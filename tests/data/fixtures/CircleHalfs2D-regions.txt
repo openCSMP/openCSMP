@@ -1,0 +1,6 @@
+boundary test model
+no properties
+UPPER
+LOWER
+CUT
+BOUNDARY

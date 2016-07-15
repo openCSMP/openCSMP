@@ -1,0 +1,9 @@
+Linear Elasticity Split Boundary Test Model - Philipp Lang 2011
+no properties
+MATRIX
+FRACTURE1
+FRACTURE2
+FRACTURE3
+FRACTURE4
+FRACTURE5
+FRACTURE6
