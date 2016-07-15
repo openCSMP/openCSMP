@@ -1,0 +1,63 @@
+#include "TriangularFacet.h"
+#include "Point.h"
+
+namespace csmp {
+
+double64 triangleArea( const Point<3U>& pt0, 
+                       const Point<3U>& pt1, 
+                       const Point<3U>& pt2 )
+{
+   return crossProduct(pt1-pt0, pt2-pt0).Length()/2.;
+}
+
+
+double64 triangleArea( const Point<2U>& pt0, 
+                       const Point<2U>& pt1, 
+                       const Point<2U>& pt2 )
+{
+   return std::fabs( 0.5 * ( pt1[0]*pt2[1] + pt0[0]*pt1[1] + 
+                             pt0[1]*pt2[0] - pt2[1]*pt0[0] -
+                             pt2[0]*pt1[1] - pt1[0]*pt0[1] ) );
+}
+
+double64 triangleArea( const Point<1U>&,
+                       const Point<1U>&,
+                       const Point<1U>& )
+ {
+    return 1.;
+ }
+
+
+/**
+    creates the unit normal to the triangle defined by the points in 
+    counter-clockwise order.
+*/
+Point<3U>  normalOfTriangle( const Point<3U>& pt0, 
+                             const Point<3U>& pt1, 
+                             const Point<3U>& pt2 )
+{ 
+  Point<3U> vecNormal( crossProduct(pt1-pt0,pt2-pt0) );
+
+  vecNormal.NormalizeLengthTo(1.); 
+
+  return vecNormal;
+  
+}
+
+/// normal is zero as it points into the coordinate direction that does not exist
+Point<2U>  normalOfTriangle( const Point<2U>&,
+                             const Point<2U>&,
+                             const Point<2U>& )
+ {
+    return Point<2U>();
+ }
+
+/// normal is zero as it points into the coordinate direction that does not exist
+Point<1U>  normalOfTriangle( const Point<1U>&,
+                             const Point<1U>&,
+                             const Point<1U>& )
+ {
+    return Point<1U>();
+ }
+
+} // end csmp

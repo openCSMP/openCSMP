@@ -1,0 +1,1229 @@
+#include "CSMP_ElementSpecifications.h"
+#include "Box.h"
+
+
+namespace csmp {
+
+CSMP_ElementSpecifications::CSMP_ElementSpecifications()
+ {
+ }
+  
+CSMP_ElementSpecifications::~CSMP_ElementSpecifications()
+ {
+ }
+
+
+/**
+
+Returns the CSMP finite element type name.
+*/
+std::string  CSMP_ElementSpecifications::CSMP_TypeName( int32 etype ) const
+{
+    return parseFiniteElementType( etype );
+} // end CSMP_TypeName( int, bool )
+
+
+/** Returns the CSMP integer flag corresponding to the CSMP element name std::string.
+*/
+CSMP_FEM_TYPE  CSMP_ElementSpecifications::CSMP_Type( const std::string& csmp_FEtype ) const
+{
+    return parseFiniteElementType( csmp_FEtype );
+} // end CSMP_Type
+
+
+/**
+
+Method deduces order of element interpolation functions from the
+input finite-element type.
+
+@section arguments Input Arguments
+
+The CSMP type name of the finite element that shall be queried.
+
+@return the interpolation order is returned as an unsigned integer value:
+1 = linear, 2 = quadratic, 3 = cubic.
+
+*/
+size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype ) const
+ {
+     if ( LinearElement( CSMP_Type(etype) ) )    return 1U;
+     if ( QuadraticElement( CSMP_Type(etype) ) ) return 2U;
+     if ( CubicElement( CSMP_Type(etype) ) )     return 3U;
+     return 0U; // order not identified, probably constant as in a polygon
+ }
+
+size_t  CSMP_ElementSpecifications::InterpolationOrder( int32 etype ) const
+  {
+    if ( LinearElement( etype ) )    return 1U;
+    if ( QuadraticElement( etype ) ) return 2U;
+    if ( CubicElement( etype ) )     return 3U;
+    return 0U; // order not identified, probably constant as in a polygon
+  }
+
+
+/**
+
+Returns whether the CSMP element type specifier denotes a finite
+element type that uses linear basis functions.
+
+CSMP element types with such characteristics are:
+@code
+linear
+==============
+LINEAR_BAR
+LINEAR_TRIANGLE
+LINEAR_TRIANGLE3D
+BARYCENTRIC_LINEAR_TRIANGLE
+LINEAR_TETRAHEDRON
+ISOPARAMETRIC_LINEAR_BAR
+ISOPARAMETRIC_LINEAR_TRIANGLE
+ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE
+ISOPARAMETRIC_LINEAR_QUADRILATERAL
+ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL
+ISOPARAMETRIC_LINEAR_TETRAHEDRON
+ISOPARAMETRIC_LINEAR_PYRAMID
+ISOPARAMETRIC_LINEAR_PRISM
+ISOPARAMETRIC_LINEAR_HEXAHEDRON
+
+@endcode */
+bool  CSMP_ElementSpecifications::LinearElement( int32 etype ) const
+ {
+    if ( etype == LINEAR_BAR ||
+         etype == LINEAR_TRIANGLE ||
+         etype == LINEAR_TRIANGLE3D ||
+         etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_LINEAR_BAR ||
+         etype == ISOPARAMETRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+        return true;
+    return false;
+ }
+
+
+
+
+/**
+
+Returns whether the CSMP element type specifier denotes a finite
+element type that uses quadratic basis functions.
+CSMP element types with such characteristics are:
+
+@code
+quadratic
+==============
+QUADRATIC_BAR
+ISOPARAMETRIC_QUADRATIC_BAR
+QUADRATIC_TRIANGLE
+BARYCENTRIC_QUADRATIC_TRIANGLE
+ISOPARAMETRIC_QUADRATIC_TRIANGLE
+ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE
+ISOPARAMETRIC_QUADRATIC_QUADRILATERAL
+ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL
+ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9
+QUADRATIC_TETRAHEDRON
+BARYCENTRIC_QUADRATIC_TETRAHEDRON
+ISOPARAMETRIC_QUADRATIC_TETRAHEDRON
+ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON
+ISOPARAMETRIC_QUADRATIC_PYRAMID13
+ISOPARAMETRIC_QUADRATIC_PYRAMID14
+ISOPARAMETRIC_QUADRATIC_PRISM15
+ISOPARAMETRIC_QUADRATIC_PRISM18
+ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20
+ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27
+
+@endcode*/
+bool  CSMP_ElementSpecifications::QuadraticElement( int32 etype ) const
+ {
+    if ( etype == QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR ||
+         etype == QUADRATIC_TRIANGLE ||
+         etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == QUADRATIC_TETRAHEDRON ||
+         etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 )
+        return true;
+    return false;
+ }
+
+
+
+/**
+
+Returns whether the CSMP element type specifier denotes a finite
+element type that uses cubic basis functions.
+CSMP element types with such characteristics are:
+
+@code
+cubic
+==============
+CUBIC_BAR
+ISOPARAMETRIC_CUBIC_BAR
+CUBIC_TRIANGLE
+ISOPARAMETRIC_CUBIC_TRIANGLE
+ISOPARAMETRIC_CUBIC_QUADRILATERAL
+CUBIC_TETRAHEDRON
+ISOPARAMETRIC_CUBIC_TETRAHEDRON
+ISOPARAMETRIC_CUBIC_PYRAMID
+ISOPARAMETRIC_CUBIC_PRISM
+ISOPARAMETRIC_CUBIC_HEXAHEDRON
+
+@endcode*/
+bool  CSMP_ElementSpecifications::CubicElement( int32 etype ) const
+ {
+    if ( etype == CUBIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR ||
+         etype == CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ||
+         etype == CUBIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+        return true;
+    return false;
+ }
+
+
+
+
+/**
+
+The element type used defines the spatial dimension of the model. It is
+indicative only of the minimum dimension since lines and surfaces can
+also exist in 3D space, which the name makes explicit.
+
+@section arguments Input Arguments
+
+Method expects a std::string argument that contains the ANSYS element type
+to deduce the spatial dimension from.
+
+@return size_t The minimum spatial dimension is returned as an unsigned integer ranging
+from 1(=1D) to 3(=3D).
+
+*/
+size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( const std::string& etype ) const
+ {
+    if ( LineElement(etype) )    return 1U;
+    if ( SurfaceElement(etype) ) return 2U;
+    return 3U;
+ }
+size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( int32 etype ) const
+ {
+    if ( LineElement(etype) )    return 1U;
+    if ( SurfaceElement(etype) ) return 2U;
+    return 3U;
+ }
+
+
+/**
+Returns a list of line type elements (see FiniteElement.h).
+"LINEAR_BAR"
+"QUADRATIC_BAR"
+"CUBIC_BAR"
+"ISOPARAMETRIC_LINEAR_BAR"
+"ISOPARAMETRIC_QUADRATIC_BAR"
+"ISOPARAMETRIC_CUBIC_BAR"
+*/
+void  CSMP_ElementSpecifications::LineElements( std::list<std::string>& line_elements ) const
+ {
+    if ( !line_elements.empty() )
+      line_elements.erase( line_elements.begin(), line_elements.end() );
+    line_elements.push_back("LINEAR_BAR");
+    line_elements.push_back("QUADRATIC_BAR");
+    line_elements.push_back("CUBIC_BAR");
+    // isoparametric elements
+    line_elements.push_back("ISOPARAMETRIC_LINEAR_BAR");
+    line_elements.push_back("ISOPARAMETRIC_QUADRATIC_BAR");
+    line_elements.push_back("ISOPARAMETRIC_CUBIC_BAR");
+ }
+
+/** Returns true if the CSMP element name corresponds to a line element.
+*/
+bool  CSMP_ElementSpecifications::LineElement( const std::string& etype ) const
+ {
+    if ( etype == "LINEAR_BAR" ||
+         etype == "QUADRATIC_BAR" ||
+         etype == "CUBIC_BAR" ||
+         etype == "ISOPARAMETRIC_LINEAR_BAR" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_BAR" ||
+         etype == "ISOPARAMETRIC_CUBIC_BAR" )
+        return true;
+    return false;
+ }
+
+/** Returns true if the CSMP input element type is a line.
+*/
+bool  CSMP_ElementSpecifications::LineElement( int32 etype ) const
+ {
+    if ( etype == LINEAR_BAR ||
+         etype == QUADRATIC_BAR ||
+         etype == CUBIC_BAR ||
+         etype == ISOPARAMETRIC_LINEAR_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR )
+        return true;
+
+    return false;
+ }
+
+
+
+/**
+Returns a list of the CSMP surface element type names:
+"LINEAR_TRIANGLE"
+"LINEAR_TRIANGLE3D"
+"BARYCENTRIC_LINEAR_TRIANGLE"
+"QUADRATIC_TRIANGLE"
+"BARYCENTRIC_QUADRATIC_TRIANGLE"
+"CUBIC_TRIANGLE"
+"ISOPARAMETRIC_LINEAR_TRIANGLE"
+"ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE"
+"ISOPARAMETRIC_QUADRATIC_TRIANGLE"
+"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE"
+"ISOPARAMETRIC_CUBIC_TRIANGLE"
+"ISOPARAMETRIC_LINEAR_QUADRILATERAL"
+"ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL"
+"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL"
+"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL"
+"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9"
+"ISOPARAMETRIC_CUBIC_QUADRILATERAL"
+*/
+void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_elements ) const
+ {
+    if ( !surf_elements.empty() )
+      surf_elements.erase( surf_elements.begin(), surf_elements.end() );
+    surf_elements.push_back("LINEAR_TRIANGLE");
+    surf_elements.push_back("LINEAR_TRIANGLE3D");
+    surf_elements.push_back("BARYCENTRIC_LINEAR_TRIANGLE");
+    surf_elements.push_back("QUADRATIC_TRIANGLE");
+    surf_elements.push_back("BARYCENTRIC_QUADRATIC_TRIANGLE");
+    surf_elements.push_back("CUBIC_TRIANGLE");
+    // isoparametric elements
+    surf_elements.push_back("ISOPARAMETRIC_LINEAR_TRIANGLE");
+    surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE");
+    surf_elements.push_back("ISOPARAMETRIC_QUADRATIC_TRIANGLE");
+    surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE");
+    surf_elements.push_back("ISOPARAMETRIC_CUBIC_TRIANGLE");
+    surf_elements.push_back("ISOPARAMETRIC_LINEAR_QUADRILATERAL");
+    surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL");
+    surf_elements.push_back("ISOPARAMETRIC_QUADRATIC_QUADRILATERAL");
+    surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL");
+    surf_elements.push_back("ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9");
+    surf_elements.push_back("ISOPARAMETRIC_CUBIC_QUADRILATERAL");
+ }
+
+/**
+Returns true is the CSMP input element name is a surface element.
+*/
+bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype ) const
+ {
+    if ( etype == "LINEAR_TRIANGLE" ||
+         etype == "LINEAR_TRIANGLE3D" ||
+         etype == "BARYCENTRIC_LINEAR_TRIANGLE" ||
+         etype == "QUADRATIC_TRIANGLE" ||
+         etype == "BARYCENTRIC_QUADRATIC_TRIANGLE" ||
+         etype == "CUBIC_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_LINEAR_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_CUBIC_TRIANGLE" ||
+         etype == "ISOPARAMETRIC_LINEAR_QUADRILATERAL" ||
+         etype == "ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_QUADRILATERAL" ||
+         etype == "ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9" |
+         etype == "ISOPARAMETRIC_CUBIC_QUADRILATERAL" )
+      return true;
+    return false;
+ }
+
+/** Returns true if the CSMP input element type is a surface element.
+*/
+bool  CSMP_ElementSpecifications::SurfaceElement( int32 etype ) const
+ {
+    if ( etype == LINEAR_TRIANGLE ||
+         etype == LINEAR_TRIANGLE3D ||
+         etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == QUADRATIC_TRIANGLE ||
+         etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+      return true;
+    return false;
+ }
+
+/**
+Returns a list of the CSMP element type names that denote volumetric elements:
+"LINEAR_TETRAHEDRON"
+"QUADRATIC_TETRAHEDRON"
+"BARYCENTRIC_QUADRATIC_TETRAHEDRON"
+"CUBIC_TETRAHEDRON"
+"ISOPARAMETRIC_LINEAR_TETRAHEDRON"
+"ISOPARAMETRIC_QUADRATIC_TETRAHEDRON"
+"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON"
+"ISOPARAMETRIC_CUBIC_TETRAHEDRON"
+"ISOPARAMETRIC_LINEAR_PYRAMID"
+"ISOPARAMETRIC_QUADRATIC_PYRAMID13"
+"ISOPARAMETRIC_QUADRATIC_PYRAMID14"
+"ISOPARAMETRIC_CUBIC_PYRAMID"
+"ISOPARAMETRIC_LINEAR_PRISM"
+"ISOPARAMETRIC_QUADRATIC_PRISM15"
+"ISOPARAMETRIC_QUADRATIC_PRISM18"
+"ISOPARAMETRIC_CUBIC_PRISM"
+"ISOPARAMETRIC_LINEAR_HEXAHEDRON"
+"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20"
+"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27"
+"ISOPARAMETRIC_CUBIC_HEXAHEDRON"
+*/
+void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_elements ) const
+ {
+    if ( !vol_elements.empty() )
+      vol_elements.erase( vol_elements.begin(), vol_elements.end() );
+    vol_elements.push_back("LINEAR_TETRAHEDRON");
+    vol_elements.push_back("QUADRATIC_TETRAHEDRON");
+    vol_elements.push_back("BARYCENTRIC_QUADRATIC_TETRAHEDRON");
+    vol_elements.push_back("CUBIC_TETRAHEDRON");
+    // isoparametric elements
+    vol_elements.push_back("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_TETRAHEDRON");
+    vol_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON");
+    vol_elements.push_back("ISOPARAMETRIC_CUBIC_TETRAHEDRON");
+    vol_elements.push_back("ISOPARAMETRIC_LINEAR_PYRAMID");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_PYRAMID13");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_PYRAMID14");
+    vol_elements.push_back("ISOPARAMETRIC_CUBIC_PYRAMID");
+    vol_elements.push_back("ISOPARAMETRIC_LINEAR_PRISM");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_PRISM15");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_PRISM18");
+    vol_elements.push_back("ISOPARAMETRIC_CUBIC_PRISM");
+    vol_elements.push_back("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20");
+    vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27");
+    vol_elements.push_back("ISOPARAMETRIC_CUBIC_HEXAHEDRON");
+ }
+
+
+/**
+Return true if the ANSYS input element name corresponds to a volumetric element.
+*/
+bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype ) const
+ {
+    if ( etype == "LINEAR_TETRAHEDRON" ||
+         etype == "QUADRATIC_TETRAHEDRON" ||
+         etype == "BARYCENTRIC_QUADRATIC_TETRAHEDRON" ||
+         etype == "CUBIC_TETRAHEDRON" ||
+         etype == "ISOPARAMETRIC_LINEAR_TETRAHEDRON" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_TETRAHEDRON" ||
+         etype == "ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON" ||
+         etype == "ISOPARAMETRIC_CUBIC_TETRAHEDRON" ||
+         etype == "ISOPARAMETRIC_LINEAR_PYRAMID" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_PYRAMID13" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_PYRAMID14" ||
+         etype == "ISOPARAMETRIC_CUBIC_PYRAMID" ||
+         etype == "ISOPARAMETRIC_LINEAR_PRISM" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_PRISM15" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_PRISM18" ||
+         etype == "ISOPARAMETRIC_CUBIC_PRISM" ||
+         etype == "ISOPARAMETRIC_LINEAR_HEXAHEDRON" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20" ||
+         etype == "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27" ||
+         etype == "ISOPARAMETRIC_CUBIC_HEXAHEDRON" )
+        return true;
+    return false;
+ }
+
+
+/** Returns true if the ANSYS input element type is a volumetric element.
+*/
+bool  CSMP_ElementSpecifications::VolumeElement( int32 etype ) const
+ {
+    if ( etype == LINEAR_TETRAHEDRON ||
+         etype == QUADRATIC_TETRAHEDRON ||
+         etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == CUBIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID ||
+         etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM ||
+         etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+        return true;
+    return false;
+ }
+
+
+
+
+
+
+
+
+
+/** 
+    Returns the number of nodes of the CSMP element type as identified by
+    the CSMP element integer code (enumeration CSMP_FEM_TYPE in FiniteElement.h).
+*/
+size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype ) const
+ {
+    // bar
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR )
+        return 2U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR )
+        return 3U;
+    if ( etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+        return 4U;
+
+    // tetrahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON )
+        return 4U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON )
+        return 10U;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON )
+        return 11U;
+    if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON )
+        return 16U;
+
+    // hexahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+        return 8U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 )
+        return 20U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 )
+        return 27U;
+    if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+        return 32U;
+
+    // quadrilateral
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL )
+        return 4U;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL )
+        return 5U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL )
+        return 8U;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL )
+        return 9U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 )
+        return 9U;
+    if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+        return 12U;
+
+    // triangle
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE3D )
+        return 3U;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE || etype == BARYCENTRIC_LINEAR_TRIANGLE )
+        return 4U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE || etype == QUADRATIC_TRIANGLE )
+        return 6U;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE || etype == BARYCENTRIC_QUADRATIC_TRIANGLE )
+        return 7U;
+    if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE )
+        return 9U;
+
+    // prism
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM )
+        return 6U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 )
+        return 15U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 )
+        return 18U;
+    if ( etype == ISOPARAMETRIC_CUBIC_PRISM )
+        return 24U;
+
+    // pyramid
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID )
+        return 5U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 )
+        return 13U;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 )
+        return 14U;
+    if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+        return 21U;
+
+    std::cout <<"\nCSMP_ElementSpecifications::NodesPerElementOfType: ";
+    std::cout <<"unable to parse element type, returning 0"<< std::endl;
+    return ULONG_MAX; // unknown element type
+
+ } // end
+
+
+
+
+size_t CSMP_ElementSpecifications::FacesPerElementOfType( int32 CSMP_finite_element_type ) const
+ {
+    // since these are equivalent numbers
+    return NeighborsPerElementOfType( CSMP_finite_element_type );
+ } // end FacesPerElementOfType
+
+
+
+
+/** Returns the maximum possible number of neighbors of the input CSMP finite element type
+    as specified in CSMP_FEM_conventions.pdf in the documentation directory.
+*/
+size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype ) const
+ {
+    // bar
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+        return 2U;
+
+    // tetrahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON )
+        return 4U;
+
+    // hexahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
+         etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+        return 6U;
+
+    // quadrilateral
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+        return 4U;
+
+    // triangle
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE3D ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE || etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE || etype == QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE || etype == BARYCENTRIC_QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE )
+        return 3U;
+
+    // prism
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM )
+        return 5U;
+
+    // pyramid
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+        return 5U;
+
+    std::cout <<"\nCSMP_ElementSpecifications::NeighborsPerElementOfType: ";
+    std::cout <<"unable to parse element type, returning 0"<< std::endl;
+    return ULONG_MAX; // unknown element type
+ } // end
+
+
+
+/**
+
+    Returns number of nodes that make up a particular face of the supplied 
+    CSMP_FEM_TYPE enumeration as specified in FiniteElement.h
+    
+    Use this method to retrieve this information before any finite elements have been built.
+
+    @attention 17/12/2015 SKM fixed method for quadratic elements
+*/
+size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
+                                                                 size_t face ) const
+ {
+    // bar
+    // ---
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
+         etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR ||
+         etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+    {
+        assert( face < 2U );
+        return 1U;
+    }
+
+    // tetrahedron
+    // -----------
+    // linear elements
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON  ) {
+          assert( face < 4U );
+          return 3U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) {
+          assert( face < 4U );
+          return 6U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON ) {
+          assert( face < 4U );
+          return 8U;
+      }
+
+    // hexahedron
+    // ----------
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
+          assert( face < 6U );
+          return 4U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) {
+          assert( face < 6U );
+          return 8U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) {
+          assert( face < 6U );
+          return 9U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) {
+          assert( face < 6U );
+          return 13U;
+      }
+
+    // quadrilateral
+    // -------------
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) {
+         assert( face < 4U );
+         return 2U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) {
+         assert( face < 4U );
+         return 3U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ) {
+         assert( face < 4U );
+         return 12U;
+      }
+
+    // triangle
+    // --------
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE3D ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE || etype == BARYCENTRIC_LINEAR_TRIANGLE ) {
+          assert( face < 4U );
+          return 2U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE || etype == QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE || etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) {
+          assert( face < 4U );
+          return 3U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE ) {
+          assert( face < 4U );
+          return 9U;
+      }
+
+    // prism
+    // -----
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ) {
+          assert( face < 5U );
+          if ( face<=2U ) return 4U;
+          return 3U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ) {
+          assert( face < 5U );
+          if ( face<=2U ) return 8U;
+          return 6U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ) {
+          assert( face < 5U );
+          if ( face<=2U ) return 9U;
+          return 6U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_PRISM ) {
+          assert( face < 5U );
+          if ( face<=2U ) return 12U;
+          return 9U;
+      }
+
+    // pyramid
+    // -------
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ) {
+          assert( face < 5U );
+          if ( face <=1U ) return 4U;
+          return 3U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) {
+          assert( face < 5U );
+          if ( face <=1U ) return 8U;
+          return 6U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ) {
+          assert( face < 5U );
+          if ( face <=1U ) return 9U;
+          return 6U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID ) {
+          assert( face < 5U );
+          if ( face <=1U ) return 12U;
+          return 8U;
+      }
+
+    std::cout <<"\nCSMP_ElementSpecifications::NodesPerFaceForElementOfType: ";
+    std::cout <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
+    return ULONG_MAX; // unknown number of faces
+
+ } // end NodesPerFaceForElementOfType
+
+
+
+
+
+/**
+    Returns the number of the node that is the n'th node of a particular face of the supplied
+    element type as specified by CSMP_FEM_TYPE enumeration, see FiniteElement.h
+    
+    Use this method to retrieve this information before any finite elements have been built.
+*/
+size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
+                                                             size_t face,
+                                                             size_t face_node ) const
+ {
+    // bar element
+    // -----------
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR )
+      {
+          assert( face < 2U );
+          assert( face_node == 0U );
+          // face 1 is adjacent to node 0 and 1 to node 1
+          if ( face==0U ) return 0U;
+          if ( face==1U ) return 1U;
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_BAR || etype == QUADRATIC_BAR )
+      {
+          assert( face < 2U );
+          assert( face_node == 0U );
+          // face 1 is adjacent to node 0 and 1 to node 1
+          if ( face==0U ) return 0U;
+          if ( face==1U ) return 1U;
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "elements with cubic interpolation functions are not handled yet");
+
+    // tetrahedron
+    // -----------
+    if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON )
+      {
+          assert( face < 4U );
+          assert( face_node < 3U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 3U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 3U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 3U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 2U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON )
+      {
+          assert( face < 4U );
+          assert( face_node < 6U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 3U;
+               // midside nodes
+               if ( face_node==3U ) return 5U;
+               if ( face_node==4U ) return 9U;
+               if ( face_node==5U ) return 6U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 3U;
+               // midside nodes
+               if ( face_node==3U ) return 6U;
+               if ( face_node==4U ) return 9U;
+               if ( face_node==5U ) return 7U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 3U;
+               // midside nodes
+               if ( face_node==3U ) return 4U;
+               if ( face_node==4U ) return 8U;
+               if ( face_node==5U ) return 7U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 2U;
+               // midside nodes
+               if ( face_node==3U ) return 4U;
+               if ( face_node==4U ) return 5U;
+               if ( face_node==5U ) return 6U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "elements with cubic interpolation functions are not handled yet");
+
+    // hexahedron
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+      {
+          assert( face < 6U );
+          assert( face_node < 4U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 2U;
+               if ( face_node==3U ) return 1U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 5U;
+               if ( face_node==3U ) return 4U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 6U;
+               if ( face_node==3U ) return 5U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 7U;
+               if ( face_node==3U ) return 6U;
+            }
+          if ( face==4U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 4U;
+               if ( face_node==2U ) return 7U;
+               if ( face_node==3U ) return 3U;
+            }
+          if ( face==5U ) {
+               if ( face_node==0U ) return 4U;
+               if ( face_node==1U ) return 5U;
+               if ( face_node==2U ) return 6U;
+               if ( face_node==3U ) return 7U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 )
+      {
+          assert( face < 6U );
+          assert( face_node < 8U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 2U;
+               if ( face_node==3U ) return 1U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 11U;
+               if ( face_node==5U ) return 10U;
+               if ( face_node==6U ) return 9U;
+               if ( face_node==7U ) return 8U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 5U;
+               if ( face_node==3U ) return 4U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 8U;
+               if ( face_node==5U ) return 10U;
+               if ( face_node==6U ) return 16U;
+               if ( face_node==7U ) return 12U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 6U;
+               if ( face_node==3U ) return 5U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 9U;
+               if ( face_node==5U ) return 14U;
+               if ( face_node==6U ) return 17U;
+               if ( face_node==7U ) return 10U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 7U;
+               if ( face_node==3U ) return 6U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 13U;
+               if ( face_node==5U ) return 15U;
+               if ( face_node==6U ) return 18U;
+               if ( face_node==7U ) return 14U;
+            }
+          if ( face==4U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 4U;
+               if ( face_node==2U ) return 7U;
+               if ( face_node==3U ) return 3U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 11U;
+               if ( face_node==5U ) return 12U;
+               if ( face_node==6U ) return 19U;
+               if ( face_node==7U ) return 15U;
+            }
+          if ( face==5U ) {
+               if ( face_node==0U ) return 4U;
+               if ( face_node==1U ) return 5U;
+               if ( face_node==2U ) return 6U;
+               if ( face_node==3U ) return 7U;
+               // mid-edge nodes
+               if ( face_node==4U ) return 19U;
+               if ( face_node==5U ) return 16U;
+               if ( face_node==6U ) return 17U;
+               if ( face_node==7U ) return 18U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 || etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "elements with cubic interpolation functions are not handled yet");
+
+    // quadrilateral
+    // -------------
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL )
+      {
+          assert( face < 4U );
+          assert( face_node < 2U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 3U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 3U;
+               if ( face_node==1U ) return 0U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
+         etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 )
+      {
+          assert( face < 4U );
+          assert( face_node < 3U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 4U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 5U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 6U;
+            }
+          if ( face==3U ) {
+               if ( face_node==0U ) return 3U;
+               if ( face_node==1U ) return 0U;
+               if ( face_node==2U ) return 7U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "elements with cubic interpolation functions are not handled yet");
+
+    // triangle
+    // --------
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE || etype == LINEAR_TRIANGLE3D )
+      {
+          assert( face < 3U );
+          assert( face_node < 2U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 0U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE || etype == BARYCENTRIC_LINEAR_TRIANGLE ||
+         etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE || etype == QUADRATIC_TRIANGLE ||
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE || etype == BARYCENTRIC_QUADRATIC_TRIANGLE )
+      {
+          assert( face < 3U );
+          assert( face_node < 3U );
+          if ( face==0U ) {
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 4U;
+            }
+          if ( face==1U ) {
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 0U;
+               if ( face_node==2U ) return 5U;
+            }
+          if ( face==2U ) {
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 3U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "elements with cubic interpolation functions are not handled yet");
+
+    // prism
+    // -----
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM )
+      {
+          assert( face < 5U );
+          if ( face==0U ) {
+               assert( face_node < 3U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 1U;
+            }
+          if ( face==1U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 4U;
+               if ( face_node==3U ) return 3U;
+            }
+          if ( face==2U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 5U;
+               if ( face_node==3U ) return 4U;
+            }
+          if ( face==3U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 5U;
+               if ( face_node==3U ) return 2U;
+            }
+          if ( face==4U ) {
+               assert( face_node < 3U );
+               if ( face_node==0U ) return 3U;
+               if ( face_node==1U ) return 4U;
+               if ( face_node==2U ) return 5U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "prism elements with quadratic or cubic interpolation functions are not handled yet");
+
+    // pyramid
+    // -------
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID )
+      {
+          assert( face < 5U );
+          if ( face==0U ) {
+               assert( face_node < 3U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 1U;
+               if ( face_node==2U ) return 4U;
+            }
+          if ( face==1U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 1U;
+               if ( face_node==1U ) return 2U;
+               if ( face_node==2U ) return 4U;
+            }
+          if ( face==2U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 2U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 4U;
+            }
+          if ( face==3U ) {
+               assert( face_node < 4U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 4U;
+               if ( face_node==2U ) return 3U;
+            }
+          if ( face==4U ) {
+               assert( face_node < 3U );
+               if ( face_node==0U ) return 0U;
+               if ( face_node==1U ) return 3U;
+               if ( face_node==2U ) return 2U;
+               if ( face_node==3U ) return 1U;
+            }
+      }
+    if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+                            "pyramid elements with quadratic or cubic interpolation functions are not handled yet");
+
+    std::cout <<"\nCSMP_ElementSpecifications::FaceNodeForElementOfType: ";
+    std::cout <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
+    return ULONG_MAX;
+
+ } // end FaceNodeForElementOfType
+
+} // end namespace csmp

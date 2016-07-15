@@ -1,0 +1,20 @@
+#ifndef TUTORIAL1_EXAMPLE_H
+#define TUTORIAL1_EXAMPLE_H
+
+#include "Example.h"
+
+namespace csmp {
+
+class  Tutorial1_Example : public Example
+{
+
+public:
+
+    virtual void Run();
+    virtual void Specifications();
+
+};
+
+} // csmp
+
+#endif // TUTORIAL1_EXAMPLE_H

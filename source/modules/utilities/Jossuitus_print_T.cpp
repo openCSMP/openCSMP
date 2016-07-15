@@ -1,0 +1,17 @@
+#include <iostream>
+
+/**
+- prints optional C-string optcstr followed by
+- all elements of the collection coll
+- separated by spaces
+ */
+template <class T>
+inline void PRINT_ELEMENTS (const T& coll, const char* optcstr="")
+{
+    std::cout << optcstr;
+    for ( typename T::const_iterator 
+          pos=coll.begin(); pos!=coll.end(); ++pos ) {
+        std::cout << *pos << ' ';
+    }
+    std::cout << std::endl;
+}

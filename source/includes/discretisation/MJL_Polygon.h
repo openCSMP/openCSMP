@@ -1,0 +1,236 @@
+#ifndef MJL_POLYGON_H
+#define MJL_POLYGON_H
+
+#include "MJL_Vertex.h"
+#include "MJL_Edge.h"
+
+namespace mjl {
+
+class Polygon {
+  public: // points // should be unique and ordered clockwise
+    Polygon( std::list<mjl::Point>::const_iterator, 
+             std::list<mjl::Point>::const_iterator );  
+    explicit Polygon( Vertex* );
+    Polygon();
+    Polygon( const Polygon& );
+    virtual ~Polygon();
+    Polygon&      operator=( const Polygon& p ); 
+    Vertex*       SetV( Vertex* );
+    Vertex*       V() const;
+    size_t        Size() const;
+    bool          Empty() const;
+    mjl::Point    Point() const;
+    mjl::Edge     Edge() const;
+    Vertex*       Cw() const;
+    Vertex*       Ccw() const;
+    Vertex*       Neighbor( ORIENTATION );
+    Vertex*       Advance( ORIENTATION );
+    const Vertex* Advance( ORIENTATION ) const;
+    Vertex*       Insert( const mjl::Point& );
+    void          Erase();
+    void          Remove();
+    void          Revert(); ///< rebuilds itself in reverse order
+    Polygon*      Split( Vertex* );
+                  // MJL, p.87
+    Vertex*       LeastVertex( int (*cmp)( const mjl::Point& a, const mjl::Point& b ) ); 
+    mjl::Point    CenterOfGravity() const;
+    void          CenterOfGravity( double&, double& ) const;
+    double        Perimeter() const;
+    bool          CheckAngles( double tolerated_bound ) const;
+    mjl::Point    InsidePointSA(); ///< uses signed angle > and returns edge midpoint 
+    void          Scale( double factor );
+    void          Move( double dx, double dy );
+    void          BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) const;
+
+    void          Out() const;
+    void          Out( const char* ) const;
+    void          OutputCoordinatesTo( std::list<mjl::Point>& ) const;
+
+  private:
+    mutable Vertex* v_;
+    size_t  size_;
+    
+    void Resize(); 
+};      
+
+// nonmember functions
+int leftToRightCmp( const mjl::Point& a, const mjl::Point& b );
+int rightToLeftCmp( const mjl::Point& a, const mjl::Point& b );
+int closestToPolygonCmp( const mjl::Point& a, const mjl::Point& b );
+
+
+
+// member functions
+
+inline Polygon::Polygon()
+ : v_(0), size_(0)
+  {
+  }
+
+  
+inline Polygon::Polygon( const Polygon& p )
+ {
+    *this = p;
+ }
+
+
+
+inline Polygon::Polygon( Vertex* v )
+ : v_(v)
+  {
+     Resize();
+  }
+
+
+inline Vertex* Polygon::V() const
+ {
+    return v_;
+ }
+ 
+
+inline size_t Polygon::Size() const
+ { return size_; }
+ 
+ 
+inline bool  Polygon::Empty() const 
+ { return (size_==0u); }
+
+ 
+inline mjl::Point Polygon::Point() const
+ {
+    return v_->Point();
+ } 
+ 
+
+inline Edge  Polygon::Edge() const
+ {
+    return mjl::Edge( Point(), v_->Cw()->Point() );
+ }
+ 
+ 
+/// @return vertex successor
+inline Vertex* Polygon::Cw() const
+ {
+    return v_->Cw();
+ }
+
+
+/// @return predecessor of vertex
+inline Vertex* Polygon::Ccw() const
+ {
+    return v_->Ccw();
+ }
+ 
+ 
+inline Vertex* Polygon::Neighbor( ORIENTATION rotation )
+ {
+    return v_->Neighbor( rotation );
+ }
+ 
+ 
+inline Vertex* Polygon::Advance( ORIENTATION rotation )
+ {
+    return v_ = v_->Neighbor( rotation );
+ }
+
+inline const Vertex* Polygon::Advance( ORIENTATION rotation ) const
+ {
+    return v_ = v_->Neighbor( rotation );
+ }
+
+
+
+inline Vertex* Polygon::SetV( Vertex* v )
+ {
+    return v_ = v;
+ }
+
+
+
+inline Vertex* Polygon::Insert( const mjl::Point& p )
+ {
+    if ( size_++ == 0U ) v_ = new Vertex(p);
+    else v_ = v_->Insert( new Vertex(p) );
+    
+    return v_;
+ }
+
+
+inline void Polygon::Remove()
+ {
+    Vertex* v = v_;
+    v_ = (--size_ == 0U) ? 0 : v_->Ccw();
+    delete v->Remove(); 
+ }
+ 
+ 
+
+inline Polygon*  Polygon::Split( Vertex* b )
+ {
+    Vertex* bp = v_->Split(b);
+    Resize();
+    return new Polygon(bp);
+ }
+ 
+
+
+
+// old functionality recaptured
+
+
+inline mjl::Point Polygon::CenterOfGravity() const
+ {
+     double x, y;
+     CenterOfGravity( x, y );
+     return mjl::Point( x, y );
+ }
+
+
+
+
+
+// nonmember functions
+
+inline int leftToRightCmp( const mjl::Point& a, const mjl::Point& b )
+ {
+    if ( a < b ) return -1;
+    if ( a > b ) return  1;
+    return 0;
+ }
+
+inline int rightToLeftCmp( const mjl::Point& a, const mjl::Point& b )
+ {
+    return leftToRightCmp( b, a );
+ }
+
+
+inline int closestToPolygonCmp( const mjl::Point& a, const mjl::Point& b )
+ {
+     extern mjl::Point somePoint;
+     double distA = (somePoint - a).Length();
+     double distB = (somePoint - b).Length();
+     if ( distA < distB )     return -1;
+     else if ( distA > distB ) return 1;
+     return 0;
+ }
+
+
+
+
+} 
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+

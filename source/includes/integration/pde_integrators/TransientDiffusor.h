@@ -1,0 +1,104 @@
+#ifndef TRANSIENT_DIFFUSOR_H
+#define TRANSIENT_DIFFUSOR_H
+
+#include "CSMP_definitions.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "PointSource_rhsop.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_op_dV.h"
+#include "PDE_Integrator.h"
+
+namespace csmp {
+
+template<size_t> class Model;
+
+
+/** transient diffusion solver with Backward-Euler time-stepping
+
+  [C/dt + K]{p}_t+dt = [C/dt]{p}_t + q   
+   ------------------------------------
+   specific to the CSP reservoir simulator
+   only a single equation is solved for total pressure
+   result variable 'fluid pressure'
+   initialises hydrostatic pressure to zero
+   
+   @attention gradient_multiplier currently is not used.
+   
+*/
+
+template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
+class TransientDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
+
+  public:
+
+    typedef typename SIMPLICIAL_COMPLEX<dim>::Simplex Simplex;
+
+    TransientDiffusor( Model<dim>&,
+                              const char* diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* element_source_variable );
+                                     
+    TransientDiffusor( Model<dim>&,
+                              const char* diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* element_source_variable,
+                              const char* point_source_variable );
+    
+    // including gravity
+    TransientDiffusor( Model<dim>&, 
+                              const char* diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* spatial_source_variable,
+                              const char* gradient_variable, double64 gradient_multiplier );
+
+    TransientDiffusor( Model<dim>&, 
+                              const char* lhs_diffusivity,
+                              const char* rhs_diffusivity,
+                              const char* diffusing_variable,
+                              const char* storage_variable,
+                              const char* spatial_source_variable,
+                              const char* gradient_variable, double64 gradient_multiplier );
+
+    virtual ~TransientDiffusor();
+  
+    /// [C/dt + K]{p}_t+dt = [C/dt]{p}_t + q + g [d(var)/dy]
+    void ComputeTransientStateFullyImplicit( Model<dim>& sg, double64 time_increment, bool verbose=false ); 
+
+    virtual void AdjustSolverSettings();
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings&  GetSolverSettings();
+#else
+    /// add extra functionality for alternative solver if needed
+#endif
+
+  protected:
+
+    NumIntegral_dNT_op_dN_dV<dim,Simplex>   conductance_;
+    NumIntegral_NT_op_N_dV<dim,Simplex>*    source_;
+    NumIntegral_NT_lhsop_N_dV<dim,Simplex>  capacitance_lhs_;
+    NumIntegral_NT_op_N_dV<dim,Simplex>     capacitance_rhs_;
+    PointSource_rhsop<dim,Simplex>*         nodal_source_;
+    NumIntegral_dNT_op_dV<dim,Simplex>*     gravity_;
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings                   settings_;
+#else
+    /// add extra functionality for alternative solver if needed
+#endif
+
+    const double64                  grad_multiplier_;
+    std::string                     dep_var_name_;
+    
+  private:
+    TransientDiffusor();
+};
+
+} // end csmp
+
+#endif

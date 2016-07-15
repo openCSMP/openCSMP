@@ -1,0 +1,63 @@
+#ifndef NumIntegral_NT_op1_op2_dNi_dV_h
+#define NumIntegral_NT_op1_op2_dNi_dV_h
+
+#include "CSMP_definitions.h"
+#include "MathOperatorRHS.h"
+
+namespace csmp {
+
+/**
+@author S.K. Matthaei
+@date 2005
+
+gravity term in transient flow: -S / dt  +  K     g   delta_rho grad Z
+                              mtrl1 * dt   mtrl2  oper      dN (pf)
+
+@note only use in BE scheme where storage term is divided by time-increment
+*/
+template<size_t dim,class SIMPLEX=Element<dim> >
+class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
+  public:
+    NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& p, 
+                                   const char* oper,          // e.g., fluid density
+                                   const char* mtrl1,         // e.g., storativity
+                                   const char* mtrl2,         // e.g., conductivity
+                                   const char* test );        // e.g., fluid pressure
+    
+    virtual void GetOperands( SIMPLEX& e );
+
+    virtual void ComputeContribution( SIMPLEX& e );
+    
+    virtual void MultiplyWithTimeFactor( double64 dt );
+  
+  private:
+    std::vector<double64>                   IPOL;
+    DenseMatrix<DM_MIN>            DN;
+    csmp::Index                        mtrl1_key, mtrl2_key;
+    ScalarVariable                oper_eprop, mtrl1_prop, mtrl2_prop;
+    const double64                          gravity;   // acceleration of gravity
+    const size_t                   xyz; // 1=x, 2=y
+    std::vector<ScalarVariable >  oper_nprop;
+};
+
+
+
+} // csmp
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

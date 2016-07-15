@@ -1,0 +1,135 @@
+#ifndef TEST_H
+#define TEST_H
+
+#include <string>
+#include <iosfwd>
+#ifdef __GNUC__
+#include "cxxabi.h"
+#endif
+
+using std::string;
+using std::ostream;
+
+// The following have underscores because they are macros
+// (and it's impolite to usurp other users' functions!).
+// For consistency, _succeed() also has an underscore.
+#define _test(cond) do_test(cond, #cond, __FILE__, __LINE__)
+#define _fail(str) do_fail(str, __FILE__, __LINE__)
+#define _equal(expr,value,tol) do_equal(expr, value, tol, #expr " == " #value, __FILE__, __LINE__)
+
+namespace csmp {
+
+/** Test  base class for unit testing.
+
+    Usage example:
+      1. define default constructor and run() function
+      2. in run() function, use the macros provided to test whether desired conditions
+         apply or not. 
+      
+      Examples:
+         - check whether the floating point value, a, is equal to b within given tolerance, tol:
+         
+           _equal(a,b,tol);
+        
+         - check whether a boolean conditions applies:
+         
+           _test(isoparametric==false);
+          
+         - add a message to a failure report:
+         
+           _fail("for this input this did not work");
+           
+         - report that a test passed: if (...) _succeed();
+    
+     3. Obtain a fail/succeed report after running the test.
+     
+        test.report();
+*/
+class Test
+  {
+  public:
+    Test(ostream* osptr = 0);
+    virtual ~Test(){}
+    virtual void run() = 0;
+
+    long getNumPassed() const;
+    long getNumFailed() const;
+    const ostream* getStream() const;
+    void setStream(ostream* osptr);
+    void setName( string testName ) { testName_ = testName; }
+    string getName() const { return testName_; }
+    bool hasName() const { return !testName_.empty(); }
+    
+    void _succeed();
+    long report() const;
+    virtual void reset();
+
+
+  protected:
+    void do_equal( double expr, double value, double tol, 
+                   const string& lbl, const char* fname, long lineno );
+                  
+    void do_test( bool cond, const string& lbl,
+                  const char* fname, long lineno );
+                 
+    void do_fail( const string& lbl,
+                  const char* fname, long lineno );
+    const char* prefix_;
+  private:
+    ostream* m_osptr;
+    string testName_;
+    long m_nPass;
+    long m_nFail;
+    // Disallowed:
+    Test(const Test&);
+    Test& operator=(const Test&);
+
+};
+
+  inline
+      Test::Test(ostream* osptr)
+  {
+    m_osptr = osptr;
+    m_nPass = m_nFail = 0;
+  }
+
+  inline
+      long Test::getNumPassed() const
+  {
+    return m_nPass;
+  }
+
+  inline
+      long Test::getNumFailed() const
+  {
+    return m_nFail;
+  }
+
+  inline
+     const ostream* Test::getStream() const
+  {
+    return m_osptr;
+  }
+
+  inline
+      void Test::setStream(ostream* osptr)
+  {
+    m_osptr = osptr;
+  }
+
+  inline
+      void Test::_succeed()
+  {
+    ++m_nPass;
+  }
+
+  inline
+      void Test::reset()
+  {
+    m_nPass = m_nFail = 0;
+  }
+
+} // end namespace csmp
+
+#endif
+

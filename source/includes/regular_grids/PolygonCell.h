@@ -1,0 +1,148 @@
+#ifndef POLYGON_CELL_H
+#define POLYGON_CELL_H
+
+#include "CSMP_definitions.h"
+#include "CSMP_ElementSpecifications.h"
+#include "Point.h"
+#include "PolygonGrid.h"
+
+namespace csmp {
+
+template<size_t dim>
+class PolygonCell
+{
+public:
+
+    PolygonCell( PolygonGridManager<dim>* pgm );
+    PolygonCell( const PolygonCell& cell );
+    PolygonCell& operator=( const PolygonCell& cell );
+    ~PolygonCell();
+
+    /// cell dim
+    size_t GetElementDim( ) const;
+
+    /// elements info
+    size_t GetNumElements() const;
+    size_t GetNumElementNodes( size_t eid ) const;
+    const csmp::Point<dim>& GetElementPoint( size_t eid, size_t nid ) const;
+    csmp::GridNode<dim>* GetElementNode( size_t eid, size_t nid );
+    size_t GetElementNodeGlobalId( size_t eid, size_t nid ) const;
+    const csmp::CSMP_FEM_TYPE& GetElementType( size_t eid ) const;
+    size_t GetElementDim( size_t eid ) const;
+
+    /// faces info
+    size_t GetNumFaces() const;
+    /// returns into how many faces a particular face is split?
+    size_t GetNumSubFaces( size_t fid ) const;
+    /// should this be GetNumSubFaceNodes() where subfaces only exist when a quadrilateral faces is split into triangles?
+    size_t GetNumFaceNodes( size_t fid, size_t sfid ) const;
+    const csmp::Point<dim>& GetFacePoint( size_t fid, size_t sfid, size_t nid ) const;
+    csmp::GridNode<dim>* GetFaceNode( size_t fid, size_t sfid, size_t nid );
+    size_t GetFaceNodeGlobalId( size_t fid, size_t sfid, size_t nid ) const;
+    const csmp::CSMP_FEM_TYPE& GetFaceType( size_t fid, size_t sfid ) const;
+    size_t GetFaceDim( size_t fid, size_t sfid ) const;
+
+    /// nodes info
+    size_t GetNumNodes() const;
+    size_t GetNodeGlobalIdOriginalOrder( size_t nid ) const;
+    size_t GetNodeGlobalIdCustomOrder( size_t nid ) const;
+    const csmp::Point<dim>& GetPointOriginalOrder( size_t nid ) const;
+    const csmp::Point<dim>& GetPointCustomOrder( size_t nid ) const;
+    csmp::GridNode<dim>* GetNodeOriginalOrder( size_t nid );
+    csmp::GridNode<dim>* GetNodeCustomOrder( size_t nid );
+
+    /// extra nodes info
+    size_t GetNumExtraNodes() const;
+    const csmp::Point<dim>& GetExtraPoint( size_t nid ) const;
+    csmp::GridNode<dim>* GetExtraNode( size_t nid );
+    void AddExtraNode( const csmp::Point<dim>& pt );
+
+    /// cell centroid ( if exist: by convention it's a first node of extra nodes arrays )
+    size_t GetCellCentroidGlobalId() const;
+    const csmp::Point<dim>& GetCellCentroidPoint() const;
+    csmp::GridNode<dim>* GetCellCentroidNode();
+
+    /// face and node id's
+    size_t GetOriginalNodeId( size_t custom_nid ) const;
+    size_t GetCustomNodeId( size_t custom_nid ) const;
+    size_t GetOriginalFaceId( size_t custom_fid ) const;
+    size_t GetCustomFaceId( size_t custom_fid ) const;
+
+    /// polygon faces info
+    size_t GetNumPolygonFaceNodes( size_t fid ) const;
+    size_t GetPolygonFaceNodeLocalId( size_t fid, size_t nid ) const;
+    size_t GetPolygonFaceNodeGlobalId( size_t fid, size_t nid ) const;
+    const csmp::Point<dim>& GetPolygonFacePoint( size_t fid, size_t nid ) const;
+    csmp::GridNode<dim>* const GetPolygonFaceNode( size_t fid, size_t nid ) const;
+  
+    /// print object state to screen
+    void Out() const;
+
+protected:
+
+    PolygonCell();
+
+    /// polygon faces info
+    void AssignPolygonFaceNode( size_t fid, size_t lnid, size_t cell_nid );
+    void AddPolygonFaceNode( size_t fid, size_t cell_nid );
+    void ClearPolygonFaceNodes( size_t fid );
+    void ResizePolygonFaceNodes( size_t fid, size_t size );
+
+    /// nodes
+    void InitializeNodeOrder( size_t num_nodes );
+    void AssignNodeOrder( size_t cnid, size_t onid );
+
+    /// elements
+    void AddCell( const std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> >& cell );
+    void EraseCell( size_t position );
+    void ClearCells();
+
+    /// faces
+    void InitializeFaceOrder( size_t num_faces );
+    void AssignFaceOrder( size_t cfid, size_t ofid );
+    void AddFace( size_t fid, const std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> >& face );
+    void EraseFace( size_t fid );
+    void EraseFace( size_t fid, size_t position );
+    void ClearFaces( size_t fid );
+    void ClearFaces();
+
+protected:
+
+    /// grid manager
+    PolygonGridManager<dim>* grid_;
+
+    /// cell nodes data
+    size_t  num_nodes_;
+    std::vector<csmp::GridNode<dim>*>   extra_nodes_;
+    std::vector<csmp::GridNode<dim>*>   nodes_;
+    std::vector<csmp::GridNode<dim>*>   nodes_in_custom_order_;
+    std::vector<size_t>                 custom_node_order_;
+
+    /// cells
+    std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > elements_;
+
+    /// faces
+    size_t  num_faces_;
+    std::vector<std::vector<size_t> >   face_nodes_;
+    std::vector<std::vector<size_t> >   face_nodes_in_custom_order_;
+    std::vector<size_t>                 custom_face_order_;
+
+    /// faces[i][j] is a 6 x 5 matrix of faces defined by face-type and corresponding node pointers as entries (type, value pairs)
+    std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > > faces_;
+
+};
+
+/**
+
+@class PolygonCell  PolygonCell "PolygonCell.h"
+@author R. Manasipov
+@date 2015
+
+PolygonCell contains data related to cell topology.
+
+*/
+
+}// end namespace csmp
+
+#endif
+

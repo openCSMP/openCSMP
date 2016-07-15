@@ -1,0 +1,125 @@
+// include declarations
+#include "AP_BoolVector.h"
+#include <memory>
+
+namespace csmp {
+
+/** Size constructor.
+
+@param uSize initial size of the bit vector.
+*/
+BoolVector::BoolVector(size_t uSize) :
+ pBits_ (NULL),
+ uSize_ (uSize) 
+{
+  if( uSize != 0 ) //if not, it will allocate 1 byte although empty
+  {
+   pBits_ = new uint8[uSize/8+1];
+  
+   // uSize/8+1 is the byte size
+   // initialize everything to false   
+   memset(pBits_,0, uSize/8+1);
+  } 
+}
+
+/** Copy constructor.
+
+ */
+BoolVector::BoolVector(const BoolVector& bv) :
+ pBits_ (NULL),
+ uSize_ (bv.uSize_) 
+{
+  if( uSize_ != 0 ) //special case
+  {
+   pBits_ = new uint8[uSize_/8+1];
+  
+   // copy bits
+   memcpy(pBits_,bv.pBits_,uSize_/8+1);
+  }   
+}
+
+/** Assign operator
+
+ */
+BoolVector& BoolVector::operator=( const BoolVector& bv )
+{
+  if ( &bv != this ) {
+      uSize_ = bv.uSize_; 
+      if( pBits_ != NULL ) delete [] pBits_;
+      if( uSize_ == 0 ) pBits_ = NULL;
+      else   
+        {
+           const size_t uHowManyBytes ( bv.uSize_/8+1 );
+           pBits_ = new uint8[uHowManyBytes];
+           memcpy(pBits_,bv.pBits_,uHowManyBytes);
+        }
+    }
+  return *this;
+}
+
+/** 
+
+@param uSize initial size of the bit vector.
+*/
+
+void BoolVector::Resize(size_t uSize)
+{
+  if( uSize == 0 ) //special case
+  {
+    uSize_ = 0;
+    
+    if(pBits_ != NULL)
+     delete[] pBits_;
+    
+    pBits_ = NULL;
+    
+    return;
+  }  
+  
+  const size_t uByteSize(uSize/8+1); 
+  const size_t uCurrentByteSize(uSize_/8+1); 
+  
+  //remember old bit container ptr
+  uint8 * pBits_Tmp = pBits_;
+  
+  //compute how many to copy
+  const size_t uHowMany(std::min(uCurrentByteSize,uByteSize));
+  
+  //resize bit container
+  pBits_ = new uint8[uByteSize];
+  
+  //initiallize to false
+  memset(pBits_,0,uByteSize);
+
+  // copy old info that fits & delete temp
+  if (pBits_Tmp != NULL)
+  {
+    memcpy(pBits_,pBits_Tmp,uHowMany);
+    delete[] pBits_Tmp;
+  }
+  
+  //set new size
+  uSize_=uSize;
+}
+
+
+
+/** Sets all bits to a value.
+*/
+void BoolVector::SetAll(const bool value)
+{
+  if (pBits_!=NULL)
+  {
+    const size_t uByteSize(uSize_/8+1);
+    memset(pBits_,(value?255:0),uByteSize);
+  }
+}
+
+
+
+void BoolVector::Out() const
+ {
+    std::cout <<"\nBoolVector::Out: not defined yet."<< std::endl;
+ }
+
+} //end of namespace csmp

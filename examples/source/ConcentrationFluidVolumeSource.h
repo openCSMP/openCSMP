@@ -1,0 +1,33 @@
+#ifndef CONCENTRATION_FLUID_VOLUME_SOURCE_H
+#define CONCENTRATION_FLUID_VOLUME_SOURCE_H
+
+#include "CSMP_definitions.h"
+#include "Interrelation.h"
+
+namespace csmp {
+
+template<size_t dim>
+class ConcentrationFluidVolumeSource : public Interrelation<dim> {
+    Operand<dim>&  CONCP;    
+    Operand<dim>&  CONCN;    
+    Operand<dim>&  Q;    
+    Operand<dim>&  PHI;    
+    ScalarVariable concn, concp, phi;
+    double64 dt, rho_increment, rho_zero;
+    
+  public:
+    ConcentrationFluidVolumeSource( const PropertyDatabase<dim>& p, double64 rho_max );
+    ~ConcentrationFluidVolumeSource() {};
+    void Calculate();
+    void TimeIncrement( double64 time_increment );
+    
+};
+
+template<size_t dim>
+inline void ConcentrationFluidVolumeSource<dim>::TimeIncrement( double64 time_increment ) 
+{ dt = time_increment; }
+
+}
+
+#endif
+

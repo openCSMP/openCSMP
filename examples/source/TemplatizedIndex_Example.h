@@ -1,0 +1,18 @@
+#ifndef TEMPLATIZED_INDEX_EXAMPLE_H
+#define TEMPLATIZED_INDEX_EXAMPLE_H
+
+#include "Example.h"
+
+namespace csmp {
+
+/// shows how Index can be extended to permit static polymorphism
+class TemplatizedIndex_Example : public Example {
+  public:
+    virtual void Specifications();
+    virtual void Run();
+
+ };
+
+ } // end csmp
+ 
+#endif
