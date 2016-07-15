@@ -1,0 +1,18 @@
+'hex2_3-configuration.txt' fracture perpendicular to well, 3 hex layers
+
+# (2) global material properties
+permeability				1.0e-13
+porosity					0.25
+fluid volume source			0.0
+nodal fluid volume source		0.0
+concentration				0.0
+
+# (3) local material properties (of the fractures)
+IN_FRACTURE	complete	permeability	1.0e-11
+IN_FRACTURE	complete	porosity		0.7
+
+# (4) essential conditions on model boundaries
+# initial pressure 5MPa, min pressure at producer = 1MPa
+EDGE5	Dirichlet	fluid pressure		5.0e6	5.0e6	5.0e6	5.0e6
+EDGE7	Dirichlet	fluid pressure		1.0e6	1.0e6	1.0e6	1.0e6
+EDGE5	Plain		concentration		3.0	3.0	3.0	3.0

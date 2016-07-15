@@ -1,0 +1,15 @@
+'one_sphere_0.45_tetra-configuration.txt' 
+
+# (1) global material properties
+permeability						1.0e-24
+porosity						0.2
+
+# (2) local material properties 
+PORES	complete	permeability	1.0e-12
+PORES	complete	porosity	0.2
+
+# (3) essential conditions on model boundaries
+# ----------------------------------------------------------------------------------
+BACK		Dirichlet	fluid pressure		5.0e6	5.0e6	5.0e6	5.0e6
+FRONT		Dirichlet	fluid pressure		1.0e5	1.0e5	1.0e5	1.0e5
+BACK		Dirichlet	concentration		1.	1.	1.	1.
