@@ -230,7 +230,7 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
       int32     diag;
       bool      zero_diag_element(false);
 	  
-      std::vector<int32>  temp( nnu_); // auxilary vector
+      std::vector<int32>  temp( ja.size() ); // auxilary vector
 
       const size_t nnu_(A.Rows());
 	    for ( k = 0U; k < nnu_; k++)
@@ -266,7 +266,7 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
 	   
      // converting C array indices (0..n-1) into Fortran indices (1..n) 
      for ( auto i : ia ) i++;
-     for ( auto i : ja ) j++;
+     for ( auto j : ja ) j++;
 
 }  // end InitializePointBased
 

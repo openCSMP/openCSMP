@@ -4,11 +4,12 @@ using namespace std;
 
 namespace csmp {
 
-  // *****************************************************************************************
-  //   2D advection via CSMP's generic CVFE method
-  // *****************************************************************************************
-  int test_implicit_advection_2D()
-
+/** 
+    *****************************************************************************************
+      2D advection via CSMP's generic CVFE method
+    ***************************************************************************************** 
+*/
+int test_implicit_advection_2D()
   {
     // isoparametric parameter
     const bool       isoparametric(true);

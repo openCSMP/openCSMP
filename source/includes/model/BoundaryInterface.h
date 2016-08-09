@@ -162,7 +162,7 @@ class BoundaryInterface {
 
   // TO DEPRECATE
   public:
-    /// construct Boundary<Face> around a region
+    /// construct Boundary<Face> objects around a region
     bool AddFaces( const char* region );
 
     /// Splits boundary based on regions into new boundaries

@@ -44,7 +44,7 @@ VectorVariable<2U>  VectorVariable<2U>::Flip()
     temp.data[0] = data[1];
     temp.data[1] = data[0];
 
-    return temp; 
+    return std::move(temp);
  }
 
 /// Multiplies by negative unity vector
@@ -58,8 +58,8 @@ VectorVariable<2U>  VectorVariable<2U>::ProjectOnto( const std::vector<double64>
  {
     double64 ratio((data[0]*v[0] + data[1]*v[1]) / (v[0]*v[0] + v[1]*v[1]));
 
-    return VectorVariable<2U>( flag[0], flag[1],
-                               v[0]*ratio, v[1]*ratio );
+    return std::move(VectorVariable<2U>( flag[0], flag[1],
+                               v[0]*ratio, v[1]*ratio ));
  }
 
 
@@ -68,8 +68,8 @@ VectorVariable<2U>  VectorVariable<2U>::ProjectOnto( const VectorVariable<2U>& v
  {
     double64 ratio((data[0]*v.data[0] + data[1]*v.data[1]) / (v.data[0]*v.data[0] + v.data[1]*v.data[1]));
 
-    return VectorVariable<2U>( flag[0], flag[1],
-                               v.data[0]*ratio, v.data[1]*ratio );
+    return std::move(VectorVariable<2U>( flag[0], flag[1],
+                               v.data[0]*ratio, v.data[1]*ratio ));
  }
 
 

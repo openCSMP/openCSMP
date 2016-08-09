@@ -1138,8 +1138,7 @@ The Element is consulted for its global coordinates.
 */
 double64  IsoparametricQuadraticPyramid::AspectRatio()
 {
-   static vector<double64> vec(spe);
-
+   vector<double64> vec(spe);
    EdgeLengths( vec );
 
    double64 seg_max(vec[0]), seg_min(vec[0]);

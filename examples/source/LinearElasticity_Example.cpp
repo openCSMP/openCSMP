@@ -22,7 +22,7 @@
 #include "ConstantFactor.h"
 
 #include "PDE_IntegratorExperimental.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 
 // PDE Operators
 #include "NumIntegral_BT_D_B_dV.h"
@@ -262,7 +262,7 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
    //ostream &cout = *GetStream();
    
-   SteadyStateDiffusionSolver<2U,Region>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+   SteadyStateDiffusor<2U,Region>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
 
    VelocityAndVolumeFlux<2U,Element<2U> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
 

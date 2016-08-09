@@ -18,8 +18,6 @@ Face-by-face calculation of CFL like timestepping criteria.
 \version   1a
 \date      21/2/2013
 \pre       high-level class depending on CSMP++ API
-\bug
-\warning
 \copyright Stephan K. Matthai
 
 */
@@ -51,7 +49,7 @@ class TimeStepEvaluator {
 
   private:
     const double64 max_time_increment_;
-    bool step_size_reduction_factor_;
+    double64       step_size_reduction_factor_;
 };
 
 } // end csmp

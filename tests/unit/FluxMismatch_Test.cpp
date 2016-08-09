@@ -3,7 +3,7 @@
 #include "vset_makers.h"
 #include "Model.h"
 #include "Region.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "ConstantFactor.h"
 #include "VTK_Interface.h"
@@ -72,7 +72,7 @@ int flux_mismatch( bool bPrescribedVelocity )
    // -----------------------------------------------------------------------
    // 2. steady-state fluid pressure 
    // -----------------------------------------------------------------------
-    SteadyStateDiffusionSolver<3U,Region> steady_state_pressure( sg, "conductivity", "fluid pressure", "fluid volume source" );
+    SteadyStateDiffusor<3U,Region> steady_state_pressure( sg, "conductivity", "fluid pressure", "fluid volume source" );
 
     VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( sg, "conductivity", "porosity", "fluid pressure" );
     

@@ -33,7 +33,6 @@ namespace csmp
       const double matrixLeftValue(2.);
       const double matrixRightValue(3.);
       const double tolerance(1.0e-5);
-      const double nodalTolerance(0.2);
       modelOutput1.Region("Model").InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1.0 ) );
       modelOutput1.Region("MATRIX_LEFT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixLeftValue ) );
       modelOutput1.Region("MATRIX_RIGHT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixRightValue ) );
@@ -75,7 +74,6 @@ namespace csmp
       timer.Start();
       Model<3> modelInput1("ANSYS_Model3D_Test_modelOutput1");
       const double binaryModelTime( timer.Stop() );
-      size_t i(0);
       size_t nullNeighbors(0);
       for( vector<Element<3>*>::iterator it = modelInput1.Region("Model").ElementsBegin(); it != modelInput1.Region("Model").ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
@@ -141,7 +139,6 @@ namespace csmp
       ba = 99.;
 
       //Geometry
-      const size_t elementCount2( modelOutput2.Region("Model").Elements() );
       const size_t nodeCount2( modelOutput2.Region("Model").Nodes() );
       const size_t regionCount2( modelOutput2.Regions() );
       const size_t boundaryCount2( modelOutput2.Boundaries() );

@@ -19,7 +19,7 @@
 #include "TextInterface.h"
 #include "MapleInterface.h"
 
-#include "Mesher1D.h"
+#include "LineElementMesher.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #include "Gauss_Solver.h"
@@ -59,7 +59,7 @@ void TimeSteppingApproaches_Example::Run()
    // --------------------------------------------
    VSet<DIM>  mesh_container;
    //         min_element_size, max_size, width_transition_zone, model_length
-   Mesher1D<DIM>  mesher;
+   LineElementMesher<DIM>  mesher;
    mesher.BuildUniformMesh( mesh_container, 10., 10 ); // 10 m sample
 
    // creating a model topological region

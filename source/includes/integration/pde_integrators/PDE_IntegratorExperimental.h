@@ -274,8 +274,8 @@ class PDE_IntegratorExperimental {
 
   public:
 
-    typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator;
-    typedef typename std::map<Parameter,size_t>::iterator       operandsIterator;
+    typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator; ///< constant iterator over solution variables
+    typedef typename std::map<Parameter,size_t>::iterator       operandsIterator;      ///< iterator over solution variables
 
     PDE_IntegratorExperimental();
   
@@ -285,26 +285,39 @@ class PDE_IntegratorExperimental {
 
   protected:
 
+    /// make a copy of this PDE integrator with its own unique solver
     PDE_IntegratorExperimental( const PDE_IntegratorExperimental& );
+  
+    /// assign setup to another PDE integrator
     PDE_IntegratorExperimental& operator=( const PDE_IntegratorExperimental& );
 
   public:
 
+    /// add desired integral terms (pde operators) to the left-hand side matrix of the algebraic system of equations
     void          Add( MathOperatorLHS<dim>* );
+
+    /// add desired integral terms (pde operators) to the right-hand side vector of the algebraic system of equations
     void          Add( MathOperatorRHS<dim>* );
   
     /// adds integral terms on the boundary of the computational domain if any
     void          AddBoundaryIntegrals( MathOperatorRHS<dim>* );
   
+    /// adds math operators that will be applied in a second loop after the matrix has been inverted
     void          AddPostProcess( MathOperatorLHS<dim>* );
 
+    /// sets the time-increment for- and triggers a transient calculation (use 1/t if problem has been set up that way)
     void          TimeIncrement( double64 dt );
+  
+    /// returns whether a finite-difference time increment has been set
     bool          Transient() const;
-    
+  
+    /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file
     void          IntegrateOver( SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
-    void          IntegrateOver1( SIMPLICIAL_COMPLEX<dim>&, bool debug=false ); // SKM FIX version that eliminates Dirichlet constraints
+  
+    /// performs an elimination of the Dirichlet degrees-of-freedom prior to solving the problem
+    void          IntegrateOver1( SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
 
-    /// simultaneously considering potential Boundary objects associated with the simplicial complex
+    /// simultaneously considers potential Boundary objects sharing nodes with the simplicial complex on which the solution is obtained
     void          IntegrateOver( Model<dim>&, SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
 
     /// switch to another solver deleting any dynamically allocated solver that was associated with integrator
@@ -316,16 +329,31 @@ class PDE_IntegratorExperimental {
     /// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
     void          ScaleEssentialConditions( double64 scale_factor);
   
+    /// returns PDE integrator into the state created by default constructor ( @todo is Reset is this needed?)
     virtual void  Reset( bool delete_math_operators=true );
 
     void          ListMathOperatorsLHS() const;
     void          ListMathOperatorsRHS() const;
+  
+    /// outputs solution vector; @attention this is useful only after an application of the PDE integrator
     void          SolutionVector( std::vector<double64>& ) const;
+  
+    /// optional input of a solution vector with an initial guess of the result; for SAMG set ifirst=0 so that this vector is used
     void          FirstGuess( const std::vector<double64>& );
+  
+    /// if an evolutionary problem where only the right-hand side changes, the matrix needs to be assembled only once
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
+  
+    /// writes out the sparsity pattern of the solution matrix
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
+  
+    /// outputs the system A x = b to the screen
     void          OutputGlobals( int precision=1 );
+  
+    /// prints current parameters settings and pde operators to screen
     void          Out() const;
+  
+    /// extra detailed screen output about the assembly  solution progress
     void          Verbose( bool );
     bool          Verbose() const;
 
@@ -372,23 +400,22 @@ class PDE_IntegratorExperimental {
 
   protected:
 
-    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;
-    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;
+    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< pde operators for solution matrix
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;           ///< pde operators for righthand vector
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< potential surface integrals for accumulation over boundary
+    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;       ///< post-processing: Darcy velocities, stresses from strains etc.
     std::map<Parameter,size_t>                   basic_operands_;
-    std::map<Parameter,size_t>                   test_operands_;   ///< dependent variables in the solved system of equations
+    std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations
 
-    SparseMatrix            G_;
-    std::vector<double64>   rh_;
-    std::vector<double64>   x_;
-    std::vector<long64>     Dirichlet_index_mapping_;              ///< mapping from the unknowns in the condensed solution matrix back to the indexed mode
+    SparseMatrix            G_;                        ///< solution matrix
+    std::vector<double64>   rh_;                       ///< righthand vector
+    std::vector<double64>   x_;                        ///< solution vector
+    std::vector<long64>     Dirichlet_index_mapping_;  ///< mapping from the unknowns in the condensed solution matrix back to the indexed mode
     Solver*                 solver_;
 
-    const size_t            dim2_;
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_;
-    const bool              newed_Solver_object;
+    const bool              newed_Solver_object_;
     double64                time_increment_;
 
     struct SIZES {

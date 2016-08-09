@@ -27,7 +27,6 @@ template<size_t> class Model;
    @attention gradient_multiplier currently is not used.
    
 */
-
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 class TransientDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
 

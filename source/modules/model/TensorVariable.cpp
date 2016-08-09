@@ -107,60 +107,60 @@ void  TensorVariable<3U>::Zero()
 
 TensorVariable<3U>  TensorVariable<3U>::operator+( const TensorVariable<3U>& t ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2], 
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            t.data[0][0]+data[0][0], t.data[0][1]+data[0][1], t.data[0][2]+data[0][2],
                            t.data[1][0]+data[1][0], t.data[1][1]+data[1][1], t.data[1][2]+data[1][2],
-                           t.data[2][0]+data[2][0], t.data[2][1]+data[2][1], t.data[2][2]+data[2][2] );
+                           t.data[2][0]+data[2][0], t.data[2][1]+data[2][1], t.data[2][2]+data[2][2] ));
  }
 
 
 
 TensorVariable<3U>  TensorVariable<3U>::operator-( const TensorVariable<3U>& t ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2], 
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0]-t.data[0][0], data[0][1]-t.data[0][1], data[0][2]-t.data[0][2],
                            data[1][0]-t.data[1][0], data[1][1]-t.data[1][1], data[1][2]-t.data[1][2],
-                           data[2][0]-t.data[2][0], data[2][1]-t.data[2][1], data[2][2]-t.data[2][2] );
+                           data[2][0]-t.data[2][0], data[2][1]-t.data[2][1], data[2][2]-t.data[2][2] ));
  }
 
 
 
 TensorVariable<3U>  TensorVariable<3U>::operator+( double64 val ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2],  
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0]+val, data[0][1]+val, data[0][2]+val,
                            data[1][0]+val, data[1][1]+val, data[1][2]+val,
-                           data[2][0]+val, data[2][1]+val, data[2][2]+val );
+                           data[2][0]+val, data[2][1]+val, data[2][2]+val ));
  }
  
  
 
 TensorVariable<3U>  TensorVariable<3U>::operator-( double64 val ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2],  
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0]-val, data[0][1]-val, data[0][2]-val,
                            data[1][0]-val, data[1][1]-val, data[1][2]-val,
-                           data[2][0]-val, data[2][1]-val, data[2][2]-val );
+                           data[2][0]-val, data[2][1]-val, data[2][2]-val ));
  }
  
  
 
 TensorVariable<3U>  TensorVariable<3U>::operator*( double64 val ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2],   
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0]*val, data[0][1]*val, data[0][2]*val,
                            data[1][0]*val, data[1][1]*val, data[1][2]*val,
-                           data[2][0]*val, data[2][1]*val, data[2][2]*val );
+                           data[2][0]*val, data[2][1]*val, data[2][2]*val ));
  }
  
  
 
 TensorVariable<3U>  TensorVariable<3U>::operator/( double64 val ) const
  {
-    return TensorVariable( flag[0], flag[1], flag[2],  
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0]/val, data[0][1]/val, data[0][2]/val,
                            data[1][0]/val, data[1][1]/val, data[1][2]/val,
-                           data[2][0]/val, data[2][1]/val, data[2][2]/val );
+                           data[2][0]/val, data[2][1]/val, data[2][2]/val ));
  }
 
 
@@ -174,7 +174,7 @@ VectorVariable<3U>  TensorVariable<3U>::operator*( const VectorVariable<3U>& vc 
                              data[0][0] * vc[0] + data[0][1] * vc[1] + data[0][2] * vc[2],
                              data[1][0] * vc[0] + data[1][1] * vc[1] + data[1][2] * vc[2],
                              data[2][0] * vc[0] + data[2][1] * vc[1] + data[2][2] * vc[2] );
-    return temp;
+    return std::move(temp);
  } 
 
 
@@ -182,7 +182,7 @@ VectorVariable<3U>  TensorVariable<3U>::operator*( const VectorVariable<3U>& vc 
 // re-tested: SKM 29-9-2001
 TensorVariable<3U> TensorVariable<3U>::Adjoint() const
  {
-    return TensorVariable( flag[0], flag[1], flag[2], 
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[1][1]*data[2][2] - data[1][2]*data[2][1],
                           -data[1][0]*data[2][2] + data[1][2]*data[2][0],
                            data[1][0]*data[2][1] - data[2][0]*data[1][1],
@@ -191,7 +191,7 @@ TensorVariable<3U> TensorVariable<3U>::Adjoint() const
                           -data[0][0]*data[2][1] + data[0][1]*data[2][0],
                            data[0][1]*data[1][2] - data[0][2]*data[1][1],
                           -data[0][0]*data[1][2] + data[0][2]*data[1][0],
-                           data[0][0]*data[1][1] - data[0][1]*data[1][0] );
+                           data[0][0]*data[1][1] - data[0][1]*data[1][0] ));
  }
 
 
@@ -219,7 +219,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator*( const TensorVariable<3U>& ts 
     temp.flag[1] = flag[1];
     temp.flag[2] = flag[2];
   
-    return temp;
+    return std::move(temp);
  } 
 
 
@@ -363,7 +363,7 @@ TensorVariable<3U>  TensorVariable<3U>::operator/( const TensorVariable<3U>& ts 
     temp.flag[1] = flag[1] ;
     temp.flag[2] = flag[2] ;
 
-    return temp; 
+    return std::move(temp);
  }
 
 
@@ -391,7 +391,7 @@ TensorVariable<3U>&  TensorVariable<3U>::operator*=( const TensorVariable<3U>& t
     temp.flag[1] = flag[1] ;
     temp.flag[2] = flag[2] ;
     
-    return *this = temp; 
+    return *this = std::move(temp);
  }
 
 
@@ -614,10 +614,10 @@ void TensorVariable<3U>::DiagonalValues(const VectorVariable<3U>& vecDiags)
 
 TensorVariable<3U>  TensorVariable<3U>::Transposed() const
  {
-    return TensorVariable( flag[0], flag[1], flag[2],  
+    return std::move(TensorVariable( flag[0], flag[1], flag[2],
                            data[0][0], data[1][0], data[2][0],
                            data[0][1], data[1][1], data[2][1],
-                           data[0][2], data[1][2], data[2][2] );
+                           data[0][2], data[1][2], data[2][2] ));
  }
 
 
@@ -842,7 +842,7 @@ VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariabl
                              ts.Value(0,0) * vc[0] + ts.Value(1,0) * vc[1] + ts.Value(2,0) * vc[2],
                              ts.Value(0,1) * vc[0] + ts.Value(1,1) * vc[1] + ts.Value(2,1) * vc[2],
                              ts.Value(0,2) * vc[0] + ts.Value(1,2) * vc[1] + ts.Value(2,2) * vc[2] );
-    return temp;
+    return std::move(temp);
  }
 
 

@@ -30,8 +30,7 @@ PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental()
    /// add extra functionality for alternative solver if needed
    solver_(new CSMP_DEFAULT_LINEAR_SOLVER()),
 #endif
-   newed_Solver_object(true),
-   dim2_(dim*dim),
+   newed_Solver_object_(true),
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
@@ -53,8 +52,7 @@ PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental()
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental( Solver& solver )
  : solver_(&solver),
-   newed_Solver_object(false),
-   dim2_(dim*dim),
+   newed_Solver_object_(false),
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
@@ -70,7 +68,7 @@ PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental( 
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::~PDE_IntegratorExperimental()
  {
-    if ( newed_Solver_object ) delete solver_;
+    if ( newed_Solver_object_ ) delete solver_;
  }
 
 
@@ -91,7 +89,7 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental( const PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>& a )
  :
    solver_(a.solver_),
-   newed_Solver_object(false),
+   newed_Solver_object_(false),
    rh_(a.rh_),
    x_(a.x_),
    G_(a.G_),
@@ -100,7 +98,6 @@ PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::PDE_IntegratorExperimental( 
    basic_operands_(a.basic_operands_),
    test_operands_(a.test_operands_),
    postpro_operators_(a.postpro_operators_),
-   dim2_(dim*dim),
    dof_per_node_(a.dof_per_node_),
    setup_established_(a.setup_established_),
    Dirichlet_index_mapping_(a.Dirichlet_index_mapping_),
@@ -131,7 +128,7 @@ PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>& PDE_IntegratorExperimental<d
 
       if ( a.solver_ != NULL ) {
            assert( solver_ != NULL or solver_ == 0 );
-           if ( newed_Solver_object ) {
+           if ( newed_Solver_object_ ) {
                delete solver_;
                /// SKM fix:  this is not a clean solution. One should bring over solver from other integrator instance
                #ifdef CSMP_WITH_SAMG_SOLVER
@@ -174,7 +171,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::RetainGlobalSolutionMat
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::SetSolver( Solver& new_solver ) {
-  if ( solver_ != &new_solver and newed_Solver_object ) delete solver_;
+  if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
   solver_ = &new_solver;
 }
 
@@ -292,9 +289,7 @@ which represent parts of the PDE which is being modeled by the PDE_IntegratorExp
 Add() allows you to associate such operators_ (like dove^2) with the
 PDE_IntegratorExperimental.
 
-@param op
-
-Pointer to PDE operator objects (=Operands) which you defined
+@param op pointer to PDE operator objects (=Operands) which you defined
 earlier in your program. These are always subclasses derived
 from the MathOperatorLHSptr or MathOperatorRHSptr base classes.
 
@@ -698,7 +693,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
    //   4. Offsets are assigned to test Operands
    //      indicating positions, i,j in solution matrix.
    // ----------------------------------------------------------------
-   size_t  offset(0U);
+   size_t       offset(0U);
+   const size_t dim2(dim * dim);
    for ( operandsIterator
          iter=test_operands_.begin(); iter!=test_operands_.end(); iter++ )
      {
@@ -708,7 +704,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         else if ( (*iter).first.key.type == VECTOR )
           dof_per_node_ += dim;
         else if ( (*iter).first.key.type == TENSOR )
-          dof_per_node_ += dim2_;
+          dof_per_node_ += dim2;
         else if ( (*iter).first.key.type == ARRAY )
           dof_per_node_ += (*iter).first.key.dataDepth;
         else if ( (*iter).first.key.type == FLAGGEDARRAY )
@@ -725,7 +721,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                      break;
                    case VECTOR: offset += target_.nodes * dim;
                      break;
-                   case TENSOR: offset += target_.nodes * dim2_;
+                   case TENSOR: offset += target_.nodes * dim2;
                      break;
                    case ARRAY:  offset += target_.nodes * (*iter).first.key.dataDepth;
                      break;
@@ -741,7 +737,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                      break;
                    case VECTOR: offset += target_.elements * dim;
                      break;
-                   case TENSOR: offset += target_.elements * dim2_;
+                   case TENSOR: offset += target_.elements * dim2;
                      break;
                    case ARRAY:  offset += target_.elements * (*iter).first.key.dataDepth;
                       break;
@@ -879,6 +875,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
     VectorVariable<dim>     vc;
     TensorVariable<dim>     ts;
     Index                   prop_key;
+    const size_t            dim2(dim * dim);
 
     if ( !setup_established_ )
       throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
@@ -930,7 +927,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
                          (*niter)->Read( prop_key, ts );
                          for ( i=0; i<dim; i++ )
                            for ( j=0; j<dim; j++ ) {
-                               position = (*niter)->Idx() * dim2_ + i * dim + j + offset;
+                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                rh_[ position ] *= ts(i,j);
                              }
                          niter++;
@@ -1065,6 +1062,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
     //  of only assembling one of their components. To do this just set the
     //  components that you do not want to assemble to DBL_MAX.
     // -------------------------------------------------------------
+     const size_t dim2(dim * dim);
+
      for ( operandsConstIterator
            it=test_operands_.begin(); it!=test_operands_.end(); it++ )
        {
@@ -1113,7 +1112,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
                           if ( ts.Flag(i) == DIRICH ) 
                             for ( size_t j=0U; j<dim; j++ )
                               {
-                                size_t  position = (*niter)->Idx() * dim2_ + i * dim + j + offset;
+                                size_t  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                 G_.ZeroRow( position );
                                 G_.Add( position, position, scale_factor_ );
                                 rh_[ position ] = scale_factor_ * ts(i,j);
@@ -1175,8 +1174,9 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
      original matrix. This mapping is needed for the assignment of the solution results to the 
      Model.
 */
-void eliminateDirichletConstraints( const map<size_t,double64>& Dirichlet_constraints, const csmp::SparseMatrix& A,
-                                    vector<double64>& rhs, csmp::SparseMatrix& B, vector<long64>& index_mapping  )
+void eliminateDirichletConstraints( const map<size_t,double64>& Dirichlet_constraints,
+                                    const csmp::SparseMatrix& A, vector<double64>& rhs,
+                                    csmp::SparseMatrix& B, vector<long64>& index_mapping  )
 {
     // 0. checking whether anything needs to be done
     if ( Dirichlet_constraints.empty() ) {
@@ -1629,6 +1629,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
  {
    Index   prop_key;
    size_t  offset;
+   const size_t dim2(dim * dim);
 
     for ( operandsIterator
           it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
@@ -1665,7 +1666,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
                       (*gfirst)->Read( prop_key, ts );
                       for ( size_t i=0U; i<dim; i++ )
                         for ( size_t k=0U; k<dim; k++ )
-                          ts(i,k) = x_[ (*gfirst)->Idx() * dim2_ + i * dim + k + offset ];
+                          ts(i,k) = x_[ (*gfirst)->Idx() * dim2 + i * dim + k + offset ];
                       (*gfirst)->Store( prop_key, ts );
                       gfirst++;
                    }

@@ -2,7 +2,7 @@
 #define STEADYSTATEDIFFUSIONPROFILE_H
 
 #include "SAMG_Profile.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "Region.h"
 
 namespace csmp{
@@ -28,7 +28,7 @@ class SteadyStateDiffusionProfile : public SAMG_Profile {
     virtual bool Solve( double64 modelTime );
 
     /// bridging to solver
-    SteadyStateDiffusionSolver<dim,Region>& Solver() { return ssds_; }
+    SteadyStateDiffusor<dim,Region>& Solver() { return ssds_; }
 
   private:
     SteadyStateDiffusionProfile();
@@ -38,7 +38,7 @@ class SteadyStateDiffusionProfile : public SAMG_Profile {
   private:
     Model<dim>& model_;
 
-    SteadyStateDiffusionSolver<dim,Region> ssds_;
+    SteadyStateDiffusor<dim,Region> ssds_;
 
     bool firstCall_;
     std::string   dumpFileName_;

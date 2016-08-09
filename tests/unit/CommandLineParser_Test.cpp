@@ -252,8 +252,8 @@ void CommandLineParser_Test::sequenceTest()
     argv[4] = "10";
     
     CommandLineParser parser(5, argv);
-    int i = parser.get<int>("-i");
-    double d = parser.get<double>("-d");
+    parser.get<int>("-i");
+    parser.get<double>("-d");
     
 	delete[] argv;
 }
@@ -265,11 +265,10 @@ void CommandLineParser_Test::missingArgumentTest()
     argv[1] = "-d";
     argv[2] = "2.0";
     
-    try
-	{
-        CommandLineParser parser(3, argv);
-        double d = parser.get<double>("-e");
-    }
+    try	{
+         CommandLineParser parser(3, argv);
+         parser.get<double>("-e");
+      }
 	catch (std::runtime_error& e)
 	{
         _succeed();
@@ -534,7 +533,7 @@ void CommandLineParser_Test::notUsedArgumentsTest()
     _test(parser.unused());
     _test(parser.getUnused() == "-d 2.0");
     
-    double d = parser.get<double>("-d");
+    parser.get<double>("-d");
             
     _test(!parser.unused());
     _test(parser.getUnused().empty());

@@ -2,7 +2,7 @@
 #define MODEL_1D_H
 
 #include "Model.h"
-#include "Mesher1D.h"
+#include "LineElementMesher.h"
 
 namespace csmp {
 

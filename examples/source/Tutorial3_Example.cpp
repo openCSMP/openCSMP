@@ -4,7 +4,7 @@
 #include "ANSYS_Model2D.h"
 
 // FE algorithm
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 
 // FV algorithms
@@ -129,7 +129,7 @@ void Tutorial3_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create a steady-state CSMP FE Algorithm using a high-level class
-    SteadyStateDiffusionSolver<2U,Region> fluid_pressure( model,
+    SteadyStateDiffusor<2U,Region> fluid_pressure( model,
                                                           "total mobility",
                                                           "fluid pressure",
                                                           "fluid volume source" );

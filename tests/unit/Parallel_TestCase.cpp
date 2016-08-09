@@ -2,7 +2,7 @@
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
 #include "InterFace.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
 #include "BrooksCorey.h"
 
@@ -69,7 +69,7 @@ namespace csmp
       boundary2.InputPropertyValue( "fluid pressure", makeScalar( DIRICH, 10.0E+5 ) );
 
       // pressure solver
-      SteadyStateDiffusionSolver<3,csmp::Region>  SSPS( model, "total mobility", "fluid pressure",
+      SteadyStateDiffusor<3,csmp::Region>  SSPS( model, "total mobility", "fluid pressure",
                                                                        "fluid volume source" );
 
       // transport algorithm

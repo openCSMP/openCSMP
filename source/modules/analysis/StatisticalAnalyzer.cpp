@@ -146,7 +146,7 @@ Goes through all regions of the current Model and counts property values
 within the ranges defined in 'bins'. Returns a map of bins and counts for each region
 using the region name as key / identifier.
 
-@param bool normalize the total number of counts can be normalized by the number of counts per
+@param normalize normalizes the total number of counts can be normalized by the number of counts per
 region if this is set to true.
 
 */
@@ -171,7 +171,7 @@ const
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
      double64             val;
-     size_t               n;
+     size_t               n(1U);
 
      // defining upper bin limits in result vector (lowest limit is always 0.)
      HistogramBins::iterator rit=result.begin();
@@ -551,7 +551,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double64             val1, val2;
+     double64             val1(0.), val2(0.);
      double64             porosity(1.);
 
      // defining upper bin limits in result vector (lowest limit is always 0.)

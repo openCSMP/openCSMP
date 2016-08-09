@@ -8,17 +8,21 @@
 
 namespace csmp{
 
-enum WELL_MODE { SHUTIN, PRODUCER, INJECTOR};
+enum WELL_MODE { SHUTIN, PRODUCER, INJECTOR };
 
-/** @author Julian E. Mindel
- */
+/** @author Julian E. Mindel (ETHZ)
 
+    @todo document this code.
+
+    @todo SKM move to applications, geothermal energy storage simulator
+
+*/
 template <size_t dim>
 class SimulatorControl
 {
 public:
     SimulatorControl();
-    ~SimulatorControl();
+    virtual ~SimulatorControl();
     SimulatorControl(SimulatorSetup<dim>* ss);
     void CatchSignals();
     SimulationSignalHandler& GetSignalHandler(){return sig_;}

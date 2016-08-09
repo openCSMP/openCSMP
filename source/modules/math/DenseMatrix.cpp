@@ -154,8 +154,8 @@ void DenseMatrix<mn_max>::FillRow( size_t row, double64 val )
  {
     if ( row < rows ) for ( size_t j=0U; j<cols; j++ ) data[row][j] = val;
     else {
-    std::cout <<"\nDenseMatrix<"<< mn_max <<">::FillRow: ";
-    std::cout <<"Target rows does not exist: "<< row << std::endl;
+      std::cerr <<"\nDenseMatrix<"<< mn_max <<">::FillRow: ";
+      std::cerr <<"Target rows does not exist: "<< row << std::endl;
     }
  }
  
@@ -167,8 +167,8 @@ void DenseMatrix<mn_max>::FillCol( size_t col, double64 val )
  {
     if ( col < cols ) for ( size_t i=0U; i<rows; i++ ) data[i][col] = val;
     else {
-    std::cout <<"\nDenseMatrix<"<< mn_max <<">::FillCol: ";
-    std::cout <<"Target column does not exist: "<< col << std::endl;
+      std::cerr <<"\nDenseMatrix<"<< mn_max <<">::FillCol: ";
+      std::cerr <<"Target column does not exist: "<< col << std::endl;
      }
  }
 
@@ -199,8 +199,8 @@ double64   DenseMatrix<mn_max>::RowSum( size_t row ) const
          return sum;
       }
 
-    std::cout <<"\nDenseMatrix<"<< mn_max <<">::RowSum: ";
-    std::cout <<"Target rows does not exist: "<< row << std::endl;
+    std::cerr <<"\nDenseMatrix<"<< mn_max <<">::RowSum: ";
+    std::cerr <<"Target rows does not exist: "<< row << std::endl;
     throw std::length_error("DenseMatrix<mn_max>::RowSum");
 
     return static_cast<double64>(0.0);
@@ -220,8 +220,8 @@ double64   DenseMatrix<mn_max>::ColSum( size_t col ) const
          return sum;
       }
 
-    std::cout <<"\nDenseMatrix<"<< mn_max <<">::ColSum: ";
-    std::cout <<"Target column does not exist: "<< col << std::endl;
+    std::cerr <<"\nDenseMatrix<"<< mn_max <<">::ColSum: ";
+    std::cerr <<"Target column does not exist: "<< col << std::endl;
     throw std::length_error("DenseMatrix<mn_max>::ColSum");
 
     return static_cast<double64>(0.0);
@@ -937,7 +937,7 @@ DenseMatrix<mn_max>&
     temp(2,1) = data[2][0] * ts.Value(0,1) + data[2][1] * ts.Value(1,1) + data[2][2] * ts.Value(2,1);
     temp(2,2) = data[2][0] * ts.Value(0,2) + data[2][1] * ts.Value(1,2) + data[2][2] * ts.Value(2,2);
 
-    return *this = temp;
+    return *this = std::move(temp);
  }
 
 #endif // USED_TOGETHER WITH CSMP

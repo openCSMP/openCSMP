@@ -2359,6 +2359,27 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
 
 
 
+
+
+/**
+    Stub: ID there are no boundaries so this should be a compile time assert
+    
+    @todo TODO: use static_assert<> here on the template argument
+*/
+template<>
+bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain )
+ {
+    ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
+                                     subdomain.Name(), "one-dimensional models have no boundaries." );
+    return false;
+   
+ } // end checkNeighborNormalsForConsistentOrientation
+
+
+
+
+
+
 /**
      Assigns chosen node coordinate (x or y or z) to the target node variable.
 */

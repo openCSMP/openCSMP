@@ -211,6 +211,7 @@ public:
     // Screen output
     // ----------------------------------------
 
+    /// the name of the computational model
     const char* Name() const;
     void        Name( const char* );
 

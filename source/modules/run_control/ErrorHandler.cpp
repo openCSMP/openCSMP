@@ -17,12 +17,12 @@ The default constructor is the only constructor for the error handler and
 it is called before the simulation enters main(). 
 */
 ErrorHandler::ErrorHandler()
-   : verbose(VERBOSE), debug(false), errors(0), warnings(0), total(0), error_limit(10000)
+   : verbose_(VERBOSE), errors_(0), warnings_(0), total_(0), error_limit_(10000)
  {
     if ( !(aus.duration==0) and aus.secs_remaining <= 0 ) {
          cerr <<"\n\nErrorHandler: CSMP++ "<< parse(aus.duration);
          cerr <<" license has expired since "<< -aus.secs_remaining <<" secs.";
-         cerr <<" Contact: 'stephan.matthai@unileoben.ac.at' for an extension.\n";
+         cerr <<" Contact: 'stephan.matthai@unimelb.edu.au' for an extension.\n";
          terminate();
       }
  }
@@ -51,36 +51,36 @@ ErrorHandler::~ErrorHandler()
     // ----------------------------------------
     // create output file (overwrite earlier file)
     // log messages
-    if ( !error_sequence.empty() )
+    if ( !error_sequence_.empty() )
       {
          ofs.open( "Runtime.log", ios::out|ios::trunc );
          if ( !ofs )
            {
-              cout << "ErrorHandler (Destructor): Cannot open error documentation file !\n" << endl;
+              cerr << "ErrorHandler (Destructor): Cannot open error documentation file !\n" << endl;
               return;
            }
          ofs << "ErrorHandler (Destructor): logfile: Runtime messages in chronological sequence " << endl;
          ofs <<"(if this starts with an info or a warning, there were no errors):"<< endl;
          for ( map<string,string>::const_iterator
-               err_it=error_sequence.begin(); err_it!=error_sequence.end(); err_it++ )
+               err_it=error_sequence_.begin(); err_it!=error_sequence_.end(); err_it++ )
            ofs << (*err_it).first <<": "<< (*err_it).second << endl;
           
-         if ( !merrors.empty() ) {  
+         if ( !merrors_.empty() ) {
              ofs << "\nErrorHandler (Destructor): logfile: CSMP ERROR messages in sequence of occurrence:" << endl;
-             multimap<string,string>::const_iterator  wit;
-             for ( wit=merrors.begin(); wit!=merrors.end(); wit++ )
+             for ( multimap<string,string>::const_iterator
+                   wit=merrors_.begin(); wit!=merrors_.end(); wit++ )
                ofs << (*wit).first <<": "<< (*wit).second << endl;
            }
-         if ( !mwarnings.empty() ) {  
+         if ( !mwarnings_.empty() ) {
              ofs << "\nErrorHandler (Destructor): logfile: CSMP WARNING messages in sequence of occurrence:" << endl;
-             multimap<string,string>::const_iterator  wit;
-             for ( wit=mwarnings.begin(); wit!=mwarnings.end(); wit++ )
+             for ( multimap<string,string>::const_iterator
+                   wit=mwarnings_.begin(); wit!=mwarnings_.end(); wit++ )
                ofs << (*wit).first <<": "<< (*wit).second << endl;
            }
-         if ( !minfos.empty() ) {  
+         if ( !minfos_.empty() ) {
              ofs << "\nErrorHandler (Destructor): logfile: CSMP INFO messages in sequence of occurrence:" << endl;
-             multimap<string,string>::const_iterator  wit;
-             for ( wit=minfos.begin(); wit!=minfos.end(); wit++ )
+             for ( multimap<string,string>::const_iterator
+                   wit=minfos_.begin(); wit!=minfos_.end(); wit++ )
                ofs << (*wit).first <<": "<< (*wit).second << endl;
            }
            
@@ -92,56 +92,104 @@ ErrorHandler::~ErrorHandler()
 
 
 
+/**
+
+OS-specific program termination prompted by an error classification
+as FATAL_ERROR. Before program terminates, this method writes all the 
+messages which occurred until then to the text file 'ErrorHandler.log'.
+This is similar to calling the destructor of the error handler.  
+
+@section messages Messages
+
+Terminate() will report if it cannot open the output file and prompt the
+user for a new file name such that the event sequence until the error
+occurred can still be recorded. 
+*/
+void ErrorHandler::WriteErrorsToFile( const char* err_file )
+ {
+    // before exiting errors are logged to file
+    // ----------------------------------------
+    // create output file (overwrite earlier file)
+    // log messages
+    map<string,string>::const_iterator  err_it;
+    ofstream   ofs;
+    char       ofile[50];
+    
+    if ( !error_sequence_.empty() )
+      {
+         ofs.open ( err_file, ios::out|ios::trunc );
+         if ( !ofs )
+           {
+              cerr << "ErrorHandler::WriteErrorsToFile: Cannot open error documentation file !" << endl;
+              cerr << "\nPlease enter a new valid output file name: ";
+              cin >> ofile;
+              ofs.open ( ofile, ios::out|ios::trunc );
+              return;
+           }
+         ofs <<"ErrorHandler::Terminate: Logfile created before abnormal program termination."<< endl;
+         ofs <<"CSMP messages in chronological sequence:" << endl;
+         for ( err_it=error_sequence_.begin(); err_it!=error_sequence_.end(); err_it++ )
+           ofs << (*err_it).first <<": "<< (*err_it).second << endl;
+         ofs.close();
+      }
+    
+ } // end WriteErrorsToFile
+
+
+
+
+/**
+    Returns the maximum number of errors that the ErrorHandler permits before 
+    issueing a fatal (program terminating) error.
+*/
+size_t ErrorHandler::MaximumNumberOfErrors() const
+ { return error_limit_; }
+
+
+
+
 
 
 /**
 
 Method to suppress runtime error messages. The latter can still be
 output selectively by listing the message maps using the Print...()
-methods.  */
+methods.  
+
+*/
 void ErrorHandler::Verbose( bool verb )
 {
-    verbose = ( verb ? VERBOSE : SILENT );
-}
-void ErrorHandler::Verbose( size_t verb )
-{
-    verbose = verb;
-}
-size_t ErrorHandler::Verbose( ) const
-{
-    return verbose;
+    verbose_ = ( verb ? VERBOSE : SILENT );
 }
 
-void ErrorHandler::Debug( bool debug_flag )
+bool ErrorHandler::Verbose() const
 {
-    debug = debug_flag;
-}
-bool ErrorHandler::Debug( ) const
-{
-    return debug;
+    return ( verbose_ == VERBOSE );
 }
 
-bool ErrorHandler::operator>( size_t level )  const
+
+/**
+    Sets the level of error reporting
+*/
+void ErrorHandler::ReportingLevel( CSMP_OUTPUT_LEVEL verb )
 {
-    return ( verbose > level );
+    verbose_ = verb;
 }
-bool ErrorHandler::operator>=( size_t level ) const
+
+
+/**
+    Returns the current level of error reporting
+*/
+CSMP_OUTPUT_LEVEL ErrorHandler::ReportingLevel() const
 {
-    return ( verbose >= level );
+    return verbose_;
 }
-bool ErrorHandler::operator==( size_t level ) const
-{
-    return ( verbose == level );
-}
-bool ErrorHandler::operator!=( size_t level ) const
-{
-    return ( verbose != level );
-}
+
 
  
 /**
 
-Various versions of the notice() method are provided such that CSP objects
+Various versions of the notice() method are provided such that CSMP objects
 can report their messages to the ErrorHandler. These are distinguished
 by the number and type of arguments. 
 
@@ -189,54 +237,54 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
    // 1. logging the message
     switch( err_type )
       {
-         case INFO:        minfos.insert( make_pair(source,msg) );      
+         case INFO:        minfos_.insert( make_pair(source,msg) );
                            message += " Info: ";
            break;
-         case WARNING:     mwarnings.insert( make_pair(source,msg) );
+         case WARNING:     mwarnings_.insert( make_pair(source,msg) );
                            message += " Warning: ";
-                           warnings++;
+                           warnings_++;
            break;
-         case ERROR:       merrors.insert( make_pair(source,msg) );
+         case ERROR:       merrors_.insert( make_pair(source,msg) );
                            message += " Error: ";
-                           errors++;
+                           errors_++;
            break;
-         case EXCEPTION:   merrors.insert( make_pair(source,msg) );
+         case EXCEPTION:   merrors_.insert( make_pair(source,msg) );
                            message += " Exception: ";
-                           errors++;
+                           errors_++;
                            WriteErrorsToFile();
                            throw Exception( err_type, source.c_str(), msg );
            break;
-         case FATAL_ERROR: merrors.insert( make_pair(source,msg) );
+         case FATAL_ERROR: merrors_.insert( make_pair(source,msg) );
                            message += " Fatal Error: ";
                            cout <<"Fatal Error: "<< source <<" "<< msg << endl;
                            cout.flush();
-                           errors++;
+                           errors_++;
                            throw Exception( err_type, source.c_str(), msg );
            break;
          default: cerr <<"\nErrorHandler::notice: error of unknown type was detected."<< endl;
                   terminate();
       }
    message += msg;
-   total++;
+   total_++;
    
    // 2. recording the messages in chronological order 
-   error_sequence[ timer_.ascii() ] = message;
+   error_sequence_[ timer_.ascii() ] = message;
    
    // reporting the error
-   if ( verbose ) {
+   if ( verbose_ ) {
         if ( err_type == INFO ) cout <<"\n"<< message << endl;
         else cout <<"\n"<< message << endl; 
         cout.flush();
 #ifndef NDEBUG 
         if ( err_type < WARNING ) {
-             cout <<"\nHit return to continue."<< endl;
+             cout <<"\nErrorHandler: Hit return to continue."<< endl;
              getchar();
              getchar();
           }
 #endif
      }
    // terminating the run if too many errors occured
-   if ( errors > error_limit ) {
+   if ( errors_ >= error_limit_ ) {
        WriteErrorsToFile();
        throw Exception( err_type, source.c_str(), msg );
    }
@@ -245,6 +293,9 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
 
 
 
+/**
+    Combines multiple message strings into a single one
+*/
 void ErrorHandler::notice( CSMP_MESSAGE err_type, const string& source,
                            const string& message1, const string& message2 )
  {
@@ -252,36 +303,18 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type, const string& source,
      msg +=", ";
      msg += message2;
      notice( err_type, source, msg );
+   
  } // end
 
-void ErrorHandler::notice( CSMP_MESSAGE err_type, const char*  source, const string& message )
+
+
+
+void print( const multimap<string,string>& m )
  {
-     notice( err_type, string(source), message );
+     for ( multimap<string,string>::const_iterator
+           it=m.begin(); it!=m.end(); it++ )
+       cerr << (*it).first << endl << (*it).second << endl << endl;
  }
-
-void ErrorHandler::notice( CSMP_MESSAGE err_type, const char*  source, const string& message1, const string& message2 )
- {
-     notice( err_type, string(source), message1, message2 );
- }
-
-
-void ErrorHandler::notice( CSMP_MESSAGE err_type, const char* source, const char* message )
- {
-     notice( err_type, string(source), string(message) );
-     
- } // end
-
-
-
-void ErrorHandler::notice( CSMP_MESSAGE err_type, const char* source, 
-                           const char* message1, const char* message2 )
- {
-     string  msg(message1);
-     msg     +=", ";
-     if ( message2 != NULL ) msg += message2;
-     notice( err_type, string(source), msg );
-
- } // end
 
 
 
@@ -294,25 +327,26 @@ expected way during a complex simulation.
 
 Apart from PrintInfos() there are methods which print warnings 
 (PrintWarnings()), and for errors. 
+
 */
 void ErrorHandler::PrintInfos() const
  {
     cout <<"\nErrorHandler::PrintInfos:"<< endl;
-    Print( minfos );
+    print( minfos_ );
  }
  
  
 void ErrorHandler::PrintWarnings() const
  {
     cout <<"\nErrorHandler::PrintWarnings:"<< endl;
-    Print( mwarnings );
+    print( mwarnings_ );
  }
  
  
 void ErrorHandler::PrintErrors() const
  {
     cout <<"\nErrorHandler::PrintErrors:"<< endl;
-    Print( merrors );
+    print( merrors_ );
  }
 
 
@@ -322,71 +356,18 @@ void ErrorHandler::PrintErrors() const
 The standard CSmP interface used to list the state of the object.
 Here, all recorded messages are printed on 'stdout' in chronological
 sequence. 
+
 */
 void ErrorHandler::Out() const
  {
     cerr <<"\nErrorHandler::Out:"<< endl;
-    cerr <<"errors: "<< errors <<", warnings: "<< warnings << endl;
+    cerr <<"errors: "<< errors_ <<", warnings: "<< warnings_ <<", infos: "<< minfos_.size() << endl;
      
     for ( map<string,string>::const_iterator
-          it=error_sequence.begin(); it!=error_sequence.end(); it++ )
+          it=error_sequence_.begin(); it!=error_sequence_.end(); it++ )
       cerr << (*it).first << endl << (*it).second << endl << endl;
  }
 
-
-void ErrorHandler::Print( const multimap<string,string>& m ) const
- {
-     for ( multimap<string,string>::const_iterator
-           it=m.begin(); it!=m.end(); it++ )
-       cerr << (*it).first << endl << (*it).second << endl << endl;
- }
-
-
-
-
-
-/**
-
-OS-specific program termination which prompted by an error specification
-as FATAL_ERROR. Before program terminates, this method writes all the 
-messages which occurred until then to the text file 'ErrorHandler.log'.
-This is similar to calling the destructor of the error handler.  
-
-@section messages Messages
-
-Terminate() will report if it cannot open the output file and prompt the
-user for a new file name such that the event sequence until the error
-occurred can still be recorded. 
-*/
-void ErrorHandler::WriteErrorsToFile( const char* err_file )
- {
-    // before exiting errors are logged to file
-    // ----------------------------------------
-    // create output file (overwrite earlier file)
-    // log messages
-    map<string,string>::const_iterator  err_it;
-    ofstream   ofs;
-    char       ofile[50];
-    
-    if ( !error_sequence.empty() )
-      {
-         ofs.open ( err_file, ios::out|ios::trunc );
-         if ( !ofs )
-           {
-              cerr << "ErrorHandler::WriteErrorsToFile: Cannot open error documentation file !" << endl;
-              cerr << "\nPlease enter a new valid output file name: ";
-              cin >> ofile;
-              ofs.open ( ofile, ios::out|ios::trunc );
-              return;
-           }
-         ofs <<"ErrorHandler::Terminate: Logfile created before abnormal program termination."<< endl;
-         ofs <<"CSMP messages in chronological sequence:" << endl;
-         for ( err_it=error_sequence.begin(); err_it!=error_sequence.end(); err_it++ )
-           ofs << (*err_it).first <<": "<< (*err_it).second << endl;
-         ofs.close();
-      }
-    
- } // end WriteErrorsToFile
 
 
 } // end namespace csmp

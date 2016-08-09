@@ -18,7 +18,7 @@
 #include "TextInterface.h"
 #include "MapleInterface.h"
 
-#include "Mesher1D.h"
+#include "LineElementMesher.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #include "Gauss_Solver.h"
@@ -73,7 +73,7 @@ void TemperatureDensityPressure_Example::Run()
     // -------------------------------------------
     VSet<1U>       mesh_container;
     const uint32   N_ELEMENTS(4000);  // 4,000 meter tall model
-    Mesher1D<1U>   mesher;
+    LineElementMesher<1U>   mesher;
     mesher.BuildUniformMesh( mesh_container, 1., N_ELEMENTS+1 );
 
     // creating a model topological region

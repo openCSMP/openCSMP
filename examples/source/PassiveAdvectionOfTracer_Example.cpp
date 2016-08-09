@@ -16,7 +16,7 @@
 #include "VTK_Interface.h"
 
 // integration od PDEs and post-processing
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 
 // interrelations
@@ -125,9 +125,9 @@ void PassiveAdvectionOfTracer_Example::Run()
  // -----------------------------------------------------------------------
  // 5. computing a steady-state fluid pressure distribution in the model
  // -----------------------------------------------------------------------
-  SteadyStateDiffusionSolver<3U,Region> steady_state_pressure( model3D,
-                                                              "conductivity", "fluid pressure",
-                                                              "fluid volume source" );
+  SteadyStateDiffusor<3U,Region> steady_state_pressure( model3D,
+                                                        "conductivity", "fluid pressure",
+                                                        "fluid volume source" );
   // postprocessing of pressure gradients and flow velocities
   VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
   steady_state_pressure.AddPostProcess( &postpro0 );
@@ -163,7 +163,7 @@ void PassiveAdvectionOfTracer_Example::Run()
        case 1:
           cout <<"\nmain: Would you like to restrict computation to group (yes=1, 0=no)? ";
           cin >> tmethod;
-          if ( tmethod != 1 ) AdvectVariableExplicit( model3D, "Model" );
+          if ( tmethod != 1 ) AdvectVariableExplicit( model3D, false /* second order=false */ );
           else {
                string group_name;
                cout <<"\nmain: Enter name of model region: ";
@@ -264,10 +264,10 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableExplicit( Model<3U>& sg, bo
    cin >> time_interval;
 
    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
-  clock_t ticks = clock();
-  explicit_advector.AdvectVariable( time_interval, 0.1, true, false );
-  ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+   clock_t ticks = clock();
+   explicit_advector.AdvectVariable( time_interval, 0.1, true, false );
+   ticks = clock() - ticks;
+   cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
 } // end advectVariableExplicit
 

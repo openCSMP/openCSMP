@@ -104,7 +104,7 @@ void ANSYS_Model2D_Test::run()
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
     _test( avBin0 == av );
     
-    Model<2U> modelBinIn1(bin1name,"CSMP-variables.txt");
+    Model<2U> modelBinIn1(bin1name);
     Index nodalArrayKey( modelBinIn1.Database().StorageKey("nodal array") );
     Index faceVariableKey( modelBinIn1.Database().StorageKey("face variable") );
     _test( leftNodes == modelBinIn1.Boundary("LEFT").Nodes() );

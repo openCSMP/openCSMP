@@ -13,7 +13,7 @@
 #include "Region.h"
 #include "ModelTime.h"
 #include "PDE_Integrator.h"
-#include "TransientDiffusionSolver.h"
+#include "TransientDiffusor.h"
 #include "ConstantFactor.h"
 
 // interfaces
@@ -254,7 +254,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     static bool first_call(true);
     
      if ( first_call ) {
-         fluid_pressure_ = new TransientDiffusionSolver<DIM,Region>( model,
+         fluid_pressure_ = new TransientDiffusor<DIM,Region>( model,
                                                            "conductivity",
                                                            "fluid pressure", "total system compressibility",
                                                            "fluid volume source" );
@@ -265,27 +265,27 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
 
          #ifdef CSMP_WITH_SAMG_SOLVER
          // targeting SAMG DLL 2 for this pressure solver (same as for steady state solver, but now reusing solution from previous timestep if available)
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().SetSolverInstance(2);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().SetSolverInstance(2);
          // io
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1( 0 );
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2( 0 );
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_idmp( -1 );
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1( 0 );
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2( 0 );
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_idmp( -1 );
          // SAMG solution criteria
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps(0.);
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_rel_eps(1.E-10);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps(0.);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_rel_eps(1.E-10);
          
          // Re-use solver setup from previous timestep, internal checks force setup when required
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
 
          // Re-use solver setup from previous timestep, internal checks force setup when required
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(7);
          // Agressive first level coarsening nredlev(1) for decreased setup time and reduced no. of cycles
       //    dynamic_cast<SteadyStateDiffusionSolver<3U,Region>*>(fluid_pressure_)->GetSolverSettings().GetSolverSettings().Set_nred(1);
          // Pre-adjust SAMG coarse matrix size relative to original size, based on solver output
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_a_cmplx(2);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_a_cmplx(2);
          // Pre-adjust SAMG mesh complexity, based on solver output
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_g_cmplx(1.5);
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_w_avrge(2);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_g_cmplx(1.5);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_w_avrge(2);
          #else
          /// add extra functionality for alternative solver if needed
          #endif
@@ -322,14 +322,14 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     if ( first_call )  {
         #ifdef CSMP_WITH_SAMG_SOLVER
          // suppress verbose output
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
          // absolute tolerance set to 1e-14
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
          // use solution from last step as an initial guess
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
          // reuse solver setup from last call
-         dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
+         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
         #else
         /// add extra functionality for alternative solver if needed
         #endif

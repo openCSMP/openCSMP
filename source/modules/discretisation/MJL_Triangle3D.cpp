@@ -106,16 +106,16 @@ axis, a message will report this.
 */
 int  Triangle3D::FacingDirection() const
   {
-    static const double cut_off = 45.0;
+    const double cut_off(45.);
     // normals corresponding to the possible directions
-    static Edge3D  front ( Point3D(0.0,0.0,0.0), Point3D(0.0,0.0,1.0) );
-    static Edge3D  back  ( Point3D(0.0,0.0,0.0), Point3D(0.0,0.0,-1.0) );
-    static Edge3D  top   ( Point3D(0.0,0.0,0.0), Point3D(0.0,1.0,0.0) );
-    static Edge3D  bottom( Point3D(0.0,0.0,0.0), Point3D(0.0,-1.0,0.0) );
-    static Edge3D  left  ( Point3D(0.0,0.0,0.0), Point3D(-1.0,0.0,0.0) );
-    static Edge3D  right ( Point3D(0.0,0.0,0.0), Point3D(1.0,0.0,0.0) );
-    static Edge3D  tnormal;
+    Edge3D  front ( Point3D(0.0,0.0,0.0), Point3D(0.0,0.0,1.0) );
+    Edge3D  back  ( Point3D(0.0,0.0,0.0), Point3D(0.0,0.0,-1.0) );
+    Edge3D  top   ( Point3D(0.0,0.0,0.0), Point3D(0.0,1.0,0.0) );
+    Edge3D  bottom( Point3D(0.0,0.0,0.0), Point3D(0.0,-1.0,0.0) );
+    Edge3D  left  ( Point3D(0.0,0.0,0.0), Point3D(-1.0,0.0,0.0) );
+    Edge3D  right ( Point3D(0.0,0.0,0.0), Point3D(1.0,0.0,0.0) );
     
+    Edge3D  tnormal;
     UnitNormal( tnormal );
  
     if ( bottom.AngleTo(tnormal) <= cut_off ) return MJL3D_BOTTOM;

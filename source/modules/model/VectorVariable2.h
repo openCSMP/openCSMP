@@ -227,7 +227,7 @@ inline void VectorVariable<2U>::Resize( size_t, double64 newValue )
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator+( const VectorVariable<2U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] + v.data[0], data[1] + v.data[1] );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] + v.data[0], data[1] + v.data[1] ));
  }
 
 
@@ -235,49 +235,49 @@ inline VectorVariable<2U>  VectorVariable<2U>::operator+( const VectorVariable<2
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator-( const VectorVariable<2U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] - v.data[0], data[1] - v.data[1] );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] - v.data[0], data[1] - v.data[1] ));
  }
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator*( const VectorVariable<2U>& v ) const 
  {
-    return VectorVariable( flag[0], flag[1], data[0] * v.data[0], data[1] * v.data[1] );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] * v.data[0], data[1] * v.data[1] ));
  } 
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator/( const VectorVariable<2U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] / v.data[0], data[1] / v.data[1] );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] / v.data[0], data[1] / v.data[1] ));
  }
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator+( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] + val, data[1] + val );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] + val, data[1] + val ));
  }
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator-( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] - val, data[1] - val );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] - val, data[1] - val ));
  }
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator*( double64 val ) const 
  {
-    return VectorVariable( flag[0], flag[1], data[0] * val, data[1] * val );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] * val, data[1] * val ));
  } 
 
 
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator/( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], data[0] / val, data[1] / val );
+    return std::move(VectorVariable( flag[0], flag[1], data[0] / val, data[1] / val ));
  }
 
 
@@ -285,7 +285,7 @@ inline VectorVariable<2U>  VectorVariable<2U>::operator/( double64 val ) const
 
 inline VectorVariable<2U>  VectorVariable<2U>::operator^( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], std::pow( data[0],val ), std::pow( data[1], val ) );
+    return std::move(VectorVariable( flag[0], flag[1], std::pow( data[0],val ), std::pow( data[1], val ) ));
  }
 
 
@@ -493,7 +493,7 @@ inline double64 VectorVariable<2U>::operator&( const VectorVariable<2U>& v ) con
 inline VectorVariable<2U>  VectorVariable<2U>::operator%( const VectorVariable<2U>& v ) const
  {
     // assuming that the third dimension has a zero coordinate
-    return VectorVariable( flag[0], flag[1], 0., data[0]*v.data[1] - v.data[0]*data[1] );
+    return std::move(VectorVariable( flag[0], flag[1], 0., data[0]*v.data[1] - v.data[0]*data[1] ));
  } 
 
 
@@ -528,12 +528,12 @@ inline double64 VectorVariable<2U>::DotProduct( const VectorVariable& v ) const
 
 inline VectorVariable<2U> VectorVariable<2U>::CrossProduct( const csmp::Point<2U>& p ) const
  {
-     return VectorVariable<2U>( flag[0], flag[1], 0., data[0]*p[1] - data[1]*p[0] );
+     return std::move(VectorVariable<2U>( flag[0], flag[1], 0., data[0]*p[1] - data[1]*p[0] ));
  }
 
 inline VectorVariable<2U> VectorVariable<2U>::CrossProduct( const VectorVariable& v ) const
  {
-     return VectorVariable<2U>( flag[0], flag[1], 0., data[0]*v[1] - data[1]*v[0] );
+     return std::move(VectorVariable<2U>( flag[0], flag[1], 0., data[0]*v[1] - data[1]*v[0] ));
  }
 
 inline size_t  VectorVariable<2U>::Components() const { return 2U; } 
@@ -632,14 +632,14 @@ inline void  VectorVariable<2U>::Log10()
 
 inline  bool VectorVariable<2U>::Out( FILE* fp ) const
   {
-  fwrite( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
-  return true;
+     fwrite( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
+     return true;
   }
 
 inline  bool VectorVariable<2U>::In( FILE* fp )
   {
-  fread( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
-  return true;
+     fread( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
+     return true;
   }
 
 

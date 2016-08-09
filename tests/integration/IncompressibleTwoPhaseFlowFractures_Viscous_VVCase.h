@@ -22,7 +22,7 @@
 #include "LinearSolver.h"
 #include "SAMG_Exception.h"
 #include "VelocityAndVolumeFlux.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 

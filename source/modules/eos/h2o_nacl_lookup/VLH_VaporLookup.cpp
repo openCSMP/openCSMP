@@ -67,9 +67,9 @@ namespace csmp
                            "FATAL_ERROR: when constructing the properties_at _tmax vector, x at Tmax, Pmax was calaculated as NaN!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
         return;
       }
-    if( max_index-1 != 7)
+    if( max_index-1 != 7 )
       {
-        cout << "max_index is " << max_index << endl;
+        cerr << "max_index is " << max_index << endl;
         csmp_error.notice( FATAL_ERROR, 
                            "Constructor VLH_VaporLookup::VLH_VaporLookup(const double64& externaltemperature) -",
                            "FATAL_ERROR: wrong size of properties_at_tmax vector compared to LookupPropertyIndex.h!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");

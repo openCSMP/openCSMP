@@ -5,7 +5,7 @@
 #include "PropertyHandle.h"
 #include "PDE_Integrator.h"
 #include "ScalarVariable.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "VelocityAndVolumeFlux.h"
 #include "Timer.hpp"
@@ -89,7 +89,7 @@ void InflowOutflowCalculation_VVCase<dim>::run()
 
     model->InputBoundaryValue( LEFT,  "concentration", concentration );
 
-    SteadyStateDiffusionSolver<dim, Region> ssds( *model, "conductivity", "fluid pressure", "fluid volume source");
+    SteadyStateDiffusor<dim, Region> ssds( *model, "conductivity", "fluid pressure", "fluid volume source");
     VelocityAndVolumeFlux<dim,Element<dim> > veloandvflux( *model,
                                              "conductivity",               // conductivity (abs. perm./visc. for single phase)
                                              "porosity",                   // porosity

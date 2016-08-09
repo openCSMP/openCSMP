@@ -1241,7 +1241,7 @@ of the RGB image size.
 */
 
 void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep, 
-                                          bool greyscale, bool sqrt_of ) const
+                                      bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
     ColorPalette  rgb_colorizer;  // default rainbow scale 1-255

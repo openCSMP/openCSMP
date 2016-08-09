@@ -45,12 +45,25 @@ void Experimental_Example::Specifications()
    AddRequirement( "no predefined model or variables file" );
 }
 
-/** 
+
+/**
      Put CSMP code that you would like to test here and run it as part of the 
      example suite.
 */
 void Experimental_Example::Run()
 {
+  Point<3U> a(1.,2.,3.), b(3.,4.,5.);
+  
+  Point<3U> c = a + b;
+
+  Point<3U> d = a + b;
+  
+  a.Out();
+  b.Out();
+  c.Out();
+
+  return;
+
   // testing model construction
   const size_t   dim(3U);
   const string   model_name("prism_test");

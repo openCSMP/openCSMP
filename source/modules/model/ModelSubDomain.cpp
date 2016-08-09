@@ -5032,9 +5032,9 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
          const size_t perimeter_faces(PerimeterFaces(eid));
          // writing the number of perimeter faces as negative number, but only if there are more than 1
-         if ( perimeter_faces > 1 ) faceIDs.push_back( -perimeter_faces );
+         if ( perimeter_faces > 1 ) faceIDs.push_back( static_cast<int8>(-perimeter_faces) );
          for ( size_t j=0U; j<perimeter_faces; ++j )
-           faceIDs.push_back( PerimeterFace(eid,j) );
+           faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
       }
     skm_C_fwrite( fp, faceIDs );
 
@@ -5115,7 +5115,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
 
 
 /**
-    returns the number of nodes on its perimeter that the region shares with the given boundary
+    @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
 template<size_t dim, template<size_t> class SIMPLEX>
 size_t ModelSubDomain<dim,SIMPLEX>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
@@ -5193,8 +5193,9 @@ template size_t sharedNodes( const ModelSubDomain<1U,Element>& g1, const ModelSu
 template size_t sharedNodes( const ModelSubDomain<2U,Element>& g1, const ModelSubDomain<2U,Element>& g2 );
 template size_t sharedNodes( const ModelSubDomain<3U,Element>& g1, const ModelSubDomain<3U,Element>& g2 );
 
+
 /** 
-    As sharedNodes - but application is restricted to nodes that sit 
+    As for sharedNodes() - but application is restricted to nodes that sit
     on the perimeter / surface of the region.
 */
 template<size_t dim, template<size_t> class SIMPLEX>

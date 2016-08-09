@@ -254,8 +254,8 @@ class PropertyDatabase  {
 
    void   Out() const;
 
-   void   Verbose(bool verbose){this->verbose_=verbose;}
-   bool   Verbose(){return this->verbose_;}
+   void   Verbose(bool verbose) { this->verbose_=verbose; }
+   bool   Verbose() { return this->verbose_; }
 
  private:
    const size_t vectorFlags, tensorFlags;

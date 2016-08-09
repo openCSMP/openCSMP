@@ -8,5 +8,11 @@ SAMG_Profile::SAMG_Profile()
 {
 }
 
+SAMG_Profile::~SAMG_Profile()
+{
+  // nothing needs to be done
+}
+
+
 } // csmp
 

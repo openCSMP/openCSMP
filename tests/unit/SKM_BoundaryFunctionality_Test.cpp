@@ -12,7 +12,7 @@
 #include "ANSYS_Model3D.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
-#include "FaceConstructionData.hpp"
+#include "FaceConstructionData.h"
 
 
 using namespace std;

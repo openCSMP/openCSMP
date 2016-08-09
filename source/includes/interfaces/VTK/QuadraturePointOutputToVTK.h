@@ -13,6 +13,7 @@
 #include "VTK_Interface.h"
 #include "CSMP_highLevelUtilities.h"
 
+namespace csmp {
 
 template<size_t> class Model;
 
@@ -21,9 +22,8 @@ public:
 	QuadraturePointOutputToVTK();
 	~QuadraturePointOutputToVTK();
 	void OutputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK(const Model<3U>&, const char*, const char*);
-private:
-
 };
 
+} // end csmp
 
 #endif // end defined quadraturePointOutputToVTK.h

@@ -3,7 +3,6 @@
 
 #include "ANSYS_Interface.h"
 #include "ANSYS_ElementSpecifications.h"
-#include "Mesher1D.h"
 
 #include "Box.h"
 #include "Region.h"

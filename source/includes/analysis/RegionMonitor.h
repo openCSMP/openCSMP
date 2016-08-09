@@ -42,7 +42,7 @@ class RegionMonitor {
     void  DivideIntegralPropertiesByRegionVolumes( bool divide );
 
     /// returns true when there are already monitoring data stored in respective containers
-    bool  DataExists() const { return !integrals_.empty() || !ranges_.empty()) }
+    bool  DataExists() const { return ( !integrals_.empty() || !ranges_.empty() ); }
   
     /// calculates integrals over current property values and stores these for the current time-step and property name
     void  ScalarPropertyIntegrals( const Model<dim>&, double64 current_time=0. );

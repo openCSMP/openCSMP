@@ -5,6 +5,13 @@
 
 namespace csmp {
 
+/**
+    Relates to the geothermal simulator application
+    
+    @todo documentation is needed (probably Julian Mindel)
+    
+    @todo SKM move to applications, geothermal energy storage simulator
+*/
 struct SimulatorSetupParameter : Parameter {
     SimulatorSetupParameter()
     {

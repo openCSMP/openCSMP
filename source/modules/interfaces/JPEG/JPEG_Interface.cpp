@@ -133,7 +133,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     // 5. Writing grid to JPG file
     // ---------------------------
     //                                      grayscale output 
-    regular_grid.SaveToJPG( file_name, timestep, gray, sqrt_of_value );
+    regular_grid.SaveToJPG( file_name, static_cast<int32>(timestep), gray, sqrt_of_value );
 
     return true;
 
@@ -205,7 +205,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     
     // 5. Writing grid to JPG file
     // ---------------------------
-    regular_grid.SaveToJPG( file_name, timestep, data_min, data_max, gray, sqrt_of_value );
+    regular_grid.SaveToJPG( file_name, static_cast<int32>(timestep), data_min, data_max, gray, sqrt_of_value );
 
     return true;
 

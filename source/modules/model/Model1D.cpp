@@ -192,7 +192,7 @@ void Model1D<dim>::Initialize( double64 length, size_t elements,
                                const Point<dim>& destination )
 {
   VSet<dim>      vset;
-  Mesher1D<dim>  mesher;
+  LineElementMesher<dim>  mesher;
   mesher.BuildUniformMesh( vset,
                            length, elements,
                            splitnode_coordinates,
@@ -213,7 +213,7 @@ void Model1D<dim>::Initialize(double64 length, double64 dx_min, double64 dx_max,
                               const Point<dim>& origin,const Point<dim>& destination )
 {
   VSet<dim>      vset;
-  Mesher1D<dim>  mesher;
+  LineElementMesher<dim>  mesher;
   mesher.BuildRefinedMesh( vset,
                            length, dx_min, dx_max, width_of_transition_zone, density,
                            splitnode_coordinates,
@@ -233,7 +233,7 @@ void Model1D<dim>::Initialize( const std::vector<double64>& node_coordinates,
                                const Point<dim>& destination )
 {
     VSet<dim>      vset;
-    Mesher1D<dim>  mesher;
+    LineElementMesher<dim>  mesher;
     mesher.BuildCustomMesh( vset,
                             node_coordinates,
                             splitnode_coordinates,
@@ -254,7 +254,7 @@ void Model1D<dim>::Initialize( const std::vector<Point<dim> >& node_coordinates,
                                const Point<dim>& destination )
 {
     VSet<dim>      vset;
-    Mesher1D<dim>  mesher;
+    LineElementMesher<dim>  mesher;
     mesher.BuildCustomMesh( vset,
                             node_coordinates,
                             splitnode_coordinates,

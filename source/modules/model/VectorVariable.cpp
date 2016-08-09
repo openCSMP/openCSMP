@@ -59,8 +59,8 @@ VectorVariable<3U>&  VectorVariable<3U>::operator=( VectorVariable<3U>&& v )
 
 VectorVariable<3U>  VectorVariable<3U>::operator+( const VectorVariable<3U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2], 
-                           data[0] + v.data[0], data[1] + v.data[1], data[2] + v.data[2] );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] + v.data[0], data[1] + v.data[1], data[2] + v.data[2] ));
  }
 
 
@@ -68,56 +68,56 @@ VectorVariable<3U>  VectorVariable<3U>::operator+( const VectorVariable<3U>& v )
 
 VectorVariable<3U>  VectorVariable<3U>::operator-( const VectorVariable<3U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] - v.data[0], data[1] - v.data[1], data[2] - v.data[2] );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] - v.data[0], data[1] - v.data[1], data[2] - v.data[2] ));
  }
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator*( const VectorVariable<3U>& v ) const 
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] * v.data[0], data[1] * v.data[1], data[2] * v.data[2] );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] * v.data[0], data[1] * v.data[1], data[2] * v.data[2] ));
  } 
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator/( const VectorVariable<3U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] / v.data[0], data[1] / v.data[1], data[2] / v.data[2] );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] / v.data[0], data[1] / v.data[1], data[2] / v.data[2] ));
  }
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator+( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] + val, data[1] + val, data[2] + val );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] + val, data[1] + val, data[2] + val ));
  }
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator-( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] - val, data[1] - val, data[2] - val );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] - val, data[1] - val, data[2] - val ));
  }
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator*( double64 val ) const 
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] * val, data[1] * val, data[2] * val );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] * val, data[1] * val, data[2] * val ));
  } 
 
 
 
 VectorVariable<3U>  VectorVariable<3U>::operator/( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           data[0] / val, data[1] / val, data[2] / val );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           data[0] / val, data[1] / val, data[2] / val ));
  }
 
 
@@ -125,8 +125,8 @@ VectorVariable<3U>  VectorVariable<3U>::operator/( double64 val ) const
 
 VectorVariable<3U>  VectorVariable<3U>::operator^( double64 val ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
-                           std::pow( data[0],val ), std::pow( data[1], val ), std::pow( data[2], val ) );
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
+                           std::pow( data[0],val ), std::pow( data[1], val ), std::pow( data[2], val ) ));
  }
 
 
@@ -135,10 +135,10 @@ VectorVariable<3U>  VectorVariable<3U>::operator^( double64 val ) const
 /// cross product ' % ' of two vectors
 VectorVariable<3U>  VectorVariable<3U>::operator%( const VectorVariable<3U>& v ) const
  {
-    return VectorVariable( flag[0], flag[1], flag[2],
+    return std::move(VectorVariable( flag[0], flag[1], flag[2],
                            data[1]*v.data[2] - v.data[1]*data[2],
                          -(data[0]*v.data[2] - v.data[0]*data[2]),
-                           data[0]*v.data[1] - v.data[0]*data[1] );
+                           data[0]*v.data[1] - v.data[0]*data[1] ));
  } 
 
 
@@ -176,7 +176,7 @@ VectorVariable<3U>  VectorVariable<3U>::Flip()
     temp.data[2] = data[0];
     temp.data[1] = data[1];
 
-    return temp; 
+    return std::move(temp);
  }
 
 
@@ -197,7 +197,7 @@ VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const std::vector<double64>
  {
     double64 ratio((data[0]*v[0] + data[1]*v[1] + data[2]*v[2]) / (v[0]*v[0] + v[1]*v[1] + v[2]*v[2]));
 
-    return VectorVariable<3U>( flag[0], flag[1], flag[2], v[0]*ratio, v[1]*ratio, v[2]*ratio );
+    return std::move(VectorVariable<3U>( flag[0], flag[1], flag[2], v[0]*ratio, v[1]*ratio, v[2]*ratio ));
  }
 
 
@@ -207,8 +207,8 @@ VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const VectorVariable<3U>& v
     double64 ratio((data[0]*v.data[0] + data[1]*v.data[1] + data[2]*v.data[2]) / 
                     (v.data[0]*v.data[0] + v.data[1]*v.data[1] + v.data[2]*v.data[2]));
 
-    return VectorVariable<3U>( flag[0], flag[1], flag[2],
-                               v.data[0]*ratio, v.data[1]*ratio, v.data[2]*ratio );
+    return std::move(VectorVariable<3U>( flag[0], flag[1], flag[2],
+                               v.data[0]*ratio, v.data[1]*ratio, v.data[2]*ratio ));
  }
 
 

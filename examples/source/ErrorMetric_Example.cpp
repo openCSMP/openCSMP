@@ -3,7 +3,7 @@
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "ANSYS_Model3D.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "CSMP_highLevelUtilities.h"
 
@@ -70,7 +70,7 @@ void ErrorMetric_Example::Run()
    // -----------------------------------------------------------------------
    // 2. steady-state fluid pressure
    // -----------------------------------------------------------------------
-    SteadyStateDiffusionSolver<3U,Region> steady_state_pressure( model, "conductivity", "fluid pressure",
+    SteadyStateDiffusor<3U,Region> steady_state_pressure( model, "conductivity", "fluid pressure",
                                                                         "fluid volume source" );
 
     VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );

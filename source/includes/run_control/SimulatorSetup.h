@@ -20,6 +20,14 @@
 
 namespace csmp {
 
+/**
+    Relates to the geothermal simulator application
+    
+    @todo documentation is needed (probably Julian Mindel)
+
+    @todo SKM move to applications, geothermal energy storage simulator
+
+*/
 template<size_t dim>
 class SimulatorSetup {
 public:
@@ -27,7 +35,7 @@ public:
                    std::string project_name,
                    std::vector<bool > options,
                    bool verbose = false);
-    ~SimulatorSetup();
+    virtual ~SimulatorSetup();
 
     //-----------------------------------------------------------------
     // Initializer methods to be used by subclasses

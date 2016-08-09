@@ -8,7 +8,7 @@
 #include "PDE_Integrator.h"
 #include "PropertyConstraints.h"
 #include "PropertyHandle.h"
-#include "SteadyStateDiffusionSolver.h"
+#include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "CSMP_highLevelUtilities.h"
 
@@ -78,7 +78,7 @@ void Region_Test::run()
     if ( with_VTK_output ) vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
 
     // compute steady-state fluid pressure and Darcy velocity
-    SteadyStateDiffusionSolver<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+    SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
     VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
     steady_state_pressure.AddPostProcess( &postpro );
 

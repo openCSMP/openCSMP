@@ -257,8 +257,8 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
           fvit=region_ref.NodesBegin();
           fvit!=region_ref.NodesEnd(); fvit++ )
           { 
-            unsigned int idx = (*fvit)->Idx();
-   		    pore_vol = (*fvit)->Read( pv_key);
+            size_t idx = (*fvit)->Idx();
+   		      pore_vol = (*fvit)->Read( pv_key);
             for( size_t i=0; i<flux_out_vectors.size(); i++ ) {
                 property_vectors[i][idx] = (*fvit)->Read( pl_key[i] );
                 flux_out_vectors[i][idx] *= internal_time_step;

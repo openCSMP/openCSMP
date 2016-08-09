@@ -803,8 +803,8 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                 }
     }
    
-    // DEBUGGING CODE ONLY
-    if ( csmp_error.Debug() )
+// DEBUGGING CODE ONLY
+#ifndef NDEBUG
       {
           std::map<size_t,std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> > >::const_iterator cit;
 
@@ -861,6 +861,8 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
               regions.insert("DEGENERATE_OVERLAP");
           }
       }
+#endif
+
     regular_cells.clear();
     regular_well_cells.clear();
     degenerate_well_cells.clear();

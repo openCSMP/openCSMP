@@ -1,5 +1,5 @@
 #include "StraightLineMeshInterface.h"
-#include "Mesher1D.h"
+#include "LineElementMesher.h"
 #include "TextFileInterface.h"
 
 using namespace std;
@@ -209,7 +209,7 @@ bool StraightLineMeshInterface<dim>
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
 
-    csmp::Mesher1D<dim> mesher;
+    csmp::LineElementMesher<dim> mesher;
     if ( keyword == "UNIFORM_MESH" )
     {
         if( keyword_params.size() < 2 )

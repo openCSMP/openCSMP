@@ -462,84 +462,84 @@ inline bool  ScalarVariable::IsWithinRange( double64 vmin, double64 vmax ) const
 
 inline ScalarVariable  operator+( const ScalarVariable& l, const double64& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() + r );
+    return std::move(ScalarVariable( l.Flag(), l.Value() + r ));
  }
  
 
 
 inline ScalarVariable  operator-( const ScalarVariable& l, const double64& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() - r );
+    return std::move(ScalarVariable( l.Flag(), l.Value() - r ));
  }
  
 
 
 inline ScalarVariable  operator*( const ScalarVariable& l, const double64& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() * r );
+    return std::move(ScalarVariable( l.Flag(), l.Value() * r ));
  }
  
 
 
 inline ScalarVariable  operator/( const ScalarVariable& l, const double64& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() / r );
+    return std::move(ScalarVariable( l.Flag(), l.Value() / r ));
  }
 
 
 
 inline ScalarVariable  operator+( const double64& l, const ScalarVariable& r )
  {
-    return ScalarVariable( r.Flag(), l + r.Value() );
+    return std::move(ScalarVariable( r.Flag(), l + r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator-( const double64& l, const ScalarVariable& r )
  {
-    return ScalarVariable( r.Flag(), l - r.Value() );
+    return std::move(ScalarVariable( r.Flag(), l - r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator*( const double64& l, const ScalarVariable& r )
  {
-    return ScalarVariable( r.Flag(), l * r.Value() );
+    return std::move(ScalarVariable( r.Flag(), l * r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator/( const double64& l, const ScalarVariable& r )
  {
-    return ScalarVariable( r.Flag(), l / r.Value() );
+    return std::move(ScalarVariable( r.Flag(), l / r.Value() ));
  }
 
 
 
 inline ScalarVariable  operator+( const ScalarVariable& l, const ScalarVariable& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() + r.Value() );
+    return std::move(ScalarVariable( l.Flag(), l.Value() + r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator-( const ScalarVariable& l, const ScalarVariable& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() - r.Value() );
+    return std::move(ScalarVariable( l.Flag(), l.Value() - r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator*( const ScalarVariable& l, const ScalarVariable& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() * r.Value() );
+    return std::move(ScalarVariable( l.Flag(), l.Value() * r.Value() ));
  }
  
 
 
 inline ScalarVariable  operator/( const ScalarVariable& l, const ScalarVariable& r )
  {
-    return ScalarVariable( l.Flag(), l.Value() / r.Value() );
+    return std::move(ScalarVariable( l.Flag(), l.Value() / r.Value() ));
  }
 
 
@@ -558,7 +558,7 @@ inline TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVari
 
 inline ScalarVariable  makeScalar( VARIABLE_FLAG flag, double64 val )
   {
-     return ScalarVariable(flag,val);
+     return std::move(ScalarVariable(flag,val));
   }
 
 inline bool ScalarVariable::Out( FILE* fp ) const

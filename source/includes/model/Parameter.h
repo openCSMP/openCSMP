@@ -7,32 +7,37 @@
 namespace csmp {
 
 /**
-    Public record with information about physical variables:
+    @brief Record that describes the physical variables that are stored on a model:
     
-    Stores notation (in correspondance with publications),
-    SI unit, type, range, name, and background information on the variable
-    and its usage. 
+    Stores variable name and notation (potential in correspondance with publications),
+    SI unit, type, range (simulaton-specific physically meaningful minimum and maximum value, 
+    and background information on the variable and its usage.
     
-    Usage has already been applied to tell a GUI which
-    Parameters are input, dependent and/or the result of constitutive relation
+    Usage can be used to tell a GUI which
+    parameters have to be input by the user, distinguishing them from 
+    dependent (computed) values and/or the result of constitutive relation
     calculations. However, there is no fixed terminology communicating this
     yet.
     
-    Is managed by the PropertyDatabase class.
+    Parameter records are managed by the PropertyDatabase class.
     
-    @author SKM (1994)
+    @author Stephan K. Matthai
+    @date 1994
 */
 struct Parameter {
     Parameter();
     Parameter( const Parameter& );
     ~Parameter();
     Parameter& operator=( const Parameter& );
-
+  
+    /// comparitor (to verify uniqueness of a new parameter definition
     bool    operator==( const csmp::Parameter& ) const;
     bool    operator!=( const csmp::Parameter& ) const;
+  
+    /// less-than operator so that Parameters can be stored in STL associative containers
     bool    operator<( const csmp::Parameter& ) const;
 
-    /// define a physical variable at runtime, using console input
+    /// define a physical variable at runtime, using console input (stdin)
     void           DefineFromStdin();
   
     /// checks whether the supplied value lies within min/max defined for this parameter
@@ -50,7 +55,7 @@ struct Parameter {
     /// reads parameter record from a binary file
     bool           In( FILE* fp );
     
-    std::string    name;
+    std::string    name;        ///< typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks)
     std::string    notation;    ///< e.g., k for permeability, v for velocity etc.
     std::string    unit;        ///< normally SI unit like kg/m2
     double64       min, max;    ///< physically meaningful value range, specific to simulation problem
@@ -60,12 +65,16 @@ struct Parameter {
     mutable csmp::Index  key;   ///< variable accessor for this parameter as calculated and assigned by PropertyDatabase
  };
 
+/// to print parameter description in compact form to an output stream
 std::ostream&  operator<<( std::ostream&, const Parameter& );
+
+
+
+// inline methods
 
 inline bool Parameter::IsWithinRange( double64 value ) const
  {
-    if ( value > max || value < min ) 
-      return false;
+    if ( value > max || value < min ) return false;
     return true;
  }
 

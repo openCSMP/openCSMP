@@ -5,7 +5,6 @@
 #include "Model.h"
 
 #include "ModelTopology.h"
-#include "Mesher1D.h"
 #include "ModelTime.h"
 
 #include "Exception.h"

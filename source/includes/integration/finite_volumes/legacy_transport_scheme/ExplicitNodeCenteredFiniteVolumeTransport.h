@@ -1102,12 +1102,12 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( cons
         std::cout<< " Range is from: "<<amin<<" to: "<<amax<< std::endl;
     }
     // reporting problems
-    if ( error_counter >= csmp_error.MaxNumberOfErrors() ) {
+    if ( error_counter >= csmp_error.MaximumNumberOfErrors() ) {
         throw csmp::Exception( ERROR, "ExplicitNodeCenteredFiniteVolumeTransport::OutputResults",
                                "Output property was out of range, legal (min/max) was stored instead");
     }
-    if ( error_counter > (RESULT.size() / csmp_error.MaxNumberOfErrors()) ){
-        std::cerr<<"errors: "<<error_counter<<" max: " <<csmp_error.MaxNumberOfErrors()<<" result size:"<<RESULT.size()<<std::endl;
+    if ( error_counter > (RESULT.size() / csmp_error.MaximumNumberOfErrors()) ){
+        std::cerr<<"errors: "<<error_counter<<" max: " << csmp_error.MaximumNumberOfErrors()<<" result size:"<<RESULT.size()<<std::endl;
         throw std::out_of_range("ExplicitNodeCenteredFiniteVolumeTransport::OutputResults: Advected variable out of range");
     }
 

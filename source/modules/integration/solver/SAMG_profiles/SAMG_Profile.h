@@ -13,6 +13,7 @@ class SAMG_Settings;
 class SAMG_Profile {
   public:
     SAMG_Profile();
+    ~SAMG_Profile();
 
     /// Solve for matrix equation
     virtual bool Solve( double64 modelTime ) = 0;

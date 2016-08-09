@@ -503,7 +503,7 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 
     @param out_var the name of the output variable.
 
-    @return The second method argument is a reference to a FEM_Data object which
+    The second method argument is a reference to a FEM_Data object which
     will store the output property values. All previous property values in
     this object will be deleted.
 
@@ -560,8 +560,6 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVar
     
     @attention method expects that a master region called "All Elements" exists
     via which the variable values can be transferred onto the model.
-    
-    @return reports if the VSet did not contain any property values.
 */
 template<size_t dim>
 void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
@@ -1717,7 +1715,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   variable flags such as DIRICH are also copied to the target variable.
 
   @param from The variable names of the physical variable (property) which is copied
-  @param and the one which is replaced.
+  @param to the variable name that will be replaced.
 
   @section application Application
 
@@ -1770,6 +1768,9 @@ bool  Model<dim>::CopyGradientOfProperty_A_To_B( const char* prop_a, const char*
  {
     return this->Region("Model").CopyGradientOfProperty_A_To_B( prop_a, prop_b );
  }  
+
+
+
 
 
 /**
@@ -1833,7 +1834,7 @@ void  Model<dim>::InterpolateNodeToIntegrationPointProperty( const char* nprop, 
   @param cprop The name of the constraint point property which shall be interpolated to the
   @param eprop element property.
 
-  @return The results are returned to the Model.
+  The results are returned to the Model.
 
   @section implementation Implementation
 
@@ -1875,7 +1876,7 @@ void  Model<dim>::InterpolateIntegrationPointToElementProperty( const char* cpro
   @param cprop The names of the targeted constraint point
   @param nprop and node variables.
 
-  @return The result of the extrapolation is returned into the Model property
+  The result of the extrapolation is returned into the Model property
   storage.
 
   @section implementation Implementation
@@ -1916,8 +1917,7 @@ void  Model<dim>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, 
   contains the enlisted objects given that they all lie in the same plane.
   If this is not the case, the results refer to a rectangular bounding box.
 
-
-  @return The two VectorVariable<dim> arguments will store the mininum and maximum
+  The two VectorVariable<dim> arguments will store the mininum and maximum
   coordinates of the bounding rectangle (2D) or bounding box (3D) which
   is defined by the object coordinates.
 
@@ -2355,6 +2355,9 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
     tmax = (*min_max.rbegin());
  }
 
+
+
+
 /**
   Finds the minimum and maximum values of a physical variable which is
   distributed over the current finite-element mesh. If the
@@ -2363,7 +2366,7 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
 
   @param prop The name of the physical variable
 
-  @return The results of the range search will be returned into the second and third
+  The results of the range search will be returned into the second and third
   method arguments. If the variable has not been initialized, the value
   NAN (not a number) is returned.
 
@@ -2545,11 +2548,6 @@ bool Model<dim>::UpdateSubdomainPropertyStorage()
 //
 // ================================================================================================================
 
-    // NEW output and input interfaces
-    ErrorHandler&      csmp_error( ErrorHandler::Instance() );
-    map<string,Index>  properties;
-   
-
   
 /**
     writes entire model with associated properties / variables to CSMP native set of binary files.
@@ -2659,6 +2657,8 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
 template<size_t dim>
 void Model<dim>::InputFromBinaryFile( const char* model_name )
  {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
      // 1. The binary data are read into VSet
      double64& model_time( ModelTime::Instance().modelTime );
      VSet<dim>  vset;
@@ -2673,10 +2673,6 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
 
      // 3. rebuilds finite element mesh and associated property storage
      mesh_manager_.Reconstruct( database_, fem_manager_, vset );
-
-for ( auto it=mesh_manager_.FacesBegin(); it!=mesh_manager_.FacesEnd(); ++it )
-  (*it).Out();
-
    
      // 4. checking whether the FV stencils need to be initialised
      if ( vset.ContainsFiniteVolumeIntegrationPointData() )

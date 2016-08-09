@@ -1,4 +1,5 @@
 #include "ANSYS_Model.h"
+#include "ModelTime.h"
 
 using namespace std;
 
