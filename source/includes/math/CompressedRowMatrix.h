@@ -46,6 +46,9 @@ struct CompressedRowMatrix {
     std::vector<double64>  a;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
 };
 
+/// to print the vector of diagonal elements in the matrix
+void print( std::vector<std::pair<std::pair<uint32,uint32>, std::vector<bool> > >& );
+
 } // end csmp
 
 #endif

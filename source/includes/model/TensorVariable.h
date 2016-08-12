@@ -146,48 +146,48 @@ class TensorVariable<3U> {
     TensorVariable&  operator*=( double64 val );
     TensorVariable&  operator/=( double64 val );
 
-    TensorVariable&  operator+=( const ScalarVariable& sc );
-    TensorVariable&  operator-=( const ScalarVariable& sc );
-    TensorVariable&  operator*=( const ScalarVariable& sc );
-    TensorVariable&  operator/=( const ScalarVariable& sc );
-    TensorVariable   operator+(  const TensorVariable& t ) const;
-    TensorVariable   operator-(  const TensorVariable& t ) const;
-    TensorVariable   operator*(  const TensorVariable& t ) const;
+    TensorVariable&  operator+=( const ScalarVariable& );
+    TensorVariable&  operator-=( const ScalarVariable& );
+    TensorVariable&  operator*=( const ScalarVariable& );
+    TensorVariable&  operator/=( const ScalarVariable& );
+    TensorVariable   operator+(  const TensorVariable& ) const;
+    TensorVariable   operator-(  const TensorVariable& ) const;
+    TensorVariable   operator*(  const TensorVariable& ) const;
     
     /// (A x) matrix-vector multiplication -> vector (v treated as column vector)
-    VectorVariable<3U>  operator*( const VectorVariable<3U>& v ) const;
+    VectorVariable<3U>  operator*( const VectorVariable<3U>& ) const;
     
     /// value by value division of the elements of the tensor with another one
-    TensorVariable   operator/( const TensorVariable& t ) const;
+    TensorVariable   operator/( const TensorVariable& ) const;
 
     /// value by value addition of the elements of the tensors
-    TensorVariable&  operator+=( const TensorVariable& t );
+    TensorVariable&  operator+=( const TensorVariable& );
 
     /// value by value subtraction from the lh-tensor by the rh tensor
-    TensorVariable&  operator-=( const TensorVariable& t );
+    TensorVariable&  operator-=( const TensorVariable& );
 
     /// value by value division of the elements of the lh-tensor by those of the righthand tensor
-    TensorVariable&  operator/=( const TensorVariable& t );
+    TensorVariable&  operator/=( const TensorVariable& );
   
     /// matrix multiplication -> matrix (A.rows, B.cols); creates temporary tensor, avoid this using 'operator*()'
-    TensorVariable&  operator*=( const TensorVariable& t );
+    TensorVariable&  operator*=( const TensorVariable& );
     
     /// sets all ij values to val or sc
     TensorVariable&  operator=( double64 val );
 
     /// sets all ij values to sc (value and flags of diagonal elements)
-    TensorVariable&  operator=( const ScalarVariable& sc );
+    TensorVariable&  operator=( const ScalarVariable& );
   
     /// assigns vector to diagonal elements of tensor, off-diagonal elements are set to zero
-    TensorVariable&  operator=( const VectorVariable<3U>& v );
+    TensorVariable&  operator=( const VectorVariable<3U>& );
     
     /// element-by-element comparison of ij values
-    bool             operator==( const TensorVariable& t ) const; 
+    bool             operator==( const TensorVariable& ) const;
     /// element-by-element comparison of ij values
-    bool             operator!=( const TensorVariable& t ) const;
+    bool             operator!=( const TensorVariable& ) const;
     
     /// comparison of the determinants of the tensors
-    bool             operator<( const TensorVariable& t ) const; 
+    bool             operator<( const TensorVariable& ) const; 
     
     double64          Value( size_t i, size_t j ) const;
   

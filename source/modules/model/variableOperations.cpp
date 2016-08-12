@@ -4,62 +4,107 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
-Point<dim> operator+(const Point<dim>& p, const VectorVariable<dim>& v ){
-    Point<dim> newp;
-    for (size_t idim = 0; idim <dim;++idim)
-        newp[idim]=p[idim]+v[idim];
-    return std::move(newp);
+// addition
+template<>
+Point<1U> operator+(const Point<1U>& p, const VectorVariable<1U>& v ) {
+     return std::move(Point<1U>(p[0]+v[0]));
+  }
+
+template<>
+Point<2U> operator+(const Point<2U>& p, const VectorVariable<2U>& v ) {
+     return std::move(Point<2U>(p[0]+v[0],p[1]+v[1]));
+  }
+
+template<>
+Point<3U> operator+(const Point<3U>& p, const VectorVariable<3U>& v ) {
+     return std::move(Point<3U>(p[0]+v[0],p[1]+v[1],p[2]+v[2]));
+  }
+
+// subtraction
+template<>
+Point<1U> operator-(const Point<1U>& p, const VectorVariable<1U>& v ) {
+     return std::move(Point<1U>(p[0]-v[0]));
+  }
+
+template<>
+Point<2U> operator-(const Point<2U>& p, const VectorVariable<2U>& v ) {
+     return std::move(Point<2U>(p[0]-v[0],p[1]-v[1]));
+  }
+
+template<>
+Point<3U> operator-(const Point<3U>& p, const VectorVariable<3U>& v ) {
+     return std::move(Point<3U>(p[0]-v[0],p[1]-v[1],p[2]-v[2]));
+  }
+
+
+// multiplication
+template<>
+Point<1U> operator*(const Point<1U>& p, const VectorVariable<1U>& v ) {
+     return std::move(Point<1U>(p[0]*v[0]));
+  }
+
+template<>
+Point<2U> operator*(const Point<2U>& p, const VectorVariable<2U>& v ) {
+     return std::move(Point<2U>(p[0]*v[0],p[1]*v[1]));
+  }
+
+template<>
+Point<3U> operator*(const Point<3U>& p, const VectorVariable<3U>& v ) {
+     return std::move(Point<3U>(p[0]*v[0],p[1]*v[1],p[2]*v[2]));
+  }
+
+
+// division result = p / v
+template<>
+Point<1U> operator/(const Point<1U>& p, const VectorVariable<1U>& v ) {
+     return std::move(Point<1U>(p[0]/v[0]));
+  }
+
+template<>
+Point<2U> operator/(const Point<2U>& p, const VectorVariable<2U>& v ) {
+     return std::move(Point<2U>(p[0]/v[0],p[1]/v[1]));
+  }
+
+template<>
+Point<3U> operator/(const Point<3U>& p, const VectorVariable<3U>& v ) {
+     return std::move(Point<3U>(p[0]/v[0],p[1]/v[1],p[2]/v[2]));
+  }
+
+
+// dot products: result = v . p
+template<>
+double64 dotProduct( const VectorVariable<1>& v,  const csmp::Point<1>& p ) {
+   return std::move(v[0]*p[0]);
 }
 
-template<size_t dim>
-Point<dim> operator-(const Point<dim>& p, const VectorVariable<dim>& v ){
-    Point<dim> newp;
-    for (size_t idim = 0; idim <dim;++idim)
-        newp[idim]=p[idim]-v[idim];
-    return std::move(newp);
+template<>
+double64 dotProduct( const VectorVariable<2>& v,  const csmp::Point<2>& p ) {
+   return std::move(v[0]*p[0] + v[1]*p[1]);
 }
 
-template<size_t dim>
-Point<dim> operator*(const Point<dim>& p, const VectorVariable<dim>& v ){
-    Point<dim> newp;
-    for (size_t idim = 0; idim <dim;++idim)
-        newp[idim]=p[idim]*v[idim];
-    return std::move(newp);
+template<>
+double64 dotProduct( const VectorVariable<3>& v,  const csmp::Point<3>& p ) {
+   return std::move(v[0]*p[0] + v[1]*p[1] + v[2]*p[2]);
 }
 
-template<size_t dim>
-Point<dim> operator/(const Point<dim>& p, const VectorVariable<dim>& v ){
-    Point<dim> newp;
-    for (size_t idim = 0; idim <dim;++idim)
-        newp[idim]=p[idim]/v[idim];
-    return std::move(newp);
+
+// dot products vector variables: result = v1 . v2
+template<>
+double64 dotProduct( const VectorVariable<1>& v1, const VectorVariable<1>& v2 ) {
+   return std::move(v1[0]*v2[0]);
 }
 
-template<size_t dim >
-double64 dotProduct(const VectorVariable<dim>& v1,  const csmp::Point<dim>& p ) {
-    double64 dprod(0.0);
-    for (size_t i = 0U ; i < dim; ++i)
-        dprod += v1[i]*p[i];
-
-    return dprod;
+template<>
+double64 dotProduct( const VectorVariable<2>& v1, const VectorVariable<2>& v2 ) {
+   return std::move(v1[0]*v2[0] + v1[1]*v2[1]);
 }
 
-template<size_t dim>
-double64 dotProduct(  const VectorVariable<dim>& v1,  const VectorVariable<dim>& v2 ) {
-    double64 dprod(0.0);
-    for (size_t i = 0U ; i < dim; ++i)
-        dprod += v1[i] * v2[i];
-    return dprod;
+template<>
+double64 dotProduct( const VectorVariable<3>& v1, const VectorVariable<3>& v2 ) {
+   return std::move(v1[0]*v2[0] + v1[1]*v2[1] + v1[2]*v2[2]);
 }
 
-template double64 dotProduct( const VectorVariable<1U>&, const csmp::Point<1U>& ) ;
-template double64 dotProduct( const VectorVariable<2U>&, const csmp::Point<2U>& ) ;
-template double64 dotProduct( const VectorVariable<3U>&, const csmp::Point<3U>& ) ;
 
-template double64 dotProduct( const VectorVariable<1U>&, const VectorVariable<1U>& ) ;
-template double64 dotProduct( const VectorVariable<2U>&, const VectorVariable<2U>& ) ;
-template double64 dotProduct( const VectorVariable<3U>&, const VectorVariable<3U>& ) ;
 
 VectorVariable<1U> crossProduct(  const VectorVariable<1U>& v,  const csmp::Point<1U>& )
 {
@@ -73,10 +118,10 @@ VectorVariable<2U> crossProduct(  const VectorVariable<2U>& v1,  const csmp::Poi
 
 VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const csmp::Point<3U>& p ) {
 
-    return std::move(VectorVariable<3U>(v1.Flag(0),
-                              v1.Flag(1),
-                              v1.Flag(2),(v1[1]*p[2]-v1[2]*p[1]),(v1[2]*p[0] - v1[0]*p[2]),
-                                         (v1[0]*p[1] - v1[1]*p[0])) );
+    return std::move(VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
+                                        (v1[1]*p[2]-v1[2]*p[1]),
+                                        (v1[2]*p[0] - v1[0]*p[2]),
+                                        (v1[0]*p[1] - v1[1]*p[0])) );
 }
 
 
@@ -90,9 +135,8 @@ VectorVariable<2U> crossProduct(  const VectorVariable<2U>& v1,  const VectorVar
 
 VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const VectorVariable<3U>& v2 ) {
 
-    return std::move(VectorVariable<3U>(v1.Flag(0),
-                              v1.Flag(1),
-                              v1.Flag(2),(v1[1]*v2[2]-v1[2]*v2[1]),(v1[2]*v2[0] - v1[0]*v2[2]),
+    return std::move(VectorVariable<3U>( v1.Flag(0), v1.Flag(1), v1.Flag(2),
+                                         (v1[1]*v2[2]-v1[2]*v2[1]),(v1[2]*v2[0] - v1[0]*v2[2]),
                                          (v1[0]*v2[1] - v1[1]*v2[0])));
 }
 
@@ -175,22 +219,13 @@ double64  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>
 }
 
 
-template Point<1U> operator+(const Point<1U>& p, const VectorVariable<1U>& v );
-template Point<2U> operator+(const Point<2U>& p, const VectorVariable<2U>& v );
-template Point<3U> operator+(const Point<3U>& p, const VectorVariable<3U>& v );
 
-template Point<1U> operator-(const Point<1U>& p, const VectorVariable<1U>& v );// found these mostly in VectorVariable_Tests
-template Point<2U> operator-(const Point<2U>& p, const VectorVariable<2U>& v );// found these mostly in VectorVariable_Tests
-template Point<3U> operator-(const Point<3U>& p, const VectorVariable<3U>& v );// found these mostly in VectorVariable_Tests
+template double64  angleBetween( const VectorVariable<1U> & v1, const VectorVariable<1U>& v2 );
+template double64  angleBetween( const VectorVariable<2U> & v1, const VectorVariable<2U>& v2 );
+template double64  angleBetween( const VectorVariable<3U> & v1, const VectorVariable<3U>& v2 );
 
-template Point<1U> operator*(const Point<1U>& p, const VectorVariable<1U>& v );// found these mostly in VectorVariable_Tests
-template Point<2U> operator*(const Point<2U>& p, const VectorVariable<2U>& v );// found these mostly in VectorVariable_Tests
-template Point<3U> operator*(const Point<3U>& p, const VectorVariable<3U>& v );// found these mostly in VectorVariable_Tests
 
-template Point<1U> operator/(const Point<1U>& p, const VectorVariable<1U>& v );// found these mostly in VectorVariable_Tests
-template Point<2U> operator/(const Point<2U>& p, const VectorVariable<2U>& v );// found these mostly in VectorVariable_Tests
-template Point<3U> operator/(const Point<3U>& p, const VectorVariable<3U>& v );// found these mostly in VectorVariable_Tests
-
+// TODO: this is what operator overloading should be for; revise!
 template VectorVariable<1U> multiplyTensorByVector( const TensorVariable<1U>&, const VectorVariable<1U>& ) ;
 template VectorVariable<2U> multiplyTensorByVector( const TensorVariable<2U>&, const VectorVariable<2U>& ) ;
 template VectorVariable<3U> multiplyTensorByVector( const TensorVariable<3U>&, const VectorVariable<3U>& ) ;
@@ -202,10 +237,6 @@ template VectorVariable<3U> multiplyHorizontalVectorByTensor( const VectorVariab
 template TensorVariable<1U> multiplyTensorByTensor( const TensorVariable<1U>&, const TensorVariable<1U>& ) ;
 template TensorVariable<2U> multiplyTensorByTensor( const TensorVariable<2U>&, const TensorVariable<2U>& ) ;
 template TensorVariable<3U> multiplyTensorByTensor( const TensorVariable<3U>&, const TensorVariable<3U>& ) ;
-
-template double64  angleBetween( const VectorVariable<1U> & v1, const VectorVariable<1U>& v2 );
-template double64  angleBetween( const VectorVariable<2U> & v1, const VectorVariable<2U>& v2 );
-template double64  angleBetween( const VectorVariable<3U> & v1, const VectorVariable<3U>& v2 );
 
 } // end namespace csmp
 
