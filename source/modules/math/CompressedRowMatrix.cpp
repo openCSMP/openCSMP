@@ -17,9 +17,9 @@ namespace csmp {
 @{
 */
 
-// the long vector
-void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v ) {
-       cout <<"\nvector with off-diagonal elements:\n";
+void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v )
+ {
+       cout <<"\nvector of off-diagonal elements:\n";
        int32 n(0);
        
          for ( vector<pair<pair<uint32,uint32>,vector<bool> > >::iterator it=v.begin(); it!=v.end(); it++ )
