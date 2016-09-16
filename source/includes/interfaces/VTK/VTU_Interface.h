@@ -139,7 +139,7 @@ public:
 
   /**
       allows the creation of an index-to-name correspondance.  If the resulting container is
-      empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
+      empty or the array variable name does not exist upon the output call, the behaviour is the default one (output of [#] suffix).
       If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
       Julian, July 2014
   */
