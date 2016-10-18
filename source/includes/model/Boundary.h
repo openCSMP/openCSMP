@@ -20,7 +20,9 @@ template<size_t> class Element;
 template<size_t> class Region;
 
 
-/** brief Boundaries are lower dimensional regions=subdomains of the Model
+/** 
+
+@brief Boundaries are lower dimensional regions=subdomains of the Model
 which consist of Face objects
 
 @author P. Lang

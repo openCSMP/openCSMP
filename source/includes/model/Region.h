@@ -54,7 +54,29 @@ bool  containsSurfaceElements( const Region<dim>& );
 template<size_t dim>
 bool  containsLineElements( const Region<dim>& );
 
+/**
 
+@brief To associate and access elements which share certain properties.
+Once such a distinction has been made these can be drawn
+or output to specific visualization software.
+Examples: shale horizons, faults etc.
+ 
+@author S.K. Matthai
+@author Stephen G. Roberts
+@date 1999
+ 
+@section consequences Consequences
+
+When a new group is formed a group internal flag will be assigned to
+each node, constraint point and element. 
+There are two group-internal object flags, PLAIN and BOUNDARY. When a
+new group is formed, the Region method IdentifyBoundaryAs() assigns the 
+group-internal object flags, depending on whether the nodes, constraint
+points or elements in the group lie at the group boundary or inside of 
+the group. Elements are assigned a boundary flag if at least one of 
+their faces coincides with the region boundary.
+
+*/
 template<size_t dim>
 class Region : public ModelSubDomain<dim,Element> {
 
@@ -245,39 +267,6 @@ class Region : public ModelSubDomain<dim,Element> {
     /// returns local variables for elements
     LocalVariables ElementVariables() const;
 };
-
-
-   
-
-
-/**
- 
-@class Region Region "main_library/Region.h"
-
-@author S.K. Matthai
-@author Stephen G. Roberts
-@date 1999
-
-@section motivation Motivation
-
-To associate and access elements which share certain properties.
-Once such a distinction has been made these can be drawn
-or output to specific visualization software.
-Examples: shale horizons, faults etc.
- 
-
- 
-@section consequences Consequences
-
-When a new group is formed a group internal flag will be assigned to
-each node, constraint point and element. 
-There are two group-internal object flags, PLAIN and BOUNDARY. When a
-new group is formed, the Region method IdentifyBoundaryAs() assigns the 
-group-internal object flags, depending on whether the nodes, constraint
-points or elements in the group lie at the group boundary or inside of 
-the group. Elements are assigned a boundary flag if at least one of 
-their faces coincides with the region boundary.
-*/
 
 
 template<size_t dim>

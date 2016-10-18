@@ -6,6 +6,7 @@
 #include <vector>
 #include <typeinfo>
 #include <cstdlib>
+#include <limits>
 #include "CSMP_number_types.h"
 
 namespace csmp {

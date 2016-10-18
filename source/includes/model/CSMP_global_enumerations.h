@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include <limits>
 
 namespace csmp {
 
