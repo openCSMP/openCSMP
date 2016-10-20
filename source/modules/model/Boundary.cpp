@@ -51,8 +51,8 @@ Boundary<dim>::Boundary( const Boundary& ed )
 /// move constructor
 template<size_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
-  : ModelSubDomain<dim,Face>{ed},
-    boundaryFlag_{ed.boundaryFlag_}
+  : ModelSubDomain<dim,Face>(ed),
+    boundaryFlag_(ed.boundaryFlag_)
   {
   }
 
