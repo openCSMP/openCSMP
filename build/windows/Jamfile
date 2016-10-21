@@ -162,17 +162,15 @@ lib csmp-lib
 	<include>$(TEST_BASE)/unit	
 	<define>CSMP_WITH_SAMG_SOLVER
 	<define>SAMG_MULTIPLE_INSTANCES
-	#<define>_CRT_NONSTDC_NO_WARNINGS	
-	#<define>_CRT_SECURE_NO_WARNINGS
-	#<define>_MBCS
 	;
 
-unit-test csmp-test
+exe csmp-test
 	:
 	iaps
 	jpeg
 	csmp-lib
 	amg_mult_dyn.lib
+	$(TEST_BASE)/unit_tests_main.cpp
     [ glob $(TEST_BASE)/integration/*.cpp ]
     [ glob $(TEST_BASE)/unit/*.cpp : $(TEST_BASE)/unit/Index_Test.cpp $(TEST_BASE)/unit/PropertyDatabase_Test.cpp ]
 	:
@@ -260,8 +258,6 @@ unit-test csmp-test
 	<include>$(MODULE_BASE)/run_control
 	<include>$(MODULE_BASE)/thmc
 	<include>$(MODULE_BASE)/utilities
-	<include>$(LIB_BASE)
-	<include>$(LIB_BASE)/cgns
 	<include>$(LIB_BASE)/jpeg
 	<include>$(LIB_BASE)/samg
 	<include>$(LIB_BASE)/iaps_h2o_eos
@@ -269,9 +265,6 @@ unit-test csmp-test
 	<include>$(TEST_BASE)/unit	
 	<define>CSMP_WITH_SAMG_SOLVER
 	<define>SAMG_MULTIPLE_INSTANCES
-	#<define>_CRT_NONSTDC_NO_WARNINGS	
-	#<define>_CRT_SECURE_NO_WARNINGS
-	#<define>_MBCS
 	;
 
 unit-test run-csmp-test
@@ -280,6 +273,7 @@ unit-test run-csmp-test
 	jpeg
 	csmp-lib
 	amg_mult_dyn.lib
+	$(TEST_BASE)/unit_tests_main.cpp
     [ glob $(TEST_BASE)/integration/*.cpp ]
     [ glob $(TEST_BASE)/unit/*.cpp : $(TEST_BASE)/unit/Index_Test.cpp $(TEST_BASE)/unit/PropertyDatabase_Test.cpp ]
 	:
@@ -367,8 +361,6 @@ unit-test run-csmp-test
 	<include>$(MODULE_BASE)/run_control
 	<include>$(MODULE_BASE)/thmc
 	<include>$(MODULE_BASE)/utilities
-	<include>$(LIB_BASE)
-	<include>$(LIB_BASE)/cgns
 	<include>$(LIB_BASE)/jpeg
 	<include>$(LIB_BASE)/samg
 	<include>$(LIB_BASE)/iaps_h2o_eos
@@ -376,9 +368,6 @@ unit-test run-csmp-test
 	<include>$(TEST_BASE)/unit	
 	<define>CSMP_WITH_SAMG_SOLVER
 	<define>SAMG_MULTIPLE_INSTANCES
-	#<define>_CRT_NONSTDC_NO_WARNINGS	
-	#<define>_CRT_SECURE_NO_WARNINGS
-	#<define>_MBCS
 	;
 	
 install dist 

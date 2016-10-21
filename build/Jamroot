@@ -27,11 +27,8 @@ feature.feature cpp11 :
 feature.compose <cpp11>on :
     ;
 
-project csmp-api-library-final
+project csmp-api-library
     : requirements
-		<include>$(LIB_BASE)/iaps_h2o_eos
-		<include>$(LIB_BASE)/jpeg
-		<include>$(LIB_BASE)/samg
         <threading>multi
         <warnings>off
 		<cpp11>on
@@ -43,4 +40,4 @@ project csmp-api-library-final
         $(BUILD_BASE)
     ;
 
-#ex) bjam --toolset=msvc-14.0 address-model=64
+#Usage: bjam -j4 --toolset=msvc-14.0 address-model=64 link=static
