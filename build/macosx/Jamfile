@@ -20,7 +20,7 @@ unit-test run-csmp-type
 	
 install headers
 	:
-	$(BUILD_BASE)/macosx/CSMP_number_types.h
+	$(INCLUDE_BASE)/model/CSMP_number_types.h
 	:
 	<location>$(INCLUDE_BASE)/model
 	;
