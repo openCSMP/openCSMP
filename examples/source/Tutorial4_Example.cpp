@@ -147,7 +147,7 @@ void Tutorial4_Example::Run()
     SAMG_Solver  samg_solver(&settings);
     PDE_Integrator<2U,Region>  stokes_flow(samg_solver);
 #else
-   C SMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     PDE_Integrator<2U,Region>  stokes_flow(linear_solver);
 #endif
 
