@@ -24,39 +24,20 @@ NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::NumIntegral_SetRHS_to_Zero( const Prope
  } // end constructor
 
 
-/*M <H4>Method:</H4><CODE>
-<!------------------------------------------------------------------------>
-  void NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
-<!------------------------------------------------------------------------>
-</CODE>
+/**
 
-<H4>Description:</H4><!--------------------------------------------------->
+Generats a RHS vector of zeros that is added to the global solution matrix.
 
-Generats a RHS vector of zeros that is added to the global solution matrix. <p>
+The result is returned into the MathOperatorRHS vector<fT> V.
 
-<H4>Input Arguments:</H4><!----------------------------------------------->
-
-The element for which the RHS is generated <p>
-
-<H4>Output Arguments &amp; Return Value</H4><!---------------------------->
-
-The result is returned into the MathOperatorRHS vector<fT> V.<p>
-
-<H4>Implementation:</H4><!------------------------------------------------>
-
-
-<H4>Application:</H4><!--------------------------------------------------->
-
-To assign stress boundary conditions to the boundary of the model. <p>
-
-<!------------------------------------------------------------------------>
-tested: O.K.  */
+@test O.K.  
+*/
 template<size_t dim,class SIMPLEX>
 void NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
    // create a RHS vector of zeros
    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-   //fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
+   fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 
 } // end ComputeContribution
 
@@ -69,4 +50,4 @@ template class NumIntegral_SetRHS_to_Zero<1U,Face<1U> >;
 template class NumIntegral_SetRHS_to_Zero<2U,Face<2U> >;
 template class NumIntegral_SetRHS_to_Zero<3U,Face<3U> >;
 
-} // csp
+} // csmp

@@ -53,7 +53,7 @@ void StabilizationParameterVisitor<dim>::Visit( Element<dim>* e )
      // if the viscosity key has been defined
      if ( visc_key_.place != UNDEFINED ) viscosity = e->Read( visc_key_ );
     
-     sp() = min_segment*min_segment/12.0/viscosity*coefficient;
+     sp() = min_segment * min_segment/12.0/viscosity*coefficient;
      
     /* for (stl_index i = 0; i <= dim; i++)
      {

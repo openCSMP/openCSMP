@@ -1163,8 +1163,7 @@ DenseMatrix<mn_max>&
 // ---------------------------------------
 // creates a temporary   
 template<size_t mn_max>
-DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( 
-                                                    const DenseMatrix<mn_max>& mat )
+DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( const DenseMatrix<mn_max>& mat )
  {
 #ifdef CSMP_DENSE_MATRIX_DEBUG
     if ( cols != mat.rows ) {
@@ -1197,9 +1196,8 @@ DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=(
 /// RES = A B^T
 // ---------------------------------------
 template<size_t mn_max>
-void 
-DenseMatrix<mn_max>::MultiplyWithTransposedOf( const DenseMatrix<mn_max>& B, 
-                                                      DenseMatrix<mn_max>& RES ) const
+void DenseMatrix<mn_max>::MultiplyWithTransposedOf( const DenseMatrix<mn_max>& B,
+                                                    DenseMatrix<mn_max>& RES ) const
  {
     if ( cols != B.cols ) {
          cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;

@@ -298,6 +298,30 @@ std::string  parsePlacement( PLACEMENT splace )
     cout <<"\nparsePlacement(PLACEMENT): unable to parse const char*: "<< splace << endl;
     return string("MODEL");
  }
+ 
+ 
+ 
+ 
+bool  faceVariable( PLACEMENT place )
+ {
+    if ( place == FACE ) return true;
+    if ( place == FACE_INTEGRATION_POINT ) return true;
+    if ( place == FACE_FACET_INTEGRATION_POINT ) return true;
+    if ( place == FACE_SECTOR_INTEGRATION_POINT ) return true;
+    return false;
+ }
+ 
+ 
+bool  interFaceVariable( PLACEMENT place )
+ {
+    if ( place == INTER_FACE ) return true;
+    if ( place == INTER_FACE_INTEGRATION_POINT ) return true;
+    if ( place == INTER_FACE_FACET_INTEGRATION_POINT ) return true;
+    if ( place == INTER_FACE_SECTOR_INTEGRATION_POINT ) return true;
+    return false;
+ }
+ 
+ 
 
 PLACEMENT intToPLACEMENT( int i )
   {

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-/// scalar solution variable: invokes accumulation of a right-hand side equal to unity
+/// for a scalar solution variable this operator creates a unit vector for accumulation into righthand side vector
 template<size_t dim,class SIMPLEX=Element<dim> >
 class NumIntegral_SetRHS_to_One : public MathOperatorRHS<dim> {
   public:
@@ -22,7 +22,7 @@ class NumIntegral_SetRHS_to_One : public MathOperatorRHS<dim> {
       { return new NumIntegral_SetRHS_to_One<dim,SIMPLEX> (*this); }
 };
 
-// since there is no material Operand nothing needs to be done
+/// since there is no material Operand nothing needs to be done
 template<size_t dim,class SIMPLEX>
 inline void NumIntegral_SetRHS_to_One<dim,SIMPLEX>::GetOperands( SIMPLEX& ) {}
 

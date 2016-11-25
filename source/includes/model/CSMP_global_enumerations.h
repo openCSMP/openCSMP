@@ -150,6 +150,8 @@ VARIABLE_TYPE  variableType();
 PLACEMENT      intToPLACEMENT( int i );
 PLACEMENT      parsePlacement( const char* placement );
 std::string    parsePlacement( PLACEMENT );
+bool           faceVariable( PLACEMENT );
+bool           interFaceVariable( PLACEMENT );
 
 /// determine from type whether the placement of the variable is Region, Boundary or SplitBoundary
 template<size_t dim, template<size_t> class SIMPLEX>

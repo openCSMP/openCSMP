@@ -184,7 +184,7 @@ void Tutorial4_Example::Run()
     PointSource_rhsop<2U>  extpressure_y( p_ref, "Neumann traction y", "nodal velocity y" );
 
     // RHS operators                           operand   test function
-    NumIntegral_NT_op_N_dV<2U>  dummy( p_ref, "zero",   "fluid pressure"   );
+    NumIntegral_NT_op_N_dV<2U>  dummy( p_ref, "zero",   "fluid pressure"  );
 
     // add each PDE Operator to the FE algorithm
 

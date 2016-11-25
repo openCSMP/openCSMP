@@ -171,8 +171,9 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::RetainGlobalSolutionMat
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::SetSolver( Solver& new_solver ) {
-  if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
-  solver_ = &new_solver;
+   if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
+   newed_Solver_object_ = false;
+   solver_ = &new_solver;
 }
 
 

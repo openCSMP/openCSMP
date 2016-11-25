@@ -415,7 +415,7 @@ class PDE_IntegratorExperimental {
 
     size_t                  dof_per_node_;
     bool                    setup_established_, retain_matrix_;
-    const bool              newed_Solver_object_;
+    bool                    newed_Solver_object_;
     double64                time_increment_;
 
     struct SIZES {

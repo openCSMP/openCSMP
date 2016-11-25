@@ -388,8 +388,10 @@ double64 printRangeOfVariable( const Model<dim>& sg,
  {
      double64  pmin, pmax;
      const PropertyDatabase<dim>& p_ref = sg.Database();
+     const PLACEMENT place = sg.Database().Placement(var);
      
-     if ( sg.ContainsRegion(group) ) sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
      else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
@@ -415,8 +417,10 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      double64& model_time( ModelTime::Instance().modelTime );
      double64         pmin, pmax;
      const PropertyDatabase<dim>& p_ref = sg.Database();
-     // if region does not exist, the boundaries are tried
-     if ( sg.ContainsRegion(group) ) sg.Region( group ).MinMaxOf( var, pmin, pmax );
+     const PLACEMENT place = sg.Database().Placement(var);
+
+     if ( sg.ContainsRegion(group) && !faceVariable(place) && !interFaceVariable(place) )
+       sg.Region( group ).MinMaxOf( var, pmin, pmax );
      else if ( sg.ContainsBoundary(group) ) sg.Boundary( group ).MinMaxOf( var, pmin, pmax );
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
