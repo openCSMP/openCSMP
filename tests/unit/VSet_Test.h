@@ -228,9 +228,9 @@ void VSet_Test::run()
 
   // .)REMOVEDATA
   vset4.RemoveBflags();
-  vset4.RemoveData( "scalar data" );
-  vset4.RemoveData( "vector data" );
-  vset4.RemoveData( "tensor data" );
+  //vset4.RemoveData( "scalar data" );	// jc: not implemented yet.
+  //vset4.RemoveData( "vector data" );	// jc: not implemented yet.
+  //vset4.RemoveData( "tensor data" );	// jc: not implemented yet.
 //  _test( vset4.ScalarPropertiesBegin() == vset4.vdata_scalar.end() );
 //  _test( vset4.ScalarPropertiesEnd() == vset4.vdata_scalar.end() );
 //  _test( vset4.VectorPropertiesBegin() == vset4.vdata_vector.end() );

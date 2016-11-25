@@ -1,0 +1,43 @@
+import testing ;
+import path ;
+import feature ;
+import toolset ;
+import package ;
+import os ;
+import set ;
+
+path-constant PROJECT_ROOT : .. ;
+
+path-constant SOURCE_BASE : $(PROJECT_ROOT)/source ;
+path-constant INCLUDE_BASE : $(SOURCE_BASE)/includes ;
+path-constant MODULE_BASE : $(SOURCE_BASE)/modules ;
+
+path-constant LIB_BASE : $(PROJECT_ROOT)/lib ;
+path-constant EXAMPLE_BASE : $(PROJECT_ROOT)/examples/source ;
+path-constant TEST_BASE : $(PROJECT_ROOT)/tests ;
+
+path-constant BIN_BASE : $(PROJECT_ROOT)/bin ;
+path-constant BUILD_BASE : $(PROJECT_ROOT)/build ;    
+
+feature.feature cpp11 :
+    on :
+    composite optional propagated
+    ;
+
+feature.compose <cpp11>on :
+    ;
+
+project csmp-api-library
+    : requirements
+        <threading>multi
+        <warnings>off
+		<cpp11>on
+
+    : default-build
+        release
+
+    : build-dir
+        $(BUILD_BASE)
+    ;
+
+#Usage: bjam -j4 --toolset=msvc-14.0 address-model=64 link=static

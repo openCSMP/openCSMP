@@ -1,6 +1,7 @@
 #include <cmath>
 #include <limits>
 #include <cassert>
+#include <ciso646>
 #include "CompressedRowMatrix.h"
 #include "SparseMatrix.h"
 #include "Exception.h"

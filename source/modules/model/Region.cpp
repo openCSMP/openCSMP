@@ -55,7 +55,7 @@ Region<dim>::Region( const Region& g )
 
 template<size_t dim>
 Region<dim>::Region( Region&& g )
- : ModelSubDomain<dim,Element>{g}
+ : ModelSubDomain<dim,Element>(g)
  {
  }
 

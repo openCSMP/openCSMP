@@ -71,7 +71,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <utility>
 #include <vector>
 #include <array>
-
+#include <ciso646>
 
 /*
 ===========================

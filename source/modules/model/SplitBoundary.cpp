@@ -45,7 +45,7 @@ SplitBoundary<dim>::SplitBoundary( const SplitBoundary& ed )
 
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( SplitBoundary&& ed )
- : ModelSubDomain<dim,InterFace>{ed}
+ : ModelSubDomain<dim,InterFace>(ed)
  {
  }
 
