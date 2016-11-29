@@ -266,8 +266,8 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
        }
 	   
      // converting C array indices (0..n-1) into Fortran indices (1..n) 
-     for ( auto i : ia ) i++;
-     for ( auto j : ja ) j++;
+     for ( vector<int32>::iterator i=ia.begin(); i!=ia.end(); ++i )  (*i)++;
+     for ( vector<int32>::iterator i=ja.begin(); i!=ja.end(); ++i )  (*i)++;
 
 }  // end InitializePointBased
 
