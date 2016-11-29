@@ -241,20 +241,9 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void  PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputGlobals( int32 precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   G_.Out( precision );
 
    cout.setf(ios::scientific);
-
-   for ( size_t i=0; i<G_.Rows(); i++ )
-      {
-         for ( size_t j=0; j<G_.Cols(); j++ )
-           {
-              cout.precision(precision);
-              if ( G_.At(i,j) >= 0 ) cout <<" ";
-              cout <<  G_.At(i,j) <<" ";
-           }
-         cout << endl;
-      }
-
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
    for ( size_t i=0U; i<rh_.size(); i++ )
      {
@@ -1799,7 +1788,23 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1( SIMPLIC
 
 
 
-
+/**
+    Solution of the system of linear algebraic equations:
+    
+    1. Dimensionsing of the solution matrix (n-variables, scalar or vector etc.)
+    
+    2. Accumulation of the FE or FV integrals
+    
+    3. Multiplication of the initial conditions into the RHS in the case of the transient problem.
+    
+    4. Late accumulation to RHS
+    
+    5. Essential conditions (either with or without elimination of the Dirichlet constraints from the matrix).
+    
+    6. Solution
+    
+    7. Postprocessing (if respective pde operators were added to the PDE_Integrator).
+*/
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICIAL_COMPLEX<dim>& domain, bool debug )
  {
@@ -1822,7 +1827,6 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICI
     if ( debug ) {
          Out();
          OutputGlobals();
-         // OutputInput();
       }
  
     // 7. invert global matrix

@@ -1,7 +1,7 @@
 #include <cmath>
 #include <limits>
 #include <cassert>
-#include <ciso646>
+#include <fstream>
 #include "CompressedRowMatrix.h"
 #include "SparseMatrix.h"
 #include "Exception.h"
@@ -297,6 +297,33 @@ void CompressedRowMatrix::Out() const
        } 
     cout << endl;
     cout.flush();   
+ }
+
+
+
+/** Outputs matrix to text file.
+*/
+void CompressedRowMatrix::Out( const string& outfile ) const
+ {
+    ofstream ofs(outfile);
+    assert( ofs.is_open() );
+    ofs << flush <<"\nCompressedRowMatrix::Out: "<< endl;
+    ofs <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
+    for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
+      ofs << *it <<" ";
+    cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
+    for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
+      ofs << *it <<" ";
+    cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
+    const long precision = ofs.precision();
+    ofs.precision(15);
+    for ( size_t n=0U; n<ja.size(); n++ ) {
+           ofs << ja[n] <<":"<< a[n] <<" ";
+           if ( n < ja.size()-1U and ja[n+1] < ja[n] ) cout << endl;
+       }
+    ofs.precision(precision);
+    ofs << endl;
+    ofs.flush();
  }
 
 

@@ -714,29 +714,38 @@ void SparseMatrix::In( const char* file_name_without_extension )
  }
 
 
-
-
+/**
+    Prints matrix dimensions, # of non-zero elements and (non-zero)
+    entries row by row.
+    Each entry is prefaced by its column index.
+*/
 void SparseMatrix::Out( long digits ) const
  {
     if ( data.empty() ) {
-         cout <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
+         cerr <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
          return;
       }
 
     long    prec(cout.precision(digits));
     size_t pcols(1);
 
-    cout <<"\nSparseMatrix::Out: Entries: "<< Entries();
+    cout <<"\nSparseMatrix::Out: entries (non-zero elements): "<< Entries();
     cout <<"\nrows: "<< data.size() <<", columns: "<< data.size() << endl;
     
     if ( digits != 0 ) cout.setf(ios::scientific);
 
+    // for all rows
     for ( size_t i=0U; i<data.size(); i++ )
+      // for all column entries
       for ( map<size_t,double64>::const_iterator
             ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
+         // print the column index
          cout <<"("<< i <<","<< (*ditc).first;
+         // prints values with extra spaces to achieve an alignment even if there are
+         // negative elements
          if ( (*ditc).second > 0 ) cout <<"):  "<< (*ditc).second <<" ";
          else                      cout <<"): "<< (*ditc).second <<" ";
+         // wraps the lines if there are more than 10 entries per line
          if ( pcols == 10 || pcols == data[i].size() ) {
               cout << endl;
               pcols = 0;

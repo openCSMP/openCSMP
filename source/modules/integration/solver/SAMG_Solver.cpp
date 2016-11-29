@@ -535,7 +535,9 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 			int* ip(0);
 			SAMG(&nnu_, &nna_, &nsys_,
 				&crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
-				&iu_[0], &ndiu_, ip, &ndip_, &matrix, &iscale_[0],
+				&iu_[0], &ndiu_, 
+-> !    ip,
+        &ndip_, &matrix, &iscale_[0],
 				&res_in_, &res_out_, &ncyc_done_, &ierr_,
 				&nsolve, &ifirst, &eps, &ncyc, &iswtch,
 				&a_cmplx, &g_cmplx, &p_cmplx, &w_avrge,
@@ -543,6 +545,8 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 		  }
 		else
 */
+//crmat_.Out("test-compressed-row-matrix.txt");
+
 			SAMG( &nnu_, &nna_, &nsys_,
               &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
               &iu_[0], &ndiu_, &ip_[0], &ndip_, &matrix, &iscale_[0],

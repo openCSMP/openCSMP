@@ -40,6 +40,7 @@ struct CompressedRowMatrix {
     size_t TotalExistingEntries() const { return ja.size(); }
 
     void Out() const;
+    void Out( const std::string& outfile ) const;
 
     std::vector<int32>     ia, ///< ia(ilo) and the last row ends at position ia(ihi+1)-1 (see next).
                            ja; ///< ja - pointer array pointing to the column indices. that is, for each matrix element a(j) with ia(ilo)<=j<=ia(ihi+1)-1, ja(j) contains the column index of that element. since, within each row, the diagonal element is stored first (see above), we always have ja(ia(i))=i.
