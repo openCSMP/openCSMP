@@ -1070,7 +1070,7 @@ void IsoparametricLinearTetrahedron::JacobianAt( const std::vector<double64>& rs
 
 
 /**
-     uses the triangularFacet to compute the normals to its faces.
+     uses the TriangularFacet to compute the normals to its faces.
 
      @author SKM 15/2/2016
      

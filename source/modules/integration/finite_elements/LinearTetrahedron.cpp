@@ -343,7 +343,7 @@ void LinearTetrahedron::UpdateFor()
 
 
 /**
-     uses the triangularFacet to compute the normals to its faces.
+     uses the TriangularFacet to compute the normals to its faces.
 
      @author SKM 15/2/2016
      

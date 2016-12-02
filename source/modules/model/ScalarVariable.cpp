@@ -5,7 +5,7 @@ namespace csmp {
 void  ScalarVariable::Out() const
  {
     std::cout <<"\nStatus: "<< parseStatus(flag_);
-    if ( std::isnan(data_) )
+    if ( isnan(data_) )
       std::cout <<", value: NAN\n";
     else
       std::cout <<", value: " << data_ << std::endl;

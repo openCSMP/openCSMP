@@ -1,12 +1,17 @@
+exe csmptype
+	:
+    $(PROJECT_ROOT)/source/CSMP_number_types_main.cpp
+	;
+	
 lib iaps
-        :
-        [ glob $(LIB_BASE)/iaps_h2o_eos/*.cpp ]
-        ;
+	:
+    [ glob $(LIB_BASE)/iaps_h2o_eos/*.cpp ]
+    ;
 
 lib jpeg
-        :
-        [ glob $(LIB_BASE)/jpeg/*.cpp ]
-        ;
+	:
+    [ glob $(LIB_BASE)/jpeg/*.cpp ]
+    ;
 		
 lib csmpcore
 	:
@@ -145,8 +150,6 @@ lib csmpcore
 	<include>$(TEST_BASE)/unit
 	<define>CSMP_WITH_SAMG_SOLVER
 	<define>SAMG_MULTIPLE_INSTANCES
-	#<define>SAMG_UNIX_LINUX
-	#<define>SAMG_LCASE_USCORE
 	;
 
 exe csmptest
@@ -158,7 +161,7 @@ exe csmptest
 	csmpcore	
 	$(TEST_BASE)/unit_tests_main.cpp
     [ glob $(TEST_BASE)/integration/*.cpp ]
-    [ glob $(TEST_BASE)/unit/*.cpp : $(TEST_BASE)/unit/Index_Test.cpp ] $(TEST_BASE)/unit/PropertyDatabase_Test.cpp ]	
+    [ glob $(TEST_BASE)/unit/*.cpp : $(TEST_BASE)/unit/Index_Test.cpp $(TEST_BASE)/unit/PropertyDatabase_Test.cpp ]
 	:
 	<include>$(INCLUDE_BASE)/analysis
 	<include>$(INCLUDE_BASE)/thmc/fractures
@@ -251,12 +254,11 @@ exe csmptest
 	<include>$(TEST_BASE)/unit	
 	<define>CSMP_WITH_SAMG_SOLVER
 	<define>SAMG_MULTIPLE_INSTANCES
-	#<define>SAMG_UNIX_LINUX
-	#<define>SAMG_LCASE_USCORE
 	;
 
 install dist 
     :
+	csmptype
 	csmpcore
 	jpeg
 	iaps

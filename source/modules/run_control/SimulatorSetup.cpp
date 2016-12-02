@@ -439,7 +439,7 @@ void SimulatorSetup<dim>::CheckInputRanges(){
         std::transform(usage.begin(), usage.end(), usage.begin(), ::tolower);
         this->GetModel()->MinMaxOf( property_name.c_str(), vmin, vmax );
 
-        if ((std::isnan(vmin)|| std::isnan(vmax)) && usage=="input" ) {
+        if ((isnan(vmin)|| isnan(vmax)) && usage=="input" ) {
             cout<<" property name (SS): "<<property_name<<" vmin:"<<vmin<<" vmax:"<<vmax<<endl;
             no_mistakes=false;
             cerr<<" Variable '"<<property_name<<"'( min = "<<vmin<<", max = "<<vmax<< "):";
@@ -628,7 +628,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
                     // get the min and max rates.
                     model_->Region((*sit).c_str()).Read( this->Database().StorageKey(mit->second.first.c_str()), vflowrate );
 
-                    if ( std::isnan(vflowrate()) )
+                    if ( isnan(vflowrate()) )
                         throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()","nan injection rate detected" );
 
                     // The volume method calculates volume, surface, or length depending on the type of element that composes the well.

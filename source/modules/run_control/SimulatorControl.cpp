@@ -890,7 +890,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
     if (simulator_setup_->GetModel()->Database().IsDefined("vtu frames"))
     {
 
-        if (!std::isnan(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ) ) &&
+        if (!isnan(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ) ) &&
                 simulator_setup_->GetModel()->Read( vtu_frames_Key_ )>0.0 )
         {
             this->SetOutputTimes(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ), this->GetSimulationStartTime());
@@ -913,7 +913,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
     if (simulator_setup_->GetModel()->Database().IsDefined("monitor frames"))
     {
 
-        if (!std::isnan(simulator_setup_->GetModel()->Read( monitor_frames_Key_ ) ) &&
+        if (!isnan(simulator_setup_->GetModel()->Read( monitor_frames_Key_ ) ) &&
                 simulator_setup_->GetModel()->Read( monitor_frames_Key_ )>0.0 )
         {
             if (!this->restart_)
@@ -939,7 +939,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Output times..."<<endl;
         for (size_t i = 0 ; i < av.Size();i++)
-            if (!std::isnan(av(i))){
+            if (!isnan(av(i))){
                 cout<<" "<<i<<" time: "<<av(i)<<endl;
                 this->RunSettings().AddOutputTime(av(i));
             }
@@ -953,7 +953,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Monitoring times..."<<endl;
         for (size_t i = 0 ; i < av.Size();i++)
-            if (!std::isnan(av(i)))
+            if (!isnan(av(i)))
                 this->RunSettings().AddMonitorTime(av(i));
         this->GetSS()->GetModel()->DeleteProperty("monitor times");
 

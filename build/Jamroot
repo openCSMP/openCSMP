@@ -39,5 +39,3 @@ project csmp-api-library
     : build-dir
         $(BUILD_BASE)
     ;
-
-#Usage: bjam -j4 --toolset=msvc-14.0 address-model=64 link=static

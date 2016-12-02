@@ -1,6 +1,6 @@
 #include "IsoparametricLinearPyramid.h"
 #include "Exception.h"
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 #include "QuadrilateralFacet.h"
 
 using namespace std;
@@ -958,7 +958,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
 
 
 /**
-     Uses the triangularFacet and QuadrlateralFacet classes to compute the normals to the prism faces.
+     Uses the TriangularFacet and QuadrlateralFacet classes to compute the normals to the prism faces.
      Based of the face nodes as specified in NodesOfFace()
 
      @author SKM 15/2/2016

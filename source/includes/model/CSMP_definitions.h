@@ -87,7 +87,9 @@ template<typename T> std::string to_string( T& number ) {
   }
 #endif
 
-
+#ifndef isnan
+#define isnan(x) std::isnan(x)
+#endif
 
 
 /*
