@@ -91,6 +91,9 @@ template<typename T> std::string to_string( T& number ) {
 #define isnan(x) std::isnan(x)
 #endif
 
+#ifndef isinf
+#define isinf(x) std::isinf(x)
+#endif
 
 /*
 ============================================================================
