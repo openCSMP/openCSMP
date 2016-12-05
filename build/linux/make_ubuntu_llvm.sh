@@ -1,5 +1,6 @@
 #export LM_LICENSE_FILE="/home/junchulk/samg/license.dat"
 #export LD_LIBRARY_PATH="/home/junchulk/csmp/csmp-api-library/bin/linux/"
+export LD_LIBRARY_PATH="../../bin/linux/"
 
 if [ -f "CSMP_number_type.h" ]
   then
