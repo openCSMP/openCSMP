@@ -10,30 +10,31 @@ namespace csmp {
 
 @brief For the calculation of directional integrals in direction xyz;
 example hydrostatic pf-gradient;
-conductivity can be node or element property but is not computed
-from basic variables. 
+basic operands can be node or element variables.
 
 @author S.K. Matthai
 @date 2005
 
 */
+enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
+
 template<size_t dim,class SIMPLEX=Element<dim> >
 class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
   public:
-    NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
                               const char* oper,    // e.g., fluid density
                               const char* test,    // e.g., fluid pressure
                               double64 acc_gravity=9.8601 ); // m/s2
 
-    NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
                               const char* oper,    // e.g., fluid density
                               const char* mtrl,    // e.g., conductivity
                               const char* test,    // e.g., fluid pressure
                               double64 acc_gravity=9.8601 );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( SIMPLEX& );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( SIMPLEX& );
     
     void SpatialDerivative( size_t xyz );
     virtual NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_op_dNi_dV<dim,SIMPLEX> (*this); }

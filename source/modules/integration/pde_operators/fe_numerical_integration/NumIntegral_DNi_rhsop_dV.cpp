@@ -1,0 +1,88 @@
+#include "NumIntegral_DNi_rhsop_dV.h"
+#include "Element.h"
+#include "Face.h"
+
+using namespace std;
+
+namespace csmp {
+
+template<size_t dim,class SIMPLEX>
+NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::~NumIntegral_DNi_rhsop_dV() {}
+
+/// custom constructor that should be used
+template<size_t dim,class SIMPLEX>
+NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
+                                                                 const char*                  oper,
+                                                                 const char*                  test )
+  : MathOperatorRHS<dim>(pref,oper,test),
+    xyz_(Y_DIRECTION), op_vec_(dim)
+{
+    MathOperatorRHS<dim>::Name("NumIntegral_DNi_rhsop_dV",oper, test );
+    
+
+    if ( MathOperatorRHS<dim>::BasicOperandPlacement() != NODE ||
+         MathOperatorRHS<dim>::BasicOperandType() != SCALAR )
+      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+                             oper, "Operand must be a scalar property placed on the nodes." );
+
+    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE ||
+         MathOperatorRHS<dim>::TestOperandType() != SCALAR)
+      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+                             test, "Operand (test) must be a scalar property placed on the nodes." );
+}
+
+template<size_t dim,class SIMPLEX>
+void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
+ {
+    xyz_ = num_xyz;
+ }
+ 
+template<size_t dim,class SIMPLEX>
+void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+{
+   e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), op_vec_ );
+
+} // end GetOperands
+
+ 
+ 
+//element contribution
+template<size_t dim,class SIMPLEX>
+void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+ {
+    // initialize output matrix
+    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
+    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+
+    for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+      {
+         // computing gradient of operand
+         double64 det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
+         double64 grad_op(0.);
+         const size_t nodes(e.Nodes());
+         for ( size_t j=0; j<nodes; ++j )
+           grad_op += MathOperatorRHS<dim>::DERIV(xyz_,j) * op_vec_[j]();
+        
+         // integration
+         e.N_AtIntegrationPoint( i, MathOperatorRHS<dim>::IPOL );
+         for ( size_t k=0; k<nodes; ++k )
+           MathOperatorRHS<dim>::IPOL[k] *= grad_op * det * e.WeightAtIntegrationPoint(i);
+
+         // RHS vector for accumulation
+         for ( size_t k=0; k<nodes; ++k )
+           MathOperatorRHS<dim>::RHS[k] += MathOperatorRHS<dim>::IPOL[k];
+      }
+  cerr <<"\nelement "<< e.Idx() <<": rhs: ";
+  out( MathOperatorRHS<dim>::RHS );
+
+} // end ComputeContribution
+
+template class NumIntegral_DNi_rhsop_dV<1U,Element<1U> >;
+template class NumIntegral_DNi_rhsop_dV<2U,Element<2U> >;
+template class NumIntegral_DNi_rhsop_dV<3U,Element<3U> >;
+
+template class NumIntegral_DNi_rhsop_dV<1U,Face<1U> >;
+template class NumIntegral_DNi_rhsop_dV<2U,Face<2U> >;
+template class NumIntegral_DNi_rhsop_dV<3U,Face<3U> >;
+
+} // namespace csmp

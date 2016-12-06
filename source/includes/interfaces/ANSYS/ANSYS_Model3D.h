@@ -42,7 +42,14 @@ class ANSYS_Model3D : public Model<3U> {
     // To rebuild model from CSMP native binary file do not use an ANSYS model
 
     virtual ~ANSYS_Model3D();
-    
+  
+    /// renumbers the nodes (0..n) as in the original ANSYS model; returns true if changes were made
+    bool RestoreOriginalNodeNumbering( bool verbose );
+  
+    /// access to the node points of the model in the original order output from ANSYS
+    std::vector<Point<3U> >::const_iterator VerticesBegin() const;
+    std::vector<Point<3U> >::const_iterator VerticesEnd() const;
+  
   private:
 
     void Initialize( const char* icem_file_set,
@@ -50,8 +57,20 @@ class ANSYS_Model3D : public Model<3U> {
                      bool irregular_mesh,
                      bool binary_file,
                      bool use_regions_file,
-                     bool create_boundaries);
+                     bool create_boundaries );
+  
+    std::vector<Point<3U> > node_coords_; ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };
+
+
+// inlines
+
+inline std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesBegin() const { return node_coords_.begin(); }
+
+inline std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { return node_coords_.end(); }
+
+
+
 
 } // end csmp
 

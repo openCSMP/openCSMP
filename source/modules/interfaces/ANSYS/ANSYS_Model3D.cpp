@@ -58,7 +58,13 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
        // 0. reading the mesh from ANSYS-CSMP-input files
        mesh_interface.Read_ANSYS_Mesh( std::string(mesh_file_set), vset, mesh_topology, binary_input_file, irregular_mesh );
 
-       // 1. construct model based on obtained model topology and vset
+       // 1. preserving numbered node coordinates in a vector
+       const size_t vertices(vset.Vertices());
+       node_coords_.reserve(vertices);
+       for ( size_t i=0U; i<vertices; ++i )
+         node_coords_.emplace_back( Point<3U>(vset.Px(i),vset.Py(i),vset.Pz(i)) );
+
+       // 2. construct model based on obtained model topology and vset
        if ( use_regions_file )
          Model<3U>::Initialize( regions_file_prefix,
                                 mesh_topology,
@@ -276,5 +282,55 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
 ANSYS_Model3D::~ANSYS_Model3D()
  {
  }
+ 
+ 
+ 
+/** 
+     Renumbers the nodes (0..n) as in the original ANSYS model.
+     
+     @return returns whether any changes in the numbering were made.
+     
+     @author SKM
+     @date 6/12/2016
+*/
+bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
+ {
+    // making a binary tree of the original node numbers, searchable for point coordinates
+    map<Point<3U>,size_t>  original_node_numbers;
+    for ( size_t i=0U; i<node_coords_.size(); ++i )
+      original_node_numbers.insert( make_pair( node_coords_[i], i ) );
+   
+    // renumbering the nodes of the model consecutively
+    bool first_call(true), made_changes(false);
+    const auto nodesEnd(Mesh().NodesEnd());
+    const auto onodesEnd(original_node_numbers.end());
+    for ( auto nit=Mesh().NodesBegin(); nit!=nodesEnd; ++nit ) {
+         auto onit( original_node_numbers.find( (*nit).Coordinate() ) );
+         if ( onit != onodesEnd ) {
+              if ( (*nit).Idx() != (*onit).second ) {
+                   if ( first_call ) {
+                        if ( verbose ) cout <<"\nANSYS_Model3D::RestoreOriginalNodeNumbering: changed indices of following nodes:";
+                        first_call   = false;
+                        made_changes = true;
+                     }
+                   if ( verbose ) cout <<"\n\t"<< (*nit).Idx() <<" -> "<< (*onit).second;
+                }
+              (*nit).Idx( (*onit).second );
+           }
+         else
+           throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
+                                 "node could not be identified; has it been newly created?" );
+      }
+   
+   return made_changes;
+   
+ } // end RestoreOriginalNodeNumbering
+
+ 
+ 
+ 
+ 
+ 
+ 
 
 } // end csmp

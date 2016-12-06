@@ -198,7 +198,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
 
     // ----------------------------------------
-    // manipulation with properties
+    // manipulation of properties
     // ----------------------------------------
 
     /// assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter

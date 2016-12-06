@@ -148,8 +148,8 @@ void NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
            }
          else // if Operand is placed on the NODE
            {
+               // interpolating Operand value and multipliers to integration point
                e.N_AtIntegrationPoint( i, IPOL );
-               // interpolating Operand value and nodal multipliers to integration point
                double64 op_value(0.);
                for ( size_t j=0; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
 
