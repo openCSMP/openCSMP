@@ -141,7 +141,7 @@ since there are 3 integration points, each weight is 0.33...
 */
 
 
-} // end namespace csp
+} // end namespace csmp
 
 #endif
 

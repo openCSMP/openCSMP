@@ -661,7 +661,6 @@ void SAMG_Settings::Set_iextent( int32 iextent ) {
           20-23	alternative to 10-13 for 'critical' positive off-diagonal entries
           25-28	Same as prev with more effort in construction of interpolation
 
-
 tested: */
 void SAMG_Settings::Set_ndefault( int32 ndefault ) {
     ndefault_ = ndefault;
@@ -905,16 +904,20 @@ Standard choices: ncgtyp=1 or ncgtyp=4.
                   mostly negative off-diagonals. Positive off-diagonal
                   elements (if any) should be small. Variables with only
                   positive couplings will become C-variables.
+ 
                 2 Standard process except that variables which have only
                   positive couplings are treated by absolute value.
+ 
                 3 Standard process except that, for mixed-sign rows, all
                   "large" positive entries (threshold parameter ewt2) are
                   eliminated before a decision on strong connectivity is
                   made. If, for some variable i, this does not lead to a clear
                   decision, i will become a C-variable.
+ 
                 4 Same as 3 except that, if the elimination of positive
                   couplings of variable i fails to give a clear picture, this
                   option temporarily switches to the standard process 1.
+ 
                 5 Same as 4 except that variables which have only
                   positive couplings are treated by absolute value.
 

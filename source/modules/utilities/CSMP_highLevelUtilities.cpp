@@ -1442,6 +1442,66 @@ template void flagToNumber( Model<3U>&, const char* );
 
 
 
+/**
+    convert the flag(s) of first variable into double values stored in the second variable
+    
+    @attention works only for node-property placement.
+    
+    @author SKM 8/12/2016
+*/
+template<size_t dim> 
+void flagToNumber( Model<dim>& model, const char* flag_variable, const char* value_variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  flag_key = model.Database().StorageKey(flag_variable);  // input
+    csmp::Index  prop_key = model.Database().StorageKey(value_variable); // output
+ 
+    if ( flag_key.type != prop_key.type )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must be of the same type." );
+
+    if ( flag_key.place != prop_key.place )
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must have the same placement." );
+
+    if ( flag_key.type != SCALAR and flag_key.type != VECTOR )
+      throw csmp::Exception( ERROR, "flagToNumber:", "method handles only scalar and vector variables." );
+  
+    switch( prop_key.place )
+      {
+         case NODE:
+              if ( flag_key.type == SCALAR ) {
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       // retrieves status of the flag variable
+                       double64 value = static_cast<double64>( (*nit)->Status(flag_key) );
+                       // overwrites value of value variable with integer value of its flag enum
+                       (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+                    }
+                }
+              else if ( flag_key.type == VECTOR ) {
+                  VectorVariable<dim> vc;
+                  for ( typename vector<Node<dim>*>::iterator
+                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                    {
+                       (*nit)->Read( flag_key, vc );
+                       for ( size_t i=0U; i<dim; ++ i )
+                         vc(i) = static_cast<double64>( vc.Flag(i) );
+                       (*nit)->Store( prop_key, vc );
+                    }
+                }
+           break;
+         default:
+           throw csmp::Exception( ERROR, "flagToNumber:", "property placement not handled." );
+      }
+   
+ } // end flagToNumber
+
+template void flagToNumber( Model<1U>&, const char*, const char* );
+template void flagToNumber( Model<2U>&, const char*, const char* );
+template void flagToNumber( Model<3U>&, const char*, const char* );
+
+
+
 
 
 

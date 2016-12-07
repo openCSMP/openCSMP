@@ -2498,12 +2498,10 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     /// @todo (2-P) Rm rtti
     csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
-    string cache;
-    uintToString( dim, cache );
-    src += cache;
+    src += to_string(dim);
     src += ",";
-    src += typeid(SIMPLEX<dim>).name();
-    src +=">::ChangePropertyStatus";
+    src += "Element/Face/Interface";
+    src +=">::ChangePropertyStatus:";
 
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
@@ -2514,7 +2512,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( elmt_vec_.empty() ) {
-         csmp_error.notice( ERROR, src.c_str(), "Region is empty");
+         csmp_error.notice( ERROR, src.c_str(), "Region is empty.");
          return;
       }
 
@@ -2530,25 +2528,25 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                          eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
+                          eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
                     for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=NodesEnd(); nit++ )
+                          nit=NodesBegin(); nit!=NodesEnd(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
             }
-          // if the property shall only be changed on the Subdomain boundary
+          // if the flags shall only be changed on the Subdomain boundary
           else if ( group_flag == PERIMETER ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
                 throw csmp::Exception( ERROR, src.c_str(),
@@ -2557,24 +2555,25 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
+                          eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
                     for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=PerimeterNodesBegin(); nit!=NodesEnd(); nit++ )
+                          nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
             }
+          // if the flags for all entities in the interior of the region shall be changed
           else if ( group_flag == INTERIOR ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
                 throw csmp::Exception( ERROR, src.c_str(),
@@ -2583,20 +2582,20 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                     for ( typename vector<SIMPLEX<dim>*>::iterator
-                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
+                          eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == NODE ) {
                     for ( typename vector<csmp::Node<dim>*>::iterator
-                          nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
+                          nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
                       (*nit)->Status( prop_key, status[0U] );
                     return;
                  }
@@ -2704,6 +2703,10 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     throw csmp::Exception( ERROR, src.c_str(), "Property placement not recognized");
 
  } // end ChangePropertyStatus
+
+
+
+
 
 
 /// changes the variable flag to status for those group members which carry the group_flag.

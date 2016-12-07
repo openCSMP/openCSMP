@@ -80,6 +80,10 @@ void printRangeOfVectorOfVectors( const std::vector<std::vector<double64> >&  );
 template<size_t dim> 
 void flagToNumber( Model<dim>&, const char* variable );
  
+/// convert the flag(s) of first variable into integer values stored in the second variable
+template<size_t dim> 
+void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_variable );
+
 /// using random number generator, adds percentage of Gaussian noise to variable values
 template<size_t dim> 
 void randomPerturb( Model<dim>&, const char* prop, double64 by_percent_of_max_value );
