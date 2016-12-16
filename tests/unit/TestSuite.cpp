@@ -75,15 +75,15 @@ void TestSuite::run()
     {
         assert(m_tests[i]);
         if (m_tests[i]->hasName())
-            cout<<"Running Test: "<<m_tests[i]->getName()<<endl;
+            cout<<"\n\n\nTestSuite: Running Test: "<<m_tests[i]->getName()<<endl;
         else {
           #ifdef __GNUC__
             //This is a fix for gcc name demangling.
             const std::type_info  &ti = typeid(*m_tests[i]);
             realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
-            cout<<"Running Test: "<<realname<<endl;
+            cout<<"\n\n\nTestSuite: Running Test: "<<realname<<endl;
           #else
-            cout<<"Running Test: "<<typeid(*m_tests[i]).name()<<endl;
+            cout<<"\n\n\nTestSuite: Running Test: "<<typeid(*m_tests[i]).name()<<endl;
           #endif
         }
         m_tests[i]->run();

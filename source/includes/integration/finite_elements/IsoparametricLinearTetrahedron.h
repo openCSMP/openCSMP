@@ -61,8 +61,8 @@ class IsoparametricLinearTetrahedron : public FiniteElement {
                                     std::vector<double64>& NVAR ) const;
 
     virtual void        OutputNodeDataToVTK( const char* file_name,
-                                    const char* var_name,
-                                    DenseMatrix<DM_MIN>& DATA ) const;
+                                             const char* var_name,
+                                             DenseMatrix<DM_MIN>& DATA ) const;
 
     void                N(std::vector<double64>& N, size_t& iterations,	double64& distance,const std::vector<double64>& xyz);
 

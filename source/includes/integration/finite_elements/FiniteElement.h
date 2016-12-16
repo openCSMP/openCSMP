@@ -150,7 +150,7 @@ class FiniteElement {
     size_t             Neighbors() const;
   
     /// returns how many nodes make up a particular face
-    virtual size_t     NodesPerFace( size_t ) const;
+    size_t             NodesPerFace( size_t ) const;
   
     /// @todo (1) SKM: WHAT IS THIS
     size_t             IntegrationPointNeighbors() const;

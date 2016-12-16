@@ -921,12 +921,6 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
 
 
 
-///  loop mapping over the nodes of the element. @test AM o.k.
-inline size_t IsoparametricQuadraticTetrahedron::n( size_t i, size_t a ) const
-{
-     if ( i+a >= 4 ) return i+a-4;
-     return i+a;
-}
 
 
 
@@ -1711,6 +1705,16 @@ void IsoparametricQuadraticTetrahedron::ReferenceCoordinates( DenseMatrix<DM_MIN
     matCoords = NXYZ;
 }
 
+
+
+void IsoparametricQuadraticTetrahedron::JacobianAt( const std::vector<double64>& rst )
+{
+   dNr(rst[0], rst[1], rst[2], DNR);
+   dNs(rst[0], rst[1], rst[2], DNS);
+   dNt(rst[0], rst[1], rst[2], DNT);
+
+   Jacobian(DNR, DNS, DNT);
+}
 
 
 /**

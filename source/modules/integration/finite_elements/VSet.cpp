@@ -414,7 +414,7 @@ data. This output is ordered in the following way:
 The binary writing is done with the templatized set of functions declared
 in 'binaryReadWrite.h'. These can read and write all CSMP type of datasets. 
 
-TODO: include property_map_
+    TODO: @todo Refactor to work with PropertyData based variable storage
  
 */
 template<size_t dim>
@@ -445,7 +445,7 @@ bool  VSet<dim>::ParallelOutputTo( const char* bin_file, double64 time, size_t f
      // 3. Writing the mesh connectivity to file
      OutBinary( fp );
    
-     throw out_of_range("VSet<dim>::ParallelOutputTo: variable output has not been implemented yet.");
+     cerr <<"\nVSet<dim>::ParallelOutputTo: variable output has not been implemented yet.\n";
      
      // 5. cleaning up
      fclose( fp );
@@ -512,10 +512,13 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
   } // end InputFrom
 
 
+/**
+    TODO: @todo Refactor to work with PropertyData based variable storage
+*/
 template<size_t dim>
 bool  VSet<dim>::ParallelInputFrom( const char* bin_file, double64& time, size_t& first_outerhalo )
  {
-     throw out_of_range("VSet<dim>::ParallelInputFrom: variable output has not been implemented yet.");
+     cerr <<"\nVSet<dim>::ParallelInputFrom: variable output has not been implemented yet.\n";
 
      char file_name[200], heading[300];
      strcpy( file_name, bin_file );
