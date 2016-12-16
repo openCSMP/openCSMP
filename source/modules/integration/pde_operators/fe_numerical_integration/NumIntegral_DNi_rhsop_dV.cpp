@@ -72,10 +72,14 @@ void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
          for ( size_t k=0; k<nodes; ++k )
            MathOperatorRHS<dim>::RHS[k] += MathOperatorRHS<dim>::IPOL[k];
       }
-  cerr <<"\nelement "<< e.Idx() <<": rhs: ";
-  out( MathOperatorRHS<dim>::RHS );
 
 } // end ComputeContribution
+
+// TESTING
+//  cerr <<"\nelement "<< e.Idx() <<": rhs: ";
+//  out( MathOperatorRHS<dim>::RHS );
+
+
 
 template class NumIntegral_DNi_rhsop_dV<1U,Element<1U> >;
 template class NumIntegral_DNi_rhsop_dV<2U,Element<2U> >;

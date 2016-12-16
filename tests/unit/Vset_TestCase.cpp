@@ -5,17 +5,9 @@
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
-//#include "InputDataManager.h"
-//#include "PropertyHandle.h"
 
 // File I/O and Initialization
 #include "ANSYS_Model3D.h"
-//#include "MeshDiagnostics.h"
-
-// Output
-//#include "VTU_Interface.h"
-
-
 
 using namespace std;
 
@@ -32,6 +24,9 @@ Vset_TestCase::~Vset_TestCase()
 }
 
 
+/**
+    TODO: @todo the VSet test should not be dependent on the Model functionality ! - refactor
+*/
 void Vset_TestCase::run()
 {
     //------------------------------------

@@ -1569,8 +1569,6 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
                     Face<dim>* const ptr(face_collection_[fidx].Neighbor(j));
                     // if the neighbor exists (which it must on the inside of the Face)
                     if ( ptr != nullptr ) {
-                         assert( ptr->Idx() >= elements );
-                         assert( ptr->Idx() < elements + faces );
                          vset.Pfvert( fidx + elements, j, static_cast<int32>(ptr->Idx()) );
                       }
                     else vset.Pfvert( fidx + elements, j, face_collection_[fidx].InnerParent()->AtBoundary() );
@@ -1612,8 +1610,6 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
              for ( size_t j=0U; j<neighbors; ++j ) {
                     InterFace<dim>* const ptr(interface_collection_[fidx].Neighbor(j));
                     if ( ptr != nullptr ) {
-                         assert( ptr->Idx() >= elements + faces );
-                         assert( ptr->Idx() < elements + faces + interfaces );
                          vset.Pfvert( fidx + elements + faces, j, static_cast<int32>(ptr->Idx()) );
                       }
                     else vset.Pfvert( fidx + elements + faces, j, REGION_BOUNDARY );

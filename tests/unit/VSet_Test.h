@@ -87,6 +87,7 @@ void VSet_Test::run()
   _test( vset4.ElementType( 2 ) == ISOPARAMETRIC_LINEAR_PYRAMID );
 
   // .)DATA OPS
+  // TODO: use PropertyData interface rather than the deprecated FEM_Data interface
   std::deque<double64> px, py, pz;
   for( size_t i = 0; i < 13; ++i )
   {
@@ -175,15 +176,17 @@ void VSet_Test::run()
   std::vector<VectorVariable<3U> > vectorData; vectorData.push_back( vectorVariable ); vectorData.push_back( vectorVariable ); vectorData.push_back( vectorVariable );
   FEM_Data<VectorVariable<3U> > femDataVector( ELEMENT, vectorData );
 //  vset4.AddData( "vector data", femDataVector );
+
+// TODO: SKM fix these tests to work with PropertyData
   FEM_Data<ScalarVariable> femDataScalarTest;
 //  vset4.Data( "scalar data", femDataScalarTest );
-  _test( femDataScalarTest == femDataScalar );
+  _test( femDataScalarTest == femDataScalar );         // FAIL 16/12/2016
   FEM_Data<VectorVariable<3U> > femDataVectorTest;
 //  vset4.Data( "vector data", femDataVectorTest );
-  _test( femDataVectorTest == femDataVector );
+  _test( femDataVectorTest == femDataVector );         // FAIL 16/12/2016
   FEM_Data<TensorVariable<3U> > femDataTensorTest;
 //  vset4.Data( "tensor data", femDataTensorTest );
-  _test( femDataTensorTest == femDataTensor );
+  _test( femDataTensorTest == femDataTensor );         // FAIL 16/12/2016
   std::map<size_t,long64> bfmap;
   for( size_t i = 0; i < 13; ++i )
     bfmap.insert( std::make_pair( i, 99 ) );
@@ -207,6 +210,7 @@ void VSet_Test::run()
   _test( vset5.Vertices() == 0 );
   vset5.InputFrom( "vsetBIN", time );
   _test( vset5 == vset4 );
+// TODO: SKM: Parallel output needs to be refactored to work with PropertyData
   vset4.ParallelOutputTo( "vsetBINp", 0., 0 );
   vset5.Erase();
   _test( vset5.Elements() == 0 );

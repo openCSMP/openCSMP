@@ -77,8 +77,7 @@ void VTU_Interface_Test::run()
   _test( vtu.OutputDataToVTU( "VTU_RegionReference_Test2", "nodal variable", rref2, static_cast<int>(0) ) );
 
   // boundary
-  _test( model.InsertBoundary( "LAYER1", "LAYER2" ) );
-  Boundary<DIM>& bref( model.Boundary( std::string("LAYER1") +std::string("_") + std::string("LAYER2") ) );
+  Boundary<DIM>& bref( model.Boundary("FRONT") );
   _test( vtu.OutputDataToVTU( "VTU_BoundaryReference_Test1", "nodal variable", bref, static_cast<int>(0) ) );
 
   // vector variable
@@ -109,8 +108,8 @@ void VTU_Interface_Test::run()
   vtu.OutputDataToVTU( "VTU_TestScalar3D", outputPropsScalar, "Model", static_cast<int>(0) );
   vtu.OutputDataToVTU( "VTU_TestArray3D",  outputPropsArrays, "Model", static_cast<int>(0) );
 
-  // planar model in 3D space
-  ANSYS_Model3D modelB( "BoxHalfs2D", "CSMP-variables.txt" );
+  // planar model in 3D space (do not create boundaries, else model will fail)
+  ANSYS_Model3D modelB( "BoxHalfs2D", "CSMP-variables.txt", true, true, true, false );
   VTU_Interface<DIM> vtuB( modelB );
   vtuB.OmitZeroInFileName( true );
   modelB.InputPropertyValue( "nodal vector", vectorA );

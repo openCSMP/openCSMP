@@ -274,7 +274,7 @@ faces perpendicular to the triangles plane.
  */
 void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz ) 
 {
-  double64 X12 = XY(1,0) - XY(0,0), // X
+  const double64 X12 = XY(1,0) - XY(0,0), // X
          X23 = XY(2,0) - XY(1,0),
          X31 = XY(0,0) - XY(2,0),
          Y12 = XY(1,1) - XY(0,1), // Y
@@ -284,7 +284,7 @@ void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz )
          Z23 = XY(2,2) - XY(1,2),
          Z31 = XY(0,2) - XY(2,2);
 
-  double64 XP1 = XY(0,0) - xyz[0],
+  const double64 XP1 = XY(0,0) - xyz[0],
          XP2 = XY(1,0) - xyz[0],
          XP3 = XY(2,0) - xyz[0],
          YP1 = XY(0,1) - xyz[1],
@@ -295,7 +295,7 @@ void LinearTriangle3D::N( vector<double64>& N, const vector<double64>& xyz )
          ZP3 = XY(2,2) - xyz[2];
 
   // XNRM,YNRM,ZNRM is normal to triangle (not unit normal!)
-  double64 XNRM = -Y12*Z31 + Z12*Y31,
+  const double64 XNRM = -Y12*Z31 + Z12*Y31,
          YNRM = -Z12*X31 + X12*Z31,
          ZNRM = -X12*Y31 + Y12*X31,
 

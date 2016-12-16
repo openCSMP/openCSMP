@@ -581,6 +581,8 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
 /**
     Checks that the face normals are pointing correctly and computes face flux balance 
     over all faces of the element. This should be zero.
+    
+    @todo check how accurate this result can be expected to be?
 */
 void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const Element<3U>& e )
  {
@@ -595,7 +597,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
     // -----------------------------------------------------------
     for ( size_t i=0; i<e.Faces(); i++ ) {
          // computing and storing normal to face
-         e.UnitNormalToFace( i, nrml );
+         e.FE()->UnitNormalAtFaceBarycenter( i, nrml );
          VectorVariable<3U>  fn(nrml);
          // projecting flux onto normal
          // dot product fn . vc
@@ -607,8 +609,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
       
          // summing flux balance
          flux_balance += fflux;  
-         cout <<"\nFace "<< i <<", integrated normal flux: "<< fflux;
-         
+         cout <<"\nFace "<< i <<", integrated normal flux: "<< fflux;         
       }
     cout <<"\n";
 
@@ -710,7 +711,8 @@ void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char*
     vector<size_t> fnids;
     for ( size_t i=0; i<e.Faces(); i++ ) {
          // computing and storing normal to face
-         Point<3U> unormal = e.UnitNormalToFace( i );
+         e.FE()->UnitNormalAtFaceBarycenter( i, nrml );
+         Point<3U> unormal(nrml);
          // scaling the normals (by empirical factor)
          unormal *= (sqrt(e.Volume()) / 10.);
          // finding root points for the normals = barycenters of faces

@@ -29,7 +29,7 @@ namespace csmp
     
     void InputDataManager_Test::run()
     {
-        _model=new csmp::ANSYS_Model3D("prism_test","CSMP_Variables.txt");
+        _model=new csmp::ANSYS_Model3D("prism_test","CSMP_DataInputManager_Test-variables.txt");
 
         InputDataManager<3U> idm;
         idm.ConfigureFromFile(*_model,"prism_test",false, true, true, true, true );

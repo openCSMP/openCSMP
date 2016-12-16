@@ -394,14 +394,16 @@ inline bool  ScalarVariable::operator>=( double64 val ) const
 /// D. Knuth's approach to comparison of floating point values
 inline bool  ScalarVariable::operator==( double64 val ) const
  {
-    return fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon();
+//    return fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon();
+    return !(data_ > val and data_ < val);
  }
  
 
 inline bool  ScalarVariable::operator!=( double64 val ) const
  {
-    return !(fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon());
- } 
+//    return !(fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon());
+    return !(data_ == val);
+ }
 
 
 
@@ -437,7 +439,8 @@ inline bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
 
 inline bool  ScalarVariable::operator==( const ScalarVariable& s ) const
  {
-    return (s.flag_==flag_ && fabs(data_ - s.data_) <= fabs(data_) * std::numeric_limits<double64>::epsilon());
+    if ( s.flag_ != flag_ ) return false;
+    return !(data_ > s.data_ and data_ < s.data_);
  }
  
   

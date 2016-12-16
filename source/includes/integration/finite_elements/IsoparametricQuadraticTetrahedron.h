@@ -36,6 +36,7 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
     virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double64>& N );
     virtual   void      N_AtBaryCenter( std::vector<double64>& N );
     virtual   void      JacobianAtIntegrationPoint( size_t ip );
+    virtual   void      JacobianAt(const std::vector<double64>& rst);
 
     virtual double64    dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double64>& xyz  );
     virtual void        dN( DenseMatrix<DM_MIN>& M );
@@ -91,7 +92,7 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
     //Local &  Global coordinates
     void ParametricToPhysical(std::vector<double64> &rst, std::vector<double64> &xyz);
     void PhysicalToParametric(std::vector<double64>& rst,const std::vector<double64>& xyz);
-    inline size_t n( size_t i, size_t a ) const;
+    size_t n( size_t i, size_t a ) const;
 };
 
 
@@ -140,6 +141,12 @@ Note that this numbering scheme is different from that used by ICEMCFD
 where node 7 (0..n-1) is the midside node of the edge 0-3, node 8 of
 edge 1-3, and node 9 of edge 2-3.
 */
+
+///  loop mapping over the nodes of the element. @test AM o.k.
+inline size_t IsoparametricQuadraticTetrahedron::n( size_t i, size_t a ) const {
+     if ( i+a >= 4 ) return i+a-4;
+     return i+a;
+}
 
 
 } // end namespace csmp
