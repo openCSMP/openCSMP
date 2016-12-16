@@ -244,6 +244,11 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 
 
 
+
+
+/**
+    custom constructor
+*/
 template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
                              VSet<dim>& vset,
@@ -267,7 +272,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 4. forming unique root Region called "All Elements" as well as default computational domain called "Model"
     const bool withNeighborConnectivity(true);
-    this->CreateNonUniqueMasterRegionFromRootNode( withNeighborConnectivity );
+    const bool valid_master_region = this->CreateNonUniqueMasterRegionFromRootNode( withNeighborConnectivity );
+    assert( valid_master_region );
     const bool place_copy_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     this->CopyRegion( "All Elements", "Model", place_copy_in_unique_regions );
 

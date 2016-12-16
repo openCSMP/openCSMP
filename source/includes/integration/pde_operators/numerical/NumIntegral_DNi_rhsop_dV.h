@@ -8,6 +8,8 @@ namespace csmp {
 
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
+std::string parse( SPATIAL_DERIVATIVE );
+
 /**
     Volume integral over the gradient of the Operand in the direction i (i=x,y,z).
     Accumulation into the right-hand side of the linear algebraic system Ax=b

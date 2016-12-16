@@ -205,6 +205,8 @@ bool RegionInterface<dim,REGION_COMPLEX>::ContainsRegion( const std::string& reg
 
     @return element and node numbers are compared with MeshManager entries to verify that
     all elements and nodes were discovered. If so method returns true, else false
+    
+    @param reestablishNeighborConnectivity=true will prompt CSMP to recreate element neighbor connectivity.
 
     @author SKM
     @date 5/4/2016
@@ -213,6 +215,7 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode( bool reestablishNeighborConnectivity )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
     // does this region already exist
     if ( ContainsRegion(masterRegion_) ) {
          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
@@ -223,12 +226,17 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
     std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
     newRegion = groupMap_.insert( std::make_pair( masterRegion_, csmp::Region<dim>( masterRegion_,
                                                   static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
-    
-
-     // if region was inserted successfully
-    if ( newRegion.second )
-        (*newRegion.first).second.AccumulateAll( &(static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode()),
-                                                  reestablishNeighborConnectivity );
+   
+     // if region could be inserted successfully
+    if ( newRegion.second ) {
+         const size_t elements = (*newRegion.first).second.AccumulateAll( &(static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode()),
+                                                                                                      reestablishNeighborConnectivity );
+         if ( elements < static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() ) {
+              std::cerr <<"\n\n\tdiscovered only "<< elements <<" versus "<< static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() <<" elements.\n\n";
+              csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
+                                "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
+           }
+      }
    
     else {
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
@@ -1344,12 +1352,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
   template<size_t dim, template<size_t> class REGION_COMPLEX>
   bool RegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom( const ModelTopology& topo )
    {
-      std::list<std::string>    regions;
-      std::vector<size_t>  element_ids;  
-      std::string          group_name;
-      size_t          new_regions(0U);
-
       // 1. getting the names of the regions
+      std::list<std::string> regions;
       topo.Out( regions );
 
       // 2. assigning the regions to groups in the Model
@@ -1358,9 +1362,10 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+      size_t new_regions(0U);
       for ( typename std::list<std::string>::const_iterator lit=regions.begin(); lit!=regions.end(); lit++ )
         {
-           group_name = (*lit).c_str();
+           std::string group_name(*lit);
            std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
              it=uniqueGroupMap_.insert( make_pair( group_name, csmp::Region<dim>( group_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
            if ( it.second )
@@ -1368,6 +1373,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                 assert( ContainsRegion( (*lit).c_str() ) == true );
               
                 // making a list of the element numbers
+                std::vector<size_t>  element_ids;
                 element_ids.reserve(topo.ElementsOfRegion((*lit).c_str()));
                 copy( topo.ElementsOfRegionBegin((*lit).c_str()),
                       topo.ElementsOfRegionEnd((*lit).c_str()),

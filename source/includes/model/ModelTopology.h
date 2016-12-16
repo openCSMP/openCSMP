@@ -107,8 +107,8 @@ class ModelTopology {
     void        RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
     void        RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
     bool        CheckElementNumbering() const;
-    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping );
-    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_element_numbering );
+//    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping );
+    void        CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
 
     /// checks and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes etc
     template<size_t dim>

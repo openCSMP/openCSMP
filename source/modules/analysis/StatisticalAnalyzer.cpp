@@ -329,8 +329,8 @@ const
 
 /**
 
-Goes through all Regions of the current Model and calculates the area/volume of the region with property values
-within the ranges defined in 'bins'. Normalizes the values by the total area/volume of the Region.
+Goes through all Regions of current Model and calculates the area/volume of the region with property values
+within the ranges defined in 'bins'. Normalizes the computed values by the total area/volume of the Region.
 Returns a map of bins and area/volume normalized values for each region
 using the region name as key / identifier.
 
@@ -991,14 +991,17 @@ const
 
 
 
-/// writing: datasetname := [ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8) ]:
+/**  Output to Maple (old statistics package), format:
+
+     writing: datasetname := [ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8) ]:
+*/
 template<size_t dim>
 void StatisticalAnalyzer<dim>::WriteHistogramToMapleTextfile( const char* fname,
-                                                             const char* datasetname,
-                                                             const HistogramBins& bins,
-                                                             const HistogramBins& hist,
-                                                             size_t points,
-                                                             bool log10_of_bin_data )
+                                                              const char* datasetname,
+                                                              const HistogramBins& bins,
+                                                              const HistogramBins& hist,
+                                                              size_t points,
+                                                              bool log10_of_bin_data )
 const
  {
     typename HistogramBins::const_iterator  it  = hist.begin();

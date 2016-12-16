@@ -56,8 +56,9 @@ void ANSYS_Interface::Clear()
       object_elements_.erase( object_elements_.begin(), object_elements_.end() );
 }
 
-/// Builds Model after it was constructed with the default constructor.
 
+
+/// Builds Model after it was constructed with the default constructor.
 template<size_t dim>
 void ANSYS_Interface::Read_ANSYS_Mesh( const std::string& filename,
                                        VSet<dim>&         vset,

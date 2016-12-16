@@ -5,6 +5,7 @@
 #include "Standard_IO_Handler.h"
 #include "VSet.h"
 #include "Box.h"
+#include "ConsecutiveSequenceChecker.h"
 
 namespace csmp {
 
@@ -1621,8 +1622,7 @@ suitable for reorganising the VSet. The following tests are made:
 - is the largest element number equivalent to the number of elements-1?
 - are the elements numbered consecutively?
 - are there any duplicate elements?
-  
-
+ 
 The method assumes that that each element can only belong to a single
 region.
 
@@ -1632,6 +1632,7 @@ region.
 
 The method complains if the element numbering does not start at 0
 or the largest element number is not equal to nn-elements-1.  
+
 */
 bool  ModelTopology::CheckElementNumbering() const
  {
@@ -1667,32 +1668,27 @@ bool  ModelTopology::CheckElementNumbering() const
       }
 
     // if the first element is not numbered zero
-    if ( (*element_ids.begin()) != 0U )
-    {
-        if( csmp_error.Verbose() )
-        {
-            std::string  err_msg("first element number ");
-            err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
-            err_msg +=" is not equal to zero.";
-            csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
-        }
-        return false;
-    }
+    if ( (*element_ids.begin()) != 0U ) {
+          if( csmp_error.Verbose() ) {
+                std::string  err_msg("first element number ");
+                err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
+                err_msg +=" is not equal to zero.";
+                csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
+            }
+          return false;
+      }
       
     // if the last element number is not equivalent to the total number of contained elements - 1
-    if ( (*max_element(element_ids.begin(),element_ids.end())) != element_ids.size()-1U )
-    {
-        if( csmp_error.Verbose() )
-        {
-            std::string  err_msg("largest element number ");
-            err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
-            err_msg +=" is not equal to the total number of elements ";
-            err_msg += to_string( (*element_ids.rbegin()) );
-            err_msg +=" minus one.";
-            csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
-        }
-        return false;
-    }
+    if ( (*max_element(element_ids.begin(),element_ids.end())) != element_ids.size()-1U ) {
+          if ( csmp_error.Verbose() ) {
+                std::string  err_msg("largest element number ");
+                err_msg += std::to_string( (*max_element(element_ids.begin(),element_ids.end())) );
+                err_msg +="-1 is not equal to the total number of elements ";
+                err_msg += std::to_string( element_ids.size() );
+                csmp_error.notice( ERROR, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
+            }
+          return false;
+      }
      
     return true;
  
@@ -1703,58 +1699,59 @@ bool  ModelTopology::CheckElementNumbering() const
 
 
 /**
-     Creates a new contiguous element numbering 0..n-1 and outputs old-to-new mapping.
+     Creates a new contiguous element numbering 0..n-1 and outputs an old-to-new mapping into its argument map.
+     
+     @param check_output - if true a consistency check is performed on the new mapping, using
+     the ConsecutiveSequenceChecker.
 */
-void  ModelTopology::CreateNewElementNumbers( std::map<size_t /* old-# */,size_t /* new-# */>& eid_mapping, bool correct_element_numbering )
+void  ModelTopology::CreateNewElementNumbers( std::map<size_t /* old-# */,size_t /* new-# */>& eid_mapping, bool check_output )
 {
-    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
-
+    // 1. assuming that the elements are already numbered correctly, this numbering only is output to the map
     if ( !eid_mapping.empty() ) eid_mapping.clear();
-
-    // 1. if elements are already numbered correctly, they only have to be output
-    if ( correct_element_numbering ) {
-         for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator
-               rit=model_regions.begin(); rit!=model_regions.end(); ++rit )
-           for ( std::vector<size_t>::const_iterator
-                 lit=(*rit).second.second.begin(); lit!=(*rit).second.second.end(); ++lit )
-              eid_mapping.insert( std::make_pair( *lit, *lit ) );
-         return;
-      }
-
-    // 2. if the numbering is not contiguous a new numbering is created
+  
     size_t  eid(0U);
     for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator
           rit=model_regions.begin(); rit!=model_regions.end(); rit++ )
       // for all element IDs of each region
       for ( std::vector<size_t>::const_iterator
-            lit=(*rit).second.second.begin(); lit!=(*rit).second.second.end(); lit++ )
+            lit=(*rit).second.second.begin(); lit!=(*rit).second.second.end(); ++lit )
         {
-           // only if the element ID could be inserted the element counter is incremented
+           // only if the element ID could be inserted the element counter is incremented            old  new
            std::pair<std::map<size_t,size_t>::iterator,bool> it=eid_mapping.insert( std::make_pair( *lit, eid ) );
            if ( it.second == true ) eid++;
         }
+  
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
-    // the internal elements are renumbered accordingly
+    if ( csmp_error.Verbose() ) {
+         std::cout <<"\nModelTopology::CreateNewElementNumbers: mapped "<< eid;
+         std::cout <<" elements successfully to consecutive numbers."<< std::endl;
+         std::cout.flush();
+      }
+
+    if ( check_output ) {
+    // ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker();
+         const bool check_whether_max_value_is_size_minus1(true);
+         if ( !ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( eid_mapping, check_whether_max_value_is_size_minus1 ) )
+           csmp_error.notice( WARNING, "ModelTopology::CreateNewElementNumbers:",
+                            "the renumbered element range is not consecutive and unique; trying to fix this.");
+      }
+
+    // needs to be done only if something changed
     RenumberElements( eid_mapping );
+  
+} // end CreateNewElementNumbers
 
-    if( csmp_error.Verbose() )
-    {
-        std::cout <<"\nModelTopology::CreateNewElementNumbers: mapped "<< eid;
-        std::cout <<" elements successfully to consecutive numbers."<< std::endl;
-    }
-}
 
-void  ModelTopology::CreateNewElementNumbers( std::map<size_t /* old-# */,size_t /* new-# */>& eid_mapping )
- {
-    CreateNewElementNumbers( eid_mapping, CheckElementNumbering() );
- } // end CreateNewElementNumbers
+
+
 
 
 
 /**
  
 The elements in each region are renumbered using the supplied number mapping. 
-In debug mode, First a check is performed whether this numbering 
+In debug mode, first a check is performed whether this numbering
 is consecutive, starts with 0 and there are no duplicates.  
 
 @param eid_mapping Map with ID correspondance between old and new IDs.
@@ -1765,6 +1762,10 @@ The method throws CSMP Exceptions.
 */
 void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mapping )
  {
+    //std::cerr <<"\nelement id mapping: size: "<< eid_mapping.size() <<":\n";
+    //for ( auto it=eid_mapping.begin(); it!=eid_mapping.end(); ++it )
+    //std::cerr << (*it).first <<"->"<< (*it).second <<" ";
+
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( eid_mapping.empty() ) {
@@ -1809,15 +1810,19 @@ void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mappin
     for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::iterator
           rit=model_regions.begin(); rit!=model_regions.end(); ++rit )
       {
+         const size_t elements_to_renumber((*rit).second.second.size());
          // for each region
-         new_region_eids.reserve((*rit).second.second.size());
+         new_region_eids.reserve(elements_to_renumber);
          // for all the element IDs of the region 
          for ( std::vector<size_t>::const_iterator
                lit=(*rit).second.second.begin(); lit!=(*rit).second.second.end(); ++lit ) {
               std::map<size_t,size_t>::const_iterator it=eid_mapping.find(*lit);
+              // checking that the element ID was found
               assert( it != eid_mapping.end() );
               new_region_eids.push_back( (*it).second );
            }
+         // writing the renumbered vector ModelTopology
+         assert( new_region_eids.size() == elements_to_renumber );
          (*rit).second.second = new_region_eids;
          new_region_eids.clear();
       }
@@ -1828,20 +1833,25 @@ void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mappin
 
 
 
-
+/**
+    Renumbers the element ids stored in ModelTopology and eliminates potentiallu unused
+    elements from the argument VSet.
+    
+    @param check_range allows user to check the newly generated range again.
+*/
 template<size_t dim>
-void  ModelTopology::RenumberElements(csmp::VSet<dim>& vset, bool check_whether_already_correct )
+void  ModelTopology::RenumberElements(csmp::VSet<dim>& vset, bool check_range )
 {
-     bool correct_element_numbering( false );
-     if( check_whether_already_correct )
-         correct_element_numbering = CheckElementNumbering();
-     if( !correct_element_numbering )
-     {
-         std::map<size_t,size_t>  old_and_new_elmtids;
-         CreateNewElementNumbers( old_and_new_elmtids, correct_element_numbering );
-         vset.ReduceTo( old_and_new_elmtids );
-         old_and_new_elmtids.clear();
-     }
+   std::map<size_t,size_t>  old_and_new_elmtids;
+   CreateNewElementNumbers( old_and_new_elmtids, false );
+   vset.ReduceTo( old_and_new_elmtids );
+   old_and_new_elmtids.clear();
+
+  if ( check_range ) {
+        const bool check_whether_max_value_is_size_minus1(true);
+        if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) )
+          throw csmp::Exception( ERROR, "ModelTopology::RenumberElements:", "failed to calculate consecutive new element idx range.");
+    }
 }
 
 template void ModelTopology::RenumberElements( csmp::VSet<1U>&,bool );
@@ -1849,6 +1859,11 @@ template void ModelTopology::RenumberElements( csmp::VSet<2U>&,bool );
 template void ModelTopology::RenumberElements( csmp::VSet<3U>&,bool );
 
 
+    // checking that the new numbers form a consecutive range
+    // test: assert( ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker() );
+//    const bool check_whether_max_value_is_size_minus1(true);
+//    if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( eid_mapping, check_whether_max_value_is_size_minus1 ) )
+//      throw csmp::Exception( ERROR, "ModelTopology::CreateNewElementNumbers:", "failed to calculate consecutive new element idx range.");
 
 
 template<size_t dim>
@@ -1867,10 +1882,13 @@ bool ModelTopology::CheckTopology( VSet<dim>& vset,
     else
         AddRegionsWithoutEquidimensionalCheck( object_specs, object_elements );
 
-    // 2. check numbering
+    // 2. check element numbering
     // -------------------------------------------------------
-    const bool check_whether_already_correct( true );
-    RenumberElements( vset, check_whether_already_correct );
+    // checking that the new numbers form a consecutive range
+    // test: assert( ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker() );
+    const bool check_whether_max_value_is_size_minus1(true);
+    if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( object_elements, check_whether_max_value_is_size_minus1 ) )
+      RenumberElements( vset, false );
 
     // 3. assign boundary flags for box-shaped model
     // -----------------------------------------------

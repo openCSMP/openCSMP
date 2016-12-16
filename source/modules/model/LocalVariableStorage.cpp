@@ -8,6 +8,8 @@
 #include "SplitBoundary.h"
 #include "Model.h"
 
+#define VARIABLE_STORAGE_DEBUG
+
 namespace csmp {
 
 namespace lvsCompileTimeDispatch{

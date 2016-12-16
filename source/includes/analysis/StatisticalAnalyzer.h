@@ -36,14 +36,13 @@ class StatisticalAnalyzer {
                      const size_t number_of_bins,
                      HistogramBins& data ) const;
                      
-    /// normalizes number of counts by element volume: 
-    void RegionPropertyHistograms( const char* prop, // analysed element variable 
-                                   //    bin ranges from < to <=
-                                   const HistogramBins& bins,
+    /// normalizes number of counts by element volume
+    void RegionPropertyHistograms( const char* prop,          ///< analysed element variable
+                                   const HistogramBins& bins, ///< bin ranges from < to <=
                                    //       region-name           bin-end value, counts     total counts 
                                    std::map<std::string,std::pair<HistogramBins, size_t> >& results ) const;
 
-    /// normalize by counts which is possible for regular grids
+    /// normalize by counts; @attention this makes sense only for regular grids
     void RegionPropertyHistograms( const char* prop, // desired output property
                                   // bin ranges from < to <=
                                   const HistogramBins& bins,
