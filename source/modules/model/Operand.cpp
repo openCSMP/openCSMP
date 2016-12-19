@@ -1,6 +1,7 @@
 #include "Operand.h"
 #include "PropertyDatabase.h"
 #include "CSMP_highLevelUtilities.h"
+#include "CompareFloats.h"
 
 using namespace std;
 
@@ -1567,7 +1568,7 @@ bool  Operand<dim>::operator<=( double64 val ) const
 template<size_t dim>
 bool  Operand<dim>::operator==( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ == val);
+    if ( prop_key_.type == SCALAR ) return approximatelyEqual( scalar_storage_(), val );
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
@@ -1578,7 +1579,8 @@ bool  Operand<dim>::operator==( double64 val ) const
 template<size_t dim>
 bool  Operand<dim>::operator!=( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ != val);
+    if ( prop_key_.type == SCALAR ) return !approximatelyEqual( scalar_storage_(), val );
+
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");

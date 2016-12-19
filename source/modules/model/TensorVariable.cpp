@@ -530,21 +530,6 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc
 
 
 
-bool  TensorVariable<3U>::operator==( const TensorVariable<3U>& ts ) const
- {
-   return ( data[0][0] == ts.data[0][0] && 
-            data[0][1] == ts.data[0][1] &&
-            data[1][0] == ts.data[1][0] &&
-            data[1][1] == ts.data[1][1] &&
-            data[0][2] == ts.data[0][2] &&
-            data[1][2] == ts.data[1][2] &&
-            data[2][0] == ts.data[2][0] &&
-            data[2][1] == ts.data[2][1] &&
-            data[2][2] == ts.data[2][2] &&
-            flag[0] == ts.flag[0] && 
-            flag[1] == ts.flag[1] &&
-            flag[2] == ts.flag[2] );
- }
 
 
 

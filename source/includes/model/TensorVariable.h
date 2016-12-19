@@ -183,6 +183,7 @@ class TensorVariable<3U> {
     
     /// element-by-element comparison of ij values
     bool             operator==( const TensorVariable& ) const;
+    
     /// element-by-element comparison of ij values
     bool             operator!=( const TensorVariable& ) const;
     
@@ -296,7 +297,13 @@ template<size_t dim>
 std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
 
 
-// INLINE METHODS
+
+
+// ******************************************************************************************
+//
+//            INLINE METHODS START HERE
+//
+// ******************************************************************************************
 
 inline TensorVariable<3U>::~TensorVariable() {}
 
@@ -511,6 +518,11 @@ inline VectorVariable<3U> TensorVariable<3U>::Column( size_t iCol ) const
 	                           data[0U][iCol], data[1U][iCol], data[2U][iCol] );
 }
  
+
+inline bool  TensorVariable<3U>::operator==( const TensorVariable<3U>& ts ) const
+ {
+   return ( data == ts.data && flag == ts.flag );
+ }
   
 
 inline bool  TensorVariable<3U>::operator!=( const TensorVariable<3U>& t ) const

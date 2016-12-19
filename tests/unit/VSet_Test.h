@@ -177,7 +177,7 @@ void VSet_Test::run()
   FEM_Data<VectorVariable<3U> > femDataVector( ELEMENT, vectorData );
 //  vset4.AddData( "vector data", femDataVector );
 
-// TODO: SKM fix these tests to work with PropertyData
+// TODO: SKM replace these tests to work with PropertyData
   FEM_Data<ScalarVariable> femDataScalarTest;
 //  vset4.Data( "scalar data", femDataScalarTest );
   _test( femDataScalarTest == femDataScalar );         // FAIL 16/12/2016

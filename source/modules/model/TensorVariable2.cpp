@@ -423,17 +423,6 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc
 
 
 
-bool  TensorVariable<2U>::operator==( const TensorVariable<2U>& ts ) const
- {
-    return ( data[0][0] == ts.data[0][0] &&
-             data[0][1] == ts.data[0][1] &&
-             data[1][0] == ts.data[1][0] &&
-             data[1][1] == ts.data[1][1] &&
-             flag[0] == ts.flag[0] &&
-             flag[1] == ts.flag[1] );
- }
-
-
 // @test tested: O.K.
 
 void TensorVariable<2U>::Identity()

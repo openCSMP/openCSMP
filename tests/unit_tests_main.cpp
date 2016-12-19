@@ -95,8 +95,7 @@ using namespace csmp;
      interdependent1:   fails on volume-flux integral balance of face fluxes
      
      interdependent2:   fails when re-reading the 3D Model in PropertyData for a tensor variable placed on the sector integration point
-                        CopyReplaceVisitor  - fails on all comparisons
-     
+ 
      composite:
  
 */
@@ -105,10 +104,9 @@ int main()
   long nFail(0);
   const bool test_fundamentals(false),
              test_interdependent1(false),
-             test_interdependent2(false),
-             test_composite(true),
+             test_interdependent2(true),
+             test_composite(false),
              test_refactoring(false);
-  
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;
         if ( test_fundamentals ) {
@@ -123,7 +121,7 @@ int main()
               // Data storage tests
               basic.addTest( new LocalVariableStorage_Test() );
               basic.addTest( new PropertyDatabase_Test());		// jc: error LNK2001: unresolved external symbol
-              basic.addTest( new Index_Test());					// jc: error LNK2001: unresolved external symbol
+              basic.addTest( new Index_Test());					      // jc: error LNK2001: unresolved external symbol
               basic.addTest( new Parameter_Test());
 
               // Model
@@ -154,6 +152,7 @@ int main()
               basic.addTest( new FV_Parameter_Test());
           
               // interfaces / containers
+// add ModelTopology_Test
               basic.addTest( new VData_Test() );
               basic.addTest( new FEM_Data_Test());
               basic.addTest( new PropertyData_Test() );
@@ -200,8 +199,8 @@ int main()
               interdependent2.addTest( new Box_Test() );
               interdependent2.addTest( new ANSYS_Model2D_Test() );
               interdependent2.addTest( new InputDataManager_Test());
-//              interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
-              interdependent2.addTest( new Region_Test() );                    // SKM OK
+              interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
+              interdependent2.addTest( new Region_Test() );                  // SKM OK
               interdependent2.addTest( new ModelTopology_Test() );
               interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
               // interfaces
@@ -219,10 +218,10 @@ int main()
               TestSuite composite("CSMP-dependent-unit test suite", &cout );
               // misc
               // composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
-//              composite.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
+              composite.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
               // composite.addTest( new FluxMismatch_Test() );
-//              composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
-//              composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
+              composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
+              composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
               // constitutive relationships
               composite.addTest( new ExponentialTransferFunction_Test() );
 
@@ -246,9 +245,11 @@ int main()
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
               refactored.addTest( new Boundary_Test() );
-              refactored.addTest( new VSet_Test() );
               // composite.addTest( new SplitBoundary_Test() );
              // running unit tests and reporting errors
+
+
+              // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
               refactored.run();
               nFail = refactored.report();
               refactored.free();

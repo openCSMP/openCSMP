@@ -2,3 +2,9 @@
 no properties
 LAYER1
 LAYER2
+LEFT
+RIGHT
+TOP
+BOTTOM
+FRONT
+BACK

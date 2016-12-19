@@ -95,19 +95,20 @@ class ScalarVariable {
     bool             operator>(  double64 val ) const; 
     bool             operator<=( double64 val ) const; 
     bool             operator>=( double64 val ) const; 
-    bool             operator==( double64 val ) const;
-    bool             operator!=( double64 val ) const;
   
     bool             operator<(  const ScalarVariable& s ) const; 
     bool             operator>(  const ScalarVariable& s ) const; 
     bool             operator<=( const ScalarVariable& s ) const; 
-    bool             operator>=( const ScalarVariable& s ) const; 
+    bool             operator>=( const ScalarVariable& s ) const;
+  
+    /// for storing scalars in associative containers with respective predicates
     bool             operator==( const ScalarVariable& s ) const; 
     bool             operator!=( const ScalarVariable& s ) const; 
   
     /// assignment as an lvalue
     double64&        operator()(void);
-    
+    double64         operator()(void) const;
+  
     void             Component( size_t, double64 );
     double64         Component( size_t ) const;
     
@@ -167,6 +168,12 @@ class ScalarVariable {
  TensorVariable<dim>  operator*( const ScalarVariable&, const TensorVariable<dim>& );
 
 
+// *******************************************************************
+//
+//             INLINE FUNCTIONS
+//
+// *******************************************************************
+
 
 /// for printing scalars using the standard streams cout, cerr, clog
 std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
@@ -175,7 +182,8 @@ std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
 ScalarVariable  makeScalar( VARIABLE_FLAG, double64 );
 
 
-inline  double64&     ScalarVariable::operator()(void) { return data_; }
+inline  double64& ScalarVariable::operator()(void) { return data_; }
+inline  double64  ScalarVariable::operator()(void) const { return data_; }
 
 
 inline  void      ScalarVariable::Component(size_t, double64 val) { data_ = val; }
@@ -391,23 +399,6 @@ inline bool  ScalarVariable::operator>=( double64 val ) const
  }
 
 
-/// D. Knuth's approach to comparison of floating point values
-inline bool  ScalarVariable::operator==( double64 val ) const
- {
-//    return fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon();
-    return !(data_ > val and data_ < val);
- }
- 
-
-inline bool  ScalarVariable::operator!=( double64 val ) const
- {
-//    return !(fabs(data_ - val) <= fabs(data_) * std::numeric_limits<double64>::epsilon());
-    return !(data_ == val);
- }
-
-
-
-
 inline bool  ScalarVariable::operator<( const ScalarVariable& s ) const
  {
     return( s.data_ > data_ );
@@ -436,7 +427,7 @@ inline bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
  
 
 
-
+// keep for associative containers
 inline bool  ScalarVariable::operator==( const ScalarVariable& s ) const
  {
     if ( s.flag_ != flag_ ) return false;
@@ -446,6 +437,7 @@ inline bool  ScalarVariable::operator==( const ScalarVariable& s ) const
   
 
 
+// keep for associative containers
 inline bool  ScalarVariable::operator!=( const ScalarVariable& s ) const
  {
     return !(*this == s);

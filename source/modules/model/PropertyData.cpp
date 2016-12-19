@@ -122,83 +122,111 @@ PropertyData::~PropertyData()
 
 // ACCESSORS AND MUTATORS
 
-/// accessors / mutators for flags
 /// scalars
 VARIABLE_FLAG& PropertyData::Flag( size_t nth_value ) {
+     assert( Type() == SCALAR );
+     assert( !flags_.empty() );
      assert( nth_value < flags_.size() );
      return flags_[nth_value];
   }
   
-  
+
+/// scalars
 VARIABLE_FLAG  PropertyData::Flag( size_t nth_value ) const {
+     assert( Type() == SCALAR );
+     assert( !flags_.empty() );
      assert( nth_value < flags_.size() );
      return flags_[nth_value];
   }
   
   
-/// vectors and array variables
+/// set flags: vectors and array variables
 VARIABLE_FLAG& PropertyData::Flag( size_t nth_value, size_t ith_dim ) {
+    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
+    assert( !flags_.empty() );
     assert( nth_value < flags_.size() );
-    assert( ith_dim <= dim_ );
+    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim == 0) or (Type() == FLAGGEDARRAY && ith_dim < flag_stride_) );
     return flags_[ nth_value * flag_stride_ + ith_dim ];
   }
 
-/// vectors and array variables
+/// read flags: vectors and array variables
 VARIABLE_FLAG PropertyData::Flag( size_t nth_value, size_t ith_dim ) const {
+    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
+     assert( !flags_.empty() );
     assert( nth_value < flags_.size() );
-    assert( ith_dim <= dim_ );
+    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim == 0) or (Type() == FLAGGEDARRAY && ith_dim < flag_stride_) );
     return flags_[ nth_value * flag_stride_ + ith_dim ];
-  }
+ }
   
   
 /// tensors
 VARIABLE_FLAG& PropertyData::Flag( size_t nth_value, size_t ith_row, size_t jth_col ) {
+     assert( Type() == TENSOR );
+     assert( !flags_.empty() );
      assert( nth_value < flags_.size() );
      assert( ith_row <= dim_ );
      assert( jth_col <= dim_ );
-     return flags_[ nth_value * data_stride_ + ith_row * dim_ + jth_col ];
-  }
+     assert( jth_col == ith_row );
+// since only 3 values are stored and i==j on the diagonal, only j is used
+//     return flags_[ nth_value * flag_stride_ + ith_row * dim_ + jth_col ];
+     return flags_[ nth_value * flag_stride_ + jth_col ];
+ }
 
-/// tensors
+/// tensors (only their diagonal elements have flags)
 VARIABLE_FLAG PropertyData::Flag( size_t nth_value, size_t ith_row, size_t jth_col ) const {
+     assert( Type() == TENSOR );
+     assert( !flags_.empty() );
      assert( nth_value < flags_.size() );
      assert( ith_row <= dim_ );
      assert( jth_col <= dim_ );
-     return flags_[ nth_value * data_stride_ + ith_row * dim_ + jth_col ];
-  }
+     assert( jth_col == ith_row );
+// since only 3 values are stored and i==j on the diagonal, only j is used
+//     return flags_[ nth_value * flag_stride_ + ith_row * dim_ + jth_col ];
+     return flags_[ nth_value * flag_stride_ + jth_col ];
+ }
 
 
 
 /// scalars
 double64& PropertyData::Value( size_t nth_value ) {
+    assert( Type() == SCALAR );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
     return data_[nth_value];
  }
  
  
 double64  PropertyData::Value( size_t nth_value ) const {
+    assert( Type() == SCALAR );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
     return data_[nth_value];
  }
  
  
-/// vectors and array variables
+/// assign values: vectors and array variables
 double64& PropertyData::Value( size_t nth_value, size_t ith_dim ) {
+    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
-    assert( ith_dim <= dim_ );
+    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim <= data_stride_) or (Type() == FLAGGEDARRAY && ith_dim <= data_stride_) );
     return data_[ nth_value * data_stride_ + ith_dim ];
  }
  
- 
+/// retrieve values: vectors and array variables
 double64  PropertyData::Value( size_t nth_value, size_t ith_dim ) const {
+    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
-    assert( ith_dim <= dim_ );
+    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim <= data_stride_) or (Type() == FLAGGEDARRAY && ith_dim <= data_stride_) );
     return data_[ nth_value * data_stride_ + ith_dim ];
  }
 
  
 /// tensors
 double64& PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) {
+    assert( Type() == TENSOR );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
     assert( ith_row <= dim_ );
     assert( jth_col <= dim_ );
@@ -207,6 +235,8 @@ double64& PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col 
  
  
 double64  PropertyData::Value( size_t nth_value, size_t ith_row, size_t jth_col ) const {
+    assert( Type() == TENSOR );
+    assert( !data_.empty() );
     assert( nth_value < data_.size() );
     assert( ith_row <= dim_ );
     assert( jth_col <= dim_ );
@@ -504,18 +534,18 @@ PropertyData inBinaryPropertyData( FILE* fp )
 
 void PropertyData::Out() const
  {
-    cout <<"\nPropertyData::Out: (contains storage for "<< data_.size() <<" flag/value pairs)"<< endl;
+    cout <<"\nPropertyData::Out: storage for "<< data_.size()/data_stride_ <<" "<< string(parseType(type_)) <<" objects."<< endl;
     cout <<"Data placement: "<< string(parsePlacement(place_)) << endl;
-    cout <<"Data type:      "<< string(parseType(type_)) <<", spatial dimension = "<< dim_ << endl;
-    cout <<"Flag stride:    "<< flag_stride_ << endl;
-    cout <<"Data stride:    "<< data_stride_ << endl;
+    cout <<"Spatial dimension: "<< dim_ << endl;
+    cout <<"Flag stride:       "<< flag_stride_ << endl;
+    cout <<"Data stride:       "<< data_stride_ << endl;
     cout <<"\nflag values:\n";
     for ( size_t i=0U; i<flags_.size(); i++ )
       cout << parseStatus(flags_[i]) <<" ";
     cout << endl;
 
     cout <<"\nvariable component values:\n";
-    for ( size_t i=0U; i<flags_.size(); i++ )
+    for ( size_t i=0U; i<data_.size(); i++ )
       cout << data_[i] <<" ";
     cout << endl;
 
@@ -538,12 +568,14 @@ bool  PropertyData::operator==( const PropertyData& d ) const
 // PUSH BACK
 
 void pushBack( PropertyData& data, const ScalarVariable& sc ) {
+    assert( data.Type() == SCALAR );
     data.PushBack( sc.Flag() );
     data.PushBack( sc.Value() );
  }
   
   
 void pushBack( PropertyData& data, const ArrayVariable& ar ) {
+    assert( data.Type() == ARRAY );
     data.PushBack( ar.Flag() );
     for ( size_t i=0U; i<ar.Size(); ++i )
       data.PushBack( ar[i] );
@@ -551,6 +583,7 @@ void pushBack( PropertyData& data, const ArrayVariable& ar ) {
  
  
 void pushBack( PropertyData& data, const FlaggedArrayVariable& fa ) {
+    assert( data.Type() == FLAGGEDARRAY );
     for ( size_t i=0U; i<fa.Size(); ++i ) {
          data.PushBack( fa.Flag(i) );
          data.PushBack( fa[i] );
@@ -560,6 +593,7 @@ void pushBack( PropertyData& data, const FlaggedArrayVariable& fa ) {
 
 template<size_t dim>
 void pushBack( PropertyData& data, const VectorVariable<dim>& vc ) {
+    assert( data.Type() == VECTOR );
     assert( data.Dim() == dim );
     for ( size_t i=0U; i<dim; ++i ) {
          data.PushBack( vc.Flag(i) );
@@ -573,6 +607,7 @@ template void pushBack( PropertyData& data, const VectorVariable<3U>& vc );
  
 template<size_t dim>
 void pushBack( PropertyData& data, const TensorVariable<dim>& ts ) {
+    assert( data.Type() == TENSOR );
     assert( data.Dim() == dim );
     for ( size_t i=0U; i<dim; ++i ) {
          data.PushBack( ts.Flag(i) );
@@ -589,13 +624,15 @@ template void pushBack( PropertyData& data, const TensorVariable<3U>& vc );
 
 template<>
 void store( PropertyData& data, size_t position, const ScalarVariable& sc ) {
+    assert( data.Type() == SCALAR );
     data.Flag( position )  = sc.Flag();
     data.Value( position ) = sc.Value();
  }
 
 template<>
 void store( PropertyData& data, size_t position, const ArrayVariable& ary ) {
-    data.Flag( position ) = ary.Flag();
+    assert( data.Type() == ARRAY );
+    data.Flag( position, 0U ) = ary.Flag();
     const size_t array_size(ary.Size());
     for ( size_t i=0U; i<array_size; ++i )
       data.Value( position * array_size + i ) = ary[i];
@@ -603,6 +640,7 @@ void store( PropertyData& data, size_t position, const ArrayVariable& ary ) {
 
 template<>
 void store( PropertyData& data, size_t position, const FlaggedArrayVariable& ary ) {
+    assert( data.Type() == FLAGGEDARRAY );
     const size_t array_size(ary.Size());
     for ( size_t i=0U; i<array_size; ++i ) {
          data.Flag( position * array_size + i  ) = ary.Flag(i);
@@ -612,10 +650,11 @@ void store( PropertyData& data, size_t position, const FlaggedArrayVariable& ary
 
 template<size_t dim>
 void store( PropertyData& data, size_t position, const VectorVariable<dim>& vc ) {
+    assert( data.Type() == VECTOR );
     assert( data.Dim() == dim );
     for ( size_t i=0U; i<dim; ++i ) {
-         data.Flag( position * dim + i )  = vc.Flag(i);
-         data.Value( position * dim + i ) = vc[i];
+         data.Flag( position, i )  = vc.Flag(i);
+         data.Value( position, i ) = vc[i];
       }
  }
 
@@ -626,12 +665,12 @@ template void store( PropertyData&, size_t, const VectorVariable<3U>& );
 
 template<size_t dim>
 void store( PropertyData& data, size_t position, const TensorVariable<dim>& ts ) {
+    assert( data.Type() == TENSOR );
     assert( data.Dim() == dim );
-    constexpr size_t dim2(dim * dim);
     for ( size_t i=0U; i<dim; ++i ) {
-         data.Flag( position * dim + i )  = ts.Flag(i);
+         data.Flag( position, i, i ) = ts.Flag(i);
          for ( size_t j=0U; j<dim; ++j )
-           data.Value( position * dim2 + i * dim + j ) = ts(i,j);
+           data.Value( position, i, j ) = ts(i,j);
       }
  }
 
@@ -644,35 +683,39 @@ template void store( PropertyData&, size_t, const TensorVariable<3U>& );
 
 template<>
 void read( const PropertyData& data, size_t position, ScalarVariable& sc ) {
+    assert( data.Type() == SCALAR );
     sc.Flag() = data.Flag( position );
     sc()      = data.Value( position );
  }
 
 template<>
 void read( const PropertyData& data, size_t position, ArrayVariable& ary ) {
-    ary.Flag() = data.Flag( position );
+    assert( data.Type() == ARRAY );
+    ary.Flag() = data.Flag( position, 0U );
     const size_t array_size(data.Components());
     ary.Resize(array_size);
     for ( size_t i=0U; i<array_size; ++i )
-      ary(i) = data.Value( position * array_size + i );
+      ary(i) = data.Value( position, i );
  }
 
 template<>
 void read( const PropertyData& data, size_t position, FlaggedArrayVariable& ary ) {
+    assert( data.Type() == FLAGGEDARRAY );
     const size_t array_size(data.Components());
     ary.Resize(array_size);
     for ( size_t i=0U; i<array_size; ++i ) {
-         ary.Flag(i) = data.Flag( position * array_size + i );
-         ary(i) = data.Value( position * array_size + i );
+         ary.Flag(i) = data.Flag( position, i );
+         ary(i) = data.Value( position, i );
       }
  }
 
 template<size_t dim>
 void read( const PropertyData& data, size_t position, VectorVariable<dim>& vc ) {
+    assert( data.Type() == VECTOR );
     assert( data.Dim() == dim );
     for ( size_t i=0U; i<dim; ++i ) {
-         vc.Flag(i) = data.Flag( position * dim + i );
-         vc(i) = data.Value( position * dim + i );
+         vc.Flag(i) = data.Flag( position, i );
+         vc(i) = data.Value( position, i );
       }
  }
 
@@ -683,12 +726,12 @@ template void read( const PropertyData&, size_t, VectorVariable<3U>& );
 
 template<size_t dim>
 void read( const PropertyData& data, size_t position, TensorVariable<dim>& ts ) {
+    assert( data.Type() == TENSOR );
     assert( data.Dim() == dim );
-    constexpr size_t dim2(dim * dim);
     for ( size_t i=0U; i<dim; ++i ) {
-         ts.Flag(i) = data.Flag( position * dim + i );
+         ts.Flag(i) = data.Flag( position, i, i );
          for ( size_t j=0U; j<dim; ++j )
-           ts(i,j) = data.Value( position * dim2 + i * dim + j );
+           ts(i,j) = data.Value( position, i, j );
       }
  }
 

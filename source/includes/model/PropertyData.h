@@ -59,6 +59,9 @@ template<size_t dim> void read( const PropertyData&, size_t position, TensorVari
   data.OutBinary( FILE );  
   @endcode
 
+  @attention use read() and store() from above to retrieve entire csmp variables,
+  there are no member accessors Read() or Store()
+
 */
 class PropertyData {
   public:
@@ -99,8 +102,12 @@ class PropertyData {
     void ReduceTo( const std::map<size_t,size_t>& o_n_elmt_ids );
   
     // accessors / mutators for values (operator[] cannot be overloaded for this)
+    /// @attention use read() and store() from above to retrieve entire csmp variables
   
+    /// 'raw' inserter for flags (user must ascertain that stride is correct); use pushBack() for objects
     void PushBack( VARIABLE_FLAG );
+
+    /// 'raw' inserter for values (user must ascertain that stride is correct); use pushBack() for objects
     void PushBack( double64 );
   
     /// accessors / mutators for flags
@@ -155,9 +162,12 @@ class PropertyData {
  };
 
 
-  /// reading stored flag and data vaues from file
-  PropertyData inBinaryPropertyData( std::FILE* fp );
-  
+/// reading stored flag and data vaues from file
+PropertyData inBinaryPropertyData( std::FILE* fp );
+
+/// calculating the distance bwetween consecutive data entries in the container
+size_t flagOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
+size_t valueOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
 
 
 // inlines

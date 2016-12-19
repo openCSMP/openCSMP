@@ -458,16 +458,14 @@ inline VectorVariable<2U>&  VectorVariable<2U>::operator=( const ScalarVariable&
 
 inline bool VectorVariable<2U>::operator==( const VectorVariable<2U>& v ) const
  {
-    return( (v.flag[0]==flag[0] && v.flag[1]==flag[1] && 
-             v.data[0]==data[0] && v.data[1]==data[1]) );
+    return( flag == v.flag && data == v.data );
  }
 
 
 inline bool VectorVariable<2U>::operator!=( const VectorVariable<2U>& v ) const
  {
-    return( !(v.flag[0]==flag[0] && v.flag[1]==flag[1] &&
-              v.data[0]==data[0] && v.data[1]==data[1]) );
- } 
+    return( flag != v.flag || data != v.data );
+ }
 
 
 // compare the length of two vectors

@@ -154,7 +154,7 @@ namespace csmp
       modelOutput2.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput2");
       cout<<"The Output of Model with boundaries done..."<<endl;
 
-      cout <<"Building ModelInput with boundaries..."<<endl;
+      cout <<"Re-building ModelInput with boundaries..."<<endl;
       Model<3U> modelInput2("ANSYS_Model3D_Test_modelOutput2");
       _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
       modelInput2.Region("Model").Read( regionVectorKey, vvPlain );

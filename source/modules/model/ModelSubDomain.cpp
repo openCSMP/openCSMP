@@ -4624,36 +4624,29 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
 template<size_t dim, template<size_t> class SIMPLEX>
 void  ModelSubDomain<dim,SIMPLEX>::CopyReplace( const char* from, const char* to )
  {
-     size_t  node_visitations_required(0U);
-
-     if ( pref_.Placement(from) == NODE ) {
-          node_visitations_required = node_vec_.size();
-          RenumberNodes();
-       }
-
      if ( pref_.Type(from) == SCALAR ) {
           CopyReplaceVisitor<ScalarVariable,dim>
-            cpvisitor( pref_, from, to, node_visitations_required );
+            cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
      else if ( pref_.Type(from) == VECTOR ) {
           CopyReplaceVisitor<VectorVariable<dim>,dim>
-            cpvisitor( pref_, from, to, node_visitations_required );
+            cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
      else if ( pref_.Type(from) == TENSOR ) {
           CopyReplaceVisitor<TensorVariable<dim>,dim>
-            cpvisitor( pref_, from, to, node_visitations_required );
+            cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
      else if ( pref_.Type(from) == ARRAY ) {
           CopyReplaceVisitor<ArrayVariable,dim>
-            cpvisitor( pref_, from, to, node_visitations_required );
+            cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
      else if ( pref_.Type(from) == FLAGGEDARRAY ) {
           CopyReplaceVisitor<FlaggedArrayVariable,dim>
-            cpvisitor( pref_, from, to, node_visitations_required );
+            cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
      else throw csmp::Exception( ERROR,

@@ -422,7 +422,7 @@ inline bool VectorVariable<1U>::operator==( const VectorVariable<1U>& v ) const
 
 inline bool VectorVariable<1U>::operator!=( const VectorVariable<1U>& v ) const
  {
-    return( !(v.flag==flag && v.data==data) );
+    return( v.flag!=flag || v.data!=data );
  } 
 
 

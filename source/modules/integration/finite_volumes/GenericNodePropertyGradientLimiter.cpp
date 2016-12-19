@@ -1,4 +1,5 @@
 #include "GenericNodePropertyGradientLimiter.h"
+#include "CompareFloats.h"
 
 using namespace std;
 
@@ -199,7 +200,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const std::
                          // if necessary, set new value to phi
                          if ( phi_temp < phi() ) phi=phi_temp;
                          if ( fabs( phi() ) < tolerance ) phi = 0.0;
-                         if ( phi == 0.0 ) break;
+                         if ( essentiallyEqual( phi(), 0.0 ) ) break;
                     } // end loop over facet
                 }
             } // end loop over parents -> this node is done            

@@ -314,15 +314,7 @@ void ScalarVariable_Test::Equality_Operator()
    ScalarVariable scalar3( PLAIN, 5 );
    ScalarVariable scalar4( PLAIN, 2 );
    ScalarVariable scalar5( ANY, 5 );
-   
-   //Testing for constant_value
-   _test( !(scalar1 == 2) );
-   _test( scalar1 == 5 );
-   _test( !(scalar1 == 10) );
-   _test( scalar1 != 2 );
-   _test( !(scalar1 != 5) );
-   _test( scalar1 != 10 );
-      
+         
    //Testing for scalar
    _test( !(scalar2 == scalar1) );
    _test( !(scalar3 == scalar1) );

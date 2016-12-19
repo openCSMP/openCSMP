@@ -564,19 +564,17 @@ inline VectorVariable<3U>&  VectorVariable<3U>::operator=( const csmp::Point<3U>
     return *this; 
  }
 
-
+// using the comparitor of the standard array
 inline bool VectorVariable<3U>::operator==( const VectorVariable<3U>& v ) const
  {
-    return( (v.flag[0]==flag[0] && v.flag[1]==flag[1] && v.flag[2]==flag[2] &&
-             v.data[0]==data[0] && v.data[1]==data[1] && v.data[2]==data[2]) );
+    return( flag == v.flag && data == v.data );
  }
  
 
 inline bool VectorVariable<3U>::operator!=( const VectorVariable<3U>& v ) const
  {
-    return( !(v.flag[0]==flag[0] && v.flag[1]==flag[1] && v.flag[2]==flag[2] &&
-              v.data[0]==data[0] && v.data[1]==data[1] && v.data[2]==data[2]) );
- } 
+    return( flag != v.flag || data != v.data );
+ }
 
 
 /// compare the length of two vectors

@@ -22,7 +22,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> nodeScalar1( *model_, "node scalar 1", SCALAR, NODE );
     PropertyHandle<DIM> nodeScalar2( *model_, "node scalar 2", SCALAR, NODE );
     model_->InputPropertyValue( "node scalar 1", scalarValue );
-    CopyReplaceVisitor<ScalarVariable,DIM> cpyNodeScalar1to2( model_->Database(), "node scalar 1", "node scalar 2", region.Nodes() );
+    CopyReplaceVisitor<ScalarVariable,DIM> cpyNodeScalar1to2( model_->Database(), "node scalar 1", "node scalar 2");
     model_->Accept(cpyNodeScalar1to2);
     testNodes( model_, scalarValue, "node scalar 2" );  
 
@@ -30,7 +30,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> nodeVector1( *model_, "node vector 1", VECTOR, NODE );
     PropertyHandle<DIM> nodeVector2( *model_, "node vector 2", VECTOR, NODE );
     model_->InputPropertyValue( "node vector 1", vectorValue );
-    CopyReplaceVisitor<VectorVariable<DIM>,DIM> cpyNodeVector1to2( model_->Database(), "node vector 1", "node vector 2", region.Nodes() );
+    CopyReplaceVisitor<VectorVariable<DIM>,DIM> cpyNodeVector1to2( model_->Database(), "node vector 1", "node vector 2" );
     model_->Accept(cpyNodeVector1to2);
     testNodes( model_, vectorValue, "node vector 2" );  
 
@@ -38,7 +38,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> nodeTensor1( *model_, "node tensor 1", TENSOR, NODE );
     PropertyHandle<DIM> nodeTensor2( *model_, "node tensor 2", TENSOR, NODE );
     model_->InputPropertyValue( "node tensor 1", tensorValue );
-    CopyReplaceVisitor<TensorVariable<DIM>,DIM> cpyNodeTensor1to2( model_->Database(), "node tensor 1", "node tensor 2", region.Nodes() );
+    CopyReplaceVisitor<TensorVariable<DIM>,DIM> cpyNodeTensor1to2( model_->Database(), "node tensor 1", "node tensor 2" );
     model_->Accept(cpyNodeTensor1to2);
     testNodes( model_, tensorValue, "node tensor 2" );
 
@@ -46,7 +46,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> elementScalar1( *model_, "element scalar 1", SCALAR, ELEMENT );
     PropertyHandle<DIM> elementScalar2( *model_, "element scalar 2", SCALAR, ELEMENT );
     model_->InputPropertyValue( "element scalar 1", scalarValue );
-    CopyReplaceVisitor<ScalarVariable,DIM> cpyElementScalar1to2( model_->Database(), "element scalar 1", "element scalar 2", region.Nodes() );
+    CopyReplaceVisitor<ScalarVariable,DIM> cpyElementScalar1to2( model_->Database(), "element scalar 1", "element scalar 2" );
     model_->Accept(cpyElementScalar1to2);
     testElements( model_, scalarValue, "element scalar 2" );  
 
@@ -54,7 +54,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> elementVector1( *model_, "element vector 1", VECTOR, ELEMENT );
     PropertyHandle<DIM> elementVector2( *model_, "element vector 2", VECTOR, ELEMENT );
     model_->InputPropertyValue( "element vector 1", vectorValue );
-    CopyReplaceVisitor<VectorVariable<DIM>,DIM> cpyElementVector1to2( model_->Database(), "element vector 1", "element vector 2", region.Nodes() );
+    CopyReplaceVisitor<VectorVariable<DIM>,DIM> cpyElementVector1to2( model_->Database(), "element vector 1", "element vector 2" );
     model_->Accept(cpyElementVector1to2);
     testElements( model_, vectorValue, "element vector 2" );  
 
@@ -62,7 +62,7 @@ void CopyReplaceVisitor_Test::run()
     PropertyHandle<DIM> elementTensor1( *model_, "element tensor 1", TENSOR, ELEMENT );
     PropertyHandle<DIM> elementTensor2( *model_, "element tensor 2", TENSOR, ELEMENT );
     model_->InputPropertyValue( "element tensor 1", tensorValue );
-    CopyReplaceVisitor<TensorVariable<DIM>,DIM> cpyElementTensor1to2( model_->Database(), "element tensor 1", "element tensor 2", region.Nodes() );
+    CopyReplaceVisitor<TensorVariable<DIM>,DIM> cpyElementTensor1to2( model_->Database(), "element tensor 1", "element tensor 2" );
     model_->Accept(cpyElementTensor1to2);
     testElements( model_, tensorValue, "element tensor 2" );
 } // run

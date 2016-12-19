@@ -244,9 +244,12 @@ inline void TensorVariable<2U>::Resize( size_t, double64 newValue )
 inline TensorVariable<2U>::~TensorVariable() {}
 
 
+// keep for storage of tensors in associative containers
+inline bool  TensorVariable<2U>::operator==( const TensorVariable<2U>& ts ) const
+ {
+    return ( data == ts.data && flag == ts.flag );
+ }
 
- 
-  
 
 inline bool  TensorVariable<2U>::operator!=( const TensorVariable<2U>& t ) const
  {

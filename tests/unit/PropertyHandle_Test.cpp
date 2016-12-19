@@ -469,7 +469,7 @@ void PropertyHandle_Test::run()
         ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 /= nodeVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
-        _test( sc == 2.);
+        _equal( sc(), 2., TOLERANCE );
         IPVariable2 /= elementVariable1;
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 4./3., TOLERANCE );

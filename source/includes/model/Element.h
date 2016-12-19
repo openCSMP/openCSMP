@@ -21,7 +21,7 @@ template<size_t> class Visitor;
 @brief Object representation of a finite element Bridge pattern together with
 FiniteElement class. 
 
-@author S.K. Matthaei
+@author S.K. Matthai
 @author Stephen G. Roberts
 @date 1999
 

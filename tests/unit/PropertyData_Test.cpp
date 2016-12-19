@@ -16,12 +16,12 @@ using namespace std;
 
 namespace csmp {
 
+/// TESTING THE PUBLIC INTERFACE OF THE CLASS
 void PropertyData_Test::run()
  {
-    // TESTING THE PUBLIC INTERFACE OF CLASS
-   
+    // ---------------------------------------------------------------------------
     // SCALAR VARIABLES
-    // ----------------
+    // ---------------------------------------------------------------------------
     // constructor for all possible csmp variable types
     PropertyData dataset1( ELEMENT, SCALAR, 3U ), dataset3( ELEMENT, SCALAR, 3U );
    
@@ -44,7 +44,6 @@ void PropertyData_Test::run()
     // should be empty
     dataset3.Clear();
     _test( dataset3.Size() == 0 );
-   
     // resizing
     dataset1.Resize( 5, 5 );
     cout <<"\n\nPropertyData_Test::run: dataset1 after resizing to 5:";
@@ -63,7 +62,10 @@ void PropertyData_Test::run()
     /// scalars
     _test( dataset1.Flag(0) == PLAIN );
     _test( dataset1.Flag(1) == ANY );
-/*
+
+
+/*  TESTING
+
     /// vectors and array variables
     VARIABLE_FLAG& Flag( size_t nth_value, size_t ith_dim );
     VARIABLE_FLAG  Flag( size_t nth_value, size_t ith_dim ) const;
@@ -81,7 +83,7 @@ void PropertyData_Test::run()
     double64&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
     double64       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
 */
-    /// checks range; all values included
+    /// range check; all values included
     pushBack( dataset1, sc1 );
     pushBack( dataset1, sc2 );
     // pushBack( dataset1, sc3 ); // NaN
@@ -124,6 +126,96 @@ void PropertyData_Test::run()
     fclose( in_fp );
     datasetN.Out();
     _test( datasetN == dataset1 );
+
+
+    // ---------------------------------------------------------------------------
+    // VECTOR VARIABLES
+    // ---------------------------------------------------------------------------
+    cout <<"\n\nPropertyData_Test: testing for VectorVariable:" << flush;
+    // constructor for all possible csmp variable types
+    const size_t DIM3(3);
+    PropertyData dataset4( ELEMENT_INTEGRATION_POINT, VECTOR, DIM3 );
+    // stick in 3 vectors
+    VectorVariable<DIM3>  vc1(PLAIN,1.), vc2(DIRICH,2.), vc3(ANY,3.);
+    dataset4.Reserve( 3 );
+    pushBack( dataset4, vc1 );
+    pushBack( dataset4, vc2 );
+    pushBack( dataset4, vc3 );
+    dataset4.Out();
+    // a copy
+    PropertyData dataset5( dataset4 );
+    // comparison
+    dataset5.Out();
+    // are they the same? (operator==) - should be the same
+    _test( (dataset4 == dataset5) == true );
+    // reading element vc2
+    VectorVariable<DIM3> vc_test;
+    read( dataset5, 1, vc_test );
+    vc_test.Out();
+    _test( (vc_test == vc2) == true );
+    // writing vc1 into position 3
+    store( dataset5, 2, vc1 );
+    dataset5.Out();
+    _test( (dataset4 == dataset5) == false );
+   
+
+    // ---------------------------------------------------------------------------
+    // TENSOR VARIABLES
+    // ---------------------------------------------------------------------------
+    cout <<"\n\nPropertyData_Test: testing for TensorVariable:" << flush;
+    // constructor for all possible csmp variable types
+    PropertyData dataset6( ELEMENT_INTEGRATION_POINT, TENSOR, DIM3 );
+    // stick in 3 diagonal tensors
+    TensorVariable<DIM3>  ts1(PLAIN,1.), ts2(DIRICH,2.), ts3(FIELD_DATA,3.);
+    ts3(0,1) = ts3(1,0) =  1.;
+    ts3(1,2) = ts3(2,1) = -3.;
+    ts3(2,0) = ts3(0,2) =  1.;
+    dataset6.Reserve( 3 );
+    pushBack( dataset6, ts1 );
+    pushBack( dataset6, ts2 );
+    pushBack( dataset6, ts3 );
+    dataset6.Out();
+    // a copy
+    PropertyData dataset7( dataset6 );
+    // comparison
+    dataset7.Out();
+    // are they the same? (operator==) - should be the same
+    _test( (dataset6 == dataset7) == true );
+
+    // reading element ts3
+    TensorVariable<DIM3> ts_test;
+    read( dataset7, 2, ts_test );
+    ts_test.Out();
+    _test( (ts_test == ts3) == true );
+    // (over) writing ts3 into position 3
+    store( dataset7, 2, ts_test );
+    // should not change the dataset
+    _test( (dataset7 == dataset6) == true );
+
+
+    // ---------------------------------------------------------------------------
+    // ARRAY VARIABLES
+    // ---------------------------------------------------------------------------
+    cout <<"\n\nPropertyData_Test: testing for ArrayVariable:" << flush;
+    // constructor for all possible csmp variable types
+    const size_t array_length(4);
+    PropertyData dataset8( NODE, ARRAY, DIM3, array_length );
+    // stick in 2 arrays of 4
+    ArrayVariable  ary1( array_length, 0., ANY ), ary2( 4, 1., PLAIN);
+    dataset8.Reserve( 2 );
+    pushBack( dataset8, ary1 );
+    pushBack( dataset8, ary2 );
+    dataset8.Out();
+    // a copy
+    PropertyData dataset9( dataset8 );
+    // comparison
+    dataset9.Out();
+    // are they the same? (operator==) - should be the same
+    _test( (dataset8 == dataset9) == true );
+    // changing last element of ary1 to 4
+    ary2(3) = 4.;
+    dataset9.Value( 3, 3 ) = 4.;
+    _equal( ary2(3), dataset9.Value(3,3), numeric_limits<double64>::epsilon() );
    
  } // end run
 
