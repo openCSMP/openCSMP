@@ -7,6 +7,9 @@
 #include "Test.h"
 #include "TestSuite.h"
 
+// read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/  as a tutorial how to use with XCode
+#include "catch159.h"
+
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
 #include "VectorVar_Test1.h"
@@ -86,9 +89,7 @@
 using namespace std;
 using namespace csmp;
 
-/** 
-
-   SKM 16/12/2016 - status report (XCode Mac)
+/**  SKM 16/12/2016 - status report (XCode Mac)
 
      fundamentals:      24 real precision issues in FiniteVolumeTraits, VSet test needs to be rewritten for variable storage in PropertyData container
      
@@ -97,7 +98,37 @@ using namespace csmp;
      interdependent2:   fails when re-reading the 3D Model in PropertyData for a tensor variable placed on the sector integration point
  
      composite:
+     
+     @section Missing Unit Tests
+     
+     Triage needed to generate order:
  
+     - ModelTopology
+     - Model
+     - MeshManager
+     - FiniteElementManager
+     - ModelSubDomain
+     - PDE_Integrator
+     - MathOperatorLHS
+     - MathOperatorRHS
+     - PropertyConstraints
+     - RegionInterface
+     - BoundaryInterface
+     - Point
+     - ANSYS_Interface
+     
+     - refactor   Box_Test
+     - refactor   VTU_Interface_Test
+     - refactored CompressedRowMatrix
+     
+     
+     @section Failing Tests
+     
+     - FiniteVolumeTraits_Test (TODO: urgent fixes needed)
+     - Boundary_Test (TODO: separate BoundaryInterface functionality)
+     - SplitBoundary_Test
+     - InterFace_Test
+     -
 */
 int main()
 {
