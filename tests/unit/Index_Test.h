@@ -6,7 +6,7 @@
 
 namespace csmp
 {
-    class Index;
+	struct Index;
     class Index_Test: public Test
     {
     public:
