@@ -10,6 +10,8 @@
 #include <unordered_set>
 #include <type_traits>
 #include <cassert>
+#include <ciso646>
+#include <string>
 #include "ConsecutiveSequenceChecker.h"
 
 using namespace std;

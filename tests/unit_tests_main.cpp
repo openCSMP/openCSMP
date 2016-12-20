@@ -48,8 +48,8 @@
 #include "FV_Parameter_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
 
-#include "PropertyDatabase_Test.h"	// jc: error LNK2001: unresolved external symbol
-#include "Index_Test.h"				      // jc: error LNK2001: unresolved external symbol
+#include "PropertyDatabase_Test.h"
+#include "Index_Test.h"
 #include "PropertyData_Test.hpp"
 
 #include "InputDataManager_Test.h"
@@ -151,8 +151,8 @@ int main()
 
               // Data storage tests
               basic.addTest( new LocalVariableStorage_Test() );
-              basic.addTest( new PropertyDatabase_Test());		// jc: error LNK2001: unresolved external symbol
-              basic.addTest( new Index_Test());					      // jc: error LNK2001: unresolved external symbol
+              basic.addTest( new PropertyDatabase_Test());
+              basic.addTest( new Index_Test());
               basic.addTest( new Parameter_Test());
 
               // Model

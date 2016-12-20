@@ -4,7 +4,7 @@
 
 namespace csmp
 {
-    class Index;
+	struct Index;
     template<size_t> class PropertyDatabase;
     class PropertyDatabase_Test : public Test
     {
