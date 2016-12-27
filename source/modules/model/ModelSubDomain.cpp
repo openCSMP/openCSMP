@@ -5027,8 +5027,9 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     faceIDs.reserve( PerimeterElements() );
     for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
          const size_t perimeter_faces(PerimeterFaces(eid));
-         // writing the number of perimeter faces as negative number, but only if there are more than 1
+         // writing the number of perimeter faces as negative number, but only if there are more than 1 perimeter faces
          if ( perimeter_faces > 1 ) faceIDs.push_back( static_cast<int8>(-perimeter_faces) );
+         // writing the perimeter face ids
          for ( size_t j=0U; j<perimeter_faces; ++j )
            faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
       }
@@ -5086,14 +5087,19 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
     assert( !faceIDs.empty() );
-   
+ 
+    if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
     info.perimeter_faces.reserve( faceIDs.size() );
     for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) {
-         const size_t perimeter_faces = ((*it) < 0) ? 1 : abs( (*it) );
+         const size_t perimeter_faces = ((*it) < 0) ? abs( (*it) ) : 1;
          std::vector<int8> face_ids;
          face_ids.reserve(3);
-         for ( size_t i=0U; i<perimeter_faces; ++i )
-           info.perimeter_faces.push_back( move(face_ids) );
+         for ( size_t i=0U; i<perimeter_faces; ++i ) {
+              if ( perimeter_faces > 1 ) it++;
+              assert( it != faceIDs.end() );
+              face_ids.push_back( (*it) );
+           }
+         info.perimeter_faces.push_back( move(face_ids) );
       }
 
     // 5. reading the interior nodes

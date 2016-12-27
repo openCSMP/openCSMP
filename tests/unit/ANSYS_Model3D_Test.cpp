@@ -20,14 +20,18 @@ namespace csmp
       const string variablesFile("UIVariables.txt");
       Timer timer;
       timer.Start();
+      //                          fileset       regions-file
       ANSYS_Model3D modelOutput1( "BoxHalfs3D", "BoxHalfs3Dirregular", variablesFile.c_str(), true );
       const double icemModelTime( timer.Stop() );
 
       size_t nullNeighborsOut(0);
-      for( vector<Element<3>*>::iterator it = modelOutput1.Region("Model").ElementsBegin(); it != modelOutput1.Region("Model").ElementsEnd(); ++it )
-        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
-          if( !(*it)->Neighbor(n) )
-            ++nullNeighborsOut;
+      const Region<3U> model_domain1(modelOutput1.Region("Model"));
+      for( vector<Element<3>*>::const_iterator it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it ) {
+            if ( (*it)->AtBoundary() != NOT ) (*it)->Out();
+            for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+              if( (*it)->Neighbor(n) == nullptr )
+                ++nullNeighborsOut;
+        }
       _test( nullNeighborsOut != 0 );
 
       const double matrixLeftValue(2.);
@@ -73,12 +77,19 @@ namespace csmp
       //------------------------------------
       timer.Start();
       Model<3> modelInput1("ANSYS_Model3D_Test_modelOutput1");
+      const Region<3U> model_domain2(modelInput1.Region("Model"));
       const double binaryModelTime( timer.Stop() );
+      _test( elementCount == modelInput1.Region("Model").Elements() );
+      _test( nodeCount    == modelInput1.Region("Model").Nodes() );
+      
+      cerr <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
-      for( vector<Element<3>*>::iterator it = modelInput1.Region("Model").ElementsBegin(); it != modelInput1.Region("Model").ElementsEnd(); ++it )
-        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
-          if( !(*it)->Neighbor(n) )
-            ++nullNeighbors;
+      for( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it ) {
+            if ( (*it)->AtBoundary() != NOT ) (*it)->Out();
+            for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+              if( (*it)->Neighbor(n) == nullptr )
+                ++nullNeighbors;
+         }
       _test( nullNeighbors == nullNeighborsOut );
 
       _test( modelInput1.ContainsRegion("Model") );

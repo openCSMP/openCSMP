@@ -1831,274 +1831,281 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
     // element integration point properties
     // ------------------------------------
-    database.ListProperties( ELEMENT_INTEGRATION_POINT, properties );
-    const size_t elmt_ips(elmt_collection_[0].IntegrationPoints()); // just an estimate
-   
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         // creating the property storage
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto elementsEnd(elmt_collection_.end());
-         // for the given property type
-         const size_t flag_capacity( elements * elmt_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( elements  * elmt_ips * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+    if ( database.ListProperties( ELEMENT_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !elmt_collection_.empty() );
+        const size_t elmt_ips(elmt_collection_[0].IntegrationPoints()); // just an estimate
+       
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             // creating the property storage
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto elementsEnd(elmt_collection_.end());
+             // for the given property type
+             const size_t flag_capacity( elements * elmt_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( elements  * elmt_ips * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of element integration point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of element integration point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+          }
       }
-
+   
+   
     // element sector integration point properties
     // -------------------------------------------
-    database.ListProperties( SECTOR_INTEGRATION_POINT, properties );
-    const size_t elmt_sector_ips(elmt_collection_[0].IntegrationPointsPerSector());
-    const size_t sectors_per_element(elmt_collection_[0].Sectors());
-   
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto elementsEnd(elmt_collection_.end());
+    if ( database.ListProperties( SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !elmt_collection_.empty() );
+        const size_t elmt_sector_ips(elmt_collection_[0].IntegrationPointsPerSector());
+        const size_t sectors_per_element(elmt_collection_[0].Sectors());
+       
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto elementsEnd(elmt_collection_.end());
 
-         const size_t flag_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+             const size_t flag_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of element sector integraton point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of element sector integraton point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+         }
       }
+
 
     // element facet integration point properties
     // ------------------------------------------
-    database.ListProperties( FACET_INTEGRATION_POINT, properties );
-    const size_t elmt_facet_ips(elmt_collection_[0].IntegrationPointsPerFacet());
-    const size_t facets_per_element(elmt_collection_[0].Facets());
+    if ( database.ListProperties( FACET_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !elmt_collection_.empty() );
+        const size_t elmt_facet_ips(elmt_collection_[0].IntegrationPointsPerFacet());
+        const size_t facets_per_element(elmt_collection_[0].Facets());
 
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         PropertyData data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto   elementsEnd(elmt_collection_.end());
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto   elementsEnd(elmt_collection_.end());
 
-         const size_t flag_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+             const size_t flag_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of facet integration point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=elmt_collection_.begin(); it!=elementsEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of facet integration point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+          }
       }
- 
    
    
     // ----------------------------------------------
@@ -2168,275 +2175,283 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
          vset.AddData( (*pit).first.c_str(), data );
       }
 
+
     // face integration point properties
     // ---------------------------------
-    database.ListProperties( FACE_INTEGRATION_POINT, properties );
-    const size_t face_ips(face_collection_[0].IntegrationPoints());
-   
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto facesEnd(face_collection_.end());
-         // for the given property type
-         const size_t flag_capacity( faces * face_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( faces * face_ips  * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+    if ( database.ListProperties( FACE_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !face_collection_.empty() );
+        const size_t face_ips(face_collection_[0].IntegrationPoints());
+       
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto facesEnd(face_collection_.end());
+             // for the given property type
+             const size_t flag_capacity( faces * face_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( faces * face_ips  * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t integration_points((*it).IntegrationPoints());
-                         for ( size_t i=0U; i<integration_points; ++i ) {
-                              (*it).Read( i, (*pit).second, value );
-                              pushBack( data, value );
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of face integration point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t integration_points((*it).IntegrationPoints());
+                             for ( size_t i=0U; i<integration_points; ++i ) {
+                                  (*it).Read( i, (*pit).second, value );
+                                  pushBack( data, value );
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of face integration point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+         }
       }
+   
 
     // face sector integration point properties
     // ----------------------------------------
-    database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties );
-    const size_t face_sector_ips(face_collection_[0].IntegrationPointsPerSector());
-    const size_t sectors_per_face(face_collection_[0].Sectors());
+    if ( database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !face_collection_.empty() );
+        const size_t face_sector_ips(face_collection_[0].IntegrationPointsPerSector());
+        const size_t sectors_per_face(face_collection_[0].Sectors());
 
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto facesEnd(face_collection_.end());
-         // for the given property type
-         const size_t flag_capacity( faces * sectors_per_face * face_sector_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( faces * sectors_per_face * face_sector_ips  * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto facesEnd(face_collection_.end());
+             // for the given property type
+             const size_t flag_capacity( faces * sectors_per_face * face_sector_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( faces * sectors_per_face * face_sector_ips  * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t sectors((*it).Sectors());
-                         for ( size_t i=0U; i<sectors; ++i ) {
-                              const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-                              for ( size_t j=0U; j<ips_per_sector; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of face-sector integration point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t sectors((*it).Sectors());
+                             for ( size_t i=0U; i<sectors; ++i ) {
+                                  const size_t ips_per_sector((*it).IntegrationPointsPerSector());
+                                  for ( size_t j=0U; j<ips_per_sector; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of face-sector integration point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+         }
       }
-
+   
+   
     // face facet integration point properties
     // ---------------------------------------
-    database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties );
-    const size_t face_facet_ips(face_collection_[0].IntegrationPointsPerFacet());
-    const size_t facets_per_face(face_collection_[0].Facets());
+    if ( database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !face_collection_.empty() );
+        const size_t face_facet_ips(face_collection_[0].IntegrationPointsPerFacet());
+        const size_t facets_per_face(face_collection_[0].Facets());
 
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
-      {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto facesEnd(face_collection_.end());
-         // for the given property type
-         const size_t flag_capacity( faces * facets_per_face * face_facet_ips * (*pit).second.flagDepth );
-         const size_t data_capacity( faces * facets_per_face * face_facet_ips * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
-        
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         const size_t facets((*it).Facets());
-                         for ( size_t i=0U; i<facets; ++i ) {
-                              const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
-                              for ( size_t j=0U; j<ips_per_facet; ++j ) {
-                                   (*it).Read( i, j, (*pit).second, value );
-                                   pushBack( data, value );
-                                }
-                           }
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of face facet integration point variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto facesEnd(face_collection_.end());
+             // for the given property type
+             const size_t flag_capacity( faces * facets_per_face * face_facet_ips * (*pit).second.flagDepth );
+             const size_t data_capacity( faces * facets_per_face * face_facet_ips * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
+            
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             const size_t facets((*it).Facets());
+                             for ( size_t i=0U; i<facets; ++i ) {
+                                  const size_t ips_per_facet((*it).IntegrationPointsPerFacet());
+                                  for ( size_t j=0U; j<ips_per_facet; ++j ) {
+                                       (*it).Read( i, j, (*pit).second, value );
+                                       pushBack( data, value );
+                                    }
+                               }
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of face facet integration point variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+          }
       }
-
 
    
     // ---------------------------------------------------
@@ -2587,6 +2602,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     // interface sector integration point properties
     // ---------------------------------------------
     if ( database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !interface_collection_.empty() );
         const size_t interface_sector_ips(interface_collection_[0].IntegrationPointsPerSector());
         const size_t sectors_per_interface(interface_collection_[0].Sectors());
 
@@ -2682,6 +2698,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     // interface facet integration point properties
     // --------------------------------------------
     if ( database.ListProperties( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
+        assert( !interface_collection_.empty() );
         const size_t interface_facet_ips(face_collection_[0].IntegrationPointsPerFacet());
         const size_t facets_per_interface(face_collection_[0].Facets());
 

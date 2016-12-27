@@ -1113,17 +1113,19 @@ void PropertyDatabase<dim>::Out() const
  {
      cout <<"\nPropertyDatabase::Out: variables file'"<< physvarsFile <<"'"<< endl;
      cout <<"total number of stored properties: "<< VariableCount() << endl;
-     cout <<"detailed variable counts:\n";
-     for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
-      for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
-        cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
+     if ( VariableCount() > 0 ) {
+          cout <<"detailed variable counts:\n";
+          for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
+           for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
+             cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
-     cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
-     for ( map<string,csmp::Parameter>::const_iterator
-           iter=propList_.begin(); iter!=propList_.end(); iter++ ) 
-       cout << iter->first << ": \n" << (*iter).second;
-     cout << endl;
-     cout.flush();
+          cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
+          for ( map<string,csmp::Parameter>::const_iterator
+                iter=propList_.begin(); iter!=propList_.end(); iter++ )
+            cout << iter->first << ": \n" << (*iter).second;
+          cout << endl;
+          cout.flush();
+       }
      
  }  // end Out
 

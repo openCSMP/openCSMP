@@ -61,6 +61,7 @@
 #include "RegionMonitorTest.h"
 #include "Visitor_TestSuite.h"
 
+#include "ModelSubDomain_Test.hpp"
 #include "Boundary_Test.h"
 #include "Region_Test.h"
 #include "Box_Test.h"
@@ -102,7 +103,8 @@ using namespace csmp;
      @section Missing Unit Tests
      
      Triage needed to generate order:
- 
+
+     - TODO: URGENT ModelSubDomain !!!
      - ModelTopology
      - Model
      - MeshManager
@@ -128,16 +130,22 @@ using namespace csmp;
      - Boundary_Test (TODO: separate BoundaryInterface functionality)
      - SplitBoundary_Test
      - InterFace_Test
-     -
+     - TODO: test unit normal computations on model boundaries
+     - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
+     
+     - AnsysModel3D - when reconstructed from file volumetric elements suddenly have surface elemenet neighbors
+     
+     @section Comments
+     - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 int main()
 {
   long nFail(0);
   const bool test_fundamentals(false),
              test_interdependent1(false),
-             test_interdependent2(true),
+             test_interdependent2(false),
              test_composite(false),
-             test_refactoring(false);
+             test_refactoring(true);
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;
         if ( test_fundamentals ) {
@@ -179,7 +187,7 @@ int main()
               basic.addTest( new ErrorFunction_Test() );
 
               basic.addTest( new FiniteVolumeStencil_Test());
-              basic.addTest( new FiniteVolumeTraits_Test()); //also compares the speed between mapping the facet areas and normals and computing them.
+              basic.addTest( new FiniteVolumeTraits_Test()); //also compares speed of mapping facet areas and normals versus computing them.
               basic.addTest( new FV_Parameter_Test());
           
               // interfaces / containers
@@ -275,10 +283,10 @@ int main()
         if ( test_refactoring ) {
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
-              refactored.addTest( new Boundary_Test() );
+//              refactored.addTest( new Boundary_Test() );
               // composite.addTest( new SplitBoundary_Test() );
              // running unit tests and reporting errors
-
+              refactored.addTest( new ModelSubDomain_Test() );
 
               // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
               refactored.run();

@@ -42,3 +42,4 @@ fracture porosity			PHIF	X	1	1.00E-20	1.00E+08	element
 fracture matrix flux ratio		QFQM	X	1	1.00E-20	1.00E+08	element
 block radius				BR	m	1	1.00E-20	1.00E+08	element
 initial water saturation		SWI	X	1	1.00E-20	1.00E+08	element
+concentration				C	kg m-3	1	0.		500.		node

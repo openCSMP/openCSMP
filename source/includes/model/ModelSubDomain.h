@@ -36,7 +36,7 @@ struct SubDomainInfo {
    std::string         name;                         ///< unique name
    std::vector<size_t> interior_elmts;               ///< elements that have no face on the perimeter
    std::vector<size_t> perimeter_elmts;              ///< elements that have at least one face on perimeter
-   std::vector<std::vector<int8 > > perimeter_faces; ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
+   std::vector<std::vector<int8> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
    std::vector<size_t> interior_nodes;               ///< nodes within the subdomain
    std::vector<size_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
 };
