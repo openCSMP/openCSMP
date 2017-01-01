@@ -12,6 +12,7 @@
 #include "CSMP_highLevelUtilities.h"
 #include "ErrorHandler.h"
 #include "PropertyData.h"
+#include "Box.h"
 
 using namespace std;
 
@@ -678,6 +679,8 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
     // ---------------------------------------------------------------------
     // 5. Flagging the elements using boundary flags from the nodes
     // ---------------------------------------------------------------------
+    flagElementUsingNodalAtBoundaryFlags<dim>( ElementsBegin(), ElementsEnd() );
+    /* TODO: clean after verification that code works as expected
     const bool vset_has_connectivity_info( vset.ElementNeighbors() > 0 );
     if( vset_has_connectivity_info )
     {
@@ -721,6 +724,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
                    }
           }
     }
+   */
 
    // ------------------------------------------------------------------------------
    // 6. Assigning parent elements (these are the elements that share the node) and
@@ -760,6 +764,8 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
 /**
     Efficient initialisation without checks, assuming that these were done
     earlier before a model was saved to binary file.
+ 
+    @note This method not recreates the element connectivity but also the box flags.
     
     @note use this method to bring a pre-existing CSMP model back from
     binary file.
@@ -925,80 +931,37 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
           node_collection_[ (*bit).first ].AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
       }
     
-
     // ---------------------------------------------------------------------
     // 5. Flagging the elements using boundary flags from the nodes
     // ---------------------------------------------------------------------
-    const bool vset_has_connectivity_info( vset.ElementNeighbors() > 0 );
-    if( vset_has_connectivity_info )
-    {
-        size_t        n, bnodes;
-        BOX_BOUNDARY  bflag;
-        bool          assigned;
+    flagElementUsingNodalAtBoundaryFlags<dim>( ElementsBegin(), ElementsEnd() );
 
-        for ( typename deque<Element<dim> >::iterator
-              eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
-          {
-             // element is assumed to have been flagged as NOT
-             assert( (*eit).AtBoundary() == NOT );
+    // ------------------------------------------------------------------------------
+    // 6. Assigning parent elements (these are the elements that share the node) and
+    // their respective internal node-id numbers to the nodes
+    // -------------------------------------------------------------------------------
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning parent element information to nodes..."<< endl;
+    vector<size_t>  parent_elmts_per_node( node_collection_.size(), 0U );
 
-             // getting those elements which lie at an internal boundary, i.e., one of their
-             // neighbors has been flagged as internal or none of the neighbor flags can be matched
-             for ( size_t j=0U; j<(*eit).Neighbors(); j++ )
-                 if ( (*eit).Neighbor(j) == NULL  &&  vset.Pfvert((*eit).Idx(),j) <= REGION_BOUNDARY ) {
-                     (*eit).AtBoundary( INTERNAL );
-                     break;
-                 }
-
-             if ( (*eit).AtBoundary() == NOT )
-               for ( assigned=false, bnodes=n=0U; n<(*eit).Nodes(); n++ )
-                 if ( (bflag=(*eit).N(n)->AtBoundary()) != NOT ) {
-                      // dealing with the element corners
-                      if      ( bflag == CNR1 ) { (*eit).AtBoundary( CNR1 ); break; }
-                      else if ( bflag == CNR2 ) { (*eit).AtBoundary( CNR2 ); break; }
-                      else if ( bflag == CNR3 ) { (*eit).AtBoundary( CNR3 ); break; }
-                      else if ( bflag == CNR4 ) { (*eit).AtBoundary( CNR4 ); break; }
-                      else if ( bflag == CNR5 ) { (*eit).AtBoundary( CNR5 ); break; }
-                      else if ( bflag == CNR6 ) { (*eit).AtBoundary( CNR6 ); break; }
-                      else if ( bflag == CNR7 ) { (*eit).AtBoundary( CNR7 ); break; }
-                      else if ( bflag == CNR8 ) { (*eit).AtBoundary( CNR8 ); break; }
-                      // now dealing with the other cases (if more than 2 bnodes are equal,
-                      // their flag will be used to define the boundary)
-                      if ( ++bnodes >= 2U  or  (bnodes >= 1U  and  dim == 1U) ) {
-                           (*eit).AtBoundary( ((*eit).N(n))->AtBoundary() );
-                           assigned = true;
-                           break;
-                        }
-                   }
-          }
-    }
-
-   // ------------------------------------------------------------------------------
-   // 6. Assigning parent elements (these are the elements that share the node) and
-   // their respective internal node-id numbers to the nodes
-   // -------------------------------------------------------------------------------
-   if( csmp_error.Verbose() )
-       cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning parent element information to nodes..."<< endl;
-   vector<size_t>  parent_elmts_per_node( node_collection_.size(), 0U );
-
-   // counting how many parent elements each node has
-   for ( typename deque<Element<dim> >::const_iterator
-         eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
-     for ( typename vector<csmp::Node<dim>*>::const_iterator
-           nit=(*eit).NodesBegin(); nit!=(*eit).NodesEnd(); nit++ )
-       parent_elmts_per_node[ (*nit)->Idx() ]++;
-
-   // reserving the memory for the parent storage and zeroing parent vector for next step
-   for ( size_t i=0U; i<node_collection_.size(); i++ )
-     node_collection_[i].ResizeParentStorage( parent_elmts_per_node[i] );
-
-   // assigning the parent element information to the nodes
-    for ( typename deque<Element<dim> >::iterator
+    // counting how many parent elements each node has
+    for ( typename deque<Element<dim> >::const_iterator
           eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
-      for ( size_t j=0U; j<(*eit).Nodes(); j++ )
-        (*eit).N(j)->Assign( j, &(*eit) );
+      for ( typename vector<csmp::Node<dim>*>::const_iterator
+            nit=(*eit).NodesBegin(); nit!=(*eit).NodesEnd(); nit++ )
+        parent_elmts_per_node[ (*nit)->Idx() ]++;
 
-   return true;
+    // reserving the memory for the parent storage and zeroing parent vector for next step
+    for ( size_t i=0U; i<node_collection_.size(); i++ )
+      node_collection_[i].ResizeParentStorage( parent_elmts_per_node[i] );
+
+    // assigning the parent element information to the nodes
+     for ( typename deque<Element<dim> >::iterator
+           eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
+       for ( size_t j=0U; j<(*eit).Nodes(); j++ )
+         (*eit).N(j)->Assign( j, &(*eit) );
+
+    return true;
  
  } // end InitializeWithVerifiedConnectivity(VSet)
 

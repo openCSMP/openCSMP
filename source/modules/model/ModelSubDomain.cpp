@@ -4999,13 +4999,12 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     // 1. writing name of the region
     skm_C_fwrite( fp, Name().c_str() );
    
-    std::vector<size_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin()) );
-   
     // 2. writing the interior element records of the region
+    std::vector<size_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin()) );
     transform( ElementsBegin(), PerimeterElementsBegin(),
                IDs.begin(), []( const SIMPLEX<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
-   
+
     // 3. writing the perimeter element records of the region
     IDs.resize( distance(PerimeterElementsBegin(), ElementsEnd()) );
     transform( PerimeterElementsBegin(), ElementsEnd(),
@@ -5048,6 +5047,17 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     skm_C_fwrite( fp, IDs );
    
  } // end WriteDomainIndexesToBinaryFile
+
+
+/*
+
+
+cerr <<"\n\n\nregion: "<< Name() <<"\n";
+cerr <<"interior nodes";
+out( IDs );
+cerr <<"\n perimeter nodes";
+out( IDs );
+*/
 
 
 
@@ -5108,7 +5118,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
   
     // 6. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );
-    assert( !info.perimeter_elmts.empty() );
+    assert( !info.perimeter_nodes.empty() );
    
  } // end readRegionIndexesFromBinaryFile
 

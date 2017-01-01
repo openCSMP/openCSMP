@@ -95,7 +95,7 @@ Region<dim>::~Region()
 
 
 /** 
-    "All Elements" re-constructor of region from all elements of model
+    "All Elements" re-constructor of region from all elements of model.
 */
 template<size_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
@@ -128,10 +128,12 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
           face_vec.reserve(perimeter_faces);
           for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
             face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+          this->bd_face_vec_.emplace_back( face_vec );
       }
 
     // building the node vector
     // ------------------------
+    this->first_bd_node_ = info.interior_nodes.size();
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
     for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )

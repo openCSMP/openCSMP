@@ -32,9 +32,41 @@ namespace csmp
     double64 CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
                            const char* variablesFile1, const char* variablesFile2,
                            bool isoparametric = false, const char* region = "Model" ) const;
+    
     double64 CompareVSets( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
                            const char* variablesFile1, const char* variablesFile2,
                            bool isoparametric = false, const char* region = "Model" ) const;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Comparison is done for identically equal meshes but might be different numbering of nodes //
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    double64 CompareModelsRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
+                                           const char* property1, const char* property2, const char* region = "Model" );
+
+    double64 CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
+                                          const char* variablesFile1, const char* variablesFile2,
+                                          bool isoparametric = false, const char* region = "Model" );
+    
+    double64 CompareVSetsRenumberedNodes( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
+                           const char* variablesFile1, const char* variablesFile2,
+                           bool isoparametric = false, const char* region = "Model" );
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    /// Comparison is done for meshes that can be in general different from each other     //
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    double64 CompareModelsAtPoints( Model<dim>& model1, Model<dim>& model2,
+                            const char* property1, const char* property2, const char* region = "Model" );
+
+    double64 CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
+                           const char* variablesFile1, const char* variablesFile2,
+                           bool isoparametric = false, const char* region = "Model" );
+    
+    double64 CompareVSetsAtPoints( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
+                           const char* variablesFile1, const char* variablesFile2,
+                           bool isoparametric = false, const char* region = "Model" );
+
   private:
 
     double64 CompareRegionScalarVariable( const Model<dim>& model1, const Model<dim>& model2,
@@ -50,24 +82,6 @@ namespace csmp
     void ReadRegionNodalScalarVariable( const Region<dim>& region,
                                         const Index propKey,
                                         std::deque<ScalarVariable>& scalarDeque ) const;
-  public:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Comparison is done for identically equal meshes but might be different numbering of nodes //
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    double64 CompareModelsRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
-                            const char* property1, const char* property2, const char* region = "Model" );
-
-    double64 CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
-                           const char* variablesFile1, const char* variablesFile2,
-                           bool isoparametric = false, const char* region = "Model" );
-    double64 CompareVSetsRenumberedNodes( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
-                           const char* variablesFile1, const char* variablesFile2,
-                           bool isoparametric = false, const char* region = "Model" );
-
-  private:
-
 
     double64 CompareRegionScalarVariableRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
                                           const char* property1, const char* property2, const char* region = "Model" );
@@ -76,25 +90,6 @@ namespace csmp
                                         const Index propKey,
                                         std::map<Point<dim>, ScalarVariable >& points_and_values);
 
-  public:
-
-    /////////////////////////////////////////////////////////////////////////////////////////
-    /// Comparison is done for meshes that can be in general different from each other     //
-    /////////////////////////////////////////////////////////////////////////////////////////
-
-    double64 CompareModelsAtPoints( Model<dim>& model1, Model<dim>& model2,
-                            const char* property1, const char* property2, const char* region = "Model" );
-
-    double64 CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
-                           const char* variablesFile1, const char* variablesFile2,
-                           bool isoparametric = false, const char* region = "Model" );
-    double64 CompareVSetsAtPoints( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
-                           const char* variablesFile1, const char* variablesFile2,
-                           bool isoparametric = false, const char* region = "Model" );
-
-
-  private:
-
     double64 CompareRegionScalarVariableAtPoints( Model<dim>& model1, Model<dim>& model2,
                                           const char* property1, const char* property2, const char* region = "Model" );
 
@@ -102,9 +97,6 @@ namespace csmp
                                         const Index propKey,
                                         std::vector<ScalarVariable> & values,
                                         std::map<size_t, std::vector<double64> >& points);
-
-
-
   };
 
   /**
@@ -115,6 +107,7 @@ namespace csmp
   Compares Models, Vsets. For usage example, please refer to ModelComparator_Test
   for the time being.
 
+  @todo (1) seperate comparisons of meshes from properties discretised on them
   @todo (3) Different error norms
   @todo (3) Different properties of same model
   @todo (3) Cor diff var types

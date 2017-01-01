@@ -306,11 +306,11 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
 };
 
 
-/// returns number of nodes that are shared by the two subdomains
+/// returns number of nodes that are shared by the two subdomains (matches by pointers)
 template<size_t dim,template<size_t> class SIMPLEX>
 size_t  sharedNodes( const ModelSubDomain<dim,SIMPLEX>&, const ModelSubDomain<dim,SIMPLEX>& );
 
-/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains
+/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains (matches by pointers)
 template<size_t dim,template<size_t> class SIMPLEX>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,SIMPLEX>&, const ModelSubDomain<dim,SIMPLEX>& );
 

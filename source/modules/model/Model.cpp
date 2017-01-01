@@ -67,7 +67,7 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 
 
 /**
-    Full input from binary file
+    Full input from CSMP-native binary file.
 */
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileNames )
@@ -2743,7 +2743,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      if ( !this->ContainsRegion("Model") )
        throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
-     // 7. reconstructing the boundaries
+     // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
     this->InputAllBoundariesFromBinary( BinaryBoundariesFileName(model_name).c_str() );
 
      // 8. reconstructing the splitboundaries
