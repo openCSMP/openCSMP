@@ -542,7 +542,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              // if the region info record is not empty the region is reconstructed
              if ( !info.interior_elmts.empty() ) {
                  std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                   it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,masterRegion,info) ) );
+                   it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
                  //   ^^^^^^^^^^^^^^^
                  if ( !it.second )
                     throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
@@ -571,7 +571,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              // if the region info record is not empty the region is reconstructed
              if ( info.name != masterRegion_ and !info.interior_elmts.empty() ) {
                  std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                   it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,masterRegion,info) ) );
+                   it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
                  //   ^^^^^^^^^
                  if ( !it.second )
                     throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",

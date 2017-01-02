@@ -14,6 +14,7 @@
 #include "InterFace.h"
 #include "Element.h"
 #include "FiniteElementManager.h"
+#include "MeshManager.h"
 #include "FiniteVolumeStencilManager.h"
 
 #include "Visitor.h"
@@ -71,19 +72,14 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( ModelSubDomain&& ed )
  }
 
 
-/**
-   Constructs completely intact subregion; assuming that involved
-   entities have a unique numbering matching between the supplied master domain
-   and the subdomain info.
-   
-   @note Constructor is used in model from binary file reconstruction process.
-   
-   @author SKM
-   @date 2016
-*/
+
+
+
+/* DOES NOT WORK BECAUSE "All Elements" region gets sorted before
+
 template<size_t dim, template<size_t> class SIMPLEX>
 ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                             const ModelSubDomain<dim,SIMPLEX>& mesh,
+                                             const ModelSubDomain<dim,SIMPLEX>& mesh, "All Elements"
                                              const SubDomainInfo& info )
  : pref_(pref),
    first_bd_node_(info.interior_nodes.size()),
@@ -114,6 +110,7 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const PropertyDatabase<dim>& pref,
           face_vec.reserve(perimeter_faces);
           for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
             face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+          this->bd_face_vec_.emplace_back( face_vec );
       }
 
     // building the node vector
@@ -122,23 +119,23 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const PropertyDatabase<dim>& pref,
     // assigning pointers to the interior nodes
     for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
       node_vec_.push_back( mesh.node_vec_[ (*it) ] );
+
     // assigning pointers to the perimeter nodes
+    this->first_bd_node_ = info.interior_nodes.size();
     for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
       node_vec_.push_back( mesh.node_vec_[ (*it) ] );
+
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(node_vec_.begin(), info.interior_nodes.size()) );
     sort( node_vec_.begin(), perimeterNodesBegin );
     sort( perimeterNodesBegin, node_vec_.end() );
-   
-    // any ideas about in situ checks of the build?
 
     // allocating the storage for subdomain properties
     // -----------------------------------------------
     this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,SIMPLEX>() ) );
  
  } // end constructor
-
-
+*/
 
 
 

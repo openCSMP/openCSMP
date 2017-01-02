@@ -93,6 +93,7 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
           face_vec.reserve(perimeter_faces);
           for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
             face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+          this->bd_face_vec_.emplace_back( face_vec );
       }
 
     // building the node vector
@@ -103,6 +104,7 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
       this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
    
     // assigning pointers to the perimeter nodes
+    this->first_bd_node_ = info.interior_nodes.size();
     for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
       this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
    
@@ -118,16 +120,6 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
  
  
  
-/** complete construction of boundary using a master boundary that must contain all faces used for the construction
-*/
-template<size_t dim>
-SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& dbase,
-                                   const SplitBoundary<dim>&  all_interfaces,
-                                   const SubDomainInfo& info )
- : ModelSubDomain<dim,InterFace>(dbase,all_interfaces,info)
- {
-    // property storage is handled by model subdomain
- }
 
 
 

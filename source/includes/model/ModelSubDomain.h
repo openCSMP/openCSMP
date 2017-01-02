@@ -18,6 +18,7 @@ std::string    parseSubdomainPart( SUBDOMAIN_PART part );
 
 class FiniteElementManager;
 template<size_t> class PropertyDatabase;
+template<size_t> class MeshManager;
 template<size_t> class FiniteVolumeStencilManager;
 template<size_t> class Point;
 template<size_t> class Node;
@@ -78,9 +79,6 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
 
   public:
 
-    /// (re)-constructs completely intact subregion; assuming that involved entities have a unique numbering matching that in the subdomain info
-    ModelSubDomain( const PropertyDatabase<dim>&, const ModelSubDomain<dim,SIMPLEX>& all_simplices_domain, const SubDomainInfo& );
-  
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
     ModelSubDomain( const ModelSubDomain& );

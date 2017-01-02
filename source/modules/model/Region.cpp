@@ -25,19 +25,6 @@ using namespace std;
 
 namespace csmp {
 
-/**
-    Constructs completely intact region;
-    assuming that involved entities have a unique numbering
-    that matches between the master region and the subdomain info.
-*/
-template<size_t dim>
-Region<dim>::Region( const PropertyDatabase<dim>& dbase, const Region<dim>&  master_region, const SubDomainInfo& info )
- : ModelSubDomain<dim,Element>(dbase,master_region,info)
- {
-    // property storage is handled by model subdomain
- }
-
-
 template<size_t dim>
 Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p )
  : ModelSubDomain<dim,Element>(regionname,p)
@@ -95,12 +82,29 @@ Region<dim>::~Region()
 
 
 /** 
-    "All Elements" re-constructor of region from all elements of model.
+    Re-constructor for regions that were stored in the CSMP native
+    file format.
+    
+    Using the indices retrieved from binary file and stored in SubDomainInfo,
+    the regions are recreated.
+    
+    @attention the numbering that is provided through the domain info
+    must match the current state of the MeshManager.
+    
+    @attention the indices are just used to connect the element and node
+    pointers of the region to the mesh storage, but, due to the sorting that
+    this method will perform, they will not correspond to the indices
+    used by the region accessors N() and E().
+    
+    @attention this constructor initialises the data of the ModelSubDomain
+    from which the region is derived. This cannot be done by the subdomain
+    itself because it does not know whether it will consist of elements,
+    faces or interfaces.
 */
 template<size_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
-                     MeshManager<dim>& mesh,
-                     const SubDomainInfo& info )
+                     MeshManager<dim>& mesh,       ///< not constant because region shall later be able to modify elements and nodes
+                     const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
   : ModelSubDomain<dim,Element>(info.name,pref)
  {
     // building the face vector
@@ -114,7 +118,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
       this->elmt_vec_.push_back( &(*next(mesh.ElementsBegin(),(*it))) );
    
-    // sorting the subvectors for future searching
+    // sorting the subvectors for future searching (upsets original numbering)
     const auto perimeterElementsBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
     sort( this->elmt_vec_.begin(), perimeterElementsBegin );
     sort( perimeterElementsBegin, this->elmt_vec_.end() );
@@ -133,13 +137,13 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
     // building the node vector
     // ------------------------
-    this->first_bd_node_ = info.interior_nodes.size();
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
     for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
       this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
    
     // assigning pointers to the perimeter nodes
+    this->first_bd_node_ = info.interior_nodes.size();
     for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
       this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
    
@@ -151,7 +155,8 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // allocating the storage for boundary properties
     // ----------------------------------------------
     this->ResizePropertyStorage( pref.LocalVariablesAt(REGION) );
- }
+   
+ } // end region re-constructor (using MeshManager)
 
 
 

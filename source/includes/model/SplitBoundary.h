@@ -73,17 +73,11 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     // reconstruction of boundaries that existed before
     // ------------------------------------------------
   
-    /// "All InterFaces" re-constructor of boundary from all faces in the model
+    /// re-constructor of split boundaries from csmp native file format
     SplitBoundary( const PropertyDatabase<dim>&,
-                   MeshManager<dim>&,       ///< not constant since write access is granted to region
+                   MeshManager<dim>&,       ///< not constant since write access is granted to boundary
                    const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
  
-    /// complete construction of boundary using a master boundary that must contain all faces used for the construction
-    SplitBoundary( const PropertyDatabase<dim>&,
-                   const SplitBoundary<dim>&  master_region,
-                   const SubDomainInfo& );
-
-
     /// applies visitor this split boundary
     virtual void Accept( Visitor<dim>& );
 

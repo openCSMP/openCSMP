@@ -34,7 +34,7 @@ void ModelSubDomain_Test::run()
      VSet<3U>   vset;
      const bool skewed(false), isoparametric(true), verbose(true);
      test_Create_Prism_Hexa_VSet( vset, skewed );
-     Model<3U>          model1( vset, isoparametric );
+     Model<3U>   model1( vset, isoparametric );
     
      //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
      //model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
@@ -47,7 +47,7 @@ void ModelSubDomain_Test::run()
      // TODO: numbering of boundary nodes does not seem to be correct
      vset.Out();
      //if ( verbose ) model1.Out();
-     model1.Region("All Elements").Out();
+     //model1.Region("All Elements").Out();
     
      model1.OutputToBinaryFile("ModelSubDomain_Test");
     
@@ -60,6 +60,7 @@ void ModelSubDomain_Test::run()
      //if ( verbose ) model2.Out();
     
      _test( CompareModelSubdomains( model1.Region("All Elements"), model2.Region("All Elements"), verbose ) );
+    
      _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );
   }
 

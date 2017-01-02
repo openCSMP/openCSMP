@@ -68,18 +68,6 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
       }
     _test( domain1.InteriorNodes() == domain2.InteriorNodes() );
    
-    // node boundary flags
-    int node_flag_mismatches(0);
-    auto nit2=domain2.NodesBegin();
-    for ( auto nit1=domain1.NodesBegin(); nit1!=domain1.NodesEnd(); ++nit1, ++nit2 )
-      if ( (*nit1)->AtBoundary() != (*nit2)->AtBoundary() ) node_flag_mismatches++;
-   
-    if ( node_flag_mismatches > 0 ) {
-          std::cerr <<"\ncompareModelSubdomains: the BOX_BOUNDARY flags of the domains do not match.\n";
-          //return false;
-      }
-    _test( node_flag_mismatches == 0 );
-  
     // node coordinates (sorted ranges of points have to be created)
     // ranges for domain 1
     std::set<Point<dim> >  interior_points1;
@@ -114,12 +102,34 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     interior_points2.clear();
     perimeter_points1.clear();
     perimeter_points2.clear();
-   
-    // if the points are all the same,
-    // nodes and elements in both domains are renumbered to be able to compare connectivity
-    domain1.RenumberNodes();
-    domain2.RenumberNodes();
- 
+
+    // node boundary flags
+    // (creating maps where the nodes are ordered by their location because
+    //  they do not necessarily have the same number)
+    std::map<Point<dim>,BOX_BOUNDARY>  boundary_flags1;
+    for ( auto nit=domain1.NodesBegin(); nit!=domain1.NodesEnd(); ++nit )
+      boundary_flags1.insert( std::make_pair( (*nit)->Coordinate(), (*nit)->AtBoundary() ) );
+    //
+    std::map<Point<dim>,BOX_BOUNDARY>  boundary_flags2;
+    for ( auto nit=domain2.NodesBegin(); nit!=domain2.NodesEnd(); ++nit )
+      boundary_flags1.insert( std::make_pair( (*nit)->Coordinate(), (*nit)->AtBoundary() ) );
+    //
+    // may fail due to tolerance differences in point classification _test( boundary_flags1.size() == boundary_flags2.size() );
+    int node_flag_mismatches(0);
+    auto nit2=boundary_flags2.begin();
+    for ( auto nit1=boundary_flags1.begin(); (nit1!=boundary_flags1.end() && nit2!=boundary_flags2.end()); ++nit1, ++nit2 )
+      if ( (*nit1).second != (*nit2).second ) {
+            std::cerr <<"\n\t"<< parseBoundary((*nit1).second) <<" vs "<< parseBoundary((*nit2).second);
+            node_flag_mismatches++;
+        }
+    if ( node_flag_mismatches > 0 ) {
+          std::cerr <<"\ncompareModelSubdomains: the BOX_BOUNDARY flags of the domains do not match.\n";
+          //return false;
+      }
+    _test( node_flag_mismatches == 0 );
+    boundary_flags1.clear();
+    boundary_flags2.clear();
+
    
     // 2. elements, i.e. connectivity
     // ------------------------------
@@ -139,9 +149,15 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
       }
     _test( domain1.PerimeterElements() == domain2.PerimeterElements() );
    
-    // element connectivity of interior elements (not assuming that elements are in same order)
+    // are the interior elements the same ?
+    std::set<size_t>  interior_elmts1, interior_elmts2;
+    for ( auto it=domain1.ElementsBegin(); it!=domain1.PerimeterElementsBegin(); ++it ) interior_elmts1.insert( (*it)->Idx() );
+    for ( auto it=domain2.ElementsBegin(); it!=domain2.PerimeterElementsBegin(); ++it ) interior_elmts2.insert( (*it)->Idx() );
+    _test( interior_elmts1 == interior_elmts2 );   
+   
+    // element connectivity (not assuming that elements are in same order)
     std::set<std::vector<size_t> > plist_entries1;
-    for ( auto it=domain1.ElementsBegin(); it!=domain1.PerimeterElementsBegin(); ++it ) {
+    for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
          std::vector<size_t> nodes( (*it)->Nodes() );
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
@@ -149,7 +165,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
          plist_entries1.insert( move(nodes) );
       }
     std::set<std::vector<size_t> > plist_entries2;
-    for ( auto it=domain2.ElementsBegin(); it!=domain2.PerimeterElementsBegin(); ++it ) {
+    for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
          std::vector<size_t> nodes( (*it)->Nodes() );
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
@@ -170,11 +186,8 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     plist_entries2.clear();
    
     // comparing the element neighbor connectivity
-    domain1.RenumberElements();
-    domain2.RenumberElements();
-
     std::set<std::vector<size_t> > pfverts_entries1;
-    for ( auto it=domain1.ElementsBegin(); it!=domain1.PerimeterElementsBegin(); ++it ) {
+    for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
          std::vector<size_t> nbors( (*it)->Neighbors(),0 );
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
@@ -183,7 +196,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
          pfverts_entries1.insert( move(nbors) );
       }
     std::set<std::vector<size_t> > pfverts_entries2;
-    for ( auto it=domain2.ElementsBegin(); it!=domain2.PerimeterElementsBegin(); ++it ) {
+    for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
          std::vector<size_t> nbors( (*it)->Neighbors(),0 );
          for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {

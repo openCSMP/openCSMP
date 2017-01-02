@@ -99,14 +99,10 @@ class Region : public ModelSubDomain<dim,Element> {
     // reconstruction of regions that existed before
     // ---------------------------------------------
   
-    /// "All Faces" re-constructor of boundary from all faces in the model
+    /// re-constructor for regions via the MeshManager
     Region( const PropertyDatabase<dim>&,
             MeshManager<dim>&,       ///< not constant since write access is granted to region
             const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
-
-    /// constructs completely intact region; assuming that involved entities have a unique numbering matching that in the subdomain info
-    Region( const PropertyDatabase<dim>&, const Region<dim>&  master_region, const SubDomainInfo& );
-  
 
     // --------------------------------------------
     // Property input/output

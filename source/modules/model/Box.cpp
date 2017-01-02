@@ -223,7 +223,7 @@ std::string  parseBoundary( BOX_BOUNDARY i )
     if ( i == EDGE12 )   return string("EDGE12");
     if ( i == INTERNAL ) return string("INTERNAL");
 
-    cout <<"\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: "<< i << endl; 
+    cerr <<"\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: "<< i << endl;
     return string("NOT");   
  }
 
@@ -262,8 +262,8 @@ BOX_BOUNDARY  parseBoundary( const string& i )
     if ( i == "EDGE12" )   return EDGE12;
     if ( i == "INTERNAL" ) return INTERNAL;
 
-    cout <<"\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: '";
-    cout << i <<"'; returning NOT."<< endl;
+    cerr <<"\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: '";
+    cerr << i <<"'; returning NOT."<< endl;
     return NOT;   
  }
 

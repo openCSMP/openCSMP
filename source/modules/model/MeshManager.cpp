@@ -829,8 +829,7 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
              (*fit).Assign( j, &node_collection_[ vset.Plist((*fit).Idx(),j) ] );
        }
     // interfaces
-    // TODO: check that the nodes for the interfaces are assigned correctly
-    if( csmp_error.Verbose() )
+    if ( csmp_error.Verbose() )
         cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to interfaces..."<< endl;
     const typename deque<InterFace<dim> >::iterator interfacesEnd(interface_collection_.end());
     for ( typename deque<InterFace<dim> >::iterator
@@ -1516,8 +1515,8 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
     for ( size_t eidx=0U; eidx<elements; ++eidx )
       for ( size_t j=0U; j<elmt_collection_[eidx].Neighbors(); ++j ) {
              Element<dim>* const ptr(elmt_collection_[eidx].Neighbor(j));
-             if ( ptr != NULL ) vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
-             else               vset.Pfvert( eidx, j, elmt_collection_[eidx].AtBoundary() );
+             if ( ptr != nullptr ) vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+             else                  vset.Pfvert( eidx, j, elmt_collection_[eidx].AtBoundary() );
         }
     // 'pfverts' faces
     // ---------------
