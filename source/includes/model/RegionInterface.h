@@ -37,9 +37,8 @@ namespace csmp {
   (in this latter case it is non-unique).
 
   @attention region construction is performed starting with a master region that is created 
-  directly from the MeshManager. This region called 'All Elements' can be set but is hidded in the sense of C++
-  encapsulation and implementation hiding. In the model construction process from file
-  it is called "All Elements" but this name is not to be relied on.
+  directly from the MeshManager. This region called 'All Elements' can be set but is hidden in the sense of C++
+  encapsulation and implementation hiding.
   
   @attention there is a second "fixed" master region that is always there. It is always called "Model" and
   its purpose is as the default computational domain, i.e. when you compute something on the mdel
@@ -249,7 +248,8 @@ class RegionInterface
     /// creates a region that contains all elements of the model
     void CreateOverallModelRegionFromMeshManager( bool model_is_unique );
 
-    std::string                               masterRegion_;   ///< 'All Elements' region that is used to form other regions from (non-unique)
+    // TODO: discuss with team whether the 'All Elements' region is needed
+    std::string                               masterRegion_;   ///< 'All Elements' (non-unique) region for forming other regions rather than region 'Model' that may be a subset 
     std::map<std::string,csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap
     std::map<std::string,csmp::Region<dim> >  groupMap_;       ///< map of potentially overlapping regions
 

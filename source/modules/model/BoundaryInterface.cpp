@@ -1116,7 +1116,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      // 0. writing the file header
      skm_C_fwrite( fp, heading.c_str() );
 
-     std::cout <<"\nBoundaryInterface::OutputAllBoundariesToBinary: regions written to binary file: ";
+     std::cout <<"\nBoundaryInterface::OutputAllBoundariesToBinary: boundaries written to binary file: ";
      // 1. writing all boundary objects to binary file
      const size_t records(this->Boundaries());
      fwrite( (void*) &records, sizeof(size_t), 1, fp );

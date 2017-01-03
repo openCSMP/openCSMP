@@ -781,15 +781,15 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
     assert( !node_collection_.empty() );
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: building storage..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: building storage..."<< endl;
 
     // -------------------------------------
     // 1. assigning coordinates to the nodes
     // -------------------------------------
     const size_t  nodes(node_collection_.size());
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning node coordinates..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning node coordinates..."<< endl;
     if      ( dim == 1U )
       for ( size_t i=0U; i<nodes; ++i )
         node_collection_[i].x( vset.Px( i ) );
@@ -809,8 +809,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
     // 2. assigning nodes to elements, faces and interfaces using 'plist' array
     // ------------------------------------------------------------------------
     const typename deque<Element<dim> >::iterator elementsEnd(elmt_collection_.end());
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to elements..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to elements..."<< endl;
     for ( typename deque<Element<dim> >::iterator
           eit=elmt_collection_.begin(); eit!=elementsEnd; ++eit ) {
            const size_t nodes((*eit).Nodes());
@@ -818,8 +818,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
              (*eit).Assign( j, &node_collection_[ vset.Plist((*eit).Idx(),j) ] );
        }
     // faces
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to faces..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to faces..."<< endl;
     const typename deque<Face<dim> >::iterator facesEnd(face_collection_.end());
     for ( typename deque<Face<dim> >::iterator
           fit=face_collection_.begin(); fit!=facesEnd; ++fit ) {
@@ -830,7 +830,7 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
        }
     // interfaces
     if ( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to interfaces..."<< endl;
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning nodes to interfaces..."<< endl;
     const typename deque<InterFace<dim> >::iterator interfacesEnd(interface_collection_.end());
     for ( typename deque<InterFace<dim> >::iterator
           fit=interface_collection_.begin(); fit!=interfacesEnd; ++fit ) {
@@ -846,7 +846,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
     // ----------------------------------------------------------------
     // 3.1 elements
     // ------------
-    cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning neighbors to elements..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning neighbors to elements..."<< endl;
     for ( typename deque<Element<dim> >::iterator
           eit=elmt_collection_.begin(); eit!=elementsEnd; ++eit ) {
           const size_t neighbors((*eit).Neighbors());
@@ -861,7 +862,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
       }
     // 3.2 faces
     // ---------
-    // connecting faces to their higher-dimensional neighbors
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: connecting faces to their higher-dimensional neighbors..."<< endl;
     const size_t elements(elmt_collection_.size());
     const size_t faces(face_collection_.size());
     for ( typename deque<Face<dim> >::iterator
@@ -894,6 +896,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
       }
     // 3.3 interfaces
     // --------------
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: connecting interfaces to their higher-dimensional neighbors..."<< endl;
     const size_t interfaces(interface_collection_.size());
     // connecting interfaces to their higher-dimensional neighbors
     for ( typename deque<InterFace<dim> >::iterator
@@ -920,8 +924,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
     // ---------------------------------------------------------------------
     // 4. Flagging nodes located at the model boundary
     // ---------------------------------------------------------------------
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: flagging boundary objects..."<< endl;
+    if ( csmp_error.Verbose() )
+      cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: flagging boundary objects..."<< endl;
     if ( vset.BFlags() > 0 )
       {
         // nodes were initially constructed as not located at the model boundary

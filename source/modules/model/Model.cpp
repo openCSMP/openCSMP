@@ -563,9 +563,6 @@ template void Model<3U>::OutputVariableTo( const char*, FEM_Data<FlaggedArrayVar
     sector integration point as well as region are read from file.
     However, the region placement works only if there is only a single region in the 
     model.
-    
-    @attention method expects that a master region called "All Elements" exists
-    via which the variable values can be transferred onto the model.
 */
 template<size_t dim>
 void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
@@ -764,8 +761,8 @@ Model<dim>& Model<dim>::operator=( const Model<dim>& model )
 
  
 /** Add a property at runtime
-@warning Any runtime change in variables invalidates existing Index objects! The need to be refreshed.
-@todo (1-F) Support for BOUNDARY... (create overload taking index)
+@warning Any runtime change in variables invalidates existing Index objects! They need to be refreshed.
+@todo (1-F) Support for BOUNDARY... / SPLIT_BOUNDARY (create overload taking index)
 */
 template<size_t dim>
 csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
@@ -785,7 +782,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
       }
 
     size_t  prop_index = Database().VariableCount(vplace, vtype);
-    csmp::Index  prop_key = database_.AddProperty( new_prop, unit, prop_index, vtype, vplace, vsize , vmin, vmax ,usage);
+    csmp::Index  prop_key = database_.AddProperty( new_prop, unit, prop_index, vtype, vplace, vsize , vmin, vmax, usage );
 
     if ( vplace == NODE ) {
           csmp::Region<dim>&  gref(this->Region("Model"));

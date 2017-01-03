@@ -456,6 +456,12 @@ void Face<dim>::Assign( size_t i, Face<dim>* const fc_ptr ) // neighbor face
     Here the convention is assumed that the first parent element is that on the inside
     of the Face with regard to the outward pointing normal and the second element is on
     the outside. It follows that the node sequences are the same.
+    
+    TODO: @todo (1) store the number of face or edge of the higher-dimensional inner
+    element for future reference; return it from the function InnerParentFaceNumber().
+    
+    TODO: @todo (1) check code-coverage and remove all constructors and functions 
+    that are not used BEFORE working up the InterFace class.
 */
 template<size_t dim>
 void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const outerElement )
@@ -485,24 +491,54 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
          face_nds.insert( this->N(i) );
       }
 
-    // searching for the Face in inner parent element
-    bool             matching_face_found(false);
-    const size_t     faces(innerParent_->Faces());
-    vector<size_t>   nodes_of_face;
+    // 3. matching the lower-dimensional face to a face of the higher-dimensional element
+    // -----------------------------------------------------------------------------------
+    if ( (dim == 3U and face_nds.size() >= 3U) or // Face is either a triangle or a quadrilateral in 3D
+         (dim == 2U and face_nds.size() >= 2U) )  // Face is a line in 2D
+      {
+         // searching the matching Face of the inner parent element
+         bool             matching_face_found(false);
+         const size_t     faces(innerParent_->Faces());
+         vector<size_t>   nodes_of_face;
+         set<Node<dim>*>  parent_nds;
+        
+         for ( size_t i=0U; i<faces; ++i ) {
+              innerParent_->FE()->NodesOfFace( i, nodes_of_face );
+              for ( size_t j=0U; j<nodes_of_face.size(); ++j )
+                parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
+              // checking
+              if ( face_nds == parent_nds ) {
+                    matching_face_found = true;
+                    break;
+                }
+              parent_nds.clear();
+           }
+         assert( matching_face_found );
+         return;
+      }
+    
+    // 4. matching the dimension-2 face with an edge of the higher-dimensional element
+    // -------------------------------------------------------------------------------
+    // (if the higher-dimensional element has 2 more dimensions that the Face, a comparison
+    //  with its edges needs to be performed)
+    // searching for the matching Segment (Edge) of the inner parent element
+    bool             matching_segment_found(false);
+    const size_t     segments(innerParent_->Segments());
+    vector<size_t>   nodes_of_segm;
     set<Node<dim>*>  parent_nds;
     
-    for ( size_t i=0U; i<faces; ++i ) {
-         innerParent_->FE()->NodesOfFace( i, nodes_of_face );
-         for ( size_t j=0U; j<nodes_of_face.size(); ++j )
-           parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
-         // checking
-         if ( face_nds == parent_nds ) {
-               matching_face_found = true;
-               break;
-           }
-         parent_nds.clear();
-      }
-    assert( matching_face_found );
+     for ( size_t i=0U; i<segments; ++i ) {
+          innerParent_->FE()->NodesOfSegment( i, nodes_of_segm );
+          for ( size_t j=0U; j<nodes_of_segm.size(); ++j )
+            parent_nds.insert( innerParent_->N( nodes_of_segm[j] ) );
+          // checking wether line element matches edge dim+2 element
+          if ( face_nds == parent_nds ) {
+                matching_segment_found = true;
+                break;
+            }
+          parent_nds.clear();
+       }
+     assert( matching_segment_found );
 
  } // end assign
 

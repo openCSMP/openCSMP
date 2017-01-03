@@ -599,7 +599,6 @@ csmp::Index  PropertyDatabase<dim>::AddProperty()
          //EstablishVariableTypeDependentProperties( static_cast<int>(vType), added_prop.key );
          EstablishVariableTypeDependentProperties( static_cast<int>(vType), size, added_prop.key );
          EstablishPlacementDependentProperties( added_prop.key.place, added_prop.key );
-
       }
       
       // update indices and binary database
