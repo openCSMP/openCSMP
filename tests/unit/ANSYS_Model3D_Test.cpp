@@ -26,12 +26,11 @@ namespace csmp
 
       size_t nullNeighborsOut(0);
       const Region<3U> model_domain1(modelOutput1.Region("Model"));
-      for( vector<Element<3>*>::const_iterator it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it ) {
-            if ( (*it)->AtBoundary() != NOT ) (*it)->Out();
-            for ( size_t n(0); n < (*it)->Neighbors(); ++n )
-              if( (*it)->Neighbor(n) == nullptr )
-                ++nullNeighborsOut;
-        }
+      for ( vector<Element<3>*>::const_iterator it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
+        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+          if( (*it)->Neighbor(n) == nullptr )
+            ++nullNeighborsOut;
+
       _test( nullNeighborsOut != 0 );
 
       const double matrixLeftValue(2.);
@@ -84,12 +83,11 @@ namespace csmp
       
       cerr <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
-      for( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it ) {
-            if ( (*it)->AtBoundary() != NOT ) (*it)->Out();
-            for ( size_t n(0); n < (*it)->Neighbors(); ++n )
-              if( (*it)->Neighbor(n) == nullptr )
-                ++nullNeighbors;
-         }
+      for ( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
+        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+          if( (*it)->Neighbor(n) == nullptr )
+            ++nullNeighbors;
+
       _test( nullNeighbors == nullNeighborsOut );
 
       _test( modelInput1.ContainsRegion("Model") );
@@ -180,7 +178,7 @@ namespace csmp
 
       // gui consturctor
       ANSYS_Model3D guiModel1( "FracBox", true, true );
-      _test( guiModel1.Regions() == 3 );
+      _test( guiModel1.UniqueRegions() == 2 ); // FRACTURES and MATRIX
       _test( guiModel1.Boundaries() == 6 );
 
       // irregular shaped

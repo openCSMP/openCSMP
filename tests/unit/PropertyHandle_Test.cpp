@@ -119,12 +119,12 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 4" );
         nodeVariable4 += elementVariable3;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, vc );
-        _equal( vc(0), 17.5, numeric_limits<double64>::epsilon() );
+        _equal( vc(0), 17.5, numeric_limits<double64>::epsilon() * 10. );
         nodeVariable4  = 1.3;
         IPVariable3    = 0.7;
         nodeVariable4 += IPVariable3;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, vc );
-        _equal( vc(0), 2.0, numeric_limits<double64>::epsilon() * 5. );
+        _equal( vc(0), 2.0, numeric_limits<double64>::epsilon() * 10. );
 
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 4" );

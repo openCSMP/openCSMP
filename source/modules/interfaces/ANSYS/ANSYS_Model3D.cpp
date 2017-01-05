@@ -48,7 +48,6 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
   // data imported into a vset.
   // -------------------------------------------------
   try {
-
        VSet<3U>  vset;
        bool isoparametric_elements( true );
 

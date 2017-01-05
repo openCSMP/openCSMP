@@ -237,7 +237,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
     // 1. eliminating the unwanted mesh regions from topology and vset
     mesh_topology.ReduceToRegions( regions_file_prefix );
   
-    // 2. building the model
+    // 2. building the model with variable storage
     Initialize( mesh_topology, vset, create_boundaries, non_box_shaped_model );
   
 } // end Initialize (with regions from file)
@@ -267,8 +267,13 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                                      mesh_topology.InterpolationOrder(),
                                      mesh_topology.IsoparametricElements() );
 
-    // 3. building the finite element mesh and property storage
+    // 3. building the finite element mesh (finite volume mesh) and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+    if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
+         Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
+         Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
+         vset.ContainsFiniteVolumeIntegrationPointData() )
+      InstantiateFiniteVolumes();
 
     // 4. forming unique root Region called "All Elements" as well as default computational domain called "Model"
     const bool withNeighborConnectivity(true);
@@ -315,8 +320,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
     // 8. Adding property storage to the Model
-    InitializeLocalVariableStorage();
-    UpdateSubdomainPropertyStorage();
+    InitializeLocalVariableStorage();  // for the model
+    UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
     // 9. assigning properties to mesh
     InputVariablesFrom( vset );
@@ -360,6 +365,11 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
     // 1. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+    if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
+         Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
+         Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
+         vset.ContainsFiniteVolumeIntegrationPointData() )
+      InstantiateFiniteVolumes();
 
     // 2. forming unique root Region called "All Elements"
     const bool withNeighborConnectivity(true);
@@ -571,6 +581,9 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
 
      if( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
      else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
+  
+     // checking whether there a finite volumes properties that require the generation of stencils
+     if ( vset.ContainsFiniteVolumeIntegrationPointData() and !fvStencilManager_ ) InstantiateFiniteVolumes();
 
      // properties and values stored on the model itself
      for ( auto pit=vset.PropertyValuesBegin(); pit!=vset.PropertyValuesEnd(); ++pit )
@@ -686,25 +699,6 @@ template void Model<3U>::InputVariableFrom( const char*, const FEM_Data<ArrayVar
 template void Model<3U>::InputVariableFrom( const char*, const FEM_Data<FlaggedArrayVariable>& );
 
 
-
-
-/**
-    Checks whether finite-volume related properties are contained in the VSet
-*/
-template<size_t dim>
-bool Model<dim>::VSetHasFiniteVolumeProperties( const VSet<dim>& vset ) const
- {
-    for ( auto pit=vset.PropertyValuesBegin(); pit!=vset.PropertyValuesEnd(); ++pit ) {
-         if ( (*pit).second.Placement() == SECTOR_INTEGRATION_POINT ) return true;
-         if ( (*pit).second.Placement() == FACET_INTEGRATION_POINT ) return true;
-         if ( (*pit).second.Placement() == FACE_SECTOR_INTEGRATION_POINT ) return true;
-         if ( (*pit).second.Placement() == FACE_FACET_INTEGRATION_POINT ) return true;
-         if ( (*pit).second.Placement() == INTER_FACE_SECTOR_INTEGRATION_POINT ) return true;
-         if ( (*pit).second.Placement() == INTER_FACE_FACET_INTEGRATION_POINT ) return true;
-      }
-   
-    return false;
- }
 
 
 

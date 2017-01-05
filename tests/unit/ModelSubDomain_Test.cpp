@@ -29,19 +29,25 @@ namespace csmp {
 
      Observations
      - AllElements in single domain model is non-unique, but should be unique
+     
+     
+     TODO: so far (4/1/17), this test only checks the writing and reading of the model from file;
+     add tests for the other important parts of the functionality.
  
 */
 void ModelSubDomain_Test::run()
   {
      bool test_binary_file_recovery1(true),
-          test_binary_file_recovery2(true);  // with boundaries
+          test_binary_file_recovery2(true), // with boundaries
+          test_binary_file_recovery3(true), // complex model with multiple regions
+          verbose(true);
     
      // Test 1: subdomain storage to file and recreation in a new model
      // ---------------------------------------------------------------
      if ( test_binary_file_recovery1 )
        {
          VSet<3U>   vset;
-         const bool skewed(false), isoparametric(true), verbose(true);
+         const bool skewed(false), isoparametric(true);
          test_Create_Prism_Hexa_VSet( vset, skewed );
          Model<3U>   model1( vset, isoparametric );
         
@@ -134,7 +140,26 @@ void ModelSubDomain_Test::run()
          model1.OutputToBinaryFile("ModelSubDomain_Test2");
          Model<3U>  model2( string("ModelSubDomain_Test2") );
 
+         _test( CompareModelSubdomains( model1.Region("All Elements"), model2.Region("All Elements"), verbose ) );
+         _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );
+
       }
+
+    if ( test_binary_file_recovery3 )
+      {
+         ANSYS_Model3D model1( "prism_test", "CSMP-variables.txt",
+                                 false, /* irregular_mesh */
+                                 true,  /* binary_file */
+                                 true,  /* use_regions_file */
+                                 true   /* create_boundaries */ );
+        
+         model1.OutputToBinaryFile("ModelSubDomain_Test3");
+         Model<3U>  model2( string("ModelSubDomain_Test3") );
+
+         _test( CompareModelSubdomains( model1.Region("FRAC_VOLUMES"), model2.Region("FRAC_VOLUMES"), verbose ) );
+      }
+
+
     
   } // end run
 

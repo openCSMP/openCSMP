@@ -1296,29 +1296,30 @@ void flagElementUsingNodalAtBoundaryFlags( typename deque<csmp::Element<dim> >::
               eflags.erase(BOTTOM);
               eflags.erase(FRONT);
               eflags.erase(BACK);
-              assert( !eflags.empty() );
-              const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
-              const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
+              if ( !eflags.empty() ) {
+                  const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
+                  const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
 
-              // if a corner is contained that corner flag is choosen
-              if      ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it).AtBoundary( flag_max );
-              else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it).AtBoundary( flag_min );
-              // if the first integer entry in the set is an edge, that flag is chosen
-              else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it).AtBoundary( flag_max );
-              else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it).AtBoundary( flag_min );
-              // if a corner is contained that corner flag is choosen
-              else if ( (*eflags.begin()) <= CNR1 and
-                        (*eflags.begin()) >= CNR8 ) (*it).AtBoundary( (*eflags.begin()) );
-              // if the first integer entry in the set is an edge, that flag is chosen
-              else if ( (*eflags.begin()) >= EDGE1 and
-                        (*eflags.begin()) <  INTERNAL ) (*it).AtBoundary( (*eflags.begin()) );
-              else if ( (*eflags.begin()) == IRREGULAR ) (*it).AtBoundary( IRREGULAR );
-              else {
-                   cerr <<"\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-                   for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
-                     cout << parseBoundary( (*sit) ) <<" ";
-                   cout << endl;
-                   (*it).Out();
+                  // if a corner is contained that corner flag is choosen
+                  if      ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it).AtBoundary( flag_max );
+                  else if ( flag_min <= CNR1 and flag_min >= CNR8 ) (*it).AtBoundary( flag_min );
+                  // if the first integer entry in the set is an edge, that flag is chosen
+                  else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it).AtBoundary( flag_max );
+                  else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it).AtBoundary( flag_min );
+                  // if a corner is contained that corner flag is choosen
+                  else if ( (*eflags.begin()) <= CNR1 and
+                            (*eflags.begin()) >= CNR8 ) (*it).AtBoundary( (*eflags.begin()) );
+                  // if the first integer entry in the set is an edge, that flag is chosen
+                  else if ( (*eflags.begin()) >= EDGE1 and
+                            (*eflags.begin()) <  INTERNAL ) (*it).AtBoundary( (*eflags.begin()) );
+                  else if ( (*eflags.begin()) == IRREGULAR ) (*it).AtBoundary( IRREGULAR );
+                  else {
+                       cerr <<"\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
+                       for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
+                         cout << parseBoundary( (*sit) ) <<" ";
+                       cout << endl;
+                       (*it).Out();
+                    }
                 }
            }
        ++it;

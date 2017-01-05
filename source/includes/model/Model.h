@@ -247,7 +247,6 @@ public:
 
     void InitializeLocalVariableStorage();
     bool UpdateSubdomainPropertyStorage();
-    bool VSetHasFiniteVolumeProperties( const VSet<dim>& ) const;
 
     static std::string BinaryVsetFileName( const char* base_file_name );
     static std::string BinaryRegionsFileName( const char* base_file_name );

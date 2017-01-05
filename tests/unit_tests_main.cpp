@@ -131,7 +131,11 @@ using namespace csmp;
      - SplitBoundary_Test
      - InterFace_Test
      - TODO: test unit normal computations on model boundaries
-     - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
+ 
+     ? - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
+ 
+     - TODO: delete non-unique regions with boundary names before saving the model to disk so that 
+             they do not get stored and brought back when the model is rebuild
      
      - AnsysModel3D - when reconstructed from file volumetric elements suddenly have surface elemenet neighbors
      
@@ -143,9 +147,9 @@ int main()
   long nFail(0);
   const bool test_fundamentals(false),
              test_interdependent1(false),
-             test_interdependent2(false),
+             test_interdependent2(true),
              test_composite(false),
-             test_refactoring(true);
+             test_refactoring(false);
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;
         if ( test_fundamentals ) {
@@ -236,6 +240,7 @@ int main()
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               // model
               interdependent2.addTest( new Box_Test() );
+              interdependent2.addTest( new ModelSubDomain_Test() );
               interdependent2.addTest( new ANSYS_Model2D_Test() );
               interdependent2.addTest( new InputDataManager_Test());
               interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
@@ -286,7 +291,6 @@ int main()
 //              refactored.addTest( new Boundary_Test() );
               // composite.addTest( new SplitBoundary_Test() );
              // running unit tests and reporting errors
-              refactored.addTest( new ModelSubDomain_Test() );
 
               // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
               refactored.run();
