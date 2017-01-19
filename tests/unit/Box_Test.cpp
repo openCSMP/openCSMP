@@ -1,8 +1,10 @@
 #include "Box_Test.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+#include "Boundary.h"
 #include "VTU_Interface.h"
 #include "vset_makers.h"
+#include "CSMP_mathUtilities.h"
 
 using namespace std;
 
@@ -129,7 +131,7 @@ void Box_Test::run()
   _test( unitNormal.at(0) == sin(45.) );
   _test( unitNormal.at(1) == 0 );
   _test( unitNormal.at(2) == -sin(45.) );
-
+  
    // testing parse boundary
   _test( parseBoundary( NOT ) == "NOT" );
   _test( parseBoundary( IRREGULAR ) == "IRREGULAR" );
@@ -172,7 +174,10 @@ void Box_Test::run()
   
   // tests whether the boundaries of a 2D box model are assigned correctly
   _test( TestBoundaryFlagAssigment2D() );
-}
+
+  TestWhetherSimplexNormalsAreOutwardPointing();
+
+} // end run
 
 
 
@@ -281,6 +286,158 @@ bool Box_Test::TestBoundaryFlagging()
     return true;
   
  } // end TestBoundaryFlagging
+
+
+
+
+/**
+    Comparing the unit normals with the those of the sides 
+    of the box-shaped model. 
+    The expectation is that are are pointing in the direction
+    as the normals of the elements or faces on the outside boundary
+    of the model.
+*/
+void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
+ {
+    const bool irregular_mesh(true);
+    const bool binary_file(true);
+    const bool use_regions_file(true);
+    const bool create_boundaries(true);
+    const bool debug(true), verbose(true);
+   
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
+    Region<3U>    model_domain(model.Region("Model"));
+
+    // 1. testing the unit normals of the (volumetric elements)
+    // --------------------------------------------------------
+    vector<double64> leftNormal, rightNormal, topNormal, bottomNormal, frontNormal, backNormal, eUnitNormal;
+    Box().UnitNormalTo( LEFT,   3, leftNormal );
+    Box().UnitNormalTo( RIGHT,  3, rightNormal );
+    Box().UnitNormalTo( TOP,    3, topNormal );
+    Box().UnitNormalTo( BOTTOM, 3, bottomNormal );
+    Box().UnitNormalTo( FRONT,  3, frontNormal );
+    Box().UnitNormalTo( BACK,   3, backNormal );
+
+    for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
+         const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary();
+         assert( flag != NOT );
+         for ( size_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+                // verifying alignment of the element's unit normal with that of the model boundary
+                model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
+                // checking whether the normals are aligned and of of same unit magnitude
+                if ( flag == LEFT )  {
+                     const double64 dotProduct(vector_product<3U,double64>(leftNormal,eUnitNormal));
+                     // testing for alignment
+                     _test( dotProduct > 0. );
+                     // testing for unit length
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+                else if ( flag == RIGHT )  {
+                     const double64 dotProduct(vector_product<3U,double64>(rightNormal,eUnitNormal));
+                     _test( dotProduct > 0. );
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+                else if ( flag == BOTTOM )  {
+                     const double64 dotProduct(vector_product<3U,double64>(bottomNormal,eUnitNormal));
+                     _test( dotProduct > 0. );
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+                else if ( flag == TOP )  {
+                     const double64 dotProduct(vector_product<3U,double64>(topNormal,eUnitNormal));
+                     _test( dotProduct > 0. );
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+                else if ( flag == BACK )  {
+                     const double64 dotProduct(vector_product<3U,double64>(backNormal,eUnitNormal));
+                     _test( dotProduct > 0. );
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+                else if ( flag == FRONT )  {
+                     const double64 dotProduct(vector_product<3U,double64>(frontNormal,eUnitNormal));
+                     _test( dotProduct > 0. );
+                     _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+                  }
+            }
+      }
+   
+   
+    // 2. testing whether the unit normals of the faces making up the outside boundaries of the model
+    //    are outward pointing and aligned
+    // -----------------------------------
+    Boundary<3U>  left(model.Boundary("LEFT"));
+    for ( auto it=left.ElementsBegin(); it!=left.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(leftNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+    Boundary<3U>  right(model.Boundary("RIGHT"));
+    for ( auto it=right.ElementsBegin(); it!=right.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(rightNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+    Boundary<3U>  bottom(model.Boundary("BOTTOM"));
+    for ( auto it=bottom.ElementsBegin(); it!=bottom.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(bottomNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+    Boundary<3U>  top(model.Boundary("TOP"));
+    for ( auto it=top.ElementsBegin(); it!=top.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(topNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+    Boundary<3U>  back(model.Boundary("BACK"));
+    for ( auto it=back.ElementsBegin(); it!=back.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(backNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+    Boundary<3U>  front(model.Boundary("FRONT"));
+    for ( auto it=front.ElementsBegin(); it!=front.ElementsEnd(); ++it ) {
+         if ( (*it)->IsSurfaceElement() ) {
+             (*it)->UnitNormal( eUnitNormal );
+             const double64 dotProduct(vector_product<3U,double64>(frontNormal,eUnitNormal));
+             // testing for alignment
+             _test( dotProduct > 0. );
+             // testing for unit length
+             _equal( dotProduct, 1., numeric_limits<double64>::epsilon() * 5. );
+          }
+      }
+   
+ } // end TestWhetherSimplexNormalsAreOutwardPointing
+
   
 
 

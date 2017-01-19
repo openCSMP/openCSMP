@@ -30,6 +30,9 @@ class Box_Test : public Test
     bool TestWhetherBoundaryFlagsArePreservedInBinaryFile1();
 
     bool TestConsistencyOfBoxFlaggingWithBoundaryIdentification();
+  
+    /// testing the normals of the volumetric elements and the boundary faces
+    void TestWhetherSimplexNormalsAreOutwardPointing();
 
   private:
     std::string model_name_;

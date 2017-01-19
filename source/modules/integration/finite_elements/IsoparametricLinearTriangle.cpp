@@ -1544,10 +1544,11 @@ void IsoparametricLinearTriangle::UnitNormal( std::vector<double64>& vc ) const
              Z12 = XY(1,2) - XY(0,2), // Z
              Z31 = XY(0,2) - XY(2,2);
 
-    // normal to tri
+    // normal to triangle (*- to flip to outside)
     vc[0]  = -Y12*Z31 + Z12*Y31;
     vc[1]  = -Z12*X31 + X12*Z31;
     vc[2]  = -X12*Y31 + Y12*X31;
+   
     // normalization to unit length
     double64 length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
