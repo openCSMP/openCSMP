@@ -1,5 +1,5 @@
-#ifndef FACET_FLUX_H
-#define FACET_FLUX_H
+#ifndef FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H
+#define FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H
 
 #include "VectorVariable.h"
 #include "DenseMatrix.h"
@@ -19,8 +19,8 @@ for application to individual FVs using terms computed on linear FEs.
 \version   1a
 \date      21/2/2013
 \pre       high-level class depending on CSMP++ API
-\bug
-\warning
+\bug       NONE
+\warning   NONE
 \copyright Stephan K. Matthai
 
 */
@@ -60,4 +60,4 @@ class FacetFlux_TracerTransferExplicit {
 
 } // end csmp
 
-#endif /* FACET_FLUX_H */
+#endif /* FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H */

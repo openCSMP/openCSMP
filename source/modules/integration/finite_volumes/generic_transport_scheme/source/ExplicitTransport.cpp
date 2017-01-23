@@ -304,7 +304,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     cout <<"\n\tScaled time increment = "<< time_increment;
     cout <<"\n\tSolution steps needed = "<< std::max(rint(floor(time_interval/time_increment)),1);
 
-    cout <<"\n\n\nExplicitTransport::EvolveSolution: FV transport simulation initiated...\n";
+    cout <<"\n\n\nExplicitTransport::AdvectVariable: FV transport simulation initiated...\n";
     size_t   substep(1);
     double64 time(0.);
 

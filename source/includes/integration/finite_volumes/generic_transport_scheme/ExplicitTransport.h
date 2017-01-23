@@ -12,8 +12,8 @@ template<size_t> class Region;
 template<size_t> class Model;
 template<size_t> class TwoPhaseModel;
 
-// TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode...)
-// TODO: make the transported variable an template as well: Scalar, Array, FlaggedArray...
+// TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode computing and averaging element gradients vs. node by node approach)
+// TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
 template<size_t dim>
 class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
                           public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,

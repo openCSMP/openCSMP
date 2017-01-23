@@ -2626,62 +2626,62 @@ This test does the following:
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Hexahedron element, for 3D.
- 
-tested: is a test function*/
-// This set of tests uses a unit iso parametric hexahedron.  That means that it is a Hexahedron with sides 2a*2b*2c
-// where a,b, and c are the sides in each coordinate direction.  The volumetric center of this hexahedron is the origin
-// 0,0,0.
+
+@note This set of tests uses a unit iso parametric hexahedron.  That means that it is a Hexahedron with sides 2a*2b*2c
+where a,b, and c are the sides in each coordinate direction.  The volumetric center of this hexahedron is the origin
+0,0,0.
+
+ */
 void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64 fTolerance, double64 fToleranceInternal)
 {
-
-	FiniteElement* feptr			= new IsoparametricLinearHexahedron();
-    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
+	 FiniteElement* feptr = new IsoparametricLinearHexahedron();
+   FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
 	
-    Element<3U>  elmt_( feptr );
-    elmt_.Assign( fvptr );
+   Element<3U>  elmt_( feptr );
+   elmt_.Assign( fvptr );
 
 	Node<3U>  node1, node2, node3, node4, node5, node6, node7, node8;
-	{
-		node1.Idx( 1 );
-		node1.x( -1. );
-		node1.y( -1. );
-		node1.z( -1. );
+    {
+      node1.Idx( 1 );
+      node1.x( -1. );
+      node1.y( -1. );
+      node1.z( -1. );
 
-		node2.Idx( 2 );
-		node2.x(1. );
-		node2.y(-1. );
-		node2.z(-1. );
+      node2.Idx( 2 );
+      node2.x(1. );
+      node2.y(-1. );
+      node2.z(-1. );
 
-		node3.Idx( 3 );
-		node3.x(1. );
-		node3.y(1. );
-		node3.z(-1. );
+      node3.Idx( 3 );
+      node3.x(1. );
+      node3.y(1. );
+      node3.z(-1. );
 
-		node4.Idx( 4 );
-		node4.x(-1. );
-		node4.y(1. );
-		node4.z(-1. );
+      node4.Idx( 4 );
+      node4.x(-1. );
+      node4.y(1. );
+      node4.z(-1. );
 
-		node5.Idx( 5 );
-		node5.x( -1. );
-		node5.y( -1. );
-		node5.z( 1. );
+      node5.Idx( 5 );
+      node5.x( -1. );
+      node5.y( -1. );
+      node5.z( 1. );
 
-		node6.Idx( 6 );
-		node6.x(1. );
-		node6.y(-1. );
-		node6.z(1. );
+      node6.Idx( 6 );
+      node6.x(1. );
+      node6.y(-1. );
+      node6.z(1. );
 
-		node7.Idx( 7 );
-		node7.x(1. );
-		node7.y(1. );
-		node7.z(1. );
+      node7.Idx( 7 );
+      node7.x(1. );
+      node7.y(1. );
+      node7.z(1. );
 
-		node8.Idx( 8 );
-		node8.x(-1. );
-		node8.y(1. );
-		node8.z(1. );
-	}
+      node8.Idx( 8 );
+      node8.x(-1. );
+      node8.y(1. );
+      node8.z(1. );
+    }
 
 	elmt_.Idx( 1 );
 	//elmt_.FE()->CurrentID(0);

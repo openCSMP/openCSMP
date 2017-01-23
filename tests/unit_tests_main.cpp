@@ -145,9 +145,9 @@ using namespace csmp;
 int main()
 {
   long nFail(0);
-  const bool test_fundamentals(false),
+  const bool test_fundamentals(true),
              test_interdependent1(false),
-             test_interdependent2(true),
+             test_interdependent2(false),
              test_composite(false),
              test_refactoring(false);
   try {
