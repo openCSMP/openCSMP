@@ -460,7 +460,7 @@ void FiniteVolumeTraits<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
     // get integration point location and corresponding shape function values
     N_AtFacetIntegrationPoint( iFacet, ip );
 
-    // interppolating property to integration point
+    // interpolating property to integration point
     Var temp;
     var = 0;
     temp.Size( prop_key.dataDepth );

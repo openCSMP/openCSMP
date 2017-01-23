@@ -44,6 +44,7 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
     
     /// 4. composes 'new concentration': C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]
     void AssembleSolution( double64 delta_t, bool enforce_divergence_free_vt_field );
+
     /// if we know beforehand that velocity field will be divergence free, this method compensates for small abberations from this
     void AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval );
     

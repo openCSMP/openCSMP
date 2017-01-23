@@ -67,6 +67,7 @@ class FiniteVolumeStencil {
   
     /// number of facets that delimited the FV sector on the insider of the parent finite element
     size_t    FacetsPerSector( size_t iSector ) const;
+  
     /// n-th facet that delimits the FV sector in the inside of the finite element
     size_t    FacetSurroundingSector( size_t iSector, size_t n ) const;
   
@@ -118,10 +119,17 @@ class FiniteVolumeStencil {
     size_t    Sectors() const;
     size_t    IntegrationPointsPerFacet( size_t iFacet=0U ) const;
     size_t    IntegrationPointsPerSector( size_t iSector=0U ) const;
-     
-    const Point<dim>&  UnitParametricNormalTo( size_t iFacet ) const; 
-    double64           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const; 
+  
+    /// returns unit normal to facet in parametric space
+    const Point<dim>&  UnitParametricNormalTo( size_t iFacet ) const;
+  
+    /// returns x,y or z component of unit normal in parametric space
+    double64           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const;
+  
+    /// returns the parent element of the finite volume stencil
     const std::string& ParentElement() const { return parent_element_; }
+  
+    /// returns the data (private members) stored in this finite volume stencil
     void  Out() const;
     
   private:

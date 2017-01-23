@@ -14,15 +14,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
  }
  
  
-// we also need to initialize the material parameter key in the base class
-// in this case the material parameter is used as the lambda parameter
-// of the Brooks-Corey model
+/**
+   we also need to initialize the material parameter key in the base class
+   in this case the material parameter is used as the lambda parameter
+   of the Brooks-Corey model
+*/
 template<size_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
-                               const char* permeability,
-                               double64 viscosity_nw, double64 viscosity_w,
-                               double64 density_nw, double64 density_w, 
-                               const char* lamda, const char* pc_entry )
+                                                           const char* permeability,
+                                                           double64 viscosity_nw, double64 viscosity_w,
+                                                           double64 density_nw, double64 density_w, 
+                                                           const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
    sormax_key(database.StorageKey("maximum residual oil saturation")),
@@ -59,7 +61,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 
 template<size_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
-                               const char* lamda, const char* pc_entry )
+                                                           const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
    sormax_key(database.StorageKey("maximum residual oil saturation")),

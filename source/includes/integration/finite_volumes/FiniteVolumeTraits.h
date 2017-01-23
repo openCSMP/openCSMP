@@ -1,17 +1,15 @@
 #ifndef FINITE_VOLUME_TRAITS_H
 #define FINITE_VOLUME_TRAITS_H
 
-#include "DenseMatrix.h"
 #include "Index.h"
-
 #include "Point.h"
 #include "FiniteVolumeStencil.h"
-
 #include "Node.h"
 
 #include "QuadrilateralFacet.h"
 #include "TriangularFacet.h"
 
+#include "DenseMatrix.h"
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 #include "TensorVariable.h"
@@ -80,192 +78,158 @@ TODO: @todo SKM try to do computations in parametric space
  */
 template<template<size_t> class SIMPLEX>
 class FiniteVolumeTraits<3U, SIMPLEX> {
-
   public:
-
     FiniteVolumeTraits();
 
-    // FV Stencil info
     size_t     Facets()  const;
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
     size_t     IntegrationPointsPerFacet()  const;
 
-    // mapping of integration point from local to global coordinates
+    /// mapping of integration points from local to global coordinates
     Point<3U>  RstToXYZ( const Point<3U>& rst ) const;
 
-    // shape function values and their derivatives at sector and facet integration points
+    /// shape function values at sector and facet integration points
     void       N_At( const Point<3U>& rst ) const;
     void       N_At( const Point<3U>& rst, std::vector<double64>& N )  const;
-    // initialize vector NRST (stored by the current finite element)
+  
+    /// outputs to NRST vector (stored by the current finite element) at the numbered facet integration point
     void       N_AtFacetIntegrationPoint(  size_t iFacet,  size_t ip ) const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    // shape function derivatives in local coordinates
+  
+    /// shape function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element
     void       Local_dN_At( const Point<3U>& rst ) const;
-    // shape function derivatives in global coordinates + detJ for integration
+  
+    /// shape function derivatives at point specified in local coordinates returned into NRST vector of current finite element + detJ for integration
     double64   dN_At( const Point<3U>& rst, DenseMatrix<DM_MIN>& DN )  const;
 
-    // interpolate value of scalar node variable to facet/sector integration point (XYZ)
-    double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
-    double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
-    // interpolate value of any node variable to facet/sector integration point (XYZ)
+    /// interpolates value of scalar node variable to facet integration point (XYZ)
+    double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& ) const;
+
+    /// interpolates value of scalar node variable to sector integration point (XYZ)
+    double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& ) const;
+  
+    /// interpolate values of any node variable to facet integration point (XYZ)
     template<class Var>
     void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet,  size_t ip,  Var& )   const;
+
+    /// interpolate values of any node variable to sector integration point (XYZ)
     template<class Var>
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip,  Var& )   const;
 
-    // facet and sector integrals
-    double64   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
-    double64   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
+    /// integrates value of property over the area of the facet
+    double64   FacetIntegral(  size_t iFacet,  const csmp::Index& ) const;
 
-    // projection of vector property onto facet normal in physical space (returns projection and determinant into arg4) (XYZ)
-    double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
-    double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<3U>& vc ) const;
+    /// integrates value of property over the sector
+    double64   SectorIntegral( size_t iSector, const csmp::Index& ) const;
 
-    // finite volume properties in physical space (XYZ)
+    /// reads value of vecvtor property and projects it onto facet normal in physical space; returns projected value
+    double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& )  const;
+
+    /// projects value of vector property onto facet normal in physical space; returns projection
+    double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<3U>& ) const;
+
+    /// returns subvolume of finite element that corresponds to the requested finite volume sector
     double64   SectorVolume( size_t iSector )     const;
+  
+    /// returns the area of the finite-volume facet in physical space as obtained by construction of facet in physical space
     double64   FacetArea( size_t iFacet )         const;
-    Point<3U>  FacetNormal( size_t iFacet )       const;
+  
+    /// returns the area of the finite volume facet in physical space as obtained by Jacobian transformation of area in parametric space
     double64   FacetAreaMapped( size_t iFacet )   const;
+
+    /// returns the unit normal to the finite-volume facet
+    Point<3U>  FacetNormal( size_t iFacet )       const;
+  
+    /// transforms the facet normal from parametric to physical space and normalises it to obtain a unit length
     Point<3U>  FacetNormalMapped( size_t iFacet ) const;
 
-    // finite volume properties in the parametric space of the reference finite element (RST)
-    // TODO: refactor so that these methods actually map the properties from parametric space to physical space
+    /// returns the facet area in parametric space
     double64   ParametricFacetArea( size_t iFacet ) const;
+  
+    /// returns the normal to the facet in parametric space
     const Point<3U>&  ParametricFacetNormal( size_t iFacet ) const;
 
+    // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:
-
     FiniteVolumeTraits( const SIMPLEX<3U>& );
-
 };
 
 
-/// partial specialization ( 2D )
-
+/// full specialization ( 2D )
 template<template<size_t> class SIMPLEX>
 class FiniteVolumeTraits<2U,SIMPLEX> {
-
   public:
-
     FiniteVolumeTraits();
-
-    // FV Stencil info
     size_t     Facets()  const;
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
     size_t     IntegrationPointsPerFacet()  const;
-
-    // mapping of integration point from local to global coordinates
     Point<2U>  RstToXYZ( const Point<2U>& rst ) const;
-
-    // shape function values and their derivatives at sector and facet integration points
     void       N_At( const Point<2U>& rst ) const;
     void       N_At( const Point<2U>& rst, std::vector<double64>& N )  const;
-    // initialize vector NRST (stored by the current finite element)
     void       N_AtFacetIntegrationPoint(  size_t iFacet,  size_t ip ) const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    // shape function derivatives in local coordinates
     void       Local_dN_At( const Point<2U>& rst ) const;
-    // shape function derivatives in global coordinates + detJ for integration
     double64   dN_At( const Point<2U>& rst, DenseMatrix<DM_MIN>& DN )  const;
-
-
-    // interpolate value of scalar node variable to facet/sector integration point (XYZ)
     double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
     double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
-    // interpolate value of any node variable to facet/sector integration point (XYZ)
     template<class Var>
     void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet, size_t ip,  Var& )    const;
     template<class Var>
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip, Var& )    const;
-
-    // facte and sector integrals
     double64   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
     double64   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
-
-    // projection of vector property onto facet normal in physical space (returns projection and determinant into arg4) (XYZ)
     double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
     double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<2U>& vc ) const;
-
-    // finite volume properties in physical space (XYZ)
     double64   SectorVolume( size_t iSector )     const;
     double64   FacetArea( size_t iFacet )         const;
     double64   FacetAreaMapped( size_t iFacet )   const;
     Point<2U>  FacetNormal( size_t iFacet )       const;
     Point<2U>  FacetNormalMapped( size_t iFacet ) const;
-
-    // finite volume properties in the parametric space of the reference finite element (RST)
     double64   ParametricFacetArea( size_t iFacet ) const;
     const Point<2U>&  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
-
     FiniteVolumeTraits( const SIMPLEX<2U>& );
-
 };
 
-/// partial specialization ( 1D )
-
+/// full specialization ( 1D )
 template<template<size_t> class SIMPLEX>
 class FiniteVolumeTraits<1U, SIMPLEX> {
-
   public:
-
     FiniteVolumeTraits();
-
-    // FV Stencil info
     size_t     Facets()  const;
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
     size_t     IntegrationPointsPerFacet()  const;
-
-    // mapping of integration point from local to global coordinates
     Point<1U>  RstToXYZ( const Point<1U>& rst ) const;
-
-    // shape function values and their derivatives at sector and facet integration points
     void       N_At( const Point<1U>& rst ) const;
     void       N_At( const Point<1U>& rst, std::vector<double64>& N )  const;
-    // initialize vector NRST (stored by the current finite element)
     void       N_AtFacetIntegrationPoint( size_t iFacet, size_t ip )   const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    // shape function derivatives in local coordinates
     void       Local_dN_At( const Point<1U>& rst ) const;
-    // shape function derivatives in global coordinates + detJ for integration
     double64   dN_At( const Point<1U>& rst, DenseMatrix<DM_MIN>& DN )  const;
-
-    // interpolate value of scalar node variable to facet/sector integration point (XYZ)
     double64   PropertyValueAtFacetIntegrationPoint(  size_t iFacet,  size_t ip, const csmp::Index& prop_key ) const;
     double64   PropertyValueAtSectorIntegrationPoint( size_t iSector, size_t ip, const csmp::Index& prop_key ) const;
-    // interpolate value of any node variable to facet/sector integration point (XYZ)
     template<class Var>
     void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, size_t iFacet, size_t ip,  Var& )    const;
     template<class Var>
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, size_t iSector, size_t ip,  Var& )   const;
-
-    // facet and sector integrals
     double64   FacetIntegral(  size_t iFacet,  const csmp::Index& prop_key ) const;
     double64   SectorIntegral( size_t iSector, const csmp::Index& prop_key ) const;
-
-    // projection of vector property onto facet normal in physical space (returns projection and determinant into arg4) (XYZ)
     double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& prop_key )  const;
     double64   ProjectionOnFacetNormal( size_t iFacet, const VectorVariable<1U>& vc ) const;
-
-    // finite volume properties in physical space (XYZ)
     double64   SectorVolume( size_t iSector )     const;
     double64   FacetArea( size_t iFacet )         const;
     double64   FacetAreaMapped( size_t iFacet )   const;
     Point<1U>  FacetNormal( size_t iFacet )       const;
     Point<1U>  FacetNormalMapped( size_t iFacet ) const;
-
-    // finite volume properties in the parametric space of the reference finite element (RST)
     double64   ParametricFacetArea( size_t iFacet )         const;
     const Point<1U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
-
     FiniteVolumeTraits( const SIMPLEX<1U>& );
-
 };
 
 } // end namespace 
