@@ -1,5 +1,5 @@
-#ifndef CSMP_COPY_REPLACE_VISITOR_H
-#define CSMP_COPY_REPLACE_VISITOR_H
+#ifndef CSMP_COPY_REPLACE_VISITOR_COMPUTE_H
+#define CSMP_COPY_REPLACE_VISITOR_COMPUTE_H
 
 #include "CSMP_definitions.h"
 #include "Visitor.h"
@@ -54,10 +54,4 @@ class CopyReplaceVisitor : public Visitor<dim> {
 
 
 #endif
-
-
-
-
-
-
 
