@@ -8,7 +8,7 @@
 #include "TestSuite.h"
 
 // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/  as a tutorial how to use with XCode
-#include "catch159.h"
+// #include "catch159.h"
 
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
