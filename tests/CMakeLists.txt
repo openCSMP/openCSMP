@@ -33,10 +33,11 @@ INCLUDE_DIRECTORIES(
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
 )
 
+enable_testing()
 FILE(GLOB TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp)
 ADD_EXECUTABLE(csmptest unit_tests_main.cpp ${TEST_SOURCES})
-ADD_TEST(NAME csmptest COMMAND csmptest)
 TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
+ADD_TEST(NAME csmptest COMMAND csmptest)
 
 
 
