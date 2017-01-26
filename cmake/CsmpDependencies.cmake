@@ -6,16 +6,19 @@ if (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
 endif (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
 
 find_package(PkgConfig)
-pkg_check_modules(PC_SAMG amg_mult)
 
 set(SAMG_DEFINITIONS ${PC_SAMG_CFLAGS_OTHER})
 
 find_path(SAMG_INCLUDE_DIR NAMES samg.h
     PATHS
+    ${PLATFORM_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/lib/samg
 )
 
-find_library(SAMG_LIBRARIES NAMES amg_mult
+find_library(SAMG_LIBRARIES
+    NAMES amg_mult ifcoremt ifportmt imf intlc iomp5 irc svml
     PATHS
+    ${PLATFORM_LIBS}
 )
 
 include(FindPackageHandleStandardArgs)
