@@ -9,6 +9,7 @@ set(PACKAGE_TARNAME "${PACKAGE_NAME}")
 set(CMAKE_MODULE_PATH ${csmp_api_SOURCE_DIR}/cmake)
 
 include(CsmpPlatform)
+include(CsmpDependencies)
 
 add_subdirectory(source)
 add_subdirectory(tests)
