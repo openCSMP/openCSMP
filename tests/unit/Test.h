@@ -18,9 +18,11 @@ using std::ostream;
 #include "catch.hpp"
 
 #define _test(cond) REQUIRE( (cond) )
-#define _fail(str) REQUIRE_FALSE( (str) )
+#define _fail(e) FAIL( e )
 #define _equal(expr,value,tol) REQUIRE( (expr) == Approx( (value) ).epsilon( (tol) ) )
 #define _succeed()
+#define _warn(e) WARN( e )
+#define _info(e) INFO( e )
 
 #else
 
@@ -28,8 +30,11 @@ using std::ostream;
 #define _fail(str) do_fail(str, __FILE__, __LINE__)
 #define _equal(expr,value,tol) do_equal(expr, value, tol, #expr " == " #value, __FILE__, __LINE__)
 #define _succeed() do_succeed()
+#define _warn(str) std::cout << e << '\n'
+#define _info(str) std::cout << e << '\n'
 
 #endif
+
 
 namespace csmp {
 

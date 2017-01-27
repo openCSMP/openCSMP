@@ -21,7 +21,7 @@ using namespace std;
 //sector integration point (rst to xyz test), facet integration point (rst to xyz test),
 //and total volume.
 //Rhino settings used for this test were:
-//Precision: 
+//Precision:
 //   - Absolute Tolerance: 1.e-7
 //   - Relative Tolerance: 1.e-7
 //   - Angle Tolerance: 0.001
@@ -31,21 +31,37 @@ using namespace std;
 
 namespace csmp {
 
-/**  Method:
- 
- 
-FiniteVolumeTraits_Test<dim>::FiniteVolumeTraits_Test() 
- 
- 
 
-Description: 
-Constructor. This function specifies which specific modalities of the test are on. 
-@section arguments Input Arguments 
+namespace {
+    template<size_t dim>
+    void dumpVector(const char* text, const Point<dim>& v)
+    {
+		if ( dim==3 )
+		{
+		    _info(text << "[" << v[0] << ", " << v[1] << ", " << v[2] << "]");
+		}
+		else
+        {
+		    _info(text << "[" << v[0] << ", " << v[1] << "]");
+        }
+    }
+}
+
+/**  Method:
+
+
+FiniteVolumeTraits_Test<dim>::FiniteVolumeTraits_Test()
+
+
+
+Description:
+Constructor. This function specifies which specific modalities of the test are on.
+@section arguments Input Arguments
 
 
 @section application Application
-The idea of this function is to control the test functionality in one place, in an easy, fast way. 
- 
+The idea of this function is to control the test functionality in one place, in an easy, fast way.
+
 tested: is a test function*/
 FiniteVolumeTraits_Test::FiniteVolumeTraits_Test()
  : m_bTestFacetAreas(true),
@@ -60,29 +76,29 @@ FiniteVolumeTraits_Test::FiniteVolumeTraits_Test()
 	and then the test would have been valid. The test was inconsistent.
 	*/
 	m_bPropertyValueAt(true),
-	m_bRSTToXYZ(true)      
-{ 
+	m_bRSTToXYZ(true)
+{
  }
- 
-/**  Method:
- 
- 
-void FiniteVolumeTraits_Test<dim>::Test_CreateVSet() 
- 
- 
 
-Description: 
+/**  Method:
+
+
+void FiniteVolumeTraits_Test<dim>::Test_CreateVSet()
+
+
+
+Description:
 This function tests the creation of a VSet (not related to the  class).
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 
- 
+
 tested: is a test function*/
 void FiniteVolumeTraits_Test::Test_CreateVSet()
 {
     const size_t iNodes(9);
     const size_t iNrOfElements(4);
-    
+
   	IsoparametricLinearQuadrilateral  iso_quadrilateral;
   	VSet<2U>  vset( 4U, 4U, ISOPARAMETRIC_LINEAR_QUADRILATERAL, iNodes, iNrOfElements );
 
@@ -90,7 +106,7 @@ void FiniteVolumeTraits_Test::Test_CreateVSet()
   	std::deque<double64> px(iNodes);
   	std::deque<double64> py(iNodes);
   	std::deque<double64> pz(iNodes);
-  
+
   	px[0]=0.;py[0]=0.;pz[0]=0.;
   	px[1]=1.;py[1]=0.;pz[1]=0.;
   	px[2]=2.;py[2]=0.;pz[2]=0.;
@@ -100,10 +116,10 @@ void FiniteVolumeTraits_Test::Test_CreateVSet()
   	px[6]=0.;py[6]=2.;pz[6]=0.;
   	px[7]=1.;py[7]=2.;pz[7]=0.;
   	px[8]=2.;py[8]=2.;pz[8]=0.;
-  	
+
   	//load nodes
   	vset.AddXYZ( px, py, pz );
-    
+
     //define elements
     std::deque<std::vector<size_t> > deqElements(iNrOfElements);
     std::vector<size_t> vecNodes(4);
@@ -127,7 +143,7 @@ void FiniteVolumeTraits_Test::Test_CreateVSet()
     vecNodes[2]=7;
     vecNodes[3]=6;
     deqElements[3]=vecNodes;
-    
+
     vset.AddPlist( deqElements.begin(),deqElements.end());
 
     //define neighbors
@@ -154,7 +170,7 @@ void FiniteVolumeTraits_Test::Test_CreateVSet()
     vecNeighbors[3]=LEFT_OUTSIDE;
     deqElementNeighbors[3]=vecNeighbors;
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
-  	
+
   	vset.AddBFlag( 0, CNR1 );
     vset.AddBFlag( 1, BOTTOM_OUTSIDE );
     vset.AddBFlag( 2, CNR2 );
@@ -163,59 +179,58 @@ void FiniteVolumeTraits_Test::Test_CreateVSet()
     vset.AddBFlag( 6, CNR4 );
 	  vset.AddBFlag( 7, TOP_OUTSIDE );
     vset.AddBFlag( 8, CNR3 );
-    
+
     vset.CheckFix();
     vset.Out();
-    
+
     //create the super group
    Model<2>  superGroup( vset, "fe_test_variables.txt", true );
-  
+
  	 VectorVariable<2> vVariable(PLAIN,PLAIN, sqrt(2.)/2., sqrt(2.)/2.);
-   cout << vVariable.Length();
-  
-  superGroup.InputPropertyValue( "velocity", vVariable ); 
+   _info(vVariable.Length());
+
+  superGroup.InputPropertyValue( "velocity", vVariable );
 }
 
- 
-/**  Method:
- 
- 
-FiniteVolumeTraits_Test<dim>::~FiniteVolumeTraits_Test() 
- 
- 
 
-Description: 
+/**  Method:
+
+
+FiniteVolumeTraits_Test<dim>::~FiniteVolumeTraits_Test()
+
+
+
+Description:
 Destructor.
-@section arguments Input Arguments 
+@section arguments Input Arguments
 None.
 @section application Application
 Nothing to destroy.
- 
+
 tested: is a test function*/
 FiniteVolumeTraits_Test::~FiniteVolumeTraits_Test()
  {
  }
- 
-/**  Method:
- 
- 
-void FiniteVolumeTraits_Test<dim>::run() 
- 
- 
 
-Description: 
+/**  Method:
+
+
+void FiniteVolumeTraits_Test<dim>::run()
+
+
+
+Description:
 Specifies the procedure of the test.
-@section arguments Input Arguments 
+@section arguments Input Arguments
 None.
 @section application Application
 Runs the tests.
- 
+
 tested: is a test function*/
 void FiniteVolumeTraits_Test::run() // runs all the tests for the class (register other methods)
  {
-  cout << endl;
-  cout << "---------------------------------------------------------------------" << endl;
-  cout << "Starting...FiniteVolumeTraits_Test::run()" << endl;
+  _info("---------------------------------------------------------------------");
+  _info("Starting...FiniteVolumeTraits_Test::run()");
 
 	IsoparametricLinearLineElement_Test(1.e-7,1.e-7);
 	IsoparametricLinearTriangle_Test<2U>(1.e-7,1.e-7);
@@ -233,20 +248,20 @@ void FiniteVolumeTraits_Test::run() // runs all the tests for the class (registe
 
 
 
-  cout << "Done...FiniteVolumeTraits_Test::run()" << endl;
-  cout << "---------------------------------------------------------------------" << endl;
- 	
+  _info("Done...FiniteVolumeTraits_Test::run()");
+  _info("---------------------------------------------------------------------");
+
  }
- 
+
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<dim>::IsoparametricLinearLineElement_Test(double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<dim>::IsoparametricLinearLineElement_Test(double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -264,28 +279,28 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Bar element, for all dimensions.
- 
+
 tested: is a test function*/
 void FiniteVolumeTraits_Test::IsoparametricLinearLineElement_Test(double64 fTolerance, double64)
  {
 	FiniteElement* feptr			= new IsoparametricLinearLineElement(1U);
 	FiniteVolumeStencil<1U>* fvptr	= new FiniteVolumeStencil<1U>("ISOPARAMETRIC_LINEAR_BAR");
-    
+
 	Element<1U>  elmt_( feptr );
  	elmt_.Assign( fvptr );
 
 	Node<1U>  node1, node2, node3;
-	
+
 	node1.Idx( 1 );
 	node1.x( -3. );
-	
+
 	node2.Idx( 2 );
 	node2.x( -2.3680806 );
-  
+
     const size_t dim(1);
 
 	if(dim > 1)
@@ -298,61 +313,61 @@ void FiniteVolumeTraits_Test::IsoparametricLinearLineElement_Test(double64 fTole
 		node1.z( 0. );
 		node2.z( 0. );
 	}
-	
+
 	elmt_.Idx( 1 );
 	elmt_.Assign( 0U, &node1 );
 	elmt_.Assign( 1U, &node2 );
-	
+
 	//test facet area
-	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	  {
-		
+
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
-		
+
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
-		
+
 	  }
 
 	if ( m_bTestParametricFacetArea )
 	  {
     double64 fArea = ( elmt_ ).ParametricFacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, elmt_.FV_Stencil()->FacetIntegrationWeight(0U,0U), fTolerance );
 	  }
 
 	//test sector volumes
-	//testing: fT   SectorVolume( size_t sector ) const; 
+	//testing: fT   SectorVolume( size_t sector ) const;
     double64 fVolSum(0.f);
-	
+
     if ( m_bTestSectorVolumes )
 	  {
     double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
-		cout << "Volume is: " << setprecision(15) << fSectorVolume << endl;
+		_info("Volume is: " << setprecision(15) << fSectorVolume);
 		if(dim == 1)
 			_equal( fSectorVolume, 0.3159597, fTolerance );
 		else
 			_equal( fSectorVolume, 1.2207746, fTolerance );
 		fVolSum += fSectorVolume;
-		
+
     fSectorVolume = ( elmt_ ).SectorVolume( 1U );
-		cout << "Volume is: " << fSectorVolume << endl;
+		_info("Volume is: " << fSectorVolume);
 		if(dim == 1)
 			_equal( fSectorVolume, 0.3159597, fTolerance );
 		else
 			_equal( fSectorVolume, 1.2207746, fTolerance );
 		fVolSum += fSectorVolume;
-	
+
 		//test if sector volumes add up to volume of element
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+		_info("Volume of the Element: " << elmt_.Volume());
+		_info("vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
 	  }
-	
+
 	if (m_bProjectionOnFacetNormal)
       {
 	   const size_t iNrOfFacets(elmt_.FV_Stencil()->Facets());
@@ -360,75 +375,75 @@ void FiniteVolumeTraits_Test::IsoparametricLinearLineElement_Test(double64 fTole
 	   {
 	     //const CSPINDEX& prop_key
 			 VectorVariable<1U> vVariable;
-	     for(size_t iD= 0U; iD < dim; iD++) {	
+	     for(size_t iD= 0U; iD < dim; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
-	     }	
-	 
+	     }
+
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
-	    
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
-	   }   
+	   }
      }
-     
+
    if(m_bRSTToXYZ)
    {
    	Point<dim> vecRST, vecXYZ;
 
-	//check facet integration points 
+	//check facet integration points
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(0U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-   
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.6840403 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.6840403);
     _equal(vecXYZ[0], -2.6840403, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.1791777 << endl;
+      _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.1791777);
       _equal(vecXYZ[1], 1.1791777, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
+
     //check sector integration points
     //sector 0
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(0U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-   
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.8420201 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.8420201);
     _equal(vecXYZ[0], -2.8420201, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.5895889 << endl;
+      _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 0.5895889);
       _equal(vecXYZ[1], 0.5895889, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
 
     //sector 1
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(1U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.5260604 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.5260604);
     _equal(vecXYZ[0], -2.5260604, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.7687666 << endl;
+      _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.7687666);
       _equal(vecXYZ[1], 1.7687666, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   }  
+   }
 
    delete feptr;
    delete fvptr;
@@ -437,14 +452,14 @@ void FiniteVolumeTraits_Test::IsoparametricLinearLineElement_Test(double64 fTole
 
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<dim>::IsoparametricLinearTriangle_Test(
-                     double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<dim>::IsoparametricLinearTriangle_Test(
+                     double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 
 Specifies the procedure of the test.
 
@@ -464,7 +479,7 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 
 double64 fTolerance - specifies the tolerance of the test
 
@@ -472,14 +487,14 @@ double64 fTolerance - specifies the tolerance of the test
 
 Runs the test for the Isoparametric Linear Triangle element, for all dimensions != 1.
 
- 
+
 tested: is a test function*/
-template<size_t dim> 
+template<size_t dim>
 void FiniteVolumeTraits_Test::IsoparametricLinearTriangle_Test(double64 fTolerance, double64 fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearTriangle(dim);
 	FiniteVolumeStencil<dim>* fvptr	= new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_TRIANGLE");
-	
+
 	Element<dim>  elmt_( feptr );
 	elmt_.Assign( fvptr );
 
@@ -498,86 +513,82 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		node3.y( 0.7660444 );
 
 	}
-	
+
 	elmt_.Idx( 1 );
 	elmt_.Assign( 0, &node1 );
 	elmt_.Assign( 1, &node2 );
 	elmt_.Assign( 2, &node3 );
 
 	//test facet area
-	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	  {
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.2733262, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 1U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.3287479, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 2U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.3399482, fTolerance );
-		
+
 		//test mapped vs original
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.2733262, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.3287479, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.3399482, fTolerance );
-		
+
 		//test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 	  for(size_t i = 0; i < 3; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearTriangle_Test: "; 
-		 
+		 file << "\nIsoparametricLinearTriangle_Test: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
-	
-		 file.close();	 
+
+		 file.close();
 	  }
 
 	//test facet area
-	//fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const; 
+	//fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const;
 	if ( m_bTestFacetNormals )
 	  {
 		csmp::Point<dim> vecNormal, vecNormalMapped;
-		
+
 		//ignore return parameter, jacobian
-		
+
 		//facet 0
     vecNormal = ( elmt_ ).FacetNormal(0U);
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-		if ( dim==3 )
-		{
-			cout << ", " << vecNormal[2] << "]" << endl;
-		}
-		else 
-			cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 		_equal( vecNormal[0], 0.2151953, fTolerance );
 		_equal( vecNormal[1], 0.9765710, fTolerance );
 		_equal( vecNormalMapped[0], 0.2151953, fTolerance );
@@ -586,46 +597,32 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		  _equal( vecNormal[2], 0., fTolerance );
 		if ( dim==3 )
 		  _equal( vecNormalMapped[2], 0., fTolerance );
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1];
-		if ( dim==3 )
-		{
-			cout << ", " << vecNormalMapped[2] << "]" << endl;
-		}
-		else 
-			cout << "]" << endl;
-		  
+
+        dumpVector<dim>("Mapped Normal is: ", vecNormalMapped);
+
 		//facet 1
     vecNormal = ( elmt_ ).FacetNormal(1U);
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-		if ( dim==3 )
-			cout << ", " << vecNormal[2] << "]" << endl;
-		else 
-			cout << "]" << endl;
-		_equal( vecNormal[0], -0.9861773, fTolerance );  
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
+		_equal( vecNormal[0], -0.9861773, fTolerance );
 		_equal( vecNormal[1], -0.1656933, fTolerance );
-		_equal( vecNormalMapped[0], -0.9861773, fTolerance );  
+		_equal( vecNormalMapped[0], -0.9861773, fTolerance );
 		_equal( vecNormalMapped[1], -0.1656933, fTolerance );
 		if ( dim==3 )
 		  _equal( vecNormal[2], 0, fTolerance );
 		if ( dim==3 )
 		  _equal( vecNormalMapped[2], 0, fTolerance );
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1];
-		if ( dim==3 )
-		{
-			cout << ", " << vecNormalMapped[2] << "]" << endl;
-		}
-		else 
-			cout << "]" << endl;
-		
+
+        dumpVector<dim>("Mapped Normal is: ", vecNormalMapped);
+
 		//facet 2
     vecNormal = ( elmt_ ).FacetNormal(2U);
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-		if ( dim==3 )
-			cout << ", " << vecNormal[2] << "]" << endl;
-		else 
-			cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 		_equal( vecNormal[0], 0.7806635, fTolerance );
 		_equal( vecNormal[1], -0.6249516, fTolerance );
 		_equal( vecNormalMapped[0], 0.7806635, fTolerance );
@@ -634,251 +631,241 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTriangle_Test(double64 fToleran
 		  _equal( vecNormal[2], 0, fTolerance );
 	  if ( dim==3 )
 		  _equal( vecNormalMapped[2], 0, fTolerance );
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1];
-		if ( dim==3 )
-		{
-			cout << ", " << vecNormalMapped[2] << "]" << endl;
-		}
-		else 
-			cout << "]" << endl;
-		}
-    
+
+        dumpVector<dim>("Mapped Normal is: ", vecNormalMapped);
+      }
+
     //test mapped vs computed
-    cout << "\nTest mapped normal vs computed.";
+    _info("Test mapped normal vs computed.");
 	  for(size_t i = 0; i < 3; i++)
-	    for(size_t j = 0; j < 3; j++) 
+	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearTriangle_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearTriangle_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 3; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
-		 
+
 	//test parametric facet area
-	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
         double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-				cout << "Area is: " << fArea << endl;
+				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
       }
 	  }
-	  
+
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const                                                                        
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<dim>  vecNormal;
-	
+
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-				cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-		    if ( dim==3 )
-					cout << ", " << vecNormal[2] << "]" << endl;
-		    else 
-					cout << "]" << endl;
-		    
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 		    _equal( vecNormal[0],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 		    _equal( vecNormal[1],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 		    if ( dim==3 )
 		      _equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
 		  }
 	  }
-	  
+
 	//test sector volumes
-	//testing: fT   SectorVolume( size_t sector ) const; 
+	//testing: fT   SectorVolume( size_t sector ) const;
 	if ( m_bTestSectorVolumes )
 	  {
 		double64 fVolSum(0.);
-		
+
     double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
-		cout << "Volume is: " << fSectorVolume << endl;
+		_info("Volume is: " << fSectorVolume);
 		_equal( fSectorVolume, 1./6., fTolerance );
 		fVolSum+=fSectorVolume;
-		
+
     fSectorVolume = ( elmt_ ).SectorVolume( 1U );
-		cout << "Volume is: " << fSectorVolume << endl;
+		_info("Volume is: " << fSectorVolume);
 		_equal( fSectorVolume, 1./6., fTolerance );
         fVolSum+=fSectorVolume;
-		
+
     fSectorVolume = ( elmt_ ).SectorVolume( 2U );
-		cout << "Volume is: " << fSectorVolume << endl;
-		_equal( fSectorVolume, 1./6., fTolerance );   
+		_info("Volume is: " << fSectorVolume);
+		_equal( fSectorVolume, 1./6., fTolerance );
 	    fVolSum+=fSectorVolume;
-		
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+
+		_info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
-	
+
 	  }
-   
+
    if(m_bProjectionOnFacetNormal)
    {
 	   const size_t iNrOfFacets(elmt_.FV_Stencil()->Facets());
 	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     VectorVariable<dim> vVariable;
-	     for(size_t iD= 0U; iD < dim; iD++) {	
+	     for(size_t iD= 0U; iD < dim; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
-	     }	
-	 
+	     }
+
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
-	   
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		_equal(fProjectionVal, fProjectionValP, fTolerance);
-	}   
+	}
    }
-   
+
    if(m_bRSTToXYZ)
    {
    	Point<dim> vecRST, vecXYZ;
 
-	  //check facet integration points 
+	  //check facet integration points
    	//facet 0
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(0U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.9754814 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.9754814);
     _equal(vecXYZ[0], -2.9754814, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.6189981 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.6189981);
       _equal(vecXYZ[1], 0.6189981, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
-   
+
+
     //facet 1
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(1U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.1361783 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.1361783);
     _equal(vecXYZ[0], -3.1361783, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.8105092 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.8105092);
       _equal(vecXYZ[1], 0.8105092, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
+
     //facet 2
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(2U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.2151682 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.2151682);
     _equal(vecXYZ[0], -3.2151682, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.5157148 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.5157148);
       _equal(vecXYZ[1], 0.5157148, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
+
     //check sector integration points
     //sector 0
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(0U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.0635499 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.0635499);
     _equal(vecXYZ[0],  -3.0635499, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.3782376 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.3782376);
       _equal(vecXYZ[1], 0.3782376, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
-    
+
+
     //sector 1
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(1U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.9319000 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.9319000);
     _equal(vecXYZ[0], -2.9319000, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.8695617 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.8695617);
       _equal(vecXYZ[1], 0.8695617, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
- 
+
     //sector 2
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(2U, 0U);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.3313780 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.3313780);
     _equal(vecXYZ[0], -3.3313780, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.6974228 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.6974228);
       _equal(vecXYZ[1], 0.6974228, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
-   }  
+
+   }
 
    delete feptr;
    delete fvptr;
 
 } //end test
-	
+
 
 
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<dim>::IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<dim>::IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -897,32 +884,32 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Quadrilateral element, for all dimensions != 1.
- 
+
 tested: is a test function*/
-template<size_t dim> 
+template<size_t dim>
 void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTolerance, double64 fToleranceInternal)
 {
-   
+
    FiniteElement* feptr			    = new IsoparametricLinearQuadrilateral(dim);
    FiniteVolumeStencil<dim>* fvptr	= new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_QUADRILATERAL");
-   
+
    csmp::Element<dim>  elmt_( feptr );
    elmt_.Assign( fvptr );
-   
+
    Node<dim>  node1, node2, node3, node4;
    {
 	  node1.Idx( 1 );
 	  node1.x( -3. );
 	  node1.y( 0. );
-	  
+
 	  node2.Idx( 2 );
 	  node2.x( -2.3680806 );
 	  node2.y( 2.3583554 );
-	  
+
 	  node3.Idx( 3 );
 	  node3.x( -3.6536558 );
 	  node3.y( 3.8904443 );
@@ -931,8 +918,8 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	  node4.x( -4.2855752 );
 	  node4.y( 1.5320889 );
     }
-  
-  	if ( dim == 3U ) 
+
+  	if ( dim == 3U )
   	{
 	  node1.z( 0. );
 	  node2.z( 0. );
@@ -947,82 +934,80 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	elmt_.Assign( 3, &node4 );
 
    //test facet area
-   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
     if ( m_bTestFacetAreas )
 	  {
       double64 fArea = ( elmt_ ).FacetArea( 0U );
-      cout << "Area is: " << fArea << endl;
+      _info("Area is: " << fArea);
 	    _equal( fArea, 1., fTolerance );
-	
+
       fArea = ( elmt_ ).FacetArea( 1U );
-			cout << "Area is: " << fArea << endl;
+			_info("Area is: " << fArea);
 	    _equal( fArea, 1.2207746, fTolerance );
-	
+
       fArea = ( elmt_ ).FacetArea( 2U );
-      cout << "Area is: " << fArea << endl;
+      _info("Area is: " << fArea);
 	   _equal( fArea, 1., fTolerance );
-	
+
       fArea = ( elmt_ ).FacetArea( 3U );
-      cout << "Area is: " << fArea << endl;
+      _info("Area is: " << fArea);
 	    _equal( fArea, 1.2207746, fTolerance );
-	    
+
 	    //mapped area
       double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-			cout << "Mapped Area is: " << fAreaMapped << endl;
+			_info("Mapped Area is: " << fAreaMapped);
 	    _equal( fAreaMapped, 1., fTolerance );
-	
+
       fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-			cout << "Mapped Area is: " << fAreaMapped << endl;
+			_info("Mapped Area is: " << fAreaMapped);
 	    _equal( fAreaMapped, 1.2207746, fTolerance );
-	
+
       fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-      cout << "Mapped Area is: " << fAreaMapped << endl;
+      _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 1., fTolerance );
-	
+
       fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-      cout << "Mapped Area is: " << fAreaMapped << endl;
+      _info("Mapped Area is: " << fAreaMapped);
 	    _equal( fAreaMapped, 1.2207746, fTolerance );
-	    
+
 	   //test mapped vs computed
-		 cout << "\nTest mapped area vs computed.";
+		 _info("Test mapped area vs computed.");
 	   for(size_t i = 0; i < 4; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearQuadrilateral_Test<" << dim<< ">: "; 
-		 
+		 file << "\nIsoparametricLinearQuadrilateral_Test<" << dim<< ">: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
      }
-   
+
    //test facet area
-   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const; 
+   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const;
    if ( m_bTestFacetNormals )
 	 {
 	   Point<dim> vecNormal, vecNormalMapped;
 	   /*ignore return parameter, jacobian*/
      vecNormal = ( elmt_ ).FacetNormal(0U);
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-	   if ( dim==3 )
-			cout << ", " << vecNormal[2] << "]" << endl;
-	   else 
-			cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 	   _equal( vecNormal[0], 0.7660444, fTolerance );
 	   _equal( vecNormal[1], 0.6427876, fTolerance );
 	   if ( dim==3 )
@@ -1031,14 +1016,12 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	   _equal( vecNormalMapped[1], 0.6427876, fTolerance );
 	   if ( dim==3 )
 	     _equal( vecNormalMapped[2], 0., fTolerance );
-	
+
      vecNormal = ( elmt_ ).FacetNormal(1U);
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-	   if ( dim==3 )
-			 cout << ", " << vecNormal[2] << "]" << endl;
-	   else 
-			 cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 	   _equal( vecNormal[0], -0.9659258, fTolerance );
 	   _equal( vecNormal[1], 0.2588190, fTolerance );
 	   if ( dim==3 )
@@ -1047,14 +1030,12 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	   _equal( vecNormalMapped[1], 0.2588190, fTolerance );
 	   if ( dim==3 )
 	     _equal( vecNormalMapped[2], 0., fTolerance );
-	   
+
      vecNormal = ( elmt_ ).FacetNormal(2U);
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-	   if ( dim==3 )
-				cout << ", " << vecNormal[2] << "]" << endl;
-	   else 
-			 cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 	   _equal( vecNormal[0], -0.7660444, fTolerance );
 	   _equal( vecNormal[1], -0.6427876, fTolerance );
 	   if ( dim==3 )
@@ -1063,14 +1044,12 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	   _equal( vecNormalMapped[1], -0.6427876, fTolerance );
 	   if ( dim==3 )
 	     _equal( vecNormalMapped[2], 0., fTolerance );
-	   
+
      vecNormal = ( elmt_ ).FacetNormal(3U);
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-	   if ( dim==3 )
-			 cout << ", " << vecNormal[2] << "]" << endl;
-	   else 
-		cout << "]" << endl;
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 	  _equal( vecNormal[0], 0.9659258, fTolerance );
 	  _equal( vecNormal[1], -0.2588190, fTolerance );
 	  if ( dim==3 )
@@ -1079,101 +1058,97 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	  _equal( vecNormalMapped[1], -0.2588190, fTolerance );
 	  if ( dim==3 )
 	    _equal( vecNormalMapped[2], 0., fTolerance );
-	    
+
 	    //test mapped vs computed
-		cout << "\nTest mapped normal vs computed.";
+		_info("Test mapped normal vs computed.");
 	  for(size_t i = 0; i < 4; i++)
-	    for(size_t j = 0; j < 3; j++) 
+	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearQuadrilateral_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearQuadrilateral_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 4; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
 	 }
-   
+
 	//test parametric facet area
-	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
         double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-				cout << "Area is: " << fArea << endl;
+				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
-	  
+
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const                                                                        
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<dim> vecNormal;
-	
+
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-				cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1];
-		    if ( dim==3 )
-					cout << ", " << vecNormal[2] << "]" << endl;
-		    else 
-					cout << "]" << endl;
-		    
+
+        dumpVector<dim>("Normal is: ", vecNormal);
+
 		    _equal( vecNormal[0],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 		    _equal( vecNormal[1],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 		    if ( dim==3 )
 		      _equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
 		  }
 	  }
-	  
+
    //test sector volumes
-   //testing: fT   SectorVolume( size_t sector ) const; 
+   //testing: fT   SectorVolume( size_t sector ) const;
    if ( m_bTestSectorVolumes )
 	 {
 	   double64 fVolSum(0.);
-	   
+
      double64 fSectorVolume = ( elmt_ ).SectorVolume( 0U );
-		 cout << "Volume is: " << fSectorVolume << endl;
+		 _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1., fTolerance );
 	   fVolSum+=fSectorVolume;
 
      fSectorVolume = ( elmt_ ).SectorVolume( 1U );
-     cout << "Volume is: " << fSectorVolume << endl;
+     _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1., fTolerance );
      fVolSum+=fSectorVolume;
 
      fSectorVolume = ( elmt_ ).SectorVolume( 2U );
-		 cout << "Volume is: " << fSectorVolume << endl;
+		 _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1., fTolerance );
 	   fVolSum+=fSectorVolume;
-	
+
      fSectorVolume = ( elmt_ ).SectorVolume( 3U );
-		 cout << "Volume is: " << fSectorVolume << endl;
+		 _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1., fTolerance );
      fVolSum+=fSectorVolume;
-		
-		 cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		 cout << "vs Volume Sum: " << fVolSum << endl;
+
+		 _info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 	   _equal(fVolSum, elmt_.Volume(), fTolerance);
 	 }
-   
+
    if(m_bProjectionOnFacetNormal)
    {
 	   const size_t iNrOfFacets(elmt_.FV_Stencil()->Facets());
@@ -1181,169 +1156,169 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 	   {
 	     VectorVariable<dim> vVariable;
 	     vVariable=3.;
-	     
-			 cout << "LENGTH::::::::" << vVariable.Length() << endl;
-	     
+
+			 _info("LENGTH::::::::" << vVariable.Length());
+
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
-	   
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		  _equal(fProjectionVal, fProjectionValP, fTolerance);
-	   }   
+	   }
    }
-   
+
      if(m_bRSTToXYZ)
    {
    	elmt_.CoordinateMatrix();
-	
+
    	Point<dim> vecRST, vecXYZ;
 
-	  //check facet integration points 
+	  //check facet integration points
    	//facet 0
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.0054341 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.0054341);
     _equal(vecXYZ[0], -3.0054341, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.5621999 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.5621999);
       _equal(vecXYZ[1], 1.5621999, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
+
     //facet 1
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.1688480 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.1688480);
     _equal(vecXYZ[0],  -3.1688480, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.5348110 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.5348110);
       _equal(vecXYZ[1], 2.5348110, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
+
     //facet 2
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.6482217 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.6482217);
     _equal(vecXYZ[0], -3.6482217, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.3282444 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.3282444);
       _equal(vecXYZ[1], 2.3282444, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   
+
     //facet 3
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.4848078 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.4848078);
     _equal(vecXYZ[0], -3.4848078, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.3556333 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.3556333);
       _equal(vecXYZ[1], 1.3556333, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
+
     //check sector integration points
     //sector 0
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.16341395 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.16341395);
     _equal(vecXYZ[0], -3.16341395, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.972611073 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.972611073);
       _equal(vecXYZ[1], 0.972611073, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
+
     //sector 1
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.8474542 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.8474542);
     _equal(vecXYZ[0],  -2.8474542, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.1517888 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.1517888);
       _equal(vecXYZ[1], 2.1517888, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
- 
+
     //sector 2
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.4902418 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.4902418);
     _equal(vecXYZ[0], -3.4902418, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.9178332 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 2.9178332);
       _equal(vecXYZ[1], 2.9178332, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-    
+
     //sector 3
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.80620156 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -3.80620156);
     _equal(vecXYZ[0], -3.80620156, fTolerance);
     if ( dim > 1 )
     {
-      cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.73865552 << endl;
+      _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 1.73865552);
       _equal(vecXYZ[1], 1.73865552, fTolerance);
     }
     if ( dim > 2 )
     {
-      cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0. << endl;
+      _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.);
       _equal(vecXYZ[2], 0., fTolerance);
     }
-   }  
+   }
 
    delete feptr;
    delete fvptr;
@@ -1354,13 +1329,13 @@ void FiniteVolumeTraits_Test::IsoparametricLinearQuadrilateral_Test(double64 fTo
 
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<3>::IsoparametricLinearTetrahedron_Test(double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<3>::IsoparametricLinearTetrahedron_Test(double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -1379,37 +1354,37 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Tetrahedron element, for 3D.
- 
+
 tested: is a test function*/
 void FiniteVolumeTraits_Test::IsoparametricLinearTetrahedron_Test( double64 fTolerance, double64 fToleranceInternal )
 {
    FiniteElement* feptr			    = new IsoparametricLinearTetrahedron();
    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3U>("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
-	
+
    Element<3U>  elmt_( feptr );
    elmt_.Assign( fvptr );
-   
+
    Node<3U>  node1, node2, node3, node4;
    {
 	  node1.Idx( 1 );
 	  node1.x( -3. );
 	  node1.y( 0. );
 	  node1.z( 0. );
-	  
+
 	  node2.Idx( 2 );
 	  node2.x( -2.1691958 );
 	  node2.y( 0.8889046 );
 	  node2.z( -0.0995164 );
-	  
+
 	  node3.Idx( 3 );
 	  node3.x( -3.1084262 );
 	  node3.y( 0.8216875 );
 	  node3.z( 0.6190235 );
-	  
+
 	  node4.Idx( 4 );
 	  node4.x( -2.8077164 );
 	  node4.y( -0.5393590 );
@@ -1421,228 +1396,228 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 	elmt_.Assign( 1, &node2 );
 	elmt_.Assign( 2, &node3 );
 	elmt_.Assign( 3, &node4 );
-	
+
    //test facet area
-   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
    if ( m_bTestFacetAreas )
 	 {
      double64 fArea = ( elmt_ ).FacetArea( 0U );
-     cout << "Area is: " << setprecision(15) << fArea << endl;
+     _info("Area is: " << setprecision(15) << fArea);
 	   _equal( fArea, 0.0979896825, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 1U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.0760544993, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 2U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.0917751512, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 3U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.109391786, fTolerance );
-      
+
        fArea = ( elmt_ ).FacetArea( 4U );
-     cout << "Area is: " << fArea << endl;
+     _info("Area is: " << fArea);
 	   _equal( fArea, 0.0491005164, fTolerance );
-      
+
        fArea = ( elmt_ ).FacetArea( 5U );
-     cout << "Area is: " << fArea << endl;
+     _info("Area is: " << fArea);
 	   _equal( fArea, 0.0722797155, fTolerance );
-	   
+
 	   //mapped area
      double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		 cout << "Mapped Area is: " << setprecision(15) << fAreaMapped << endl;
+		 _info("Mapped Area is: " << setprecision(15) << fAreaMapped);
 	   _equal( fAreaMapped, 0.0979896825, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.0760544993, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.0917751512, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.109391786, fTolerance );
-      
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-     cout << "Mapped Area is: " << fAreaMapped << endl;
+     _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.0491005164, fTolerance );
-      
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-     cout << "Mapped Area is: " << fAreaMapped << endl;
+     _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.0722797155, fTolerance );
-	   
+
 	  //test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 	  for(size_t i = 0; i < 6; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearTetrahedron_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearTetrahedron_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
      }
-   
+
    //test facet area
-   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const; 
+   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const;
    if ( m_bTestFacetNormals )
 	 {
      Point<3U> vecNormal;
-     
+
 	   /*ignore return parameter, jacobian*/
      vecNormal = ( elmt_ ).FacetNormal(0U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], 0.8254335, fTolerance );
 	   _equal( vecNormal[1], 0.2423141, fTolerance );
 	   _equal( vecNormal[2], 0.5098465, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(1U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], -0.8835900, fTolerance );
 	   _equal( vecNormal[1], 0.2535847, fTolerance );
 	   _equal( vecNormal[2], 0.3936540, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(2U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], -0.1490923, fTolerance );
 	    _equal( vecNormal[1], -0.4688692, fTolerance );
 	   _equal( vecNormal[2], -0.8705936, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(3U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], 0.6091387, fTolerance );
 	   _equal( vecNormal[1], -0.0522324, fTolerance );
 	   _equal( vecNormal[2], 0.7913418, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(4U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], -0.2902046, fTolerance );
 	   _equal( vecNormal[1], -0.5999545, fTolerance );
 	   _equal( vecNormal[2], 0.7455440, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(5U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 	   _equal( vecNormal[0], 0.7325956, fTolerance );
 	   _equal( vecNormal[1], -0.6743846, fTolerance );
-	   _equal( vecNormal[2], 0.0922449, fTolerance );	  
-	   
+	   _equal( vecNormal[2], 0.0922449, fTolerance );
+
 	   //mapped normals
 	   Point<3U> vecNormalMapped;
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		 cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], 0.8254335, fTolerance );
 	   _equal( vecNormalMapped[1], 0.2423141, fTolerance );
 	   _equal( vecNormalMapped[2], 0.5098465, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], -0.8835900, fTolerance );
 	   _equal( vecNormalMapped[1], 0.2535847, fTolerance );
 	   _equal( vecNormalMapped[2], 0.3936540, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], -0.1490923, fTolerance );
 	    _equal( vecNormalMapped[1], -0.4688692, fTolerance );
 	   _equal( vecNormalMapped[2], -0.8705936, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], 0.6091387, fTolerance );
 	   _equal( vecNormalMapped[1], -0.0522324, fTolerance );
 	   _equal( vecNormalMapped[2], 0.7913418, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], -0.2902046, fTolerance );
 	   _equal( vecNormalMapped[1], -0.5999545, fTolerance );
 	   _equal( vecNormalMapped[2], 0.7455440, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Mapped Normal is: ", vecNormalMapped);
 	   _equal( vecNormalMapped[0], 0.7325956, fTolerance );
 	   _equal( vecNormalMapped[1], -0.6743846, fTolerance );
-	   _equal( vecNormalMapped[2], 0.0922449, fTolerance );	  
-	   
+	   _equal( vecNormalMapped[2], 0.0922449, fTolerance );
+
 	   //test mapped vs computed
-		cout << "\nTest mapped normal vs computed.";
+		_info("Test mapped normal vs computed.");
 	  for(size_t i = 0; i < 6; i++)
-	    for(size_t j = 0; j < 3; j++) 
+	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearTetrahedron_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearTetrahedron_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < 6; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
-     }   
-       
+     }
+
 	//test parametric facet area
-	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
         double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-				cout << "Area is: " << fArea << endl;
+				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
-	  
+
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const                                                                        
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<3U> vecNormal;
-	
+
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-				cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
-		   
+            dumpVector<3>("Normal is: ", vecNormal);
+
 		    _equal( vecNormal[0], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 		    _equal( vecNormal[1], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 		    _equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
 		  }
 	  }
-	      
+
    //test sector volumes
-   //testing: fT   SectorVolume( size_t sector ) const; 
+   //testing: fT   SectorVolume( size_t sector ) const;
     if ( m_bTestSectorVolumes )
 	 {
        double64 fVolSum(0.);
@@ -1650,16 +1625,15 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 	   for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors(); iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-				 //cout << "Volume is: " << fSectorVolume << endl;
+				 //_info("Volume is: " << fSectorVolume);
 	       _equal( fSectorVolume, 0.041666666666667, fTolerance );
 	       fVolSum+=fSectorVolume;
 	   }
 
-		 cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		 cout << "vs Volume Sum: " << fVolSum << endl;
+		 _info("Volume of the Element: " << elmt_.Volume() << "vs Volume Sum: " << fVolSum);
 	   _equal(fVolSum, elmt_.Volume(), fTolerance);
-     }   
-       
+     }
+
       if(m_bProjectionOnFacetNormal)
      {
 	   const size_t iNrOfFacets(elmt_.FV_Stencil()->Facets());
@@ -1668,153 +1642,153 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 	     //const CSPINDEX& prop_key
 	     VectorVariable<3> vVariable;
 	     vVariable=3.;
-	    
-			 cout << "LENGTH::::::::" << vVariable.Length() << endl;
-	    
+
+			 _info("LENGTH::::::::" << vVariable.Length());
+
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
-	   
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
   		_equal(fProjectionVal, fProjectionValP, fTolerance);
-	   }   
-   }    
-   
+	   }
+   }
+
    if(m_bRSTToXYZ)
    {
    	elmt_.CoordinateMatrix();
-	
+
 	  Point<3U> vecRST, vecXYZ;
-   	
-	//check facet integration points 
+
+	//check facet integration points
    	//facet 0
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.6884298  << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.6884298 );
     _equal(vecXYZ[0],-2.68834051, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.3606430 << endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.3606430);
     _equal(vecXYZ[1], 0.360205629, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.1581760 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.1581760);
     _equal(vecXYZ[2], 0.158239294, fTolerance);
-    
+
     //facet 1
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.71243522 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.71243522);
     _equal(vecXYZ[0], -2.71243522, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.542802848 << endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.542802848);
     _equal(vecXYZ[1],0.542802848, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.29580007 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.29580007);
     _equal(vecXYZ[2], 0.29580007, fTolerance);
-    
+
     //facet 2
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.89705838 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.89705838);
     _equal(vecXYZ[0], -2.89705838, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.345268485 << endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.345268485);
     _equal(vecXYZ[1],0.345268485, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.317914821 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.317914821);
     _equal(vecXYZ[2], 0.317914821, fTolerance);
-    
+
     //facet 3
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.83023398 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.83023398);
     _equal(vecXYZ[0], -2.83023398, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.0428137098 << endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.0428137098);
     _equal(vecXYZ[1],0.0428137098, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.353474481 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.353474481);
     _equal(vecXYZ[2], 0.353474481, fTolerance);
-    
+
     //facet 4
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(4U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.64561082 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.64561082);
     _equal(vecXYZ[0], -2.64561082, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.240348073<< endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.240348073);
     _equal(vecXYZ[1],0.240348073, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.331359733 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.331359733);
     _equal(vecXYZ[2], 0.331359733, fTolerance);
-    
+
     //facet 5
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(5U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.85432869 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.85432869);
     _equal(vecXYZ[0], -2.85432869, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.225410929<< endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.225410929);
     _equal(vecXYZ[1],0.225410929, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.491035259 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.491035259);
     _equal(vecXYZ[2],0.491035259, fTolerance);
-    
+
     //check sector integration points
     //sector 0
-    cout << "Sector 0" << endl;
+    _info("Sector 0");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.85390822 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.85390822);
     _equal(vecXYZ[0], -2.85390822, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.187071956 << endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " << 0.187071956);
     _equal(vecXYZ[1],0.187071956, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.207407149 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.207407149);
     _equal(vecXYZ[2], 0.207407149, fTolerance);
-    
+
     //sector 1
-    cout << "Sector 1" << endl;
+    _info("Sector 1");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.55389558 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.55389558);
     _equal(vecXYZ[0], -2.55389558, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.508065295<< endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.508065295);
     _equal(vecXYZ[1],0.508065295, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.171470682 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.171470682);
     _equal(vecXYZ[2], 0.171470682, fTolerance);
-    
+
     //sector 2
-    cout << "Sector 2" << endl;
+    _info("Sector 2");
 
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.89306212 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.89306212);
     _equal(vecXYZ[0], -2.89306212, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.483792436<< endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<0.483792436);
     _equal(vecXYZ[1],0.483792436, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.430943413 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.430943413);
     _equal(vecXYZ[2], 0.430943413, fTolerance);
-    
+
 	  //sector 3
-		cout << "Sector 3" << endl;
+		_info("Sector 3");
 
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.78447248 << endl;
+
+    _info("vecXYZ[0]" << vecXYZ[0] << " vs. " << -2.78447248);
     _equal(vecXYZ[0],-2.78447248, fTolerance);
-    cout << "vecXYZ[1]" << vecXYZ[1] << " vs. " <<-0.00769657293<< endl;
+    _info("vecXYZ[1]" << vecXYZ[1] << " vs. " <<-0.00769657293);
     _equal(vecXYZ[1],-0.00769657293, fTolerance);
-    cout << "vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.488727862 << endl;
+    _info("vecXYZ[2]" << vecXYZ[2] << " vs. " << 0.488727862);
     _equal(vecXYZ[2], 0.488727862, fTolerance);
-    
-   }  
-	
+
+   }
+
    delete feptr;
    delete fvptr;
 
@@ -1824,13 +1798,13 @@ void FiniteVolumeTraits_Test::IsoparametricLinearTetrahedron_Test( double64 fTol
 
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<3>::IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<3>::IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -1849,43 +1823,43 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Pyramid element, for 3D.
- 
+
 tested: is a test function*/
 void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fTolerance, double64 fToleranceInternal)
 {
 
    FiniteElement* feptr			    = new IsoparametricLinearPyramid();
    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3U>("ISOPARAMETRIC_LINEAR_PYRAMID");
-	
+
    Element<3U>  elmt_( feptr );
    elmt_.Assign( fvptr );
-   
+
    Node<3U>  node1, node2, node3, node4, node5;
    {
 	  node1.Idx( 1 );
 	  node1.x( -3. );
 	  node1.y( 0. );
 	  node1.z( 0. );
-	  
+
 	  node2.Idx( 2 );
 	  node2.x( -1. );
 	  node2.y( 1.4004151 );
 	  node2.z( 0. );
-	  
+
 	  node3.Idx( 3 );
 	  node3.x( -1. );
 	  node3.y( 2.9325040 );
 	  node3.z( 1.2855752 );
-	
+
     node4.Idx( 4 );
 	  node4.x( -3. );
 	  node4.y( 1.5320889 );
 	  node4.z( 1.2855752 );
-		
+
 	  node5.Idx( 5 );
 	  node5.x( -2. );
 	  node5.y( 0.8234644 );
@@ -1898,228 +1872,228 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 	elmt_.Assign( 2, &node3 );
 	elmt_.Assign( 3, &node4 );
 	elmt_.Assign( 4, &node5 );
-	
+
   const size_t nr_of_facets = elmt_.FV_Stencil()->Facets();
-  
+
    //test facet area
-   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+   //testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
    if ( m_bTestFacetAreas )
 	 {
        double64 fArea = ( elmt_ ).FacetArea( 0U );
-     cout << "Area is: " << fArea << endl;
+     _info("Area is: " << fArea);
 	   _equal( fArea, 0.25, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 1U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.283693754, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 2U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.25, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 3U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.283693754, fTolerance );
 
 	   //---
 #ifndef PYRAMID_TRIANGULAR_FACETS
      fArea = ( elmt_ ).FacetArea( 4U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.3919809523, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 5U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.3442955048, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 6U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.3611982773, fTolerance );
 
      fArea = ( elmt_ ).FacetArea( 7U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.4420105594, fTolerance );
 #else
      fArea = ( elmt_ ).FacetArea( 4U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.188595316, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 5U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.210174764, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 6U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.167969043, fTolerance );
 
      fArea = ( elmt_ ).FacetArea( 7U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.179194629, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 8U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.198434434, fTolerance );
-       
+
      fArea = ( elmt_ ).FacetArea( 9U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.169625972, fTolerance );
-	   
+
      fArea = ( elmt_ ).FacetArea( 10U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.224321642, fTolerance );
 
      fArea = ( elmt_ ).FacetArea( 11U );
-		 cout << "Area is: " << fArea << endl;
+		 _info("Area is: " << fArea);
 	   _equal( fArea, 0.220047949, fTolerance );
-#endif	
-   
+#endif
+
 	   //Mapped Area
      double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.25, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.283693754, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.25, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.283693754, fTolerance );
 
 //---
 #ifndef PYRAMID_TRIANGULAR_FACETS
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.3919809523, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.3442955048, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.3611982773, fTolerance );
 
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.4420105594, fTolerance );
 #else
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-     cout << "Mapped Area is: " << fAreaMapped << endl;
+     _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.188595316, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.210174764, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.167969043, fTolerance );
 
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.179194629, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 8U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.198434434, fTolerance );
-       
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 9U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.169625972, fTolerance );
-	   
+
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 10U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.224321642, fTolerance );
 
      fAreaMapped = ( elmt_ ).FacetAreaMapped( 11U );
-		 cout << "Mapped Area is: " << fAreaMapped << endl;
+		 _info("Mapped Area is: " << fAreaMapped);
 	   _equal( fAreaMapped, 0.220047949, fTolerance );
 #endif
-     
+
      //test mapped vs computed
-    cout << "\nTest mapped area vs computed.";
+    _info("Test mapped area vs computed.");
 	  for(size_t i = 0; i < nr_of_facets; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearPyramid_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearPyramid_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
    }
-   
-      
+
+
    //test facet area
-   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const; 
+   //fT   FacetNormal( size_t surface, size_t ip, fT* nrml ) const;
    if ( m_bTestFacetNormals )
 	 {
 	   Point<3U> vecNormal;
-       
+
      vecNormal = ( elmt_ ).FacetNormal(0U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		 _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 1., fTolerance );
 	   _equal( vecNormal[1], 0., fTolerance );
 	   _equal( vecNormal[2], 0., fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(1U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		 _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0],  -0.4726841, fTolerance );
 	   _equal( vecNormal[1], 0.6750628, fTolerance );
 	   _equal( vecNormal[2], 0.5664450, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(2U);
-		 cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		 _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], -1., fTolerance );
 	   _equal( vecNormal[1], 0., fTolerance );
 	   _equal( vecNormal[2], 0., fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(3U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.4726841, fTolerance );
 	   _equal( vecNormal[1], -0.6750628, fTolerance );
 	   _equal( vecNormal[2], -0.5664450, fTolerance );
-       
+
 //---
 #ifndef PYRAMID_TRIANGULAR_FACETS
      vecNormal = ( elmt_ ).FacetNormal(4U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.4813050332, fTolerance );
 	   _equal( vecNormal[1], -0.3837571776, fTolerance );
 	   _equal( vecNormal[2], 0.7880836845, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(5U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.06388619905, fTolerance );
 	   _equal( vecNormal[1], -0.4369081457, fTolerance );
 	   _equal( vecNormal[2], 0.8972345432, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(6U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.3084014915, fTolerance );
 	   _equal( vecNormal[1], -0.7699360282, fTolerance );
 	   _equal( vecNormal[2], 0.5586475025, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(7U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.6290817090, fTolerance );
 	   _equal( vecNormal[1], -0.6291695223, fTolerance );
 	   _equal( vecNormal[2], 0.4565105864, fTolerance );
@@ -2127,107 +2101,107 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
      //overload tolerance for this bit
      {
      const double64 fTolerance = 1.e-6;
-     
+
      vecNormal = ( elmt_ ).FacetNormal(4U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.330459, fTolerance );
 	   _equal( vecNormal[1], -0.314183, fTolerance );
 	   _equal( vecNormal[2], 0.889992, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(5U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.601116, fTolerance );
 	   _equal( vecNormal[1], -0.433791, fTolerance );
 	   _equal( vecNormal[2], 0.671182, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(6U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.00797366, fTolerance );
 	   _equal( vecNormal[1], -0.542791, fTolerance );
 	   _equal( vecNormal[2], 0.83983, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(7U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.115274, fTolerance );
 	   _equal( vecNormal[1], -0.330666, fTolerance );
 	   _equal( vecNormal[2], 0.936682, fTolerance );
-	   
+
      vecNormal = ( elmt_ ).FacetNormal(8U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.441986, fTolerance );
 	   _equal( vecNormal[1], -0.78116, fTolerance );
 	   _equal( vecNormal[2], 0.440951, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(9U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.139654, fTolerance );
 	   _equal( vecNormal[1], -0.725658, fTolerance );
 	   _equal( vecNormal[2], 0.673733, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(10U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.662838, fTolerance );
 	   _equal( vecNormal[1], -0.548723, fTolerance );
 	   _equal( vecNormal[2], 0.509459, fTolerance );
-       
+
      vecNormal = ( elmt_ ).FacetNormal(11U);
-     cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+     _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 	   _equal( vecNormal[0], 0.587926, fTolerance );
 	   _equal( vecNormal[1], -0.704433, fTolerance );
 	   _equal( vecNormal[2], 0.39764, fTolerance );
-	   
+
 	   } //end of overloading tolerance
 #endif
-	   
+
 	   //mapped normals
 	   Point<3U> vecNormalMapped;
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		 cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		 _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 1., fTolerance );
 	   _equal( vecNormalMapped[1], 0., fTolerance );
 	   _equal( vecNormalMapped[2], 0., fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		 cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		 _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0],  -0.4726841, fTolerance );
 	   _equal( vecNormalMapped[1], 0.6750628, fTolerance );
 	   _equal( vecNormalMapped[2], 0.5664450, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		 cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		 _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], -1., fTolerance );
 	   _equal( vecNormalMapped[1], 0., fTolerance );
 	   _equal( vecNormalMapped[2], 0., fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.4726841, fTolerance );
 	   _equal( vecNormalMapped[1], -0.6750628, fTolerance );
 	   _equal( vecNormalMapped[2], -0.5664450, fTolerance );
 
 //---
-#ifndef PYRAMID_TRIANGULAR_FACETS       
+#ifndef PYRAMID_TRIANGULAR_FACETS
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.4813050332, fTolerance );
 	   _equal( vecNormalMapped[1], -0.3837571776, fTolerance );
 	   _equal( vecNormalMapped[2], 0.7880836845, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.06388619905, fTolerance );
 	   _equal( vecNormalMapped[1], -0.4369081457, fTolerance );
 	   _equal( vecNormalMapped[2], 0.8972345432, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.3084014915, fTolerance );
 	   _equal( vecNormalMapped[1], -0.7699360282, fTolerance );
 	   _equal( vecNormalMapped[2], 0.5586475025, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.6290817090, fTolerance );
 	   _equal( vecNormalMapped[1], -0.6291695223, fTolerance );
 	   _equal( vecNormalMapped[2], 0.4565105864, fTolerance );
@@ -2235,119 +2209,119 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
      //overload tolerance for this bit
      {
      const double64 fTolerance = 1.e-6;
-     
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.330459, fTolerance );
 	   _equal( vecNormalMapped[1], -0.314183, fTolerance );
 	   _equal( vecNormalMapped[2], 0.889992, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.601116, fTolerance );
 	   _equal( vecNormalMapped[1], -0.433791, fTolerance );
 	   _equal( vecNormalMapped[2], 0.671182, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.00797366, fTolerance );
 	   _equal( vecNormalMapped[1], -0.542791, fTolerance );
 	   _equal( vecNormalMapped[2], 0.83983, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.115274, fTolerance );
 	   _equal( vecNormalMapped[1], -0.330666, fTolerance );
 	   _equal( vecNormalMapped[2], 0.936682, fTolerance );
-	   
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(8U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.441986, fTolerance );
 	   _equal( vecNormalMapped[1], -0.78116, fTolerance );
 	   _equal( vecNormalMapped[2], 0.440951, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(9U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.139654, fTolerance );
 	   _equal( vecNormalMapped[1], -0.725658, fTolerance );
 	   _equal( vecNormalMapped[2], 0.673733, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(10U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.662838, fTolerance );
 	   _equal( vecNormalMapped[1], -0.548723, fTolerance );
 	   _equal( vecNormalMapped[2], 0.509459, fTolerance );
-       
+
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(11U);
-     cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+     _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 	   _equal( vecNormalMapped[0], 0.587926, fTolerance );
 	   _equal( vecNormalMapped[1], -0.704433, fTolerance );
 	   _equal( vecNormalMapped[2], 0.39764, fTolerance );
 	   }
-#endif	   
+#endif
 
 	   //test mapped vs computed
-		 cout << "\nTest mapped normal vs computed., tolerance: " << fToleranceInternal;
-	   
+		 _info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
+
 	   for(size_t i = 0; i < nr_of_facets; i++)
 	   {
-			cout << "\nNormal " << i << ":";
-	    for(size_t j = 0; j < 3; j++) 
-       cout << ( elmt_ ).FacetNormal( i )[j] << " ";
-			cout << " vs ";
-	    for(size_t j = 0; j < 3; j++) 
-       cout << ( elmt_ ).FacetNormalMapped( i )[j] << " ";
+			_info("Normal " << i << ":");
+	    for(size_t j = 0; j < 3; j++)
+       _info(( elmt_ ).FacetNormal( i )[j] << " ");
+			_info(" vs ");
+	    for(size_t j = 0; j < 3; j++)
+       _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 	   }
-	   
+
 	   for(size_t i = 0; i < nr_of_facets; i++)
-	    for(size_t j = 0; j < 3; j++) 
+	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
-		
+
 		 //compare time computed vs mapped
 		 ofstream file ("speed_compare.txt", ios::out|ios::app);
 		 size_t total_times(TIMES);
-		 file << "\nIsoparametricLinearPyramid_Test<3>: "; 
-		 
+		 file << "\nIsoparametricLinearPyramid_Test<3>: ";
+
 		 clock_t ticks = clock();  double64 j(0);
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
-	   
+
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
 		   for(size_t i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
-	
+
 		 file.close();
    }
-   
+
    	//test parametric facet area
-	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
         double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-				cout << "Area is: " << fArea << endl;
+				_info("Area is: " << fArea);
 		    _equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
           }
 	  }
-	  
+
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const                                                                        
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	  {
 		Point<3U> vecNormal;
-	
+
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-				cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+            dumpVector<3>("Normal is: ", vecNormal);
 		    _equal( vecNormal[0],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 		    _equal( vecNormal[1],  elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 		    _equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
@@ -2355,27 +2329,26 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 	  }
 
    //test sector volumes
-   //testing: fT   SectorVolume( size_t sector ) const; 
+   //testing: fT   SectorVolume( size_t sector ) const;
    if ( m_bTestSectorVolumes )
 	 {
 	   double64 fVolSum(0.);
-	   
+
 	   double64 fSectorVolume(0.);
 	   for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors()-1; iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-				 //cout << "Volume is: " << fSectorVolume << endl;
+				 //_info("Volume is: " << fSectorVolume);
 	       _equal( fSectorVolume, 1./4., fTolerance );
 	       fVolSum+=fSectorVolume;
 	   }
-	   
+
      fSectorVolume = ( elmt_ ).SectorVolume( 4U );
-		 cout << "Volume is: " << fSectorVolume << endl;
+		 _info("Volume is: " << fSectorVolume);
 	   _equal( fSectorVolume, 1./3., fTolerance );
 	   fVolSum+=fSectorVolume;
-	   
-		 cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		 cout << "vs Volume Sum: " << fVolSum << endl;
+
+		 _info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 	   _equal(fVolSum, elmt_.Volume(), fTolerance);
      }
 
@@ -2386,207 +2359,207 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 	   {
 	     //const CSPINDEX& prop_key
 	     VectorVariable<3> vVariable;
-	     for(size_t iD= 0U; iD < 3; iD++) {	
+	     for(size_t iD= 0U; iD < 3; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
-	     }	
-	 
+	     }
+
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct(( elmt_ ).ParametricFacetNormal( iFacet ));
-	   
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		_equal(fProjectionVal, fProjectionValP, fTolerance);
-	   }   
+	   }
    }
-   
+
    if(m_bRSTToXYZ)
    {
    	elmt_.CoordinateMatrix();
-	
+
    	Point<3U> vecRST, vecXYZ;
 
-	  //check facet integration points 
+	  //check facet integration points
    	//facet 0
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2);
     _equal(vecXYZ[0],-2, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.03651173 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.03651173);
     _equal(vecXYZ[1], 1.03651173, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.463499289 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.463499289);
     _equal(vecXYZ[2], 0.463499289, fTolerance);
-    
+
     //facet 1
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.55555556 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.55555556);
     _equal(vecXYZ[0], -1.55555556, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " <<1.68817927 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " <<1.68817927);
     _equal(vecXYZ[1],1.68817927, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.749182671 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.749182671);
     _equal(vecXYZ[2], 0.749182671, fTolerance);
-    
+
     //facet 2
    	vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2);
     _equal(vecXYZ[0], -2, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.71744012 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.71744012);
     _equal(vecXYZ[1],1.71744012, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.03486605 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.03486605);
     _equal(vecXYZ[2], 1.03486605, fTolerance);
-    
+
     //facet 3
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.44444444  << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.44444444 );
     _equal(vecXYZ[0], -2.44444444, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.06577257 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.06577257);
     _equal(vecXYZ[1],1.06577257, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.749182671 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.749182671);
     _equal(vecXYZ[2], 0.749182671, fTolerance);
-    
+
     //facet 4 - equivalent to the facet integration point for the non-planar facets.
-#ifndef PYRAMID_TRIANGULAR_FACETS    
+#ifndef PYRAMID_TRIANGULAR_FACETS
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(4U, 0U);
 #else
     vecRST = Point< 3>(-7./24.,-7./24.,17./48.);
 #endif
-   	
+
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.291666675 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.291666675);
     _equal(vecXYZ[0], -2.291666675, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 0.8109412000 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 0.8109412000);
     _equal(vecXYZ[1], 0.8109412000, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.7266153000 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.7266153000);
     _equal(vecXYZ[2], 0.7266153000, fTolerance);
-    
+
     //facet 5
-#ifndef PYRAMID_TRIANGULAR_FACETS    
+#ifndef PYRAMID_TRIANGULAR_FACETS
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(5U, 0U);
 #else
     vecRST = Point< 3>(7./24.,-7./24.,17./48.);
 #endif
-   	
+
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.708333325 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.708333325);
     _equal(vecXYZ[0], -1.708333325, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.219395600 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.219395600);
     _equal(vecXYZ[1], 1.219395600, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.7266153000 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.7266153000);
     _equal(vecXYZ[2], 0.7266153000, fTolerance);
-    
+
     //facet 6
-#ifndef PYRAMID_TRIANGULAR_FACETS    
+#ifndef PYRAMID_TRIANGULAR_FACETS
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(6U, 0U);
 #else
     vecRST = Point< 3>(7./24.,7./24.,17./48.);
 #endif
-   	
+
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.708333325 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.708333325);
     _equal(vecXYZ[0], -1.708333325, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.666254875 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.666254875);
     _equal(vecXYZ[1], 1.666254875, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.101574725 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.101574725);
     _equal(vecXYZ[2], 1.101574725, fTolerance);
 
     //facet 7
-#ifndef PYRAMID_TRIANGULAR_FACETS    
+#ifndef PYRAMID_TRIANGULAR_FACETS
     vecRST = elmt_.FV_Stencil()->FacetIntegrationPoint(7U, 0U);
 #else
     vecRST = Point< 3>(-7./24.,7./24.,17./48.);
 #endif
-   	
+
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.291666675 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.291666675);
     _equal(vecXYZ[0], -2.291666675, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.257800450 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.257800450);
     _equal(vecXYZ[1], 1.257800450, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.101574725 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.101574725);
     _equal(vecXYZ[2], 1.101574725, fTolerance);
-    
+
     //check sector integration points
     //sector 0
-    cout << "Sector 0" << endl;
+    _info("Sector 0");
 	  vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(0U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.43055556 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.43055556);
     _equal(vecXYZ[0], -2.43055556, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 0.732281579 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 0.732281579);
     _equal(vecXYZ[1],0.732281579, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.488386154 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.488386154);
     _equal(vecXYZ[2], 0.488386154, fTolerance);
-    
+
     //sector 1
-    cout << "Sector 1" << endl;
+    _info("Sector 1");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(1U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-     
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.56944444 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -1.56944444);
     _equal(vecXYZ[0], -1.56944444, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.33523807 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.33523807);
     _equal(vecXYZ[1], 1.33523807, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.488386154 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 0.488386154);
     _equal(vecXYZ[2], 0.488386154, fTolerance);
-    
+
     //sector 2
-    cout << "Sector 2" << endl;
+    _info("Sector 2");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(2U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " <<  -1.56944444 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " <<  -1.56944444);
     _equal(vecXYZ[0], -1.56944444, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.99488745 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.99488745);
     _equal(vecXYZ[1], 1.99488745, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04189771 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04189771);
     _equal(vecXYZ[2], 1.04189771, fTolerance);
-    
-	  //sector 3    
-		cout << "Sector 3" << endl;
+
+	  //sector 3
+		_info("Sector 3");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(3U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.43055556 << endl;
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2.43055556);
     _equal(vecXYZ[0], -2.43055556, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.39193096 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.39193096);
     _equal(vecXYZ[1], 1.39193096, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04189771 << endl;
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04189771);
     _equal(vecXYZ[2], 1.04189771, fTolerance);
-  
+
   	//sector 4
-    cout << "Sector 4" << endl;
+    _info("Sector 4");
     vecRST = elmt_.FV_Stencil()->SectorIntegrationPoint(4U, 0U);
     ( elmt_ ).N_At(vecRST);
     vecXYZ = ( elmt_ ).RstToXYZ(vecRST);
-    
-    cout << "vecXYZ[0] " << vecXYZ[0] << " vs. " << -2 << endl;
+
+    _info("vecXYZ[0] " << vecXYZ[0] << " vs. " << -2);
     _equal(vecXYZ[0],-2, fTolerance);
-    cout << "vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.13146677 << endl;
+    _info("vecXYZ[1] " << vecXYZ[1] << " vs. " << 1.13146677);
     _equal(vecXYZ[1], 1.13146677, fTolerance);
-    cout << "vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04176909 << endl;
-    _equal(vecXYZ[2], 1.04176909, fTolerance);  
-   }  
+    _info("vecXYZ[2] " << vecXYZ[2] << " vs. " << 1.04176909);
+    _equal(vecXYZ[2], 1.04176909, fTolerance);
+   }
 
    delete feptr;
    delete fvptr;
@@ -2597,13 +2570,13 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPyramid_Test(double64 fToleranc
 
 
 /**  Method:
- 
- 
-void FiniteVolumeTraits_Test<3>::IsoparametricLinearHexahedron_Test(double64 fTolerance, double64 fToleranceInternal) 
- 
- 
 
-Description: 
+
+void FiniteVolumeTraits_Test<3>::IsoparametricLinearHexahedron_Test(double64 fTolerance, double64 fToleranceInternal)
+
+
+
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -2622,7 +2595,7 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Hexahedron element, for 3D.
@@ -2636,7 +2609,7 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 {
 	 FiniteElement* feptr = new IsoparametricLinearHexahedron();
    FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
-	
+
    Element<3U>  elmt_( feptr );
    elmt_.Assign( fvptr );
 
@@ -2698,108 +2671,108 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	{
-		cout << "Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) " << endl;
+		_info("Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) ");
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 1U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 2U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 3U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 4U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 5U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 6U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 7U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 8U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 9U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 10U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 11U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
 		//area mapped
-		cout << "Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) " << endl;
+		_info("Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) ");
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 8U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 9U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 10U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 11U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
 
 		//test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 		for(size_t i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
@@ -2830,168 +2803,168 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 	{
 		Point<3U> vecNormal;
 		/*ignore return parameter, jacobian*/
-		std::cout << "\n Unit Hexahedron.  Facet Normal calculations (using FacetNormal...";
-		std::cout << "\nFacet 1...";
+		_info(" Unit Hexahedron.  Facet Normal calculations (using FacetNormal...");
+		_info("Facet 1...");
     vecNormal = ( elmt_ ).FacetNormal(0U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 2...";
+		_info("Facet 2...");
     vecNormal = ( elmt_ ).FacetNormal(1U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 3...";
+		_info("Facet 3...");
     vecNormal = ( elmt_ ).FacetNormal(2U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 4...";
+		_info("Facet 4...");
     vecNormal = ( elmt_ ).FacetNormal(3U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], -1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 5...";
+		_info("Facet 5...");
     vecNormal = ( elmt_ ).FacetNormal(4U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 6...";
+		_info("Facet 6...");
     vecNormal = ( elmt_ ).FacetNormal(5U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 7...";
+		_info("Facet 7...");
     vecNormal = ( elmt_ ).FacetNormal(6U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 8...";
+		_info("Facet 8...");
     vecNormal = ( elmt_ ).FacetNormal(7U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 9...";
+		_info("Facet 9...");
     vecNormal = ( elmt_ ).FacetNormal(8U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 10...";
+		_info("Facet 10...");
     vecNormal = ( elmt_ ).FacetNormal(9U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 11...";
+		_info("Facet 11...");
     vecNormal = ( elmt_ ).FacetNormal(10U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 12...";
+		_info("Facet 12...");
     vecNormal = ( elmt_ ).FacetNormal(11U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], -1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 
 		//mapped normal
 		Point<3U> vecNormalMapped;
-		std::cout << "Unit Hexahedron.  Facet Normal calculations (using FacetNormalMapped...";
-		std::cout << "\nFacet 1...";
+		_info("Unit Hexahedron.  Facet Normal calculations (using FacetNormalMapped...");
+		_info("Facet 1...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 2...";
+		_info("Facet 2...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
-		std::cout << "Facet 3...";
+		_info("Facet 3...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 4...";
+		_info("Facet 4...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], -1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 5...";
+		_info("Facet 5...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 6...";
+		_info("Facet 6...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 7...";
+		_info("Facet 7...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 8...";
+		_info("Facet 8...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 9...";
+		_info("Facet 9...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(8U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 10...";
+		_info("Facet 10...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(9U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 11...";
+		_info("Facet 11...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(10U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 12...";
+		_info("Facet 12...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(11U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], -1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
 
 		//test mapped vs computed
-		cout << "\nTest mapped normal vs computed., tolerance: " << fToleranceInternal;
+		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 		for(size_t i = 0; i < 8; i++)
 		{
-			cout << "\nNormal " << i << ":";
+			_info("Normal " << i << ":");
 			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormal( i )[j] << " ";
-			cout << " vs ";
+        _info(( elmt_ ).FacetNormal( i )[j] << " ");
+			_info(" vs ");
 			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormalMapped( i )[j] << " ";
+        _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
 		for(size_t i = 0; i < 12; i++)
@@ -3027,7 +3000,7 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		{
       double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-			cout << "Area is: " << fArea << endl;
+			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
@@ -3042,7 +3015,7 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-			cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+            dumpVector<3>("Normal is: ", vecNormal);
 			_equal( vecNormal[0], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 			_equal( vecNormal[1], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 			_equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
@@ -3058,13 +3031,12 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
 		for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-			//cout << "Volume is: " << fSectorVolume << endl;
+			//_info("Volume is: " << fSectorVolume);
 			_equal( fSectorVolume, 1., fTolerance );
 			fVolSum+=fSectorVolume;
 		}
 
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+		_info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
 	}
 
@@ -3084,7 +3056,7 @@ void FiniteVolumeTraits_Test::Test_UnitaryIsoparametricLinearHexahedron(double64
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
 		}
 
@@ -3103,7 +3075,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 {
 	FiniteElement* feptr			= new IsoparametricLinearHexahedron();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
-	
+
     Element<3U>  elmt_( feptr );
     elmt_.Assign( fvptr );
 
@@ -3165,108 +3137,108 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 	//testing: fT   FacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestFacetAreas )
 	{
-		cout << "Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) " << endl;
+		_info("Facet area test.  Method 1 (facetarea1 in FiniteVolumeTraits) ");
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 1U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 2U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 3U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 4U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 5U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 6U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 7U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 8U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 9U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 10U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 11U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 4., fTolerance );
 
 		//area mapped
-		cout << "Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) " << endl;
+		_info("Facet area test.  Method 2 (FaceAreaMapped in FiniteVolumeTraits) ");
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 8U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 9U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 10U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 11U );
-		cout << "Mapped Facet Area is: " << fAreaMapped << endl;
+		_info("Mapped Facet Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 4., fTolerance );
 
 
 		//test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 		for(size_t i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
@@ -3297,168 +3269,163 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 	{
 		Point<3U> vecNormal;
 		/*ignore return parameter, jacobian*/
-		std::cout << "\n Unit Hexahedron.  Facet Normal calculations (using FacetNormal...";
-		std::cout << "\nFacet 1...";
+		_info("Unit Hexahedron.  Facet Normal calculations (using FacetNormal...");
+		_info("Facet 1...");
     vecNormal = ( elmt_ ).FacetNormal(0U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 2...";
+		_info("Facet 2...");
     vecNormal = ( elmt_ ).FacetNormal(1U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 3...";
-    vecNormal = ( elmt_ ).FacetNormal(2U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Facet 3...");
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 4...";
+		_info("Facet 4...");
     vecNormal = ( elmt_ ).FacetNormal(3U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], -1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 5...";
+		_info("Facet 5...");
     vecNormal = ( elmt_ ).FacetNormal(4U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 6...";
+		_info("Facet 6...");
     vecNormal = ( elmt_ ).FacetNormal(5U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 7...";
+		_info("Facet 7...");
     vecNormal = ( elmt_ ).FacetNormal(6U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 8...";
+		_info("Facet 8...");
     vecNormal = ( elmt_ ).FacetNormal(7U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 1., fTolerance );
-		std::cout << "Facet 9...";
+		_info("Facet 9...");
     vecNormal = ( elmt_ ).FacetNormal(8U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 10...";
+		_info("Facet 10...");
     vecNormal = ( elmt_ ).FacetNormal(9U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 11...";
+		_info("Facet 11...");
     vecNormal = ( elmt_ ).FacetNormal(10U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
-		std::cout << "Facet 12...";
+		_info("Facet 12...");
     vecNormal = ( elmt_ ).FacetNormal(11U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], 0., fTolerance );
 		_equal( vecNormal[1], -1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 
 		//mapped normal
 		Point<3U> vecNormalMapped;
-		std::cout << "Unit Hexahedron.  Facet Normal calculations (using FacetNormalMapped...";
-		std::cout << "\nFacet 1...";
+		_info("Unit Hexahedron.  Facet Normal calculations (using FacetNormalMapped...");
+		_info("Facet 1...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 2...";
+		_info("Facet 2...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-
-		std::cout << "Facet 3...";
+		_info("Facet 3...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 4...";
+		_info("Facet 4...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], -1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 5...";
+		_info("Facet 5...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 6...";
+		_info("Facet 6...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 7...";
+		_info("Facet 7...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 8...";
+		_info("Facet 8...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 1., fTolerance );
-		std::cout << "Facet 9...";
+		_info("Facet 9...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(8U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 10...";
+		_info("Facet 10...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(9U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], 1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 11...";
+		_info("Facet 11...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(10U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
-		std::cout << "Facet 12...";
+		_info("Facet 12...");
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(11U);
-		cout << "Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+        dumpVector<3>("Normal is: ", vecNormalMapped);
 		_equal( vecNormalMapped[0], 0., fTolerance );
 		_equal( vecNormalMapped[1], -1., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
 
 		//test mapped vs computed
-		cout << "\nTest mapped normal vs computed., tolerance: " << fToleranceInternal;
+		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 		for(size_t i = 0; i < 8; i++)
 		{
-			cout << "\nNormal " << i << ":";
-			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormal( i )[j] << " ";
-			cout << " vs ";
-			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormalMapped( i )[j] << " ";
+			_info("Normal " << i << ":");
+            dumpVector<3>(" ", elmt_.FacetNormal( i ));
+            dumpVector<3>(" ", elmt_.FacetNormalMapped( i ));
 		}
 
 		for(size_t i = 0; i < 12; i++)
@@ -3494,7 +3461,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		{
       double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-			cout << "Area is: " << fArea << endl;
+			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
@@ -3509,7 +3476,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-			cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+            dumpVector<3>("Normal is: ", vecNormal);
 			_equal( vecNormal[0], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 			_equal( vecNormal[1], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 			_equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
@@ -3525,13 +3492,13 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-			cout << "Volume is: " << fSectorVolume << endl;
+			_info("Volume is: " << fSectorVolume);
 			_equal( fSectorVolume, 8., fTolerance );
 			fVolSum+=fSectorVolume;
 		}
 
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+		_info("Volume of the Element: " << elmt_.Volume());
+		_info("vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
 	}
 
@@ -3565,7 +3532,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
 		}
 
@@ -3583,7 +3550,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 {
 	FiniteElement* feptr			= new IsoparametricLinearHexahedron();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
-	
+
     Element<3U>  elmt_( feptr );
     elmt_.Assign( fvptr );
 
@@ -3645,104 +3612,104 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 	if ( m_bTestFacetAreas )
 	{
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 1U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.13477501, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 2U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 3U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.13477501, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 4U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.09662038, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 5U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.09662038, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 6U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.09662038, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 7U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.09662038, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 8U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 9U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.13477501, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 10U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1., fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 11U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 1.13477501, fTolerance );
 
 		//area mapped
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.13477501, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.13477501, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.09662038, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.09662038, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.09662038, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.09662038, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 8U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 9U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.13477501, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 10U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1., fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 11U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 1.13477501, fTolerance );
 
 		//test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 		for(size_t i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
@@ -3775,73 +3742,73 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		/*ignore return parameter, jacobian*/
 
     vecNormal = ( elmt_ ).FacetNormal(0U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], 1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(1U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], -0.4726841, fTolerance );
 		_equal( vecNormal[1], 0.6750628, fTolerance );
 		_equal( vecNormal[2], 0.5664450, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(2U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(3U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4726841, fTolerance );
 		_equal( vecNormal[1], -0.6750628, fTolerance );
 		_equal( vecNormal[2], -0.5664450, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(4U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(5U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(6U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],   0.4104289, fTolerance );
 		_equal( vecNormal[1],  -0.5861533, fTolerance );
 		_equal( vecNormal[2],   0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(7U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(8U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  1., fTolerance );
 		_equal( vecNormal[1],  0., fTolerance );
 		_equal( vecNormal[2],  0., fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(9U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], -0.4726841, fTolerance );
 		_equal( vecNormal[1], 0.6750628, fTolerance );
 		_equal( vecNormal[2], 0.5664450, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(10U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(11U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4726841, fTolerance );
 		_equal( vecNormal[1], -0.6750628, fTolerance );
 		_equal( vecNormal[2], -0.5664450, fTolerance );
@@ -3850,88 +3817,88 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		Point<3U> vecNormalMapped;
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], 1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], -0.4726841, fTolerance );
 		_equal( vecNormalMapped[1], 0.6750628, fTolerance );
 		_equal( vecNormalMapped[2], 0.5664450, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4726841, fTolerance );
 		_equal( vecNormalMapped[1], -0.6750628, fTolerance );
 		_equal( vecNormalMapped[2], -0.5664450, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],   0.4104289, fTolerance );
 		_equal( vecNormalMapped[1],  -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],   0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(8U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  1., fTolerance );
 		_equal( vecNormalMapped[1],  0., fTolerance );
 		_equal( vecNormalMapped[2],  0., fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(9U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], -0.4726841, fTolerance );
 		_equal( vecNormalMapped[1], 0.6750628, fTolerance );
 		_equal( vecNormalMapped[2], 0.5664450, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(10U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], -1., fTolerance );
 		_equal( vecNormalMapped[1], 0., fTolerance );
 		_equal( vecNormalMapped[2], 0., fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(11U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4726841, fTolerance );
 		_equal( vecNormalMapped[1], -0.6750628, fTolerance );
 		_equal( vecNormalMapped[2], -0.5664450, fTolerance );
 
 		//test mapped vs computed
-		cout << "\nTest mapped normal vs computed., tolerance: " << fToleranceInternal;
+		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 
 		for(size_t i = 0; i < 8; i++)
 		{
-			cout << "\nNormal " << i << ":";
+			_info("Normal " << i << ":");
 			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormal( i )[j] << " ";
-			cout << " vs ";
+        _info(( elmt_ ).FacetNormal( i )[j] << " ");
+			_info(" vs ");
 			for(size_t j = 0; j < 3; j++)
-        cout << ( elmt_ ).FacetNormalMapped( i )[j] << " ";
+        _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
 		for(size_t i = 0; i < 12; i++)
@@ -3967,7 +3934,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		{
       double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-			cout << "Area is: " << fArea << endl;
+			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
@@ -3982,7 +3949,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-			cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+			_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 			_equal( vecNormal[0], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 			_equal( vecNormal[1], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 			_equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
@@ -3998,13 +3965,12 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 		for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-			//cout << "Volume is: " << fSectorVolume << endl;
+			//_info("Volume is: " << fSectorVolume);
 			_equal( fSectorVolume, 1., fTolerance );
 			fVolSum+=fSectorVolume;
 		}
 
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+		_info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
 	}
 
@@ -4062,12 +4028,12 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 
       Point<3U> pPoint((( elmt_ ).RstToXYZ(p))[0U],(( elmt_ ).RstToXYZ(p))[1U],(( elmt_ ).RstToXYZ(p))[2U]);
 
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
-			cout << "Projected vector Length in physical space: "<<fProjectionVal<<endl;
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
+			_info("Projected vector Length in physical space: "<<fProjectionVal<<endl);
 			vVariable(0U)=pPoint[0U];
 			vVariable(1U)=pPoint[1U];
 			vVariable(2U)=pPoint[2U];
-			cout << "Projected vector Length in parametric space: "<<vVariable.Length()<<endl;
+			_info("Projected vector Length in parametric space: "<<vVariable.Length()<<endl);
 			_equal(fProjectionVal, fProjectionValP, fTolerance);
 			*/
 		}
@@ -4090,9 +4056,9 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron2(double64 fTole
 
 
 
-void FiniteVolumeTraits_Test<3>::IsoparametricLinearPrism_Test(double64 fTolerance) 
+void FiniteVolumeTraits_Test<3>::IsoparametricLinearPrism_Test(double64 fTolerance)
 
-Description: 
+Description:
 Specifies the procedure of the test.
 
 The tested element is supposed to be a uniform transformation of the original object by:
@@ -4111,7 +4077,7 @@ This test does the following:
 -convert the facet integration points to physical space and check if they correspond to the measured values
 -convert the sector integration points to physical space and check if they correspond to the measured values
 
-@section arguments Input Arguments 
+@section arguments Input Arguments
 double64 fTolerance - specifies the tolerance of the test
 @section application Application
 Runs the test for the Isoparametric Linear Prism element, for 3D.
@@ -4121,7 +4087,7 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 {
 	FiniteElement* feptr			= new IsoparametricLinearPrism();
     FiniteVolumeStencil<3U>* fvptr	= new FiniteVolumeStencil<3>("ISOPARAMETRIC_LINEAR_PRISM");
-	
+
     Element<3U>  elmt_( feptr );
     elmt_.Assign( fvptr );
 
@@ -4131,12 +4097,12 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	  node1.x( -3. );
 	  node1.y( 0. );
 	  node1.z( 0. );
-	  
+
 	  node2.Idx( 2 );
 	  node2.x( -2.0000000 );
 	  node2.y( 0.7002075 );
 	  node2.z( 0. );
-	  
+
 	  node3.Idx( 3 );
 	  node3.x(  -3. );
 	  node3.y( 0.7660444 );
@@ -4146,7 +4112,7 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	  node4.x( -3. );
 	  node4.y( -1.2855752 );
 	  node4.z( 1.5320889 );
-		
+
 	  node5.Idx( 5 );
 	  node5.x(-2. );
 	  node5.y( -0.5853677 );
@@ -4156,7 +4122,7 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	  node6.x( -3. );
 	  node6.y( -0.5195308 );
 	  node6.z( 2.1748765 );
-	  
+
 	}
 
 	elmt_.Idx( 1 );
@@ -4172,83 +4138,83 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	if ( m_bTestFacetAreas )
 	{
     double64 fArea = ( elmt_ ).FacetArea( 0U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.295435364, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 1U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.305527528, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 2U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.333553967, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 3U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.182770064, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 4U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.182770064, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 5U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.182770064, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 6U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.295435364, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 7U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.305527528, fTolerance );
 
     fArea = ( elmt_ ).FacetArea( 8U );
-		cout << "Area is: " << fArea << endl;
+		_info("Area is: " << fArea);
 		_equal( fArea, 0.333553967, fTolerance );
 
 		//area mapped
     double64 fAreaMapped = ( elmt_ ).FacetAreaMapped( 0U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.295435364, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 1U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.305527528, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 2U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.333553967, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 3U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.182770064, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 4U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.182770064, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 5U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.182770064, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 6U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.295435364, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 7U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.305527528, fTolerance );
 
     fAreaMapped = ( elmt_ ).FacetAreaMapped( 8U );
-		cout << "Mapped Area is: " << fAreaMapped << endl;
+		_info("Mapped Area is: " << fAreaMapped);
 		_equal( fAreaMapped, 0.333553967, fTolerance );
-	  
+
 	  //test mapped vs computed
-		cout << "\nTest mapped area vs computed.";
+		_info("Test mapped area vs computed.");
 	  for(size_t i = 0; i < 9; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
-		
+
 		//compare time computed vs mapped
 		ofstream file ("speed_compare.txt", ios::out|ios::app);
 		size_t total_times(TIMES);
@@ -4279,55 +4245,55 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		/*ignore return parameter, jacobian*/
 
     vecNormal = ( elmt_ ).FacetNormal(0U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], 0.8256797, fTolerance );
 		_equal( vecNormal[1], 0.4321557, fTolerance );
 		_equal( vecNormal[2], 0.3626217, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(1U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  -0.8381078, fTolerance );
 		_equal( vecNormal[1],  0.4178808, fTolerance );
 		_equal( vecNormal[2],  0.3506436, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(2U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.0363660, fTolerance );
 		_equal( vecNormal[1], -0.7655377, fTolerance );
 		_equal( vecNormal[2], -0.6423624, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(3U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(4U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(5U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.4104289, fTolerance );
 		_equal( vecNormal[1], -0.5861533, fTolerance );
 		_equal( vecNormal[2],  0.6985503, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(6U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], 0.8256797, fTolerance );
 		_equal( vecNormal[1], 0.4321557, fTolerance );
 		_equal( vecNormal[2], 0.3626217, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(7U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0], -0.8381078, fTolerance );
 		_equal( vecNormal[1],  0.4178808, fTolerance );
 		_equal( vecNormal[2],  0.3506436, fTolerance );
 
     vecNormal = ( elmt_ ).FacetNormal(8U);
-		cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+		_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 		_equal( vecNormal[0],  0.0363660, fTolerance );
 		_equal( vecNormal[1], -0.7655377, fTolerance );
 		_equal( vecNormal[2], -0.6423624, fTolerance );
@@ -4336,65 +4302,65 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		Point<3U> vecNormalMapped;
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(0U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], 0.8256797, fTolerance );
 		_equal( vecNormalMapped[1], 0.4321557, fTolerance );
 		_equal( vecNormalMapped[2], 0.3626217, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(1U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  -0.8381078, fTolerance );
 		_equal( vecNormalMapped[1],  0.4178808, fTolerance );
 		_equal( vecNormalMapped[2],  0.3506436, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(2U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.0363660, fTolerance );
 		_equal( vecNormalMapped[1], -0.7655377, fTolerance );
 		_equal( vecNormalMapped[2], -0.6423624, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(3U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(5U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.4104289, fTolerance );
 		_equal( vecNormalMapped[1], -0.5861533, fTolerance );
 		_equal( vecNormalMapped[2],  0.6985503, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(6U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], 0.8256797, fTolerance );
 		_equal( vecNormalMapped[1], 0.4321557, fTolerance );
 		_equal( vecNormalMapped[2], 0.3626217, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(7U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0], -0.8381078, fTolerance );
 		_equal( vecNormalMapped[1],  0.4178808, fTolerance );
 		_equal( vecNormalMapped[2],  0.3506436, fTolerance );
 
     vecNormalMapped = ( elmt_ ).FacetNormalMapped(8U);
-		cout << "Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]" << endl;
+		_info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
 		_equal( vecNormalMapped[0],  0.0363660, fTolerance );
 		_equal( vecNormalMapped[1], -0.7655377, fTolerance );
 		_equal( vecNormalMapped[2], -0.6423624, fTolerance );
 
 		//test mapped vs computed
-		cout << "\nTest mapped normal vs computed.";
+		_info("Test mapped normal vs computed.");
 	  for(size_t i = 0; i < 9; i++)
-	    for(size_t j = 0; j < 3; j++) 
+	    for(size_t j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
-		
+
 		//compare time computed vs mapped
 		ofstream file ("speed_compare.txt", ios::out|ios::app);
 		size_t total_times(TIMES);
@@ -4418,19 +4384,19 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 	}
 
 	//test parametric facet area
-	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;  
+	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	{
 		for ( size_t iFacet = 0U; iFacet < elmt_.FV_Stencil()->Facets(); iFacet++ )
 		{
       double64 fArea = ( elmt_ ).ParametricFacetArea( iFacet );
-			cout << "Area is: " << fArea << endl;
+			_info("Area is: " << fArea);
 			_equal( fArea,  elmt_.FV_Stencil()->FacetIntegrationWeight(iFacet,0U), fTolerance );
 		}
 	}
 
 	//test parametric facet normals
-	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const                                                                        
+	//fT   ParametricFacetNormal( size_t surface, size_t ip,double64* NRML ) const
 	if ( m_bTestParametricFacetNormals )
 	{
 		Point<3U> vecNormal;
@@ -4439,7 +4405,7 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
-			cout << "Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]" << endl;
+			_info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
 			_equal( vecNormal[0], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 0), fTolerance );
 			_equal( vecNormal[1], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 1), fTolerance );
 			_equal( vecNormal[2], elmt_.FV_Stencil()->UnitParametricNormalComponent(iFacet, 2), fTolerance );
@@ -4456,13 +4422,12 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
 		for ( size_t iSector = 0U; iSector < elmt_.FV_Stencil()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
-			//cout << "Volume is: " << fSectorVolume << endl;
+			//_info("Volume is: " << fSectorVolume);
 			_equal( fSectorVolume, 0.166666666666667, fTolerance );
 			fVolSum+=fSectorVolume;
 		}
 
-		cout << "Volume of the Element: " << elmt_.Volume() << endl;
-		cout << "vs Volume Sum: " << fVolSum << endl;
+		_info("Volume of the Element: " << elmt_.Volume() << " vs Volume Sum: " << fVolSum);
 		_equal(fVolSum, elmt_.Volume(), fTolerance);
 	}
 
@@ -4495,7 +4460,7 @@ void FiniteVolumeTraits_Test::IsoparametricLinearPrism_Test(double64 fTolerance,
       double64 fProjectionVal = ( elmt_ ).ProjectionOnFacetNormal( iFacet, vVariable);
       double64 fProjectionValP = vVariable.DotProduct( ( elmt_ ).ParametricFacetNormal( iFacet ));
 
-			cout << "fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP << endl;
+			_info("fProjectionVal:" << fProjectionVal << " vs. fProjectionValP:" << fProjectionValP);
 		  _equal(fProjectionVal, fProjectionValP, fTolerance);
 		}
 	}

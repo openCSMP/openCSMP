@@ -46,7 +46,7 @@ void PropertyData_Test::run()
     _test( dataset3.Size() == 0 );
     // resizing
     dataset1.Resize( 5, 5 );
-    cout <<"\n\nPropertyData_Test::run: dataset1 after resizing to 5:";
+    _info("PropertyData_Test::run: dataset1 after resizing to 5:");
     dataset1.Out();
     _test( dataset1.Size() == 5 );
  
@@ -104,16 +104,16 @@ void PropertyData_Test::run()
     _equal( tmin, 16., 1e-10 );
     _equal( tmax, 35., 1e-10 );
   
-    cout <<"\n\nPropertyData_Test::run: scaled and offset dataset1:";
+    _info("PropertyData_Test::run: scaled and offset dataset1:");
     dataset1.Out();
-    cout <<"\n\nPropertyData_Test::run: sqrt of values ibn dataset1:";
+    _info("PropertyData_Test::run: sqrt of values in dataset1:");
     dataset1.TransformValues( std::sqrt );
     // eliminating the nan value
     dataset1.Value(1) = -1.;
     dataset1.Out();
    
     /// writing stored flag and data values to file
-    cout <<"\n\nPropertyData_Test::run: dataset1 written to file and read back to memory:";
+    _info("PropertyData_Test::run: dataset1 written to file and read back to memory:");
     PropertyData datasetN( dataset1 ); // backup copy
 
     std::FILE* out_fp = fopen( "PropertyData_Test", "wb" );
@@ -131,7 +131,7 @@ void PropertyData_Test::run()
     // ---------------------------------------------------------------------------
     // VECTOR VARIABLES
     // ---------------------------------------------------------------------------
-    cout <<"\n\nPropertyData_Test: testing for VectorVariable:" << flush;
+    _info("PropertyData_Test: testing for VectorVariable:");
     // constructor for all possible csmp variable types
     const size_t DIM3(3);
     PropertyData dataset4( ELEMENT_INTEGRATION_POINT, VECTOR, DIM3 );
@@ -162,7 +162,7 @@ void PropertyData_Test::run()
     // ---------------------------------------------------------------------------
     // TENSOR VARIABLES
     // ---------------------------------------------------------------------------
-    cout <<"\n\nPropertyData_Test: testing for TensorVariable:" << flush;
+    _info("PropertyData_Test: testing for TensorVariable:");
     // constructor for all possible csmp variable types
     PropertyData dataset6( ELEMENT_INTEGRATION_POINT, TENSOR, DIM3 );
     // stick in 3 diagonal tensors
@@ -196,7 +196,7 @@ void PropertyData_Test::run()
     // ---------------------------------------------------------------------------
     // ARRAY VARIABLES
     // ---------------------------------------------------------------------------
-    cout <<"\n\nPropertyData_Test: testing for ArrayVariable:" << flush;
+    _info("PropertyData_Test: testing for ArrayVariable:");
     // constructor for all possible csmp variable types
     const size_t array_length(4);
     PropertyData dataset8( NODE, ARRAY, DIM3, array_length );
