@@ -12,10 +12,24 @@ using std::ostream;
 
 // The following have underscores because they are macros
 // (and it's impolite to usurp other users' functions!).
-// For consistency, _succeed() also has an underscore.
+
+#ifdef RUNNING_UNDER_CATCH
+
+#include "catch.hpp"
+
+#define _test(cond) REQUIRE( (cond) )
+#define _fail(str) REQUIRE_FALSE( (str) )
+#define _equal(expr,value,tol) REQUIRE( (expr) == Approx( (value) ).epsilon( (tol) ) )
+#define _succeed()
+
+#else
+
 #define _test(cond) do_test(cond, #cond, __FILE__, __LINE__)
 #define _fail(str) do_fail(str, __FILE__, __LINE__)
 #define _equal(expr,value,tol) do_equal(expr, value, tol, #expr " == " #value, __FILE__, __LINE__)
+#define _succeed() do_succeed()
+
+#endif
 
 namespace csmp {
 
@@ -52,6 +66,8 @@ class Test
     virtual ~Test(){}
     virtual void run() = 0;
 
+#ifdef RUNNING_UNDER_CATCH
+    
     long getNumPassed() const;
     long getNumFailed() const;
     const ostream* getStream() const;
@@ -60,7 +76,7 @@ class Test
     string getName() const { return testName_; }
     bool hasName() const { return !testName_.empty(); }
     
-    void _succeed();
+    void do_succeed();
     long report() const;
     virtual void reset();
 
@@ -83,9 +99,10 @@ class Test
     // Disallowed:
     Test(const Test&);
     Test& operator=(const Test&);
-
+#endif
 };
 
+#ifdef RUNNING_UNDER_CATCH
   inline
       Test::Test(ostream* osptr)
   {
@@ -118,7 +135,7 @@ class Test
   }
 
   inline
-      void Test::_succeed()
+      void Test::do_succeed()
   {
     ++m_nPass;
   }
@@ -128,6 +145,7 @@ class Test
   {
     m_nPass = m_nFail = 0;
   }
+#endif
 
 } // end namespace csmp
 

@@ -15,8 +15,9 @@
 namespace csmp {
 
 class PropertyData_Test : public Test {
+public:
     virtual void run();
- };
+};
  
  } // end csmp
 

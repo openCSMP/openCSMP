@@ -11,6 +11,7 @@ namespace csmp
 /// PL Nov 2010
 class FEM_Data_Test : public Test
 {
+public:
   virtual void run();
 };
 
