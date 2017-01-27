@@ -16,7 +16,7 @@ find_path(SAMG_INCLUDE_DIR NAMES samg.h
 )
 
 find_library(SAMG_LIBRARIES
-    NAMES amg_mult ifcoremt ifportmt imf intlc iomp5 irc svml
+    NAMES ${PLATFORM_SPECIAL_DEPENDENCIES}
     PATHS
     ${PLATFORM_LIBS}
 )
