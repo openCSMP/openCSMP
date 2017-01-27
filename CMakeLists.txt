@@ -11,6 +11,8 @@ set(CMAKE_MODULE_PATH ${csmp_api_SOURCE_DIR}/cmake)
 include(CsmpPlatform)
 include(CsmpDependencies)
 
+enable_testing()
+
 add_subdirectory(source)
 add_subdirectory(tests)
 
