@@ -206,7 +206,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::ContainsRegion( const std::string& reg
     @return element and node numbers are compared with MeshManager entries to verify that
     all elements and nodes were discovered. If so method returns true, else false
     
-    @param reestablishNeighborConnectivity=true will prompt CSMP to recreate element neighbor connectivity.
+    @param reestablishNeighborConnectivity will prompt CSMP to recreate element neighbor connectivity.
 
     @author SKM
     @date 5/4/2016
@@ -330,7 +330,7 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
     @attention Element objects will not be deleted but remain in the csmp::Mesh deque
 
     @param  regionName The name of the group object which shall be removed.
-    @param  deleteElements Whether the elements shall be detached from its nodes and removed from the model region
+
 
     @section messages Messages
 
@@ -526,8 +526,6 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      // getting a reference to this newly created master region
      std::cout <<"\n\tunique regions: ";
    
-     const csmp::Region<dim>&  masterRegion(static_cast<REGION_COMPLEX<dim>& >(*this).Region(masterRegion_));
-
      // -----------------------------
      // 2. reading the unique regions
      // -----------------------------
@@ -930,7 +928,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
     @param prop the property on the basis of whose variations
     the group regions will be defined. 
 
-    @return The names of the newly created groups are returned into an STL set
+    The names of the newly created groups are returned into an STL set
     which uses the less<> functional to order the names alphabetically. If 
     the set is not empty, it will be erased before the group names are 
     stored within it. 
@@ -1452,7 +1450,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       
       @attention The master region that was successfully partitioned is removed.
 
-      @param region The name of the region that may be non-contiguous. 
+      @param group The name of the region that may be non-contiguous. 
       If so, new sbregions will be created to the name of which integers
       will be appended that correspond to the number of subdomains
       that are created in this process.  

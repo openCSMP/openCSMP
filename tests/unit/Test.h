@@ -71,14 +71,13 @@ class Test
     virtual ~Test(){}
     virtual void run() = 0;
 
-#ifdef RUNNING_UNDER_CATCH
-    
+#ifdef RUNNING_UNDER_CATCH    
     long getNumPassed() const;
     long getNumFailed() const;
-    const ostream* getStream() const;
-    void setStream(ostream* osptr);
-    void setName( string testName ) { testName_ = testName; }
-    string getName() const { return testName_; }
+    const std::ostream* getStream() const;
+    void setStream(std::ostream* osptr);
+    void setName( std::string testName ) { testName_ = testName; }
+    std::string getName() const { return testName_; }
     bool hasName() const { return !testName_.empty(); }
     
     void do_succeed();
@@ -88,17 +87,17 @@ class Test
 
   protected:
     void do_equal( double expr, double value, double tol, 
-                   const string& lbl, const char* fname, long lineno );
+                   const std::string& lbl, const char* fname, long lineno );
                   
-    void do_test( bool cond, const string& lbl,
+    void do_test( bool cond, const std::string& lbl,
                   const char* fname, long lineno );
                  
-    void do_fail( const string& lbl,
+    void do_fail( const std::string& lbl,
                   const char* fname, long lineno );
     const char* prefix_;
   private:
-    ostream* m_osptr;
-    string testName_;
+    std::ostream* m_osptr;
+    std::string testName_;
     long m_nPass;
     long m_nFail;
     // Disallowed:

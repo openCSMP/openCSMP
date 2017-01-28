@@ -365,7 +365,7 @@ void Node<dim>::Out() const
       }
     cout <<", Coordinates: "<< xyz_;
     cout << endl;
-    
+#ifndef NDEBUG
     if ( parent_node_indexes_.size() > 0u ) {
          cout <<"\nElement objects sharing the node / node position therein:\n"<< endl;
          for ( size_t i=0U; i<Parents(); i++ ) {
@@ -375,7 +375,7 @@ void Node<dim>::Out() const
            }
          cout << endl;
       } 
-
+#endif
  } // end out 
 
 template class Node<1U>;
