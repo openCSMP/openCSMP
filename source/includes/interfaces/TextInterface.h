@@ -10,6 +10,13 @@ namespace csmp {
 class Matrix;
 template<size_t>  class Model;
 
+/**
+     Writing model data to text output files.
+     
+     @author S. K. Matthai
+     @date 14/5/1999
+     @copyright SKM
+*/
 class TextInterface {
   public:
     TextInterface();

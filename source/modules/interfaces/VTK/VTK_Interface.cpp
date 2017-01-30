@@ -376,6 +376,10 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
 
   } // end OutputDataToVTK
 
+template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,unsigned int,bool);
+template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,unsigned int,bool);
+template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,unsigned int,bool);
+
 template void VTK_Interface<1U>::OutputDataToVTK(const Model<1U>&,const std::string&,const std::string&,int,bool);
 template void VTK_Interface<2U>::OutputDataToVTK(const Model<2U>&,const std::string&,const std::string&,int,bool);
 template void VTK_Interface<3U>::OutputDataToVTK(const Model<3U>&,const std::string&,const std::string&,int,bool);

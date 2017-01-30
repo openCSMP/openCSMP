@@ -795,6 +795,26 @@ void GenericFiniteVolumeTransport_Test::run()
 
 
 
+      // first order version only
+      ExplicitTransport<3U>  explicit_advector( model3D, "Model" );
+      printRangeOfVariable( model3D, "sector volume" );
+      printRangeOfVariable( model3D, "sector pore volume" );
+      printRangeOfVariable( model3D, "finite volume" );
+      printRangeOfVariable( model3D, "FV pore volume" );
+
+      cout <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
+    //  if ( second_order ) cout <<" IMPES: SECOND ORDER SCHEME."<< endl;
+      cout <<" FIRST ORDER SCHEME."<< endl;
+      cout <<"\nThe grid Courant number is "<< explicit_advector.TimeIncrement() << endl;
+      cout <<"\nEnter advection time: ";
+      double64 time_interval;
+      cin >> time_interval;
+
+      cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+      clock_t ticks = clock();
+      explicit_advector.AdvectVariable( time_interval );
+      ticks = clock() - ticks;
+      cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
 
 

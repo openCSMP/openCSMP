@@ -23,7 +23,7 @@ namespace csmp {
 
 /**
 
-Global Text File Reading Functons
+Global Text File Reading Functions
 @author S.K. Matthai
 @author S. Geiger
 @author S.G. Roberts
