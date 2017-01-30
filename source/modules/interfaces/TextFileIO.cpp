@@ -2382,7 +2382,8 @@ bool readRegionPropertyConditions( Model<dim>& model,
 
                 if( verbose )
                 {
-                    cout <<"\tassigned special condition to '"<< prop_name;
+                    if ( prop_type == SCALAR ) cout <<"\tassigned "<< parseStatus(flags[0]) <<" condition to '"<< prop_name;
+                    else cout <<"\tassigned VARIABLE_FLAG condition(s) to '"<< prop_name;
                     cout <<"' in '"<< assignment_spec <<"' region '"<< group_name <<"'"<< endl;
                 }
             }
@@ -2399,7 +2400,8 @@ bool readRegionPropertyConditions( Model<dim>& model,
 
                 if( verbose )
                 {
-                    cout <<"\tassigned special condition to '"<< prop_name<<"' at position = "<<position;
+                    if ( prop_type == SCALAR ) cout <<"\tassigned "<< parseStatus(flags[0]) <<" condition to '"<< prop_name<<"' at position = "<<position;
+                    else cout <<"\tassigned VARIABLE_FLAG  condition(s) to '"<< prop_name<<"' at position = "<<position;
                     cout <<" in '"<< assignment_spec <<"' region '"<< group_name <<"'"<< endl;
                 }
             }
