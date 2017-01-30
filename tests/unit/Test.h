@@ -30,8 +30,8 @@ using std::ostream;
 #define _fail(str) do_fail(str, __FILE__, __LINE__)
 #define _equal(expr,value,tol) do_equal(expr, value, tol, #expr " == " #value, __FILE__, __LINE__)
 #define _succeed() do_succeed()
-#define _warn(str) std::cout << e << '\n'
-#define _info(str) std::cout << e << '\n'
+#define _warn(str) std::cout << str << '\n'
+#define _info(str) std::cout << str << '\n'
 
 #endif
 
@@ -71,8 +71,6 @@ class Test
     virtual ~Test(){}
     virtual void run() = 0;
 
-#ifdef RUNNING_UNDER_CATCH
-    
     long getNumPassed() const;
     long getNumFailed() const;
     const ostream* getStream() const;
@@ -104,7 +102,6 @@ class Test
     // Disallowed:
     Test(const Test&);
     Test& operator=(const Test&);
-#endif
 };
 
 #ifdef RUNNING_UNDER_CATCH
