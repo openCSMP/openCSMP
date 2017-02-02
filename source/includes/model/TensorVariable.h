@@ -297,6 +297,16 @@ template<size_t dim>
 std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
 
 
+/// fastest way to insert a tensor into an STL container
+const TensorVariable<2U>& makeTensor( VARIABLE_FLAG, VARIABLE_FLAG,
+                                      double64, double64,
+                                      double64, double64 );
+
+const TensorVariable<3U>& makeTensor( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG,
+                                      double64, double64, double64,
+                                      double64, double64, double64,
+                                      double64, double64, double64 );
+
 
 
 // ******************************************************************************************
@@ -548,6 +558,27 @@ inline  bool TensorVariable<3U>::In( FILE* fp )
      fread( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
      return true;
   }
+  
+  
+/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
+inline const TensorVariable<2U>& makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
+                                             double64 v11, double64 v12,
+                                             double64 v21, double64 v22 )
+ {
+     return std::move(TensorVariable<2U>(f1,f2,v11,v12,v21,v22) );
+ }
+ 
+
+/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
+inline const TensorVariable<3U>& makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
+                                             double64 v11, double64 v12, double64 v13,
+                                             double64 v21, double64 v22, double64 v23,
+                                             double64 v31, double64 v32, double64 v33 )
+ {
+     return std::move(TensorVariable<3U>(f1,f2,f3,v11,v12,v13,v21,v22,v23,v31,v32,v33) );
+ }
+  
+  
 
 } // csmp 
  

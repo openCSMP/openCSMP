@@ -66,8 +66,6 @@ ScalarVariable<double>  my_value(NEUMANN,20.);
 
 my_value /= 15.;
 @endcode
-
-@todo (2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable
  
 */
 class ScalarVariable {
@@ -179,7 +177,7 @@ class ScalarVariable {
 std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
 
 /// helper functions
-ScalarVariable  makeScalar( VARIABLE_FLAG, double64 );
+const ScalarVariable&  makeScalar( VARIABLE_FLAG, double64 );
 
 
 inline  double64& ScalarVariable::operator()(void) { return data_; }
@@ -188,41 +186,31 @@ inline  double64  ScalarVariable::operator()(void) const { return data_; }
 
 inline  void      ScalarVariable::Component(size_t, double64 val) { data_ = val; }
 
-
 inline  double64      ScalarVariable::Component(size_t) const { return data_; }
 
 
 inline  size_t  ScalarVariable::Components() const { return 1U; }
 
 
-
 inline double64       ScalarVariable::Value()   const  { return data_; }
-
 
 
 inline double64       ScalarVariable::Average() const  { return data_; }
 
 
-
 inline VARIABLE_FLAG&  ScalarVariable::Flag() { return flag_; }
-
 
 
 inline VARIABLE_FLAG   ScalarVariable::Flag() const { return flag_; }
 
-inline size_t ScalarVariable::Size() const
-  {
-    return 1U;
-  }
+
+inline size_t ScalarVariable::Size() const  { return 1U;  }
 
 
-inline void ScalarVariable::Resize( size_t, double64 newValue )
-  {
-    data_ = newValue;
-  }
+inline void ScalarVariable::Resize( size_t, double64 newValue ) { data_ = newValue; }
 
 
-inline void  ScalarVariable::Zero() { data_ = static_cast<double64>(0.0);  }
+inline void  ScalarVariable::Zero() { data_ = static_cast<double64>(0.);  }
 
 
 
@@ -246,8 +234,8 @@ inline void  ScalarVariable::Log10()
 
 
 
-
 inline ScalarVariable::ScalarVariable() : flag_(ANY), data_(std::numeric_limits<double64>::quiet_NaN()) {}
+
 
 
 inline ScalarVariable::ScalarVariable(  VARIABLE_FLAG f, double64 val )
@@ -550,8 +538,8 @@ inline TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVari
     return r*l.Value();
 }
 
-
-inline ScalarVariable  makeScalar( VARIABLE_FLAG flag, double64 val )
+// extensively tested fastest version that does not generate any temporaries
+inline const ScalarVariable&  makeScalar( VARIABLE_FLAG flag, double64 val )
   {
      return std::move(ScalarVariable(flag,val));
   }

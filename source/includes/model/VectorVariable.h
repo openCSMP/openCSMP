@@ -199,7 +199,11 @@ class VectorVariable<3U> {
 };
 
 
-
+const VectorVariable<1U>& makeVector( VARIABLE_FLAG, double64 );
+const VectorVariable<2U>& makeVector( VARIABLE_FLAG, VARIABLE_FLAG, double64, double64 );
+const VectorVariable<3U>& makeVector( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG, double64, double64, double64 );
+const VectorVariable<3U>& makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::array<double64,3U>& );
+const VectorVariable<3U>& makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double64>& );
 
 
 template<size_t dim>
@@ -245,9 +249,39 @@ Point<3U> operator*( const Point<3U>&, const VectorVariable<3U>& );
 Point<3U> operator/( const Point<3U>&, const VectorVariable<3U>& );
 
 
+// 1D specializations
+inline const VectorVariable<1U>& makeVector( VARIABLE_FLAG fx, double64 vx )
+ {
+    return std::move(VectorVariable<1U>(fx,vx));
+ }
+ 
+// 2D specializations
+inline const VectorVariable<2U>& makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, double64 vx, double64 vy )
+ {
+    return std::move(VectorVariable<2U>(fx,fy,vx,vy));
+ }
 
 
-// 3D specialization
+// 3D specializations
+
+inline const VectorVariable<3U>& makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, VARIABLE_FLAG fz, double64 vx, double64 vy, double64 vz )
+ {
+    return std::move(VectorVariable<3U>(fx,fy,fz,vx,vy,vz));
+ }
+
+inline const VectorVariable<3U>& makeVector( const std::array<VARIABLE_FLAG,3U>& flags, const std::array<double64,3U>& vals )
+ {
+    return std::move(VectorVariable<3U>(flags[0],flags[1],flags[2],vals[0],vals[1],vals[2]));
+ }
+
+inline const VectorVariable<3U>& makeVector( const std::vector<VARIABLE_FLAG>& flags, const std::vector<double64>& vals )
+ {
+    assert( flags.size() == 3U );
+    assert( vals.size() == 3U );
+    return std::move(VectorVariable<3U>(flags[0],flags[1],flags[2],vals[0],vals[1],vals[2]));
+ }
+
+
 
 inline VectorVariable<3U>::VectorVariable( const VectorVariable<3U>& v )
  : flag(v.flag),

@@ -3,6 +3,9 @@
 
 #include "CSMP_definitions.h"
 #include "Exception.h"
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Exception.h"
+#endif
 
 #include "Test.h"
 #include "TestSuite.h"
@@ -87,6 +90,9 @@
 #include "TwoPhaseModel_TestSuite.h"
 #include "ExponentialTransferFunction_Test.h"
 
+#include "CSMP_VariableBenchmarking_Test.hpp"
+
+
 using namespace std;
 using namespace csmp;
 
@@ -145,11 +151,12 @@ using namespace csmp;
 int main()
 {
   long nFail(0);
-  const bool test_fundamentals(true),
+  const bool test_fundamentals(false),
              test_interdependent1(false),
              test_interdependent2(false),
              test_composite(false),
-             test_refactoring(false);
+             test_refactoring(false),
+             test_new_developments(true);
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;
         if ( test_fundamentals ) {
@@ -299,6 +306,19 @@ int main()
               cerr << "\nunit_tests_main: 5. CSMP refactored and new functionality: Total unit test failures: " << nFail << endl;
           }
 
+        // tests related to code that is currently being refactored
+        if ( test_new_developments ) {
+              cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
+              TestSuite new_developments("new tests of the CSMP base library", &cout );
+              new_developments.addTest( new VariableBenchmarking_Test() );
+
+             // running unit tests and reporting errors
+              new_developments.run();
+              nFail = new_developments.report();
+              new_developments.free();
+              cerr << "\nunit_tests_main: 6. New functionality: Total unit test failures: " << nFail << endl;
+          }
+
         cerr << "\nunit_tests_main: Total unit test failures: " << nFail << endl;
 
   } // Exception handling (warnings etc. are caught at a much lower level)
@@ -352,12 +372,25 @@ int main()
     cerr <<"\nunderflow_error: Runtime error caused by: "<< ba.what() << endl;
     system("pause");
   }
-  catch( Exception& ba ) {
-    cerr <<"\nException: Exception raised: "<< ba.What() << endl;
-    cerr <<"\nDiagnostics:"<< endl;
-    ba.Out();
-    system("pause");
-  }
+      catch( Exception& ba ) {
+#ifdef __GNUC__
+           // this is a fix for gcc name demangling.
+           const std::type_info  &ti = typeid(ba);
+           int status;
+           char* realname = abi::__cxa_demangle(ti.name(), 0, 0, &status );
+           cout<<"\nException: Exception raised by: "<<realname<<endl;
+#else
+           cout<<"\nException: Exception raised by: "<< typeid(ba).name() << endl;
+#endif
+           cout <<"\nDiagnostics:"<< endl;
+           ba.Out();
+        }
+#ifdef CSMP_WITH_SAMG_SOLVER
+    catch( SAMG_Exception& ba ) {
+         cout <<"\nSAMG_Exception: "<< ba.what() << endl;
+         system("pause");
+      }
+#endif
 
   // tell operating system that no error occurred (by returning 0 as opposed to
   // some error number)

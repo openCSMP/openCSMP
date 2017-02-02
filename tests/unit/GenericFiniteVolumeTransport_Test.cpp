@@ -54,6 +54,15 @@ namespace csmp {
 //
 // *************************************************************************************************
 
+/**
+    Tests performed:
+    
+    Speed comparison between projections made in parametric versus physical space while checking accuracy
+    at same time.
+*/
+void run()
+ {
+ } // end run
 
 
 /**
