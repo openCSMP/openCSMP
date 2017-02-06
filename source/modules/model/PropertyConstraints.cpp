@@ -462,22 +462,22 @@ bool PropertyConstraints::VectorLengthCheck( const Element<dim>& e,
 
 
 
-void PropertyConstraints::Out() const
+void PropertyConstraints::Out(std::ostream& os) const
  {
-    cout <<"\nPropertyConstraints::Out: "<< endl;
-    if ( vector_length_check )      cout <<"\tSet to check the length of vector variables"<< endl;
-    if ( one_node_only )            cout <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
-    if ( nodal_average )            cout <<"\tAll nodal variables are averaged"<< endl;
-    if ( check_list.empty() )       cout <<"\tIndex data are not established yet."<< endl;
-    else                            cout <<"\tIndex data have been established."<< endl;
+    os <<"\nPropertyConstraints::Out: "<< endl;
+    if ( vector_length_check )      os <<"\tSet to check the length of vector variables"<< endl;
+    if ( one_node_only )            os <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
+    if ( nodal_average )            os <<"\tAll nodal variables are averaged"<< endl;
+    if ( check_list.empty() )       os <<"\tIndex data are not established yet."<< endl;
+    else                            os <<"\tIndex data have been established."<< endl;
 
     map<string,pair<double64,double64> >::const_iterator  crit;       
     
-    cout <<"\tAssigned property constraints, and their ranges:";
+    os <<"\tAssigned property constraints, and their ranges:";
     for ( crit=criteria.begin(); crit!=criteria.end(); crit++ )
-      cout <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
+      os <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
     
-    cout << endl; 
+    os << endl; 
  }
 
  // 1d

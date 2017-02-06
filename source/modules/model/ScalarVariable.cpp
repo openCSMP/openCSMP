@@ -2,13 +2,13 @@
 
 namespace csmp {
 
-void  ScalarVariable::Out() const
+void  ScalarVariable::Out(std::ostream& os) const
  {
-    std::cout <<"\nStatus: "<< parseStatus(flag_);
+    os <<"\nStatus: "<< parseStatus(flag_);
     if ( isnan(data_) )
-      std::cout <<", value: NAN\n";
+      os <<", value: NAN\n";
     else
-      std::cout <<", value: " << data_ << std::endl;
+      os <<", value: " << data_ << std::endl;
  }
 
  

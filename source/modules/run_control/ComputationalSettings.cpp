@@ -473,23 +473,23 @@ double64 ComputationalSettings::PopOutputTime()
 /** Prints the current computational settings to screen.
 
 */
-void ComputationalSettings::Out() const
+void ComputationalSettings::Out(std::ostream& os) const
 {
-    cout <<"\nComputationalSettings::Out:";
-    cout <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
-    cout <<"\nrun duration:  "<< run_duration_;
-    cout <<"\noutput times:  ";
+    os <<"\nComputationalSettings::Out:";
+    os <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
+    os <<"\nrun duration:  "<< run_duration_;
+    os <<"\noutput times:  ";
     for ( std::set<double64>::const_iterator oit=output_times_.begin();
           oit!=output_times_.end(); oit++ )
-        cout << (*oit) <<", ";
-    cout << endl << endl;
+        os << (*oit) <<", ";
+    os << endl << endl;
 
     if (!monitor_times_.empty()){
-        cout <<"\nmonitor times:  ";
+        os <<"\nmonitor times:  ";
         for ( std::set<double64>::const_iterator oit=monitor_times_.begin();
               oit!=monitor_times_.end(); oit++ )
-            cout << (*oit) <<", ";
-        cout << endl << endl;
+            os << (*oit) <<", ";
+        os << endl << endl;
     }
 }
 

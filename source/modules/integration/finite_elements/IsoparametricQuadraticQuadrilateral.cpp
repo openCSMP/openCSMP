@@ -987,7 +987,7 @@ IsoparametricQuadraticQuadrilateral::dN_At( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricQuadraticQuadrilateral3D::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
     rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
     cout<<" IsoparametricQuadraticQuadrilateral3D::dN  Matrix DN2: "<<endl;
-    DN2.Out();
+    DN2.Out(cout);
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
     return detJ;

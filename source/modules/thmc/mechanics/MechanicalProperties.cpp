@@ -77,19 +77,20 @@ double64  tensileStrengthFromUCS_Griffith( double64 UCS, double64 fric_coeff )
 
 
 
-void MechanicalProperties::Out() const
+void MechanicalProperties::Out(std::ostream& os) const
  {
-    cout <<"\nMechanicalProperties::Out:";
-    cout <<"\nE:     "<< E <<" Young's modulus (Pa)";
-    cout <<"\nB:     "<< B <<" bulk modulus = compressibility of rock skeleton = K_dry (Pa)";
-    cout <<"\nG:     "<< G <<" shear modulus = modulus of rigidity (Pa)";
-    cout <<"\nalpha: "<< alpha <<" Biot coefficient alpha = 1 - K_dry/K_grain (dimensionless ratio)";
-    cout <<"\nTS:    "<< TS <<" tensile strength (Pa)";
-    cout <<"\nUCS:   "<< UCS <<" unconfined compressive strength (Pa)";
-    cout <<"\npstar: "<< pstar <<" crushing pressure of the rock, see Fjaer et al. 08', p. 68 (Pa)";
-    cout <<"\nmu:    "<< mu <<" friction coefficient (dimensionless)";
-    cout <<"\nnu:    "<< nu <<" Poisson's ratio (dimensionless ratio)";
-    cout <<"\nC:     "<< C <<" cohesive strength = inherent shear strength (Pa).\n";
+    os <<"\nMechanicalProperties::Out:";
+    os <<"\nE:     "<< E <<" Young's modulus (Pa)";
+    os <<"\nB:     "<< B <<" bulk modulus = compressibility of rock skeleton = K_dry (Pa)";
+    os <<"\nG:     "<< G <<" shear modulus = modulus of rigidity (Pa)";
+    os <<"\nalpha: "<< alpha <<" Biot coefficient alpha = 1 - K_dry/K_grain (dimensionless ratio)";
+    os <<"\nTS:    "<< TS <<" tensile strength (Pa)";
+    os <<"\nUCS:   "<< UCS <<" unconfined compressive strength (Pa)";
+    os <<"\npstar: "<< pstar <<" crushing pressure of the rock, see Fjaer et al. 08', p. 68 (Pa)";
+    os <<"\nmu:    "<< mu <<" friction coefficient (dimensionless)";
+    os <<"\nnu:    "<< nu <<" Poisson's ratio (dimensionless ratio)";
+    os <<"\nC:     "<< C <<" cohesive strength = inherent shear strength (Pa).\n";
+    os.flush();
  }
 
 

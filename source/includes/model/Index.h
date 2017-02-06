@@ -43,7 +43,7 @@ namespace csmp {
     void Detach();
     void UpdateData( const csmp::Index& idx );
 
-    void Out() const;
+    void Out(std::ostream& os) const;
     bool Out( FILE* fp ) const;
     bool In( FILE* fp );
 

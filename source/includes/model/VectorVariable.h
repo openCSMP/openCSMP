@@ -71,7 +71,7 @@ VectorVariable<3U>  v2;
 v2 = sqrt(3.);
 VectorVariable<3U>  v3 = v2 & v1; // dot product
 
-v3.Out();
+v3.Out(std::ostream& os);
 @endcode
 
 */
@@ -187,7 +187,7 @@ class VectorVariable<3U> {
     
     // IO
     void            In();
-    void            Out() const;
+    void            Out(std::ostream& is) const;
     bool            In( FILE* );
     bool            Out( FILE* ) const;
 

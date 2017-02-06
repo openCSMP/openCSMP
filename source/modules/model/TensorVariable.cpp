@@ -878,21 +878,21 @@ void  TensorVariable<3U>::In()
 
 
  /// @test tested: O.K.
- void  TensorVariable<3U>::Out() const
+ void  TensorVariable<3U>::Out(std::ostream& os) const
  {
      size_t   i, j;
      
-     cout <<"\nStatus: "<< endl;
+     os <<"\nStatus: "<< endl;
      for ( i=0; i<3U; i++ ) 
-       cout << parseStatus(flag[i]) <<"  ";
+       os << parseStatus(flag[i]) <<"  ";
        
-     cout << endl;
+     os << endl;
       
-     cout <<"\nValues: "<< endl;
+     os <<"\nValues: "<< endl;
      for ( i=0; i<3U; i++ )
        {
-          for ( j=0; j<3U; j++ ) cout << data[i][j] <<"\t\t";
-          cout << endl;
+          for ( j=0; j<3U; j++ ) os << data[i][j] <<"\t\t";
+          os << endl;
        }
  } // end Out
 

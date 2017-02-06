@@ -544,9 +544,9 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN6 )
           ////////// Debug Printout////////////////////////////////
           //  cout<<" At vertice #: "<<i<<endl;
           //	cout<<" Jacobian Matrix: "<<endl;
-          //	JAC.Out();
+          //	JAC.Out(cout);
           //	cout<<" Jacobian Inverse Matrix: "<<endl;
-          //JINV.Out();
+          //JINV.Out(cout);
           /////////////////////////////////////////////////////////
           //for ( size_t j=0; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
@@ -607,7 +607,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricLinearPrism::dN  For given xyz=("<<xyz[0]<<","<<xyz[1]<<","<<xyz[2]<<"), rst=("<<
     rst[0]<<","<<rst[1]<<","<<rst[2]<<")"<<endl;
     cout<<" IsoparametricLinearPrism::dN  Matrix DN2: "<<endl;
-    DN2.Out();
+    DN2.Out(cout);
     getchar();
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 

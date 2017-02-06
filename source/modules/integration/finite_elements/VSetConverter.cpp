@@ -1918,7 +1918,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
          for ( ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )
            {   
               cout <<"\nx,y,id: "<< endl;
-              (*ndit).first.Out();
+              (*ndit).first.Out(cout);
            }
          cout << endl << endl;
       }
@@ -2246,7 +2246,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
          for ( ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )
            {   
               cout <<"\nx,y,id: "<< endl;
-              (*ndit).first.Out();
+              (*ndit).first.Out(cout);
            }
          cout << endl << endl;
       }

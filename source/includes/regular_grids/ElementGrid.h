@@ -20,7 +20,7 @@ class ElementGrid {
     double64 GridAverage() const;
     double64 Sum() const;
     void  MinMax( double64& dmin, double64& dmax ) const;
-    void  Out() const;
+    void  Out(std::ostream& os) const;
     void  TransferDataToGrid( FiniteDifferenceGrid& ) const;
     bool  Empty() const;
     int32  Size() const;

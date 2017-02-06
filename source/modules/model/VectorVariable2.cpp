@@ -97,16 +97,16 @@ void  VectorVariable<2U>::In()
 
 
 
-void  VectorVariable<2U>::Out() const 
+void  VectorVariable<2U>::Out(std::ostream& os) const 
  {
      string  status;
      
-     cout <<"\nStatus: "<< endl; 
+     os <<"\nStatus: "<< endl; 
      for ( size_t i=0; i<2U; i++ ) 
-       cout << (status = parseStatus(flag[i])) <<"\t\t";
-     cout << endl;
-     for ( size_t i=0; i<2U; i++ ) cout << data[i] <<"\t\t";
-     cout << endl;
+       os << (status = parseStatus(flag[i])) <<"\t\t";
+     os << endl;
+     for ( size_t i=0; i<2U; i++ ) os << data[i] <<"\t\t";
+     os << endl;
 
  } // end Out
 

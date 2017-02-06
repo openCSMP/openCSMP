@@ -46,34 +46,34 @@ ModelTopology::~ModelTopology()
 
 /** Writes all the currently stored topological information to standard output, i.e. the screen.
 */
-void  ModelTopology::Out() const
+void  ModelTopology::Out(std::ostream& os) const
  {
     if ( model_regions.empty() ) {
-         std::cout <<"\nModelTopology::Out: Topology of '"<< model_name;
-         std::cout <<"' is not defined."<< std::endl;
+         os <<"\nModelTopology::Out: Topology of '"<< model_name;
+         os <<"' is not defined."<< std::endl;
          return;
       }
 
-    std::cout <<"\nModelTopology::Out: Model: '"<< model_name <<"' with "<< Elements() <<" elements."<< std::endl;
+    os <<"\nModelTopology::Out: Model: '"<< model_name <<"' with "<< Elements() <<" elements."<< std::endl;
     for ( std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       {
-         std::cout <<"\nRegion: '"<< (*it).first <<"' of ";
+         os <<"\nRegion: '"<< (*it).first <<"' of ";
          for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
                sit!=(*it).second.first.end(); sit++ ) std::cout << (*sit) <<" ";
          if ( isoparametric_mesh )
-           std::cout <<" isoparametric finite elements";
+           os <<" isoparametric finite elements";
          else
-           std::cout <<" finite elements";
-         std::cout <<"\nNumber of elements in region: "<< (*it).second.second.size();
-         std::cout <<"\nElement ID numbers: "<< std::endl;
+           os <<" finite elements";
+         os <<"\nNumber of elements in region: "<< (*it).second.second.size();
+         os <<"\nElement ID numbers: "<< std::endl;
          for ( std::vector<size_t>::const_iterator
                lit=(*it).second.second.begin(); lit!=(*it).second.second.end(); lit++ )
-           std::cout << (*lit) <<" ";
-         std::cout << std::endl;
+           os << (*lit) <<" ";
+         os << std::endl;
       }
 
-    std::cout << std::endl;
+    os << std::endl;
 
  } // end Out()
 
@@ -945,11 +945,11 @@ before the new names are inserted.
 
 If the current model does not contain a topology a message is printed.
 */
-void  ModelTopology::Out( std::list<std::string>& regions ) const
+void  ModelTopology::Out( std::ostream& os, std::list<std::string>& regions ) const
  {
     if ( model_regions.empty() ) {
-         std::cout <<"\nModelTopology::Out: Topology of '"<< model_name;
-         std::cout <<"' is not defined."<< std::endl;
+         os <<"\nModelTopology::Out: Topology of '"<< model_name;
+         os <<"' is not defined."<< std::endl;
          return;
       }
     if ( !regions.empty() ) regions.erase( regions.begin(), regions.end() );
@@ -2184,7 +2184,7 @@ bool  ModelTopology::BoxShapedModel() const
        {
           std::cerr <<"\nException: Exception raised: "<< ba.What() << std::endl;
           std::cerr <<"\nDiagnostics:"<< std::endl;
-          ba.Out();
+          ba.Out(std::cerr);
           if ( !Standard_IO_Handler().YesNo("\nDo you want to carry on?") ) throw ba;
        }
 

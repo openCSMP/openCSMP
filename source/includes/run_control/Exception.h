@@ -52,7 +52,7 @@ class Exception : std::exception {
     CSMP_MESSAGE  Message() const;
   
     /// prints all data assocatiated with the exception (following the convention for all CSMP classes)
-    void          Out() const;
+    void          Out(std::ostream& os) const;
 
   private:
     CSMP_MESSAGE csmp_exception_;

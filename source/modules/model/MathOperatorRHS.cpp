@@ -188,10 +188,10 @@ std::string  MathOperatorRHS<dim>::Name() const
 
 
 template<size_t dim>
-void MathOperatorRHS<dim>::Out() const
+void MathOperatorRHS<dim>::Out(std::ostream& os) const
 {
-    op.Out();
-    top.first.Out();
+    op.Out(os);
+    top.first.Out(os);
 }
 
 

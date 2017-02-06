@@ -720,90 +720,90 @@ bool InterFace<dim>::SpacingNode( size_t n_local, VectorVariable<dim>& innerToOu
 // SCREEN OUTPUT
 
 template<size_t dim>
-void  InterFace<dim>::Out() const
+void  InterFace<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\nInterFace<"<< dim <<">::Out: number: "<< idx_;
+    os <<"\n\n\nInterFace<"<< dim <<">::Out: number: "<< idx_;
 
     string str;
     //str = parseBoundary(at_boundary_);
     /// @todo (2-P) Remove typeid, implement name fct
-    cout <<" ("<< typeid(fptr_).name() <<")";
-    //if ( at_boundary_ != NOT ) cout <<", Boundary flag: "<< str;
-    cout << endl;
+    os <<" ("<< typeid(fptr_).name() <<")";
+    //if ( at_boundary_ != NOT ) os <<", Boundary flag: "<< str;
+    os << endl;
 
-    cout <<"\nInternal data: "<< endl;
+    os <<"\nInternal data: "<< endl;
 
-    cout <<"\n\tconnected nodes with boundary flags:  ";
+    os <<"\n\tconnected nodes with boundary flags:  ";
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i,INSIDE)->AtBoundary());
-         cout << N(i,INSIDE)->Idx() <<":"<< str <<"  ";
+         os << N(i,INSIDE)->Idx() <<":"<< str <<"  ";
       }
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i,OUTSIDE)->AtBoundary());
-         cout << N(i,OUTSIDE)->Idx() <<":"<< str <<"  ";
+         os << N(i,OUTSIDE)->Idx() <<":"<< str <<"  ";
       }
-    cout << endl;
+    os << endl;
 
-    cout <<"\n\tconnected neighbor InterFace types / boundary flags:\n";
+    os <<"\n\tconnected neighbor InterFace types / boundary flags:\n";
     for ( size_t i=0U; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
-           cout <<"\t\t"<< Idx() <<":";
-           cout << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
+           os <<"\t\t"<< Idx() <<":";
+           os << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
            //str = parseBoundary(Neighbor(i)->AtBoundary());
-           //cout << str;
-           cout << endl;
+           //os << str;
+           os << endl;
         }
-      else cout <<"none.  ";
-    cout << endl;
+      else os <<"none.  ";
+    os << endl;
 
     /// @todo (2-P) Remove typeid, implement name fct
-    cout <<"\tInterFace is connected via bridge pattern to: ";
-    cout << typeid(fptr_).name() << endl;
+    os <<"\tInterFace is connected via bridge pattern to: ";
+    os << typeid(fptr_).name() << endl;
 
-    cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    os <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
 
     Point<dim>  pt(this->BaryCenter());
 
     if ( dim == 1U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
     else if ( dim == 2U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
     else
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
 
     const size_t ipoints(this->IntegrationPoints());
     if ( ipoints > 0U ) {
-         cout <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
+         os <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
       }
 
-    cout <<"\n Connected Node objects, side 1 of interface: ";
-    for ( size_t i=0U; i<this->Nodes(); i++ ) cout << parent_elements_node_connector_[i].first <<",  ";
-    cout << endl;
+    os <<"\n Connected Node objects, side 1 of interface: ";
+    for ( size_t i=0U; i<this->Nodes(); i++ ) os << parent_elements_node_connector_[i].first <<",  ";
+    os << endl;
 
-    cout <<"\n Connected Node objects, side 2 of interface: ";
-    for ( size_t i=0U; i<this->Nodes(); i++ ) cout << parent_elements_node_connector_[i].second <<",  ";
-    cout << endl;
+    os <<"\n Connected Node objects, side 2 of interface: ";
+    for ( size_t i=0U; i<this->Nodes(); i++ ) os << parent_elements_node_connector_[i].second <<",  ";
+    os << endl;
 
     /// @todo (2-D) Rm rtti
-    cout <<"\n\nParent (higher-dimensional) Element objects:     "<< endl;
+    os <<"\n\nParent (higher-dimensional) Element objects:     "<< endl;
     if ( innerParent_ != 0 ) {
-         cout <<"\tinward  facing Element: ";
-         cout  <<" ("<< typeid(*(this->Parent(INSIDE)->FE())).name() <<")"<< endl;
-         this->innerParent_->Out();
+         os <<"\tinward  facing Element: ";
+         os  <<" ("<< typeid(*(this->Parent(INSIDE)->FE())).name() <<")"<< endl;
+         this->innerParent_->Out(os);
       }
-    else cout <<"\tnone.\n";
+    else os <<"\tnone.\n";
     if ( this->outerParent_ != 0 ) {
-         cout <<"\toutward facing Element: ";
-         cout <<" ("<< typeid(*(this->Parent(OUTSIDE)->FE())).name() <<")"<< endl;
-         this->outerParent_->Out();
+         os <<"\toutward facing Element: ";
+         os <<" ("<< typeid(*(this->Parent(OUTSIDE)->FE())).name() <<")"<< endl;
+         this->outerParent_->Out(os);
       }
-    else cout <<"\tnone.\n";
+    else os <<"\tnone.\n";
 
-    cout <<"\tUnit Normal:            ";
+    os <<"\tUnit Normal:            ";
     VectorVariable<dim> un( PLAIN, 0. );
     UnitNormal( un );
-    for ( size_t i=0U; i<dim; i++ ) cout << un[i] <<", ";
-    cout << endl;
+    for ( size_t i=0U; i<dim; i++ ) os << un[i] <<", ";
+    os << endl;
 
  } // end Out
 

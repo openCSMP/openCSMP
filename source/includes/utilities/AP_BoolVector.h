@@ -31,7 +31,7 @@ public:
   /// sets all bits to a value
   void SetAll( bool value );
   
-  void Out() const;
+  void Out(std::ostream& os) const;
 
 private:
   /// bit vector

@@ -73,7 +73,7 @@ class MathOperatorRHS {
     void          Name( const char*, const char* topname );
     void          Name( const char*, const char* opname, const char* topname );
 
-    virtual void  Out() const;
+    virtual void  Out(std::ostream& os) const;
 
     const Parameter& MaterialOperand()          const;
     const Index&  MaterialOperandKey()          const;

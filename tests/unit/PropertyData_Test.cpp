@@ -34,8 +34,8 @@ void PropertyData_Test::run()
     // a copy
     PropertyData dataset2( dataset1 );
     // comparison
-    dataset1.Out();
-    dataset2.Out();
+    dataset1.Out(getInfoStream());
+    dataset2.Out(getInfoStream());
     // are they the same? (operator==) - should be fd
     _test( (dataset1 == dataset2) == false );
     // and a third one (asignment operator)
@@ -46,8 +46,8 @@ void PropertyData_Test::run()
     _test( dataset3.Size() == 0 );
     // resizing
     dataset1.Resize( 5, 5 );
-    _info("PropertyData_Test::run: dataset1 after resizing to 5:");
-    dataset1.Out();
+    getInfoStream() << "PropertyData_Test::run: dataset1 after resizing to 5:";
+    dataset1.Out(getInfoStream());
     _test( dataset1.Size() == 5 );
  
     /// loosing entry 2 and 4, 5
@@ -55,7 +55,7 @@ void PropertyData_Test::run()
     o_n_elmt_ids.insert( make_pair(0,0) ); // keep first value: PLAIN:2
     o_n_elmt_ids.insert( make_pair(2,1) ); // keep third value: ANY:NaN
     dataset1.ReduceTo( o_n_elmt_ids );
-    dataset1.Out();
+    dataset1.Out(getInfoStream());
     _test( dataset1.Size() == 2 );
  
     // accessors / mutators for values (operator[] cannot be overloaded for this)
@@ -104,16 +104,16 @@ void PropertyData_Test::run()
     _equal( tmin, 16., 1e-10 );
     _equal( tmax, 35., 1e-10 );
   
-    _info("PropertyData_Test::run: scaled and offset dataset1:");
-    dataset1.Out();
-    _info("PropertyData_Test::run: sqrt of values in dataset1:");
+    getInfoStream() << "PropertyData_Test::run: scaled and offset dataset1:";
+    dataset1.Out(getInfoStream());
+    getInfoStream() << "PropertyData_Test::run: sqrt of values in dataset1:";
     dataset1.TransformValues( std::sqrt );
     // eliminating the nan value
     dataset1.Value(1) = -1.;
-    dataset1.Out();
+    dataset1.Out(getInfoStream());
    
     /// writing stored flag and data values to file
-    _info("PropertyData_Test::run: dataset1 written to file and read back to memory:");
+    getInfoStream() << "PropertyData_Test::run: dataset1 written to file and read back to memory:";
     PropertyData datasetN( dataset1 ); // backup copy
 
     std::FILE* out_fp = fopen( "PropertyData_Test", "wb" );
@@ -124,14 +124,14 @@ void PropertyData_Test::run()
     std::FILE* in_fp = fopen( "PropertyData_Test", "rb" );
     datasetN = inBinaryPropertyData( in_fp );
     fclose( in_fp );
-    datasetN.Out();
+    datasetN.Out(getInfoStream());
     _test( datasetN == dataset1 );
 
 
     // ---------------------------------------------------------------------------
     // VECTOR VARIABLES
     // ---------------------------------------------------------------------------
-    _info("PropertyData_Test: testing for VectorVariable:");
+    getInfoStream() << "PropertyData_Test: testing for VectorVariable:";
     // constructor for all possible csmp variable types
     const size_t DIM3(3);
     PropertyData dataset4( ELEMENT_INTEGRATION_POINT, VECTOR, DIM3 );
@@ -141,28 +141,28 @@ void PropertyData_Test::run()
     pushBack( dataset4, vc1 );
     pushBack( dataset4, vc2 );
     pushBack( dataset4, vc3 );
-    dataset4.Out();
+    dataset4.Out(getInfoStream());
     // a copy
     PropertyData dataset5( dataset4 );
     // comparison
-    dataset5.Out();
+    dataset5.Out(getInfoStream());
     // are they the same? (operator==) - should be the same
     _test( (dataset4 == dataset5) == true );
     // reading element vc2
     VectorVariable<DIM3> vc_test;
     read( dataset5, 1, vc_test );
-    vc_test.Out();
+    vc_test.Out(getInfoStream());
     _test( (vc_test == vc2) == true );
     // writing vc1 into position 3
     store( dataset5, 2, vc1 );
-    dataset5.Out();
+    dataset5.Out(getInfoStream());
     _test( (dataset4 == dataset5) == false );
    
 
     // ---------------------------------------------------------------------------
     // TENSOR VARIABLES
     // ---------------------------------------------------------------------------
-    _info("PropertyData_Test: testing for TensorVariable:");
+    getInfoStream() << "PropertyData_Test: testing for TensorVariable:";
     // constructor for all possible csmp variable types
     PropertyData dataset6( ELEMENT_INTEGRATION_POINT, TENSOR, DIM3 );
     // stick in 3 diagonal tensors
@@ -174,18 +174,18 @@ void PropertyData_Test::run()
     pushBack( dataset6, ts1 );
     pushBack( dataset6, ts2 );
     pushBack( dataset6, ts3 );
-    dataset6.Out();
+    dataset6.Out(getInfoStream());
     // a copy
     PropertyData dataset7( dataset6 );
     // comparison
-    dataset7.Out();
+    dataset7.Out(getInfoStream());
     // are they the same? (operator==) - should be the same
     _test( (dataset6 == dataset7) == true );
 
     // reading element ts3
     TensorVariable<DIM3> ts_test;
     read( dataset7, 2, ts_test );
-    ts_test.Out();
+    ts_test.Out(getInfoStream());
     _test( (ts_test == ts3) == true );
     // (over) writing ts3 into position 3
     store( dataset7, 2, ts_test );
@@ -196,7 +196,7 @@ void PropertyData_Test::run()
     // ---------------------------------------------------------------------------
     // ARRAY VARIABLES
     // ---------------------------------------------------------------------------
-    _info("PropertyData_Test: testing for ArrayVariable:");
+    getInfoStream() << "PropertyData_Test: testing for ArrayVariable:";
     // constructor for all possible csmp variable types
     const size_t array_length(4);
     PropertyData dataset8( NODE, ARRAY, DIM3, array_length );
@@ -205,11 +205,11 @@ void PropertyData_Test::run()
     dataset8.Reserve( 2 );
     pushBack( dataset8, ary1 );
     pushBack( dataset8, ary2 );
-    dataset8.Out();
+    dataset8.Out(getInfoStream());
     // a copy
     PropertyData dataset9( dataset8 );
     // comparison
-    dataset9.Out();
+    dataset9.Out(getInfoStream());
     // are they the same? (operator==) - should be the same
     _test( (dataset8 == dataset9) == true );
     // changing last element of ary1 to 4

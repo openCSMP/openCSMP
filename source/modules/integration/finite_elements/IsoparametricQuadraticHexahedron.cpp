@@ -872,14 +872,14 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN27 )
         Jacobian( DNR, DNS, DNT );
 
         cout<<" Jacobian Matrix: "<<endl;
-        JAC.Out();
+        JAC.Out(cout);
         /////////////////////////////////////////////////////////
 
         JacobianInverse();
 
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Inverse Matrix: "<<endl;
-        JINV.Out();
+        JINV.Out(cout);
         /////////////////////////////////////////////////////////
         }
         else
@@ -889,13 +889,13 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN27 )
 
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Matrix: "<<endl;
-        JAC.Out();
+        JAC.Out(cout);
         /////////////////////////////////////////////////////////
         getchar();
          JacobianInverse();
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Inverse Matrix: "<<endl;
-        JINV.Out();
+        JINV.Out(cout);
         /////////////////////////////////////////////////////////
           }
 
@@ -953,7 +953,7 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricQuadraticHexahedron::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
     rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
     cout<<" IsoparametricQuadraticHexahedron::dN  Matrix DN2: "<<endl;
-    DN2.Out();
+    DN2.Out(cout);
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
     return detJ;
@@ -1722,7 +1722,7 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
         for ( size_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
-            //TEMP_N.Out();
+            //TEMP_N.Out(cout);
             for ( size_t j=0; j<cornerNodes; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);

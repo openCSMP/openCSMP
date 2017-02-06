@@ -574,9 +574,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
             if ( verbose_ ) {
                 cout <<"\ncomputed element variable 'velocity':"<< endl;
-                vt_.Out();
+                vt_.Out(cout);
                 cout <<"\ncomputed element variable 'pore velocity':"<< endl;
-                ivelo_.Out();
+                ivelo_.Out(cout);
                 cout <<"\ncomputed element variable 'volume flux': "<< flux_.Value() << endl;
             }
         }

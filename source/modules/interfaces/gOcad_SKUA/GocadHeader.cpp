@@ -245,23 +245,22 @@ void GocadHeader::WriteToText( ofstream& ofs ) const
 
 
 
-void GocadHeader::Out() const
+void GocadHeader::Out(std::ostream& os) const
  {
-    cout <<"\nGocadHeader::Out: name: "<< name << endl << endl;
-    cout <<"Geological type of object: "<< geological_type << endl;
-    cout <<"With control nodes:        "<< cn << endl;   
-    cout <<"Solid:                     "<< solid << endl;
-    cout <<"Sample size:               "<< sample_size << endl;
-    cout <<"No data value threshold:   "<< no_data_values << endl;
+    os <<"\nGocadHeader::Out: name: "<< name << endl << endl;
+    os <<"Geological type of object: "<< geological_type << endl;
+    os <<"With control nodes:        "<< cn << endl;   
+    os <<"Solid:                     "<< solid << endl;
+    os <<"Sample size:               "<< sample_size << endl;
+    os <<"No data value threshold:   "<< no_data_values << endl;
     
-    if ( !properties.empty() ) cout <<"\nAssociated properties:" << endl;
+    if ( !properties.empty() ) os <<"\nAssociated properties:" << endl;
     map<string,GocadPropertyClassHeader>::const_iterator  it;
     for ( it=properties.begin(); it!=properties.end(); it++ )
       {
-         cout << (*it).first << endl;
-         (*it).second.Out();
+         os << (*it).first << endl;
+         (*it).second.Out(os);
       }
-    cout.flush();
       
  } // end 
  

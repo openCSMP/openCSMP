@@ -1689,7 +1689,7 @@ void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
              edge2->Assign( neighbor, edge1 );
           }
         else {
-              it.first->Out();
+              it.first->Out(std::cerr);
               csmp_error.notice( ERROR, "creatLineFaceConnectivity(Faces)",
                                 "edge node is connected to more than 2 line Faces; don't know how to deal with this manifold.");
           }

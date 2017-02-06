@@ -124,7 +124,7 @@ void FEM_Data<csp_type>::ScaleRangeTo( const csp_type& tmin, const csp_type& tma
     MinMaxOf( new_min, new_max );
     if ( new_min != tmin || new_max != tmax ) {
          cout <<"\nFEM_Data<T>::ScaleRangeTo: Scaling failed."<< endl;
-         Out();
+         Out(cout);
          throw range_error("FEM_Data<T>::ScaleRangeTo");
       }
 
@@ -306,16 +306,16 @@ void FEM_Data<csp_type>::InBinary( FILE* fp )
 
 
 template<typename csp_type>
-void FEM_Data<csp_type>::Out() const
+void FEM_Data<csp_type>::Out(std::ostream& os) const
  {
-    cout <<"\nFEM_Data::Out:"<< endl;
-    cout <<"Data placement: "<< string(parsePlacement(place)) << endl;
-    if ( logarithmitized ) cout <<"\nLogarithmitized data: "<< endl;
-    else                   cout <<"\nData ("<< data.size()<<" vals): "<< endl;
+    os <<"\nFEM_Data::Out:"<< endl;
+    os <<"Data placement: "<< string(parsePlacement(place)) << endl;
+    if ( logarithmitized ) os <<"\nLogarithmitized data: "<< endl;
+    else                   os <<"\nData ("<< data.size()<<" vals): "<< endl;
  
     for ( size_t i=0U; i<data.size(); i++ )
-      cout << data[i] <<"\t";
-    cout << endl;
+      os << data[i] <<"\t";
+    os << endl;
 
  } // end Out 
 

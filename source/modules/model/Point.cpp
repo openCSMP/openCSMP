@@ -287,12 +287,11 @@ bool Point<dim>::IsBetween( const Point<dim>& pt1, const Point<dim>& pt2 )
 }
 
 template<size_t dim>
-void Point<dim>::Out() const
+void Point<dim>::Out(std::ostream& os) const
  {
-    cout <<"\nPoint<"<<  dim <<">::Out(): coordinates: ";
-    for ( size_t i=0U; i<dim; i++ ) cout << xyz_[i] <<" ";
-    cout << endl;
-    cout.flush();
+    os << "\nPoint<" << dim << ">::Out(): coordinates: ";
+    for ( size_t i=0U; i<dim; i++ ) os << xyz_[i] <<" ";
+    os << endl;
  }
 
 

@@ -21,8 +21,15 @@ using std::ostream;
 #define _fail(e) FAIL( e )
 #define _equal(expr,value,tol) REQUIRE( (expr) == Approx( (value) ).epsilon( (tol) ) )
 #define _succeed()
+
+#ifdef VERBOSE_TESTING
 #define _warn(e) WARN( e )
 #define _info(e) INFO( e )
+#else
+#define _warn(e)
+#define _info(e)
+#endif
+
 
 #else
 
@@ -73,6 +80,8 @@ class Test
 
     long getNumPassed() const;
     long getNumFailed() const;
+    std::ostream& getInfoStream();
+    void setInfoStream(std::ostream* osptr);
     const std::ostream* getStream() const;
     void setStream(std::ostream* osptr);
     void setName( std::string testName ) { testName_ = testName; }
@@ -96,6 +105,7 @@ class Test
     const char* prefix_;
   private:
     std::ostream* m_osptr;
+    std::ostream* m_infoptr;
     std::string testName_;
     long m_nPass;
     long m_nFail;
@@ -103,13 +113,6 @@ class Test
     Test(const Test&);
     Test& operator=(const Test&);
 };
-
-  inline
-      Test::Test(ostream* osptr)
-  {
-    m_osptr = osptr;
-    m_nPass = m_nFail = 0;
-  }
 
   inline
       long Test::getNumPassed() const

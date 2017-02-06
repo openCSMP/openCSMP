@@ -300,7 +300,7 @@ double64 FiniteElementTraits<dim,SIMPLEX>::PropertyIntegral( const csmp::Index& 
                                             "This method only integrates scalar properties" );
 
     if ( eptr->FE() == NULL ) {
-          eptr->Out();
+          eptr->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::PropertyIntegral:",
                                  "encountered element with invalid element pointer.");
@@ -561,7 +561,7 @@ void  FiniteElementTraits<dim,SIMPLEX>::IntegrationPointPropertyVector( const cs
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
     if ( eptr->FE() == NULL ) {
-          eptr->Out();
+          eptr->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::IntegrationPointPropertyVector:",
                                  "encountered element with invalid element pointer.");
@@ -639,7 +639,7 @@ void  FiniteElementTraits<dim,SIMPLEX>::NodePropertyVector( const csmp::Index& i
          std::cerr <<"\nFiniteElementTraits<"<< dim;
          std::cerr <<">::NodePropertyVector: Requested property ";
          std::cerr <<"is not placed on the nodes; property Index: "<< std::endl;
-         idx.Out();
+         idx.Out(std::cerr);
          return;
       }
 
@@ -781,7 +781,7 @@ Point<dim>  FiniteElementTraits<dim,SIMPLEX>::BaryCenter() const
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
     if ( eptr->FE() == NULL ) {
-          eptr->Out();
+          eptr->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::BaryCenter:",
                                  "encountered element with invalid element pointer.");
@@ -835,7 +835,7 @@ double64  FiniteElementTraits<dim,SIMPLEX>::FaceArea( size_t n ) const
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
     if ( eptr->FE() == NULL ) {
-          eptr->Out();
+          eptr->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::FaceArea:",
                                  "encountered element with invalid element pointer.");
@@ -885,7 +885,7 @@ Point<dim>  FiniteElementTraits<dim,SIMPLEX>::FaceBaryCenter( size_t face ) cons
   {
     const SIMPLEX<dim>* e( static_cast<const SIMPLEX<dim>*>(this) );
     if ( e->FE() == NULL ) {
-          e->Out();
+          e->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::FaceBaryCenter:",
                                 "encountered element with invalid element pointer.");
@@ -912,7 +912,7 @@ double64 FiniteElementTraits<dim,SIMPLEX>::SegmentLength( size_t segm ) const
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
     if ( eptr->FE() == NULL ) {
-          eptr->Out();
+          eptr->Out(std::cerr);
           throw csmp::Exception( ERROR,
                                  "FiniteElementTraits<dim,SIMPLEX>::SegmentLenghts:",
                                  "encountered element with invalid element pointer.");

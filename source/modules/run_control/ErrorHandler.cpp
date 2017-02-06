@@ -358,14 +358,14 @@ Here, all recorded messages are printed on 'stdout' in chronological
 sequence. 
 
 */
-void ErrorHandler::Out() const
+void ErrorHandler::Out(std::ostream& os) const
  {
-    cerr <<"\nErrorHandler::Out:"<< endl;
-    cerr <<"errors: "<< errors_ <<", warnings: "<< warnings_ <<", infos: "<< minfos_.size() << endl;
+    os <<"\nErrorHandler::Out:"<< endl;
+    os <<"errors: "<< errors_ <<", warnings: "<< warnings_ <<", infos: "<< minfos_.size() << endl;
      
     for ( map<string,string>::const_iterator
           it=error_sequence_.begin(); it!=error_sequence_.end(); it++ )
-      cerr << (*it).first << endl << (*it).second << endl << endl;
+      os << (*it).first << endl << (*it).second << endl << endl;
  }
 
 

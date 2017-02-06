@@ -273,7 +273,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
@@ -360,7 +360,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
@@ -452,7 +452,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
@@ -538,7 +538,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
@@ -717,7 +717,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
             if ( ResultWithinRange() == false ) {
                  csmp_error.notice( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                            "calculated result out of range; nothing is done.");
-                 (*result_).second.Out();
+                 (*result_).second.Out(std::cerr);
                  csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  
@@ -877,7 +877,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                   {
                      csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                             "calculated result out of range; nothing is done");
-                     (*result_).second.Out();
+                     (*result_).second.Out(std::cerr);
                      csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
                   }
                 // 3.2 if the calculated variable exists in database the result is stored in Model  
@@ -1023,7 +1023,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
               {
                  csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                         "calculated result out of range; nothing is done");
-                 (*result_).second.Out();
+                 (*result_).second.Out(std::cerr);
                  csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  

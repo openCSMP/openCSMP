@@ -261,28 +261,28 @@ void  FiniteElementManager::CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etype
  
  
 
-void  FiniteElementManager::Out() const
+void  FiniteElementManager::Out(std::ostream& os) const
  {
-     cout <<"\nFiniteElementManager::Out: ";
+     os <<"\nFiniteElementManager::Out: ";
      
      /// @todo (2-P) Remove typid by name fct
      if ( hexa_ptr or pyra_ptr or pris_ptr or tetr_ptr ) 
-        cout <<"\n\tcurrent volume elements: ";
-     if ( hexa_ptr  ) cout << typeid(*hexa_ptr).name() <<" ";
-     if ( pyra_ptr ) cout << typeid(*pyra_ptr).name() <<" ";
-     if ( pris_ptr ) cout << typeid(*pris_ptr).name() <<" ";
-     if ( tetr_ptr ) cout << typeid(*tetr_ptr).name() <<" ";
+        os <<"\n\tcurrent volume elements: ";
+     if ( hexa_ptr  ) os << typeid(*hexa_ptr).name() <<" ";
+     if ( pyra_ptr ) os << typeid(*pyra_ptr).name() <<" ";
+     if ( pris_ptr ) os << typeid(*pris_ptr).name() <<" ";
+     if ( tetr_ptr ) os << typeid(*tetr_ptr).name() <<" ";
      
      if ( quad_ptr or tria_ptr ) 
-       cout <<"\n\tcurrent surface elements: ";
-     if ( quad_ptr  ) cout << typeid(*quad_ptr).name() <<" ";
-     if ( tria_ptr ) cout << typeid(*tria_ptr).name() <<" ";
+       os <<"\n\tcurrent surface elements: ";
+     if ( quad_ptr  ) os << typeid(*quad_ptr).name() <<" ";
+     if ( tria_ptr ) os << typeid(*tria_ptr).name() <<" ";
 
      if ( line_ptr ) {
-          cout <<"\n\tcurrent line elements: ";
-          cout << typeid(*line_ptr).name() <<" ";
+          os <<"\n\tcurrent line elements: ";
+          os << typeid(*line_ptr).name() <<" ";
        }
-     cout << endl;
+     os << endl;
  }
 
 

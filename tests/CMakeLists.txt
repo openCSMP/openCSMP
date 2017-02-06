@@ -41,7 +41,7 @@ ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
 TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
 ADD_TEST(
 	NAME csmptest
-	COMMAND csmptest -r xml
+	COMMAND csmptest -r junit
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
 )
 

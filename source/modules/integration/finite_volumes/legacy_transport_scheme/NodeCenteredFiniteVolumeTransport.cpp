@@ -2019,10 +2019,10 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double64 
 template<size_t dim>
 double64  NodeCenteredFiniteVolumeTransport<dim>::TransportPhase( TwoPhaseModel<dim>& ff, double64 )
 {
-    cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim;
-    cout <<">::TransportPhase: you called virtual method stub which cannot ";
-    cout <<" be used for two-phase flow. You need to call specific subclasses in stead."<< endl;
-    ff.Out();
+    std::cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim;
+    std::cout <<">::TransportPhase: you called virtual method stub which cannot ";
+    std::cout <<" be used for two-phase flow. You need to call specific subclasses in stead."<< endl;
+    ff.Out(std::cout);
     gref_.Nodes();
     return std::numeric_limits<double64>::quiet_NaN();
 }
@@ -3399,59 +3399,59 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFinit
 
 /**
 
-Writes internal (state) variables of the NCFVT to the screen. Note that
+Writes internal (state) variables of the NCFVT to a stream. Note that
 these may vary dependent on the choice of constructor which was used
 when the object was built.
 */
 template<size_t dim>
-void NodeCenteredFiniteVolumeTransport<dim>::Out() const
+void NodeCenteredFiniteVolumeTransport<dim>::Out(std::ostream& os) const
 {
-    cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim <<">::Out: ";
-    cout <<"Variable to advect '"<< advected_variable_ <<"'"<< endl;
+    os <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim <<">::Out: ";
+    os <<"Variable to advect '"<< advected_variable_ <<"'"<< endl;
 
-    cout <<"\nFV_STENCIL_DATA - sectors, facets, facet-areas and normals for each finite element: "<< endl;
+    os <<"\nFV_STENCIL_DATA - sectors, facets, facet-areas and normals for each finite element: "<< endl;
     for ( size_t i=0U; i<STENCIL_DATA.size(); i++ ) {
-        cout <<"\nStencil "<< i+1;
-        STENCIL_DATA[i].Out();
+        os <<"\nStencil "<< i+1;
+        STENCIL_DATA[i].Out(os);
     }
-    cout << endl;
+    os << endl;
 
-    cout <<"\nFVPOREVOL, FLUX_BALANCE pore volumes and flux balances for each finite volume: "<< endl;
+    os <<"\nFVPOREVOL, FLUX_BALANCE pore volumes and flux balances for each finite volume: "<< endl;
     for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
-        cout << i+1 <<": "<< FVPOREVOL[i] <<" "<< FLUX_BALANCE[i] << endl;
+        os << i+1 <<": "<< FVPOREVOL[i] <<" "<< FLUX_BALANCE[i] << endl;
 
     if ( SecondOrderInSpace() ) {
-        cout <<"\nThe transport algorithm was constructed for a higher order method; It also contains the following arrays."<< endl;
+        os <<"\nThe transport algorithm was constructed for a higher order method; It also contains the following arrays."<< endl;
 
-        cout <<"\nSMINMAX - min,max of transport variable in the neighborhood of finite volume:"<< endl;
+        os <<"\nSMINMAX - min,max of transport variable in the neighborhood of finite volume:"<< endl;
         for ( size_t i=0U; i<SMINMAX.size(); i++ )
-            cout << i+1 <<": "<< SMINMAX[i].first <<" "<< SMINMAX[i].second << endl;
-        cout << endl;
+            os << i+1 <<": "<< SMINMAX[i].first <<" "<< SMINMAX[i].second << endl;
+        os << endl;
     }
 
     if ( SecondOrderInTime() ) {
-        cout <<"\nSAT0 - initial transport variable values for each finite volume: "<< endl;
+        os <<"\nSAT0 - initial transport variable values for each finite volume: "<< endl;
         for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
-            cout << i+1 <<": "<< SAT0[i] <<" ";
-        cout << endl;
+            os << i+1 <<": "<< SAT0[i] <<" ";
+        os << endl;
 
-        cout <<"\nFACETFLUXES0 - fluxes across finite volume facets in each finite element at time levels 0:"<< endl;
+        os <<"\nFACETFLUXES0 - fluxes across finite volume facets in each finite element at time levels 0:"<< endl;
         for ( size_t i=0U; i<FACETFLUXES0.size(); i++ ) {
-            cout <<" element "<< i+1;
+            os <<" element "<< i+1;
             for ( size_t j=0U; j<FACETFLUXES0[i].size(); j++ )
-                cout <<"\n\tfacet "<< j <<": "<< FACETFLUXES0[i][j] <<" ";
-            cout << endl;
+                os <<"\n\tfacet "<< j <<": "<< FACETFLUXES0[i][j] <<" ";
+            os << endl;
         }
-        cout << endl;
+        os << endl;
 
-        cout <<"\nLTDSATS0 - limited facet values of transported variable at time levels 0:"<< endl;
+        os <<"\nLTDSATS0 - limited facet values of transported variable at time levels 0:"<< endl;
         for ( size_t i=0U; i<LTDSATS0.size(); i++ ) {
-            cout <<" element "<< i+1;
+            os <<" element "<< i+1;
             for ( size_t j=0U; j<LTDSATS0[i].size(); j++ )
-                cout <<"\n\tfacet "<< j <<": "<< LTDSATS0[i][j] <<" ";
-            cout << endl;
+                os <<"\n\tfacet "<< j <<": "<< LTDSATS0[i][j] <<" ";
+            os << endl;
         }
-        cout << endl;
+        os << endl;
     }
 
 } // end Out
@@ -3500,7 +3500,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
     cout <<"\ntestFiniteVolumeStencil(NodeCenteredFiniteVolumeTransport): Test 1, velocity integration in X-direction, velo: "<< endl;
     velo    = 0.;
     velo(0) = 1.;
-    velo.Out();
+    velo.Out(cout);
     vector<double64>  rst(3), IPOL;
 
     for ( typename vector<Element<dim>*>::const_iterator

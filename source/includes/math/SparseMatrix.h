@@ -92,7 +92,7 @@ class SparseMatrix {
     /// read (square) matrix from text file with zeros
     void      In( const char* file_name_without_extension );
 
-    void      Out( long precis=5L ) const;
+    void      Out( std::ostream& os, long precis=5L ) const;
     void      Out( const char* file ) const;
     
   private:

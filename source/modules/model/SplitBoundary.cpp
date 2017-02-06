@@ -1012,11 +1012,11 @@ template void SplitBoundary<3>::InputNodePropertyValue( const char*, const Tenso
 // SCREEN OUTPUT
 
 template<size_t dim>
-void SplitBoundary<dim>::Out() const
+void SplitBoundary<dim>::Out(std::ostream& os) const
  {
-    cout <<"\nSplitBoundary<dim>::Out(): ";
-    cout <<" member elements: interior="<< this->InteriorElements();
-    cout <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
+    os <<"\nSplitBoundary<dim>::Out(): ";
+    os <<" member elements: interior="<< this->InteriorElements();
+    os <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
 
     for ( typename vector<InterFace<dim>*>::const_iterator
           it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
@@ -1025,22 +1025,22 @@ void SplitBoundary<dim>::Out() const
                                  "member element pointer not initialised");
       }
 
-    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    os <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
     for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-         cout <<"\nelement "<< i <<": edge face numbers: ";
+         os <<"\nelement "<< i <<": edge face numbers: ";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
       }
 
-    cout <<"\n\n edge nodes: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current local numbering):"<< endl;
+    os <<"\n\n edge nodes: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
          if ( this->node_vec_[i] == NULL )
            throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised.");
-         else cout << this->node_vec_[i]->Idx() <<" ";
+         else os << this->node_vec_[i]->Idx() <<" ";
       }
 
-    cout << endl;
+    os << endl;
  }
 
 

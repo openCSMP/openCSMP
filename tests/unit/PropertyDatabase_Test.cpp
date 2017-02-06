@@ -197,7 +197,7 @@ namespace csmp
         this->PlacementTest();
         this->TypeTest();
         this->DeletePropertyTest();
-        pdb->Out();
+        pdb->Out(getInfoStream());
     }
 
 

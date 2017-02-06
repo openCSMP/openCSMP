@@ -1185,48 +1185,48 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
 
 
 template<size_t dim>
-void Boundary<dim>::Out() const
+void Boundary<dim>::Out(std::ostream& os) const
  {
     // high-level output
-    cout <<"\n" << "Boundary<" << dim << ">::Out: ("<< parseBoundary(boundaryFlag_) <<") '"<< this->Name();
-    cout <<"', Face objects interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements() << endl;
-    cout <<"   Node objects interior: "<< this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
+    os <<"\n" << "Boundary<" << dim << ">::Out: ("<< parseBoundary(boundaryFlag_) <<") '"<< this->Name();
+    os <<"', Face objects interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements() << endl;
+    os <<"   Node objects interior: "<< this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
 
     // member faces
-    cout <<"\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
+    os <<"\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
     for ( const auto it :  this->elmt_vec_ ) {
           if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized.");
-          cout <<"\t\t"<< it->Idx() <<": "<< it->Area() <<", ";
+          os <<"\t\t"<< it->Idx() <<": "<< it->Area() <<", ";
           // Nodes
           for ( size_t i=0U; i<it->Nodes(); ++i ) {
                const string str = ( it->N(i) == nullptr ) ? "none" : to_string( it->N(i)->Idx() );
-               cout << str <<",";
+               os << str <<",";
             }
-          cout <<"\t\t ";
+          os <<"\t\t ";
           // Face neighbors
           for ( size_t i=0U; i<it->Neighbors(); ++i ) {
                const string str = ( it->Neighbor(i) == nullptr ) ? "none" : to_string( it->Neighbor(i)->Idx() );
-               if ( i<it->Neighbors()-1 ) cout << str <<":";
-               else cout << str;
+               if ( i<it->Neighbors()-1 ) os << str <<":";
+               else os << str;
             }
-          cout <<",\t\t";
+          os <<",\t\t";
           // Element neighbors
           const string inner = ( it->InnerParent() == nullptr ) ? "none" : to_string( it->InnerParent()->Idx() );
           const string outer = ( it->OuterParent() == nullptr ) ? "none" : to_string( it->OuterParent()->Idx() );
-          cout << inner <<":"<< outer <<"\n";
+          os << inner <<":"<< outer <<"\n";
       }
 
     // printing the Faces
     //for ( auto it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )  (*it)->Out();
 
-    cout <<"\n\tperimeter Faces and edge numbers (current local numbering):\n";
+    os <<"\n\tperimeter Faces and edge numbers (current local numbering):\n";
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
     for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-         cout << i <<":";
+         os << i <<":";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
       }
-    cout << endl;
+    os << endl;
   }
 
 

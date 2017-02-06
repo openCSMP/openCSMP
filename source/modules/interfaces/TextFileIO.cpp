@@ -3140,7 +3140,7 @@ bool readComputationalSettings( ComputationalSettings& settings,
     while ( !isBlankLine(text_line) && !ifs.eof() );
 
     if( verbose )
-        settings.Out();
+        settings.Out(std::cout);
 
     return true;
 

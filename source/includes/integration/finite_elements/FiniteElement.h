@@ -330,7 +330,7 @@ class FiniteElement {
     virtual void  dNt( double64 r,  double64 s, double64 t, std::vector<double64>& DNT ) const;
     
     /// prints finite element properties to screen
-    virtual void  Out() const;
+    virtual void  Out(std::ostream& os) const;
   
     /// prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination
     virtual void  OutputNodeDataToVTK( const char* file_name, const char* var_name, 

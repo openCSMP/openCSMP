@@ -21,7 +21,7 @@ Exception::Exception( CSMP_MESSAGE err,
    message_(msg)
  {
 #ifndef NDEBUG 
-    Out();
+    Out(cout);
     cout <<"\nHit return to continue."<< endl;
     getchar();
 #endif
@@ -39,7 +39,7 @@ Exception::Exception( CSMP_MESSAGE err,
     message_ += "  ";
     message_ += msg;
 #ifndef NDEBUG 
-    Out();
+    Out(cout);
     cout <<"\nHit return to continue."<< endl;
     getchar();
 #endif
@@ -87,10 +87,10 @@ const char* Exception::what() const throw()
   }
 
 
-void Exception::Out() const
+void Exception::Out(std::ostream& os) const
  {
-    cout <<"\n"<< string(parseMessage(csmp_exception_)) <<": "<< originator_ << endl;
-    cout << message_ << endl;
+    os <<"\n"<< string(parseMessage(csmp_exception_)) <<": "<< originator_ << endl;
+    os << message_ << endl;
  }
 
 Exception::~Exception() throw()

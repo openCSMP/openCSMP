@@ -240,7 +240,7 @@ class Region : public ModelSubDomain<dim,Element> {
     // ----------------------------------------
 
     /// no variables in addition to ModelSubDomain
-    void Out() const {  std::cout<<"\nRegion:Out:\n"; ModelSubDomain<dim,Element>::Out(); }
+    void Out(std::ostream& os) const {  os<<"\nRegion:Out:\n"; ModelSubDomain<dim,Element>::Out(os); }
 
   // TODO: deprecate these methods
   public:

@@ -587,19 +587,19 @@ bool  VSet<dim>::InputFromTextFile( const char* text_file )
 
 
 template<size_t dim>
-void VSet<dim>::Out( bool data_as_well ) const
+void VSet<dim>::Out( std::ostream& os, bool data_as_well ) const
  {
-    VData::Out();
+    VData::Out(os);
     
     if ( data_as_well )
       {
          // scalar type data
-         cout <<"\nVSet<dim>::Out: property records stored in VSet:\n";
+         os <<"\nVSet<dim>::Out: property records stored in VSet:\n";
          for ( map<string,PropertyData>::const_iterator
                it=property_map_.begin(); it!=property_map_.end(); it++ )
            {
-              cout <<"\n"<< (*it).first << endl;
-              (*it).second.Out();
+              os <<"\n"<< (*it).first << endl;
+              (*it).second.Out(os);
            }
       }
    

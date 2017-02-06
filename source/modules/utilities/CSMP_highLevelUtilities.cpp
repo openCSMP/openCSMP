@@ -876,8 +876,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t,
       if ( xy1 == xy2 ) 
         {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out();
-           xy2.Out();
+           xy1.Out(cout);
+           xy2.Out(cout);
            return (p1+p2) / 2.0;      
         }
 
@@ -942,8 +942,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       // is assigned.
       if ( xy1 == xy2 ) {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out();
-           xy2.Out();
+           xy1.Out(cout);
+           xy2.Out(cout);
            return (p1+p2+p3+p4) / 4.0;      
         }
 
@@ -1008,8 +1008,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       // is assigned.
       if ( xy1 == xy2 ) {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out();
-           xy2.Out();
+           xy1.Out(cout);
+           xy2.Out(cout);
            return (p1+p2+p3+p4) / 4.0;      
         }
 

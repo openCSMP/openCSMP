@@ -37,7 +37,7 @@ class PropertyConstraints {
     bool CheckConstraints( const Element<dim>& e, Index& idx ) const;
     
     void Erase();
-    void Out() const;
+    void Out(std::ostream& os) const;
   
   private:
     std::map<std::string,std::pair<double64,double64> >  criteria;

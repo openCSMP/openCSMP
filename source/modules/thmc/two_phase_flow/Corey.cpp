@@ -353,18 +353,18 @@ double64 Corey<dim>::MaxFractionalFlowDerivative() const
 
 
 template<size_t dim>
-void Corey<dim>::Out( size_t phase ) const
+void Corey<dim>::Out( std::ostream& os, size_t phase ) const
  {
-    TwoPhaseModel<dim>::Out(phase);
-    cout << "\nCorey<csp_float," << dim << ">::Out: Additional properties: " << endl;
-    cout << "\nElement properties:";
-    cout << "\nCapillary entry pressure (Pa): " << entry_pressure_;
-    cout << "\nCorey parameter brine: " << expw_;
-    cout << "\nCorey parameter oil: " << expn_;
-    cout << "\nRelative permeability endpoint brine: " << krw_;
-    cout << "\nRelative permeability endpoint oil: " << krn_;
-    cout << "\nCorey exponent capillary pressure: " << lambda_;
-	cout << endl << endl;
+    TwoPhaseModel<dim>::Out(os, phase);
+    os << "\nCorey<csp_float," << dim << ">::Out: Additional properties: " << endl;
+    os << "\nElement properties:";
+    os << "\nCapillary entry pressure (Pa): " << entry_pressure_;
+    os << "\nCorey parameter brine: " << expw_;
+    os << "\nCorey parameter oil: " << expn_;
+    os << "\nRelative permeability endpoint brine: " << krw_;
+    os << "\nRelative permeability endpoint oil: " << krn_;
+    os << "\nCorey exponent capillary pressure: " << lambda_;
+	os << endl << endl;
 
  } // end Out
  

@@ -219,21 +219,22 @@ void StressRotate::Rotate( char axis, double64 angle )
 
 
 /// outputs state of object
-void StressRotate::Out() const
+void StressRotate::Out(std::ostream& os) const
   {
-    cout << "\nStressRotate: ";
-    cout << "\nSigma1: " << sigma1_ << " Sigma2: " << sigma2_ << " Sigma3: " << sigma3_;
-    cout << "\nOriginal Principal Vectors:";
-    cout << "\nN1: " << original_n1_[0] << ", " << original_n1_[1] << ", " << original_n1_[2]; 
-    cout << "\nN3: " << original_n3_[0] << ", " << original_n3_[1] << ", " << original_n3_[2]; 
-    cout << "\nPrincipal Vectors:";
-    cout << "\nN1: " << n1_[0] << ", " << n1_[1] << ", " << n1_[2]; 
-    cout << "\nN3: " << n3_[0] << ", " << n3_[1] << ", " << n3_[2]; 
-    cout << "\nX Axis: " << x_ << " Y Axis: " << y_ << " Z Axis: " << z_;
-    cout << "\nCartesian Stress Tensor:"<< endl;
+    os << "\nStressRotate: ";
+    os << "\nSigma1: " << sigma1_ << " Sigma2: " << sigma2_ << " Sigma3: " << sigma3_;
+    os << "\nOriginal Principal Vectors:";
+    os << "\nN1: " << original_n1_[0] << ", " << original_n1_[1] << ", " << original_n1_[2]; 
+    os << "\nN3: " << original_n3_[0] << ", " << original_n3_[1] << ", " << original_n3_[2]; 
+    os << "\nPrincipal Vectors:";
+    os << "\nN1: " << n1_[0] << ", " << n1_[1] << ", " << n1_[2]; 
+    os << "\nN3: " << n3_[0] << ", " << n3_[1] << ", " << n3_[2]; 
+    os << "\nX Axis: " << x_ << " Y Axis: " << y_ << " Z Axis: " << z_;
+    os << "\nCartesian Stress Tensor:"<< endl;
     TensorVariable<3U>  stress;
     CartesianStressTensor(stress);
-    cout << stress;
+    os << stress;
+    os.flush();
   }
  
   

@@ -325,7 +325,7 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 2U;
               cout <<">::GetOperands: Nodal displacements, element: "<< e.Idx() << endl;
-              DISPL_.Out();  
+              DISPL_.Out(cout);  
            }      
         
         // 2. For stress computation from strains at integration points
@@ -408,9 +408,9 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
 
              if ( verbose_ ) { 
                   cout <<"\nstrain at integration point: "<< i << endl; 
-                  EGP_.Out();
+                  EGP_.Out(cout);
                   cout <<"\nstress at integration point: "<< i << endl; 
-                  SGP_.Out();
+                  SGP_.Out(cout);
                }       
 
              // inserting strains and stresses sequentially into temporary 

@@ -481,7 +481,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsLHS() const
     for ( it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 
@@ -494,7 +494,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsRHS() const
     for ( it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 

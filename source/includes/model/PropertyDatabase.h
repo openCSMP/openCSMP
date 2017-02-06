@@ -252,7 +252,7 @@ class PropertyDatabase  {
    
    bool   WriteVariablesFile( const char* fileName ) const;
 
-   void   Out() const;
+   void   Out(std::ostream& out) const;
 
    void   Verbose(bool verbose) { this->verbose_=verbose; }
    bool   Verbose() { return this->verbose_; }

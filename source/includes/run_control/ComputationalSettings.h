@@ -73,7 +73,7 @@ class ComputationalSettings {
     std::set<double64>::const_iterator MonitorTimesBegin() const;
     std::set<double64>::const_iterator MonitorTimesEnd() const;
     
-    virtual void   Out() const;
+    virtual void   Out(std::ostream& os) const;
     virtual void   Out( const char* filename ) const;
   
   private:

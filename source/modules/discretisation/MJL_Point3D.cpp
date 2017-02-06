@@ -18,9 +18,9 @@ bool Point3D::CoincidesWithWithinTolerance( const Point3D& p,
 
 
 
-void Point3D::Out() const
+void Point3D::Out(std::ostream& os) const
  {
-    cout <<"\nMJL_Point3D::Out: "<< x_ <<"  "<< y_ <<"  "<< z_ << endl;
+    os <<"\nMJL_Point3D::Out: "<< x_ <<"  "<< y_ <<"  "<< z_ << endl;
  }
  
 } // end mjl

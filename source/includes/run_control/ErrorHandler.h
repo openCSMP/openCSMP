@@ -194,7 +194,7 @@ class ErrorHandler : public GenericSingleton<ErrorHandler> {
     void WriteErrorsToFile( const char* err_file="ErrorHandler.log" );
 
     /// writes contents of contained maps to file
-    void Out() const;
+    void Out(std::ostream& os) const;
 
   private:
     /// sets default to VERBOSE, error limit to 10'000, and counters to zero; private because ErrorHandler is a singleton

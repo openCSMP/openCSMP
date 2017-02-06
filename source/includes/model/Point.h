@@ -69,8 +69,8 @@ class Point {
     bool      IsBetween( const Point& pt1, const Point& pt2 );
     /// returns point coordinates into an STL vector
     std::vector<double64> Coordinates() const;
-    /// prints point cooordinates to screen
-    void  Out() const;
+    /// prints point cooordinates to stream
+    void  Out(std::ostream& os) const;
 
   protected:
     double64 xyz_[dim];
@@ -149,7 +149,7 @@ class Point<1U> {
     bool      CoincidesWithWithinTolerance( const Point<1U>&, double64 tolerance=1.0e-5 ) const;
     bool      IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
-    void                  Out() const;
+    void                  Out(std::ostream& os) const;
 
     friend Point<1U> operator-( double64, const Point<1U>& );
     friend Point<1U> operator+( double64, const Point<1U>& );
@@ -202,7 +202,7 @@ class Point<2U> {
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;
     bool     IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
-    void            Out() const;
+    void            Out(std::ostream& os) const;
   
     friend Point<2U> operator-( double64, const Point<2U>& );
     friend Point<2U> operator+( double64, const Point<2U>& );
@@ -256,7 +256,7 @@ class Point<3U> {
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;
     bool     IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
-    void                  Out() const;
+    void                  Out(std::ostream& os) const;
  
     friend Point<3U> operator-( double64, const Point<3U>& );
     friend Point<3U> operator+( double64, const Point<3U>& );
@@ -514,11 +514,10 @@ inline std::vector<double64> Point<1U>::Coordinates() const
  }
 
 
-inline void Point<1U>::Out() const
+inline void Point<1U>::Out(std::ostream& os) const
  {
-    std::cout <<"\nPoint<" << 1U;
-    std::cout <<">::Out(): coordinates: "<< x_ << std::endl;
-    std::cout.flush();
+    os <<"\nPoint<" << 1U;
+    os <<">::Out(std::ostream& os): coordinates: "<< x_ << std::endl;
  }
 
 
@@ -772,11 +771,10 @@ inline std::vector<double64> Point<2U>::Coordinates() const
 
 
 
-inline void Point<2U>::Out() const
+inline void Point<2U>::Out(std::ostream& os) const
  {
-    std::cout <<"\nPoint<"<< 2U;
-    std::cout <<">::Out(): coordinates: "<< x_ <<","<< y_ << std::endl;
-    std::cout.flush();
+    os <<"\nPoint<"<< 2U;
+    os <<">::Out(std::ostream& os): coordinates: "<< x_ <<","<< y_ << std::endl;
  }
 
 
@@ -1048,12 +1046,11 @@ inline std::vector<double64> Point<3U>::Coordinates() const
 
 
 
-inline void Point<3U>::Out() const
+inline void Point<3U>::Out(std::ostream& os) const
  {
-    std::cout <<"\nPoint<"<< 3U;
-    std::cout <<">::Out(): coordinates: ";
-    std::cout << x_ <<","<< y_ <<","<< z_ << std::endl;
-    std::cout.flush();
+    os <<"\nPoint<"<< 3U;
+    os <<">::Out(std::ostream& os): coordinates: ";
+    os << x_ <<","<< y_ <<","<< z_ << std::endl;
  }
 
 

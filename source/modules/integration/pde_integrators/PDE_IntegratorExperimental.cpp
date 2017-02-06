@@ -238,31 +238,31 @@ To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void  PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputGlobals( int32 precision )
+void  PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputGlobals( std::ostream& os, int32 precision )
  {
-   cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
-   G_.Out( precision );
+   os <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   G_.Out( os, precision );
 
-   cout.setf(ios::scientific);
-   cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+   os.setf(ios::scientific);
+   os <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
    for ( size_t i=0U; i<rh_.size(); i++ )
      {
-        cout.precision(precision);
-        if ( rh_[i] >= 0. ) cout <<" ";
-        cout << rh_[i] <<" ";
+        os.precision(precision);
+        if ( rh_[i] >= 0. ) os <<" ";
+        os << rh_[i] <<" ";
      }
-   cout << endl;
+   os << endl;
 
-   cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+   os <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
    for ( size_t i=0U; i<x_.size(); i++ )
      {
-        cout.precision(precision);
-        if ( x_[i] >= 0 ) cout <<" ";
-        cout << x_[i] <<" ";
+        os.precision(precision);
+        if ( x_[i] >= 0 ) os <<" ";
+        os << x_[i] <<" ";
      }
-   cout << endl;
+   os << endl;
 
-   cout.unsetf(ios::scientific);
+   os.unsetf(ios::scientific);
 
  } // end OutputGlobals
 
@@ -350,7 +350,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsLHS() 
     for ( it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 
@@ -363,7 +363,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsRHS() 
     for ( it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 
@@ -1825,8 +1825,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICI
     
     // 6. diagnostics
     if ( debug ) {
-         Out();
-         OutputGlobals();
+         Out(cout);
+         OutputGlobals(cout);
       }
  
     // 7. invert global matrix
@@ -1872,8 +1872,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver1( SIMPLIC
    
     // 6. diagnostics
     if ( debug ) {
-         Out();
-         OutputGlobals();
+         Out(cout);
+         OutputGlobals(cout);
          // OutputInput();
       }
  
@@ -1944,8 +1944,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( Model<di
     
     // 7. diagnostics
     if ( debug ) {
-         Out();
-         OutputGlobals();
+         Out(cout);
+         OutputGlobals(cout);
          // OutputInput();
       }
    
@@ -2106,52 +2106,52 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMap
 
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out() const
+void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out(std::ostream& os) const
  {
-     cout <<"\nPDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out:\n";
+     os <<"\nPDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out:\n";
    
      if ( basic_operands_.empty() || test_operands_.empty() ) {
-          cout <<"\nintegrator has not been initialized yet.\n";
+          os <<"\nintegrator has not been initialized yet.\n";
           return;
        }
    
-     cout <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
+     os <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
      //  std::map<Parameter,size_t>  test_operands_;
      for ( auto it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       cout <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
+       os <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
 
-     cout <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
+     os <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
      for ( auto it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
-          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          os <<"\n"<< (*it).first <<": ";
+          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     cout <<"\n\nrighthand element integrals that will be accumulated:\n";
+     os <<"\n\nrighthand element integrals that will be accumulated:\n";
      for ( auto it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
-          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          os <<"\n"<< (*it).first <<": ";
+          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     cout <<"\n\nsurface element integrals that will be accumulated:\n";
+     os <<"\n\nsurface element integrals that will be accumulated:\n";
      for ( auto it=rhs_boundary_operators_.begin(); it!=rhs_boundary_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
-          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          os <<"\n"<< (*it).first <<": ";
+          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     cout <<"\n\npost-processing operators:\n";
+     os <<"\n\npost-processing operators:\n";
      for ( auto it=postpro_operators_.begin(); it!=postpro_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
-          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          os <<"\n"<< (*it).first <<": ";
+          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     cout <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
-     cout <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
-     cout <<"\n\tset up etablished:                  "<< setup_established_;
-     cout <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
-     cout <<"\n\ttime increment:                     "<< time_increment_;
-     cout <<"\n\tscale factor for essential conds:   "<< scale_factor_;
+     os <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
+     os <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
+     os <<"\n\tset up etablished:                  "<< setup_established_;
+     os <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
+     os <<"\n\ttime increment:                     "<< time_increment_;
+     os <<"\n\tscale factor for essential conds:   "<< scale_factor_;
    
-     if ( solver_ != NULL ) cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
+     if ( solver_ != NULL ) os <<"\n\nSolver: "<< typeid(solver_).name() << endl;
    
  } // end Out
 

@@ -973,7 +973,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
     std::cout<<"\n\tList of regions: ";
     const size_t max_per_line( 5 );
     std::list<std::string> regions_list;
-    model_topology.Out( regions_list );
+    model_topology.Out( std::cout, regions_list );
     size_t rid( 0 );
     for( std::list<std::string>::const_iterator
          rit = regions_list.begin(); rit != regions_list.end(); ++rit )
@@ -1651,7 +1651,7 @@ void CornerPointGrid<dim>
                 hexa_face_id  = (*fit).second;
                 assert( hexa_face_id <= 5 );
 // DEBUGGING: NODE ORDER OF FACES IS DIFFERENT FROM DEFINITION FOR CORNER-POINT CELL
-poly[ hexa_cell_id ].Out();
+                poly[ hexa_cell_id ].Out(std::cout);
 
                 // used to always evaluate to zero; now replaced by subclass method
                 num_sub_faces = poly[ hexa_cell_id ].GetNumSubFaces( hexa_face_id );

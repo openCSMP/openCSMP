@@ -793,64 +793,64 @@ double64 Face<dim>::Area() const
 
 ///  outputs local variables of Face(Element) overriding corresponding method of base class
 template<size_t dim>
-void  Face<dim>::Out() const
+void  Face<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
+    os <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
 
     string str;
-    cout <<" ("<< parseFiniteElementType(this->FE_Type()) <<")";
-    if ( outerParent_ == nullptr ) cout <<", face is located at model boundary.";
-    cout << endl;
+    os <<" ("<< parseFiniteElementType(this->FE_Type()) <<")";
+    if ( outerParent_ == nullptr ) os <<", face is located at model boundary.";
+    os << endl;
 
-    cout <<"\nInternal data: "<< endl;
+    os <<"\nInternal data: "<< endl;
 
-    cout <<"\n\tconnected nodes with boundary flags:  ";
+    os <<"\n\tconnected nodes with boundary flags:  ";
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
-         cout << N(i)->Idx() <<":"<< str <<"  ";
+         os << N(i)->Idx() <<":"<< str <<"  ";
       }
-    cout << endl;
+    os << endl;
 
-    cout <<"\n\tconnected neighbor Face types / boundary flags:\n";
+    os <<"\n\tconnected neighbor Face types / boundary flags:\n";
     for ( size_t i=0U; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
-           cout <<"\t\t"<< Idx() <<":";
-           cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
-           cout << endl;
+           os <<"\t\t"<< Idx() <<":";
+           os << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
+           os << endl;
         }
-      else cout <<"none.  ";
-    cout << endl;
+      else os <<"none.  ";
+    os << endl;
 
-    cout <<"\tFace is connected via bridge pattern to: ";
-    cout << parseFiniteElementType(fptr_->ElementType()) << endl;
+    os <<"\tFace is connected via bridge pattern to: ";
+    os << parseFiniteElementType(fptr_->ElementType()) << endl;
 
-    cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    os <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
 
     Point<dim>  pt(this->BaryCenter());
 
     if ( dim == 1U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
     else if ( dim == 2U )
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
     else
-       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
 
     const size_t ipoints(this->IntegrationPoints());
     if ( ipoints > 0U ) {
-         cout <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
+         os <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
       }
 
-    cout <<"\nParent (higher-dimensional) Element objects:\n";
+    os <<"\nParent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\tinward  facing Element: "<< this->innerParent_->Idx();
-         cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
+         os <<"\tinward  facing Element: "<< this->innerParent_->Idx();
+         os  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
-    else cout <<"\tnone.\n";
+    else os <<"\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\toutward facing Element: "<< this->outerParent_->Idx();
-         cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
+         os <<"\toutward facing Element: "<< this->outerParent_->Idx();
+         os <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
-    else cout <<"\tnone.\n";
+    else os <<"\tnone.\n";
 
  } // end Out
 

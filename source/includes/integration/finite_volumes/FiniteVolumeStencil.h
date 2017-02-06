@@ -130,7 +130,7 @@ class FiniteVolumeStencil {
     const std::string& ParentElement() const { return parent_element_; }
   
     /// returns the data (private members) stored in this finite volume stencil
-    void  Out() const;
+    void  Out(std::ostream& os) const;
     
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };

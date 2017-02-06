@@ -118,7 +118,7 @@ void  Solver::Solve( SparseMatrix& A,
         cout <<"\nSolver::SolveMatrixEquation: Solution matrix is symmetric."<< endl;
 
       cout <<"\nSolver::SolveMatrixEquation: Global matrix before solution:"<< endl;
-      A.Out();
+      A.Out(cout);
       cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
       out( b );
     }
@@ -133,7 +133,7 @@ void  Solver::Solve( SparseMatrix& A,
                                      
     if ( Verbose() ) {
          cout <<"\nSolver::SolveMatrixEquation: Global matrix after solution:"<< endl;
-         A.Out();
+         A.Out(cout);
          cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
          out( b );
          cout <<"\nSolver::SolveMatrixEquation: Solution vector:"<< endl;

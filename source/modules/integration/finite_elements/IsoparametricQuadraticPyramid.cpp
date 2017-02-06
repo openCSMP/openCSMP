@@ -723,13 +723,13 @@ IsoparametricQuadraticPyramid::dN( DenseMatrix<DM_MIN>& DN14 )
         if(ldbug){
           cout<<" At node  #: "<<i+1<<endl<<endl;
           cout<<" Jacobian Matrix: "<<endl;
-          JAC.Out();
+          JAC.Out(cout);
         }
           JacobianInverse();
           ////////// Debug Printout////////////////////////////////
           if(ldbug){
             cout<<" Jacobian Inverse Matrix: "<<endl;
-            JINV.Out();
+            JINV.Out(cout);
           }
           /////////////////////////////////////////////////////////
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
@@ -788,7 +788,7 @@ IsoparametricQuadraticPyramid::dN_At( DenseMatrix<DM_MIN>& DN2,
       cout<<" IsoparametricQuadraticPyramid::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
       rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
       cout<<" IsoparametricQuadraticPyramid::dN  Matrix DN2: "<<endl;
-      DN2.Out();
+      DN2.Out(cout);
     }
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 

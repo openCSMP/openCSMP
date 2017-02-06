@@ -46,8 +46,8 @@ struct Parameter {
     /// expected range of this parameter in the specific simulation
     void           Range( double64& vmin, double64& vmax ) const;
   
-    /// prints parameter record to screen
-    void           Out() const;
+    /// prints parameter record to stream
+    void           Out(std::ostream& os) const;
   
     /// writes parameter record to a binary file
     bool           Out( FILE* fp ) const;

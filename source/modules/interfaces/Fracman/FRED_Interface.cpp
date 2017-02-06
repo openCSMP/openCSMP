@@ -507,26 +507,26 @@ void FRED_Interface::OutputSelectedFractureDiameters( const char* sregions ) con
 
 
 
-void FRED_Interface::Out() const
+void FRED_Interface::Out(std::ostream& os) const
  {
     map<string,FRED_Fracture,less<string> >::const_iterator  it;
     list<string>::const_iterator                             pit;
     
     // 1. writing header line
-    cout <<"\nFRED_Interface::Out: FRED fracture model: '"<< dataset;
-    cout <<"' specifying the properties: "<< endl;
+    os <<"\nFRED_Interface::Out: FRED fracture model: '"<< dataset;
+    os <<"' specifying the properties: "<< endl;
     
     // 2. writing properties
     for ( pit=properties.begin(); pit!=properties.end(); pit++ )
-      cout << (*pit) <<"  ";
-    cout << endl;
+      os << (*pit) <<"  ";
+    os << endl;
 
     // 3. writing the region=fracture names and the associated property values
     for ( it=fractures.begin(); it!=fractures.end(); it++ ) {
-         cout <<"\n\nFracture: "<< (*it).first << endl;
-         (*it).second.Out();
+         os <<"\n\nFracture: "<< (*it).first << endl;
+         (*it).second.Out(os);
       }
-    cout << endl;
+    os << endl;
 
  } // end Out
 

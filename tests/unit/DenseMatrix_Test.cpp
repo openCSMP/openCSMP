@@ -19,17 +19,17 @@ namespace csmp
     void DenseMatrix_Test::run()
     {
 
-    cout << "\n===================";
-    cout << "\nTesting DenseMatrix" << endl;
-    cout << "===================" << endl;
+    getInfoStream() << "\n===================";
+    getInfoStream() << "\nTesting DenseMatrix" << endl;
+    getInfoStream() << "===================" << endl;
 
     //Testing Identity functions
-        cout << "\nTesting Identity function" << endl;
-        cout << "=========================" << endl;
+        getInfoStream() << "\nTesting Identity function" << endl;
+        getInfoStream() << "=========================" << endl;
 
-        cout << "\nB.Identity()";
+        getInfoStream() << "\nB.Identity()";
         B.Identity();
-        B.Out();
+        B.Out(getInfoStream());
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -42,8 +42,8 @@ namespace csmp
 
     //Testing + and - operator
 
-        cout << "\nTesting + and += operator" << endl;
-        cout << "======================" << endl;
+        getInfoStream() << "\nTesting + and += operator" << endl;
+        getInfoStream() << "======================" << endl;
 
         A( 0, 0 ) = 1.;
         A( 0, 1 ) = 0.;
@@ -65,21 +65,21 @@ namespace csmp
         A( 3, 2 ) = 3.;
         A( 3, 3 ) = 5.;
 
-        cout << "\nTest Matrix A";
-        A.Out();
+        getInfoStream() << "\nTest Matrix A";
+        A.Out(getInfoStream());
 
-        cout << "Test Matrix B";
+        getInfoStream() << "Test Matrix B";
         B.Fill(1.);
-        B.Out();
+        B.Out(getInfoStream());
 
-        cout << "Matrix C = A + B";
+        getInfoStream() << "Matrix C = A + B";
         C = A + B;
-        C.Out();
+        C.Out(getInfoStream());
         E = C;
 
-        cout << "Matrix A += B =! C";
+        getInfoStream() << "Matrix A += B =! C";
         A += B;
-        A.Out();
+        A.Out(getInfoStream());
 
         ResC( 0, 0 ) = 2.;
         ResC( 0, 1 ) = 1.;
@@ -105,20 +105,20 @@ namespace csmp
         {
             for ( int j = 0; j < 4; j++ )
             {
-                //cout << C(i, j) << "  ";
-                //cout << A(i, j) << endl;
+                //getInfoStream() << C(i, j) << "  ";
+                //getInfoStream() << A(i, j) << endl;
                 _equal( A(i,j ), ResC(i,j), 1E-6 );
                 _equal( C(i,j ), ResC(i,j), 1E-6 );
             }
         }
 
-        cout << "Matrix D = C - B";
+        getInfoStream() << "Matrix D = C - B";
         D = C - B;
-        D.Out();
+        D.Out(getInfoStream());
 
-        cout << "Matrix A -= B =! D";
+        getInfoStream() << "Matrix A -= B =! D";
         A -= B;
-        A.Out();
+        A.Out(getInfoStream());
 
         ResA( 0, 0 ) = 1.;
         ResA( 0, 1 ) = 0.;
@@ -145,8 +145,8 @@ namespace csmp
         {
             for ( int j = 0; j < 4; j++ )
             {
-                //cout << D(i, j) << "  ";
-                //cout << A(i, j) << endl;
+                //getInfoStream() << D(i, j) << "  ";
+                //getInfoStream() << A(i, j) << endl;
                 _equal( D(i,j), ResA(i,j), 1E-6 );
                 _equal( A(i,j), ResA(i,j), 1E-6 );
             }
@@ -154,20 +154,20 @@ namespace csmp
 
 
 //Testing * operators
-    cout << "\nTesting * operators" << endl;
-    cout << "===================" << endl;
+    getInfoStream() << "\nTesting * operators" << endl;
+    getInfoStream() << "===================" << endl;
 
         //Matrix-scalar multiplication
-        cout << "\nMatrix-scalar multiplication method" << endl;
-        cout << "-----------------------------------" << endl;
+        getInfoStream() << "\nMatrix-scalar multiplication method" << endl;
+        getInfoStream() << "-----------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+        getInfoStream() << "\nTest matrix A";
+        A.Out(getInfoStream());
 
-        cout << "Matrix A *= ( 3 )";
+        getInfoStream() << "Matrix A *= ( 3 )";
         C = A;
         C.operator *= ( 3. );
-        C.Out();
+        C.Out(getInfoStream());
 
         ResC( 0, 0 ) = 3.;
         ResC( 0, 1 ) = 0.;
@@ -200,16 +200,16 @@ namespace csmp
 
 
         //Matrix-scalar multiplication
-        cout << "\nMatrix-scalar multiplication method" << endl;
-        cout << "-----------------------------------" << endl;
+        getInfoStream() << "\nMatrix-scalar multiplication method" << endl;
+        getInfoStream() << "-----------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+        getInfoStream() << "\nTest matrix A";
+        A.Out(getInfoStream());
 
-        cout << "Matrix A *= ( 3 )";
+        getInfoStream() << "Matrix A *= ( 3 )";
         C = A;
         C.operator *= ( 3. );
-        C.Out();
+        C.Out(getInfoStream());
 
 
         for ( int i = 0; i < 4; i++ )
@@ -223,38 +223,38 @@ namespace csmp
 
         //Matrix multiplication by vector
         //First vector-matrix multiplication method
-        cout << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
-        cout << "----------------------------------------------------" << endl;
+        getInfoStream() << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
+        getInfoStream() << "----------------------------------------------------" << endl;
 
-        cout << "\nTest matrix A";
+        getInfoStream() << "\nTest matrix A";
 
-        A.Out();
+        A.Out(getInfoStream());
 
         x.push_back(1.);
         x.push_back(2.);
         x.push_back(0.);
         x.push_back(1.5);
 
-        cout << "Test vector x =   ";
+        getInfoStream() << "Test vector x =   ";
 
         vector<double64>::const_iterator it( x.begin() );
         for ( vector<double64>::const_iterator
              it = x.begin(); it != x.end(); it++ )
         {
-            cout << *it << setw(5);
+            getInfoStream() << *it << setw(5);
         }
 
-        cout << "\n\ny = A * x";
+        getInfoStream() << "\n\ny = A * x";
         y = A * x;
 
         vector<double64>::const_iterator it1(y.begin());
 
-        cout << "\n\ny = ";
+        getInfoStream() << "\n\ny = ";
 
         for (vector<double64>::const_iterator
              it1 = y.begin(); it1 != y.end(); it1++ )
         {
-            cout << *it1 << setw(5);
+            getInfoStream() << *it1 << setw(5);
         }
 
         sol_y.push_back(2.5);
@@ -267,24 +267,24 @@ namespace csmp
         for (vector<double64>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
-                //cout << "\n" << *itsol_y << setw(7) << *it1;
+                //getInfoStream() << "\n" << *itsol_y << setw(7) << *it1;
                 _equal( *itsol_y, *it1, 1E-6);
             }
 
 
         //\nSecond matrix-vector multiplication method
-        cout << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
-        cout << "--------------------------------------------------" << endl;
+        getInfoStream() << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
+        getInfoStream() << "--------------------------------------------------" << endl;
 
         B = A;
-        cout << "A *= x";
+        getInfoStream() << "A *= x";
         B.operator *= (x);
 
-        cout << "\nA = ";
+        getInfoStream() << "\nA = ";
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << B(i,0) << setw(5);
+            getInfoStream() << B(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solB.push_back(B(i,0));
@@ -292,42 +292,42 @@ namespace csmp
 
         vector<double64>::const_iterator itB( solB.begin() );
 
-        //cout << endl << "\nA  " << setw(5) << "y";
+        //getInfoStream() << endl << "\nA  " << setw(5) << "y";
 
         for (vector<double64>::const_iterator
              itB = solB.begin(); itB != solB.end(); itB++, itsol_y++ )
         {
-            //cout << "\n" << *itB << setw(7) << *it1;
+            //getInfoStream() << "\n" << *itB << setw(7) << *it1;
             _equal( *itB, *itsol_y, 1E-6 );
         }
 
-        cout << endl;
+        getInfoStream() << endl;
 
 
-        cout << "\nThird matrix-matrix multiplication method: A *= ( C array )" << endl;
-        cout << "--------------------------------------------------" << endl;
+        getInfoStream() << "\nThird matrix-matrix multiplication method: A *= ( C array )" << endl;
+        getInfoStream() << "--------------------------------------------------" << endl;
 
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        getInfoStream() << "\nTest matrix A";
+        D.Out(getInfoStream());
 
 
         double64 Ca[4] = { 1., 2., 0., 1.5 };
 
-        cout << "Test array Ca";
+        getInfoStream() << "Test array Ca";
 
         for ( int i = 0; i < 4; i++ )
-            cout << "\n" << Ca[i];
+            getInfoStream() << "\n" << Ca[i];
 
 
-        cout << "\n\nMatrix A *= ( C array )";
+        getInfoStream() << "\n\nMatrix A *= ( C array )";
         D.operator *=( Ca );
-        D.Out();
+        D.Out(getInfoStream());
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << D(i,0) << setw(5);
+            getInfoStream() << D(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solD.push_back(D(i,0));
@@ -335,32 +335,32 @@ namespace csmp
 
         vector<double64>::const_iterator itD( solD.begin() );
 
-        //cout << endl << "\nA  " << setw(5) << "y";
+        //getInfoStream() << endl << "\nA  " << setw(5) << "y";
 
         for (vector<double64>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, itD++ )
             {
-                //cout << "\n" << *itsol_y << setw(7) << *itD;
+                //getInfoStream() << "\n" << *itsol_y << setw(7) << *itD;
                 _equal( *itsol_y, *itD, 1E-6);
             }
 
-        cout << endl;
+        getInfoStream() << endl;
 
 
         //Matrix-by-matrix multiplication
-        cout << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
-        cout << "------------------------------------------------" << endl;
+        getInfoStream() << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
+        getInfoStream() << "------------------------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+        getInfoStream() << "\nTest matrix A";
+        A.Out(getInfoStream());
 
-        cout << "Test matrix B";
+        getInfoStream() << "Test matrix B";
         B = E;
-        B.Out();
+        B.Out(getInfoStream());
 
-        cout << "C = A * B";
+        getInfoStream() << "C = A * B";
         C = A * B;
-        C.Out();
+        C.Out(getInfoStream());
 
         ResAB( 0, 0 ) = 7.;
         ResAB( 0, 1 ) = 5.;
@@ -390,17 +390,17 @@ namespace csmp
             }
         }
 
-        cout << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
-        cout << "--------------------------------------------------" << endl;
+        getInfoStream() << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
+        getInfoStream() << "--------------------------------------------------" << endl;
 
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        getInfoStream() << "\nTest matrix A";
+        D.Out(getInfoStream());
 
-        cout << "\nMatrix A *= B";
+        getInfoStream() << "\nMatrix A *= B";
         D.operator *=(B);
-        D.Out();
+        D.Out(getInfoStream());
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -412,16 +412,16 @@ namespace csmp
 
 
     //Testing fill operators
-        cout << "\nTesting fill functions" << endl;
-        cout << "======================" << endl;
+        getInfoStream() << "\nTesting fill functions" << endl;
+        getInfoStream() << "======================" << endl;
 
         //fill
-        cout << "\nMatrix fill()" << endl;
-        cout << "-------------" << endl;
+        getInfoStream() << "\nMatrix fill()" << endl;
+        getInfoStream() << "-------------" << endl;
 
-        cout << "\nB.fill(1.)";
+        getInfoStream() << "\nB.fill(1.)";
         B.Fill(1.);
-        B.Out();
+        B.Out(getInfoStream());
 
         C = 1.;
 
@@ -434,12 +434,12 @@ namespace csmp
         }
 
         //fillCol
-        cout << "\nMatrix fillCol()" << endl;
-        cout << "---------------" << endl;
+        getInfoStream() << "\nMatrix fillCol()" << endl;
+        getInfoStream() << "---------------" << endl;
 
-        cout << "\nB.fillCol(2,5.5)";
+        getInfoStream() << "\nB.fillCol(2,5.5)";
         B.FillCol(2,5.5);
-        B.Out();
+        B.Out(getInfoStream());
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -447,12 +447,12 @@ namespace csmp
         }
 
         //fillRow
-        cout << "\nMatrix fillRow()" << endl;
-        cout << "----------------" << endl;
+        getInfoStream() << "\nMatrix fillRow()" << endl;
+        getInfoStream() << "----------------" << endl;
 
-        cout << "\nB.fillRow(2,3.3)";
+        getInfoStream() << "\nB.fillRow(2,3.3)";
         B.FillRow(2,3.3);
-        B.Out();
+        B.Out(getInfoStream());
 
         for ( int j = 0; j < 4; j++ )
         {
@@ -462,14 +462,14 @@ namespace csmp
         C = B;
 
     //Testing summation functions
-        cout << "\nTesting summation function" << endl;
-        cout << "==========================" << endl;
+        getInfoStream() << "\nTesting summation function" << endl;
+        getInfoStream() << "==========================" << endl;
 
         //ColSum()
-        cout << "\nMatrix ColSum()" << endl;
-        cout << "---------------" << endl;
+        getInfoStream() << "\nMatrix ColSum()" << endl;
+        getInfoStream() << "---------------" << endl;
 
-        cout << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
+        getInfoStream() << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
 
         double64 ColSumB2 = B.ColSum(2);
         double64 CheckColSumB2 = 0.;
@@ -479,15 +479,15 @@ namespace csmp
             CheckColSumB2 += B(i,2);
         }
 
-        cout << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
+        getInfoStream() << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
         _equal( CheckColSumB2, ColSumB2, 1E-6 );
 
 
         //RowSum
-        cout << "\nMatrix RowSum()" << endl;
-        cout << "---------------" << endl;
+        getInfoStream() << "\nMatrix RowSum()" << endl;
+        getInfoStream() << "---------------" << endl;
 
-        cout << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
+        getInfoStream() << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
 
         double64 RowSumB2 = B.RowSum(2);
         double64 CheckRowSumB2 = 0.;
@@ -497,20 +497,20 @@ namespace csmp
             CheckRowSumB2 += B(2,j);
         }
 
-        cout << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
+        getInfoStream() << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
         _equal( CheckRowSumB2, RowSumB2, 1E-6 );
 
         //Testing Zero functions
-            cout << "\nTesting Zero functions" << endl;
-            cout << "======================" << endl;
+            getInfoStream() << "\nTesting Zero functions" << endl;
+            getInfoStream() << "======================" << endl;
 
             //ZeroCol
-            cout << "\nMatrix ZeroCol()" << endl;
-            cout << "----------------" << endl;
+            getInfoStream() << "\nMatrix ZeroCol()" << endl;
+            getInfoStream() << "----------------" << endl;
 
-            cout << "\nB.ZeroCol(2)";
+            getInfoStream() << "\nB.ZeroCol(2)";
             B.ZeroCol(2);
-            B.Out();
+            B.Out(getInfoStream());
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -518,12 +518,12 @@ namespace csmp
             }
 
             //ZeroRow
-            cout << "\nMatrix ZeroRow()" << endl;
-            cout << "----------------" << endl;
+            getInfoStream() << "\nMatrix ZeroRow()" << endl;
+            getInfoStream() << "----------------" << endl;
 
-            cout << "\nB.ZeroRow(2)";
+            getInfoStream() << "\nB.ZeroRow(2)";
             B.ZeroRow(2);
-            B.Out();
+            B.Out(getInfoStream());
 
             for ( int j = 0; j < 4; j++ )
             {
@@ -531,12 +531,12 @@ namespace csmp
             }
 
             //Zero
-            cout << "\nMatrix Zero()" << endl;
-            cout << "-------------" << endl;
+            getInfoStream() << "\nMatrix Zero()" << endl;
+            getInfoStream() << "-------------" << endl;
 
-            cout << "\nB.Zero()";
+            getInfoStream() << "\nB.Zero()";
             B.Zero();
-            B.Out();
+            B.Out(getInfoStream());
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -548,19 +548,19 @@ namespace csmp
 
 
         //Testing operator= ()
-            cout << "\nTesting operator= ()" << endl;
-            cout << "====================" << endl;
+            getInfoStream() << "\nTesting operator= ()" << endl;
+            getInfoStream() << "====================" << endl;
 
             //Testing operator= (const DenseMatrix& )
-            cout << "\nTesting operator= ( const DenseMatrix& )" << endl;
-            cout << "---------------------------------------" << endl;
+            getInfoStream() << "\nTesting operator= ( const DenseMatrix& )" << endl;
+            getInfoStream() << "---------------------------------------" << endl;
 
-            cout << "\nMatrix B";
-            B.Out();
+            getInfoStream() << "\nMatrix B";
+            B.Out(getInfoStream());
 
-            cout << "\nMatrix B = C";
+            getInfoStream() << "\nMatrix B = C";
             B = C;
-            B.Out();
+            B.Out(getInfoStream());
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -572,19 +572,19 @@ namespace csmp
 
 
         //Testing transposed functions
-            cout << "\nTesting transposed matrix functions" << endl;
-            cout << "===================================" << endl;
+            getInfoStream() << "\nTesting transposed matrix functions" << endl;
+            getInfoStream() << "===================================" << endl;
 
             //Transposed matrix
-            cout << "\nMatrix Transposed()" << endl;
-            cout << "-------------------" << endl;
+            getInfoStream() << "\nMatrix Transposed()" << endl;
+            getInfoStream() << "-------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            getInfoStream() << "\nTest matrix A";
+            A.Out(getInfoStream());
 
             A.Transposed(F);
-            cout << "\nF = A^T = A.Transposed(F)";
-            F.Out();
+            getInfoStream() << "\nF = A^T = A.Transposed(F)";
+            F.Out(getInfoStream());
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -595,16 +595,16 @@ namespace csmp
             }
 
             //MultiplyWithTransposedOf
-            cout << "\nMatrix MultiplyWithTransposedOf()" << endl;
-            cout << "---------------------------------" << endl;
+            getInfoStream() << "\nMatrix MultiplyWithTransposedOf()" << endl;
+            getInfoStream() << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            getInfoStream() << "\nTest matrix A";
+            A.Out(getInfoStream());
 
 
-            cout << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
+            getInfoStream() << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
             A.MultiplyWithTransposedOf( B, F );
-            F.Out();
+            F.Out(getInfoStream());
 
             ResF( 0, 0 ) = 13.;
             ResF( 0, 1 ) = 13.;
@@ -635,18 +635,18 @@ namespace csmp
             }
 
             //MultiplyTransposedOfWith
-            cout << "\nMatrix MultiplyTransposedOfWith()" << endl;
-            cout << "---------------------------------" << endl;
+            getInfoStream() << "\nMatrix MultiplyTransposedOfWith()" << endl;
+            getInfoStream() << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            getInfoStream() << "\nTest matrix A";
+            A.Out(getInfoStream());
 
-            cout << "\nTest matrix B";
-            B.Out();
+            getInfoStream() << "\nTest matrix B";
+            B.Out(getInfoStream());
 
-            cout << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
+            getInfoStream() << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
             A.MultiplyTransposedOfWith( B, G );
-            G.Out();
+            G.Out(getInfoStream());
 
             ResG( 0, 0 ) = 7.3;
             ResG( 0, 1 ) = 7.3;
@@ -678,43 +678,43 @@ namespace csmp
 
 
         //Testing operator= ( TensorVariable )
-            cout << "\nTesting operator= ( TensorVariable )" << endl;
-            cout << "====================================" << endl;
+            getInfoStream() << "\nTesting operator= ( TensorVariable )" << endl;
+            getInfoStream() << "====================================" << endl;
 
             //Operator= ( TensorVariable 1U )
-            cout << "\nOperator= ( TensorVariable 1U )" << endl;
-            cout << "-------------------------------" << endl;
+            getInfoStream() << "\nOperator= ( TensorVariable 1U )" << endl;
+            getInfoStream() << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix DenseMatrix3x3";
+            getInfoStream() << "\n3U test matrix DenseMatrix3x3";
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
-            cout << "\n1U tensor variable TensorVariable1U";
+            getInfoStream() << "\n1U tensor variable TensorVariable1U";
             TensorVariable1U.Identity();
-            TensorVariable1U.Out();
+            TensorVariable1U.Out(getInfoStream());
 
-            cout << "\nDenseMatrix3x3 = TensorVariable1U";
+            getInfoStream() << "\nDenseMatrix3x3 = TensorVariable1U";
             DenseMatrix3x3 = TensorVariable1U;
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
             _equal( DenseMatrix3x3(0,0), 1., 1E-6 );
 
             //Operator= ( TensorVariable 2U )
-            cout << "\nOperator= ( TensorVariable 2U )" << endl;
-            cout << "-------------------------------" << endl;
+            getInfoStream() << "\nOperator= ( TensorVariable 2U )" << endl;
+            getInfoStream() << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix DenseMatrix3x3";
+            getInfoStream() << "\n3U test matrix DenseMatrix3x3";
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
-            cout << "\n2U tensor variable TensorVariable2U";
+            getInfoStream() << "\n2U tensor variable TensorVariable2U";
             TensorVariable2U.Identity();
             TensorVariable2U += 1.;
-            TensorVariable2U.Out();
+            TensorVariable2U.Out(getInfoStream());
 
-            cout << "\nDenseMatrix3x3 = TensorVariable2U";
+            getInfoStream() << "\nDenseMatrix3x3 = TensorVariable2U";
             DenseMatrix3x3 = TensorVariable2U;
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
             for ( int i = 0; i < 2; i++ )
             {
@@ -727,21 +727,21 @@ namespace csmp
 
 
             //Operator= ( TensorVariable 3U )
-            cout << "\nOperator= ( TensorVariable 3U )" << endl;
-            cout << "-------------------------------" << endl;
+            getInfoStream() << "\nOperator= ( TensorVariable 3U )" << endl;
+            getInfoStream() << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix DenseMatrix3x3";
+            getInfoStream() << "\n3U test matrix DenseMatrix3x3";
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
-            cout << "\n3U tensor variable TensorVariable3U";
+            getInfoStream() << "\n3U tensor variable TensorVariable3U";
             TensorVariable3U.Identity();
             TensorVariable3U += 2.;
-            TensorVariable3U.Out();
+            TensorVariable3U.Out(getInfoStream());
 
-            cout << "\nDenseMatrix3x3 = TensorVariable3U";
+            getInfoStream() << "\nDenseMatrix3x3 = TensorVariable3U";
             DenseMatrix3x3 = TensorVariable3U;
-            DenseMatrix3x3.Out();
+            DenseMatrix3x3.Out(getInfoStream());
 
             for ( int i = 0; i < 3; i++ )
             {
@@ -753,41 +753,41 @@ namespace csmp
             }
 
             //Testing operator*= ( TensorVariable )
-                cout << "\nTesting operator*= ( TensorVariable )" << endl;
-                cout << "====================================" << endl;
+                getInfoStream() << "\nTesting operator*= ( TensorVariable )" << endl;
+                getInfoStream() << "====================================" << endl;
 
                 //Operator *= ( double64 )
-                cout << "\nOperator *= ( double64 )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nOperator *= ( double64 )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3 *= ( 5 )";
+                getInfoStream() << "\nDenseMatrix3x3 *= ( 5 )";
                 DenseMatrix3x3 *= ( 5 );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 _equal( DenseMatrix3x3(0,0), 25., 1E-6 );
 
                 //Operator *= ( TensorVariable 2U )
-                cout << "\nOperator *= ( TensorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nOperator *= ( TensorVariable 2U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n2U tensor variable TensorVariable2U";
+                getInfoStream() << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U.Identity();
                 TensorVariable2U += 1.;
-                TensorVariable2U.Out();
+                TensorVariable2U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable2U )";
+                getInfoStream() << "\nDenseMatrix3x3 *= ( TensorVariable2U )";
                 DenseMatrix3x3 *= ( TensorVariable2U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -799,22 +799,22 @@ namespace csmp
 
 
                 //Operator*= ( TensorVariable 3U )
-                cout << "\nOperator*= ( TensorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nOperator*= ( TensorVariable 3U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n3U tensor variable TensorVariable3U";
+                getInfoStream() << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U.Identity();
                 TensorVariable3U += 2.;
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
+                getInfoStream() << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
                 DenseMatrix3x3 *= ( TensorVariable3U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -825,26 +825,26 @@ namespace csmp
                 }
 
             //Testing operator*= ( VectorVariable )
-                cout << "\nTesting operator*= ( VectorVariable )" << endl;
-                cout << "====================================" << endl;
+                getInfoStream() << "\nTesting operator*= ( VectorVariable )" << endl;
+                getInfoStream() << "====================================" << endl;
 
                 //Operator *= ( VectorVariable 2U )
-                cout << "\nOperator *= ( VectorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nOperator *= ( VectorVariable 2U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n2U test matrix DenseMatrix2x2";
+                getInfoStream() << "\n2U test matrix DenseMatrix2x2";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n2U Vector variable VectorVariable2U";
+                getInfoStream() << "\n2U Vector variable VectorVariable2U";
                 VectorVariable2U = 5;
                 VectorVariable2U += 1.;
-                VectorVariable2U.Out();
+                VectorVariable2U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix2x2 *= ( VectorVariable2U )";
+                getInfoStream() << "\nDenseMatrix2x2 *= ( VectorVariable2U )";
                 DenseMatrix3x3 *= ( VectorVariable2U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -854,22 +854,22 @@ namespace csmp
 
 
                 //Operator*= ( VectorVariable 3U )
-                cout << "\nOperator*= ( VectorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nOperator*= ( VectorVariable 3U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n3U Vector variable VectorVariable3U";
+                getInfoStream() << "\n3U Vector variable VectorVariable3U";
                 VectorVariable3U = 5;
                 VectorVariable3U += 2.;
-                VectorVariable3U.Out();
+                VectorVariable3U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3 *= ( VectorVariable3U )";
+                getInfoStream() << "\nDenseMatrix3x3 *= ( VectorVariable3U )";
                 DenseMatrix3x3 *= ( VectorVariable3U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -878,21 +878,21 @@ namespace csmp
 
 
             //AssignToDiagonal ( TensorVariable )
-                cout << "\nTesting AssignToDiagonal ( VectorVariable )" << endl;
-                cout << "===========================================" << endl;
+                getInfoStream() << "\nTesting AssignToDiagonal ( VectorVariable )" << endl;
+                getInfoStream() << "===========================================" << endl;
 
                 //AssignToDiagonal ( diag_elmts, ScalarVariable )
-                cout << "\nAssignToDiagonal ( diag_elmts, ScalarVariable )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nAssignToDiagonal ( diag_elmts, ScalarVariable )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( 2, 6. )";
+                getInfoStream() << "\nDenseMatrix3x3.AssignToDiagonal ( 2, 6. )";
                 DenseMatrix3x3.AssignToDiagonal(2, 6.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0, j = 0; i < 2; i++, j++ )
                 {
@@ -900,42 +900,42 @@ namespace csmp
                 }
 
                 //AssignToDiagonal ( VectorVariable1U )
-                cout << "\nAssignToDiagonal ( VectorVariable 1U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nAssignToDiagonal ( VectorVariable 1U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n1U test matrix DenseMatrix1x1";
+                getInfoStream() << "\n1U test matrix DenseMatrix1x1";
                 DenseMatrix3x3.Resize(1,1);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n1U Vector variable VectorVariable1U";
+                getInfoStream() << "\n1U Vector variable VectorVariable1U";
                 VectorVariable1U = 5;
                 VectorVariable1U += 6.;
-                VectorVariable1U.Out();
+                VectorVariable1U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix1x1.AssignToDiagonal ( VectorVariable1U )";
+                getInfoStream() << "\nDenseMatrix1x1.AssignToDiagonal ( VectorVariable1U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable1U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 _equal( DenseMatrix3x3(0,0), 11., 1E-6 );
 
                 //AssignToDiagonal ( VectorVariable2U )
-                cout << "\nAssignToDiagonal ( VectorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nAssignToDiagonal ( VectorVariable 2U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix2x2";
+                getInfoStream() << "\n3U test matrix DenseMatrix2x2";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n2U Vector variable VectorVariable2U";
+                getInfoStream() << "\n2U Vector variable VectorVariable2U";
                 VectorVariable2U = 9;
                 VectorVariable2U += 1.;
-                VectorVariable2U.Out();
+                VectorVariable2U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix2x2.AssignToDiagonal ( VectorVariable2U )";
+                getInfoStream() << "\nDenseMatrix2x2.AssignToDiagonal ( VectorVariable2U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable2U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0, j = 0; i < 2; i++, j++ )
                 {
@@ -944,22 +944,22 @@ namespace csmp
 
 
                 //AssignToDiagonal ( VectorVariable3U )
-                cout << "\nAssignToDiagonal ( VectorVariable3U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nAssignToDiagonal ( VectorVariable3U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n3U Vector variable VectorVariable3U";
+                getInfoStream() << "\n3U Vector variable VectorVariable3U";
                 VectorVariable3U = 8;
                 VectorVariable3U += 2.;
-                VectorVariable3U.Out();
+                VectorVariable3U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( VectorVariable3U )";
+                getInfoStream() << "\nDenseMatrix3x3.AssignToDiagonal ( VectorVariable3U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable3U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0, j = 0 ; i < 3; i++, j++ )
                 {
@@ -968,17 +968,17 @@ namespace csmp
 
 
                 //AssignToDiagonal ( size_t diag elmnts, double64 )
-                cout << "\nAssignToDiagonal ( size_t diag elmnts, double64 )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nAssignToDiagonal ( size_t diag elmnts, double64 )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( size_t diag elmnts, double64 )";
+                getInfoStream() << "\nDenseMatrix3x3.AssignToDiagonal ( size_t diag elmnts, double64 )";
                 DenseMatrix3x3.AssignToDiagonal(3, 10.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0, j = 0 ; i < 3; i++, j++ )
                 {
@@ -987,60 +987,60 @@ namespace csmp
 
 
             //RowCondenseTo( vector<double64> )
-                cout << "\nTesting RowCondenseTo( vector<double64> )" << endl;
-                cout << "===========================================" << endl;
+                getInfoStream() << "\nTesting RowCondenseTo( vector<double64> )" << endl;
+                getInfoStream() << "===========================================" << endl;
                 //RowCondenseTo ( vector<double64> )
-                cout << "\nRowCondenseTo ( vector<double64> )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nRowCondenseTo ( vector<double64> )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(9.);
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 vector<double64>::const_iterator itx(x.begin());
 
-                cout << "Test vector x";
+                getInfoStream() << "Test vector x";
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx;
+                    getInfoStream() << "\n" << *itx;
                 }
 
-                cout << "\n\nDenseMatrix3x3.RowCondenseTo( x )";
+                getInfoStream() << "\n\nDenseMatrix3x3.RowCondenseTo( x )";
                 DenseMatrix3x3.RowCondenseTo( x );
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx ;
+                    getInfoStream() << "\n" << *itx ;
                     _equal( *itx, 27., 1E-6 );
                 }
 
-                cout << endl;
+                getInfoStream() << endl;
 
 
             //ExportTo ( TensorVariable )
-                cout << "\nTesting ExportTo ( TensorVariable )" << endl;
-                cout << "===========================================" << endl;
+                getInfoStream() << "\nTesting ExportTo ( TensorVariable )" << endl;
+                getInfoStream() << "===========================================" << endl;
 
                 //ExportTo ( TensorVariable 2U )
-                cout << "\nExportTo ( TensorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\nExportTo ( TensorVariable 2U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n2U test matrix DenseMatrix2x2";
+                getInfoStream() << "\n2U test matrix DenseMatrix2x2";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n2U tensor variable TensorVariable2U";
+                getInfoStream() << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U.Zero();
-                TensorVariable2U.Out();
+                TensorVariable2U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix2x2 *= ( TensorVariable2U )";
+                getInfoStream() << "\nDenseMatrix2x2 *= ( TensorVariable2U )";
                 DenseMatrix3x3.ExportTo(TensorVariable2U);
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(getInfoStream());
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1048,21 +1048,21 @@ namespace csmp
                 }
 
                 //ExportTo ( TensorVariable 3U )
-                cout << "\n\nExportTo ( TensorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                getInfoStream() << "\n\nExportTo ( TensorVariable 3U )" << endl;
+                getInfoStream() << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "\n3U tensor variable TensorVariable3U";
+                getInfoStream() << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U.Zero();
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(getInfoStream());
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
+                getInfoStream() << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
                 DenseMatrix3x3.ExportTo(TensorVariable3U);
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(getInfoStream());
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1070,44 +1070,44 @@ namespace csmp
                 }
 
             //Assign ( size_t , Point )
-                cout << "\n\nTesting Assign ( size_t , Point )" << endl;
-                cout << "===========================================" << endl;
+                getInfoStream() << "\n\nTesting Assign ( size_t , Point )" << endl;
+                getInfoStream() << "===========================================" << endl;
 
                 //AssignRow ( size_t i, Point<1U> )
-                cout << "\nAssignRow ( size_t i, Point<1U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "\nAssignRow ( size_t i, Point<1U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<1U>";
+                getInfoStream() << "Point Point<1U>";
                 Point1U= 13.;
-                Point1U.Out();
+                Point1U.Out(getInfoStream());
 
-                cout << "\nAssignRow( 1, Point1U )";
+                getInfoStream() << "\nAssignRow( 1, Point1U )";
                 DenseMatrix3x3.AssignRow( 1, Point1U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 _equal( DenseMatrix3x3(1,0), 13., 1E-6 );
 
                 //AssignRow ( size_t i, Point<2U> )
-                cout << "AssignRow ( size_t i, Point<2U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "AssignRow ( size_t i, Point<2U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n2U test matrix DenseMatrix2x2";
+                getInfoStream() << "\n2U test matrix DenseMatrix2x2";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Zero();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<2U>";
+                getInfoStream() << "Point Point<2U>";
                 Point2U = 11.;
-                Point2U.Out();
+                Point2U.Out(getInfoStream());
 
-                cout << "\nAssignRow( 1, Point2U )";
+                getInfoStream() << "\nAssignRow( 1, Point2U )";
                 DenseMatrix3x3.AssignRow( 1, Point2U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1115,21 +1115,21 @@ namespace csmp
                 }
 
                 //AssignRow ( size_t i, Point<3U> )
-                cout << "\nAssignRow ( size_t i, Point<3U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "\nAssignRow ( size_t i, Point<3U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<3U>";
+                getInfoStream() << "Point Point<3U>";
                 Point3U.Set (13., 12., 11.);
-                Point3U.Out();
+                Point3U.Out(getInfoStream());
 
-                cout << "\nAssignRow( 1, Point2U )";
+                getInfoStream() << "\nAssignRow( 1, Point2U )";
                 DenseMatrix3x3.AssignRow( 1, Point3U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1137,40 +1137,40 @@ namespace csmp
                 }
 
                 //AssignCol ( size_t i, Point<1U> )
-                cout << "\nAssignCol ( size_t i, Point<1U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "\nAssignCol ( size_t i, Point<1U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<1U>";
+                getInfoStream() << "Point Point<1U>";
                 Point1U= 13.;
-                Point1U.Out();
+                Point1U.Out(getInfoStream());
 
-                cout << "\nAssignCol( 1, Point1U )";
+                getInfoStream() << "\nAssignCol( 1, Point1U )";
                 DenseMatrix3x3.AssignCol( 1, Point1U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 _equal( DenseMatrix3x3(0,1), 13., 1E-6 );
 
                 //AssignCol ( size_t i, Point<2U> )
-                cout << "\nAssignCol ( size_t i, Point<2U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "\nAssignCol ( size_t i, Point<2U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n2U test matrix DenseMatrix2x2";
+                getInfoStream() << "\n2U test matrix DenseMatrix2x2";
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Zero();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<2U>";
+                getInfoStream() << "Point Point<2U>";
                 Point2U = 11.;
-                Point2U.Out();
+                Point2U.Out(getInfoStream());
 
-                cout << "\nAssignCol( 1, Point2U )";
+                getInfoStream() << "\nAssignCol( 1, Point2U )";
                 DenseMatrix3x3.AssignCol( 1, Point2U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1178,21 +1178,21 @@ namespace csmp
                 }
 
                 //AssignCol ( size_t i, Point<3U> )
-                cout << "\nAssignCol ( size_t i, Point<3U> )" << endl;
-                cout << "---------------------------------" << endl;
+                getInfoStream() << "\nAssignCol ( size_t i, Point<3U> )" << endl;
+                getInfoStream() << "---------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
-                cout << "Point Point<3U>";
+                getInfoStream() << "Point Point<3U>";
                 Point3U.Set (13., 12., 11.);
-                Point3U.Out();
+                Point3U.Out(getInfoStream());
 
-                cout << "\nAssignCol( 1, Point2U )";
+                getInfoStream() << "\nAssignCol( 1, Point2U )";
                 DenseMatrix3x3.AssignCol( 2, Point3U );
-                DenseMatrix3x3.Out();
+                DenseMatrix3x3.Out(getInfoStream());
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1201,101 +1201,101 @@ namespace csmp
 
 
                 //Testing operator*= ( Point<1U> )
-                    cout << "\nTesting operator*= ( Point<1U> )" << endl;
-                    cout << "====================================" << endl;
+                    getInfoStream() << "\nTesting operator*= ( Point<1U> )" << endl;
+                    getInfoStream() << "====================================" << endl;
 
                     //Operator *= ( Point<1U> )
-                    cout << "\nOperator *= ( Point<1U> )" << endl;
-                    cout << "-------------------------------" << endl;
+                    getInfoStream() << "\nOperator *= ( Point<1U> )" << endl;
+                    getInfoStream() << "-------------------------------" << endl;
 
-                    cout << "\n3U test matrix DenseMatrix3x3";
+                    getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                     DenseMatrix3x3.Resize(1,1);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
-                    cout << "\nPoint<1U> Point1U";
-                    Point1U.Out();
+                    getInfoStream() << "\nPoint<1U> Point1U";
+                    Point1U.Out(getInfoStream());
 
-                    cout << "\nDenseMatrix3x3 *= ( Point1U )";
+                    getInfoStream() << "\nDenseMatrix3x3 *= ( Point1U )";
                     DenseMatrix3x3 *= ( Point1U );
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
                     _equal( DenseMatrix3x3(0,0), 65., 1E-6 );
 
                     //Operator *= ( Point<2U> )
-                    cout << "\nOperator *= ( Point<2U> )" << endl;
-                    cout << "-------------------------------" << endl;
+                    getInfoStream() << "\nOperator *= ( Point<2U> )" << endl;
+                    getInfoStream() << "-------------------------------" << endl;
 
-                    cout << "\n3U test matrix DenseMatrix3x3";
+                    getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                     DenseMatrix3x3.Resize(2,2);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
-                    cout << "\nPoint<2U> Point2U";
-                    Point2U.Out();
+                    getInfoStream() << "\nPoint<2U> Point2U";
+                    Point2U.Out(getInfoStream());
 
-                    cout << "\nDenseMatrix3x3 *= ( Point2U )";
+                    getInfoStream() << "\nDenseMatrix3x3 *= ( Point2U )";
                     DenseMatrix3x3 *= ( Point2U );
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
                     for ( int i = 0; i < 2; i++ )
                         _equal( DenseMatrix3x3(i,0), 110., 1E-6 );
 
 
                     //Operator*= ( Point<3U> )
-                    cout << "\nOperator*= ( Point<3U> )" << endl;
-                    cout << "-------------------------------" << endl;
+                    getInfoStream() << "\nOperator*= ( Point<3U> )" << endl;
+                    getInfoStream() << "-------------------------------" << endl;
 
-                    cout << "\n3U test matrix DenseMatrix3x3";
+                    getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                     DenseMatrix3x3.Resize(3,3);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
-                    cout << "\nPoint<3U> Point3U";
-                    Point3U.Out();
+                    getInfoStream() << "\nPoint<3U> Point3U";
+                    Point3U.Out(getInfoStream());
 
-                    cout << "\nDenseMatrix3x3 *= ( Point3U )";
+                    getInfoStream() << "\nDenseMatrix3x3 *= ( Point3U )";
                     DenseMatrix3x3 *= ( Point3U );
-                    DenseMatrix3x3.Out();
+                    DenseMatrix3x3.Out(getInfoStream());
 
                     for ( int i = 0; i < 3; i++ )
                         _equal( DenseMatrix3x3(i,0), 180., 1E-6 );
 
 
                 //Testing L1 matrix norm()
-                    cout << "\nTesting NormL1()" << endl;
-                    cout << "================" << endl;
+                    getInfoStream() << "\nTesting NormL1()" << endl;
+                    getInfoStream() << "================" << endl;
 
-                        cout << "\n3U test matrix A";
+                        getInfoStream() << "\n3U test matrix A";
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        A.Out(getInfoStream());
                         double64 normL1 = A.NormL1();
 
-                        cout << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
+                        getInfoStream() << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
                         _equal( normL1, 201., 1E-6 );
 
 
                 //Testing L infinity matrix norm()
-                    cout << "\nTesting NormL_Infinity()" << endl;
-                    cout << "================" << endl;
+                    getInfoStream() << "\nTesting NormL_Infinity()" << endl;
+                    getInfoStream() << "================" << endl;
 
-                        cout << "\n3U test matrix A";
+                        getInfoStream() << "\n3U test matrix A";
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        A.Out(getInfoStream());
                         double64 normInf = A.NormL_Infinity();
 
-                        cout << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
+                        getInfoStream() << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
                         _equal( normInf, 303., 1E-6 );
 
 /*
                 //Testing In()
-                    cout << "\nTesting In()" << endl;
-                    cout << "============" << endl;
+                    getInfoStream() << "\nTesting In()" << endl;
+                    getInfoStream() << "============" << endl;
 
 
-                        cout << "\n3U test matrix DenseMatrix3x3";
+                        getInfoStream() << "\n3U test matrix DenseMatrix3x3";
                         DenseMatrix3x3.Resize(3,3);
                         int rows = 2;
                         int cols = 2;

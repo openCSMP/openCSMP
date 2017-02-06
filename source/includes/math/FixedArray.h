@@ -36,7 +36,7 @@ if ( dim != vec.size() ) std::cout<<"\nFixedArray=vector: size mismatch."<< std:
       void Out( std::vector<double64>& vec ) const {
            vec.resize(dim); for ( unsigned int i=0U; i<dim; i++ ) vec[i]=v_[i]; 
         }  
-      void Out() const { 
+      void Out(std::ostream& os) const { 
            std::cout << "\ncsp::FixedArray<"<< dim <<" ";
            for ( unsigned int i=0U; i<dim; i++ ) 
              std::cout <<v_[i]; std::cout << std::endl; 

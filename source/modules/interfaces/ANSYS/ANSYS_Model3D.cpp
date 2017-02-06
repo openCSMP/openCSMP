@@ -122,7 +122,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
   catch( Exception& ba ) {
        cout <<"\nException: Exception raised by: "<< ba.What() << endl;
        cout <<"\nDiagnostics:"<< endl;
-       ba.Out();
+       ba.Out(cout);
     }
 
  } // end Initialize

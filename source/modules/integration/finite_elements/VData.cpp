@@ -1195,71 +1195,71 @@ void VData::OutASCII( const char* file ) const
 
 
 /**
-    Prints contents of VSet to console;
+    Prints contents of VSet to a stream;
 */
-void VData::Out() const
+void VData::Out(std::ostream& os) const
   {
-     cout<<"\nVData::Out: "<< endl;
+     os <<"\nVData::Out: "<< endl;
 
      // mixed mesh
      // ----------
-     if ( hybrid_mesh_ ) cout <<"mesh contains different type of elements..."<< endl;
-     else cout <<"mesh contains only one type of element..."<< endl;
+     if ( hybrid_mesh_ ) os <<"mesh contains different type of elements..."<< endl;
+     else os <<"mesh contains only one type of element..."<< endl;
 
      // faces or interfaces
      // -------------------
      if ( first_face_ < plist.size() and first_face_ < first_interface_  )
-       cout <<"\tmesh contains "<< first_interface_ - first_face_ <<" descriptors of Face objects."<< endl;
+       os <<"\tmesh contains "<< first_interface_ - first_face_ <<" descriptors of Face objects."<< endl;
      if ( first_interface_ < plist.size() )
-       cout <<"\tmesh contains "<< plist.size() - first_interface_ <<" descriptors of InterFace objects."<< endl;
+       os <<"\tmesh contains "<< plist.size() - first_interface_ <<" descriptors of InterFace objects."<< endl;
 
      // px, py, pz
      // ----------
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
-     cout<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
+     os<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
      for ( size_t i=0U; i<px.size(); i++ )
-       cout << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
+       os << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
      // -----
-     cout <<"\n'pelmt' finite element types:";
+     os <<"\n'pelmt' finite element types:";
      size_t i(0U);
      for ( vector<int32>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
-       cout <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
-     cout << endl;
+       os <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
+     os << endl;
 
      // plist
      // -----
-     cout <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
+     os <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
      i = 0U;
      for ( deque<vector<size_t> >::const_iterator
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
-          cout << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
-          cout << endl;
+          os << i <<": \t";
+          for ( size_t j=0U; j<(*pt).size(); j++ ) os << (*pt)[j] <<"\t";
+          os << endl;
        }
 
      // pfverts
      // -------
-     cout <<"\n'pfverts':"<< endl;
+     os <<"\n'pfverts':"<< endl;
      i = 0U;
      for ( deque<vector<long64> >::const_iterator
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
-          cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t";
-          cout << endl;
+          os << i <<": \t";
+          for ( size_t j=0U; j<(*ft).size(); j++ ) os << (*ft)[j] <<"\t";
+          os << endl;
        }
 
      // bflags
      // ------
-     if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
+     if ( !bflags.empty() ) os <<"\nBoundary flags 'bflags':"<< endl;
      for ( map<size_t,long64>::const_iterator
            bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       cout << (*bf).first <<": \t"<< (*bf).second << endl;
+       os << (*bf).first <<": \t"<< (*bf).second << endl;
 
   } // end Out()
 
@@ -1441,9 +1441,9 @@ void VData::CoordinateRange( char coordinate_axis, double64& cmin, double64& cma
            }
       }
     else {
-       cout <<"\nVData::CoordinateRange: Coordinate axis specifier not recognized: ";
-       cout << coordinate_axis << endl;
-       cout <<"\n\tNot returning any values."<< endl;
+        std::cout <<"\nVData::CoordinateRange: Coordinate axis specifier not recognized: ";
+        std::cout << coordinate_axis << endl;
+        std::cout <<"\n\tNot returning any values."<< endl;
      }
  } 
  

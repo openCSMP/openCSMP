@@ -92,7 +92,7 @@ AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file,
      strcat( reaction_file_name, ".txt" );
 
      solver.ReadODEsFrom( reaction_file_name, coefs, dependent_comps, independent_comps );
-     solver.Out();
+     solver.Out(std::cout);
  
      // finding the ODE solver index for H2O
      // ------------------------------------ 

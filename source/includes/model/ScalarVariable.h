@@ -131,7 +131,7 @@ class ScalarVariable {
     void             Ln();
     /// base 10 logarithm
     void             Log10();
-    void             Out() const;
+    void             Out(std::ostream& os) const;
     /// reading and writing scalars binary files
     bool             Out( FILE* fp ) const;
     bool             In( FILE* fp );

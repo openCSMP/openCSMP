@@ -93,7 +93,7 @@ class VectorVariable<2U> {
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
 
     void             In();
-    void             Out() const;
+    void             Out(std::ostream& is) const;
     bool             In( FILE* fp );
     bool             Out( FILE* fp ) const;
 

@@ -1947,7 +1947,7 @@ void Model<dim>::MinMaxCoordinates( Point<dim>& xyz_min,
 
 
 /**
-  OutputMesh() will print to 'stdout' the mesh connectivity and boundary
+  OutputMesh() will print to a specified stream the mesh connectivity and boundary
   flags of each Node, IntegrationPoint, and Element.
 
   @section implementation Implementation
@@ -1961,50 +1961,50 @@ void Model<dim>::MinMaxCoordinates( Point<dim>& xyz_min,
   output of large meshes will be prohibitively large.
 */
 template<size_t dim>
-void Model<dim>::Out() const
+void Model<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\n\nModel<"<< dim <<">::Out: ";
-    database_.Out();
-    fem_manager_.Out();
-    mesh_manager_.Out();
+    os <<"\n\n\n\nModel<"<< dim <<">::Out: ";
+    database_.Out(os);
+    fem_manager_.Out(os);
+    mesh_manager_.Out(os);
 
-    cout <<"\nunique Regions: ";
+    os <<"\nunique Regions: ";
     for ( typename map<string,csmp::Region<dim> >::const_iterator
           gr_it=this->uniqueGroupMap_.begin(); gr_it!=this->uniqueGroupMap_.end(); gr_it++ )
       {
-         cout <<"\n\t"<< (*gr_it).first;
-         (*gr_it).second.Out();
+         os <<"\n\t"<< (*gr_it).first;
+         (*gr_it).second.Out(os);
       }
 
     if ( !this->groupMap_.empty() ) {
-        cout <<"\n\n\nnon-unique Regions: ";
+        os <<"\n\n\nnon-unique Regions: ";
         for ( typename map<string,csmp::Region<dim> >::const_iterator
               gr_it=this->groupMap_.begin(); gr_it!=this->groupMap_.end(); gr_it++ )
           {
-             cout <<"\n\t"<< (*gr_it).first;
-             (*gr_it).second.Out();
+             os <<"\n\t"<< (*gr_it).first;
+             (*gr_it).second.Out(os);
           }
       }
 
      // boundaries
      if ( this->Boundaries() != 0U ) {
-        cout <<"\n\n\nBoundaries: "<< endl;
+        os <<"\n\n\nBoundaries: "<< endl;
         for (typename map<std::string,csmp::Boundary<dim> >::const_iterator
              it = this->BoundariesBegin(); it != this->BoundariesEnd(); it++ )
           {
-             cout <<"\n\t"<< (*it).first;
-             (*it).second.Out();
+             os <<"\n\t"<< (*it).first;
+             (*it).second.Out(os);
           }
       }
 
     // split boundaries
     if ( this->SplitBoundaries() != 0U ) {
-        cout <<"\n\n\nSplitBoundaries: "<< endl;
+        os <<"\n\n\nSplitBoundaries: "<< endl;
         for ( typename map<std::string,csmp::SplitBoundary<dim> >::const_iterator
               it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); it++ )
           {
-             cout <<"\n\t"<< (*it).first;
-             (*it).second.Out();
+             os <<"\n\t"<< (*it).first;
+             (*it).second.Out(os);
           }
       }
 
@@ -2326,16 +2326,16 @@ void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
 
   @section messages Messages
 
-  OutputVariableToScreen() will report the variable type, its placement,
+  OutputVariableHumanReadable() will report the variable type, its placement,
   and property index. Then it will print the host object IDs followed
   by the variable flags and values.
 */
 template<size_t dim>
-void Model<dim>::OutputVariableToScreen( const char* prop ) const
+void Model<dim>::OutputVariableHumanReadable( std::ostream& os, const char* prop ) const
  {
-     this->Region("Model").OutputVariableToScreen( prop );
+     this->Region("Model").OutputVariableHumanReadable( os, prop );
 
- } // end OutputVariableToScreen
+ } // end OutputVariableHumanReadable
 
 
 

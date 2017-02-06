@@ -1836,22 +1836,22 @@ Outputs the current internal variables of the FV sector to screen.
 
 */
 template<size_t dim>
-void  ExplicitStencilProcessor<dim>::Out() const
+void  ExplicitStencilProcessor<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\nExplicitStencilProcessor<"<< dim <<">::Out: "<< endl;
+    os <<"\n\n\nExplicitStencilProcessor<"<< dim <<">::Out: "<< endl;
     // outputting data of object
-    cout <<"Finite volume stencil data."<< endl;
-    cout <<"\n\tassociated sectors, pore volumes, and advected property values: ";
+    os <<"Finite volume stencil data."<< endl;
+    os <<"\n\tassociated sectors, pore volumes, and advected property values: ";
     for ( size_t i=0U; i<sector_pore_volume_.size(); i++ )
-      cout <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
+      os <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
           
     if ( !src_.empty() ) {
-         cout <<"\n\nFacet integrated source terms:";
+         os <<"\n\nFacet integrated source terms:";
          for ( size_t i=0; i<src_.size(); i++ )
-         cout <<"\n\tfacet "<< i+1 <<": "<< src_[i];
+         os <<"\n\tfacet "<< i+1 <<": "<< src_[i];
       }
         
-    cout << endl << endl;
+    os << endl << endl;
     
  } // end Out
 

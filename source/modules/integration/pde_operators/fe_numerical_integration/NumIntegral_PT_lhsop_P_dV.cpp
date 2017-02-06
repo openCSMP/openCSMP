@@ -121,7 +121,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
       }
 
     cout <<"\nNumIntegral_PT_lhsop_P_dV<dim>::N_to_P: LHS contribution element: "<< e.Idx() << endl;    
-    MathOperatorLHS<dim>::LHS.Out();
+    MathOperatorLHS<dim>::LHS.Out(cout);
       
 } // end ComputeContribution
 

@@ -264,10 +264,7 @@ void Standard_IO_Handler::Out() const
     for ( list<string>::const_iterator 
           it=input_output.begin(); it!=input_output.end(); it++ )
       ofs <<"\n"<< (*it);
-    ofs << endl;
-
-    ofs.unsetf( ios::scientific );
-    ofs.precision(prec);
+    ofs << '\n';
  }
 
 

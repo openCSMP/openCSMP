@@ -276,14 +276,14 @@ void  VectorVariable<3U>::In()
 
 
 
-void  VectorVariable<3U>::Out() const 
+void  VectorVariable<3U>::Out(std::ostream& os) const 
  {
-     cout <<"\nStatus: "<< endl; 
+     os <<"\nStatus: "<< endl; 
      for ( size_t i=0; i<3U; i++ ) 
-       cout << parseStatus(flag[i]) <<"\t\t";
-     cout << endl;
-     for ( size_t i=0; i<3U; i++ ) cout << data[i] <<"\t\t";
-     cout << endl;
+       os << parseStatus(flag[i]) <<"\t\t";
+     os << endl;
+     for ( size_t i=0; i<3U; i++ ) os << data[i] <<"\t\t";
+     os << endl;
 
  } // end Out
 

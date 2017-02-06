@@ -308,7 +308,7 @@ void PropertyDatabase<dim>::FlushToScreen( const char* propname ) const
           return;
        }
        
-     (*iter).second.Out();
+     (*iter).second.Out(cout);
      cout.flush();
     
  } // FlushToScreen
@@ -400,7 +400,7 @@ void PropertyDatabase<dim>::ListVariables() const
   {
      for ( map<string,csmp::Parameter>::const_iterator
            iter=propList_.begin(); iter!=propList_.end(); iter++ )
-       (*iter).second.Out();
+       (*iter).second.Out(std::cout);
 
   } // ListVariables
 
@@ -522,7 +522,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
             propList_.insert( make_pair( new_param.name, new_param ) );
 
 	        // testing
-  	      if ( echo_to_screen ) new_param.Out();
+  	      if ( echo_to_screen ) new_param.Out(std::cout);
        }
      
      ifs.close();
@@ -584,7 +584,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty()
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty property '"<< new_prop <<"' already exists" << endl;
-         (*iter).second.Out();
+         (*iter).second.Out(std::cout);
          return StorageKey( new_prop.c_str() );
       }
     else  
@@ -706,7 +706,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty ( const char* s, const char* uni
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty: '"<< s <<"' already exists. Nothing was done."<< endl;
-         (*iter).second.Out();
+         (*iter).second.Out(std::cout);
          return StorageKey(s);
       }
     else {
@@ -1108,22 +1108,21 @@ const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
 
 
 template<size_t dim>
-void PropertyDatabase<dim>::Out() const
+void PropertyDatabase<dim>::Out(std::ostream& os) const
  {
-     cout <<"\nPropertyDatabase::Out: variables file'"<< physvarsFile <<"'"<< endl;
-     cout <<"total number of stored properties: "<< VariableCount() << endl;
+     os <<"\nPropertyDatabase::Out: variables file'"<< physvarsFile <<"'"<< endl;
+     os <<"total number of stored properties: "<< VariableCount() << endl;
      if ( VariableCount() > 0 ) {
-          cout <<"detailed variable counts:\n";
+          os <<"detailed variable counts:\n";
           for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
            for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
-             cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
+             os << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
-          cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
+          os <<"\nDetailed information on current properties in alphabetical order: "<< endl;
           for ( map<string,csmp::Parameter>::const_iterator
                 iter=propList_.begin(); iter!=propList_.end(); iter++ )
-            cout << iter->first << ": \n" << (*iter).second;
-          cout << endl;
-          cout.flush();
+            os << iter->first << ": \n" << (*iter).second;
+          os << endl;
        }
      
  }  // end Out

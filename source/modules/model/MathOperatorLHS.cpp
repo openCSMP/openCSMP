@@ -210,11 +210,11 @@ template<size_t dim>
 }
 
 template<size_t dim>
-void MathOperatorLHS<dim>::Out()  const
+void MathOperatorLHS<dim>::Out(std::ostream& os)  const
 {
-    op.Out();
-    bop.first.Out();
-    top.first.Out();
+    op.Out(os);
+    bop.first.Out(os);
+    top.first.Out(os);
 }
 
 // MATERIAL PROPERTY OPERAND

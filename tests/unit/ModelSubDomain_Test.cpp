@@ -37,6 +37,7 @@ namespace csmp {
 */
 void ModelSubDomain_Test::run()
   {
+      std::ostream& os = getInfoStream();
      bool test_binary_file_recovery1(true),
           test_binary_file_recovery2(true), // with boundaries
           test_binary_file_recovery3(true), // complex model with multiple regions
@@ -48,7 +49,7 @@ void ModelSubDomain_Test::run()
        {
          VSet<3U>   vset;
          const bool skewed(false), isoparametric(true);
-         test_Create_Prism_Hexa_VSet( vset, skewed );
+         test_Create_Prism_Hexa_VSet( os, vset, skewed );
          Model<3U>   model1( vset, isoparametric );
         
          //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
@@ -60,9 +61,9 @@ void ModelSubDomain_Test::run()
         
          cerr <<"\nModelSubDomain_Test::run: original model.";
          // TODO: numbering of boundary nodes does not seem to be correct
-         vset.Out();
-         //if ( verbose ) model1.Out();
-         //model1.Region("All Elements").Out();
+         vset.Out(os);
+         //if ( verbose ) model1.Out(os);
+         //model1.Region("All Elements").Out(os);
         
          model1.OutputToBinaryFile("ModelSubDomain_Test");
         
@@ -72,7 +73,7 @@ void ModelSubDomain_Test::run()
          //vtk_output.OutputDataToVTK( model2, "element_flag", "box flag element", 1 );
         
          cerr <<"\nModelSubDomain_Test::run: model reconstructed from disk.";
-         //if ( verbose ) model2.Out();
+         //if ( verbose ) model2.Out(os);
         
          _test( CompareModelSubdomains( model1.Region("All Elements"), model2.Region("All Elements"), verbose ) );
          _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );

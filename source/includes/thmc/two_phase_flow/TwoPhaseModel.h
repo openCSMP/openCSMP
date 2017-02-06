@@ -205,7 +205,7 @@ class TwoPhaseModel {
     double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
 
     /// default is the wetting phase
-    virtual void Out( size_t phase=1U ) const;
+    virtual void Out( std::ostream& os, size_t phase=1U ) const;
     
   protected:
 

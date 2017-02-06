@@ -96,12 +96,12 @@ void SimulatorSetup<dim>::CreateAllProperties(){
             p.vsize=dim*dim;
         else if ((p.type== ARRAY || p.type==FLAGGEDARRAY)){
             if (p.vsize <= 0 && p.vsize > 10e6){
-                p.Out();
+                p.Out(std::cerr);
                 throw csmp::Exception(EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "(Flagged)Array variable has unusual size.");
             }
         }
         else {
-            p.Out();
+            p.Out(std::cerr);
             throw csmp::Exception(EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "Failed to create vsize for this variable type.");
         }
     }
@@ -417,8 +417,8 @@ void SimulatorSetup<dim>::CheckModelMinMaxCoordinates(){
     Point<dim> minp,maxp;
     this->GetModel()->MinMaxCoordinates(minp,maxp);
     cout<<" min max coords:"<<endl;
-    cout<<" max :"; maxp.Out();
-    cout<<" min :"; minp.Out();
+    cout<<" max :"; maxp.Out(cout);
+    cout<<" min :"; minp.Out(cout);
 }
 
 template <size_t dim>

@@ -87,7 +87,7 @@ class TensorVariable<1U> {
  	VectorVariable<1U> Column( size_t ) const;
 
     void             In();
-    void             Out() const;
+    void             Out(std::ostream& os) const;
     bool             In( FILE* fp );
     bool             Out( FILE* fp ) const;
 

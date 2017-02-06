@@ -162,7 +162,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname,
          cout <<"\nGoCadInterface::ReadTetrahedralGocad3DSurface: reading 'TSurf' object..."<< endl;
          // 2.1 reading header into GocadHeader
          header.InitializeFrom( ifs );
-         header.Out();
+         header.Out(cout);
       }
     streampos pos = ifs.tellg(); // remembering position in file stream
 
@@ -250,7 +250,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname,
            
          if ( debug )
            for ( it=prop_headers.begin(); it!=prop_headers.end(); it++ )
-             (*it).Out();
+             (*it).Out(cout);
 
          // 3.3 reading solid including properties
          // --------------------------------------
@@ -761,7 +761,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
          }
     }
 
-  if ( debug ) vset.Out();
+  if ( debug ) vset.Out(cout);
    
   return true;
     
@@ -863,7 +863,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
          
          // 2.1 reading header
          header.InitializeFrom( ifs );
-         header.Out();
+         header.Out(cout);
 
          // 2.2 reading property class header
          //     If there is property information
@@ -954,7 +954,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
            
          if ( debug )
            for ( it=prop_headers.begin(); it!=prop_headers.end(); it++ )
-             (*it).Out();
+             (*it).Out(cout);
 
          // reading solid including properties
          // ----------------------------------
@@ -1713,7 +1713,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
 
   vset.AddData( "permeability", data );
 
-  if ( verbose ) vset.Out();
+  if ( verbose ) vset.Out(cout);
 
  } // end ReadTSolid
 

@@ -235,7 +235,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
          cerr << parseFiniteElementType((*iit)) <<"  ";
          if ( !fem_manager.ContainsElementType(*iit) ) {
               cerr <<"\n\n\tFinite element type not available: "<< parseFiniteElementType( *iit ) << endl;
-              fem_manager.Out();
+              fem_manager.Out(cerr);
               throw csmp::Exception( FATAL_ERROR, 
                              "MeshManager<dim>::BuildElementsAndVariableStorage(VSet):",
                              "'FiniteElementManager' lacks finite-element type required by VSet." );
@@ -395,7 +395,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
          cerr << parseFiniteElementType((*iit)) <<"  ";
          if ( !fem_manager.ContainsElementType(*iit) ) {
               cerr <<"\n\n\tFinite element type not available: "<< parseFiniteElementType( *iit ) << endl;
-              fem_manager.Out();
+              fem_manager.Out(cerr);
               throw csmp::Exception( FATAL_ERROR, 
                              "MeshManager<dim>::ReconstructMeshAndVariableStorage(VSet):",
                              "'FiniteElementManager' lacks finite-element type required by VSet." );
@@ -1555,7 +1555,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
              else {
                   // if there is no neighbor, the inner element parent should be at the model boundary
                   if ( face_collection_[fidx].InnerParent()->AtBoundary() == NOT ) {
-                       face_collection_[fidx].Out();
+                       face_collection_[fidx].Out(std::cerr);
                        csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
                                          "inner dim+1 element should be at model boundary because Face has is no outer element.");
                        face_collection_[fidx].InnerParent()->AtBoundary( IRREGULAR );
@@ -3899,39 +3899,39 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
 
 
 template<size_t dim>
-void MeshManager<dim>::Out() const
+void MeshManager<dim>::Out(std::ostream& os) const
  {
-    cout <<"\nMeshManager<"<< dim <<">::Out: "<< endl;
+    os <<"\nMeshManager<"<< dim <<">::Out: "<< endl;
     
     // nodes
-    cout <<"\nNODES: "<< endl;
+    os <<"\nNODES: "<< endl;
     for ( typename deque<Node<dim> >::const_iterator
           nit=node_collection_.begin(); nit!=node_collection_.end(); nit++ )
       { 
          string bound = parseBoundary((*nit).AtBoundary());
-         cout <<"\nNode ID: "<< (*nit).Idx() <<" ";
-         cout << (*nit).Coordinate();
-         cout <<" Boundary flag: "<< bound << endl;
+         os <<"\nNode ID: "<< (*nit).Idx() <<" ";
+         os << (*nit).Coordinate();
+         os <<" Boundary flag: "<< bound << endl;
       }
 
     // elements
-    cout <<"\nELEMENTS: "<< endl;
+    os <<"\nELEMENTS: "<< endl;
     for ( typename deque<Element<dim> >::const_iterator
           eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
       { 
          string bound = parseBoundary((*eit).AtBoundary());
-         cout <<"\nElement ID: "<< (*eit).Idx() <<" Boundary flag: "<< bound << endl;
-         cout <<"Member Nodes: "<< endl;
+         os <<"\nElement ID: "<< (*eit).Idx() <<" Boundary flag: "<< bound << endl;
+         os <<"Member Nodes: "<< endl;
          for ( size_t i=0U; i<(*eit).Nodes(); i++ ) 
-           cout << (*eit).N(i)->Idx() <<"\t";
-          cout <<"\nNeighbor elements: "<< endl;
+           os << (*eit).N(i)->Idx() <<"\t";
+          os <<"\nNeighbor elements: "<< endl;
          for ( size_t i=0U; i<(*eit).Neighbors(); i++ )
            if ( (*eit).Neighbor(i) != NULL )
-             cout << (*eit).Neighbor(i)->Idx() <<"\t";
+             os << (*eit).Neighbor(i)->Idx() <<"\t";
            else
-           cout <<"NO NEIGHBOR\t";        
+           os <<"NO NEIGHBOR\t";        
  
-         cout << endl;
+         os << endl;
      }
 
    // faces
@@ -3941,15 +3941,15 @@ void MeshManager<dim>::Out() const
    // TODO:
 
    // parent elements ID's for each node
-   cout << endl << endl;   
-    cout <<"PARENT ELEMENT INFORMATION FOR ALL NODES: "<< endl;
+   os << endl << endl;   
+    os <<"PARENT ELEMENT INFORMATION FOR ALL NODES: "<< endl;
    for ( typename deque<Node<dim> >::const_iterator
          nit=node_collection_.begin(); nit!=node_collection_.end(); nit++ )
      {
-        cout <<"\nNode: "<< (*nit).Idx() <<", parent elements: "<< endl;
+        os <<"\nNode: "<< (*nit).Idx() <<", parent elements: "<< endl;
         for ( size_t i=0u; i<(*nit).Parents(); i++ )
-          cout << (*nit).Parent( i )->Idx() <<" ";
-        cout << endl;
+          os << (*nit).Parent( i )->Idx() <<" ";
+        os << endl;
      } 
 
  } // end Out

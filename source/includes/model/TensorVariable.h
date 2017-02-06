@@ -53,8 +53,8 @@ The *= operator will always produce a temporary matrix. Therefore,
 Assignent of a vector to a tensor is done by placing the vector in the
 tensors diagonal and zeroing its off-diagonal elements.  
 
-Matrices can be input and output via the console, using the In() and
-Out() member functions. 
+Matrices can be input and output from streams, using the In() and
+Out(std::ostream& os) member functions. 
 
  
 @section motivation Motivation
@@ -82,7 +82,7 @@ TensorVariable<double,2> ts;
 ts.Identity();
 vc = ts * vc;
 
-vc.Out();
+vc.Out(std::ostream& os);
 @endcode
 
 @todo (2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable
@@ -271,11 +271,11 @@ class TensorVariable<3U> {
     void              Ln( bool from_absolute_value=false );
     void              Log10( bool from_absolute_value=false );
 
-    /// prompts user to initialise the tensor from the command line
+    /// prompts user to initialise the tensor from the console
     void              In();
   
-    /// prints the tensor to the command line
-    void              Out() const;
+    /// prints the tensor to a stream
+    void              Out(std::ostream& os) const;
   
     /// reads the tensor from the supplied input file
     bool              In( FILE* fp );

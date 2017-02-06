@@ -163,7 +163,7 @@ class Face : public FiniteElementTraits<dim,Face>,
     // ------------------------------------------------------------------------
 
     /// prints state of this object
-    void  Out() const;
+    void  Out(std::ostream& os) const;
 
   private:
     Face();

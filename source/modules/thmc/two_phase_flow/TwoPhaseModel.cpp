@@ -735,16 +735,16 @@ double64 TwoPhaseModel<dim>::spline_second_derivative( double64 x, double64 x1, 
 }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::Out( size_t phase ) const
+void TwoPhaseModel<dim>::Out( std::ostream& os, size_t phase ) const
  { 
     assert( phase == 1U or phase == 2U );
-    cout <<"\nTwoPhaseModel<" << dim <<">::Out: ";
-    if ( phase == 1U ) cout <<" data for the wetting phase: ";
-    else               cout <<" data for the non-wetting phase: ";
+    os <<"\nTwoPhaseModel<" << dim <<">::Out: ";
+    if ( phase == 1U ) os <<" data for the wetting phase: ";
+    else               os <<" data for the non-wetting phase: ";
     if ( !interpolate_fluid_properties_ )
-      cout <<"fluid properties are fixed. "<< endl;
+      os <<"fluid properties are fixed. "<< endl;
     else 
-      cout <<"fluid properties are interpolated. "<< endl;
+      os <<"fluid properties are interpolated. "<< endl;
       
     //perm_key,    // permeability = scalar element property
     //sat_key,     // saturation of the wetting phase (nodal property)
@@ -756,26 +756,26 @@ void TwoPhaseModel<dim>::Out( size_t phase ) const
     //muw_key,     // viscosity of wetting phase (nodal property)
     //rhw_key,     // density of non-wetting phase (nodal property)
     //rhn_key;     // density of non-wetting phase (nodal property)
-    cout <<"\nelement properties:";
-    cout <<"\n       irreducible saturation of wetting phase: "<< swr_;
-    cout <<"\n   irreducible saturation of non-wetting phase: "<< snr_;
-    cout <<"\n                                  permeability: "<< k_;
-    cout <<"\nnode properties:";
-    cout <<"\n                    viscosity of wetting phase: "<< muw_;
-    cout <<"\n                viscosity of non-wetting phase: "<< mun_;
-    cout <<"\n                      density of wetting phase: "<< rhw_;
-    cout <<"\n                  density of non-wetting phase: "<< rhn_;
-    cout <<"\ninterfacial tension (surface tension of fluid): "<< ift_;
-    cout <<"\n                      saturation wetting phase: "<< sat_;
-    cout <<"\n            effective saturation wetting phase: "<< seff_;
-    cout <<"\n                               fractional flow: "<< f_Phase(phase);
-    cout <<"\n                                         df/dS: "<< dfds();
-    cout <<"\n                                   df/dSn(max): "<< MaxFractionalFlowDerivative();
-    cout <<"\n                                             G: "<< G();
-    cout <<"\n                                         dG/dS: "<< dGds();
-    cout <<"\n                                         pc(2): "<< pc_Phase();
-    cout <<"\n                                      dpcdS(2): "<< dpcds_Phase();
-    cout << endl << endl;
+    os <<"\nelement properties:";
+    os <<"\n       irreducible saturation of wetting phase: "<< swr_;
+    os <<"\n   irreducible saturation of non-wetting phase: "<< snr_;
+    os <<"\n                                  permeability: "<< k_;
+    os <<"\nnode properties:";
+    os <<"\n                    viscosity of wetting phase: "<< muw_;
+    os <<"\n                viscosity of non-wetting phase: "<< mun_;
+    os <<"\n                      density of wetting phase: "<< rhw_;
+    os <<"\n                  density of non-wetting phase: "<< rhn_;
+    os <<"\ninterfacial tension (surface tension of fluid): "<< ift_;
+    os <<"\n                      saturation wetting phase: "<< sat_;
+    os <<"\n            effective saturation wetting phase: "<< seff_;
+    os <<"\n                               fractional flow: "<< f_Phase(phase);
+    os <<"\n                                         df/dS: "<< dfds();
+    os <<"\n                                   df/dSn(max): "<< MaxFractionalFlowDerivative();
+    os <<"\n                                             G: "<< G();
+    os <<"\n                                         dG/dS: "<< dGds();
+    os <<"\n                                         pc(2): "<< pc_Phase();
+    os <<"\n                                      dpcdS(2): "<< dpcds_Phase();
+    os << endl << endl;
 }
 
 

@@ -736,7 +736,7 @@ cout <<"\n\n\n\nBoundary patches and their face data:\n";
 for ( auto it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it) {
      cout <<"\n\n\n"<< (*it).first <<"\n";
      for ( auto fit=(*it).second.begin(); fit!=(*it).second.end(); ++fit )
-       (*fit).Out();
+       (*fit).Out(getInfoStream());
   }
 */
     return patches.size();

@@ -99,23 +99,23 @@ finite element mesh and the associated data storage index for the CSMP
 'MemoryManager'. 
 */
 
-void Index::Out() const
+void Index::Out(std::ostream& os) const
  {
-    cout <<"\nIndex::Out: ";
+    os <<"\nIndex::Out: ";
     string str(parseType(type));
-    cout <<"\nVARIABLE_TYPE: "<< str;
+    os <<"\nVARIABLE_TYPE: "<< str;
     str = parsePlacement(place);
-    cout <<"\nPLACEMENT:        "<< str;
-    cout <<"\nindex:            "<< index << endl;
-    cout <<"\ndata depth:       "<< dataDepth << endl;
-    cout <<"\nflag depth:       "<< flagDepth << endl;
-    cout <<"\ndata offset:      "<< dataOffset << endl;
-    cout <<"\nflag offset:      "<< flagOffset << endl;
-    cout <<"\noffset factor si: "<< offsetFactorSimplex << endl;
-    cout <<"\noffset factor se: "<< offsetFactorSector << endl;
-    cout <<"\nip factor si:     "<< ipFactorSimplex << endl;
-    cout <<"\nip factor se:     "<< ipFactorSector << endl;
-    cout <<"\nip factor fa:     "<< ipFactorFacet << endl;
+    os <<"\nPLACEMENT:        "<< str;
+    os <<"\nindex:            "<< index << endl;
+    os <<"\ndata depth:       "<< dataDepth << endl;
+    os <<"\nflag depth:       "<< flagDepth << endl;
+    os <<"\ndata offset:      "<< dataOffset << endl;
+    os <<"\nflag offset:      "<< flagOffset << endl;
+    os <<"\noffset factor si: "<< offsetFactorSimplex << endl;
+    os <<"\noffset factor se: "<< offsetFactorSector << endl;
+    os <<"\nip factor si:     "<< ipFactorSimplex << endl;
+    os <<"\nip factor se:     "<< ipFactorSector << endl;
+    os <<"\nip factor fa:     "<< ipFactorFacet << endl;
  }
 
 bool Index::Out( FILE* fp ) const

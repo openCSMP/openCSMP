@@ -216,8 +216,8 @@ public:
     void        Name( const char* );
 
     /// console output
-    void OutputVariableToScreen( const char* prop ) const;
-    void Out() const;
+    void OutputVariableHumanReadable( std::ostream& os, const char* prop ) const;
+    void Out(std::ostream& os) const;
 
     void Verbose(bool verbose);
     bool Verbose();

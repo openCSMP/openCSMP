@@ -224,7 +224,7 @@ void StressesAndStrainsIP3D::GetOperands( Element<3U>& e )
 
    if ( verbose_ ) {     
         cout <<"\nStressesAndStrainsIP3D::GetOperands: Nodal displacements, element: "<< e.Idx() << endl;
-        DISPL_.Out();  
+        DISPL_.Out(cout);  
      }      
   
    // 3. For stress computation from strains at integration points
@@ -320,9 +320,9 @@ void StressesAndStrainsIP3D::ComputeContribution( Element<3U>& e )
 
        if ( verbose_ ) { 
             cout <<"\n\tstrain at integration point: "<< i << endl;
-            EGP_.Out();
+            EGP_.Out(cout);
             cout <<"\n\tstress at integration point: "<< i << endl;
-            SGP_.Out();
+            SGP_.Out(cout);
          }       
 
        // inserting strains and stresses sequentially into temporary 
@@ -390,8 +390,8 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
         if ( principal_e_and_sigma_ ) {
              // principal strains
              if ( !IP_STRAIN_TENSOR_.Eigen( evals_, evecs_, false ) ) {
-                    e.Out();
-                    IP_STRAIN_TENSOR_.Out();
+                    e.Out(cout);
+                    IP_STRAIN_TENSOR_.Out(cout);
                     throw csmp::Exception( ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
                                           "Eigen decompostion of strain tensor failed.");
                 }
@@ -402,8 +402,8 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
              e.Store( dilat_key_, makeScalar(PLAIN,evals_[0]+evals_[1]+evals_[2]) );
              // principal stresses
              if ( !IP_STRESS_TENSOR_.Eigen( evals_, evecs_, false ) ) {
-                  e.Out();
-                  IP_STRESS_TENSOR_.Out();
+                  e.Out(cout);
+                  IP_STRESS_TENSOR_.Out(cout);
                   throw csmp::Exception( ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
                                         "Eigen decompostion of stress tensor failed.");
                }

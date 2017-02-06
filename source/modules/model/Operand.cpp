@@ -1920,7 +1920,7 @@ bool Operand<dim>::IsWithinRange( const cspT& val ) const
 
     if ( !val.IsWithinRange( omin, omax ) ) {
           std::cerr <<"\n'"<< name_ <<"' has erratic value:";
-          val.Out();
+          val.Out(std::cerr);
           std::cerr << std::endl << std::endl;
           csmp_error.notice( ERROR, "Operand::IsWithinRange", "Property value out of range.");
           return false;
@@ -1965,13 +1965,13 @@ computations.
 
 */
 template<size_t dim>
-void Operand<dim>::PrintValue() const
+void Operand<dim>::PrintValue(std::ostream& os) const
  {
-    if      ( prop_key_.type == SCALAR )        scalar_storage_.Out();
-    else if ( prop_key_.type == VECTOR )        vector_storage_.Out();
-    else if ( prop_key_.type == TENSOR )        tensor_storage_.Out();
-    else if ( prop_key_.type == ARRAY  )        array_storage_.Out();
-    else if ( prop_key_.type == FLAGGEDARRAY  ) flagged_array_storage_.Out();
+    if      ( prop_key_.type == SCALAR )        scalar_storage_.Out(os);
+    else if ( prop_key_.type == VECTOR )        vector_storage_.Out(os);
+    else if ( prop_key_.type == TENSOR )        tensor_storage_.Out(os);
+    else if ( prop_key_.type == ARRAY  )        array_storage_.Out(os);
+    else if ( prop_key_.type == FLAGGEDARRAY  ) flagged_array_storage_.Out(os);
     
  } // end PrintValue
 
@@ -1982,23 +1982,23 @@ void Operand<dim>::PrintValue() const
 
 */
 template<size_t dim>
-void  Operand<dim>::Out() const 
+void  Operand<dim>::Out(std::ostream& os) const 
  {
     string stype    = parseType(prop_key_.type);
     string place    = parsePlacement(prop_key_.place);
     string esstatus = parseStatus(flag_essential_);
     string oustatus = parseStatus(flag_output_);
            
-    cout <<"\n\nOperand<dim>: '" << name_ <<"'"<< endl;
-    cout <<"\nproperty type:       "<< stype << endl;
-    cout <<"placement:           "<< place << endl;
-    cout <<"index:               "<< prop_key_.index << endl;
-    cout <<"property range, min: "<< omin <<",  max: "<< omax << endl;
-    cout <<"flag_essential:      "<< esstatus << endl;
-    cout <<"flag_output:         "<< oustatus << endl;
-    cout <<"calculation offset:  "<< calc_offset_ << endl;
+    os <<"\n\nOperand<dim>: '" << name_ <<"'"<< endl;
+    os <<"\nproperty type:       "<< stype << endl;
+    os <<"placement:           "<< place << endl;
+    os <<"index:               "<< prop_key_.index << endl;
+    os <<"property range, min: "<< omin <<",  max: "<< omax << endl;
+    os <<"flag_essential:      "<< esstatus << endl;
+    os <<"flag_output:         "<< oustatus << endl;
+    os <<"calculation offset:  "<< calc_offset_ << endl;
 
-    PrintValue();
+    PrintValue(os);
      
  } // end Out
 

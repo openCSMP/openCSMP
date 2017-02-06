@@ -4688,13 +4688,13 @@ To check variable values in small test problems.
 
 @section messages Messages
 
-OutputVariableToScreen() will report the variable type, its placement,
+OutputVariableHumanReadable() will report the variable type, its placement,
 and property index. Then it will print the host object IDs followed
 by the variable flags and values.
 
 */
 template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) const
+void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os, const char* prop ) const
  {
      csmp::Index          prop_key = pref_.StorageKey(prop);
      ScalarVariable       sc;
@@ -4703,24 +4703,24 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
 
      string place_name = parsePlacement(prop_key.place);
 
-     cout <<"\n\nModelSubDomain<"<< dim << ">::OutputVariableToScreen: output of ";
+     os <<"\n\nModelSubDomain<"<< dim << ">::OutputVariableHumanReadable: output of ";
      switch(prop_key.type)
       {
-         case SCALAR: cout <<"SCALAR variable: '";
+         case SCALAR: os <<"SCALAR variable: '";
            break;
-         case VECTOR: cout <<"VECTOR variable: '";
+         case VECTOR: os <<"VECTOR variable: '";
            break;
-         case TENSOR: cout <<"TENSOR variable: '";
+         case TENSOR: os <<"TENSOR variable: '";
            break;
-         case ARRAY:  cout <<"ARRAY variable: '";
+         case ARRAY:  os <<"ARRAY variable: '";
            break;
-         case FLAGGEDARRAY:  cout <<"FLAGGEDARRAY variable: '";
+         case FLAGGEDARRAY:  os <<"FLAGGEDARRAY variable: '";
            break;
          default:
-           cout <<"\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: type of '"<< prop <<"' not recognized."<< endl;
+           os <<"\nModelSubDomain<"<< dim <<">::OutputVariableHumanReadable: type of '"<< prop <<"' not recognized."<< endl;
            return;
       }
-     cout << prop <<"' placed on the: "<< place_name << endl;
+     os << prop <<"' placed on the: "<< place_name << endl;
 
      switch( prop_key.place )
        {
@@ -4728,36 +4728,36 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
               for ( typename vector<csmp::Node<dim>*>::const_iterator
                     nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                 {
-                  cout <<"\nIdx: " << (*nit)->Idx() <<"\t\t";
-                  cout << string(parseBoundary((*nit)->AtBoundary())) <<" ";
+                  os <<"\nIdx: " << (*nit)->Idx() <<"\t\t";
+                  os << string(parseBoundary((*nit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
                        case SCALAR:
                            (*nit)->Read( prop_key, sc );
-                           cout << sc;
+                           os << sc;
                          break;
                        case VECTOR:
                            (*nit)->Read( prop_key, vc );
-                           cout << vc;
+                           os << vc;
                          break;
                        case TENSOR:
                            (*nit)->Read( prop_key, ts );
-                           cout << ts;
+                           os << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*nit)->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*nit)->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of Node variable not recognized." );
                     }
                 }
@@ -4766,33 +4766,33 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
               for ( typename vector<SIMPLEX<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
-                  cout <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
+                  os <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     switch (prop_key.type)
                       {
                          case SCALAR:
-                             (*eit)->Read( i, prop_key, sc ); cout << i <<":"<< sc;
+                             (*eit)->Read( i, prop_key, sc ); os << i <<":"<< sc;
                            break;
                          case VECTOR:
-                             (*eit)->Read( i, prop_key, vc ); cout << i <<":"<< vc;
+                             (*eit)->Read( i, prop_key, vc ); os << i <<":"<< vc;
                            break;
                          case TENSOR:
-                             (*eit)->Read( i, prop_key, ts ); cout << i <<":"<< ts;
+                             (*eit)->Read( i, prop_key, ts ); os << i <<":"<< ts;
                            break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*eit)->Read( i, prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*eit)->Read( i, prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of Element integration point variable not recognized." );
                       }
                 }
@@ -4801,129 +4801,128 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
               for ( typename vector<SIMPLEX<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
-                  cout <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
+                  os <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
                   /// Roman, 2014 (Face&InterFace): Should Face contain AtBoundary flag?
-                  //cout << string(parseBoundary((*eit)->AtBoundary())) <<" ";
+                  //os << string(parseBoundary((*eit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: (*eit)->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: (*eit)->Read( prop_key, sc ); os << sc;
                          break;
-                       case VECTOR: (*eit)->Read( prop_key, vc ); cout << vc;
+                       case VECTOR: (*eit)->Read( prop_key, vc ); os << vc;
                          break;
-                       case TENSOR: (*eit)->Read( prop_key, ts ); cout << ts;
+                       case TENSOR: (*eit)->Read( prop_key, ts ); os << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*eit)->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*eit)->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of Element variable not recognized." );
                     }
                 }
               break;
            case SPLIT_BOUNDARY:
-                  cout <<"\nSplitBoundary: ";
+                  os <<"\nSplitBoundary: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: this->Read( prop_key, sc ); os << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
+                       case VECTOR: this->Read( prop_key, vc ); os << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
+                       case TENSOR: this->Read( prop_key, ts ); os << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of split boundary variable not recognized." );
                     }
                   break;
            case BOUNDARY:
                 {
-                  cout <<"\nRegion: ";
+                  os <<"\nRegion: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: this->Read( prop_key, sc ); os << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
+                       case VECTOR: this->Read( prop_key, vc ); os << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
+                       case TENSOR: this->Read( prop_key, ts ); os << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of boundary variable not recognized." );
                     }
                 }
               break;
            case REGION:
                 {
-                  cout <<"\nRegion: ";
+                  os <<"\nRegion: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
+                       case SCALAR: this->Read( prop_key, sc ); os << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
+                       case VECTOR: this->Read( prop_key, vc ); os << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
+                       case TENSOR: this->Read( prop_key, ts ); os << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out();
+                            ary.Out(os);
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
                                                "type of region variable not recognized." );
                     }
                 }
               break;
           default:
-               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: The property ";
+               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableHumanReadable: The property ";
                cerr << prop <<"  "<< place_name <<" could not be retrieved from the Region";
                break;
        }
-    cout << endl;
-    cout.flush();
+    os << endl;
 
- } // end OutputVariableToScreen
+ } // end OutputVariableHumanReadable
 
 
 
@@ -4948,11 +4947,11 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
 
 */
 template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Out() const
+void ModelSubDomain<dim,SIMPLEX>::Out(std::ostream& os) const
  {
-    cout <<"\nModelSubDomain<dim,SIMPLEX>::Out(): name: '"<< subdomain_name_ <<"'";
-    cout <<" member elements: interior="<< InteriorElements();
-    cout <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
+    os <<"\nModelSubDomain<dim,SIMPLEX>::Out(): name: '"<< subdomain_name_ <<"'";
+    os <<" member elements: interior="<< InteriorElements();
+    os <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
 
     for ( typename vector<SIMPLEX<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
@@ -4962,22 +4961,22 @@ void ModelSubDomain<dim,SIMPLEX>::Out() const
 //         else (*it)->Out();
       }
 
-    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    os <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(bd_face_vec_.begin());
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
-         cout <<"\nelement "<< i <<": edge face numbers: ";
+         os <<"\nelement "<< i <<": edge face numbers: ";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
       }
 
-    cout <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
+    os <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
          if ( node_vec_[i] == NULL )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
-         else cout << node_vec_[i]->Idx() <<" ";
+         else os << node_vec_[i]->Idx() <<" ";
       }
 
-    cout << endl;
+    os << endl;
  }
 
 

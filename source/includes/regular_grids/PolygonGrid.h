@@ -150,7 +150,7 @@ class PolygonGridManager
     GridNode<dim>* AddNode( const csmp::Point<dim>& pt );
   
     /// prints object state to screen
-    void Out() const;
+    void Out(std::ostream& os) const;
 
   private:
 

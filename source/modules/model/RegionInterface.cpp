@@ -1352,7 +1352,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
    {
       // 1. getting the names of the regions
       std::list<std::string> regions;
-      topo.Out( regions );
+      topo.Out( std::cout, regions );
 
       // 2. assigning the regions to groups in the Model
       std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom: Forming the regions: ";
@@ -1929,8 +1929,8 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
             gref_to_be_added_to.Add( gref_to_add );
         }
       catch( Exception& e ) {
-           std::cout <<"\nRegionsInterface<dim,REGION_COMPLEX>::AssimilateRegion: nothing was done; handled exception: "<< std::endl;
-           e.Out();
+           std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::AssimilateRegion: nothing was done; handled exception: "<< std::endl;
+           e.Out(std::cerr);
         }
     
    } // end AssimilateRegion
@@ -2076,7 +2076,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
       catch( Exception& e ) {
            std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::RegionIncludes: returning false; handled exception: "<< std::endl;
-           e.Out();
+           e.Out(std::cerr);
         }
     
       return false;
@@ -2154,7 +2154,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
       catch( Exception& e ) {
            std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::RegionUnion: returning false; handled exception: "<< std::endl;
-           e.Out();
+           e.Out(std::cerr);
         }
       
       return false;
@@ -2233,7 +2233,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
       catch( Exception& e ) {
            std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::RegionIntersection: returning false; handled exception: "<< std::endl;
-           e.Out();
+           e.Out(std::cerr);
         }
       
       return false;
@@ -2315,7 +2315,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
       catch( Exception& e ) {
            std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::RegionDifference: returning false; handled exception: "<< std::endl;
-           e.Out();
+           e.Out(std::cerr);
         }
       
       return false;
@@ -2390,7 +2390,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
       catch( Exception& e ) {
            std::cerr <<"\nRegionsInterface<dim,REGION_COMPLEX>::RegionSymmetricDifference: returning false; handled exception: "<< std::endl;
-           e.Out();
+           e.Out(std::cerr);
         }
       
       return false;

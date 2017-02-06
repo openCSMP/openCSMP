@@ -750,7 +750,7 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
                for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
                  cout << parseBoundary( (*sit) ) <<" ";
                cout << endl;
-               (*it)->Out();
+               (*it)->Out(cout);
            }
       }
 
@@ -1205,7 +1205,7 @@ void recreateBoxBoundaryFlags( Model<3>& model )
                    for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
                      cout << parseBoundary( (*sit) ) <<" ";
                    cout << endl;
-                   (*it)->Out();
+                   (*it)->Out(cout);
                 }
            }
       }
@@ -1318,7 +1318,7 @@ void flagElementUsingNodalAtBoundaryFlags( typename deque<csmp::Element<dim> >::
                        for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
                          cout << parseBoundary( (*sit) ) <<" ";
                        cout << endl;
-                       (*it).Out();
+                       (*it).Out(cout);
                     }
                 }
            }

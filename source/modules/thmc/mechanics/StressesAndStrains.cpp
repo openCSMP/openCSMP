@@ -238,7 +238,7 @@ void StressesAndStrains<3U>::GetOperands( Element<3U>& e )
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 3U;
               cout <<">::GetOperands: Nodal displacements, element: "<< e.Idx() << endl;
-              DISPL_.Out();  
+              DISPL_.Out(cout);  
            }      
         
         // 4. For stress computation from strains at integration points
@@ -336,9 +336,9 @@ void StressesAndStrains<3U>::ComputeContribution( Element<3U>& e )
 
              if ( verbose_ ) { 
                   cout <<"\nstrain at integration point: "<< i << endl;
-                  EGP_.Out();
+                  EGP_.Out(cout);
                   cout <<"\nstress at integration point: "<< i << endl; 
-                  SGP_.Out();
+                  SGP_.Out(cout);
                }       
 
              // inserting strains and stresses sequentially into temporary 
@@ -478,8 +478,8 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
         if ( principal_e_and_sigma_ ) {
              // principal strains
              if ( !IP_STRAIN_TENSOR_.Eigen( evals_, evecs_, false ) ) {
-                    e.Out();
-                    IP_STRAIN_TENSOR_.Out();
+                    e.Out(cout);
+                    IP_STRAIN_TENSOR_.Out(cerr);
                     throw csmp::Exception( ERROR, "StressesAndStrains<3U>::WriteOperands:",
                                           "Eigen decompostion of strain tensor failed.");
                 }
@@ -490,8 +490,8 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
              e.Store( dilat_key_, makeScalar(PLAIN,evals_[0]+evals_[1]+evals_[2]) );
              // principal stresses
              if ( !IP_STRESS_TENSOR_.Eigen( evals_, evecs_, false ) ) {
-                  e.Out();
-                  IP_STRESS_TENSOR_.Out();
+                  e.Out(cerr);
+                  IP_STRESS_TENSOR_.Out(cerr);
                   throw csmp::Exception( ERROR, "StressesAndStrains<3U>::WriteOperands:",
                                         "Eigen decompostion of stress tensor failed.");
                }

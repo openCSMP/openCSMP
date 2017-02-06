@@ -101,7 +101,7 @@ class DenseMatrix {
     double64   NormL_Infinity() const;
 
     void In();
-    void Out( long digits=5L ) const;
+    void Out( std::ostream& os, long digits=5L ) const;
 
 #ifdef USED_TOGETHER_WITH_CSMP
     /// assignment of point coordinates to matrix rows or columns

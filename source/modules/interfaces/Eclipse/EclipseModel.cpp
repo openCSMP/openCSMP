@@ -219,7 +219,7 @@ void EclipseModel<dim>::BuildModel()
     catch( csmp::Exception& ba ) {
          std::cout <<"\nException: Exception raised by: "<< ba.What() << std::endl;
          std::cout <<"\nDiagnostics:"<< std::endl;
-         ba.Out();
+         ba.Out(std::cout);
       }
 
 } // end BuildModel

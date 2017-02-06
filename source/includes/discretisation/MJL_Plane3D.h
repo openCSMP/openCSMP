@@ -20,7 +20,7 @@ class Plane3D {
     mjl::Point3D NVector() const;
     mjl::Point3D p1_, p2_, p3_;
     mjl::Point3D vc_;
-    void Out() ;
+    void Out(std::ostream& os) ;
 };
 
 INTERSECTION  crossingPoint( double tolerance, const Edge3D&, const Plane3D&, Point3D& ); 

@@ -26,7 +26,7 @@ class Edge3D {
     // 90o clockwise rotation and normalization if so requested
     Edge3D&     Rot( const Point3D& rot_axis, bool normalize=false );
     
-    void Out() const;
+    void Out(std::ostream& os) const;
 
     Point3D org_;
     Point3D dest_; 

@@ -61,7 +61,7 @@ class FaceConstructionData {
     void   PatchNumber( size_t number );
     size_t PatchNumber() const;
   
-    void Out() const;
+    void Out(std::ostream& os) const;
   
   private:
     FaceConstructionData();

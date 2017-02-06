@@ -133,7 +133,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     // 7. Checking the VSet
     // --------------------
     vset.EstablishZeroBasedNumbering();
-    if ( verbose ) vset.Out(); 
+    if ( verbose ) vset.Out(std::cout); 
    
 } // end ReadTriangle2DMesh
 
@@ -263,7 +263,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     // 7. Checking the VSet
     // --------------------
     vset.EstablishZeroBasedNumbering();
-    if ( verbose ) vset.Out(); 
+    if ( verbose ) vset.Out(std::cout); 
    
 } // end ReadTriangle2DMesh
 

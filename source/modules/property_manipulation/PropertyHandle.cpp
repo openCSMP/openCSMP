@@ -4129,12 +4129,12 @@ The method Out() uses the Model method OutputVariableToScreen() to
 print the variable values. 
 */ 
 template<size_t dim>
-void  PropertyHandle<dim>::Out() const 
+void  PropertyHandle<dim>::Out(std::ostream& os) const 
  {
-    cout <<"\nPropertyHandle('"<< group_name <<"')::Out: "<< endl;
-    cout <<"Physical variable: "<< var_name << endl;
-    cout <<"flag_output:         "<< parseStatus(flag_output) << endl;
-    group.OutputVariableToScreen( var_name.c_str() );
+    os <<"\nPropertyHandle('"<< group_name <<"')::Out: "<< endl;
+    os <<"Physical variable: "<< var_name << endl;
+    os <<"flag_output:         "<< parseStatus(flag_output) << endl;
+    group.OutputVariableHumanReadable( os, var_name.c_str() );
 
  } // end Out
 

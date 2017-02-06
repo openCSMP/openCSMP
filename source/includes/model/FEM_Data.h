@@ -53,7 +53,7 @@ class FEM_Data {
 
     bool OutBinary( std::FILE* fp ) const;
     void InBinary( std::FILE* fp );
-    void Out() const;
+    void Out(std::ostream& os) const;
 
 protected:
     PLACEMENT              place;

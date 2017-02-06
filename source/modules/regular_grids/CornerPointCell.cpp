@@ -2258,31 +2258,32 @@ std::string toString( CORNER_POINT_CELL_FACE_INDEX fidx )
     Prints object state to screen.
 */
 template<size_t dim>
-void CornerPointCell<dim>::Out() const
+void CornerPointCell<dim>::Out(std::ostream& os) const
  {
     // printing the base class first
-    PolygonCell<dim>::Out();
+    PolygonCell<dim>::Out(os);
    
-    std::cout <<"\nCornerPointCell<"<< dim <<">Out: type: "<< toString(cell_type_) <<", category: "<< toString(cell_category_);
-    std::cout <<"\n\tquadrilateral faces: "<< num_quad_faces_ <<", triangular faces: "<< num_tri_faces_;
-    std::cout <<", meshing cycle: "<< meshing_cycle_;
-    std::cout <<"\n\n\t pillar nodes (pillar_nodes_.size()):\n";
+    os <<"\nCornerPointCell<"<< dim <<">Out: type: "<< toString(cell_type_) <<", category: "<< toString(cell_category_);
+    os <<"\n\tquadrilateral faces: "<< num_quad_faces_ <<", triangular faces: "<< num_tri_faces_;
+    os <<", meshing cycle: "<< meshing_cycle_;
+    os <<"\n\n\t pillar nodes (pillar_nodes_.size()):\n";
     for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=pillar_nodes_.begin(); it!=pillar_nodes_.end(); ++it )
-      std::cout << *(*it) <<" ";
-    std::cout <<"\n\n\tpillar node order:\n";
+      os << *(*it) <<" ";
+    os <<"\n\n\tpillar node order:\n";
     for ( typename std::vector<size_t>::const_iterator it=pillar_nodes_order_.begin(); it!=pillar_nodes_order_.end(); ++it )
-      std::cout << (*it) <<" ";
-    std::cout <<"\n\n\torigin well face: "<< well_face_org_ <<", destination well face: "<< well_face_dst_;
+      os << (*it) <<" ";
+    os <<"\n\n\torigin well face: "<< well_face_org_ <<", destination well face: "<< well_face_dst_;
 
-    std::cout <<"\n\n\twells penetrating the grid cell:\n";
+    os <<"\n\n\twells penetrating the grid cell:\n";
     // vector<pair<csmp::CSMP_FEM_TYPE,vector<csmp::GridNode<dim>*> > >  wells_;
     for ( auto it=wells_.begin(); it!=wells_.end(); it++ ) {
-         std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
+         os <<"\n"<< parseFiniteElementType((*it).first) <<": ";
          for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
               nit!=(*it).second.end(); nit++ )
-           std::cout << *(*nit) <<" ";
+           os << *(*nit) <<" ";
       }
-    std::cout <<"\n\n";
+    os <<"\n\n";
+    os.flush();
  }
 
 
