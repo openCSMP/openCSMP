@@ -15,8 +15,8 @@ include(CsmpDependencies)
 add_subdirectory(source)
 
 
-
 FILE(COPY cmake/CsmpTestResultTransform.cmake DESTINATION ${CMAKE_BINARY_DIR})
-CONFIGURE_FILE(ctest_runner.cmake.in ${CMAKE_BINARY_DIR}/ctest_runner.cmake)
+FILE(COPY ctest_runner.cmake DESTINATION ${CMAKE_BINARY_DIR})
+CONFIGURE_FILE(ctest_runner.vars.in ${CMAKE_BINARY_DIR}/ctest_runner.vars)
 add_subdirectory(tests)
 

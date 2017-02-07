@@ -19,11 +19,11 @@ endif(_result STREQUAL "xsltproc")
 
 separate_arguments(XSLT_PROCESSOR_ARGS_PATTERN)
 
-function(CTEST_GET_RESULTDIR out_results_dir build_dir)
-  file(STRINGS "${build_dir}/Testing/TAG" _tag_content)
+function(CTEST_GET_RESULTDIR _out_results_dir _build_dir)
+  file(STRINGS "${_build_dir}/Testing/TAG" _tag_content)
   list(GET _tag_content 0 _stamp)
-  message(STATUS "Setting ${out_results_dir} to ${build_dir}/Testing/${_stamp} in parent scope")
-  set(${out_results_dir} "${build_dir}/Testing/${_stamp}" PARENT_SCOPE)
+  message(STATUS "Setting ${_out_results_dir} to ${_build_dir}/Testing/${_stamp} in parent scope")
+  set(${_out_results_dir} "${_build_dir}/Testing/${_stamp}" PARENT_SCOPE)
 endfunction(CTEST_GET_RESULTDIR)
 
 
@@ -47,9 +47,9 @@ function(CTEST_GENERATE_RESULTINDEX out_index_xml results_dir)
 endfunction(CTEST_GENERATE_RESULTINDEX)
 
 
-function(CTEST_XSL_TRANSFORM  xsl_catalog index_xml output_xml)
+function(CTEST_XSL_TRANSFORM  xsl_catalog input_xml output_xml)
   string(REPLACE "<XML_OUTPUT>" "${output_xml}" _xslt_command "${XSLT_PROCESSOR_ARGS_PATTERN}")
-  string(REPLACE "<XML_INPUT>" "${index_xml}" _xslt_command "${_xslt_command}")
+  string(REPLACE "<XML_INPUT>" "${input_xml}" _xslt_command "${_xslt_command}")
   string(REPLACE "<XSL_CATALOG>" "${xsl_catalog}" _xslt_command "${_xslt_command}")
   string(REPLACE "<XSLT_PROCESSOR>" "${XSLT_PROCESSOR}" _xslt_command "${_xslt_command}")
   
