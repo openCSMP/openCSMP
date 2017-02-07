@@ -37,11 +37,14 @@ INCLUDE_DIRECTORIES(
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
 FILE(GLOB TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp)
-ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
-TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
-ADD_TEST(
+if(BUILD_TESTING)
+    ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
+    TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
+    ADD_TEST(
 	NAME csmptest
 	COMMAND csmptest -r junit
 	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
-)
+    )
+endif(BUILD_TESTING)
+
 
