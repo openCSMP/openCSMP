@@ -62,7 +62,7 @@ double64 maximumOfProperty( Model<dim>& model, const char* prop, const char* reg
 
 /// conversion from float number to string
 template<typename T>
-void floatnumberToString( T number, std::string& recipient )
+inline void floatnumberToString( T number, std::string& recipient )
 {
   std::ostringstream stringStream;
 #ifdef __APPLE__
@@ -75,7 +75,7 @@ void floatnumberToString( T number, std::string& recipient )
 
 /// conversion from float number to string
 template<typename T>
-std::string floatnumberToString( T number )
+inline std::string floatnumberToString( T number )
 {
   std::string cacheString;
   floatnumberToString<T>( number, cacheString );
@@ -84,7 +84,7 @@ std::string floatnumberToString( T number )
 
 /// conversion from number to string, no formatting specified
 template<typename T>
-void numberToString( T number, std::string& recipient )
+inline void numberToString( T number, std::string& recipient )
 {
   std::ostringstream stringStream;
   // SKM FIX
@@ -126,7 +126,7 @@ inline void numberToString<double>( double number, std::string& recipient )
 
 /// conversion from number to string, no formatting specified
 template<typename T>
-std::string numberToString( T number )
+inline std::string numberToString( T number )
 {
   std::string cacheString;
   numberToString<T>( number, cacheString );
@@ -135,7 +135,7 @@ std::string numberToString( T number )
 
 
 template <typename T>
-T stringToNumber ( const std::string &Text )
+inline T stringToNumber ( const std::string &Text )
   {                               
     std::stringstream ss(Text);
     // SKM FIX
@@ -148,7 +148,7 @@ T stringToNumber ( const std::string &Text )
 
 /// returns arithmetic average of parent elements prop to node
 template<size_t dim>
-double64 elementToNodeProperty( Node<dim>* node, Index key )
+inline double64 elementToNodeProperty( Node<dim>* node, Index key )
   {
     double cacheDouble = 0.;
     for( size_t parent = 0; parent < node->Parents(); ++parent )
@@ -223,7 +223,7 @@ Point<3U> modelMidpoint( const Model<3U>& model, const char* regionName = "Model
 
 /// NCFVT bug workaround to calculate inflow across a boundary with PP conditions. Requires add. 'nodal volume flux'
 template<size_t dim>
-double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
+inline double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
   {
     model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
     return  boundary.SurfaceIntegral( model.Database(), "nodal volume flux" );
@@ -231,7 +231,7 @@ double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
 
 
 template<size_t dim>
-double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
+inline double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
   {
   model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
   return  region.VolumeIntegral( "nodal volume flux" ,false);
@@ -277,7 +277,7 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
 
 /// looks up value for given key and passes it to parameter; returns true if found, false otherwise
 template<typename KeyType,typename ValueType>
-bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,ValueType>& mapToWriteTo )
+inline bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,ValueType>& mapToWriteTo )
   {
     const typename std::map<KeyType,ValueType>::const_iterator IT( mapToWriteTo.find( KEY ) );
     if( IT == mapToWriteTo.end() )
@@ -289,7 +289,7 @@ bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,Value
 
 /// returns if value is to be found
 template<typename KeyType,typename ValueType>
-bool mapFind( const KeyType& KEY, const std::map<KeyType,ValueType>& mapToWriteTo )
+inline bool mapFind( const KeyType& KEY, const std::map<KeyType,ValueType>& mapToWriteTo )
   {
     const typename std::map<KeyType,ValueType>::const_iterator IT( mapToWriteTo.find( KEY ) );
     if( IT == mapToWriteTo.end() )
