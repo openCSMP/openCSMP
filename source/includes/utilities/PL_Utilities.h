@@ -89,15 +89,40 @@ void numberToString( T number, std::string& recipient )
   std::ostringstream stringStream;
   // SKM FIX
   stringStream.setf(std::ios::scientific);
-//  stringStream.precision(std::numeric_limits<double>::digits10);
- // avoiding numbers with an exponent that has 3 digits (for PARAVIEW on Mac)
-#ifdef __APPLE__
-  if ( fabs(number) < 1.0e-30 ) number=0.;
-  else if ( fabs(number) > 1.0e+30 ) number=1.0e+30;
-#endif
   stringStream << number;
   recipient = stringStream.str();
 }
+
+// Specialisations for avoiding numbers with an exponent that
+// has 3 digits (for PARAVIEW on Mac)
+#ifdef __APPLE__
+template<>
+void numberToString<float>( float number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+  // SKM FIX
+  stringStream.setf(std::ios::scientific);
+//  stringStream.precision(std::numeric_limits<float>::digits10);
+  if ( fabsf(number) < 1.0e-30f ) number=0.f;
+  else if ( fabsf(number) > 1.0e+30f ) number=1.0e+30f;
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+template<>
+void numberToString<double>( double number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+  // SKM FIX
+  stringStream.setf(std::ios::scientific);
+//  stringStream.precision(std::numeric_limits<double>::digits10);
+  if ( fabs(number) < 1.0e-30 ) number=0.;
+  else if ( fabs(number) > 1.0e+30 ) number=1.0e+30;
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+#endif
 
 /// conversion from number to string, no formatting specified
 template<typename T>
