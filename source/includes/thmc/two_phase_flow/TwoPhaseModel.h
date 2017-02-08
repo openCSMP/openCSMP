@@ -624,7 +624,7 @@ inline csmp::Index TwoPhaseModel<dim>::WettingPhaseSaturationKey() const
 template<size_t dim>
 inline csmp::Index TwoPhaseModel<dim>::NonWettingPhaseSaturationKey() const
 {
-    throw csmp::Exception( ERROR, "TwoPhaseModel<dim>::NonWettingPhaseSaturationKey()",
+    throw csmp::Exception( CSMP_ERROR, "TwoPhaseModel<dim>::NonWettingPhaseSaturationKey()",
                            "It appears someone decided this should be the irreducible non-wet. phase saturation. Wrong." );
     return snr_key_;
 }

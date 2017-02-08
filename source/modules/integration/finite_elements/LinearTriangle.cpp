@@ -329,7 +329,7 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
            cout <<"\n\tnodes at boundary: ";
            for ( size_t j=0; j<bnodes.size(); j++ ) cout << bnodes[j] <<" ";
            cout << endl;
-           throw csmp::Exception( ERROR, "LinearTriangle::ConsecutiveNodesAtBoundary",
+           throw csmp::Exception( CSMP_ERROR, "LinearTriangle::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
                                       "correct input to meet this criterion." );
        }

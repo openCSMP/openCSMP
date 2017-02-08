@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// classification of exception; warning (possible problem), error (actual problem; fatal (need to terminate)
-enum CSMP_MESSAGE { INFO = 0, EXCEPTION = -1, WARNING = -2, ERROR = -3, FATAL_ERROR = -4 };
+enum CSMP_MESSAGE { CSMP_INFO = 0, CSMP_EXCEPTION = -1, CSMP_WARNING = -2, CSMP_ERROR = -3, CSMP_FATAL_ERROR = -4 };
 
 /// convert enum to a printable string
 std::string  parseMessage( CSMP_MESSAGE );
@@ -25,7 +25,7 @@ std::string  parseMessage( CSMP_MESSAGE );
 */
 class Exception : std::exception {
   public:
-    /// use as: throw csmp::Exception( WARNING, "class::method where this comes from", messsage );
+    /// use as: throw csmp::Exception( CSMP_WARNING, "class::method where this comes from", messsage );
     Exception( CSMP_MESSAGE, 
                const std::string& originator,
                const std::string& message );

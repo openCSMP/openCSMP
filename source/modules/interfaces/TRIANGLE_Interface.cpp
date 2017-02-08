@@ -81,7 +81,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     // 2. Checking for consecutive node numbering
     // ------------------------------------------
     if ( perform_extra_checks && !VerifyConsecutiveNodeNumbering( plist ) )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
             "Nodes in input mesh are not numbered consecutivly");
     
     // 3. If triangles span the element corners
@@ -99,11 +99,11 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     // 5. Assigning and testing the permeability data
     // ----------------------------------------------
     if (  evalues.size() < plist.size() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
                             "There were no element property values read");
 
     if ( evalues.size() != plist.size() )
-      csmp_error.notice( ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
+      csmp_error.notice( CSMP_ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
                             "This method assumes that there is only one property value per element." );
     
     ListZeroPropertyValueElements( evalues,plist, x, y );
@@ -190,7 +190,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     // 2. Checking for consecutive node numbering
     // ------------------------------------------
     if ( perform_extra_checks && !VerifyConsecutiveNodeNumbering( plist_tria ) )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", 
             "Nodes in input mesh are not numbered consecutivly");
     
     // 3. If triangles span the element corners
@@ -208,10 +208,10 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     // 5. Assigning and testing the permeability data
     // ----------------------------------------------
     if ( evalues.size() != plist_tria.size() )
-      throw csmp::Exception( ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", "Element property array has wrong size." );
+      throw csmp::Exception( CSMP_ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", "Element property array has wrong size." );
     
     if ( kfrac == 0. )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", "Fracture permeability is set to zero." );
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures", "Fracture permeability is set to zero." );
 
     // additional bar elements
     size_t total_elements(plist_tria.size()+plist_bar.size()), tria_elements(plist_tria.size());
@@ -293,7 +293,7 @@ void TRIANGLE_Interface::CheckTriangleOutput( const char*  file,
     ifstream ifn( fnode );
     
     if ( !ifn.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
                      "'*.node' input file could not be opened. Does it exist (in the same directory as program) ?" );
     
     ifn >> nodes >> dimension >> node_attributes >> bms;
@@ -303,7 +303,7 @@ void TRIANGLE_Interface::CheckTriangleOutput( const char*  file,
     ifstream ife( fele );
     
     if ( !ife.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
                      "'*.ele' input file could not be opened. Does it exist (in the same directory as program) ?" );
    
     ife >> elements >> nodes_per_element >> elmt_attributes >> bms;
@@ -316,7 +316,7 @@ void TRIANGLE_Interface::CheckTriangleOutput( const char*  file,
     ifstream ifd( fedge );
     
     if ( !ifd.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::CheckTriangleOutput", 
                      "'*.edge' input file could not be opened. Does it exist (in the same directory as program) ?" );
     
     ifd >> segms >> bms;
@@ -372,7 +372,7 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
          y.push_back( yval );
          z.push_back( 0. );
          if ( id == 0 || id > nodes )
-           throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadNodeDataFile", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadNodeDataFile", 
                      "encountered erratic node ID's (nodes should be numbered 1...n)" );
 
          // boundary values and flags are stored only if a node is at the model
@@ -405,7 +405,7 @@ void TRIANGLE_Interface::ReadElementDataFile( const char* file,
     ifstream ifs( fname );
     
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadElementDataFile", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadElementDataFile", 
                      "'*.ele' input file could not be opened. Does it exist (in the same directory as program) ?" );
     
     // erasing vectors and maps
@@ -471,7 +471,7 @@ void TRIANGLE_Interface::ReadPolyDataFile( const char* file,
     ifstream ifs( fname );
     
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadPolyDataFile", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadPolyDataFile", 
                      "'*.poly' input file could not be opened. Does it exist (in the same directory as program) ?" );
     
     // erasing vectors and maps
@@ -486,7 +486,7 @@ void TRIANGLE_Interface::ReadPolyDataFile( const char* file,
     ifs >> segments >> markers;
     
     if ( nodes != 0 ) 
-    throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadPolyDataFile", 
+    throw csmp::Exception( CSMP_FATAL_ERROR, "TRIANGLE_Interface::ReadPolyDataFile", 
                      "Aparently there are nodes listed in '*.poly' file ?" );
                      
     vector<size_t>  pdata(2); // bar elements have 2 nodes per element.
@@ -1036,7 +1036,7 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<size_t> >
                      {
                         new_prop = (eprop1 + eprop2) / 2.0;
                         evalues[ (*eit1).first-1 ] = evalues[ (*eit2).first-1 ] = new_prop;
-                        csmp_error.notice( INFO, "TRIANGLE_Interface::SplitSingleCornerElements", 
+                        csmp_error.notice( CSMP_INFO, "TRIANGLE_Interface::SplitSingleCornerElements", 
                                        "Element property values were averaged when corner element was flipped");
                         cout <<"\nElement: "<< (*eit1).first <<", original property value: "<< eprop1;
                         cout <<"\nElement: "<< (*eit2).first <<", original property value: "<< eprop2;

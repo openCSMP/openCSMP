@@ -62,17 +62,17 @@ namespace csmp
     if( my_isnan )
       {
         cout << "xcurrent = " << xcurrent << endl;
-        csmp_error.notice( FATAL_ERROR, 
+        csmp_error.notice( CSMP_FATAL_ERROR, 
                            "Constructor VLH_VaporLookup::VLH_VaporLookup(const double64& externaltemperature) -",
-                           "FATAL_ERROR: when constructing the properties_at _tmax vector, x at Tmax, Pmax was calaculated as NaN!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
+                           "CSMP_FATAL_ERROR: when constructing the properties_at _tmax vector, x at Tmax, Pmax was calaculated as NaN!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
         return;
       }
     if( max_index-1 != 7 )
       {
         cerr << "max_index is " << max_index << endl;
-        csmp_error.notice( FATAL_ERROR, 
+        csmp_error.notice( CSMP_FATAL_ERROR, 
                            "Constructor VLH_VaporLookup::VLH_VaporLookup(const double64& externaltemperature) -",
-                           "FATAL_ERROR: wrong size of properties_at_tmax vector compared to LookupPropertyIndex.h!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
+                           "CSMP_FATAL_ERROR: wrong size of properties_at_tmax vector compared to LookupPropertyIndex.h!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
         return;
       }	
     properties_at_tmax.resize(   max_index);
@@ -112,7 +112,7 @@ namespace csmp
           {
             if(essentiallyEqual( tcurrent, tmax, numeric_limits<double64>::epsilon() ) )
               {
-                csmp_error.notice( FATAL_ERROR, 
+                csmp_error.notice( CSMP_FATAL_ERROR, 
                                    "Constructor VLH_VaporLookup::VLH_VaporLookup(const double64& externaltemperature) -",
                                    "while building lookup table, tcurrent was == tmax of vlh curve.\nThis can potentially mess up computations of fluid\nproperties during simulations.\nProbably you or somebody else changed the t-resolution of lookup tables - re-think those.\nElse: if you have source code access you might set the error level associated\nwith this message to WARNING and pray ;-) but better contact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
                 return;
@@ -296,9 +296,9 @@ namespace csmp
     // if( definitelyGreaterThan( press, pmax, numeric_limits<double64>::epsilon() ) )
     //   {
     // 	cerr << "pmax = " << pmax << ", pcurrent was " << press << endl;
-    // 	csmp_error.notice( FATAL_ERROR, 
+    // 	csmp_error.notice( CSMP_FATAL_ERROR, 
     // 			"VLH_VaporLookup::TfromP(const double64& press, const double64& t_estimate) -",
-    // 			"FATAL_ERROR: you tried to invoke this function at p>pmax, this makes no sense, terminating!\nThomas Driesner, thomas.driesner@erdw.ethz.ch");
+    // 			"CSMP_FATAL_ERROR: you tried to invoke this function at p>pmax, this makes no sense, terminating!\nThomas Driesner, thomas.driesner@erdw.ethz.ch");
     // 	return 9.9e99;
     //   }
 

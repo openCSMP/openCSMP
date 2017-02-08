@@ -45,23 +45,23 @@ namespace csmp {
   {
 
     if ( water_pressure_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.pres_w, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.pres_w, " must be a node property." );
     if ( oil_pressure_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.pres_o, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.pres_o, " must be a node property." );
     if ( temperature_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.temp, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.temp, " must be a node property." );
     if ( water_visc_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.visc_w, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.visc_w, " must be a node property." );
     if ( oil_visc_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.visc_o, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.visc_o, " must be a node property." );
     if ( water_comp_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.comp_w, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.comp_w, " must be a node property." );
     if ( oil_comp_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.comp_o, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.comp_o, " must be a node property." );
     if ( water_density_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.dens_w, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.dens_w, " must be a node property." );
     if ( oil_density_key_.place != NODE )
-      throw csmp::Exception( ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.dens_o, " must be a node property." );
+      throw csmp::Exception( CSMP_ERROR, "TwoPhaseUndersaturatedFluidPropertyVisitor", config.dens_o, " must be a node property." );
     
     assert(API>0.0);
     assert(spGr_sp>0.0);

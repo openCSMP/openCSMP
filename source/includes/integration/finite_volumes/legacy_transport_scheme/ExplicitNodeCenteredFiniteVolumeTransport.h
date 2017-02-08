@@ -1103,7 +1103,7 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( cons
     }
     // reporting problems
     if ( error_counter >= csmp_error.MaximumNumberOfErrors() ) {
-        throw csmp::Exception( ERROR, "ExplicitNodeCenteredFiniteVolumeTransport::OutputResults",
+        throw csmp::Exception( CSMP_ERROR, "ExplicitNodeCenteredFiniteVolumeTransport::OutputResults",
                                "Output property was out of range, legal (min/max) was stored instead");
     }
     if ( error_counter > (RESULT.size() / csmp_error.MaximumNumberOfErrors()) ){

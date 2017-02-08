@@ -97,12 +97,12 @@ void SimulatorSetup<dim>::CreateAllProperties(){
         else if ((p.type== ARRAY || p.type==FLAGGEDARRAY)){
             if (p.vsize <= 0 && p.vsize > 10e6){
                 p.Out(std::cerr);
-                throw csmp::Exception(EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "(Flagged)Array variable has unusual size.");
+                throw csmp::Exception(CSMP_EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "(Flagged)Array variable has unusual size.");
             }
         }
         else {
             p.Out(std::cerr);
-            throw csmp::Exception(EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "Failed to create vsize for this variable type.");
+            throw csmp::Exception(CSMP_EXCEPTION,"SimulatorSetup<dim>::CreateAllProperties()", "Failed to create vsize for this variable type.");
         }
     }
 
@@ -124,9 +124,9 @@ void SimulatorSetup<dim>::CreateAllProperties(){
             else {
                 if (this->Verbose()) cout<<" Variable '"<<p.name<<"' already exists. if its size and type is correct, it will be loaded untouched. "<<endl;
                 if (this->Database().Parameter(p.name.c_str()).key.type!=p.type)
-                    throw csmp::Exception(FATAL_ERROR, "SimulatorSetup<dim>::CreateAllProperties()", " Variable type in model does not correspond to the type in the expected parameter list.");
+                    throw csmp::Exception(CSMP_FATAL_ERROR, "SimulatorSetup<dim>::CreateAllProperties()", " Variable type in model does not correspond to the type in the expected parameter list.");
                 if (this->Database().Parameter(p.name.c_str()).usage!=p.usage)
-                    throw csmp::Exception(FATAL_ERROR, "SimulatorSetup<dim>::CreateAllProperties()", " Variable usage in model does not correspond to the usage in the expected parameter list.");
+                    throw csmp::Exception(CSMP_FATAL_ERROR, "SimulatorSetup<dim>::CreateAllProperties()", " Variable usage in model does not correspond to the usage in the expected parameter list.");
 
             }
         }
@@ -140,7 +140,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if (this->Verbose()) this->CheckModelMinMaxCoordinates();
 
     if( !created_lists_ )
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.notice(CSMP_FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Something is wrong in the creation of default parameter list. This is a developer issue.",
                           "\n Revise the method CreateParameterList.");
 
@@ -148,7 +148,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if( !associated_notations_all_variables)
     {
         this->OutputSampleVariablesFile();
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.notice(CSMP_FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Property name or notation is incorrect.",
                           "\n Please specify the notation of your variables according to the template file SimulatorSetupSampleVariables.txt supplied after this message is printed out.");
 
@@ -158,7 +158,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if ( !checked_range_and_placement_of_properties)
     {
         this->OutputSampleVariablesFile();
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.notice(CSMP_FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Property placement or range is incorrect.",
                           "\n Please specify the notation of your variables according to the template file SimulatorSetupSampleVariables.txt supplied after this message is printed out.");
 
@@ -276,7 +276,7 @@ void SimulatorSetup<dim>::ModelSetupFromConfigFile()
                                                true,    // properties & essential conditions for csmp::Boundaries
                                                this->RunSettings() );
     else
-        throw csmp::Exception( ERROR, "SimulatorSetup<dim>::ModelSetupFromConfigFile()",
+        throw csmp::Exception( CSMP_ERROR, "SimulatorSetup<dim>::ModelSetupFromConfigFile()",
                                "can only configure 2D and 3D models from file." );
 
 
@@ -316,7 +316,7 @@ bool SimulatorSetup<dim>::CheckVariables()
         for (auto mit = duplicates.begin(); mit!=duplicates.end();mit++)
             cout<<" notation: "<<mit->first<<" name: "<<mit->second<<endl;
         string errorMessage(" Detected same notation for at least two variables inside the Property Database. This comes from the used variables file!");
-        throw csmp::Exception( FATAL_ERROR, "SimulatorSetup<dim>::CheckVariables():",errorMessage.c_str() );
+        throw csmp::Exception( CSMP_FATAL_ERROR, "SimulatorSetup<dim>::CheckVariables():",errorMessage.c_str() );
     }
     // ---------------------------------------------------------------------
     // Checking setup class' variables.
@@ -338,7 +338,7 @@ bool SimulatorSetup<dim>::CheckVariables()
         for (auto mit = duplicates.begin(); mit!=duplicates.end();mit++)
             cout<<" notation: "<<mit->first<<" name: "<<mit->second<<endl;
         string errorMessage(" Detected same notation for at least two variables. This comes from the desired parameter list in your own setup class.");
-        throw csmp::Exception( FATAL_ERROR, "SimulatorSetup<dim>::CheckVariables():",errorMessage.c_str() );
+        throw csmp::Exception( CSMP_FATAL_ERROR, "SimulatorSetup<dim>::CheckVariables():",errorMessage.c_str() );
     }
 
     // -----------------------------------------------------------------------
@@ -452,7 +452,7 @@ void SimulatorSetup<dim>::CheckInputRanges(){
         cerr<<" Please input correct static and/or initial conditions for properties listed above, "<<endl;
         cerr<<" or correct their usage to 'computed', if you will be calculating them inside your algorithm. "<<endl;
         string errorMessage(" One or more input variables are incorrect. Check your -configuration.txt file.");
-        throw csmp::Exception( FATAL_ERROR, "SimulatorSetup<dim>::CheckInputRanges():", errorMessage );
+        throw csmp::Exception( CSMP_FATAL_ERROR, "SimulatorSetup<dim>::CheckInputRanges():", errorMessage );
     }
 
 }
@@ -629,7 +629,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
                     model_->Region((*sit).c_str()).Read( this->Database().StorageKey(mit->second.first.c_str()), vflowrate );
 
                     if ( isnan(vflowrate()) )
-                        throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()","nan injection rate detected" );
+                        throw csmp::Exception( CSMP_ERROR, "SimulatorSetup::SetupWellsBasedOnRates()","nan injection rate detected" );
 
                     // The volume method calculates volume, surface, or length depending on the type of element that composes the well.
                     double64 wellvolume=model_->Region((*sit).c_str()).Volume();
@@ -647,7 +647,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
                         if (fabs(vflowrate() - model_->Region((*sit).c_str()).VolumeIntegral( mit->second.second.c_str(),false,this->Verbose())) > 10.e-15) {
                             cout<<" rate: "<<vflowrate<< " well: "<<(*sit)<<" integrated dist. rate: "<<model_->Region((*sit).c_str()).VolumeIntegral(mit->second.second.c_str(),false,false)<<endl;
                             cout<<" rate diff: "<<vflowrate-model_->Region((*sit).c_str()).VolumeIntegral(mit->second.second.c_str(),false,false)<<endl;
-                            throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
+                            throw csmp::Exception( CSMP_ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
                                                    "distribution of well rate for 2D or 3D  elements to 'fluid volume source' " );
                         }
                     }
@@ -655,7 +655,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
                         if (fabs(vflowrate() - model_->Region((*sit).c_str()).VolumeIntegral(mit->second.second.c_str(),false,this->Verbose())) > 10.e-15) {
                             cout<<" rate: "<<vflowrate<< " well: "<<(*sit)<<" integrated dist. rate: "<<model_->Region((*sit).c_str()).VolumeIntegral(mit->second.second.c_str(),false,false)<<endl;
                             cout<<" rate diff: "<<vflowrate-model_->Region((*sit).c_str()).VolumeIntegral( mit->second.second.c_str(),false,false)<<endl;
-                            throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
+                            throw csmp::Exception( CSMP_ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
                                                    "distribution of well rate to 'fluid volume source' does not pass check." );
                         }
                     }
@@ -664,7 +664,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
             }
             else
             {
-                throw csmp::Exception( ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
+                throw csmp::Exception( CSMP_ERROR, "SimulatorSetup::SetupWellsBasedOnRates()",
                                        "Well rates may only be placed on the REGION for now." );
             }
 
@@ -798,7 +798,7 @@ void SimulatorSetup<dim>::OutputSampleConfigurationFile()
     fout<<"time stepping\tCAREFUL"<<endl;
     fout<<"duration\t0.0"<<endl;
     fout.close();
-    throw csmp::Exception( EXCEPTION, "SimulatorSetup<dim>::OutputSampleConfigurationFile",
+    throw csmp::Exception( CSMP_EXCEPTION, "SimulatorSetup<dim>::OutputSampleConfigurationFile",
                            " A sample configuration file has been output. Please restart the simulator." );
 }
 
@@ -847,10 +847,10 @@ void SimulatorSetup<dim>::OutputSampleRegionsFile()
         }
     }
     else {
-        throw csmp::Exception( ERROR, "SimulatorSetup<dim>::OutputSampleRegionsFile()",
+        throw csmp::Exception( CSMP_ERROR, "SimulatorSetup<dim>::OutputSampleRegionsFile()",
                                " Could not open .asc file for reading!" );
     }
-    throw csmp::Exception( EXCEPTION, "SimulatorSetup<dim>::OutputSampleRegionsFile()",
+    throw csmp::Exception( CSMP_EXCEPTION, "SimulatorSetup<dim>::OutputSampleRegionsFile()",
                            " A sample regions file has been output. Please restart the simulator." );
 }
 
@@ -915,7 +915,7 @@ template<size_t dim>
 vector<bool> SimulatorSetup<dim>::LoadDefaultOptions()
 {
 
-    throw csmp::Exception( ERROR, "SimulatorSetup::GetDefaultOptions()",
+    throw csmp::Exception( CSMP_ERROR, "SimulatorSetup::GetDefaultOptions()",
                            " Your default options should be set in the derived class." );
 }
 
@@ -955,7 +955,7 @@ void SimulatorSetup<dim>::LoadModel()
             this->model_ = dynamic_cast<Model<dim>*> ( new ANSYS_Model3D(geometry_file_prefix_.data(),name_.c_str(),null_variable_file,true,true,true));
             break;
         default:
-            throw csmp::Exception( ERROR, "SimulatorSetup<dim>::LoadModel()",
+            throw csmp::Exception( CSMP_ERROR, "SimulatorSetup<dim>::LoadModel()",
                                    "Only 2D and 3D models are supported" );
         }
     }
@@ -999,12 +999,12 @@ void SimulatorSetup<dim>::LoadModel()
                 model_ = new Model<dim>(filename.substr(0, filename.size()-5));
               break;
             default:
-              throw csmp::Exception( ERROR, "SimulatorSetup<dim>::LoadModel:",
+              throw csmp::Exception( CSMP_ERROR, "SimulatorSetup<dim>::LoadModel:",
                                     "Only the restart of 2D and 3D models is supported." );
             }
         }
         else {
-            throw csmp::Exception( ERROR, "SimulatorSetup<dim>::LoadModel:",
+            throw csmp::Exception( CSMP_ERROR, "SimulatorSetup<dim>::LoadModel:",
                                    "Failed to restart simulation. Are the files missing or corrupted?" );
         }
     }
@@ -1238,7 +1238,7 @@ template <size_t dim>
 SAMG_Settings* SimulatorSetup<dim>::GetIntegratorSolverSettings(string name)
 {
     if (solver_settings_.find(name)==solver_settings_.end()){
-        throw csmp::Exception(FATAL_ERROR,"SimulatorSetup<dim>::GetIntegratorSolverSettings"," Did not find a solver settings object for this name of an integrator.\n Did you add the integrator to the SimulatorSetup?");
+        throw csmp::Exception(CSMP_FATAL_ERROR,"SimulatorSetup<dim>::GetIntegratorSolverSettings"," Did not find a solver settings object for this name of an integrator.\n Did you add the integrator to the SimulatorSetup?");
     }
     return solver_settings_.at(name);
 }

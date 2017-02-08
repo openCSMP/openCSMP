@@ -206,7 +206,7 @@ bool EclipseInterface<dim>::ReadFile( csmp::VSet<dim>& vset,
     ClearBefore();
 
     if( !ReadFile( ifs, line_length ) ) {
-        csmp_error.notice( csmp::FATAL_ERROR, "EclipseInterface<dim>::","File could not be properly read!!!");
+        csmp_error.notice( CSMP_FATAL_ERROR, "EclipseInterface<dim>::","File could not be properly read!!!");
         return false;
     }
 
@@ -1007,7 +1007,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
                 if ( !readEclipseValue<size_t>(std::string(token),default_value,num,value) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseDimension:",
                                       "value cannot be read!");
                     return 0;
@@ -1039,7 +1039,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
 
     /// assign dimensions
     if( values.size() > 3U ){
-        csmp_error.notice(csmp::ERROR,
+        csmp_error.notice(CSMP_ERROR,
                           "readEclipseDimension:",
                           "found more than 3 dimensions!");
         return 0;
@@ -1085,7 +1085,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
                 if ( !readEclipseValue<size_t>(std::string(token),default_value,num,value) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseGridSpecs:",
                                       "value cannot be read!");
                     return 0;
@@ -1117,7 +1117,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
 
     /// assign dimensions
     if( values.size() > 3U ){
-        csmp_error.notice(csmp::ERROR,
+        csmp_error.notice(CSMP_ERROR,
                               "readEclipseGridSpecs:",
                               "found more than 3 dimensions!");
         return 0;
@@ -1201,7 +1201,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
                     message  = ( position == 0 ? "top" : "bottom" );
                     message += ") ";
                     message += "value!";
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipsePillarCoordinates:",
                                       message.c_str() );
                     return 0;
@@ -1214,7 +1214,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
                     message += ") ";
                     message += "value is not a digit!";
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipsePillarCoordinates:",
                                       message.c_str() );
                     return 0;
@@ -1380,7 +1380,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
                     message += " ";
                     message += "value!";
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseCornerDepths:",
                                       message.c_str() );
                     return 0;
@@ -1395,7 +1395,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
                     message += " ";
                     message += "value is not a digit!";
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseCornerDepths:",
                                       message.c_str() );
                     return 0;
@@ -1477,7 +1477,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
                 }
                 else if( endOfblock )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseCornerDepths:",
                                       "Unexpected end!!! Not all the blocks were read!" );
                     return 0;
@@ -1512,7 +1512,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
                 msg << " point instead of expected ";
                 msg << num_points_in_z_direction_internal_pillars;
                 msg << " points!!!";
-                csmp_error.notice( csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                    "readEclipseCornerDepths:",
                                    msg.str() );
                 return 0;
@@ -1530,7 +1530,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
             msg << " point instead of expected ";
             msg << num_points_in_z_direction_boundary_pillars;
             msg << " points!!!";
-            csmp_error.notice( csmp::ERROR,
+            csmp_error.notice( CSMP_ERROR,
                                "readEclipseCornerDepths:",
                                msg.str() );
             return 0;
@@ -1547,7 +1547,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
             msg << " point instead of expected ";
             msg << num_points_in_z_direction_boundary_pillars;
             msg << " points!!!";
-            csmp_error.notice( csmp::ERROR,
+            csmp_error.notice( CSMP_ERROR,
                                "readEclipseCornerDepths:",
                                msg.str() );
             return 0;
@@ -1564,7 +1564,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
         msg << " point instead of expected ";
         msg << num_points_in_z_direction_corner_pillars;
         msg << " points!!!";
-        csmp_error.notice( csmp::ERROR,
+        csmp_error.notice( CSMP_ERROR,
                            "readEclipseCornerDepths:",
                            msg.str() );
         return 0;
@@ -1612,7 +1612,7 @@ int readEclipseActiveCells( std::vector<size_t>& cell_activity,
                 if ( !readEclipseValue<size_t>(std::string(token),default_value,num,active_num) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                           "readEclipseActiveCells:",
                                           "index value cannot be read!");
                     return 0;
@@ -1627,7 +1627,7 @@ int readEclipseActiveCells( std::vector<size_t>& cell_activity,
                     else
                     {
                         std::cout <<"\n"<< token << std::endl;
-                        csmp_error.notice(csmp::ERROR,
+                        csmp_error.notice(CSMP_ERROR,
                                           "readEclipseActiveCells:",
                                           "index value is not valid! Should be 0 or 1.");
                         return 0;
@@ -1691,7 +1691,7 @@ int readEclipseCellData( std::vector<csmp::ScalarVariable>& values,
                 if ( !readEclipseValue<double>(std::string(token),default_value,num,value) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseCellData:",
                                       "value cannot be read!");
                     return 0;
@@ -1777,7 +1777,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellSpecs:",
                                   "cannot read well name!");
                 return 0;
@@ -1794,7 +1794,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellSpecs:",
                                   "cannot read group name!");
                 return 0;
@@ -1813,7 +1813,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellSpecs:",
                                       "cannot read index!");
                     return 0;
@@ -1821,7 +1821,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellSpecs:",
                                       "index is not a digit!");
                     return 0;
@@ -1841,7 +1841,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellSpecs:",
                                   "cannot read reference pressure value!");
                 return 0;
@@ -1849,7 +1849,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             else if( !isRealNumber(token) )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellSpecs:",
                                   "reference pressure is not a digit!");
                 return 0;
@@ -1865,7 +1865,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice( csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                    "readEclipseWellSpecs:",
                                    "cannot read phase name!");
                 return 0;
@@ -1947,7 +1947,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellCompletionsData:",
                                   "cannot read well name!");
                 return 0;
@@ -1968,7 +1968,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellCompletionsData:",
                                       "cannot read index!");
                     return 0;
@@ -1976,7 +1976,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellCompletionsData:",
                                       "index is not a digit!");
                     return 0;
@@ -2079,7 +2079,7 @@ int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellCompletionsData:",
                                   "cannot read well name!");
                 return 0;
@@ -2100,7 +2100,7 @@ int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellCompletionsData:",
                                       "cannot read index!");
                     return 0;
@@ -2108,7 +2108,7 @@ int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseWellCompletionsData:",
                                       "index is not a digit!");
                     return 0;
@@ -2126,7 +2126,7 @@ int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellCompletionsData:",
                                   "cannot read face(in) value!");
                 return 0;
@@ -2143,7 +2143,7 @@ int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseWellCompletionsData:",
                                   "cannot read face(out) value!");
                 return 0;
@@ -2233,7 +2233,7 @@ int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseExplicitNodeWellCompletionsData:",
                                   "cannot read well name!");
                 return 0;
@@ -2254,7 +2254,7 @@ int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseExplicitNodeWellCompletionsData:",
                                       "cannot read index!");
                     return 0;
@@ -2262,7 +2262,7 @@ int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseExplicitNodeWellCompletionsData:",
                                       "index is not a digit!");
                     return 0;
@@ -2364,7 +2364,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseFaultData:",
                                   "cannot read fault name!");
                 return 0;
@@ -2382,7 +2382,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseFaultData:",
                                       "cannot read index!");
                     return 0;
@@ -2390,7 +2390,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseFaultData:",
                                       "index is not a digit!");
                     return 0;
@@ -2409,7 +2409,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
             if ( token == NULL )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseFaultData:",
                                   "cannot read face value!");
                 return 0;
@@ -2487,7 +2487,7 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseFaultTransmissibilityMultipliers:",
                                   "cannot read fault name!");
                 return 0;
@@ -2502,7 +2502,7 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
             token = strtok( NULL, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseFaultTransmissibilityMultipliers:",
                                   "cannot read index!");
                 return 0;
@@ -2510,7 +2510,7 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
             else if( !isRealNumber(token) )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseFaultTransmissibilityMultipliers:",
                                   "index is not a digit!");
                 return 0;
@@ -2572,7 +2572,7 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
             token = strtok( text_line, delims );
             if ( token == NULL )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseBoxData:",
                                   "cannot read index!");
                 return 0;
@@ -2580,7 +2580,7 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
             else if( !isIntegerNumber(token) )
             {
                 std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice(CSMP_ERROR,
                                   "readEclipseBoxData:",
                                   "index is not a digit!");
                 return 0;
@@ -2595,7 +2595,7 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
                 if ( token == NULL )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseBoxData:",
                                       "cannot read index!");
                     return 0;
@@ -2603,7 +2603,7 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
                 else if( !isIntegerNumber(token) )
                 {
                     std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice(CSMP_ERROR,
                                       "readEclipseBoxData:",
                                       "index is not a digit!");
                     return 0;
@@ -2781,7 +2781,7 @@ bool readEclipseValue( const std::string& str, bool& default_value, size_t& num,
     if ( !isRealNumber(str) )
     {
         std::cout <<"\n"<< str << std::endl;
-        csmp_error.notice(csmp::ERROR,
+        csmp_error.notice(CSMP_ERROR,
                           "readEclipseValue:",
                           "value is not a digit!");
         return false;
@@ -3259,12 +3259,12 @@ char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
 
      // if something else than a number is read
      if ( ifs.eof() ) {
-            csmp_error.notice(csmp::ERROR, "EclipseInterface<dim>::Read_COORD:", "reached end of file." );
+            csmp_error.notice(CSMP_ERROR, "EclipseInterface<dim>::Read_COORD:", "reached end of file." );
             return NULL;
         }
      if ( !isRealNumber(token) ) {
             std::cout <<"\n"<< token << std::endl;
-            csmp_error.notice(csmp::ERROR, "EclipseInterface<dim>::Read_COORD:", "value is not a digit!" );
+            csmp_error.notice(CSMP_ERROR, "EclipseInterface<dim>::Read_COORD:", "value is not a digit!" );
             return NULL;
         }
 

@@ -208,7 +208,7 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
         vis.Visit(this);
         return;
       }
-    throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
+    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
   } // end Accept
 
 
@@ -283,7 +283,7 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
     else if( side == MIDDLE )
     {
         baseElement_ = parentElement;
-        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( side, Element, face_id )", "This method is not intended to be used for base element!" );
+        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::Assign( side, Element, face_id )", "This method is not intended to be used for base element!" );
     }
 
   }
@@ -334,7 +334,7 @@ void InterFace<dim>::Assign( size_t n_local, size_t parent_node, INTERFACE_SIDE 
     }
     else if( side == MIDDLE )
     {
-        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( local_id, side, parent_node )", "This method is not intended to be used for base element!" );
+        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::Assign( local_id, side, parent_node )", "This method is not intended to be used for base element!" );
     }
   }
 
@@ -408,7 +408,7 @@ void  InterFace<dim>::InitializeNodeCorrespondanceVector()
          outerParent_->FE()->NodesOfFace( numbers_of_shared_face.second, fnids_outside );
      }
      else
-         throw csmp::Exception( ERROR,
+         throw csmp::Exception( CSMP_ERROR,
                                 "csmp::InterFace<dim>::InitializeNodeCorrespondanceVector",
                                 "Cannot connect elements! Elements can have different nodes or one of it is of low dimensional type!" );
 
@@ -434,7 +434,7 @@ void  InterFace<dim>::InitializeNodeCorrespondanceVector()
     std::vector<std::pair<size_t, size_t> >( parent_elements_node_connector_ ).swap( parent_elements_node_connector_ );
 
     if( fnids_inside.size() != parent_elements_node_connector_.size() )
-        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::InitializeNodeCorrepondanceVector", "Cannot connect elements that has different nodes!" );
+        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::InitializeNodeCorrepondanceVector", "Cannot connect elements that has different nodes!" );
      
  } // end InitializeNodeCorrespondanceVector
 
@@ -519,7 +519,7 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
     if( baseElement_ != NULL )
         return baseElement_->N( n );
 
-    throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
+    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
     return innerParent_->N( parent_elements_node_connector_[n].first );
  }
 
@@ -577,7 +577,7 @@ size_t  InterFace<dim>::ParentNodeNumberOppositeTo( size_t n_from_parent, INTERF
             }
     }
 
-    throw csmp::Exception( ERROR, "InterFace<dim>::ParentNodeNumberOppositeTo( n_from_parent, parent_side )", "Base Element does not exist!" );
+    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::ParentNodeNumberOppositeTo( n_from_parent, parent_side )", "Base Element does not exist!" );
     return n_from_parent;
  }
 
@@ -651,7 +651,7 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( WARNING, "csmp::InterFace<dim>::AssignFaceID:", "ID of outer face could not be determined." );
+    csmp_error.notice( CSMP_WARNING, "csmp::InterFace<dim>::AssignFaceID:", "ID of outer face could not be determined." );
 
     return inner_parent_face_id_;
 
@@ -688,7 +688,7 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side )
     if( baseElement_ != NULL )
         return baseElement_->UnitNormal( vc );
 
-    throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal( side )", "Base Element does not exist!" );
+    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::UnitNormal( side )", "Base Element does not exist!" );
     innerParent_->UnitNormalToFace( inner_parent_face_id_, vc );
  }
 

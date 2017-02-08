@@ -29,28 +29,28 @@ DataInputVisitor<Var,dim>::DataInputVisitor( Model<dim>& sg,
 
      if ( prop_key_.place == NODE ) {
          if ( prop_key_.type == SCALAR and renumberer.VisitedNodes() != input_data.size() )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between scalar input data and number of nodes");
          
          else if ( prop_key_.type == VECTOR and renumberer.VisitedNodes() != input_data.size()*dim )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between vector input data and number of nodes");
          
          else if ( prop_key_.type == TENSOR and renumberer.VisitedNodes() != input_data.size()*dim*dim )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between tensor input data and number of nodes");
        }
      else if ( prop_key_.place == ELEMENT ) {
          if ( prop_key_.type == SCALAR and  renumberer.VisitedElements() != input_data.size() )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between scalar input data and number of elements");
          
          else if ( prop_key_.type == VECTOR and  renumberer.VisitedElements() != input_data.size()*dim )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between vector input data and number of elements");
 
          else if ( prop_key_.type == TENSOR and  renumberer.VisitedElements() != input_data.size()*dim*dim )
-           throw csmp::Exception( FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between tensor input data and number of elements");
        }
   }

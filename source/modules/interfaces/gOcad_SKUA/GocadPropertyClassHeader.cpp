@@ -73,7 +73,7 @@ bool GocadPropertyClassHeader::InitializeFrom( ifstream& ifn )
     if ( strstr( text, "PROPERTY_CLASS_HEADER" ) == NULL )
       {
          ifn.seekg( pos );
-         throw csmp::Exception( FATAL_ERROR, "GocadPropertyClassHeader::InitializeFrom", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GocadPropertyClassHeader::InitializeFrom", 
                          "No header information found..." );
          return false;
       }

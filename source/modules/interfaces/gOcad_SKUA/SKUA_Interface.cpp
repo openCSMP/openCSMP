@@ -31,7 +31,7 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
  {
     const csmp::Index  var_key(model.Database().StorageKey(var));
     if ( var_key.place != ELEMENT )
-      throw csmp::Exception( ERROR, "SKUA_Interface::VariableToPointCloud", "This method works only for 'Element' variables" );
+      throw csmp::Exception( CSMP_ERROR, "SKUA_Interface::VariableToPointCloud", "This method works only for 'Element' variables" );
    
     string var_name(var);
     replaceWhiteSpaceBy( var_name, '-' );
@@ -118,9 +118,9 @@ void SKUA_Interface::VariablesToPointCloud( const Model<3U>& model,
       {
          const csmp::Index  var_key(model.Database().StorageKey((*i).c_str()));
          if ( var_key.place != ELEMENT )
-            throw csmp::Exception( ERROR, "SKUA_Interface::VariablesToPointCloud", "This method works only for 'Element' variables" );
+            throw csmp::Exception( CSMP_ERROR, "SKUA_Interface::VariablesToPointCloud", "This method works only for 'Element' variables" );
          if ( var_key.type != SCALAR )
-            throw csmp::Exception( ERROR, "SKUA_Interface::VariablesToPointCloud", "This method works only for SCALAR variables" );
+            throw csmp::Exception( CSMP_ERROR, "SKUA_Interface::VariablesToPointCloud", "This method works only for SCALAR variables" );
          string var_name((*i).c_str());
          replaceWhiteSpaceBy( var_name, '_' );
          var_keys.insert( make_pair(var_name,var_key) );
@@ -184,7 +184,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
  {
     const csmp::Index  var_key(model.Database().StorageKey(var));
     if ( var_key.place != ELEMENT )
-      throw csmp::Exception( ERROR, "SKUA_Interface::SurfaceArrayVariableToPointCloud", "This method works only for 'Element' variables" );
+      throw csmp::Exception( CSMP_ERROR, "SKUA_Interface::SurfaceArrayVariableToPointCloud", "This method works only for 'Element' variables" );
     assert( var_key.type == ARRAY );
     string var_name(var);
     replaceWhiteSpaceBy( var_name, '-' );
@@ -224,7 +224,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
                 if ( (*it)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE )
                   nrml = normalOfTriangle( (*it)->N(0)->Coordinate(), (*it)->N(1)->Coordinate(), (*it)->N(2)->Coordinate() );
               else
-              throw Exception( ERROR, "SKUA_Interface::SurfaceArrayVariableToPointCloud",
+              throw Exception( CSMP_ERROR, "SKUA_Interface::SurfaceArrayVariableToPointCloud",
                               "attempt to compute normal on volume element rather than fault surface element");
 
               // reading the ARRAY variable and the thickness attribute

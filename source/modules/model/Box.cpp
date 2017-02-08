@@ -464,7 +464,7 @@ void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double64>& nrml ) 
          else if ( bdry == RIGHT ) nrml[0] =  1.;
          else
          // 1D models only have x-coordinate and therefore only left and right
-         throw csmp::Exception( ERROR, "Box::UnitNormalTo", 
+         throw csmp::Exception( CSMP_ERROR, "Box::UnitNormalTo", 
                               "1D models only have a LEFT and RIGHT boundary.");
       }
 
@@ -483,7 +483,7 @@ void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double64>& nrml ) 
            }
          else
          // 2D models only have x,y-coordinate and therefore only 4 boundaries
-         throw csmp::Exception( ERROR, "Box::UnitNormalTo", 
+         throw csmp::Exception( CSMP_ERROR, "Box::UnitNormalTo", 
                         "2D models only have a LEFT, RIGHT, TOP & BOTTOM boundary.");
       }
  
@@ -549,7 +549,7 @@ void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double64>& nrml ) 
            }
          else
          // 3D models only have surface and edge boundaries
-         throw csmp::Exception( ERROR, "Box::UnitNormalTo", 
+         throw csmp::Exception( CSMP_ERROR, "Box::UnitNormalTo", 
                         "Boundary flag could not be identified.");
          
       }
@@ -603,7 +603,7 @@ bool isDiagnosticBoxBoundaryClassifier( const string& i )
 */
 void recreateBoxBoundaryFlags( Model<1U>& )
  {
-    throw csmp::Exception( ERROR, "recreateBoxBoundaryFlags(from Box.h)",  "not implemented yet.");
+    throw csmp::Exception( CSMP_ERROR, "recreateBoxBoundaryFlags(from Box.h)",  "not implemented yet.");
  }
  
 
@@ -616,7 +616,7 @@ void recreateBoxBoundaryFlags( Model<1U>& )
 void recreateBoxBoundaryFlags( Model<2U>& model )
  {
     if ( distance( model.BoundariesBegin(), model.BoundariesEnd() ) == 0 )
-      csmp::Exception( ERROR, "recreateBoxBoundaryFlags(2D):", "model contains no Boundary objects; nothing could be done.");
+      csmp::Exception( CSMP_ERROR, "recreateBoxBoundaryFlags(2D):", "model contains no Boundary objects; nothing could be done.");
     
     // flagging the sides where they could be identified as box boundaries
     int counter(0);
@@ -770,7 +770,7 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
 void recreateBoxBoundaryFlags( Model<3>& model )
  {
     if ( distance( model.BoundariesBegin(), model.BoundariesEnd() ) == 0 )
-      csmp::Exception( ERROR, "recreateBoxBoundaryFlags:", "model contains no Boundary objects; nothing could be done.");
+      csmp::Exception( CSMP_ERROR, "recreateBoxBoundaryFlags:", "model contains no Boundary objects; nothing could be done.");
     
     // flagging the sides where box boundaries can be identified
     int counter(0);

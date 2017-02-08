@@ -16,13 +16,13 @@ NumIntegral_PT_op_dS<dim>::NumIntegral_PT_op_dS( const PropertyDatabase<dim>& pr
     MathOperatorRHS<dim>::Name("NumIntegral_PT_op_dS", oper, test );
 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != FACE || ( MathOperatorRHS<dim>::MaterialOperandType() != VECTOR && MathOperatorRHS<dim>::MaterialOperandType() != SCALAR ) ) 
-      throw csmp::Exception( ERROR, "NumIntegral_PT_op_dS<dim>::(constructor):",
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_dS<dim>::(constructor):",
                              oper, "Operand must be a vector or scalar variable on the face.");
 
 
     if ( MathOperatorRHS<dim>::TestOperandType() != VECTOR || 
          MathOperatorRHS<dim>::TestOperandPlacement() != NODE ) 
-      throw csmp::Exception( ERROR, "NumIntegral_PT_op_dS<dim>::(constructor):",
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_dS<dim>::(constructor):",
                              test,  "Dependent-variable Operand must be a vector variable placed on the nodes.");   
  }
 

@@ -57,7 +57,7 @@ MeshManager<dim>::~MeshManager()
             }
 */            
          // now doing the elements
-         throw csmp::Exception( ERROR, "MeshManager<dim>::~MeshManager:",
+         throw csmp::Exception( CSMP_ERROR, "MeshManager<dim>::~MeshManager:",
                                 "adaptively refined mesh not implemented yet");
       }
  }
@@ -94,7 +94,7 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
  {
     if ( this == &mmgr ) return *this;
     
-    throw csmp::Exception( WARNING, "MeshManager<dim>::operator=", 
+    throw csmp::Exception( CSMP_WARNING, "MeshManager<dim>::operator=", 
                                     "operator has not been tested yet");
 
     adaptive_remeshing_     = mmgr.adaptive_remeshing_;
@@ -132,7 +132,7 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
             (*itn).Assign( (*nit).ParentNodeNumber(i), &elmt_collection_[ (*nit).Parent(i)->Idx() ] );
       }
     else { // the model has been build as a tree structure (adaptive_remeshing_=true)
-        throw csmp::Exception( FATAL_ERROR, "MeshManager<dim>::operator=", 
+        throw csmp::Exception( CSMP_FATAL_ERROR, "MeshManager<dim>::operator=", 
                        "for graph-style MeshManageres, copy construction has not been implemented yet");
       }   
        
@@ -236,7 +236,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
          if ( !fem_manager.ContainsElementType(*iit) ) {
               cerr <<"\n\n\tFinite element type not available: "<< parseFiniteElementType( *iit ) << endl;
               fem_manager.Out(cerr);
-              throw csmp::Exception( FATAL_ERROR, 
+              throw csmp::Exception( CSMP_FATAL_ERROR, 
                              "MeshManager<dim>::BuildElementsAndVariableStorage(VSet):",
                              "'FiniteElementManager' lacks finite-element type required by VSet." );
           }
@@ -396,7 +396,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
          if ( !fem_manager.ContainsElementType(*iit) ) {
               cerr <<"\n\n\tFinite element type not available: "<< parseFiniteElementType( *iit ) << endl;
               fem_manager.Out(cerr);
-              throw csmp::Exception( FATAL_ERROR, 
+              throw csmp::Exception( CSMP_FATAL_ERROR, 
                              "MeshManager<dim>::ReconstructMeshAndVariableStorage(VSet):",
                              "'FiniteElementManager' lacks finite-element type required by VSet." );
           }
@@ -1031,7 +1031,7 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
                                                        FiniteVolumeStencilManager<dim>& fvs_manager )
  {
     if ( elmt_collection_.size() <= 1U )
-       throw csmp::Exception( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+       throw csmp::Exception( CSMP_FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
                                     "Currently no model exists to which stencils could be assigned.");
 
     // 1. initialize the stencil manager (the stencils are build and assigned the correct properties
@@ -1556,7 +1556,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
                   // if there is no neighbor, the inner element parent should be at the model boundary
                   if ( face_collection_[fidx].InnerParent()->AtBoundary() == NOT ) {
                        face_collection_[fidx].Out(std::cerr);
-                       csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
+                       csmp_error.notice( CSMP_WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
                                          "inner dim+1 element should be at model boundary because Face has is no outer element.");
                        face_collection_[fidx].InnerParent()->AtBoundary( IRREGULAR );
                     }
@@ -1720,7 +1720,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of node variable not recognized.");
            }
          // storing the data in the VSet
@@ -1788,7 +1788,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of element variable not recognized.");
            }
          // storing the data in the VSet
@@ -1869,7 +1869,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of element integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -1967,7 +1967,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of element sector integraton point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2065,7 +2065,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of facet integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2134,7 +2134,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of face variable not recognized.");
            }
          // storing the data in the VSet
@@ -2215,7 +2215,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of face integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2313,7 +2313,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of face-sector integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2411,7 +2411,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of face facet integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2479,7 +2479,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of interface variable not recognized.");
            }
          // storing the data in the VSet
@@ -2557,7 +2557,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of interface integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2653,7 +2653,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of interface sector integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2749,7 +2749,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                      }
                    break;
                  default:
-                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                   csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                       (*pit).first, "type of interface facet integration point variable not recognized.");
                }
              // storing the data in the VSet
@@ -2833,7 +2833,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of node variable not recognized.");
            }
       }
@@ -2896,7 +2896,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of element variable not recognized.");
            }
       }
@@ -2981,7 +2981,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of element integration point variable not recognized.");
            }
       }
@@ -3081,7 +3081,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of element sector integraton point variable not recognized.");
            }
       }
@@ -3181,7 +3181,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of facet integration point variable not recognized.");
            }
       }
@@ -3248,7 +3248,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of face variable not recognized.");
            }
       }
@@ -3333,7 +3333,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of face integration point variable not recognized.");
            }
       }
@@ -3433,7 +3433,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of face-sector integration point variable not recognized.");
            }
       }
@@ -3533,7 +3533,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of face facet integration point variable not recognized.");
            }
       }
@@ -3599,7 +3599,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                 }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of interface variable not recognized.");
            }
       }
@@ -3684,7 +3684,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of interface integration point variable not recognized.");
            }
       }
@@ -3784,7 +3784,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of interface sector integration point variable not recognized.");
            }
       }
@@ -3884,7 +3884,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+               csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
                                   (*pit).first, "type of interface facet integration point variable not recognized.");
            }
       }

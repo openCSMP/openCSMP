@@ -91,36 +91,36 @@ StressesAndStrains<2U>::StressesAndStrains( const Model<2U> & sg,
 
     // testing the Operands 
     if ( (strain_key_.place != NODE and strain_key_.place != ELEMENT_INTEGRATION_POINT) || strain_key_.type != TENSOR ) 
-      throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                      "'strain' must be a tensor property placed on the constraint points or element." );
 
     if ( (stress_key_.place != NODE and stress_key_.place != ELEMENT_INTEGRATION_POINT) || stress_key_.type != TENSOR ) 
-      throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                      "'stress' must be a tensor property placed on the constraint points or element." );
 
     // displacement
     if ( MathOperatorLHS<2U>::TestOperandPlacement() != NODE ||
          MathOperatorLHS<2U>::TestOperandType() != VECTOR )
-    throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                     test, "Operand 'displacement' must be a vector property placed on the nodes." );
 
     // Young's modulus & Poisson's ratio
     if ( (MathOperatorLHS<2U>::MaterialOperandPlacement() != ELEMENT &&
           MathOperatorLHS<2U>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
          MathOperatorLHS<2U>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                     oper, "Operand 'Young's modulus' must be a scalar property placed on the constraint points or element." );
 
     // Poisson's ratio
     if ( (MathOperatorLHS<2U>::BasicOperandPlacement() != ELEMENT &&
           MathOperatorLHS<2U>::BasicOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
          MathOperatorLHS<2U>::BasicOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                     basic, "Basic Operand 'Poisson's ratio' must be a scalar property placed on the constraint points or element." );
                    
     if ( strain_key_.place != stress_key_.place or  
          MathOperatorLHS<2U>::MaterialOperandPlacement() != MathOperatorLHS<2U>::BasicOperandPlacement() )
-      throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                      "'Young's modulus' and 'Poisson's ratio', and 'strain' and 'stress' must have the same placement." );
 
     // principal stresses and strains
@@ -136,52 +136,52 @@ StressesAndStrains<2U>::StressesAndStrains( const Model<2U> & sg,
          pstress_key_ = sg.Database().StorageKey("principal stress");
         
          if ( (strain1_key_.place != NODE and strain1_key_.place != ELEMENT_INTEGRATION_POINT) || strain1_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'strain1' must be a vector property placed on the constraint points or nodes." );
 
          if ( (strain2_key_.place != NODE and strain2_key_.place != ELEMENT_INTEGRATION_POINT) || strain2_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'strain2' must be a vector property placed on the constraint points or nodes." );
 
          if ( (sigma1_key_.place != NODE and sigma1_key_.place != ELEMENT_INTEGRATION_POINT) || sigma1_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'sigma1' principal stress must be a vector property placed on the constraint points or nodes." );
 
          if ( (sigma2_key_.place != NODE and sigma2_key_.place != ELEMENT_INTEGRATION_POINT) || sigma2_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'sigma2' principal stress must be a vector property placed on the constraint points or nodes." );
          
          if ( (pstrain_key_.place != NODE and pstrain_key_.place != ELEMENT_INTEGRATION_POINT) || pstrain_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'principal strain' must be a vector property placed on the constraint points or nodes." );
                    
          if ( (pstress_key_.place != NODE and pstress_key_.place != ELEMENT_INTEGRATION_POINT) || pstress_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'principal stress' must be a vector property placed on the constraint points or nodes." );
 
          if ( means_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'mean stress' must be a scalar property placed on the constraint points or nodes." );
 
          if ( dilat_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
                    "Operand 'dilatation' must be a scalar property placed on the constraint points or nodes." );
 
 	     if ( strain1_key_.place != strain2_key_.place or 
 	          strain2_key_.place != strain_key_.place ) 
-	       throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+	       throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
 	                      "strains and principal strains must have the same placement." );
 
 	     if ( sigma1_key_.place != sigma2_key_.place or 
 	          sigma2_key_.place != stress_key_.place ) 
-	       throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+	       throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
 	                      "stresses and principal stresses must have the same placement." );
 
 	     if ( stress_key_.place  != means_key_.place or 
 	          means_key_.place   != dilat_key_.place or 
 	          dilat_key_.place   != strain1_key_.place or
 	          strain1_key_.place != sigma1_key_.place ) 
-	       throw csmp::Exception( ERROR, "StressesAndStrains<2D>::(constructor)", 
+	       throw csmp::Exception( CSMP_ERROR, "StressesAndStrains<2D>::(constructor)", 
 	                      "'dilation', mean stress', 'strain', and 'sigma' must have the same placement." );
       }               
                    

@@ -116,7 +116,7 @@ void Boundary_Test::TestBoxBoundary( Model<dim>& model, const string& boxBoundar
   else if( boxBoundary == "BACK" )
     boxBoundaryFlag = BACK;
   else
-    throw csmp::Exception(ERROR, "Boundary_Test::TestBoxBoundary", "Box boundary not recognized!" );
+    throw csmp::Exception(CSMP_ERROR, "Boundary_Test::TestBoxBoundary", "Box boundary not recognized!" );
   CheckNodeFlags( boundary, boxBoundaryFlag, true );
   CheckFaceUnitNormalOrientation( boundary );
   CheckNodeParents( boundary );

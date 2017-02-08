@@ -73,11 +73,11 @@ size_t  Quadrilaterator::MapVertex( unsigned int m, unsigned int n ) const
 
     // safety 
     if ( m > rows || m < 1 ) 
-      throw csmp::Exception( FATAL_ERROR, "Quadrilaterator::MapVertex", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Quadrilaterator::MapVertex", 
                                    "n-array index out of range");
 
     if ( n > cols || n < 1 ) 
-      throw csmp::Exception( FATAL_ERROR, "Quadrilaterator::MapVertex", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Quadrilaterator::MapVertex", 
                                    "n-array index out of range");
     return vert - 1U;
      

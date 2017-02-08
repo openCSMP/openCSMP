@@ -92,7 +92,7 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double64 pmin
              }
       }
     else
-    throw csmp::Exception( INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
+    throw csmp::Exception( CSMP_INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
     criteria[ prop_name ] = make_pair(pmin,pmax);
  }
  
@@ -113,7 +113,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e,
                                             Index& failed_upon ) const
  {  
     if ( vector_length_check ) {
-         throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::CheckConstraints",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyConstraints::CheckConstraints",
                                       "Tensor Eigenvalue check not implemented yet");
          return false;
       }      
@@ -260,7 +260,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e,
                      }
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -305,7 +305,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e ) const
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -362,7 +362,7 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const Element<dim>& e ) co
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckSingleNodeConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckSingleNodeConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -409,7 +409,7 @@ bool PropertyConstraints::CheckNodeAverageConstraints( const Element<dim>& e ) c
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckNodeAverageConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckNodeAverageConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -427,7 +427,7 @@ bool PropertyConstraints::VectorLengthCheck( const Element<dim>& e,
     VectorVariable<dim>  vc;
  
     if ( nodal_average ) {
-         throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
                                       "'nodal average' and 'vector_length_check' are mutually exclusive switches");
          return false;
       }

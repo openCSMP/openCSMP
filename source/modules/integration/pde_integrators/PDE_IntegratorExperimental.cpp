@@ -626,7 +626,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         //                                   Index,   calculation offset
         if ( unspecified != pkey ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
         else
-            throw csmp::Exception( WARNING,
+            throw csmp::Exception( CSMP_WARNING,
                                    "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                    "lefthand basic operand not found.");
         // test function operands are picked up when the righthandside is accumulated
@@ -643,7 +643,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
         if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
         else
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
+          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                          "righthand test operand not found.");
      }
    // including pde operators on the model boundary
@@ -656,7 +656,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
             if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
             if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
             else
-              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
+              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                              "righthand test operand not found.");
          }
      }
@@ -675,7 +675,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
           cout <<"\nThe system of equations is undefined. ";
           cout <<"\nCreate corresponding LHS basic or test Operand for: ";
           cout << (*lhs_it).first << endl;
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                          "lefthand basic or test operand missing");
        }
 
@@ -735,7 +735,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                 }
                break;
             default:
-              throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+              throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                            "Test operand placement unresolved");
          }
       }
@@ -757,13 +757,13 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                (*iter).second = (*lhs_it).second->BasicOperandOffset();
           }
         else
-          throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                        "LHS basic operand matrix placement i unresolved");
 
         if ( (iter=test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end() )
           (*lhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
    
@@ -774,7 +774,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                           (*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
@@ -785,7 +785,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                           (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
@@ -868,11 +868,11 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
     const size_t            dim2(dim * dim);
 
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() ) {
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "No basic operands have been specified...");
          return;
       }
@@ -885,7 +885,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
             typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
             if ( prop_key.place != NODE ) {
-                 throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+                 throw csmp::Exception( CSMP_WARNING, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                  "So far no conditions are assigned to elements, faces, segments");
                  return;
               }
@@ -1031,11 +1031,11 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& gref )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                       "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                              "No (basic) operands have been specified...");
 
     // ----------------------------------------------------
@@ -1062,7 +1062,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
          size_t      offset   = (*it).second;
 
          if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+           throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                  "So far no conditions are assigned to elements, faces, segments");
 
           switch( prop_key.type )
@@ -1145,7 +1145,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
                   }
                  break;
                default:
-                 throw csmp::Exception( FATAL_ERROR,
+                 throw csmp::Exception( CSMP_FATAL_ERROR,
                                        "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                        "Variable type not recognised by this method" );
         }
@@ -1242,11 +1242,11 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& domain )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                       "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                              "No (basic) operands have been specified...");
 
      // 1. establish the rows (and columns) to which Dirichlet conditions were applied and storing these in a map
@@ -1262,7 +1262,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialCondi
          size_t      offset   = (*it).second;
 
          if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+           throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                                  "So far no conditions are assigned to elements, faces, segments");
 
           switch( prop_key.type )
@@ -1317,7 +1317,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialCondi
                   }
                  break;
                default:
-                 throw csmp::Exception( FATAL_ERROR,
+                 throw csmp::Exception( CSMP_FATAL_ERROR,
                                        "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                                        "Variable type not recognised by this method" );
         }
@@ -1629,7 +1629,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
         offset   = (*it).second;
 
         if ( prop_key.place != NODE )
-            throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+            throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
         switch ( prop_key.type  )
          {
@@ -1683,7 +1683,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
                  }
                break;
         default:
-              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
             
          } // end switch(type)
@@ -1717,7 +1717,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1( SIMPLIC
         offset   = (*it).second;
 
         if ( prop_key.place != NODE )
-            throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1:",
+            throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1:",
                                            "only nodal properties can be output by this method.");
         switch ( prop_key.type  )
          {
@@ -1773,7 +1773,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1( SIMPLIC
                  }
                break;
         default:
-              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults:",
+              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults:",
                                             "Output to ARRAY type variables is not supported by this method yet.");
             
          } // end switch(type)
@@ -2051,7 +2051,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMap
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
-       throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
+       throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file

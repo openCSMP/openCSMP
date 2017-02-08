@@ -238,7 +238,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
        else non_surface_elements++;
    
     if ( non_surface_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation:",
+      ErrorHandler::Instance().notice( CSMP_ERROR, "checkNeighborNormalsForConsistentOrientation:",
                                        subdomain.Name(), "region contained not only surface elements." );
     return true;
    
@@ -299,12 +299,12 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundary:", "supplied set of substrings is empty; returning '\0'." );
+         ErrorHandler::Instance().notice( CSMP_WARNING, "findBoundary:", "supplied set of substrings is empty; returning '\0'." );
          return std::string("\0");
       }
     // if the model has no boundaries
     if ( model.Boundaries() == 0 ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundary:", "model has no boundaries; returning '\0'." );
+         ErrorHandler::Instance().notice( CSMP_WARNING, "findBoundary:", "model has no boundaries; returning '\0'." );
          return std::string("\0");
       }
      // making a set of boundary names
@@ -339,12 +339,12 @@ size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_r
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundaries:", "supplied set of substrings is empty; returning '\0'." );
+         ErrorHandler::Instance().notice( CSMP_WARNING, "findBoundaries:", "supplied set of substrings is empty; returning '\0'." );
          return 0U;
       }
     // if the model has no boundaries
     if ( model.Boundaries() == 0 ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundaries:", "model has no boundaries; returning '\0'." );
+         ErrorHandler::Instance().notice( CSMP_WARNING, "findBoundaries:", "model has no boundaries; returning '\0'." );
          return 0U;
       }
     region_patches_found.clear();
@@ -616,11 +616,11 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     // 1. verification of input to function
     // ------------------------------------
     if ( model.ContainsRegion(dim_1_region) == false ) {
-          ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "does not exist; nothing was done." );
+          ErrorHandler::Instance().notice( CSMP_ERROR, "labelRegionPatches:", dim_1_region, "does not exist; nothing was done." );
           return 0;
       }
     if ( model.UniqueRegions() <= 1 ) {
-          ErrorHandler::Instance().notice( WARNING, "labelRegionPatches:", "model contains only a single unique region; so there is only one patch." );
+          ErrorHandler::Instance().notice( CSMP_WARNING, "labelRegionPatches:", "model contains only a single unique region; so there is only one patch." );
           return 1;
       }
     // verifying that we are indeed dealing with a region of surface elements only
@@ -628,7 +628,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     pair<int32,int32>  dimensionality = subdomain.ElementSpatialDimensions();
     //   number of dims in region      dimension of contained elements
     if ( dimensionality.first != 1 and dimensionality.second != 2 ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region does not consist of surface elements only; nothing was done." );
+         ErrorHandler::Instance().notice( CSMP_ERROR, "labelRegionPatches:", dim_1_region, "region does not consist of surface elements only; nothing was done." );
          return 0;
       }
     // verifying that the region lies inside of the model
@@ -639,18 +639,18 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
          if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL ) boundary_elements++;
       }
     if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
+         ErrorHandler::Instance().notice( CSMP_ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
          return 0;
       }
     if ( !model.Database().IsDefined(diagnostic_elmt_variable) ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", diagnostic_elmt_variable, "variable to discern regions is not defined; nothing was done." );
+         ErrorHandler::Instance().notice( CSMP_ERROR, "labelRegionPatches:", diagnostic_elmt_variable, "variable to discern regions is not defined; nothing was done." );
          return 0;
       }
       {  // check whether there are multiple region identifiers
          double64 rmin, rmax;
          model.MinMaxOf( diagnostic_elmt_variable, rmin, rmax );
          if ( fabs(rmax - rmin) <= numeric_limits<double64>::epsilon() ) {
-              ErrorHandler::Instance().notice( WARNING, "labelRegionPatches:", diagnostic_elmt_variable, "is single valued; so there is only one patch." );
+              ErrorHandler::Instance().notice( CSMP_WARNING, "labelRegionPatches:", diagnostic_elmt_variable, "is single valued; so there is only one patch." );
               return 1;
            }
       }
@@ -784,7 +784,7 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
     // ------------------------------------------------------------------------------------------------------------------------------------------------
     // does the parent region exist
     if ( model.ContainsRegion(dim_1_region) == false ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "does not exist; nothing was done." );
+          ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "does not exist; nothing was done." );
           return 0;
       }
     // do such boundaries already exist ?
@@ -796,19 +796,19 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
                error_info += (*it);
                error_info +=", ";
             }
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:",
+          ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary::FormInternalFromDim_m1_Region:",
                                            error_info.c_str(), "boundaries are already contained in this model." );
           return 0;
       }
     // does the model contain unique regions
     if ( model.UniqueRegions() < 1 ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", "model contains no unique regions; cannot proceed." );
+          ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary::FormInternalFromDim_m1_Region:", "model contains no unique regions; cannot proceed." );
           return 0;
       }
     // verifying that we are indeed dealing with a region of surface elements only and that their normals all point into same direction
     Region<3U>&  subdomain(model.Region(dim_1_region));
     if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region,
+         ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region,
                                          "region appears to have inconstent surface-normal orientations; nothing was done." );
          return 0;
       }
@@ -818,7 +818,7 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
          if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL ) boundary_elements++;
       }
     if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
+         ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
          return 0;
       }
     // creating region labels and tagging the regions with unique integer indentifiers
@@ -836,7 +836,7 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
 //cerr << endl;
    
     if ( model_regions == 1 )
-       ErrorHandler::Instance().notice( INFO, "Boundary::FormInternalFromDim_m1_Region:", region_tag.c_str(), "is single valued; so there is only one patch." );
+       ErrorHandler::Instance().notice( CSMP_INFO, "Boundary::FormInternalFromDim_m1_Region:", region_tag.c_str(), "is single valued; so there is only one patch." );
 
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------

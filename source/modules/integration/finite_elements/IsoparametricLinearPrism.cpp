@@ -899,7 +899,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
                 <<"N[4] = "<<N[4]<<" ;\t"
                 <<"N[5] = "<<N[5]<<"\n";
 
-            csmp::Exception( WARNING, "IsoparametricLinearPrism::PhysicalToParametric",
+            csmp::Exception( CSMP_WARNING, "IsoparametricLinearPrism::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1329,7 +1329,7 @@ IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<size_t>& bnod
     fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 4 && bnodes.size() != 3 )
-       throw csmp::Exception( ERROR, "IsoparametricLinearPrism::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearPrism::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1362,7 +1362,7 @@ IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( size_t nva
                                                                       vector<double64>& NVAR )
 const
 {
-  if(gpe!=1) throw csmp::Exception( ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
+  if(gpe!=1) throw csmp::Exception( CSMP_ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
                                           "Number of Integration points should be 1");
 
  assert( gpe == 1);

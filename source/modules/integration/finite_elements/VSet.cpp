@@ -287,7 +287,7 @@ PropertyData  VSet<dim>::Data( const char* s ) const
  {
      auto prop_it = property_map_.find(s);
      if ( prop_it == property_map_.end() )
-       throw csmp::Exception( ERROR, "VSet<dim>::Data:", s, "property data was not found in VSet.");
+       throw csmp::Exception( CSMP_ERROR, "VSet<dim>::Data:", s, "property data was not found in VSet.");
    
      return (*prop_it).second;
    
@@ -617,7 +617,7 @@ template<size_t dim> //             old    new
 void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
  {
     if ( o_n_elmt_ids.empty() )
-      throw csmp::Exception( ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
+      throw csmp::Exception( CSMP_ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
  
     // 'plist' and 'pfverts' in base class
     if ( Elements() > 0 ) {

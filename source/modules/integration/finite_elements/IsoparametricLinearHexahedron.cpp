@@ -1176,7 +1176,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
                 <<"N[6] = "<<N[6]<<" ;\t"
                 <<"N[7] = "<<N[7]<<"\n";
 
-            csmp::Exception( WARNING, "IsoparametricLinearHexahedron::PhysicalToParametric",
+            csmp::Exception( CSMP_WARNING, "IsoparametricLinearHexahedron::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1600,7 +1600,7 @@ IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<size_t>&
      fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 4 )
-       throw csmp::Exception( ERROR, "IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 

@@ -1115,7 +1115,7 @@ IsoparametricQuadraticPyramid::PhysicalToParametric(
                 <<"N[12] = "<<N[12]<<" ;\t"
                 <<"N[13] = "<<N[13]<<"\n";
 
-            csmp::Exception( WARNING, "IsoparametricQuadraticPyramid::PhysicalToParametric",
+            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticPyramid::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1379,7 +1379,7 @@ IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary( const vector<size_t>&
      fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 8 || bnodes.size() != 6  )
-       throw csmp::Exception( ERROR, "IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1532,7 +1532,7 @@ IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes( size_
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
    if ( IVAR.size() != (gpe*nvars) )
-     throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
                                   "Input vector must have 'nvars' x 6 entries");
 
    NVAR.resize( npe * nvars );
@@ -1542,7 +1542,7 @@ IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes( size_
    if ( first_call ) {
        // checking starting conditions
        if ( gpe != 6 )
-       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
+       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
          "This method expects six integration points on which extrapolation functions will be based on" );
 
         first_call = false;

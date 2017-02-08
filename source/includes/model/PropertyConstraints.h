@@ -62,7 +62,7 @@ template<size_t dim>
 bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>& pref )
   {
     if ( criteria.empty() ) {
-      throw csmp::Exception( WARNING, "PropertyConstraints::InitializePropertyIndices",
+      throw csmp::Exception( CSMP_WARNING, "PropertyConstraints::InitializePropertyIndices",
         "No criteria have been defined so far");
       return false;
       }

@@ -1340,7 +1340,7 @@ bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
 
         ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-        csmp_error.notice( WARNING, "TensorVariable::EigenValues(double,double,double):",
+        csmp_error.notice( CSMP_WARNING, "TensorVariable::EigenValues(double,double,double):",
                           "found complex conjugate roots when calculating the eigenvalues of a tensor.");
         return false;
       }

@@ -61,11 +61,11 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
 	    pr_key[i] =  model.Database().StorageKey( rhs_property[i].c_str() );
 	    
 	    if ( pl_key[i].type != SCALAR || pl_key[i].place != NODE )
-           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
+           throw csmp::Exception( CSMP_ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
                              lhs_property[i].c_str(), " must be a nodal scalar property." );
 
 	    if ( pr_key[i].type != SCALAR || (pr_key[i].place != NODE && pr_key[i].place != ELEMENT) )
-           throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
+           throw csmp::Exception( CSMP_ERROR, "ExplicitFiniteVolumeTransportPHX.<double64, dim>::ExplicitFiniteVolumeTransportPHX\n", 
                              rhs_property[i].c_str(), " must be a nodal or element scalar property." );
 
    }     
@@ -130,7 +130,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
   		           if (value < pmin) sc()= pmin;
   		           else if (value > pmax) sc()= pmax;
   		           region_ref.N(idx)->Store( pl_key[i], sc );
-                       throw csmp::Exception( ERROR, "ExplicitFiniteVolumeTransportPHX::WriteResults",
+                       throw csmp::Exception( CSMP_ERROR, "ExplicitFiniteVolumeTransportPHX::WriteResults",
                                      "Output property was out of range, legal (min/max) was stored instead");
   		           cin >> temp;
   		         }

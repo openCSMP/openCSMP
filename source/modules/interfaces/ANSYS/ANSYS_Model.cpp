@@ -135,7 +135,7 @@ Uses the method Initialize.
                                        irregular_mesh );
          }else{
 
-             throw csmp::Exception( ERROR,
+             throw csmp::Exception( CSMP_ERROR,
                                     "ANSYS_Model<dim>::Initialize()",
                                     "Reading of ANSYS mesh file is not yet implemented in 1D! " );
          }

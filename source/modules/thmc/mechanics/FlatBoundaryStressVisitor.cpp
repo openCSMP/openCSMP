@@ -41,15 +41,15 @@ FlatBoundaryStressVisitor<dim>::FlatBoundaryStressVisitor( const Model<dim>& mod
 
 {
     if ( Sn_key_.place != FACE || Sn_key_.type != SCALAR )
-        throw csmp::Exception( ERROR, "FlatBoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "FlatBoundaryStressVisitor (constructor):",
                               "'normal stress' must be a SCALAR face variable." );
 
     if ( Ss_key_.place != FACE || Ss_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "FlatBoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "FlatBoundaryStressVisitor (constructor):",
                               "'shear stress' must be a VECTOR face variable." );
 
     if ( F_key_.place != NODE || F_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "FlatBoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "FlatBoundaryStressVisitor (constructor):",
                               "'force' must be a VECTOR variable placed on the nodes." );
      
 }
@@ -93,7 +93,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 
    const size_t elemType(f->InnerParent()->FE()->Interpolation()); //1 linear, 2 Quadratic
    if (elemType!=1 && elemType!=2)  {
-      throw csmp::Exception(ERROR, "FlatBoundaryStressVisitor::Visit",
+      throw csmp::Exception(CSMP_ERROR, "FlatBoundaryStressVisitor::Visit",
          "element type is not linear or quadratic.");
    }
 
@@ -106,7 +106,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    // This would accumulate NaN values to the rhs vector. 
    ErrorHandler&  csmp_error(ErrorHandler::Instance());
    if (isnan(Sn) || isnan(Ss_magnitude)) {
-      csmp_error.notice(WARNING, "csmp::FlatBoundaryStressVisitor::Visit:", "Boundaries without boundary stresses are visited, returning NaN values.");
+      csmp_error.notice(CSMP_WARNING, "csmp::FlatBoundaryStressVisitor::Visit:", "Boundaries without boundary stresses are visited, returning NaN values.");
       terminate();
    }
    

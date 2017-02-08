@@ -122,12 +122,12 @@ void FiniteElementManager::InitializeElements( size_t dim, size_t interpolation_
               if      ( interpolation_order == 1U ) line_ptr = new IsoparametricLinearLineElement(1);
               else if ( interpolation_order == 2U ) line_ptr = new IsoparametricQuadraticLineElement(1);
 	          else
-	          throw csmp::Exception( FATAL_ERROR, "FiniteElementManager(constructor):",
+	          throw csmp::Exception( CSMP_FATAL_ERROR, "FiniteElementManager(constructor):",
 	                         "Desired order of interpolation functions is not available");
            }
          else {
               if      ( interpolation_order == 1 ) line_ptr = new LinearLineElement(1);
-              else throw csmp::Exception( FATAL_ERROR, "FiniteElementManager(constructor):",
+              else throw csmp::Exception( CSMP_FATAL_ERROR, "FiniteElementManager(constructor):",
                                                 "1D analytically integrated >=quadratic elements are not available");
            }
       }
@@ -153,12 +153,12 @@ void FiniteElementManager::InitializeElements( size_t dim, size_t interpolation_
                    line_ptr = new IsoparametricQuadraticLineElement(2);
                 }
               else {
-                   throw csmp::Exception( WARNING, "FiniteElementManager::InitializeElements:",
+                   throw csmp::Exception( CSMP_WARNING, "FiniteElementManager::InitializeElements:",
                                   "In this version only isoparametric elements are available for quadratic interpolation");
                 }
            }
          else
-         throw csmp::Exception( FATAL_ERROR, "FiniteElementManager::InitializeElements:",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "FiniteElementManager::InitializeElements:",
                          "Desired order of interpolation functions is not available in this version");
       }
       
@@ -191,16 +191,16 @@ void FiniteElementManager::InitializeElements( size_t dim, size_t interpolation_
                    line_ptr = new IsoparametricQuadraticLineElement(3);
                 }
               else {
-                   throw csmp::Exception( WARNING, "FiniteElementManager::InitializeElements:",
+                   throw csmp::Exception( CSMP_WARNING, "FiniteElementManager::InitializeElements:",
                                   "In this version only isoparametric elements are available for quadratic interpolation");
                 }
            }
          else
-         throw csmp::Exception( FATAL_ERROR, "FiniteElementManager::InitializeElements:",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "FiniteElementManager::InitializeElements:",
                          "Desired order of interpolation functions is not available");
       }
     else {
-         throw csmp::Exception( FATAL_ERROR, "FiniteElementManager::InitializeElements:",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "FiniteElementManager::InitializeElements:",
                          "Error in constructor argument 1");
       }
 

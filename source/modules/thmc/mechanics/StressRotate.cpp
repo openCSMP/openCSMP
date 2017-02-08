@@ -148,10 +148,10 @@ stress was measured.
 void StressRotate::Rotate( char axis, double64 angle ) 
   {
     if ( axis != 'x' and axis != 'y' and axis != 'z' )
-      throw Exception( ERROR, "StressRotate::Rotate", "axis parameter (1) could not be identified; should be x,y or z");
+      throw Exception( CSMP_ERROR, "StressRotate::Rotate", "axis parameter (1) could not be identified; should be x,y or z");
   
     if ( angle < 0. or angle > 360. )
-      throw Exception( ERROR, "StressRotate::Rotate", "rotation angle is in degrees and must be between 0 and 360");
+      throw Exception( CSMP_ERROR, "StressRotate::Rotate", "rotation angle is in degrees and must be between 0 and 360");
 
     //conversion from degrees to radians
     //conversion from yaw-pitch-roll to right hand side rule
@@ -208,7 +208,7 @@ void StressRotate::Rotate( char axis, double64 angle )
        z_ += angle;
     }
     else
-    throw csmp::Exception( ERROR, "StressRotate<dim>::Rotate",
+    throw csmp::Exception( CSMP_ERROR, "StressRotate<dim>::Rotate",
                           "axis could not be recognised: possibilities are x,y,and z");      
  
     n1_ = (rotation * VectorVariable<3U>(n1_.Coordinates())).P();

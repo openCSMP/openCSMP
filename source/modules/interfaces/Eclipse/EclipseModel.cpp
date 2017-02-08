@@ -149,7 +149,7 @@ void EclipseModel<dim>::BuildModel()
                      message += *prop_it;
                  }
                  message += " !!!";
-                 error_handler.notice( csmp::INFO, "EclipseModel<dim>::", message.c_str() );
+                 error_handler.notice( CSMP_INFO, "EclipseModel<dim>::", message.c_str() );
              }
          }
 

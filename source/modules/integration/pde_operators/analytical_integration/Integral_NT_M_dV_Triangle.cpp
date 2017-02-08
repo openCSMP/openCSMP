@@ -25,7 +25,7 @@ Integral_NT_M_dV_Triangle<dim,SIMPLEX>::Integral_NT_M_dV_Triangle( const Propert
         // testing the Operands 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "Integral_NT_M_dV_Triangle<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Integral_NT_M_dV_Triangle<dim>::(constructor)", 
                    test, "Mapped variable must be a scalar property placed on the nodes." );
  }
 

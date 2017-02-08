@@ -787,7 +787,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
 
     ifstream ifs(file_name);
     if ( !ifs.is_open() )
-      throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile",
+      throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::inputFromFile",
                              file_name,
                              "file specifying regions is missing");
     if ( !interface_basic_set.empty() )
@@ -810,7 +810,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
          if ( !interface_name.empty() )
              interface_basic_set.insert(interface_name);
          else
-             throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
+             throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
       }
 
     ifs.close();
@@ -858,7 +858,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
 
     ifstream ifs(file_name);
     if ( !ifs.is_open() )
-      throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile",
+      throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::inputFromFile",
                              file_name,
                              "file specifying regions is missing");
     if ( !interfaces.empty() )
@@ -881,7 +881,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
          if ( !interface_name.empty() )
              interfaces.push_back(interface_name);
          else
-             throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
+             throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
       }
 
     ifs.close();
@@ -899,7 +899,7 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
 
     ofstream ofs(file_name);
     if ( !ofs.is_open() )
-      throw csmp::Exception( ERROR, "SplitBoundary_Test::outputToFile",
+      throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::outputToFile",
                              file_name,   "file specifying permeability-model input variables is missing");
 
     ofs <<"'"<< file_name <<"' interface regions to be included.\n\n";
@@ -923,7 +923,7 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
 
     ofstream ofs(file_name);
     if ( !ofs.is_open() )
-      throw csmp::Exception( ERROR, "SplitBoundary_Test::outputToFile",
+      throw csmp::Exception( CSMP_ERROR, "SplitBoundary_Test::outputToFile",
                              file_name,   "file specifying permeability-model input variables is missing");
 
     ofs <<"'"<< file_name <<"' interface regions to be included.\n\n";

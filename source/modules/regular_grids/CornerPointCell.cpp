@@ -226,7 +226,7 @@ void CornerPointCell<dim>::CheckFaceOrder()
     for( size_t fid = 0; fid<num_faces; ++fid )
         order.insert( this->GetOriginalFaceId(fid) );
     if( order.size() != num_faces )
-        csmp_error.notice( csmp::ERROR, "CornerPointCell<dim>::CheckFaceOrder()",
+        csmp_error.notice( CSMP_ERROR, "CornerPointCell<dim>::CheckFaceOrder()",
                            "Face order is not unique!!!" );
 }
 
@@ -238,7 +238,7 @@ void CornerPointCell<dim>::CheckNodeOrder()
     for( size_t nid = 0; nid<this->GetNumNodes(); ++nid )
         order.insert( this->GetOriginalNodeId(nid) );
     if( order.size() != this->GetNumNodes() )
-        csmp_error.notice( csmp::ERROR, "CornerPointCell<dim>::CheckNodeOrder()",
+        csmp_error.notice( CSMP_ERROR, "CornerPointCell<dim>::CheckNodeOrder()",
                            "Node order is not unique!!!" );
 }
 
@@ -1358,7 +1358,7 @@ void CornerPointCell<dim>
         this->AssignFaceOrder( 5, point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly7Element():", "Unpredictable case for 7 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1611,7 +1611,7 @@ void CornerPointCell<dim>
         this->AssignFaceOrder( 5, ( point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] != this->GetOriginalFaceId(4) ? point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] : point_tri_faces.at( this->GetPointCustomOrder(3) )[ 1 ] ) );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly6Element():", "Unpredictable case for 6 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1841,7 +1841,7 @@ void CornerPointCell<dim>
             this->AssignFaceOrder( ++fid, *fit );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly5Element():", "Unpredictable case for 5 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1987,7 +1987,7 @@ void CornerPointCell<dim>
         assert( current_fid == 6 );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly4Element():", "Unpredictable case for 4 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();

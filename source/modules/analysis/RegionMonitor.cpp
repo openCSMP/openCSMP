@@ -60,15 +60,15 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
     for ( typename list<string>::const_iterator
           it=integral_properties_.begin(); it!=integral_properties_.end(); it++ ) {
         if ( !sg.Database().IsDefined( (*it).c_str() ) )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( sg.Database().Type( (*it).c_str() ) != SCALAR )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
                                    "integral property must be a scalar property");
 
         if ( sg.Database().Placement( (*it).c_str() ) == INTER_FACE )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
                                    "properties placed on the FACE cannot be integrated over the Region volume");
     }
 
@@ -79,7 +79,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
     for ( typename list<string>::const_iterator
           it=range_properties_.begin(); it!=range_properties_.end(); it++ )
         if ( !sg.Database().IsDefined( (*it).c_str() ) )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
                                    "range property is not defined in the database (file)");
 
     // getting geometric data from the existing regions
@@ -136,22 +136,22 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
     // checking whether target properties are suitable for integration
     for ( it=integral_properties_.begin(); it!=integral_properties_.end(); it++ ) {
         if ( !sg.Database().IsDefined( (*it).c_str() ) )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( sg.Database().Type( (*it).c_str() ) != SCALAR )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor::DefineProperties)", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor::DefineProperties)", (*it).c_str(),
                                    "integral property must be a scalar property");
 
         if ( sg.Database().Placement( (*it).c_str() ) == INTER_FACE )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
                                    "properties placed on the FACE cannot be integrated over the Region volume");
     }
     
     // checking range properties
     for ( it=range_properties_.begin(); it!=range_properties_.end(); it++ )
         if ( !sg.Database().IsDefined( (*it).c_str() ) )
-            throw csmp::Exception( FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
+            throw csmp::Exception( CSMP_FATAL_ERROR, "RegionMonitor::DefineProperties", (*it).c_str(),
                                    "range property is not defined in the database (file)");
 
     // getting geometric data from the existing groups
@@ -256,7 +256,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
     if (entry!=ext_calc_properties_column_headers_.end())
         ext_properties_[time].insert(make_pair(property_column_entry,value));
     else
-        throw csmp::Exception( ERROR, "RegionMonitor:InsertPreCalculatedPropertyValue()", property_column_entry.c_str(),
+        throw csmp::Exception( CSMP_ERROR, "RegionMonitor:InsertPreCalculatedPropertyValue()", property_column_entry.c_str(),
                                "Property and region name combination has not been inserted. \n Call InsertExternallyCalculatedProperty() first ");
 }
 
@@ -276,7 +276,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
     if (entry!=ext_calc_properties_column_headers_.end())
         ext_properties_[time].insert(make_pair(property_column_entry,value));
     else
-        throw csmp::Exception( ERROR, "RegionMonitor:InsertPreCalculatedPropertyValue()", property_column_entry.c_str(),
+        throw csmp::Exception( CSMP_ERROR, "RegionMonitor:InsertPreCalculatedPropertyValue()", property_column_entry.c_str(),
                                "Property and region name combination has not been inserted. \n Call InsertExternallyCalculatedProperty() first ");
 }
 

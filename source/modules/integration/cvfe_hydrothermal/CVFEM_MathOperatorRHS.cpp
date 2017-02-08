@@ -35,7 +35,7 @@ template<size_t dim>
 void CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key )
  {
 
-	 throw csmp::Exception( ERROR, "CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM", 
+	 throw csmp::Exception( CSMP_ERROR, "CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM", 
                            " not specifically defined for this operator" );
 
 }

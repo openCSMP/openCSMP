@@ -367,7 +367,7 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator=( const VectorVariable<dim>& vc )
  {
     if ( prop_key_.type != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator=(vector)", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator=(vector)", name_.c_str(),
                             "can only assign vectors to VectorVariable Operands");
     vector_storage_ = vc;
 
@@ -379,7 +379,7 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator=( const TensorVariable<dim>& ts )
  {
     if ( prop_key_.type != TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator=(tensor)", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator=(tensor)", name_.c_str(),
                                    "can only assign tensors to TensorVariable Operands");
     tensor_storage_ = ts;
 
@@ -390,7 +390,7 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator=( const ArrayVariable& ar )
  {
     if ( prop_key_.type != ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator=(array)", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator=(array)", name_.c_str(),
                                    "can only assign arrays to ArrayVariable Operands");
     array_storage_ = ar;
 
@@ -401,7 +401,7 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator=( const FlaggedArrayVariable& ar )
  {
     if ( prop_key_.type != FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator=(flagged array)", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator=(flagged array)", name_.c_str(),
                                    "can only assign flagged arrays to FlaggedArrayVariable Operands");
     flagged_array_storage_ = ar;
 
@@ -454,7 +454,7 @@ Operand<dim>&  Operand<dim>::operator=( double64 val )
               flagged_array_storage_ = val;
               break;
         default:
-           throw csmp::Exception( ERROR, "Operand<dim>::operator=(double)",
+           throw csmp::Exception( CSMP_ERROR, "Operand<dim>::operator=(double)",
                                   "Array type variables are not handled yet.");
     }
     return *this;
@@ -880,17 +880,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding vector to scalar");
     else if ( prop_key_.type == VECTOR ) vector_storage_ += vc;
     else if ( prop_key_.type == TENSOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(), 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(), 
                                    "no rule for adding vector to tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding vector to array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding vector to flagged array");
 
     return *this;
@@ -901,17 +901,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting vector from scalar");
     else if ( prop_key_.type == VECTOR ) vector_storage_ -= vc;
     else if ( prop_key_.type == TENSOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting vector from tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting vector from array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting vector from flagged array");
 
     return *this;
@@ -922,17 +922,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with vector");
     else if ( prop_key_.type == VECTOR ) vector_storage_ *= vc;
     else if ( prop_key_.type == TENSOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "result of multiplying tensor with vector would be a vector");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying vector with array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying vector with flagged array");
 
     return *this;
@@ -943,17 +943,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing scalar by vector");
     else if ( prop_key_.type == VECTOR ) vector_storage_ /= vc;
     else if ( prop_key_.type == TENSOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for for dividing tensor by vector");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing vector by array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing vector by flagged array");
     return *this;
  } // end
@@ -963,17 +963,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding array to scalar");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                      "no rule for adding array to vector");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding array to tensor");
     else if ( prop_key_.type == ARRAY ) array_storage_ += ar;
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding array to flagged array");
 
     return *this;
@@ -984,17 +984,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting array from scalar");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                      "no rule for subtractiong array from vector");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting array from tensor");
     else if ( prop_key_.type == ARRAY ) array_storage_ -= ar;
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtractiong array from flagged array");
 
     return *this;
@@ -1005,17 +1005,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with array");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                      "no rule for multiplying vector with array");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with array");
     else if ( prop_key_.type == ARRAY ) array_storage_ *= ar;
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying flagged array with array");
 
     return *this;
@@ -1026,17 +1026,17 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing scalar by array");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                      "no rule for dividing vector by array");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing tensor by array");
     else if ( prop_key_.type == ARRAY ) array_storage_ /= ar;
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing flagged array by array");
 
     return *this;
@@ -1047,16 +1047,16 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding flagged array to scalar");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                      "no rule for adding flagged array to vector");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding flagged array to tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding flagged array to array");
     else if ( prop_key_.type == FLAGGEDARRAY ) flagged_array_storage_ += ar;
 
@@ -1068,16 +1068,16 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting flagged array from scalar");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                      "no rule for subtractiong flagged array from vector");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting flagged array from tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtractiong flagged array from array");
     else if ( prop_key_.type == FLAGGEDARRAY ) flagged_array_storage_ -= ar;
 
@@ -1089,16 +1089,16 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with flagged array");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                      "no rule for multiplying vector with flagged array");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with flagged array");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying array with flagged array");
     else if ( prop_key_.type == FLAGGEDARRAY ) flagged_array_storage_ *= ar;
 
@@ -1110,16 +1110,16 @@ template<size_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing scalar by flagged array");
     else if ( prop_key_.type == VECTOR )
-        throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                      "no rule for dividing vector by flagged array");
     else if ( prop_key_.type == TENSOR )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing tensor by flagged array");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing array by flagged array");
     else if ( prop_key_.type == FLAGGEDARRAY ) flagged_array_storage_ /= ar;
 
@@ -1164,16 +1164,16 @@ Operand<dim>&  Operand<dim>::operator+=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ += ts;
     else if ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding tensor to scalar");
     else if ( prop_key_.type == VECTOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(), 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(), 
                                    "no rule for adding tensor to vector");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding tensor to array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for adding tensor to flagged array");
 
     return *this;
@@ -1185,16 +1185,16 @@ Operand<dim>&  Operand<dim>::operator-=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ -= ts;
     else if ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting tensor from scalar");
     else if ( prop_key_.type == VECTOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting tensor from vector");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting tensor from array");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator-=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator-=", name_.c_str(),
                                    "no rule for subtracting tensor from flagged array");
 
     return *this;
@@ -1206,16 +1206,16 @@ Operand<dim>&  Operand<dim>::operator*=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ *= ts;
     else if ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying scalar with tensor");
     else if ( prop_key_.type == VECTOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multiplying vector with tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multying array with tensor");
     else if ( prop_key_.type == FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator*=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator*=", name_.c_str(),
                                    "no rule for multying flagged array with tensor");
 
     return *this;
@@ -1227,16 +1227,16 @@ Operand<dim>&  Operand<dim>::operator/=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ /= ts;
     else if ( prop_key_.type == SCALAR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing scalar by tensor");
     else if ( prop_key_.type == VECTOR ) 
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator/=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator/=", name_.c_str(),
                                    "no rule for dividing vector by tensor");
     else if ( prop_key_.type == ARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for dividing array by tensor");
     else if ( prop_key_.type ==FLAGGEDARRAY )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator+=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator+=", name_.c_str(),
                                    "no rule for dividing flagged array by tensor");
 
     return *this;
@@ -1526,7 +1526,7 @@ bool  Operand<dim>::operator>( double64 val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ > val);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator>", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator>", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1537,7 +1537,7 @@ bool  Operand<dim>::operator<( double64 val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ < val);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator<", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator<", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1548,7 +1548,7 @@ bool  Operand<dim>::operator>=( double64 val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ >= val);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator>=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator>=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1559,7 +1559,7 @@ bool  Operand<dim>::operator<=( double64 val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ <= val);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator<=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator<=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1570,7 +1570,7 @@ bool  Operand<dim>::operator==( double64 val ) const
  {
     if ( prop_key_.type == SCALAR ) return approximatelyEqual( scalar_storage_(), val );
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1582,7 +1582,7 @@ bool  Operand<dim>::operator!=( double64 val ) const
     if ( prop_key_.type == SCALAR ) return !approximatelyEqual( scalar_storage_(), val );
 
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
     return false;
  }
@@ -1593,7 +1593,7 @@ bool  Operand<dim>::operator==( const ScalarVariable& sc ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ == sc);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with ScalarVariable");
     return false;
  }
@@ -1603,7 +1603,7 @@ bool  Operand<dim>::operator!=( const ScalarVariable& sc ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ != sc);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with ScalarVariable");
     return false;
  }
@@ -1614,7 +1614,7 @@ bool  Operand<dim>::operator==( const VectorVariable<dim>& vc ) const
  {
     if ( prop_key_.type == VECTOR ) return (vector_storage_ == vc);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare scalar, tensor, array or flagged array variable with VectorVariable");
     return false;
  }
@@ -1625,7 +1625,7 @@ bool  Operand<dim>::operator!=( const VectorVariable<dim>& vc ) const
  {
     if ( prop_key_.type == VECTOR ) return (vector_storage_ != vc);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare scalar, tensor, array or flagged array variable with VectorVariable");
     return false;
  }
@@ -1636,7 +1636,7 @@ bool  Operand<dim>::operator==( const TensorVariable<dim>& ts ) const
  {
     if ( prop_key_.type == TENSOR ) return (tensor_storage_ == ts);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare scalar, vector, array or flagged array variable with TensorVariable");
     return false;
  }
@@ -1647,7 +1647,7 @@ bool  Operand<dim>::operator!=( const TensorVariable<dim>& ts ) const
  {
     if ( prop_key_.type == TENSOR ) return (tensor_storage_ != ts);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare scalar, vector, array or flagged array variable with TensorVariable");
     return false;
  }
@@ -1657,7 +1657,7 @@ bool  Operand<dim>::operator==( const ArrayVariable& ar ) const
  {
     if ( prop_key_.type == ARRAY ) return (array_storage_ == ar);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare scalar, vector, tensor or flagged array variable with ArrayVariable");
     return false;
  }
@@ -1668,7 +1668,7 @@ bool  Operand<dim>::operator!=( const ArrayVariable& ar ) const
  {
     if ( prop_key_.type == ARRAY ) return (array_storage_ != ar);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare scalar, vector, tensor or flagged array variable with ArrayVariable");
     return false;
  }
@@ -1678,7 +1678,7 @@ bool  Operand<dim>::operator==( const FlaggedArrayVariable& ar ) const
  {
     if ( prop_key_.type == FLAGGEDARRAY ) return (flagged_array_storage_ == ar);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                            "cannot compare scalar, vector, tensor or array variable with FlaggedArrayVariable");
     return false;
  }
@@ -1689,7 +1689,7 @@ bool  Operand<dim>::operator!=( const FlaggedArrayVariable& ar ) const
  {
     if ( prop_key_.type == FLAGGEDARRAY ) return (flagged_array_storage_ != ar);
 
-    throw csmp::Exception( FATAL_ERROR, "Operand::operator!=", name_.c_str(),
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator!=", name_.c_str(),
                            "cannot compare scalar, vector, tensor or array variable with FlaggedArrayVariable");
     return false;
  }
@@ -1698,7 +1698,7 @@ template<size_t dim>
 bool  Operand<dim>::operator>( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator>", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator>", name_.c_str(),
                                    "cannot compare Operands with different variable types");
      
     if ( prop_key_.type == SCALAR ) 
@@ -1724,7 +1724,7 @@ template<size_t dim>
 bool  Operand<dim>::operator<( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator<", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator<", name_.c_str(),
                                    "cannot compare Operands with different variable types");
      
     if ( prop_key_.type == SCALAR ) 
@@ -1750,7 +1750,7 @@ template<size_t dim>
 bool  Operand<dim>::operator>=( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator>=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator>=", name_.c_str(),
                                    "cannot compare Operands with different variable types");
      
     if ( prop_key_.type == SCALAR ) 
@@ -1776,7 +1776,7 @@ template<size_t dim>
 bool  Operand<dim>::operator<=( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator<=", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator<=", name_.c_str(),
                                    "cannot compare Operands with different variable types");
      
     if ( prop_key_.type == SCALAR ) 
@@ -1802,7 +1802,7 @@ template<size_t dim>
 bool  Operand<dim>::operator==( Operand<dim>& op ) const 
  {
     if ( prop_key_.type != op.prop_key_.type )
-      throw csmp::Exception( FATAL_ERROR, "Operand::operator==", name_.c_str(),
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Operand::operator==", name_.c_str(),
                                    "cannot compare Operands with different variable types");
     if ( prop_key_.type == SCALAR ) 
       return (scalar_storage_ == op.scalar_storage_);
@@ -1922,7 +1922,7 @@ bool Operand<dim>::IsWithinRange( const cspT& val ) const
           std::cerr <<"\n'"<< name_ <<"' has erratic value:";
           val.Out(std::cerr);
           std::cerr << std::endl << std::endl;
-          csmp_error.notice( ERROR, "Operand::IsWithinRange", "Property value out of range.");
+          csmp_error.notice( CSMP_ERROR, "Operand::IsWithinRange", "Property value out of range.");
           return false;
        }
 

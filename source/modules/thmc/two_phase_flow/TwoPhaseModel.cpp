@@ -57,31 +57,31 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
  {
 
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
 
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       snr, " variable must be scalar element property" );
 
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       swr, " variable must be scalar element property" );
 
     if (sw_ro_mu_placement_)
     {
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                           sat, " variable must be scalar node property" );
 
     }
     else
     {
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                           sat, " variable must be scalar element property" );
 
     }
@@ -128,63 +128,63 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    tensor_permeability_(false)
  {
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
                       
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       snr, " variable must be scalar element property" ); 
                       
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       swr, " variable must be scalar element property" );
     
     if (sw_ro_mu_placement_)
     {
         if ( mun_key_.place != NODE || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           mun, " variable must be scalar node property" ); 
                           
         if ( muw_key_.place != NODE || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           muw, " variable must be scalar node property" ); 
                           
         if ( rhn_key_.place != NODE || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhn, " variable must be scalar node property" ); 
                           
         if ( rhw_key_.place != NODE || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhw, " variable must be scalar node property" ); 
                           
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           sat, " variable must be scalar node property" ); 
         
     }
     else
     {
         if ( mun_key_.place != ELEMENT || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           mun, " variable must be scalar element property" ); 
                           
         if ( muw_key_.place != ELEMENT || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           muw, " variable must be scalar element property" ); 
                           
         if ( rhn_key_.place != ELEMENT || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhn, " variable must be scalar element property" ); 
                           
         if ( rhw_key_.place != ELEMENT || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhw, " variable must be scalar element property" ); 
                           
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           sat, " variable must be scalar element property" ); 
     
     }

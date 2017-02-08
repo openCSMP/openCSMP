@@ -42,17 +42,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
                         "residual saturation wetting phase")
  {
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }
@@ -81,17 +81,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
  {
  
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }

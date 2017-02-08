@@ -21,12 +21,12 @@ NumIntegral_NT_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_dNi_dV( const PropertyDatabas
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE ||
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_dNi_dV<dim>::(constructor)",
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_dNi_dV<dim>::(constructor)",
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE ||
          MathOperatorLHS<dim>::TestOperandType() != SCALAR)
-      throw csmp::Exception( ERROR, "NumIntegral_NT_dNi_dV<dim>::(constructor)",
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_dNi_dV<dim>::(constructor)",
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

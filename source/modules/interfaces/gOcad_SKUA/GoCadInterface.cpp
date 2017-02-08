@@ -177,7 +177,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname,
     while ( strstr( text_line, "PROPERTIES" ) == NULL && tries <= max_tries );
 
     if ( tries >= max_tries )     
-      throw csmp::Exception( ERROR, "GoCadInterface::ReadTetrahedralGocad3DSurface", 
+      throw csmp::Exception( CSMP_ERROR, "GoCadInterface::ReadTetrahedralGocad3DSurface", 
                              "PROPERTIES specifier not found" );
 
     // 3.1 reading property class header
@@ -229,7 +229,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname,
          // 3.2 Reading the property class headers for each property
          // --------------------------------------------------------
          if ( !IsInNextLine( ifs, "PROPERTY_CLASS_HEADER" ) )
-           throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DSurface", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DSurface", 
                                         "First PROPERTY_CLASS_HEADER not found" );
          else
            {
@@ -320,7 +320,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
     bool               debug(false);
     
     if ( !ifs )
-      throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
                                    "Invalid file input stream",
                                    "Reading could not be performed.");
    
@@ -332,7 +332,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
 
     if ( strstr( text_line, "TFACE" ) == NULL ) {
          ifs.seekg( pos );
-         throw csmp::Exception( ERROR, "GoCadInterface::ReadTSurface","TFACE descriptor missing");
+         throw csmp::Exception( CSMP_ERROR, "GoCadInterface::ReadTSurface","TFACE descriptor missing");
          return false;
       }
       
@@ -412,7 +412,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
             }
           // abnormal termination
           if ( token != NULL && strcmp( token, "CNP" ) )
-            throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
+            throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
                                          "Abnormal string read", token );
        }
 
@@ -451,7 +451,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
     cout <<"\nGoCadInterface::ReadTSurface: ";
     cout <<"completed reading first TFACE; Reading is stopped."<< endl;
 
-    throw csmp::Exception( WARNING, "GoCadInterface::ReadTSurface:", 
+    throw csmp::Exception( CSMP_WARNING, "GoCadInterface::ReadTSurface:", 
                    "If there is more than 1 surface in this file, the latter are ignored" );
 
 
@@ -490,7 +490,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
     // 4b. Checking for consecutive node numbering
     // -------------------------------------------
     if ( !VerifyConsecutiveNodeNumbering( triangles ) )
-      throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface", 
             "Nodes in input mesh are not numbered consecutivly");
 
 
@@ -601,7 +601,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // finding face with the same key and checking to which element
        // it belongs
        if ( (face_it=face_tree.find( face_key )) == face_tree.end() )
-         throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
                                       "Failed to retrieve face hash-key from multimap for element", face_key );
 
        // pre-empt effects of probable bug in CW Pro 5 STL: multimap should always return iterator
@@ -645,7 +645,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // ------
        hasher.Key( (*plit).second[2], (*plit).second[0], face_key );
        if ( (face_it=face_tree.find( face_key )) == face_tree.end() )
-         throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
                                       "Failed to retrieve face hash-key from multimap for element", face_key );
 
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
@@ -669,7 +669,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        // ------
        hasher.Key( (*plit).second[0], (*plit).second[1], face_key );
        if ( (face_it=face_tree.find( face_key )) == face_tree.end() )
-         throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSurface:", 
                                       "Failed to retrieve face hash-key from multimap for element", face_key );
 
        if ( face_it!=face_tree.begin() ) if ( (*(--face_it)).first != face_key ) face_it++;
@@ -833,7 +833,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
     ifstream ifs( file_name );
     
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh:",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh:",
                                    "File not found.",
                                    "Remember that extension '.so' is automatically appended" );
 
@@ -852,7 +852,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
 
     // seeking for word in text string
     if ( strstr( text_line, "GOCAD" ) == NULL )
-      throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh:",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh:",
                                    "GOCAD header string could not be found in input file");
    
     // 2. Identifying type of GoCad object
@@ -880,7 +880,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
     while ( strstr( text_line, "PROPERTIES" ) == NULL && tries <= max_tries );
 
     if ( tries >= max_tries )     
-      throw csmp::Exception( ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh", 
+      throw csmp::Exception( CSMP_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh", 
                              "PROPERTIES specifier not found" );
 
     // 3.1 reading property class header
@@ -933,7 +933,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
          // 3.2 Reading the property class headers for each property
          // --------------------------------------------------------
          if ( !IsInNextLine( ifs, "PROPERTY_CLASS_HEADER" ) )
-           throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTetrahedralGocad3DMesh", 
                                         "First PROPERTY_CLASS_HEADER not found" );
          else
            {
@@ -1096,7 +1096,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     if ( strstr( text_line, "TVOLUME" ) == NULL )
       {
          ifs.seekg( pos );
-         throw csmp::Exception( ERROR, "GoCadInterface::ReadTSolid", 
+         throw csmp::Exception( CSMP_ERROR, "GoCadInterface::ReadTSolid", 
                                 "TVOLUME descriptor missing.");
          return;
       }
@@ -1420,7 +1420,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
     // 4b. Checking for consecutive node numbering
     // ------------------------------------------
     if ( !VerifyConsecutiveNodeNumbering( tetrahedra ) )
-      throw csmp::Exception( FATAL_ERROR, "GoCadInterface::ReadTSolid", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface::ReadTSolid", 
             "Nodes in input mesh are not numbered consecutivly");
 
 
@@ -1757,7 +1757,7 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
     
     // 2. checking whether the model is actually 3-dimensional
     if ( xmin == xmax || ymin == ymax || zmin == zmax ) {
-         throw csmp::Exception( WARNING, "GoCadInterface::FlagEdgeNodesOfBoxShapedModel",
+         throw csmp::Exception( CSMP_WARNING, "GoCadInterface::FlagEdgeNodesOfBoxShapedModel",
                          "Model appears to be 2-dimensional. No edge-node flagging needed");
          return;
       }
@@ -1879,13 +1879,13 @@ const
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         throw csmp::Exception( FATAL_ERROR, "Model::OutputVariableToTSurface", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "Model::OutputVariableToTSurface", 
                                       "Output file could not be opened");
          return;
       }
    if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) 
      {
-         throw csmp::Exception( ERROR, "Model::OutputVariableToTSurface", 
+         throw csmp::Exception( CSMP_ERROR, "Model::OutputVariableToTSurface", 
                                 "IntegrationPoint variables must be output to Point format");
          return;
      } 
@@ -2099,7 +2099,7 @@ const
    const Region<dim>&  gref     = sgroup.Region( group_name );
 
    if ( prop_key.type != SCALAR ) {
-        throw csmp::Exception( ERROR, "Model<dim>::OutputVariableToTSurface", 
+        throw csmp::Exception( CSMP_ERROR, "Model<dim>::OutputVariableToTSurface", 
                        "With this method only scalars can be handled. Nothing is done..." ); 		       
         return;
      }
@@ -2119,7 +2119,7 @@ const
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         throw csmp::Exception( FATAL_ERROR, "Model<dim>::OutputVariableToTSurface", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "Model<dim>::OutputVariableToTSurface", 
                                       "Output file could not be opened");
          return;
       }
@@ -2202,7 +2202,7 @@ const
                          (*it)->Read(prop_key, ts );
                          for ( i=0; i<(*it)->Nodes(); i++ ) ts_elmt_data[ (*it)->N(i)->Idx() ] = ts;
                     default:
-                      throw Exception( ERROR, "GoCadInterface<dim>::OutputVariableToTSurface",
+                      throw Exception( CSMP_ERROR, "GoCadInterface<dim>::OutputVariableToTSurface",
                                       "Array or FlaggedArray variables are not handled yet.");
                 }
           }
@@ -2341,13 +2341,13 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
    if ( prop_list.empty() )
      {
-        throw csmp::Exception( WARNING, "Model<dim>::OutputVariablesToTSurface", 
+        throw csmp::Exception( CSMP_WARNING, "Model<dim>::OutputVariablesToTSurface", 
                                  "No properties were found. Nothing is done..." ); 		       
         return;
      }
    if ( dim != 2 )
      {
-        throw csmp::Exception( WARNING, "Model<dim>::OutputVariablesToTSurface", 
+        throw csmp::Exception( CSMP_WARNING, "Model<dim>::OutputVariablesToTSurface", 
                                  "This method is only for surface (2D) data. Nothing is done..." ); 		       
         return;
      }
@@ -2367,7 +2367,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         throw csmp::Exception( FATAL_ERROR, "Model<dim>::OutputVariablesToTSurface", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "Model<dim>::OutputVariablesToTSurface", 
                                       "Output file could not be opened");
          return;
       }
@@ -2547,7 +2547,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         throw csmp::Exception( ERROR, "Model<dim>::OutputVariableToTSolid", 
+         throw csmp::Exception( CSMP_ERROR, "Model<dim>::OutputVariableToTSolid", 
                                 "Output file could not be opened");
          return;
       }
@@ -2789,7 +2789,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
    if ( prop_key.type != SCALAR && prop_key.place == ELEMENT_INTEGRATION_POINT )
      {
-        throw csmp::Exception( WARNING, "GoCadInterface<dim>::OutputVariableToTSolid", 
+        throw csmp::Exception( CSMP_WARNING, "GoCadInterface<dim>::OutputVariableToTSolid", 
                         "With this method only scalar IntegrationPoint variables can be handled. Nothing is done..." ); 		       
         return;
      }
@@ -2809,7 +2809,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    ofs.open ( file, ios::out|ios::trunc );
    if ( !ofs )
      {
-         throw csmp::Exception( FATAL_ERROR, "GoCadInterface<dim>::OutputVariableToTSolid", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GoCadInterface<dim>::OutputVariableToTSolid", 
                                       "Output file could not be opened");
          return;
       }

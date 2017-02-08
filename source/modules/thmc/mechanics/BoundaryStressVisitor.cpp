@@ -32,15 +32,15 @@ BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
 //      nrml_(dim)
 {
     if ( Sn_key_.place != FACE || Sn_key_.type != SCALAR )
-        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "BoundaryStressVisitor (constructor):",
                               "'normal stress' must be a SCALAR face variable." );
 
     if ( Ss_key_.place != FACE || Ss_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "BoundaryStressVisitor (constructor):",
                               "'shear stress' must be a VECTOR face variable." );
 
     if ( F_key_.place != NODE || F_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "BoundaryStressVisitor (constructor):",
                               "'force' must be a VECTOR variable placed on the nodes." );
 }
 
@@ -274,7 +274,7 @@ void BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection( Face<dim>* 
            }
       }
    
-   throw csmp::Exception( ERROR, "BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection:",
+   throw csmp::Exception( CSMP_ERROR, "BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection:",
                          "case of boundary inside the model not handled yet." );
 
  } // end

@@ -40,20 +40,20 @@ Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::Upwind_Integral_dNT_rhsop_g_dV(cons
     // testing the Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT || 
          MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-       throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
+       throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    oper, "Operand must be a scalar property placed on the element." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
      
     if ( upwind_.key.place != NODE || upwind_.key.type != SCALAR )
-      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    upwind, "Upwind variable must be a scalar property placed on the nodes." );
                    
     if ( trigger_.key.place != NODE || trigger_.key.type != SCALAR )
-       throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
+       throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV<dim>::(constructor)", 
                    trigger, "Trigger variable must be a scalar property placed on the nodes." );
  }
 
@@ -135,7 +135,7 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& 
         MathOperatorRHS<dim>::RHS[i] *= e.Volume() * prefactor_ * gravity;
     
     } else { // lumped formulation
-      throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV::(ComputeContribution)",
+      throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV::(ComputeContribution)",
                       "", "Lumped formulation not allowed for this operator"); 
     }
 

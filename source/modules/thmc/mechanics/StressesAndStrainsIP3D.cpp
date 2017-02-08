@@ -54,31 +54,31 @@ StressesAndStrainsIP3D::StressesAndStrainsIP3D( const Model<3U>& sg,
 
     // testing the Operands 
     if ( strain_key_.type != TENSOR ) 
-      throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                      "'strain' must be a tensor property." );
 
     if ( stress_key_.type != TENSOR ) 
-      throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                      "'stress' must be a tensor property." );
 
     // displacement
     if ( MathOperatorLHS<3U>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<3U>::TestOperandType() != VECTOR )
-    throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                     test, "Operand 'displacement' must be a vector property placed on the nodes." );
 
     // Young's modulus
     if ( (MathOperatorLHS<3U>::MaterialOperandPlacement() != ELEMENT &&
           MathOperatorLHS<3U>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
          MathOperatorLHS<3U>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                     oper, "Operand 'Young's modulus' must be a scalar property placed on the constraint points or element." );
 
     // Poisson's ratio
     if ( (MathOperatorLHS<3U>::BasicOperandPlacement() != ELEMENT &&
           MathOperatorLHS<3U>::BasicOperandPlacement() != ELEMENT_INTEGRATION_POINT) ||
          MathOperatorLHS<3U>::BasicOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                     basic, "Basic Operand 'Poisson's ratio' must be a scalar property placed on the constraint points or element." );
 
    // principal stresses and strains (must all be element integration point properties)
@@ -95,39 +95,39 @@ StressesAndStrainsIP3D::StressesAndStrainsIP3D( const Model<3U>& sg,
          shear_key_   = sg.Database().StorageKey("max shear stress");
         
          if ( strain1_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'strain1' must be a vector property." );
 
          if ( strain2_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'strain2' must be a vector property." );
 
          if ( strain3_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'strain3' must be a vector property." );
 
          if ( sigma1_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'sigma1' principal stress must be a vector property." );
 
          if ( sigma2_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'sigma2' principal stress must be a vector property." );
 
          if ( sigma3_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'sigma3' principal stress must be a vector property." );
 
          if ( means_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'mean stress' must be a scalar property." );
 
          if ( dilat_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'dilatation' must be a scalar property." );
 
          if ( shear_key_.type != SCALAR or shear_key_.place != ELEMENT_INTEGRATION_POINT )
-           throw csmp::Exception( ERROR, "StressesAndStrainsIP3D::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D::(constructor)", 
                    "Operand 'max shear stress' must be a scalar property placed on the element integration point." );
      }
 
@@ -392,7 +392,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
              if ( !IP_STRAIN_TENSOR_.Eigen( evals_, evecs_, false ) ) {
                     e.Out(cout);
                     IP_STRAIN_TENSOR_.Out(cout);
-                    throw csmp::Exception( ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
+                    throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
                                           "Eigen decompostion of strain tensor failed.");
                 }
              sortEigenVectorsAndValues( evals_, evecs_ );
@@ -404,7 +404,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
              if ( !IP_STRESS_TENSOR_.Eigen( evals_, evecs_, false ) ) {
                   e.Out(cout);
                   IP_STRESS_TENSOR_.Out(cout);
-                  throw csmp::Exception( ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
+                  throw csmp::Exception( CSMP_ERROR, "StressesAndStrainsIP3D<3U>::WriteOperands:",
                                         "Eigen decompostion of stress tensor failed.");
                }
              sortEigenVectorsAndValues( evals_, evecs_ );

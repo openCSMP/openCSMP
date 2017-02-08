@@ -25,23 +25,23 @@ CVFEM_PressureGradientVisitor<dim>::CVFEM_PressureGradientVisitor( Model<dim>& m
     scale_key_      = model.Database().StorageKey(gradP_scaling);
 
 	if ( k_key_.type != SCALAR || k_key_.place != ELEMENT )
-      throw csmp::Exception( ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
                              permeability, " must be a scalar property placed on the elements." );
 
     if ( pres_key_.type != SCALAR || pres_key_.place != NODE )
-      throw csmp::Exception( ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
                              fluid_pressure, " must be a scalar property placed on the nodes." );
 
 	if ( lith_pres_key_.type != SCALAR || lith_pres_key_.place != NODE )
-      throw csmp::Exception( ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
                              lithostatic_pressure, " must be a scalar property placed on the nodes." );
 
 	if ( KgradP_key_.type != VECTOR || KgradP_key_.place != ELEMENT )
-      throw csmp::Exception( ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
                              KgradP, " must be a vector property placed on the element." );
 
 	if ( scale_key_.type != SCALAR || scale_key_.place != ELEMENT )
-      throw csmp::Exception( ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "CVFEM_PressureGradientVisitor::(constructor)", 
                              gradP_scaling, " must be a scalar property placed on the element." );
 
 }

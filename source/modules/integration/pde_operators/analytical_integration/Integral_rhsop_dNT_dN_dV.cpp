@@ -27,15 +27,15 @@ Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const Prope
 
     // testing the Operands
     if ( basic_.key.place != NODE || basic_.key.type != SCALAR )
-    throw csmp::Exception( ERROR, "Integral_NT_rhsop_N_dV<dim>::(constructor)",
+    throw csmp::Exception( CSMP_ERROR, "Integral_NT_rhsop_N_dV<dim>::(constructor)",
                        basic, "Basic variable must be a scalar property placed on the node." );
                    
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT and MathOperatorRHS<dim>::MaterialOperandPlacement() != REGION )
-    throw csmp::Exception( ERROR, "Integral_rhsop_dNT_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Integral_rhsop_dNT_dN_dV::(constructor)", 
                        oper, "Operand must be placed on the element or group.");
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "Integral_rhsop_dNT_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Integral_rhsop_dNT_dN_dV::(constructor)", 
                        test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 }
 

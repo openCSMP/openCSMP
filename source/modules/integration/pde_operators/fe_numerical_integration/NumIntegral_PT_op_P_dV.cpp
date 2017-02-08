@@ -27,12 +27,12 @@ NumIntegral_PT_op_P_dV<dim,SIMPLEX>::NumIntegral_PT_op_P_dV( const PropertyDatab
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR && 
          MathOperatorRHS<dim>::TestOperandType() == SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
                       test, "Non-scalar Operands require multiple degrees of freedom per node." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

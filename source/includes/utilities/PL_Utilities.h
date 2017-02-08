@@ -97,7 +97,7 @@ void numberToString( T number, std::string& recipient )
 // has 3 digits (for PARAVIEW on Mac)
 #ifdef __APPLE__
 template<>
-void numberToString<float>( float number, std::string& recipient )
+inline void numberToString<float>( float number, std::string& recipient )
 {
   std::ostringstream stringStream;
   // SKM FIX
@@ -110,7 +110,7 @@ void numberToString<float>( float number, std::string& recipient )
 }
 
 template<>
-void numberToString<double>( double number, std::string& recipient )
+inline void numberToString<double>( double number, std::string& recipient )
 {
   std::ostringstream stringStream;
   // SKM FIX

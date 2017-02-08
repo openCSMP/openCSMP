@@ -42,7 +42,7 @@ namespace csmp{
          if ( existingIndex != NULL ) cerr << (*existingIndex) << endl;
          cerr <<"\n\tnew Index: ";
          if ( newIndex != NULL ) cerr << (*newIndex) << endl;
-         throw csmp::Exception( ERROR, "IndexTracker::Attach:", "Existing Index not registered." );
+         throw csmp::Exception( CSMP_ERROR, "IndexTracker::Attach:", "Existing Index not registered." );
       }
     string parameterName = it->second;
     Attach( newIndex, parameterName );
@@ -53,7 +53,7 @@ namespace csmp{
     {
     map<csmp::Index*,string>::iterator it = trackedIndices_.find( const_cast<csmp::Index*>(existingIndex) );
     if( it == trackedIndices_.end() )
-      throw csmp::Exception( ERROR, "IndexTracker::Detach", "Index not registered" );
+      throw csmp::Exception( CSMP_ERROR, "IndexTracker::Detach", "Index not registered" );
     trackedIndices_.erase(it);
     }
 

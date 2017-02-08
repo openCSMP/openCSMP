@@ -32,21 +32,21 @@ ConductivityVisitor<dim>::ConductivityVisitor(Model<dim>& model,
       sshdKey_( ((specific_saturated_hydraulic_diffusivity==NULL) ? csmp::Index() : model.Database().StorageKey(specific_saturated_hydraulic_diffusivity)))
 {
     if ( sshcKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", specific_saturated_hydraulic_conductivity, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", specific_saturated_hydraulic_conductivity, " must be an element property." );
     if ( kKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", permeability, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", permeability, " must be an element property." );
     if ( muKey_.place != NODE )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", viscosity, " must be a node property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", viscosity, " must be a node property." );
     if ( rhoKey_ != csmp::Index() && rhoKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", density, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", density, " must be an element property." );
     if ( shcKey_ != csmp::Index() && shcKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", saturated_hydraulic_conductivity, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", saturated_hydraulic_conductivity, " must be an element property." );
     if ( ctKey_ != csmp::Index()  && ctKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", compressibility, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", compressibility, " must be an element property." );
     if ( phiKey_ != csmp::Index() && phiKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", porosity, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", porosity, " must be an element property." );
     if ( sshdKey_ != csmp::Index() && sshdKey_.place != ELEMENT )
-        throw csmp::Exception( ERROR, "ConductivityVisitor", specific_saturated_hydraulic_diffusivity, " must be an element property." );
+        throw csmp::Exception( CSMP_ERROR, "ConductivityVisitor", specific_saturated_hydraulic_diffusivity, " must be an element property." );
 
 #if defined(_OPENMP )
     thread_result_.resize(omp_get_max_threads());

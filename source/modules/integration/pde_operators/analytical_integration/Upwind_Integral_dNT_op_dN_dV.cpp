@@ -38,23 +38,23 @@ Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_op_dN_dV( const P
 
     // testing the Operands 
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
                     oper, "Operand must be placed on the element.");
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
                     test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (uvar_.place != NODE || uvar_.type != SCALAR)
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
                     upwind, "Upwind variable must be a scalar property placed on the nodes.");
                     
     if (tvar_.place != NODE || uvar_.type != SCALAR)
-    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_op_dN_dV::(constructor)", 
                     trigger, "Upwind variable must be a scalar property placed on the nodes.");
                     
 }
@@ -80,7 +80,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
     e.NodePropertyVector( tvar_, el_tvar);
   }
   else {
-    throw csmp::Exception( FATAL_ERROR, "Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+    throw csmp::Exception( CSMP_FATAL_ERROR, "Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
                                       "Only nodal properties allowed" );
   }
     

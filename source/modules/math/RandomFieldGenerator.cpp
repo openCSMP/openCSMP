@@ -123,19 +123,19 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   Index         key(mdl.Database().StorageKey(variable));
   
   if ( key.place != ELEMENT or key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
                      variable,    "Property must be a scalar variable placed on the elements");
   if ( dim != 2 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
                      "Methods works only in two dimensions");
   if ( xlength <= 0.0 or ylength <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
                      "Correlation must be larger than zero");
   if ( sigma <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
                      "Standard deviation must be larger than zero");
   if ( iterations < 50 ) {
-     throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
+     throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::RandomElementField2D",
                      "Number of iterations less than 50, Monte Carlo iteration possibly incorrect, resetting iterations to 50");
      iterations = 50;
    }
@@ -260,19 +260,19 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
   Index         key(mdl.Database().StorageKey(variable));
   
   if ( key.place != NODE or key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
                      variable,    "Property must be a scalar variable placed on the nodes");
   if ( dim != 2 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
                      "Methods works only in two dimensions");
   if ( xlength <= 0.0 or ylength <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
                      "Correlation must be larger than zero");
   if ( sigma <= 0.0 )
-     throw csmp::Exception( FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
                      "Standard deviation must be larger than zero");
   if ( iterations < 50 ) {
-     throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
+     throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::RandomNodeField2D",
                      "Number of iterations less than 50, Monte Carlo iteration possibly incorrect, resetting iterations to 50");
      iterations = 50;
    }
@@ -359,14 +359,14 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
 {
 
   if ( k_.size() == 0 ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
                       "Random field was not generated, no field is saved");
       return;
     }
  
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_.size() != mref.Elements() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::OutputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
     }
@@ -391,14 +391,14 @@ void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
 {
 
   if ( k_.size() == 0 ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
                       "Random field was not generated, no field is saved");
       return;
     }
   
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_.size() != mref.Nodes() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::OutputRandomNodeField2D",
                       "Size of the random field does not correspond to number of nodes in Model");
       return;
     }
@@ -430,7 +430,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   ifs.open( fname.c_str() );
   
   if ( !ifs.is_open() ) { 
-       throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
+       throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
                       "Input file for random element field could not be located");
       return;
     }
@@ -441,7 +441,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
 
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Elements() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::InputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
     }
@@ -471,7 +471,7 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
   ifs.open( fname.c_str() );
   
   if ( !ifs.is_open() ) { 
-       throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
+       throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
                       "Input file for random element field could not be located");
       return;
     }
@@ -482,7 +482,7 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
 
   const Region<dim>& mref = mdl.Region("Model");
   if ( k_temp.size() != mref.Nodes() ) {
-      throw csmp::Exception( ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
+      throw csmp::Exception( CSMP_ERROR, "RandomFieldGenerator<double64,2>::InputRandomNodeField2D",
                       "Size of the random field does not correspond to number of nodes in Model");
       return;
     }

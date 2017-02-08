@@ -365,7 +365,7 @@ inline PLACEMENT PropertyDatabase<dim>::Placement( const char* s ) const
      if ( iter != propList_.end() ) 
        return (*iter).second.key.place;
      else 
-       throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Placement", "Unable to identify property", s );
+       throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::Placement", "Unable to identify property", s );
 
      // shouldn't get here
      return MODEL;        
@@ -498,7 +498,7 @@ inline csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
          std::string message("Variable '");
          message += s;
          message +="' is undefined";
-         throw csmp::Exception( ERROR, "PropertyDatabase<dim>::StorageKey:", message );
+         throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::StorageKey:", message );
       }
     if ( iter == propList_.end() ) 
       return csmp::Index();
@@ -514,7 +514,7 @@ inline csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
     std::string message("Variable '");
     message += s;
     message +="' is undefined";
-    throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Parameter:", message );
+    throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::Parameter:", message );
   }
   if ( iter == propList_.end() ) 
     return csmp::Parameter();
@@ -533,7 +533,7 @@ inline const char*  PropertyDatabase<dim>::Usage( const char* s ) const
          std::string message("Variable '");
          message += s;
          message +="' is undefined";
-         throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Usage:", message );
+         throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::Usage:", message );
       }
     if ( iter == propList_.end() ) return "undefined";
 

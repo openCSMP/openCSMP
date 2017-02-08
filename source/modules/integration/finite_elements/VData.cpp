@@ -636,11 +636,11 @@ void VData::ResizeNodes( size_t nodes )
            if ( (*i) > node_max ) node_max = (*i);
         
        if ( nodes < node_max )
-         csmp_error.notice( WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
+         csmp_error.notice( CSMP_WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
       }
       
     if ( px.size() > 0U )
-      csmp_error.notice( WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
+      csmp_error.notice( CSMP_WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
     px.resize( nodes );  vector<double64>( px ).swap( px );
     py.resize( nodes );  vector<double64>( py ).swap( py );
     pz.resize( nodes );  vector<double64>( pz ).swap( pz );
@@ -1533,12 +1533,12 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
         
     // if nothing can be done because there are not enough node coordinates
     if ( node_set.size() > px.size() )
-      throw csmp::Exception( FATAL_ERROR, "VData::CheckForOrphanNodes",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "VData::CheckForOrphanNodes",
                      "plist contains more nodes node coordinate arrays");
  
     // detecting discontinuities in the node numbering
     if ( (*max_element( node_set.begin(), node_set.end() )) >= node_set.size() )
-      throw csmp::Exception( FATAL_ERROR, "VData::CheckForOrphanNodes",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "VData::CheckForOrphanNodes",
                      "there is a discontinuity in the node-numbers stored in 'plist'");
     
     // if there are extra nodes but everything else is OK, these can be removed 
@@ -1556,7 +1556,7 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
                     pz.resize( node_set.size() );
                     vector<double64>( pz ).swap( pz );
                  }
-               //throw csmp::Exception( INFO, "VData::CheckForOrphanNodes",
+               //throw csmp::Exception( CSMP_INFO, "VData::CheckForOrphanNodes",
                               //"there were orphan nodes but they have been removed as requested");
                  cout << "\nVData::CheckForOrphanNodes -- there were orphan nodes but they have been removed as requested\n";
              }
@@ -1678,13 +1678,13 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
     for ( vector<vector<size_t> >::const_iterator
           it=new_plist.begin(); it!=new_plist.end(); it++ )
       if ( (*it).empty() )
-        throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "VData::ReduceTo",
                               "The reduced 'plist' deque contains empty entries. Unable to continue");
     if( with_connectivity )
         for ( vector<vector<long64> >::const_iterator
               it=new_pfverts.begin(); it!=new_pfverts.end(); it++ )
           if ( (*it).empty() )
-            throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
+            throw csmp::Exception( CSMP_FATAL_ERROR, "VData::ReduceTo",
                                   "The reduced 'pverts' deque contains empty entries. Unable to continue");
 
     // reassigning the plist and pfverts now
@@ -1728,7 +1728,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
               {
                   map<size_t,size_t>::const_iterator nit=o_n_node_ids.find( *pit );
                   if ( nit == o_n_node_ids.end() )
-                     throw csmp::Exception( ERROR, "VData::ReduceTo",
+                     throw csmp::Exception( CSMP_ERROR, "VData::ReduceTo",
                                                    "'plist' node ID could not be updated");
                   else *pit = (*nit).second;
                }

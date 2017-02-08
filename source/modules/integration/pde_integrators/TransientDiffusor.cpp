@@ -33,31 +33,31 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
    dep_var_name_(diffusing_variable)
  {
    	if ( !isoparametricElementMesh( sg ) )
-		  throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+		  throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
 		                                     "elements are not isoparametric; use other Algorithm" ); 
 
     const PropertyDatabase<dim>&   p_ref = sg.Database();
     
     csmp::Index  diffusivity_key = p_ref.StorageKey(diffusivity);
     if ( diffusivity_key.place != ELEMENT  and  diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusivity, "variable must be placed on element or constraint point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              storage_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(element_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              element_source_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     // setting the PDE operators up for transient computation
@@ -110,36 +110,36 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
    dep_var_name_(diffusing_variable)
  {
     if ( !isoparametricElementMesh( sg ) )
-          throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                              "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&   p_ref = sg.Database();
     
     csmp::Index  diffusivity_key = p_ref.StorageKey(diffusivity);
     if ( diffusivity_key.place != ELEMENT  and  diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusivity, "variable must be placed on element or constraint point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              storage_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(element_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              element_source_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  nsource_variable_key = p_ref.StorageKey(point_source_variable);
     if ( nsource_variable_key.place != NODE  and  nsource_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              point_source_variable, "variable must be a scalar placed on the node" ); 
 
     // setting the PDE operators up for transient computation
@@ -193,36 +193,36 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
    dep_var_name_(diffusing_variable)
  {
     if ( !isoparametricElementMesh( sg ) )
-          throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&   p_ref = sg.Database();
     
     csmp::Index  diffusivity_key = p_ref.StorageKey(diffusivity);
     if ( diffusivity_key.place != ELEMENT  and  diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusivity, "lefthand variable must be placed on element or constraint point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              storage_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a vector placed on element or integration point" ); 
 
@@ -278,41 +278,41 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
    dep_var_name_(diffusing_variable)
  {
     if ( !isoparametricElementMesh( sg ) )
-          throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):",
                                               "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&   p_ref = sg.Database();
     
     csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
     if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              lhs_diffusivity, "lefthand variable must be placed on element or constraint point" ); 
 
     csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
     if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              rhs_diffusivity, "righthand variable must be placed on element or constraint point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  storage_variable_key = p_ref.StorageKey(storage_variable);
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              storage_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TransientDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a vector placed on element or integration point" ); 
 

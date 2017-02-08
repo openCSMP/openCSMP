@@ -100,7 +100,7 @@ void PropertyAtPointVisitor<dim>::SetPropertyKeys( const char* prop )
 
     if (prop_idx_.type != SCALAR && prop_idx_.type != VECTOR && prop_idx_.type != TENSOR )
     {
-        csmp_error.notice( FATAL_ERROR, "PropertyAtPointVisitor<dim>::SetNodeAndElementPropertyKeys",
+        csmp_error.notice( CSMP_FATAL_ERROR, "PropertyAtPointVisitor<dim>::SetNodeAndElementPropertyKeys",
                            prop, "Element property must be a scalar, vector or tensor" );
     }
 }
@@ -450,7 +450,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double6
         // warning if the element not found at all
         if( listOfCheckedElements.size() >= maxElementsInTheMesh_-1 )
         {
-            csmp_error.notice( ERROR," PropertyAtPointVisitor<>::Visit:Element: Current point not found",
+            csmp_error.notice( CSMP_ERROR," PropertyAtPointVisitor<>::Visit:Element: Current point not found",
                                " Probably point is out of the meshed domain");
             TargetElement_ = NULL;
         }
@@ -594,7 +594,7 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                 }
                 else
                 {
-                    csmp_error.notice( ERROR," PropertyAtPointVisitor<>::Visit:Element() Property type not supported"," Probably wrong type of property");
+                    csmp_error.notice( CSMP_ERROR," PropertyAtPointVisitor<>::Visit:Element() Property type not supported"," Probably wrong type of property");
                 }
 
             }// if  target element found - resulOfSearch, we are checking the properties

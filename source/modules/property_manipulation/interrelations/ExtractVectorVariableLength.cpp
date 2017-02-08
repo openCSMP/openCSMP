@@ -18,18 +18,18 @@ ExtractVectorVariableLength<dim>::ExtractVectorVariableLength( const PropertyDat
     Interrelation<dim>::ResultProperty( to_scalar_var );
     
     if ( V.Type() != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
                                    "Extraction variable must be of VectorVariable type");
     if ( S.Type() != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
                                    "Extracted variable must be of ScalarVariable type");
  
     if ( V.Placement() == ELEMENT && S.Placement() != ELEMENT )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
                                    "Element variable cannot be extrapolated to elsewhere");
    
     if ( V.Placement() != ELEMENT && V.Placement() != S.Placement() )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableLength::(constructor)", 
                                    "Incompatible placement of input variables");
  }
 

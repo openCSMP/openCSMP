@@ -31,19 +31,19 @@ NumIntegral_BT_D_op_dV<dim,SIMPLEX>::NumIntegral_BT_D_op_dV( const PropertyDatab
 
     // verify here that the operands have the correct placement and type 
     if ( Y_key_.place != nu_key_.place ) 
-      throw csmp::Exception( ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
                                  "Young's modulus variable must have same placement as Poisson's ratio.");
 
    if ( (Y_key_.place != ELEMENT or Y_key_.place != ELEMENT_INTEGRATION_POINT) && Y_key_.type != SCALAR ) {
-        throw csmp::Exception( ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
+        throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
                                "Modulus variable must be a scalar placed on the element.");
      }
    if ( (nu_key_.place != ELEMENT or nu_key_.place != ELEMENT_INTEGRATION_POINT) && nu_key_.type != SCALAR ) {
-        throw csmp::Exception( ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
+        throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
                                "Poisson's ratio must be a scalar placed on the element.");
      }
    if ( nu_key_.place != Y_key_.place ) {
-        throw csmp::Exception( ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
+        throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_op_dV<dim>::(constructor)", 
                                "Young's modulus and Poisson's ratio must have the same placement.");
      }
      
@@ -202,7 +202,7 @@ void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 
          if ( detJ <= 0. ) {
               cout <<"\nDeterminant of Jacobian at Gauss point: "<< i <<": "<< detJ << endl;
-              throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_op_dV<dim>::ComputeContribution",
+              throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_BT_D_op_dV<dim>::ComputeContribution",
                               "Jacobian transformation failed.");
            }
          // transposing B -> BT 

@@ -53,7 +53,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
    var_name(var_name)
  {
     if ( place == BOUNDARY )
-      throw Exception( ERROR, "PropertyHandle<dim>(constructor)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>(constructor)",
                        var_name, "Property handles cannot handle BOUNDARY properties" );
 
     // if the variable exists the Operand is associated with it
@@ -101,7 +101,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
    var_name(var_name)
  {
     if ( place == BOUNDARY )
-      throw Exception( ERROR, "PropertyHandle<dim>(constructor)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>(constructor)",
                        var_name, "Property handles cannot handle BOUNDARY properties" );
 
     // if the variable exists the Operand is associated with it
@@ -177,19 +177,19 @@ template<size_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
  {
     if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
  
     if ( &op != this ) {
          // key is not touched, thus placement and variable type must remain
          // the same as well and all other variables are retained
          if ( group_name != op.group_name )
-           throw csmp::Exception( WARNING, "PropertyHandle<dim>::operator=", 
+           throw csmp::Exception( CSMP_WARNING, "PropertyHandle<dim>::operator=", 
                           "operands have different targets using that of the assigned operand"  );
          group_name = op.group_name; 
  
           if ( var_name != op.var_name ) {
-               throw csmp::Exception( WARNING, "PropertyHandle<dim>::operator=", 
+               throw csmp::Exception( CSMP_WARNING, "PropertyHandle<dim>::operator=", 
                               "target operands have different names, no assignment was made"  );
                return *this;
             }
@@ -201,7 +201,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
     
        // these combinations of properties are not possible   
        if ( key.place != opkey.place )
-         throw Exception( ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
+         throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
                           VariableName(), "the property that shall be assigned must have the same placement as this one" );
        
         switch( key.type ) {
@@ -231,7 +231,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
                             group.Store( key, makeScalar( flag_output, group.Read( opkey )) );
 	                      break;
 	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                         throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                               "BOUNDARY and MODEL properties are not handled by this class yet."  );
 	                }
 	           break;
@@ -270,7 +270,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
                             }     
 	                      break;
 	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                         throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                               "BOUNDARY and MODEL properties are not handled by this class yet."  );
 	                }
 	           break;
@@ -309,12 +309,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
                             }     
 	                      break;
 	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                         throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                               "BOUNDARY and MODEL properties are not handled by this class yet."  );
 	                }
 	            break;
 	          default:
-              throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+              throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                              "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
           }
       }
@@ -398,7 +398,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
                           (*eit)->Store( key_, sc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
              }
@@ -425,7 +425,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
                           (*eit)->Store( key_, vc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
              }
@@ -452,13 +452,13 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double64 val )
                           (*eit)->Store( key_, ts );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
               }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -499,7 +499,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -520,7 +520,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           (*eit)->Store( key, vc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -541,12 +541,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           (*eit)->Store( key, ts );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -583,7 +583,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -618,7 +618,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                           }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
              }
@@ -628,7 +628,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
               cout <<"No assignments were made."<< endl;
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -668,7 +668,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -694,12 +694,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                           if ( (*eit)->Status( key, 0 ) == flag_output ) (*eit)->Store( key, ts );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -717,27 +717,27 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != VECTOR ) {
-         throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of vectors )", 
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )", 
                                     "Type mismatch; PropertyHandle does not contain vectors" );
       }
     switch ( key.place ) {
          case NODE: 
               if ( group.Nodes() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
                                              "vector size does not match number of Nodes" ); 
            break;
          case ELEMENT_INTEGRATION_POINT:
               if ( group.IntegrationPoints() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
                                              "vector size does not match number of IntegrationPoints" ); 
            break;
          case ELEMENT:
               if ( group.Elements() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
                                              "vector size does not match number of Elements" ); 
             break;
          default:
-             throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+             throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                   "REGION and MODEL properties are not handled by this class yet."  );
       }
   
@@ -757,27 +757,27 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVa
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != TENSOR ) {
-         throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of tensors )", 
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )", 
                                     "Type mismatch; PropertyHandle does not contain tensors" );
       }
     switch ( key.place ) {
          case NODE: 
               if ( group.Nodes() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
                                              "vector size does not match number of Nodes" ); 
            break;
          case ELEMENT_INTEGRATION_POINT:
               if ( group.IntegrationPoints() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
                                              "vector size does not match number of IntegrationPoints" ); 
            break;
          case ELEMENT:
               if ( group.Elements() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
                                              "vector size does not match number of Elements" ); 
             break;
          default:
-             throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+             throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                   "REGION and MODEL properties are not handled by this class yet."  );
       }
   
@@ -867,7 +867,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -900,7 +900,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -933,12 +933,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -994,7 +994,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1027,7 +1027,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1060,12 +1060,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -1124,7 +1124,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1157,7 +1157,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1190,12 +1190,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -1250,7 +1250,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1283,7 +1283,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1316,12 +1316,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
       }
     IsWithinRange();
@@ -1370,20 +1370,20 @@ template<size_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>& op )
  {
     if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator+=(PropertyHandle)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator+=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
     csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
     csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
  
     if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
                                 "Nothing was done.");
          return *this;
       }
 
     //if ( key.place != opkey.place ) {
-    //     throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
+    //     throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
     //                            "Nothing was done.");
     //     return *this;
     //  }
@@ -1429,7 +1429,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                }
             break;
@@ -1465,7 +1465,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
               break;
@@ -1501,12 +1501,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
               break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        }
 
@@ -1554,7 +1554,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "This placement combination has not been implemented yet",
+        throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "This placement combination has not been implemented yet",
                                       "Nothing was done.");
         return *this;
     }
@@ -1570,19 +1570,19 @@ template<size_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>& op )
  {
      if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator-=(PropertyHandle)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator-=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
     csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
                                 "Nothing was done.");
          return *this;
       }
     //if ( key.place != opkey.place ) {
-    //     throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
+    //     throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
     //                            "Nothing was done.");
     //     return *this;
     //  }
@@ -1631,7 +1631,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -1667,7 +1667,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1703,12 +1703,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
@@ -1749,7 +1749,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator-=", "This placement combination has not been implemented yet",
+        throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator-=", "This placement combination has not been implemented yet",
                                       "Nothing was done.");
         return *this;
     }
@@ -1765,7 +1765,7 @@ template<size_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>& op )
  {
     if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator*=(PropertyHandle)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator*=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
@@ -1828,10 +1828,10 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                          }
                      }
                      else
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(*=)", "Type combination not implemented"  );
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(*=)", "Type combination not implemented"  );
                      break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -1867,7 +1867,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -1903,12 +1903,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
@@ -1950,7 +1950,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator*=", "This placement combination has not been implemented yet",
+        throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator*=", "This placement combination has not been implemented yet",
                                       "Nothing was done.");
         return *this;
     }
@@ -1966,19 +1966,19 @@ template<size_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>& op )
  {
     if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator/=(PropertyHandle)",
+      throw Exception( CSMP_ERROR, "PropertyHandle<dim>::operator/=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
     csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
                                 "Nothing was done.");
          return *this;
       }
     //if ( key.place != opkey.place ) {
-    //     throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
+    //     throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator+=", "Operands have not the same placement",
     //                            "Nothing was done.");
     //     return *this;
     //  }
@@ -2026,7 +2026,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2062,7 +2062,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2098,12 +2098,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
@@ -2144,7 +2144,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator/=", "This placement combination has not been implemented yet",
+        throw csmp::Exception( CSMP_ERROR, "PropertyHandle::operator/=", "This placement combination has not been implemented yet",
                                       "Nothing was done.");
         return *this;
     }
@@ -2217,7 +2217,7 @@ void  PropertyHandle<dim>::Squared()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2250,7 +2250,7 @@ void  PropertyHandle<dim>::Squared()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2283,12 +2283,12 @@ void  PropertyHandle<dim>::Squared()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -2347,7 +2347,7 @@ void  PropertyHandle<dim>::Sqrt()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2381,7 +2381,7 @@ void  PropertyHandle<dim>::Sqrt()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2420,12 +2420,12 @@ void  PropertyHandle<dim>::Sqrt()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -2490,7 +2490,7 @@ void  PropertyHandle<dim>::Ln()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2526,7 +2526,7 @@ void  PropertyHandle<dim>::Ln()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2565,12 +2565,12 @@ void  PropertyHandle<dim>::Ln()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -2633,7 +2633,7 @@ void  PropertyHandle<dim>::Log10()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2669,7 +2669,7 @@ void  PropertyHandle<dim>::Log10()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2707,13 +2707,13 @@ void  PropertyHandle<dim>::Log10()
                                (*eit)->Store( key, ts );
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                             }
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -2773,7 +2773,7 @@ void  PropertyHandle<dim>::Exp()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2806,7 +2806,7 @@ void  PropertyHandle<dim>::Exp()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2845,12 +2845,12 @@ void  PropertyHandle<dim>::Exp()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -2912,7 +2912,7 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -2945,7 +2945,7 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -2984,12 +2984,12 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3052,7 +3052,7 @@ void  PropertyHandle<dim>::ZapNAN( double64 with )
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3088,7 +3088,7 @@ void  PropertyHandle<dim>::ZapNAN( double64 with )
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3127,12 +3127,12 @@ void  PropertyHandle<dim>::ZapNAN( double64 with )
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3169,7 +3169,7 @@ void  PropertyHandle<dim>::Sin()
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Sin", "Operand value not in range of 0 to 2 Pi",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Sin", "Operand value not in range of 0 to 2 Pi",
                                 "Nothing was done.");
          return;
       }
@@ -3208,7 +3208,7 @@ void  PropertyHandle<dim>::Sin()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3241,7 +3241,7 @@ void  PropertyHandle<dim>::Sin()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3280,12 +3280,12 @@ void  PropertyHandle<dim>::Sin()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3322,7 +3322,7 @@ void  PropertyHandle<dim>::Cos()
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Cos", "Operand value not in range of 0 to 2 Pi",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Cos", "Operand value not in range of 0 to 2 Pi",
                                 "Nothing was done.");
          return;
       }
@@ -3361,7 +3361,7 @@ void  PropertyHandle<dim>::Cos()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3394,7 +3394,7 @@ void  PropertyHandle<dim>::Cos()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3433,12 +3433,12 @@ void  PropertyHandle<dim>::Cos()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3475,7 +3475,7 @@ void  PropertyHandle<dim>::Tan()
     Range( omin, omax );
     if ( omin < 0.0 || omax > (3.1415927*2.0) )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Tan", "Operand value not in range of 0 to 2 Pi",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Tan", "Operand value not in range of 0 to 2 Pi",
                                 "Nothing was done.");
          return;
       }
@@ -3514,7 +3514,7 @@ void  PropertyHandle<dim>::Tan()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3547,7 +3547,7 @@ void  PropertyHandle<dim>::Tan()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3586,12 +3586,12 @@ void  PropertyHandle<dim>::Tan()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3625,7 +3625,7 @@ void  PropertyHandle<dim>::Acos()
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Acos", "Operand value not in range of -1 to 1",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Acos", "Operand value not in range of -1 to 1",
                                 "Nothing was done.");
          return;
       }
@@ -3664,7 +3664,7 @@ void  PropertyHandle<dim>::Acos()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3697,7 +3697,7 @@ void  PropertyHandle<dim>::Acos()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3736,12 +3736,12 @@ void  PropertyHandle<dim>::Acos()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3775,7 +3775,7 @@ void  PropertyHandle<dim>::Asin()
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Asin", "Operand value not in range of -1 to 1",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Asin", "Operand value not in range of -1 to 1",
                                 "Nothing was done.");
          return;
       }
@@ -3814,7 +3814,7 @@ void  PropertyHandle<dim>::Asin()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3847,7 +3847,7 @@ void  PropertyHandle<dim>::Asin()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -3886,12 +3886,12 @@ void  PropertyHandle<dim>::Asin()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -3926,7 +3926,7 @@ void  PropertyHandle<dim>::Atan()
     Range( omin, omax );
     if ( omin < -1.0 || omax > 1.0 )
       {
-         throw csmp::Exception( ERROR, "PropertyHandle::Atan", "Operand value not in range of -1 to 1",
+         throw csmp::Exception( CSMP_ERROR, "PropertyHandle::Atan", "Operand value not in range of -1 to 1",
                                 "Nothing was done.");
          return;
       }
@@ -3965,7 +3965,7 @@ void  PropertyHandle<dim>::Atan()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
@@ -3998,7 +3998,7 @@ void  PropertyHandle<dim>::Atan()
                            }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
            break;
@@ -4037,12 +4037,12 @@ void  PropertyHandle<dim>::Atan()
                             }
                       break;
                    default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+                       throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                             "REGION and MODEL properties are not handled by this class yet."  );
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
+            throw csmp::Exception( CSMP_ERROR, "PropertyHandle<dim>::(method)", 
                            "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
        } 
     IsWithinRange();
@@ -4102,7 +4102,7 @@ bool  PropertyHandle<dim>::IsWithinRange() const
  {
     if ( key_.type == TENSOR ) {
          ErrorHandler&  csmp_error(ErrorHandler::Instance());
-         csmp_error.notice( WARNING, "PropertyHandle<dim>::IsWithinRange:",
+         csmp_error.notice( CSMP_WARNING, "PropertyHandle<dim>::IsWithinRange:",
                            "cannot return range of arbitrary tensors for which Eigenvalues cannot be found.");
          return true;
       }

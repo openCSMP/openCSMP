@@ -108,7 +108,7 @@ void  Solver::Solve( SparseMatrix& A,
  {
     // checking for consistent sizes 
     if ( A.Rows() != b.size() )
-      throw csmp::Exception( ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows");
+      throw csmp::Exception( CSMP_ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows");
 
     x.resize( b.size() );
     vector<double64>(x).swap(x);
@@ -230,7 +230,7 @@ void  Solver::Out( const vector<double64>& vec, const char* fname ) const
     strcat( file,".text" );
 
     if ((fp = fopen (file,"wt")) == NULL )
-      throw csmp::Exception( ERROR, "Solver::Out (vector<double64>)", "output file could not be created" );
+      throw csmp::Exception( CSMP_ERROR, "Solver::Out (vector<double64>)", "output file could not be created" );
 
     out( vec );
 

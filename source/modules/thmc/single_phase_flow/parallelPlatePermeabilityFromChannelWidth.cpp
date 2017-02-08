@@ -31,7 +31,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
  {
     if ( sg.Database().Type(channel_width) != SCALAR or 
          sg.Database().Placement(channel_width) != NODE )
-         throw csmp::Exception( ERROR, "parallelPlatePermeabilityFromChannelWidth: property '", 
+         throw csmp::Exception( CSMP_ERROR, "parallelPlatePermeabilityFromChannelWidth: property '", 
                                 channel_width, "' must be a scalar node property." );
 
     PropertyHandle<dim>  src( sg, "source term", SCALAR, ELEMENT ); src = 1.; // gives integral_x1_x2 d^3 / 12 mu

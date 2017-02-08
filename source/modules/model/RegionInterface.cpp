@@ -92,7 +92,7 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 const Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::Region( const std::string& region_name ) const
  {
     if ( region_name.empty() )
-      throw csmp::Exception( ERROR,
+      throw csmp::Exception( CSMP_ERROR,
                              "RegionsInterface<dim,REGION_COMPLEX>::Region: ",
                              "regions search string is empty" );
 
@@ -107,7 +107,7 @@ const Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::Region( const std::stri
     if ( iter != groupMap_.end() )
         return (*iter).second;
     else
-        throw csmp::Exception( ERROR,
+        throw csmp::Exception( CSMP_ERROR,
                                "RegionsInterface<dim,REGION_COMPLEX>::Region: ",
                                (std::string("region does not exist: ") + region_name) );
 
@@ -129,7 +129,7 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::Region( const std::string& region_name )
  {
     if ( region_name.empty() )
-      throw csmp::Exception( ERROR,
+      throw csmp::Exception( CSMP_ERROR,
                              "RegionsInterface<dim,REGION_COMPLEX>::Region: ",
                              "regions search string is empty" );
 
@@ -142,7 +142,7 @@ Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::Region( const std::string& re
     if ( iter != groupMap_.end() )
         return (*iter).second;
     else
-        throw csmp::Exception( ERROR,
+        throw csmp::Exception( CSMP_ERROR,
                                "RegionsInterface<dim,REGION_COMPLEX>::Region:",
                                (std::string("region does not exist: ") + region_name) );
 
@@ -157,7 +157,7 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 const Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::AllElementRegion() const
  {
     if ( masterRegion_.empty() )
-      throw csmp::Exception( ERROR,
+      throw csmp::Exception( CSMP_ERROR,
                              "RegionsInterface<dim,REGION_COMPLEX>::AllElementRegion:",
                               masterRegion_, "appears to not have been initialized." );
 
@@ -166,7 +166,7 @@ const Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::AllElementRegion() cons
     if ( iter != groupMap_.end() )
         return (*iter).second;
     else
-        throw csmp::Exception( ERROR,
+        throw csmp::Exception( CSMP_ERROR,
                                "RegionsInterface<dim,REGION_COMPLEX>::AllElementRegion: ",
                                (std::string("region does not exist: ") + masterRegion_) );
 
@@ -218,7 +218,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
    
     // does this region already exist
     if ( ContainsRegion(masterRegion_) ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
+         csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
                             masterRegion_.c_str(), " already exists; nothing was done." );
          return false;
       }
@@ -233,13 +233,13 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
                                                                                                       reestablishNeighborConnectivity );
          if ( elements < static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() ) {
               std::cerr <<"\n\n\tdiscovered only "<< elements <<" versus "<< static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() <<" elements.\n\n";
-              csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
+              csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
                                 "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
            }
       }
    
     else {
-         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
+         csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode:",
                             masterRegion_, "region could not be formed.");
          return false;
       }
@@ -260,7 +260,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // does this region already exist
     if ( ContainsRegion(regionname) ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
+         csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
                             regionname, "region already exists; nothing was done." );
          return false;
       }
@@ -279,7 +279,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
                                                   reestablishNeighborConnectivity );
    
     else {
-         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
+         csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
                             regionname, "region could not be formed.");
          return false;
       }
@@ -346,7 +346,7 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
    {
       // check whether region exists (should be a notice only, nothrow)
       if( !ContainsRegion( regionName ) )
-        throw csmp::Exception( WARNING,
+        throw csmp::Exception( CSMP_WARNING,
                                "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
                                "region did not exist: ",
                                regionName );
@@ -398,7 +398,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
 
     FILE*  fp(0);
     if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
-         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary:",
+         csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary:",
                             bin_file, "file could not be opened; nothing was done." );
          return;
       }
@@ -483,7 +483,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      FILE*  fp(0);
      // opening the file
      if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
-          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+          csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
           return;
        }
@@ -511,7 +511,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
                it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
              //   ^^^^^^^^^
              if ( !it.second )
-                throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                                        info.name, "Region could not be formed; issue with binary file." );
 
              std::cout <<"\n\t\t'"<< masterRegion_ <<"'("<< (*it.first).second.Elements() <<" elements).";
@@ -520,7 +520,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              domainVariablesIn( fp, (*it.first).second, database );
           }
        }
-     else csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+     else csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                              masterRegion_.c_str(), "inconsistent binary record for region; no data could be read." );
    
      // getting a reference to this newly created master region
@@ -543,14 +543,14 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
                    it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
                  //   ^^^^^^^^^^^^^^^
                  if ( !it.second )
-                    throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+                    throw csmp::Exception( CSMP_FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                                            info.name, "Region could not be formed; issue with binary file." );
                
                   std::cout <<"\n\t\t'"<< (*it.first).first <<"'("<< (*it.first).second.Elements() <<" elements).";
                   domainVariablesIn( fp, (*it.first).second, database );
                }
          }
-     else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+     else csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                             bin_file, "does not contain any unique region descriptions; no regions were initialised." );
 
 
@@ -572,14 +572,14 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
                    it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
                  //   ^^^^^^^^^
                  if ( !it.second )
-                    throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+                    throw csmp::Exception( CSMP_FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                                            info.name, "Region could not be formed; issue with binary file." );
 
                   std::cout <<"\n\t\t'"<< (*it.first).first <<"'("<< (*it.first).second.Elements() <<" elements).";
                   domainVariablesIn( fp, (*it.first).second, database );
                }
          }
-     else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+     else csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                              bin_file, "does not contain any non-unique region descriptions; no regions were initialised." );
 
     // 6. cleaning up
@@ -603,7 +603,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary(  const char* reg
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // does this region already exist
     if ( !ContainsRegion(region_name) ) {
-         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
+         csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
                             region_name, "region does not exist; nothing was done." );
          return;
       }
@@ -622,7 +622,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary(  const char* reg
 
     FILE*  fp(0);
     if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
-         csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
+         csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
                             bin_file, "file could not be opened; nothing was done." );
          return;
       }
@@ -753,7 +753,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary( const char* reg
      FILE*  fp(0);
      // opening the file
      if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
-          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
+          csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
           return;
        }
@@ -784,7 +784,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary( const char* reg
           // elements were already accumulated so only the region variables need to be read
           domainVariablesIn( fp, this->Region(region_name), database );
        }
-     else csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
+     else csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
                              region_name, "inconsistent binary record for region; no data could be read." );
 
  } // end InputRegionFromBinary
@@ -802,7 +802,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // does this region already exist
     if ( !ContainsRegion(masterRegion_.c_str()) ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+         csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                             masterRegion_, "that all the regions shall be created from is missing; nothing can be done." );
          return;
       }
@@ -859,12 +859,12 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
                  if ( (*it.first).second.Elements() == 0U ) {
                       uniqueGroupMap_.erase( it.first );
-                      throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+                      throw csmp::Exception( CSMP_FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                                             text, "Region could not be formed; dataset contained no elements." );
                    }
                }
          }
-     else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+     else csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                             bin_file, "does not contain any unique region descriptions; none were initialised." );
 
      // ------------------
@@ -890,12 +890,12 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
              if ( (*it.first).second.Elements() == 0U ) {
                this->groupMap_.erase( it.first );
-               throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+               throw csmp::Exception( CSMP_FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                                       text, "Region could not be formed; dataset contained no elements." );
              }
            }
          }
-     else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
+     else csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
                              bin_file, "does not contain any non-unique region descriptions; none were initialised." );
 
      /// @todo (3-D) We misuse the regions file here to store Model variables
@@ -961,7 +961,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
        csmp::Index  prop_key = regionComplex->Database().StorageKey(prop);
 
        if ( prop_key.type != SCALAR )
-         throw csmp::Exception( INFO, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
+         throw csmp::Exception( CSMP_INFO, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
                                   "method can only be applied to SCALAR variables", 
                                   "no assignments were made" );
 
@@ -999,7 +999,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                   }
                 break;
             default:
-                throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
+                throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
              "Property placement not recognized; presumable placement REGION is not allowed in this context. ");
          }
 
@@ -1105,13 +1105,13 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
                groupMap_.erase( it.first );
-               csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
+               csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
                                            "Region could not be formed", output_region.c_str() );
                return false;
             }
         }
       else { 
-          csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
+          csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
                                        "Region could not be formed", output_region.c_str() );
           return false;
         }
@@ -1201,13 +1201,13 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
                groupMap_.erase( it.first );
-               csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
+               csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
                                  "Region could not be formed", output_region.c_str() );
                return false;
             }
         }
       else {
-            csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
+            csmp_error.notice( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom", 
                               "Region could not be formed. ", output_region.c_str() );
             return false;
         }
@@ -1225,7 +1225,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
       if ( element_ids.empty() )
-        throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
+        throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
                               "Region could not be formed because input element number vector is empty", groupname );
 
       std::string output_region(groupname);
@@ -1246,13 +1246,13 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
                groupMap_.erase( it.first );
-               csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
+               csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
                                      "Region could not be formed", output_region.c_str() );
                return false;
             }
         }
       else {
-           csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
+           csmp_error.notice( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
                             "Region could not be formed. Does this region already exist?", output_region.c_str() );
            return false;
         }
@@ -1384,7 +1384,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                 // removing the group if it contains no elements
                 if ( (*it.first).second.Elements() == 0U ) {
                      uniqueGroupMap_.erase( it.first );
-                     csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom", 
+                     csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom", 
                                                  "Region could not be formed", (*lit).c_str() );
                   }
                 else {
@@ -1393,7 +1393,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                   }
              } 
            else
-           throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom", 
+           throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom", 
                                  "Region could not be formed. Does this region already exist?", (*lit).c_str() );
         }
       std::cout << std::endl;
@@ -1422,7 +1422,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       std::pair<int32,int32>  dimensionality = mref.ElementSpatialDimensions();
       if ( dimensionality.first > 1U ) {
-           csmp_error.notice( WARNING,  "RegionInterface<dim,REGION_COMPLEX>::IsContiguous:",
+           csmp_error.notice( CSMP_WARNING,  "RegionInterface<dim,REGION_COMPLEX>::IsContiguous:",
                              "method can determine contiguity only for regions which consist only of same spatial dimension elements; returned false." );
            return false;
         }
@@ -1481,7 +1481,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
       if ( std::string("Model") == group or masterRegion_ == group ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
+         csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
                            "this operation is not allowed for region 'Model' or the master region." );
             return 0U;
         }
@@ -1530,7 +1530,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
              it = ( unique_group ) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
                                    : groupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
            if ( !it.second )
-             throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions", 
+             throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions", 
                                     subgroup_name.c_str(), "region could not be formed (name is probably not unique)" );
            else {
                 // accumulating the subregion
@@ -1578,7 +1578,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
    {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
       if ( std::string("Model") == group or masterRegion_ == group ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegionsByIdx:",
+         csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegionsByIdx:",
                            "this operation is not allowed for region 'Model' or the master region." );
             return 0U;
         }
@@ -1628,7 +1628,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
              it = ( unique_group ) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
                                    : groupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
            if ( !it.second )
-             throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions", 
+             throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions", 
                                     subgroup_name.c_str(), "region could not be formed (name is probably not unique)" );
            else {
                 std::vector<size_t>  elementsIdx( elements_contiguous_subset.begin(), elements_contiguous_subset.end() );
@@ -1840,13 +1840,13 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
                groupMap_.erase( it.first );
-               csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRectangularRegion", 
+               csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRectangularRegion", 
                                            "Region could not be formed", output_region.c_str() );
                return false;
             }
         }
       else {
-          csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRectangularRegion", 
+          csmp_error.notice( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRectangularRegion", 
                             "Region could not be formed. Does this region already exist?", output_region.c_str() );
           return false;
        }
@@ -1874,7 +1874,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
   void  RegionInterface<dim,REGION_COMPLEX>::CopyRegion( const char* existing_group, const char* new_copied_group, bool unique_group )
    {
       if ( !ContainsRegion(existing_group) ) 
-        throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion", 
+        throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion", 
                               "region to make a copy of could not be found",
                                existing_group );
 
@@ -1894,7 +1894,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
             it = (unique_group) ? uniqueGroupMap_.insert( make_pair( output_region, csmp::Region<dim>(gr_ref) ) ) :
                                   groupMap_.insert( make_pair( output_region, csmp::Region<dim>(gr_ref) ) );
        if ( !it.second )
-         throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion", 
+         throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion", 
                                "region to copy to- could not be formed",
                                 output_region.c_str() );
      
@@ -1966,14 +1966,14 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
       ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
       if ( ContainsRegion(ensemble_group) ) {
-           csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
+           csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                               ensemble_group, "output region already exists, adding an underscore to its name.");
            output_region +="_";
            std::cout <<  output_region << std::endl;
         }
 
       if ( input_groups.empty() ) {
-           csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
+           csmp_error.notice( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                              "No input regions were specified; merge could not be performed; no new region.",
                               ensemble_group );
            return;
@@ -1998,7 +1998,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
     		              eit=(*iter).second.ElementsBegin(); eit!=(*iter).second.ElementsEnd(); eit++ ) 
     		          element_ids.push_back( (*eit)->Idx() );
               }
-	        else csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
+	        else csmp_error.notice( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                                   (*it).c_str(), "region does not exist and was therefore not considered.");
         }
 
@@ -2008,13 +2008,13 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
              it=groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region,
                                              static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
            if ( !it.second )
-             throw csmp::Exception( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
+             throw csmp::Exception( CSMP_WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                                     output_region.c_str(), "region could not be formed." );
                            
            else (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), element_ids );
         }
       else
-      throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions", 
+      throw csmp::Exception( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions", 
 	                          "No elements in target list; merged region could not be build", 
 	                           output_region.c_str() );
      
@@ -2145,7 +2145,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
               }
             else {
                  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-                 csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::RegionUnion", 
+                 csmp_error.notice( CSMP_ERROR, "RegionsInterface<dim,REGION_COMPLEX>::RegionUnion", 
                                    "union of regions cannot be build", output_region.c_str() );
                  return false;
               }
@@ -2278,7 +2278,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
 
       std::string output_region(groupdiff);
       if ( ContainsRegion(groupdiff) ) {
-           csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionDifference: '", groupdiff,
+           csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionDifference: '", groupdiff,
                               "' already exists, adding an underscore at end of name.");
            output_region +="_";
            std::cout <<  output_region << std::endl;
@@ -2298,7 +2298,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
               {
                  size_t elements_of_new_region = difference( itera, iterb, (*it.first).second );
                  if ( elements_of_new_region == 0 )
-                   csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionDifference:", groupdiff,
+                   csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionDifference:", groupdiff,
                                      "to be formed. No elements found that belong only to one of the 2 input regions.");
                 
                 // removing the group if it contains no elements (extra error message is generated in function)
@@ -2419,22 +2419,22 @@ bool RegionInterface<dim,REGION_COMPLEX>::RegionBetween( const char* group1, con
       std::string region2(group2);
 
       if ( ( region1 == "Model" ) || ( region2 == "Model" ) ) {
-           csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween", "Region 'Model' not eligible for RegionBetween.");
+           csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween", "Region 'Model' not eligible for RegionBetween.");
            return false;
         }
       if ( group1 == group2 ) {
-           csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween", "Provided Regions are identical.");
+           csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween", "Provided Regions are identical.");
            return false;
         }
 
 
       if ( !regionComplex->IsUnique(group1) or !regionComplex->IsUnique(group2) ) {
-           csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
+           csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
                              "This method is intended for the creation of layer between unique Regions");
 
            // checking for a potential overlap of the regions, if the regions are non-unique
            if ( regionComplex->RegionIntersection( group1,  group2, "groupintersection" ) ) {
-                 csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
+                 csmp_error.notice( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
                                    "one of the supplied regions is not unique and they overlap",
                                    "It was therefore impossible to insert a boundary");
                  regionComplex->RemoveRegion( "groupintersection" );
@@ -2450,7 +2450,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::RegionBetween( const char* group1, con
       bool  succeeded( false );
 
       if ( shared_nodes == 0U )
-          csmp_error.notice( WARNING, "Model<dim,REGION_COMPLEX>::RegionBetween",
+          csmp_error.notice( CSMP_WARNING, "Model<dim,REGION_COMPLEX>::RegionBetween",
                              "The regions of interest do not share any nodes; trying to create a region between");
 
 
@@ -2468,7 +2468,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::RegionBetween( const char* group1, con
                 // assigning new region name
                 (*it.first).second.Name(region_between);
              }
-           else throw csmp::Exception( INFO, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
+           else throw csmp::Exception( CSMP_INFO, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
                                        static_cast<std::string>( region_name_between ).c_str(),
                                       "region already exists. Nothing was done.");
         }
@@ -2476,7 +2476,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::RegionBetween( const char* group1, con
       if( succeeded )
           std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::RegionBetweeen created region between " << group1 << " and " << group2 << std::endl;
       else
-        throw csmp::Exception( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetweeen", "Creating Region failed!" );
+        throw csmp::Exception( CSMP_ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetweeen", "Creating Region failed!" );
 
       return false;
   }
@@ -2501,17 +2501,17 @@ bool RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion( const char* region, 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     if ( !ContainsRegion(region) ) {
-          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
+          csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
                              region, "does not exist; nothing was done." );
           return false;
       }
     if ( !ContainsRegion(region_to_subtract) ) {
-          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
+          csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
                              region_to_subtract, "does not exist; nothing was done." );
           return false;
       }
     if ( IsUnique(region) )
-      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
+      csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
                          region, "is a unique region; therefore it should not overlap with another region." );
 
     // finding the elements that are shared among the 2 regions
@@ -2568,12 +2568,12 @@ bool RegionInterface<dim,REGION_COMPLEX>::MoveToNonUniqueRegions( const char* un
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     if ( !ContainsRegion(unique_region) ) {
-          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToNonUniqueRegions:",
+          csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToNonUniqueRegions:",
                              unique_region, "does not exist; nothing was done." );
           return false;
       }
     if ( !IsUnique(unique_region) ) {
-          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToNonUniqueRegions:",
+          csmp_error.notice( CSMP_WARNING, "RegionInterface<dim,REGION_COMPLEX>::MoveToNonUniqueRegions:",
                              unique_region, "is already a non-unique region; nothing was done." );
           return true;
       }

@@ -596,7 +596,7 @@ double64 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantInc
          return max_time_increment;
       }
     if ( courant_increment <= millisecond ) {
-         throw csmp::Exception( WARNING, "TwoPhaseImplicitNodeCenteredFVTransport::AnisotropicCourantIncrement (2-phase flow):",
+         throw csmp::Exception( CSMP_WARNING, "TwoPhaseImplicitNodeCenteredFVTransport::AnisotropicCourantIncrement (2-phase flow):",
                                          "courant increment is smaller than a millisecond. Check your boundary conditions." );
       }
     else {
@@ -645,7 +645,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::CheckTransportVariables()
 	          rhn_key.place != NODE   || rhw_key.place != NODE || 
 	          mun_key.type  != SCALAR || muw_key.type  != SCALAR ||
 	          rhn_key.type  != SCALAR || rhw_key.type  != SCALAR )
-	       throw csmp::Exception( FATAL_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport::CheckTransportVariables", 
+	       throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport::CheckTransportVariables", 
 	                                           "Fluid viscosities and densities must be scalar node properties" );
 
  } // end CheckTransportVariables
@@ -1079,7 +1079,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                           // the balance can only be evaluated if there is a halo stencil
                           if(!IsInteriorStencil(eptr)){
                                 if (halo_stencils_.find(eptr)!= halo_stencils_.end()) flux_balance -= flux;
-                                else throw csmp::Exception( ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson",
+                                else throw csmp::Exception( CSMP_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson",
                                                          "Attempt to access a finite volume stencil that was not initialized" );
                           }
 
@@ -1176,7 +1176,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                               // the balance can only be evaluated if there is a halo stencil
                               if(!IsInteriorStencil(eptr)){
                                     if (halo_stencils_.find(eptr)!= halo_stencils_.end()) flux_balance -= flux;
-                                    else throw csmp::Exception( ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson",
+                                    else throw csmp::Exception( CSMP_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson",
                                                              "Attempt to access a finite volume stencil that was not initialized" );
                               }
 
@@ -1357,7 +1357,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                           // the balance can only be evaluated if there is a halo stencil
                           if(!IsInteriorStencil(eptr)){
                                 if (halo_stencils_.find(eptr)!= halo_stencils_.end()) flux_balance -= flux;
-                                else throw csmp::Exception( ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrder_NonlinearNewtonRaphson",
+                                else throw csmp::Exception( CSMP_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrder_NonlinearNewtonRaphson",
                                                          "Attempt to access a finite volume stencil that was not initialized" );
                           }
 
@@ -1483,7 +1483,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                               // the balance can only be evaluated if there is a halo stencil
                               if(!IsInteriorStencil(eptr)){
                                     if (halo_stencils_.find(eptr)!= halo_stencils_.end()) flux_balance -= flux;
-                                    else throw csmp::Exception( ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrder_NonlinearNewtonRaphson",
+                                    else throw csmp::Exception( CSMP_ERROR, "TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrder_NonlinearNewtonRaphson",
                                                              "Attempt to access a finite volume stencil that was not initialized" );
                               }
 

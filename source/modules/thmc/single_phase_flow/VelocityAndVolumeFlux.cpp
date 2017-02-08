@@ -69,27 +69,27 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
     
     // testing the Operands 
     if ( this->MaterialOperandPlacement() != ELEMENT and this->MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT  )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    oper, " must be either an element or a constraint-point property." );
 
      if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
     if ( velo_key_.place != ELEMENT || velo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'velocity' must be a vector property placed on the element." );
 
     if ( ivelo_key_.place != ELEMENT || ivelo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'pore velocity' must be a vector property placed on the element." );
 
     if ( flux_key_.place != ELEMENT || flux_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'volume flux' must be a scalar property placed on the element." );
 
     if ( node_averaging ) 
@@ -99,15 +99,15 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
          nflux_key_  = sg.Database().StorageKey(nodal_volume_flux);
         
          if ( nvelo_key_.place != NODE || nvelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal velocity' must be a vector property placed on the node." );
 
          if ( nivelo_key_.place != NODE || ivelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal pore velocity' must be a vector property placed on the node." );
 
          if ( nflux_key_.place != NODE || nflux_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
@@ -117,7 +117,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
    
    if ( WithLowerDimensionalElements(sg) ) {
-        csmp_error.notice( WARNING, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+        csmp_error.notice( CSMP_WARNING, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
                           "your model contains lower dimensional elements, have you taken care of a thickness attribute?" );
      }
     
@@ -177,31 +177,31 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
     
     // testing the Operands 
     if ( this->MaterialOperandPlacement() != ELEMENT and this->MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT  )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    oper, " must be either an element or a constraint-point property." );
 
     if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
     if ( velo_key_.place != ELEMENT || velo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'velocity' must be a vector property placed on the element." );
 
     if ( ivelo_key_.place != ELEMENT || ivelo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'pore velocity' must be a vector property placed on the element." );
 
     if ( flux_key_.place != ELEMENT || flux_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'volume flux' must be a scalar property placed on the element." );
 
     if ( rhor_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Fluid density operand must be a scalar property." );
 
     if ( node_averaging ) 
@@ -211,15 +211,15 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
          nflux_key_  = sg.Database().StorageKey(nodal_volume_flux);
         
          if ( nvelo_key_.place != NODE || nvelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal velocity' must be a vector property placed on the node." );
 
          if ( nivelo_key_.place != NODE || ivelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal pore velocity' must be a vector property placed on the node." );
 
          if ( nflux_key_.place != NODE || nflux_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
@@ -227,7 +227,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
       }
    
    if ( WithLowerDimensionalElements(sg) )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
                 "post-processing of gravity-influenced flows in the lower-dimensional elements will not work with this visitor." );
    
  } // end constructor
@@ -287,35 +287,35 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
     
     // testing the Operands 
     if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                      oper, "Operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
     if ( velo_key_.place != ELEMENT || velo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'velocity' must be a vector property placed on the element." );
 
     if ( ivelo_key_.place != ELEMENT || ivelo_key_.type != VECTOR )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'pore velocity' must be a vector property placed on the element." );
 
     if ( flux_key_.place != ELEMENT || flux_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'volume flux' must be a scalar property placed on the element." );
 
     if ( rhor_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Fluid density operand must be a scalar property." );
 
     if (  mult_key_.place != NODE || mult_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Property multiplier must be a scalar property placed on the node." );
 
     if ( node_averaging ) 
@@ -325,15 +325,15 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
          nflux_key_  = sg.Database().StorageKey(nodal_volume_flux);
         
          if ( nvelo_key_.place != NODE || nvelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal velocity' must be a vector property placed on the node." );
 
          if ( nivelo_key_.place != NODE || ivelo_key_.type != VECTOR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal pore velocity' must be a vector property placed on the node." );
 
          if ( nflux_key_.place != NODE || nflux_key_.type != SCALAR )
-           throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
+           throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
@@ -341,7 +341,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
       }                                  
 
    if ( WithLowerDimensionalElements(sg) )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+     throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
                 "post-processing of gravity-influenced flows in the lower-dimensional elements will not work with this visitor." );
    
  } // end constructor
@@ -373,16 +373,16 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
      for ( size_t i=0; i<dim; i++ )
        {
           if ( velo_[i] < minmaxV_.first || velo_[i] > minmaxV_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+            throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
                           "Result variable 'velocity' outside of range specified in database file." );
 
           if ( ivelo_[i] < minmaxV_.first || ivelo_[i] > minmaxV_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+            throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
                           "Result variable 'pore velocity' outside of range specified in database file." );
        }
      // volume flux
      if ( flux_.Value() < minmaxF_.first || flux_.Value() > minmaxF_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+            throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
                           "Result variable 'volume flux' outside of range specified in database file." );
   }
 
@@ -421,7 +421,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
              e.NodePropertyVector( rhor_key_, rho_vec_ );
           }      
         else
-        throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim>::GetOperands", 
+        throw csmp::Exception( CSMP_ERROR, "VelocityAndVolumeFlux<dim>::GetOperands", 
                        "fluid density is neither a node nor element variable; can't deal with this.");
       }
       
@@ -468,7 +468,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
     else // if a nodal variable is dealt with
       {
          if ( e.FE()->IntegrationPoints() == 0U ) 
-           throw csmp::Exception( FATAL_ERROR, "VelocityAndVolumeFlux<dim>::GetOperands", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "VelocityAndVolumeFlux<dim>::GetOperands", 
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       

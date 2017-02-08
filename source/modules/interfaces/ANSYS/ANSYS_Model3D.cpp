@@ -317,7 +317,7 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
               (*nit).Idx( (*onit).second );
            }
          else
-           throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
+           throw csmp::Exception( CSMP_ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
                                  "node could not be identified; has it been newly created?" );
       }
    

@@ -232,7 +232,7 @@ size_t  ModelTopology::MinimumSpatialDimensionOfRegion( const char* region ) con
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(target_region));
     
     if ( it == model_regions.end() )
-      throw csmp::Exception( ERROR, "ModelTopology::MinimumSpatialDimensionOfRegion",
+      throw csmp::Exception( CSMP_ERROR, "ModelTopology::MinimumSpatialDimensionOfRegion",
                             "Target region could not be found; returning dim of entire model." );
     
     // if the target region exists, its element types are used to establish
@@ -435,7 +435,7 @@ void ModelTopology::ChangeElementType( const std::string& old_element_type,
   }
   
   if ( counter == 0U )
-    csmp_error.notice( ERROR, "ModelTopology::ChangeElementType",
+    csmp_error.notice( CSMP_ERROR, "ModelTopology::ChangeElementType",
                       "topology did not contain requested element type (should be ANSYS type)" );
 }
 
@@ -521,7 +521,7 @@ void  ModelTopology::EliminateElementTypes( const std::list<std::string>& etypes
     for ( lit=etypes.begin(); lit!=etypes.end(); lit++ )
       if ( (sit=existing_etypes.find((*lit))) == existing_etypes.end() ) {
             std::cout <<"\n'"<< (*lit) <<"'"<< std::endl;
-            throw csmp::Exception( INFO, "ModelTopology::EliminateElementTypes",
+            throw csmp::Exception( CSMP_INFO, "ModelTopology::EliminateElementTypes",
                                      "This element type is not contained in the model" );
         }
 
@@ -657,7 +657,7 @@ size_t  ModelTopology::ElementsOfRegion( const char* region ) const
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(region));
 
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( INFO, "ModelTopology::ElementsOfRegion",
+         throw csmp::Exception( CSMP_INFO, "ModelTopology::ElementsOfRegion",
                                 "Target region could not be found" );
          return 0U;
       }
@@ -671,11 +671,11 @@ bool  ModelTopology::IsWithinRegion( const char* region, size_t elmt_id ) const
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(region));
 
     if ( model_regions.empty() ) {
-         throw csmp::Exception( ERROR, "ModelTopology::IsWithinRegion",
+         throw csmp::Exception( CSMP_ERROR, "ModelTopology::IsWithinRegion",
                                     "The ModelTopology map of regions is empty" );
       }
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( ERROR, "ModelTopology::IsWithinRegion",
+         throw csmp::Exception( CSMP_ERROR, "ModelTopology::IsWithinRegion",
                                      region, " does not exist" );
          return false;
       }
@@ -706,7 +706,7 @@ std::vector<size_t>::const_iterator  ModelTopology::ElementsOfRegionBegin( const
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(region));
 
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( ERROR, "ModelTopology::ElementsOfRegionBegin",
+         throw csmp::Exception( CSMP_ERROR, "ModelTopology::ElementsOfRegionBegin",
                                     "Target region could not be found" );
 
          return (*model_regions.begin()).second.second.end();
@@ -737,7 +737,7 @@ std::vector<size_t>::const_iterator  ModelTopology::ElementsOfRegionEnd( const c
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(region));
 
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( ERROR, "ModelTopology::ElementsOfRegionEnd",
+         throw csmp::Exception( CSMP_ERROR, "ModelTopology::ElementsOfRegionEnd",
                                       "Target region could not be found" );
 
          return (*model_regions.begin()).second.second.end();
@@ -762,7 +762,7 @@ void  ModelTopology::ElementTypesOfRegion( const char* region, std::set<std::str
 
 
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( ERROR, "ModelTopology::ElementTypeOfRegion",
+         throw csmp::Exception( CSMP_ERROR, "ModelTopology::ElementTypeOfRegion",
                                     "Target region could not be found" );
 
          return;
@@ -869,7 +869,7 @@ void  readDesiredRegions( const char* regions_file,
     std::ifstream ifs(file_name.c_str());
 
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR,
+      throw csmp::Exception( CSMP_FATAL_ERROR,
                              "readDesiredRegions:", text_line,
                              "ASCII geometry input file could not be opened");
 
@@ -929,7 +929,7 @@ void  ModelTopology::ExportSelectionTo( const std::list<std::string>& regions, M
     for ( std::list<std::string>::const_iterator
           lit=regions.begin(); lit!=regions.end(); lit++ )
       if ( (it=model_regions.find((*lit))) == model_regions.end() )
-         throw csmp::Exception( ERROR, "\nModelTopology::ExportSelectionTo",
+         throw csmp::Exception( CSMP_ERROR, "\nModelTopology::ExportSelectionTo",
                                     "Target region does not exist, e.g. ", (*lit).c_str() );
       else
       mt.AddRegion( (*it).first.c_str(), (*it).second.first, (*it).second.second );
@@ -979,7 +979,7 @@ bool  ModelTopology::Contains( const char* region ) const
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( region == NULL ) {
-         csmp_error.notice( WARNING, "ModelTopology::Contains",
+         csmp_error.notice( CSMP_WARNING, "ModelTopology::Contains",
                            "method was passed empty const char* std::string" );
          return false;
       }
@@ -1026,7 +1026,7 @@ void  ModelTopology::RemoveRegion( const char* region )
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator  it(model_regions.find(region));
 
     if ( it == model_regions.end() ) {
-         throw csmp::Exception( WARNING, "ModelTopology::RemoveRegion","Nothing was done." );
+         throw csmp::Exception( CSMP_WARNING, "ModelTopology::RemoveRegion","Nothing was done." );
          return;
       }
 
@@ -1070,7 +1070,7 @@ void  ModelTopology::ReduceToRegions( const std::set<std::string>& desired_regio
           std::string errorMessage("unrecognized region in region file");
           std::string token_message("token: ");
           token_message += (*rit);
-          csmp_error.notice( ERROR, "ModelTopology::ReduceToRegions:",
+          csmp_error.notice( CSMP_ERROR, "ModelTopology::ReduceToRegions:",
                              token_message.c_str(), errorMessage.c_str() );
         }
 
@@ -1234,7 +1234,7 @@ bool ModelTopology::AddRegionsWithoutEquidimensionalCheck( const std::multimap<s
                                                            const std::multimap<std::string,std::vector<size_t> >& object_elements )
  {
     if ( object_specs.empty() || object_elements.empty() )
-      throw csmp::Exception( ERROR, "ModelTopology::AddRegionsWithoutEquidimensionalCheck:", "Method did not receive any region data." );
+      throw csmp::Exception( CSMP_ERROR, "ModelTopology::AddRegionsWithoutEquidimensionalCheck:", "Method did not receive any region data." );
 
     // 1. make a unique set of region names
     // ------------------------------------
@@ -1294,7 +1294,7 @@ bool ModelTopology
                                       const std::multimap<std::string,std::vector<size_t> >& object_elements )
  {
     if ( object_specs.empty() || object_elements.empty() )
-      throw csmp::Exception( WARNING, "ModelTopology::AddRegionsWithEquidimensionalCheck:", "Method did not receive any region data." );
+      throw csmp::Exception( CSMP_WARNING, "ModelTopology::AddRegionsWithEquidimensionalCheck:", "Method did not receive any region data." );
 
     // 1. make a unique set of region names
     // ------------------------------------
@@ -1458,11 +1458,11 @@ void  ModelTopology::PropertiesOfRegions( const char* regions_file,
     std::string          region;
 
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "ModelTopology::PropertiesOfRegions:", text_line,
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ModelTopology::PropertiesOfRegions:", text_line,
                                       "ASCII geometry input file could not be opened");
 
     if ( !props.empty() )
-      throw csmp::Exception( INFO, "ModelTopology::PropertiesOfRegions:", regions_file,
+      throw csmp::Exception( CSMP_INFO, "ModelTopology::PropertiesOfRegions:", regions_file,
                             "Supplied non-empty regions map is erased");
 
     // 1. reading and discarding file header
@@ -1492,7 +1492,7 @@ void  ModelTopology::PropertiesOfRegions( const char* regions_file,
                prop_vals.erase( prop_vals.begin(), prop_vals.end() );
            }
          else
-         throw csmp::Exception( ERROR, "\nModelTopology::PropertiesOfRegions",
+         throw csmp::Exception( CSMP_ERROR, "\nModelTopology::PropertiesOfRegions",
                            "Region file contains unrecognized region, e.g.", region.c_str() );
       }
     ifs.close();
@@ -1652,7 +1652,7 @@ bool  ModelTopology::CheckElementNumbering() const
               if ( litp1 != (*rit).second.second.end() and (*lit+1U) != *litp1 )
               {
                   if( csmp_error.Verbose() )
-                      csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", "Sequence of elemnt id's within the Region is not consecutive." );
+                      csmp_error.notice( CSMP_WARNING, "ModelTopology::CheckElementNumbering:", "Sequence of elemnt id's within the Region is not consecutive." );
                   return false;
               }
               // sequence is not consecutive if next element number cannot be inserted into it because it is non-unique
@@ -1660,7 +1660,7 @@ bool  ModelTopology::CheckElementNumbering() const
               if ( it.second == false )
               {
                   if( csmp_error.Verbose() )
-                      csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", "Sequence of elemnt id's within the Region is not consecutive." );
+                      csmp_error.notice( CSMP_WARNING, "ModelTopology::CheckElementNumbering:", "Sequence of elemnt id's within the Region is not consecutive." );
                   return false;
               }
               if( litp1 != litEnd ) ++litp1;
@@ -1673,7 +1673,7 @@ bool  ModelTopology::CheckElementNumbering() const
                 std::string  err_msg("first element number ");
                 err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
                 err_msg +=" is not equal to zero.";
-                csmp_error.notice( WARNING, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
+                csmp_error.notice( CSMP_WARNING, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
             }
           return false;
       }
@@ -1685,7 +1685,7 @@ bool  ModelTopology::CheckElementNumbering() const
                 err_msg += std::to_string( (*max_element(element_ids.begin(),element_ids.end())) );
                 err_msg +="-1 is not equal to the total number of elements ";
                 err_msg += std::to_string( element_ids.size() );
-                csmp_error.notice( ERROR, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
+                csmp_error.notice( CSMP_ERROR, "ModelTopology::CheckElementNumbering:", err_msg.c_str() );
             }
           return false;
       }
@@ -1733,7 +1733,7 @@ void  ModelTopology::CreateNewElementNumbers( std::map<size_t /* old-# */,size_t
     // ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker();
          const bool check_whether_max_value_is_size_minus1(true);
          if ( !ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( eid_mapping, check_whether_max_value_is_size_minus1 ) )
-           csmp_error.notice( WARNING, "ModelTopology::CreateNewElementNumbers:",
+           csmp_error.notice( CSMP_WARNING, "ModelTopology::CreateNewElementNumbers:",
                             "the renumbered element range is not consecutive and unique; trying to fix this.");
       }
 
@@ -1769,7 +1769,7 @@ void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mappin
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( eid_mapping.empty() ) {
-         csmp_error.notice( WARNING, "ModelTopology::RenumberElements",
+         csmp_error.notice( CSMP_WARNING, "ModelTopology::RenumberElements",
                            "The element number correspondance map is empty. Nothing was done.");
          return;
       }
@@ -1790,18 +1790,18 @@ void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mappin
       }
 
     if ( new_min_id != 0U )
-      throw csmp::Exception( WARNING, "ModelTopology::RenumberElements",
+      throw csmp::Exception( CSMP_WARNING, "ModelTopology::RenumberElements",
                             "The new number range does not commence with zero. Nothing was done.");
                                
     if ( new_max_id != new_eids.size()-1U)
-      throw csmp::Exception( WARNING, "ModelTopology::RenumberElements",
+      throw csmp::Exception( CSMP_WARNING, "ModelTopology::RenumberElements",
                             "The supplied maximum element number is not equal to N-elements-1. Nothing was done.");
 
     // is input range consecutive
     std::set<size_t>::const_iterator it2(++(new_eids.begin()));
     for ( std::set<size_t>::const_iterator it1=new_eids.begin(); it2!=new_eids.end(); it1++, it2++ )
       if ( (*it2) != ((*it1)+1U) ) 
-        throw csmp::Exception( WARNING, "ModelTopology::RenumberElements",
+        throw csmp::Exception( CSMP_WARNING, "ModelTopology::RenumberElements",
                               "The supplied new element numbers are not consecutive. Nothing was done.");
 #endif
 
@@ -1850,7 +1850,7 @@ void  ModelTopology::RenumberElements(csmp::VSet<dim>& vset, bool check_range )
   if ( check_range ) {
         const bool check_whether_max_value_is_size_minus1(true);
         if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) )
-          throw csmp::Exception( ERROR, "ModelTopology::RenumberElements:", "failed to calculate consecutive new element idx range.");
+          throw csmp::Exception( CSMP_ERROR, "ModelTopology::RenumberElements:", "failed to calculate consecutive new element idx range.");
     }
 }
 
@@ -1863,7 +1863,7 @@ template void ModelTopology::RenumberElements( csmp::VSet<3U>&,bool );
     // test: assert( ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker() );
 //    const bool check_whether_max_value_is_size_minus1(true);
 //    if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( eid_mapping, check_whether_max_value_is_size_minus1 ) )
-//      throw csmp::Exception( ERROR, "ModelTopology::CreateNewElementNumbers:", "failed to calculate consecutive new element idx range.");
+//      throw csmp::Exception( CSMP_ERROR, "ModelTopology::CreateNewElementNumbers:", "failed to calculate consecutive new element idx range.");
 
 
 template<size_t dim>
@@ -2175,7 +2175,7 @@ bool  ModelTopology::BoxShapedModel() const
          if ( !Contains("TOP")   || !Contains("BOTTOM") ||
               !Contains("FRONT") || !Contains("BACK")   ||
               !Contains("LEFT")  || !Contains("RIGHT") ) {
-              throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+              throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
        "not all boundaries of box-shaped model are not identified by appropriate std::strings; use methods for irregular model");
               return false;
            }
@@ -2304,19 +2304,19 @@ bool  ModelTopology::BoxShapedModel() const
 
      // 0. Preliminary checks
      if ( !fem_specs.VolumeElement(ANSYS_etype) ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+          throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                          "Element the faces of which shall be flagged must be a volume element");
           return false;
        }
      if ( !fem_specs.SurfaceElement(ANSYS_bound_etype) ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+          throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                          "Element used to assign model boundary must be a volume element");
           return false;
        }
      if ( !Contains("TOP")   || !Contains("BOTTOM") ||
           !Contains("FRONT") || !Contains("BACK")   ||
           !Contains("LEFT")  || !Contains("RIGHT") ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+          throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                          "Boundaries of box-shaped model must be identified by appropriate std::strings");
           return false;
        }
@@ -2355,7 +2355,7 @@ bool  ModelTopology::BoxShapedModel() const
                 // search for which family this surface element belongs to
                 if ( (fit=boundary_elements.find( *it2 )) == boundary_elements.end() ) {
                      std::cerr <<"\n\tElement ID: "<< (*it2) << std::endl;
-                     throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
+                     throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                                            "Surface element at side of volume element is not part of any boundary family");
                    }
                 else {
@@ -2425,7 +2425,7 @@ bool  ModelTopology::BoxShapedModel() const
 
      // 0. Preliminary checks
      if ( !BoxShapedModel() ) {
-          throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+          throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                          "Model is not box shaped");
           return false;
        }
@@ -2562,7 +2562,7 @@ bool  ModelTopology::BoxShapedModel() const
                        back_bottom.begin(), back_bottom.end(), cit );
 
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR1 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN );
      corner.erase( corner.begin(), corner.end() );
@@ -2571,7 +2571,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_bottom.begin(), back_bottom.end(),
                        back_right.begin(), back_right.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR2 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2580,7 +2580,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_right.begin(), back_right.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR3 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXX );
      corner.erase( corner.begin(), corner.end() );
@@ -2589,7 +2589,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( back_left.begin(), back_left.end(),
                        back_top.begin(), back_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR4 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MINXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2599,7 +2599,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_left.begin(), front_left.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR5 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2608,7 +2608,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_right.begin(), front_right.end(),
                        front_bottom.begin(), front_bottom.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR6 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MIN_MAXXZ );
      corner.erase( corner.begin(), corner.end() );
@@ -2617,7 +2617,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_right.begin(), front_right.end(),
                        front_top.begin(), front_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR7 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX );
      corner.erase( corner.begin(), corner.end() );
@@ -2626,7 +2626,7 @@ bool  ModelTopology::BoxShapedModel() const
      set_intersection( front_left.begin(), front_left.end(),
                        front_top.begin(), front_top.end(), cit );
      if ( corner.empty() )
-       throw csmp::Exception( ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::FlagBoundaryNodesOfBoxShapedModel",
                                                            "CNR8 could not be identified");
      else vset.AddBFlag( (*corner.begin()), CNR_MAX_MAXZ );
 
@@ -2827,22 +2827,22 @@ bool  ModelTopology::BoxShapedModel() const
 
      if ( ebottom.empty() ) {
            with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                       "BOTTOM boundary: No line elements could be identified." );
        }
      if ( eright.empty() ) {
            with_right=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                       "RIGHT boundary: No line elements could be identified." );
        }
      if ( etop.empty() ) {
            with_top=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                       "TOP boundary: No line elements could be identified." );
        }
      if ( eleft.empty() ) {
            with_bottom=false;
-           csmp_error.notice( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+           csmp_error.notice( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                       "LEFT boundary: No line elements could be identified." );
        }
 
@@ -2860,7 +2860,7 @@ bool  ModelTopology::BoxShapedModel() const
             fit=surface_neighbor_keys.find( (*it).first );
             // if key cannot be found
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                          "BOTTOM boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2880,7 +2880,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                          "RIGHT boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2900,7 +2900,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                          "TOP boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2920,7 +2920,7 @@ bool  ModelTopology::BoxShapedModel() const
             std::multimap<std::set<size_t>,std::pair<size_t,size_t> >::iterator
             fit=surface_neighbor_keys.find( (*it).first );
             if ( fit==surface_neighbor_keys.end() )
-              throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+              throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                          "LEFT boundary pfvert not identified." );
             else {
                 assert( (*fit).second.second < vset.Elements() );
@@ -2947,7 +2947,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                   "CNR1 could not be identified" );
      // CNR2
      set_intersection( nbottom.begin(), nbottom.end(), nright.begin(), nright.end(), cit );
@@ -2956,7 +2956,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                   "CNR2 could not be identified" );
      // CNR3
      set_intersection( nright.begin(), nright.end(), ntop.begin(), ntop.end(), cit );
@@ -2965,7 +2965,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                   "CNR3 could not be identified" );
      // CNR4
      set_intersection( ntop.begin(), ntop.end(), nleft.begin(), nleft.end(), cit );
@@ -2974,7 +2974,7 @@ bool  ModelTopology::BoxShapedModel() const
           corner.clear();
        }
      else
-       throw csmp::Exception( ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
+       throw csmp::Exception( CSMP_ERROR, "ModelTopology::BuildNeighborConnectivityOfRectangleShapedModel",
                                   "CNR4 could not be identified" );
 
   } // end BuildNeighborConnectivityOfRectangleShapedModel
@@ -3056,7 +3056,7 @@ bool  ModelTopology::BoxShapedModel() const
 
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
      if ( n_orientations_corrected > 0U ) {
-          csmp_error.notice( WARNING, "ModelTopology::correctSurfaceElementOrientations(2D)",
+          csmp_error.notice( CSMP_WARNING, "ModelTopology::correctSurfaceElementOrientations(2D)",
                                       "node-numbering in 'plist' was not counter-clockwise.");
           std::cerr <<"\t\tcorrections made: "<< n_orientations_corrected << std::endl << std::endl;
        }

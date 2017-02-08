@@ -17,11 +17,11 @@ Integral_dNT_dN_dV<dim,SIMPLEX>::Integral_dNT_dN_dV( const PropertyDatabase<dim>
 
     // testing the Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT or MathOperatorRHS<dim>::MaterialOperandPlacement() != REGION )
-      throw csmp::Exception( ERROR, "Integral_dNT_dN_dV::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_dN_dV::(constructor)", 
                     oper, "Operand must be placed on the element or group.");
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "Integral_dNT_dN_dV::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 }
 

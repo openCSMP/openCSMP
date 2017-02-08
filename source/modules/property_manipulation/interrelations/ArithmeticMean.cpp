@@ -29,11 +29,11 @@ ArithmeticMean<dim,var>::ArithmeticMean( const PropertyDatabase<dim>& p, const c
     string  var_type(typeid(var).name());
     // ugly but robust
     if ( p.Type(res_prop) == SCALAR and var_type.find("Scalar") == 0 )
-     throw Exception( ERROR, "ArithmeticArithmeticMean", "Result variable must match 'ScalarVariable' template parameter: ", res_prop );
+     throw Exception( CSMP_ERROR, "ArithmeticArithmeticMean", "Result variable must match 'ScalarVariable' template parameter: ", res_prop );
     else if ( p.Type(res_prop) == VECTOR and var_type.find("Vector") == 0 )
-     throw Exception( ERROR, "ArithmeticArithmeticMean", "Result variable must match 'VectorVariable' template parameter: ", res_prop );
+     throw Exception( CSMP_ERROR, "ArithmeticArithmeticMean", "Result variable must match 'VectorVariable' template parameter: ", res_prop );
     else if ( p.Type(res_prop) == TENSOR and var_type.find("Tensor") == 0 )
-     throw Exception( ERROR, "ArithmeticArithmeticMean", "Result variable must match 'TensorVariable' template parameter: ", res_prop );
+     throw Exception( CSMP_ERROR, "ArithmeticArithmeticMean", "Result variable must match 'TensorVariable' template parameter: ", res_prop );
  }
  
  

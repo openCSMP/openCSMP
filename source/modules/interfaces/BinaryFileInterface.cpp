@@ -135,7 +135,7 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          size_t  n0(0);
          fwrite( (void*) &n0, sizeof(size_t), 1, fp );
 
-         throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::WriteDataTo",
+         throw csmp::Exception( CSMP_ERROR, "BinaryFileInterface<dim>::WriteDataTo",
                          "Variable record was empty:", var_name );
 	     return false;
       }
@@ -159,7 +159,7 @@ string  BinaryFileInterface<dim>::ReadVariableName( const char* file_name ) cons
      // 1. opening the file
      FILE*  fp(0);
      if ( (fp=fopen( file_name, "rb")) == NULL ) {
-          throw csmp::Exception( FATAL_ERROR, "BinaryFileInterface<dim>::ReadDataFrom: file: ",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "BinaryFileInterface<dim>::ReadDataFrom: file: ",
                              file_name, " could not be opened" );
           return string("undefined variable");
        }
@@ -199,7 +199,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
      char  variable[200] = "undefined variable"; 
      skm_C_fread( fp, variable );
      if ( !pref.IsDefined(variable) ) {
-          throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
+          throw csmp::Exception( CSMP_ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
                          "Variable is not defined in model database:", variable );
           fclose( fp );
           return string(variable);
@@ -215,7 +215,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
      else if ( typeid(Var) == typeid(FlaggedArrayVariable) ) input_var_type = FLAGGEDARRAY;
 
      if ( input_var_type != pref.Type(variable) ) {
-          throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
+          throw csmp::Exception( CSMP_ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
                          "Supplied data object has different type than data" );
           fclose( fp );
           return string(variable);
