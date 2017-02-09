@@ -59,16 +59,6 @@ int main()
      ofs <<"#ifndef CSMP_NUMBER_TYPES_H"<< endl;
      ofs <<"#define CSMP_NUMBER_TYPES_H"<< endl << endl;
 
-#ifdef __MWERKS__
-     ofs <<"#ifdef __MWERKS__"<< endl;
-     ofs <<"#include <unix.h>"<< endl;
-     ofs <<"#include <size_t.h>"<< endl;
-     ofs <<"#ifndef size_t"<< endl;
-     ofs <<"typedef std::size_t  size_t;"<< endl;
-     ofs <<"#endif"<< endl;
-     ofs <<"#endif"<< endl << endl;
-#endif
-
      ofs <<"/**"                                                << endl;
      ofs <<"@file CSMP_number_types.h"                          << endl;
      ofs <<"@author S.K. Matthaei"                              << endl << endl;

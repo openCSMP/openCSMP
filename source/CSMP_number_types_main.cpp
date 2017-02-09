@@ -2,7 +2,6 @@
 #include <fstream>
 #include <cassert>
 #include <vector>
-
 #include <cmath>
 
 
@@ -50,28 +49,18 @@ int main()
      cout <<" versus vector<double>::size_type: "<< sizeof(vector<double>::size_type)  << endl;
      cout <<"\n\nUsing 'size_t' for loop integers."<< endl;
      assert( sizeof(size_t) == sizeof(vector<double>::size_type) );
-     // if this assertion fails please contact: stephan.matthai@gmail.com
+     // if this assertion fails please contact: stephan.matthai@unimelb.edu.au
 
      // 2. writing a corresponding header file for the
-     // CSP port to this platform
-     // -------------------------
+     // CSMP port to this platform
+     // --------------------------
      ofstream ofs("CSMP_number_types.h");
      ofs <<"#ifndef CSMP_NUMBER_TYPES_H"<< endl;
      ofs <<"#define CSMP_NUMBER_TYPES_H"<< endl << endl;
 
-#ifdef __MWERKS__
-     ofs <<"#ifdef __MWERKS__"<< endl;
-     ofs <<"#include <unix.h>"<< endl;
-     ofs <<"#include <size_t.h>"<< endl;
-     ofs <<"#ifndef size_t"<< endl;
-     ofs <<"typedef std::size_t  size_t;"<< endl;
-     ofs <<"#endif"<< endl;
-     ofs <<"#endif"<< endl << endl;
-#endif
-
      ofs <<"/**"                                                << endl;
      ofs <<"@file CSMP_number_types.h"                          << endl;
-     ofs <<"@author S.K. Matthaei"                              << endl << endl;
+     ofs <<"@author S.K. Matthai"                               << endl << endl;
      ofs <<"// ------------------------------------------------"<< endl << endl;
      ofs <<"// CSMP number types for current computing platform"<< endl << endl;
      ofs <<"// ------------------------------------------------"<< endl << endl;
