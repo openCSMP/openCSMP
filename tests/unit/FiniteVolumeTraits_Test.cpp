@@ -3283,6 +3283,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 		getInfoStream() << "Facet 3...";
+    vecNormal = ( elmt_ ).FacetNormal(2U);
         dumpVector<3>(getInfoStream(), "Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );

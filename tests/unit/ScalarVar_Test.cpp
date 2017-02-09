@@ -363,7 +363,7 @@ void ScalarVariable_Test::Sqrt_Function()
    ScalarVariable scalar2( ANY, 5. );
    
    scalar1.Sqrt();
-   _test( isnan(scalar1.Value()));
+   _test( isnan(scalar1.Value()) );
    _equal( scalar1.Flag(), ANY, fTolerance);
    scalar2.Sqrt();
    _equal( scalar2.Value(), sqrt(5.), fTolerance);
