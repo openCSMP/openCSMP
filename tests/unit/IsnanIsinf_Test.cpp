@@ -27,8 +27,11 @@ void IsnanIsinf_Test::run()
 	getInfoStream() << "isnan( -1.0/0.0 ) = "<< isnan(-1.0/zero);
 	_test( !isnan(-1.0/zero) );
 
+#if 0
+    // This is not guaranteed behavior; EDOM exception is also possible.
 	getInfoStream() << "isnan( sqrt(-1.0) ) = "<< isnan(sqrt(-1.0));
 	_test( isnan(sqrt(-1.0)) );
+#endif
 
 	// isinf tests
 
