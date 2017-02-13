@@ -11,37 +11,6 @@ namespace csmp {
 enum CSMP_MESSAGE { CSMP_INFO = 0, CSMP_EXCEPTION = -1, CSMP_WARNING = -2, CSMP_ERROR = -3, CSMP_FATAL_ERROR = -4 };
 
 
-// Support for old code
-#if defined(INFO)
-#warning "INFO has already been defined somewhere in an included dependency"
-#undef INFO
-#endif
-#define INFO CSMP_INFO
-
-#if defined(EXCEPTION)
-#warning "EXCEPTION has already been defined somewhere in an included dependency"
-#undef EXCEPTION
-#endif
-#define EXCEPTION CSMP_EXCEPTION
-
-#if defined(WARNING)
-#warning "WARNING has already been defined somewhere in an included dependency"
-#undef WARNING
-#endif
-#define WARNING CSMP_WARNING
-
-#if defined(ERROR)
-#warning "ERROR has already been defined somewhere in an included dependency"
-#undef ERROR
-#endif
-#define ERROR CSMP_ERROR
-
-#if defined(FATAL_ERROR)
-#warning "FATAL_ERROR has already been defined somewhere in an included dependency"
-#undef FATAL_ERROR
-#endif
-#define FATAL_ERROR CSMP_FATAL_ERROR
-
 /// convert enum to a printable string
 std::string  parseMessage( CSMP_MESSAGE );
 
