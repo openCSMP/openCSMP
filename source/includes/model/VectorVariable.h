@@ -291,8 +291,8 @@ inline VectorVariable<3U>::VectorVariable( const VectorVariable<3U>& v )
  }
 
 inline VectorVariable<3U>::VectorVariable( VectorVariable<3U>&& v )
- : flag{v.flag},
-   data{v.data}
+ : flag{std::move(v.flag)},
+   data{std::move(v.data)}
  {
  }
 

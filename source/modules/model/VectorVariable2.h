@@ -125,8 +125,8 @@ inline VectorVariable<2U>::VectorVariable( const VectorVariable<2U>& v )
 
 
 inline VectorVariable<2U>::VectorVariable( VectorVariable<2U>&& v )
-  : flag{v.flag},
-    data{v.data}
+  : flag{std::move(v.flag)},
+    data{std::move(v.data)}
  {
  }
 
