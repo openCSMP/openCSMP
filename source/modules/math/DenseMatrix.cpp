@@ -28,18 +28,6 @@ DenseMatrix<mn_max>::DenseMatrix( const DenseMatrix<mn_max>& mat )
  }
 
 
-
-/// move constructor
-// ---------------------------------------
-template<size_t mn_max>
-DenseMatrix<mn_max>::DenseMatrix( DenseMatrix<mn_max>&& mat )
- : data{mat.data},
-   rows{mat.rows},
-   cols{mat.cols}
- {
- }
-
-
 // constructor (i,j, value)
 // ---------------------------------------
 template<size_t mn_max>

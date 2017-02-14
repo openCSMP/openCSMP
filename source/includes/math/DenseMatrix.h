@@ -48,7 +48,6 @@ class DenseMatrix {
     DenseMatrix( size_t m, size_t n );
     DenseMatrix( size_t m, size_t n, double64 val );
     DenseMatrix( const DenseMatrix& );
-    DenseMatrix( DenseMatrix&& );
     ~DenseMatrix();
     size_t Rows() const;
     size_t Cols() const;
