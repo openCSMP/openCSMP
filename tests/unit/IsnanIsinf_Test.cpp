@@ -28,7 +28,7 @@ void IsnanIsinf_Test::run()
 	_test( !isnan(-1.0/zero) );
 
 #if 0
-    // This is not guaranteed behavior; EDOM exception is also possible.
+    // XXX FIXME Behaviour not guaranteed.
 	getInfoStream() << "isnan( sqrt(-1.0) ) = "<< isnan(sqrt(-1.0));
 	_test( isnan(sqrt(-1.0)) );
 #endif
@@ -38,11 +38,21 @@ void IsnanIsinf_Test::run()
 	getInfoStream() << "isinf( 0.0 ) = "<< isinf(0.0);
 	_test( !isinf(0.0) );
 
+#if 0
+    // XXX FIXME Behaviour not guaranteed.
+    //
+    // C standard 6.5.5:
+    //
+    // "The result of the / operator is the quotient from the division of
+    // the first operand by the second; the result of the % operator is
+    // the remainder. In both operations, if the value of the second
+    // operand is zero, the behavior is undefined."
 	getInfoStream() << "isinf( 1.0/0.0 ) = "<< isinf(1.0/zero);
 	_test( isinf(1.0/zero) );
 
 	getInfoStream() << "isinf( -1.0/0.0 ) = "<< isinf(-1.0/zero);
 	_test( isinf(-1.0/zero) );
+#endif
 
 	getInfoStream() << "isinf( sqrt(-1.0) ) = "<< isinf(sqrt(-1.0));
 	_test( !isinf(sqrt(-1.0)) );
@@ -51,6 +61,8 @@ void IsnanIsinf_Test::run()
 	getInfoStream() << "isfinite( 0.0 ) = "<< isfinite(0.0);
 	_test( isfinite(0.0) );
 
+#if 0
+    // XXX FIXME Behaviour not guaranteed.
 	getInfoStream() << "isfinite( 1.0/0.0 ) = "<< isfinite(1.0/zero);
 	_test( !isfinite(1.0/zero) );
 
@@ -59,6 +71,7 @@ void IsnanIsinf_Test::run()
 
 	getInfoStream() << "isfinite( sqrt(-1.0) ) = "	<< isfinite(sqrt(-1.0));
 	_test( !isfinite(sqrt(-1.0)) );
+#endif
 }
 
 
