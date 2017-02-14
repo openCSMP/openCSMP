@@ -47,7 +47,8 @@ struct Parameter {
     void           Range( double64& vmin, double64& vmax ) const;
   
     /// prints parameter record to stream
-    void           Out(std::ostream& os) const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
   
     /// writes parameter record to a binary file
     bool           Out( FILE* fp ) const;

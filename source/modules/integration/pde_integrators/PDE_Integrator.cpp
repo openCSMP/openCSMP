@@ -1724,6 +1724,13 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText( cons
  } // end WriteGlobalMatrixMap
 
 
+template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
+void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::Out( std::ostream& os ) const
+ {
+     os << "XXX PDE_Integrator::Out() not yet implemented.\n";
+ }
+
+
 
 
 template class PDE_Integrator<1U,Region>;

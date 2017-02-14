@@ -25,6 +25,7 @@ class CubicSpline {
     double64 Range_x() const;
     double64 Range_fx() const;
     
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
     
   private:

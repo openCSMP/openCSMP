@@ -39,6 +39,7 @@ struct CompressedRowMatrix {
     size_t Rows() const { return (ia.size()-1U); }
     size_t TotalExistingEntries() const { return ja.size(); }
 
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
     void Out( const std::string& outfile ) const;
 

@@ -102,6 +102,7 @@ class TensorVariable<2U> {
  	  VectorVariable<2U> Column( size_t iCol ) const;
  		
     void             	In();
+    void             	Out() const { Out(std::cout); }
     void             	Out(std::ostream& os) const;
     bool              In( FILE* fp );
     bool              Out( FILE* fp ) const;

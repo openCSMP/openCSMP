@@ -54,7 +54,7 @@ Assignent of a vector to a tensor is done by placing the vector in the
 tensors diagonal and zeroing its off-diagonal elements.  
 
 Matrices can be input and output from streams, using the In() and
-Out(std::ostream& os) member functions. 
+Out() member functions. 
 
  
 @section motivation Motivation
@@ -275,6 +275,7 @@ class TensorVariable<3U> {
     void              In();
   
     /// prints the tensor to a stream
+    void              Out() const { Out(std::cout); }
     void              Out(std::ostream& os) const;
   
     /// reads the tensor from the supplied input file

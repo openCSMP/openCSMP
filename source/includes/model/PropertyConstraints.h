@@ -37,6 +37,7 @@ class PropertyConstraints {
     bool CheckConstraints( const Element<dim>& e, Index& idx ) const;
     
     void Erase();
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
   
   private:

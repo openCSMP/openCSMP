@@ -36,6 +36,7 @@ struct MechanicalProperties {
    double64  nu;         ///< Poisson's ratio
    double64  C;          ///< cohesive strength = inherent shear strength
   
+   void Out() const { Out(std::cout); }
    void Out(std::ostream& os) const;
 };
 

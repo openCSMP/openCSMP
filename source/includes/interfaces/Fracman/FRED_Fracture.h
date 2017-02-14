@@ -48,6 +48,7 @@ class FRED_Fracture {
     
     void    Erase();
     
+    void    Out() const { Out(std::cout); }
     void    Out(std::ostream& os) const;
   
   private:

@@ -148,6 +148,7 @@ class ScalarVariable;
       void           Sort();
 
       /// printing array values to screen
+      void           Out(long digits = 3) const { Out(std::cout, digits); }
       void           Out( std::ostream& os, long digits=3 ) const;
       bool           Out( const char* filename, size_t precision = 9 ) const;
       

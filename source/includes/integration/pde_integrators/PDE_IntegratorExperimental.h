@@ -351,6 +351,7 @@ class PDE_IntegratorExperimental {
     void          OutputGlobals( std::ostream& os, int precision=1 );
   
     /// prints current parameters settings and pde operators to screen
+    void          Out() const { Out(std::cout); }
     void          Out(std::ostream& os) const;
   
     /// extra detailed screen output about the assembly  solution progress

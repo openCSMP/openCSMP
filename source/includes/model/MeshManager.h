@@ -152,6 +152,7 @@ class MeshManager {
     void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
 
     /// prints stored objects and their connectivity to a stream
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
     
   private:

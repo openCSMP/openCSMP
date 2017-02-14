@@ -26,6 +26,7 @@ class SumOfProducts {
    std::vector<std::map<int,double64> >::iterator  Begin() { return sumproducts.begin(); };
    std::vector<std::map<int,double64> >::iterator  End()   { return sumproducts.end(); };
 
+   void       Out() const { Out(std::cout); }
    void       Out(std::ostream& os) const;
  
  private:

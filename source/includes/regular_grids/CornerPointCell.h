@@ -135,6 +135,7 @@ public:
     csmp::GridNode<dim>* GetPillarNodeCustomOrder( size_t nid );
   
     /// prints object state to screen
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
 
 protected:

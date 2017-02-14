@@ -69,6 +69,7 @@ class PropertyHandle {
     VARIABLE_FLAG  OutputCondition() const;
     void           OutputCondition( VARIABLE_FLAG c );
     
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
     void Out( const char* text_file_name ) const;
   

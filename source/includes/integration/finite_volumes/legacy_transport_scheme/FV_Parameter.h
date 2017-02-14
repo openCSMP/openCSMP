@@ -38,6 +38,7 @@ class FV_Parameter {
     double64 FacetNormalProjection( size_t facet, const VectorVariable<3U>& cxyz ) const;
 
     size_t Bytes() const;
+    void Out() const { Out(std::cout); }
     void   Out(std::ostream& os) const;
     
   private:

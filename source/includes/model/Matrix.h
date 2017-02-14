@@ -100,6 +100,7 @@ class Matrix {
     Matrix  Minor( const size_t row, const size_t col );
 
     void In();
+    void Out(long digits=5L) const { Out(std::cout, digits); }
     void Out( std::ostream& os, long digits=5L ) const;
 
     /// LU decomposition and back-substitution

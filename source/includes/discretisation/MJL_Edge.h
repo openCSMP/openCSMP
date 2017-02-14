@@ -46,6 +46,7 @@ class Edge {
     double  AngleTo( const Edge& v ) const;
     double  DotProduct( const mjl::Point& p, const mjl::Point& q ) const;
 
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
     
     mjl::Point org_, dest_;

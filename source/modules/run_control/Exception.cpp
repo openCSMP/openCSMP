@@ -93,6 +93,12 @@ void Exception::Out(std::ostream& os) const
     os << message_ << endl;
  }
 
+
+void Exception::Out() const
+{
+    Out(std::cout);
+}
+
 Exception::~Exception() throw()
   {
 

@@ -43,7 +43,7 @@ INTERSECTION  crossingPoint( double tolerance, const mjl::Edge3D& e, const mjl::
  } 
 
 
- void Plane3D::Out(std::ostream& os)
+ void Plane3D::Out(std::ostream& os) const
  { 
   os <<"\nMJL_Point3D::Out: "<< p1_.x_ <<"  "<< p1_.y_ <<"  "<< p1_.z_ <<std:: endl;
   os <<"\n vector::Out: "<< vc_.x_ <<"  "<< vc_.y_ <<"  "<< vc_.z_ << std::endl;

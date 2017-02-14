@@ -70,6 +70,7 @@ class Point {
     /// returns point coordinates into an STL vector
     std::vector<double64> Coordinates() const;
     /// prints point cooordinates to stream
+    void  Out() const { Out(std::cout); }
     void  Out(std::ostream& os) const;
 
   protected:
@@ -149,7 +150,8 @@ class Point<1U> {
     bool      CoincidesWithWithinTolerance( const Point<1U>&, double64 tolerance=1.0e-5 ) const;
     bool      IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
-    void                  Out(std::ostream& os) const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
 
     friend Point<1U> operator-( double64, const Point<1U>& );
     friend Point<1U> operator+( double64, const Point<1U>& );
@@ -202,7 +204,8 @@ class Point<2U> {
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;
     bool     IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
-    void            Out(std::ostream& os) const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
   
     friend Point<2U> operator-( double64, const Point<2U>& );
     friend Point<2U> operator+( double64, const Point<2U>& );
@@ -256,6 +259,7 @@ class Point<3U> {
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;
     bool     IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double64> Coordinates() const;
+    void     Out() const { Out(std::cout); }
     void                  Out(std::ostream& os) const;
  
     friend Point<3U> operator-( double64, const Point<3U>& );

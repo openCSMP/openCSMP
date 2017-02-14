@@ -154,6 +154,7 @@ struct ExplicitStencilProcessor {
                                               bool with_gravity_forces,
                                               bool with_capillary_spreading);
                                     
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
 
     // local array index for the stencil

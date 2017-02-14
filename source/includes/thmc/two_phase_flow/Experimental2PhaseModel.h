@@ -58,6 +58,7 @@ class Experimental2PhaseModel : public TwoPhaseModel<dim> {
     virtual double64 ShockSpeed() const;
     virtual double64 ShockHeight() const;
     
+    void Out(size_t phase) const { Out(std::cout, phase); }
     virtual void Out( std::ostream& os, size_t phase ) const;
 
   private:

@@ -235,6 +235,7 @@ class VData {
     void OutASCII( const char* file ) const;
   
     /// print connectivity information to a stream
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any

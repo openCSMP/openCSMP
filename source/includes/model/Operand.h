@@ -303,6 +303,7 @@ class Operand {
     void                AssignTo( FlaggedArrayVariable& )  const;
 
     void                PrintValue(std::ostream& os)        const;
+    void                Out() const { Out(std::cout); }
     void                Out(std::ostream& os)               const;
 
   private:

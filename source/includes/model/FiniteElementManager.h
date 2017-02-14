@@ -51,6 +51,7 @@ class FiniteElementManager {
     void              InterpolationOrder( size_t interpolation_order );
     size_t            InterpolationOrder() const;
     
+    void              Out() const { Out(std::cout); }
     void              Out(std::ostream& os) const;
   
   private:

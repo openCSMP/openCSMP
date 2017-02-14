@@ -217,6 +217,7 @@ public:
 
     /// console output
     void OutputVariableHumanReadable( std::ostream& os, const char* prop ) const;
+    void Out() const { Out(std::cout); }
     void Out(std::ostream& os) const;
 
     void Verbose(bool verbose);
