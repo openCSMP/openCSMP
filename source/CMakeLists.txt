@@ -209,3 +209,29 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${CMAKE_SOURCE_DIR}/tests
 )
 
+
+# Install targets
+
+# Header files
+FILE(GLOB_RECURSE PUBLIC_INCLUDE_FILES
+	RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/includes"
+	"${CMAKE_CURRENT_SOURCE_DIR}/includes/*"
+	)
+foreach ( I ${PUBLIC_INCLUDE_FILES} )
+    if (IS_DIRECTORY "${I}")
+	message(STATUS "Examining include directory ${I}")
+    elseif("${I}" MATCHES ".h$")
+        get_filename_component( dir ${I} DIRECTORY )
+	install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/includes/${I}"
+		DESTINATION "include/${dir}")
+    else()
+	message(WARNING "Excluding file ${I} from installation")
+    endif()
+endforeach()
+
+INSTALL(FILES "${GEN_INCLUDES_DIR}/CSMP_number_types.h" DESTINATION include)
+
+# Libraries
+
+install(TARGETS csmpcore ARCHIVE DESTINATION lib)
+

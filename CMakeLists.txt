@@ -13,6 +13,7 @@ include(CsmpPlatform)
 include(CsmpDependencies)
 
 add_subdirectory(source)
+add_subdirectory(examples)
 
 
 FILE(COPY cmake/CsmpTestResultTransform.cmake DESTINATION ${CMAKE_BINARY_DIR})
