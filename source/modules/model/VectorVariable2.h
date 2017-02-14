@@ -12,7 +12,6 @@ class VectorVariable<2U> {
   public:
     VectorVariable();
     VectorVariable( const VectorVariable& );
-    VectorVariable( VectorVariable&& );
     VectorVariable( VARIABLE_FLAG f, double64 val );
     VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double64 val1, double64 val2 ); // 2d
     explicit VectorVariable( const std::vector<double64>& );
@@ -120,13 +119,6 @@ inline VectorVariable<2U>::VectorVariable()
 inline VectorVariable<2U>::VectorVariable( const VectorVariable<2U>& v )
   : flag(v.flag),
     data(v.data)
- {
- }
-
-
-inline VectorVariable<2U>::VectorVariable( VectorVariable<2U>&& v )
-  : flag{std::move(v.flag)},
-    data{std::move(v.data)}
  {
  }
 

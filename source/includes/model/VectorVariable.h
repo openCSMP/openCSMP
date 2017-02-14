@@ -81,7 +81,6 @@ class VectorVariable<3U> {
     VectorVariable();                        ///< default constructor
     ~VectorVariable();                       ///< destructor
     VectorVariable( const VectorVariable& ); ///< copy constructor
-    VectorVariable( VectorVariable&& );      ///< move constructor
     /// sets all elements to fl, val
     VectorVariable( VARIABLE_FLAG, double64 );
     
@@ -287,12 +286,6 @@ inline const VectorVariable<3U>& makeVector( const std::vector<VARIABLE_FLAG>& f
 inline VectorVariable<3U>::VectorVariable( const VectorVariable<3U>& v )
  : flag(v.flag),
    data(v.data)
- {
- }
-
-inline VectorVariable<3U>::VectorVariable( VectorVariable<3U>&& v )
- : flag{std::move(v.flag)},
-   data{std::move(v.data)}
  {
  }
 
