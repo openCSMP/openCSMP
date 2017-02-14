@@ -12,12 +12,6 @@ TensorVariable<3U>::TensorVariable( const TensorVariable<3U>& t )
  {
  }
 
-TensorVariable<3U>::TensorVariable( TensorVariable<3U>&& t )
- : flag{t.flag},
-   data{t.data}
- {
- }
-
 
 
 TensorVariable<3U>::TensorVariable()

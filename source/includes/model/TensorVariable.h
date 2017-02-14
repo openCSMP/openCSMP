@@ -93,7 +93,6 @@ class TensorVariable<3U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
-    TensorVariable( TensorVariable&& );
   
     /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
     TensorVariable( VARIABLE_FLAG flag, double64 val );
