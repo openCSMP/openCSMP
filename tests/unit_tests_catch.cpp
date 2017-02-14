@@ -1,3 +1,6 @@
+// Disable wingdi.h because it steps on our toes
+#define NOGDI
+
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
