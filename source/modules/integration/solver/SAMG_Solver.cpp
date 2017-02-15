@@ -8,14 +8,14 @@
 #include <fstream>
 
 #ifndef SAMG_MULTIPLE_INSTANCES
-#include "samg.h"
+#include "thirdparty/samg/samg.h"
 #else
-#include "samg.h"
-#include "samg1.h"
-#include "samg2.h"
-#include "samg3.h"
-#include "samg4.h"
-#include "samg5.h"
+#include "thirdparty/samg/samg.h"
+#include "thirdparty/samg/samg1.h"
+#include "thirdparty/samg/samg2.h"
+#include "thirdparty/samg/samg3.h"
+#include "thirdparty/samg/samg4.h"
+#include "thirdparty/samg/samg5.h"
 #endif
 
 

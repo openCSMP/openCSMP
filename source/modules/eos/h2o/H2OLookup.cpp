@@ -1,6 +1,7 @@
 #include "H2OLookup.h"
 #include "ConvertConcentrationUnitsNaCl.h"
 #include "binaryReadWrite.h"
+#include "thirdparty/iaps_h2o_eos/iaps.h"
 
 #include <string>
 

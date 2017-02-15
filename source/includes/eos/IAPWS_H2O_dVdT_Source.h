@@ -3,7 +3,7 @@
 
 #include "CSMP_definitions.h"
 #include "Interrelation.h"
-#include "steam4.h"
+#include "thirdparty/iaps_h2o_eos/steam4.h"
 
 namespace csmp {
 

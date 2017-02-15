@@ -202,11 +202,8 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/thmc
     ${MODULES_DIR}/utilities
     ${CMAKE_SOURCE_DIR}/lib/catch/include
-    ${CMAKE_SOURCE_DIR}/lib/jpeg
-    ${CMAKE_SOURCE_DIR}/lib/samg
-    ${CMAKE_SOURCE_DIR}/lib/iaps_h2o_eos
+    ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/examples/source
-    ${CMAKE_SOURCE_DIR}/tests
 )
 
 
@@ -214,15 +211,15 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
 
 # Header files
 FILE(GLOB_RECURSE PUBLIC_INCLUDE_FILES
-	RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/includes"
-	"${CMAKE_CURRENT_SOURCE_DIR}/includes/*"
+	RELATIVE "${INCLUDES_DIR}"
+	"${INCLUDES_DIR}/*"
 	)
 foreach ( I ${PUBLIC_INCLUDE_FILES} )
     if (IS_DIRECTORY "${I}")
 	message(STATUS "Examining include directory ${I}")
     elseif("${I}" MATCHES ".h$")
         get_filename_component( dir ${I} DIRECTORY )
-	install( FILES "${CMAKE_CURRENT_SOURCE_DIR}/includes/${I}"
+	install( FILES "${INCLUDES_DIR}/${I}"
 		DESTINATION "include/${dir}")
     else()
 	message(WARNING "Excluding file ${I} from installation")

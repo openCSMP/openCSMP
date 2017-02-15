@@ -13,6 +13,7 @@ include(CsmpPlatform)
 include(CsmpDependencies)
 
 add_subdirectory(source)
+add_subdirectory(thirdparty)
 add_subdirectory(examples)
 
 

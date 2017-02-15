@@ -28,7 +28,7 @@ INCLUDE_DIRECTORIES(
 	${BASE_INCLUDES_SUBDIR}
 	${BASE_INCLUDES_SUBSUBDIR}
 	${MODULES_SOURCE_DIR}
-	"${CMAKE_SOURCE_DIR}/lib/catch/include"
+	"${CMAKE_SOURCE_DIR}/thirdparty/catch/include"
 	"${CMAKE_BINARY_DIR}/source/generated_includes"
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
 )

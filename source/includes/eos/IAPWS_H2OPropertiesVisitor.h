@@ -5,7 +5,7 @@
 #include "ScalarVariable.h"
 #include "DynamicViscosity.h"
 // watch out: this file defined global constants ONE, TWO etc.
-#include "steam4.h"
+#include "thirdparty/iaps_h2o_eos/steam4.h"
 
 namespace csmp {
 

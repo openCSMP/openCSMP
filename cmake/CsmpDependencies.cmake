@@ -12,7 +12,7 @@ set(SAMG_DEFINITIONS ${PC_SAMG_CFLAGS_OTHER})
 find_path(SAMG_INCLUDE_DIR NAMES samg.h
     PATHS
     ${PLATFORM_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/lib/samg
+    ${CMAKE_SOURCE_DIR}/support/samg
 )
 
 find_library(SAMG_LIBRARIES
