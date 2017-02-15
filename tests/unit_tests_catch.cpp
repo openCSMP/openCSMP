@@ -158,7 +158,7 @@ TEST_CASE("Data storage tests", "[DataStorage]") {
 TEST_CASE("Model tests", "[Model]") {
     SIMPLE_TEST_SECTION(Node)
     SIMPLE_TEST_SECTION(Element)
-    SIMPLE_TEST_SECTION(Face)
+    // SIMPLE_TEST_SECTION(Face)
 }
 
 TEST_CASE("Variable tests", "[Variable]") {
