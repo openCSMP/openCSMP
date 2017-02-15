@@ -51,13 +51,6 @@ TensorVariable<2U>::TensorVariable( const TensorVariable<2U>& t )
  }
 
 
-TensorVariable<2U>::TensorVariable( TensorVariable<2U>&& t )
- : flag{t.flag},
-   data{t.data}
- {
- }
-
-
 
 /**
     initialises variable as diagonal isotropic tensor with flag and value

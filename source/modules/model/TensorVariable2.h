@@ -13,7 +13,6 @@ class TensorVariable<2U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
-    TensorVariable( TensorVariable&& );
     TensorVariable( VARIABLE_FLAG f, double64 val );
     TensorVariable( VARIABLE_FLAG f, double64 v11, double64 v12,
                     double64 v21, double64 v22 );
