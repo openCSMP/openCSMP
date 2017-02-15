@@ -32,7 +32,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "The compiler is Clang")
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal -march=corei7-avx -O3 -loop-vectorize"
+	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal -march=corei7-avx -O3"
 	)
     else()
         set(PLATFORM_CXX_FLAGS
@@ -70,7 +70,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${PLATFORM_FLAGS} ${COMPILER_VENDOR} ${PLATFORM_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${PLATFORM_LDFLAGS} ${COMPILER_LDFLAGS}")
-#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${PLATFORM_LDFLAGS} ${COMPILER_LDFLAGS}")
-#set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS} ${PLATFORM_LDFLAGS} ${COMPILER_LDFLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+set(CMAKE_STATIC_LINKER_FLAGS "${CMAKE_STATIC_LINKER_FLAGS}")
 
 set(CMAKE_DEBUG_POSTFIX "_debug")
