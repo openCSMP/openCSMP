@@ -30,6 +30,12 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "The compiler is Clang")
+    if (CMAKE_HOST_APPLE)
+	# MacBooks are a little behind other platforms
+	set(PLATFORM_ARCH "-march=core2-ssse3")
+    else()
+	set(PLATFORM_ARCH "-march=corei7-avx")
+    endif()
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS
 	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal -march=corei7-avx -O3"
