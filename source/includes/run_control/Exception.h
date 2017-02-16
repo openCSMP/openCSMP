@@ -10,12 +10,6 @@ namespace csmp {
 /// classification of exception; warning (possible problem), error (actual problem; fatal (need to terminate)
 enum CSMP_MESSAGE { CSMP_INFO = 0, CSMP_EXCEPTION = -1, CSMP_WARNING = -2, CSMP_ERROR = -3, CSMP_FATAL_ERROR = -4 };
 
-#define INFO CSMP_INFO
-#define WARNING CSMP_WARNING
-#define EXCEPTION CSMP_EXCEPTION
-#define ERROR CSMP_ERROR
-#define FATAL_ERROR CSMP_FATAL_ERROR
-
 /// convert enum to a printable string
 std::string  parseMessage( CSMP_MESSAGE );
 
