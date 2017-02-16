@@ -38,11 +38,11 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     endif()
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal -march=corei7-avx -O3"
+	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal ${PLATFORM_ARCH} -O3"
 	)
     else()
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal -march=corei7-avx -O0"
+	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal ${PLATFORM_ARCH} -O0"
 	)
     endif()
     set(COMPILER_LDFLAGS)
