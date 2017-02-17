@@ -6,6 +6,7 @@
 #include "PL_Utilities.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Interface.h"
+#include "variableOperations.h"
 
 
 using namespace std;
@@ -179,7 +180,7 @@ void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundar
         bcInner = (*it)->Parent(INSIDE)->BaryCenter();
         for( size_t d(0); d < dim; ++d )
             faceToInner(d) = bcInner[d] - bcFace[d];
-        _test( (faceToInner&unFace) < 0. );
+        _test( dotProduct(faceToInner,unFace) < 0. );
       }
   }
 

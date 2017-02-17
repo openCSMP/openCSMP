@@ -106,9 +106,6 @@ class NodeCenteredFiniteVolumeAlgorithm {
                            bool show_range ,
                            const size_t var_comp_nr=0) const;
 
-    /// results are stored back in the Region where condition flag is PLAIN
-    double64 OutputResultsWithL2NormRes( const PropertyDatabase<dim>&, const csmp::Index& adv_key, bool show_range ) const;
-
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
     double64 OutputResults( const PropertyDatabase<dim>&,
                             size_t result_phase, // enter either 1(w) or 2(nw) here
@@ -117,6 +114,8 @@ class NodeCenteredFiniteVolumeAlgorithm {
                             bool show_range ) const;
 
 
+    /// testing only: results are stored back in the Region where condition flag is PLAIN
+    double64 OutputResultsWithL2NormRes( const PropertyDatabase<dim>&, const csmp::Index& adv_key, bool show_range ) const;
 
     /// multiphase version for range 0..1 (adv1=wetting phase=1)
     double64 OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>&,

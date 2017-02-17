@@ -251,7 +251,7 @@ void FemToGridVisitor<dim>::Visit( Element<dim>* n )
      // initializing egrid of element if this has not been done before
      if ( !visited[ e_id ] ) 
        {
-          n->CoordinateMatrix( XY );
+          n->NodeCoordinateMatrix( XY );
           InitializeElementGrid( e_id, n->FE_Type() );
        }
      

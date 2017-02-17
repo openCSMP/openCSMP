@@ -53,6 +53,25 @@ void StressRotate::Reset()
 
 
 
+// inline functions
+
+// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
+double64 StressRotate::Sigma1() const
+  { return sigma1_; }
+  
+// intermediate principal stress (Pa/m2)
+double64 StressRotate::Sigma2() const
+  { return sigma2_; }
+  
+// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
+double64 StressRotate::Sigma3() const
+  { return sigma3_; }
+  
+
+
+
+
+
 /**
     Finds the the Cartesion stresses from the principal stresses
     using the formulae (6.86, 6.87, and 6.88) from Pollard & Fletcher's

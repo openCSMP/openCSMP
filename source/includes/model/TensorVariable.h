@@ -93,7 +93,7 @@ class TensorVariable<3U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
-    TensorVariable( TensorVariable&& );
+    TensorVariable( TensorVariable&& ) = default;
   
     /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
     TensorVariable( VARIABLE_FLAG flag, double64 val );
@@ -114,7 +114,7 @@ class TensorVariable<3U> {
   
     /// basic assignment
     TensorVariable&  operator=( const TensorVariable& );
-    TensorVariable&  operator=( TensorVariable&& );
+    TensorVariable&  operator=( TensorVariable&& ) = default;
  
     /// read/write access to the elements of the tensor
     double64&        operator()( size_t i, size_t j );
@@ -128,14 +128,12 @@ class TensorVariable<3U> {
     /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
     double64  Component( size_t i ) const;
 
-    /// number of entries in tensor (9 in this 3D case
-    size_t  Components() const;
-    size_t  Size() const { return Components(); }
+    /// number of entries in tensor (dim x dim = 9 in this 3D case)
+    size_t  Size() const { return 9U; }
 
     /// assigns second argument to all elements of the tensor, first argument is not used; @todo remove
     void Resize( size_t, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
 
-    /// addition creating a temporary that is assigned to the lefthand Tensor
     TensorVariable   operator+( double64 val ) const;
     TensorVariable   operator-( double64 val ) const;
     TensorVariable   operator*( double64 val ) const;
@@ -190,11 +188,6 @@ class TensorVariable<3U> {
     /// comparison of the determinants of the tensors
     bool             operator<( const TensorVariable& ) const; 
     
-    double64          Value( size_t i, size_t j ) const;
-  
-    /// averages all elements of tensor (may make sense only for diagonalised tensor)
-    double64          Average() const;
-  
     /// compares the individual elements of the tensor with the ranges specified in PropertyDatabase file
     bool              IsWithinRange( double64 vmin, double64 vmax ) const;
   
@@ -206,6 +199,7 @@ class TensorVariable<3U> {
 
     /// returns largest element in tensor
     double64          MaxElement() const;
+  
     double64          Determinant() const;
   
     /// returns the sum of the diagonal values of the tensor
@@ -259,18 +253,9 @@ class TensorVariable<3U> {
     /// accessor/mutator of the flags of the diagonal elements of the tensor
     VARIABLE_FLAG&    Flag( size_t i=0 );
   
-    /// replaces all elements by 0.
-    void              Zero();
-  
     /// converts tensor into identity matrix
     void              Identity();
   
-    /// shorthands for efficient tensor modification for display
-    void              Fabs();
-    void              Sqrt( bool from_absolute_value=false );
-    void              Ln( bool from_absolute_value=false );
-    void              Log10( bool from_absolute_value=false );
-
     /// prompts user to initialise the tensor from the command line
     void              In();
   
@@ -298,287 +283,15 @@ std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
 
 
 /// fastest way to insert a tensor into an STL container
-const TensorVariable<2U>& makeTensor( VARIABLE_FLAG, VARIABLE_FLAG,
-                                      double64, double64,
-                                      double64, double64 );
+TensorVariable<2U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG,
+                                double64, double64,
+                                double64, double64 );
+
+TensorVariable<3U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG,
+                               double64, double64, double64,
+                               double64, double64, double64,
+                               double64, double64, double64 );
 
-const TensorVariable<3U>& makeTensor( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG,
-                                      double64, double64, double64,
-                                      double64, double64, double64,
-                                      double64, double64, double64 );
-
-
-
-// ******************************************************************************************
-//
-//            INLINE METHODS START HERE
-//
-// ******************************************************************************************
-
-inline TensorVariable<3U>::~TensorVariable() {}
-
-
-inline double64& TensorVariable<3U>::operator()( size_t i, size_t j ) 
- {
-#ifndef NDEBUG 
-    if ( i >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::operator(): row access violation, i="<< i << std::endl;
-         return data[0][0];
-      }
-    if ( j >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::operator(): column access violation, j="<< j << std::endl;
-         return data[0][0];
-      }
-#endif
-    return data[i][j]; 
- }
-
-
-
-
-inline const double64& TensorVariable<3U>::operator()( size_t i, size_t j ) const
- {
-#ifndef NDEBUG 
-    if ( i >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::operator(): row access violation, i="<< i << std::endl;
-         return data[0][0];
-      }
-    if ( j >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::operator(): column access violation, j="<< j << std::endl;
-         return data[0][0];
-      }
-#endif
-    return data[i][j]; 
- }
-
-
-
-inline size_t  TensorVariable<3U>::Components() const { return 9U; } 
-
-
-
-
-inline void TensorVariable<3U>::Component( size_t i, double64 val )
- { 
-    assert( i < Components() );
-    // row by row
-    if ( i == 0U )      data[0U][0U] = val;
-    else if ( i == 1U ) data[0U][1U] = val;
-    else if ( i == 2U ) data[0U][2U] = val;
-
-    else if ( i == 3U ) data[1U][0U] = val;
-    else if ( i == 4U ) data[1U][1U] = val;
-    else if ( i == 5U ) data[1U][2U] = val;
-
-    else if ( i == 6U ) data[2U][0U] = val;
-    else if ( i == 7U ) data[2U][1U] = val;
-
-    else data[2U][2U] = val; // remaining case
- }
-
-
-
-
-inline double64 TensorVariable<3U>::Component( size_t i ) const
- { 
-    assert( i < Components() );
-    // row by row
-    if ( i == 0U ) return data[0U][0U];
-    if ( i == 1U ) return data[0U][1U];
-    if ( i == 2U ) return data[0U][2U];
-
-    if ( i == 3U ) return data[1U][0U];
-    if ( i == 4U ) return data[1U][1U];
-    if ( i == 5U ) return data[1U][2U];
-
-    if ( i == 6U ) return data[2U][0U];
-    if ( i == 7U ) return data[2U][1U];
-
-    return data[2U][2U]; // remaining case
- }
-
-
-
-
-inline double64 TensorVariable<3U>::Value( size_t i, size_t j ) const
- { 
-#ifndef NDEBUG 
-    if ( i >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::Value(): row access violation, i="<< i << std::endl;
-         return data[0][0];
-      }
-    if ( j >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::Value(): column access violation, j="<< j << std::endl;
-         return data[0][0];
-      }
-#endif
-    return data[i][j];
- }
- 
- 
-
-inline VARIABLE_FLAG& TensorVariable<3U>::Flag( size_t i )      
- { 
-#ifndef NDEBUG 
-    if ( i >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::Flag(): diagonal access violation, i="<< i << std::endl;
-         return flag[0];
-      }
-#endif
-    return flag[i]; 
- }
-
-
-
-inline VARIABLE_FLAG  TensorVariable<3U>::Flag( size_t i ) const 
- { 
-#ifndef NDEBUG 
-    if ( i >= 3U ) { 
-         std::cerr <<"\nTensorVariable<3U>::Flag(): diagonal access violation, i="<< i << std::endl;
-         return flag[0];
-      }
-#endif
-    return flag[i]; 
- }
-
-
-
-
-inline bool TensorVariable<3U>::EigenValues( VectorVariable<3U>& Ev ) const
- {
-		return EigenValuesPositiveDefiniteSymmetricMatrix( Ev(0), Ev(1), Ev(2) );
-	}
-
-
-inline bool TensorVariable<3U>::EigenValues( std::vector<double64>& Ev ) const
-	{
-		return EigenValuesPositiveDefiniteSymmetricMatrix( Ev[0], Ev[1], Ev[2] );
-	}
-
-
-
-
-/**
-    Initialiser for tensor variable, index is not used.
-*/
-inline void TensorVariable<3U>::Resize( size_t, double64 newValue )
-  {
-    data[0][0] = newValue;
-    data[0][1] = newValue;
-    data[1][0] = newValue;
-    data[1][1] = newValue;
-    data[0][2] = newValue;
-    data[1][2] = newValue;
-    data[2][0] = newValue;
-    data[2][1] = newValue;
-    data[2][2] = newValue;
-  }
-
-
-
-inline double64 TensorVariable<3U>::Trace() const
- {
-    return data[0][0] + data[1][1] + data[2][2];   
- }
-
-
-
-inline void TensorVariable<3U>::AssignToRow( size_t iRow, VectorVariable<3U>& vc )
-{
-  if ( iRow == 0U )
-      flag[0U] = vc.Flag(0U);
-  else if ( iRow == 1U )
-      flag[1U] = vc.Flag(1U);
-  else
-      flag[2U] = vc.Flag(2U);
-
-	data[iRow][0U] = vc[0U];
-	data[iRow][1U] = vc[1U];
-	data[iRow][2U] = vc[2U];
-}
-
-
-inline void TensorVariable<3U>::AssignToColumn( size_t iCol, VectorVariable<3U>& vc )
-{
-  if ( iCol == 0U )
-      flag[0U] = vc.Flag(0U);
-  else if ( iCol == 1U )
-      flag[1U] = vc.Flag(1U);
-  else
-      flag[2U] = vc.Flag(2U);
-
-	data[0U][iCol] = vc[0U];
-	data[1U][iCol] = vc[1U];
-	data[2U][iCol] = vc[2U];
-}
-
-
-
-
-inline VectorVariable<3U> TensorVariable<3U>::Row( size_t iRow ) const
-{
-	return VectorVariable<3U>( flag[iRow], flag[iRow], flag[iRow], 
-	                           data[iRow][0U], data[iRow][1U], data[iRow][2U]);
-}
-
-
-inline VectorVariable<3U> TensorVariable<3U>::Column( size_t iCol ) const
-{
-	return VectorVariable<3U>( flag[iCol], flag[iCol], flag[iCol], 
-	                           data[0U][iCol], data[1U][iCol], data[2U][iCol] );
-}
- 
-
-inline bool  TensorVariable<3U>::operator==( const TensorVariable<3U>& ts ) const
- {
-   return ( data == ts.data && flag == ts.flag );
- }
-  
-
-inline bool  TensorVariable<3U>::operator!=( const TensorVariable<3U>& t ) const
- {
-     return !(*this == t);
- } 
-
-
-
-inline bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const
- {
-     return (this->Determinant() < t.Determinant());
- } 
-
-inline  bool TensorVariable<3U>::Out( FILE* fp ) const
-  {
-     fwrite( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
-     return true;
-  }
-
-inline  bool TensorVariable<3U>::In( FILE* fp )
-  {
-     fread( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
-     return true;
-  }
-  
-  
-/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
-inline const TensorVariable<2U>& makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
-                                             double64 v11, double64 v12,
-                                             double64 v21, double64 v22 )
- {
-     return std::move(TensorVariable<2U>(f1,f2,v11,v12,v21,v22) );
- }
- 
-
-/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
-inline const TensorVariable<3U>& makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
-                                             double64 v11, double64 v12, double64 v13,
-                                             double64 v21, double64 v22, double64 v23,
-                                             double64 v31, double64 v32, double64 v33 )
- {
-     return std::move(TensorVariable<3U>(f1,f2,f3,v11,v12,v13,v21,v22,v23,v31,v32,v33) );
- }
-  
-  
 
 } // csmp 
  

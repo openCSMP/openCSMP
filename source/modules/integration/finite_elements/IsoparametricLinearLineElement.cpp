@@ -1068,7 +1068,7 @@ double64  IsoparametricLinearLineElement::JacobianDeterminant()
     return current_detJ;
 }
 
-} // end namespace csp
+} // end namespace csmp
 
 
 

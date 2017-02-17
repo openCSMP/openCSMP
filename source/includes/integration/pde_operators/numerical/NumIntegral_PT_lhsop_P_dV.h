@@ -24,27 +24,15 @@ class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim> {
     virtual void ComputeContribution( SIMPLEX& e );
 
   private:
-    int                     nodal_degrees_of_freedom;
-    csmp::Index              phi_key;
+    int                 nodal_degrees_of_freedom;
+    csmp::Index         phi_key;
     ScalarVariable      phi;
-    DenseMatrix<DM_MIN>  PT, P;
+    DenseMatrix<DM_MIN> PT, P;
     
-    void       N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P );
+    void N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P );
 };
 
 // copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger
-
-
-template<size_t dim,class SIMPLEX>
-inline void  NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P )
- {
-    P.Resize(1,nodal_degrees_of_freedom*N.size());
-    size_t k(0);
-    
-    for ( size_t i=0; i<N.size(); i++ ) 
-      for ( size_t j=0; j<static_cast<size_t>(nodal_degrees_of_freedom); j++ ) P(0,k++ ) = N[i];
-}
-
 
 } // csmp
 

@@ -90,12 +90,12 @@ class BoundaryInterface {
     typedef typename std::map<std::string,csmp::Boundary<dim> >::iterator         boundaryIterator;
     typedef typename std::map<std::string,csmp::Boundary<dim> >::const_iterator   boundaryConstIterator;
 
-    boundaryIterator                 BoundariesBegin();
-    boundaryIterator                 BoundariesEnd();
-    boundaryConstIterator            BoundariesBegin() const;
-    boundaryConstIterator            BoundariesEnd() const;
-    boundaryIterator                 Boundary( const csmp::Boundary<dim>& );
-    size_t                           Boundaries() const;
+    boundaryIterator       BoundariesBegin();
+    boundaryIterator       BoundariesEnd();
+    boundaryConstIterator  BoundariesBegin() const;
+    boundaryConstIterator  BoundariesEnd() const;
+    boundaryIterator       Boundary( const csmp::Boundary<dim>& );
+    size_t                 Boundaries() const;
 
     /// Switches names of boundaries
     void SwitchBoundaryNames( csmp::Boundary<dim> const& b1, csmp::Boundary<dim> const& b2 );

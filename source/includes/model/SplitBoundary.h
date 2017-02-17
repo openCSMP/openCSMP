@@ -120,9 +120,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     /// establishes connectivity and initializes LVS
     void Initialize( bool updateNeighborConnectivity = true, bool updateIndexes = true );
 
-    /// sets up FV stencils restricted to region of interest
-    void ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& );
-
     /// reestablishes the pointers to the nodes associated with the stored elements
     void CreateNodePointerVector();
 

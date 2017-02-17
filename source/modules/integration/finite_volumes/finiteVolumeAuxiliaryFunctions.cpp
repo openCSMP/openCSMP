@@ -220,15 +220,14 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
         e.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );
     }
 
-    DenseMatrix<DM_MIN> XYZmatr;
-    e.CoordinateMatrix(XYZmatr);
+    e.CoordinateMatrix();
 
     global_c.assign( dim, 0.0);
 
     // transform local c's to global c's
     for (size_t m = 0; m<e.Nodes(); m++)
         for (size_t n = 0; n<dim; n++){
-          global_c[n] += XYZmatr(m,n)*temp[m];
+          global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
 
 
@@ -243,7 +242,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_inside_node+=grad_sn_inside_node[l]*distance_inside_node[l];
 
-    limited_sn_inside_node = sn_inside_node + limiter_sn_inside_node.Value()*sn_linear_increment_inside_node;
+    limited_sn_inside_node = sn_inside_node + limiter_sn_inside_node()*sn_linear_increment_inside_node;
 
 
     e.N(outside_node)->Read( mass_center_key,mass_center_outside_node);
@@ -257,7 +256,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_outside_node+=grad_sn_outside_node[l]*distance_outside_node[l];
 
-    limited_sn_outside_node = sn_outside_node  + limiter_sn_outside_node.Value()*sn_linear_increment_outside_node;
+    limited_sn_outside_node = sn_outside_node  + limiter_sn_outside_node()*sn_linear_increment_outside_node;
 
 
  }
@@ -296,15 +295,14 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
         e.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );
     }
 
-    DenseMatrix<DM_MIN> XYZmatr;
-    e.CoordinateMatrix(XYZmatr);
+    e.CoordinateMatrix();
 
     global_c.assign( dim, 0.0);
 
     // transform local c's to global c's
     for (size_t m = 0; m<e.Nodes(); m++)
         for (size_t n = 0; n<dim; n++){
-          global_c[n] += XYZmatr(m,n)*temp[m];
+          global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
 
 
@@ -319,7 +317,7 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
     for(size_t l=0U;l<dim;l++)
         sn_linear_increment_upstream_node+=grad_sn_upstream_node[l]*distance_upstream_node[l];
 
-    return sn_upstream_node + limiter_sn_upstream_node.Value()*sn_linear_increment_upstream_node;
+    return sn_upstream_node + limiter_sn_upstream_node()*sn_linear_increment_upstream_node;
 
  }
 
@@ -468,7 +466,7 @@ The method needs the volume of the current FV cell as input.
 @return The method returns the diameter of the hypothetically spherical
 FV cell.
  */
-inline double64 delta_X_FromFV_Volume( double64 FV_volume, size_t dim )
+double64 delta_X_FromFV_Volume( double64 FV_volume, size_t dim )
  {
     // cross-section length from volume of a sphere
     if ( dim == 3U ) return 2. * std::pow( (3. * FV_volume) / (4. * PI), 1./3. );
@@ -493,7 +491,7 @@ goes to zero.
 Third argument is the source term that shall be distributed between
 left and right.
  */
-inline double64 omega( double64 dt, double64 pore_vol, double64 src )
+double64 omega( double64 dt, double64 pore_vol, double64 src )
  {
     // limit the source terms according to equation 61, p. 31 (original manuscript),
     // but max criterion is not applied

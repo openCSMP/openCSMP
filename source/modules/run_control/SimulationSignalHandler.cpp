@@ -1,5 +1,4 @@
 #include "SimulationSignalHandler.h"
-#include "PL_Utilities.h"
 
 using namespace std;
 
@@ -32,7 +31,7 @@ void HandleSignal(int sig_code)
 
     if (sig_code == SIGINT)
     {
-        size_t choice(0);
+        int choice(0);
         while (choice < 1 || choice > 10){
             std::cout << "\n\nSimulationSignalHandler::CTRL+C signal raised. Signal handling options:\n\n";
             std::cout << "1. Continue\n";
@@ -57,7 +56,7 @@ void HandleSignal(int sig_code)
             std::cin.clear();
             fflush(stdin);
             getline(cin,choice1);
-            choice=csmp::stringToNumber<size_t>(choice1);
+            choice=std::atoi(choice1.c_str());
             switch (choice){
             case 1: {
                 break;

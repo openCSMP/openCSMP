@@ -129,7 +129,7 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
              else if (with_operand && operand_key.place == ELEMENT
                      && element_operand() != 0.0)
                LHS(m,n) /= element_operand();                
-             variable[m] -= LHS(m,n);          
+             variable[m]() -= LHS(m,n);
              }
      }
 
@@ -149,7 +149,7 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
              else if (with_operand && operand_key.place == ELEMENT
                      && element_operand() != 0.0)
                LHS(m,n) /= element_operand();                
-             variable[m] -= LHS(m,n);          
+             variable[m]() -= LHS(m,n);
              }
      }
 
@@ -167,7 +167,7 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
           else if (with_operand && operand_key.place == ELEMENT
                    && element_operand() != 0.0)
             RHS[m] /= element_operand();                
-          variable[m] += RHS[m];
+          variable[m]() += RHS[m];
          }
      }
 
@@ -185,7 +185,7 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
           else if (with_operand && operand_key.place == ELEMENT
                    && element_operand() != 0.0)
             RHS[m] /= element_operand();                
-          variable[m] += RHS[m];
+          variable[m]() += RHS[m];
          }
      }
 

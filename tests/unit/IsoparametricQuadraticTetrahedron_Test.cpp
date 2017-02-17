@@ -13,6 +13,7 @@
 #include "Node.h"
 #include "Element.h"
 #include "DenseMatrix.h"
+#include "variableOperations.h"
 
 // element to test
 #include "IsoparametricQuadraticTriangle.h"
@@ -226,7 +227,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
    if ( verbose_ ) {
         // coordinates
         DenseMatrix<DM_MIN>  XY(element_->Nodes(),3U);
-        element_->CoordinateMatrix( XY );
+        element_->NodeCoordinateMatrix( XY );
         cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element coordinate matrix:"<< endl;
         XY.Out();
         // nodes
@@ -601,7 +602,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
          VectorVariable<3U>  fn(nrml);
          // projecting flux onto normal
          // dot product fn . vc
-         double64 projflux  = fn & flux;
+         double64 projflux  = dotProduct(fn,flux);
          cout <<"\nFace "<< i <<", projected flux:         "<< projflux;
          
          // integrating flux over the face
@@ -613,7 +614,9 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
       }
     cout <<"\n";
 
-   _equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+   // accuracy is limited by the single-precision representation of the point coordinates
+   //_equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
+   _equal( flux_balance, 0., 1.0e-7 );
     cout <<"\nFlux balance of element "<< e.Idx() <<": "<< flux_balance << endl;
       
  } // end CheckElementFaceConsistency

@@ -72,10 +72,6 @@ class GenericNodePropertyGradientLimiter {
 
  };
 
-template<size_t dim>
-inline void GenericNodePropertyGradientLimiter<dim>::SetPropertyKey( csmp::Index& key )  { u_key = key; }
-
-
 }
 
 #endif

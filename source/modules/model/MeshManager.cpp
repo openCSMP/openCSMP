@@ -880,7 +880,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
                    assert( index < elements + faces ); // (-) elements because face container is numbered from 0..n-1
                    (*eit).Assign( j, &face_collection_[ static_cast<size_t>(index)-elements ] );
                 }
-              else (*eit).Assign( j, static_cast<Face<dim>*>(nullptr) );
+              // nullptr assignment is not needed since this is the default initialisation
+              //else (*eit).Assign( j, static_cast<Face<dim>*>(nullptr) );
            }
         // higher-dimensional neighbors
         // ----------------------------
@@ -912,7 +913,8 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
                    assert( index < elements + faces + interfaces ); // (-) because interface container is numbered from 0..n-1
                    (*eit).Assign( j, &interface_collection_[ static_cast<size_t>(index)-elements-faces ] );
               }
-            else (*eit).Assign( j, static_cast<InterFace<dim>*>(nullptr) );
+            // nullptr assignment is not needed since this is the default initialisation
+            //else (*eit).Assign( j, static_cast<InterFace<dim>*>(nullptr) );
          }
         // higher-dimensional neighbors
         // ----------------------------
@@ -1043,9 +1045,9 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
     const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
     for ( typename deque<Element<dim> >::iterator
           it=elmt_collection_.begin(); it!=elmt_collection_.end(); it++ )
-          if( !(*it).FV_Stencil() )
+          if ( !(*it).FV_Stencil() )
             {
-              (*it).Assign( fvs_manager.Stencil( (*it).FE_Type() ) );
+              (*it).AssignFiniteVolume( fvs_manager.Stencil( (*it).FE_Type() ) );
               (*it).ResizePropertyStorage( lvs, ipvs );
             }
 
@@ -3893,6 +3895,129 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
 
 
 
+
+template<size_t dim>
+bool  MeshManager<dim>::HybridElementMesh() const 
+ { return hybrid_element_mesh_; }
+
+// size of containers
+
+template<size_t dim>
+size_t  MeshManager<dim>::Nodes() const
+ { assert( !adaptive_remeshing_ ); return node_collection_.size(); }
+
+template<size_t dim>
+size_t  MeshManager<dim>::Elements() const
+ { assert( !adaptive_remeshing_ ); return elmt_collection_.size(); }
+
+template<size_t dim>
+size_t  MeshManager<dim>::Faces() const
+ { assert( !adaptive_remeshing_ ); return face_collection_.size(); }
+
+template<size_t dim>
+size_t  MeshManager<dim>::InterFaces() const
+ { assert( !adaptive_remeshing_ ); return interface_collection_.size(); }
+
+
+// accessors
+
+template<size_t dim>
+csmp::Node<dim>&    MeshManager<dim>::RootNode()
+ { assert( !node_collection_.empty() ); return node_collection_[0]; }
+
+template<size_t dim>
+csmp::Element<dim>&  MeshManager<dim>::RootElement()
+ { assert( !elmt_collection_.empty() ); return elmt_collection_[0]; }
+
+template<size_t dim>
+csmp::Face<dim>&  MeshManager<dim>::RootFace()
+ { assert( !face_collection_.empty() ); return face_collection_[0]; }
+
+template<size_t dim>
+csmp::InterFace<dim>&  MeshManager<dim>::RootInterFace()
+ { assert( !interface_collection_.empty() ); return interface_collection_[0]; }
+
+template<size_t dim>
+typename std::deque<csmp::Node<dim> >::iterator  MeshManager<dim>::NodesBegin()
+ { assert( !node_collection_.empty() ); return node_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Node<dim> >::iterator  MeshManager<dim>::NodesEnd()
+ { assert( !node_collection_.empty() ); return node_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::Element<dim> >::iterator  MeshManager<dim>::ElementsBegin()
+ { assert( !elmt_collection_.empty() ); return elmt_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Element<dim> >::iterator  MeshManager<dim>::ElementsEnd()
+ { assert( !elmt_collection_.empty() ); return elmt_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::Face<dim> >::iterator  MeshManager<dim>::FacesBegin()
+ { assert( !face_collection_.empty() ); return face_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Face<dim> >::iterator  MeshManager<dim>::FacesEnd()
+ { assert( !face_collection_.empty() ); return face_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::InterFace<dim> >::iterator  MeshManager<dim>::InterFacesBegin()
+ { assert( !interface_collection_.empty() ); return interface_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::InterFace<dim> >::iterator  MeshManager<dim>::InterFacesEnd()
+ { assert( !interface_collection_.empty() ); return interface_collection_.end(); }
+
+// const accessors
+
+template<size_t dim>
+const csmp::Node<dim>&    MeshManager<dim>::RootNode() const
+ { assert( !node_collection_.empty() ); return node_collection_[0]; }
+
+template<size_t dim>
+const csmp::Element<dim>&  MeshManager<dim>::RootElement() const
+ { assert( !elmt_collection_.empty() ); return elmt_collection_[0]; }
+
+template<size_t dim>
+const csmp::Face<dim>&  MeshManager<dim>::RootFace() const
+ { assert( !face_collection_.empty() ); return face_collection_[0]; }
+
+template<size_t dim>
+const csmp::InterFace<dim>&  MeshManager<dim>::RootInterFace() const
+ { assert( !interface_collection_.empty() ); return interface_collection_[0]; }
+
+template<size_t dim>
+typename std::deque<csmp::Node<dim> >::const_iterator  MeshManager<dim>::NodesBegin() const
+ { assert( !node_collection_.empty() ); return node_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Node<dim> >::const_iterator  MeshManager<dim>::NodesEnd() const
+ { assert( !node_collection_.empty() ); return node_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::Element<dim> >::const_iterator  MeshManager<dim>::ElementsBegin() const
+ { assert( !elmt_collection_.empty() ); return elmt_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Element<dim> >::const_iterator  MeshManager<dim>::ElementsEnd() const
+ { assert( !elmt_collection_.empty() ); return elmt_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::Face<dim> >::const_iterator  MeshManager<dim>::FacesBegin() const
+ { assert( !face_collection_.empty() ); return face_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::Face<dim> >::const_iterator  MeshManager<dim>::FacesEnd() const
+ { assert( !face_collection_.empty() ); return face_collection_.end(); }
+
+template<size_t dim>
+typename std::deque<csmp::InterFace<dim> >::const_iterator  MeshManager<dim>::InterFacesBegin() const
+ { assert( !interface_collection_.empty() ); return interface_collection_.begin(); }
+
+template<size_t dim>
+typename std::deque<csmp::InterFace<dim> >::const_iterator  MeshManager<dim>::InterFacesEnd() const
+ { assert( !interface_collection_.empty() ); return interface_collection_.end(); }
 
 
 

@@ -79,7 +79,7 @@ bool  FemFromGridVisitor<dim>::IsInsideTriangle( double64 x, double64 y, bool up
                p3(XY(2,0),XY(2,1)), 
                p(x,y), mp(XY(0,0),XY(0,1));
                
-     static mjl::Edge  a[3];
+     mjl::Edge a[3];
  
      if ( update )
        {
@@ -168,14 +168,14 @@ void FemFromGridVisitor<dim>::Visit( Element<dim>* n )
   { 
      // getting to element
      size_t e_id = n->Idx();
-     n->CoordinateMatrix( XY );
+     n->NodeCoordinateMatrix( XY );
 
      // reading values from grid
      InitializeElementGrid( e_id, n->FE_Type() );
      
      // getting grid-point indices and values for element 
      // egrids[ e_id ].Out();
-     val = egrids[ e_id ].GridAverage();
+     val() = egrids[ e_id ].GridAverage();
      val.Flag() = PLAIN;
 
      if ( n->Status( key ) == PLAIN )

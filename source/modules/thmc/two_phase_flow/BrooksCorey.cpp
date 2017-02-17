@@ -518,6 +518,33 @@ void BrooksCorey<dim>::Out( size_t phase ) const
  
  
 
+template<size_t dim>
+double64 csmp::BrooksCorey<dim>::Pd() const
+  {
+    return entry_pressure_;
+  }
+
+
+template<size_t dim>
+void csmp::BrooksCorey<dim>::Pd( double64 pd )
+  {
+    entry_pressure_ = pd;
+  }
+
+
+template<size_t dim>
+void csmp::BrooksCorey<dim>::Lambda( double64 lambda )
+  {
+    lambda_ = lambda;
+  }
+
+template<size_t dim>
+double64 csmp::BrooksCorey<dim>::Lambda() const
+  {
+    return lambda_;
+  }
+
+
 template class BrooksCorey<1U>;
 template class BrooksCorey<2U>;
 template class BrooksCorey<3U>;

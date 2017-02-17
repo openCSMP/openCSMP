@@ -42,7 +42,7 @@ class Triangulator {
 };  
 
 /// reads pixel-based text input file and use triangulator to generate VSet
-VSet<2U>& readTextPixelData();
+VSet<2U> readTextPixelData();
 
 #endif
 

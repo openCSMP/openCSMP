@@ -60,67 +60,6 @@ double64 averageDifference( Model<dim>& model, const char* nodeProp1, const char
 template<size_t dim, template<size_t> class NodeOrElement>
 double64 maximumOfProperty( Model<dim>& model, const char* prop, const char* region = "Model" );
 
-/// conversion from float number to string
-template<typename T>
-void floatnumberToString( T number, std::string& recipient )
-{
-  std::ostringstream stringStream;
-#ifdef __APPLE__
-  if ( fabs(number) < 1.0e-30 ) number=0.0;
-  else if ( number >1.0e+30 ) number=1.0e+30;
-#endif
-  stringStream << number;
-  recipient = stringStream.str();
-}
-
-/// conversion from float number to string
-template<typename T>
-std::string floatnumberToString( T number )
-{
-  std::string cacheString;
-  floatnumberToString<T>( number, cacheString );
-  return cacheString;
-}
-
-/// conversion from number to string, no formatting specified
-template<typename T>
-void numberToString( T number, std::string& recipient )
-{
-  std::ostringstream stringStream;
-  // SKM FIX
-  stringStream.setf(std::ios::scientific);
-//  stringStream.precision(std::numeric_limits<double>::digits10);
- // avoiding numbers with an exponent that has 3 digits (for PARAVIEW on Mac)
-#ifdef __APPLE__
-  if ( fabs(number) < 1.0e-30 ) number=0.;
-  else if ( fabs(number) > 1.0e+30 ) number=1.0e+30;
-#endif
-  stringStream << number;
-  recipient = stringStream.str();
-}
-
-/// conversion from number to string, no formatting specified
-template<typename T>
-std::string numberToString( T number )
-{
-  std::string cacheString;
-  numberToString<T>( number, cacheString );
-  return cacheString;
-}
-
-
-template <typename T>
-T stringToNumber ( const std::string &Text )
-  {                               
-    std::stringstream ss(Text);
-    // SKM FIX
-    ss.setf(std::ios::scientific);
-//    ss.precision(std::numeric_limits<double>::digits10);
-
-    T result;
-    return ss >> result ? result : 0;
-  }
-
 /// returns arithmetic average of parent elements prop to node
 template<size_t dim>
 double64 elementToNodeProperty( Node<dim>* node, Index key )
@@ -158,7 +97,7 @@ void extrapolateElementToNodalVariable( Model<dim>& mref,
   const typename std::vector<Element<dim>* >::const_iterator elementsEnd( rref.ElementsEnd() );
   for( typename std::vector<Element<dim>* >::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
   {
-    elementContribution = (*it)->Read( eKey ) * (*it)->Volume() / (*it)->Nodes();
+    elementContribution() = (*it)->Read( eKey ) * (*it)->Volume() / (*it)->Nodes();
 
     for( typename std::vector<Node<dim>* > ::iterator iit = (*it)->NodesBegin(); iit != (*it)->NodesEnd(); ++iit )
     {

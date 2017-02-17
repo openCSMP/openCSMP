@@ -136,6 +136,253 @@ PropertyDatabase<dim>::~PropertyDatabase()
   }
 
 
+
+
+// property iterators
+template<size_t dim>
+std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
+ {
+    return propList_.begin();
+ } 
+ 
+ 
+template<size_t dim>
+std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
+ {
+    return propList_.end();
+ } 
+
+
+template<size_t dim>
+std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountEnd() const
+  {
+    return variableCount_.end();
+  }
+
+
+template<size_t dim>
+std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountBegin() const
+  {
+    return variableCount_.begin();
+  }
+
+/**
+ 
+Tells the user whether a variable exists in the property database. 
+
+@param s The name or csmp::Index of the variable which shall be searched for in the
+database. 
+
+@return The boolean variable 'true' or 'false'.
+*/
+template<size_t dim>
+bool PropertyDatabase<dim>::IsDefined( const char* s ) const
+ {
+    if ( propList_.find(std::string(s)) != propList_.end() ) return true;
+     return false;
+ }
+
+
+/**
+ 
+Returns the placement (Node, IntegrationPoint or Element) of the target
+physical variable. 
+
+@param s The name of the physical variable whose placement shall be determined.
+
+@return The variable placement.
+
+@section messages Messages
+
+If the variable is not defined, an error will be reported. 
+*/
+template<size_t dim>
+PLACEMENT PropertyDatabase<dim>::Placement( const char* s ) const 
+  {
+     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     
+     if ( iter != propList_.end() ) 
+       return (*iter).second.key.place;
+     else 
+       throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Placement", "Unable to identify property", s );
+
+     // shouldn't get here
+     return MODEL;        
+  } // end WhereIs   
+
+
+
+/**
+ 
+Returns the csmp::Index.index of the target physical variable. 
+
+@param s The name of the physical variable whose index shall be determined.
+
+@return The variable index which defines the number of the corresponding property
+vector inside of the MemoryManager. 
+
+@section messages Messages
+
+If the variable is not defined, an error will be reported. 
+*/
+template<size_t dim>
+size_t PropertyDatabase<dim>::Index( const char* s ) const 
+  {
+     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     
+     if ( iter != propList_.end() ) 
+       return (*iter).second.key.index;
+     else 
+       std::cout <<"\nPropertyDatabase::Index: Unable to identify index of: " << s << std::endl;
+
+     return ULONG_MAX;  
+  } // end Index 
+
+
+
+/**
+ 
+Reports whether the target physical variable is of scalar, vector or
+tensor type. 
+
+@param s The name of the physical variable whose type shall be established.
+
+@return The type of the physical variable.
+
+
+@section messages Messages
+
+If the variable is not defined, an error will be reported. 
+*/
+template<size_t dim>
+VARIABLE_TYPE  PropertyDatabase<dim>::Type( const char* s ) const 
+  {
+     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     
+     if ( iter != propList_.end() ) 
+       return (*iter).second.key.type;
+     else 
+       std::cout <<"\n\nPropertyDatabase::Type: Unable to identify type of variable: '" << s <<"'\n";
+
+     return static_cast<VARIABLE_TYPE>(-1);  
+  } // end Type 
+
+/**
+ 
+Returns the number of components of a variable.
+
+Scalar: 1
+Vector: 2
+Tensor: 3
+
+Array:          variable (as defined in the variables file)
+FlaggedArray:   variable (as defined in the variables file)
+
+
+@param s The name of the physical variable whose type shall be established.
+
+@return The number of components of a variable.
+
+@section messages Messages
+
+If the variable is not defined, an error will be reported. 
+*/
+template<size_t dim>
+size_t  PropertyDatabase<dim>::Components( const char* s ) const 
+  {
+     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     
+     if ( iter != propList_.end() ) 
+       return (*iter).second.key.dataDepth;
+     else 
+       std::cout <<"\n\nPropertyDatabase::Type: Unable to identify component count of variable: '" << s <<"'\n";
+
+     return -1;  
+  } // end Type 
+
+
+
+
+/**
+ 
+Returns the Index type for the target physical variable. This index is 
+an efficient access key for the physical variable andcan be used in
+repeated operations on the property storage, such as Read() / Write()
+operations of variable values. 
+
+@param s The name of the variable whose Index shall be retrieved.
+
+@return csmp::Index initialised with variable specifications
+
+A Index class object specifying the type, placement and property-array 
+index of the target variable. If the variable cannot be found in the 
+database the returned Index will be initialized using its default 
+constructor. 
+
+@section application Application
+
+StorageKey() is used inside Interrelation, Algorithm, Visitor and other
+class objects to derive Index keys for computations. 
+
+@section messages Messages
+
+If the variable does not exist in the property database, an error will be
+reported. 
+*/
+template<size_t dim>
+csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
+ {
+    std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+    if ( iter == propList_.end() ) {
+         std::string message("Variable '");
+         message += s;
+         message +="' is undefined";
+         throw csmp::Exception( ERROR, "PropertyDatabase<dim>::StorageKey:", message );
+      }
+    if ( iter == propList_.end() ) 
+      return csmp::Index();
+
+    return (*iter).second.key;
+ }
+
+template<size_t dim>
+csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
+{
+  std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+  if ( iter == propList_.end() ) {
+    std::string message("Variable '");
+    message += s;
+    message +="' is undefined";
+    throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Parameter:", message );
+  }
+  if ( iter == propList_.end() ) 
+    return csmp::Parameter();
+
+  return (*iter).second;
+}
+
+
+
+/// reports how the variable is normally used (as input by user vs. computed)
+template<size_t dim>
+const char*  PropertyDatabase<dim>::Usage( const char* s ) const
+ {
+    std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+    if ( iter == propList_.end() ) {
+         std::string message("Variable '");
+         message += s;
+         message +="' is undefined";
+         throw csmp::Exception( ERROR, "PropertyDatabase<dim>::Usage:", message );
+      }
+    if ( iter == propList_.end() ) return "undefined";
+
+    return (*iter).second.usage.c_str();
+ }
+
+
+
+
+
 /**
  Binary out.
 
@@ -698,9 +945,9 @@ database.
 
 */
 template<size_t dim>
-csmp::Index  PropertyDatabase<dim>::AddProperty ( const char* s, const char* unit, size_t index,
-                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
-                                                  double64 vmin, double64 vmax , string usage)
+csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
+                                                 VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
+                                                 double64 vmin, double64 vmax , string usage )
  {
     map<string,csmp::Parameter>::iterator  iter(propList_.find(string(s)));
 
@@ -728,7 +975,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty ( const char* s, const char* uni
          added_prop.usage =usage;
          added_prop.reference ="not specified";
          added_prop.explanation ="new property defined at runtime";
-         if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: "<< s << endl;
+         if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< s <<"'\n";
 
          /// Roman,2013: Added explicit way of reading the size of variable
          //EstablishVariableTypeDependentProperties( static_cast<int>(vtype), added_prop.key );
@@ -744,6 +991,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty ( const char* s, const char* uni
          UpdateIndexReferences();
       }
 
+    // returning the up-to-date storage key for the newly created variable
     return StorageKey(s);
 
  } // end AddProperty
@@ -1110,7 +1358,7 @@ const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
 template<size_t dim>
 void PropertyDatabase<dim>::Out() const
  {
-     cout <<"\nPropertyDatabase::Out: variables file'"<< physvarsFile <<"'"<< endl;
+     cout <<"\nPropertyDatabase::Out: variables file '"<< physvarsFile <<"'"<< endl;
      cout <<"total number of stored properties: "<< VariableCount() << endl;
      if ( VariableCount() > 0 ) {
           cout <<"detailed variable counts:\n";
@@ -1249,14 +1497,24 @@ void PropertyDatabase<dim>::AttachIndices()
 template<size_t dim>
 void PropertyDatabase<dim>::UpdateIndexReferences()
   {
-  size_t i(0);
-  // update
-  for( map<csmp::Index*,string>::const_iterator it( indexTracker_.IndicesBegin() ); it != indexTracker_.IndicesEnd(); ++it, ++i )
-    if( IsDefined( it->second.c_str() ) )
-      (it->first)->UpdateData( propList_[it->second].key ); /// @todo (2-F) Buggy, only safe by design
-    else
-      throw csmp::Exception( ERROR, "PropertyDatabase<dim>::UpdateIndexReferences", "IndexTracker has Indexes linked to undefined properties" ); 
-  if (this->Verbose()) cout << "\nPropertyDatabase<dim>::UpdateIndexReferences() updated " << i << " Index objects using IndexTracker\n";
+    size_t i(0);
+    // update
+    for ( map<csmp::Index*,string>::const_iterator it(indexTracker_.IndicesBegin()); it != indexTracker_.IndicesEnd(); ++it, ++i )
+      if ( IsDefined( it->second.c_str() ) ) {
+           // (it->first)->UpdateData( propList_[it->second].key ); /// @todo (2-F) Buggy, only safe by design
+           //            string,Parameter pairs
+           auto key_it = propList_.find( (*it).second );
+           if ( key_it == propList_.end() ) {
+                cerr <<"\n"<< (*it).second;
+                throw csmp::Exception( ERROR, "PropertyDatabase<dim>::UpdateIndexReferences:", "could not find variable in database when searching by name." );
+             }
+          else if ( (*it).first != nullptr )
+            (*it).first->UpdateData( (*key_it).second.key );
+        }
+      else
+        throw csmp::Exception( ERROR, "PropertyDatabase<dim>::UpdateIndexReferences:", "IndexTracker has Index objects that are linked to undefined properties." );
+    
+    if (this->Verbose()) cout << "\nPropertyDatabase<dim>::UpdateIndexReferences: updated " << i << " Index objects using IndexTracker.\n";
   }
 
 

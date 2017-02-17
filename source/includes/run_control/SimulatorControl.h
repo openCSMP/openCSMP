@@ -1,5 +1,6 @@
-#ifndef SIMULATORCONTROL_H
-#define SIMULATORCONTROL_H
+#ifndef SIMULATOR_CONTROL_H
+#define SIMULATOR_CONTROL_H
+
 #include "ErrorHandler.h"
 #include "SimulatorSetup.h"
 #include "SimulationSignalHandler.h"

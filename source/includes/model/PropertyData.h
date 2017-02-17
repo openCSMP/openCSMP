@@ -169,13 +169,6 @@ PropertyData inBinaryPropertyData( std::FILE* fp );
 size_t flagOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
 size_t valueOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
 
-
-// inlines
-
-inline void PropertyData::PushBack( VARIABLE_FLAG flag ) { flags_.push_back( flag ); }
-
-inline void PropertyData::PushBack( double64 val ) { data_.push_back( val ); }
-
 } // csmp
 
 #endif

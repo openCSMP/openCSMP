@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "FiniteVolumeStencil.h"
+#include "variableOperations.h"
 
 namespace csmp
 {
@@ -14,7 +15,7 @@ namespace csmp
       const Point<dim> bcFace( f.BaryCenter() ), bcInner( f.Parent(INSIDE)->BaryCenter() );
       for( size_t d(0); d < dim; ++d )
         faceToInner(d) = bcInner[d] - bcFace[d];
-      if( (faceToInner&faceUN) > 0. )
+      if( dotProduct(faceToInner,faceUN) > 0. )
         return false;
       return true;
     }

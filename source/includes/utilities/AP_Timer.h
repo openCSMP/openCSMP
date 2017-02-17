@@ -45,7 +45,7 @@ public:
 protected:
   
   /// read the system time and then update m_elapsedTime accordingly
-  inline void UpdateTimes();
+  void UpdateTimes();
 
 
 protected:

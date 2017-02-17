@@ -373,8 +373,8 @@ public:
     //  objectname  elmttype  identifier (volumes, surfaces, curves in file) 
     std::string                                       file_header_;
     std::string                                       boundary_tag_;
-    ANSYS_ElementSpecifications                       elmt_specs_;
-    CSMP_ElementSpecifications                        csmp_elmt_specs_;
+    typedef ANSYS_ElementSpecifications               elmt_specs;       ///< not local variable but shorthand
+    typedef CSMP_ElementSpecifications                csmp_elmt_specs;
     //          region name   type of elements
     std::multimap<std::string,std::string>            object_specs_;
     //          region name   element ids

@@ -84,7 +84,8 @@ void Tutorial1_Example::Run()
     // -----------------------------------------------------------------------
   
     // txt file defines the physical variables to be used in the simulation
-    Model<2U>  model( readTextPixelData(), "tutorial1_variables.txt" );
+    VSet<2U>   vset=readTextPixelData();
+    Model<2U>  model( vset, "tutorial1_variables.txt" );
     const PropertyDatabase<2>& p_ref(model.Database());  // constand reference to the property database
 
     // give the model dimensions

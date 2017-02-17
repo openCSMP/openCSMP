@@ -185,7 +185,7 @@ void TransportVisitor2D::Visit( Element<2U>* n )
      
      // initializing egrid of element if this has not been done before
      if ( !visited.GetBit( n->Idx() ) ) {
-          n->CoordinateMatrix( XY );
+          n->NodeCoordinateMatrix( XY );
           InitializeElementGrid( n->Idx() );
        }
      

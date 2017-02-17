@@ -145,6 +145,8 @@ void Point_Test::Test_1D_Point()
     p2[0]=1.; 
     p3[0]=2.; 
     _test( p2==midPoint(p1,p3) );
+    Point<dim> pMP = midPoint(p1,p3);
+    _equal( p2[0], pMP[0], numeric_limits<double64>::epsilon() );
 
     // dot product
     _equal( dotProduct( p2, p3 ), 2., numeric_limits<double64>::epsilon() );
@@ -277,6 +279,9 @@ void Point_Test::Test_2D_Point()
     p2[0]=1.; p2[1]=1.;
     p3[0]=2.; p3[1]=2.;
     _test( p2==midPoint(p1,p3) );
+    Point<dim> pMP = midPoint(p1,p3);
+    _equal( p2[0], pMP[0], numeric_limits<double64>::epsilon() );
+    _equal( p2[1], pMP[1], numeric_limits<double64>::epsilon() );
 
     // dot product
     _equal( dotProduct( p2, p3 ), 4., numeric_limits<double64>::epsilon() );
@@ -413,6 +418,10 @@ void Point_Test::Test_3D_Point()
     p2[0]=1.; p2[1]=1.; p2[2]=1.;
     p3[0]=2.; p3[1]=2.; p3[2]=2.;
     _test( p2==midPoint(p1,p3) );
+    Point<dim> pMP = midPoint(p1,p3);
+    _equal( p2[0], pMP[0], numeric_limits<double64>::epsilon() );
+    _equal( p2[1], pMP[1], numeric_limits<double64>::epsilon() );
+    _equal( p2[2], pMP[2], numeric_limits<double64>::epsilon() );
 
     // dot product
     _equal( dotProduct( p2, p3 ), 6., numeric_limits<double64>::epsilon() );

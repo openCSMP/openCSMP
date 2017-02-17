@@ -203,7 +203,7 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                 }
            }
           ScalarVariable result( makeScalar( (*nit)->Status(this->C1_key), (*nit)->Read(this->C1_key) ) );
-          result += div;
+          result() += div;
           (*nit)->Store( this->C1_key, result );
       
       } // end for cycle for nodes
@@ -247,7 +247,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
   
                // result checking and assignment
-               if ( C1 <= upper_limit_ && C1 >= lower_limit_ ) (*nit)->Store( this->C0_key, C1 );
+               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->C0_key, C1 );
                else {
                     cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
                     cerr <<"value: "<< C1() <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;

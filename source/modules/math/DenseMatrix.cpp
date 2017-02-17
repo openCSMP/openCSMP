@@ -29,17 +29,6 @@ DenseMatrix<mn_max>::DenseMatrix( const DenseMatrix<mn_max>& mat )
 
 
 
-/// move constructor
-// ---------------------------------------
-template<size_t mn_max>
-DenseMatrix<mn_max>::DenseMatrix( DenseMatrix<mn_max>&& mat )
- : data{mat.data},
-   rows{mat.rows},
-   cols{mat.cols}
- {
- }
-
-
 // constructor (i,j, value)
 // ---------------------------------------
 template<size_t mn_max>
@@ -73,19 +62,6 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( const DenseMatrix<mn_max>& 
  }
 
 
-template<size_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator=( DenseMatrix<mn_max>&& mat )
- {
-    if ( &mat != this ) {
-         rows  = {mat.rows};
-         cols  = {mat.cols};
-         data  = {mat.data};
-      }
-    return *this;
- }
-
-
-
 
 // Identity()
 // ---------------------------------------------
@@ -97,6 +73,135 @@ void DenseMatrix<mn_max>::Identity()
         if ( i == j ) data[i][j] = static_cast<double64>(1.0);
         else          data[i][j] = static_cast<double64>(0.0);         
  }
+ 
+ 
+/// constructor (i,j)
+template<size_t mn_max>
+DenseMatrix<mn_max>::DenseMatrix( size_t m, size_t n )
+ : rows(m), cols(n)
+ {
+ }
+
+
+
+/// operator (i,j)
+template<size_t mn_max>
+double64& DenseMatrix<mn_max>::operator()( size_t m, size_t n )
+ {
+    CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
+    return data[m][n];
+ }
+
+
+
+/// operator (i,j) const
+template<size_t mn_max>
+const double64& DenseMatrix<mn_max>::operator()( size_t m, size_t n ) const
+ {
+    CheckRange( m, n, "DenseMatrix<mn_max>::operator()");
+    return data[m][n];
+ }
+
+
+ 
+// Rows()
+template<size_t mn_max>
+size_t DenseMatrix<mn_max>::Rows() const { return rows; }
+
+
+// Cols()
+template<size_t mn_max>
+size_t DenseMatrix<mn_max>::Cols() const { return cols; }
+
+
+/**  
+    Resizes DenseMatrix without allocation of new memory.
+    If the capacitiy is exceeded an exception is thrown,
+    but only if the code is compiled in debug mode.
+*/
+template<size_t mn_max>
+void DenseMatrix<mn_max>::Resize( size_t m, size_t n )
+ {
+#ifndef NDEBUG 
+    if ( m > mn_max ) {
+         std::cerr <<"\nDenseMatrix<"<< mn_max;
+         std::cerr <<">::Resize: Requested m-rows exceed matric capacity (";
+         std::cerr << m <<" versus "<< rows <<")."<< std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::Resize");
+      }
+    if ( n > mn_max ) {
+         std::cerr <<"\nDenseMatrix<"<<  mn_max;
+         std::cerr <<">::Resize: Requested n-columns exceed matric capacity (";
+         std::cerr << n <<" versus "<< cols <<")."<< std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::Resize");
+      }
+#endif
+    rows = m;
+    cols = n;
+ }
+
+
+#ifndef NDEBUG 
+/// indices checking but only in the debug version
+template<size_t mn_max>
+bool DenseMatrix<mn_max>::CheckRange( size_t m, size_t n, 
+                                             const char* originator ) const
+ {
+    if ( m >= rows ) {
+         std::cerr <<"\n"<< originator <<" row index violation, index="<< m;
+         std::cerr <<" versus, row-max=" << rows << std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::CheckRange");
+         return false;
+      }
+    if ( n >= cols ) {
+         std::cerr <<"\n"<< originator <<" column index violation, index="<< n;
+         std::cerr <<" versus, column-max=" << cols << std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::CheckRange");
+         return false;
+      }
+    return true;
+ }
+#else
+template<size_t mn_max>
+bool DenseMatrix<mn_max>::CheckRange( size_t, size_t, 
+                                             const char* ) const
+ {
+    return true;
+ }
+#endif
+
+
+
+
+#ifndef NDEBUG 
+template<size_t mn_max>
+/// checks (in DEBUG mode) whether the sizes of the matrices on either side of the expression match
+bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix& mat, 
+                                                const char* originator ) const
+#else
+template<size_t mn_max>
+bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix&, 
+                                                const char* ) const
+#endif
+ {
+#ifndef NDEBUG 
+    if ( rows != mat.rows ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
+         std::cerr <<" versus, rows2=" << mat.rows << std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::CheckSizes");
+         return false;
+      }
+    if ( cols != mat.cols ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< cols;
+         std::cerr <<" versus, columns2=" << mat.cols << std::endl;
+         throw std::length_error("DenseMatrix<mn_max>::CheckSizes");
+         return false;
+      }
+#endif
+    return true;
+ }
+ 
+ 
  
 
 // Zero()
@@ -431,7 +536,7 @@ void DenseMatrix<mn_max>::AssignToDiagonal( size_t diag_elmts,
     Resize( diag_elmts, diag_elmts );
     for ( size_t i=0U; i<diag_elmts; i++ )
       for ( size_t j=0U; j<diag_elmts; j++ )
-        data[i][j] = (i==j) ? sc.Value() : static_cast<double64>(0.);
+        data[i][j] = (i==j) ? sc() : static_cast<double64>(0.);
  }
 
 template<size_t mn_max>
@@ -440,7 +545,7 @@ DenseMatrix<mn_max>&
  {
     for ( size_t i=0U; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ )
-          data[i][j] *= sc.Value();
+          data[i][j] *= sc();
     return *this;
  }
 
@@ -748,7 +853,7 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator=( const TensorVariable<1U>& ts )
  {
     rows = cols = 1U;
-    data[0][0] = ts.Value(0,0);
+    data[0][0] = ts(0,0);
       
     return *this; 
  }
@@ -761,10 +866,10 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator=( const TensorVariable<2U>& ts )
  {
     rows = cols = 2U;
-    data[0][0] = ts.Value(0,0);
-    data[0][1] = ts.Value(0,1);
-    data[1][0] = ts.Value(1,0);
-    data[1][1] = ts.Value(1,1);
+    data[0][0] = ts(0,0);
+    data[0][1] = ts(0,1);
+    data[1][0] = ts(1,0);
+    data[1][1] = ts(1,1);
       
     return *this; 
  }
@@ -778,15 +883,15 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator=( const TensorVariable<3U>& ts )
  {
     rows = cols = 3U;
-    data[0][0] = ts.Value(0,0);
-    data[0][1] = ts.Value(0,1);
-    data[0][2] = ts.Value(0,2);
-    data[1][0] = ts.Value(1,0);
-    data[1][1] = ts.Value(1,1);
-    data[1][2] = ts.Value(1,2);
-    data[2][0] = ts.Value(2,0);
-    data[2][1] = ts.Value(2,1);
-    data[2][2] = ts.Value(2,2); 
+    data[0][0] = ts(0,0);
+    data[0][1] = ts(0,1);
+    data[0][2] = ts(0,2);
+    data[1][0] = ts(1,0);
+    data[1][1] = ts(1,1);
+    data[1][2] = ts(1,2);
+    data[2][0] = ts(2,0);
+    data[2][1] = ts(2,1);
+    data[2][2] = ts(2,2); 
       
     return *this; 
  }
@@ -883,17 +988,17 @@ DenseMatrix<mn_max>&
            for ( size_t j=0U; j<2U; j++ ) {
                  temp.data[i][j] = static_cast<double64>(0.0);
                  for ( size_t k=0U; k<2U; k++ ) 
-                   temp.data[i][j] += data[i][k] * ts.Value(k,j);
+                   temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
       }
 
     TensorVariable<3U> temp;
-    // temp(i,j) += data[i][k]*ts.Value(k][j];
-    temp(0,0) = data[0][0] * ts.Value(0,0) + data[0][1] * ts.Value(1,0);
-    temp(0,1) = data[0][0] * ts.Value(0,1) + data[0][1] * ts.Value(1,1);
-    temp(1,0) = data[1][0] * ts.Value(0,0) + data[1][1] * ts.Value(1,0);
-    temp(1,1) = data[1][0] * ts.Value(0,1) + data[1][1] * ts.Value(1,1);
+    // temp(i,j) += data[i][k]*ts(k][j];
+    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0);
+    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1);
+    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0);
+    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1);
        
     return *this = temp;
  }
@@ -917,7 +1022,7 @@ DenseMatrix<mn_max>&
            for ( size_t j=0U; j<3U; j++ ) {
                  temp.data[i][j] = static_cast<double64>(0.0);
                  for ( size_t k=0U; k<3U; k++ )
-                   temp.data[i][j] += data[i][k] * ts.Value(k,j);
+                   temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
       }
@@ -925,17 +1030,17 @@ DenseMatrix<mn_max>&
     TensorVariable<3U> temp;
     // Unrolled loop(i...3,j...3)
     // row 0
-    temp(0,0) = data[0][0] * ts.Value(0,0) + data[0][1] * ts.Value(1,0) + data[0][2] * ts.Value(2,0);
-    temp(0,1) = data[0][0] * ts.Value(0,1) + data[0][1] * ts.Value(1,1) + data[0][2] * ts.Value(2,1);
-    temp(0,2) = data[0][0] * ts.Value(0,2) + data[0][1] * ts.Value(1,2) + data[0][2] * ts.Value(2,2);
+    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0) + data[0][2] * ts(2,0);
+    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1) + data[0][2] * ts(2,1);
+    temp(0,2) = data[0][0] * ts(0,2) + data[0][1] * ts(1,2) + data[0][2] * ts(2,2);
      // row 1
-    temp(1,0) = data[1][0] * ts.Value(0,0) + data[1][1] * ts.Value(1,0) + data[1][2] * ts.Value(2,0);
-    temp(1,1) = data[1][0] * ts.Value(0,1) + data[1][1] * ts.Value(1,1) + data[1][2] * ts.Value(2,1);
-    temp(1,2) = data[1][0] * ts.Value(0,2) + data[1][1] * ts.Value(1,2) + data[1][2] * ts.Value(2,2);
+    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0) + data[1][2] * ts(2,0);
+    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1) + data[1][2] * ts(2,1);
+    temp(1,2) = data[1][0] * ts(0,2) + data[1][1] * ts(1,2) + data[1][2] * ts(2,2);
     // row 2
-    temp(2,0) = data[2][0] * ts.Value(0,0) + data[2][1] * ts.Value(1,0) + data[2][2] * ts.Value(2,0);
-    temp(2,1) = data[2][0] * ts.Value(0,1) + data[2][1] * ts.Value(1,1) + data[2][2] * ts.Value(2,1);
-    temp(2,2) = data[2][0] * ts.Value(0,2) + data[2][1] * ts.Value(1,2) + data[2][2] * ts.Value(2,2);
+    temp(2,0) = data[2][0] * ts(0,0) + data[2][1] * ts(1,0) + data[2][2] * ts(2,0);
+    temp(2,1) = data[2][0] * ts(0,1) + data[2][1] * ts(1,1) + data[2][2] * ts(2,1);
+    temp(2,2) = data[2][0] * ts(0,2) + data[2][1] * ts(1,2) + data[2][2] * ts(2,2);
 
     return *this = std::move(temp);
  }

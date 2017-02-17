@@ -1,3 +1,4 @@
+#include <ctime>
 #include "SimulatorSetup.h"
 #include "Exception.h"
 #include "PropertyDatabase.h"
@@ -6,7 +7,7 @@
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
 #include "InputDataManager.h"
-#include <time.h>
+#include "OS_Utilities.h"
 
 using namespace std;
 

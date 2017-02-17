@@ -18,6 +18,7 @@
 #include "FEM_Data.h"
 
 #include "Visitor.h"
+#include "variableOperations.h"
 
 //#define SPLITBOUNDARY_DEBUG
 
@@ -562,15 +563,6 @@ void SplitBoundary<dim>::Initialize( bool updateNeighborConnectivity, bool updat
 
 
 template<size_t dim>
-void SplitBoundary<dim>::ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& fvm_mgr )
- {
-    for ( typename vector<InterFace<dim>*>::iterator it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
-        (*it)->Assign( fvm_mgr.Stencil( (*it)->FE_Type() ) );
-
- }
-
-
-template<size_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
  {
     assert( !this->elmt_vec_.empty() );
@@ -585,7 +577,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
         {
             nodes_set.insert( (*it)->N(i, INSIDE ) );
             nodes_set.insert( (*it)->N(i, OUTSIDE ) );
-            if ( (*it)->hasBase() )
+            if ( (*it)->HasBase() )
                 nodes_set.insert( (*it)->N(i, MIDDLE ) );
         }
 
@@ -913,7 +905,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
                 for ( typename vector<InterFace<dim>*>::const_iterator
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->PropertyValueAtBaryCenter( prop_key, sc );
-                     property_integral += (*it)->Volume() * sc.Value();
+                     property_integral += (*it)->Volume() * sc();
                   }
              }
            else {
@@ -930,7 +922,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->UnitNormal( unrml );
                      (*it)->Read( prop_key, vc );
-                     property_integral += unrml & vc;
+                     property_integral += dotProduct( unrml, vc);
                   }
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -939,7 +931,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->UnitNormal( unrml );
                      (*it)->PropertyValueAtBaryCenter( prop_key, vc );
-                     property_integral += unrml & vc;
+                     property_integral += dotProduct( unrml, vc);
                   }
              }
            else {

@@ -16,7 +16,7 @@ namespace csmp {
   class FromElementToElement{
   public:
     void Store( Element<dim>* e, const Index& i, double v )
-      { cache = v; e->Store( i,cache ); }
+      { cache() = v; e->Store( i,cache ); }
   private:
     ScalarVariable cache;
   };
@@ -26,7 +26,7 @@ namespace csmp {
   public:
     void Store( Element<dim>* e, const Index& i, double v )
       {
-        cache = v;
+        cache() = v;
         for( typename vector<Node<dim>*>::iterator it = e->NodesBegin(); it != e->NodesEnd(); ++it )
           (*it)->Store( i,cache );
       }

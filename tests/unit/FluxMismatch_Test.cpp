@@ -122,7 +122,7 @@ int flux_mismatch( bool bPrescribedVelocity )
     for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ ) {
          sc = fabs( (*it)->Read( prop_key ));// / cross_section_fv[it->ID()-1U] );
          (*it)->Store( prop_key, sc );           
-         emax = std::max( emax, sc.Value() );
+         emax = std::max( emax, sc() );
       }
     for ( vector<Node<3U>*>::iterator it=sgref.PerimeterNodesBegin(); it!=sgref.NodesEnd(); it++ )
       (*it)->Store( prop_key, sc=0. );

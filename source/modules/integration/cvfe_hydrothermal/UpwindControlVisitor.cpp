@@ -352,12 +352,12 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
                facet_cfl = false;
     	      }
 
-          if (sh[inside_node_] >= 1.0)
+          if (sh[inside_node_]() >= 1.0)
             {
             Upwinder[p][e.Idx()](inside_node_,outside_node_) = 2;
             Upwinder[p][e.Idx()](outside_node_,inside_node_) = 1;
             }
-          if (sh[outside_node_] >= 1.0)
+          if (sh[outside_node_]() >= 1.0)
             {
             Upwinder[p][e.Idx()](outside_node_,inside_node_) = 2;
             Upwinder[p][e.Idx()](inside_node_,outside_node_) = 1;

@@ -153,41 +153,6 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     std::vector<std::list<std::vector<double64> > >  temp_veloflux_;
     const size_t                  VERTICAL_AXIS_;
 };
-
- 
-
-
-
-
-
-template<size_t dim,class SIMPLEX>
-inline void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
-                                                         size_t        col,
-                                                         VectorVariable<dim>& vc )
- {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i,col);
- }
-
-
-
-template<size_t dim,class SIMPLEX>
-inline void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
-                                                              size_t    col, 
-                                                              ScalarVariable& sc ) 
- {
-    sc = INP(dim,col);
- }
-
- 
-
-template<size_t dim,class SIMPLEX>
-inline void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
-                                                                        size_t         col, 
-                                                                        VectorVariable<dim>& vc ) 
- {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
- }
- 
  
 } // end csmp
  

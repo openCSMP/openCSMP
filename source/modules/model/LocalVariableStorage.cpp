@@ -517,13 +517,6 @@ LocalVariableStorage<dim, STOREE>::LocalVariableStorage(const LocalVariableStora
 }
 
 
-// SKM ADDITION: move constructor
-template<size_t dim, class STOREE>
-LocalVariableStorage<dim, STOREE>::LocalVariableStorage( LocalVariableStorage<dim,STOREE>&& ps )
-    : data_{ps.data_}
-{
-}
-
 template<size_t dim, class STOREE>
 LocalVariableStorage<dim, STOREE>& LocalVariableStorage<dim, STOREE>::operator=(const LocalVariableStorage& ps)
 {
@@ -973,7 +966,7 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Scal
  assert( idx.dataOffset < data_.data.size() );
 #endif
     data_.flags[idx.flagOffset] = sc.Flag();
-    data_.data[idx.dataOffset]  = sc.Value();
+    data_.data[idx.dataOffset]  = sc();
  }
 
 
@@ -1337,7 +1330,7 @@ void LocalVariableStorage<dim,STOREE>::Store( size_t ip, const csmp::Index& idx,
 #endif
 
     data_.flags[flagOffset] = sc.Flag();
-    data_.data[offset] = sc.Value();
+    data_.data[offset] = sc();
   }
 
 
@@ -1724,7 +1717,7 @@ void LocalVariableStorage<dim,STOREE>::Store( size_t sector_or_facet, size_t ip,
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
     data_.flags[flagOffset + sector_ip_flag_offset] = sc.Flag();
-    data_.data[offset + sector_ip_offset]           = sc.Value();
+    data_.data[offset + sector_ip_offset]           = sc();
   }
 
 

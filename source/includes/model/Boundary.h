@@ -149,9 +149,6 @@ class Boundary : public ModelSubDomain<dim,Face> {
     /// establishes connectivity, assigns boundary flags and initializes LVS
     void Initialize( BOX_BOUNDARY boxBoundary = IRREGULAR , bool updateNeighborConnectivity = true, bool updateIndexes = true );
 
-    /// sets up FV stencils restricted to region of interest
-    void ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& );
-
     /// reestablish nodes based on element container
     void CreateNodePointerVector();
 

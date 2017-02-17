@@ -18,7 +18,9 @@ class ComputationalSettings {
   public:
     ComputationalSettings();
     virtual ~ComputationalSettings();
+  
     // for output of results
+  
     void           SetOutputTimes( const std::set<double64>& times, bool overwrite=true );
     void           AddOutputTime( double64 time );
     
@@ -28,7 +30,7 @@ class ComputationalSettings {
     double64       NearestOutputTime( double64 current_time ) const;
     size_t         OutputTimePosition(double64 time);
 
-    /// For output of monitoring data
+    // For output of monitoring data
 
     void           SetMonitorTimes( const std::set<double64>& times, bool overwrite=true );
     void           AddMonitorTime( double64 time );
@@ -39,7 +41,7 @@ class ComputationalSettings {
     double64       NearestMonitorTime( double64 current_time ) const;
     size_t         MonitorTimePosition(double64 time);
 
-    /// Time control
+    // Time control
     
     void           Duration( double64 duration );
     double64       Duration() const;
@@ -60,8 +62,9 @@ class ComputationalSettings {
                                               double64 log_velocity_change, 
                                               double64 current_delta_t, 
                                               double64 max_delta_t );
-    void            RemoveAllOutputtimes(){ output_times_.clear();}
-    void            RemoveAllMonitortimes(){ output_times_.clear();}
+  
+    void            RemoveAllOutputtimes() { output_times_.clear(); }
+    void            RemoveAllMonitortimes(){ output_times_.clear(); }
 
     /// step through output times
     double64                           PopOutputTime();
@@ -85,21 +88,6 @@ class ComputationalSettings {
     std::set<double64>::const_iterator  it_; // points to next output time
     std::set<double64>::const_iterator  itm_; // points to next monitor time
 };
-
-
-
-inline std::set<double64>::const_iterator ComputationalSettings::OutputTimesBegin() const
- { return output_times_.begin(); }
- 
-inline std::set<double64>::const_iterator ComputationalSettings::OutputTimesEnd() const
- { return output_times_.end(); }
-
-inline std::set<double64>::const_iterator ComputationalSettings::MonitorTimesBegin() const
- { return monitor_times_.begin(); }
-
-inline std::set<double64>::const_iterator ComputationalSettings::MonitorTimesEnd() const
- { return monitor_times_.end(); }
-
 
 } // end namespace csmp
 

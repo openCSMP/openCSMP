@@ -160,7 +160,7 @@ and the regions file prefix is used to read the regions file.
         return;
       runningPos = line.find_last_of( " " );
       string regionElementNumber( line.substr( runningPos) );
-      const size_t regionElementCount( stringToNumber<int>(regionElementNumber) );
+      size_t regionElementCount = std::stol(regionElementNumber);
       cout << endl << "  Family " << regionName << " found with " << regionElementCount << " eligible element(s)." << endl;
       regionElements_.push_back( make_pair( regionName, vector<size_t>(regionElementCount) ) );
     }
@@ -221,14 +221,14 @@ and the regions file prefix is used to read the regions file.
 
       int32 ansysFemType(999);
       vector<CSMP_FEM_TYPE> femTypes;
-      ANSYS_ElementSpecifications ansysSpecs;
+      typedef ANSYS_ElementSpecifications ansysSpecs;
       for( size_t e(0); e < elementCount; ++e )
         {
           file >> ansysFemType;
-          femTypes.push_back( ansysSpecs.CSMP_TypeFrom_ANSYS_Type( ansysFemType, true, dim ) );
+          femTypes.push_back( ansysSpecs::CSMP_TypeFrom_ANSYS_Type( ansysFemType, true, dim ) );
         }
       // we assume either all linear, all quadratic or all cubic here
-      interpolationOrder_ = ansysSpecs.InterpolationOrder(ansysFemType);
+      interpolationOrder_ = ansysSpecs::InterpolationOrder(ansysFemType);
       cout << endl << "  Elements are ";
       if( interpolationOrder_ == LINEAR ) cout << "linear." << endl;
       else if( interpolationOrder_ == QUADRATIC ) cout << "quadratic." << endl;
@@ -327,7 +327,7 @@ and the regions file prefix is used to read the regions file.
     {
       const size_t endOfCount( line.find_first_of(" ") );
       const string countString( line.substr(0,endOfCount) );
-      return stringToNumber<int>(countString);
+      return std::stoi(countString);
     }
 
 

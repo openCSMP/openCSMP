@@ -208,7 +208,7 @@ double64 FractureMatrixUpscaled<dim>::krn_Phase() const
 
     // 1. upscaled relative permeability
     GenericTransferFunction  gtf( phim_, pd_, lambda_, this->muw_, this->mun_ );
-    // cout <<"\ngtf "<< gtf.Transfer( this->sat, swi_.Value(), swi_.Value(), this->k, radius_ );
+    // cout <<"\ngtf "<< gtf.Transfer( this->sat, swi_(), swi_(), this->k, radius_ );
 
     // matrix relperm
     const double64 krn_m = gtf.krn_BC( this->seff_ );
@@ -217,7 +217,7 @@ double64 FractureMatrixUpscaled<dim>::krn_Phase() const
     double64 krn_f = (erfc(this->sat_/phif_) * (1.-this->sat_)) / (qfqm_ * ((1.-this->sat_)/qfqm_ + this->sat_ * qfqm_));
 
     // contribution to kro due to capillary transfer
-    krn_f += Af_sw() * gtf.Transfer( this->sat_, swi_.Value(), swi_.Value(), this->k_, radius_ ) / (1. + qv_ * qfqm_);
+    krn_f += Af_sw() * gtf.Transfer( this->sat_, swi_(), swi_(), this->k_, radius_ ) / (1. + qv_ * qfqm_);
 
     // 2. weighting krn by qfqm ratio and limiting it so that sum of relperms is <= 1.
     return ( qfqm_ > 1. ) ? std::max( 1. - krw_Phase(), krn_f ) : krn_m;

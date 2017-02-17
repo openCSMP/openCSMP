@@ -310,7 +310,7 @@ void Region_Example::Run()
    ScalarVariable phi(PLAIN,1.);
    model.Region("FRACS").InputPropertyValue( "porosity", phi, COMPLETE ); // test: O.K.
    //                    ^^^^^^^^^^^^^^^^^^
-   model.Region("MATRIX").InputPropertyValue( "porosity", phi=0.2, COMPLETE ); // test: O.K.
+   model.Region("MATRIX").InputPropertyValue( "porosity", makeScalar(phi.Flag(),0.2), COMPLETE ); // test: O.K.
    printRangeOfVariable( model, "porosity" );
 
    FEM_Data<ScalarVariable>  input_data;

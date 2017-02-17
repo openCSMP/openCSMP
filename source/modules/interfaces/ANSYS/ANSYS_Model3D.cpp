@@ -181,6 +181,15 @@ cout << endl << endl;
 // ==============================================================================
 
 
+// inlines
+
+std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesBegin() const { return node_coords_.begin(); }
+
+std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { return node_coords_.end(); }
+
+
+
+
 
 
 

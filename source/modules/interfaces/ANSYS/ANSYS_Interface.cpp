@@ -460,13 +460,11 @@ The method converts the argument VSet.
 template<size_t dim>
 void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametric )
  {
-    ANSYS_ElementSpecifications  elmt_specs;
-
     if ( !vset.HybridElementTypeMesh() )
-      vset.ElementType( 0U, elmt_specs.CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
+      vset.ElementType( 0U, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
     else
       for ( size_t i=0U; i<vset.ElementTypes(); i++ )
-        vset.ElementType( i, elmt_specs.CSMP_TypeFrom_ANSYS_Type( vset.ElementType(i), isoparametric, dim ) );
+        vset.ElementType( i, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(i), isoparametric, dim ) );
 
  } // end
 
@@ -477,14 +475,13 @@ template void Convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<3U>&,bool );
 void Convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>& object_specs,
                                                bool isoparametric, size_t dim )
 {
-    ANSYS_ElementSpecifications  icem_elmt_specs;
     std::string elmt_type;
     std::multimap<std::string,std::string>::iterator itEnd = object_specs.end();
     for ( std::multimap<std::string,std::string>::iterator
        it=object_specs.begin(); it!=itEnd; it++ )
     {
         elmt_type = (*it).second;
-        (*it).second = icem_elmt_specs.CSMP_TypeNameFrom_ANSYS_TypeName( elmt_type, isoparametric, dim );
+        (*it).second = ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( elmt_type, isoparametric, dim );
     }
 }
 
@@ -996,7 +993,7 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
     std::deque<size_t>  ndele(vset.ElementTypes());
                        
     for ( size_t i=0U; i<vset.ElementTypes(); i++ )
-      ndele[i] = csmp_elmt_specs_.NodesPerElementOfType( vset.ElementType(i) );
+      ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
     vset.ResizePlist( ndele );
 
     // reading number of data identifiers in the record
@@ -1078,7 +1075,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
     // making an array of numbers of neighbors of each element
     std::deque<size_t>  nbors( vset.ElementTypes() );
     for ( size_t i=0U; i<vset.ElementTypes(); ++i )
-      nbors[i] = csmp_elmt_specs_.NeighborsPerElementOfType( vset.ElementType(i) );
+      nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
     vset.ResizePfverts( nbors );
 
     // reading how many neighbor-element data identifiers are in the file record
@@ -1414,7 +1411,7 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     // now the vset can be resized according to the new information
     std::deque<size_t>  ndele(nelements);
     for ( size_t i=0U; i<nelements; ++i )
-      ndele[i] = csmp_elmt_specs_.NodesPerElementOfType( vset.ElementType(i) );
+      ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
     vset.ResizePlist( ndele );
 
     // reading nodes connected to elements 'plist' (unsigned int)
@@ -1470,7 +1467,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     // making an array of numbers of neighbors of each element
     std::deque<size_t>  nbors( nelements );
     for ( size_t i=0U; i<nelements; ++i )
-      nbors[i] = csmp_elmt_specs_.NeighborsPerElementOfType( vset.ElementType(i) );
+      nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
     vset.ResizePfverts( nbors );
 
     // reading neighbors connected to elements 'pfverts' (int)

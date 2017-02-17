@@ -68,16 +68,6 @@ struct Parameter {
 /// to print parameter description in compact form to an output stream
 std::ostream&  operator<<( std::ostream&, const Parameter& );
 
-
-
-// inline methods
-
-inline bool Parameter::IsWithinRange( double64 value ) const
- {
-    if ( value > max || value < min ) return false;
-    return true;
- }
-
 } // csmp
 
 #endif

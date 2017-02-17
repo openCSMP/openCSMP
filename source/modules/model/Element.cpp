@@ -31,13 +31,13 @@ this case the Element default constructor will initialize the FiniteElement
 pointer to zero.
 */
 template<size_t dim>
-Element<dim>::Element( BOX_BOUNDARY bflag  )
+Element<dim>::Element( BOX_BOUNDARY bflag )
   : at_boundary_(bflag),
-    idx_(UINT_MAX),
-    fptr_(0),
-    fvptr_(0)
+    idx_(UINT_MAX)
  {
  }
+
+
 
 /**
 
@@ -63,22 +63,23 @@ them properly.
 */
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
-  : at_boundary_(NOT),
+  : FiniteElementPolicy<dim,csmp::Element>(f),
+    at_boundary_(NOT),
     idx_(UINT_MAX),
-    fptr_(f),
-    fvptr_(0),
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr)
  {
  }
 
+
+
 template<size_t dim>
 Element<dim>::Element( csmp::FiniteElement* f, 
                        csmp::FiniteVolumeStencil<dim>* fvs )	
-  : at_boundary_(NOT),
+  : FiniteElementPolicy<dim,csmp::Element>(f),
+    FiniteVolumePolicy<dim,::csmp::Element>(fvs),
+    at_boundary_(NOT),
     idx_(UINT_MAX),
-    fptr_(f),
-    fvptr_(fvs),
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr)
  {
@@ -92,17 +93,16 @@ Element<dim>::Element( csmp::FiniteElement* f,
                        const LocalVariables& ep,
                        const IntegrationPointVariables& cp )
  
-  : at_boundary_(NOT),
+  : FiniteElementPolicy<dim,csmp::Element>(f),
+    FiniteVolumePolicy<dim,::csmp::Element>(fvs),
+    at_boundary_(NOT),
     idx_(UINT_MAX),
-    fptr_(f),
-    fvptr_(fvs),
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr)
  {
     // variable storage is resized here because the
     // finite element pointer must be initialised first
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, cp );
     else
         this->ResizePropertyStorage( ep );
@@ -120,15 +120,13 @@ Element<dim>::Element( size_t idx,
                        const IntegrationPointVariables& cp,
                        BOX_BOUNDARY boundary_flag )
  
-  : idx_(idx),
-    fptr_(f),
-    fvptr_(nullptr),
+  : FiniteElementPolicy<dim,csmp::Element>(f),
+    idx_(idx),
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr),
     at_boundary_(boundary_flag)
  {
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, cp );
     else
         this->ResizePropertyStorage( ep );
@@ -139,14 +137,12 @@ Element<dim>::Element( size_t idx,
 
 template<size_t dim>
 Element<dim>::Element( const Element<dim>& el )  
- : at_boundary_   (el.at_boundary_   ),
+ : FiniteElementPolicy<dim,csmp::Element>(el.FE()),
+   at_boundary_   (el.at_boundary_   ),
    idx_           (el.idx_           ),
-   fptr_          (el.fptr_          ),
-   fvptr_         (el.fvptr_         ),
    elmt_connector_(el.elmt_connector_), // watch out where the pointers point to
    node_connector_(el.node_connector_)  // watch out where the pointers point to
  {
-   assert( fptr_ != nullptr /* detected unitialized element*/ );
    assert( !node_connector_.empty() /* detected unitialized element*/ );
    assert( !elmt_connector_.empty() /* detected unitialized element*/ );
    // variable storage: call of initialization function
@@ -156,20 +152,21 @@ Element<dim>::Element( const Element<dim>& el )
 
 
 /// move constructor
+/*
 template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
- : at_boundary_   {el.at_boundary_   },
+ : FiniteElementPolicy<dim,csmp::Element>{el.FE()},
+   at_boundary_   {el.at_boundary_   },
    idx_           {el.idx_           },
-   fptr_          {el.fptr_          },
-   fvptr_         {el.fvptr_         },
    elmt_connector_{el.elmt_connector_},
-   node_connector_{el.node_connector_}
+   node_connector_{el.node_connector_},
+   this->fptr_(el.fptr_),
  {
    this->LVS( move(el.LVS()) );
-   el.fptr_  = nullptr;
-   el.fvptr_ = nullptr;
+   el.Assign( static_cast<FiniteElement*>(nullptr) );
+   el.Assign( static_cast<FiniteVolumeStencil<dim>*>(nullptr) );
  }
-
+*/
 
 template<size_t dim>
 Element<dim>::~Element()
@@ -186,11 +183,10 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
     if ( &el != this ) {
         at_boundary_    = el.at_boundary_;
         idx_            = el.idx_;
-        fptr_           = el.fptr_;
-        fvptr_          = el.fvptr_;
         elmt_connector_ = el.elmt_connector_;
         node_connector_ = el.node_connector_;
         this->LVS( el.LVS() );
+        FiniteElementPolicy<dim,csmp::Element>::Assign( el.FE() );
       }
     return *this;
  }
@@ -335,23 +331,8 @@ typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd(
 
 
 template<size_t dim>
-void Element<dim>::Assign( const csmp::FiniteVolumeStencil<dim>* const stencil_ptr )
- {
-    assert( stencil_ptr != NULL );
-    fvptr_ = stencil_ptr;
- }
-
-template<size_t dim>
-void Element<dim>::Assign(FiniteElement * fem_ptr )
- {
-    assert( fem_ptr != NULL );
-    fptr_ = fem_ptr;
- }
-
-template<size_t dim>
 void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor elements
  {
-    assert( fptr_ != NULL );
     assert( elmt_connector_.size() == this->Neighbors() );
     assert( i < this->Neighbors() );
 
@@ -362,10 +343,9 @@ void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor ele
 template<size_t dim>
 void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
-    assert( fptr_ != NULL );
     assert( node_connector_.size() == this->Nodes() );
     assert( i < this->Nodes() );
-    assert( nd_ptr != NULL );
+    assert( nd_ptr != nullptr );
 
     node_connector_[i] = nd_ptr;
  }
@@ -400,19 +380,6 @@ template<size_t dim>
 BOX_BOUNDARY  Element<dim>::AtBoundary() const
  {
     return at_boundary_;
- }
-
-// methods supporting the bridge to the subclasses of FiniteElement
-template<size_t dim>
-FiniteElement*  Element<dim>::FE() const
- {
-    return fptr_;
- }
-
-template<size_t dim>
-const FiniteVolumeStencil<dim>*  Element<dim>::FV_Stencil() const
- {
-    return fvptr_;
  }
 
 template<size_t dim>
@@ -490,6 +457,37 @@ csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
  }
 
 
+/**
+
+Returns a matrix with 'nodes'-rows and 'coordinate-directions' columns.
+This Meschach++ matrix defines the positions of the elements nodes for
+the finite-element matrix assembly. Since the number of element nodes
+may vary among different elements types, the number of rows in XY may
+also vary from element to element.
+
+@param XY A DenseMatrix<DM_MIN> class object (value type fT). This matrix is dynamically
+resized if necessary but must have been constructed with a finite size
+before passing it to CoordinateMatrix().
+
+@return The node coordinates are returned into the supplied matrix.
+
+@section application Application
+
+Finite-element forms of differential equations require the global node
+coordinates of the element to calculate the element constribution to the
+global solution matrix. If the element uses local coordinates, the global
+node coordinates will still be required to compute Jacobian (coordinate-
+transformation) matrix.
+*/
+template<size_t dim>
+void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+  {
+    const size_t n_nodes( Nodes());
+    XY.Resize( n_nodes, dim );
+    for ( size_t i=0U; i<n_nodes; ++i )
+        XY.AssignRow( i, N(i)->Coordinate() );
+
+  } // end CoordinateMatrix
 
 
 
@@ -497,9 +495,142 @@ csmp::Element<dim>*  Element<dim>::Neighbor( size_t n ) const
 
 
 
+/**
+
+BaryCenter() calculates the node coordinate average for the element. This
+coordinate value is equivalent to the center of gravity of the Element
+type.
+
+@section input Input Arguments
+
+The barycentre is returned into a CSMP vector variable a reference to which
+is supplied as single argument.
+
+@section application Application
+
+The element barycentre could be used for instance to output element material
+properties from the Model as point data. This is done if you use the
+Model OutputToTextFile() methods.
+
+@return The VARIABLE_FLAG of the returned vector variable will not be changed by
+BaryCentre().
+
+@note could be madfe more
+
+@test O.K. SKM25/8/14 after refactoring loop
+
+*/
+template<size_t dim>
+Point<dim>  Element<dim>::BaryCenter() const
+  {
+    Point<dim>    pt(N(0U)->Coordinate());
+    const size_t  n_nodes(Nodes());
+    for ( size_t i=1U; i<n_nodes; ++i )
+      pt += N(i)->Coordinate();
+
+    return pt / static_cast<double64>(Nodes());
+  }
 
 
 
+/**
+
+Measures the length of the element (in physical space) in a certain direction.
+
+@param vecDirection direction in which the element is to be measured
+
+@return Length of the element.
+
+@sectin implementation Implementation
+
+The main idea is to measure the height of the oriented bounding box
+(oriented by the direction of vecDirection) which surrounds the element.
+This is done by projecting each node onto the direction vector and calculating
+the difference between the largest and smallest magnitude. The distance between both
+projections will be given by the absolute value of this difference.
+
+@section application Application
+
+The length of the element in a certain dimension is used to weigh the error of the element,
+when evaluating the quality of a certain mesh.
+
+@todo this method could be optimised if only the corner nodes would be used
+
+*/
+template<size_t dim>
+double64  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+  {
+    double64 fMinTemp( static_cast<double64>( DBL_MAX) );
+    double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+
+    // this normalisation is necessary because the vector variable
+    // being any physical quantity may have any magnitude
+    const double64 fMagnitudeOfDirection(vecDirection.Length());
+    // avoid division by zero
+    assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+
+    const size_t n_nodes(Nodes());
+    for ( size_t i=0; i<n_nodes; ++i ) {
+        // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
+        double64 fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
+        fTemp /= fMagnitudeOfDirection;
+
+        // update minimum value
+        fMinTemp = std::min(fMinTemp, fTemp);
+        // update maximum value
+        fMaxTemp = std::max(fMaxTemp, fTemp);
+    }
+
+    //substract magnitudes
+    return fMaxTemp - fMinTemp;
+ }
+
+
+
+
+/** 
+    returns property values at the nodes
+*/
+template<size_t dim>
+template< class Var>
+void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V ) const
+ {
+    if ( idx.place != NODE ) {
+         std::cerr <<"\nElement<"<< dim;
+         std::cerr <<">::NodePropertyVector: Requested property ";
+         std::cerr <<"is not placed on the nodes; property Index: "<< std::endl;
+         idx.Out();
+         return;
+      }
+
+    // resizing V if necessary
+    const size_t  n_nodes(Nodes());
+    V.resize(n_nodes);
+
+    for ( size_t i=0U; i<n_nodes; i++ )
+      N(i)->Read( idx, V[i] );
+ }
+
+// scalar
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+// vector
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<1U> >& ) const;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<2U> >& ) const;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<3U> >& ) const;
+// tensor
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<1U> >& ) const;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<2U> >& ) const;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<3U> >& ) const;
+// array
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+// flagged array
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
 
 
 // OUTPUT

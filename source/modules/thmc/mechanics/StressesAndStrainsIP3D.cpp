@@ -220,7 +220,7 @@ void StressesAndStrainsIP3D::GetOperands( Element<3U>& e )
    DISPL_.Resize( nodes * 3U, 1 );
    size_t k(0U);
    for ( size_t i=0; i<nodes; i++ )
-     for ( size_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i].Value(j);
+     for ( size_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i](j);
 
    if ( verbose_ ) {     
         cout <<"\nStressesAndStrainsIP3D::GetOperands: Nodal displacements, element: "<< e.Idx() << endl;
@@ -451,7 +451,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
 
                  // dilatation = sum of principal strains 
                  // -------------------------------------
-                 sc_ = evals_[0] + evals_[1] + evals_[2];
+                 sc_() = evals_[0] + evals_[1] + evals_[2];
                  e.Store( i, dilat_key_, sc_ );
               }
             
@@ -475,7 +475,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
 
                  // mean stress = average of principal stresses
                  // -------------------------------------------
-                 sc_ = evals_.Average();
+                 sc_() = (evals_[0] + evals_[1] + evals_[2]) / 3.;
                  e.Store( i, means_key_, sc_ );
                  // max shear stress
                  // ----------------

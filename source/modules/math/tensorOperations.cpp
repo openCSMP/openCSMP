@@ -11,6 +11,7 @@
 #include "Element.h"
 #include "ErrorHandler.h"
 #include "Point.h"
+#include "vectorOperations.h"
 
 namespace csmp {
 
@@ -36,7 +37,7 @@ double64 magnitude( const PLACE<dim>& site, const csmp::Index& prop_key )
          site.Read( prop_key, ts );
          VectorVariable<dim> Eigenvalues;
          ts.EigenValues( Eigenvalues );
-         return Eigenvalues.Average();
+         return valueAverage(Eigenvalues);
       }
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );

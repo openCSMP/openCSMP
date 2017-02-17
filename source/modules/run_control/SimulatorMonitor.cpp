@@ -257,8 +257,8 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
                     listoftokens.push_back(token);
 
                 // if model time is greater than current simulation time, break out.
-                if (stringToNumber<double64>(listoftokens[mtime_pos]) >= mref_.Read(mref_.Database().StorageKey("model time"))){
-                    cout<<" WARNING: model time in monitoring file exceeds model time saved in the CSMP model"<<stringToNumber<double64>(listoftokens[mtime_pos])<<">="<<mref_.Read(mref_.Database().StorageKey("model time"))<<endl;
+                if (std::stod(listoftokens[mtime_pos]) >= mref_.Read(mref_.Database().StorageKey("model time"))){
+                    cout<<" WARNING: model time in monitoring file exceeds model time saved in the CSMP model"<<std::stod(listoftokens[mtime_pos])<<">="<<mref_.Read(mref_.Database().StorageKey("model time"))<<endl;
                     cout<<" Data beyond this value of simulated time will be discarded."<<endl;
                     cout.flush();
                     break;
@@ -272,7 +272,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
                 }
                 size_t n(0);
                 for (vector<string>::iterator lit = listoftokens.begin(); lit!=listoftokens.end();lit++){
-                    dataline.push_back(stringToNumber<double64>(*lit));
+                    dataline.push_back(std::stod(*lit));
                     n++;
                 }
                                

@@ -201,6 +201,404 @@ TwoPhaseModel<dim>::~TwoPhaseModel()
 
 
 template<size_t dim>
+double64 csmp::TwoPhaseModel<dim>::Swr() const
+  {
+    return swr_;
+  }
+
+template<size_t dim>
+double csmp::TwoPhaseModel<dim>::Snr() const
+  {
+    return snr_;
+  }
+
+template<size_t dim>
+void csmp::TwoPhaseModel<dim>::Swr( double wettingResidual )
+  {
+     swr_ = wettingResidual;
+  }
+
+template<size_t dim>
+void csmp::TwoPhaseModel<dim>::Snr( double wettingNonResidual )
+  {
+    snr_ = wettingNonResidual;
+  }
+
+
+template<size_t dim>
+void TwoPhaseModel<dim>::SaturationWettingPhase( double64 s_wetting )
+{ sat_ = s_wetting; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::ViscosityNonWettingPhase( double64 visc )
+{ mun_ = visc; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::ViscosityWettingPhase( double64 visc )
+{ muw_ = visc; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::DensityNonWettingPhase( double64 dens )
+{ rhn_ = dens; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::DensityWettingPhase( double64 dens )
+{ rhw_ = dens; }
+
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::Permeability() const
+{ return k_; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::Permeability( double64 permeability )
+  { k_ = permeability; }
+
+template<size_t dim>
+TensorVariable<dim> TwoPhaseModel<dim>::TensorPermeability() const
+  { return K_; }
+
+template<size_t dim>
+void TwoPhaseModel<dim>::TensorPermeability( TensorVariable<dim> permeability )
+  { K_ = permeability; }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::ViscosityNonWettingPhase() const
+{ return mun_; }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::ViscosityWettingPhase() const
+{ return muw_; }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::DensityNonWettingPhase() const
+{ return rhn_; }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::DensityWettingPhase() const
+{ return rhw_; }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
+{ 
+   assert( phase == 1U or phase == 2U );
+   if ( phase == 2U ) return MAX_CAPILLARY_PRESSURE_;
+   return static_cast<double64>(0.); 
+}
+
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::Saturation( size_t phase ) const
+{ 
+   assert( phase == 1U or phase == 2U );
+   if ( phase == 2U ) return static_cast<double64>(1.) - sat_;
+   return sat_;
+}
+
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const 
+ {
+    assert( phase == 1U or phase == 2U );
+    if ( phase == 1U ) return krw_Phase() / muw_;
+    return krn_Phase() / mun_;
+ }
+
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::TotalMobilityMultiplier() const 
+ {
+    return krn_Phase() / mun_ + krw_Phase() / muw_;
+ }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::TotalMobility() const 
+ {
+    return k_ * TotalMobilityMultiplier();
+ }
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::ViscosityRatio() const
+{
+  return mun_ / muw_;
+}
+
+/** 
+    calculates lambda_t (total mobility) = sum of phase mobilities
+
+    @todo SKM averages tensor properties, but should create tensor mobilities in stead
+*/
+template<size_t dim>
+void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
+ {
+    swr_ = e.Read( swr_key_ );
+    snr_ = e.Read( snr_key_ );
+
+    if( tensor_permeability_){
+        e.Read( perm_key_, K_);
+        // TODO: Skm: fix these unwanted averages of the tensor k
+        k_ = K_.Trace()/static_cast<double64>(dim);
+    }else{
+        k_ = e.Read( perm_key_ );
+        K_.operator=( VectorVariable<dim>(PLAIN, k_ ) );
+    }
+    
+    // if properties are discretized on element
+    if (!sw_ro_mu_placement_) {
+        sat_ = e.Read( sat_key_ );
+        mun_ = e.Read( mun_key_ );
+        muw_ = e.Read( muw_key_ );
+        rhn_ = e.Read( rhn_key_ );
+        rhw_ = e.Read( rhw_key_ );
+    }
+    
+ } 
+ 
+ 
+ 
+template<size_t dim>
+void TwoPhaseModel<dim>::InitializeForBaryCenter( const Element<dim>& e )
+ {
+    if (sw_ro_mu_placement_) {
+        e.N_AtBaryCenter( e.FE()->NRST );
+        InterpolateNodeProperties( e );
+    }
+ }  
+
+
+template<size_t dim>
+void TwoPhaseModel<dim>::InitializeForNode( const Element<dim>& e,
+                                                   size_t fem_node )
+ {
+    if (sw_ro_mu_placement_) {
+        sat_ = e.N(fem_node)->Read( sat_key_ );
+        mun_ = e.N(fem_node)->Read( mun_key_ );
+        muw_ = e.N(fem_node)->Read( muw_key_ );
+        rhn_ = e.N(fem_node)->Read( rhn_key_ );
+        rhw_ = e.N(fem_node)->Read( rhw_key_ );
+    }
+
+ }  
+
+
+template<size_t dim>
+void TwoPhaseModel<dim>::InitializeForIntegrationPoint( size_t ip, 
+                                                               const Element<dim>& e )
+ {
+    if (sw_ro_mu_placement_) {
+        e.N_AtIntegrationPoint( ip, e.FE()->NRST );
+        InterpolateNodeProperties( e );
+    }
+    
+ } // end 
+ 
+ 
+ 
+ 
+template<size_t dim>
+void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_t ip,
+                                                                    const Element<dim>& e )
+ {
+    if (sw_ro_mu_placement_) {
+        (e).N_AtFacetIntegrationPoint( facet, ip );  
+        InterpolateNodeProperties( e );
+    }
+
+ }  
+
+
+
+template<size_t dim>
+void TwoPhaseModel<dim>::InitializeForSectorIntegrationPoint( size_t sector, size_t ip,
+                                                                     const Element<dim>& e )
+ {
+    if (sw_ro_mu_placement_) {
+        (e).N_AtSectorIntegrationPoint( sector, ip );  
+        InterpolateNodeProperties( e );
+    }
+
+ } 
+
+
+
+
+
+ 
+
+/**
+ 
+The effective saturation is always computed w.r.t. the wetting phase. 
+(compare with Helmig 1997, p. 71 and note that phase 1 is the wetting 
+phase; note also that Initialize() must be called first to get input 
+parameters like residual saturations).  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::EffectiveSaturation() const 
+ {
+    return seff_ = std::min( std::max( (sat_ - swr_) / (1. - swr_ - snr_), 0. ), 1. );
+    
+ } // end EffectiveSaturation
+
+
+/// return wetting-phase saturation based on effective saturation
+template<size_t dim>
+double64 TwoPhaseModel<dim>::SeffToSw() const
+ {
+    return sat_ = seff_*(1. - swr_ - snr_) + swr_;
+
+ }
+
+/// return wetting-phase saturation based on effective saturation ( useful for numerical calculations )
+template<size_t dim>
+double64 TwoPhaseModel<dim>::SeffToSw( double64 seff ) const
+ {
+    return sat_ = seff*(1. - swr_ - snr_) + swr_;
+
+ }
+
+/**
+ 
+Computes the fractional flow of the wetting (phase=1) and non-wetting
+(phase=2) phases using the relative k's. and viscosities. Note that 
+Initialize() must be called first.  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::f_Phase( size_t phase ) const
+ {
+    assert( phase == 1U or phase == 2U );
+      if ( phase == 1U )
+        return (krw_Phase() / muw_) / TotalMobilityMultiplier();
+
+      return   (krn_Phase() / mun_) / TotalMobilityMultiplier();
+ }
+
+      
+                                  
+/**
+Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn 
+and de Neef (1998). Note that Initialize() must be called first.  
+ */
+template<size_t dim>
+double64 TwoPhaseModel<dim>::G() const
+ {
+    const double64 lambda_w(krw_Phase() / muw_),
+             lambda_n(krn_Phase() / mun_);
+             
+	return (lambda_w * lambda_n) / (lambda_w + lambda_n);
+ }
+ 
+
+
+
+/**
+Returns the diffusion coefficient for the phase of interest. If not 
+overloaeded, the hydraulic conductivity is returned.  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::DiffusionMultiplier( size_t phase ) const
+{
+     assert( phase == 1U or phase == 2U );
+     return k_ / ( (phase==1u) ? muw_ : mun_ );
+} 
+ 
+
+
+/**
+See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
+permeability in direction of flow  x  lambda_overbar  x pc-gradient.  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::CapillaryDiffusionMultiplier( ) const
+{
+   return k_ * G() * dpcds_Phase( );
+} 
+
+
+
+/**
+ 
+If not overloaded, this returns the derivative of the fractional flow
+function at the current saturation of the wetting phase (see Helmig, 1997, 
+p. 108, eqn. 3.74, term 2 (first part).  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::AdvectionMultiplier( ) const
+ {
+    return dfds();
+ } 
+
+template<size_t dim>
+double64 TwoPhaseModel<dim>::GravityTerm() const
+{
+  // note that the projected gravity acts opposite the y-axis
+  const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+
+    // economizing the calculation
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+
+    // else compute result using G saturation derivative
+    return k_g_drho;
+}
+
+/** See Sebastian Geiger's thesis (2004), closed form.
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::GravityMultiplier_G( ) const
+{
+  // note that the projected gravity acts opposite the y-axis
+  const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+	
+	// economizing the calculation
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+
+	// else compute result using G saturation derivative
+	return k_g_drho * G();	
+} 
+
+
+ 
+/**
+ 
+Computes multiplier for advection gravity coefficient. The divergence 
+lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997, 
+p. 108, eqn. 3.74, term 2 (second part).  
+*/
+template<size_t dim>
+double64 TwoPhaseModel<dim>::GravityMultiplier_dGds( ) const
+{
+    // SKM flow equations worked out with Adrian
+    const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
+	
+	// economizing the calculation
+    if ( std::fabs(k_g_drho) < tolerance_ ) return static_cast<double64>(0.);
+
+	// else compute result using G saturation derivative
+    return k_g_drho * dGds(  );
+} 
+
+template<size_t dim>
+csmp::Index TwoPhaseModel<dim>::WettingPhaseSaturationKey() const
+{
+  return sat_key_;
+}
+
+template<size_t dim>
+csmp::Index TwoPhaseModel<dim>::NonWettingPhaseSaturationKey() const
+{
+    throw csmp::Exception( ERROR, "TwoPhaseModel<dim>::NonWettingPhaseSaturationKey()",
+                           "It appears someone decided this should be the irreducible non-wet. phase saturation. Wrong." );
+    return snr_key_;
+}
+
+template<size_t dim>
+csmp::Index TwoPhaseModel<dim>::TotalMobilityKey() const
+{
+  return lt_key_;
+}
+
+
+
+template<size_t dim>
 void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
  {
     if ( interpolate_fluid_properties_ ) {
@@ -560,32 +958,32 @@ void TwoPhaseModel<dim>::ShockSpeedHeight( double64& speed, double64& height)con
 /// General accessory functions
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::mobility_w_at( double64 se ) const
+double64 TwoPhaseModel<dim>::mobility_w_at( double64 se ) const
 {
   return krw_at( se ) / muw_;
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::mobility_n_at( double64 se ) const
+double64 TwoPhaseModel<dim>::mobility_n_at( double64 se ) const
 {
   return krn_at( se ) / mun_;
 }
 
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::fw_at( double64 se ) const
+double64 TwoPhaseModel<dim>::fw_at( double64 se ) const
 {
   return 1.0 / ( 1.0 + mobility_n_at( se ) / mobility_w_at( se ) );
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::fn_at( double64 se ) const
+double64 TwoPhaseModel<dim>::fn_at( double64 se ) const
 {
   return 1.0 / ( 1.0 + mobility_w_at( se ) / mobility_n_at( se ) );
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::krw_at( double64 se) const
+double64 TwoPhaseModel<dim>::krw_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -597,7 +995,7 @@ inline double64 TwoPhaseModel<dim>::krw_at( double64 se) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::krn_at( double64 se) const
+double64 TwoPhaseModel<dim>::krn_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -609,7 +1007,7 @@ inline double64 TwoPhaseModel<dim>::krn_at( double64 se) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
+double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
 {
   const double64 cache = seff_;
   seff_ = se;
@@ -620,7 +1018,7 @@ inline double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
+double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -633,7 +1031,7 @@ inline double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
 
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
+double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -645,7 +1043,7 @@ inline double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::G_at( double64 se ) const
+double64 TwoPhaseModel<dim>::G_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -657,7 +1055,7 @@ inline double64 TwoPhaseModel<dim>::G_at( double64 se ) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
+double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -669,7 +1067,7 @@ inline double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
+double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
 {
     double64 cache = seff_;
     seff_ = se;
@@ -680,7 +1078,7 @@ inline double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
+double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
 {
   const double64 cache = seff_;
   const double64 Sw = Sw_Phase( pc );
@@ -690,7 +1088,7 @@ inline double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
 }
 
 template<size_t dim>
-inline double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
+double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
 {
     const double64 cache = seff_;
     const double64 dsdpc = dsdpc_Phase( pc );

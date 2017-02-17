@@ -14,8 +14,6 @@ namespace csmp {
 template<size_t dim>
 Face<dim>::Face()
  : idx_(NULL_IDX),
-   fptr_(nullptr),
-   fvptr_(nullptr),
    innerParent_( nullptr ),
    outerParent_( nullptr )
  {
@@ -55,9 +53,8 @@ Face<dim>::Face( const Element<dim>& elmt,
                  Element<dim>* const outer_parent,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : idx_(elmt.Idx()),
-    fptr_(elmt.FE()),
-    fvptr_(elmt.FV_Stencil()),
+  : FiniteElementPolicy<dim,csmp::Face>(elmt.FE()),
+    idx_(elmt.Idx()),
     node_connector_(elmt.Nodes(),nullptr),
     face_connector_(elmt.Neighbors(),nullptr),
     innerParent_(inner_parent),
@@ -68,8 +65,7 @@ Face<dim>::Face( const Element<dim>& elmt,
     assert( innerParent_ != nullptr );
    
     // 1. creating local storage for face and face integration point variables
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
@@ -123,9 +119,8 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                  const std::vector<Node<dim>*>&  edge_nodes,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
- : idx_(NULL_IDX),
-   fptr_(FE_type_of_boundary_face),
-   fvptr_(nullptr),
+ : FiniteElementPolicy<dim,csmp::Face>(FE_type_of_boundary_face),
+   idx_(NULL_IDX),
    innerParent_(inner_parent),
    outerParent_(outer_parent),
    node_connector_(edge_nodes),
@@ -133,11 +128,9 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
  {
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
-    assert( fptr_ != nullptr );
    
     // creating local storage for face and face integration point variables
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
@@ -181,9 +174,8 @@ Face<dim>::Face( Element<dim>& e,
                  size_t boundary_face,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : idx_(NULL_IDX),
-    fptr_(FE_type_for_face),
-    fvptr_(nullptr),
+  : FiniteElementPolicy<dim,csmp::Face>(FE_type_for_face),
+    idx_(NULL_IDX),
     node_connector_( FE_type_for_face->Nodes(),nullptr),
     face_connector_(FE_type_for_face->Neighbors(),nullptr),
     innerParent_(&e),
@@ -193,8 +185,7 @@ Face<dim>::Face( Element<dim>& e,
     assert( e.Neighbor(boundary_face) == nullptr );
 
     // 1. creating local storage for face and face integration point variables
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
@@ -290,17 +281,15 @@ Face<dim>::Face( csmp::FiniteElement* f,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
 
-  : idx_(UINT_MAX),
-    fptr_(f),
-    fvptr_(fvs),
+  : FiniteElementPolicy<dim,csmp::Face>(f),
+    idx_(UINT_MAX),
     node_connector_(f->Nodes(),nullptr),
     face_connector_(f->Neighbors(),nullptr),
     innerParent_( nullptr ),
     outerParent_( nullptr )
  {
     // LVS must be resized here because the finite element pointer has to be initialised before
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
@@ -319,16 +308,14 @@ Face<dim>::Face( size_t index,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
 
-  : idx_(index),
-    fptr_(f),
-    fvptr_(nullptr),
+  : FiniteElementPolicy<dim,csmp::Face>(f),
+    idx_(index),
     node_connector_(f->Nodes(),nullptr),
     face_connector_(f->Neighbors(),nullptr),
     innerParent_( nullptr ),
     outerParent_( nullptr )
  {
-    assert( fptr_ );
-    if ( fptr_->UsesLocalCoordinates() )
+    if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
     else
         this->ResizePropertyStorage( ep );
@@ -339,37 +326,43 @@ Face<dim>::Face( size_t index,
 /// copy constructor
 template<size_t dim>
 Face<dim>::Face( const Face<dim>& fc )
-  : idx_                  ( fc.idx_                  ),
-    fptr_                 ( fc.fptr_                 ),
-    fvptr_                ( fc.fvptr_                ),
-    face_connector_       ( fc.face_connector_       ),
+  : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
+    idx_                  ( fc.idx_),
+    face_connector_       ( fc.face_connector_),
     node_connector_ ( fc.node_connector_ ),
-    innerParent_          ( fc.innerParent_          ),
-    outerParent_          ( fc.outerParent_          )
+    innerParent_          ( fc.innerParent_),
+    outerParent_          ( fc.outerParent_)
   {
-    assert( fptr_ != nullptr /* detected unitialized element*/ );
+    assert( this->FE() != nullptr /* detected unitialized element*/ );
     assert( !face_connector_.empty() /* detected unitialized element*/ );
     // variable storage: call of initialization function
     this->LVS( fc.LVS() );
   }
 
 
+
+
 /// move constructor
+/*
 template<size_t dim>
 Face<dim>::Face( Face<dim>&& fc )
-  : idx_                  { fc.idx_},
-    fptr_                 { fc.fptr_},
-    fvptr_                { fc.fvptr_},
+  : idx_           { fc.idx_},
     node_connector_{ fc.node_connector_},
-    face_connector_       { fc.face_connector_},
-    innerParent_          { fc.innerParent_},
-    outerParent_          { fc.outerParent_}
-  {
+    face_connector_{ fc.face_connector_},
+    innerParent_   { fc.innerParent_},
+    outerParent_   { fc.outerParent_}
+ {
+    throw csmp::Exception( ERROR, "Face(move constructor:", "pointers have not been implemented yet correctly");
     this->LVS( move(fc.LVS()) );
-    fc.fptr_  = nullptr;
-    fc.fvptr_ = nullptr;
-  }
+    fc.Assign( static_cast<FiniteElement*>(nullptr) );
+    fc.Assign( static_cast<FiniteVolumeStencil<dim>*>(nullptr) );
+    fc.innerParent_ = nullptr;
+    fc.outerParent_ = nullptr;
+ }
+*/
 
+
+// TODO: implement move constructor and assignment operator
 
 
 template<size_t dim>
@@ -391,13 +384,12 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
         idx_                  = fc.idx_;
-        fptr_                 = fc.fptr_;  // O.K.
-        fvptr_                = fc.fvptr_; // O.K.
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
         innerParent_          = fc.innerParent_; // problematic pointer assignment
         outerParent_          = fc.outerParent_; // problematic
         this->LVS( fc.LVS() );
+        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
       }
     return *this;
  }
@@ -405,42 +397,31 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
 
 // CONSTRUCTION PROCESS
 
-
 /**
     Connect Face object with its nodes.
 */
 template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
-    assert( i < this->Nodes() );
-    assert( nd_ptr != NULL );
-    assert( fptr_ != NULL );
-    assert( node_connector_.size() == this->Nodes() );
+    assert( nd_ptr != nullptr );
+    assert( i < Nodes() );
+    assert( node_connector_.size() == this->FE()->Nodes() );
 
     node_connector_[i] = nd_ptr;
  }
 
 
 
-/// connect face to corresponding finite-volume stecncil
 template<size_t dim>
-void Face<dim>::Assign( const csmp::FiniteVolumeStencil<dim>* const stencil_ptr )
+void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  {
-    assert( stencil_ptr != NULL );
-    fvptr_ = stencil_ptr;
+    assert( f_ptr != nullptr );
+    assert( i < Neighbors() );
+    assert( face_connector_.size() == this->FE()->Neighbors() );
+
+    face_connector_[i] = f_ptr;
  }
 
-
-
-/// connect face to its neighbors
-template<size_t dim>
-void Face<dim>::Assign( size_t i, Face<dim>* const fc_ptr ) // neighbor face
- {
-    assert( this->FE() != NULL );
-    assert( face_connector_.size() == this->Neighbors() );
-    assert( i < this->Neighbors() );
-    face_connector_[i] = fc_ptr;
- }
 
 
 
@@ -482,9 +463,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // 2. finding the face of the inner element which corresponds to this Face and checking its node numbering
     // -------------------------------------------------------------------------------------------------------
     // creating a search key for Face
-    assert( fptr_ != nullptr );
     set<Node<dim>*>  face_nds;
-    const size_t face_nodes(fptr_->Nodes());
+    const size_t face_nodes(Nodes());
     for ( size_t i=0U; i<face_nodes; ++i ) {
          // are the nodes there?
          assert( this->N(i) != nullptr );
@@ -648,7 +628,6 @@ size_t Face<dim>::InnerParentFaceNumber() const
     
     // 2. creating face keys for the inner parent element and trying to match them
     //    with the one created for the current face
-    assert( fptr_ != nullptr );
     vector<size_t> fnids;
     set<size_t>    face_key_n;
     const size_t faces(innerParent_->Faces());
@@ -681,18 +660,6 @@ size_t   Face<dim>::Idx() const
     return idx_;
   }
 
-// methods which use subclasses of FiniteElement class via bridge
-template<size_t dim>
-FiniteElement*  Face<dim>::FE() const
-  {
-    return fptr_;
-  }
-
-template<size_t dim>
-const FiniteVolumeStencil<dim>*  Face<dim>::FV_Stencil() const
-  {
-    return fvptr_;
-  }
 
 template<size_t dim>
 typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
@@ -704,8 +671,7 @@ typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
 template<size_t dim>
 csmp::Node<dim>*  Face<dim>::N( size_t n ) const
   {
-     assert( node_connector_.size() == fptr_->Nodes() );
-     assert( n < this->Nodes() );
+     assert( n < Nodes() );
      return node_connector_[n];
   }
 
@@ -716,8 +682,7 @@ csmp::Node<dim>*  Face<dim>::N( size_t n ) const
 template<size_t dim>
 csmp::Face<dim>*  Face<dim>::Neighbor( size_t n ) const
  {
-    assert( face_connector_.size() == fptr_->Neighbors() );
-    assert( n < this->Neighbors() );
+    assert( n < Neighbors() );
     return face_connector_[n];
  }
 
@@ -789,6 +754,187 @@ double64 Face<dim>::Area() const
 
 
 
+// FUNCTIONALITY
+
+/**
+
+Returns a matrix with 'nodes'-rows and 'coordinate-directions' columns.
+This matrix defines the positions of the elements nodes for
+the finite-element matrix assembly. Since the number of element nodes
+may vary among different elements types, the number of rows in XY may
+also vary from element to element.
+
+@param XY A DenseMatrix<DM_MIN> class object (value type fT). This matrix is dynamically
+resized if necessary but must have been constructed with a finite size
+before passing it to CoordinateMatrix().
+
+@return The node coordinates are returned into the supplied matrix.
+
+@section application Application
+
+Finite-element forms of differential equations require the global node
+coordinates of the element to calculate the element constribution to the
+global solution matrix. If the element uses local coordinates, the global
+node coordinates will still be required to compute Jacobian (coordinate-
+transformation) matrix.
+*/
+template<size_t dim>
+void  Face<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+  {
+    const size_t n_nodes( Nodes());
+    XY.Resize( n_nodes, dim );
+    for ( size_t i=0U; i<n_nodes; ++i )
+        XY.AssignRow( i, N(i)->Coordinate() );
+
+  } // end CoordinateMatrix
+
+
+
+
+
+
+
+/**
+
+BaryCenter() calculates the node coordinate average for the element. This
+coordinate value is equivalent to the center of gravity of the Element
+type.
+
+@section input Input Arguments
+
+The barycentre is returned into a CSMP vector variable a reference to which
+is supplied as single argument.
+
+@section application Application
+
+The element barycentre could be used for instance to output element material
+properties from the Model as point data. This is done if you use the
+Model OutputToTextFile() methods.
+
+@return The VARIABLE_FLAG of the returned vector variable will not be changed by
+BaryCentre().
+
+@note could be madfe more
+
+@test O.K. SKM25/8/14 after refactoring loop
+
+*/
+template<size_t dim>
+Point<dim>  Face<dim>::BaryCenter() const
+  {
+    Point<dim>    pt(N(0U)->Coordinate());
+    const size_t  n_nodes(Nodes());
+    for ( size_t i=1U; i<n_nodes; ++i )
+      pt += N(i)->Coordinate();
+
+    return pt / static_cast<double64>(Nodes());
+  }
+
+
+
+/**
+
+Measures the length of the element (in physical space) in a certain direction.
+
+@param vecDirection direction in which the element is to be measured
+
+@return Length of the element.
+
+@sectin implementation Implementation
+
+The main idea is to measure the height of the oriented bounding box
+(oriented by the direction of vecDirection) which surrounds the element.
+This is done by projecting each node onto the direction vector and calculating
+the difference between the largest and smallest magnitude. The distance between both
+projections will be given by the absolute value of this difference.
+
+@section application Application
+
+The length of the element in a certain dimension is used to weigh the error of the element,
+when evaluating the quality of a certain mesh.
+
+@todo this method could be optimised if only the corner nodes would be used
+
+*/
+template<size_t dim>
+double64  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+  {
+    double64 fMinTemp( static_cast<double64>( DBL_MAX) );
+    double64 fMaxTemp( static_cast<double64>(-DBL_MAX) );
+
+    // this normalisation is necessary because the vector variable
+    // being any physical quantity may have any magnitude
+    const double64 fMagnitudeOfDirection(vecDirection.Length());
+    // avoid division by zero
+    assert( fMagnitudeOfDirection >= numeric_limits<double64>::epsilon() );
+
+    const size_t n_nodes(Nodes());
+    for ( size_t i=0; i<n_nodes; ++i ) {
+        // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
+        double64 fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
+        fTemp /= fMagnitudeOfDirection;
+
+        // update minimum value
+        fMinTemp = std::min(fMinTemp, fTemp);
+        // update maximum value
+        fMaxTemp = std::max(fMaxTemp, fTemp);
+    }
+
+    //substract magnitudes
+    return fMaxTemp - fMinTemp;
+ }
+
+
+
+
+/** 
+    returns property values at the nodes
+*/
+template<size_t dim>
+template< class Var>
+void  Face<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V ) const
+ {
+    if ( idx.place != NODE ) {
+         std::cerr <<"\nFace<"<< dim;
+         std::cerr <<">::NodePropertyVector: Requested property ";
+         std::cerr <<"is not placed on the nodes; property Index: "<< std::endl;
+         idx.Out();
+         return;
+      }
+
+    // resizing V if necessary
+    const size_t  n_nodes(Nodes());
+    V.resize(n_nodes);
+
+    for ( size_t i=0U; i<n_nodes; i++ )
+      N(i)->Read( idx, V[i] );
+ }
+
+// scalar
+template void  Face<1U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+template void  Face<2U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+// vector
+template void  Face<1U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<1U> >& ) const;
+template void  Face<2U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<2U> >& ) const;
+template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<3U> >& ) const;
+// tensor
+template void  Face<1U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<1U> >& ) const;
+template void  Face<2U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<2U> >& ) const;
+template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<3U> >& ) const;
+// array
+template void  Face<1U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+template void  Face<2U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+// flagged array
+template void  Face<1U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+template void  Face<2U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+
+
+
+
+
 // OUTPUT
 
 ///  outputs local variables of Face(Element) overriding corresponding method of base class
@@ -822,7 +968,7 @@ void  Face<dim>::Out() const
     cout << endl;
 
     cout <<"\tFace is connected via bridge pattern to: ";
-    cout << parseFiniteElementType(fptr_->ElementType()) << endl;
+    cout << parseFiniteElementType(this->FE_Type()) << endl;
 
     cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
 

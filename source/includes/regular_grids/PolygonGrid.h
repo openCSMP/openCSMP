@@ -121,7 +121,6 @@ class PolygonGrid
     std::deque<GridNode<dim>*>     nodes_;
     std::deque<GridFace<dim>*>     faces_;
     std::deque<GridElement<dim>*>  elements_;
-    CSMP_ElementSpecifications     fem_specs_;
 };
 
 
@@ -138,9 +137,6 @@ class PolygonGridManager
     ~PolygonGridManager();
     void Clear();
 
-    /// fem specs
-    const CSMP_ElementSpecifications& GetFemSpecs() const;
-
     /// nodes
     size_t GetNumNodes() const;
     size_t GetNodeId( const csmp::Point<dim>& pt ) const;
@@ -153,8 +149,6 @@ class PolygonGridManager
     void Out() const;
 
   private:
-
-    CSMP_ElementSpecifications          fem_specs_;
     std::map<csmp::Point<dim>,size_t>   points_;
     std::vector<csmp::GridNode<dim>*>   grid_nodes_;
 };

@@ -30,15 +30,9 @@ void TensorVariable_Test::run()
 	Multiplication_Assignment_Operator();
 	Division_Assignment_Operator();
 	Equality_Operator();
-	Zero_Function();
-	Average_Function();
-    MinElement_Function();
+  MinElement_Function();
 	MaxElement_Function();
 	IsWithinRange_Function();
-	Fabs_Function();
-	Ln_Function();
-	Log10_Function();
-	Sqrt_Function();
 	Adjoint_Function();
 	Identity_Function();
 	Transposed_Function();
@@ -49,7 +43,6 @@ void TensorVariable_Test::run()
 	Trace_Function();
 	AssignToRow_Function();
 	AssignToColumn_Function();
-	LessThan_Operator();
 	Row_Function();
 	Column_Function();
 }
@@ -156,7 +149,7 @@ void TensorVariable_Test::Addition_Operator()
    _test( tensor3.Flag(0) == INIT_GUESS );
    _test( tensor3.Flag(1) == PLAIN );
    _test( tensor3.Flag(2) == NEUMANN );
-   
+/*
    //Test for tensor-constant_value addition
    tensor3 = tensor1 + 10;
    _equal(tensor3( 0, 0 ), 11.0, fTolerance);
@@ -171,6 +164,7 @@ void TensorVariable_Test::Addition_Operator()
    _test( tensor3.Flag(0) == INIT_GUESS );
    _test( tensor3.Flag(1) == PLAIN );
    _test( tensor3.Flag(2) == NEUMANN );
+*/
 }
 
 
@@ -200,7 +194,7 @@ void TensorVariable_Test::Subtraction_Operator()
    _test( tensor3.Flag(0) == INIT_GUESS );
    _test( tensor3.Flag(1) == PLAIN );
    _test( tensor3.Flag(2) == NEUMANN );   
-   
+/*
    //Test for tensor-constant_value subtraction
    tensor3 = tensor1 - 10;
    _equal(tensor3( 0, 0 ), -9.0, fTolerance);
@@ -215,7 +209,7 @@ void TensorVariable_Test::Subtraction_Operator()
    _test( tensor3.Flag(0) == INIT_GUESS );
    _test( tensor3.Flag(1) == PLAIN );
    _test( tensor3.Flag(2) == NEUMANN );
- 	
+*/
 }
 
 
@@ -236,6 +230,7 @@ void TensorVariable_Test::Multiplication_Operator()
    VectorVariable<3U> vector2;
       
    //Testing constant_value-tensor multiplication
+   /*
    tensor2 = tensor1 * 10;
    _equal(tensor2( 0, 0 ), 10.0, fTolerance);
    _equal(tensor2( 0, 1 ), 20.0, fTolerance);
@@ -249,7 +244,7 @@ void TensorVariable_Test::Multiplication_Operator()
    _test( tensor2.Flag(0) == INIT_GUESS );
    _test( tensor2.Flag(1) == PLAIN );
    _test( tensor2.Flag(2) == NEUMANN );
-   
+   */
    //Testing vector-tensor multiplication
    vector2 = vector1 * tensor1;  
    _equal(vector2( 0 ), 12.0, fTolerance);
@@ -295,21 +290,6 @@ void TensorVariable_Test::Division_Operator()
                                           70.0, 80.0, 90.0 );
    TensorVariable<3U> tensor2;
    
-   //Testing tensor-constant_value division
-   tensor2 = tensor1 / 10;
-   _equal(tensor2( 0, 0 ), 0.1, fTolerance);
-   _equal(tensor2( 0, 1 ), 0.2, fTolerance);
-   _equal(tensor2( 0, 2 ), 0.3, fTolerance);
-   _equal(tensor2( 1, 0 ), 0.4, fTolerance);
-   _equal(tensor2( 1, 1 ), 0.5, fTolerance);
-   _equal(tensor2( 1, 2 ), 0.6, fTolerance);
-   _equal(tensor2( 2, 0 ), 0.7, fTolerance);
-   _equal(tensor2( 2, 1 ), 0.8, fTolerance);
-   _equal(tensor2( 2, 2 ), 0.9, fTolerance);
-   _test( tensor2.Flag(0) == INIT_GUESS );
-   _test( tensor2.Flag(1) == PLAIN );
-   _test( tensor2.Flag(2) == NEUMANN );   
-   
    //Testing element by element division
    tensor2 = tensor3 / tensor1;
    _equal(tensor2( 0, 0 ), 10, fTolerance);
@@ -326,27 +306,6 @@ void TensorVariable_Test::Division_Operator()
    _test( tensor2.Flag(2) == PLAIN );
 }
 
-void TensorVariable_Test::Zero_Function()
-{
-   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   tensor1.Zero();
-   _equal(tensor1( 0, 0 ), 0, fTolerance);
-   _equal(tensor1( 0, 1 ), 0, fTolerance);
-   _equal(tensor1( 0, 2 ), 0, fTolerance);
-   _equal(tensor1( 1, 0 ), 0, fTolerance);
-   _equal(tensor1( 1, 1 ), 0, fTolerance);
-   _equal(tensor1( 1, 2 ), 0, fTolerance);
-   _equal(tensor1( 2, 0 ), 0, fTolerance);
-   _equal(tensor1( 2, 1 ), 0, fTolerance);
-   _equal(tensor1( 2, 2 ), 0, fTolerance); 
-   _test( tensor1.Flag(0) == INIT_GUESS );
-   _test( tensor1.Flag(1) == PLAIN );
-   _test( tensor1.Flag(2) == NEUMANN );
-   
-}
 
 void TensorVariable_Test::Addition_Assignment_Operator()
 {
@@ -377,6 +336,7 @@ void TensorVariable_Test::Addition_Assignment_Operator()
    
    //Test for tensor-constant_value addition
    tensor3 = tensor1;
+   /*
    tensor3 += 10;
    _equal(tensor3( 0, 0 ), 11.0, fTolerance);
    _equal(tensor3( 0, 1 ), 12.0, fTolerance);
@@ -387,7 +347,7 @@ void TensorVariable_Test::Addition_Assignment_Operator()
    _equal(tensor3( 2, 0 ), 17.0, fTolerance);
    _equal(tensor3( 2, 1 ), 18.0, fTolerance);
    _equal(tensor3( 2, 2 ), 19.0, fTolerance); 
-   
+   */
 
    //Test for tensor-scalar addition
    tensor3 = tensor1;
@@ -431,20 +391,6 @@ void TensorVariable_Test::Subtraction_Assignment_Operator()
    _equal(tensor3( 2, 2 ), 8.0, fTolerance);
       
    
-   //Test for tensor-constant_value subtraction
-   tensor3 = tensor1;
-   tensor3 -= 10;
-   _equal(tensor3( 0, 0 ), -9.0, fTolerance);
-   _equal(tensor3( 0, 1 ), -8.0, fTolerance);
-   _equal(tensor3( 0, 2 ), -7.0, fTolerance);
-   _equal(tensor3( 1, 0 ), -6.0, fTolerance);
-   _equal(tensor3( 1, 1 ), -5.0, fTolerance);
-   _equal(tensor3( 1, 2 ), -4.0, fTolerance);
-   _equal(tensor3( 2, 0 ), -3.0, fTolerance);
-   _equal(tensor3( 2, 1 ), -2.0, fTolerance);
-   _equal(tensor3( 2, 2 ), -1.0, fTolerance); 
-   
-
    //Test for tensor-scalar addition
    tensor3 = tensor1;
    tensor3 -= scalar1;
@@ -472,20 +418,6 @@ void TensorVariable_Test::Multiplication_Assignment_Operator()
                                           6.0, 5.0, 4.0,
                                           3.0, 2.0, 1.0);
    ScalarVariable scalar1( PLAIN, 5 );
-      
-   //Testing constant_value-tensor multiplication
-   tensor2 = tensor1;
-   tensor2 *= 10;
-   _equal(tensor2( 0, 0 ), 10.0, fTolerance);
-   _equal(tensor2( 0, 1 ), 20.0, fTolerance);
-   _equal(tensor2( 0, 2 ), 30.0, fTolerance);
-   _equal(tensor2( 1, 0 ), 40.0, fTolerance);
-   _equal(tensor2( 1, 1 ), 50.0, fTolerance);
-   _equal(tensor2( 1, 2 ), 60.0, fTolerance);
-   _equal(tensor2( 2, 0 ), 70.0, fTolerance);
-   _equal(tensor2( 2, 1 ), 80.0, fTolerance);
-   _equal(tensor2( 2, 2 ), 90.0, fTolerance);
-   
 
    //Testing tensor-tensor multiplication
    tensor2 = tensor1;
@@ -528,20 +460,6 @@ void TensorVariable_Test::Division_Assignment_Operator()
                                           70.0, 80.0, 90.0 );
    TensorVariable<3U> tensor3;
    ScalarVariable scalar1( PLAIN, 5 );
-   
-   //Testing tensor-constant_value division
-   tensor3 = tensor1;
-   tensor3 /= 10;
-   _equal(tensor3( 0, 0 ), 0.1, fTolerance);
-   _equal(tensor3( 0, 1 ), 0.2, fTolerance);
-   _equal(tensor3( 0, 2 ), 0.3, fTolerance);
-   _equal(tensor3( 1, 0 ), 0.4, fTolerance);
-   _equal(tensor3( 1, 1 ), 0.5, fTolerance);
-   _equal(tensor3( 1, 2 ), 0.6, fTolerance);
-   _equal(tensor3( 2, 0 ), 0.7, fTolerance);
-   _equal(tensor3( 2, 1 ), 0.8, fTolerance);
-   _equal(tensor3( 2, 2 ), 0.9, fTolerance);
-      
    
    //Testing element by element division
    tensor3 = tensor1;
@@ -597,15 +515,6 @@ void TensorVariable_Test::Equality_Operator()
 }
 
 
-void TensorVariable_Test::Average_Function()
-{
-   TensorVariable<3U> tensor1( PLAIN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   _equal(tensor1.Average(), 5.0, fTolerance);
-
-}
 
 
 void TensorVariable_Test::MinElement_Function()
@@ -645,156 +554,9 @@ void TensorVariable_Test::IsWithinRange_Function()
 }	
 
 
-void TensorVariable_Test::Fabs_Function()
-{
-   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
-                                          -1.0, -2.0, -3.0,
-                                          -4.0, -5.0, -6.0,
-                                          -7.0, -8.0, -9.0 );
-   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   TensorVariable<3U> tensor3;
-   
-   tensor3 = tensor1;
-   tensor3.Fabs();
-   _test( tensor3 == tensor2 );
-      
-   tensor3 = tensor2;
-   tensor3.Fabs();
-   _test( tensor3 == tensor2 );
-      
-}
 
 
-void TensorVariable_Test::Ln_Function()
-{
-   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
-                                          -1.0, -2.0, -3.0,
-                                          -4.0, -5.0, -6.0,
-                                          -7.0, -8.0, -9.0 );
-   TensorVariable<3U> tensor3( INIT_GUESS, PLAIN, NEUMANN,
-                                          log( 1.0 ), log( 2.0 ), log( 3.0 ),
-                                          log( 4.0 ), log( 5.0 ), log( 6.0 ),
-                                          log( 7.0 ), log( 8.0 ), log( 9.0 ));
-   TensorVariable<3U> tensor5;
-   
-   tensor5 = tensor1;
-   tensor5.Ln(true);
-   _test( tensor5 == tensor3 );
-   
-   tensor5 = tensor1;
-   tensor5.Ln(false);
-   _test( tensor5 == tensor3 );
-      
-   tensor5 = tensor2;
-   tensor5.Ln(true);
-   _test( tensor5 == tensor3 );      
-      
-   tensor5 = tensor2;
-   tensor5.Ln(false);
-   _test( isnan(tensor5( 0, 0 )) == true );
-   _test( isnan(tensor5( 0, 1 )) == true );
-   _test( isnan(tensor5( 0, 2 )) == true );
-   _test( isnan(tensor5( 1, 0 )) == true );
-   _test( isnan(tensor5( 1, 1 )) == true );
-   _test( isnan(tensor5( 1, 2 )) == true );
-   _test( isnan(tensor5( 2, 0 )) == true );
-   _test( isnan(tensor5( 2, 1 )) == true );
-   _test( isnan(tensor5( 2, 2 )) == true );
-     
-}
 
-
-void TensorVariable_Test::Log10_Function()
-{
-   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
-                                          -1.0, -2.0, -3.0,
-                                          -4.0, -5.0, -6.0,
-                                          -7.0, -8.0, -9.0 );
-   TensorVariable<3U> tensor3( INIT_GUESS, PLAIN, NEUMANN,
-                                          log10( 1.0 ), log10( 2.0 ), log10( 3.0 ),
-                                          log10( 4.0 ), log10( 5.0 ), log10( 6.0 ),
-                                          log10( 7.0 ), log10( 8.0 ), log10( 9.0 ));
-   TensorVariable<3U> tensor5;
-   
-   tensor5 = tensor1;
-   tensor5.Log10(true);
-   _test( tensor5 == tensor3 );
-   
-   tensor5 = tensor1;
-   tensor5.Log10(false);
-   _test( tensor5 == tensor3 );
-      
-   tensor5 = tensor2;
-   tensor5.Log10(true);
-   _test( tensor5 == tensor3 );      
-      
-   tensor5 = tensor2;
-   tensor5.Log10(false);
-   _test( isnan(tensor5( 0, 0 )) == true );
-   _test( isnan(tensor5( 0, 1 )) == true );
-   _test( isnan(tensor5( 0, 2 )) == true );
-   _test( isnan(tensor5( 1, 0 )) == true );
-   _test( isnan(tensor5( 1, 1 )) == true );
-   _test( isnan(tensor5( 1, 2 )) == true );
-   _test( isnan(tensor5( 2, 0 )) == true );
-   _test( isnan(tensor5( 2, 1 )) == true );
-   _test( isnan(tensor5( 2, 2 )) == true );
-   
-}
-
-
-void TensorVariable_Test::Sqrt_Function()
-{
-   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
-                                          1.0, 2.0, 3.0,
-                                          4.0, 5.0, 6.0,
-                                          7.0, 8.0, 9.0 );
-   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
-                                          -1.0, -2.0, -3.0,
-                                          -4.0, -5.0, -6.0,
-                                          -7.0, -8.0, -9.0 );
-   TensorVariable<3U> tensor3( INIT_GUESS, PLAIN, NEUMANN,
-                                          sqrt( 1.0 ), sqrt( 2.0 ), sqrt( 3.0 ),
-                                          sqrt( 4.0 ), sqrt( 5.0 ), sqrt( 6.0 ),
-                                          sqrt( 7.0 ), sqrt( 8.0 ), sqrt( 9.0 ));
-   TensorVariable<3U> tensor5;
-   
-   tensor5 = tensor1;
-   tensor5.Sqrt(true);
-   _test( tensor5 == tensor3 );
-   
-   tensor5 = tensor1;
-   tensor5.Sqrt(false);
-   _test( tensor5 == tensor3 );
-      
-   tensor5 = tensor2;
-   tensor5.Sqrt(true);
-   _test( tensor5 == tensor3 );
-      
-   tensor5 = tensor2;
-   tensor5.Sqrt(false);
-   _test( isnan(tensor5( 0, 0 )) == true );
-   _test( isnan(tensor5( 0, 1 )) == true );
-   _test( isnan(tensor5( 0, 2 )) == true );
-   _test( isnan(tensor5( 1, 0 )) == true );
-   _test( isnan(tensor5( 1, 1 )) == true );
-   _test( isnan(tensor5( 1, 2 )) == true );
-   _test( isnan(tensor5( 2, 0 )) == true );
-   _test( isnan(tensor5( 2, 1 )) == true );
-   _test( isnan(tensor5( 2, 2 )) == true );
-   
-}
 
 
 void TensorVariable_Test::Adjoint_Function()
@@ -873,15 +635,13 @@ void TensorVariable_Test::Inverse_Function()
                                           9.0, 1.0, 0.0,
                                           4.0, 3.0, 8.0,
                                           1.0, -1.0, 1.0 );
+  
    TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
                                           11.0, -1.0, 8.0,
                                           4.0, 9.0, -72.0,
                                           -7.0, 10.0, 23.0 );
-
-   TensorVariable<3U> tensor3;
-   
-   tensor2 /= 103;   
-   tensor3 = tensor1.Inverse();
+   tensor2 /= 103.;
+   TensorVariable<3U> tensor3 = tensor1.Inverse();
    _equal(tensor3( 0, 0 ), tensor2( 0, 0 ), fTolerance);
    _equal(tensor3( 0, 1 ), tensor2( 0, 1 ), fTolerance);
    _equal(tensor3( 0, 2 ), tensor2( 0, 2 ), fTolerance);

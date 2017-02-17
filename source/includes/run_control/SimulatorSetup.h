@@ -1,5 +1,5 @@
-#ifndef SIMULATORSETUP_H
-#define SIMULATORSETUP_H
+#ifndef SIMULATOR_SETUP_H
+#define SIMULATOR_SETUP_H
 
 #include "Index.h"
 #include "SimulatorSetupParameter.h"

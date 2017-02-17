@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include <limits>
+#include <cstdint>
 
 namespace csmp {
 
@@ -53,7 +54,8 @@ enum ONE_BYTE_NUMBER { ZERO, ONE, TWO, THREE,
 /// Discretized csmp variables
 enum VARIABLE_TYPE { SCALAR=1, VECTOR=2, TENSOR=3, ARRAY=4, FLAGGEDARRAY=5 };
 
-/// variable flag indicating treatment in computations
+//enum VARIABLE_FLAG : int_fast8_t
+/// variable flag indicating treatment in computations (forced to be one-byte size because it is stored everywhere)
 enum VARIABLE_FLAG { PLAIN,          /**< modifyable, dependent or indep. var. */
                      ANY,            /**< unspecified discriminator.  This is also used to identify if a variable has been assigned a value or not*/
                      INIT_GUESS,     /**< convergence oriented not phys. meaningful, not checked  */

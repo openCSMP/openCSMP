@@ -1,6 +1,7 @@
 #include <sstream>
 #include "AP_testUtilities.h"
-#include "FiniteVolumeTraits.h"
+//#include "FiniteVolumeTraits.h"
+#include "FiniteVolumePolicy.h"
 #include "Element.h"
 #include "Region.h"
 #include "Model.h"
@@ -10,7 +11,7 @@ using namespace std;
 
 namespace csmp {
 
-typedef FiniteVolumeTraits<3U,Element> EFT3;
+typedef FiniteVolumePolicy<3U,Element> EFT3;
 
 void rhinoOutput( const Model<3U>& sgroup )
  {

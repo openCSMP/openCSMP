@@ -123,7 +123,7 @@ class FiniteVolumeTraits<3U, SIMPLEX> {
     /// integrates value of property over the sector
     double64   SectorIntegral( size_t iSector, const csmp::Index& ) const;
 
-    /// reads value of vecvtor property and projects it onto facet normal in physical space; returns projected value
+    /// reads value of vector property and projects it onto facet normal in physical space; returns projected value
     double64   ProjectionOnFacetNormal( size_t iFacet, const csmp::Index& )  const;
 
     /// projects value of vector property onto facet normal in physical space; returns projection
@@ -148,7 +148,7 @@ class FiniteVolumeTraits<3U, SIMPLEX> {
     double64   ParametricFacetArea( size_t iFacet ) const;
   
     /// returns the normal to the facet in parametric space
-    const Point<3U>&  ParametricFacetNormal( size_t iFacet ) const;
+    Point<3U>  ParametricFacetNormal( size_t iFacet ) const;
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:
@@ -188,7 +188,7 @@ class FiniteVolumeTraits<2U,SIMPLEX> {
     Point<2U>  FacetNormal( size_t iFacet )       const;
     Point<2U>  FacetNormalMapped( size_t iFacet ) const;
     double64   ParametricFacetArea( size_t iFacet ) const;
-    const Point<2U>&  ParametricFacetNormal( size_t iFacet ) const;
+    Point<2U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
     FiniteVolumeTraits( const SIMPLEX<2U>& );
@@ -226,7 +226,7 @@ class FiniteVolumeTraits<1U, SIMPLEX> {
     Point<1U>  FacetNormal( size_t iFacet )       const;
     Point<1U>  FacetNormalMapped( size_t iFacet ) const;
     double64   ParametricFacetArea( size_t iFacet )         const;
-    const Point<1U>  ParametricFacetNormal( size_t iFacet ) const;
+    Point<1U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
     FiniteVolumeTraits( const SIMPLEX<1U>& );

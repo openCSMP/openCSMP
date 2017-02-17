@@ -331,11 +331,9 @@ template<size_t  dim>
 double64 printRangeOfVariable( const Model<dim>& sg, 
                                const char* var, bool max_or_min )
  {
-     double64         pmin, pmax;
-     const PropertyDatabase<dim>& p_ref = sg.Database();
-
+     double64 pmin, pmax;
      sg.MinMaxOf( var, pmin, pmax );
-     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax << endl;
           
      if ( !max_or_min ) return pmin;
@@ -350,10 +348,8 @@ double64 printRangeOfVariable( const Model<dim>& sg,
                                const char* var, bool max_or_min )
  {
      double64  pmin, pmax;
-     const PropertyDatabase<dim>& p_ref = sg.Database();
-
      sg.MinMaxOf( var, pmin, pmax );
-     cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
+     cout << scientific << setprecision(5) <<"\nRange of variable ["<< sg.Database().Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax << endl;
      
      // recording the measured variable value range at given timestep
@@ -364,7 +360,7 @@ double64 printRangeOfVariable( const Model<dim>& sg,
      var_info += " secs, range of'";
      var_info += var;
      var_info += "' [";
-     var_info += p_ref.Unit(var);
+     var_info += sg.Database().Unit(var);
      var_info += "]: ";
      sprintf( info, "%lf", pmin );
      var_info += info;
@@ -1793,7 +1789,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                double64     sc_sum(0U);
                unsigned int counter(0U);
                for ( size_t i=0U; i<super_group.E(n)->Neighbors(); i++ ) 
-                 if ( sc.Value() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
+                 if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) { 
                       sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
                       counter++;
                    }

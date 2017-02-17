@@ -14,21 +14,16 @@ class NumIntegral_dNT_dN_dV : public MathOperatorLHS<dim> {
     NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref, 
                            const char* basic, 
                            const char* test );
-    
-    virtual void GetOperands( SIMPLEX& );
+  
+    /// no operands need to be fetched from computational domain
+    virtual void GetOperands( SIMPLEX& ) {}
+  
     virtual void ComputeContribution( SIMPLEX& );
+  
     virtual NumIntegral_dNT_dN_dV<dim,SIMPLEX >* clone() const { return new NumIntegral_dNT_dN_dV<dim,SIMPLEX >(*this); }
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 };
-
-
-
-/// since there is no material Operand nothing needs to be done
-template<size_t dim,class SIMPLEX>
-inline void NumIntegral_dNT_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& )
- {
- }
 
 } // csmp
 

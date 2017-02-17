@@ -156,7 +156,7 @@ ArrayVariable& ArrayVariable::operator=( double64 val )
 ArrayVariable& ArrayVariable::operator=( const ScalarVariable& val )
   {
   for( size_t i(0); i < Size(); ++i )
-    data_[i] = val.Value();
+    data_[i] = val();
   return *this;
   }
 
@@ -238,28 +238,28 @@ ArrayVariable& ArrayVariable::operator/=( double64 val )
 ArrayVariable& ArrayVariable::operator+=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] += sc.Value();
+        data_[i] += sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator-=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] -= sc.Value();
+        data_[i] -= sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator*=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] *= sc.Value();
+        data_[i] *= sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator/=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] /= sc.Value();
+        data_[i] /= sc();
     return *this;
   }
 

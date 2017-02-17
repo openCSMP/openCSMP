@@ -56,7 +56,7 @@ namespace csmp{
 
       // scalars
       e.Store( ks1, s1 );
-      _test( e.Read(ks1) == s1.Value() );
+      _test( e.Read(ks1) == s1() );
       e.Read( ks1, s0 );
       _test( s0 == s1 );
 
@@ -362,7 +362,7 @@ namespace csmp{
 
         // scalars
         e.Store( ks1, s1 );
-        _test( e.Read(ks1) == s1.Value() );
+        _test( e.Read(ks1) == s1() );
         e.Read( ks1, s0 );
         _test( s0 == s1 );
 

@@ -72,7 +72,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     // storing the constraint point property into a vector
     eptr->IntegrationPointPropertyVector( cprop_key_, vars_vector_ );
     
-    const size_t  vcomponents(vars_vector_[0].Components());
+    const size_t  vcomponents(vars_vector_[0].Size());
     cp_vars_.resize( eptr->IntegrationPoints() * vcomponents );
     nd_vars_.resize( eptr->Nodes() * vcomponents );
     

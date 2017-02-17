@@ -1002,11 +1002,10 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( cons
                                                                             const size_t var_comp_nr ) const
 {
     double64  rmin, rmax,
-            amin = RESULT[0],
-            amax = RESULT[0],
-            difference_to_last_output(0.);
+              amin = RESULT[0],
+              amax = RESULT[0],
+              difference_to_last_output(0.);
     size_t    error_counter(0);
-    ScalarVariable   sc;
 
     p.RangeOf( p.Name(adv_key), rmin, rmax );
     if (this->adv1_key_.type==SCALAR){
@@ -1016,17 +1015,17 @@ double64 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( cons
             amax = std::max( amax, RESULT[i] );
             if ( this->gref_.N(i)->Status( adv_key ) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
-                this->gref_.N(i)->Read( adv_key, sc );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+                double64 sc = this->gref_.N(i)->Read( adv_key );
+                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc) );
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin )
-                    this->gref_.N(i)->Store( adv_key, sc=RESULT[i] );
+                    this->gref_.N(i)->Store( adv_key, makeScalar( this->gref_.N(i)->Status(adv_key), RESULT[i] ) );
                 else {
-                    std::cout <<"ExplicitNodeCenteredFiniteVolumeTransport<dim>::OutputResults: value: "<< RESULT[i] <<" versus range from PropertyDatabase: "<< rmin <<"-"<< rmax << std::endl;
+                    std::cerr <<"ExplicitNodeCenteredFiniteVolumeTransport<dim>::OutputResults: value: "<< RESULT[i] <<" versus range from PropertyDatabase: "<< rmin <<"-"<< rmax << std::endl;
                     if ( RESULT[i] > rmax )
-                        this->gref_.N(i)->Store( adv_key, sc=rmax );
+                        this->gref_.N(i)->Store( adv_key, makeScalar( this->gref_.N(i)->Status(adv_key), rmax) );
                     else if ( RESULT[i] < rmin )
-                        this->gref_.N(i)->Store( adv_key, sc=rmin );
+                        this->gref_.N(i)->Store( adv_key, makeScalar( this->gref_.N(i)->Status(adv_key), rmin) );
                     error_counter++;
                 }
             }

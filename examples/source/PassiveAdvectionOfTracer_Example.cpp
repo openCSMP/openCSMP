@@ -467,14 +467,14 @@ double64  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTranspor
 
   // for all interior nodes we calculate the normalised flux balance
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
-       sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
+       sc() = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        (*it)->Store( prop_key, sc );
-       emax = std::max( emax, fabs(sc.Value()) );
+       emax = std::max( emax, fabs(sc()) );
     }
 
   // for all boundary nodes we set the balance to zero because we cannot evaluate it
   for ( vector<Node<3U>*>::iterator it=gref.PerimeterNodesBegin(); it!=gref.NodesEnd(); it++ )
-    (*it)->Store( prop_key, sc=0. );
+    (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), 0.) );
 
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
@@ -525,12 +525,12 @@ void PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport( Mo
   Region<3>&  gref(sg.Region("Model"));
 
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
-       sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
+       sc() = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        if ( (*it)->AtBoundary() != NOT and (*it)->Status( pf_key ) == DIRICH )
-         (*it)->Store( prop_key, sc=0. );
+         (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key),0.) );
        else
          (*it)->Store( prop_key, sc );
-       emax = std::max( emax, sc.Value() );
+       emax = std::max( emax, sc() );
     }
 
   // finding the worst finite volume and analyzing it

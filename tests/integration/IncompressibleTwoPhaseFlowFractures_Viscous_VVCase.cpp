@@ -323,7 +323,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::UpdateSaturations(
     const typename vector<Node<dim>*>::const_iterator nodesEnd( mref.NodesEnd() );
     for ( typename vector<Node<dim>*>::iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
       {
-         sc = 1. - (*it)->Read( sn_idx_ );
+         sc() = 1. - (*it)->Read( sn_idx_ );
          (*it)->Store(  sw_idx_, sc );
       }
 
@@ -346,7 +346,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ComputeTotalMobili
          saturationFunctions.EffectiveSaturation();
 
          // total mobility
-         mob_t = saturationFunctions.TotalMobility();
+         mob_t() = saturationFunctions.TotalMobility();
          (*it)->Store(  total_mobility_idx_, mob_t );
       }
 

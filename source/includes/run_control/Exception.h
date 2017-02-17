@@ -3,7 +3,6 @@
 
 #include <string>
 #include <exception>
-#include "CSMP_global_enumerations.h"
 
 namespace csmp {
 

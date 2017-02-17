@@ -240,7 +240,7 @@ void StokesDiscrepancyMeasure_Example::Run()
          // take norm of term 1
          (*nit)->Read( term1.Key(), vc );
          (*nit)->Store( E_vec.Key(), vc );
-         em = vc.Length() / sc.Value();
+         em = vc.Length() / sc();
          (*nit)->Store( E_mag.Key(), em );
       }
 

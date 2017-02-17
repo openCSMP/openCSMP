@@ -60,9 +60,170 @@ namespace csmp {
     Speed comparison between projections made in parametric versus physical space while checking accuracy
     at same time.
 */
-void run()
+void GenericFiniteVolumeTransport_Test::run()
  {
+     BenchmarkGlobalVersusParametricIntegration();
+   
  } // end run
+
+
+
+/**
+    Testing finite volume projection calculations for the underpinning stencils.
+    
+    1. get model and compute pressure gradients
+    
+    2. verify (for the interior elements only) that the flux balance is indeed zero using established approach
+    
+    3. verify face by face computations
+    
+    4. verify flux balance cell-by-cell
+    
+    5. verify overall flux balances for hybrid element mesh
+    
+    6. compare computation times for flux balances
+ 
+*/
+void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegration()
+ {
+     // ------------------------------------------------------------
+     // 1. building model from ANSYS data files
+     // ------------------------------------------------------------
+      string  model_name("prism_test");
+      ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
+      printModelDimensions( model, true );
+
+     // ------------------------------------------------------------
+     // 2. configuring the model
+     // ------------------------------------------------------------
+      InputDataManager<3U>   model_configuration;
+      ComputationalSettings  run_settings;
+      model_configuration.ConfigureFromFile( model,
+                                             model_name.c_str(),
+                                             false, 
+                                             true,   // 2) default prop.values
+                                             true,   // 3) region prop.values
+                                             true,   // 4) essential box-boundary conditions
+                                             true,   // 5) essential flags
+                                             true,   // 6) boundary conditions
+                                             run_settings );
+      Standard_IO_Handler  stdio;
+      printRangeOfVariable( model, stdio, "permeability" );
+
+      // optional visualization of the input permeability and boundary conditions
+      VTK_Interface<3U>  vtk_output;
+      vtk_output.OutputDataToVTK( model, "permeability", "permeability", 0 );
+      vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
+
+
+     // -----------------------------------------------------------------------
+     // 3. hydraulic conductivity computation
+     // -----------------------------------------------------------------------
+      const double64  fluid_viscosity(1.0e-03);
+      ConstantFactor<3U,divides>  conductivity( model.Database(),
+                                               "conductivity", "permeability",
+                                                fluid_viscosity );
+      model.Apply( conductivity );
+      printRangeOfVariable( model, "conductivity" );
+      vtk_output.OutputDataToVTK( model, "conductivity", "conductivity", 0 );
+
+
+     // -----------------------------------------------------------------------
+     // 4. computing a steady-state fluid pressure distribution in the model
+     // -----------------------------------------------------------------------
+      SteadyStateDiffusor<3U,Region> steady_state_pressure( model,
+                                                            "conductivity", "fluid pressure",
+                                                            "fluid volume source" );
+    
+      // postprocessing of pressure gradients and flow velocities
+      VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+      steady_state_pressure.AddPostProcess( &postpro0 );
+
+      // the calculation of fluid pressure
+      steady_state_pressure.ComputeSteadyState( model );
+
+      // results: the pore velocity is the Darcy velocity divided by the porosity
+      printRangeOfVariable( model, stdio, "fluid pressure" );
+      printRangeOfVariable( model, stdio, "velocity" );
+      printRangeOfVariable( model, stdio, "pore velocity" );
+
+      vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
+      vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       1 );
+
+     // -----------------------------------------------------------------------
+     // 4. stepping over the model comparing facet by facet flux calculations
+     // -----------------------------------------------------------------------
+     model.InstantiateFiniteVolumes();
+     const Region<3>& model_domain(model.Region("Model"));
+     const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
+                       K_key(model.Database().StorageKey("conductivity")),
+                       v_key(model.Database().StorageKey("velocity"));
+   
+     std::vector<double64> DNR, DNS, DNT;
+     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+       {
+          const size_t nodes((*it)->Nodes());
+          // 1. computing facet velocity in parametric space
+          // -----------------------------------------------
+          // 1.1 getting ipol-functions at barycentre and computing the pressure gradient in parametric space
+          Point<3U> bctr = (*it)->FV_Stencil()->Barycenter();
+          (*it)->FE()->dNr( bctr[0], bctr[1], bctr[2], DNR );
+          (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
+          (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
+          // pressure gradients / velocities
+          const double64 K((*it)->Read(K_key));
+          double64  dpdr(0.), dpds(0.), dpdt(0.);
+          Point<3U> vD(0.);
+          for ( size_t i=0U; i<nodes; ++i ) {
+               const double64 p_node((*it)->N(i)->Read(p_key));
+               dpdr  += DNR[i] * p_node;
+               dpds  += DNS[i] * p_node;
+               dpdt  += DNT[i] * p_node;
+               vD[0] += -K * dpdr;
+               vD[1] += -K * dpds;
+               vD[2] += -K * dpdt;
+            }
+         
+          // 2. facet projections
+          // --------------------
+          const size_t facets=(*it)->Facets();
+          for ( size_t i=0U; i<facets; ++i ) {
+               // 2.1 classic way of calculating facet fluxes in physical space
+               // ------------------------------------------------------------
+               double64 flux = (*it)->ProjectionOnFacetNormal( i, v_key );
+               // Darcy velocity computation
+               double64 flux_physical = (*it)->FacetArea(i) * flux;
+            
+               // 2.2 parametric space computation
+               // --------------------------------
+               Point<3U> fnu = (*it)->ParametricFacetNormal( i );
+               double64  local_facet_area = (*it)->ParametricFacetArea( i );
+               // computing the facet projection
+               double64 flux_from_parametric = dotProduct( fnu, vD );
+               // performing local integration via multiplication with integration weight
+               flux_from_parametric *= local_facet_area;
+               // transforming the result to physical space
+               assert( (*it)->IsVolumeElement() );
+               // get Jacobian and its determinant at the facet integration point
+               Point<3U> fip( (*it)->FV_Stencil()->FacetIntegrationPoint(i,0U) );
+               (*it)->FE()->dNr( fip[0], fip[1], fip[2], DNR );
+               (*it)->FE()->dNs( fip[0], fip[1], fip[2], DNS );
+               (*it)->FE()->dNt( fip[0], fip[1], fip[2], DNT );
+               (*it)->CoordinateMatrix();
+               (*it)->FE()->Jacobian( DNR, DNS, DNT );
+               double64 scale_factor = (*it)->FE()->JacobianDeterminant();
+               flux_from_parametric *= scale_factor;
+            
+               // 3. testing that the fluxes are the same
+               // ---------------------------------------
+               _equal( flux_physical, flux_from_parametric, numeric_limits<double64>::epsilon() );
+            }
+       }
+
+ } // end
+
+
+
 
 
 /**
@@ -371,7 +532,7 @@ double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& s
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
        sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        (*it)->Store( prop_key, sc );
-       emax = std::max( emax, fabs(sc.Value()) );
+       emax = std::max( emax, fabs(sc()) );
     }
 
   // for all boundary nodes we set the balance to zero because we cannot evaluate it
@@ -623,7 +784,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
          (*it)->Store( prop_key, sc=0. );
        else
          (*it)->Store( prop_key, sc );
-       emax = std::max( emax, sc.Value() );
+       emax = std::max( emax, sc() );
     }
 
   // finding the worst finite volume and analyzing it
@@ -657,7 +818,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
 // *************************************************************************************************
 
 
-void GenericFiniteVolumeTransport_Test::run()
+void testSchemeAsComponent()
   {
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files

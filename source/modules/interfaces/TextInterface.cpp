@@ -601,7 +601,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                    {
                       case SCALAR: 
                            (*eit)->Read( prop_key, sc ); 
-                           fprintf( fp, "%E\n", sc.Value() );
+                           fprintf( fp, "%E\n", sc() );
                         break;
                       case VECTOR: 
                            (*eit)->Read( prop_key, vc );
@@ -919,7 +919,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                   {
                      case SCALAR: 
                           (*nit)->Read( prop_key, sc ); 
-                          fprintf( fp, "%E\n", sc.Value() );
+                          fprintf( fp, "%E\n", sc() );
                        break;
                      case VECTOR: 
                           (*nit)->Read( prop_key, vc );

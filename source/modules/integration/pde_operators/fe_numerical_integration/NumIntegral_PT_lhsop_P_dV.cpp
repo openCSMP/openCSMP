@@ -81,6 +81,16 @@ void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 
+template<size_t dim,class SIMPLEX>
+void  NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P )
+ {
+    P.Resize(1,nodal_degrees_of_freedom*N.size());
+    size_t k(0);
+    
+    for ( size_t i=0; i<N.size(); i++ ) 
+      for ( size_t j=0; j<static_cast<size_t>(nodal_degrees_of_freedom); j++ ) P(0,k++ ) = N[i];
+}
+
 
 
 

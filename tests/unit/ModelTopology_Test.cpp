@@ -10,7 +10,7 @@ void ModelTopology_Test::run()
 {
   setName( "csmp::ModelTopology_Test" );
   cout << "\nUnit Test " << getName() << endl;
-  ANSYS_ElementSpecifications fem_specs;
+  typedef ANSYS_ElementSpecifications fem_specs;
   const bool isoparametric( true );
   const size_t dim( 3 );
 
@@ -28,14 +28,14 @@ void ModelTopology_Test::run()
   set<string> femTypes;
   vector<size_t>   elmIDS;
   const size_t elms( 8 );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
   elmIDS.push_back( 0 );
   elmIDS.push_back( 1 );
   elmIDS.push_back( 2 );
@@ -55,10 +55,10 @@ void ModelTopology_Test::run()
   elmIDS.push_back( 12 );
   elmIDS.push_back( 13 );
   elmIDS.push_back( 14 );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3_X", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3_X", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
   _test( topology2.AddRegion( "Region2", femTypes, elmIDS ) );
 
   // .)RETURN FUNCTIONS 2
@@ -93,29 +93,29 @@ void ModelTopology_Test::run()
   _test( !topology5.AddRegion( "Region1", femTypes, elmIDS ) );
 
   // .)FEM TYPES
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3_X", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_6", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_6_X", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_10", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_5", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_13", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_14", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_6", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_15", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_18", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_4", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_4_X", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_8", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_8_X", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_9", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
-  femTypes.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3_X", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_6", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_6_X", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_10", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_5", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_13", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PYRA_14", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_6", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_15", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "PENTA_18", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_4", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_4_X", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_8_X", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "QUAD_9", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_8", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
+  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
   for( size_t i = 0; i < 23; ++i )
     elmIDS.push_back( i );
   ModelTopology topology6( topology2 );
@@ -124,21 +124,21 @@ void ModelTopology_Test::run()
 
   // .)ELEMENT TYPES
   ModelTopology topTypes( topology6 );
-  string oldType( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
-  topTypes.ChangeElementType( oldType, fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim ) );
+  string oldType( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
+  topTypes.ChangeElementType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim ) );
   set<string> region3Types;
   topTypes.ElementTypesOfRegion( "Region3", region3Types );
   for( set<string>::const_iterator it = region3Types.begin(); it != region3Types.end(); ++it )
-    _test( *it != fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName("HEXA_27", isoparametric, dim ) );
+    _test( *it != fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("HEXA_27", isoparametric, dim ) );
   // ISSUES, check with stephan
   topology6.EliminateLineElements();
   set<string> top6types;
   topology6.ElementTypesOfRegion( "Region3", top6types );
   // ISSUES, check with stephan
   /*
-  _test( top6types.find( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName("BAR_2",isoparametric,dim) ) == top6types.end() );
-  _test( top6types.find( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName("BAR_3",isoparametric,dim) ) == top6types.end() );
-  _test( top6types.find( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName("POLYGON",isoparametric,dim) ) == top6types.end() );
+  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_2",isoparametric,dim) ) == top6types.end() );
+  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_3",isoparametric,dim) ) == top6types.end() );
+  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("POLYGON",isoparametric,dim) ) == top6types.end() );
   */
   cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
   for( set<string>::const_iterator it = top6types.begin(); it != top6types.end(); ++it )
@@ -155,8 +155,8 @@ void ModelTopology_Test::run()
     cout << *it << endl;
   set<string> typesCheck;
   _test( 22 == topTypes.FiniteElementTypes( typesCheck ) );
-  oldType = fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim );
-  topTypes.ChangeElementType( oldType, fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
+  oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim );
+  topTypes.ChangeElementType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
   _test( 23 == topTypes.FiniteElementTypes( typesCheck ) );
 
   // .)REGION OPS
@@ -179,7 +179,7 @@ void ModelTopology_Test::run()
   _test( !topology7.IsWithinRegion( "Region1", 14 ) );
   _test( topology7.CheckElementNumbering() );
   set<string> femTypes2;
-  femTypes2.insert( fem_specs.CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
+  femTypes2.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
   vector<size_t> elmtIDS2;
   elmtIDS2.push_back( 22 );
   elmtIDS2.push_back( 42 );

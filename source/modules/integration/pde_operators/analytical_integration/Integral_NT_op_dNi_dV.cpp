@@ -73,7 +73,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
      {
         e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), OP );
         e.N_AtBaryCenter( IPOL );
-        prop1 = 0.0;
+        prop1() = 0.0;
         for ( size_t i=0; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
      }
      
@@ -81,11 +81,11 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
    e.Read( prop_key, prop2 );
    
    // multiplying operand with time multiplier
-   prop2 *= prop2_time_multiplier;
+   prop2() *= prop2_time_multiplier;
    
 //   cout <<"\ngravity: "<< gravity << endl;    
-//   cout << op.Name() <<": "<< prop1.Value() << endl;
-//   cout <<"Total mobility: "<< prop2.Value() << endl;
+//   cout << op.Name() <<": "<< prop1() << endl;
+//   cout <<"Total mobility: "<< prop2() << endl;
 }
 
 
@@ -109,7 +109,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 
     for ( size_t i=0; i<e.Nodes(); i++ ) 
       //                                gradZ         density         K            acc.gravity    element volume
-      MathOperatorRHS<dim>::RHS[i] = DN(xyz-1,i) * prop1.Value() * prop2.Value() * -gravity  * vol;
+      MathOperatorRHS<dim>::RHS[i] = DN(xyz-1,i) * prop1() * prop2() * -gravity  * vol;
 
 // cout <<"\nIntegral_NT_op_dNi_dV<dim>::ComputeContribution: Element "<< e.Idx() <<":"<< endl; 
 // nicePrint( RHS );

@@ -35,21 +35,11 @@ void VectorVariable_Test2::run()
 	Multiplication_Assignment_Operator2();
 	Division_Assignment_Operator2();
 	Equality_Operator2();
-	Ampersand_Operator2();
-	LessThan_Operator2();
-	Power_Operator2();
-	CrossProduct_Operator2();
-	Zero_Function2();
-	Average_Function2();
 	Length_Function2();
 	EuclideanNormalize_Function2();
 	DotProduct_Function2();
 	CrossProduct_Function2();
 	IsWithinRange_Function2();
-	Fabs_Function2();
-	Ln_Function2();
-	Log10_Function2();
-	Sqrt_Function2();
 	Flip_Function2();
 	AngleTo_Function2();
 	ProjectOnto_Function2();
@@ -402,28 +392,6 @@ void VectorVariable_Test2::Equality_Operator2()
    
 }
 
-void VectorVariable_Test2::Ampersand_Operator2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( ROBIN, PLAIN,
-                                             5.0, 4.0 );
-   
-   _test( (csmpvector1 & csmpvector2) == 13 );
-}
-
-void VectorVariable_Test2::LessThan_Operator2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( ROBIN, PLAIN,
-                                             5.0, 4.0 );
-
-   _test( csmpvector1 < csmpvector2 );
-   _test( !(csmpvector1 < csmpvector1) );
-   _test( !(csmpvector2 < csmpvector1) );
-   
-}
 
 void VectorVariable_Test2::Power_Operator2()
 {
@@ -436,44 +404,7 @@ void VectorVariable_Test2::Power_Operator2()
    
 }
 
-void VectorVariable_Test2::CrossProduct_Operator2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( ROBIN, PLAIN,
-                                             3.0, 1.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             0.0, -5.0 );
-   VectorVariable<2U> csmpvector4;
-   
-   csmpvector4 = csmpvector1 % csmpvector2;
-   _test( csmpvector4 == csmpvector3 );
-   _equal(csmpvector4.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector4.Flag( 1 ), ROBIN, fTolerance);
-      
-}
 
-void VectorVariable_Test2::Zero_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   
-   csmpvector1.Zero();
-   _equal(csmpvector1( 0 ), 0.0, fTolerance);
-   _equal(csmpvector1( 1 ), 0.0, fTolerance);
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-   
-}
-
-void VectorVariable_Test2::Average_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   
-   _test( csmpvector1.Average() == 1.5 );
-   
-}
 
 void VectorVariable_Test2::Length_Function2()
 {
@@ -542,96 +473,9 @@ void VectorVariable_Test2::IsWithinRange_Function2()
    
 }
 
-void VectorVariable_Test2::Fabs_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3;
-   
-   csmpvector3 = csmpvector1;
-   csmpvector3.Fabs();
-   _test( csmpvector3 == csmpvector1 );
-   _equal(csmpvector3.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector3.Flag( 1 ), ROBIN, fTolerance);
-   
-   csmpvector3 = csmpvector2;
-   csmpvector3.Fabs();
-   _test( csmpvector3 == csmpvector1 );
-   _equal(csmpvector3.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector3.Flag( 1 ), ROBIN, fTolerance);
-      
-}
 
-void VectorVariable_Test2::Ln_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             log(1.0), log(2.0) );
-   
-   csmpvector1.Ln();
-   _test( csmpvector1 == csmpvector3 );
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-      
-   csmpvector2.Ln();
-   _test( isnan(csmpvector2(0)));
-   _test( isnan(csmpvector2(1)));
-   _test( isnan(csmpvector2(2)));
-   _equal(csmpvector2.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector2.Flag( 1 ), ROBIN, fTolerance);
-      
-}
 
-void VectorVariable_Test2::Log10_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             log10(1.0), log10(2.0) );
-   
-   csmpvector1.Log10();
-   _test( csmpvector1 == csmpvector3 );
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-      
-   csmpvector2.Log10();
-   _test( isnan(csmpvector2(0)));
-   _test( isnan(csmpvector2(1)));
-   _test( isnan(csmpvector2(2)));
-   _equal(csmpvector2.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector2.Flag( 1 ), ROBIN, fTolerance);
-   
-}
 
-void VectorVariable_Test2::Sqrt_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             sqrt(1.0), sqrt(2.0) );
-   
-   csmpvector1.Sqrt();
-   _test( csmpvector1 == csmpvector3 );
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-      
-   csmpvector2.Sqrt();
-   _test( isnan(csmpvector2(0)));
-   _test( isnan(csmpvector2(1)));
-   _test( isnan(csmpvector2(2)));
-   _equal(csmpvector2.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector2.Flag( 1 ), ROBIN, fTolerance);
-   
-}
 
 void VectorVariable_Test2::Flip_Function2()
 {

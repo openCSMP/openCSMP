@@ -91,15 +91,14 @@ Point<3U>  FiniteVolumeTraits<3U,SIMPLEX>::RstToXYZ( const Point<3U>& rst ) cons
 {
    const SIMPLEX<3U>* e( static_cast<const SIMPLEX<3U>*>(this) );
    N_At( rst );
-   e->CoordinateMatrix();
-
    const size_t nodes(e->Nodes());
    double64 sumx(0.), sumy(0.), sumz(0.);
    for ( size_t i=0U; i<nodes; i++ ) {
-        sumx += e->FE()->NRST[i] * e->FE()->XYZ(i,0U);
-        sumy += e->FE()->NRST[i] * e->FE()->XYZ(i,1U);
-        sumz += e->FE()->NRST[i] * e->FE()->XYZ(i,2U);
+        sumx += e->FE()->NRST[i] * e->N(i)->x();
+        sumy += e->FE()->NRST[i] * e->N(i)->y();
+        sumz += e->FE()->NRST[i] * e->N(i)->z();
      }
+   // standard RVO
    return Point<3U>(sumx,sumy,sumz);
 }
 
@@ -326,10 +325,10 @@ double64 FiniteVolumeTraits<3U,SIMPLEX>::dN_At( const Point<3U>& rst,
          return detJ;
       }
 
-// NOT DONE YET
+// TODO: 2D->3d Jacobian
     // line element
     e->FE()->dNr( rst[0], e->FE()->DNR );
-    std::cout <<"\nFiniteVolumeTraits<3U,SIMPLEX>::dN_At: 2D->3d Jacobian is required to get this right."<< std::endl;
+    std::cerr <<"\nFiniteVolumeTraits<3U,SIMPLEX>::dN_At: 2D->3d Jacobian is required to get this right."<< std::endl;
     e->FE()->Jacobian( e->FE()->DNR );
     return e->FE()->JacobianInverse();
 
@@ -1042,11 +1041,17 @@ boundary loop of the facet. Dot product of the reference normal and any normal i
 or parametric realisation can be used to define outward pointing normal.
 */
 template<template<size_t> class SIMPLEX>
-const Point<3U>&  FiniteVolumeTraits<3U,SIMPLEX>::ParametricFacetNormal( size_t iFacet ) const
+Point<3U>  FiniteVolumeTraits<3U,SIMPLEX>::ParametricFacetNormal( size_t iFacet ) const
 {
   const SIMPLEX<3U>* e( static_cast<const SIMPLEX<3U>*>(this) );
+  assert(iFacet<e->FV_Stencil()->Facets());
+
+  // standard RVO
   return e->FV_Stencil()->UnitParametricNormalTo( iFacet );
+  
 } // end ParametricFacetNormal
+
+
 
 template class FiniteVolumeTraits<3U,Element>;
 template class FiniteVolumeTraits<3U,Face>;

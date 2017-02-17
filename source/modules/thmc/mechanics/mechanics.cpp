@@ -147,7 +147,7 @@ void planeStressMatrix( const vector<ScalarVariable >& E,
     vector<ScalarVariable>::const_iterator  Eit(E.begin()), nit(nu.begin());
     vector<DenseMatrix<DM_MIN> >::iterator  Dit(D.begin());
     while( Eit != E.end() ) {
-         planeStressMatrix( (*Eit).Value(), (*nit).Value(), (*Dit) );
+         planeStressMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;
          nit++;
          Dit++;
@@ -176,7 +176,7 @@ void planeStrainMatrix( const vector<ScalarVariable >& E,
     vector<ScalarVariable >::const_iterator  Eit(E.begin()), nit(nu.begin());
     vector<DenseMatrix<DM_MIN> >::iterator   Dit(D.begin());
     while( Eit != E.end() ) {
-         planeStrainMatrix( (*Eit).Value(), (*nit).Value(), (*Dit) );
+         planeStrainMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;
          nit++;
          Dit++;
@@ -208,7 +208,7 @@ void stiffnessMatrix( const vector<ScalarVariable >& E,
     vector<ScalarVariable >::const_iterator  Eit(E.begin()), nit(nu.begin());
     vector<DenseMatrix<DM_MIN> >::iterator   Dit(D.begin());
     while( Eit != E.end() ) {
-         stiffnessMatrix( (*Eit).Value(), (*nit).Value(), (*Dit) );
+         stiffnessMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;
          nit++;
          Dit++;

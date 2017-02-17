@@ -378,7 +378,7 @@ const
                           // ------------------------------------------------------------------------------------
                           if ( prop_key.type == SCALAR ) {
                                 (*it)->PropertyValueAtBaryCenter( prop_key, sc );
-                                val = sc.Value();
+                                val = sc();
                              }
                           else if ( prop_key.type == VECTOR ) {
                                 (*it)->PropertyValueAtBaryCenter( prop_key, vc );
@@ -587,7 +587,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case NODE:
                                         if ( prop2_key.type == SCALAR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, sc );
-                                              val2 = sc.Value();
+                                              val2 = sc();
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, vc );
@@ -650,7 +650,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                           // ------------------------------------------------------------------------------------
                           if ( prop1_key.type == SCALAR ) {
                                 (*it)->PropertyValueAtBaryCenter( prop1_key, sc );
-                                val1 = sc.Value();
+                                val1 = sc();
                              }
                           else if ( prop1_key.type == VECTOR ) {
                                 (*it)->PropertyValueAtBaryCenter( prop1_key, vc );
@@ -705,7 +705,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case NODE:
                                         if ( prop2_key.type == SCALAR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, sc );
-                                              val2 = sc.Value();
+                                              val2 = sc();
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, vc );
@@ -838,7 +838,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case NODE:
                                         if ( prop2_key.type == SCALAR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, sc );
-                                              val2 = sc.Value();
+                                              val2 = sc();
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               (*it)->PropertyValueAtBaryCenter( prop2_key, vc );

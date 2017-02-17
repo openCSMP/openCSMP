@@ -581,7 +581,7 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      sc() > 1. ? 1. : sc();
      // storing new rock porosity and density
      n->Store( node_porosity_key, sc );
-     n->Store( rhor_key, (sc=rho_r_new) );
+     n->Store( rhor_key, makeScalar( n->Status(rhor_key),rho_r_new) );
 
         
      // ----------------------------------------------------------------------------------------------
@@ -596,8 +596,8 @@ void AlterationVisitor<dim>::Visit( Node<dim>* n )
      if ( fabs(solver(h2o_index) - 55.2) >= tolerance )
        {
           n->Read( source_key, fsource );
-          sc = fsource - sc;
-          n->Store( source_key, sc );
+          fsource -= sc;
+          n->Store( source_key, fsource );
        }
        
 } // end Visit

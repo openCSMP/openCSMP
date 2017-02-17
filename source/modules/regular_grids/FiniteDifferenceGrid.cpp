@@ -49,6 +49,208 @@ FiniteDifferenceGrid::FiniteDifferenceGrid( double64 x_dmin, double64 x_dmax,
 
 
 
+double64&  FiniteDifferenceGrid::operator()( int32 row, int32 col )
+  {
+#ifndef NDEBUG
+      if ( row+yfr < 0 || row > size_y+yfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"Row access violation in row: "<< row;
+           std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("FiniteDifferenceGrid::operator(row access)");
+        }
+      if ( col+xfr < 0 || col > size_x+xfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"Column access violation in column: "<< col;
+           std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("FiniteDifferenceGrid::operator(column access)");
+        }
+#endif
+      return grid[ (row+yfr)*rowlength + (col+xfr) ];
+  }
+
+
+
+
+double64  FiniteDifferenceGrid::operator()( int32 row, int32 col ) const
+  {
+#ifndef NDEBUG
+      if ( row+yfr < 0 || row > size_y+yfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"Row access violation in row: "<< row;
+           std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("const FiniteDifferenceGrid::operator(row access)");
+        }
+      if ( col+xfr < 0 || col > size_x+xfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::operator(int32,int32): "<< std::endl;
+           std::cout <<"Column access violation in column: "<< col;
+           std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("const FiniteDifferenceGrid::operator(column access)");
+        }
+#endif
+      return grid[ (row+yfr)*rowlength + (col+xfr) ];
+  }
+
+
+
+
+double64  FiniteDifferenceGrid::Value( int32 row, int32 col ) const
+  {
+#ifndef NDEBUG
+      if ( row+yfr < 0 || row > size_y+yfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::Value(int32,int32): "<< std::endl;
+           std::cout <<"Row access violation in row: "<< row;
+           std::cout <<" (max row index = "<< size_y+yfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("FiniteDifferenceGrid::Value(row access)");
+        }
+      if ( col+xfr < 0 || col > size_x+xfr )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::Value(int32,int32): "<< std::endl;
+           std::cout <<"Column access violation in column: "<< col;
+           std::cout <<" (max column index = "<< size_x+xfr <<")" << std::endl;
+           std::cout.flush();
+           throw std::range_error("FiniteDifferenceGrid::Value(column access)");
+        }
+#endif
+      return grid[ (row+yfr)*rowlength + (col+xfr) ];
+  }
+
+
+
+double64& FiniteDifferenceGrid::N( int32 row, int32 col )
+  {
+      return (*this)(row-1,col);
+  }
+
+
+
+double64& FiniteDifferenceGrid::NW( int32 row, int32 col )
+  {
+      return (*this)(row-1,col-1);
+  }
+
+
+
+double64& FiniteDifferenceGrid::NE( int32 row, int32 col )
+  {
+      return (*this)(row-1,col+1);
+  }
+
+
+
+double64& FiniteDifferenceGrid::S( int32 row, int32 col )
+  {
+      return (*this)(row+1,col);
+  }
+
+
+
+double64& FiniteDifferenceGrid::SW( int32 row, int32 col )
+  {
+      return (*this)(row+1,col-1);
+  }
+
+
+
+double64& FiniteDifferenceGrid::SE( int32 row, int32 col )
+  {
+      return (*this)(row+1,col+1);
+  }
+
+
+
+double64& FiniteDifferenceGrid::W( int32 row, int32 col )
+  {
+      return (*this)(row,col-1);
+  }
+
+
+
+
+double64& FiniteDifferenceGrid::E( int32 row, int32 col )
+  {
+      return (*this)(row,col+1);
+  }
+
+
+
+///returns x-coordinate for column c-style index 0...n
+double64  FiniteDifferenceGrid::X( int32 i ) const
+ {
+#ifndef NDEBUG
+    if ( i+xfr<0 || i>size_x+xfr ) {
+         std::cout <<"\nFiniteDifferenceGrid<double64>::X: Index out of range: "<< i;
+         std::cout <<" versus ("<< -xfr <<"-"<< size_x+xfr <<")."<< std::endl;
+         throw std::out_of_range("FiniteDifferenceGrid<double64>::X");
+      }
+#endif
+    return i * xresolution + x_min;
+ }
+ 
+ 
+ 
+///returns x-coordinate for row c-style index 0...n
+double64  FiniteDifferenceGrid::Y( int32 j ) const
+ {
+#ifndef NDEBUG
+    if ( j+yfr<0 || j>size_y+yfr ) {
+         std::cout <<"\nFiniteDifferenceGrid<double64>::Y: Index out of range: "<< j;
+         std::cout <<" versus ("<< -yfr <<"-"<< size_y+yfr <<")."<< std::endl;
+         throw std::out_of_range("FiniteDifferenceGrid<double64>::Y");
+      }
+#endif
+     return j * yresolution + y_min;
+ }
+
+
+
+/**
+
+Computes the grid indices (i{0,n-1}, j{0..m-1}) of the grid point (x,y)
+that is located the closest to the entered point
+
+NB:  i,j are NOT numbered in the usual matrix sense
+     - i refers to x-coordinate direction
+     - j refers to y-coordinate direction
+
+*/
+void  FiniteDifferenceGrid::ClosestGridPointTo( double64 x, double64 y,
+                                                       int32& row, int32& col )
+ const
+ {
+#ifndef NDEBUG
+      if ( x < x_min || x > x_max )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::ClosestGridPointTo: "<< std::endl;
+           std::cout <<"x-coordinate lies outside of grid: "<< x;
+           std::cout <<" (xmin="<< x_min <<", xmax="<< x_max <<")" << std::endl;
+           std::cout.flush();
+           throw std::domain_error("FiniteDifferenceGrid::ClosestGridPointTo(error x)");
+        }
+      if ( y < y_min || y > y_max )
+        {
+           std::cout <<"\nFiniteDifferenceGrid<double64>::ClosestGridPointTo: "<< std::endl;
+           std::cout <<"y-coordinate lies outside grid: "<< y;
+           std::cout <<" (ymin="<< y_min <<", ymax="<< y_max <<")" << std::endl;
+           std::cout.flush();
+           throw std::domain_error("FiniteDifferenceGrid::ClosestGridPointTo(error y)");
+        }
+#endif
+      col = rint((x-x_min) / xresolution);
+      row = rint((y-y_min) / yresolution);
+ } 
+
+
+
 
 
 
@@ -360,7 +562,7 @@ void   FiniteDifferenceGrid::Out() const
       {
          cout <<"\nrow "<< i <<"\t";
          for ( j=-xfr; j<size_x+xfr; j++ ) 
-           cout << (*this).Value(i,j) <<"\t";
+           cout << (*this)(i,j) <<"\t";
       }
     cout <<"\n\nDone..." << endl;
  }
@@ -394,12 +596,12 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32 tstep, bool with_fram
     // central portion of grid to file
     if ( !with_frame )
       for ( int32 i=0; i<size_y; i++ ) {
-           for ( int32 j=0; j<size_x; j++ ) ifs << (*this).Value(i,j) <<"\t";
+           for ( int32 j=0; j<size_x; j++ ) ifs << (*this)(i,j) <<"\t";
            ifs << endl;
         }
     else
       for ( int32 i=-yfr; i<size_y+yfr; i++ ) {
-           for ( int32 j=-xfr; j<size_x+xfr; j++ ) ifs << (*this).Value(i,j) <<"\t";
+           for ( int32 j=-xfr; j<size_x+xfr; j++ ) ifs << (*this)(i,j) <<"\t";
            ifs << endl;
         }
 
@@ -463,14 +665,14 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32 tstep, bool 
     if ( !with_frame )
       for ( int32 i=0; i<size_y; i++ ) {
            for ( int32 j=0; j<size_x; j++ ) {
-               grid_data[counter] = (*this).Value(i,j);
+               grid_data[counter] = (*this)(i,j);
                counter++;
              }
         }
     else
       for ( int32 i=-yfr; i<size_y+yfr; i++ ) {
            for ( int32 j=-xfr; j<size_x+xfr; j++ ) {
-               grid_data[counter] = (*this).Value(i,j);
+               grid_data[counter] = (*this)(i,j);
                counter++;
              }
         }
@@ -537,7 +739,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
 
 
 void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double64& dmin, double64& dmax,
-					                                  bool frame_included ) const
+					                                        bool frame_included ) const
  {
     int32  i, j;
     double64 val;
@@ -561,16 +763,16 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double64& dmin, double64& dmax
     else
       {
 	// getting min and max of the data (excluding frame)
-        dmax=dmin=(*this).Value(0L,0L);
+        dmax=dmin=(*this)( static_cast<int32>(0), static_cast<int32>(0) );
         for ( i=0; i<size_y; i++ )
           for ( j=0; j<size_x; j++ ) 
            {
-               if ( !isnan( (*this).Value(i,j) ) ) {
+               if ( !isnan( (*this)(i,j) ) ) {
                    if ( first_call ) { 
-                       dmin = dmax = (*this).Value(i,j);
+                       dmin = dmax = (*this)(i,j);
                        first_call = false;
                      }
-                   val = (*this).Value(i,j);
+                   val = (*this)(i,j);
                    if ( val > dmax ) dmax = val;
                    if ( val < dmin ) dmin = val;
                  }
@@ -598,11 +800,11 @@ void  FiniteDifferenceGrid::DataMinMax( double64& dmin, double64& dmax,
     else
       {
 	// getting min and max of the data (excluding frame)
-        dmax=dmin=(*this).Value(0L,0L);
+        dmax=dmin=(*this)( static_cast<int32>(0),static_cast<int32>(0) );
         for ( i=0; i<size_y; i++ )
           for ( j=0; j<size_x; j++ ) 
            {
-             val = (*this).Value(i,j);
+             val = (*this)(i,j);
              if ( val > dmax ) dmax = val;
              if ( val < dmin ) dmin = val;
            }
@@ -891,7 +1093,7 @@ void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32 timestep, bo
         for ( j=0; j<size_x; j++ ) 
           {
              // scaling value to 0-256 scale
-             out_val = (((*this).Value(i,j) - old_min)/old_range) * new_range;
+             out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
              // getting red,green, blue color values
              rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
              ifs.width(3);
@@ -994,18 +1196,18 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) {
-                 if ( isnan( (*this).Value(i,j) ) ) out_val = 255.0;
-                 else                               out_val = ((sqrt((*this).Value(i,j)) - old_min)/old_range) * new_range;
+                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
+                 else                               out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
                }
              else {
-                 if ( isnan( (*this).Value(i,j) ) ) out_val = 255.0;
-                 else                               out_val = (((*this).Value(i,j) - old_min)/old_range) * new_range;
+                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
+                 else                               out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
                }
              if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
              else
                {
                   // getting red,green, blue color values
-                  if ( isnan( (*this).Value(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
+                  if ( isnan( (*this)(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
                   else                               rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
                   image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
                   image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
@@ -1160,18 +1362,18 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32 time
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) {
-                 if ( isnan( (*this).Value(i,j) ) ) out_val = 255.0;
-                 else                               out_val = ((sqrt((*this).Value(i,j)) - old_min)/old_range) * new_range;
+                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
+                 else                               out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
                }
              else {
-                 if ( isnan( (*this).Value(i,j) ) ) out_val = 255.0;
-                 else                               out_val = (((*this).Value(i,j) - old_min)/old_range) * new_range;
+                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
+                 else                               out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
                }
              if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
              else
                {
                   // getting red,green, blue color values
-                  if ( isnan( (*this).Value(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
+                  if ( isnan( (*this)(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
                   else                               rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
                   image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
                   image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
@@ -1312,8 +1514,8 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
         for ( j=0; j<size_x; j++ ) 
           {
              // scaling value to 0-256 scale
-             if ( sqrt_of ) out_val = ((sqrt((*this).Value(i,j)) - old_min)/old_range) * new_range;
-             else           out_val = (((*this).Value(i,j) - old_min)/old_range) * new_range;
+             if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
+             else           out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
              if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
              else
                {
@@ -1471,8 +1673,8 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32 timestep,
         for ( j=0; j<size_x; j++ ) 
           {
              // scaling value to 0-256 scale
-             if ( sqrt_of ) out_val = ((sqrt((*this).Value(i,j)) - old_min)/old_range) * new_range;
-             else           out_val = (((*this).Value(i,j) - old_min)/old_range) * new_range;
+             if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
+             else           out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
              if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
              else
                {

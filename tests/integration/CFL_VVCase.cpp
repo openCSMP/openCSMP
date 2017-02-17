@@ -114,14 +114,14 @@ void CFL_TestCase::SetModel( Model<3>& model,
                              double phi )
 {
     const ScalarVariable viscosityWater( PLAIN, 1.0E-03 );
-    const ScalarVariable viscosityOil( PLAIN, viscosityWater.Value()*mobilityRatio );
+    const ScalarVariable viscosityOil( PLAIN, viscosityWater()*mobilityRatio );
     const ScalarVariable permeability( PLAIN, 1.0E-12 );
     const ScalarVariable densityWater( PLAIN, 1.0E+03 );
     const ScalarVariable densityOil( PLAIN, 1.0E+03 );
     const ScalarVariable saturationWater( PLAIN, 0. );
     const ScalarVariable saturationOil( PLAIN, 1.0 );
     const ScalarVariable porosity( PLAIN, phi );
-    const ScalarVariable conductivity( PLAIN, permeability.Value() / viscosityWater.Value() );
+    const ScalarVariable conductivity( PLAIN, permeability() / viscosityWater() );
     const ScalarVariable lambda( PLAIN, 3.0 );
     const ScalarVariable residualWater( PLAIN, 0.0 );
     const ScalarVariable residualOil( PLAIN, 2.0E-01 );

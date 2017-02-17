@@ -385,7 +385,7 @@ Reads a 264-colour coded text-input file (matrix format) and uses Triangulator t
 FE mesh with uniform triangles that is returned as a VSet.
 
 */
-VSet<2U>& readTextPixelData()
+VSet<2U> readTextPixelData()
 {
     cout <<"\nreadTextPixelData: Please specify 256-color-coded geometry input file (text): ";
     string model_name;
@@ -406,7 +406,7 @@ VSet<2U>& readTextPixelData()
     // 0.3 Building a 2d mesh of triangular elements, incorporating the
     //    permeability data and the boundary conditions. The mesh is
     //    stored in the VSet object 'vset'
-    static VSet<2U>  vset;
+    VSet<2U>  vset;
     Triangulator().TrianglesFromRegularGrid( pixelcolors, vset );
 
     // 0.4 Scaling the geometrical input object that will become the Region

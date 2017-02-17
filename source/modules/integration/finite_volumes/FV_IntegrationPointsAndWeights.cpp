@@ -153,6 +153,105 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
 
 
 
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints( 
+                          std::vector<std::vector<Point<dim> > >&  volume_integration_points ) const
+{
+  volume_integration_points = m_volume_integration_points1;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights( 
+                                       std::vector<std::vector<double64> >&  volume_integration_weights ) const
+{
+  volume_integration_weights = m_volume_integration_weights;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints( 
+                         std::vector<std::vector<Point<dim> > >&  facet_integration_points ) const
+{
+   facet_integration_points = m_facet_integration_points;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights( 
+                                      std::vector<std::vector<double64> >&  facet_integration_weights ) const
+{
+   facet_integration_weights = m_facet_integration_weights;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::ProjectionWeights( 
+                                                std::vector<std::vector<double64> >&  projection_weights ) const
+{
+   projection_weights = m_projection_weights;
+}
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetNormals( 
+                                                   std::vector<Point<dim> >&  facet_normals ) const
+{
+   facet_normals = m_facet_normals;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetsSurroundingNode( 
+                                   std::vector<std::vector<size_t> >& facets_surrounding_node ) const
+{
+   facets_surrounding_node = m_facets_surrounding_node;
+}
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::EdgePairs( 
+                                    std::vector<std::pair<size_t,size_t> >&  edges_of_element ) const
+{
+   edges_of_element = m_edges_of_element;
+}
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::EdgeMidpoints(std::vector<Point<dim> >& rst_facet_edge_midpoints)
+{
+   rst_facet_edge_midpoints = m_facet_edge_midpoints;
+}
+		  
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::Barycenter( Point<dim>& rst_barycenter )
+{
+	rst_barycenter = m_barycenter;
+}
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetPoints( std::vector<std::vector<Point<dim> > >& rst_facet_points )
+{
+   rst_facet_points = m_facet_points;
+}
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
+                          std::vector<std::vector<Point<dim> > >& rst_sector_points)
+{
+   rst_sector_points = m_sector_points;
+}    
+
+
+template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::SectorEdgePairs( 
+               std::vector<std::vector<std::pair<size_t,size_t> > >&  edges_of_sector ) const
+{
+   edges_of_sector = m_edge_of_sectors;
+}
+    
+
+
 /**
 
 Generates data needed in the subdivision of the isoparametric linear
@@ -177,10 +276,10 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
   m_facet_integration_points[0][0][0] = 0.;
   m_facet_normals[0][0]               = 1.; 
    
-  // Subdivided line volume integration points
-  double64 vip[2U][3U] = { 
-                      {-0.5, strtod("NAN",NULL), strtod("NAN",NULL) }, 
-                      { 0.5, strtod("NAN",NULL), strtod("NAN",NULL) } 
+  // Subdivided line volume integration points (x,y,z, but dependent on element dimension, only some will be non zero)
+  const double64 vip[2U][3U] = {
+                      {-0.5, 0., 0. }, 
+                      { 0.5, 0., 0. } 
                    }; 
     
   // in parametric space, the bar element has just a single dimension r
@@ -228,7 +327,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
 /**
 
 Generates data for subdivision of isoparametric linear
-triangle to CV sectors
+triangle to CV sectors.
+
 */
 template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI()
@@ -244,11 +344,11 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
        m_volume_integration_weights[i][j]=1./6.;
      
   // facet integration points
-  double64 fip[3U][3U]=
+  const double64 fip[3U][3U]=
      {
-         { 5./12., 1./6.,  strtod("NAN",NULL) }, 
-         { 5./12., 5./12., strtod("NAN",NULL) }, // point adjacent to hypotenuse
-         { 1./6.,  5./12., strtod("NAN",NULL) }, 
+         { 5./12., 1./6.,  0. }, 
+         { 5./12., 5./12., 0. }, // point adjacent to hypotenuse
+         { 1./6.,  5./12., 0. }, 
      }; 
 
    // products of detJ's, weights & conversion factors
@@ -274,11 +374,11 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
    m_facet_normals[2][0]=-sinAlpha1; m_facet_normals[2][1]=-cosAlpha1; 
    
    // triangle sector integration points
-   double64 vip[3U][3U] = 
+   const double64 vip[3U][3U] =
     {
-      { 7./36.,  7./36., strtod("NAN",NULL) },
-      { 11./18., 7./36., strtod("NAN",NULL) },
-      { 7./36., 11./18., strtod("NAN",NULL) }
+      { 7./36.,  7./36., 0. },
+      { 11./18., 7./36., 0. },
+      { 7./36., 11./18., 0. }
     }; 
     
     for(size_t i=0U;i<3U;i++)
@@ -369,12 +469,12 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
       m_volume_integration_weights[i][j]=1.;
      
   // facet integration points
-  double64 fip[4U][3U]=
+  const double64 fip[4U][3U]=
      {
-         { 0.0,-0.5, std::numeric_limits<double64>::quiet_NaN() },
-         { 0.5, 0.0, std::numeric_limits<double64>::quiet_NaN() },
-         { 0.0, 0.5, std::numeric_limits<double64>::quiet_NaN() },
-         {-0.5, 0.0, std::numeric_limits<double64>::quiet_NaN() }
+         { 0.0,-0.5, 0. },
+         { 0.5, 0.0, 0. },
+         { 0.0, 0.5, 0. },
+         {-0.5, 0.0, 0. }
      }; 
 
    // products of detJ's, weights & conversion factors
@@ -388,12 +488,12 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     }
  
    // Subdivided Quad Volume integration points
-   double64 vip[4U][3U] = 
+   const double64 vip[4U][3U] =
     {
-      {-0.5,-0.5, std::numeric_limits<double64>::quiet_NaN() },
-      {0.5 ,-0.5, std::numeric_limits<double64>::quiet_NaN() },
-      {0.5 , 0.5, std::numeric_limits<double64>::quiet_NaN() },
-      {-0.5, 0.5, std::numeric_limits<double64>::quiet_NaN() }
+      {-0.5,-0.5, 0. },
+      {0.5 ,-0.5, 0. },
+      {0.5 , 0.5, 0. },
+      {-0.5, 0.5, 0. }
     }; 
     
    for(size_t i=0U; i<NumOfInternalVolumes; i++)
@@ -491,7 +591,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1./24.;
 	
-    double64 fip[6U][3U] =
+    const double64 fip[6U][3U] =
     {
      {13./36.,5./36.,5./36.},
      {13./36.,13./36.,5./36.},
@@ -507,7 +607,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     	  m_facet_integration_points[i][0][j]=fip[i][j];
     		  		
     // Subdivided Tet Volume integration points
-    double64 vip[4U][3U] =
+    const double64 vip[4U][3U] =
     {
      {23./144.,23./144.,23./144.},
      {25./48.,23./144.,23./144.},
@@ -733,7 +833,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
         }
 
 	// face integration points (3D element)
-	double64 fip[12U][3U] =
+	const double64 fip[12U][3U] =
     {
      // Lower
      {0., - 0.5,-0.5},
@@ -759,7 +859,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided volume integration points for hexahedron
-    double64 vip[8U][3U]=
+    const double64 vip[8U][3U]=
         {
             {-0.5,-0.5,-0.5},
             {0.5,-0.5,-0.5}, 
@@ -1125,7 +1225,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_projection_weights[8][0]=0.145828940771960402;
 
 	// face integration points
-    double64 fip[9U][NumberOfPhysicalDimensions] =
+    const double64 fip[9U][NumberOfPhysicalDimensions] =
     {
       {5./12.,1./6.,-1./2.},
       {5./12.,5./12.,-1./2.},
@@ -1145,7 +1245,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided Tet Volume integration points
-    double64 vip[6U][NumberOfPhysicalDimensions]=
+    const double64 vip[6U][NumberOfPhysicalDimensions]=
     {
      {5./24.,5./24.,-1./2.},
      {7./12.,5./24.,-1./2.}, 
@@ -1428,7 +1528,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_volume_integration_weights[4][0]=1./3.;//0.351851852;//
     
     // Subdivided pyramid volume integration points
-    double64 vip[5U][3U]=
+    const double64 vip[5U][3U]=
       {
          {-31./72.,-31./72.,23./144.},
          {31./72.,-31./72.,23./144.},
@@ -1445,7 +1545,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
 
 	  //face integration points
-    double64 fip[8U][3U] =
+    const double64 fip[8U][3U] =
    	 {
   	   {0.,-4./9., 5./36.},
          {4./9.,0.,5./36.},
@@ -1712,7 +1812,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_volume_integration_weights[4][0]=1./3.;
     
     // Subdivided pyramid volume integration points
-    double64 vip[5U][3U]=
+    const double64 vip[5U][3U]=
       {
          {-31./72.,-31./72.,23./144.},
          {31./72.,-31./72.,23./144.},
@@ -1728,7 +1828,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     	  m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
 
 	  //face integration points
-    double64 fip[12U][3U] =
+    const double64 fip[12U][3U] =
    	 {
   	   {0.,-4./9., 5./36.},
        {4./9.,0.,5./36.},

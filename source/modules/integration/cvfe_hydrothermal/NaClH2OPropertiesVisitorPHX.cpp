@@ -1226,7 +1226,7 @@ namespace csmp
                         "\nNegative xCv:");
         cout <<xCv()<< endl;
       }
-    if ( p < 101325.0 || t < 5.0 )
+    if ( p() < 101325.0 || t() < 5.0 )
       {
         cerr << "\nNode: ("<<n->x()<<", "<<n->y()<<", Pressure: "<<p()<<" Pa, total enthalpy: "<<H_current_<<" J, total mass: " <<
           mt() <<" kg, rock temperature: "<<t()<<" oC " << endl;

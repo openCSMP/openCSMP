@@ -16,6 +16,7 @@
 #include "binaryReadWrite.h"
 #include "CSMP_highLevelUtilities.h"
 #include "PL_Utilities.h"
+#include "variableOperations.h"
 
 #include "Visitor.h"
 
@@ -723,15 +724,6 @@ void csmp::Boundary<dim>::AtBoundary( BOX_BOUNDARY boxBoundary )
 
 
 template<size_t dim>
-void Boundary<dim>::ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& fvm_mgr )
- {
-    for ( typename vector<Face<dim>*>::iterator it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
-        (*it)->Assign( fvm_mgr.Stencil( (*it)->FE_Type() ) );
- }
-
-
-
-template<size_t dim>
 void Boundary<dim>::CreateNodePointerVector()
  {
     assert( !this->elmt_vec_.empty() );
@@ -893,7 +885,10 @@ bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterato
 
 
 /** Creates faces around the region
-    Only for volume regions in 3D and surface regions in 2D
+    Only for volume regions in 3D and surface regions in 2D.
+    
+    @note any dim-2 elements are ignored: this means line elements
+    in a 3D model are ignored.
 
 @date refactored by SKM 1/6/2016 (new face constructor etc.)
 
@@ -918,32 +913,29 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
     // container for face nodes
     vector<size_t> faceNodes;
 
-    // looking for model boundary faces along the boundary of the group
-    size_t face_idx(0U);
-    const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != elementsEnd; ++it )
-      {
-         // equidimensional elements only
-         if ( ( dim == 3 and !(*it)->FE()->IsVolumeElement() ) or
-              ( dim == 2 and !(*it)->FE()->IsSurfaceElement() ) )
-           continue;
-        
-         // logic: for each neighbor there is a face
-         const size_t faces((*it)->Faces());
-         for ( size_t i=0U; i<faces; ++i )
-           // if this is a perimeter face, i.e. there is no neighbour element 
-           if ( (*it)->Neighbor(i) == nullptr ) {
-                // which is used to create the new face using the variables prepared above ( FV Stencil = NULL)
-                Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *(*it),
-                                                                      finiteElementManager.E( (*it)->FE()->ElementTypeOfFace(i) ),
-                                                                      i, lvsFaces, lvsIntegrationPoints ) );
-                faceObj->Idx( face_idx++ );
-                // push back into face container
-//                this->elmt_vec_.emplace_back( faceObj );
-                this->elmt_vec_.push_back( faceObj );
-             }
+    // for the faces of the perimeter elements of the region
+    size_t face_idx(0);
+    for ( size_t i=region.InteriorElements(); i<region.Elements(); ++i ) {
+          // ignoring dim-2 elements
+          if ( ( dim == 3 and !region.E(i)->IsVolumeElement() ) or
+               ( dim == 2 and !region.E(i)->IsSurfaceElement() ) )
+            continue;
 
-      } // perimeter elements
+          // for each perimter face
+          const size_t perimeter_faces(region.PerimeterFaces(i));
+          for ( size_t j=0U; j<perimeter_faces; ++j )
+            {
+               // create the new face using the variables prepared above ( FV Stencil = NULL)
+               Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *region.E(i),
+                                                                     finiteElementManager.E(
+                                                                     region.E(i)->FE()->ElementTypeOfFace(i) ),
+                                                                     region.PerimeterFace(i,j),
+                                                                     lvsFaces, lvsIntegrationPoints ) );
+               faceObj->Idx( face_idx++ );
+               // push back into face container
+               this->elmt_vec_.push_back( faceObj );
+            }
+       }
 
     // free up excessive storage
     vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
@@ -964,6 +956,64 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
 //  }
 
 
+
+/*  OLD VERSION (Leoben CSMP)
+
+template<size_t dim>
+bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
+                                  const FiniteElementManager& finiteElementManager,
+                                  const Region<dim>& region,
+                                  BOX_BOUNDARY boxBoundary )
+  {
+    // LVS
+    const LocalVariables lvsFaces( FaceVariables() );
+    const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
+
+    // reserving storage for boundary elements
+    // logic: the number of faces created cannot be larger than the number of boundary elements
+    this->elmt_vec_.reserve( region.PerimeterElements() );
+
+    // container for face nodes
+    vector<size_t> faceNodes;
+
+    // looking for model boundary faces along the boundary of the group
+    size_t face_idx(0U);
+    const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != elementsEnd; ++it )
+      {
+         // equidimensional elements only
+         if ( ( dim == 3 and !(*it)->IsVolumeElement() ) or
+              ( dim == 2 and !(*it)->IsSurfaceElement() ) )
+           continue;
+        
+         // logic: for each neighbor there is a face
+         const size_t faces((*it)->Faces());
+         for ( size_t i=0U; i<faces; ++i )
+           // if this is a perimeter face, i.e. there is no neighbour element 
+           if ( (*it)->Neighbor(i) == nullptr ) {
+                // which is used to create the new face using the variables prepared above ( FV Stencil = NULL)
+                Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *(*it),
+                                                                      finiteElementManager.E( (*it)->FE()->ElementTypeOfFace(i) ),
+                                                                      i, lvsFaces, lvsIntegrationPoints ) );
+                faceObj->Idx( face_idx++ );
+                // push back into face container
+                this->elmt_vec_.push_back( faceObj );
+             }
+
+      } // perimeter elements
+
+    // free up excessive storage
+    vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+
+    // initialize boundary essentials
+    //  box boundary flag=true, update neighbor connectivity=true, update member indexes=true
+    Initialize( boxBoundary, true , true );
+
+    //done
+    return true;
+
+  } // CreateAround
+*/
 
 
 
@@ -1136,7 +1186,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
                 for ( typename vector<Face<dim>*>::const_iterator
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->PropertyValueAtBaryCenter( prop_key, sc );
-                     property_integral += (*it)->Volume() * sc.Value();
+                     property_integral += (*it)->Volume() * sc();
                   }
              }
            else {
@@ -1153,7 +1203,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->UnitNormal( unrml );
                      (*it)->Read( prop_key, vc );
-                     property_integral += unrml & vc;
+                     property_integral += dotProduct(unrml,vc);
                   }
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
@@ -1162,7 +1212,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
                       it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
                      (*it)->UnitNormal( unrml );
                      (*it)->PropertyValueAtBaryCenter( prop_key, vc );
-                     property_integral += unrml & vc;
+                     property_integral += dotProduct(unrml,vc);
                   }
              }
            else throw csmp::Exception( FATAL_ERROR, "Boundary<dim>::SurfaceIntegral",

@@ -1,11 +1,19 @@
-#ifndef SIMULATIONSIGNALHANDLER_H
-#define SIMULATIONSIGNALHANDLER_H
+#ifndef SIMULATION_SIGNAL_HANDLER_H
+#define SIMULATION_SIGNAL_HANDLER_H
 
 #include <csignal>
 #include <iostream>
 
 void HandleSignal(int sig_code);
 
+/**
+    Allows user to interrupt simulation by keystrokes.
+    
+    Used by FEMCFVM simulator.
+    
+    @author J. Mindel & S. Bazrafkan
+    @date 2012
+*/
 class SimulationSignalHandler
 {
 public:
@@ -41,4 +49,4 @@ private:
     static bool outputMonitorDataSignal_;
 };
 
-#endif // SIMULATIONSIGNALHANDLER_H
+#endif // SIMULATION_SIGNAL_HANDLER_H

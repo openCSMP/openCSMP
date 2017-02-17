@@ -97,7 +97,7 @@ Matrix&
            for ( size_t j=0U; j<3U; j++ ) {
                  temp.data[i][j] = static_cast<double64>(0.0);
                  for ( size_t k=0U; k<3U; k++ ) 
-                   temp.data[i][j] += data[i][k] * ts.Value(k,j);
+                   temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
       }
@@ -105,17 +105,17 @@ Matrix&
     TensorVariable<3U> temp;
     // Unrolled loop(i...3,j...3)
     // row 0
-    temp(0,0) = data[0][0] * ts.Value(0,0) + data[0][1] * ts.Value(1,0) + data[0][2] * ts.Value(2,0);
-    temp(0,1) = data[0][0] * ts.Value(0,1) + data[0][1] * ts.Value(1,1) + data[0][2] * ts.Value(2,1);
-    temp(0,2) = data[0][0] * ts.Value(0,2) + data[0][1] * ts.Value(1,2) + data[0][2] * ts.Value(2,2);
+    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0) + data[0][2] * ts(2,0);
+    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1) + data[0][2] * ts(2,1);
+    temp(0,2) = data[0][0] * ts(0,2) + data[0][1] * ts(1,2) + data[0][2] * ts(2,2);
      // row 1
-    temp(1,0) = data[1][0] * ts.Value(0,0) + data[1][1] * ts.Value(1,0) + data[1][2] * ts.Value(2,0);
-    temp(1,1) = data[1][0] * ts.Value(0,1) + data[1][1] * ts.Value(1,1) + data[1][2] * ts.Value(2,1);
-    temp(1,2) = data[1][0] * ts.Value(0,2) + data[1][1] * ts.Value(1,2) + data[1][2] * ts.Value(2,2);
+    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0) + data[1][2] * ts(2,0);
+    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1) + data[1][2] * ts(2,1);
+    temp(1,2) = data[1][0] * ts(0,2) + data[1][1] * ts(1,2) + data[1][2] * ts(2,2);
     // row 2
-    temp(2,0) = data[2][0] * ts.Value(0,0) + data[2][1] * ts.Value(1,0) + data[2][2] * ts.Value(2,0);
-    temp(2,1) = data[2][0] * ts.Value(0,1) + data[2][1] * ts.Value(1,1) + data[2][2] * ts.Value(2,1);
-    temp(2,2) = data[2][0] * ts.Value(0,2) + data[2][1] * ts.Value(1,2) + data[2][2] * ts.Value(2,2);
+    temp(2,0) = data[2][0] * ts(0,0) + data[2][1] * ts(1,0) + data[2][2] * ts(2,0);
+    temp(2,1) = data[2][0] * ts(0,1) + data[2][1] * ts(1,1) + data[2][2] * ts(2,1);
+    temp(2,2) = data[2][0] * ts(0,2) + data[2][1] * ts(1,2) + data[2][2] * ts(2,2);
   
     return *this = temp; 
  }
@@ -180,17 +180,17 @@ Matrix::operator*=( const TensorVariable<2U>& ts )
            for ( size_t j=0U; j<2U; j++ ) {
                  temp.data[i][j] = static_cast<double64>(0.0);
                  for ( size_t k=0U; k<2U; k++ ) 
-                   temp.data[i][j] += data[i][k] * ts.Value(k,j);
+                   temp.data[i][j] += data[i][k] * ts(k,j);
              }
          return *this = temp;
       }
 
     TensorVariable<3U> temp;
-    // temp(i,j) += data[i][k]*ts.Value(k][j];
-    temp(0,0) = data[0][0] * ts.Value(0,0) + data[0][1] * ts.Value(1,0);
-    temp(0,1) = data[0][0] * ts.Value(0,1) + data[0][1] * ts.Value(1,1);
-    temp(1,0) = data[1][0] * ts.Value(0,0) + data[1][1] * ts.Value(1,0);
-    temp(1,1) = data[1][0] * ts.Value(0,1) + data[1][1] * ts.Value(1,1);
+    // temp(i,j) += data[i][k]*ts(k][j];
+    temp(0,0) = data[0][0] * ts(0,0) + data[0][1] * ts(1,0);
+    temp(0,1) = data[0][0] * ts(0,1) + data[0][1] * ts(1,1);
+    temp(1,0) = data[1][0] * ts(0,0) + data[1][1] * ts(1,0);
+    temp(1,1) = data[1][0] * ts(0,1) + data[1][1] * ts(1,1);
        
     return *this = temp;
  }
@@ -876,10 +876,10 @@ void Matrix::Out( long digits ) const
 Matrix& Matrix::operator=( const TensorVariable<2U>& ts )
  {
     rows = cols = 2U;
-    data[0][0] = ts.Value(0,0);
-    data[0][1] = ts.Value(0,1);
-    data[1][0] = ts.Value(1,0);
-    data[1][1] = ts.Value(1,1);
+    data[0][0] = ts(0,0);
+    data[0][1] = ts(0,1);
+    data[1][0] = ts(1,0);
+    data[1][1] = ts(1,1);
       
     return *this; 
  }
@@ -891,19 +891,113 @@ Matrix& Matrix::operator=( const TensorVariable<2U>& ts )
 Matrix&  Matrix::operator=( const TensorVariable<3U>& ts )
  {
     rows = cols = 3U;
-    data[0][0] = ts.Value(0,0);
-    data[0][1] = ts.Value(0,1);
-    data[0][2] = ts.Value(0,2);
-    data[1][0] = ts.Value(1,0);
-    data[1][1] = ts.Value(1,1);
-    data[1][2] = ts.Value(1,2);
-    data[2][0] = ts.Value(2,0);
-    data[2][1] = ts.Value(2,1);
-    data[2][2] = ts.Value(2,2); 
+    data[0][0] = ts(0,0);
+    data[0][1] = ts(0,1);
+    data[0][2] = ts(0,2);
+    data[1][0] = ts(1,0);
+    data[1][1] = ts(1,1);
+    data[1][2] = ts(1,2);
+    data[2][0] = ts(2,0);
+    data[2][1] = ts(2,1);
+    data[2][2] = ts(2,2); 
       
     return *this; 
  }
 
+
+
+/// default constructor
+Matrix::Matrix()
+ : rows(0), cols(0)
+ {
+ }
+
+
+/// constructor (i,j)
+Matrix::Matrix( size_t m, size_t n )
+ : rows(m), cols(n), data(m,std::vector<double64>(n))
+ {
+ }
+
+
+
+
+
+/// operator (i,j)
+double64& Matrix::operator()( size_t m, size_t n )
+ {
+#ifndef NDEBUG
+    CheckRange( m, n, "Matrix::operator()");
+#endif
+    return data[m][n];
+ }
+
+
+
+/// operator (i,j) const
+const double64& Matrix::operator()( size_t m, size_t n ) const
+ {
+#ifndef NDEBUG
+    CheckRange( m, n, "Matrix::operator()");
+#endif
+    return data[m][n];
+ }
+
+
+
+
+
+/// returns number of rows
+size_t Matrix::Rows() const { return rows; }
+
+
+/// returns number of columns
+size_t Matrix::Cols() const { return cols; }
+
+
+
+
+#ifndef NDEBUG
+/// checks whether row and column numbers are compatible with the size of the matrix
+bool Matrix::CheckRange( size_t m, size_t n,
+                                const char* originator ) const
+ {
+    if ( m >= rows ) {
+         std::cerr <<"\n"<< originator <<" row index violation, index="<< m;
+         std::cerr <<" versus, row-max=" << rows << std::endl;
+         throw std::length_error("Matrix<mn_max>::CheckRange");
+         return false;
+      }
+    if ( n >= cols ) {
+         std::cerr <<"\n"<< originator <<" column index violation, index="<< n;
+         std::cerr <<" versus, column-max=" << cols << std::endl;
+         throw std::length_error("Matrix<mn_max>::CheckRange");
+         return false;
+      }
+    return true;
+ }
+#endif
+
+
+
+/// checks whether the righthand matrix has the same size as the lefthand one in the calculation
+bool Matrix::CheckSizes( const Matrix& mat, 
+                                const char* originator ) const
+ {
+    if ( rows != mat.rows ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
+         std::cerr <<" versus, rows2=" << mat.rows << std::endl;
+         throw std::length_error("Matrix<mn_max>::CheckSizes");
+         return false;
+      }
+    if ( cols != mat.cols ) {
+         std::cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< cols;
+         std::cerr <<" versus, columns2=" << mat.cols << std::endl;
+         throw std::length_error("Matrix<mn_max>::CheckSizes");
+         return false;
+      }
+    return true;
+ }
 
 
 // AssignToDiagonal ( VectorVariable 2D)
@@ -911,10 +1005,10 @@ Matrix&  Matrix::operator=( const TensorVariable<3U>& ts )
 void Matrix::AssignToDiagonal( const VectorVariable<2U>& vc )
  {
     assert ( rows == cols && cols == 2U );
-    data[0][0] = vc.Value(0);
+    data[0][0] = vc(0);
     data[0][1] = static_cast<double64>(0.);
     data[1][0] = static_cast<double64>(0.);
-    data[1][1] = vc.Value(1);
+    data[1][1] = vc(1);
  }
 
 
@@ -924,15 +1018,15 @@ void Matrix::AssignToDiagonal( const VectorVariable<2U>& vc )
 void Matrix::AssignToDiagonal( const VectorVariable<3U>& vc )
  {
     assert ( rows == cols && cols == 3U );
-    data[0][0] = vc.Value(0);
+    data[0][0] = vc(0);
     data[0][1] = static_cast<double64>(0.);
     data[0][2] = static_cast<double64>(0.);
     data[1][0] = static_cast<double64>(0.);
-    data[1][1] = vc.Value(1);
+    data[1][1] = vc(1);
     data[1][2] = static_cast<double64>(0.);
     data[2][0] = static_cast<double64>(0.);
     data[2][1] = static_cast<double64>(0.);
-    data[2][2] = vc.Value(2); 
+    data[2][2] = vc(2); 
  }
 
 

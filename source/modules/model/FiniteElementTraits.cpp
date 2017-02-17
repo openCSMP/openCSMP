@@ -93,7 +93,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return The node coordinates are returned into the supplied matrix.
+The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
@@ -313,7 +313,7 @@ double64 FiniteElementTraits<dim,SIMPLEX>::PropertyIntegral( const csmp::Index& 
       {
         ScalarVariable  sc;
         eptr->PropertyValueAtBaryCenter( prop_key, sc );
-        return eptr->Volume() * sc.Value();
+        return eptr->Volume() * sc();
       }
 
     if ( prop_key.place == ELEMENT_INTEGRATION_POINT )

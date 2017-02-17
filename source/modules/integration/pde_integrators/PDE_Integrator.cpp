@@ -1592,7 +1592,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICIAL_COMPLEX<d
          {
             case SCALAR:
                  while ( gfirst != gref.NodesEnd() ) {
-                      double64 sc = x_[ (*gfirst)->Idx() + offset ];
+                      const double64 sc = x_[ (*gfirst)->Idx() + offset ];
                       (*gfirst)->Store( prop_key, makeScalar((*gfirst)->Status(prop_key),sc) );
                       gfirst++;
                    }

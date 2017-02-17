@@ -7,6 +7,7 @@
 #include "IsoparametricLinearPyramid.h"
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPrism.h"
+#include "Element.h"
 #include "Point.h"
 #include "VSet.h"
 #include "Test.h"
@@ -3283,6 +3284,7 @@ void FiniteVolumeTraits_Test::Test_IsoparametricLinearHexahedron1(double64 fTole
 		_equal( vecNormal[1], 1., fTolerance );
 		_equal( vecNormal[2], 0., fTolerance );
 		_info("Facet 3...");
+    vecNormal = ( elmt_ ).FacetNormal(2U);
         dumpVector<3>("Normal is: ", vecNormal);
 		_equal( vecNormal[0], -1., fTolerance );
 		_equal( vecNormal[1], 0., fTolerance );

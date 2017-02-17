@@ -220,6 +220,12 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const std::
 
 
 
+/// provide the csmp::Index for the gradient variable
+template<size_t dim>
+void GenericNodePropertyGradientLimiter<dim>::SetPropertyKey( csmp::Index& key )  { u_key = key; }
+
+
+
 
 
 /**

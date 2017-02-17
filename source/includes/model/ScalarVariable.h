@@ -72,80 +72,83 @@ class ScalarVariable {
   public:
     ScalarVariable();
     ScalarVariable( VARIABLE_FLAG f, double64 val );
-    ScalarVariable( const ScalarVariable& s );
-    ScalarVariable( ScalarVariable&& s );
+    ScalarVariable( const ScalarVariable& );
+    ScalarVariable( ScalarVariable&& ) = default;
     ~ScalarVariable();
   
-    ScalarVariable&  operator+=( double64 val );
-    ScalarVariable&  operator-=( double64 val );
-    ScalarVariable&  operator*=( double64 val );
-    ScalarVariable&  operator/=( double64 val );
-
-    ScalarVariable&  operator+=( const ScalarVariable& s );
-    ScalarVariable&  operator-=( const ScalarVariable& s );
-    ScalarVariable&  operator*=( const ScalarVariable& s );
-    ScalarVariable&  operator/=( const ScalarVariable& s );
-    
-    ScalarVariable&  operator=( double64 val );
-    ScalarVariable&  operator=( const ScalarVariable& s );
-
-    bool             operator<(  double64 val ) const; 
-    bool             operator>(  double64 val ) const; 
-    bool             operator<=( double64 val ) const; 
-    bool             operator>=( double64 val ) const; 
+    ScalarVariable&  operator+=( const ScalarVariable& );
+    ScalarVariable&  operator-=( const ScalarVariable& );
+    ScalarVariable&  operator*=( const ScalarVariable& );
+    ScalarVariable&  operator/=( const ScalarVariable& );
   
-    bool             operator<(  const ScalarVariable& s ) const; 
-    bool             operator>(  const ScalarVariable& s ) const; 
-    bool             operator<=( const ScalarVariable& s ) const; 
-    bool             operator>=( const ScalarVariable& s ) const;
+    // for conformance with the interfaces of the other CSMP variables
+    ScalarVariable&  operator=( double64 val )  { data_ = val; return *this; }
+    ScalarVariable&  operator+=( double64 val ) { data_ += val; return *this; }
+    ScalarVariable&  operator-=( double64 val ) { data_ -= val; return *this; }
+    ScalarVariable&  operator*=( double64 val ) { data_ *= val; return *this; }
+    ScalarVariable&  operator/=( double64 val ) { data_ /= val; return *this; }
+
+    /// assignment operator
+    ScalarVariable&  operator=( const ScalarVariable& );
+  
+    /// move assignment
+    ScalarVariable&  operator=( ScalarVariable&& ) = default;
+
+    /// comparitor that is used by less<> predicate in STL
+    bool             operator<(  const ScalarVariable& ) const;
+    /// comparitor that is used by greater than<> predicate in STL
+    bool             operator>(  const ScalarVariable& ) const;
+    bool             operator<=( const ScalarVariable& ) const;
+    bool             operator>=( const ScalarVariable& ) const;
   
     /// for storing scalars in associative containers with respective predicates
-    bool             operator==( const ScalarVariable& s ) const; 
-    bool             operator!=( const ScalarVariable& s ) const; 
+    bool             operator==( const ScalarVariable& ) const;
+    bool             operator!=( const ScalarVariable& ) const;
   
     /// assignment as an lvalue
     double64&        operator()(void);
     double64         operator()(void) const;
   
-    void             Component( size_t, double64 );
-    double64         Component( size_t ) const;
-    
-    size_t           Components() const;
-    double64         Value()   const;
-    double64         Average() const;
-  
     /// tests whether the variable value lies within the given bounds
     bool             IsWithinRange( double64 vmin, double64 vmax ) const;
+
+    /// universal way of assigning values to all CSMP variable types
+    void             Component( size_t, double64 val ) { data_ = val; }
+
+    /// universal accessor of CSMP variable values which works for all variable types
+    double64         Component( size_t ) const { return data_; }
   
-    /// returns size of variable (=1 for scalar)
+    /// returns size = number of components of the variable (=1 for scalar)
     size_t           Size() const;
   
     /// value assignment to scalar: cannot resize, but assigns user-defined or default value
     void             Resize( size_t newSize, double64 newValue = std::numeric_limits<double64>::quiet_NaN() );
   
+    /// assigment: status of variable which determines how it is used in computations
     VARIABLE_FLAG&   Flag();
+
+    /// accessor: status of variable which determines how it is used in computations
     VARIABLE_FLAG    Flag() const;
-    void             Zero();
-    void             Sqrt();
-    /// natural logarithm of scalar
-    void             Ln();
-    /// base 10 logarithm
-    void             Log10();
+
+    /// prints flag/value pair to screen
     void             Out() const;
-    /// reading and writing scalars binary files
+  
+    /// reading and writing of scalar variables to binary files
     bool             Out( FILE* fp ) const;
     bool             In( FILE* fp );
-
-    friend class VectorVariable<2U>;
-    friend class TensorVariable<2U>;
-    friend class VectorVariable<3U>;
-    friend class TensorVariable<3U>;
 
   private:
     VARIABLE_FLAG flag_;
     double64      data_;
  };
 
+ /// creates scalar and returns; use for inserting scalars into functions
+ ScalarVariable  makeScalar( VARIABLE_FLAG, double64 );
+
+ ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& );
+ ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& );
+ ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& );
+ ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& );
  ScalarVariable  operator+( const ScalarVariable&, const double64& );
  ScalarVariable  operator-( const ScalarVariable&, const double64& );
  ScalarVariable  operator*( const ScalarVariable&, const double64& );
@@ -154,409 +157,18 @@ class ScalarVariable {
  ScalarVariable  operator-( const double64&, const ScalarVariable& );
  ScalarVariable  operator*( const double64&, const ScalarVariable& );
  ScalarVariable  operator/( const double64&, const ScalarVariable& );
- ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& );
- ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& );
- ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& );
- ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& );
 
+ /// multiplies each element of vector variable with scalar
  template<size_t dim>
  VectorVariable<dim>  operator*( const ScalarVariable&, const VectorVariable<dim>& );
 
+ /// multiplies each element of tensor variable with scalar
  template<size_t dim>
  TensorVariable<dim>  operator*( const ScalarVariable&, const TensorVariable<dim>& );
-
-
-// *******************************************************************
-//
-//             INLINE FUNCTIONS
-//
-// *******************************************************************
-
-
-/// for printing scalars using the standard streams cout, cerr, clog
-std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
-
-/// helper functions
-const ScalarVariable&  makeScalar( VARIABLE_FLAG, double64 );
-
-
-inline  double64& ScalarVariable::operator()(void) { return data_; }
-inline  double64  ScalarVariable::operator()(void) const { return data_; }
-
-
-inline  void      ScalarVariable::Component(size_t, double64 val) { data_ = val; }
-
-inline  double64      ScalarVariable::Component(size_t) const { return data_; }
-
-
-inline  size_t  ScalarVariable::Components() const { return 1U; }
-
-
-inline double64       ScalarVariable::Value()   const  { return data_; }
-
-
-inline double64       ScalarVariable::Average() const  { return data_; }
-
-
-inline VARIABLE_FLAG&  ScalarVariable::Flag() { return flag_; }
-
-
-inline VARIABLE_FLAG   ScalarVariable::Flag() const { return flag_; }
-
-
-inline size_t ScalarVariable::Size() const  { return 1U;  }
-
-
-inline void ScalarVariable::Resize( size_t, double64 newValue ) { data_ = newValue; }
-
-
-inline void  ScalarVariable::Zero() { data_ = static_cast<double64>(0.);  }
-
-
-
-inline void  ScalarVariable::Sqrt() 
-  { 
-     data_ = std::sqrt(data_);
-  }
-
-
-
-inline void  ScalarVariable::Ln()
-  { 
-     data_ = std::log(data_);
-  }
-
-
-inline void  ScalarVariable::Log10() 
-  { 
-     data_ = std::log10(data_);
-  }
-
-
-
-inline ScalarVariable::ScalarVariable() : flag_(ANY), data_(std::numeric_limits<double64>::quiet_NaN()) {}
-
-
-
-inline ScalarVariable::ScalarVariable(  VARIABLE_FLAG f, double64 val )
- : flag_(f), data_(val)
- {
- }
-
-
-
-
-inline ScalarVariable::ScalarVariable( const ScalarVariable& s ) 
- : flag_(s.flag_),
-   data_(s.data_)
- { 
- }
  
+  /// for printing scalars using the standard streams cout, cerr, clog
+  std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
 
-
-inline ScalarVariable::ScalarVariable( ScalarVariable&& s )
- : flag_{s.flag_},
-   data_{s.data_}
- { 
- }
-
-
-inline ScalarVariable::~ScalarVariable() {}
- 
- 
-
-
-
-
-inline ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s )
- {
-    data_ += s.data_;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator-=( const ScalarVariable& s )
- {
-    data_ -= s.data_;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator*=( const ScalarVariable& s )
- {
-    data_ *= s.data_;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s )
- {
-    data_ /= s.data_;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator+=( double64 val )
- {
-    data_ += val;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator-=( double64 val )
- {
-    data_ -= val;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator*=( double64 val )
- {
-    data_ *= val;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator/=( double64 val )
- {
-    data_ /= val;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator=( const ScalarVariable& s )
- {
-    if ( &s == this ) return *this;
-    flag_ = s.flag_;
-    data_ = s.data_;
-    return( *this );
- }
- 
- 
-
-
-inline ScalarVariable&  ScalarVariable::operator=( double64 val )
- {
-    data_ = val;
-    return( *this );
- }
-
-
-
-
-inline bool  ScalarVariable::operator<( double64 val ) const
- {
-    return( data_ < val );
- }
-
-
-
-inline bool  ScalarVariable::operator>( double64 val ) const
- {
-    return( data_ > val );
- }
-
-
-
-inline bool  ScalarVariable::operator<=( double64 val ) const
- {
-    return( data_ <= val );
- }
-
-
-
-inline bool  ScalarVariable::operator>=( double64 val ) const
- {
-    return( data_ >= val );
- }
-
-
-inline bool  ScalarVariable::operator<( const ScalarVariable& s ) const
- {
-    return( s.data_ > data_ );
- }
-
-
-
-inline bool  ScalarVariable::operator>( const ScalarVariable& s ) const
- {
-    return( s.data_ < data_ );
- }
-
-
-
-inline bool  ScalarVariable::operator<=( const ScalarVariable& s ) const
- {
-    return( s.data_ >= data_ );
- }
-
-
-
-inline bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
- {
-    return( s.data_ <= data_ );
- }
- 
-
-
-// keep for associative containers
-inline bool  ScalarVariable::operator==( const ScalarVariable& s ) const
- {
-    if ( s.flag_ != flag_ ) return false;
-    return !(data_ > s.data_ and data_ < s.data_);
- }
- 
-  
-
-
-// keep for associative containers
-inline bool  ScalarVariable::operator!=( const ScalarVariable& s ) const
- {
-    return !(*this == s);
- } 
-
-
-
-
-
-inline bool  ScalarVariable::IsWithinRange( double64 vmin, double64 vmax ) const
- {
-    if ( data_ < vmin || data_ > vmax ) return false;
-    return true;
- }
-
-
-
-inline ScalarVariable  operator+( const ScalarVariable& l, const double64& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() + r ));
- }
- 
-
-
-inline ScalarVariable  operator-( const ScalarVariable& l, const double64& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() - r ));
- }
- 
-
-
-inline ScalarVariable  operator*( const ScalarVariable& l, const double64& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() * r ));
- }
- 
-
-
-inline ScalarVariable  operator/( const ScalarVariable& l, const double64& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() / r ));
- }
-
-
-
-inline ScalarVariable  operator+( const double64& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( r.Flag(), l + r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator-( const double64& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( r.Flag(), l - r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator*( const double64& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( r.Flag(), l * r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator/( const double64& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( r.Flag(), l / r.Value() ));
- }
-
-
-
-inline ScalarVariable  operator+( const ScalarVariable& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() + r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator-( const ScalarVariable& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() - r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator*( const ScalarVariable& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() * r.Value() ));
- }
- 
-
-
-inline ScalarVariable  operator/( const ScalarVariable& l, const ScalarVariable& r )
- {
-    return std::move(ScalarVariable( l.Flag(), l.Value() / r.Value() ));
- }
-
-
-template<size_t dim>
-inline VectorVariable<dim>  operator*( const ScalarVariable& l, const VectorVariable<dim>& r )
-{
-    return r*l.Value();
-}
-
-template<size_t dim>
-inline TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVariable<dim>& r )
-{
-    return r*l.Value();
-}
-
-// extensively tested fastest version that does not generate any temporaries
-inline const ScalarVariable&  makeScalar( VARIABLE_FLAG flag, double64 val )
-  {
-     return std::move(ScalarVariable(flag,val));
-  }
-
-inline bool ScalarVariable::Out( FILE* fp ) const
-  {
-  fwrite( (void*)&flag_, sizeof(VARIABLE_FLAG), 1, fp);
-  fwrite( (void*)&data_, sizeof(double64), 1, fp);
-  return true;
-  }
-
-inline bool ScalarVariable::In( FILE* fp )
-  {
-  fread( (void*)&flag_, sizeof(VARIABLE_FLAG), 1, fp);
-  fread( (void*)&data_, sizeof(double64), 1, fp);
-  return true;
-  }
 
 } // csmp
 

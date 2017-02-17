@@ -169,6 +169,66 @@ PropertyHandle<dim>::~PropertyHandle()
 
 
 
+/** Returns the storage specification of the variable which is associated with the csmp::Operand into a corresponding structure.
+*/    
+template<size_t dim>
+const csmp::Index&  PropertyHandle<dim>::Key() const { 
+    return key_;
+ }
+
+template<size_t dim>
+const char*  PropertyHandle<dim>::VariableName() const
+ { return var_name.c_str(); }
+
+
+/**
+
+OutputCondition() returns  the VARIABLE_FLAG flag which the
+distributed physical variable which is associated with the PropertyHandle
+must have in order to allow modification by the PropertyHandle. 
+
+@return The flag that the physical variables flag must correspond to if the
+variable shall be modified.
+
+@section application Application 
+
+Since each CSMP scalar, vector, or tensor variable has a single or a set
+of flags which indicate to the solver whether it may modify or use this 
+variable instance as a constraint, the same rule applies to PropertyHandles.
+Thus, only if the output flag matches the local flag of the distributed
+variable, it will modify the latter. Accordingly, the variable flag may
+be used to protect certain variable values from modification by 
+PropertyHandles.*/    
+template<size_t dim>
+VARIABLE_FLAG  PropertyHandle<dim>::OutputCondition() const { return flag_output; }
+    
+    
+/**
+
+OutputCondition() assigns the VARIABLE_FLAG flag which the
+distributed physical variable which is associated with the PropertyHandle
+must have in order to allow modification by the PropertyHandle. 
+
+@param c The flag which the output flag shall be changed into.
+
+@attention The flag of the physical variables flag must correspond,
+else the variable is not modified.
+
+@section application Application 
+
+Since each CSMP scalar, vector, or tensor variable has a single or a set
+of flags which indicate to the solver whether it may modify or use this 
+variable instance as a constraint, the same rule applies to PropertyHandles.
+Thus, only if the output flag matches the local flag of the distributed
+variable, it will modify the latter. Accordingly, the variable flag may
+be used to protect certain variable values from modification by 
+PropertyHandles. 
+*/
+template<size_t dim>
+void  PropertyHandle<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output=c; }
+
+
+
 
    
 
@@ -645,7 +705,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
     typename vector<Node<dim>*>::iterator             nit;
     typename vector<Element<dim>*>::iterator          eit;
     ScalarVariable  sc(flag_output,strtod("NAN",NULL));
-    sc = ts.Determinant();
+    sc() = ts.Determinant();
     csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
@@ -843,7 +903,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc += val;
+                               sc() += val;
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -853,7 +913,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key, sc );
-                                 sc += val;
+                                 sc() += val;
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -862,7 +922,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double64 val )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc += val;
+                               sc() += val;
                                (*eit)->Store( key, sc );
                             }
                       break;
@@ -970,7 +1030,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc -= val;
+                               sc() -= val;
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -980,7 +1040,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key, sc );
-                                 sc -= val;
+                                 sc() -= val;
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -989,7 +1049,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double64 val )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc -= val;
+                               sc() -= val;
                                (*eit)->Store( key, sc );
                             }
                       break;
@@ -1100,7 +1160,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc *= val;
+                               sc() *= val;
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -1110,7 +1170,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key, sc );
-                                 sc *= val;
+                                 sc() *= val;
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -1119,7 +1179,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double64 val )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc *= val;
+                               sc() *= val;
                                (*eit)->Store( key, sc );
                             }
                       break;
@@ -1226,7 +1286,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc /= val;
+                               sc() /= val;
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -1236,7 +1296,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key, sc );
-                                 sc /= val;
+                                 sc() /= val;
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -1245,7 +1305,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double64 val )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc /= val;
+                               sc() /= val;
                                (*eit)->Store( key, sc );
                             }
                       break;
@@ -2323,7 +2383,7 @@ void  PropertyHandle<dim>::Sqrt()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = sqrt( sc() );
+                               sc() = sqrt( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -2333,7 +2393,7 @@ void  PropertyHandle<dim>::Sqrt()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = sqrt( sc() );
+                                 sc() = sqrt( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -2342,7 +2402,7 @@ void  PropertyHandle<dim>::Sqrt()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = sqrt( sc() );
+                               sc() = sqrt( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -2466,7 +2526,7 @@ void  PropertyHandle<dim>::Ln()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc = log( sc() );
+                               if ( sc() > 0.0 ) sc() = log( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -2476,7 +2536,7 @@ void  PropertyHandle<dim>::Ln()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 if ( sc() > 0.0 ) sc = log( sc() );
+                                 if ( sc() > 0.0 ) sc() = log( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -2485,7 +2545,7 @@ void  PropertyHandle<dim>::Ln()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc = log( sc() );
+                               if ( sc() > 0.0 ) sc() = log( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -2609,7 +2669,7 @@ void  PropertyHandle<dim>::Log10()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc = log10( sc() );
+                               if ( sc() > 0.0 ) sc() = log10( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -2619,7 +2679,7 @@ void  PropertyHandle<dim>::Log10()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 if ( sc() > 0.0 ) sc = log10( sc() );
+                                 if ( sc() > 0.0 ) sc() = log10( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -2628,7 +2688,7 @@ void  PropertyHandle<dim>::Log10()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc = log10( sc() );
+                               if ( sc() > 0.0 ) sc() = log10( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -2749,7 +2809,7 @@ void  PropertyHandle<dim>::Exp()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = exp( sc() );
+                               sc() = exp( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -2759,7 +2819,7 @@ void  PropertyHandle<dim>::Exp()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = exp( sc() );
+                                 sc() = exp( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -2768,7 +2828,7 @@ void  PropertyHandle<dim>::Exp()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = exp( sc() );
+                               sc() = exp( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -2888,7 +2948,7 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = pow( sc(), raised_to );
+                               sc() = pow( sc(), raised_to );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -2898,7 +2958,7 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = pow( sc(), raised_to );
+                                 sc() = pow( sc(), raised_to );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -2907,7 +2967,7 @@ void  PropertyHandle<dim>::Pow( double64 raised_to )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = pow( sc(), raised_to );
+                               sc() = pow( sc(), raised_to );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3184,7 +3244,7 @@ void  PropertyHandle<dim>::Sin()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = sin( sc() );
+                               sc() = sin( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3194,7 +3254,7 @@ void  PropertyHandle<dim>::Sin()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = sin( sc() );
+                                 sc() = sin( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3203,7 +3263,7 @@ void  PropertyHandle<dim>::Sin()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = sin( sc() );
+                               sc() = sin( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3337,7 +3397,7 @@ void  PropertyHandle<dim>::Cos()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = cos( sc() );
+                               sc() = cos( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3347,7 +3407,7 @@ void  PropertyHandle<dim>::Cos()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = cos( sc() );
+                                 sc() = cos( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3356,7 +3416,7 @@ void  PropertyHandle<dim>::Cos()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = cos( sc() );
+                               sc() = cos( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3490,7 +3550,7 @@ void  PropertyHandle<dim>::Tan()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = tan( sc() );
+                               sc() = tan( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3500,7 +3560,7 @@ void  PropertyHandle<dim>::Tan()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = tan( sc() );
+                                 sc() = tan( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3509,7 +3569,7 @@ void  PropertyHandle<dim>::Tan()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = tan( sc() );
+                               sc() = tan( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3640,7 +3700,7 @@ void  PropertyHandle<dim>::Acos()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = acos( sc() );
+                               sc() = acos( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3650,7 +3710,7 @@ void  PropertyHandle<dim>::Acos()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = acos( sc() );
+                                 sc() = acos( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3659,7 +3719,7 @@ void  PropertyHandle<dim>::Acos()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = acos( sc() );
+                               sc() = acos( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3790,7 +3850,7 @@ void  PropertyHandle<dim>::Asin()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = asin( sc() );
+                               sc() = asin( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3800,7 +3860,7 @@ void  PropertyHandle<dim>::Asin()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = asin( sc() );
+                                 sc() = asin( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3809,7 +3869,7 @@ void  PropertyHandle<dim>::Asin()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = asin( sc() );
+                               sc() = asin( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;
@@ -3941,7 +4001,7 @@ void  PropertyHandle<dim>::Atan()
                           if ( (*nit)->Status( key ) == flag_output )
                             {
                                (*nit)->Read( key, sc );
-                               sc = atan( sc() );
+                               sc() = atan( sc() );
                                (*nit)->Store( key, sc );
                             }
                      break;
@@ -3951,7 +4011,7 @@ void  PropertyHandle<dim>::Atan()
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
-                                 sc = atan( sc() );
+                                 sc() = atan( sc() );
                                  (*eit)->Store( i, key, sc );
                               }
                      break;
@@ -3960,7 +4020,7 @@ void  PropertyHandle<dim>::Atan()
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
-                               sc = atan( sc() );
+                               sc() = atan( sc() );
                                (*eit)->Store( key, sc );
                            }
                       break;

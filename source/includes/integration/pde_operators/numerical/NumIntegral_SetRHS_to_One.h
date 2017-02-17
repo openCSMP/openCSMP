@@ -14,17 +14,14 @@ class NumIntegral_SetRHS_to_One : public MathOperatorRHS<dim> {
     
     virtual ~NumIntegral_SetRHS_to_One();
     
-    virtual void ComputeContribution( SIMPLEX& e );
+    /// since there is no material Operand nothing needs to be done
+    virtual void GetOperands( SIMPLEX& ) {}
 
-    virtual void GetOperands( SIMPLEX& );
+    virtual void ComputeContribution( SIMPLEX& e );
 
     virtual NumIntegral_SetRHS_to_One<dim,SIMPLEX>* clone() const
       { return new NumIntegral_SetRHS_to_One<dim,SIMPLEX> (*this); }
 };
-
-/// since there is no material Operand nothing needs to be done
-template<size_t dim,class SIMPLEX>
-inline void NumIntegral_SetRHS_to_One<dim,SIMPLEX>::GetOperands( SIMPLEX& ) {}
 
 } // csmp
 

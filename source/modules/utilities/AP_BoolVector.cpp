@@ -57,6 +57,53 @@ BoolVector& BoolVector::operator=( const BoolVector& bv )
   return *this;
 }
 
+
+
+/** Default constructor.
+
+*/
+BoolVector::BoolVector() :
+ pBits_ ( NULL ),
+ uSize_ ( 0U )
+{
+}
+
+/** destructor.
+ */
+BoolVector::~BoolVector()
+{
+  delete[] pBits_;
+}
+
+
+
+size_t BoolVector::Size() const
+{
+  return uSize_;
+}
+
+/** Sets the value of the bit with the specified offset.
+
+@param uOffset offset of the bit in the bit vector.
+@param bValue  logical value to set the bit.
+ */
+void BoolVector::SetBit(const size_t uOffset, const bool bValue)
+{
+  (bValue != 0) ? *(pBits_ + (uOffset >> 3)) |=  (1 << (uOffset & 0x7)) : 
+    *(pBits_ + (uOffset >> 3)) &= ~(1 << (uOffset & 0x7));                 
+}
+
+/** Gets the value of the bit with the specified offset.
+
+@param uOffset offset of the bit in the bit vector.
+@return logical value of the bit.
+ */
+bool BoolVector::GetBit(const size_t uOffset) const
+{
+  return ((*(pBits_ + (uOffset >> 3)) & (1 << (uOffset & 0x7))) != 0);
+}
+
+
 /** 
 
 @param uSize initial size of the bit vector.

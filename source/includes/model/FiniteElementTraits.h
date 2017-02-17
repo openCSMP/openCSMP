@@ -5,8 +5,8 @@
 #include "QuadrilateralFacet.h"
 
 #include "CSMP_definitions.h"
-#include "CSMP_mathUtilities.h"
-#include "CSMP_highLevelUtilities.h"
+#include "DenseMatrix.h"
+#include "FiniteElement.h"
 
 #include "Exception.h"
 

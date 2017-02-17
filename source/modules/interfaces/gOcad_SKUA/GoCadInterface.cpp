@@ -1982,7 +1982,7 @@ const
               case TENSOR:
                    (*nit)->Read(prop_key, ts );
                    for( i=0; i<3; i++ ) 
-                      for( j=0; j<3; j++ ) ofs << ts.Value(i,j) <<" ";
+                      for( j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
            }
@@ -2001,7 +2001,7 @@ const
               case TENSOR:
                    for ( i=0; i<3; i++ ) 
                       for ( j=0; j<3; j++ ) 
-                          ofs << ts_elmt_data[ (*nit)->Idx() ].Value(i,j) <<" ";
+                          ofs << ts_elmt_data[ (*nit)->Idx() ](i,j) <<" ";
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
            }
@@ -2257,7 +2257,7 @@ const
                        case TENSOR:
                             for ( k=0; k<3; k++ ) 
                               for ( j=0; j<3; j++ ) 
-                                 ofs << ts_elmt_data[ (*en_it) ].Value(k,j) <<" ";
+                                 ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                       default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
                      }
@@ -2431,7 +2431,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
                          break;
                        case TENSOR:
                            for( i=0; i<3; i++ ) 
-                             for( j=0; j<3; j++ ) ofs << ts.Value(i,j) <<" ";
+                             for( j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
                        default:
                          throw out_of_range("GoCadInterface<dim>::OutputVariablesToTSurface: variable type not handled");
                      }
@@ -2673,7 +2673,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                         case TENSOR:
                              for ( i=0; i<dim; i++ ) 
                                for ( j=0; j<dim; j++ ) 
-                                 ofs << ts_elmt_data[ (*nit)->Idx() ].Value(i,j) <<" ";
+                                 ofs << ts_elmt_data[ (*nit)->Idx() ](i,j) <<" ";
                         default:
                           throw out_of_range("GoCadInterface<dim>: variable type not handled");
                     }
@@ -2921,7 +2921,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                             gref.N( nodes[i] )->Read(prop_key, ts );
                             for ( j=0; j<dim; j++ )
                               for ( k=0; k<dim; k++ ) 
-                                 ofs << ts.Value(j,k) <<" ";
+                                 ofs << ts(j,k) <<" ";
                        default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
                     }
@@ -2963,7 +2963,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                        case TENSOR:
                             for ( k=0; k<dim; k++ ) 
                               for ( j=0; j<dim; j++ ) 
-                                 ofs << ts_elmt_data[ (*en_it) ].Value(k,j) <<" ";
+                                 ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                        default:
                           throw out_of_range("GoCadInterface<dim>: variable type not handled");
                      }

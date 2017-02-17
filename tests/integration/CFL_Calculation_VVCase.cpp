@@ -1,6 +1,7 @@
 #include "CFL_Calculation_VVCase.h"
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
+
 using namespace std;
 
 namespace csmp {

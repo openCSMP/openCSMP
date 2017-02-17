@@ -127,7 +127,7 @@ double64 ModelComparator<dim>::CompareScalarDequesL2( const std::deque<ScalarVar
 
     for( size_t i = 0; i < deque1.size(); ++i )
     {
-        error += std::pow( std::fabs( deque1[i].Value() - deque2[i].Value() ), 2 );
+        error += std::pow( std::fabs( deque1[i]() - deque2[i]() ), 2 );
     }
 
     return std::sqrt( error );

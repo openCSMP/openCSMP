@@ -4,19 +4,10 @@ using namespace std;
 
 namespace csmp {
 
-ANSYS_ElementSpecifications::ANSYS_ElementSpecifications()
- {
- }
-  
-ANSYS_ElementSpecifications::~ANSYS_ElementSpecifications()
- {
- }
- 
-
 /** Returns the ANSYS integer flag corresponding to the ANSYS element name
 string.  
 */
-int32  ANSYS_ElementSpecifications::ANSYS_Type( const string& icem_FEtype ) const
+int32  ANSYS_ElementSpecifications::ANSYS_Type( const string& icem_FEtype )
  {
     // bar elements
     if ( icem_FEtype == "BAR_2" )    return 2;
@@ -91,7 +82,7 @@ element type     identifier
 #define POLYGON		23
 @endcode
 */
-size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int32 etype ) const
+size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int32 etype )
  {
     if ( etype ==  2 ) return  2U; // bar element
     if ( etype ==  3 ) return  3U; // 
@@ -126,7 +117,7 @@ size_t ANSYS_ElementSpecifications::NodesPerElementOfType( int32 etype ) const
 
 /** Returns the number of neighbors of the input ANSYS finite element type.
 */
-size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int32 etype ) const
+size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
  {
     if ( etype ==  2 ) return  2U; // bar element
     if ( etype ==  3 ) return  2U; // 
@@ -162,7 +153,7 @@ size_t ANSYS_ElementSpecifications::NeighborsPerElementOfType( int32 etype ) con
 
 
 size_t ANSYS_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype, 
-                                                                    size_t face ) const
+                                                                    size_t face )
  {
     // bar element
     if ( etype ==  2 or etype == 3 ) { 
@@ -212,7 +203,7 @@ size_t ANSYS_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
   
 size_t ANSYS_ElementSpecifications::FaceNodeForElementOfType( int32 etype, 
                                                               size_t face, 
-                                                              size_t face_node ) const
+                                                              size_t face_node )
  {
     // bar element
     if ( etype ==  2 or etype == 3 ) { 
@@ -409,6 +400,15 @@ size_t ANSYS_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
  
 
 
+size_t ANSYS_ElementSpecifications::FacesPerElementOfType( int32 ANSYS_finite_element_type )
+ {
+    // since these are equivalent numbers
+    return NeighborsPerElementOfType( ANSYS_finite_element_type );
+    
+ } // end FacesPerElementOfType
+
+
+
 
 /** Returns true if the ANSYS input element type is a line. Possible ANSYS
 types are:  
@@ -418,7 +418,7 @@ element type     identifier
 #define BAR_2		2
 #define BAR_3		3
 @endcode*/
-bool  ANSYS_ElementSpecifications::LineElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::LineElement( int32 etype )
  {
     if ( etype == 2 || etype == 3 ) return true;
     
@@ -442,7 +442,7 @@ element type     identifier
 #define TRI_6_X	 11
 @endcode
 */
-bool  ANSYS_ElementSpecifications::SurfaceElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::SurfaceElement( int32 etype )
  {
     if ( etype ==  8 || etype ==  9 || etype == 10 || 
          etype == 11 || etype == 14 || etype == 15 || 
@@ -468,7 +468,7 @@ element type     identifier
 #define PENTA_15	13	#define PYRA_14		22
 #define PENTA_18	21	#define PYRA_13		24
 @endcode */
-bool  ANSYS_ElementSpecifications::VolumeElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::VolumeElement( int32 etype )
  {
     if ( etype ==  4 || etype ==  5 || etype ==  6 || 
          etype ==  7 || etype == 12 || etype == 13 || 
@@ -495,7 +495,7 @@ to deduce the spatial dimension from.
 from 1(=1D) to 3(=3D).  
 
 */
-size_t  ANSYS_ElementSpecifications::MinimumSpatialDimension( const string& etype ) const
+size_t  ANSYS_ElementSpecifications::MinimumSpatialDimension( const string& etype )
  {
     if ( LineElement(etype) )    return 1U;
     if ( SurfaceElement(etype) ) return 2U;
@@ -518,7 +518,7 @@ BAR_3		3
 @return bool whether the element type is a line element.
 
 */
-bool  ANSYS_ElementSpecifications::LineElement( const string& etype ) const
+bool  ANSYS_ElementSpecifications::LineElement( const string& etype )
  {
     if ( etype == "BAR_2" || etype == "BAR_3" ) return true;
     
@@ -544,7 +544,7 @@ QUAD_8		16
 QUAD_8_X	17
 QUAD_9		19
 @endcode */
-bool  ANSYS_ElementSpecifications::SurfaceElement( const string& etype ) const
+bool  ANSYS_ElementSpecifications::SurfaceElement( const string& etype )
  {
     if ( etype == "TRI_3"   || etype == "TRI_3_X"   || etype == "TRI_6"    || 
          etype == "TRI_6_X" || etype == "QUAD_4"    || etype == "QUAD_4_X" || 
@@ -577,7 +577,7 @@ element type     identifier
 #define PENTA_18	21	#define PYRA_13		24
 
 @endcode */
-bool  ANSYS_ElementSpecifications::VolumeElement( const string& etype ) const
+bool  ANSYS_ElementSpecifications::VolumeElement( const string& etype )
  {
     if ( etype == "TETRA_4"  || etype == "TETRA_10" || etype == "HEXA_8"  || 
          etype == "HEXA_20"  || etype == "HEXA_27"  || etype == "PENTA_6" || 
@@ -604,7 +604,7 @@ The ANSYS type name of the finite element that shall be queried.
 The interpolation order is returned as an unsigned integer value:
 1 = linear, 2 = quadratic, 3 = cubic.  
 */
-size_t  ANSYS_ElementSpecifications::InterpolationOrder( const std::string& etype ) const
+size_t  ANSYS_ElementSpecifications::InterpolationOrder( const std::string& etype )
  {
      if ( LinearElement( ANSYS_Type(etype) ) )    return 1U;
      if ( QuadraticElement( ANSYS_Type(etype) ) ) return 2U;
@@ -614,7 +614,7 @@ size_t  ANSYS_ElementSpecifications::InterpolationOrder( const std::string& etyp
  }
 
 
-size_t  ANSYS_ElementSpecifications::InterpolationOrder( int32 etype ) const
+size_t  ANSYS_ElementSpecifications::InterpolationOrder( int32 etype )
   {
     if ( LinearElement( etype ) )    return 1U;
     if ( QuadraticElement( etype ) ) return 2U;
@@ -643,7 +643,7 @@ QUAD_4		14
 QUAD_4_X	15
 PYRA_5		18
 @endcode */
-bool  ANSYS_ElementSpecifications::LinearElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::LinearElement( int32 etype )
  {
     if ( etype ==  2 || etype ==  4 || 
          etype ==  6 || etype ==  8 || etype ==  9 || 
@@ -678,7 +678,7 @@ PENTA_18	21
 PYRA_14		22
 PYRA_13		24
 @endcode*/
-bool  ANSYS_ElementSpecifications::QuadraticElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::QuadraticElement( int32 etype )
  {
     if ( etype ==  5 || etype ==  7 || etype == 10 || 
          etype == 11 || etype == 13 || etype == 16 || 
@@ -701,7 +701,7 @@ cubic
 ==============
 HEXA_32		32
 @endcode*/
-bool  ANSYS_ElementSpecifications::CubicElement( int32 etype ) const
+bool  ANSYS_ElementSpecifications::CubicElement( int32 etype )
  {
     if ( etype == 32 ) return true;
     return false;
@@ -724,7 +724,7 @@ ISOPARAMETRIC_LINEAR_BAR
 ISOPARAMETRIC_QUADRATIC_BAR
 ISOPARAMETRIC_CUBIC_BAR
 @endcode */
-void  ANSYS_ElementSpecifications::LineElements( list<string>& line_elements ) const
+void  ANSYS_ElementSpecifications::LineElements( list<string>& line_elements )
  {
     if ( !line_elements.empty() ) 
       line_elements.erase( line_elements.begin(), line_elements.end() );
@@ -773,7 +773,7 @@ ISOPARAMETRIC_QUADRATIC_QUADRILATERAL
 ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL
 ISOPARAMETRIC_CUBIC_QUADRILATERAL
 @endcode*/
-void  ANSYS_ElementSpecifications::SurfaceElements( list<string>& surf_elements ) const
+void  ANSYS_ElementSpecifications::SurfaceElements( list<string>& surf_elements )
  {
     if ( !surf_elements.empty() ) 
       surf_elements.erase( surf_elements.begin(), surf_elements.end() );
@@ -834,7 +834,7 @@ ISOPARAMETRIC_LINEAR_PRISM
 ISOPARAMETRIC_QUADRATIC_PRISM15
 ISOPARAMETRIC_QUADRATIC_PRISM18
 @endcode*/
-void  ANSYS_ElementSpecifications::VolumeElements( list<string>& vol_elements ) const
+void  ANSYS_ElementSpecifications::VolumeElements( list<string>& vol_elements )
  {
     if ( !vol_elements.empty() ) 
       vol_elements.erase( vol_elements.begin(), vol_elements.end() );
@@ -879,12 +879,12 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
 */
-std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim ) const
+std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim )
 {
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_Type( etype, isoparametric, dim ) );
 }
 
-std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& etype, bool isoparametric, uint32 dim ) const
+std::string  ANSYS_ElementSpecifications::CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& etype, bool isoparametric, uint32 dim )
 {
     return parseFiniteElementType( CSMP_TypeFrom_ANSYS_TypeName( etype, isoparametric, dim ) );
 }
@@ -937,7 +937,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
  */
-CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim ) const
+CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int32 etype, bool isoparametric, uint32 dim )
  {
     if ( isoparametric ) {
 	    // bar elements
@@ -1026,7 +1026,7 @@ Note however that ANSYS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.  
  */
-CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_element_type, bool isoparametric, uint32 dim ) const
+CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_element_type, bool isoparametric, uint32 dim )
  {
     string etype(ANSYS_element_type);
  

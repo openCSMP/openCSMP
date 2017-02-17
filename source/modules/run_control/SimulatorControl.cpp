@@ -4,8 +4,6 @@
 #endif
 using namespace std;
 
-//#include <math.h>
-
 namespace csmp {
 
 template <size_t dim>
@@ -674,7 +672,7 @@ double64 SimulatorControl<dim>::GetRealInput(bool success)
     std::string choice="";
     getline(cin, choice);
     if (!choice.empty()){
-        return stringToNumber<double64>(choice);
+        return std::stod(choice);
         success=true;
     }
     else{
@@ -689,7 +687,7 @@ int32 SimulatorControl<dim>::GetIntegerInput()
     std::string choice="";
     getline(cin, choice);
     if (!choice.empty())
-        return stringToNumber<int32>(choice);
+        return std::stoi(choice);
     else
         return 0;
 }
@@ -1080,13 +1078,13 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 std::string time_unit(token.substr(0,1));
                 if (time_unit=="s")
-                    time_value=stringToNumber<double64>(listoftokens[1]);
+                    time_value=std::stod(listoftokens[1]);
                 else if (time_unit=="h")
-                    time_value=3600.0*stringToNumber<double64>(listoftokens[1]);
+                    time_value=3600.0 * std::stod(listoftokens[1]);
                 else if (time_unit=="d")
-                    time_value=86400.0*stringToNumber<double64>(listoftokens[1]);
+                    time_value=86400.0 * std::stod(listoftokens[1]);
                 else if (time_unit=="y")
-                    time_value=86400.0*365.0*stringToNumber<double64>(listoftokens[1]);
+                    time_value=86400.0*365.0 * std::stod(listoftokens[1]);
                 else
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," End time value or unit not recognized.","Should be one of seconds, hours, days, years");
 
@@ -1100,7 +1098,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<2)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for vtu frames"," set the number in the -control.txt file.");
                 size_t value(0);
-                value=stringToNumber<size_t>(listoftokens[1]);
+                value=std::stoul(listoftokens[1]);
                 // We now modify the model variables accordingly, to fit the current control options,
                 // only if restart is not active.
                 if (!this->GetSS()->Restart())
@@ -1112,7 +1110,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 if (listoftokens.size()<2)
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor frames");
                 size_t value(0);
-                value=stringToNumber<size_t>(listoftokens[1]);
+                value=std::stoul(listoftokens[1]);
                 // We now modify the model variables accordingly, to fit the current control options,
                 // only if restart is not active.
                 if (!this->GetSS()->Restart())
@@ -1131,13 +1129,13 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 /// Note: These times will output monitoring as well!
                 for  (size_t i = 2 ; i < listoftokens.size();i++){
                     if (time_unit=="s")
-                        time_value=stringToNumber<double64>(listoftokens[i]);
+                        time_value=std::stod(listoftokens[i]);
                     else if (time_unit=="h")
-                        time_value=3600.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=3600.0 * std::stod(listoftokens[i]);
                     else if (time_unit=="d")
-                        time_value=86400.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=86400.0 * std::stod(listoftokens[i]);
                     else if (time_unit=="y")
-                        time_value=86400.0*365.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=86400.0*365.0* std::stod(listoftokens[i]);
                     else
                         error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
 
@@ -1157,13 +1155,13 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
                 for  (size_t i = 2 ; i < listoftokens.size();i++){
                     if (time_unit=="s")
-                        time_value=stringToNumber<double64>(listoftokens[i]);
+                        time_value=std::stod(listoftokens[i]);
                     else if (time_unit=="h")
-                        time_value=3600.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=3600.0*std::stod(listoftokens[i]);
                     else if (time_unit=="d")
-                        time_value=86400.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=86400.0*std::stod(listoftokens[i]);
                     else if (time_unit=="y")
-                        time_value=86400.0*365.0*stringToNumber<double64>(listoftokens[i]);
+                        time_value=86400.0*365.0*std::stod(listoftokens[i]);
                     else
                         error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
 
@@ -1178,7 +1176,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for restart file output runtime interval."," Please provide a unit type and at least one output time.");
                 //                cout<<"reading restart options: "<<listoftokens[0]<<" "<<listoftokens[1]<<endl;
                 double64 value(0);
-                value=stringToNumber<size_t>(listoftokens[1]);
+                value=std::stod(listoftokens[1]);
                 //                cout<<" value: "<<value<<endl;
                 this->restartFileOuputRunTimeInterval_=value;
                 //                cin.get();
@@ -1194,13 +1192,13 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 string time_unit(token.substr(0,1));
                 if (time_unit=="s")
-                    time_value=stringToNumber<double64>(listoftokens[2]);
+                    time_value=std::stod(listoftokens[2]);
                 else if (time_unit=="h")
-                    time_value=3600.0*stringToNumber<double64>(listoftokens[2]);
+                    time_value=3600.0*std::stod(listoftokens[2]);
                 else if (time_unit=="d")
-                    time_value=86400.0*stringToNumber<double64>(listoftokens[2]);
+                    time_value=86400.0*std::stod(listoftokens[2]);
                 else if (time_unit=="y")
-                    time_value=86400.0*365.0*stringToNumber<double64>(listoftokens[2]);
+                    time_value=86400.0*365.0*std::stod(listoftokens[2]);
                 else{
                     string errmsg="Interval start time value or unit not recognized: '"+time_unit+"' text_line: '"+text_line+"'";
                     error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()",errmsg.c_str()," Should be one of seconds, hours, days, years");
@@ -1337,14 +1335,19 @@ void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double64 
     std::sort(this->GetIntervals().begin(),this->GetIntervals().end());
 }
 
+/**
+
+@todo  Hualp! -> use standard library
+
+*/
 template <size_t dim>
 void SimulatorControl<dim>::OutputSimulationTimeToScreen(double64 time)
 {
-    size_t days = std::floor(time/86400.0);
-    size_t hours = floor(( time - days*86400 )/3600);
+    size_t days    = std::floor(time/86400.0);
+    size_t hours   = floor(( time - days*86400 )/3600);
     size_t minutes = floor((time-days*86400-hours*3600)/60);
     size_t seconds = floor(time - days*86400 - hours*3600 - minutes*60);
-    string stime = "[      ] Simulated time: "+numberToString<size_t>(days)+" days, "+numberToString<size_t>(hours)+" hours, "+numberToString<size_t>(minutes)+" minutes, "+numberToString<size_t>(seconds)+" seconds                    ";
+    string stime = "[      ] Simulated time: "+std::to_string(days) +" days, "+std::to_string(hours)+" hours, "+std::to_string(minutes)+" minutes, "+std::to_string(seconds)+" seconds                    ";
     cout<<"\r"<<stime<<"\r["<<flush;
 }
 

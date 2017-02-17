@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"
+#include "OS_Utilities.h"
 
 // revision history:
 // SKM 1/7/2005 - replaced inefficient element/face list by vectors
@@ -1343,7 +1344,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
                 {
                    typename map<size_t,vector<double> >::iterator
                      dit2 = pxyz_data.find( (*pit) );
-                   (*dit2).second.push_back( sc.Value() );
+                   (*dit2).second.push_back( sc() );
                 }
            }
          else if ( prop_key.type == VECTOR )
@@ -2405,7 +2406,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      // 2. writing node coordinates
      // ---------------------------
      DenseMatrix<DM_MIN> COORD;
-     e.CoordinateMatrix( COORD );
+     e.NodeCoordinateMatrix( COORD );
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      // NOTE: in VTK coordinates always are stored in single precision
      ofs <<"POINTS " << e.Nodes() <<" float"<< endl;

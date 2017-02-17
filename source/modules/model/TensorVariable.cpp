@@ -12,13 +12,6 @@ TensorVariable<3U>::TensorVariable( const TensorVariable<3U>& t )
  {
  }
 
-TensorVariable<3U>::TensorVariable( TensorVariable<3U>&& t )
- : flag{t.flag},
-   data{t.data}
- {
- }
-
-
 
 TensorVariable<3U>::TensorVariable()
   : flag{{ANY,ANY,ANY}},
@@ -41,17 +34,6 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const TensorVariable<3U>& ts
 
 
 
-TensorVariable<3U>&  TensorVariable<3U>::operator=( TensorVariable<3U>&& ts )
- {
-    if ( &ts != this ) {
-         flag = {ts.flag};
-         data = {ts.data};
-      }
-    return *this; 
- }
-
-
-
 /**
     initialises variable as diagonal isotropic tensor with flag and value
     SKM 17/6/2015
@@ -62,7 +44,255 @@ TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double64 val )
  {
  }
 
+// ******************************************************************************************
+//
+//            INLINE METHODS START HERE
+//
+// ******************************************************************************************
+
+TensorVariable<3U>::~TensorVariable() {}
+
+
+double64& TensorVariable<3U>::operator()( size_t i, size_t j ) 
+ {
+#ifndef NDEBUG 
+    if ( i >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::operator(): row access violation, i="<< i << std::endl;
+         return data[0][0];
+      }
+    if ( j >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::operator(): column access violation, j="<< j << std::endl;
+         return data[0][0];
+      }
+#endif
+    return data[i][j]; 
+ }
+
+
+
+
+const double64& TensorVariable<3U>::operator()( size_t i, size_t j ) const
+ {
+#ifndef NDEBUG 
+    if ( i >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::operator(): row access violation, i="<< i << std::endl;
+         return data[0][0];
+      }
+    if ( j >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::operator(): column access violation, j="<< j << std::endl;
+         return data[0][0];
+      }
+#endif
+    return data[i][j]; 
+ }
+
+
+
+void TensorVariable<3U>::Component( size_t i, double64 val )
+ { 
+    assert( i < Size() );
+    // row by row
+    if ( i == 0U )      data[0U][0U] = val;
+    else if ( i == 1U ) data[0U][1U] = val;
+    else if ( i == 2U ) data[0U][2U] = val;
+
+    else if ( i == 3U ) data[1U][0U] = val;
+    else if ( i == 4U ) data[1U][1U] = val;
+    else if ( i == 5U ) data[1U][2U] = val;
+
+    else if ( i == 6U ) data[2U][0U] = val;
+    else if ( i == 7U ) data[2U][1U] = val;
+
+    else data[2U][2U] = val; // remaining case
+ }
+
+
+
+
+double64 TensorVariable<3U>::Component( size_t i ) const
+ { 
+    assert( i < Size() );
+    // row by row
+    if ( i == 0U ) return data[0U][0U];
+    if ( i == 1U ) return data[0U][1U];
+    if ( i == 2U ) return data[0U][2U];
+
+    if ( i == 3U ) return data[1U][0U];
+    if ( i == 4U ) return data[1U][1U];
+    if ( i == 5U ) return data[1U][2U];
+
+    if ( i == 6U ) return data[2U][0U];
+    if ( i == 7U ) return data[2U][1U];
+
+    return data[2U][2U]; // remaining case
+ }
+
+
+
+
+VARIABLE_FLAG& TensorVariable<3U>::Flag( size_t i )      
+ { 
+#ifndef NDEBUG 
+    if ( i >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::Flag(): diagonal access violation, i="<< i << std::endl;
+         return flag[0];
+      }
+#endif
+    return flag[i]; 
+ }
+
+
+
+VARIABLE_FLAG  TensorVariable<3U>::Flag( size_t i ) const 
+ { 
+#ifndef NDEBUG 
+    if ( i >= 3U ) { 
+         std::cerr <<"\nTensorVariable<3U>::Flag(): diagonal access violation, i="<< i << std::endl;
+         return flag[0];
+      }
+#endif
+    return flag[i]; 
+ }
+
+
+
+
+bool TensorVariable<3U>::EigenValues( VectorVariable<3U>& Ev ) const
+ {
+		return EigenValuesPositiveDefiniteSymmetricMatrix( Ev(0), Ev(1), Ev(2) );
+	}
+
+
+bool TensorVariable<3U>::EigenValues( std::vector<double64>& Ev ) const
+	{
+		return EigenValuesPositiveDefiniteSymmetricMatrix( Ev[0], Ev[1], Ev[2] );
+	}
+
+
+
+
+/**
+    Initialiser for tensor variable, index is not used.
+*/
+void TensorVariable<3U>::Resize( size_t, double64 newValue )
+  {
+    data[0][0] = newValue;
+    data[0][1] = newValue;
+    data[1][0] = newValue;
+    data[1][1] = newValue;
+    data[0][2] = newValue;
+    data[1][2] = newValue;
+    data[2][0] = newValue;
+    data[2][1] = newValue;
+    data[2][2] = newValue;
+  }
+
+
+
+double64 TensorVariable<3U>::Trace() const
+ {
+    return data[0][0] + data[1][1] + data[2][2];   
+ }
+
+
+
+void TensorVariable<3U>::AssignToRow( size_t iRow, VectorVariable<3U>& vc )
+{
+  if ( iRow == 0U )
+      flag[0U] = vc.Flag(0U);
+  else if ( iRow == 1U )
+      flag[1U] = vc.Flag(1U);
+  else
+      flag[2U] = vc.Flag(2U);
+
+	data[iRow][0U] = vc[0U];
+	data[iRow][1U] = vc[1U];
+	data[iRow][2U] = vc[2U];
+}
+
+
+void TensorVariable<3U>::AssignToColumn( size_t iCol, VectorVariable<3U>& vc )
+{
+  if ( iCol == 0U )
+      flag[0U] = vc.Flag(0U);
+  else if ( iCol == 1U )
+      flag[1U] = vc.Flag(1U);
+  else
+      flag[2U] = vc.Flag(2U);
+
+	data[0U][iCol] = vc[0U];
+	data[1U][iCol] = vc[1U];
+	data[2U][iCol] = vc[2U];
+}
+
+
+
+
+VectorVariable<3U> TensorVariable<3U>::Row( size_t iRow ) const
+{
+	return VectorVariable<3U>( flag[iRow], flag[iRow], flag[iRow], 
+	                           data[iRow][0U], data[iRow][1U], data[iRow][2U]);
+}
+
+
+VectorVariable<3U> TensorVariable<3U>::Column( size_t iCol ) const
+{
+	return VectorVariable<3U>( flag[iCol], flag[iCol], flag[iCol], 
+	                           data[0U][iCol], data[1U][iCol], data[2U][iCol] );
+}
  
+
+bool  TensorVariable<3U>::operator==( const TensorVariable<3U>& ts ) const
+ {
+   return ( data == ts.data && flag == ts.flag );
+ }
+  
+
+bool  TensorVariable<3U>::operator!=( const TensorVariable<3U>& t ) const
+ {
+     return !(*this == t);
+ } 
+
+
+/// to achieve reasonable ordering in associative STL containers
+bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const
+ {
+     return (this < &t);
+ } 
+
+ bool TensorVariable<3U>::Out( FILE* fp ) const
+  {
+     fwrite( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
+     return true;
+  }
+
+ bool TensorVariable<3U>::In( FILE* fp )
+  {
+     fread( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
+     return true;
+  }
+  
+  
+/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
+TensorVariable<2U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
+                                             double64 v11, double64 v12,
+                                             double64 v21, double64 v22 )
+ {
+     return std::move(TensorVariable<2U>(f1,f2,v11,v12,v21,v22) );
+ }
+ 
+
+/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
+TensorVariable<3U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
+                                             double64 v11, double64 v12, double64 v13,
+                                             double64 v21, double64 v22, double64 v23,
+                                             double64 v31, double64 v32, double64 v33 )
+ {
+     return std::move(TensorVariable<3U>(f1,f2,f3,v11,v12,v13,v21,v22,v23,v31,v32,v33) );
+ }
+  
+  
+
  
 TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, 
                                     double64 v11, double64 v12, double64 v13,
@@ -84,23 +314,6 @@ TensorVariable<3U>::TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG
  {
  }
 
-
-
-/// @test tested: O.K.
-
-void  TensorVariable<3U>::Zero()
- {
-    data[0][0] = static_cast<double64>(0.0);
-    data[0][1] = static_cast<double64>(0.0);
-    data[1][0] = static_cast<double64>(0.0);
-    data[1][1] = static_cast<double64>(0.0);
-    data[0][2] = static_cast<double64>(0.0);
-    data[1][2] = static_cast<double64>(0.0);
-    data[2][0] = static_cast<double64>(0.0);
-    data[2][1] = static_cast<double64>(0.0);
-    data[2][2] = static_cast<double64>(0.0); 
- }
- 
  
 
 // here the flag of the lefthand tensor-variable is sustained
@@ -122,7 +335,6 @@ TensorVariable<3U>  TensorVariable<3U>::operator-( const TensorVariable<3U>& t )
                            data[1][0]-t.data[1][0], data[1][1]-t.data[1][1], data[1][2]-t.data[1][2],
                            data[2][0]-t.data[2][0], data[2][1]-t.data[2][1], data[2][2]-t.data[2][2] ));
  }
-
 
 
 TensorVariable<3U>  TensorVariable<3U>::operator+( double64 val ) const
@@ -162,7 +374,6 @@ TensorVariable<3U>  TensorVariable<3U>::operator/( double64 val ) const
                            data[1][0]/val, data[1][1]/val, data[1][2]/val,
                            data[2][0]/val, data[2][1]/val, data[2][2]/val ));
  }
-
 
 
 // matrix vector multiplication: v = M * v
@@ -227,15 +438,15 @@ TensorVariable<3U>  TensorVariable<3U>::operator*( const TensorVariable<3U>& ts 
 
 TensorVariable<3U>&  TensorVariable<3U>::operator+=( const ScalarVariable& sc )
  {
-    data[0][0] += sc.Value();
-    data[0][1] += sc.Value();
-    data[1][0] += sc.Value();
-    data[1][1] += sc.Value();
-    data[0][2] += sc.Value();
-    data[1][2] += sc.Value();
-    data[2][0] += sc.Value();
-    data[2][1] += sc.Value();
-    data[2][2] += sc.Value();
+    data[0][0] += sc();
+    data[0][1] += sc();
+    data[1][0] += sc();
+    data[1][1] += sc();
+    data[0][2] += sc();
+    data[1][2] += sc();
+    data[2][0] += sc();
+    data[2][1] += sc();
+    data[2][2] += sc();
 
     return *this; 
  }
@@ -244,15 +455,15 @@ TensorVariable<3U>&  TensorVariable<3U>::operator+=( const ScalarVariable& sc )
 
 TensorVariable<3U>&  TensorVariable<3U>::operator-=( const ScalarVariable& sc )
  {
-    data[0][0] -= sc.Value();
-    data[0][1] -= sc.Value();
-    data[1][0] -= sc.Value();
-    data[1][1] -= sc.Value();
-    data[0][2] -= sc.Value();
-    data[1][2] -= sc.Value();
-    data[2][0] -= sc.Value();
-    data[2][1] -= sc.Value();
-    data[2][2] -= sc.Value();
+    data[0][0] -= sc();
+    data[0][1] -= sc();
+    data[1][0] -= sc();
+    data[1][1] -= sc();
+    data[0][2] -= sc();
+    data[1][2] -= sc();
+    data[2][0] -= sc();
+    data[2][1] -= sc();
+    data[2][2] -= sc();
 
     return *this; 
  }
@@ -261,15 +472,15 @@ TensorVariable<3U>&  TensorVariable<3U>::operator-=( const ScalarVariable& sc )
 
 TensorVariable<3U>&  TensorVariable<3U>::operator*=( const ScalarVariable& sc )
  {
-    data[0][0] *= sc.Value();
-    data[0][1] *= sc.Value();
-    data[1][0] *= sc.Value();
-    data[1][1] *= sc.Value();
-    data[0][2] *= sc.Value();
-    data[1][2] *= sc.Value();
-    data[2][0] *= sc.Value();
-    data[2][1] *= sc.Value();
-    data[2][2] *= sc.Value();
+    data[0][0] *= sc();
+    data[0][1] *= sc();
+    data[1][0] *= sc();
+    data[1][1] *= sc();
+    data[0][2] *= sc();
+    data[1][2] *= sc();
+    data[2][0] *= sc();
+    data[2][1] *= sc();
+    data[2][2] *= sc();
 
     return *this; 
  }
@@ -278,15 +489,15 @@ TensorVariable<3U>&  TensorVariable<3U>::operator*=( const ScalarVariable& sc )
 
 TensorVariable<3U>&  TensorVariable<3U>::operator/=( const ScalarVariable& sc )
  {
-    data[0][0] /= sc.Value();
-    data[0][1] /= sc.Value();
-    data[1][0] /= sc.Value();
-    data[1][1] /= sc.Value();
-    data[0][2] /= sc.Value();
-    data[1][2] /= sc.Value();
-    data[2][0] /= sc.Value();
-    data[2][1] /= sc.Value();
-    data[2][2] /= sc.Value();
+    data[0][0] /= sc();
+    data[0][1] /= sc();
+    data[1][0] /= sc();
+    data[1][1] /= sc();
+    data[0][2] /= sc();
+    data[1][2] /= sc();
+    data[2][0] /= sc();
+    data[2][1] /= sc();
+    data[2][2] /= sc();
 
     return *this; 
  }
@@ -397,7 +608,6 @@ TensorVariable<3U>&  TensorVariable<3U>::operator*=( const TensorVariable<3U>& t
 
 
 
-
 TensorVariable<3U>&  TensorVariable<3U>::operator+=( double64 val )
  {
     data[0][0] += val;
@@ -492,15 +702,15 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const ScalarVariable& sc )
  {
     flag[0] = flag[1] = flag[2] = sc.Flag();
     
-    data[0][0] = sc.Value();
-    data[0][1] = sc.Value();
-    data[1][0] = sc.Value();
-    data[1][1] = sc.Value();
-    data[0][2] = sc.Value();
-    data[1][2] = sc.Value();
-    data[2][0] = sc.Value();
-    data[2][1] = sc.Value();
-    data[2][2] = sc.Value();
+    data[0][0] = sc();
+    data[0][1] = sc();
+    data[1][0] = sc();
+    data[1][1] = sc();
+    data[0][2] = sc();
+    data[1][2] = sc();
+    data[2][0] = sc();
+    data[2][1] = sc();
+    data[2][2] = sc();
 
     return *this; 
  }
@@ -513,15 +723,15 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc
     flag[1] = vc.Flag(1);
     flag[2] = vc.Flag(2);
     
-    data[0][0] = vc.Value(0);
+    data[0][0] = vc(0);
     data[0][1] = static_cast<double64>(0.0);
     data[1][0] = static_cast<double64>(0.0);
-    data[1][1] = vc.Value(1);
+    data[1][1] = vc(1);
     data[0][2] = static_cast<double64>(0.0);
     data[1][2] = static_cast<double64>(0.0);
     data[2][0] = static_cast<double64>(0.0);
     data[2][1] = static_cast<double64>(0.0);
-    data[2][2] = vc.Value(2);
+    data[2][2] = vc(2);
 
     return *this; 
  }
@@ -536,16 +746,6 @@ TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc
 // -------
 // METHODS
 // -------
-
-
-
-double64  TensorVariable<3U>::Average() const
- {
-   return (data[0][0] + data[0][1] + data[1][0] + data[1][1] +
-           data[0][2] + data[1][2] + data[2][0] + data[2][1] +
-           data[2][2]) / static_cast<double64>(9.);
- }
-
 
 /// @test tested: O.K.
 
@@ -716,117 +916,15 @@ bool  TensorVariable<3U>::IsWithinRange( double64 vmin, double64 vmax ) const
  }
  
  
-/// @test re-tested: SKM 29-9-2001
-
-void  TensorVariable<3U>::Fabs() 
- { 
-    data[0][0] = std::fabs( data[0][0] );
-    data[0][1] = std::fabs( data[0][1] );
-    data[1][0] = std::fabs( data[1][0] );
-    data[1][1] = std::fabs( data[1][1] );
-    data[0][2] = std::fabs( data[0][2] );
-    data[1][2] = std::fabs( data[1][2] );
-    data[2][0] = std::fabs( data[2][0] );
-    data[2][1] = std::fabs( data[2][1] );
-    data[2][2] = std::fabs( data[2][2] ); 
- }
-
-
-/// @test re-tested: SKM 29-9-2001
-
-void  TensorVariable<3U>::Sqrt( bool from_absolute_value ) 
- { 
-    if ( from_absolute_value ) {
-         data[0][0] = std::sqrt( std::fabs( data[0][0] ) );
-         data[0][1] = std::sqrt( std::fabs( data[0][1] ) );
-         data[1][0] = std::sqrt( std::fabs( data[1][0] ) );
-         data[1][1] = std::sqrt( std::fabs( data[1][1] ) );
-         data[0][2] = std::sqrt( std::fabs( data[0][2] ) );
-         data[1][2] = std::sqrt( std::fabs( data[1][2] ) );
-         data[2][0] = std::sqrt( std::fabs( data[2][0] ) );
-         data[2][1] = std::sqrt( std::fabs( data[2][1] ) );
-         data[2][2] = std::sqrt( std::fabs( data[2][2] ) ); 
-         return;
-      }
- 
-    data[0][0] = std::sqrt( data[0][0] );
-    data[0][1] = std::sqrt( data[0][1] );
-    data[1][0] = std::sqrt( data[1][0] );
-    data[1][1] = std::sqrt( data[1][1] );
-    data[0][2] = std::sqrt( data[0][2] );
-    data[1][2] = std::sqrt( data[1][2] );
-    data[2][0] = std::sqrt( data[2][0] );
-    data[2][1] = std::sqrt( data[2][1] );
-    data[2][2] = std::sqrt( data[2][2] ); 
- }
-
-
-
-/// @test re-tested: SKM 29-9-2001
-
-void  TensorVariable<3U>::Ln( bool from_absolute_value ) 
- { 
-    if ( from_absolute_value ) {
-         data[0][0] = std::log( std::fabs( data[0][0] ) );
-         data[0][1] = std::log( std::fabs( data[0][1] ) );
-         data[1][0] = std::log( std::fabs( data[1][0] ) );
-         data[1][1] = std::log( std::fabs( data[1][1] ) );
-         data[0][2] = std::log( std::fabs( data[0][2] ) );
-         data[1][2] = std::log( std::fabs( data[1][2] ) );
-         data[2][0] = std::log( std::fabs( data[2][0] ) );
-         data[2][1] = std::log( std::fabs( data[2][1] ) );
-         data[2][2] = std::log( std::fabs( data[2][2] ) ); 
-         return;
-      }
- 
-    data[0][0] = std::log( data[0][0] );
-    data[0][1] = std::log( data[0][1] );
-    data[1][0] = std::log( data[1][0] );
-    data[1][1] = std::log( data[1][1] );
-    data[0][2] = std::log( data[0][2] );
-    data[1][2] = std::log( data[1][2] );
-    data[2][0] = std::log( data[2][0] );
-    data[2][1] = std::log( data[2][1] );
-    data[2][2] = std::log( data[2][2] ); 
- }
-
-
-/// @test re-tested: SKM 29-9-2001
-
-void  TensorVariable<3U>::Log10( bool from_absolute_value ) 
- { 
-    if ( from_absolute_value ) {
-         data[0][0] = std::log10( std::fabs( data[0][0] ) );
-         data[0][1] = std::log10( std::fabs( data[0][1] ) );
-         data[1][0] = std::log10( std::fabs( data[1][0] ) );
-         data[1][1] = std::log10( std::fabs( data[1][1] ) );
-         data[0][2] = std::log10( std::fabs( data[0][2] ) );
-         data[1][2] = std::log10( std::fabs( data[1][2] ) );
-         data[2][0] = std::log10( std::fabs( data[2][0] ) );
-         data[2][1] = std::log10( std::fabs( data[2][1] ) );
-         data[2][2] = std::log10( std::fabs( data[2][2] ) ); 
-         return;
-      }
- 
-    data[0][0] = std::log10( data[0][0] );
-    data[0][1] = std::log10( data[0][1] );
-    data[1][0] = std::log10( data[1][0] );
-    data[1][1] = std::log10( data[1][1] );
-    data[0][2] = std::log10( data[0][2] );
-    data[1][2] = std::log10( data[1][2] );
-    data[2][0] = std::log10( data[2][0] );
-    data[2][1] = std::log10( data[2][1] );
-    data[2][2] = std::log10( data[2][2] ); 
- }
  
  
 /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
 VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariable<3U>& ts )
  {
     VectorVariable<3U> temp( vc.Flag(0), vc.Flag(1), vc.Flag(2),
-                             ts.Value(0,0) * vc[0] + ts.Value(1,0) * vc[1] + ts.Value(2,0) * vc[2],
-                             ts.Value(0,1) * vc[0] + ts.Value(1,1) * vc[1] + ts.Value(2,1) * vc[2],
-                             ts.Value(0,2) * vc[0] + ts.Value(1,2) * vc[1] + ts.Value(2,2) * vc[2] );
+                             ts(0,0) * vc[0] + ts(1,0) * vc[1] + ts(2,0) * vc[2],
+                             ts(0,1) * vc[0] + ts(1,1) * vc[1] + ts(2,1) * vc[2],
+                             ts(0,2) * vc[0] + ts(1,2) * vc[1] + ts(2,2) * vc[2] );
     return std::move(temp);
  }
 

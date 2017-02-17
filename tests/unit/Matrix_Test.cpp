@@ -994,7 +994,7 @@ namespace csmp
                 Matrix3x3.Out();
 
                 cout << "\n2U tensor variable TensorVariable2U";
-                TensorVariable2U.Zero();
+                TensorVariable2U=0.;
                 TensorVariable2U.Out();
 
                 cout << "\nMatrix2x2 *= ( TensorVariable2U )";
@@ -1017,7 +1017,7 @@ namespace csmp
                 Matrix3x3.Out();
 
                 cout << "\n3U tensor variable TensorVariable3U";
-                TensorVariable3U.Zero();
+                TensorVariable3U=0.;
                 TensorVariable3U.Out();
 
                 cout << "\nMatrix3x3 *= ( TensorVariable3U )";

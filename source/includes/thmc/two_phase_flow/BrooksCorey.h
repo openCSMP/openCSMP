@@ -105,33 +105,6 @@ class BrooksCorey : public TwoPhaseModel<dim> {
 
 };
 
-template<size_t dim>
-inline double64 csmp::BrooksCorey<dim>::Pd() const
-  {
-    return entry_pressure_;
-  }
-
-
-template<size_t dim>
-inline void csmp::BrooksCorey<dim>::Pd( double64 pd )
-  {
-    entry_pressure_ = pd;
-  }
-
-
-template<size_t dim>
-inline void csmp::BrooksCorey<dim>::Lambda( double64 lambda )
-  {
-    lambda_ = lambda;
-  }
-
-template<size_t dim>
-inline double64 csmp::BrooksCorey<dim>::Lambda() const
-  {
-    return lambda_;
-  }
-
-
 } // end namespace csmp
 
 #endif

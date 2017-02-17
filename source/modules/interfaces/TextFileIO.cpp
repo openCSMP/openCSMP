@@ -985,7 +985,7 @@ void printPropertyValue( const TensorVariable<dim>& ts )
     for ( size_t i=0; i<dim; i++ ) {
         cout <<"\t";
         for ( size_t j=0; j<dim; j++ )
-            cout << ts.Value(i,j) <<", ";
+            cout << ts(i,j) <<", ";
         cout << endl;
     }
     cout << endl;
@@ -1694,7 +1694,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                 if ( dim == 1U || dim == 2U ) {
                     if ( sc1 == sc2 )
                         model.InputBoundaryValue( parseBoundary(bound_name), prop_name.c_str(),
-                                               makeScalar( parseCondition(cond_type), sc1.Value() ) );
+                                               makeScalar( parseCondition(cond_type), sc1() ) );
                     else {
                         bvalues.reserve(2U);
                         bvalues.push_back( sc1 ); assert( parseCondition(cond_type) == sc1.Flag() );
@@ -1711,7 +1711,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     model.Database().CheckRange( prop_name.c_str(), sc4() );
                     if ( sc1 == sc2 and sc2 == sc3 and sc3 == sc4 )
                         model.InputBoundaryValue( parseBoundary(bound_name), prop_name.c_str(),
-                                               makeScalar( parseCondition(cond_type), sc1.Value() ) );
+                                               makeScalar( parseCondition(cond_type), sc1() ) );
                     else {
                         bvalues.reserve(4U);
                         bvalues.push_back( sc1 ); assert( parseCondition(cond_type) == sc1.Flag() );

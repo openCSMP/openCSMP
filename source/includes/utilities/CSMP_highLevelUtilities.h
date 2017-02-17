@@ -8,7 +8,6 @@
 #include "Exception.h"
 #include "FiniteElement.h"
 #include "binaryReadWrite.h"
-#include "OS_Utilities.h"
 
 namespace csmp {
 
@@ -228,8 +227,7 @@ size_t  renumberElementNodes( std::vector<Element<2U>*>::iterator first,
 size_t  renumberElementNodes( std::vector<Element<3U>*>::iterator first,
                               std::vector<Element<3U>*>::iterator last );
 
-// Recent additions by P. Lang
-/// SKM @todo explain what this is good for
+/// additions by P. Lang (2012); SKM @todo explain what this is good for
 namespace femDataOutputDispatch {
 
 template<class Var>

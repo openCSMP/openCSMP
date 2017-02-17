@@ -61,7 +61,7 @@ void NumIntegral_NT_rhs_nodal_op_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX
    volume = e.Volume();
 
    for ( size_t j=0; j<e.Nodes(); j++ )
-      MathOperatorRHS<dim>::RHS[j] = (VAR[j].Value()*volume) / static_cast<double64>(e.Nodes());
+      MathOperatorRHS<dim>::RHS[j] = (VAR[j]()*volume) / static_cast<double64>(e.Nodes());
    
 } // end ComputeContribution
 

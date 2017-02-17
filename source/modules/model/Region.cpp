@@ -188,6 +188,17 @@ bool Region<dim>::ValidVariable( const char* variableName ) const
   }
 
 
+
+template<size_t dim>
+IntegrationPointVariables Region<dim>::ElementIntegrationPointVariables() const
+  { return this->pref_.IntegrationPointVariablesAt(ELEMENT); }
+
+template<size_t dim>
+LocalVariables Region<dim>::ElementVariables() const
+  { return this->pref_.LocalVariablesAt(ELEMENT); }
+
+
+
 // VISITORS INTERFACE
 
 /**
@@ -873,26 +884,9 @@ template void Region<3>::InputVariableFrom<TensorVariable<3U> >( const char*, co
 
 
 
-
-
-
-
-
-
-
 // -------------------------------------------------------------------
 // Building blocks
 // -------------------------------------------------------------------
-
-
-template<size_t dim>
-void Region<dim>::ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& fvm_mgr )
- {
-    for ( typename vector<Element<dim>*>::iterator
-          it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
-        (*it)->Assign( fvm_mgr.Stencil( (*it)->FE_Type() ) );
- }
-
 
 
 template<size_t dim>

@@ -73,7 +73,7 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
     for ( vector<Node<1U>*>::iterator
           it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
       {
-         saturation = 0. + sat_incr * (*it)->Idx();
+         saturation() = 0. + sat_incr * (*it)->Idx();
          (*it)->Store( satw_key, saturation );
          saturation = 1. - saturation;
          (*it)->Store( satn_key, saturation );

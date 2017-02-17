@@ -11,80 +11,10 @@ template<size_t> class TensorVariable;
 template<size_t> class Region;
 template<size_t> class Model;
 
-template<size_t dim>
-class PropertyHandle {
-  public:
-    PropertyHandle( Model<dim>& sg, const char* var_name,
-                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
-
-    PropertyHandle( Model<dim>& sg, const char* target_group, 
-                    const char* var_name,
-                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
-
-    PropertyHandle( const PropertyHandle& op ); 
-
-    ~PropertyHandle();
-
-    // assignment
-    PropertyHandle&  operator=( const PropertyHandle& op );
-    PropertyHandle&  operator=( double64 val );
-    PropertyHandle&  operator=( const ScalarVariable& s );
-    PropertyHandle&  operator=( const VectorVariable<dim>& v );
-    PropertyHandle&  operator=( const TensorVariable<dim>& t );
-    PropertyHandle&  operator=( const std::vector<VectorVariable<dim> >& vc ); 
-    PropertyHandle&  operator=( const std::vector<TensorVariable<dim> >& ts ); 
-
-    // "self-assign" calculation result to PropertyHandle on the left
-    PropertyHandle&  operator+=( double64 val );
-    PropertyHandle&  operator-=( double64 val );
-    PropertyHandle&  operator*=( double64 val );
-    PropertyHandle&  operator/=( double64 val );
-
-    // "self-assign" results from spatially variable calculations
-    PropertyHandle&  operator+=( const PropertyHandle& op );
-    PropertyHandle&  operator-=( const PropertyHandle& op );
-    PropertyHandle&  operator*=( const PropertyHandle& op );
-    PropertyHandle&  operator/=( const PropertyHandle& op );
-    
-    // standard math
-    void          Squared();
-    void          Sqrt();
-    void          Ln();      // natural logarithm
-    void          Log10();   // decadic logarithm
-    void          Exp();
-    void          Pow( double64 raised_to );
-    void          ZapNAN( double64 with );
-    void          Sin();
-    void          Cos();
-    void          Tan();
-    void          Acos();
-    void          Asin();
-    void          Atan();
-    
-    // various operations
-    const char*   VariableName() const;
-    const csmp::Index&  Key() const;
-    void           Range( double64& omin, double64& omax ) const;
-    bool           IsWithinRange() const;
-    VARIABLE_FLAG  OutputCondition() const;
-    void           OutputCondition( VARIABLE_FLAG c );
-    
-    void Out() const;
-    void Out( const char* text_file_name ) const;
-  
-  private:
-    Model<dim>&           super_group;
-    std::string           group_name; 
-    Region<dim>&          group;
-    std::string           var_name;
-    csmp::Index           key_;
-    VARIABLE_FLAG         flag_output;
-    bool                  new_variable_created;
-};
-
 /**
  
-@class PropertyHandle PropertyHandle "main_library/PropertyHandle.h"
+@brief PropertyHandle - a global accessor and mutator of distributed data
+
 @author S.K. Matthaei
 @author Stephen G. Roberts
 @date 1999
@@ -234,67 +164,76 @@ log_phi.~PropertyHandle();
 @todo (3) A range of switch statements must be extended for type REGION, FACE, INTER_FACE (A)
  
 */
-
-
-/** Returns the storage specification of the variable which is associated with the csmp::Operand into a corresponding structure.
-*/    
 template<size_t dim>
-inline const csmp::Index&  PropertyHandle<dim>::Key() const { 
-    return key_;
- }
+class PropertyHandle {
+  public:
+    PropertyHandle( Model<dim>& sg, const char* var_name,
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
 
-template<size_t dim>
-inline const char*  PropertyHandle<dim>::VariableName() const
- { return var_name.c_str(); }
+    PropertyHandle( Model<dim>& sg, const char* target_group, 
+                    const char* var_name,
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
 
+    PropertyHandle( const PropertyHandle& op ); 
 
-/**
+    ~PropertyHandle();
 
-OutputCondition() returns  the VARIABLE_FLAG flag which the
-distributed physical variable which is associated with the PropertyHandle
-must have in order to allow modification by the PropertyHandle. 
+    // assignment
+    PropertyHandle&  operator=( const PropertyHandle& op );
+    PropertyHandle&  operator=( double64 val );
+    PropertyHandle&  operator=( const ScalarVariable& s );
+    PropertyHandle&  operator=( const VectorVariable<dim>& v );
+    PropertyHandle&  operator=( const TensorVariable<dim>& t );
+    PropertyHandle&  operator=( const std::vector<VectorVariable<dim> >& vc ); 
+    PropertyHandle&  operator=( const std::vector<TensorVariable<dim> >& ts ); 
 
-@return The flag that the physical variables flag must correspond to if the
-variable shall be modified.
+    // "self-assign" calculation result to PropertyHandle on the left
+    PropertyHandle&  operator+=( double64 val );
+    PropertyHandle&  operator-=( double64 val );
+    PropertyHandle&  operator*=( double64 val );
+    PropertyHandle&  operator/=( double64 val );
 
-@section application Application 
-
-Since each CSMP scalar, vector, or tensor variable has a single or a set
-of flags which indicate to the solver whether it may modify or use this 
-variable instance as a constraint, the same rule applies to PropertyHandles.
-Thus, only if the output flag matches the local flag of the distributed
-variable, it will modify the latter. Accordingly, the variable flag may
-be used to protect certain variable values from modification by 
-PropertyHandles.*/    
-template<size_t dim>
-inline VARIABLE_FLAG  PropertyHandle<dim>::OutputCondition() const { return flag_output; }
+    // "self-assign" results from spatially variable calculations
+    PropertyHandle&  operator+=( const PropertyHandle& op );
+    PropertyHandle&  operator-=( const PropertyHandle& op );
+    PropertyHandle&  operator*=( const PropertyHandle& op );
+    PropertyHandle&  operator/=( const PropertyHandle& op );
     
+    // standard math
+    void          Squared();
+    void          Sqrt();
+    void          Ln();      // natural logarithm
+    void          Log10();   // decadic logarithm
+    void          Exp();
+    void          Pow( double64 raised_to );
+    void          ZapNAN( double64 with );
+    void          Sin();
+    void          Cos();
+    void          Tan();
+    void          Acos();
+    void          Asin();
+    void          Atan();
     
-/**
-
-OutputCondition() assigns the VARIABLE_FLAG flag which the
-distributed physical variable which is associated with the PropertyHandle
-must have in order to allow modification by the PropertyHandle. 
-
-@param c The flag which the output flag shall be changed into.
-
-@attention The flag of the physical variables flag must correspond,
-else the variable is not modified.
-
-@section application Application 
-
-Since each CSMP scalar, vector, or tensor variable has a single or a set
-of flags which indicate to the solver whether it may modify or use this 
-variable instance as a constraint, the same rule applies to PropertyHandles.
-Thus, only if the output flag matches the local flag of the distributed
-variable, it will modify the latter. Accordingly, the variable flag may
-be used to protect certain variable values from modification by 
-PropertyHandles. 
-*/
-template<size_t dim>
-inline void  PropertyHandle<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output=c; }
-
-
+    // various operations
+    const char*   VariableName() const;
+    const csmp::Index&  Key() const;
+    void           Range( double64& omin, double64& omax ) const;
+    bool           IsWithinRange() const;
+    VARIABLE_FLAG  OutputCondition() const;
+    void           OutputCondition( VARIABLE_FLAG c );
+    
+    void Out() const;
+    void Out( const char* text_file_name ) const;
+  
+  private:
+    Model<dim>&           super_group;
+    std::string           group_name; 
+    Region<dim>&          group;
+    std::string           var_name;
+    csmp::Index           key_;
+    VARIABLE_FLAG         flag_output;
+    bool                  new_variable_created;
+};
 
 } // csmp
 

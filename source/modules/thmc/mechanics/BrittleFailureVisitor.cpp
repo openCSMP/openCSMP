@@ -127,7 +127,7 @@ void BrittleFailureVisitor<dim>::Visit( Element<dim>* e )
             StressInvariants  invars( Cartesian_stress_ );
             
             // 3. failure analysis
-            FAILURE failure = BrittleFailure::Evaluate( mprops_, invars, fluid_pressure_.Value() );
+            FAILURE failure = BrittleFailure::Evaluate( mprops_, invars, fluid_pressure_() );
 
             // 4. store variables
             e->Store(i, Failure_key_, makeScalar(PLAIN,failure) );
@@ -153,7 +153,7 @@ void BrittleFailureVisitor<dim>::Visit( Element<dim>* e )
         // NB: pore pressure has already been read by InitializeInputProperties
 
         // 2. failure analysis
-        FAILURE failure = BrittleFailure::Evaluate( mprops_, invars, fluid_pressure_.Value() );
+        FAILURE failure = BrittleFailure::Evaluate( mprops_, invars, fluid_pressure_() );
 
         // 3. store variables
         e->Store( Failure_key_, makeScalar(PLAIN,failure) );

@@ -1484,11 +1484,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
     if ( it.second )
       {
         std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces: creating boundary around " << region << std::endl;
-        boundaryComplex->UpdateIndices();                                  // WARNING: probably should be explicitly: containsVolumeElements(boundaryComplex->Region("Model"))
-        bool succeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
+        boundaryComplex->UpdateIndices();
+        //                                 FACE & BOUNDARY CREATION
+        bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
         boundaryComplex->UpdateIndices();
         std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces: created boundary around " << region << std::endl;
-        return succeded;
+        return succeeded;
       }
     else csmp_error.notice( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary",
                             bName.c_str(),
@@ -1598,9 +1599,11 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::DivideBoundary( typename std::map<
 
 
 
-/*
+/**
     loops over the perimeter of the boundary, making keys from the node-pointers of the boundary face
     nodes and recording the boundary elements for the faces of which the keys were made
+     
+     @attention makes sense in 3D only
 */
 void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::Node<3U>*>,Face<3U>*>& perimeter_keys )
  {
@@ -1625,9 +1628,11 @@ void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::Node<3U
 
 
 
-/*
+/**
     Connects the line faces representing the edge with their neighbors    
     logic: where the line elements share a node they are connected
+    
+    makes sense in 3D only
 */
 void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
  {
@@ -1660,8 +1665,8 @@ void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
           for ( size_t i=0U; i<line_faces[ (*it.second.begin()) ]->Nodes(); ++i ) {
                // if the node pointers match the neighbor assignment can be made
                if ( line_faces[ (*it.second.begin()) ]->N(i) == it.first ) {
-                    // line_faces[ (*it.second.begin()) ]->Assign( i, line_faces[ (*it.second.begin()) ] );
-                    line_faces[ (*it.second.begin()) ]->Assign( i, static_cast<Face<3U>* const>(nullptr) );
+                    line_faces[ (*it.second.begin()) ]->Assign( i, line_faces[ (*it.second.begin()) ] );
+                    //line_faces[ (*it.second.begin()) ]->Assign( i, static_cast<Face<3U>* const>(nullptr) );
                     break;
                  }
             }
@@ -2125,7 +2130,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
      It is also moved from the unique to the non-unique region map if it was 
      stored there originally.
      
-     @attention this method does not need to be applied to box-shaped models.
+     @attention by contrast to EstablishBoxBoundaries(),
+     EstablishBoundaries() does not require to be applied to box-shaped models, but is
+     more general.
      
      @test updated by SKM 2016
 */

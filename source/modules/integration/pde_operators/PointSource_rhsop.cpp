@@ -42,7 +42,7 @@ void PointSource_rhsop<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
        
       // taking into account that the point source contributes to several elements
       for ( size_t i=0U; i<e.Nodes(); i++ )
-        SRC_[i] /= static_cast<double64>(e.N(i)->Parents()); 
+        SRC_[i]() /= static_cast<double64>(e.N(i)->Parents());
    } // end GetOperands
 
 
@@ -63,7 +63,7 @@ void PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
    for ( size_t i=0U; i<e.Nodes(); i++ )
-     MathOperatorRHS<dim>::RHS[i] = SRC_[i].Value();
+     MathOperatorRHS<dim>::RHS[i] = SRC_[i]();
      
 } // end ComputeContribution
 

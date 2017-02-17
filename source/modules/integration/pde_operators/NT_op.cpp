@@ -69,7 +69,7 @@ void NT_op<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
      if ( M_[i].Flag() == NEUMANN )
        // contributions must be divided by number of elements which share the node
        // to avoid multiple accumulation
-       MathOperatorRHS<dim>::RHS[i] = M_[i].Value() / static_cast<double64>(e.N(i)->Parents());
+       MathOperatorRHS<dim>::RHS[i] = M_[i]() / static_cast<double64>(e.N(i)->Parents());
      
 } // end ComputeContribution
 

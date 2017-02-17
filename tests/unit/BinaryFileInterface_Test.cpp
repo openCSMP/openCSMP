@@ -55,8 +55,8 @@ void BinaryFileInterface_Test::run()
   _test( toBin.ReadDataFrom<ScalarVariable>( "BinaryFileInterface_Test3", model3Dcopy.Database(), femData ) == "permeability" );
   ScalarVariable min,max;
   femData.MinMaxOf( min, max );
-  _equal( min.Value(), permValue, numeric_limits<double64>::epsilon() );
-  _equal( max.Value(), permValue, numeric_limits<double64>::epsilon() );
+  _equal( min(), permValue, numeric_limits<double64>::epsilon() );
+  _equal( max(), permValue, numeric_limits<double64>::epsilon() );
 }
 
 } // csmp

@@ -318,45 +318,6 @@ class Operand {
     FlaggedArrayVariable flagged_array_storage_;
 };
 
-
-
-template<size_t dim>
-inline std::string   Operand<dim>::Name() const { return name_; }
-
-template<size_t dim>
-inline void          Operand<dim>::Name( const char* s ) { name_ = s; }
-
-template<size_t dim>
-inline const csmp::Index& Operand<dim>::Key() const { return prop_key_; }
-
-template<size_t dim>
-inline size_t     Operand<dim>::Index() const { return prop_key_.index; }
-
-template<size_t dim>
-inline PLACEMENT     Operand<dim>::Placement() const { return prop_key_.place; }
-
-template<size_t dim>
-inline VARIABLE_TYPE Operand<dim>::Type() const { return prop_key_.type; }
-
-template<size_t dim>
-inline size_t     Operand<dim>::CalculationOffset() const { return calc_offset_; }
-
-template<size_t dim>
-inline void          Operand<dim>::CalculationOffset( size_t o ) { calc_offset_=o; }
-
-template<size_t dim>
-inline void          Operand<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output_ = c; }
-
-template<size_t dim>
-inline VARIABLE_FLAG    Operand<dim>::OutputCondition() const { return flag_output_; }
-
-template<size_t dim>
-inline VARIABLE_FLAG    Operand<dim>::EssentialCondition() const { return flag_essential_; }
-
-template<size_t dim>
-inline void          Operand<dim>::EssentialCondition( VARIABLE_FLAG c ) { flag_essential_ = c; }
-
-
 } // csmp
 
 #endif

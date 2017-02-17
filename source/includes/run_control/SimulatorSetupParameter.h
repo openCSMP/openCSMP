@@ -1,5 +1,5 @@
-#ifndef SIMULATORSETUPPARAMETER_H
-#define SIMULATORSETUPPARAMETER_H
+#ifndef SIMULATOR_SETUP_PARAMETER_H
+#define SIMULATOR_SETUP_PARAMETER_H
 
 #include "Parameter.h"
 
@@ -98,5 +98,5 @@ bool compare_setup_parameter_nocase (const csmp::SimulatorSetupParameter& first,
 
 } // end csmp
 
-#endif // SIMULATORSETUPPARAMETER_H
+#endif // SIMULATOR_SETUP_PARAMETER_H
 

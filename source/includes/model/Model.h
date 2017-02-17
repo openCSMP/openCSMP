@@ -28,6 +28,159 @@ template<size_t> class FiniteVolumeStencilManager;
 template<size_t,template<size_t> class> class PDE_Integrator;
 
 
+/** @brief Model the playground for the physics of interest
+
+@author S.K. Matthai
+@author Stephen G. Roberts
+@date 1999
+
+@section motivation Motivation
+
+Finite-element models typically are characterized by arrays
+of data that need to be accessed via complex indexing operations and whose
+interconnectedness is not explicit. Also it is relatively error
+prone to change the size of these arrays at runtime and to update the
+connectivity of represented finite elements. Tohe design of the Model
+class was therefore motivated by the need to hide this complexity from the
+user such that he/she can focus their undivided attention on the geological
+complexity of the problem at hand.
+
+
+@section design Design Intent
+
+The design intent was to have an object representation
+of the mass and space occupancy of a real world system of interest.
+One should be able to work with and observe this system through the interfaces
+of the Model object.
+
+
+@section applicability Applicability
+
+A Model representation can be built for any geometrical model which
+represents a finite-element discretization of a real-world system.
+Computations on a Model are carried out through its interface Apply().
+Through this interface you can carry out finite-element computations
+specified by Algorithms or own types derived from the classes Algorithm,
+and 'Algorithm'.  You can also calculate interrelations among variables
+(including the dependent variables that are computed at each timestep).
+You do this with your own classes that you derive from the Interrelation
+base class.  An example for such an Interrelation-derived calculation would
+be to calculate a permeability that is dependent on fluid pressure.  Any
+derived algorithm or interrelation can also be restricted to Regions of
+Elements inside the Model.
+
+
+@section structure Structure
+
+The Model is an agglomerate of objects representing the finite-element mesh,
+implemented as a connectivity scheme and a storage scheme for physical
+variables that are assigned to nodes, constraint points, or elements
+themselves.  Regions of elements that make up geological entities in the
+model are referred to as Region objects.
+
+The Model contains a class hierarchy of Region, Element, IntegrationPoint,
+and Node objects. Their connections reflect the connectivity of the mesh and
+they are handled internally by the MeshManager. The complementary
+MemoryManager object manages the storage for the distributed physical
+variables of a computation. The PropertyDatabase object keeps track of the
+existing properties, their storage locations and specifications.
+
+
+@section participants Participants
+
+The Model functionality is instrumentalized through instances of Node,
+IntegrationPoint, and Element classes managed by the MeshManager;
+basic CSMP variables managed by the MemoryManager;
+a PropertyDatabase, and a map of Regions.
+
+
+@section collaborations Collaborations
+
+In a typical CSMP simulation, the Model collaborates with Algorithm,
+Interrelation, and Visitor objects via its Apply() and Accept() interfaces,
+respectively. For data transfer, the Model can also exchange properties
+with a FiniteDifferenceGrid object using the Element interpolation functions.
+
+
+@section consequences Consequences
+
+A Model encapsulates the discretization of a geological object with
+associated properties. It thereby creates an interface to this object which
+allows to carry out computations on the object, modify property values,
+input and output these to other tools, and to address and manipulate sub-
+regions of the object. Sub-regions can be identified on the
+basis of property values and they can be associated with a name. Once this
+is done, most of the Model interface can also be used for
+individual Regions.
+
+
+@section implementation Implementation
+
+The public interfaces of the Model invoke a data-access process for
+the discretized real-world model. The key steps in this process are:
+
+(1) The Property Database is queried for the
+variable specifications of a variable defined as an input string (for
+instance "permeability"). The database returns a csmp::Index that uniquely
+identifies the variable for efficient access in the computations.
+
+(2) The placement of the variable (Node, IntegrationPoint or Element)
+determines the depth of the search for the variable in the hierarchy of the
+mesh in the Model object.
+
+(3) Once a variable location object (Node, IntegrationPoint, or Element)
+is found, its ID is used to retrieve the value or status of the variable from the
+MemoryManager via methods like Read() or Store().  These methods are
+overloaded to retrieve Scalar-, Vector-, and TensorVariable<dim> instances.
+
+(4) Within the MemoryManager object the variables live in
+STL vectors that were instantiated for the specific variable types.  The length
+of such vectors depends on the placement of the variables.  Originally the
+MemoryManager object is build for the variables that were specified in
+the variable database from your input file.  When you create a new variable at
+runtime (using PropertyHandle objects), a new vector is build and inserted
+for this variable. The addresses of other variables remain valid in
+this process. Thus, you can efficiently create new variables at runtime.
+
+
+@section examples Application Examples
+
+In the following example, the element type LinearTriangle is set as
+default finite-element. A Triangulator mesh generator object is used by
+the Model constructor to generate a mesh of triangular finite-elements.
+This mesh is build from regular-gridded input data for which the user is
+prompted and the mesh in used further to buid a Model object named
+'model'. In this process, the default variable text file 'CSP_variables.txt'
+is read to initialize the variable database. The porosity of the new model is
+set to a uniform value of 3% and DIRICH(let) boundary conditions are applied
+at the model top (cross-sectional model). Now, instances of subclasses of
+Algorithms, Interrelations and Visitors are applied by 'passing' them
+to the Model. This invokes global (mesh-wide) and local (finite-element
+restricted) computations. Finally the variable 'temperature' is output
+to the HDF file 'computed_temperature'.
+
+
+@code
+Triangulator mesher;
+
+Model   model( "CM-simulation", mesher );
+
+model.InputUniformValueWhere ( PLAIN, "porosity", 0.03 );
+
+model.AssignBoundaryValues( TOP, "temperature", DIRICH, top_T, top_T );
+
+model.Apply( interrelation_subclass );
+
+model.Apply( csp_algorithm_subclass );
+
+model.OutputDataToHDF ( "computed_temperature", "temperature" );
+@endcode
+
+
+@todo (3) Put Apply(PDE_Int) back into domain classes (from Model to Boundaries etc...) 
+@todo (3) Replace references to groupMap_ and uniqueGroupMap_ in Model.cpp by corresponding Interface functionality
+@todo (3) Test binary IO of SplitBoundaries
+*/
 template<size_t dim>
 class Model : public RegionInterface<dim,Model>,
               public BoundaryInterface<dim,Model>,
@@ -113,10 +266,10 @@ public:
     // ------------------------------------------------------------------------
 
     /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
-    csmp::Index  CreateProperty(const char* new_prop, const char* unit,
-                                VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE,
-                                size_t vsize=1 , double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
-                                std::string usage = "???");
+    csmp::Index  CreateProperty( const char* new_prop, const char* unit,
+                                 VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE,
+                                 size_t vsize=1 , double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
+                                 std::string usage = "???");
 
     /// deletes property from the database and the distributed containers all across the model
     void DeleteProperty( const char* property );
@@ -270,212 +423,6 @@ public:
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );
-
-/**
-
-@class Model Model "main_library/Model.h"
-
-@author S.K. Matthai
-@author Stephen G. Roberts
-@date 1999
-
-@section motivation Motivation
-
-Finite-element models typically are characterized by arrays
-of data that need to be accessed via complex indexing operations and whose
-interconnectedness is not explicit. Also it is relatively error
-prone to change the size of these arrays at runtime and to update the
-connectivity of represented finite elements. Tohe design of the Model
-class was therefore motivated by the need to hide this complexity from the
-user such that he/she can focus their undivided attention on the geological
-complexity of the problem at hand.
-
-
-@section design Design Intent
-
-The design intent was to have an object representation
-of the mass and space occupancy of a real world system of interest.
-One should be able to work with and observe this system through the interfaces
-of the Model object.
-
-
-@section applicability Applicability
-
-A Model representation can be built for any geometrical model which
-represents a finite-element discretization of a real-world system.
-Computations on a Model are carried out through its interface Apply().
-Through this interface you can carry out finite-element computations
-specified by Algorithms or own types derived from the classes Algorithm,
-and 'Algorithm'.  You can also calculate interrelations among variables
-(including the dependent variables that are computed at each timestep).
-You do this with your own classes that you derive from the Interrelation
-base class.  An example for such an Interrelation-derived calculation would
-be to calculate a permeability that is dependent on fluid pressure.  Any
-derived algorithm or interrelation can also be restricted to Regions of
-Elements inside the Model.
-
-
-@section structure Structure
-
-The Model is an agglomerate of objects representing the finite-element mesh,
-implemented as a connectivity scheme and a storage scheme for physical
-variables that are assigned to nodes, constraint points, or elements
-themselves.  Regions of elements that make up geological entities in the
-model are referred to as Region objects.
-
-The Model contains a class hierarchy of Region, Element, IntegrationPoint,
-and Node objects. Their connections reflect the connectivity of the mesh and
-they are handled internally by the MeshManager. The complementary
-MemoryManager object manages the storage for the distributed physical
-variables of a computation. The PropertyDatabase object keeps track of the
-existing properties, their storage locations and specifications.
-
-
-@section participants Participants
-
-The Model functionality is instrumentalized through instances of Node,
-IntegrationPoint, and Element classes managed by the MeshManager;
-basic CSMP variables managed by the MemoryManager;
-a PropertyDatabase, and a map of Regions.
-
-
-@section collaborations Collaborations
-
-In a typical CSMP simulation, the Model collaborates with Algorithm,
-Interrelation, and Visitor objects via its Apply() and Accept() interfaces,
-respectively. For data transfer, the Model can also exchange properties
-with a FiniteDifferenceGrid object using the Element interpolation functions.
-
-
-@section consequences Consequences
-
-A Model encapsulates the discretization of a geological object with
-associated properties. It thereby creates an interface to this object which
-allows to carry out computations on the object, modify property values,
-input and output these to other tools, and to address and manipulate sub-
-regions of the object. Sub-regions can be identified on the
-basis of property values and they can be associated with a name. Once this
-is done, most of the Model interface can also be used for
-individual Regions.
-
-
-@section implementation Implementation
-
-The public interfaces of the Model invoke a data-access process for
-the discretized real-world model. The key steps in this process are:
-
-(1) The Property Database is queried for the
-variable specifications of a variable defined as an input string (for
-instance "permeability"). The database returns a csmp::Index that uniquely
-identifies the variable for efficient access in the computations.
-
-(2) The placement of the variable (Node, IntegrationPoint or Element)
-determines the depth of the search for the variable in the hierarchy of the
-mesh in the Model object.
-
-(3) Once a variable location object (Node, IntegrationPoint, or Element)
-is found, its ID is used to retrieve the value or status of the variable from the
-MemoryManager via methods like Read() or Store().  These methods are
-overloaded to retrieve Scalar-, Vector-, and TensorVariable<dim> instances.
-
-(4) Within the MemoryManager object the variables live in
-STL vectors that were instantiated for the specific variable types.  The length
-of such vectors depends on the placement of the variables.  Originally the
-MemoryManager object is build for the variables that were specified in
-the variable database from your input file.  When you create a new variable at
-runtime (using PropertyHandle objects), a new vector is build and inserted
-for this variable. The addresses of other variables remain valid in
-this process. Thus, you can efficiently create new variables at runtime.
-
-
-@section examples Application Examples
-
-In the following example, the element type LinearTriangle is set as
-default finite-element. A Triangulator mesh generator object is used by
-the Model constructor to generate a mesh of triangular finite-elements.
-This mesh is build from regular-gridded input data for which the user is
-prompted and the mesh in used further to buid a Model object named
-'model'. In this process, the default variable text file 'CSP_variables.txt'
-is read to initialize the variable database. The porosity of the new model is
-set to a uniform value of 3% and DIRICH(let) boundary conditions are applied
-at the model top (cross-sectional model). Now, instances of subclasses of
-Algorithms, Interrelations and Visitors are applied by 'passing' them
-to the Model. This invokes global (mesh-wide) and local (finite-element
-restricted) computations. Finally the variable 'temperature' is output
-to the HDF file 'computed_temperature'.
-
-
-@code
-Triangulator mesher;
-
-Model   model( "CM-simulation", mesher );
-
-model.InputUniformValueWhere ( PLAIN, "porosity", 0.03 );
-
-model.AssignBoundaryValues( TOP, "temperature", DIRICH, top_T, top_T );
-
-model.Apply( interrelation_subclass );
-
-model.Apply( csp_algorithm_subclass );
-
-model.OutputDataToHDF ( "computed_temperature", "temperature" );
-@endcode
-
-
-@todo (3) Put Apply(PDE_Int) back into domain classes (from Model to Boundaries etc...) 
-@todo (3) Replace references to groupMap_ and uniqueGroupMap_ in Model.cpp by corresponding Interface functionality
-@todo (3) Test binary IO of SplitBoundaries
-*/
-
-
-
-/**
-
-Database() comes in a constant and a volatile version,
-giving you access to the PropertyDatabase object inside the Model.
-
-@return Either a constant or a volatile reference to the PropertyDatabase object.
- */
-template<size_t dim>
-inline PropertyDatabase<dim>&  Model<dim>::Database() { return database_; }
-
-template<size_t dim>
-inline const PropertyDatabase<dim>& Model<dim>::Database() const { return database_; }
-
-template<size_t dim>
-inline const FiniteElementManager&  Model<dim>::FE_Manager() const
- { return fem_manager_; }
-
-template<size_t dim>
-inline FiniteElementManager&  Model<dim>::FE_Manager()
- { return fem_manager_; }
-
-
-template<size_t dim>
-inline const FiniteVolumeStencilManager<dim>* Model<dim>::FV_Manager() const
-{ return fvStencilManager_; }
-
-template<size_t dim>
-inline FiniteVolumeStencilManager<dim>*  Model<dim>::FV_Manager()
-{ return fvStencilManager_; }
-
-
-/**
-
-Mesh() comes in a constant and in a volatile version, giving you
-access to the MeshManager object inside of the Model object.
-
-@return Either a constant or a volatile reference to the MeshManager.
-*/
-template<size_t dim>
-inline MeshManager<dim>&  Model<dim>::Mesh() { return mesh_manager_; }
-
-template<size_t dim>
-inline const MeshManager<dim>&  Model<dim>::Mesh() const { return mesh_manager_; }
-
-
-
-
 
 
 } // end namespace csmp

@@ -234,7 +234,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
     n->Read( T_key, Tf );
     n->Read( P_key, Pf );
     
-    if ( Tf < 0.0 || Pf < bar || Tf > 1500.0 ) {
+    if ( Tf() < 0.0 || Pf() < bar || Tf() > 1500.0 ) {
         ostringstream t, p, id;
         t << Tf();
         p << Pf();
@@ -342,7 +342,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
         Pf=e->PropertyValueAtIntegrationPoint(P_key,i);
 
         //perform checks
-        if ( Tf < 0.0 || Pf < bar || Tf > 1500.0 ) {
+        if ( Tf() < 0.0 || Pf() < bar || Tf() > 1500.0 ) {
             ostringstream t, p, id;
             t << Tf();
             p << Pf();

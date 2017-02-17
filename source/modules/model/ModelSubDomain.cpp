@@ -25,6 +25,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
+#include "binaryReadWrite.h"
 
 //#define MODEL_SUBDOMAIN_DEBUG
 
@@ -185,6 +186,374 @@ bool ModelSubDomain<dim,SIMPLEX>::Verbose()
 {
     return this->verbose_;
 }
+
+
+/**
+    Helper functions that checks complex boundary flags of a variable that shall be assigned.
+    They functions only transfer values to it if the variable has not got the specified flag.
+    
+    Generic version for variables that are placed on the Node, Element, Face etc.
+    
+    @TODO: make this part of new PDE_Intetgrator class
+    
+    @author SKM 10/9/2014
+*/
+template<size_t dim, template<size_t> class SIMPLEX, class Var>
+void writeVariableIf( SIMPLEX<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
+ {
+ } // end generic specification
+
+
+/// write guard for scalar variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             const csmp::Index& idx,
+                             const ScalarVariable& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    if ( ptr->Status(idx) != dont_overwrite )
+      ptr->Store( idx, var );
+ } // end version for scalars
+ 
+
+/// write guard for vector variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             const csmp::Index& idx,
+                             const VectorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    VectorVariable<dim> vc;
+    ptr->Read( idx, vc );
+    for ( size_t i=0U; i<dim; i++ )
+      // the component gets overwritten
+      if ( ptr->Status(idx,i) != dont_overwrite ) {
+           vc.Flag(i) = var.Flag(i);
+           vc(i)      = var[i];
+        }
+    ptr->Store( idx, vc );
+ } // end version for vector variables
+
+
+/**
+     Write guard for tensor variables
+    (where only the diagonal values have flags
+     so that only those rows get written where the 
+     flag permits this)
+*/
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             const csmp::Index& idx,
+                             const TensorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    TensorVariable<dim> ts;
+    ptr->Read( idx, ts );
+    for ( size_t i=0U; i<dim; i++ )
+      if ( ptr->Status(idx,i) != dont_overwrite ) {
+           ts.Flag(i) = var.Flag(i);
+           for ( size_t j=0U; j<dim; j++ )
+             ts(i,j) = var(i,j);
+        }
+    ptr->Store( idx, ts );
+ } // end version for tensors
+
+
+
+/**
+    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
+    and only transfers values to it if the variable has not got the specified flag.
+    
+    Generic version for variables that are placed on Element/Face/Interface integration points.
+*/
+template<size_t dim, template<size_t> class SIMPLEX, class Var>
+void writeVariableIf( SIMPLEX<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+ {
+ } // end generic specification
+
+/// write guard for scalar variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const ScalarVariable& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    if ( ptr->Status(ip,idx) != dont_overwrite )
+      ptr->Store( ip, idx, var );
+ } // end version for scalars
+ 
+
+/// write guard for vector variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const VectorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    VectorVariable<dim> vc;
+    ptr->Read( ip, idx, vc );
+    for ( size_t i=0U; i<dim; i++ )
+      // the component gets overwritten
+      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
+           vc.Flag(i) = var.Flag(i);
+           vc(i)      = var[i];
+        }
+    ptr->Store( ip, idx, vc );
+ } // end version for vector variables
+
+
+/**
+     Write guard for tensor variables
+    (where only the diagonal values have flags
+     so that only those rows get written where the 
+     flag permits this)
+*/
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const TensorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    TensorVariable<dim> ts;
+    ptr->Read( ip, idx, ts );
+    for ( size_t i=0U; i<dim; i++ )
+      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
+           ts.Flag(i) = var.Flag(i);
+           for ( size_t j=0U; j<dim; j++ )
+             ts(i,j) = var(i,j);
+        }
+    ptr->Store( ip, idx, ts );
+ } // end version for tensors
+
+
+
+/**
+    Helper functions that checks a complex varboundary flags of a variable that shall be assigned
+    and only transfers values to it if the variable has not got the specified flag.
+    
+    Generic version for finite volume-related integration points.
+*/
+template<size_t dim, template<size_t> class SIMPLEX, class Var>
+void writeVariableIf( SIMPLEX<dim>*, size_t sector_or_facet,
+                      size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+ {
+ } // end generic specification
+
+/// write guard for scalar variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t sector_or_facet,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const ScalarVariable& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    if ( ptr->Status(ip,idx) != dont_overwrite )
+      ptr->Store( ip, idx, var );
+ } // end version for scalars
+ 
+
+/// write guard for vector variables
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t sector_or_facet,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const VectorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    VectorVariable<dim> vc;
+    ptr->Read( sector_or_facet, ip, idx, vc );
+    for ( size_t i=0U; i<dim; i++ )
+      // the component gets overwritten
+      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
+           vc.Flag(i) = var.Flag(i);
+           vc(i)      = var[i];
+        }
+    ptr->Store( sector_or_facet, ip, idx, vc );
+ } // end version for vector variables
+
+
+/**
+     Write guard for tensor variables
+    (where only the diagonal values have flags
+     so that only those rows get written where the 
+     flag permits this)
+*/
+template<size_t dim, template<size_t> class SIMPLEX>
+void writeVariableIf( SIMPLEX<dim>* ptr,
+                             size_t sector_or_facet,
+                             size_t ip,
+                             const csmp::Index& idx,
+                             const TensorVariable<dim>& var,
+                             VARIABLE_FLAG dont_overwrite )
+ {
+    TensorVariable<dim> ts;
+    ptr->Read( sector_or_facet, ip, idx, ts );
+    for ( size_t i=0U; i<dim; i++ )
+      if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
+           ts.Flag(i) = var.Flag(i);
+           for ( size_t j=0U; j<dim; j++ )
+             ts(i,j) = var(i,j);
+        }
+    ptr->Store( sector_or_facet, ip, idx, ts );
+ } // end version for tensors
+
+
+
+// inlined methods
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::Nodes() const
+  {
+     return node_vec_.size();
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::InteriorNodes() const
+  {
+     return first_bd_node_;
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::PerimeterNodes() const
+  {
+     return node_vec_.size() - InteriorNodes();
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::Elements() const
+  {
+     return elmt_vec_.size();
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::InteriorElements() const
+  {
+     return elmt_vec_.size() - bd_face_vec_.size();
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t ModelSubDomain<dim,SIMPLEX>::PerimeterElements() const
+  {
+     return bd_face_vec_.size();
+  }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+bool ModelSubDomain<dim,SIMPLEX>::Empty() const
+  {
+     return elmt_vec_.empty();
+  }
+
+
+/// returns how many faces of the target element lie on the subdomain boundary
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFaces( size_t e ) const
+ {
+    assert( e >= InteriorElements() );
+    assert( e < elmt_vec_.size() );
+    return bd_face_vec_[e-InteriorElements()].size();
+ }
+
+/// returns the elements local face number of the n'th face that is on the subdomain boundary
+template<size_t dim, template<size_t> class SIMPLEX>
+size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFace( size_t e, size_t face ) const
+ {
+    assert( e >= InteriorElements() );
+    assert( e < elmt_vec_.size() );
+    assert( face < PerimeterFaces(e) );
+    return static_cast<size_t>(bd_face_vec_[e-InteriorElements()][face]);
+ }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+csmp::Node<dim>*  ModelSubDomain<dim,SIMPLEX>::N( size_t nd ) const
+ { assert( nd < node_vec_.size() ); return node_vec_[nd]; }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+SIMPLEX<dim>*  ModelSubDomain<dim,SIMPLEX>::E( size_t e ) const
+ { assert( e < elmt_vec_.size() ); return elmt_vec_[e]; }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::SimplexVector()
+ { return elmt_vec_; }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::ElementVector()
+ { return elmt_vec_; }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::FaceVector()
+ { return elmt_vec_; }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::InterFaceVector()
+ { return elmt_vec_; }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<Node<dim>*>&  ModelSubDomain<dim,SIMPLEX>::NodeVector()
+  { return node_vec_; }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesBegin() const
+ { return node_vec_.begin(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin() const
+ { return std::next( node_vec_.begin(), InteriorNodes() ); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd() const
+ { return node_vec_.end(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::ElementsBegin() const
+ { return elmt_vec_.begin(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin() const
+ { return std::next( elmt_vec_.begin(), InteriorElements() ); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::ElementsEnd() const
+ { return elmt_vec_.end(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesBegin()
+ { return node_vec_.begin(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin()
+ { return std::next( node_vec_.begin(), InteriorNodes() ); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd()
+ { return node_vec_.end(); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::ElementsBegin()
+ { return elmt_vec_.begin(); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin()
+ { return std::next( elmt_vec_.begin(), InteriorElements() ); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::ElementsEnd()
+ { return elmt_vec_.end(); }
 
 
 
@@ -4191,7 +4560,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                  for ( typename vector<SIMPLEX<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, sc );
-                      avg += sc.Value();
+                      avg += sc();
                    }
                  return avg / static_cast<double64>(elmt_vec_.size());
               }
@@ -4231,7 +4600,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, sc );
                         counter++;
-                        avg += sc.Value();
+                        avg += sc();
                      }
                  return avg / static_cast<double64>(elmt_vec_.size());
               }
@@ -4272,7 +4641,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                  for ( typename vector<csmp::Node<dim>*>::const_iterator
                        it=node_vec_.begin(); it!=node_vec_.end(); it++ ) {
                       (*it)->Read( idx, sc );
-                      avg += sc.Value();
+                      avg += sc();
                    }
                  return avg / static_cast<double64>(node_vec_.size());
               }
@@ -4406,7 +4775,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
                   const size_t nodes((*eit)->Nodes());
                   for ( size_t i=0U; i<nodes; i++ )
                     for ( size_t j=0U; j<dim; j++ )
-                      vc(j) += DN(j,i) * SC[i].Value();
+                      vc(j) += DN(j,i) * SC[i]();
      
                   (*eit)->Store( b_key, vc );
                }
@@ -4427,7 +4796,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
                        vc = 0.;
                        for ( size_t i=0U; i<nodes; i++ )
                          for ( size_t j=0U; j<dim; j++ )
-                           vc(j) += DN(j,i) * SC[i].Value();
+                           vc(j) += DN(j,i) * SC[i]();
 
                        (*eit)->Store( i, b_key, vc );
                     }
@@ -4573,7 +4942,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
 
              for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
                for ( size_t j=0U; j<dim; j++ )
-                 vc(j) += DN(j,i) * SC[i].Value();
+                 vc(j) += DN(j,i) * SC[i]();
 
              // saving the resulting vector<double64>
              (*eit)->Store( b_key, vc );

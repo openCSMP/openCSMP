@@ -130,52 +130,42 @@ TODO: make all the member functions static so this becomes a trait like numeric_
 */
 class ANSYS_ElementSpecifications {
   public:
-    ANSYS_ElementSpecifications();
-    ~ANSYS_ElementSpecifications();
+    ANSYS_ElementSpecifications() = delete;
+    ~ANSYS_ElementSpecifications() = delete;
 
-    CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_Type( int32 ANSYS_finite_element_type, bool isoparametric, uint32 dim ) const;
-    CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32 dim ) const;
-    std::string    CSMP_TypeNameFrom_ANSYS_Type( int32 ANSYS_finite_element_type, bool isoparametric, uint32 dim ) const;
-    std::string    CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32 dim ) const;
+    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_Type( int32 ANSYS_finite_element_type, bool isoparametric, uint32 dim );
+    static CSMP_FEM_TYPE  CSMP_TypeFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32 dim );
+    static std::string    CSMP_TypeNameFrom_ANSYS_Type( int32 ANSYS_finite_element_type, bool isoparametric, uint32 dim );
+    static std::string    CSMP_TypeNameFrom_ANSYS_TypeName( const std::string& ANSYS_finite_element_type, bool isoparametric, uint32 dim );
 
-    int32         ANSYS_Type( const std::string& FEtype ) const;
-    size_t        NodesPerElementOfType( int32 ANSYS_finite_element_type ) const; 
-    size_t        FacesPerElementOfType( int32 ANSYS_finite_element_type ) const; 
-    size_t        NeighborsPerElementOfType( int32 ANSYS_finite_element_type ) const; 
-    size_t        NodesPerFaceForElementOfType( int32 ANSYS_finite_element_type, size_t face ) const; 
-    size_t        FaceNodeForElementOfType( int32 ANSYS_finite_element_type, size_t face, size_t face_node ) const;
+    static int32         ANSYS_Type( const std::string& FEtype );
+    static size_t        NodesPerElementOfType( int32 ANSYS_finite_element_type );
+    static size_t        FacesPerElementOfType( int32 ANSYS_finite_element_type );
+    static size_t        NeighborsPerElementOfType( int32 ANSYS_finite_element_type );
+    static size_t        NodesPerFaceForElementOfType( int32 ANSYS_finite_element_type, size_t face );
+    static size_t        FaceNodeForElementOfType( int32 ANSYS_finite_element_type, size_t face, size_t face_node );
 
-    bool          LineElement( int32 ANSYS_finite_element_type ) const;
-    bool          SurfaceElement( int32 ANSYS_finite_element_type ) const;
-    bool          VolumeElement( int32 ANSYS_finite_element_type ) const;
+    static bool          LineElement( int32 ANSYS_finite_element_type );
+    static bool          SurfaceElement( int32 ANSYS_finite_element_type );
+    static bool          VolumeElement( int32 ANSYS_finite_element_type );
 
-    size_t        MinimumSpatialDimension( const std::string& ANSYS_finite_element_type ) const;
-    bool          LineElement( const std::string& ANSYS_finite_element_type ) const;
-    bool          SurfaceElement( const std::string& ANSYS_finite_element_type ) const;
-    bool          VolumeElement( const std::string& ANSYS_finite_element_type ) const;
+    static size_t        MinimumSpatialDimension( const std::string& ANSYS_finite_element_type );
+    static bool          LineElement( const std::string& ANSYS_finite_element_type );
+    static bool          SurfaceElement( const std::string& ANSYS_finite_element_type );
+    static bool          VolumeElement( const std::string& ANSYS_finite_element_type );
 
-    void          LineElements( std::list<std::string>& line_elements ) const;
-    void          SurfaceElements( std::list<std::string>& surf_elements ) const;
-    void          VolumeElements( std::list<std::string>& vol_elements ) const;
+    static void          LineElements( std::list<std::string>& line_elements );
+    static void          SurfaceElements( std::list<std::string>& surf_elements );
+    static void          VolumeElements( std::list<std::string>& vol_elements );
 
-    size_t        InterpolationOrder( const std::string& etype ) const;
-    size_t        InterpolationOrder( int32 etype ) const;
-    bool          LinearElement( int32 etype ) const;
-    bool          QuadraticElement( int32 etype ) const;
-    bool          CubicElement( int32 etype ) const;
+    static size_t        InterpolationOrder( const std::string& etype );
+    static size_t        InterpolationOrder( int32 etype );
+    static bool          LinearElement( int32 etype );
+    static bool          QuadraticElement( int32 etype );
+    static bool          CubicElement( int32 etype );
 };
 
-
 std::string    parse_ANSYS_BoundaryFlag( int i );
-
-
-
-inline size_t ANSYS_ElementSpecifications::FacesPerElementOfType( int32 ANSYS_finite_element_type ) const
- {
-    // since these are equivalent numbers
-    return NeighborsPerElementOfType( ANSYS_finite_element_type );
-    
- } // end FacesPerElementOfType
 
 } // csmp
 

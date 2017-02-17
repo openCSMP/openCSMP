@@ -6,6 +6,7 @@
 #include "Region.h"
 #include "Model.h"
 #include "CSMP_mathUtilities.h"
+#include "vectorOperations.h"
 #include "Element.h"
 
 using namespace std;
@@ -317,7 +318,7 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
          DISPL_.Resize( e.Nodes()*2U, 1 );
          k = 0, avg = 0.;
          for ( size_t i=0; i<e.Nodes(); i++ ) {
-              for ( size_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i].Value(j);
+              for ( size_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
               avg         += NVAR[i];
            }
          avg /= static_cast<double64>(e.Nodes());
@@ -540,7 +541,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  e.Store( i, pstress_key_, evals_ );
 
                  // mean stress = arithmetic average of stress Eigenvalues
-                 e.Store( i, means_key_, ScalarVariable(PLAIN,evals_.Average()) );
+                 e.Store( i, means_key_, ScalarVariable(PLAIN,valueAverage(evals_)) );
                  
                  // principal strains
                  // -----------------
@@ -589,7 +590,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                      e.N(i)->Store( pstress_key_, evals_ );
 
                      // mean stress = arithmetic average of stress Eigenvalues
-                     e.N(i)->Store( means_key_, ScalarVariable(PLAIN,evals_.Average()) );
+                     e.N(i)->Store( means_key_, ScalarVariable(PLAIN,valueAverage(evals_)) );
 
                      // principal strains
                      // -----------------

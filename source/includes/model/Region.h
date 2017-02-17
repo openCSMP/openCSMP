@@ -184,9 +184,6 @@ class Region : public ModelSubDomain<dim,Element> {
     /// merges supplied region with the current one
     void   Add( const Region& );
 
-    /// sets up FV stencils restricted to region of interest
-    void ConnectFiniteVolumeStencils( const FiniteVolumeStencilManager<dim>& );
-
     /// reestablish nodes based on element container
     void CreateNodePointerVector();
 
@@ -263,15 +260,6 @@ class Region : public ModelSubDomain<dim,Element> {
     /// returns local variables for elements
     LocalVariables ElementVariables() const;
 };
-
-
-template<size_t dim>
-inline IntegrationPointVariables Region<dim>::ElementIntegrationPointVariables() const
-  { return this->pref_.IntegrationPointVariablesAt(ELEMENT); }
-
-template<size_t dim>
-inline LocalVariables Region<dim>::ElementVariables() const
-  { return this->pref_.LocalVariablesAt(ELEMENT); }
 
 } // csmp   
     

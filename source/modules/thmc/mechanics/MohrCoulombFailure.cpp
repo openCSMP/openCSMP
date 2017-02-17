@@ -71,20 +71,20 @@ double64 MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double64
     if ( dim == 2 )
       {
          // 2D case not sure yet, search reference
-         sx  = (2*ts.Value(0,0) - ts.Value(1,1)) / 2.;
-         sy  = (2*ts.Value(1,1) - ts.Value(0,0)) / 2.;
-         J3  = sx * sy + 2.* ts.Value(0,1);
+         sx  = (2*ts(0,0) - ts(1,1)) / 2.;
+         sy  = (2*ts(1,1) - ts(0,0)) / 2.;
+         J3  = sx * sy + 2.* ts(0,1);
       }
     else
       {
-         sx  = (2*ts.Value(0,0) - ts.Value(1,1) - ts.Value(2,2)) / 3.;
-         sy  = (2*ts.Value(1,1) - ts.Value(2,2) - ts.Value(0,0)) / 3.;
-         sz  = (2*ts.Value(2,2) - ts.Value(0,0) - ts.Value(1,1)) / 3.;
+         sx  = (2*ts(0,0) - ts(1,1) - ts(2,2)) / 3.;
+         sy  = (2*ts(1,1) - ts(2,2) - ts(0,0)) / 3.;
+         sz  = (2*ts(2,2) - ts(0,0) - ts(1,1)) / 3.;
          J3  = sx * sy * sz;
-         J3 -= sx * (ts.Value(1,2)*ts.Value(1,2)); 
-         J3 -= sy * (ts.Value(0,2)*ts.Value(0,2)); 
-         J3 -= sz * (ts.Value(0,1)*ts.Value(0,1));
-         J3 += 2. * ts.Value(0,1) * ts.Value(0,2) * ts.Value(1,2);
+         J3 -= sx * (ts(1,2)*ts(1,2)); 
+         J3 -= sy * (ts(0,2)*ts(0,2)); 
+         J3 -= sz * (ts(0,1)*ts(0,1));
+         J3 += 2. * ts(0,1) * ts(0,2) * ts(1,2);
       }
       
     return 1./3. * std::asin( (-3.* std::sqrt(6.)*J3)/(t*t*t) );
@@ -111,8 +111,8 @@ template<size_t dim>
 double64  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts ) 
  {
     // Smith & Griffiths, p. 233
-    if ( dim == 2 ) return (ts.Value(0,0) + ts.Value(1,1)) / std::sqrt(3.);
-    return (ts.Value(0,0) + ts.Value(1,1) + ts.Value(2,2)) / std::sqrt(3.);
+    if ( dim == 2 ) return (ts(0,0) + ts(1,1)) / std::sqrt(3.);
+    return (ts(0,0) + ts(1,1) + ts(2,2)) / std::sqrt(3.);
     
  } // end
 
@@ -125,16 +125,16 @@ double64  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& 
     // Smith & Griffiths, p. 233
     if ( dim == 2 )
       {
-         t = ((ts.Value(0,0)-ts.Value(1,1))*(ts.Value(0,0)-ts.Value(1,1))) + 3.*ts.Value(0,1)*ts.Value(0,1);
+         t = ((ts(0,0)-ts(1,1))*(ts(0,0)-ts(1,1))) + 3.*ts(0,1)*ts(0,1);
          t = std::sqrt(t) / std::sqrt(3.);
       }
     else
       {
          // assuming symmetric stress tensor
-         t  = ((ts.Value(0,0)-ts.Value(1,1))*(ts.Value(0,0)-ts.Value(1,1)));
-         t += ((ts.Value(1,1)-ts.Value(2,2))*(ts.Value(1,1)-ts.Value(2,2)));
-         t += ((ts.Value(2,2)-ts.Value(0,0))*(ts.Value(2,2)-ts.Value(0,0)));
-         t += 6.*ts.Value(0,1)*ts.Value(0,1) + 6.*ts.Value(1,2)*ts.Value(1,2) + 6.*ts.Value(0,2)*ts.Value(0,2);
+         t  = ((ts(0,0)-ts(1,1))*(ts(0,0)-ts(1,1)));
+         t += ((ts(1,1)-ts(2,2))*(ts(1,1)-ts(2,2)));
+         t += ((ts(2,2)-ts(0,0))*(ts(2,2)-ts(0,0)));
+         t += 6.*ts(0,1)*ts(0,1) + 6.*ts(1,2)*ts(1,2) + 6.*ts(0,2)*ts(0,2);
          t  = std::sqrt(t) / std::sqrt(3.);
       }
     

@@ -19,8 +19,8 @@ namespace csmp
         void TypeTest();
         void VariablesTotalTest(size_t);
         void DeletePropertyTest();
-        void NameTest(csmp::Index, const char*);
-        void UnitTest(csmp::Index, const char*);
+        void NameTest( const csmp::Index&, const char* );
+        void UnitTest( const csmp::Index&, const char* );
         void VariablesElementTest(size_t);
         void VariablesRegionTest(size_t);
         void VariablesBoundaryTest(size_t);

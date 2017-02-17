@@ -10,6 +10,7 @@
 #include "Boundary.h"
 #include "PL_Utilities.h"
 #include "SplitBoundary.h"
+#include "variableOperations.h"
 
 
 using namespace std;
@@ -295,7 +296,7 @@ void BoundaryConnector<dim>::GlobalOrientation( const Region<dim>& region, std::
     for ( ++element; element != elementsEnd; ++element )
       {
         elementUnitNormalVector( NV, *(*element) );
-        if( (NV&RNV) < 0. ) 
+        if( dotProduct(NV,RNV) < 0. )
           elementUnitNormalOrientation.insert( make_pair( (*element)->Idx(), INNER ) );
         else
           elementUnitNormalOrientation.insert( make_pair( (*element)->Idx(), OUTER ) );
@@ -315,7 +316,7 @@ bool csmp::BoundaryConnector<dim>::OnOutside( InterFace<dim>& interFace, Face<di
     interFace.UnitNormal( interFaceUnitNormal, INSIDE);
     for( size_t d(0); d < dim; ++d )
       nodeToFace(d) = coNode[d]-bcFace[d];
-    return( (nodeToFace&interFaceUnitNormal) < 0. );
+    return( dotProduct(nodeToFace,interFaceUnitNormal) < 0. );
   }
 
 
@@ -328,7 +329,7 @@ bool csmp::BoundaryConnector<dim>::OnOutside( InterFace<dim>& interFace, InterFa
     interFace.UnitNormal( interFaceUnitNormal, INSIDE);
     for( size_t d(0); d < dim; ++d )
       nodeToInterFace(d) = coNode[d]-bcInterFace[d];
-    return( (nodeToInterFace&interFaceUnitNormal) < 0. );
+    return( dotProduct(nodeToInterFace,interFaceUnitNormal) < 0. );
   }
 
 /// returns whether initial unit normal of interface produces a positive scalar product shared node to element BC
@@ -340,7 +341,7 @@ bool csmp::BoundaryConnector<dim>::OnOutside( InterFace<dim>& interFace, Element
     interFace.UnitNormal( interFaceUnitNormal, INSIDE);
     for( size_t d(0); d < dim; ++d )
       nodeToElement(d) = coNode[d]-bcElement[d];
-    return( (nodeToElement&interFaceUnitNormal) < 0. );
+    return( dotProduct(nodeToElement,interFaceUnitNormal) < 0. );
   }
 
 

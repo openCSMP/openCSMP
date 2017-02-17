@@ -140,7 +140,7 @@ void FEM_Data<csp_type>::OffsetRangeBy( csp_type df )
  } // end OffsetRangeBy 
 
 
-
+/*
 template<typename csp_type>
 void FEM_Data<csp_type>::LogarithmOfValues()
 {
@@ -181,7 +181,7 @@ void FEM_Data<csp_type>::SquareRootOfValues()
        (*it).Sqrt();
     }
 }
-
+*/
 
 template<typename csp_type>
 void  FEM_Data<csp_type>::MinMaxOf( csp_type& tmin, csp_type& tmax ) const

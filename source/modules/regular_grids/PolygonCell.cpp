@@ -2,6 +2,7 @@
 
 #include "MeshingTools.h"
 #include "PolygonGrid.h"
+#include "CSMP_ElementSpecifications.h"
 
 #include "ErrorHandler.h"
 
@@ -289,9 +290,9 @@ template<size_t dim>
 size_t PolygonCell<dim>
 ::GetFaceDim( size_t fid, size_t sfid ) const
 {
-    if( grid_->GetFemSpecs().SurfaceElement( GetFaceType( fid, sfid ) ) )
+    if( CSMP_ElementSpecifications::SurfaceElement( GetFaceType( fid, sfid ) ) )
         return 2U;
-    if( grid_->GetFemSpecs().LineElement( GetFaceType( fid, sfid ) ) )
+    if( CSMP_ElementSpecifications::LineElement( GetFaceType( fid, sfid ) ) )
         return 1U;
     return 0U;
 }
@@ -470,11 +471,11 @@ template<size_t dim>
 size_t PolygonCell<dim>
 ::GetElementDim( size_t eid ) const
 {
-    if( grid_->GetFemSpecs().VolumeElement( elements_[eid].first ) )
+    if( CSMP_ElementSpecifications::VolumeElement( elements_[eid].first ) )
         return 3U;
-    if( grid_->GetFemSpecs().SurfaceElement( elements_[eid].first ) )
+    if( CSMP_ElementSpecifications::SurfaceElement( elements_[eid].first ) )
         return 2U;
-    if( grid_->GetFemSpecs().LineElement( elements_[eid].first ) )
+    if( CSMP_ElementSpecifications::LineElement( elements_[eid].first ) )
         return 1U;
     return 0U;
 }

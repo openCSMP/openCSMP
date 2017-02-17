@@ -410,6 +410,47 @@ Operand<dim>&  Operand<dim>::operator=( const FlaggedArrayVariable& ar )
 
 
 
+
+
+template<size_t dim>
+std::string   Operand<dim>::Name() const { return name_; }
+
+template<size_t dim>
+void          Operand<dim>::Name( const char* s ) { name_ = s; }
+
+template<size_t dim>
+const csmp::Index& Operand<dim>::Key() const { return prop_key_; }
+
+template<size_t dim>
+size_t     Operand<dim>::Index() const { return prop_key_.index; }
+
+template<size_t dim>
+PLACEMENT     Operand<dim>::Placement() const { return prop_key_.place; }
+
+template<size_t dim>
+VARIABLE_TYPE Operand<dim>::Type() const { return prop_key_.type; }
+
+template<size_t dim>
+size_t     Operand<dim>::CalculationOffset() const { return calc_offset_; }
+
+template<size_t dim>
+void          Operand<dim>::CalculationOffset( size_t o ) { calc_offset_=o; }
+
+template<size_t dim>
+void          Operand<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output_ = c; }
+
+template<size_t dim>
+VARIABLE_FLAG    Operand<dim>::OutputCondition() const { return flag_output_; }
+
+template<size_t dim>
+VARIABLE_FLAG    Operand<dim>::EssentialCondition() const { return flag_essential_; }
+
+template<size_t dim>
+void          Operand<dim>::EssentialCondition( VARIABLE_FLAG c ) { flag_essential_ = c; }
+
+
+
+
 /**
 
 Assignments of CSP basic variables to Operands are implemented as
@@ -1524,7 +1565,7 @@ Remember, however, that temporary Operands have no distinct names.
 template<size_t dim>
 bool  Operand<dim>::operator>( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ > val);
+    if ( prop_key_.type == SCALAR ) return (scalar_storage_() > val);
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator>", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
@@ -1535,7 +1576,7 @@ bool  Operand<dim>::operator>( double64 val ) const
 template<size_t dim>
 bool  Operand<dim>::operator<( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ < val);
+    if ( prop_key_.type == SCALAR ) return (scalar_storage_() < val);
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator<", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
@@ -1546,7 +1587,7 @@ bool  Operand<dim>::operator<( double64 val ) const
 template<size_t dim>
 bool  Operand<dim>::operator>=( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ >= val);
+    if ( prop_key_.type == SCALAR ) return (scalar_storage_() >= val);
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator>=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
@@ -1557,7 +1598,7 @@ bool  Operand<dim>::operator>=( double64 val ) const
 template<size_t dim>
 bool  Operand<dim>::operator<=( double64 val ) const
  {
-    if ( prop_key_.type == SCALAR ) return (scalar_storage_ <= val);
+    if ( prop_key_.type == SCALAR ) return (scalar_storage_() <= val);
 
     throw csmp::Exception( FATAL_ERROR, "Operand::operator<=", name_.c_str(),
                            "cannot compare vector, tensor, array or flagged array variable with float variable");
@@ -1858,7 +1899,7 @@ template<size_t dim>
 bool Operand<dim>::IsWithinRange() const
  {
     if ( prop_key_.type == SCALAR )
-      return (scalar_storage_ >= omin && scalar_storage_ <= omax);
+      return (scalar_storage_() >= omin && scalar_storage_() <= omax);
 
     if ( prop_key_.type == VECTOR )
       return (vector_storage_.Length() >= omin && vector_storage_.Length() <= omax);

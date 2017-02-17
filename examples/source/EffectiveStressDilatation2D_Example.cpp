@@ -529,8 +529,8 @@ void computeGasFlowProperties( Model<DIM>& model, const char* target_region )
          (*it)->PropertyValueAtBaryCenter( mu_key, mu );
         
          // calculation
-         double64 ct = phi * cf.Value() + (1 - phi) * cr;
-         double64 K  = k / mu.Value();
+         double64 ct = phi * cf() + (1 - phi) * cr;
+         double64 K  = k / mu();
         
          // store results
          (*it)->Store( ct_key, makeScalar(INIT_GUESS,ct) );

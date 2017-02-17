@@ -77,8 +77,6 @@ void FEM_Data_Test::run()
   // .) COMPARISON OP
   _test( femDataVectorNode3inputVector == femDataVectorNode3inputVectorCopy );
   _test( femDataVectorNode3inputTensorCopy == femDataVectorNode3inputTensor );
-  femDataVectorNode3inputTensor.LogarithmOfValues();
-  _test( !( femDataVectorNode3inputTensorCopy == femDataVectorNode3inputTensor ) );
 
   // .) ACCESS OPS
   bool passed( true );
@@ -92,7 +90,7 @@ void FEM_Data_Test::run()
   vectorVariable( 1 ) = 5.;
   femDataVectorNode3inputVector[ 25 ] = vectorVariable;
   _test( femDataVectorNode3inputVector( 25 ) == vectorVariable );
-  _test( femDataVectorNode3inputVector[ 25 ].Value( 1 ) == 5. );
+  _test( femDataVectorNode3inputVector[ 25 ]( 1 ) == 5. );
 
   // .) RESET
   const size_t simplexCount2( 50 );
@@ -114,37 +112,38 @@ void FEM_Data_Test::run()
   std::vector<ScalarVariable> scalarInputVector;
   for( size_t i = 0; i < simplexCount3; ++i )
   {
-    scalarVariable = (double)(i+1);
+    scalarVariable() = (double)(i+1);
     scalarInputVector.push_back( scalarVariable );
     newAndOld.insert( std::make_pair( i, (simplexCount3-1)-i ) );
   }
   FEM_Data<ScalarVariable> reduceToTestFEM_Data( NODE, scalarInputVector );
   reduceToTestFEM_Data.ReduceTo( newAndOld );
   for( size_t i = 0; i < simplexCount3; ++i )
-    if( reduceToTestFEM_Data[ i ].Value() != (double)(simplexCount3-i) )
+    if( reduceToTestFEM_Data[ i ]() != (double)(simplexCount3-i) )
       passed = false;
   _test( passed );
   passed = true;
 
   // .) LOG
+/*
   _test( femDataTensorElement2.Logarithmitized() == false );
   ScalarVariable scalarVariableLog( PLAIN, 100. );
   std::vector<ScalarVariable> inputVectorPreLog( 3, scalarVariableLog );
   FEM_Data<ScalarVariable> logTest( NODE, inputVectorPreLog );
   logTest.LogarithmOfValues();
   for( size_t i = 0; i < logTest.Size(); ++i )
-    _equal( logTest[i].Value(), 4.60517, 0.01 );
+    _equal( logTest[i](), 4.60517, 0.01 );
   FEM_Data<ScalarVariable> logTest2( NODE, inputVectorPreLog );
   logTest2.DecadicLogarithmOfValues();
   for( size_t i = 0; i < logTest2.Size(); ++i )
-    _equal( logTest2[i].Value(), 2., 0.01 );
+    _equal( logTest2[i](), 2., 0.01 );
 
   // .) SQUARE ROOT
   FEM_Data<ScalarVariable> sqrtTest( NODE, inputVectorPreLog );
   sqrtTest.SquareRootOfValues();
   for( size_t i = 0; i < logTest.Size(); ++i )
-    _equal( sqrtTest[i].Value(), 10., 0.01 );
-
+    _equal( sqrtTest[i](), 10., 0.01 );
+*/
   // .) RANGE OPERATIONS, GIVEMINMAX
   VectorVariable<3U> vectorVariableRange1( DIRICH, 5. );
   VectorVariable<3U> vectorVariableRange2( DIRICH, 15. );

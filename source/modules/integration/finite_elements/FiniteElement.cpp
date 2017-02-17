@@ -82,6 +82,83 @@ FiniteElement&  FiniteElement::operator=( const FiniteElement& e )
 void  FiniteElement::Isoparametric( bool isoparam ) { isoparametric = isoparam; }
 void  FiniteElement::UsesLocalCoordinates( bool uses ) { uses_local_coordinates = uses; }
 
+// inlined methods
+
+bool isTriangularElement( CSMP_FEM_TYPE etype )
+ {
+    // most likely case first for performance
+    if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) return true;
+    if ( etype == LINEAR_TRIANGLE ) return true;
+    if ( etype == LINEAR_TRIANGLE3D ) return true;
+    if ( etype == QUADRATIC_TRIANGLE ) return true;
+    if ( etype == BARYCENTRIC_LINEAR_TRIANGLE ) return true;
+    if ( etype == BARYCENTRIC_QUADRATIC_TRIANGLE ) return true;
+    if ( etype == CUBIC_TRIANGLE ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE ) return true;
+    return false;
+ }
+ 
+bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return true;
+    if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;
+    return false;
+ }
+ 
+bool isLineElement( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_BAR ) return true;
+    if ( etype == ISOPARAMETRIC_QUADRATIC_BAR ) return true;
+    if ( etype == LINEAR_BAR ) return true;
+    if ( etype == QUADRATIC_BAR ) return true;
+    if ( etype == ISOPARAMETRIC_CUBIC_BAR ) return true;
+    if ( etype == CUBIC_BAR ) return true;
+    return false;
+ }
+
+
+void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
+size_t  FiniteElement::CurrentID() const      { return object_id; }
+
+/// initalizing to a value that makes sure that ID does not equal initial element idx
+size_t  FiniteElement::InitialID() { return UINT_MAX; }
+
+
+bool  FiniteElement::Isoparametric() const        { return isoparametric; }
+
+bool  FiniteElement::UsesLocalCoordinates() const { return uses_local_coordinates; }
+
+bool  FiniteElement::IsLineElement()    const     
+ { if ( element_category == LINE )   return true; return false; }
+ 
+bool  FiniteElement::IsSurfaceElement() const     
+ { if ( element_category == SURFACE ) return true; return false; }
+ 
+bool  FiniteElement::IsVolumeElement()  const     
+ { if ( element_category == VOLUME )  return true; return false; }
+
+void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; }
+
+CSMP_FEM_TYPE  FiniteElement::ElementType() const       { return csp_fem_type; }
+
+ size_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
+
+ size_t  FiniteElement::Interpolation()    const { return itp; }
+ size_t  FiniteElement::Dim()              const { return dim; }
+ size_t  FiniteElement::Nodes()            const { return npe; }
+ size_t  FiniteElement::Segments()         const { return spe; }
+ size_t  FiniteElement::Faces()            const { return fpe; }
+ size_t  FiniteElement::Neighbors()        const { return epe; }
+ size_t  FiniteElement::NodesPerFace( size_t ) const { return npf; }
+ size_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
+ size_t  FiniteElement::IntegrationPoints() const { return gpe; }
+
+ double64  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
+ void    FiniteElement::XYZ( size_t i, size_t j, double64 val ) { XY(i,j) = val; }
+
 
 
 void FiniteElement::InstructUser( const char* method ) const

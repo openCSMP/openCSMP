@@ -844,19 +844,19 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
             // recording output range
             amin = std::min( amin, RESULT[i] );
             amax = std::max( amax, RESULT[i] );
-            if ( gref_.N(i)->Status( adv_key ) != DIRICH ) {
+            if ( gref_.N(i)->Status(adv_key) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
                 gref_.N(i)->Read( adv_key, sc );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin )
-                    gref_.N(i)->Store( adv_key, sc=RESULT[i] );
+                    gref_.N(i)->Store( adv_key, makeScalar(sc.Flag(),RESULT[i]) );
                 else {
                     cout <<"\nNodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults: value: "<< RESULT[i] <<" versus range from PropertyDatabase: "<< rmin <<"-"<< rmax << endl;
                     if ( RESULT[i] > rmax )
-                        gref_.N(i)->Store( adv_key, sc=rmax );
+                        gref_.N(i)->Store( adv_key, makeScalar( gref_.N(i)->Status(adv_key), rmax) );
                     else if ( RESULT[i] < rmin )
-                        gref_.N(i)->Store( adv_key, sc=rmin );
+                        gref_.N(i)->Store( adv_key, makeScalar( gref_.N(i)->Status(adv_key), rmin) );
                     error_counter++;
                 }
             }
@@ -988,24 +988,24 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
 	         // recording output range
 	         amin = std::min( amin, RESULT[i] );
 	         amax = std::max( amax, RESULT[i] );
-		       if ( gref_.N(i)->Status( adv1_key ) != DIRICH ) {
+		       if ( gref_.N(i)->Status(adv1_key) != DIRICH ) {
   		         // reading the pre-existing value and calculating the maximum change per node
   		         gref_.N(i)->Read( adv1_key, sc );
-  		         difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+  		         difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
   		         // result checking
   		         if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
-  		              gref_.N(i)->Store( adv1_key, sc=RESULT[i] );
-  		              gref_.N(i)->Store( adv2_key, sc=1.-RESULT[i] );
+  		              gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),RESULT[i]) );
+  		              gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),1.-RESULT[i]) );
   		           }
   		         else {
   		              cout <<"\nNodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults: value: "<< RESULT[i] <<" versus range from PropertyDatabase: "<< rmin <<"-"<< rmax << endl;
   		              if ( RESULT[i] > rmax ) {                           
-  		                   gref_.N(i)->Store( adv1_key, sc=rmax );
-  		                   gref_.N(i)->Store( adv2_key, sc=1.-rmax );
+  		                   gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),rmax) );
+  		                   gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),1.-rmax) );
   		                }
   		              else if ( RESULT[i] < rmin ) {                          
-  		                   gref_.N(i)->Store( adv1_key, sc=rmin );
-  		                   gref_.N(i)->Store( adv2_key, sc=1.-rmin );
+  		                   gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),rmin) );
+  		                   gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),1.-rmin) );
   		                }
   		              error_counter++;
   		           }
@@ -1023,21 +1023,21 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
           if ( gref_.N(i)->Status( adv2_key ) != DIRICH ) {
              // reading the pre-existing value and calculating the maximum change per node
              gref_.N(i)->Read( adv2_key, sc );
-             difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+             difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
              // result checking
              if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
-                  gref_.N(i)->Store( adv2_key, sc=RESULT[i] );
-                  gref_.N(i)->Store( adv1_key, sc=1.-RESULT[i] );
+                  gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),RESULT[i]) );
+                  gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),1.-RESULT[i]) );
              }
              else {
                  cout <<"\nvalue: "<< RESULT[i] <<" versus range from PropertyDatabase: "<< rmin <<"-"<< rmax << endl;
                  if ( RESULT[i] > rmax ) {
-                      gref_.N(i)->Store( adv2_key, sc=rmax );
-                      gref_.N(i)->Store( adv1_key, sc=1.-rmax );
+                      gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),rmax) );
+                      gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),1.-rmax) );
                  }
                  else if ( RESULT[i] < rmin ) {
-                      gref_.N(i)->Store( adv2_key, sc=rmin );
-                      gref_.N(i)->Store( adv1_key, sc=1.-rmin );
+                      gref_.N(i)->Store( adv2_key, makeScalar(gref_.N(i)->Status(adv2_key),rmin) );
+                      gref_.N(i)->Store( adv1_key, makeScalar(gref_.N(i)->Status(adv1_key),1.-rmin) );
                      }
                    error_counter++;
                  }
@@ -1063,6 +1063,55 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
 
  } // end OutputResults
 
+
+
+
+
+
+  /**
+
+  Save results for saturation in order to use it on the next nonlinear
+  iteration step. Updates saturation water as well! - by default phase1 = wetting phase
+  multiphase version - assumes range to be between 0 and 1
+ 
+  */
+
+ template<size_t dim>
+ int32 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
+                                                                                    size_t result_phase,
+                                                                                    const csmp::Index& adv1_key,
+                                                                                    const csmp::Index& adv2_key,
+                                                                                    bool show_range,
+                                                                                    std::vector<double64>& DS,
+                                                                                    std::vector<double64>& SN)
+   {
+       assert( result_phase >  0 );
+       assert( result_phase <= 2 );
+       double64       rmin, rmax;
+       ScalarVariable  sc;
+       if ( result_phase == 1U ) {
+           p.RangeOf( p.Name(adv1_key), rmin, rmax );
+           for ( size_t i=0; i<RESULT.size(); i++ )
+           {
+               // recording output range
+               gref_.N(i)->Read( adv1_key, sc );
+               SN[i]=sc();
+               DS[i]=RESULT[i];
+           }
+       }
+       else if ( result_phase == 2U ) {
+           p.RangeOf( p.Name(adv2_key), rmin, rmax );
+           for ( size_t i=0; i<RESULT.size(); i++ )
+           {
+               // recording output range
+               gref_.N(i)->Read( adv2_key, sc );
+               SN[i]=sc();
+               DS[i]=RESULT[i];
+           }
+       }
+       return 0;
+
+  } // end OutputResults_NonlinearNewtonRaphson
 
 
 
@@ -1092,7 +1141,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( con
            if ( gref_.N(i)->Status( adv_key ) != DIRICH ) {
              // reading the pre-existing value and calculating the maximum change per node
              gref_.N(i)->Read( adv_key, sc );
-             difference_to_last_output += (RESULT[i]-sc.Value())*(RESULT[i]-sc.Value());
+             difference_to_last_output += (RESULT[i]-sc())*(RESULT[i]-sc());
              // result checking
              if ( RESULT[i] <= rmax && RESULT[i] >= rmin )
                gref_.N(i)->Store( adv_key, sc=RESULT[i] );
@@ -1124,59 +1173,6 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( con
     return sqrt(difference_to_last_output) / std::max( amax - amin, 1.0e-20 );
 
  } // end OutputResultsWithL2NormRes
-
-
-
-
-  /**
-
-  Save results for saturation in order to use it on the next nonlinear
-  iteration step. Updates saturation water as well! - by default phase1 = wetting phase
-  multiphase version - assumes range to be between 0 and 1
-  
-  JM 2013
-  @todo Dear SKM, please use svn blame to find out who has created certain functions and contact them directly rather than leaving "blameful" comments on the code itself for everyone to see!!!
-  this function was not created by JM 2013.
-
-  */
-
- template<size_t dim>
- int32 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
-                                                                      size_t result_phase,
-                                                                      const csmp::Index& adv1_key,
-                                                                      const csmp::Index& adv2_key,
-                                                                      bool show_range,
-                                                                      std::vector<double64>& DS,
-                                                                      std::vector<double64>& SN)
-   {
-       assert( result_phase >  0 );
-       assert( result_phase <= 2 );
-       double64       rmin, rmax;
-       ScalarVariable  sc;
-       if ( result_phase == 1U ) {
-           p.RangeOf( p.Name(adv1_key), rmin, rmax );
-           for ( size_t i=0; i<RESULT.size(); i++ )
-           {
-               // recording output range
-               gref_.N(i)->Read( adv1_key, sc );
-               SN[i]=sc.Value();
-               DS[i]=RESULT[i];
-           }
-       }
-       else if ( result_phase == 2U ) {
-           p.RangeOf( p.Name(adv2_key), rmin, rmax );
-           for ( size_t i=0; i<RESULT.size(); i++ )
-           {
-               // recording output range
-               gref_.N(i)->Read( adv2_key, sc );
-               SN[i]=sc.Value();
-               DS[i]=RESULT[i];
-           }
-       }
-       return 0;
-
-  } // end OutputResults_NonlinearNewtonRaphson
-
 
 
 
@@ -1218,7 +1214,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRa
               amax = std::max( amax, RESULT[i] );
               if ( gref_.N(i)->Status( adv1_key ) != DIRICH ) {
                   // reading the pre-existing value and calculating the maximum change per node
-                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                   // result checking
                   if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                       gref_.N(i)->Store( adv1_key, sc=RESULT[i] );
@@ -1247,7 +1243,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRa
               amax = std::max( amax, RESULT[i] );
               if ( gref_.N(i)->Status( adv2_key ) != DIRICH ) {
                   // reading the pre-existing value and calculating the maximum change per node
-                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+                  difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                   // result checking
                   if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                       gref_.N(i)->Store( adv2_key, sc=RESULT[i] );
@@ -1275,6 +1271,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRa
       return difference_to_last_output / std::max( amax - amin, 1.0e-20 );
 
  } // end OutputResults_NonlinearNewtonRaphson
+
 
 
 

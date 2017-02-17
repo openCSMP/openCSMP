@@ -6,6 +6,36 @@ using namespace std;
 
 namespace csmp {
 
+double64 CubicSpline::Value( double64 x ) const
+ {
+    return splint( xa_, ya_, y2a_, x );
+ } 
+
+/// two point derivative about x(x-1% of range,x+1% of range
+double64 CubicSpline::Derivative( double64 x ) const
+ {
+    return (Value(x+x_range_/100.)-Value(x-x_range_/100.)) / (x_range_/50.);
+ } 
+ 
+
+double64 CubicSpline::MaxDerivative() const
+ {
+    return (*std::max_element( y2a_.begin(), y2a_.end() ));
+ } 
+
+
+double64 CubicSpline::Range_x() const
+ {
+    return x_range_;
+ } 
+
+
+double64 CubicSpline::Range_fx() const
+ {
+    return y_range_;
+ } 
+ 
+
 // function prototypes
 void spline( const std::vector<double64>& x, // x values    (0..n-1) 
              const std::vector<double64>& y, // f(x) values (0..n-1)

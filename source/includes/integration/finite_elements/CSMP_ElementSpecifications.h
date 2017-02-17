@@ -16,47 +16,45 @@ declared in file "FiniteElment.h"
 @author S.K. Matthai
 @author R. Mansipov
 @date 2003,2015
+@note SKM 9/2/17 made static singleton class
 
 Used to deduce element characteristics prior to the construction of CSMP Element classes.
-
-TODO: make all the member functions static so this becomes a trait like numeric_limits<>()
 
 */
 class CSMP_ElementSpecifications {
   public:
-    CSMP_ElementSpecifications();
-    ~CSMP_ElementSpecifications();
+    CSMP_ElementSpecifications() = delete;
+    ~CSMP_ElementSpecifications() = delete;
 
-    CSMP_FEM_TYPE CSMP_Type( const std::string& FEtype ) const;
-    std::string   CSMP_TypeName( int32 CSMP_finite_element_type ) const;
+    static CSMP_FEM_TYPE CSMP_Type( const std::string& FEtype );
+    static std::string   CSMP_TypeName( int32 CSMP_finite_element_type );
 
-    size_t        InterpolationOrder( const std::string& etype ) const;
-    size_t        InterpolationOrder( int32 etype ) const;
-    bool          LinearElement( int32 etype ) const;
-    bool          QuadraticElement( int32 etype ) const;
-    bool          CubicElement( int32 etype ) const;
+    static size_t        InterpolationOrder( const std::string& etype );
+    static size_t        InterpolationOrder( int32 etype );
+    static bool          LinearElement( int32 etype );
+    static bool          QuadraticElement( int32 etype );
+    static bool          CubicElement( int32 etype );
 
-    size_t        MinimumSpatialDimension( const std::string& CSMP_finite_element_type ) const;
-    size_t        MinimumSpatialDimension( int32 CSMP_finite_element_type ) const;
+    static size_t        MinimumSpatialDimension( const std::string& CSMP_finite_element_type );
+    static size_t        MinimumSpatialDimension( int32 CSMP_finite_element_type );
 
-    bool          LineElement( int32 CSMP_finite_element_type ) const;
-    bool          SurfaceElement( int32 CSMP_finite_element_type ) const;
-    bool          VolumeElement( int32 CSMP_finite_element_type ) const;
+    static bool          LineElement( int32 CSMP_finite_element_type );
+    static bool          SurfaceElement( int32 CSMP_finite_element_type );
+    static bool          VolumeElement( int32 CSMP_finite_element_type );
 
-    bool          LineElement( const std::string& CSMP_finite_element_type ) const;
-    bool          SurfaceElement( const std::string& CSMP_finite_element_type ) const;
-    bool          VolumeElement( const std::string& CSMP_finite_element_type ) const;
+    static bool          LineElement( const std::string& CSMP_finite_element_type );
+    static bool          SurfaceElement( const std::string& CSMP_finite_element_type );
+    static bool          VolumeElement( const std::string& CSMP_finite_element_type );
 
-    void          LineElements( std::list<std::string>& line_elements ) const;
-    void          SurfaceElements( std::list<std::string>& surf_elements ) const;
-    void          VolumeElements( std::list<std::string>& vol_elements ) const;
+    static void          LineElements( std::list<std::string>& line_elements );
+    static void          SurfaceElements( std::list<std::string>& surf_elements );
+    static void          VolumeElements( std::list<std::string>& vol_elements );
 
-    size_t        NodesPerElementOfType( int32 CSMP_finite_element_type ) const;
-    size_t        FacesPerElementOfType( int32 CSMP_finite_element_type ) const;
-    size_t        NeighborsPerElementOfType( int32 CSMP_finite_element_type ) const;
-    size_t        NodesPerFaceForElementOfType( int32 CSMP_finite_element_type, size_t face ) const;
-    size_t        FaceNodeForElementOfType( int32 CSMP_finite_element_type, size_t face, size_t face_node ) const;
-
+    static size_t        NodesPerElementOfType( int32 CSMP_finite_element_type );
+    static size_t        FacesPerElementOfType( int32 CSMP_finite_element_type );
+    static size_t        NeighborsPerElementOfType( int32 CSMP_finite_element_type );
+    static size_t        NodesPerFaceForElementOfType( int32 CSMP_finite_element_type, size_t face );
+    static size_t        FaceNodeForElementOfType( int32 CSMP_finite_element_type, size_t face, size_t face_node );
 };
 
 } // csmp

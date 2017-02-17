@@ -476,15 +476,14 @@ void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>&
       el.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );
   }
 
-  DenseMatrix<DM_MIN> XYZmatr;
-  el.CoordinateMatrix(XYZmatr);
+  el.CoordinateMatrix();
 
   global_c.assign( dim, 0.0);
 
   // transform local c's to global c's
   for (size_t i = 0; i<el.Nodes(); i++)
       for (size_t j = 0; j<dim; j++){
-        global_c[j] += XYZmatr(i,j)*temp[i];
+        global_c[j] += el.FE()->XY(i,j) * temp[i];
   }
 }
 

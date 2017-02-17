@@ -63,14 +63,13 @@ size_t FiniteVolumeTraits<1U,SIMPLEX>::IntegrationPointsPerFacet() const
 // MAPPING BETWEEN LOCAL AND GLOBAL COORDINATES
 
 template<template<size_t> class SIMPLEX>
-Point<1U>  FiniteVolumeTraits<1U,SIMPLEX>::RstToXYZ( const Point<1U>& rst ) const
+Point<1U> FiniteVolumeTraits<1U,SIMPLEX>::RstToXYZ( const Point<1U>& rst ) const
 {
    const SIMPLEX<1U>* e( static_cast<const SIMPLEX<1U>*>(this) );
    N_At( rst );
-   e->CoordinateMatrix();
    double64  sum(0.);
    for ( size_t i=0; i<e->Nodes(); i++ )
-     sum += e->FE()->NRST[i] * e->FE()->XYZ(i,0);
+     sum += e->FE()->NRST[i] * e->N(i)->x();
 
    return Point<1U>(sum);
 }
@@ -261,7 +260,7 @@ void  FiniteVolumeTraits<1U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
 
 template<template<size_t> class SIMPLEX>
 double64  FiniteVolumeTraits<1U,SIMPLEX>::FacetIntegral( size_t iFacet,
-                                                            const csmp::Index& prop_key ) const
+                                                         const csmp::Index& prop_key ) const
  {
     const SIMPLEX<1U>* e( static_cast<const SIMPLEX<1U>*>(this) );
     assert( iFacet < e->FV_Stencil()->Facets());
@@ -273,9 +272,11 @@ double64  FiniteVolumeTraits<1U,SIMPLEX>::FacetIntegral( size_t iFacet,
     return PropertyValueAtFacetIntegrationPoint( iFacet, 0U, prop_key );
  }
 
+
+
 template<template<size_t> class SIMPLEX>
 double64  FiniteVolumeTraits<1U,SIMPLEX>::SectorIntegral( size_t iSector,
-                                                      const csmp::Index& prop_key ) const
+                                                          const csmp::Index& prop_key ) const
  {
     const SIMPLEX<1U>* e( static_cast<const SIMPLEX<1U>*>(this) );
     assert( iSector < e->FV_Stencil()->Sectors());
@@ -402,7 +403,7 @@ double64  FiniteVolumeTraits<1U,SIMPLEX>::ParametricFacetArea( size_t ) const
  }
 
 template<template<size_t> class SIMPLEX>
-const Point<1U>  FiniteVolumeTraits<1U,SIMPLEX>::ParametricFacetNormal( size_t ) const
+Point<1U>  FiniteVolumeTraits<1U,SIMPLEX>::ParametricFacetNormal( size_t ) const
 {
    return Point<1U>(1.);
 }

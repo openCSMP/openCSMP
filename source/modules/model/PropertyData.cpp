@@ -122,6 +122,11 @@ PropertyData::~PropertyData()
 
 // ACCESSORS AND MUTATORS
 
+void PropertyData::PushBack( VARIABLE_FLAG flag ) { flags_.push_back( flag ); }
+
+void PropertyData::PushBack( double64 val ) { data_.push_back( val ); }
+
+
 /// scalars
 VARIABLE_FLAG& PropertyData::Flag( size_t nth_value ) {
      assert( Type() == SCALAR );
@@ -570,7 +575,7 @@ bool  PropertyData::operator==( const PropertyData& d ) const
 void pushBack( PropertyData& data, const ScalarVariable& sc ) {
     assert( data.Type() == SCALAR );
     data.PushBack( sc.Flag() );
-    data.PushBack( sc.Value() );
+    data.PushBack( sc() );
  }
   
   
@@ -626,7 +631,7 @@ template<>
 void store( PropertyData& data, size_t position, const ScalarVariable& sc ) {
     assert( data.Type() == SCALAR );
     data.Flag( position )  = sc.Flag();
-    data.Value( position ) = sc.Value();
+    data.Value( position ) = sc();
  }
 
 template<>

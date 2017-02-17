@@ -66,13 +66,13 @@ Point<2U>  FiniteVolumeTraits<2U,SIMPLEX>::RstToXYZ( const Point<2U>& rst ) cons
 {
    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
    N_At( rst );
-   e->CoordinateMatrix();
 
    double64 sumx(0.), sumy(0.);
    for ( size_t i=0U; i<e->Nodes(); i++ ) {
-       sumx += e->FE()->NRST[i] * e->FE()->XYZ(i,0);
-       sumy += e->FE()->NRST[i] * e->FE()->XYZ(i,1);
+       sumx += e->FE()->NRST[i] * e->N(i)->x();
+       sumy += e->FE()->NRST[i] * e->N(i)->y();
     }
+   // standard RVO
    return Point<2U>(sumx,sumy);
 }
 
@@ -389,7 +389,7 @@ double64  FiniteVolumeTraits<2U,SIMPLEX>::ProjectionOnFacetNormal(
 
 template<template<size_t> class SIMPLEX>
 double64  FiniteVolumeTraits<2U,SIMPLEX>::ProjectionOnFacetNormal( size_t iFacet,
-                                                                       const csmp::Index& prop_key ) const
+                                                                   const csmp::Index& prop_key ) const
 {
     const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
     assert( iFacet < e->FV_Stencil()->Facets());
@@ -554,7 +554,7 @@ double64  FiniteVolumeTraits<2U,SIMPLEX>::ParametricFacetArea( size_t iFacet ) c
 
 
 template<template<size_t> class SIMPLEX>
-const Point<2U>&  FiniteVolumeTraits<2U,SIMPLEX>::ParametricFacetNormal( size_t iFacet ) const
+Point<2U>  FiniteVolumeTraits<2U,SIMPLEX>::ParametricFacetNormal( size_t iFacet ) const
 {
    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
    assert( iFacet < e->FV_Stencil()->Facets());

@@ -129,8 +129,7 @@ vector<double64> crossProduct( const vector<double64>& vector1, const vector<dou
 
 
 /// 3x3 cross product
-
-inline vector<double64> crossProduct3by3(const double64& f1_0, const double64& f1_1, const double64& f1_2, const double64& f2_0, const double64& f2_1, const double64& f2_2)
+vector<double64> crossProduct3by3(const double64& f1_0, const double64& f1_1, const double64& f1_2, const double64& f2_0, const double64& f2_1, const double64& f2_2)
 {
 	vector<double64> vecReturn(3U);
 		

@@ -116,7 +116,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
       for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            // get dN = interpolation function derivate value at integration point
-           double64 ip_value =  oper_eprop.Value(); // fluid density
+           double64 ip_value =  oper_eprop(); // fluid density
            ip_value   *= -gravity;
            ip_value   *=  e.WeightAtIntegrationPoint(i);
            ip_value   *=  e.dN_AtIntegrationPoint( DN, i ); // det_J
@@ -133,9 +133,9 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
            const double64 detJ = e.dN_AtIntegrationPoint( DN, i );
          
            // interpolating Operand value to integration point
-           double64  ip_value(IPOL[0] * oper_nprop[0].Value());
+           double64  ip_value(IPOL[0] * oper_nprop[0]());
            for ( size_t j=1; j<e.Nodes(); j++ )
-             ip_value  += IPOL[j] * oper_nprop[j].Value();
+             ip_value  += IPOL[j] * oper_nprop[j]();
 
            // assembling contribution to right-hand vector
            ip_value *= -gravity;
@@ -159,8 +159,8 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::MultiplyWithTimeFactor( double6
     for ( typename vector<double64>::iterator 
           it=MathOperatorRHS<dim>::RHS.begin(); it!=MathOperatorRHS<dim>::RHS.end(); it++ ) {
           // not bad (no overshoot) 
-         (*it) *= mtrl2_prop.Value();
-         (*it) -= mtrl1_prop.Value() * dt;
+         (*it) *= mtrl2_prop();
+         (*it) -= mtrl1_prop() * dt;
       }
 
  } // end 

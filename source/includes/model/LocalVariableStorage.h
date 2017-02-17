@@ -70,8 +70,9 @@ class LocalVariableStorage {
     LocalVariableStorage( const LocalVariables& lv );
     LocalVariableStorage( const LocalVariables& lv, const IntegrationPointVariables& iv );
     LocalVariableStorage( const LocalVariableStorage& );
-    LocalVariableStorage( LocalVariableStorage&& );
+    LocalVariableStorage( LocalVariableStorage&& ) = default;
     LocalVariableStorage& operator=( const LocalVariableStorage& );
+    LocalVariableStorage& operator=( LocalVariableStorage&& ) = default;
 
     // size ops
     void            ResizePropertyStorage   ( const LocalVariables& lv );
@@ -168,8 +169,8 @@ class LocalVariableStorage {
             vectors            (0U),
             tensors            (0U),
             arrays             (0U),
-            arrayLength        (0U),
             flaggedArrays      (0U),
+            arrayLength        (0U),
             flaggedArrayLength (0U)
         {}
 
@@ -180,8 +181,8 @@ class LocalVariableStorage {
             vectors             ( d.vectors ),
             tensors             ( d.tensors ),
             arrays              ( d.arrays ),
-            arrayLength         ( d.arrayLength ),
             flaggedArrays       ( d.flaggedArrays ),
+            arrayLength         ( d.arrayLength ),
             flaggedArrayLength  ( d.flaggedArrayLength )
         {}
 
@@ -193,35 +194,36 @@ class LocalVariableStorage {
             vectors{ d.vectors },
             tensors{ d.tensors },
             arrays{ d.arrays },
-            arrayLength{ d.arrayLength },
             flaggedArrays{ d.flaggedArrays },
+            arrayLength{ d.arrayLength },
             flaggedArrayLength{ d.flaggedArrayLength }
         {}
 
         Data& operator=( const Data& d )
           {
             if ( &d != this ) {
+                flags               = d.flags;
+                data                = d.data;
                 scalars             = d.scalars;
                 vectors             = d.vectors;
                 tensors             = d.tensors;
                 arrays              = d.arrays;
-                arrayLength         = d.arrayLength;
                 flaggedArrays       = d.flaggedArrays;
+                arrayLength         = d.arrayLength;
                 flaggedArrayLength  = d.flaggedArrayLength;
-                flags               = d.flags;
-                data                = d.data;
              }
             return *this;
          }
 
         // local variable state
-        size_t  scalars,
-                vectors,
-                tensors,
-                arrays,
-                flaggedArrays;
-        size_t  arrayLength,
-                flaggedArrayLength;
+        size_t  scalars,            ///< scalar variables stored at the site this policy is associated with
+                vectors,            ///< vector variables at this site
+                tensors,            ///< tensor variables at this site
+                arrays,             ///< array variables at this site
+                flaggedArrays;      ///< flagged array variables at this site
+        
+        size_t  arrayLength,        ///< length of array variables associated with this site @todo only one size?
+                flaggedArrayLength; ///< length of flagged array variables @todo only one size?
 #endif
       };
 

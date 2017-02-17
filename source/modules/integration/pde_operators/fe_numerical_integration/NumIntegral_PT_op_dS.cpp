@@ -52,7 +52,7 @@ void NumIntegral_PT_op_dS<dim>::GetOperands( Face<dim>& f )
   // scalar, multiply negative since positive assumed compressive and unit normal of faces pointing out
   f.Read( this->MaterialOperandKey(), scalar_ );
   if( scalar_.Flag() != NEUMANN )
-    scalar_ = 0.;
+    scalar_() = 0.;
   f.UnitNormal(oper_);
   oper_ *= -scalar_();
 }

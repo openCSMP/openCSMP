@@ -11,6 +11,7 @@
 #include "FlaggedArrayVariable.h"
 #include "ErrorHandler.h"
 #include "TextFileInterface.h"
+#include "vectorOperations.h"
 
 namespace csmp {
 
@@ -374,7 +375,7 @@ void EclipseInterface<dim>
     const size_t data_size( vector_data.size() );
     std::vector<csmp::ScalarVariable> scalar_data( data_size, csmp::ScalarVariable(csmp::PLAIN,0.0) );
     for( size_t i = 0; i < data_size; i++ )
-        scalar_data[ i ] = vector_data[ i ].Average();
+        scalar_data[ i ] = valueAverage( vector_data[i] );
     // Add scalar data to vset
     grid.WritePropertyToVSet(vset,scalar_data,property_name,place);
     return;
@@ -937,7 +938,7 @@ void EclipseInterface<dim>::SaveVectorProperty( size_t component,
         vector_data.resize( data_size, csmp::VectorVariable<dim>( csmp::PLAIN, 0.0 ) );
     for( size_t i = 0; i < data_size; i++ )
         for( size_t j = component; j < 3U; j++ )
-            vector_data[ i ]( j ) = scalar_data[ i ].Value();
+            vector_data[ i ]( j ) = scalar_data[ i ]();
  }
 
 
@@ -951,7 +952,7 @@ void EclipseInterface<dim>::SaveTensorProperty( size_t component,
         tensor_data.resize( data_size, csmp::TensorVariable<dim>( csmp::PLAIN, 0.0 ) );
     for( size_t i = 0; i < data_size; i++ )
         for( size_t j = component; j < 3U; j++ )
-            tensor_data[ i ]( j, j ) = scalar_data[ i ].Value();
+            tensor_data[ i ]( j, j ) = scalar_data[ i ]();
  }
 
 template<size_t dim>

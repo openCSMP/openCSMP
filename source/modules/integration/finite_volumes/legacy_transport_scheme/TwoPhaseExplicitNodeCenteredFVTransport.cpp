@@ -379,7 +379,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
            if ( this->gref_.N(i)->Status( adv_key ) != DIRICH ) {
              // reading the pre-existing value and calculating the maximum change per node
              this->gref_.N(i)->Read( adv_key, sc );
-             difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+             difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
              // result checking
              if ( RESULT[i] <= rmax && RESULT[i] >= rmin )
                this->gref_.N(i)->Store( adv_key, sc=RESULT[i] );
@@ -437,7 +437,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
               if ( this->gref_.N(i)->Status( adv2_key ) != DIRICH ) {
                 // reading the pre-existing value and calculating the maximum change per node
                 this->gref_.N(i)->Read( adv2_key, sc );
-                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc.Value()) );
+                difference_to_last_output = std::max( difference_to_last_output, fabs(RESULT[i]-sc()) );
                 // result checking
                 if ( RESULT[i] <= rmax && RESULT[i] >= rmin ) {
                      this->gref_.N(i)->Store( adv2_key, sc=RESULT[i] );

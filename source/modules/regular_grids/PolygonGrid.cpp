@@ -346,8 +346,7 @@ template<size_t dim>
 PolygonGrid<dim>::PolygonGrid( const PolygonGrid<dim>& pg )
 :nodes_     ( pg.nodes_     ),
  faces_     ( pg.faces_     ),
- elements_  ( pg.elements_  ),
- fem_specs_ ( pg.fem_specs_ )
+ elements_  ( pg.elements_  )
 {
 }
 
@@ -359,7 +358,6 @@ PolygonGrid<dim>& PolygonGrid<dim>::operator=( const PolygonGrid<dim>& pg )
         nodes_      = pg.nodes_;
         faces_      = pg.faces_;
         elements_   = pg.elements_;
-        fem_specs_  = pg.fem_specs_;
     }
     return *this;
 }
@@ -379,12 +377,6 @@ PolygonGrid<dim>::~PolygonGrid()
     const size_t num_elements( elements_.size() );
     for(size_t i =0; i<num_elements; ++i)
         delete elements_[i];
-}
-
-template<size_t dim>
-const CSMP_ElementSpecifications& PolygonGrid<dim>::GetFemSpecs() const
-{
-    return fem_specs_;
 }
 
 template<size_t dim>
@@ -435,8 +427,7 @@ PolygonGridManager<dim>::PolygonGridManager()
 
 template<size_t dim>
 PolygonGridManager<dim>::PolygonGridManager( const PolygonGridManager<dim>& pgm )
-: fem_specs_ ( pgm.fem_specs_  ),
-  points_    ( pgm.points_     ),
+: points_    ( pgm.points_     ),
   grid_nodes_( pgm.grid_nodes_ )
 {
 }
@@ -447,7 +438,6 @@ PolygonGridManager<dim>& PolygonGridManager<dim>::operator=( const PolygonGridMa
 {
     if( &pgm != this )
       {
-          fem_specs_  = pgm.fem_specs_;
           points_     = pgm.points_;
           grid_nodes_ = pgm.grid_nodes_;
       }
@@ -483,12 +473,6 @@ void PolygonGridManager<dim>::Clear()
     points_.clear();
 }
 
-
-template<size_t dim>
-const CSMP_ElementSpecifications& PolygonGridManager<dim>::GetFemSpecs() const
-{
-    return fem_specs_;
-}
 
 template<size_t dim>
 size_t PolygonGridManager<dim>::GetNumNodes() const

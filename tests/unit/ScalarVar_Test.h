@@ -31,12 +31,7 @@ class ScalarVariable_Test : public Test
     void Less_Than_Or_Equal_To_Operator();
     void Greater_Than_Or_Equal_To_Operator();
     void Equality_Operator();
-    void Average_Function();
-    void Zero_Function();
     void IsWithinRange_Function();
-    void Sqrt_Function();
-    void Ln_Function();
-    void Log10_Function();
 	
   private:
     double64 fTolerance;

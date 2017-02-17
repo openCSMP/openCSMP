@@ -34,6 +34,21 @@ ComputationalSettings::~ComputationalSettings()
 
 
 
+
+std::set<double64>::const_iterator ComputationalSettings::OutputTimesBegin() const
+ { return output_times_.begin(); }
+ 
+std::set<double64>::const_iterator ComputationalSettings::OutputTimesEnd() const
+ { return output_times_.end(); }
+
+std::set<double64>::const_iterator ComputationalSettings::MonitorTimesBegin() const
+ { return monitor_times_.begin(); }
+
+std::set<double64>::const_iterator ComputationalSettings::MonitorTimesEnd() const
+ { return monitor_times_.end(); }
+
+
+
 /**
 
 Changes the supplied arguments pf- and advection multiplier to reflect

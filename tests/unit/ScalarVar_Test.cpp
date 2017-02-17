@@ -39,12 +39,7 @@ void ScalarVariable_Test::run()
 	Less_Than_Or_Equal_To_Operator();
 	Greater_Than_Or_Equal_To_Operator();
 	Equality_Operator();
-	Average_Function();
-	Zero_Function();
 	IsWithinRange_Function();
-	Sqrt_Function();
-	Ln_Function();
-	Log10_Function();
 }
 
 void ScalarVariable_Test::Assigment_Operator()
@@ -54,7 +49,7 @@ void ScalarVariable_Test::Assigment_Operator()
    
    //Testing for scalar assignment
    scalar2 = scalar1;
-   _equal( scalar2.Value(), scalar1.Value(), fTolerance);
+   _equal( scalar2(), scalar1(), fTolerance);
    _equal( scalar2.Flag(), scalar1.Flag(), fTolerance);
 
 }
@@ -67,16 +62,16 @@ void ScalarVariable_Test::Addition_Operator()
    
    //Testing for constant_value addition
    scalar3 = scalar1 + 10.0;
-   _equal( scalar3.Value(), 15., fTolerance);
+   _equal( scalar3(), 15., fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
    scalar3 = 10.0 + scalar1;
-   _equal( scalar3.Value(), 15., fTolerance);
+   _equal( scalar3(), 15., fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 
    //Testing for scalar addition
    scalar3 = scalar1 + scalar2;
-   _equal( scalar3.Value(), 20, fTolerance);
+   _equal( scalar3(), 20, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
    
 }
@@ -89,16 +84,16 @@ void ScalarVariable_Test::Subtraction_Operator()
    
    //Testing for constant_value subtraction
    scalar3 = scalar1 - 10.0;
-   _equal( scalar3.Value(), -5, fTolerance);
+   _equal( scalar3(), -5, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
    scalar3 = 10.0 - scalar1;
-   _equal( scalar3.Value(), 5, fTolerance);
+   _equal( scalar3(), 5, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 
    //Testing for scalar subtraction
    scalar3 = scalar1 - scalar2;
-   _equal( scalar3.Value(), -10, fTolerance);
+   _equal( scalar3(), -10, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -111,16 +106,16 @@ void ScalarVariable_Test::Multiplication_Operator()
    
    //Testing for constant_value multiplication
    scalar3 = scalar1 * 10.0;
-   _equal( scalar3.Value(), 50, fTolerance);
+   _equal( scalar3(), 50, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
    scalar3 = 10.0 * scalar1;
-   _equal( scalar3.Value(), 50, fTolerance);
+   _equal( scalar3(), 50, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 
    //Testing for scalar multiplication
    scalar3 = scalar1 * scalar2;
-   _equal( scalar3.Value(), 75, fTolerance);
+   _equal( scalar3(), 75, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -133,16 +128,16 @@ void ScalarVariable_Test::Division_Operator()
    
    //Testing for constant_value division
    scalar3 = scalar1 / 10.0;
-   _equal( scalar3.Value(), 0.5, fTolerance);
+   _equal( scalar3(), 0.5, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
    scalar3 = 10.0 / scalar1;
-   _equal( scalar3.Value(), 2, fTolerance);
+   _equal( scalar3(), 2, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 
    //Testing for scalar division
    scalar3 = scalar1 / scalar2;
-   _equal( scalar3.Value(), 0.25, fTolerance);
+   _equal( scalar3(), 0.25, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -155,15 +150,15 @@ void ScalarVariable_Test::Addition_Assigment_Operator()
    
    //Testing for constant_value addition
    scalar3 = scalar1;
-   scalar3 += 10;
-   _equal( scalar3.Value(), 15, fTolerance);
+   scalar3() += 10;
+   _equal( scalar3(), 15, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
 
 
    //Testing for scalar addition
    scalar3 = scalar1;
    scalar3 += scalar2;
-   _equal( scalar3.Value(), 20, fTolerance);
+   _equal( scalar3(), 20, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -176,15 +171,15 @@ void ScalarVariable_Test::Subtraction_Assigment_Operator()
    
    //Testing for constant_value subtraction
    scalar3 = scalar1;
-   scalar3 -= 10;
-   _equal( scalar3.Value(), -5, fTolerance);
+   scalar3() -= 10;
+   _equal( scalar3(), -5, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
 
 
    //Testing for scalar subtraction
    scalar3 = scalar1;
    scalar3 -= scalar2;
-   _equal( scalar3.Value(), -10, fTolerance);
+   _equal( scalar3(), -10, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -197,15 +192,15 @@ void ScalarVariable_Test::Multiplication_Assigment_Operator()
    
    //Testing for constant_value multiplication
    scalar3 = scalar1;
-   scalar3 *= 10;
-   _equal( scalar3.Value(), 50, fTolerance);
+   scalar3() *= 10;
+   _equal( scalar3(), 50, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
 
 
    //Testing for scalar multiplication
    scalar3 = scalar1;
    scalar3 *= scalar2;
-   _equal( scalar3.Value(), 75, fTolerance);
+   _equal( scalar3(), 75, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -217,16 +212,16 @@ void ScalarVariable_Test::Division_Assigment_Operator()
    ScalarVariable scalar3;
    
    //Testing for constant_value division
-   scalar3 = scalar1;
-   scalar3 /= 10;
-   _equal( scalar3.Value(), 0.5, fTolerance);
+   scalar3    = scalar1;
+   scalar3() /= 10;
+   _equal( scalar3(), 0.5, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);   
 
 
    //Testing for scalar division
    scalar3 = scalar1;
    scalar3 /= scalar2;
-   _equal( scalar3.Value(), 0.25, fTolerance);
+   _equal( scalar3(), 0.25, fTolerance);
    _equal( scalar3.Flag(), ANY, fTolerance);
 
 }
@@ -239,9 +234,9 @@ void ScalarVariable_Test::Less_Than_Operator()
    ScalarVariable scalar4( PLAIN, 2 );
    
    //Testing for constant_value
-   _test( scalar1 < 10 );
-   _test( !(scalar1 < 5) );
-   _test( !(scalar1 < 2) );
+   _test( scalar1() < 10 );
+   _test( !(scalar1() < 5) );
+   _test( !(scalar1() < 2) );
    
    //Testing for scalar
    _test( scalar1 < scalar2 );
@@ -258,9 +253,9 @@ void ScalarVariable_Test::Greater_Than_Operator()
    ScalarVariable scalar4( PLAIN, 2 );
    
    //Testing for constant_value
-   _test( scalar1 > 2 );
-   _test( !(scalar1 > 5) );
-   _test( !(scalar1 > 10) );
+   _test( scalar1() > 2 );
+   _test( !(scalar1() > 5) );
+   _test( !(scalar1() > 10) );
    
    //Testing for scalar
    _test( scalar2 > scalar1 );
@@ -277,9 +272,9 @@ void ScalarVariable_Test::Less_Than_Or_Equal_To_Operator()
    ScalarVariable scalar4( PLAIN, 2 );
    
    //Testing for constant_value
-   _test( scalar1 <= 10 );
-   _test( scalar1 <= 5 );
-   _test( !(scalar1 <= 2) );
+   _test( scalar1() <= 10 );
+   _test( scalar1() <= 5 );
+   _test( !(scalar1() <= 2) );
    
    //Testing for scalar
    _test( scalar1 <= scalar2 );
@@ -296,9 +291,9 @@ void ScalarVariable_Test::Greater_Than_Or_Equal_To_Operator()
    ScalarVariable scalar4( PLAIN, 2 );
    
    //Testing for constant_value
-   _test( scalar1 >= 2 );
-   _test( scalar1 >= 5 );
-   _test( !(scalar1 >= 10) );
+   _test( scalar1() >= 2 );
+   _test( scalar1() >= 5 );
+   _test( !(scalar1() >= 10) );
    
    //Testing for scalar
    _test( scalar2 >= scalar1 );
@@ -327,23 +322,6 @@ void ScalarVariable_Test::Equality_Operator()
    
 }
 
-void ScalarVariable_Test::Average_Function()
-{
-   ScalarVariable scalar1( ANY, 5 );
-   
-   _equal( scalar1.Average(), 5, fTolerance);
-
-}
-
-void ScalarVariable_Test::Zero_Function()
-{
-   ScalarVariable scalar1( ANY, 5 );
-   
-   scalar1.Zero();
-   _equal( scalar1.Value(), 0, fTolerance);
-   _equal( scalar1.Flag(), ANY, fTolerance);
-
-}
 
 void ScalarVariable_Test::IsWithinRange_Function()
 {
@@ -357,46 +335,5 @@ void ScalarVariable_Test::IsWithinRange_Function()
 
 }
 
-void ScalarVariable_Test::Sqrt_Function()
-{
-   ScalarVariable scalar1( ANY, -5. );
-   ScalarVariable scalar2( ANY, 5. );
-   
-   scalar1.Sqrt();
-   _test( isnan(scalar1.Value()));
-   _equal( scalar1.Flag(), ANY, fTolerance);
-   scalar2.Sqrt();
-   _equal( scalar2.Value(), sqrt(5.), fTolerance);
-   _equal( scalar2.Flag(), ANY, fTolerance);
-
-}
-
-void ScalarVariable_Test::Ln_Function()
-{
-   ScalarVariable scalar1( ANY, -5 );
-   ScalarVariable scalar2( ANY, 5 );
-   
-   scalar1.Ln();
-   _test( isnan(scalar1.Value()));
-   _equal( scalar1.Flag(), ANY, fTolerance);
-   scalar2.Ln();
-   _equal( scalar2.Value(), log(5.), fTolerance);
-   _equal( scalar2.Flag(), ANY, fTolerance);
-
-}
-
-void ScalarVariable_Test::Log10_Function()
-{
-   ScalarVariable scalar1( ANY, -5 );
-   ScalarVariable scalar2( ANY, 5 );
-   
-   scalar1.Log10();
-   _test( isnan(scalar1.Value()));
-   _equal( scalar1.Flag(), ANY, fTolerance);
-   scalar2.Log10();
-   _equal( scalar2.Value(), log10(5.), fTolerance);
-   _equal( scalar2.Flag(), ANY, fTolerance);
-
-}
 	
 } //end namespace csmp

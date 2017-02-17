@@ -59,11 +59,11 @@ template<size_t dim>
 void SourceVisitor<dim>::Visit( Model<dim>* model )
 {
 
-    timestep=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.
+    timestep()=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.
     if (timestepKey_!=csmp::Index())
         model_.Read(timestepKey_,timestep);
     else
-        timestep=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.
+        timestep()=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.
 }
 
 template<size_t dim>
@@ -77,7 +77,7 @@ void SourceVisitor<dim>::Visit( Element<dim>* e )
     for (size_t i=0;i< e->Nodes (); i++)
     {
         e->N(i)->Read(nfvsKey_, nfvs);
-        nfvs += e->N(i)->Read(densityDiffKey_) * e->SectorVolume(i) * phi() * thickness() / timestep();
+        nfvs() += e->N(i)->Read(densityDiffKey_) * e->SectorVolume(i) * phi() * thickness() / timestep();
         e->N(i)->Store(nfvsKey_, nfvs);
     }
     

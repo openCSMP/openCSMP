@@ -521,12 +521,12 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPS_ );
                         // Interpolate properties
-                        propS_[itX->first] = 0.0;
+                        propS_[itX->first]() = 0.0;
                         for ( size_t i=0; i<TargetElement_->Nodes(); i++ )
-                            propS_[itX->first] += NI_[i] * NPS_[i]();
+                            propS_[itX->first]() += NI_[i] * NPS_[i]();
 
                     }else if (prop_idx_.place == ELEMENT)
-                        propS_[itX->first] = TargetElement_->Read(prop_idx_);
+                        propS_[itX->first]() = TargetElement_->Read(prop_idx_);
 
                 }
                 else if(prop_idx_.type == VECTOR )

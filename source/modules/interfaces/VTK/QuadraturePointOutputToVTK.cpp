@@ -86,7 +86,7 @@ namespace csmp {
 
      DenseMatrix<DM_MIN> COORD;
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-          (*it)->CoordinateMatrix( COORD );
+          (*it)->NodeCoordinateMatrix( COORD );
           for ( size_t i=0; i<(*it)->Nodes(); ++i ) {
               for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
               if ( dim == 2 ) ofs << 0.;

@@ -70,17 +70,17 @@ void PermeabilityTensor_Example::Run()
 
   // calculating flow vector
   for( size_t i = 0; i < 3; ++i )
-    q( i ) = a.Value() / mu.Value() * (   kTensor.Value( i,0 )*grad.Value( 0 )
-                                        + kTensor.Value( i,1 )*grad.Value( 1 )
-                                        + kTensor.Value( i,2 )*grad.Value( 2 ) );
+    q( i ) = a() / mu() * (   kTensor( i,0 )*grad( 0 )
+                                        + kTensor( i,1 )*grad( 1 )
+                                        + kTensor( i,2 )*grad( 2 ) );
   //           ^^^^^        ^^^^^                 ^^^^^             ^^^^^
   // the Value() function of a variable returns its value, but does not allow
   // to manipilate it. ( in contrast to variable() which allows manipulation,
   // see above
 
   // Outputting results
-  cout << "\nExample: Cross sectional area: " << a.Value() << endl;
-  cout << "\nExample: Fluid viscosity: " << mu.Value() << endl;
+  cout << "\nExample: Cross sectional area: " << a() << endl;
+  cout << "\nExample: Fluid viscosity: " << mu() << endl;
   cout << "\nExample: Permeability tensor: \n";
   kTensor.Out();
   cout << "\nExample: Potetntial gradient: \n";

@@ -75,7 +75,7 @@ void OverburdenPressureVisitor<dim>::Visit( Element<dim>* e )
    ScalarVariable  mu;
    e->PropertyValueAtBaryCenter( mu_key_, mu );
    // hydraulic conductivity computation
-   e->Store( K_key_, makeScalar( PLAIN, e->Read(k_key_) / mu.Value() ) );
+   e->Store( K_key_, makeScalar( PLAIN, e->Read(k_key_) / mu() ) );
    ScalarVariable  erho_fluid;
    e->PropertyValueAtBaryCenter( rhof_key_, erho_fluid );
   

@@ -1447,8 +1447,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     csmp::Region<dim>&  super_group(this->Region("Model"));
 
     assert( bvalues.size() >= 2U );
-    double64  v1 = bvalues[0].Value();
-    double64  v2 = bvalues[1].Value();
+    double64  v1 = bvalues[0]();
+    double64  v2 = bvalues[1]();
 
     csmp::Point<dim>  xyz_min, xyz_max;
     MinMaxCoordinates( xyz_min, xyz_max );
@@ -1459,7 +1459,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
          boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
          for ( typename vector<Node<dim>*>::iterator
                nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-               res = linearInterpolate( make_pair(xyz_min,v1), make_pair(xyz_max,v2), (*nit)->Coordinate() );
+               res() = linearInterpolate( make_pair(xyz_min,v1), make_pair(xyz_max,v2), (*nit)->Coordinate() );
                (*nit)->Store( prop_key, res );
             }
          return;
@@ -1470,8 +1470,8 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
     if ( isSide(side) ) {
         assert( bvalues.size() == 4U );
-        double64  v3 = bvalues[2].Value();
-        double64  v4 = bvalues[3].Value();
+        double64  v3 = bvalues[2]();
+        double64  v4 = bvalues[3]();
 
         switch( side )
           {
@@ -1479,7 +1479,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( LEFT, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1488,7 +1488,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( RIGHT, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res   = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1497,7 +1497,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( BACK, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res   = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1506,7 +1506,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( FRONT, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res   = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1515,7 +1515,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( TOP, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res   = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1524,7 +1524,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
                boundaryMinMaxCoordinates( BOTTOM, xyz_min, xyz_max );
                for ( typename vector<Node<dim>*>::iterator
                      nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-                     res   = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
+                     res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
                      (*nit)->Store( prop_key, res );
                   }
                break;
@@ -1544,7 +1544,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
          boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
          for ( typename vector<Node<dim>*>::iterator
                nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
-              res = linearInterpolate( make_pair(xyz_min,v1), make_pair(xyz_max,v2), (*nit)->Coordinate() );
+              res() = linearInterpolate( make_pair(xyz_min,v1), make_pair(xyz_max,v2), (*nit)->Coordinate() );
               (*nit)->Store( prop_key, res );
            }
       }
@@ -2535,6 +2535,58 @@ bool Model<dim>::UpdateSubdomainPropertyStorage()
     return increased_storage;
 
  }  // end InitializeRegionProperties
+
+
+
+
+
+/**
+
+Database() comes in a constant and a volatile version,
+giving you access to the PropertyDatabase object inside the Model.
+
+@return Either a constant or a volatile reference to the PropertyDatabase object.
+ */
+template<size_t dim>
+PropertyDatabase<dim>&  Model<dim>::Database() { return database_; }
+
+template<size_t dim>
+const PropertyDatabase<dim>& Model<dim>::Database() const { return database_; }
+
+template<size_t dim>
+const FiniteElementManager&  Model<dim>::FE_Manager() const
+ { return fem_manager_; }
+
+template<size_t dim>
+FiniteElementManager&  Model<dim>::FE_Manager()
+ { return fem_manager_; }
+
+
+template<size_t dim>
+const FiniteVolumeStencilManager<dim>* Model<dim>::FV_Manager() const
+{ return fvStencilManager_; }
+
+template<size_t dim>
+FiniteVolumeStencilManager<dim>*  Model<dim>::FV_Manager()
+{ return fvStencilManager_; }
+
+
+/**
+
+Mesh() comes in a constant and in a volatile version, giving you
+access to the MeshManager object inside of the Model object.
+
+@return Either a constant or a volatile reference to the MeshManager.
+*/
+template<size_t dim>
+MeshManager<dim>&  Model<dim>::Mesh() { return mesh_manager_; }
+
+template<size_t dim>
+const MeshManager<dim>&  Model<dim>::Mesh() const { return mesh_manager_; }
+
+
+
+
 
 
  

@@ -978,7 +978,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                       nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
                   {
                      (*nit)->Read( prop_key, sc );
-                     groups[ sc.Value() ] = "undefined";
+                     groups[ sc() ] = "undefined";
                   }
                 break;
             case ELEMENT_INTEGRATION_POINT: 
@@ -987,7 +987,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     {
                        (*eit)->Read( i, prop_key, sc );
-                       groups[ sc.Value() ] = "undefined";
+                       groups[ sc() ] = "undefined";
                     }
                 break;
             case ELEMENT: 
@@ -995,7 +995,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                       eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
                   {
                      (*eit)->Read( prop_key, sc );
-                     groups[ sc.Value() ] = "undefined";
+                     groups[ sc() ] = "undefined";
                   }
                 break;
             default:

@@ -49,7 +49,7 @@ void PropertyStorageSpeed_Test::run()
    for ( int i=0; i<25000; i++ )
      {
         // initialising the input properties
-        sc = static_cast<double64>(rand()) / 3.;
+        sc() = static_cast<double64>(rand()) / 3.;
         vc = static_cast<double64>(rand()) / 3.;
         ts = static_cast<double64>(rand()) / 3.;
         

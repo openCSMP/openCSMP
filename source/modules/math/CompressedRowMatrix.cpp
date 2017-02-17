@@ -2,10 +2,10 @@
 #include <limits>
 #include <cassert>
 #include <fstream>
-#include <ciso646>
 #include "CompressedRowMatrix.h"
 #include "SparseMatrix.h"
 #include "Exception.h"
+#include "CSMP_global_enumerations.h"
 
 
 using namespace std;

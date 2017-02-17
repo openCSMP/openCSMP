@@ -3,8 +3,8 @@
 
 #include "LocalVariableStorage.h"
 #include "FiniteElement.h"
-#include "FiniteElementTraits.h"
-#include "FiniteVolumeTraits.h"
+#include "FiniteElementPolicy.h"
+#include "FiniteVolumePolicy.h"
 #include "ElementRemeshingTraits.h"
 
 #include "Box.h"
@@ -126,17 +126,32 @@ the functionality of the Element class. In this method element and node
 properties and node property averages are obtained and written back to
 the mesh.
 
-@todo (3) Write fast code to determine whether a Point is contained in a certain element (A)
+@section IMPORTANT - FOR DEVELOPERS
+
+Consider that users of the policies may also want to work on other 
+incarnations of the Element, in particular ones with less policies.
+This only works when the policies only depend on the functionality
+of the element, but not on each other!
+
+As a key difference between policies and traits, the latter have state.
+Thus, the finite-element policy own the fe pointer and the fv policy ons the fv pointer
+which is key to the design.
+
+For the current design, however, this is only partially true because the 
+FiniteVolumePolicy depends on finite element functionality.
+Thus, one can have an element with FEM but without FVM, but not vice versa.
+
+@todo (3) Write faster code to determine whether a Point is contained in a certain element (A)
 
 */
 template<size_t dim>
 class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo is this really needed? - else deprecate
-                public FiniteElementTraits<dim,Element>,       ///< TODO: @todo have this policy own the FE pointer and initialise always
-                public FiniteVolumeTraits<dim,Element>,        ///< TODO: @todo have this policy own the FV pointer and initialise always
+                public FiniteElementPolicy<dim,Element>,
+                public FiniteVolumePolicy<dim,Element>,        
                 public LocalVariableStorage<dim,Element<dim> > ///< TODO: @todo fix template - template parameter
   {
   public:
-    explicit Element( BOX_BOUNDARY bflag=IRREGULAR  );
+    explicit Element( BOX_BOUNDARY bflag=IRREGULAR );
     
     /// constructor for testing element in isolation
     explicit Element( FiniteElement* );
@@ -158,7 +173,7 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
              BOX_BOUNDARY=NOT );
              
     Element( const Element& );
-    Element( Element&& );
+//    Element( Element&& );
     ~Element();
 
     Element&  operator=( const Element& );
@@ -175,14 +190,24 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     // Functionality of construction process
     // ------------------------------------------------------------------------
 
-    void Assign( const FiniteVolumeStencil<dim>* const );
+    /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
     void Assign( size_t nbor, Element<dim>* const );
+    
+    /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
     void Assign( size_t node, Node<dim>* const );
-    void Assign( FiniteElement* ); /// this method was added to aid OpenMP usage.
 
     // ------------------------------------------------------------------------
     // Member access
     // ------------------------------------------------------------------------
+
+    /// number of nodes of this element
+    size_t  Nodes() const     { return node_connector_.size(); };
+    
+    /// number of equidimensional neighbor elements of this element (not necessarily connected)
+    size_t  Neighbors() const { return elmt_connector_.size(); };
+    
+    /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
+    size_t  Faces() const { return elmt_connector_.size(); };
 
     typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
@@ -194,22 +219,40 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
     typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
 
-    // for remeshing purposes
     typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
 
-    csmp::Node<dim>*                N( size_t n_local ) const;
-    csmp::Element<dim>*             Neighbor( size_t )  const;
-
-    FiniteElement*                  FE()         const;
-    const FiniteVolumeStencil<dim>* FV_Stencil() const;
+    /// accessor of the nodes of the current finite element
+    csmp::Node<dim>*     N( size_t n_local ) const;
+    
+    /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
+    csmp::Element<dim>*  Neighbor( size_t )  const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void         Idx( size_t ) const;
     size_t       Idx() const;
     
+    /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
     void         AtBoundary( BOX_BOUNDARY b );
     BOX_BOUNDARY AtBoundary() const;
+
+    // ------------------------------------------------------------------------
+    // Functionality
+    // ------------------------------------------------------------------------
+
+    /// returns a vector of the property of interest discretized on the node
+    template<class Var>
+    void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
+
+    /// inputs node coordinates into supplied matrix
+    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+
+    /// the centre of gravity of the elemt
+    Point<dim>  BaryCenter() const;
+
+    /// projects node points onto line returning max distance between them; vec direction can have any length
+    double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    
 
     // ------------------------------------------------------------------------
     // Screen Output
@@ -223,12 +266,10 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t                          idx_;
-    csmp::FiniteElement*                    fptr_;
-    const csmp::FiniteVolumeStencil<dim>*   fvptr_;
-    std::vector<Element<dim>*>              elmt_connector_; ///< neighbors
-    std::vector<csmp::Node<dim>*>           node_connector_; ///< nodes
-    BOX_BOUNDARY                            at_boundary_;
+    mutable size_t                 idx_;
+    std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
+    std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
+    BOX_BOUNDARY                   at_boundary_;
 };
 
 

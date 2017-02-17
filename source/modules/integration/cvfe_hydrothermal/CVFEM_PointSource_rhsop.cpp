@@ -61,7 +61,7 @@ void CVFEM_PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
    for ( size_t i=0; i<e.Nodes(); i++ )
-     MathOperatorRHS<dim>::RHS[i] = SRC_[i].Value();
+     MathOperatorRHS<dim>::RHS[i] = SRC_[i]();
      
 } // end ComputeContribution
 

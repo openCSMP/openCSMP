@@ -4,6 +4,7 @@
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "CSMP_highLevelUtilities.h"
+#include "variableOperations.h"
 
 // Mesh Import & Property Assignment
 #include "TRIANGLE_Interface.h"
@@ -285,7 +286,7 @@ void  StreamFunction_Example::analyze_sensitivity( Model<2U>& sg, const char* gr
           cout <<"; enter new k value (-1. to break loop): ";
           ScalarVariable  perm;
           cin >> perm();
-          if ( perm < 0. ) break;
+          if ( perm() < 0. ) break;
           sg.Region(group).InputPropertyValue( "permeability", perm, COMPLETE );
           sg.Apply( itr );
           sg.Apply( algo );
@@ -409,7 +410,7 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   // -----------------------------------------------------------------------------------
   VectorVariable<dim>  normal, velo;
   double64             velocity, flux(0U);
-  bool                 first_found, second_found;
+  bool                 first_found(false), second_found(false);
   double64             sum_influx(0.), sum_outflux(0.);
 
   cout <<"\nintegrateDomainBoundaryFlux: Computing fluxes across faces..."<< endl;
@@ -430,13 +431,13 @@ double64 StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
                 first_found = true;
                 (*fit)->Parent(INSIDE)->Read( ve_key, velo );
                 // projecting flux onto facet normal
-                velocity = normal & velo;
+                velocity = dotProduct(normal,velo);
              }
            else { // the other neighbor pointer must not be zero
                 assert( (*fit)->Parent(OUTSIDE) != NULL );
                 second_found = true;
                 (*fit)->Parent(OUTSIDE)->Read( ve_key, velo );
-                velocity = normal & velo;
+                velocity = dotProduct(normal,velo);
              }
 
            flux += (*fit)->Volume() * velocity;
@@ -489,7 +490,7 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     for ( vector<Element<2U>*>::iterator
           eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
          (*eit)->Read( con_key, sc );
-         sc = 1. / sc.Value();
+         sc = 1. / sc();
          (*eit)->Store( res_key, sc );
       }
 

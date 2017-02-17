@@ -233,7 +233,7 @@ void StressesAndStrains<3U>::GetOperands( Element<3U>& e )
          DISPL_.Resize( nodes * 3U, 1 );
          size_t k(0U);
          for ( size_t i=0; i<nodes; i++ )
-           for ( size_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i].Value(j);
+           for ( size_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i](j);
 
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 3U;
@@ -539,7 +539,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                  // dilatation = sum of principal strains 
                  // -------------------------------------
-                 sc_ = evals_[0] + evals_[1] + evals_[2];
+                 sc_() = evals_[0] + evals_[1] + evals_[2];
                  e.Store( i, dilat_key_, sc_ );
               }
             
@@ -563,7 +563,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                  // mean stress = average of principal stresses
                  // -------------------------------------------
-                 sc_ = evals_.Average();
+                 sc_() = (evals_[0] + evals_[1] + evals_[2]) / 3.;
                  e.Store( i, means_key_, sc_ );
                  // max shear stress
                  // ----------------
@@ -606,7 +606,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                      // dilatation = sum of principal strains 
                      // -------------------------------------
-                     sc_ = evals_[0] + evals_[1] + evals_[2];
+                     sc_() = evals_[0] + evals_[1] + evals_[2];
                      e.N(i)->Store( dilat_key_, sc_ );
                        
                      // principal stresses
@@ -627,7 +627,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                      // mean stress = average of stress Eigenvalues
                      // -----------
-                     sc_ = evals_.Average();
+                     sc_() = (evals_[0] + evals_[1] + evals_[2]) / 3.;
                      e.N(i)->Store( means_key_, sc_ );
                      // max shear stress
                      // ----------------
@@ -656,214 +656,6 @@ evecs_.Out();
 cerr <<"\n";
 */
 
-
-
-
-/*   OLD VERSION WITH INTEGRATION POINT AVERAGING OF PRINCIPAL STRESSES
-
-void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
- {
-    // if stress and strain are element properties, their
-    // integration point values are averaged on the element
-    if ( stress_key_.place == ELEMENT )
-      {
-        IP_STRAIN_TENSOR_ = 0.;
-        IP_STRESS_TENSOR_ = 0.;
-        double64  mean_stress(0.);
-        double64  dilation(0.);
-        if ( principal_e_and_sigma_ ) {
-             IP_e1_ = IP_e2_ = IP_e3_ = 0.;
-             IP_s1_ = IP_s2_ = IP_s3_ = 0.;
-          }
-        for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
-          {
-              // 1. assigning the strain & stress values
-              // ---------------------------------------
-              convertTo( IPSTRAIN_, i, ts_ );
-              IP_STRAIN_TENSOR_ += ts_;
-            
-              // principal strains
-              // -----------------
-              if ( principal_e_and_sigma_ ) {
-                   // principal strains = stretches in the principal elongation 
-                   // directions = Eigenvalues of strain tensor   
-                    ts_.Eigen( evals_, evecs_, false );
-                    sortEigenVectorsAndValues( evals_, evecs_ );
-                    IP_e1_ += evecs_.Row(0);
-                    IP_e2_ += evecs_.Row(1);
-                    IP_e3_ += evecs_.Row(2);
-
-                   // dilatation = sum of principal strains 
-                   // -------------------------------------
-                   for ( size_t j=0; j<3U; j++ ) dilation += evals_[j];
-                }
-              
-              convertTo( IPSTRESS_, i, ts_ );
-              IP_STRESS_TENSOR_ += ts_;
-            
-              // principal stresses
-              // ------------------
-              if ( principal_e_and_sigma_ ) {
-                    ts_.Eigen( evals_, evecs_, false );
-                    sortEigenVectorsAndValues( evals_, evecs_ );
-                    IP_s1_ += evecs_.Row(0);
-                    IP_s2_ += evecs_.Row(1);
-                    IP_s3_ += evecs_.Row(2);
-
-                   // mean stress = average of principal stresses
-                   // -------------------------------------------
-                   mean_stress += evals_.Average();
-                }
-
-cerr <<"\n"<< i <<": "<< evals_;
-           }
-       
-        // averaging values on the element barycenter
-        // ------------------------------------------
-        const double64 ips(static_cast<double64>(e.FE()->IntegrationPoints()));
-        IP_STRAIN_TENSOR_ /= ips;
-        IP_STRESS_TENSOR_ /= ips;
-        e.Store( strain_key_, IP_STRAIN_TENSOR_ );
-        e.Store( stress_key_, IP_STRESS_TENSOR_ );
-        if ( principal_e_and_sigma_ ) {
-             e.Store( strain1_key_, IP_e1_/ips );
-             e.Store( strain2_key_, IP_e2_/ips );
-             e.Store( strain3_key_, IP_e3_/ips );
-             e.Store( sigma1_key_, IP_s1_/ips );
-             e.Store( sigma2_key_, IP_s2_/ips );
-             e.Store( sigma3_key_, IP_s3_/ips );
-             e.Store( dilat_key_, makeScalar(PLAIN,dilation/ips) );
-             e.Store( means_key_, makeScalar(PLAIN,mean_stress/ips) );
-          }
-      
-      } // end element stresses and strains
-
-
-    // ELEMENT_INTEGRATION_POINT OUTPUT
-    // --------------------------------
-    // if a single stage computation is desired, excluding extrapolations to the nodes
-    if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
-        {
-            // 1. assigning the strain & stress values
-            // ---------------------------------------
-            convertTo( IPSTRAIN_, i, ts_ );
-            e.Store( i, strain_key_, ts_ );
-            // principal strains
-            // -----------------
-            if ( principal_e_and_sigma_ ) {
-                 // principal strains = stretches in the principal elongation 
-                 // directions = Eigenvalues of strain tensor   
-                  ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                  sortEigenVectorsAndValues( evals_, evecs_ );
-                  vc_ = evecs_.Row(0);
-                  e.Store( i, strain1_key_, vc_ ); 
-                  vc_ = evecs_.Row(1);
-                  e.Store( i, strain2_key_, vc_ ); 
-                  vc_ = evecs_.Row(2);
-                  e.Store( i, strain3_key_, vc_ ); 
-
-                 // dilatation = sum of principal strains 
-                 // -------------------------------------
-                 sc_ = 0.;
-                 for ( size_t j=0; j<3U; j++ ) sc_ += evals_[j];
-                 e.Store( i, dilat_key_, sc_ ); 
-              }
-            
-            convertTo( IPSTRESS_, i, ts_ );
-            e.Store( i, stress_key_, ts_ ); 
-            // principal stresses
-            // ------------------
-            if ( principal_e_and_sigma_ ) {
-                  ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                  sortEigenVectorsAndValues( evals_, evecs_ );
-                  vc_ = evecs_.Row(0);
-                  e.Store( i, sigma1_key_, vc_ ); 
-                  vc_ = evecs_.Row(1);
-                  e.Store( i, sigma2_key_, vc_ ); 
-                  vc_ = evecs_.Row(2);
-                  e.Store( i, sigma3_key_, vc_ ); 
-
-                 // mean stress = average of principal stresses
-                 // -------------------------------------------
-                 sc_ = evals_.Average();
-                 e.Store( i, means_key_, sc_ );
-              }
-         }
-
-
-    // NODE OUTPUT
-    // -----------
-    // only once the strains and stresses have been computed, these can be output to Model<3U> 
-    if ( MathOperatorLHS<3U>::ApplicationCycle() == 2 ) 
-      {
-         for ( size_t i=0U; i<e.Nodes(); i++ )
-           // doing this operation only once per node
-           if ( !node_output_[ e.N(i)->Idx() ] )
-             {
-                // 1. assigning the strain & stress values
-                // ---------------------------------------
-                convertColumnTo( STRAIN_, i, ts_ );
-                e.N(i)->Store( strain_key_, ts_ );
-                convertColumnTo( STRESS_, i, ts_ );
-                e.N(i)->Store( stress_key_, ts_ );
-
-                // 2. Computing principal strain and stress axis if requested
-                // ----------------------------------------------------------
-                if ( principal_e_and_sigma_ )
-                  {
-                     // principal strains
-                     // -----------------
-                     convertColumnTo( STRAIN_, i, ts_ );
-                     ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                     sortEigenVectorsAndValues( evals_, evecs_ );
-                     vc_ = evecs_.Row(0);
-                     e.N(i)->Store( strain1_key_, vc_ ); 
-                     vc_ = evecs_.Row(1);
-                     e.N(i)->Store( strain2_key_, vc_ ); 
-                     vc_ = evecs_.Row(2);
-                     e.N(i)->Store( strain3_key_, vc_ ); 
-
-                     // dilatation = sum of principal strains 
-                     // -------------------------------------
-                     sc_ = 0.;
-                     for ( size_t j=0U; j<3U; j++ ) sc_ += evals_[j];
-                     e.N(i)->Store( dilat_key_, sc_ ); 
-                       
-                     // principal stresses
-                     // ------------------
-                     convertColumnTo( STRESS_, i, ts_ );
-                     ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                     sortEigenVectorsAndValues( evals_, evecs_ );
-                     vc_ = evecs_.Row(0);
-                     e.N(i)->Store( sigma1_key_, vc_ ); 
-                     vc_ = evecs_.Row(1);
-                     e.N(i)->Store( sigma2_key_, vc_ ); 
-                     vc_ = evecs_.Row(2);
-                     e.N(i)->Store( sigma3_key_, vc_ ); 
-                     // principal stresses = stress magnitudes in the principal stress 
-                     // directions i.e. Eigenvalues of stress tensor ordered by
-                     // absolute magnitude (thus -1.5 > 1.4 !) 
-                     for ( size_t j=0U; j<3U; j++ ) vc_(j) = evals_[ j ];
-                     e.N(i)->Store( pstress_key_, vc_ );
-
-                     // mean stress = average of stress Eigenvalues
-                     // -----------
-                     sc_ = evals_.Average();
-                     e.N(i)->Store( means_key_, sc_ );
-                 }
-                  
-                // 3. flagging the node to prevent further computations
-                // ----------------------------------------------------
-                node_output_[ e.N(i)->Idx() ] = true;
-             }
-        }
-
- } // end WriteOperands
-
- 
-
-*/
 
  
 #ifndef _MSC_VER

@@ -4,20 +4,11 @@
 
 namespace csmp {
 
-CSMP_ElementSpecifications::CSMP_ElementSpecifications()
- {
- }
-  
-CSMP_ElementSpecifications::~CSMP_ElementSpecifications()
- {
- }
-
-
 /**
 
 Returns the CSMP finite element type name.
 */
-std::string  CSMP_ElementSpecifications::CSMP_TypeName( int32 etype ) const
+std::string  CSMP_ElementSpecifications::CSMP_TypeName( int32 etype )
 {
     return parseFiniteElementType( etype );
 } // end CSMP_TypeName( int, bool )
@@ -25,7 +16,7 @@ std::string  CSMP_ElementSpecifications::CSMP_TypeName( int32 etype ) const
 
 /** Returns the CSMP integer flag corresponding to the CSMP element name std::string.
 */
-CSMP_FEM_TYPE  CSMP_ElementSpecifications::CSMP_Type( const std::string& csmp_FEtype ) const
+CSMP_FEM_TYPE  CSMP_ElementSpecifications::CSMP_Type( const std::string& csmp_FEtype )
 {
     return parseFiniteElementType( csmp_FEtype );
 } // end CSMP_Type
@@ -44,7 +35,7 @@ The CSMP type name of the finite element that shall be queried.
 1 = linear, 2 = quadratic, 3 = cubic.
 
 */
-size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype ) const
+size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype )
  {
      if ( LinearElement( CSMP_Type(etype) ) )    return 1U;
      if ( QuadraticElement( CSMP_Type(etype) ) ) return 2U;
@@ -52,7 +43,7 @@ size_t  CSMP_ElementSpecifications::InterpolationOrder( const std::string& etype
      return 0U; // order not identified, probably constant as in a polygon
  }
 
-size_t  CSMP_ElementSpecifications::InterpolationOrder( int32 etype ) const
+size_t  CSMP_ElementSpecifications::InterpolationOrder( int32 etype )
   {
     if ( LinearElement( etype ) )    return 1U;
     if ( QuadraticElement( etype ) ) return 2U;
@@ -86,7 +77,7 @@ ISOPARAMETRIC_LINEAR_PRISM
 ISOPARAMETRIC_LINEAR_HEXAHEDRON
 
 @endcode */
-bool  CSMP_ElementSpecifications::LinearElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::LinearElement( int32 etype )
  {
     if ( etype == LINEAR_BAR ||
          etype == LINEAR_TRIANGLE ||
@@ -139,7 +130,7 @@ ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20
 ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27
 
 @endcode*/
-bool  CSMP_ElementSpecifications::QuadraticElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::QuadraticElement( int32 etype )
  {
     if ( etype == QUADRATIC_BAR ||
          etype == ISOPARAMETRIC_QUADRATIC_BAR ||
@@ -187,7 +178,7 @@ ISOPARAMETRIC_CUBIC_PRISM
 ISOPARAMETRIC_CUBIC_HEXAHEDRON
 
 @endcode*/
-bool  CSMP_ElementSpecifications::CubicElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::CubicElement( int32 etype )
  {
     if ( etype == CUBIC_BAR ||
          etype == ISOPARAMETRIC_CUBIC_BAR ||
@@ -221,13 +212,13 @@ to deduce the spatial dimension from.
 from 1(=1D) to 3(=3D).
 
 */
-size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( const std::string& etype ) const
+size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( const std::string& etype )
  {
     if ( LineElement(etype) )    return 1U;
     if ( SurfaceElement(etype) ) return 2U;
     return 3U;
  }
-size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( int32 etype ) const
+size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( int32 etype )
  {
     if ( LineElement(etype) )    return 1U;
     if ( SurfaceElement(etype) ) return 2U;
@@ -244,7 +235,7 @@ Returns a list of line type elements (see FiniteElement.h).
 "ISOPARAMETRIC_QUADRATIC_BAR"
 "ISOPARAMETRIC_CUBIC_BAR"
 */
-void  CSMP_ElementSpecifications::LineElements( std::list<std::string>& line_elements ) const
+void  CSMP_ElementSpecifications::LineElements( std::list<std::string>& line_elements )
  {
     if ( !line_elements.empty() )
       line_elements.erase( line_elements.begin(), line_elements.end() );
@@ -259,7 +250,7 @@ void  CSMP_ElementSpecifications::LineElements( std::list<std::string>& line_ele
 
 /** Returns true if the CSMP element name corresponds to a line element.
 */
-bool  CSMP_ElementSpecifications::LineElement( const std::string& etype ) const
+bool  CSMP_ElementSpecifications::LineElement( const std::string& etype )
  {
     if ( etype == "LINEAR_BAR" ||
          etype == "QUADRATIC_BAR" ||
@@ -273,7 +264,7 @@ bool  CSMP_ElementSpecifications::LineElement( const std::string& etype ) const
 
 /** Returns true if the CSMP input element type is a line.
 */
-bool  CSMP_ElementSpecifications::LineElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::LineElement( int32 etype )
  {
     if ( etype == LINEAR_BAR ||
          etype == QUADRATIC_BAR ||
@@ -308,7 +299,7 @@ Returns a list of the CSMP surface element type names:
 "ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9"
 "ISOPARAMETRIC_CUBIC_QUADRILATERAL"
 */
-void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_elements ) const
+void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_elements )
  {
     if ( !surf_elements.empty() )
       surf_elements.erase( surf_elements.begin(), surf_elements.end() );
@@ -335,7 +326,7 @@ void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_
 /**
 Returns true is the CSMP input element name is a surface element.
 */
-bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype ) const
+bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TRIANGLE" ||
          etype == "LINEAR_TRIANGLE3D" ||
@@ -360,7 +351,7 @@ bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype ) con
 
 /** Returns true if the CSMP input element type is a surface element.
 */
-bool  CSMP_ElementSpecifications::SurfaceElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::SurfaceElement( int32 etype )
  {
     if ( etype == LINEAR_TRIANGLE ||
          etype == LINEAR_TRIANGLE3D ||
@@ -406,7 +397,7 @@ Returns a list of the CSMP element type names that denote volumetric elements:
 "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27"
 "ISOPARAMETRIC_CUBIC_HEXAHEDRON"
 */
-void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_elements ) const
+void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_elements )
  {
     if ( !vol_elements.empty() )
       vol_elements.erase( vol_elements.begin(), vol_elements.end() );
@@ -437,7 +428,7 @@ void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_el
 /**
 Return true if the ANSYS input element name corresponds to a volumetric element.
 */
-bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype ) const
+bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TETRAHEDRON" ||
          etype == "QUADRATIC_TETRAHEDRON" ||
@@ -466,7 +457,7 @@ bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype ) cons
 
 /** Returns true if the ANSYS input element type is a volumetric element.
 */
-bool  CSMP_ElementSpecifications::VolumeElement( int32 etype ) const
+bool  CSMP_ElementSpecifications::VolumeElement( int32 etype )
  {
     if ( etype == LINEAR_TETRAHEDRON ||
          etype == QUADRATIC_TETRAHEDRON ||
@@ -504,7 +495,7 @@ bool  CSMP_ElementSpecifications::VolumeElement( int32 etype ) const
     Returns the number of nodes of the CSMP element type as identified by
     the CSMP element integer code (enumeration CSMP_FEM_TYPE in FiniteElement.h).
 */
-size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype ) const
+size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype )
  {
     // bar
     if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR )
@@ -589,7 +580,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype ) const
 
 
 
-size_t CSMP_ElementSpecifications::FacesPerElementOfType( int32 CSMP_finite_element_type ) const
+size_t CSMP_ElementSpecifications::FacesPerElementOfType( int32 CSMP_finite_element_type )
  {
     // since these are equivalent numbers
     return NeighborsPerElementOfType( CSMP_finite_element_type );
@@ -601,7 +592,7 @@ size_t CSMP_ElementSpecifications::FacesPerElementOfType( int32 CSMP_finite_elem
 /** Returns the maximum possible number of neighbors of the input CSMP finite element type
     as specified in CSMP_FEM_conventions.pdf in the documentation directory.
 */
-size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype ) const
+size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
  {
     // bar
     if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
@@ -671,7 +662,7 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype ) cons
     @attention 17/12/2015 SKM fixed method for quadratic elements
 */
 size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
-                                                                 size_t face ) const
+                                                                 size_t face )
  {
     // bar
     // ---
@@ -818,7 +809,7 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
 */
 size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
                                                              size_t face,
-                                                             size_t face_node ) const
+                                                             size_t face_node )
  {
     // bar element
     // -----------

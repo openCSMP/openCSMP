@@ -96,15 +96,15 @@ namespace csmp {
     
     if(outputMeanStress_)
     {
-      meanStress_ = 0.;
+      meanStress_() = 0.;
       for ( size_t i(0); i < e->FE()->IntegrationPoints(); ++i )
       {
         e->Read( i, sigmaEffKey_, sigma_ );
 
         for( size_t i(0); i < dim; ++i )
-          meanStress_ += sigma_(i,i);
+          meanStress_() += sigma_(i,i);
       }
-      meanStress_ /= dim*e->FE()->IntegrationPoints();
+      meanStress_() /= dim*e->FE()->IntegrationPoints();
       e->Store( meanStressKey_, meanStress_ );
     }
 

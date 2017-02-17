@@ -140,10 +140,14 @@ VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const VectorVar
                                          (v1[0]*v2[1] - v1[1]*v2[0])));
 }
 
-//here, the flags being kept belong to the vector (legacy).
-//perhaps, because of the multiplication order, the tensor ones should be kept.
-//Nevertheless, I will keep this since the TensorVariable_Test uses this convention
-//Julian Mindel 20.04.2016
+/**
+    @note the flags being kept belong to the vector (legacy).
+    perhaps, because of the multiplication order, the tensor ones should be kept.
+    Nevertheless, I will keep this since the TensorVariable_Test uses this convention
+
+    @author Julian Mindel 
+    @date 20.04.2016
+*/
 template<size_t dim>
 VectorVariable<dim> multiplyTensorByVector( const TensorVariable<dim>& ts, const VectorVariable<dim>& vc )
 {
@@ -159,8 +163,10 @@ VectorVariable<dim> multiplyTensorByVector( const TensorVariable<dim>& ts, const
     return std::move(resultvec);
 }
 
-/// this essentially carries out the same task as MultiplyTensorByVector, but has a meaningful name
-/// emphasizing the fact that only vectors that are horizontal/transposed can be multiplied by tensors.
+/**
+    this essentially carries out the same task as MultiplyTensorByVector, but has a meaningful name
+    emphasizing the fact that only vectors that are horizontal/transposed can be multiplied by tensors.
+*/
 template<size_t dim>
 VectorVariable<dim> multiplyHorizontalVectorByTensor( const VectorVariable<dim>& vc, const TensorVariable<dim>& ts )
 {

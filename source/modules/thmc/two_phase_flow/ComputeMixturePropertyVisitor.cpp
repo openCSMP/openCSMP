@@ -36,7 +36,7 @@ namespace csmp{
       element->PropertyValueAtBaryCenter( divisorWaterKey_, divWater_ );
       element->Read( externalMultiplierKey_, externalMultiplier_ );
 
-      mixProperty_ = satOil_.Value() * multOil_.Value() / divOil_.Value() + satWater_.Value() * multWater_.Value() / divWater_.Value();
+      mixProperty_ = satOil_() * multOil_() / divOil_() + satWater_() * multWater_() / divWater_();
       mixProperty_ *= externalMultiplier_;
 
       element->Store(  mixtureProductKey_, mixProperty_ );

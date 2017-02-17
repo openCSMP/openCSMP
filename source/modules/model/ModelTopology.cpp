@@ -25,7 +25,6 @@ ModelTopology::ModelTopology( const char* model_name,
 ModelTopology& ModelTopology::operator=( const ModelTopology& mt )
  {
     if ( &mt != this ) {
-         fem_specs          = mt.fem_specs;
          model_name         = mt.model_name;
          model_regions      = mt.model_regions;
          isoparametric_mesh = mt.isoparametric_mesh;
@@ -153,7 +152,7 @@ bool ModelTopology::LineModel() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
-        if ( fem_specs.SurfaceElement( (*sit) ) || fem_specs.VolumeElement( (*sit) ) ) return false;
+        if ( fem_specs::SurfaceElement( (*sit) ) || fem_specs::VolumeElement( (*sit) ) ) return false;
     return true;
  }
 
@@ -175,7 +174,7 @@ bool ModelTopology::SurfaceModel() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
-        if ( fem_specs.VolumeElement( (*sit) ) ) return false;
+        if ( fem_specs::VolumeElement( (*sit) ) ) return false;
     return true;
  }
 
@@ -197,7 +196,7 @@ bool ModelTopology::SolidModel() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
-        if ( fem_specs.VolumeElement( (*sit) ) ) return true;
+        if ( fem_specs::VolumeElement( (*sit) ) ) return true;
       
     return false;
  } 
@@ -241,7 +240,7 @@ size_t  ModelTopology::MinimumSpatialDimensionOfRegion( const char* region ) con
      
     for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
           sit!=(*it).second.first.end(); sit++ )
-      min_dim = std::min( min_dim, fem_specs.MinimumSpatialDimension(*sit) );
+      min_dim = std::min( min_dim, fem_specs::MinimumSpatialDimension(*sit) );
       
     return min_dim;  
 
@@ -307,9 +306,9 @@ size_t ModelTopology::InterpolationOrder() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ ) {
-           if ( fem_specs.LinearElement( fem_specs.CSMP_Type(*sit) ) )    linear_ipol    = true;
-           if ( fem_specs.QuadraticElement( fem_specs.CSMP_Type(*sit) ) ) quadratic_ipol = true;
-           if ( fem_specs.CubicElement( fem_specs.CSMP_Type(*sit) ) )     cubic_ipol     = true;
+           if ( fem_specs::LinearElement( fem_specs::CSMP_Type(*sit) ) )    linear_ipol    = true;
+           if ( fem_specs::QuadraticElement( fem_specs::CSMP_Type(*sit) ) ) quadratic_ipol = true;
+           if ( fem_specs::CubicElement( fem_specs::CSMP_Type(*sit) ) )     cubic_ipol     = true;
         }
 
     if ( linear_ipol && quadratic_ipol )
@@ -348,7 +347,7 @@ bool ModelTopology::LinearElementMesh() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
-        if ( !fem_specs.LinearElement( fem_specs.CSMP_Type(*sit) ) ) return false;
+        if ( !fem_specs::LinearElement( fem_specs::CSMP_Type(*sit) ) ) return false;
     return true;
  }
 
@@ -366,7 +365,7 @@ bool ModelTopology::QuadraticElementMesh() const
           it=model_regions.begin(); it!=model_regions.end(); it++ )
       for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
-        if ( !fem_specs.QuadraticElement( fem_specs.CSMP_Type(*sit) ) ) return false;
+        if ( !fem_specs::QuadraticElement( fem_specs::CSMP_Type(*sit) ) ) return false;
     return true;
  }
 
@@ -398,7 +397,7 @@ size_t  ModelTopology::FiniteElementTypes( std::set<int32>& etypes ) const
            it=model_regions.begin(); it!=model_regions.end(); it++ )
        for ( std::set<std::string>::const_iterator sit=(*it).second.first.begin();
              sit!=(*it).second.first.end(); sit++ )
-         etypes.insert( fem_specs.CSMP_Type(*sit) );
+         etypes.insert( fem_specs::CSMP_Type(*sit) );
      return etypes.size();
  }
 
@@ -548,7 +547,7 @@ void  ModelTopology::EliminateLineElements()
  {
     std::list<std::string>  etypes;
 
-    fem_specs.LineElements( etypes );
+    fem_specs::LineElements( etypes );
 
     for ( std::list<std::string>::const_iterator
           it=etypes.begin(); it!=etypes.end(); it++ )
@@ -579,7 +578,7 @@ void  ModelTopology::EliminateSurfaceElements()
  {
     std::list<std::string>  etypes;
 
-    fem_specs.SurfaceElements( etypes );
+    fem_specs::SurfaceElements( etypes );
 
     for ( std::list<std::string>::const_iterator
           it=etypes.begin(); it!=etypes.end(); it++ )
@@ -610,7 +609,7 @@ void  ModelTopology::EliminateVolumeElements()
  {
     std::list<std::string>  etypes;
 
-    fem_specs.VolumeElements( etypes );
+    fem_specs::VolumeElements( etypes );
 
     for (std::list<std::string>::const_iterator
            it=etypes.begin(); it!=etypes.end(); it++ )
@@ -1330,7 +1329,7 @@ bool ModelTopology
 
           // getting the spatial dimension of the first region entry
           // in the region map, this dimension will be binding
-          const size_t dim = fem_specs.MinimumSpatialDimension( (*eit1).second );
+          const size_t dim = fem_specs::MinimumSpatialDimension( (*eit1).second );
 
           // loop over the ranges, merging the element numbers and storing
           // the unique finite element types (if there is only one entry,
@@ -1338,7 +1337,7 @@ bool ModelTopology
           while ( eit1 != eit2 )  {
                // checking that the elements to be inserted have the
                // correct spatial dimension
-               if ( fem_specs.MinimumSpatialDimension( (*eit1).second ) == dim )
+               if ( fem_specs::MinimumSpatialDimension( (*eit1).second ) == dim )
                  {
                    // inserting finite element type information
                    (*rit.first).second.first.insert( (*eit1).second );
@@ -1384,12 +1383,12 @@ void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset )
         std::set<std::string>::const_iterator etype_endit = (*rit).second.first.end();
         for( std::set<std::string>::const_iterator
              etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
-            elmtdim = std::max( elmtdim, fem_specs.MinimumSpatialDimension( *etype_it ) );
+            elmtdim = std::max( elmtdim, fem_specs::MinimumSpatialDimension( *etype_it ) );
         /// remove types of low dim elements
         std::vector<std::string> remove_types;
         for( std::set<std::string>::const_iterator
              etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
-            if ( fem_specs.MinimumSpatialDimension( *etype_it ) != elmtdim )
+            if ( fem_specs::MinimumSpatialDimension( *etype_it ) != elmtdim )
                 remove_types.push_back( *etype_it );
         /// remove ids of low dim elements
         std::vector<size_t> remove_eids;
@@ -1398,7 +1397,7 @@ void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset )
             elmtid   = (*rit).second.second[ i ];
             elmttype = vset.ElementType( elmtid );
             // if element has a different spatial dimension it will be removed
-            if ( fem_specs.MinimumSpatialDimension( elmttype ) != elmtdim )
+            if ( fem_specs::MinimumSpatialDimension( elmttype ) != elmtdim )
                 remove_eids.push_back( i );
         }
         if( !remove_eids.empty() || !remove_types.empty() )
@@ -2212,13 +2211,13 @@ bool  ModelTopology::BoxShapedModel() const
 
      for ( std::deque<std::vector<long64> >::iterator it1=vset.PfvertsBegin(); it1!=vset.PfvertsEnd(); it1++, eid++ )
        // only for the volume elements in the mesh
-       if ( fem_specs.VolumeElement( vset.ElementType(eid) ) )
+       if ( fem_specs::VolumeElement( vset.ElementType(eid) ) )
          // for each neighbor of this volume element
          for ( std::vector<long64>::iterator it2=(*it1).begin(); it2!=(*it1).end(); it2++ ) {
                // only if there is not already a neighbor definition and
                // only if the neighbor element is a surface element
                if ( element_types > 1U and
-                   (*it2) >= 0 and fem_specs.SurfaceElement( vset.ElementType( static_cast<size_t>(*it2) ) ) )
+                   (*it2) >= 0 and fem_specs::SurfaceElement( vset.ElementType( static_cast<size_t>(*it2) ) ) )
                  {
                     // checking whether the surface element is a member of any boundary group
                     if      ( stop.find(static_cast<size_t>(*it2))    != stop.end() )    (*it2) = TOP_OUTSIDE;
@@ -2303,12 +2302,12 @@ bool  ModelTopology::BoxShapedModel() const
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
      // 0. Preliminary checks
-     if ( !fem_specs.VolumeElement(ANSYS_etype) ) {
+     if ( !fem_specs::VolumeElement(ANSYS_etype) ) {
           throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                          "Element the faces of which shall be flagged must be a volume element");
           return false;
        }
-     if ( !fem_specs.SurfaceElement(ANSYS_bound_etype) ) {
+     if ( !fem_specs::SurfaceElement(ANSYS_bound_etype) ) {
           throw csmp::Exception( ERROR, "ModelTopology::FlagNeighborFacesOfBoxShapedModel",
                          "Element used to assign model boundary must be a volume element");
           return false;
@@ -2671,7 +2670,7 @@ bool  ModelTopology::BoxShapedModel() const
      // -------------------------------------------- O.K.
      std::deque<size_t>  mixed_ele_pfverts;
      for ( size_t eid=0U; eid<vset.Elements(); eid++ )
-       mixed_ele_pfverts.push_back( fem_specs.NeighborsPerElementOfType( vset.ElementType(eid) ) );
+       mixed_ele_pfverts.push_back( fem_specs::NeighborsPerElementOfType( vset.ElementType(eid) ) );
      vset.ResizePfverts( mixed_ele_pfverts );
      // giving the new 'pfverts' a default value
      for ( size_t i=0U; i<vset.Elements(); i++ )
@@ -2684,12 +2683,12 @@ bool  ModelTopology::BoxShapedModel() const
      std::multimap<std::set<size_t>,std::pair<size_t,size_t> >  surface_neighbor_keys, line_neighbor_keys;
      std::set<size_t>  key;
      for ( size_t eid=0U; eid<vset.Elements(); eid++ )
-       for ( size_t i=0U; i<fem_specs.FacesPerElementOfType( vset.ElementType(eid) ); i++ )
+       for ( size_t i=0U; i<fem_specs::FacesPerElementOfType( vset.ElementType(eid) ); i++ )
          {
-            for ( size_t j=0U; j<fem_specs.NodesPerFaceForElementOfType( vset.ElementType(eid), i ); j++ )
-              key.insert( vset.Plist( eid, fem_specs.FaceNodeForElementOfType( vset.ElementType(eid), i, j ) ) );
+            for ( size_t j=0U; j<fem_specs::NodesPerFaceForElementOfType( vset.ElementType(eid), i ); j++ )
+              key.insert( vset.Plist( eid, fem_specs::FaceNodeForElementOfType( vset.ElementType(eid), i, j ) ) );
             // insert newly generated key into multimap
-            if ( fem_specs.SurfaceElement( vset.ElementType(eid) ) )
+            if ( fem_specs::SurfaceElement( vset.ElementType(eid) ) )
               surface_neighbor_keys.insert( make_pair( key, std::make_pair( i, eid ) ) );
             else // for all line elements
               line_neighbor_keys.insert( make_pair( key, std::make_pair( i, eid ) ) );
@@ -2776,7 +2775,7 @@ bool  ModelTopology::BoxShapedModel() const
      for ( std::vector<size_t>::const_iterator
            eit=ElementsOfRegionBegin("BOTTOM"); eit!=ElementsOfRegionEnd("BOTTOM"); eit++ ) {
            assert( *eit < vset.Elements() );
-           assert( fem_specs.LineElement( vset.ElementType(*eit) ) );
+           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
            for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
            ebottom.insert( std::make_pair( key, *eit ) );
            for ( std::set<size_t>::const_iterator
@@ -2789,7 +2788,7 @@ bool  ModelTopology::BoxShapedModel() const
      for ( std::vector<size_t>::const_iterator
            eit=ElementsOfRegionBegin("RIGHT"); eit!=ElementsOfRegionEnd("RIGHT"); eit++ ) {
            assert( *eit < vset.Elements() );
-           assert( fem_specs.LineElement( vset.ElementType(*eit) ) );
+           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
            for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
            eright.insert( std::make_pair( key, *eit ) );
            for ( std::set<size_t>::const_iterator
@@ -2802,7 +2801,7 @@ bool  ModelTopology::BoxShapedModel() const
      for ( std::vector<size_t>::const_iterator
            eit=ElementsOfRegionBegin("TOP"); eit!=ElementsOfRegionEnd("TOP"); eit++ ) {
            assert( *eit < vset.Elements() );
-           assert( fem_specs.LineElement( vset.ElementType(*eit) ) );
+           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
            for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
            etop.insert( std::make_pair( key, *eit ) );
            for ( std::set<size_t>::const_iterator
@@ -2815,7 +2814,7 @@ bool  ModelTopology::BoxShapedModel() const
      for ( std::vector<size_t>::const_iterator
            eit=ElementsOfRegionBegin("LEFT"); eit!=ElementsOfRegionEnd("LEFT"); eit++ ) {
            assert( *eit < vset.Elements() );
-           assert( fem_specs.LineElement( vset.ElementType(*eit) ) );
+           assert( fem_specs::LineElement( vset.ElementType(*eit) ) );
            for ( size_t i=0U; i<vset.PlistSize(*eit); i++ ) key.insert( vset.Plist( *eit, i ) );
            eleft.insert( std::make_pair( key, *eit ) );
            for ( std::set<size_t>::const_iterator

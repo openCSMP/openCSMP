@@ -31,7 +31,8 @@ inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
 */
 
 /// sign function to determine a positive or negative multiplier= -1 0 1 extracting the sign of a number
-template <typename T> int sgn(T val) {
+template <typename T>
+T sign( T val ) {
     return static_cast<T>((T(0) < val) - (val < T(0)));
 }
 

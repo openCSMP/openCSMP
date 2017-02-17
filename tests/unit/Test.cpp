@@ -26,15 +26,27 @@ void Test::do_test( bool cond, const std::string& lbl,
         _succeed();
 }
 
-/// @todo (2-D) Rm rtti
+
+// SKM 8/2/17: introduced appropriate name de-mangling
 void Test::do_fail( const std::string& lbl,
                     const char* fname, long lineno )
 {
+    int   status;
+    char* realname(nullptr);
+
     ++m_nFail;
     if (m_osptr)
-    {
-        if( !hasName() )
-          *m_osptr << typeid(*this).name();
+      {
+        if( !hasName() ) {
+#ifdef __GNUC__
+             //This is a fix for gcc name demangling.
+             const std::type_info& ti = typeid(*this);
+             realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+             *m_osptr << realname;
+#else
+             *m_osptr << typeid(*this).name();
+#endif
+          }
         else
           *m_osptr << (*this).getName();
 
@@ -44,30 +56,41 @@ void Test::do_fail( const std::string& lbl,
 }
 
 
-void Test::do_equal( double expr, double value, double tol, 
+// SKM 8/2/17: introduced appropriate name de-mangling
+void Test::do_equal( double expr, double value, double tol,
                      const string& lbl, const char* fname, long lineno ) 
 {
-    bool cond = ((expr >= value - tol) && (expr <= value + tol));
+    bool  cond = ((expr >= value - tol) && (expr <= value + tol));
+    int   status;
+    char* realname(nullptr);
 
-    if( !cond){
-        if( !hasName() )
-          *m_osptr << typeid(*this).name();
+    if ( !cond ) {
+        if( !hasName() ) {
+#ifdef __GNUC__
+             //This is a fix for gcc name demangling.
+             const std::type_info& ti = typeid(*this);
+             realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+             *m_osptr << realname;
+#else
+             *m_osptr << typeid(*this).name();
+#endif
+          }
         else
           *m_osptr << (*this).getName();
 
         *m_osptr << " failure: ( expr = " << expr <<" , value =  " << value<< ", diff = "<< expr-value <<", tolerance = "<< tol << ") , "
                  << fname << " (line " << lineno << ")\n";
-    }
+      }
 
     do_test(cond, lbl, fname, lineno);                
 }
 
 
-/// @todo (2-D) Rm rtti
+// SKM 8/2/17: introduced appropriate name de-mangling
 long Test::report() const
 {
   int   status;
-  char* realname;
+  char* realname(nullptr);
 
   if (m_osptr)
   {
@@ -83,7 +106,7 @@ long Test::report() const
     {
       #ifdef __GNUC__
         //This is a fix for gcc name demangling.
-        const std::type_info  &ti = typeid(*this);
+        const std::type_info& ti = typeid(*this);
         realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
         *m_osptr << "Test \""
             << realname << "\":\n"
@@ -92,7 +115,6 @@ long Test::report() const
             << endl;
         free(realname);
       #else
-
         *m_osptr << "Test \""
             << typeid(*this).name() << "\":\n"
             << "\tPassed: " << m_nPass

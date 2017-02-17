@@ -42,7 +42,8 @@ class FEM_Data {
     void ScaleRangeTo( const csp_type& tmin, const csp_type& tmax );
     /// add supplied value to all entries (look at conventions for vectors and tensors in the doc of these classes)
     void OffsetRangeBy( csp_type df );
-  
+
+/*  DEPRECATED - but might be brought back
     /// checks whether variable has already been taken the log of
     bool Logarithmitized() const { return logarithmitized; };
     /// convert values to their natural logarithm
@@ -50,7 +51,7 @@ class FEM_Data {
     /// convert values to base 10 logarithm
     void DecadicLogarithmOfValues();
     void SquareRootOfValues();
-
+*/
     bool OutBinary( std::FILE* fp ) const;
     void InBinary( std::FILE* fp );
     void Out() const;

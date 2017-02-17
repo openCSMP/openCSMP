@@ -152,7 +152,7 @@ class ModelTopology {
     //       region name          etypes-of-region       ids of elements in region
     std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_regions;
     // public information on csmp element types
-    CSMP_ElementSpecifications  fem_specs;
+    typedef CSMP_ElementSpecifications  fem_specs;
     std::string  model_name;
     bool  isoparametric_mesh; // default is false
 };

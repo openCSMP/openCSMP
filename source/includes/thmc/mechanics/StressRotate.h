@@ -60,25 +60,6 @@ class StressRotate {
     double64 z_;
 };
 
-
-// inline functions
-
-// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
-inline double64 StressRotate::Sigma1() const
-  { return sigma1_; }
-  
-// intermediate principal stress (Pa/m2)
-inline double64 StressRotate::Sigma2() const
-  { return sigma2_; }
-  
-// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
-inline double64 StressRotate::Sigma3() const
-  { return sigma3_; }
-  
-
-
-
-
 } // end csmp
 
 #endif

@@ -62,16 +62,6 @@ class ANSYS_Model3D : public Model<3U> {
     std::vector<Point<3U> > node_coords_; ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };
 
-
-// inlines
-
-inline std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesBegin() const { return node_coords_.begin(); }
-
-inline std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { return node_coords_.end(); }
-
-
-
-
 } // end csmp
 
 #endif

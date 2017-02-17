@@ -11,9 +11,38 @@ namespace csmp {
 template<size_t dim> class Visitor;
 template<size_t dim> class Element;
 
-// NODE class for Model
+/**
+ 
+@brief Node = lowest class of the model hierarchy.
+
+@author S.K. Matthaei
+@author Stephen G. Roberts
+@date 1999
+
+@section motivation Motivation
+
+Node class in the finite element mesh hierarchy
+stores the coordinate of the node point and the variables
+associated with the node.
+ 
+@section design Design Intent
+
+Mesh vertex with coordinates and associated flags.  
+ 
+ 
+@section participants Participants
+
+Uses Point<> template to represent the coordinate.  
+ 
+ 
+@section collaborations Collaborations
+
+Elements are registered as parents, Faces and InterFaces are not.
+ 
+*/
 template<size_t dim>
 class Node : public LocalVariableStorage<dim,Node<dim> >
+// TODO: class Node : public LocalVariableStorage<dim,Node>
   {
   public:
     Node();
@@ -77,38 +106,6 @@ class Node : public LocalVariableStorage<dim,Node<dim> >
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
 };
-
-
-
-/**
- 
-@class Node Node "main_library/Node.h"
-
-@author S.K. Matthaei
-@author Stephen G. Roberts
-@date 1999
-
-@section motivation Motivation
-
-Node class in the finite element mesh hierarchy.  
- 
- 
-@section design Design Intent
-
-Mesh vertex with coordinates and associated flags.  
- 
- 
-@section participants Participants
-
-Uses Point<> template to represent the coordinate.  
- 
- 
-@section collaborations Collaborations
-
-Elements are registered as parents, Faces and InterFaces are not.
- 
-*/
-
 
 } // csmp
 

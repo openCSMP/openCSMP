@@ -104,7 +104,7 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& 
       DNT *= DN;
       
       // get element coordinates
-      e.CoordinateMatrix(coords);
+      e.CoordinateMatrix();
       
        // calculate upwinding coefficients and multiply them with operand matrix   
       for ( size_t i=0U; i <e.Nodes(); ++i) {
@@ -126,7 +126,7 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& 
       // the matrix is contracted into a vector by multiplying with the basis vector
       for (size_t i = 0; i < e.Nodes(); ++i) {
         for (size_t j = 0; j < e.Nodes(); ++j) {
-          MathOperatorRHS<dim>::RHS[i] += DNT(i, j) * coords(j, xyz-1);
+          MathOperatorRHS<dim>::RHS[i] += DNT(i, j) * e.FE()->XY(j, xyz-1);
         }
       }
       

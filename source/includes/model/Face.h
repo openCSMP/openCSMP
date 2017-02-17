@@ -3,22 +3,40 @@
 
 #include "LocalVariableStorage.h"
 #include "FiniteElement.h"
-#include "FiniteElementTraits.h"
-#include "FiniteVolumeTraits.h"
+#include "FiniteElementPolicy.h"
+#include "FiniteVolumePolicy.h"
 
 namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Visitor;
-//class FiniteElementManager;
 
-/// surface (3D) or line (2D) element connector for use at material interfaces
-// SKM FIX removed FaceRemeshingTraits<dim,Face>
-
+/**
+    Lower dimensional surface (3D) or line (2D) element that serves as interface (Face) or connector (InterFace)
+    between higher dimensional mesh domains. The Face is used for material interfaces that are welded
+    together. The boundaries of a CSMP model consist of Face objects.
+    
+    The Face is rather similar in its functionality to the Element with many member functions
+    sharing their names. However, Face objects know their higher-dimensional neighbors which are Elemen objects.
+    This means that Face objects have an extra set of pointers that connect them to Element objects.
+    
+    Use Face objects for operations targeted on internal or external model boundaries.
+    For external boundaries only the higher-dimensional neighbor 0 will be defined.
+    For internal boundaries the Face provides access to both neighbors, distinguishing
+    inside from outside neighbors. This distinction is made with regard to the Face normal.
+    
+    The Element objects that the Face normal points to are referred to as outside
+    and the ones on the opposite side are the internal ones.
+    This also means that the sense of node numbering of the Face matches that of
+    the face of the Element on the inside.
+    
+    @author Stephan Matthai
+    @date 3/3/2016
+*/
 template<size_t dim>
-class Face : public FiniteElementTraits<dim,Face>,
-             public FiniteVolumeTraits<dim,Face>,
+class Face : public FiniteElementPolicy<dim,Face>,
+             public FiniteVolumePolicy<dim,Face>,
              public LocalVariableStorage<dim,Face<dim> >
 {
   public:
@@ -71,12 +89,9 @@ class Face : public FiniteElementTraits<dim,Face>,
           const IntegrationPointVariables& );
 
     Face( const Face& );
-    Face( Face&& );
+//    Face( Face&& );
 
     ~Face();
-
-    /// @attention because of the pointers, this assignment makes sense only in the rarest cases
-    Face& operator=( const Face<dim>& );
 
     /// connects face to the supplied node
     void Assign( size_t node, Node<dim>* const );
@@ -87,23 +102,32 @@ class Face : public FiniteElementTraits<dim,Face>,
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
   
-    /// endow Face with FiniteVolume functionality
-    void Assign( const FiniteVolumeStencil<dim>* const );
-  
     // TODO: SKM: deprecate once new functionality is available
     /// assigns inner parent and node indices after finding if boundary face by matching the provided face nodes
 //    void Assign( Element<dim>* const parent, const std::vector<Node<dim>*>& faceNodes );
+
+    /// @attention because of the pointers, this assignment makes sense only in the rarest cases
+    Face& operator=( const Face<dim>& );
+    // TODO: implement move assignment operator
+  
+    // ------------------------------------------------------------------------
+    // Basic information
+    // ------------------------------------------------------------------------
+
+    size_t  Nodes() const     { return node_connector_.size(); };
+    size_t  Neighbors() const { return face_connector_.size(); };
+    
+    /// for element face, there can be a neighbor
+    size_t  Faces() const { return face_connector_.size(); };
 
     /// compares faces with one-another
     bool operator==( const Face<dim>& ) const;
 
     /// Local variable storage interface
     PLACEMENT Placement() const { return FACE; }
-  
-    /// box boundary flagging is not carried over to face
 
     // ------------------------------------------------------------------------
-    // Member functions
+    // Member access
     // ------------------------------------------------------------------------
 
     /// to apply visitors whose application level is Boundary and target is Face
@@ -117,12 +141,6 @@ class Face : public FiniteElementTraits<dim,Face>,
   
     /// access the meighbor faces of this face
     csmp::Face<dim>*  Neighbor( size_t ) const;
-
-    /// access the finite element subclass that is associated with this face (triangle etc.)
-    FiniteElement*    FE() const;
-  
-    /// access low-level finite volume functionality
-    const FiniteVolumeStencil<dim>* FV_Stencil() const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void           Idx( size_t ) const;
@@ -159,6 +177,24 @@ class Face : public FiniteElementTraits<dim,Face>,
     // void       UnitNormal( VectorVariable<dim>& nrml ) const;
 
     // ------------------------------------------------------------------------
+    // Functionality
+    // ------------------------------------------------------------------------
+
+    /// returns a vector of the property of interest discretized on the node
+    template<class Var>
+    void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
+
+    /// inputs node coordinates into supplied matrix
+    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+
+    /// the centre of gravity of the element
+    Point<dim>  BaryCenter() const;
+
+    /// projects node points onto line returning max distance between them; vec direction can have any length
+    double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+
+
+    // ------------------------------------------------------------------------
     // Screen Output
     // ------------------------------------------------------------------------
 
@@ -176,10 +212,7 @@ class Face : public FiniteElementTraits<dim,Face>,
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t                          idx_;
-    csmp::FiniteElement*                    fptr_;
-    const csmp::FiniteVolumeStencil<dim>*   fvptr_;
-  
+    mutable size_t           idx_;
     std::vector<Node<dim>*>  node_connector_;  ///< pointers to the nodes of the face
     std::vector<Face<dim>*>  face_connector_;  ///< the (equidimensional) neighbors of the face
     // not references or constant pointers because these may need to change during remeshing
@@ -189,8 +222,7 @@ class Face : public FiniteElementTraits<dim,Face>,
 
 
 
-/**
-@class Face Face "main_library/Face.h"
+/**  PRECURSOR VERSION
 
 @author P. Lang
 @author S.K. Matthai

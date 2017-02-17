@@ -91,8 +91,8 @@ The std::inner_product between the two vectors is returned.
 
 This may be used to calculate the projection of one vector onto another, as 
 well as one of the step in the calculation of the vector norm.
+
 */
-//dimensionless dot product
 inline double64 dotProduct(const std::vector<double64>& vec1, const std::vector<double64>& vec2)
 {
 	 assert(vec1.size() == vec2.size());
@@ -119,8 +119,8 @@ vector is divided by this quantity.
 
 This method is used to make the input vector a unitary vector, thus to make 
 its length equal to one, preserving its original direction and orientation.
+
 */
-//normalizes a vector
 inline void euclideanNormalize( std::vector<double64>& vectorToNormalize )
 {
 	const double64 fNorm(std::sqrt(dotProduct(vectorToNormalize, vectorToNormalize)));
@@ -151,6 +151,7 @@ vals.insert(11);
 
 The order of the elements will be: 11, -10, 9
 This is used in TensorVariable.cpp to order the eigenvalues.
+
 */
 //binary predicate for the larger magnitude of vectors
 template <class fT>

@@ -19,11 +19,14 @@ Parameter::Parameter()
  :  name("unspecified"),
     notation("-"),
     unit("-"),
-    min(-1.0e+25),
-    max(-1.0e+25),
+//    min(numeric_limits<double64>::quiet_NaN()), - all hell breaks loose!
+//    max(numeric_limits<double64>::quiet_NaN()),
+    min(-1.0e+25), // must be numbers that can be represented
+    max(1.0e+25),
     usage("???"),
     explanation("???"),
     reference("???")
+    // key
  {
  }
 
@@ -119,6 +122,13 @@ ostream&  operator<<( ostream& stream, const Parameter& p )
     stream.precision(prec);
     stream << resetiosflags( ios::adjustfield );
     return stream;
+ }
+
+/// checks whether the supplied value is in the range stored in the parameter data
+bool Parameter::IsWithinRange( double64 value ) const
+ {
+    if ( value > max || value < min ) return false;
+    return true;
  }
 
 

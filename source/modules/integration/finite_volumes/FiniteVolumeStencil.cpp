@@ -51,9 +51,23 @@ FiniteVolumeStencil<dim>::~FiniteVolumeStencil()
 */
 template<size_t dim>
 FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& fvs )
- {
-    *this = fvs;
- }
+ : edges_of_element(fvs.edges_of_element),
+   facets_surrounding_node(fvs.facets_surrounding_node),
+   facet_integration_points(fvs.facet_integration_points),
+   facet_integration_weights(fvs.facet_integration_weights),
+   facet_normals(fvs.facet_normals),
+   facet_parametric_normals(fvs.facet_parametric_normals),
+   sector_integration_points(fvs.sector_integration_points),
+   sector_integration_weights(fvs.sector_integration_weights),
+   parent_element_(fvs.parent_element_),
+   facet_edge_midpoints(fvs.facet_edge_midpoints),
+   barycenter(fvs.barycenter),
+   facet_points(fvs.facet_points),
+   sector_points_(fvs.sector_points_),
+   sector_edges_(fvs.sector_edges_),
+   space_dimension_(fvs.space_dimension_)
+{
+}
  
  
 /**
@@ -85,6 +99,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
     	    facet_points  		         = fvs.facet_points;
     	    sector_points_             = fvs.sector_points_;
      	    sector_edges_              = fvs.sector_edges_;
+          space_dimension_           = fvs.space_dimension_;
        }
      return *this;
  }
@@ -113,11 +128,11 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
 */
 template<size_t dim>
 void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
-                                          size_t srfs_per_node, 
-                                          size_t n_ivol, 
-                                          size_t n_spts, 
-                                          size_t n_vpts
-                                          )
+                                        size_t srfs_per_node,
+                                        size_t n_ivol, 
+                                        size_t n_spts, 
+                                        size_t n_vpts
+                                     )
  {
     facet_integration_points.resize( n_isrf );
     facet_integration_weights.resize( n_isrf );
@@ -150,6 +165,482 @@ void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
       }
 
  } // end Resize
+
+
+
+/**
+    Irrespective of the dimension of the model,
+    this method reports whether the stencil corresponds to a line, surface or volumetric
+    finite element.
+*/
+template<size_t dim>
+ELEMENT_DIMENSION FiniteVolumeStencil<dim>::Geometry() const
+ {
+    return space_dimension_;
+ }
+
+
+
+/**
+
+Returns the number of internal facets - division walls inside the FE.
+
+@return Returns the number of the internal facets.
+
+@section implementation Implementation
+
+Accesses the private data of the class, retreiving the value.
+*/
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::Facets() const
+ {
+    return edges_of_element.size();
+ }
+ 
+ 
+ 
+/**
+
+Returns number of facets, opposite to the given node - this corresponds to
+the number of facets, adding flux to the given node.
+
+@return the number of the facets in front of the node of given element type.
+
+@section implementation Implementation
+
+Accesses the private data of the class, retrieving the value.
+*/
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::FacetsPerSector( size_t iSector ) const
+ {
+    assert( iSector < facets_surrounding_node.size() );
+
+    return facets_surrounding_node[iSector].size();
+ }
+
+
+
+/**
+
+Returns number of internal FV sectors, given FE is divided to.
+
+@return the number of sectors.
+
+@section implementation Implementation
+
+Accesses the private data of the class, retreiving the value.
+*/
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::Sectors() const
+ {
+    // since this is a vector of vectors of points per sector
+    return sector_integration_points.size();
+ }
+
+
+
+/**
+
+Returns number of integration points per facet.
+
+@return the number of integration points per facet.
+
+@section implementation Implementation 
+
+Accesses the private data of the class, retreiving the value.
+For current implementation this value is 1.
+
+*/
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::IntegrationPointsPerFacet( size_t iFacet ) const
+ {
+    assert( iFacet < facet_integration_weights.size() );
+
+    // assuming that each facet has the same number of ip's
+    return facet_integration_weights[iFacet].size();
+ }
+
+
+
+/**
+
+Returns number of integration points per sectortric sector of given FE
+type.
+
+@return the number of integration points per volumetric sector.
+
+@section implementation Implementation
+
+Accesses the private data of the class, retreiving the value.
+For current implementation this value is 1.
+*/
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::IntegrationPointsPerSector( size_t iSector ) const
+ {
+    assert( iSector < sector_integration_weights.size() );
+
+    return sector_integration_weights[iSector].size();
+ }
+
+
+
+
+/**
+
+Returns to argument rst the reference to STL vector of the parametric coordinates
+of the given facet integration point.
+
+@param iFacet index (No) of the internal facet isnside the FE
+@param ip index (No) of the integration point on the facet
+
+@return reference to STL vector of the parametric coordinates 
+of the given facet integration point
+
+@section implementation Implementation
+
+Accesses the private data of the tabulated points, associated with the facet.
+
+@section application  Application
+
+For current implementation index ip is constrained to 0 only, i.e. the
+FVPEM method is working with 1 facet integration point only.
+*/
+template<size_t dim>
+const Point<dim>&  FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
+                                                                           size_t ip ) const
+ {
+    assert( iFacet < Facets() );
+    assert( ip < IntegrationPointsPerFacet(iFacet) );
+    return facet_integration_points[iFacet][ip];
+ }
+
+
+
+template<size_t dim>
+void FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
+                                                             size_t ip, 
+                                                             std::vector<double64>& rst ) const
+ {
+    assert( iFacet < Facets() );
+    assert( ip < IntegrationPointsPerFacet(iFacet) );
+    rst = facet_integration_points[iFacet][ip].Coordinates();
+ }
+
+
+
+// SKM addon
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::FacetIntegrationPoint( size_t iFacet, 
+                                                                 size_t ip, 
+                                                                 size_t rst ) const
+ {
+    assert( iFacet < Facets() );
+    assert( ip < IntegrationPointsPerFacet(iFacet) );
+
+    return facet_integration_points[iFacet][ip][rst];
+ }
+
+
+
+/**
+
+Defines FE edge, associated with that facet of interest. For a given
+facet method returns local indices of the FE start node and 
+the end node. The end node is the one on the side of the facet into
+which the outward pointing normal points.  
+
+@param iFacet index of the internal dividing facet in the FE.
+@param estart local index of the FE edge start  node
+@param eend   local index of the FE edge end node
+
+@section implementation Implementation
+
+Accesses the private pair of nodes, associated with the facet.
+*/
+template<size_t dim>
+void FiniteVolumeStencil<dim>::FacetEdgeNodes( size_t iFacet, 
+                                                      size_t& estart, 
+                                                      size_t& eend ) const
+{
+    assert( iFacet < Facets() );
+
+    estart=edges_of_element[iFacet].first;
+    eend= edges_of_element[iFacet].second;
+}
+
+
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::InsideNode( size_t iFacet ) const
+{
+    assert( iFacet < Facets() );
+
+    return edges_of_element[iFacet].first;
+}
+
+
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::OutsideNode( size_t iFacet ) const
+{
+    assert( iFacet < Facets() );
+
+    return edges_of_element[iFacet].second;
+}
+
+
+
+/**
+
+Returns to argument rst the reference to STL vector of the parametric coordinates
+of the given sector integration point, associated with given sector "volume".
+
+@param iSector number of the internal sector isnside the FE
+@param ip index (No) of the integration point on the facet
+
+@return reference to STL vector of the parametric coordinates
+of the given facet integration point
+
+@section implementation Implementation
+
+Accesses the private data of the tabulated points, associated with the sector.
+
+@section application Application
+
+For current implementation index ip is constrained to 0 only, i.e. the
+FVPEM method is working with 1 facet integration point only.
+*/
+template<size_t dim>
+const Point<dim>&  FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
+                                                                            size_t ip ) const
+{
+    assert( iSector < Sectors() );
+    assert( ip < IntegrationPointsPerSector(iSector) );
+
+    return sector_integration_points[iSector][ip];
+ }
+
+
+template<size_t dim>
+void FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
+                                                              size_t ip, 
+                                                              std::vector<double64>& rst ) const
+{
+    assert( iSector < Sectors() );
+    assert( ip < IntegrationPointsPerSector(iSector) );
+
+    rst = sector_integration_points[iSector][ip].Coordinates();
+ }
+
+
+
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::SectorIntegrationPoint( size_t iSector, 
+                                                                  size_t ip, 
+                                                                  size_t rst ) const
+{
+    assert( iSector < Sectors() );
+    assert( ip < IntegrationPointsPerSector(iSector) );
+
+    return sector_integration_points[iSector][ip][rst];
+ }
+
+
+/**
+
+Returns for the given facet integration point integration weight,
+associated with given facet "facet".
+
+@param iFacet index (No) of the internal facet  isnside the FE
+@param ip index (No) of the integration point on the facet
+
+@return the value of the facet integration weight.
+
+@section implementation Implementation
+
+Accesses the private data of the tabulated points, associated with the facet.
+
+@section application Application
+
+For current implementation index ip is constrained to 0 only, i.e. the
+FVPEM method is working with 1 facet integration point only.
+*/    
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::FacetIntegrationWeight( size_t iFacet, 
+                                                           size_t ip ) const
+ {
+    assert( iFacet < Facets() );
+    assert( ip < IntegrationPointsPerFacet(iFacet) );
+
+    return facet_integration_weights[iFacet][ip];
+ }
+
+
+/**
+
+Returns for the given sector integration point projection weight,
+associated with given facet "facet". Projection weight is an extra multiplier,
+which is bringing to the same scale the size of the unit parametric
+spaces of different element types.
+
+@param facet index (No) of the internal facet  isnside the FE
+@param ip index (No) of the integration point on the facet
+
+@return the value of the facet projection weight.
+
+@section implementation Implementation
+
+Accesses the private data of the tabulated points, associated with the facet.
+
+@section application Application
+
+For current implementation index ip is constrained to 0 only, i.e. the
+FVPEM method is working with 1 facet integration point only.
+*/
+ 
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::FacetProjectionWeight( size_t iFacet, size_t ip ) const
+ {
+    assert( iFacet < Facets() );
+    assert( ip < IntegrationPointsPerFacet(iFacet) );
+    
+    return facet_projection_weights[iFacet][ip];
+ } 
+
+
+
+/**
+
+Returns for the given sector integration point integration weight,
+associated with given sector "volume".
+
+@param iSector corresponding to the finite element node with the same number
+@param ip represents the n-th integration point on the facet
+
+@return the value of the sector integration weight=volume in parametric space.
+
+@section implementation Implementation
+
+Accesses the private data of the tabulated points, associated with the sector.
+
+@section application Application
+
+For current implementation index ip is constrained to 0 only, i.e. the
+FVPEM method is working with 1 facet integration point only.
+*/
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::SectorIntegrationWeight( size_t iSector, size_t ip ) const
+ {
+    assert( iSector < Sectors() );
+    assert( ip < IntegrationPointsPerSector(iSector) );
+
+    return sector_integration_weights[iSector][ip];
+ }
+ 
+ 
+ 
+  // overloaded method, returns specific index of a facet 
+template<size_t dim>
+size_t  FiniteVolumeStencil<dim>::FacetSurroundingSector( size_t iSector, size_t n ) const
+ {
+    assert( iSector < Sectors() );
+    assert( n < FacetsPerSector(iSector) );
+
+    return facets_surrounding_node[iSector][n];
+ }
+
+ 
+ 
+
+ 
+
+
+
+
+
+/**
+
+Returns STL vector of the normal vector coordinates in parametric space of the FE.
+ 
+@param iFacet is the number 0..n-1 of the internal facet inside of the FE
+
+@return to argument "nrml" reference to STL vector of the normal vector
+ coordinates in parametric space of the FE. 
+
+@section implementation Implementation
+ 
+Accesses the private data of the class, retreiving tabulated vector.
+*/ 
+template<size_t dim>
+const Point<dim>& FiniteVolumeStencil<dim>::UnitParametricNormalTo( size_t iFacet ) const
+{
+    assert( iFacet < edges_of_element.size() );
+
+    return facet_parametric_normals[iFacet];
+}
+
+
+template<size_t dim>
+double64 FiniteVolumeStencil<dim>::UnitParametricNormalComponent( size_t iFacet, 
+                                                                         size_t x_or_y_or_z ) const
+{
+    assert( iFacet < edges_of_element.size() );
+
+   return facet_parametric_normals[iFacet][x_or_y_or_z];
+} 
+
+
+template<size_t dim>
+const Point<dim>& FiniteVolumeStencil<dim>::FacetEdgeMidPoint(size_t iFacet ) const
+{
+    assert( iFacet < edges_of_element.size() );
+
+	return facet_edge_midpoints[iFacet];
+}
+
+template<size_t dim>
+const Point<dim>& FiniteVolumeStencil<dim>::Barycenter() const
+{
+	 return barycenter;
+}
+   
+   
+template<size_t dim>
+const Point<dim>&  FiniteVolumeStencil<dim>::FacetPoint( size_t iFacet, size_t iPoint ) const
+{
+	 return facet_points[iFacet][iPoint];
+}
+
+    
+    
+template<size_t dim>
+const csmp::Point<dim>&  FiniteVolumeStencil<dim>::SectorPoint( size_t iSector, size_t iPoint ) const
+{
+	 return sector_points_[iSector][iPoint];
+}
+  
+template<size_t dim>
+const std::pair<csmp::Point<dim>,csmp::Point<dim> >&  FiniteVolumeStencil<dim>::SectorEdgePoints( size_t iSector, size_t iEdge ) const
+{
+   const size_t pt1(sector_edges_[iSector][iEdge].first);
+   const size_t pt2(sector_edges_[iSector][iEdge].second);
+   
+	 return std::move(std::make_pair( sector_points_[iSector][pt1], sector_points_[iSector][pt2] ));
+}       
+
+template<size_t dim>
+const std::pair<size_t,size_t>&  FiniteVolumeStencil<dim>::SectorEdge( size_t iSector, size_t iEdge ) const
+{
+	 return sector_edges_[iSector][iEdge];
+}       
+    
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::SectorPoints( size_t iSector ) const 
+{ return sector_points_[iSector].size(); } 
+
+template<size_t dim>
+size_t FiniteVolumeStencil<dim>::SectorEdges( size_t iSector ) const 
+{ return sector_edges_[iSector].size(); } 
+    
+  
 
 
 
@@ -226,7 +717,9 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	      	  
     	    FV.SectorPoints(sector_points_);
     	    
-     	    FV.SectorEdgePairs(sector_edges_); 
+     	    FV.SectorEdgePairs(sector_edges_);
+     
+          space_dimension_ = LINE;
 
           if(debug) {
              cout<<"\nISOPARAMETRIC_LINEAR_BAR:" <<endl;
@@ -272,6 +765,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	    
      	    FV.SectorEdgePairs(sector_edges_); 
     	  
+          space_dimension_ = SURFACE;
+     
           if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_TRIANGLE:" <<endl;
               Out();         
@@ -317,6 +812,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	    
         	   FVT.SectorEdgePairs(sector_edges_); 
              
+             space_dimension_ = VOLUME;
+
              if(debug) {
                 cout<<"\nISOPARAMETRIC_LINEAR_TETRAHEDRON: "<<endl;
                 Out();         
@@ -358,6 +855,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	    FVQ.SectorPoints(sector_points_);
     	    
      	    FVQ.SectorEdgePairs(sector_edges_); 
+
+          space_dimension_ = SURFACE;
 
           if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_QUADRILATERAL:"<<endl;
@@ -404,6 +903,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	    FVH.SectorPoints(sector_points_);
     	    
      	    FVH.SectorEdgePairs(sector_edges_); 
+
+          space_dimension_ = VOLUME;
 
          if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_HEXAHEDRON:"<<endl;
@@ -457,6 +958,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     	    
      	    FVPy.SectorEdgePairs(sector_edges_); 
 
+          space_dimension_ = VOLUME;
+
          if ( debug ) {
               cout<<"\nISOPARAMETRIC_LINEAR_PYRAMID:"<<endl;
               Out();         
@@ -498,6 +1001,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
           FVP.FacetPoints(facet_points);
 		  
+          space_dimension_ = VOLUME;
+
          if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_PRISM:"<<endl;
               Out();         
@@ -507,8 +1012,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
       return; 
       }
     else {
-         cout <<"\nFiniteVolumeStencil::Initialize: Element type not recognized: ";
-         cout << csp_finite_element_type << endl;
+         cerr <<"\nFiniteVolumeStencil::Initialize: Element type not recognized: ";
+         cerr << csp_finite_element_type << endl;
       }
       
  } // end Initialize

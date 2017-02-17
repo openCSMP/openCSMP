@@ -140,8 +140,8 @@ void ErrorMetric_Example::assignLargestEigenValueOfTo( Model<3U>& sg, const char
 
          // finding the largest eigenvalue be it negative or positive
          ScalarVariable  emax(PLAIN, fabs(evals[0]));
-         emax = std::max( emax.Value(), fabs(evals[1]) );
-         emax = std::max( emax.Value(), fabs(evals[2]) );
+         emax() = std::max( emax(), fabs(evals[1]) );
+         emax() = std::max( emax(), fabs(evals[2]) );
 
          // storing the result
          (*nit)->Store( eig_key, emax );
@@ -197,7 +197,7 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
            }
 
          // getting the largest discretization error
-         emag = std::max( d1 * evals(0), std::max( d2 * evals(1), d3 * evals(2)) );
+         emag() = std::max( d1 * evals(0), std::max( d2 * evals(1), d3 * evals(2)) );
 
          // storing the results
          (*eit)->Store( err_key, evecs ); // discretization error visualized

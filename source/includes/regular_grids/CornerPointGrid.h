@@ -153,8 +153,6 @@ private:
     std::map<std::string,std::vector<std::pair<size_t,size_t> > >             faults_data_;             ///< fault representations
     std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_face_path_;   ///< wells through center of cell faces
     std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_edge_path_;   ///< wells through center of edges
-
-    csmp::CSMP_ElementSpecifications    fem_specs_; ///< numbering conventions for CSMP element types
     bool   tetra_mesh_;
     bool   exclude_inactive_cells_;
 

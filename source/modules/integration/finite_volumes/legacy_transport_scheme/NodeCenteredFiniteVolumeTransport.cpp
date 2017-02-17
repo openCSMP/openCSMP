@@ -1763,7 +1763,7 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double64& in_fl
                       }
                  }
                if( use_advected_variable )
-                   finite_volume_influx *= advected_var.Value();
+                   finite_volume_influx *= advected_var();
                // if we are dealing with a FV marking an inflow boundary
                if ( finite_volume_influx > 0. ) inflow  += finite_volume_influx;
                else                             outflow += fabs(finite_volume_influx);
@@ -1806,7 +1806,7 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double64& in_fl
                   }
              }
            if( use_advected_variable )
-               finite_volume_influx *= advected_var.Value();
+               finite_volume_influx *= advected_var();
            // if we are dealing with a FV marking an inflow boundary
            if ( finite_volume_influx > 0. ) inflow  += finite_volume_influx;
            else                             outflow += fabs(finite_volume_influx);
@@ -3555,7 +3555,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
             // trying property interpolation
             (*eit)->NodePropertyVector( prop_key, node_prop );
             sum = zero;
-            for ( size_t j=0; j<(*eit)->Nodes(); j++ ) sum += IPOL[j] * node_prop[j].Value();
+            for ( size_t j=0; j<(*eit)->Nodes(); j++ ) sum += IPOL[j] * node_prop[j]();
             cout <<"("<< i+1 <<") "<< sum <<" ";
 
         }

@@ -62,7 +62,7 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator=( double64 val )
 FlaggedArrayVariable& FlaggedArrayVariable::operator=( const ScalarVariable& val )
   {
     for( size_t i(0); i < Size(); ++i )
-      data_[i] = val.Value();
+      data_[i] = val();
     return *this;
   }
 
@@ -254,28 +254,28 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator/=( double64 val )
 FlaggedArrayVariable& FlaggedArrayVariable::operator+=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] += sc.Value();
+        data_[i] += sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator-=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] -= sc.Value();
+        data_[i] -= sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator*=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] *= sc.Value();
+        data_[i] *= sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator/=( const ScalarVariable& sc )
   {
     for( size_t i(0); i < Size(); ++i )
-        data_[i] /= sc.Value();
+        data_[i] /= sc();
     return *this;
   }
 

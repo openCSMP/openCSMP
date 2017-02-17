@@ -159,9 +159,9 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   const double64 min(1.0e-25);
   
   
-  ScalarVariable sc, sc2;
-  Point<dim>     bc;
-  double64       v1, v2, v3, t1, t2, t3, t4;
+  double64   sc, sc2;
+  Point<dim> bc;
+  double64   v1, v2, v3, t1, t2, t3, t4;
   
   // resize the storage vector for the random permeability field
   const Region<dim>& mref = mdl.Region(region);
@@ -202,12 +202,12 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
       // scale with standard deviation  
       sc *= sigma/sigma2;
       sc += mean;
-      if ( std::fabs(sc()) < min ) sc = min;
+      if ( std::fabs(sc) < min ) sc = min;
       
-      if ( logarithmic ) sc2 = std::pow(10.0,sc());
+      if ( logarithmic ) sc2 = std::pow(10.0,sc);
       else               sc2 = sc;
-      (*it)->Store( key, sc2 );
-      k_[(*it)->Idx()] = sc2();
+      (*it)->Store( key, makeScalar(PLAIN,sc2) );
+      k_[(*it)->Idx()] = sc2;
                                                    
     }                                                    
 
@@ -296,9 +296,9 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
   const double64 min(1.0e-25);
   
   
-  ScalarVariable sc, sc2;
-  Point<dim>     bc;
-  double64       v1, v2, v3, t1, t2, t3, t4;
+  double64   sc, sc2;
+  Point<dim> bc;
+  double64   v1, v2, v3, t1, t2, t3, t4;
 
   // resize the storage vector for the random permeability field
   const Region<dim>& mref = mdl.Region(region);
@@ -340,16 +340,14 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
       // scale with standard deviation  
       sc *= sigma/sigma2;
       sc += mean;
-      if ( std::fabs(sc()) < min ) sc = min;
+      if ( std::fabs(sc) < min ) sc = min;
       
-      if ( logarithmic ) sc2 = std::pow(10.0,sc());
+      if ( logarithmic ) sc2 = std::pow(10.0,sc);
       else               sc2 = sc;
-      (*it)->Store( key, sc2 );
+      (*it)->Store( key, makeScalar(PLAIN,sc2) );
       
-      k_[(*it)->Idx()] = sc2();
-                                                   
+      k_[(*it)->Idx()] = sc2;
     }                                                    
-
 
 }
 
@@ -446,13 +444,13 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
       return;
     }
     
-  Index          key(mdl.Database().StorageKey(variable));
+  const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
 
   typename vector<Element<dim>* >::const_iterator  it;
 
   for ( it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
-      sc = k_temp[(*it)->Idx()];
+      sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }
                                                    
@@ -487,13 +485,13 @@ void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const cha
       return;
     }
     
-  Index          key(mdl.Database().StorageKey(variable));
+  const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
   
   typename vector<Node<dim>* >::const_iterator  it;
 
   for ( it = mref.NodesBegin(); it != mref.NodesEnd(); it++ ) {
-      sc = k_temp[(*it)->Idx()];
+      sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }
 

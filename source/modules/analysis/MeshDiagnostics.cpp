@@ -171,7 +171,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     for ( vector<Element<3U>*>::const_iterator
           eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
       {
-         (*eit)->CoordinateMatrix( XY );
+         (*eit)->NodeCoordinateMatrix( XY );
          for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
            {
               if ( XY(i,0) > h_valmax ) h_valmax = XY(i,0);

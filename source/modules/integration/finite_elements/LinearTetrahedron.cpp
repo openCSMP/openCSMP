@@ -240,7 +240,7 @@ LinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) 
          snids[1] = 3;
       }
     else
-    std::cout <<"\nLinearTetrahedron::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
+    std::cerr <<"\nLinearTetrahedron::NodesOfSegment: Erratic segment id requested: "<< segm_id << std::endl;
 
  } // end NodesOfSegment
 
@@ -248,39 +248,45 @@ LinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) 
 
 
 /**
-For this element, the faces are numbered such that face 0 lies opposite of
-node 0, face 1 node 1 etc.
+    The faces are numbered such that face 0 lies opposite of
+    node 0, face 1 node 1 etc., see CSMP FEM_conventions.pdf.
+    
+    @note the nodes are ordered counter-clockwise from the outside looking in.
 */
 void LinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
     fnids.resize(3);
 
-    if      ( face_id == 0 )
+    if ( face_id == 0 )
       {
          fnids[0] = 1;
          fnids[1] = 2;
          fnids[2] = 3;
+         return;
       }
-    else if ( face_id == 1 )
+    if ( face_id == 1 )
       {
-         fnids[0] = 2;
-         fnids[1] = 0;
-         fnids[2] = 3;
+         fnids[0] = 0;
+         fnids[1] = 3;
+         fnids[2] = 2;
+         return;
       }
-    else if ( face_id == 2 )
+    if ( face_id == 2 )
       {
          fnids[0] = 0;
          fnids[1] = 1;
          fnids[2] = 3;
+         return;
       }
-    else if ( face_id == 3 )
+    if ( face_id == 3 )
       {
          fnids[0] = 0;
          fnids[1] = 2;
          fnids[2] = 1;
+         return;
       }
     else
-    std::cout <<"\nLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
+    std::cerr <<"\nLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
 
 

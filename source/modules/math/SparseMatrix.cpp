@@ -45,6 +45,74 @@ void SparseMatrix::Resize( size_t n_x_m )
     vector<map<size_t,double64> >( data ).swap( data );
  }
 
+
+
+
+
+
+size_t SparseMatrix::Entries() const 
+ { 
+    return entries; 
+ }
+
+/// iterator over the matrix rows
+std::vector<std::map<size_t,double64> >::const_iterator  SparseMatrix::Begin() const
+ {
+    return data.begin();
+ }
+
+
+/// iterator over the rows of the matrix
+std::vector<std::map<size_t,double64> >::const_iterator  SparseMatrix::End() const
+ {
+    return data.end();
+ }
+
+
+std::map<size_t,double64>::const_iterator  SparseMatrix::RowBegin( size_t i ) const
+ {
+    return data[i].begin();
+ }
+
+
+std::map<size_t,double64>::const_iterator  SparseMatrix::RowEnd( size_t i ) const
+ {
+    return data[i].end();
+ }
+
+size_t SparseMatrix::Rows() const
+  {
+     return data.size();
+  }
+
+
+size_t SparseMatrix::Cols() const
+  {
+     return data.size();
+  }
+
+
+double64 SparseMatrix::operator()( size_t i, size_t j ) const
+ {
+    if ( i >= data.size() ) {
+         std::cerr <<"\nSparseMatrix::operator("<< i <<","<< j <<") const: ";
+         std::cerr <<"Row access index out of range."<< std::endl;
+         return std::numeric_limits<double64>::quiet_NaN();
+      }
+    std::map<size_t,double64>::const_iterator ditc = data[i].find(j);
+    if ( ditc == data[i].end() ) return static_cast<double64>(0.0);
+    return (*ditc).second;
+ }
+  
+    
+double64 SparseMatrix::At( size_t i, size_t j ) const
+ {
+    return (*this)(i,j);
+ }
+
+
+
+
 void SparseMatrix::RemoveHalo( int nrhalo )
  {
    for ( size_t row=data.size()-nrhalo; row!=data.size(); row++ )

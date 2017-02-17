@@ -664,10 +664,11 @@ void ODE_StiffSolver::odeint( double64 ystart[], size_t nvar, double64 x1,
 	                            double64 hmin, size_t& nok, size_t& nbad )
 {
 	size_t  nstp, i;
-	double64 xsav, x, hnext, hdid, h;
+  double64 nan(numeric_limits<double64>::quiet_NaN());
+	double64 xsav(nan), x, hnext, hdid;
 	x=x1;
 //	h=copysign(h1,x2-x1); this is not available on many platforms
-	h   = fabs(h1) * sgn(x2-x1);
+	double64 h = fabs(h1) * sign(x2-x1);
 	nok = nbad = kount = 0;
 	for (i=1;i<=nvar;i++) odeint_y[i]=ystart[i];
 	if (kmax > 0) xsav=x-dxsav*2.0;
@@ -677,7 +678,7 @@ void ODE_StiffSolver::odeint( double64 ystart[], size_t nvar, double64 x1,
                 // DERIVATIVES
 		derivs(odeint_y,odeint_dydx);
 		for (i=1;i<=nvar;i++) odeint_yscal[i]=fabs(odeint_y[i])+fabs(odeint_dydx[i]*h)+TINY;
-		if (kmax > 0 && kount < kmax-1 && fabs(x-xsav) > fabs(dxsav) ) 
+		if (kmax > 0 && kount < kmax-1 && fabs(x-xsav) > fabs(dxsav) )
                   {
 	             result_xp[kount++]=x;
 		     for (i=1;i<=nvar;i++) result_yp[i-1][kount-1]=odeint_y[i];

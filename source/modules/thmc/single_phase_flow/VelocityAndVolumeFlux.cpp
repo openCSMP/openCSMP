@@ -381,7 +381,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
                           "Result variable 'pore velocity' outside of range specified in database file." );
        }
      // volume flux
-     if ( flux_.Value() < minmaxF_.first || flux_.Value() > minmaxF_.second )
+     if ( flux_() < minmaxF_.first || flux_() > minmaxF_.second )
             throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
                           "Result variable 'volume flux' outside of range specified in database file." );
   }
@@ -532,7 +532,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                    velo_.Out();
                    cout <<"\ncomputed element variable 'pore velocity':"<< endl;
                    ivelo_.Out();
-                   cout <<"\ncomputed element variable 'volume flux': "<< flux_.Value() << endl;
+                   cout <<"\ncomputed element variable 'volume flux': "<< flux_() << endl;
                 }
           }
 
@@ -752,6 +752,44 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
         }
 
  } // end WriteOperands
+
+
+
+ 
+
+
+
+
+
+template<size_t dim,class SIMPLEX>
+void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
+                                                         size_t        col,
+                                                         VectorVariable<dim>& vc )
+ {
+    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i,col);
+ }
+
+
+
+template<size_t dim,class SIMPLEX>
+void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
+                                                              size_t    col, 
+                                                              ScalarVariable& sc ) 
+ {
+    sc() = INP(dim,col);
+ }
+
+ 
+
+template<size_t dim,class SIMPLEX>
+void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
+                                                                        size_t         col, 
+                                                                        VectorVariable<dim>& vc ) 
+ {
+    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
+ }
+ 
+
 
 
 

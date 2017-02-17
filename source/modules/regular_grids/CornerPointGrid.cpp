@@ -280,7 +280,7 @@ void CornerPointGrid<dim>::DefineAxes(PolygonGridManager<3U> &pgm )
         csmp::Point<3U> xyz_min, xyz_max;
         MinMaxCoordinates( pgm, xyz_min, xyz_max );
 
-        size_t extr_code;
+        size_t extr_code = 0;
         std::vector<bool> minp( 3U );
         std::vector<bool> maxp( 3U );
         std::map<size_t,csmp::Point<3U>,std::greater<size_t> > crns;
@@ -769,7 +769,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                              const size_t num_cell_nodes( poly[ hexa_cell_id ].GetNumElementNodes( eid ) );
                              if( num_cell_nodes > 1 )
                              {
-                                 vset.ResizePlist( cell_id + 1, fem_specs_.NodesPerElementOfType( poly[ hexa_cell_id ].GetElementType( eid ) ) );
+                                 vset.ResizePlist( cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType( poly[ hexa_cell_id ].GetElementType( eid ) ) );
                                  vset.ResizeElementTypes( cell_id + 1 );
                                  for( size_t nid = 0U; nid < num_cell_nodes; ++nid )
                                      vset.Plist( cell_id, nid, poly[ hexa_cell_id ].GetElementNodeGlobalId( eid, nid ) );
@@ -821,7 +821,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                   for( std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> >::const_iterator
                        eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit )
                   {
-                      if( fem_specs_.VolumeElement( (*eit).second ) )
+                      if( CSMP_ElementSpecifications::VolumeElement( (*eit).second ) )
                       {
                           deg_nonoverlap_cells.push_back( (*eit).first );
                           deg_nonoverlap_cells_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
@@ -847,7 +847,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                   for( std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> >::const_iterator
                        eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit )
                   {
-                      if( fem_specs_.VolumeElement( (*eit).second ) )
+                      if( CSMP_ElementSpecifications::VolumeElement( (*eit).second ) )
                       {
                           deg_overlap_cells.push_back( (*eit).first );
                           deg_overlap_cells_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
@@ -1043,17 +1043,17 @@ void CornerPointGrid<dim>
                     for( std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> >::const_iterator
                          eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit )
                     {
-                        if( fem_specs_.VolumeElement( (*eit).second ) )
+                        if( CSMP_ElementSpecifications::VolumeElement( (*eit).second ) )
                         {
                             active_cells.push_back( (*eit).first );
                             active_cell_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
                         }
-                        else if( fem_specs_.SurfaceElement( (*eit).second ) )
+                        else if( CSMP_ElementSpecifications::SurfaceElement( (*eit).second ) )
                         {
                             active_faces.push_back( (*eit).first );
                             active_face_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
                         }
-                        else if( fem_specs_.LineElement( (*eit).second ) )
+                        else if( CSMP_ElementSpecifications::LineElement( (*eit).second ) )
                         {
                             active_edges.push_back( (*eit).first );
                             active_edge_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
@@ -1065,17 +1065,17 @@ void CornerPointGrid<dim>
                     for( std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> >::const_iterator
                          eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit )
                     {
-                        if( fem_specs_.VolumeElement( (*eit).second ) )
+                        if( CSMP_ElementSpecifications::VolumeElement( (*eit).second ) )
                         {
                             inactive_cells.push_back( (*eit).first );
                             inactive_cell_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
                         }
-                        else if( fem_specs_.SurfaceElement( (*eit).second ) )
+                        else if( CSMP_ElementSpecifications::SurfaceElement( (*eit).second ) )
                         {
                             inactive_faces.push_back( (*eit).first );
                             inactive_face_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
                         }
-                        else if( fem_specs_.LineElement( (*eit).second ) )
+                        else if( CSMP_ElementSpecifications::LineElement( (*eit).second ) )
                         {
                             inactive_edge.push_back( (*eit).first );
                             inactive_edge_fem_types.insert( csmp::parseFiniteElementType( (*eit).second ) );
@@ -1662,7 +1662,8 @@ poly[ hexa_cell_id ].Out();
                     if( num_face_nodes > (dim-1) )
                     {
                         /// fill VSet
-                        vset.ResizePlist( cell_id + 1, fem_specs_.NodesPerElementOfType( poly[ hexa_cell_id ].GetFaceType( hexa_face_id, fid ) ) );
+                        vset.ResizePlist( cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType(
+                                                                   poly[ hexa_cell_id ].GetFaceType( hexa_face_id, fid ) ) );
                         vset.ResizeElementTypes( cell_id + 1 );
                         for( size_t nid = 0U; nid < num_face_nodes; ++nid )
                             vset.Plist( cell_id, nid, poly[ hexa_cell_id ].GetFaceNodeGlobalId( hexa_face_id, fid, nid ) );
@@ -2021,11 +2022,11 @@ void BlockCenteredGrid<dim>
             {
                 cell_id = i + j*NX_ + k*NXY;
 
-                dx = dx_[cell_id].Value();
-                dy = dy_[cell_id].Value();
-                dz = dz_[cell_id].Value();
+                dx = dx_[cell_id]();
+                dy = dy_[cell_id]();
+                dz = dz_[cell_id]();
 
-                z_offset = tops_[ cell_id ].Value();
+                z_offset = tops_[ cell_id ]();
 
                 // assign point coordinates
                 ///(0,0,0) NW,top
@@ -2064,11 +2065,11 @@ void BlockCenteredGrid<dim>
             {
                 cell_id = i + j*NX_ + k*NXY;
 
-                dx = dx_[cell_id].Value();
-                dy = dy_[cell_id].Value();
-                dz = dz_[cell_id].Value();
+                dx = dx_[cell_id]();
+                dy = dy_[cell_id]();
+                dz = dz_[cell_id]();
 
-                z_offset = ( ( k != NZ_-1 ) ? tops_[ cell_id + NXY ].Value() : tops_[ cell_id ].Value() + dz );
+                z_offset = ( ( k != NZ_-1 ) ? tops_[ cell_id + NXY ]() : tops_[ cell_id ]() + dz );
 
                 // assign point coordinates
                 ///(0,0,1) NW,btm
