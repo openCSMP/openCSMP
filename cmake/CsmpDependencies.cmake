@@ -12,18 +12,19 @@ set(SAMG_DEFINITIONS ${PC_SAMG_CFLAGS_OTHER})
 find_path(SAMG_INCLUDE_DIR NAMES samg.h
     PATHS
     ${PLATFORM_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/support/samg
+    ${CMAKE_SOURCE_DIR}/thirdparty/samg
 )
 
-find_library(SAMG_LIBRARIES
-    NAMES ${PLATFORM_EXTERNAL_LIBRARIES}
-    PATHS
-    ${PLATFORM_LIBS}
-)
-
-get_filename_component(SAMG_LIBRARIES_DIR ${SAMG_LIBRARIES} DIRECTORY )
-
-MESSAGE(WARNING "External libraries in ${SAMG_LIBRARIES_DIR}")
+set(SAMG_LIBRARIES)
+foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
+    set(L)
+    find_library(L
+	"${I}"
+        PATHS ${PLATFORM_LIBS}
+    )
+    list(APPEND SAMG_LIBRARIES "${L}")
+endforeach()
+message(WARNING "SAMG_LIBRARIES = ${SAMG_LIBRARIES}")
 
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SAMG DEFAULT_MSG SAMG_INCLUDE_DIR SAMG_LIBRARIES)
