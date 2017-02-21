@@ -14,6 +14,7 @@ using std::ostream;
 // (and it's impolite to usurp other users' functions!).
 
 #ifdef RUNNING_UNDER_CATCH
+#define CSMP_NO_OLD_CSMP_MESSAGE
 
 #include "catch.hpp"
 
