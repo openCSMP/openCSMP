@@ -5,7 +5,7 @@
 
 #ifdef CSMP_WITH_IMAGE_OUTPUT
 #include "ColorPalette.h"
-#include "thirdparty/jpeg/jpeglib.h"
+#include "jpeg/jpeglib.h"
 #endif
 
 using namespace std;

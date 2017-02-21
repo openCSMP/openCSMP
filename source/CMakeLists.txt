@@ -203,7 +203,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/thmc
     ${MODULES_DIR}/utilities
     ${CMAKE_SOURCE_DIR}/lib/catch/include
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/thirdparty
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 
