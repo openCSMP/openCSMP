@@ -6,7 +6,6 @@
 #include "ErrorHandler.h"
 #include "InterFace.h"
 #include "Region.h"
-#include "FiniteElementTraits.h"
 
 namespace csmp {
 

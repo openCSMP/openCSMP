@@ -33,7 +33,6 @@
 #include "LinearTwoPhaseModel.h"
 
 // Finite-Volume calculation tools
-#include "FiniteVolumeTraits.h"
 #include "FiniteVolumeStencil.h"
 #include "StencilProcessor.h"
 #include "ExplicitStencilProcessor.h"
@@ -127,7 +126,7 @@ namespace csmp {
     bool with_gravity_forces_;
     bool nonlinear_scheme_;
     bool explicit_scheme_;
-    string no_flow_bc_;
+    std::string no_flow_bc_;
 
     bool assign_dirichlet_saturation_on_the_right_boundaries_;
     bool lu_solver_;

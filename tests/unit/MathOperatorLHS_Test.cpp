@@ -1,12 +1,11 @@
 #include "MathOperatorLHS_Test.h"
-//#include "MathOperatorLHS.h"
+
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 
+using namespace std;
 
 namespace csmp {
-
-
 
 MathOperatorLHS_Test::MathOperatorLHS_Test()
 : model_ (new Model1D<1U>( "MathOperatorLHS_Test", "CSMP-2phase-variables.txt", 0.01, 100U )),

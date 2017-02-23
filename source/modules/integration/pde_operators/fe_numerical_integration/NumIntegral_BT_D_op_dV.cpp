@@ -5,6 +5,7 @@
 #include "CSMP_mathUtilities.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 

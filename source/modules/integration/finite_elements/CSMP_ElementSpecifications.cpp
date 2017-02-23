@@ -1,6 +1,6 @@
 #include "CSMP_ElementSpecifications.h"
 #include "Box.h"
-
+#include "Exception.h"
 
 namespace csmp {
 

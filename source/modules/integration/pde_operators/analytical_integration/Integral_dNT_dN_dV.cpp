@@ -1,6 +1,7 @@
 #include "Integral_dNT_dN_dV.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 

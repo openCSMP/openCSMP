@@ -1,4 +1,5 @@
 #include "CVFEM_MathOperatorRHS.h"
+#include "Exception.h"
 
 using namespace std;
 

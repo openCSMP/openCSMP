@@ -8,7 +8,7 @@
 #include "ExplicitTransport.h"
 #include "Region.h"
 #include "Model.h"
-#include "finiteVolumeUniversalFunctions.h"
+#include "finiteVolumeFunctions.h"
 
 #include "VTK_Interface.h"
 

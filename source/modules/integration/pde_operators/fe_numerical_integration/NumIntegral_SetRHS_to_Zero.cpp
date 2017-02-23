@@ -1,6 +1,7 @@
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 

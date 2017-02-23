@@ -1,5 +1,31 @@
 #include "ImplicitAdvection2D_VVCase.h"
 
+// CSMP Files
+#include "Model.h"
+#include "Region.h"
+#include "PDE_Integrator.h"
+#include "CSMP_highLevelUtilities.h"
+#include "Standard_IO_Handler.h"
+#include "InputDataManager.h"
+#include "PropertyHandle.h"
+
+// File I/O and Initialization
+#include "ANSYS_Interface.h"
+#include "ModelTopology.h"
+#include "MeshDiagnostics.h"
+
+// PDE operators & solvers
+#include "VelocityAndVolumeFlux.h"
+
+// Interrelations
+#include "ConstantFactor.h"
+
+// outputting
+#include "VTK_Interface.h"
+
+// finite-volume scheme
+#include "NodeCenteredFiniteVolumeTransport.h"
+
 using namespace std;
 
 namespace csmp {

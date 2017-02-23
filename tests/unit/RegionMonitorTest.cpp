@@ -2,6 +2,7 @@
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 
+using namespace std;
 
 namespace csmp {
 

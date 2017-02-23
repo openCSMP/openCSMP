@@ -96,7 +96,46 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double64 pmin
     criteria[ prop_name ] = make_pair(pmin,pmax);
  }
  
-    
+
+
+template<size_t dim>
+bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>& pref )
+  {
+    if ( criteria.empty() ) {
+      throw csmp::Exception( WARNING, "PropertyConstraints::InitializePropertyIndices",
+        "No criteria have been defined so far");
+      return false;
+      }
+
+    if ( !check_list.empty() && check_list.size() == criteria.size() ) return true; 
+
+    std::map<std::string,std::pair<double64,double64> >::const_iterator  it;
+
+    for ( it=criteria.begin(); it!=criteria.end(); it++ )
+      check_list[ pref.StorageKey( (*it).first.c_str() ) ] =
+      std::make_pair((*it).second.first,(*it).second.second);
+
+    return true;
+  }
+
+template bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<1U>& );
+template bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<2U>& );
+template bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<3U>& );
+
+
+
+
+template<size_t dim>
+void PropertyConstraints::DeleteConstraint( const PropertyDatabase<dim>& pref, const char* prop_name )
+  {
+     criteria.erase( prop_name );
+     check_list.erase( pref.StorageKey(prop_name) );
+  }
+
+template void PropertyConstraints::DeleteConstraint( const PropertyDatabase<1U>&, const char* );
+template void PropertyConstraints::DeleteConstraint( const PropertyDatabase<2U>&, const char* );
+template void PropertyConstraints::DeleteConstraint( const PropertyDatabase<3U>&, const char* );
+  
 
 /**
  

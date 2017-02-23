@@ -2,6 +2,7 @@
 #include "PropertyDatabase.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -108,7 +109,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     double64 vol = e.Volume();
 
     for ( size_t i=0; i<e.Nodes(); i++ ) 
-      //                                gradZ         density         K            acc.gravity    element volume
+      //                             gradZ        density    K          acc.gravity    element volume
       MathOperatorRHS<dim>::RHS[i] = DN(xyz-1,i) * prop1() * prop2() * -gravity  * vol;
 
 // cout <<"\nIntegral_NT_op_dNi_dV<dim>::ComputeContribution: Element "<< e.Idx() <<":"<< endl; 

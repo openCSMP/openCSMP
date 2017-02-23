@@ -17,6 +17,44 @@ using namespace std;
 
 namespace csmp {
 
+Test::Test(std::ostream* osptr)
+  {
+    m_osptr = osptr;
+    m_nPass = m_nFail = 0;
+  }
+
+long Test::getNumPassed() const
+  {
+    return m_nPass;
+  }
+
+long Test::getNumFailed() const
+  {
+    return m_nFail;
+  }
+
+const std::ostream* Test::getStream() const
+  {
+    return m_osptr;
+  }
+
+void Test::setStream(std::ostream* osptr)
+  {
+    m_osptr = osptr;
+  }
+
+void Test::do_succeed()
+  {
+    ++m_nPass;
+  }
+
+void Test::reset()
+  {
+    m_nPass = m_nFail = 0;
+  }
+
+
+
 void Test::do_test( bool cond, const std::string& lbl,
                     const char* fname, long lineno )
 {

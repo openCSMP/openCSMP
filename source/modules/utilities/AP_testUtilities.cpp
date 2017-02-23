@@ -5,7 +5,7 @@
 #include "Element.h"
 #include "Region.h"
 #include "Model.h"
-#include "FiniteElementTraits.h"
+#include "FiniteElementPolicy.h"
 
 using namespace std;
 

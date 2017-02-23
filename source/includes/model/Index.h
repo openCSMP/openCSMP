@@ -7,8 +7,6 @@
 #include <set>
 
 #include "CSMP_global_enumerations.h"
-#include "CSMP_number_types.h"
-#include "IndexTracker.h"
 #include "LocalVariables.h"
 #include "IntegrationPointVariables.h"
 
@@ -16,6 +14,8 @@
 // #define VARIABLE_STORAGE_DEBUG
 
 namespace csmp {
+
+class IndexTracker;
 
 /** @brief Accessor for discretized physical variables
 

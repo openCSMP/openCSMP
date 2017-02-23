@@ -2,6 +2,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "Exception.h"
 
 using namespace std;
 

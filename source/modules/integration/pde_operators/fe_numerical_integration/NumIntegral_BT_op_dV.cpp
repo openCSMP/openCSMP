@@ -1,6 +1,7 @@
 #include "NumIntegral_BT_op_dV.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -8,8 +9,8 @@ namespace csmp {
 
 template<size_t dim,class SIMPLEX>
 NumIntegral_BT_op_dV<dim,SIMPLEX>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
-                                                    const char*             oper, // pore pressure      
-                                                    const char*             test ) 
+                                                         const char*  oper, // pore pressure
+                                                         const char*  test )
   : MathOperatorRHS<dim>(pref,oper,test), 
     B(2,6),  
     BT(6,2),

@@ -1,7 +1,7 @@
 #include "NumIntegral_NT_dNi_dV_sc.h"
 #include "Element.h"
 #include "Face.h"
-#include <cmath>
+#include "Exception.h"
 
 using namespace std;
 

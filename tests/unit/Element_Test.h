@@ -1,32 +1,40 @@
-#ifndef CSP_ELEMENT_TEST_H
-#define CSP_ELEMENT_TEST_H
+#ifndef CSMP_ELEMENT_TEST_H
+#define CSMP_ELEMENT_TEST_H
 
 #include "Element.h"
 #include "Test.h"
-#include "IsoparametricLinearQuadrilateral.h"
-#include "Node.h"
 
 namespace csmp
 {
 
-template <> class Element<3U>;
-
-class Element_Test : public Test 
+class Element_Test : public Test
 {
 
   public:
 	Element_Test();
 	~Element_Test();
-	void run(); // runs all the tests for the class (register other methods)
-	void lengthMeasurement2D_Test();
-	//void lengthMeasurement3D_Test();
+  
+	virtual void run();
+  
+  /// using a quadrilateral element for testing 
+	void ElementLengthTest2D();
+	void ElementLengthTest3D();
+  
+  /// is it correctly located
+  void FaceBaryCenterTest();
+
+  /// is it correctly located
+  void BaryCenterTest();
+  
+  /// for all element types tests wether the face normals are outward pointing
+  void UnitNormalTest();
 	
   
   private:
-  double64 fTolerance;
+    double64 fTolerance;
   
-}; //end class
+};
 
-} //end csp
+} //end csmp
 
 #endif

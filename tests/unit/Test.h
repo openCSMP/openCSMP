@@ -7,9 +7,6 @@
 #include "cxxabi.h"
 #endif
 
-using std::string;
-using std::ostream;
-
 // The following have underscores because they are macros
 // (and it's impolite to usurp other users' functions!).
 
@@ -67,7 +64,7 @@ namespace csmp {
 class Test
   {
   public:
-    Test(ostream* osptr = 0);
+    Test( std::ostream* osptr = 0 );
     virtual ~Test(){}
     virtual void run() = 0;
 
@@ -103,49 +100,6 @@ class Test
     Test(const Test&);
     Test& operator=(const Test&);
 };
-
-  inline
-      Test::Test(ostream* osptr)
-  {
-    m_osptr = osptr;
-    m_nPass = m_nFail = 0;
-  }
-
-  inline
-      long Test::getNumPassed() const
-  {
-    return m_nPass;
-  }
-
-  inline
-      long Test::getNumFailed() const
-  {
-    return m_nFail;
-  }
-
-  inline
-     const ostream* Test::getStream() const
-  {
-    return m_osptr;
-  }
-
-  inline
-      void Test::setStream(ostream* osptr)
-  {
-    m_osptr = osptr;
-  }
-
-  inline
-      void Test::do_succeed()
-  {
-    ++m_nPass;
-  }
-
-  inline
-      void Test::reset()
-  {
-    m_nPass = m_nFail = 0;
-  }
 
 } // end namespace csmp
 

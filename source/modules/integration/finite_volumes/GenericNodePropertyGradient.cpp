@@ -1,5 +1,4 @@
 #include "GenericNodePropertyGradient.h"
-#include "FiniteVolumeTraits.h"
 
 using namespace std;
 

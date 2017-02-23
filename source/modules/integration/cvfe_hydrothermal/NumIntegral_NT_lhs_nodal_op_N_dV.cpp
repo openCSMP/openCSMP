@@ -1,5 +1,6 @@
 #include "NumIntegral_NT_lhs_nodal_op_N_dV.h"
 #include "Element.h"
+#include "Exception.h"
 
 using namespace std;
 

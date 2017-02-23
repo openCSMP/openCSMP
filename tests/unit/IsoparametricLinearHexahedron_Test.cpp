@@ -1,11 +1,9 @@
 #include <iostream>
 
 #include "Test.h"
-#include "TestSuite.h"
 #include "IsoparametricLinearHexahedron_Test.h"
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearTetrahedron.h"
-#include "FiniteVolumeTraits.h"
 #include "Node.h"
 #include "Element.h"
 #include "FV_IntegrationPointsAndWeights.h"
@@ -15,7 +13,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 	IsoparametricLinearHexahedron_Test::IsoparametricLinearHexahedron_Test(bool verbose) : verbose_(verbose) {}
 	IsoparametricLinearHexahedron_Test::~IsoparametricLinearHexahedron_Test(){}

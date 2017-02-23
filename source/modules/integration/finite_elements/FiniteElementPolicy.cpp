@@ -4,6 +4,7 @@
 #include "Face.h"
 #include "InterFace.h"
 #include "variableOperations.h"
+#include "Exception.h"
 
 namespace csmp {
 

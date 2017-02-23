@@ -1,7 +1,7 @@
 #include "Integral_NT_lhsop_N_dV.h"
 #include "Element.h"
 #include "Face.h"
-
+#include "Exception.h"
 
 using namespace std;
 

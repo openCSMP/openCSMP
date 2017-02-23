@@ -5447,7 +5447,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
    
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
-    assert( !info.perimeter_elmts.empty() );
+//    assert( !info.perimeter_elmts.empty() );
    
     // 4. reading the boundary faces
     // -----------------------------
@@ -5462,7 +5462,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
     */
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
-    assert( !faceIDs.empty() );
+//    assert( !faceIDs.empty() );
  
     if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
     info.perimeter_faces.reserve( faceIDs.size() );
@@ -5484,7 +5484,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
   
     // 6. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );
-    assert( !info.perimeter_nodes.empty() );
+ //   assert( !info.perimeter_nodes.empty() );
    
  } // end readRegionIndexesFromBinaryFile
 

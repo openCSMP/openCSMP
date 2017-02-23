@@ -7,14 +7,12 @@
 #include "VelocityAndVolumeFlux.h"
 #include "ConstantFactor.h"
 #include "VTK_Interface.h"
-#include "FiniteVolumeTraits.h"
 #include "FiniteVolumeStencil.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "CSMP_highLevelUtilities.h"
 #include "Standard_IO_Handler.h"
 
 using namespace std;
-
 
 namespace csmp {
 

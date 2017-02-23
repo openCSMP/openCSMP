@@ -1,6 +1,7 @@
 #include "NumIntegral_PT_op_dV.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -47,7 +48,7 @@ void NumIntegral_PT_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
    // reading the nodal "body" forces
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE )
      {
-        static vector<VectorVariable<dim> >  forces;
+        vector<VectorVariable<dim> >  forces;
         e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), forces );
    
         // remapping the forces into the vector E_OP

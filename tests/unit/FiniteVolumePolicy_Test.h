@@ -2,7 +2,7 @@
 #define FINITE_VOLUME_POLICY_TEST_H
 
 #include "Test.h"
-#include "FiniteVolumeTraits.h"
+#include "FiniteVolumePolicy.h"
 #include "Element.h"
 
 namespace csmp {

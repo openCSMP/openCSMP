@@ -4,10 +4,23 @@
 #include <iterator>
 #include "Model.h"
 #include "TwoPhaseModel.h"
+#include "VTU_Interface.h"
+
+#include "TwoPhaseModel.h"
+
+#include "BrooksCorey.h"
+#include "FourarLenormand.h"
+#include "VanGenuchten.h"
+#include "TwoPhaseFileBased.h"
+#include "Experimental2PhaseModel.h"
+#include "ExperimentalRT.h"
+#include "FractureMatrixUpscaled.h"
+#include "BrooksCoreyWithHysteresis.h"
+#include "LinearTwoPhaseModel.h"
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 
 TwoPhaseModel_Test::TwoPhaseModel_Test( Model<1U>* model,

@@ -3,7 +3,7 @@
 
 #include "LocalVariables.h"
 
-namespace csmp{
+namespace csmp {
 
 
   /// Data class to store physical variable count at given integration points

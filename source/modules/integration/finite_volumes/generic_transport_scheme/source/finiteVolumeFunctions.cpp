@@ -1,12 +1,12 @@
 //
-//  finiteVolumeUniversalFunctions.cpp
+//  finiteVolumeFunctions.cpp
 //  CSMP_API_library2014
 //
 //  Created by Stephan Matthai on 9/08/2015.
 //  Copyright (c) 2015 Stephan Matthai. All rights reserved.
 //
 
-#include "finiteVolumeUniversalFunctions.h"
+#include "finiteVolumeFunctions.h"
 
 #include "Index.h"
 #include "Model.h"

@@ -1,12 +1,10 @@
 #include "MathOperatorRHS_Test.h"
-//#include "MathOperatorRHS.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_SetRHS_to_One.h"
 
+using namespace std;
 
 namespace csmp {
-
-
 
 MathOperatorRHS_Test::MathOperatorRHS_Test()
 : model_ (new Model1D<1U>( "MathOperatorRHS_Test", "CSMP-2phase-variables.txt", 0.01, 100U )),

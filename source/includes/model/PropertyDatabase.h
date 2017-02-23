@@ -9,8 +9,8 @@
 #include <list>
 #include <vector>
 #include "Parameter.h"
-#include "Exception.h"
 #include "Index.h"
+#include "IndexTracker.h"
 
 namespace csmp {
 
@@ -289,7 +289,8 @@ class PropertyDatabase  {
    void   EstablishPlacementDependentProperties( PLACEMENT placement, csmp::Index& key ) const;
   
    void   VariableCount( PLACEMENT within, size_t& scalars, size_t& vectors, size_t& tensors,
-                         size_t& arrayCount, size_t& arrayLength, size_t& flaggedArrayCount, size_t& flaggedArrayLength ) const;
+                         size_t& arrayCount, size_t& arrayLength, size_t& flaggedArrayCount,
+                         size_t& flaggedArrayLength ) const;
   
    IntegrationPointVariables  ElementIntegrationPointVariables() const;
    IntegrationPointVariables  FaceIntegrationPointVariables() const;

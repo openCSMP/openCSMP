@@ -7,6 +7,7 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
+#include "Exception.h"
 
 using namespace std;
 

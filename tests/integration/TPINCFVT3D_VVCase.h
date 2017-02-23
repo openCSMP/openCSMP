@@ -43,8 +43,7 @@ class TPINCFVT3D_VVCase : public Test
 
   private:
       const char* prefix_;
-      string name_;
-
+      std::string name_;
 };
 
 

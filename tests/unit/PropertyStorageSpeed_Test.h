@@ -13,7 +13,7 @@ namespace csmp {
 */
 class  PropertyStorageSpeed_Test : public Test {
   public:
-    explicit PropertyStorageSpeed_Test( ostream* osptr );
+    explicit PropertyStorageSpeed_Test( std::ostream* osptr );
     virtual void run();
 };
 

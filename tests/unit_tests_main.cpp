@@ -11,7 +11,7 @@
 #include "TestSuite.h"
 
 // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/  as a tutorial how to use with XCode
-// #include "catch159.h"
+// #include "catch.h"
 
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
@@ -47,7 +47,6 @@
 #include "IsoparametricQuadraticTriangle.h"
 
 #include "FiniteVolumeStencil_Test.h"
-//#include "FiniteVolumeTraits_Test.h"
 #include "FiniteVolumePolicy_Test.h"
 #include "FluxMismatch_Test.h"
 #include "FV_Parameter_Test.h"
@@ -99,13 +98,12 @@
 using namespace std;
 using namespace csmp;
 
-/**  SKM 16/12/2016 - status report (XCode Mac)
+/**  SKM 24/2/2017 - status report (XCode Mac)
 
-     fundamentals:      24 real precision issues in FiniteVolumeTraits, VSet test needs to be rewritten for variable storage in PropertyData container
-     
      interdependent1:   fails on volume-flux integral balance of face fluxes
+     new_developments:  in progress, not ready yet
      
-     interdependent2:   fails when re-reading the 3D Model in PropertyData for a tensor variable placed on the sector integration point
+     TODO: next BoxTest - fails because unit normals for Face objects do not point into correct direction
  
      composite:
      
@@ -125,39 +123,36 @@ using namespace csmp;
      - PropertyConstraints
      - RegionInterface
      - BoundaryInterface
-     - Point
      - ANSYS_Interface
      
      - refactor   Box_Test
      - refactor   VTU_Interface_Test
-     - refactored CompressedRowMatrix
-     
+     - refactor   CompressedRowMatrix
      
      @section Failing Tests
      
-     - FiniteVolumeTraits_Test (TODO: urgent fixes needed)
      - Boundary_Test (TODO: separate BoundaryInterface functionality)
      - SplitBoundary_Test
      - InterFace_Test
-     - TODO: test unit normal computations on model boundaries
- 
-     ? - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
+     - Box_Test
+          - TODO: test unit normal computations on model boundaries
+          - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
  
      - TODO: delete non-unique regions with boundary names before saving the model to disk so that 
              they do not get stored and brought back when the model is rebuild
      
-     - AnsysModel3D - when reconstructed from file volumetric elements suddenly have surface elemenet neighbors
+     - AnsysModel3D - when reconstructed from file volumetric elements seem to have surface element neighbors
      
      @section Comments
      - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 int main()
 {
-  const bool test_fundamentals(false),
-             test_interdependent1(false),
-             test_interdependent2(false),
-             test_composite(false),
-             test_refactoring(true),
+  const bool test_fundamentals(true),
+             test_interdependent1(true),
+             test_interdependent2(true),
+             test_composite(true),
+             test_refactoring(false),
              test_new_developments(false);
   
   long fails_fundamentals(0),
@@ -166,16 +161,7 @@ int main()
        fails_composite(0),
        fails_new_developments(0),
        total_failures(0);
-//*/
-/*
-  // everything turned on
-  const bool test_fundamentals(true),
-             test_interdependent1(true),
-             test_interdependent2(true),
-             test_composite(true),
-             test_refactoring(true),
-             test_new_developments(true);
-*/
+
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;
         if ( test_fundamentals ) {
@@ -192,6 +178,7 @@ int main()
               basic.addTest( new PropertyDatabase_Test());
               basic.addTest( new Index_Test());
               basic.addTest( new Parameter_Test());
+              basic.addTest( new PropertyData_Test());
 
               // Model
               basic.addTest( new Node_Test() );
@@ -217,7 +204,8 @@ int main()
               basic.addTest( new ErrorFunction_Test() );
 
               basic.addTest( new FiniteVolumeStencil_Test());
-              basic.addTest( new FiniteVolumePolicy_Test()); //also compares speed of mapping facet areas and normals versus computing them.
+              // also compares speed of mapping facet areas and normals versus computing them
+              basic.addTest( new FiniteVolumePolicy_Test());
               basic.addTest( new FV_Parameter_Test());
           
               // interfaces / containers
@@ -265,7 +253,7 @@ int main()
               cout <<"\n3. Model-related interdependent functionality: running tests..."<< endl;
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               // model
-              interdependent2.addTest( new Box_Test() );
+//              interdependent2.addTest( new Box_Test() );
               interdependent2.addTest( new ModelSubDomain_Test() );
               interdependent2.addTest( new ANSYS_Model2D_Test() );
               interdependent2.addTest( new InputDataManager_Test());
@@ -314,12 +302,11 @@ int main()
         if ( test_refactoring ) {
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
-//              refactored.addTest( new Boundary_Test() );
-              // composite.addTest( new SplitBoundary_Test() );
-             // running unit tests and reporting errors
-              refactored.addTest( new Box_Test() );
 
-              // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
+// TODO: review and get these tests to run (in this sequence)
+              refactored.addTest( new Box_Test() );
+              // refactored.addTest( new Boundary_Test() );
+              // composite.addTest( new SplitBoundary_Test() );
               refactored.run();
               long nFail = refactored.report();
               refactored.free();
@@ -333,16 +320,6 @@ int main()
           
               // EVERYTHING THAT PERTAINS TO REFACTORED TRANSPORT SCHEME
               new_developments.addTest( new VariableBenchmarking_Test() );
-              new_developments.addTest( new Point_Test());
-              new_developments.addTest( new ScalarVariable_Test());
-              new_developments.addTest( new VectorVariable_Test());
-              new_developments.addTest( new VectorVariable_Test1());
-              new_developments.addTest( new VectorVariable_Test2());
-              new_developments.addTest( new TensorVariable_Test());
-              new_developments.addTest( new TensorVariable_Test1());
-              new_developments.addTest( new TensorVariable_Test2());
-              new_developments.addTest( new FiniteVolumeStencil_Test());
-              new_developments.addTest( new FiniteVolumePolicy_Test()); //also compares speed of mapping facet areas and normals versus computing them.
 
               new_developments.addTest( new GenericFiniteVolumeTransport_Test() );
 

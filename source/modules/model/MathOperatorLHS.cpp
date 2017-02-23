@@ -3,7 +3,7 @@
 #include "Element.h"
 #include "InterFace.h"
 #include "Face.h"
-
+#include "Exception.h"
 
 using namespace std;
 

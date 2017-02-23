@@ -116,7 +116,7 @@ class FiniteElementPolicy {
     void       SegmentLengths( std::vector<double64>& ) const;
 
     /// retrieve barycenter of element face
-    Point<dim> FaceBaryCenter( size_t segm ) const;
+    Point<dim> FaceBaryCenter( size_t face ) const;
 
     /// returns area of face i (to be scaled with thickness attribute if this is a lower-dimensional element)
     double64   FaceArea( size_t face ) const;
@@ -124,7 +124,7 @@ class FiniteElementPolicy {
     /// returns unit normal to face of element i
     Point<dim> UnitNormalToFace( size_t face ) const;
 
-    /// returns unit normal to face of element i into STL vector
+    /// returns unit normal to face of element i into STL vector; fastest version!
     void       UnitNormalToFace( size_t face, std::vector<double64>& ) const;
   
     /// returns unit normal to face of element i into supplied csmp VectorVariable

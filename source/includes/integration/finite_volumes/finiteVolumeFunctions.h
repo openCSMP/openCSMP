@@ -1,12 +1,12 @@
 //
-//  finiteVolumeUniversalFunctions.h
+//  finiteVolumeFunctions.h
 //
 //  Created by Stephan Matthai on 9/08/2015.
 //  Copyright (c) 2015 Stephan Matthai. All rights reserved.
 //
 
-#ifndef FINITE_VOLUME_UNIVERSAL_FUNCTIONS_H
-#define FINITE_VOLUME_UNIVERSAL_FUNCTIONS_H
+#ifndef FINITE_VOLUME_FUNCTIONS_H
+#define FINITE_VOLUME_FUNCTIONS_H
 
 #include <iostream>
 

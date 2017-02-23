@@ -3,7 +3,6 @@
 
 #include "Test.h"
 #include "CSMP_number_types.h"
-#include "vector"
 #include "CubicSpline.h"
 
 namespace csmp
@@ -33,7 +32,7 @@ namespace csmp
         CubicSpline cspline2;
         CubicSpline cspline1_copy;
         CubicSpline* cspline2_copy;
-        string datafile;
+        std::string datafile;
         std::vector<double64> x;
         std::vector<double64> fx;
         std::vector<double64> dfx;
