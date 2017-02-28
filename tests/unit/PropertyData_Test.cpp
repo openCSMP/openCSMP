@@ -215,9 +215,8 @@ void PropertyData_Test::run()
     // changing last element of ary1 to 4
     ary2(3) = 4.;
 	
-	// jc: the following two lines cause assertion failure. Please check it later.
-    //dataset9.Value( 3, 3 ) = 4.;
-    //_equal( ary2(3), dataset9.Value(3,3), numeric_limits<double64>::epsilon() );
+    dataset9.Value( 3, 3 ) = 4.;
+    _equal( ary2(3), dataset9.Value(3,3), numeric_limits<double64>::epsilon() );
    
  } // end run
 

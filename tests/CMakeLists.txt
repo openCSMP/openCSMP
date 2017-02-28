@@ -33,6 +33,10 @@ INCLUDE_DIRECTORIES(
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
 )
 
+if(CMAKE_HOST_WIN32)
+	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/bin/windows)
+	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/build/windows)
+endif()
 
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
@@ -41,10 +45,11 @@ if(BUILD_TESTING)
     ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
     TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
+		ENABLE_TESTING()
         ADD_TEST(
-            NAME csmptest
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Debug/csmptest.exe -r junit
-	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+        NAME csmptest
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe -r junit		
         )
     else()
         ADD_TEST(
