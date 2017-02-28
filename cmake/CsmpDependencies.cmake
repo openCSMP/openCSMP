@@ -22,7 +22,11 @@ foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
 	"${I}"
         PATHS ${PLATFORM_LIBS}
     )
-    list(APPEND SAMG_LIBRARIES "${I}")
+	if(CMAKE_HOST_WIN32)
+		list(APPEND SAMG_LIBRARIES "${I}")
+	else()
+		list(APPEND SAMG_LIBRARIES "${L}")
+	endif()
 endforeach()
 
 include(FindPackageHandleStandardArgs)
