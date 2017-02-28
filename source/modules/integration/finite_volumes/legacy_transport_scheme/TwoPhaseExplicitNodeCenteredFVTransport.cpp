@@ -692,10 +692,10 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          relperm.EffectiveSaturation();
 
          // for all FACETS per SECTOR surrounding the finite volume at the boundary
-         for ( size_t i=0U; i<eptr->FV_Stencil()->FacetsPerSector(nid); i++ )
+         for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ )
            {
-              size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(nid,i) );
-              size_t inside_node = eptr->FV_Stencil()->InsideNode( iFacet );
+              size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
+              size_t inside_node = eptr->FV()->InsideNode( iFacet );
               // get velocity across FV facet
               double64 velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *
                               this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
@@ -805,11 +805,11 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                       // now the saturation dependent properties are computed
                       // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                      for ( size_t i=0U; i<e->FV_Stencil()->FacetsPerSector(pnid); i++ )
+                      for ( size_t i=0U; i<e->FV()->FacetsPerSector(pnid); i++ )
                         {
-                           size_t iFacet( e->FV_Stencil()->FacetSurroundingSector(pnid,i) );
+                           size_t iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
                            size_t inside_node,outside_node;
-                           e->FV_Stencil()->FacetEdgeNodes( iFacet, inside_node, outside_node );
+                           e->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
                            // get velocity across FV facet
                            //double64 viscous_vel_component = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
@@ -930,10 +930,10 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                    relperm.EffectiveSaturation();
 
                    // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                   for ( size_t i=0U; i<eptr->FV_Stencil()->FacetsPerSector(nid); i++ ){
-                        size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(nid,i) );
+                   for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ){
+                        size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                         size_t inside_node,outside_node;
-                        eptr->FV_Stencil()->FacetEdgeNodes( iFacet, inside_node, outside_node );
+                        eptr->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
                         double64 velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
                         // using upstream weighted first-order fluxes (gravity is not considered)

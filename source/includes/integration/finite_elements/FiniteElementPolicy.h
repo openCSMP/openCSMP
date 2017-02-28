@@ -3,12 +3,6 @@
 
 #include "FiniteElement.h"
 
-#include "TriangularFacet.h"
-#include "QuadrilateralFacet.h"
-
-#include "CSMP_definitions.h"
-#include "CSMP_mathUtilities.h"
-
 namespace csmp {
 
 /// finite element policy for class Element
@@ -17,9 +11,11 @@ class FiniteElementPolicy {
   public:
     FiniteElementPolicy( FiniteElement* = nullptr );
     FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_(p.fptr_) {}
+    FiniteElementPolicy( FiniteElementPolicy&& p ) : fptr_{p.fptr_} { p.fptr_=nullptr; }
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );
+    void AssignFiniteElementNullPtr() { fptr_ = nullptr; }
 
     /// the type is an enumeration that is used in the generation of finite elements
     CSMP_FEM_TYPE  FE_Type() const;

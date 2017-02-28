@@ -114,7 +114,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<di
 //   csmp_float detJ;
 
     // loop over facets of the element
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
 
 //       detJ = e.dN( B, e.ConnectedFiniteVolumeStencil()->FacetEdgeMidPoint(i).Coordinates() );
@@ -125,7 +125,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<di
        B *= operand;
     
 
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           area = finite_volume.GetFacetArea( e.Idx(), i );
           
           for (size_t d = 0; d < dim; d++)

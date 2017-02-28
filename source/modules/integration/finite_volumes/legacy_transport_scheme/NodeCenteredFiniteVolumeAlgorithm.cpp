@@ -137,10 +137,10 @@ template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateFluxUpwindSaturationProducts( const StencilProcessor<dim>& es )
 {
    // for all finite-volume facets
-  for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+  for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
     {
        // identifying the finite volumes to which the flux will be distributed
-       gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+       gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
        // for the "inside" node
        if ( es.facet_flux_[i] < 0. ) {
@@ -184,10 +184,10 @@ template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderFluxSaturationProducts( const StencilProcessor<dim>& es )
 {
    // for all finite-volume facets
-   for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+   for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
      {
          // identifying the finite volumes to which the flux will be distributed
-         gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+         gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
          // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
          // -------------------------------------------------------------------------------------------------
@@ -240,9 +240,9 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DN_op_dS_LHS( co
 
     double64 flux(0.0);
     Point<dim>  n;
-    for ( size_t iFacet=0U; iFacet<gref_.E(es.eidx_)->FV_Stencil()->Facets(); iFacet++ )
+    for ( size_t iFacet=0U; iFacet<gref_.E(es.eidx_)->FV()->Facets(); iFacet++ )
     {
-        gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( iFacet, es.inside_node_, es.outside_node_ );
+        gref_.E(es.eidx_)->FV()->FacetEdgeNodes( iFacet, es.inside_node_, es.outside_node_ );
 
         n = gref_.E(es.eidx_)->FacetNormal(iFacet);
 
@@ -277,7 +277,7 @@ matrix.
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateSectorSourceTermsInLHS( const StencilProcessor<dim>& es ) 
  {
-    for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Sectors(); i++ )
+    for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
          const size_t j(gref_.E(es.eidx_)->N(i)->Idx());
@@ -319,17 +319,17 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcess
   const double64 zero(0.);
   
   // putting contributions to pore volume into the matrix diagonal
-  for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Sectors(); i++ )
+  for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
     //                                 phi * sector-volume
     LHS.Add( gref_.E(es.eidx_)->N(i)->Idx(),    
              gref_.E(es.eidx_)->N(i)->Idx(), 
              es.sector_pore_volume_[i] / time_multiplier );
     
    // for all finite-volume facets
-  for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+  for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
     {
        // identifying the finite volumes to which the flux will be distributed
-       gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+       gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
        if ( es.facet_flux_[i] < zero ) {
             // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
@@ -369,7 +369,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
                                                                                        double64 time_multiplier)
  {
     // putting contributions to pore volume into the matrix diagonal
-    for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Sectors(); i++ ){
+    for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ ){
       //  phi * sector-volume
       LHS.Add( gref_.E(es.eidx_)->N(i)->Idx(),
                gref_.E(es.eidx_)->N(i)->Idx(),
@@ -377,10 +377,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
     }
 
     // for all finite-volume facets
-    for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
-         gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+         gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
          LHS.Add( gref_.E(es.eidx_)->N(es.inside_node_)->Idx(),
                   gref_.E(es.eidx_)->N(es.upstream_node_[i])->Idx(),
@@ -441,10 +441,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_Nonlinea
                  gref_.E(es.eidx_)->N(pnid)->Idx(),
                  (es.sector_pore_volume_[pnid] / time_multiplier) );
 
-        for ( size_t k=0U; k<gref_.E(es.eidx_)->FV_Stencil()->FacetsPerSector(pnid); k++ ) {
-              const size_t i(gref_.E(es.eidx_)->FV_Stencil()->FacetSurroundingSector(pnid,k));
+        for ( size_t k=0U; k<gref_.E(es.eidx_)->FV()->FacetsPerSector(pnid); k++ ) {
+              const size_t i(gref_.E(es.eidx_)->FV()->FacetSurroundingSector(pnid,k));
               // if the sector node is the inside node then an incoming flux will create a positive source term
-              gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+              gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
               if ( pnid == es.inside_node_ ){
                   LHS.Add( gref_.E(es.eidx_)->N(es.inside_node_)->Idx(),
@@ -529,7 +529,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcess
                                                             double64 time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Sectors(); i++ )
+     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
        //                                           phi * sector volume
        RHS[ gref_.E(es.eidx_)->N(i)->Idx() ] += 
            (SAT0[ gref_.E(es.eidx_)->N(i)->Idx() ] * es.sector_pore_volume_[i]) / time_multiplier;
@@ -544,7 +544,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcess
                                                             double64 time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Sectors(); i++ )
+     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
        RHS[ gref_.E(es.eidx_)->N(i)->Idx() ] += (es.psi1_[i] * es.sector_pore_volume_[i]) / time_multiplier;
 
  } // end AccumulateRHS
@@ -585,15 +585,15 @@ template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( const StencilProcessor<dim>& es )
  {
      // summing flux saturation products over the finite volume cell
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ ) {
+     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
 	        // computing higher order flux
 	        const double64  hflux(es.facet_flux_[i] * es.ipsi1_[i]);
           
           // subtracting higher-order solution from righthand side
           // incoming fluxes, first cell (outward pointing normal)
-            RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV_Stencil()->InsideNode(i))->Idx() ]  -= hflux;
+            RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV()->InsideNode(i))->Idx() ]  -= hflux;
           // incoming fluxes, second cell (inward pointing normal)
-            RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV_Stencil()->OutsideNode(i))->Idx() ] += hflux;
+            RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV()->OutsideNode(i))->Idx() ] += hflux;
        }
 
  } // end AccumulateHigherOrderRHS (version for first-order-accurate method in time)
@@ -606,7 +606,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS(
  {
      // summing flux saturation products over the finite volume cell
      // theta  n +  1/2 term          higher-order flux contribution
-     for ( size_t i=0; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ ) {
+     for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
   	      // computing higher order flux
   	      double64 hflux  = es.theta_[i]     * es.facet_flux_[i]         * es.ipsi1_[i];
   	      hflux += (1. - es.theta_[i]) * FACETFLUXES0[es.eidx_][i] * LTDSATS0[es.eidx_][i]; 
@@ -614,9 +614,9 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS(
   	      // identifying the finite volumes to which the flux will be distributed
             // subtracting higher-order solution from righthand side
             // incoming fluxes, first cell (outward pointing normal)
-   	      RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV_Stencil()->InsideNode(i))->Idx() ]  -= hflux;    
+   	      RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV()->InsideNode(i))->Idx() ]  -= hflux;    
             // incoming fluxes, second cell (inward pointing normal)
-   	      RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV_Stencil()->OutsideNode(i))->Idx() ] += hflux;
+   	      RHS[ gref_.E(es.eidx_)->N(gref_.E(es.eidx_)->FV()->OutsideNode(i))->Idx() ] += hflux;
        }
 
  } // end AccumulateHigherOrderRHS (version for second-order-accurate method in time)
@@ -638,10 +638,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
      const double64 zero(0.);
      double64       uvar; // upstream value of advected variable
  
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
 	       // identifying the finite volumes to which the flux will be distributed
-	       gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+	       gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 	       
 	       // identifying upstream value of advected variable
 	       if ( es.facet_flux_[i] < zero ) uvar = es.psi1_[es.outside_node_];
@@ -662,10 +662,10 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
      const double64 zero(0.);
      double64       uvar; // upstream value of advected variable
 
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
            // identifying the finite volumes to which the flux will be distributed
-           gref_.E(es.eidx_)->FV_Stencil()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
+           gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
 
            // identifying upstream value of advected variable
            if ( es.facet_flux_[i] < zero ) uvar = SAT0[ gref_.E(es.eidx_)->N(es.outside_node_)->Idx() ];

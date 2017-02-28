@@ -140,12 +140,12 @@ namespace csmp {
 		HexaVolumeUsingFVSectorsIPWeight_ = 0.;
 		for (size_t i = 0; i < SectorNumbers; i++){
 			if (verbose_){
-				cout << element.FV_Stencil()->SectorIntegrationWeight(i, 0) << "\t";
+				cout << element.FV()->SectorIntegrationWeight(i, 0) << "\t";
 				cout << element.FE()->JacobianDeterminant() << "\t";
 			}
-			VolofSector = element.FV_Stencil()->SectorIntegrationWeight(i, 0)*element.FE()->JacobianDeterminant();
+			VolofSector = element.FV()->SectorIntegrationWeight(i, 0)*element.FE()->JacobianDeterminant();
 			HexaVolumeUsingFVSectorsIPWeight_ += VolofSector;
-			// Similar line from FiniteVolumeTraits: fVolume += e.FV_Stencil()->SectorIntegrationWeight(iSector, j) * e.FE()->JacobianDeterminant();
+			// Similar line from FiniteVolumeTraits: fVolume += e.FV()->SectorIntegrationWeight(iSector, j) * e.FE()->JacobianDeterminant();
 		}
 
 		return HexVol;

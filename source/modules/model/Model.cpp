@@ -37,7 +37,7 @@ namespace csmp {
 template<size_t dim>
 Model<dim>::Model()
   : database_(),
-    fvStencilManager_(NULL),
+    fvStencilManager_(nullptr),
     model_name_("undefined"),
     verbose_(true)
   {
@@ -55,7 +55,7 @@ Model<dim>::Model()
 template<size_t dim>
 Model<dim>::Model( const std::string& varFile, bool binary )
   : database_( varFile.c_str(), binary ),
-    fvStencilManager_(NULL),
+    fvStencilManager_(nullptr),
     model_name_("undefined"),
     verbose_(true)
 {
@@ -73,7 +73,7 @@ template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileNames )
   : database_( BinaryVariablesFileName(binaryFileNames.c_str()).c_str(), true ),
     model_name_(binaryFileNames),
-    fvStencilManager_(NULL)
+    fvStencilManager_(nullptr)
 {
   InitializeLocalVariableStorage();
 //  InputFromDisk(binaryFileNames); // WORKS, but all regions are rebuilt from scratch
@@ -103,7 +103,7 @@ template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements, bool binaryVariablesFile )
   : database_( var_file, binaryVariablesFile ),
     model_name_("undefined"),
-    fvStencilManager_(NULL),
+    fvStencilManager_(nullptr),
     verbose_(true)
  {
     Initialize( isoparametric_elements, vset,
@@ -117,7 +117,7 @@ template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
   : database_(),
     model_name_("undefined"),
-    fvStencilManager_(NULL)
+    fvStencilManager_(nullptr)
  {
     Initialize( isoparametric_elements, vset,
                 false /* do not create boundaries */,
@@ -168,7 +168,7 @@ Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file, bool binaryVariablesFile )
  : database_( var_file, binaryVariablesFile ),
-   fvStencilManager_(NULL),
+   fvStencilManager_(nullptr),
    model_name_("undefined"),
    verbose_(true)
  {
@@ -184,7 +184,7 @@ template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset )
  : database_( ),
    model_name_("undefined"),
-   fvStencilManager_(NULL)
+   fvStencilManager_(nullptr)
  {
     Initialize( mesh_topology, vset,
                 false /* do not create boundaries */,

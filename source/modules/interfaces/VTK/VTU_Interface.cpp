@@ -1965,7 +1965,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
           sectors = (*it)->Sectors();
           for( size_t sid = 0; sid < sectors; ++sid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -1986,7 +1986,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
           facets = (*it)->Facets();
           for( size_t fid = 0; fid < facets; ++fid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -2078,7 +2078,7 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
           sectors = (*it)->Sectors();
           for( size_t sid = 0; sid < sectors; ++sid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -2099,7 +2099,7 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
           facets = (*it)->Facets();
           for( size_t fid = 0; fid < facets; ++fid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -2194,7 +2194,7 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
           sectors = (*it)->Sectors();
           for( size_t sid = 0; sid < sectors; ++sid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -2215,7 +2215,7 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
           facets = (*it)->Facets();
           for( size_t fid = 0; fid < facets; ++fid )
           {
-              ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
               for( size_t ip = 0; ip < ips; ++ip )
               {
                   // inserting scalar data
@@ -2322,7 +2322,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
               sectors = (*it)->Sectors();
               for( size_t sid = 0; sid < sectors; ++sid )
               {
-                  ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+                  ips = (*it)->FV()->IntegrationPointsPerSector( sid );
                   for( size_t ip = 0; ip < ips; ++ip )
                   {
                       // inserting scalar data
@@ -2343,7 +2343,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
               facets = (*it)->Facets();
               for( size_t fid = 0; fid < facets; ++fid )
               {
-                  ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+                  ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
                   for( size_t ip = 0; ip < ips; ++ip )
                   {
                       // inserting scalar data
@@ -2450,7 +2450,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
               sectors = (*it)->Sectors();
               for( size_t sid = 0; sid < sectors; ++sid )
               {
-                  ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+                  ips = (*it)->FV()->IntegrationPointsPerSector( sid );
                   for( size_t ip = 0; ip < ips; ++ip )
                   {
                       // inserting scalar data
@@ -2471,7 +2471,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
               facets = (*it)->Facets();
               for( size_t fid = 0; fid < facets; ++fid )
               {
-                  ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+                  ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
                   for( size_t ip = 0; ip < ips; ++ip )
                   {
                       // inserting scalar data
@@ -3528,10 +3528,10 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
         sectors = (*it)->Sectors();
         for( sid = 0; sid < sectors; ++sid )
         {
-            ips = (*it)->FV_Stencil()->IntegrationPointsPerSector( sid );
+            ips = (*it)->FV()->IntegrationPointsPerSector( sid );
             for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
             {
-              pt = (*it)->FV_Stencil()->SectorIntegrationPoint( sid, ip );
+              pt = (*it)->FV()->SectorIntegrationPoint( sid, ip );
               pt = (*it)->RstToXYZ( pt );
               // writing x,y and z coordinates(tab seperated)
               stringNumber = std::to_string( pt[0] );
@@ -3671,10 +3671,10 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
         facets = (*it)->Facets();
         for( fid = 0; fid < facets; ++fid )
         {
-            ips = (*it)->FV_Stencil()->IntegrationPointsPerFacet( fid );
+            ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
             for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
             {
-              pt = (*it)->FV_Stencil()->FacetIntegrationPoint( fid, ip );
+              pt = (*it)->FV()->FacetIntegrationPoint( fid, ip );
               pt = (*it)->RstToXYZ( pt );
               // writing x,y and z coordinates(tab seperated)
               stringNumber = std::to_string( pt[0] );

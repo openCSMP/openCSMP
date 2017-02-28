@@ -15,7 +15,7 @@ using namespace std;
 
 namespace csmp {
 
-// LOOSER
+// LOOSER - cannot use move constructor
 inline const ScalarVariable&  makeScalarOld( const VARIABLE_FLAG flag, const double64 val )
   {
      return ScalarVariable(flag,val);

@@ -76,13 +76,13 @@ void RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::Visit( Node<dim>* nd )
               eptr->Read( flux_key_, vt_ );
               // find out which node were are on from a view-point of the parent element
               const size_t parent_nd(nd->ParentNodeNumber(i));
-              assert( eptr->FV_Stencil() != NULL /* if so the FV stencils may not have been initialized yet */ );
-              const size_t n_sector_facets(eptr->FV_Stencil()->FacetsPerSector(parent_nd));
+              assert( eptr->FV() != NULL /* if so the FV stencils may not have been initialized yet */ );
+              const size_t n_sector_facets(eptr->FV()->FacetsPerSector(parent_nd));
               for ( size_t j=0U; j<n_sector_facets; j++ )
                 {
-                   const size_t facet = eptr->FV_Stencil()->FacetSurroundingSector( parent_nd, j );
+                   const size_t facet = eptr->FV()->FacetSurroundingSector( parent_nd, j );
                    // if the sector node is the inside node then an incoming flux will create a positive source term
-                   const double64  fsign = (parent_nd == nd->Parent(i)->FV_Stencil()->InsideNode(facet)) ? -1. : 1.;
+                   const double64  fsign = (parent_nd == nd->Parent(i)->FV()->InsideNode(facet)) ? -1. : 1.;
                    FVinflux_ += fsign * eptr->FacetArea(facet) * eptr->ProjectionOnFacetNormal(facet,vt_) * delta_t_;
                 }
            }

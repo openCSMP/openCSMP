@@ -148,6 +148,8 @@ LocalVariables Boundary<dim>::FaceVariables() const
     neighbor faces.
     
     @attention the neighborhood relations are not re-established.
+    
+    @note this constructor is mainly used for edges of line-element faces.
 */
 template<size_t dim>
 Boundary<dim>::Boundary( const string& boundary_name,
@@ -161,7 +163,7 @@ Boundary<dim>::Boundary( const string& boundary_name,
     // moving the supplied Face pointers into the element storage
     this->elmt_vec_.assign( facesBegin, facesEnd );
     // initialising node pointer vector, sorting nodes and elements, and creating boundary face vector
-    const bool updateFaceConnectivity(false); // expected to be done before
+    const bool updateFaceConnectivity(false); // has been done before
     const bool updateIndexes(false);          // not necessarily needed
     Initialize( flag, updateFaceConnectivity, updateIndexes );
  }
@@ -705,7 +707,31 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborCon
     
     // assigns boundary flags
     AtBoundary( boxBoundary );
+
+} // end Initialize
+
+
+
+/*
+// TESTING - createLineFaceConnectivity()
+this->RenumberElements();
+this->RenumberNodes();
+cerr <<"\nBoundary<"<< dim <<">::Initialize: '"<< this->Name() <<"': printing element id(nodes): and neighbor ids";
+for ( auto it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); ++it )
+  {
+     cerr <<"\n\t"<< (*it)->Idx() <<" (";
+     for ( size_t i=0U; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
+     cerr <<"): ";
+     for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+       if ( (*it)->Neighbor(i) == nullptr ) cerr <<"nullptr ";
+       else cerr << (*it)->Neighbor(i)->Idx() <<" ";
   }
+cerr << endl;
+*/
+
+
+
+
 
 
 

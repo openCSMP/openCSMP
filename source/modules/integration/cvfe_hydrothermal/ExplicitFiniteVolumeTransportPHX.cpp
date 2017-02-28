@@ -45,7 +45,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
         for ( typename vector<Element<dim>*>::const_iterator 
                eit=region_ref.ElementsBegin(); 
                eit!=region_ref.ElementsEnd(); eit++)
-              facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV_Stencil()->Facets() );
+              facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV()->Facets() );
        }
     
    // set and check keys
@@ -189,7 +189,7 @@ double64 ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, u
     size_t eidx_,inside_node_,outside_node_;
     double64 flux_;
     eidx_ = e.Idx();
-    e.FV_Stencil()->FacetEdgeNodes( facet_idx, inside_node_, outside_node_ );
+    e.FV()->FacetEdgeNodes( facet_idx, inside_node_, outside_node_ );
     flux_ = facet_flux_vectors[property_idx][eidx_][facet_idx];
     if (flux_<0)
       flux_ *= mass_balance_vectors[property_idx][e.N(outside_node_)->Idx()];
@@ -439,7 +439,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* 
    for ( typename vector<Element<dim>*>::const_iterator
          eit=region_ref.ElementsBegin();
          eit!=region_ref.ElementsEnd(); eit++)
-       facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV_Stencil()->Facets() );
+       facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV()->Facets() );
 
 }
 

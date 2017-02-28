@@ -9,7 +9,7 @@
 #include "Region.h"
 #include "Model.h"
 #include "finiteVolumeFunctions.h"
-
+#include "CSMP_mathUtilities.h"
 #include "VTK_Interface.h"
 
 using namespace std;
@@ -195,10 +195,10 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                const size_t nid((*nit)->ParentNodeNumber(t));
 
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
-               for ( size_t i=0U; i<eptr->FV_Stencil()->FacetsPerSector(nid); i++ ) {
-                    size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(nid,i) );
+               for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
+                    size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                     double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->vD_key );
-                    if ( nid == eptr->FV_Stencil()->InsideNode(iFacet) )div += velo;
+                    if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
                     else div -= velo;
                 }
            }

@@ -138,10 +138,10 @@ template<size_t dim,template<size_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
     // for all finite-volume facets
-    for ( size_t i=0U; i<this->gref_.E(this->stencil_.eidx_)->FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
-        this->gref_.E(this->stencil_.eidx_)->FV_Stencil()->FacetEdgeNodes( i, this->stencil_.inside_node_, this->stencil_.outside_node_ );
+        this->gref_.E(this->stencil_.eidx_)->FV()->FacetEdgeNodes( i, this->stencil_.inside_node_, this->stencil_.outside_node_ );
 
         // for the "inside" node
         if ( this->stencil_.facet_flux_[i] < 0. ) {
@@ -173,10 +173,10 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
     Element<dim>* ep = this->gref_.E(this->thread_stencil_processor_[tid]->eidx_);
 
     // for all finite-volume facets
-    for ( size_t i=0U; i<ep->FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<ep->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
-        ep->FV_Stencil()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );
+        ep->FV()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );
 
         // for the "inside" node
         if ( this->thread_stencil_processor_[tid]->facet_flux_[i] < 0. ) {
@@ -316,7 +316,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
                 //----------------------------------------------------
 
                 //reassign fv stencil here (to put it back later, at the end of the loop.
-                const FiniteVolumeStencil<dim>* tmp_fvstencil= ep->FV_Stencil();
+                const FiniteVolumeStencil<dim>* tmp_fvstencil= ep->FV();
                 ep->Assign(this->fvmgrs_[tid].Stencil( ep->FE_Type()));
 
                 // getting all necessary data for the construction of the result vector from the element

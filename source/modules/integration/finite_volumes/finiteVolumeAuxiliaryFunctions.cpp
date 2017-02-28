@@ -208,7 +208,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     VectorVariable<dim> mass_center_inside_node(PLAIN,0.0), mass_center_outside_node(PLAIN,0.0);
 
     // Calculate the coordinates of the Facet Integration Point
-    const Point<dim> local_c_point(e.FV_Stencil()->FacetIntegrationPoint( iFacet, 0U ));
+    const Point<dim> local_c_point(e.FV()->FacetIntegrationPoint( iFacet, 0U ));
     std::vector<double64> temp(e.Nodes()); //has the local interp. function values
     std::vector<double64> global_c(dim),local_c(local_c_point.Coordinates());
 
@@ -283,7 +283,7 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
     VectorVariable<dim> mass_center_upstream_node(PLAIN,0.0);
 
     // Calculate the coordinates of the Facet Integration Point
-    const Point<dim> local_c_point(e.FV_Stencil()->FacetIntegrationPoint( iFacet, 0U ));
+    const Point<dim> local_c_point(e.FV()->FacetIntegrationPoint( iFacet, 0U ));
     std::vector<double64> temp(e.Nodes()); //has the local interp. function values
     std::vector<double64> global_c(dim),local_c(local_c_point.Coordinates());
 
@@ -415,12 +415,12 @@ double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKe
     const size_t nid(node.ParentNodeNumber(t));
     double64  flux(0.);
     // for all facets surrounding the finite volume at the boundary
-    for ( size_t i(0); i < node.Parent(t)->FV_Stencil()->FacetsPerSector(nid); ++i )
+    for ( size_t i(0); i < node.Parent(t)->FV()->FacetsPerSector(nid); ++i )
     {
-      size_t iFacet( node.Parent(t)->FV_Stencil()->FacetSurroundingSector(nid,i) );
+      size_t iFacet( node.Parent(t)->FV()->FacetSurroundingSector(nid,i) );
       // fluxes are determined for the sectors inside and outside of the advection region
       node.Parent(t)->Read( velocityKey, vel );
-      if ( nid == node.Parent(t)->FV_Stencil()->InsideNode( iFacet ) )
+      if ( nid == node.Parent(t)->FV()->InsideNode( iFacet ) )
         flux += ( *node.Parent(t) ).FacetArea(iFacet) * // facet normal velocity
         ( *node.Parent(t) ).ProjectionOnFacetNormal( iFacet, velocityKey );
       else

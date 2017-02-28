@@ -14,6 +14,7 @@
 #include "Element.h"
 #include "DenseMatrix.h"
 #include "variableOperations.h"
+#include "CSMP_mathUtilities.h"
 
 // element to test
 #include "IsoparametricQuadraticTriangle.h"

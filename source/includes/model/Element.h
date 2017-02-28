@@ -173,10 +173,16 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
              BOX_BOUNDARY=NOT );
              
     Element( const Element& );
-//    Element( Element&& );
+    
+    /// handcoded move constructor to deal with pointers
+    Element( Element&& );
+    
     ~Element();
 
     Element&  operator=( const Element& );
+    
+    /// hand-coded assignment to deal with pointers
+    Element& operator=( Element&& );
 
     /// relation operators
     bool operator==( const Element<dim>& );

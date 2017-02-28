@@ -1045,7 +1045,7 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
     const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
     for ( typename deque<Element<dim> >::iterator
           it=elmt_collection_.begin(); it!=elmt_collection_.end(); it++ )
-          if ( !(*it).FV_Stencil() )
+          if ( !(*it).FV() )
             {
               (*it).AssignFiniteVolume( fvs_manager.Stencil( (*it).FE_Type() ) );
               (*it).ResizePropertyStorage( lvs, ipvs );

@@ -955,10 +955,10 @@ template<size_t dim,template<size_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
    // for all finite-volume facets
-   for ( size_t i=0U; i<this->gref_.E(stencil_.eidx_)->FV_Stencil()->Facets(); i++ )
+   for ( size_t i=0U; i<this->gref_.E(stencil_.eidx_)->FV()->Facets(); i++ )
       {
       // identifying the finite volumes to which the flux will be distributed
-      this->gref_.E(stencil_.eidx_)->FV_Stencil()->FacetEdgeNodes( i, stencil_.inside_node_, stencil_.outside_node_ );
+      this->gref_.E(stencil_.eidx_)->FV()->FacetEdgeNodes( i, stencil_.inside_node_, stencil_.outside_node_ );
 
       // for the "inside" node
       if ( stencil_.facet_flux_[i] < 0. ) {

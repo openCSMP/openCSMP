@@ -138,6 +138,7 @@ Element<dim>::Element( size_t idx,
 template<size_t dim>
 Element<dim>::Element( const Element<dim>& el )  
  : FiniteElementPolicy<dim,csmp::Element>(el.FE()),
+   FiniteVolumePolicy<dim,csmp::Element>(el.FV()),
    at_boundary_   (el.at_boundary_   ),
    idx_           (el.idx_           ),
    elmt_connector_(el.elmt_connector_), // watch out where the pointers point to
@@ -152,21 +153,22 @@ Element<dim>::Element( const Element<dim>& el )
 
 
 /// move constructor
-/*
 template<size_t dim>
 Element<dim>::Element( Element<dim>&& el )
- : FiniteElementPolicy<dim,csmp::Element>{el.FE()},
-   at_boundary_   {el.at_boundary_   },
-   idx_           {el.idx_           },
-   elmt_connector_{el.elmt_connector_},
-   node_connector_{el.node_connector_},
-   this->fptr_(el.fptr_),
+ : FiniteElementPolicy<dim,csmp::Element>(move(el.FE())),
+   FiniteVolumePolicy<dim,csmp::Element>(move(el.FV())),
+   at_boundary_(move(el.at_boundary_)),
+   idx_(move(el.idx_)),
+   elmt_connector_(move(el.elmt_connector_)),
+   node_connector_(move(el.node_connector_))
  {
    this->LVS( move(el.LVS()) );
-   el.Assign( static_cast<FiniteElement*>(nullptr) );
-   el.Assign( static_cast<FiniteVolumeStencil<dim>*>(nullptr) );
+   el.AssignFiniteElementNullPtr();
+   el.AssignFiniteVolumeNullPtr();
  }
-*/
+
+
+
 
 template<size_t dim>
 Element<dim>::~Element()
@@ -181,13 +183,40 @@ template<size_t dim>
 Element<dim>& Element<dim>::operator=( const Element<dim>& el )
  {
     if ( &el != this ) {
+        FiniteElementPolicy<dim,csmp::Element>::Assign(el.FE());
+        FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(el.FV());
         at_boundary_    = el.at_boundary_;
         idx_            = el.idx_;
         elmt_connector_ = el.elmt_connector_;
         node_connector_ = el.node_connector_;
         this->LVS( el.LVS() );
-        FiniteElementPolicy<dim,csmp::Element>::Assign( el.FE() );
       }
+    return *this;
+ }
+
+
+
+/**
+    @note a temporary variable cannot be equivalent to lvalue!
+*/
+template<size_t dim>
+Element<dim>& Element<dim>::operator=( Element<dim>&& el )
+ {
+    // should never happen because a temporary variable cannot be an lvalue
+    assert( &el != this );
+
+    FiniteElementPolicy<dim,csmp::Element>::Assign(move(el.FE()));
+    FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(move(el.FV()));
+
+    at_boundary_    = move(el.at_boundary_);
+    idx_            = move(el.idx_);
+    elmt_connector_ = move(el.elmt_connector_);
+    node_connector_ = move(el.node_connector_);
+    this->LVS( move(el.LVS()) );
+
+    el.AssignFiniteElementNullPtr();
+    el.AssignFiniteVolumeNullPtr();
+   
     return *this;
  }
 
@@ -663,7 +692,7 @@ void Element<dim>::Out() const
            str = parseBoundary(Neighbor(i)->AtBoundary());
            cout << str << endl;
         }
-      else cout <<"none.\n";
+      else cout <<"\t\tnone.\n";
    
     // barycentre
     Point<dim>  pt(this->BaryCenter());

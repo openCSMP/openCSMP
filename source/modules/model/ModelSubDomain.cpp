@@ -5,6 +5,7 @@
  *  Copyright 2010 SKM private. All rights reserved.
  *
  */
+#include <type_traits>
 #include "ModelSubDomain.h"
 #include "Region.h"
 #include "Boundary.h"
@@ -615,14 +616,14 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
     cout << "  Building a list of the faces of the cells...\n";
-    //       key             face number neighbor
+    //       key             face number,neighbor
     multimap<set<Node<dim>*>,pair<size_t,SIMPLEX<dim>*> >  volume_neighbor_keys,
                                                            surface_neighbor_keys, 
                                                            line_neighbor_keys;
     vector<size_t>                 fnids;
     typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
 
-    for ( typename vector<SIMPLEX<dim>*>::const_iterator it = elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
+    for ( typename vector<SIMPLEX<dim>*>::const_iterator it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
           const size_t faces((*it)->Faces());
           for ( size_t face=0U; face<faces; ++face )
             {
@@ -631,7 +632,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
                                       "supplied element contains NULL pointer to elements; nothing was done." );
                     return;
                  }
-               // creating face key from idx's of face
+               // creating face key of node pointers from indices of face nodes
                (*it)->FE()->NodesOfFace( face, fnids );
                const size_t nodes(fnids.size());
                for ( size_t j=0U; j<nodes; ++j )
@@ -644,7 +645,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
                else if ( (*it)->IsSurfaceElement() )
                  surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
                else // for all line elements
-                   line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
+                 line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
                key.clear();
             }
         }
@@ -656,8 +657,8 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
 
     // 2.1 line elements
     // -----------------
-    if ( !line_neighbor_keys.empty() ) {
-
+    if ( !line_neighbor_keys.empty() )
+      {
         SIMPLEX<dim>* e1Ptr(nullptr);
         SIMPLEX<dim>* e2Ptr(nullptr);
 
@@ -678,8 +679,8 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
                    e2Ptr = (*it2).second.second;
                    assert( e1Ptr != e2Ptr ); // avoid self-assignment
 
-                   // assigning the two cells faces
-                   //                           face pointer   nbor face idx        neighbor pointer
+                   // assigning the two cells face neighbors to one another
+                   //                        face pointer  nbor face idx   neighbor pointer
                    ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
                    ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
                    
@@ -767,6 +768,36 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
       } // dim=3
     
  } // end EstablishNeighborConnectivity
+
+
+
+/* TESTING - EstablishNeighborConnectivity
+
+/ printing the multimap
+RenumberElements();
+cerr <<"\nline element face key map:\n";
+cerr <<"\n\tnode-id, face-id, nbor elmt id, neighbor 1 and 2";
+for ( auto it=line_neighbor_keys.begin(); it!=line_neighbor_keys.end(); ++it ) {
+      cerr <<"\n\t"<< (*(*it).first.begin())->Idx() <<", "<< (*it).second.first <<", ";
+      if ( (*it).second.second != nullptr ) {
+           cerr << (*it).second.second->Idx() <<", ";
+           if ( (*it).second.second->Neighbor(0) != nullptr )
+             cerr << (*it).second.second->Neighbor(0)->Idx() <<", ";
+           else cerr <<"nullptr" <<", ";
+           if ( (*it).second.second->Neighbor(1) != nullptr )
+             cerr << (*it).second.second->Neighbor(1)->Idx() <<", ";
+           else cerr <<"nullptr" <<", ";
+        }
+      else cerr <<"nullptr.";
+   }
+cerr << endl;
+cerr <<"\nprinting the elements:";
+for ( auto it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it )
+  (*it)->Out();
+cerr << endl;
+      
+*/
+
 
 
 
@@ -4071,8 +4102,8 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
                  // reading element property
                  sc = (*eit)->Read( e_key );
 
-                 for ( size_t i=0U; i<(*eit)->FV_Stencil()->Facets(); i++ )
-                    for ( size_t j=0U; j<(*eit)->FV_Stencil()->IntegrationPointsPerFacet(); j++ )
+                 for ( size_t i=0U; i<(*eit)->FV()->Facets(); i++ )
+                    for ( size_t j=0U; j<(*eit)->FV()->IntegrationPointsPerFacet(); j++ )
                      (*eit)->Store( i, j, fip_key, sc );
               }
     }
@@ -4089,7 +4120,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
                  // reading element property
                  (*eit)->Read( e_key, vc );
 
-                 for ( size_t i=0U; i<(*eit)->FV_Stencil()->Facets(); i++ )
+                 for ( size_t i=0U; i<(*eit)->FV()->Facets(); i++ )
                     for ( size_t j=0U; j<(*eit)->IntegrationPointsPerFacet(); j++ )
                      (*eit)->Store( i, j, fip_key, vc );
              }
@@ -4106,8 +4137,8 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
              {
                  (*eit)->Read( e_key, ts );
 
-                 for ( size_t i=0U; i<(*eit)->FV_Stencil()->Facets(); i++ )
-                    for ( size_t j=0U; j<(*eit)->FV_Stencil()->IntegrationPointsPerFacet(); j++ )
+                 for ( size_t i=0U; i<(*eit)->FV()->Facets(); i++ )
+                    for ( size_t j=0U; j<(*eit)->FV()->IntegrationPointsPerFacet(); j++ )
                      (*eit)->Store( i, j, fip_key, ts );
              }
     }
@@ -5447,7 +5478,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
    
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
-//    assert( !info.perimeter_elmts.empty() );
+    assert( !info.perimeter_elmts.empty() );
    
     // 4. reading the boundary faces
     // -----------------------------
@@ -5462,7 +5493,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
     */
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
-//    assert( !faceIDs.empty() );
+    assert( !faceIDs.empty() );
  
     if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
     info.perimeter_faces.reserve( faceIDs.size() );
@@ -5484,7 +5515,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
   
     // 6. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );
- //   assert( !info.perimeter_nodes.empty() );
+    assert( !info.perimeter_nodes.empty() );
    
  } // end readRegionIndexesFromBinaryFile
 

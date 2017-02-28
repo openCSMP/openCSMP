@@ -26,7 +26,7 @@ void FiniteVolumePolicy<2U,SIMPLEX>::AssignFiniteVolume( const csmp::FiniteVolum
 // FV STENCIL INFO
 
 template<template<size_t> class SIMPLEX>
-const FiniteVolumeStencil<2U>* const FiniteVolumePolicy<2U,SIMPLEX>::FV_Stencil() const
+const FiniteVolumeStencil<2U>* const FiniteVolumePolicy<2U,SIMPLEX>::FV() const
  {
     return fvptr_;
  }

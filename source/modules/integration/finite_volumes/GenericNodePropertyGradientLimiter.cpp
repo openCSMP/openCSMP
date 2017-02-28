@@ -162,10 +162,10 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const std::
 
                     // at that parent element, loop over all facets that belong to the current node/fv
                     // -------------------------------------------------------------------------------
-                    for ( size_t i=0U; i < current_el.FV_Stencil()->FacetsPerSector(nloc_id); i++ ) {
+                    for ( size_t i=0U; i < current_el.FV()->FacetsPerSector(nloc_id); i++ ) {
 
                          // at that facet, get local facet_id used for determining distance:
-                         local_facet_id = current_el.FV_Stencil()->FacetSurroundingSector( nloc_id,i );
+                         local_facet_id = current_el.FV()->FacetSurroundingSector( nloc_id,i );
 
                          // get distance barycenter - facetcenter for that facet:
                          node_prop_grad.GenericDistanceFacetFVBarycenter( global_el_id, local_facet_id, nloc_id, dist );

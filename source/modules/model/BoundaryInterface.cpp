@@ -325,7 +325,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoxShaped() const
   {
     const BOUNDARY_COMPLEX<dim>& boundaryComplex( static_cast<const BOUNDARY_COMPLEX<dim>& >(*this) );
 
-    std::cout << "\nBoundaryInterface::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
+    std::cout << "\nBoundaryInterface<"<< dim <<">::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
     size_t boundaries( 6 );
     if( dim == 2 )
       boundaries = 4;
@@ -376,8 +376,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
                                                                                                boundaryComplex->Database(),
                                                                                                facesBegin, facesEnd, bflag ) ) ) );
     if ( it.second ) {
-         cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary: successfully created boundary '";
-         cout << boundary_name <<"' from input faces.\n";
+         cout << "\nBoundaryInterface<"<< dim <<">::AddBoundary: successfully created boundary '";
+         cout << boundary_name <<"' from input faces.";
       }
     else {
          ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1116,7 +1116,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      // 0. writing the file header
      skm_C_fwrite( fp, heading.c_str() );
 
-     std::cout <<"\nBoundaryInterface::OutputAllBoundariesToBinary: boundaries written to binary file: ";
+     std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: boundaries written to binary file: ";
      // 1. writing all boundary objects to binary file
      const size_t records(this->Boundaries());
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
@@ -1141,7 +1141,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
 
     // 3. cleaning up
     fclose( fp );
-    std::cout <<"\nBoundaryInterface::OutputAllBoundariesToBinary: file '";
+    std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
    
     return true;
@@ -1172,7 +1172,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      // 0. reading the file header and printing it to screen
      char  text[500U];
      skm_C_fread( fp, text );
-     std::cout <<"\nBoundaryInterface::InputAllBoundariesFromBinary: Reading file header:\n\t"<< text << std::endl;
+     std::cout <<"\nBoundaryInterface<"<< dim <<">::InputAllBoundariesFromBinary: Reading file header:\n\t"<< text << std::endl;
      std::cout <<"\n\timporting the boundaries: ";
    
      // 1. reading the boundaries
@@ -1308,7 +1308,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* group1
              it = faceBoundaryMap_.insert( std::make_pair( b_normal, csmp::Boundary<dim>( b_normal, boundaryComplex->Database(), INTERNAL ) ) );
          if ( it.second ) 
            {
-             std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(between): creating boundary between " << group1 << " and " << group2 << std::endl;
+             std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): creating boundary between " << group1 << " and " << group2 << std::endl;
              boundaryComplex->UpdateIndices();
              if( createRegionBetween )
              {
@@ -1321,7 +1321,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* group1
                  succeeded = (*it.first).second.CreateBetween( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), gref1, gref2 );
              }
              boundaryComplex->UpdateIndices();
-             std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(between): created boundary between " << group1 << " and " << group2 << std::endl;
+             std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): created boundary between " << group1 << " and " << group2 << std::endl;
              return succeeded;
            }
          else throw csmp::Exception( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(between):",
@@ -1398,7 +1398,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* region
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region): creating boundary from Region "<< region << "\n";
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary from Region "<< region << "\n";
         boundaryComplex->UpdateIndices();
         bool succeeded( (*it.first).second.CreateFrom( boundaryComplex->Mesh(), rref, csmp::Index(), boxBoundary ) );
         boundaryComplex->UpdateIndices();
@@ -1408,7 +1408,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* region
              boundaryComplex->MoveToNonUniqueRegions( region );
           }
           
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region): created boundary from Region "<< region << "\n";
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): created boundary from Region "<< region << "\n";
         return succeeded;
       }
     else csmp_error.notice( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region):",
@@ -1443,10 +1443,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( BOX_BOUNDARY boxBo
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region): creating boundary " <<  parseBoundary( boxBoundary ) << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary " <<  parseBoundary( boxBoundary ) << std::endl;
         bool succeeded( (*it.first).second.CreateFrom( boundaryComplex->Mesh(), rref, csmp::Index(), boxBoundary ) );
         boundaryComplex->UpdateIndices();
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region): created boundary " <<  parseBoundary( boxBoundary ) << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): created boundary " <<  parseBoundary( boxBoundary ) << std::endl;
         return succeeded;
       }
     else csmp_error.notice( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region):",
@@ -1483,12 +1483,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), bflag ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces: creating boundary around " << region << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: creating boundary around " << region << std::endl;
         boundaryComplex->UpdateIndices();
         //                                 FACE & BOUNDARY CREATION
         bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
         boundaryComplex->UpdateIndices();
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces: created boundary around " << region << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: created boundary around " << region << std::endl;
         return succeeded;
       }
     else csmp_error.notice( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary",
@@ -1521,11 +1521,11 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const typename std
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), parseBoundary(bName) ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary creating boundary " <<  bName << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary creating boundary " <<  bName << std::endl;
         boundaryComplex->UpdateIndices();
         bool succeeded = (*it.first).second.CreateFrom( facesBegin, facesEnd );
         boundaryComplex->UpdateIndices();
-        std::cout << "\nBoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary created boundary " <<  bName << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary created boundary " <<  bName << std::endl;
         return succeeded;
       }
     else throw csmp::Exception( ERROR, "Model<dim,BOUNDARY_COMPLEX>::InsertBoundary",
@@ -1551,7 +1551,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::DivideBoundary( typename std::map<
     if ( subBoundary.second )
       {
         if ( boundary->second.Divide( subRegion->second, subBoundary.first->second ) ) {
-            std::cout << "\nBoundaryInterface::DivideBoundary created boundary " << bName << std::endl;
+            std::cout << "\nBoundaryInterface<"<< dim <<">::DivideBoundary created boundary " << bName << std::endl;
             return true;
           }
         else throw csmp::Exception( ERROR, "BoundaryInterface::DivideBoundary", "Unable to form boundary" );
@@ -1584,7 +1584,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::DivideBoundary( typename std::map<
     {
       if( boundary->second.Divide( facesBegin, facesEnd, subBoundary.first->second ) )
       {
-        std::cout << "\nBoundaryInterface::DivideBoundary created boundary " << bName << std::endl;
+        std::cout << "\nBoundaryInterface<"<< dim <<">::DivideBoundary created boundary " << bName << std::endl;
         return true;
       }
       else
@@ -1632,81 +1632,86 @@ void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::Node<3U
     Connects the line faces representing the edge with their neighbors    
     logic: where the line elements share a node they are connected
     
-    makes sense in 3D only
+    @note makes sense only in 3D.
+    
+    @todo TODO: deal with the special case of manifolds. At the corner
+    of a box-shaped model, for instance, 3 line-element faces contact each other.
+    
+    @attention where multiple line element faces connect at a Node,
+    this method assigns a nullptr to that face.
+    
+    @attention this method assumes that the first 2 nodes of the line-element
+    Face are the end-point nodes
 */
 void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
  {
     if ( line_faces.empty() ) return;
    
-    // 1. making a map of the connections of each node to parent faces
+    // 1. making a map of the parent faces that each node is connected to
     //  key       faces that are connected to the node (should be 2 at most)
-    map<Node<3U>*,set<size_t> > parent_faces;
+    map<Node<3U>*,set<Face<3U>*> > parent_faces;
    
-    size_t face_idx(0U);
     for ( const auto it : line_faces ) {
+         set<Face<3U>*> parents({it});
          for ( size_t i=0U; i<it->Nodes(); ++i ) {
-              // inserting new set or adding the face idx to the node set if an entry already exists
-              pair<map<Node<3U>*,set<size_t> >::iterator,bool>
-                nit = parent_faces.insert( make_pair( it->N(i), move(set<size_t>{face_idx}) ) );
+              // inserting a new set or inserting a face pointer into the set if the node key already exists
+              pair<map<Node<3U>*,set<Face<3U>*> >::iterator,bool>
+                nit = parent_faces.insert( make_pair( it->N(i), parents ) );
               if ( !nit.second )
-                (*nit.first).second.insert( face_idx );
+                (*nit.first).second.insert(it);
            }
-         face_idx++;
       }
    
    // 2. connecting the faces with one another
-   //   (the assumption is that each face has 1-2 equidimensional neighbors that coinside with its corner nodes!=midside nodes if any)
+   //   (the assumption is that each face has 1-2 equidimensional neighbors that coincide with its corner nodes!=midside nodes if any)
    ErrorHandler& csmp_error(ErrorHandler::Instance());
 
    for ( auto it : parent_faces ) {
-        // 2.1 faces at the end-points of the edge = perimeter faces
-        if ( it.second.size() == 1 )
-          // this neighbor of the face is set to nullptr=no neighbor
-          for ( size_t i=0U; i<line_faces[ (*it.second.begin()) ]->Nodes(); ++i ) {
-               // if the node pointers match the neighbor assignment can be made
-               if ( line_faces[ (*it.second.begin()) ]->N(i) == it.first ) {
-                    line_faces[ (*it.second.begin()) ]->Assign( i, line_faces[ (*it.second.begin()) ] );
-                    //line_faces[ (*it.second.begin()) ]->Assign( i, static_cast<Face<3U>* const>(nullptr) );
-                    break;
-                 }
+        // 2.1 nodes/faces at the end-points of the edge = perimeter faces
+        // (there may only be one neighbor or a manifold interpreted as endpoint)
+        if ( it.second.size() != 2 ) {
+          if ( it.second.size() > 2 ) {
+               it.first->Out();
+               csmp_error.notice( ERROR, "creatLineFaceConnectivity(Face):",
+                                "edge node is connected to more than 2 line Faces;\
+                                 don't know how to deal with this manifold.");
             }
-        // 2.2 faces with both neighbors
-        else if ( it.second.size() == 2 ) {
-             // finding node number in first edge
-             Face<3U>* const edge1 = line_faces[ (*it.second.begin()) ];
-             Face<3U>* const edge2 = line_faces[ (*it.second.rbegin()) ];
-             size_t neighbor(NULL_IDX);
-             for ( size_t i=0U; i<edge1->Nodes(); ++ i )
-               if ( it.first == edge1->N(i) ) {
-                    neighbor = i;
-                    break;
-                 }
-             // assigning the opposite neighbor
-             edge1->Assign( neighbor, edge2 );
-          
-             // finding node number in second edge
-             for ( size_t i=0U; i<edge2->Nodes(); ++ i )
-               if ( it.first == edge2->N(i) ) {
-                    neighbor = i;
-                    break;
-                 }
-             // assigning neighbors
-             edge2->Assign( neighbor, edge1 );
+           /* NOTHING NEEDS TO BE DONE BECAUSE FACE POINTERS ALREADY ARE NULLPTRs
+             // this neighbor of the face is set to nullptr=no neighbor
+             for ( auto fit=it.second.begin(); fit!=it.second.end(); ++fit )
+               for ( size_t node=0U; node<(*fit)->Nodes(); ++node )
+                 if ( it.first == (*fit)->N(node) )
+                   (*fit)->Assign( node, static_cast<Face<3U>*>(nullptr) );
+          */
           }
+        // 2.2 when both nodes/faces have line-element neighbors
         else {
-              it.first->Out();
-              csmp_error.notice( ERROR, "creatLineFaceConnectivity(Faces)",
-                                "edge node is connected to more than 2 line Faces; don't know how to deal with this manifold.");
+             Face<3U>* edge1 = (*it.second.begin());
+             Face<3U>* edge2 = (*it.second.rbegin());
+             // finding the node in the first Face = line element
+             for ( size_t i=0U; i<edge1->Nodes(); ++i )
+               if ( it.first == edge1->N(i) ) {
+                    // assigning the opposite neighbor
+                    edge1->Assign( i, edge2 );
+                    break;
+                 }
+             // finding node number in second Face
+             for ( size_t i=0U; i<edge2->Nodes(); ++i )
+               if ( it.first == edge2->N(i) ) {
+                    // assigning neighbors
+                    edge2->Assign( i, edge1 );
+                    break;
+                 }
           }
      }
    
  } // create line element neighbor connectivity
 
-
-
-
 bool createBoundaryFromSharedEdge( Model<1U>&, const Boundary<1U>&, const Boundary<1U>&, std::vector<Face<1U>*>& ) { throw logic_error("createBoundaryFromSharedEdge(1D)"); }
 bool createBoundaryFromSharedEdge( Model<2U>&, const Boundary<2U>&, const Boundary<2U>&, std::vector<Face<2U>*>& ) { throw logic_error("createBoundaryFromSharedEdge(2D)"); }
+
+
+
 
 /**
     @param shared_faces is a vector of the Face objects that were created in the MeshManager in the boundary creation process
@@ -1801,7 +1806,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
     ErrorHandler& csmp_error(ErrorHandler::Instance());
 
     if ( dim != 3 ) {
-         cout <<"\nBoundaryInterface::EstablishEdgeBoundariesOfBoxShapedModel: edges only are required in 3D; nothing was done.\n";
+         cout <<"\nBoundaryInterface<"<< dim <<">::EstablishEdgeBoundariesOfBoxShapedModel: edges only are required in 3D; nothing was done.\n";
          return false;
       }
     // getting references to all necessary side boundaries of the box-shaped model
@@ -1958,7 +1963,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
     {
       BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
 
-      std::cout << "\nBoundaryInterface::EstablishEdgeRegionsOfBoxShapedModel: Establishing Edge Regions for " << dim << " dimensional box shaped model...";
+      std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishEdgeRegionsOfBoxShapedModel: Establishing Edge Regions for " << dim << " dimensional box shaped model...";
       ErrorHandler& csmp_error(ErrorHandler::Instance());
 
       // Forming edge regions
@@ -1987,7 +1992,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
       edge_flag[11] = EDGE12;
 
       // 1. collecting the ids of the line elements that sit on the model edges also remembering their flags
-      std::cout <<"\nBoundaryInterface::EstablishEdgeRegionsOfBoxShapedModel: Assigning line elements to model edges..." << std::endl;
+      std::cout <<"\nBoundaryInterface<"<< dim <<">::EstablishEdgeRegionsOfBoxShapedModel: Assigning line elements to model edges..." << std::endl;
       // (only if there are multiple element types in the VSet)
       if ( vset.ElementTypes() > 1 )
         for ( size_t e=0U; e<vset.Elements(); ++e )
@@ -2082,7 +2087,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
   bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
    {
       BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-      std::cout << "\nBoundaryInterface::EstablishEdgeRegionsOfBoxShapedModel: Establishing Box Boundaries for " << dim << " dimensional box shaped model...";
+      std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishEdgeRegionsOfBoxShapedModel: Establishing Box Boundaries for " << dim << " dimensional box shaped model...";
 
       boundaryComplex->InsertBoundary( TOP, "TOP" );
       boundaryComplex->InsertBoundary( BOTTOM, "BOTTOM" );
@@ -2105,7 +2110,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 
       for ( size_t i = 0; i < regionsToRemove.size(); ++i )
         if ( regionsToRemove[i] != "Model" ) {
-              std::cout << "\nBoundaryInterface::EstablishBoxBoundaries: Removing region " << regionsToRemove[i] << " since it was transformed to Boundary...";
+              std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Removing region " << regionsToRemove[i] << " since it was transformed to Boundary...";
               // SKM FIX boundaryComplex->RemoveRegion( regionsToRemove[i].c_str(), true );
               boundaryComplex->RemoveFromRegion( "Model", regionsToRemove[i].c_str() );
               boundaryComplex->MoveToNonUniqueRegions( regionsToRemove[i].c_str() );
@@ -2141,7 +2146,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries()
   {
 
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-    std::cout << "\nBoundaryInterface::EstablishBoundaries: searching for eligible boundary domains...\n";
+    std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: searching for eligible boundary domains...\n";
 
     AddFaces("Model");
     csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model") ) );
@@ -2164,7 +2169,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries()
         if( modelBoundary.Elements() == 0 )
           {
             boundaryComplex->RemoveBoundary(modelBoundary);
-            std::cout << "\nBoundaryInterface::EstablishBoundaries: Boundary 'Model' entirely replaced by sub boundaries.\n";
+            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Boundary 'Model' entirely replaced by sub boundaries.\n";
             break;
           }
       }
@@ -2175,7 +2180,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries()
     // moving the original regions from which the boundaries were created from model and into the non-unique regions map
     for ( size_t i = 0; i < eligibleRegions.size(); ++i )
       if ( eligibleRegions[i] != "Model" ) {
-            std::cout << "\nBoundaryInterface::EstablishBoundaries: Removing region '";
+            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Removing region '";
             std::cout << eligibleRegions[i] << "' from 'Model' since it was transformed into Boundary...";
             boundaryComplex->RemoveFromRegion( "Model", eligibleRegions[i].c_str() );
             boundaryComplex->MoveToNonUniqueRegions( eligibleRegions[i].c_str() );

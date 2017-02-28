@@ -116,9 +116,9 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
 
          // getting all the finite-volume facet related information
          // -------------------------------------------------------
-         facet_flux_.resize(e.FV_Stencil()->Facets());
+         facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -138,9 +138,9 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
 
          // getting all the finite-volume facet related information
          // -------------------------------------------------------
-         facet_flux_.resize(e.FV_Stencil()->Facets());
+         facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -160,9 +160,9 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
 
          // getting all the finite-volume facet related information
          // -------------------------------------------------------
-         facet_flux_.resize(e.FV_Stencil()->Facets());
+         facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -191,9 +191,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
  {
      eidx_ = e.Idx();
             
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -209,15 +209,15 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
 	           
               if ( param.FacetNormalVelocity(i) > 0. ) {
 	                linear_flux *= limitProperty( psi_inside_node, psi_outside_node, psi_facet, 
-                                                SMINMAX[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ] );
+                                                SMINMAX[ e.N( e.FV()->InsideNode(i) )->Idx() ] );
 	             } 
               else {
 	                linear_flux *= limitProperty( psi_outside_node, psi_inside_node, psi_facet, 
-                                                SMINMAX[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] );
+                                                SMINMAX[ e.N( e.FV()->OutsideNode(i) )->Idx() ] );
 	             }  
           
-             res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += linear_flux;
-             res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= linear_flux;
+             res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += linear_flux;
+             res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= linear_flux;
 	       }
        }
   
@@ -239,9 +239,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
 
      double64  limited_psi_inside_node, limited_psi_outside_node;
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -264,8 +264,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
                    linear_flux*=limited_psi_outside_node;
 
 
-             res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += linear_flux;
-             res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= linear_flux;
+             res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += linear_flux;
+             res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= linear_flux;
            }
        }
 
@@ -324,9 +324,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           if (vt == SCALAR)
             {
@@ -370,8 +370,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
           const double64 diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
 
-          res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
-          res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
        }
 
 } // AccumulateExplicitAdvectionDiffusionSolution1
@@ -405,9 +405,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
             
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -423,10 +423,10 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
 	           
                if ( param.FacetNormalVelocity(i) > zero )
 	                linear_flux *= limitProperty( psi_inside_node, psi_outside_node, psi_facet, 
-                                                SMINMAX[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ] );
+                                                SMINMAX[ e.N( e.FV()->InsideNode(i) )->Idx() ] );
                else
                     linear_flux *= limitProperty( psi_outside_node, psi_inside_node, psi_facet,
-                                                SMINMAX[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] );
+                                                SMINMAX[ e.N( e.FV()->OutsideNode(i) )->Idx() ] );
           }
           else linear_flux = zero;
 
@@ -436,8 +436,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
           const double64 diffusive_flux = e.Read( diff_key_ ) * -param.FacetNormalProjection( i, grad_ )*param.FacetArea(i);
 
-          res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
-          res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
        }
   
 } // AccumulateExplicitAdvectionDiffusionSolution2
@@ -471,9 +471,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           const double64 psi_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 psi_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -503,8 +503,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
           // -----------------------------------------
           // NB: a special boundary treatment seems to be required to avoid oscillations which arise at small gradients
           const double64 diffusive_flux = e.Read( diff_key_ ) * param.FacetArea(i) * -param.FacetNormalProjection( i, grad_ );
-          res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
-          res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += (linear_flux + diffusive_flux);
+          res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= (linear_flux + diffusive_flux);
        }
 
 } // AccumulateExplicitAdvectionDiffusionSolution2 with lsm grad limiter
@@ -586,9 +586,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
           for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
           
@@ -635,8 +635,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
 
                    const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
 
-                   res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += capillary_flux;
-                   res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= capillary_flux;
+                   res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
+                   res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
                 }
           }
           */
@@ -667,8 +667,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
                                                      relperm.GravityMultiplier_G();
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += gravity_induced_flux; 
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= gravity_induced_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += gravity_induced_flux; 
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= gravity_induced_flux;
             }
 
           */
@@ -688,8 +688,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
                const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2u);
 
 	           // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-	           res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += nonlinear_flux; 
-	           res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
+	           res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux; 
+	           res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
             }
       }
   
@@ -742,9 +742,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
  {
      eidx_ = e.Idx();
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           // --------------------------------------------------------
           // 0. facet saturation and relperm
           // --------------------------------------------------------
@@ -763,18 +763,18 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                // identifying the upstream node (to get psi_hat_c, n_upstream = n_current )
                if ( param.FacetNormalVelocity(i)> 0. )
                  relperm.SaturationWettingPhase( 1. - limitProperty( sn_inside_node, sn_outside_node, sn_facet,
-                                                                     SMINMAX[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ] ) );
+                                                                     SMINMAX[ e.N( e.FV()->InsideNode(i) )->Idx() ] ) );
                else
                  relperm.SaturationWettingPhase( 1. - limitProperty( sn_outside_node, sn_inside_node, sn_facet,
-                                                                     SMINMAX[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] ) );
+                                                                     SMINMAX[ e.N( e.FV()->OutsideNode(i) )->Idx() ] ) );
                // computing flow properties at upstream node
                relperm.EffectiveSaturation();
                // + div . [fn vt]
                const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
              }
 
       }
@@ -798,9 +798,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
 
      double64 limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           // --------------------------------------------------------
           // 0. facet saturation and relperm
           // --------------------------------------------------------
@@ -835,8 +835,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
              }
 
       }
@@ -884,9 +884,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           // --------------------------------------------------------
           // 0. interpolate property values and effective saturation
@@ -911,12 +911,12 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                if ( param.FacetNormalVelocity(i) > 0. ) {
                  if ( e.N(inside_node_)->AtBoundary() ) relperm.SaturationWettingPhase( 1. - sn_inside_node );
                  else relperm.SaturationWettingPhase( 1. - limitProperty( sn_inside_node, sn_outside_node, sn_facet,
-                                                                          SMINMAX[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ] ) );
+                                                                          SMINMAX[ e.N( e.FV()->InsideNode(i) )->Idx() ] ) );
                  }
                else {
                  if ( e.N(outside_node_)->AtBoundary() ) relperm.SaturationWettingPhase( 1. - sn_outside_node );
                  else relperm.SaturationWettingPhase( 1. - limitProperty( sn_outside_node, sn_inside_node, sn_facet,
-                                                                          SMINMAX[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] ) );
+                                                                          SMINMAX[ e.N( e.FV()->OutsideNode(i) )->Idx() ] ) );
                  }
 
 
@@ -927,8 +927,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
              }
 
 
@@ -950,8 +950,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.EffectiveSaturation();
                // =  - div . [k * lambda_overbar * dpc/dn]
                const double64 capillary_flux = param.FacetArea(i) * relperm.Permeability() * relperm.G() * -dpcdn;
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += capillary_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= capillary_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
           }
           */
 
@@ -976,8 +976,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
                const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
 
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += capillary_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= capillary_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
             }
             */
 
@@ -1015,9 +1015,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      }
 
 
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           // --------------------------------------------------------
           // 0. interpolate property values and effective saturation
@@ -1053,8 +1053,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= nonlinear_flux;
              }
 
 
@@ -1083,8 +1083,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
                const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
 
-               res[ e.N( e.FV_Stencil()->InsideNode(i) )->Idx() ]  += capillary_flux;
-               res[ e.N( e.FV_Stencil()->OutsideNode(i) )->Idx() ] -= capillary_flux;
+               res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
+               res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
             }
 
           */
@@ -1138,9 +1138,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
     }
 
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
     {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           // Average values and effective saturation
           // ------------------------------------------
@@ -1336,9 +1336,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
     }
 
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
     {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           // Average values and effective saturation
           // ------------------------------------------
@@ -1555,9 +1555,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
     }
 
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
     {
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           // Average values and effective saturation
           // ------------------------------------------
@@ -1768,11 +1768,11 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
 
     // now the saturation dependent properties are computed
     // for all FACETS per SECTOR surrounding the finite volume at the boundary
-    for ( size_t k=0U; k<e.FV_Stencil()->FacetsPerSector(pnid); k++ )
+    for ( size_t k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
       {
-         size_t i( e.FV_Stencil()->FacetSurroundingSector(pnid,k) );
+         size_t i( e.FV()->FacetSurroundingSector(pnid,k) );
 
-         e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
          // get velocity across FV facet
 

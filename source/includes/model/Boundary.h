@@ -4,15 +4,11 @@
 #include "ModelSubDomain.h"
 #include "Face.h"
 
-#include <cstdio>
-#include <vector>
-#include <utility>
-
 namespace csmp {
 
+class FiniteElementManager;
 template<size_t> class PropertyDatabase;
 template<size_t> class MeshManager;
-class FiniteElementManager;
 template<typename> class FEM_Data;
 template<size_t> class Point;
 template<size_t> class Node;

@@ -35,7 +35,7 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( El
    eptr->Read( User()->vD_key, vD_ );
 
    // computing total facet fluxes by projecting vt onto facet normals
-   const size_t facets(eptr->FV_Stencil()->Facets());
+   const size_t facets(eptr->FV()->Facets());
    for ( size_t j=0U; j<facets; ++j ) {
         eptr->Read( j, 0U, User()->fn_key, nrml_ );
         // projection (dot product)
@@ -50,8 +50,8 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( El
         eptr->Store( j, 0U, User()->ff_key, makeScalar(flag1,facet_flux) );
 
         // multiplying the volumetric flux with the upstream concentration
-        const size_t inside_node  = eptr->FV_Stencil()->InsideNode( j );
-        const size_t outside_node = eptr->FV_Stencil()->OutsideNode( j );
+        const size_t inside_node  = eptr->FV()->InsideNode( j );
+        const size_t outside_node = eptr->FV()->OutsideNode( j );
         // fluxes are multiplied with upstream concentrations
         if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->C0_key );
         else                   facet_flux *= eptr->N(inside_node)->Read( User()->C0_key );
@@ -144,12 +144,12 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
               const size_t pnid(nd_ptr->ParentNodeNumber(t));
               eptr->Read( User()->vD_key, vD_ );
 
-              const size_t sector_facets(eptr->FV_Stencil()->FacetsPerSector(pnid));
+              const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
               for ( size_t i=0U; i<sector_facets; i++ )
                 {
-                   const size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(pnid,i) );
-                   const size_t inside_node(eptr->FV_Stencil()->InsideNode(iFacet));
-                   const size_t outside_node(eptr->FV_Stencil()->OutsideNode(iFacet));
+                   const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+                   const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+                   const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
 
                    eptr->Read( iFacet, 0U, User()->fn_key, nrml_ );
                    const double64  vD_n = vD_.DotProduct(nrml_);
@@ -196,12 +196,12 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
-          const size_t sector_facets(eptr->FV_Stencil()->FacetsPerSector(pnid));
+          const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
           for ( size_t i=0U; i<sector_facets; i++ )
             {
-               const size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(pnid,i) );
-               const size_t inside_node(eptr->FV_Stencil()->InsideNode(iFacet));
-               const size_t outside_node(eptr->FV_Stencil()->OutsideNode(iFacet));
+               const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+               const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+               const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
 
                eptr->Read( iFacet, 0U, User()->fn_key, nrml_ );
                const double64  normal_vel_component = vD_.DotProduct(nrml_);
@@ -263,9 +263,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
      for ( size_t i=0U; i<parent_elements; ++i ) {
           const Element<3U>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
-          for ( size_t j=0U; j<eptr->FV_Stencil()->FacetsPerSector(sector_node); ++j ) {
-               const size_t facet = eptr->FV_Stencil()->FacetSurroundingSector( sector_node, j );
-               const double64 sign = (sector_node==eptr->FV_Stencil()->InsideNode(facet)) ? 1. : -1.;
+          for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
                flux_balance += facet_flux;
             }

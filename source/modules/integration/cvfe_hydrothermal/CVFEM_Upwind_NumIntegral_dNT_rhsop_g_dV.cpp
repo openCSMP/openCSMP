@@ -95,13 +95,13 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::ComputeContribution( Element<
 //    B *= operand;
     
     // loop over facets of the element
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
 
        e.dN_AtIntegrationPoint( B, i, 1 );
 //       e.dN( B, e.ConnectedFiniteVolumeStencil()->FacetEdgeMidPoint(i ).Coordinates() );
     B *= operand;
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           area = finite_volume.GetFacetArea( e.Idx(), i );
           
           normal_component = finite_volume.GetFacetNormalComponent( e.Idx(), i, xyz );

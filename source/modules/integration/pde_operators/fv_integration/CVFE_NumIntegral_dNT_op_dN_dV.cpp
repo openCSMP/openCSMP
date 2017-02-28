@@ -55,7 +55,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
     // initialising the material constants of the relperm model
     kri_.Initialize(e);
 
-    this->MTRL.resize(e.FV_Stencil()->Facets());
+    this->MTRL.resize(e.FV()->Facets());
 
     // the scalar permeability is stored in the relperm model
     if ( this->MaterialOperandType() == SCALAR ) {
@@ -66,7 +66,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
          VectorVariable<dim> vc;
          e.Read( this->MaterialOperandKey(), vc );
          this->MTRL[0U].AssignToDiagonal( vc );
-         for ( size_t i=1U; i<e.FV_Stencil()->Facets(); i++ )
+         for ( size_t i=1U; i<e.FV()->Facets(); i++ )
            this->MTRL[i] =  this->MTRL[0U];
       }
     else if ( this->MaterialOperandType() == TENSOR ) {
@@ -74,11 +74,11 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
          TensorVariable<dim> ts;
          e.Read( this->MaterialOperandKey(), ts );
          this->MTRL[0U] = ts; 
-         for ( size_t i=1U; i<e.FV_Stencil()->Facets(); i++ )
+         for ( size_t i=1U; i<e.FV()->Facets(); i++ )
            this->MTRL[i] =  this->MTRL[0U];
       }
 
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
          kri_.InitializeForFacetIntegrationPoint( i, 0U, e );
          this->MTRL[i] *= kri_.TotalMobility();
@@ -99,16 +99,16 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
 
-    const double64 fv_integration_weight(1./e.FV_Stencil()->Facets());
+    const double64 fv_integration_weight(1./e.FV()->Facets());
 
      // for all finite-volume facets
-    for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
-         size_t inside_node  = e.FV_Stencil()->InsideNode(i),
-                outside_node = e.FV_Stencil()->OutsideNode(i);
+         size_t inside_node  = e.FV()->InsideNode(i),
+                outside_node = e.FV()->OutsideNode(i);
 
-         Point<dim> rst  = e.FV_Stencil()->FacetIntegrationPoint( i, 0U );
+         Point<dim> rst  = e.FV()->FacetIntegrationPoint( i, 0U );
          double64   detJ = (e).dN_At( rst, DN_ );
 
          LK_ = MathOperatorLHS<dim>::MTRL[i] * DN_;

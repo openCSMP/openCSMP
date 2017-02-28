@@ -57,9 +57,9 @@ void rhinoOutput( const Model<3U>& sgroup )
  {
    ss << "\nSrfPt ";
      
-   for(size_t iPoint = 0; iPoint < e.FV_Stencil()->FacetPoints(iFacet); iPoint++ )
+   for(size_t iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
    {
-    const Point<3U> pt( efvt.RstToXYZ(e.FV_Stencil()->FacetPoint(iFacet,iPoint)) );
+    const Point<3U> pt( efvt.RstToXYZ(e.FV()->FacetPoint(iFacet,iPoint)) );
     ss << pt[0] << "," << pt[1] << "," << pt[2] << " ";
    }
    
@@ -68,7 +68,7 @@ void rhinoOutput( const Model<3U>& sgroup )
  
  void writeNormal (std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, size_t iFacet, bool bInverted)
  {
-   Point<3U> pt1( efvt.RstToXYZ(e.FV_Stencil()->FacetIntegrationPoint(iFacet,0U)) );
+   Point<3U> pt1( efvt.RstToXYZ(e.FV()->FacetIntegrationPoint(iFacet,0U)) );
    Point<3U> pt2;
    
    if(bInverted)
@@ -162,7 +162,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   //change layer
-  ofs << "\n;*****FACETS " << e.FV_Stencil()->Facets();
+  ofs << "\n;*****FACETS " << e.FV()->Facets();
   
   {
   stringstream ss;
@@ -171,13 +171,13 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   //print facets
-  for ( size_t iFacet = 0U; iFacet < e.FV_Stencil()->Facets(); iFacet++ )
+  for ( size_t iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
   {
    if(e.FE()->IsSurfaceElement()) // only two facet points
    {
      ofs << "\nPolyline ";
-     Point<3U> pt1( e.RstToXYZ(e.FV_Stencil()->FacetPoint(iFacet,0U)) );
-     Point<3U> pt2( e.RstToXYZ(e.FV_Stencil()->FacetPoint(iFacet,1U)) );
+     Point<3U> pt1( e.RstToXYZ(e.FV()->FacetPoint(iFacet,0U)) );
+     Point<3U> pt2( e.RstToXYZ(e.FV()->FacetPoint(iFacet,1U)) );
      ofs << pt1[0] << "," << pt1[1] << "," << pt1[2] << " ";
      ofs << pt2[0] << "," << pt2[1] << "," << pt2[2] << " ";
      ofs << "_Enter ";
@@ -199,7 +199,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   ofs << "\n; *****NORMALS, out of the FACET Integration Points ";
-  for ( size_t iFacet = 0U; iFacet < e.FV_Stencil()->Facets(); iFacet++ )
+  for ( size_t iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
   {
    stringstream ss;
    writeNormal(ss, e, e, iFacet, false);
@@ -247,10 +247,10 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    for ( vector<Element<3U>*>::const_iterator
           eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ ) 
-     for ( size_t iFacet=0U; iFacet<(*eit)->FV_Stencil()->Facets(); iFacet++ )
+     for ( size_t iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
   	  if((*eit)->FE()->IsVolumeElement()) // there are four facet points
         {    	    
-    	    (*eit)->FV_Stencil()->FacetEdgeNodes( iFacet, inside_node, outside_node );
+    	    (*eit)->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
   	      
     	    const size_t inode = (*eit)->N(inside_node)->Idx(); 
           const size_t onode = (*eit)->N(outside_node)->Idx(); 

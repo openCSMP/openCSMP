@@ -41,11 +41,11 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
    eidx_ = e.Idx();
    e.Read( k_key, perm_ );
 
-   for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
  
         grav_ = param.FacetNormalProjection(i,gravity_);
-        e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+        e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
         
     	if (upwind(inside_node_,outside_node_) == 1)
     	  {
@@ -91,10 +91,10 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Paramete
   {
 
    eidx_ = e.Idx();
-   for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
  
-       e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+       e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
        vel_ =  param.FacetNormalVelocity(i);
         
     	if (upwind(inside_node_,outside_node_) == 1)
@@ -131,10 +131,10 @@ void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
   
    eidx_ = e.Idx();
 
-   for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
       {
  
-        e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+        e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
         if (facet_flux[eidx_][i]<0)
           flux_in [ e.N( inside_node_ )->Idx() ] += facet_flux[eidx_][i]*mass_balance[ e.N( outside_node_ )->Idx() ];
@@ -157,10 +157,10 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
-     for ( size_t i=0U; i<e.FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
        {
  
-          e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
           if ( param.FacetNormalVelocity(i) != zero ) {
 

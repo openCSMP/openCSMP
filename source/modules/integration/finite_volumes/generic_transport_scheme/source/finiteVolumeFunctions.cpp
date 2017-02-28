@@ -164,9 +164,9 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
                for ( size_t i=0U; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
                     const size_t sector_node      = (*nit)->ParentNodeNumber(i);
-                    for ( size_t j=0U; j<eptr->FV_Stencil()->FacetsPerSector(sector_node); ++j ) {
-                         const size_t facet = eptr->FV_Stencil()->FacetSurroundingSector( sector_node, j );
-                         const double64 sign = (sector_node==eptr->FV_Stencil()->InsideNode(facet)) ? 1. : -1.;
+                    for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+                         const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+                         const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                          const double64 facet_flux = sign * eptr->Read( facet, 0U, ff_key );
                          flux_balance += facet_flux;
                       }

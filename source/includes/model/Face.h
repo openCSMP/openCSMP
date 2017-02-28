@@ -67,15 +67,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
-    /// constructs face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
-    // TODO: test whether ever needed
-/*
-    Face( const FiniteElementManager& finiteElementManager,
-          Element<dim>& dim_dimensional_inner_parent_element,
-          size_t& nth_boundary_face, ///< takes target boundary face as input and returns number of discovered boundary faces as output
-          const LocalVariables&,
-          const IntegrationPointVariables& );
-*/
     /// prefered custom constructor creates face with together with variable storage
     Face( csmp::FiniteElement*,
           csmp::FiniteVolumeStencil<dim>*,
@@ -89,7 +80,9 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const IntegrationPointVariables& );
 
     Face( const Face& );
-//    Face( Face&& );
+  
+    /// hand-coded move constructor that is important since pointers need to be assigned
+    Face( Face&& );
 
     ~Face();
 
@@ -102,13 +95,11 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
   
-    // TODO: SKM: deprecate once new functionality is available
-    /// assigns inner parent and node indices after finding if boundary face by matching the provided face nodes
-//    void Assign( Element<dim>* const parent, const std::vector<Node<dim>*>& faceNodes );
-
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );
-    // TODO: implement move assignment operator
+
+    /// hand-coded move assignment; important since pointers need to be assigned
+    Face& operator=( Face<dim>&& );
   
     // ------------------------------------------------------------------------
     // Basic information
@@ -269,6 +260,16 @@ efficiently and written more transparently by braking them up into interior and
 boundary parts, rather than writing iffy code that checks each element
 whether it is at a boundary or not.
 
+*/
+
+
+// extra constructor: constructs face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
+/*
+    Face( const FiniteElementManager& finiteElementManager,
+          Element<dim>& dim_dimensional_inner_parent_element,
+          size_t& nth_boundary_face, ///< takes target boundary face as input and returns number of discovered boundary faces as output
+          const LocalVariables&,
+          const IntegrationPointVariables& );
 */
 
 

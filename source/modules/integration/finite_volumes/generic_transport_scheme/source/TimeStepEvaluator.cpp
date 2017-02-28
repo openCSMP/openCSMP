@@ -78,11 +78,11 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
      for ( size_t i=0U; i<parent_elements; ++i ) {
           const Element<3U>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
-          const size_t sector_facets    = eptr->FV_Stencil()->FacetsPerSector(sector_node);
+          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j )
             {
-               const size_t facet = eptr->FV_Stencil()->FacetSurroundingSector( sector_node, j );
-               const double64 sign = (sector_node==eptr->FV_Stencil()->InsideNode(facet)) ? 1. : -1.;
+               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric facet flow into flux balance
                const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
                if ( facet_flux > 0. ) outflow += facet_flux;
@@ -136,10 +136,10 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
      for ( size_t i=0U; i<parent_elements; ++i ) {
           const Element<3U>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
-          const size_t sector_facets    = eptr->FV_Stencil()->FacetsPerSector(sector_node);
+          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j ) {
-               const size_t facet = eptr->FV_Stencil()->FacetSurroundingSector( sector_node, j );
-               const double64 sign = (sector_node==eptr->FV_Stencil()->InsideNode(facet)) ? 1. : -1.;
+               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric outflow
                const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
                if ( facet_flux > 0. ) outflow += facet_flux;

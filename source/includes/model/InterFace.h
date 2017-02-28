@@ -45,7 +45,10 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
                const IntegrationPointVariables& integration_point_props );
 
     InterFace( const InterFace& );
-//    InterFace( InterFace&& );
+  
+    /// handcoded move contructor to deal with the pointers
+    InterFace( InterFace&& );
+  
     ~InterFace();
 
     /// connect InterFace to its equidimensional neighbors
@@ -71,6 +74,9 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     InterFace& operator=( const InterFace& );
+
+    /// hand-coded move assignment that deals with the pointers
+    InterFace& operator=( InterFace&& );
 
     /// relation operators
     bool operator==( const InterFace<dim>& );

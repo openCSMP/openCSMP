@@ -902,13 +902,13 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
             satFunc_.Initialize(*eptr);
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV_Stencil()->FacetsPerSector(pnid); k++ )
+            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV_Stencil()->FacetSurroundingSector(pnid,k) );
+                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection
-                eptr->FV_Stencil()->FacetEdgeNodes( i, inside_node, outside_node );
+                eptr->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                 eptr->Read(i,0,facet_area_idx_,sc_);
                 eptr->Read(i,0,facet_normal_idx_,facet_n_);
                 facetArea = sc_()*cell_thickness_;
@@ -984,13 +984,13 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV_Stencil()->FacetsPerSector(pnid); k++ )
+            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV_Stencil()->FacetSurroundingSector(pnid,k) );
+                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection
-                eptr->FV_Stencil()->FacetEdgeNodes( i, inside_node, outside_node );
+                eptr->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                 eptr->Read(i,0,facet_area_idx_,sc_);
                 eptr->Read(i,0,facet_normal_idx_,facet_n_);
                 facetArea = sc_()*cell_thickness_;
@@ -1146,13 +1146,13 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV_Stencil()->FacetsPerSector(pnid); k++ )
+            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV_Stencil()->FacetSurroundingSector(pnid,k) );
+                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection
-                eptr->FV_Stencil()->FacetEdgeNodes( i, inside_node, outside_node );
+                eptr->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                 eptr->Read(i,0,facet_area_idx_,sc_);
                 eptr->Read(i,0,facet_normal_idx_,facet_n_);
                 facetArea = sc_()*cell_thickness_;

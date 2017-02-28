@@ -107,6 +107,7 @@ InterFace<dim>::~InterFace()
 template<size_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
   : FiniteElementPolicy<dim,::csmp::InterFace>(ifc.FE()),
+    FiniteVolumePolicy<dim,csmp::InterFace>(ifc.FV()),
     idx_                    ( ifc.idx_),
     interface_connector_    ( ifc.interface_connector_),
     parent_elements_node_connector_( ifc.parent_elements_node_connector_),
@@ -124,30 +125,30 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 
 
 /// move constructor
-/*
 template<size_t dim>
 InterFace<dim>::InterFace( InterFace<dim>&& ifc )
-  : idx_                    { ifc.idx_ },
-    interface_connector_    { ifc.interface_connector_ },
-    parent_elements_node_connector_{ ifc.parent_elements_node_connector_ },
-    baseElement_            { ifc.baseElement_  },
-    current_side_           { ifc.current_side_ },
-    innerParent_            { ifc.innerParent_  },
-    outerParent_            { ifc.outerParent_ },
-    inner_parent_face_id_   { ifc.inner_parent_face_id_ },
-    outer_parent_face_id_   { ifc.outer_parent_face_id_ }
+  : FiniteElementPolicy<dim,::csmp::InterFace>(move(ifc.FE())),
+    FiniteVolumePolicy<dim,csmp::InterFace>(move(ifc.FV())),
+    idx_(move(ifc.idx_)),
+    interface_connector_(move(ifc.interface_connector_)),
+    parent_elements_node_connector_(move(ifc.parent_elements_node_connector_)),
+    baseElement_(move(ifc.baseElement_)),
+    current_side_(move(ifc.current_side_)),
+    innerParent_(move(ifc.innerParent_)),
+    outerParent_(move(ifc.outerParent_)),
+    inner_parent_face_id_(move(ifc.inner_parent_face_id_)),
+    outer_parent_face_id_(move(ifc.outer_parent_face_id_))
   {
     assert( !interface_connector_.empty() ); // detected unitialized element
     // variable storage: call of initialization function
     this->LVS( move(ifc.LVS()) );
-    ifc.Assign( static_cast<FiniteElement*>(nullptr) );
-    ifc.Assign( static_cast<FiniteVolumeStencil<dim>*>(nullptr) );
+    
     ifc.innerParent_ = nullptr;
     ifc.outerParent_ = nullptr;
-  }
-*/
 
-// TODO: Implement MOVE assigmnent operator
+    ifc.AssignFiniteElementNullPtr();
+    ifc.AssignFiniteVolumeNullPtr();
+  }
 
 
 
@@ -158,6 +159,9 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
  {
     if ( &ifc != this )
       {
+        FiniteElementPolicy<dim,csmp::InterFace>::Assign(ifc.FE());
+        FiniteVolumePolicy<dim,csmp::InterFace>::AssignFiniteVolume(ifc.FV());
+
         idx_                    = ifc.idx_;
         interface_connector_    = ifc.interface_connector_;
         parent_elements_node_connector_ = ifc.parent_elements_node_connector_;
@@ -169,10 +173,47 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
         outer_parent_face_id_    = ifc.outer_parent_face_id_;
 
         this->LVS( ifc.LVS() );
-        FiniteElementPolicy<dim,csmp::InterFace>::Assign(ifc.FE());
       }
     return *this;
  }
+
+
+
+
+template<size_t dim>
+InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
+ {
+    assert( &ifc != this );
+ 
+    FiniteElementPolicy<dim,csmp::InterFace>::Assign(move(ifc.FE()));
+    FiniteVolumePolicy<dim,csmp::InterFace>::AssignFiniteVolume(move(ifc.FV()));
+
+    idx_                    = ifc.idx_;
+    interface_connector_    = ifc.interface_connector_;
+    parent_elements_node_connector_ = ifc.parent_elements_node_connector_;
+    baseElement_             = ifc.baseElement_;
+    current_side_            = ifc.current_side_;
+    innerParent_             = ifc.innerParent_;
+    outerParent_             = ifc.outerParent_;
+    inner_parent_face_id_    = ifc.inner_parent_face_id_;
+    outer_parent_face_id_    = ifc.outer_parent_face_id_;
+
+    this->LVS( move(ifc.LVS()) );
+
+    ifc.AssignFiniteElementNullPtr();
+    ifc.AssignFiniteVolumeNullPtr();
+
+    ifc.innerParent_ = nullptr;
+    ifc.outerParent_ = nullptr;
+
+    return *this;
+ }
+
+
+
+
+
+
 
 /// Roman, 2014
 /// WARNING: this operator is used specifically in the process of creation of particular SplitBoundary.

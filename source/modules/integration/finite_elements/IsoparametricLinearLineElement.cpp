@@ -222,12 +222,14 @@ void IsoparametricLinearLineElement::NodesOfSegment( size_t segm_id, std::vector
 
 /**
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
-    Convention: face 0 has only one node which is the first node of the element and face 1 contains the second node.
+    Conventions: 
+       - the faces have only a single node
+       - node 0 corresponds to first face 0
+       - node 1 corresponds to second face 1
 */
 void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
  {
-    if ( face_id > 1U )
-      std::cerr <<"\nIsoparametricLinearLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
+    assert( face_id <= 1U );
     fnids.resize(1U);
     fnids[0] = face_id;
  }

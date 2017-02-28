@@ -148,7 +148,7 @@ template<size_t dim>
 void UpwindControlVisitor<dim>::Visit(Element<dim>* n)   
   {
 
-	facets = n->FV_Stencil()->Facets();
+	facets = n->FV()->Facets();
 
     n->Read( k_key, k );
     n->Read( KgradP_key, KgradP );
@@ -175,9 +175,9 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
 
 	for (size_t p = 0; p < phases; ++p) {
      uc_scal() = 0;
-     for ( size_t i=0U; i<n->FV_Stencil()->Facets(); i++ )
+     for ( size_t i=0U; i<n->FV()->Facets(); i++ )
        {
-        n->FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+        n->FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
         uc_scal() += Upwinder[p][n->Idx()](inside_node_,outside_node_);
        }
      n->Store( uc_key[p], uc_scal );
@@ -223,7 +223,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
     for ( size_t i=0U; i<facets; i++ )
        {
            facet_cfl = true;
-           e.FV_Stencil()->FacetEdgeNodes( i, inside_node_, outside_node_ );
+           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
          if (p==0)
             velocity = fv_transport_liquid.GetFacetNormalVelocity( e.Idx(), i );

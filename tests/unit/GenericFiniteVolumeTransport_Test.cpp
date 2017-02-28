@@ -166,7 +166,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
           // 1. computing facet velocity in parametric space
           // -----------------------------------------------
           // 1.1 getting ipol-functions at barycentre and computing the pressure gradient in parametric space
-          Point<3U> bctr = (*it)->FV_Stencil()->Barycenter();
+          Point<3U> bctr = (*it)->FV()->Barycenter();
           (*it)->FE()->dNr( bctr[0], bctr[1], bctr[2], DNR );
           (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
           (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
@@ -205,7 +205,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                // transforming the result to physical space
                assert( (*it)->IsVolumeElement() );
                // get Jacobian and its determinant at the facet integration point
-               Point<3U> fip( (*it)->FV_Stencil()->FacetIntegrationPoint(i,0U) );
+               Point<3U> fip( (*it)->FV()->FacetIntegrationPoint(i,0U) );
                (*it)->FE()->dNr( fip[0], fip[1], fip[2], DNR );
                (*it)->FE()->dNs( fip[0], fip[1], fip[2], DNS );
                (*it)->FE()->dNt( fip[0], fip[1], fip[2], DNT );

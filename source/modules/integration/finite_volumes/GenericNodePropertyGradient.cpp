@@ -73,11 +73,11 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg,
           e = *(*eit);
 
           //resize middle vector
-          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV_Stencil()->Facets() );
+          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV()->Facets() );
 
           // loop over facets
           // -------------------
-          for( size_t fi=0U; fi < e.FV_Stencil()->Facets(); fi++ ){
+          for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
 
                  // resize inner vector
                 distance_facet_FVBarycenter_[ e.Idx() ][ fi ].resize( e.Nodes() );
@@ -218,11 +218,11 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient(  Model<dim>& sg,
           cout<< e.Idx() <<endl;
 
           //resize middle vector
-          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV_Stencil()->Facets() );
+          distance_facet_FVBarycenter_[ e.Idx() ].resize( e.FV()->Facets() );
 
           // loop over facets
           // -------------------
-          for( size_t fi=0U; fi < e.FV_Stencil()->Facets(); fi++ ){
+          for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
 
                  // resize inner vector
                 distance_facet_FVBarycenter_[ e.Idx() ][ fi ].resize( e.Nodes() );
@@ -324,7 +324,7 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass( const FiniteVolume
 
         // loop over sectors
         // -------------------
-        for( size_t i=0U; i < e.FV_Stencil()->Sectors(); i++ ){
+        for( size_t i=0U; i < e.FV()->Sectors(); i++ ){
 
               //get the global node id for the current segment
               glob_n_id = ids[ i ];
@@ -341,7 +341,7 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass( const FiniteVolume
               }else{
 
                   //get the barycenter of current segment
-                  ConvertToGlobalCoordinates( e, e.FV_Stencil()->SectorIntegrationPoint( i, 0U), current_bc );
+                  ConvertToGlobalCoordinates( e, e.FV()->SectorIntegrationPoint( i, 0U), current_bc );
 
                   //get volume of current sector
                   volume_ = e.SectorVolume( i );
@@ -391,13 +391,13 @@ void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary(  const Fini
 
         // loop over facets
         // -------------------
-        for( size_t fi=0U; fi < e.FV_Stencil()->Facets(); fi++ ){
+        for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
 
               // get facet barycenter in global coordinates:
-              ConvertToGlobalCoordinates( e, e.FV_Stencil()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
+              ConvertToGlobalCoordinates( e, e.FV()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
 
               // get local node id's
-              e.FV_Stencil()->FacetEdgeNodes( fi, inside_node_, outside_node_ );
+              e.FV()->FacetEdgeNodes( fi, inside_node_, outside_node_ );
 
 
               // get mass center for FV of inside_node_:

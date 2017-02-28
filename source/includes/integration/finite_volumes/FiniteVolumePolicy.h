@@ -81,12 +81,14 @@ class FiniteVolumePolicy<3U, SIMPLEX> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
+    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
 
     /// connect policy to a finite-volume stencil that must match the parent element
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );
+    void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
 
     /// access the stencil functionality directly
-    const FiniteVolumeStencil<3U>* const FV_Stencil() const;
+    const FiniteVolumeStencil<3U>* const FV() const;
  
     /// the surface patches that constitute the outside walls of the finite volume
     size_t     Facets()  const;
@@ -177,8 +179,10 @@ class FiniteVolumePolicy<2U,SIMPLEX> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
+    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<2U>* );
-    const FiniteVolumeStencil<2U>* const FV_Stencil() const;
+    void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
+    const FiniteVolumeStencil<2U>* const FV() const;
     size_t     Facets()  const;
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
@@ -221,8 +225,10 @@ class FiniteVolumePolicy<1U, SIMPLEX> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<1U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
+    FiniteVolumePolicy( FiniteVolumePolicy&& p ) : fvptr_{p.fvptr_} { p.fvptr_=nullptr; }
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<1U>* );
-    const FiniteVolumeStencil<1U>* const FV_Stencil() const;
+    void       AssignFiniteVolumeNullPtr() { fvptr_ = nullptr; }
+    const FiniteVolumeStencil<1U>* const FV() const;
     size_t     Facets()  const;
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;

@@ -118,7 +118,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == SECTOR_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
@@ -129,7 +129,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACET_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
@@ -163,7 +163,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACE_SECTOR_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
@@ -174,7 +174,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACE_FACET_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
@@ -208,7 +208,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
@@ -219,7 +219,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
 
     // IntegrationPoint properties
     if ( prop_key_a_.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-        assert( eptr->FV_Stencil() != nullptr );
+        assert( eptr->FV() != nullptr );
         for ( size_t i=0U; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );

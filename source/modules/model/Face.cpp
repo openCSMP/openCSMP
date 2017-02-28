@@ -183,6 +183,8 @@ Face<dim>::Face( Element<dim>& e,
  {
     assert( boundary_face < e.Faces() );
     assert( e.Neighbor(boundary_face) == nullptr );
+    if ( dim == 2 ) assert( e.IsSurfaceElement() );
+    if ( dim == 3 ) assert( e.IsVolumeElement() );
 
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
@@ -193,6 +195,7 @@ Face<dim>::Face( Element<dim>& e,
     // 2. assigning nodes to face in the same order as the face nodes
     //    of the inner parent element
     vector<size_t> fnids;
+    // nodes of the Element object from wich this Face is constructed
     e.FE()->NodesOfFace( boundary_face, fnids );
     for ( size_t j=0U; j<fnids.size(); ++ j ) {
          assert( e.N( fnids[j] ) != nullptr );
@@ -245,7 +248,7 @@ Face<dim>::Face( const FiniteElementManager& finiteElementManager,
             if ( bface_counter == nth_boudary_face )
               {
                  // assigning parent FE pointer
-                 fptr_ = finiteElementManager.E( e.FE()->ElementTypeOfFace(i) );
+                 fptr_ = finiteElementManager.E( e->ElementTypeOfFace(i) );
               
                  // assigning nodes to face in the same order as the face nodes
                  // of the inner parent element
@@ -327,11 +330,12 @@ Face<dim>::Face( size_t index,
 template<size_t dim>
 Face<dim>::Face( const Face<dim>& fc )
   : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
-    idx_                  ( fc.idx_),
-    face_connector_       ( fc.face_connector_),
-    node_connector_ ( fc.node_connector_ ),
-    innerParent_          ( fc.innerParent_),
-    outerParent_          ( fc.outerParent_)
+    FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
+    idx_(fc.idx_),
+    face_connector_(fc.face_connector_),
+    node_connector_( fc.node_connector_),
+    innerParent_(fc.innerParent_),
+    outerParent_(fc.outerParent_)
   {
     assert( this->FE() != nullptr /* detected unitialized element*/ );
     assert( !face_connector_.empty() /* detected unitialized element*/ );
@@ -343,23 +347,24 @@ Face<dim>::Face( const Face<dim>& fc )
 
 
 /// move constructor
-/*
 template<size_t dim>
 Face<dim>::Face( Face<dim>&& fc )
-  : idx_           { fc.idx_},
-    node_connector_{ fc.node_connector_},
-    face_connector_{ fc.face_connector_},
-    innerParent_   { fc.innerParent_},
-    outerParent_   { fc.outerParent_}
+  : FiniteElementPolicy<dim,csmp::Face>(move(fc.FE())),
+    FiniteVolumePolicy<dim,csmp::Face>(move(fc.FV())),
+    idx_(move(fc.idx_)),
+    node_connector_(move(fc.node_connector_)),
+    face_connector_(move(fc.face_connector_)),
+    innerParent_(move(fc.innerParent_)),
+    outerParent_(move(fc.outerParent_))
  {
-    throw csmp::Exception( ERROR, "Face(move constructor:", "pointers have not been implemented yet correctly");
     this->LVS( move(fc.LVS()) );
-    fc.Assign( static_cast<FiniteElement*>(nullptr) );
-    fc.Assign( static_cast<FiniteVolumeStencil<dim>*>(nullptr) );
+
+    fc.AssignFiniteElementNullPtr();
+    fc.AssignFiniteVolumeNullPtr();
+
     fc.innerParent_ = nullptr;
     fc.outerParent_ = nullptr;
  }
-*/
 
 
 // TODO: implement move constructor and assignment operator
@@ -383,16 +388,50 @@ template<size_t dim>
 Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
+        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
         idx_                  = fc.idx_;
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
         innerParent_          = fc.innerParent_; // problematic pointer assignment
         outerParent_          = fc.outerParent_; // problematic
         this->LVS( fc.LVS() );
-        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
       }
     return *this;
  }
+
+
+
+
+/**
+    @note a temporary value cannot be equivalent to lvalue.
+*/
+template<size_t dim>
+Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
+ {
+    assert( &fc != this );
+
+    FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
+    FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
+   
+    idx_             = move(fc.idx_ );
+    face_connector_  = move(fc.face_connector_);
+    node_connector_  = move(fc.node_connector_);
+    innerParent_     = move(fc.innerParent_);
+    outerParent_     = move(fc.outerParent_);
+
+    this->LVS( move(fc.LVS()) );
+
+    fc.AssignFiniteElementNullPtr();
+    fc.AssignFiniteVolumeNullPtr();
+
+    fc.innerParent_ = nullptr;
+    fc.outerParent_ = nullptr;
+
+    return *this;
+ }
+
+
 
 
 // CONSTRUCTION PROCESS
@@ -578,6 +617,8 @@ void  Face<dim>::CheckNodeOrderingAccordingToUnitNormalOrientation()
     this->FE()->CurrentID( FiniteElement::InitialID() );
   }
 */
+
+
 
 // VISITOR
 

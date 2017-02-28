@@ -443,7 +443,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
-                assert( (*eit)->FV_Stencil() != NULL );
+                assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( size_t i=0U; i<(*eit)->Nodes(); ++i )
                 {
@@ -451,9 +451,9 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                   fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
                   
                   // printing the sector integration point coordinates in global coordinates
-                  for ( size_t j=1U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j ) {
+                  for ( size_t j=1U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                        fprintf( fp, " | " );
-                       Point<dim> xyz((*eit)->RstToXYZ((*eit)->FV_Stencil()->SectorPoint(i,j)));
+                       Point<dim> xyz((*eit)->RstToXYZ((*eit)->FV()->SectorPoint(i,j)));
                        fprintf( fp, "%E\t", xyz[0] );
                        if ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
                        if ( dim == 3U ) fprintf( fp, "%E\t", xyz[2] );
@@ -462,12 +462,12 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                             for ( size_t j=0U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j )
+                             for ( size_t j=0U; j<(*eit)->FV()->SectorPoints(i); ++j )
                               (*eit)->Read( i, prop_key, sc );
                             fprintf( fp, "%E\n", sc() );
                          break;
                        case VECTOR: 
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, vc );
                                  fprintf( fp, " | " );
                                  for ( k=0; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
@@ -475,7 +475,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                             fprintf( fp, "|\n" );
                          break;
                        case TENSOR: 
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ts );
                                  fprintf( fp, " | " );
                                  for ( k=0; k<dim; ++k )
@@ -485,7 +485,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         break;
                       case ARRAY: {
                             ArrayVariable ary;
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
                                  for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
@@ -495,7 +495,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         break;
                       case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->SectorPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, "|" );
                                  for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
@@ -517,17 +517,17 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
-                assert( (*eit)->FV_Stencil() != NULL );
+                assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( size_t i=0U; i<(*eit)->FV_Stencil()->Facets(); ++i )
+                for ( size_t i=0U; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
                   fprintf( fp, "%u\t", static_cast<uint32>((*eit)->Idx()) );
                   
                   // printing the facet integration point locations in global coordinates
-                  for ( size_t j=1U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j ) {
+                  for ( size_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                        fprintf( fp, " | " );
-                       Point<dim> xyz((*eit)->RstToXYZ((*eit)->FV_Stencil()->FacetPoint(i,j)));
+                       Point<dim> xyz((*eit)->RstToXYZ((*eit)->FV()->FacetPoint(i,j)));
                        fprintf( fp, "%E\t", xyz[0] );
                        if ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
                        if ( dim == 3U ) fprintf( fp, "%E\t", xyz[2] );
@@ -536,12 +536,12 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                             for ( size_t j=0U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j )
+                             for ( size_t j=0U; j<(*eit)->FV()->FacetPoints(i); ++j )
                               (*eit)->Read( i, prop_key, sc );
                             fprintf( fp, "%E\n", sc() );
                          break;
                        case VECTOR: 
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, vc );
                                  fprintf( fp, " | " );
                                  for ( k=0; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
@@ -549,7 +549,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                             fprintf( fp, "|\n" );
                          break;
                        case TENSOR: 
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ts );
                                  fprintf( fp, " | " );
                                  for ( k=0; k<dim; ++k )
@@ -559,7 +559,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         break;
                       case ARRAY: {
                             ArrayVariable ary;
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
                                  for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
@@ -569,7 +569,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         break;
                       case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
-                            for ( size_t j=0U; j<(*eit)->FV_Stencil()->FacetPoints(i); ++j ) {
+                            for ( size_t j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
                                  for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );

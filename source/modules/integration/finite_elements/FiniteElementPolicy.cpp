@@ -5,6 +5,7 @@
 #include "InterFace.h"
 #include "variableOperations.h"
 #include "Exception.h"
+#include "CSMP_mathUtilities.h"
 
 namespace csmp {
 
@@ -422,7 +423,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
        return;
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
-       const size_t n_sector_integration_points(eptr->FV_Stencil()->Sectors());
+       const size_t n_sector_integration_points(eptr->FV()->Sectors());
        for ( size_t i=0U; i < n_sector_integration_points; i++ ) {
             eptr->Read( i, 0U, idx, temp );
             var += temp;

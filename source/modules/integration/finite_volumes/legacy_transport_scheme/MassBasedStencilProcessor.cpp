@@ -46,9 +46,9 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
 
          // getting all the finite-volume facet related information
          // -------------------------------------------------------
-         this->facet_flux_.resize(e.FV_Stencil()->Facets());
+         this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -87,9 +87,9 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
              }
          }
 
-         this->facet_flux_.resize(e.FV_Stencil()->Facets());
+         this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -129,9 +129,9 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
              }
          }
 
-         this->facet_flux_.resize(e.FV_Stencil()->Facets());
+         this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV_Stencil()->Facets(); i++ ) {
+         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
