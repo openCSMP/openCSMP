@@ -14,7 +14,7 @@ namespace csmp{
       _test( av0[21] == 10. );
       av0(21) = 21.;
       _test( av0[21] == 21. );
-      _test( av0.Flag() == PLAIN );
+      _test( av0.Flag() == ANY );
       av0.Flag(DIRICH);
       _test( av0.Flag() == DIRICH );
       _test( av0.Size() == 100 );

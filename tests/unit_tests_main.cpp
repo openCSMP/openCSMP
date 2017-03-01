@@ -20,6 +20,7 @@
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
+#include "ArrayVariable_Test.h"
 
 #include "CommandLineParser_Test.h"
 #include "GenericSingleton_Test.h"
@@ -36,7 +37,6 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
-//#include "Edge_Test.h"				// jc: not exist
 
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test.h"
@@ -103,7 +103,8 @@ using namespace csmp;
      interdependent1:   fails on volume-flux integral balance of face fluxes
      new_developments:  in progress, not ready yet
      
-     TODO: next BoxTest - fails because unit normals for Face objects do not point into correct direction
+     TODO: BoxTest - fails because unit normals for Face objects do not point into correct direction
+     TODO: ModelSubDomain - add tests to cover complete functionality
  
      composite:
      
@@ -112,22 +113,20 @@ using namespace csmp;
      Triage needed to generate order:
 
      - TODO: URGENT ModelSubDomain !!!
-     - ModelTopology
      - Model
      - MeshManager
      - FiniteElementManager
-     - ModelSubDomain
-     - PDE_Integrator
-     - MathOperatorLHS
-     - MathOperatorRHS
+     - PDE_Integrator - extend to test assembly of solution matrix for systems
      - PropertyConstraints
      - RegionInterface
      - BoundaryInterface
      - ANSYS_Interface
+     - InterFace_Test - create
+     - IsNan_Test - refactor as it is built on false premises
+     - VSet_Test - add functionality that checks storing and reading of properties
      
-     - refactor   Box_Test
      - refactor   VTU_Interface_Test
-     - refactor   CompressedRowMatrix
+     - refactor   CompressedRowMatrix - include elimitation etc.
      
      @section Failing Tests
      
@@ -169,9 +168,9 @@ int main()
               TestSuite basic("CSMP-fundamental-unit test suite", &cout );
           
               // Auxiliaries
+              basic.addTest( new IsnanIsinf_Test() );
               basic.addTest( new GenericSingleton_Test() );
               basic.addTest( new CommandLineParser_Test() );
-              basic.addTest( new IsnanIsinf_Test() );
 
               // Data storage tests
               basic.addTest( new LocalVariableStorage_Test() );
@@ -179,6 +178,7 @@ int main()
               basic.addTest( new Index_Test());
               basic.addTest( new Parameter_Test());
               basic.addTest( new PropertyData_Test());
+              basic.addTest( new PropertyStorageSpeed_Test());
 
               // Model
               basic.addTest( new Node_Test() );
@@ -194,6 +194,8 @@ int main()
               basic.addTest( new TensorVariable_Test());
               basic.addTest( new TensorVariable_Test1());
               basic.addTest( new TensorVariable_Test2());
+              basic.addTest( new ArrayVariable_Test());
+              basic.addTest( new Variables_TesCase());
 
               // Math utilities tests
               basic.addTest( new Matrix_Test() );
@@ -209,10 +211,10 @@ int main()
               basic.addTest( new FV_Parameter_Test());
           
               // interfaces / containers
-// TODO: add ModelTopology_Test
               basic.addTest( new VData_Test() );
               basic.addTest( new FEM_Data_Test());
               basic.addTest( new PropertyData_Test() );
+              basic.addTest( new VSet_Test() );
           
               // Running unit tests and reporting errors
               basic.run();
@@ -221,6 +223,7 @@ int main()
               cerr << "\nunit_tests_main: 1. CSMP fundamentals: Total unit test failures: " << fails_fundamentals << endl;
           }
     
+        // FINITE ELEMENTS + MATH OPERATORS
         if ( test_interdependent1 ) {
               cout <<"\n2. partially interdependent functionality: running tests..."<< endl;
               TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
@@ -241,6 +244,7 @@ int main()
               interdependent1.addTest( new Operand_Test() );
               interdependent1.addTest( new MathOperatorLHS_Test());
               interdependent1.addTest( new MathOperatorRHS_Test());
+              // TODO: add test of assembly of matrix for systems, elimination of boundary conditions etc.
               interdependent1.addTest( new PDE_Integrator_Test() );
               // running unit tests and reporting errors
               interdependent1.run();
@@ -252,14 +256,16 @@ int main()
         if ( test_interdependent2 ) {
               cout <<"\n3. Model-related interdependent functionality: running tests..."<< endl;
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
+              interdependent2.addTest( new ModelTopology_Test() );
               // model
               interdependent2.addTest( new Box_Test() );
               interdependent2.addTest( new ModelSubDomain_Test() );
-//  TODO: broken            interdependent2.addTest( new ANSYS_Model2D_Test() );
+              interdependent2.addTest( new Region_Test() );                  // SKM OK
+//  TODO: broken              interdependent2.addTest( new Boundary_Test() );
+//  TODO: broken              interdependent2.addTest( new SplitBoundary_Test() );
+//  TODO: broken              interdependent2.addTest( new ANSYS_Model2D_Test() );
               interdependent2.addTest( new InputDataManager_Test());
               interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
-              interdependent2.addTest( new Region_Test() );                  // SKM OK
-              interdependent2.addTest( new ModelTopology_Test() );
               interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
               // interfaces
               interdependent2.addTest( new VTU_Interface_Test() );
@@ -275,8 +281,8 @@ int main()
               cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
               TestSuite composite("CSMP-dependent-unit test suite", &cout );
               // misc
-              // composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
-// TODO: update this test:              composite.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
+// TODO: PDE_Integrator_Test (assembly of matrix for systems, elimination of boundary conditions etc.)
+
               // composite.addTest( new FluxMismatch_Test() );
 // TODO: update this test:               composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
 // TODO: update this test:               composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
@@ -286,9 +292,10 @@ int main()
               /// Property data search tests
               Visitor_TestSuite visitorTests( composite );
               visitorTests.run();
+              composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
 
               /// Two phase flow tests
-              TwoPhaseModel_TestSuite twoPhaseModelTests( composite );
+              TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
               twoPhaseModelTests.run();
 
              // running unit tests and reporting errors
@@ -302,6 +309,7 @@ int main()
         if ( test_refactoring ) {
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+// TODO: REFACTOR: update this test:  refactored.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
 
 // TODO: review and get these tests to run (in this sequence)
               refactored.addTest( new Box_Test() );

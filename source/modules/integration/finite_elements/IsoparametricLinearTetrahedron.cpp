@@ -311,10 +311,9 @@ void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<si
       }
     else if ( face_id == 1 )
       {
-
          fnids[0] = 0;
-         fnids[1] = 2;
-         fnids[2] = 3;
+         fnids[1] = 3;
+         fnids[2] = 2;
      }
     else if ( face_id == 2 )
       {
@@ -325,8 +324,8 @@ void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<si
     else if ( face_id == 3 )
       {
          fnids[0] = 0;
-         fnids[1] = 1;
-         fnids[2] = 2;
+         fnids[1] = 2;
+         fnids[2] = 1;
       }
     else
     std::cout <<"\nIsoparametricLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;

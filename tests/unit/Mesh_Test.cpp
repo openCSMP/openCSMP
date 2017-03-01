@@ -30,6 +30,5 @@ namespace csmp
         this->vset_=new VSet<3U>();
 
         this->mesh_=new MeshManager<3U>(*database_,*fem_manager_,*vset_);
-
     }
 }
