@@ -21,6 +21,9 @@ BinaryFileInterface<dim>::~BinaryFileInterface()
  }
 
 
+/** 
+   writes the mesh without property data to binary file.
+*/
 template<size_t dim>
 bool BinaryFileInterface<dim>::WriteConnectivityFile( const Model<dim>& sg, 
                                                       const char* file_name ) const
@@ -28,6 +31,8 @@ bool BinaryFileInterface<dim>::WriteConnectivityFile( const Model<dim>& sg,
     double64& model_time( ModelTime::Instance().modelTime );
     VSet<dim>  vset;
     
+    const bool in_a_single_sequence(true);
+    sg.Mesh().AssignUniqueNumbers( in_a_single_sequence );
     sg.Mesh().OutputMeshTo( vset );
     vset.OutputTo( file_name, model_time );
     
@@ -50,9 +55,14 @@ bool BinaryFileInterface<dim>::ReadConnectivityFile( const char* file_name,
 
  } // end WriteConnectivityFile
 
-   
+  
+  
+  
+  
+  
 /**
-     Writes the property values to disk
+     Writes property values to disk using FEM_Data containers.
+     The timestep is appended only if it has a positive value.
 */
 template<size_t dim>
 bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg, 
@@ -62,23 +72,25 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
  {
     VARIABLE_TYPE  vtype = sg.Database().Type( var_name );
     bool           write_error(false);
+    string         name( file_name );
 
     // file name + extension
-    char    num[30];
-    string  name( file_name );
-    sprintf( num, "%8ld", timestep );
-    string  padded_string( num );
-    replaceWhiteSpaceBy( padded_string, '0');
-    name += padded_string;
+    if ( timestep > 0 ) {
+        char    num[30];
+        sprintf( num, "%8ld", timestep );
+        string  padded_string( num );
+        replaceWhiteSpaceBy( padded_string, '0' );
+        name += padded_string;
+      }
     name += ".bin";
     
     // 1. opening the file
     FILE*  fp(0);  
      
      if ( (fp=fopen( name.c_str(), "wb")) == NULL ) {
-          cout <<"\nBinaryFileInterface<" << dim;
-          cout <<">::WriteDataTo: File: "<< name;
-          cout <<" could not be opened"<< endl;
+          cerr <<"\nBinaryFileInterface<" << dim;
+          cerr <<">::WriteDataTo: File: "<< name;
+          cerr <<" could not be opened"<< endl;
           return false;
        }
 
@@ -151,25 +163,28 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
 
 
 
-/// reads the name of the variable which is stored in the binary file specified as
-/// method argument
+/**
+    reads and returns the name of the variable which is stored in the binary file specified as
+    method argument.
+*/
 template<size_t dim>
 string  BinaryFileInterface<dim>::ReadVariableName( const char* file_name ) const
  {
      // 1. opening the file
      FILE*  fp(0);
-     if ( (fp=fopen( file_name, "rb")) == NULL ) {
-          throw csmp::Exception( FATAL_ERROR, "BinaryFileInterface<dim>::ReadDataFrom: file: ",
-                             file_name, " could not be opened" );
-          return string("undefined variable");
-       }
-       
-     // 2. reading the variable name
-     char  variable[NAME_STRING] = "undefined variable"; 
+     string name(file_name);
+     name +=".bin";
 
+     if ( (fp=fopen( name.c_str(), "rb")) == NULL )
+          throw csmp::Exception( FATAL_ERROR, "BinaryFileInterface<dim>::ReadDataFrom: file: ",
+                                 file_name, " could not be opened" );
+   
+     char  variable[NAME_STRING] = "undefined variable";
+
+     // 2. reading the file header
      skm_C_fread( fp, variable );
-       
-     // 5. cleaning up
+
+     // 3. cleaning up
      fclose( fp );
 
      return string(variable);
@@ -187,11 +202,14 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
                                                 FEM_Data<Var>& var_data ) const
 {
      // 1. opening the file
-     FILE*  fp;  
-     if ( (fp=fopen( file_name, "rb")) == NULL ) {
-          cout <<"\nBinaryFileInterface<" << dim;
-          cout <<">::ReadDataFrom<Var>: File: "<< file_name;
-          cout <<" could not be opened"<< endl;
+     FILE*  fp(nullptr);
+     string name(file_name);
+     name +=".bin";
+  
+     if ( (fp=fopen( name.c_str(), "rb")) == NULL ) {
+          cerr <<"\nBinaryFileInterface<" << dim;
+          cerr <<">::ReadDataFrom<Var>: File: "<< name;
+          cerr <<" could not be opened"<< endl;
           return string("undefined variable");
        }
        

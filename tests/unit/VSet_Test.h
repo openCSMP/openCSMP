@@ -3,7 +3,7 @@
 
 #include "Test.h"
 #include "VSet.h"
-#include "FEM_Data.h"
+#include "vsetMakers.h"
 
 namespace csmp{
 
@@ -240,7 +240,14 @@ void VSet_Test::run()
 //  _test( vset4.TensorPropertiesBegin() == vset4.vdata_tensor.end() );
 //  _test( vset4.TensorPropertiesEnd() == vset4.vdata_tensor.end() );
 
-
+// NEW TESTS BY SKM
+// comparitor test
+  VSet<3U> vset6;
+  test_Create_Prism_Hexa_VSet( vset6, false /* bSkewed */ );
+  vset6.OutputTo( "vsetBIN", 0. );
+  VSet<3U> vset7;
+  vset7.InputFrom( "vsetBIN", time );
+  _test( vset7 == vset6 );
 
 } // run
 

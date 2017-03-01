@@ -92,17 +92,6 @@ VData::VData( const VData& vd )
 
 
 
-VData::VData( VData&& vd )
- : px{vd.px}, py{vd.py}, pz{vd.pz},
-   plist{vd.plist}, pfverts{vd.pfverts},
-   pelmt{vd.pelmt},
-   bflags{vd.bflags},
-   hybrid_mesh_{vd.hybrid_mesh_},
-   first_face_{vd.first_face_},
-   first_interface_{vd.first_interface_}
-{
-}
-
 
 
 VData& VData::operator=( const VData& a )
@@ -119,25 +108,6 @@ VData& VData::operator=( const VData& a )
   hybrid_mesh_     = a.hybrid_mesh_;
   first_face_      = a.first_face_;
   first_interface_ = a.first_interface_;
-
-  return *this;
-}
-
-
-VData& VData::operator=( VData&& a )
-{
-  if ( &a == this ) return *this;
-  
-  px               = {a.px};
-  py               = {a.py};
-  pz               = {a.pz};
-  pelmt            = {a.pelmt};
-  plist            = {a.plist};
-  pfverts          = {a.pfverts};
-  bflags           = {a.bflags};
-  hybrid_mesh_     = {a.hybrid_mesh_};
-  first_face_      = {a.first_face_};
-  first_interface_ = {a.first_interface_};
 
   return *this;
 }
@@ -1035,8 +1005,8 @@ void VData::OutBinary( FILE* fp ) const
       }
     else fwrite( (void*) &n0, sizeof(size_t), 1, fp );
 
-    // 3. writing pelmt, plist, pfverts, bflags, bvals
-    // -----------------------------------------------
+    // 3. writing pelmt, plist, pfverts, bflags
+    // ----------------------------------------
     skm_C_fwrite( fp, pelmt );
     skm_C_fwrite( fp, plist );
     skm_C_fwrite( fp, pfverts );
@@ -1094,8 +1064,8 @@ void VData::InBinary( FILE* fp )
          fread( (void*) &(*pz.begin()), sizeof(double64), records, fp );
       }
 
-    // 3. reading pelmt, plist, pfverts, bflags, bvals
-    // -----------------------------------------------
+    // 3. reading pelmt, plist, pfverts, bflags
+    // ----------------------------------------
     skm_C_fread( fp, pelmt );
     skm_C_fread( fp, plist );
     skm_C_fread( fp, pfverts );
@@ -1488,13 +1458,13 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(hybrid_mesh_ == vd.hybrid_mesh_) ) return false;
     if ( first_face_      != vd.first_face_ ) return false;
     if ( first_interface_ != vd.first_interface_ ) return false;
-    if ( !(px == vd.px) ) { cout<<"\nVData::operator== failed 'px' comparison."; return_value = false; }
-    if ( !(py == vd.py) ) { cout<<"\nVData::operator== failed 'py' comparison."; return_value = false; }
-    if ( !(pz == vd.pz) ) { cout<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
-    if ( !(pelmt == vd.pelmt) ) { cout<<"\nVData::operator== failed 'pelmt' comparison."; return_value = false; }
-    if ( !(plist == vd.plist) ) { cout<<"\nVData::operator== failed 'plist' comparison."; return_value = false; }
-    if ( !(pfverts == vd.pfverts) ) { cout<<"\nVData::operator== failed 'pfverts' comparison."; return_value = false; }
-    if ( !(bflags == vd.bflags) ) { cout<<"\nVData::operator== failed 'bflags' comparison."; return_value = false; }
+    if ( !(px == vd.px) ) { cerr<<"\nVData::operator== failed 'px' comparison."; return_value = false; }
+    if ( !(py == vd.py) ) { cerr<<"\nVData::operator== failed 'py' comparison."; return_value = false; }
+    if ( !(pz == vd.pz) ) { cerr<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
+    if ( !(pelmt == vd.pelmt) ) { cerr<<"\nVData::operator== failed 'pelmt' comparison."; return_value = false; }
+    if ( !(plist == vd.plist) ) { cerr<<"\nVData::operator== failed 'plist' comparison."; return_value = false; }
+    if ( !(pfverts == vd.pfverts) ) { cerr<<"\nVData::operator== failed 'pfverts' comparison."; return_value = false; }
+    if ( !(bflags == vd.bflags) ) { cerr<<"\nVData::operator== failed 'bflags' comparison."; return_value = false; }
     
     return return_value;
  }

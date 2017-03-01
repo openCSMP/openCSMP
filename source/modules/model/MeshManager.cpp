@@ -654,7 +654,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
         cout <<"\nMeshManager<"<< dim <<">::InitializeConnectivity: assigning neighbors to elements..."<< endl;
       for ( typename deque<Element<dim> >::iterator
         eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
-        for ( size_t j=0U; j<(*eit).Neighbors(); j++ )
+        for ( size_t j=0U; j<(*eit).Neighbors(); ++j )
           // if there is a neighbor
           if ( vset.Pfvert((*eit).Idx(),j) >= 0 )
               (*eit).Assign( j, &elmt_collection_[ static_cast<size_t>(vset.Pfvert((*eit).Idx(),j)) ] );
@@ -671,7 +671,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
       {
         // nodes were initially constructed as not located at the model boundary
         for ( typename map<size_t,long64>::const_iterator
-              bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+              bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit )
           node_collection_[ (*bit).first ].AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
       }
     
@@ -679,7 +679,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
     // ---------------------------------------------------------------------
     // 5. Flagging the elements using boundary flags from the nodes
     // ---------------------------------------------------------------------
-    flagElementUsingNodalAtBoundaryFlags<dim>( ElementsBegin(), ElementsEnd() );
+    flagElementUsingNodal_BOX_BOUNDARY_Flags<dim>( ElementsBegin(), ElementsEnd() );
     /* TODO: clean after verification that code works as expected
     const bool vset_has_connectivity_info( vset.ElementNeighbors() > 0 );
     if( vset_has_connectivity_info )
@@ -939,7 +939,7 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
     // ---------------------------------------------------------------------
     // 5. Flagging the elements using boundary flags from the nodes
     // ---------------------------------------------------------------------
-    flagElementUsingNodalAtBoundaryFlags<dim>( ElementsBegin(), ElementsEnd() );
+    flagElementUsingNodal_BOX_BOUNDARY_Flags<dim>( ElementsBegin(), ElementsEnd() );
 
     // ------------------------------------------------------------------------------
     // 6. Assigning parent elements (these are the elements that share the node) and

@@ -106,8 +106,6 @@ namespace csmp
       cout << endl << endl;
 
       _equal( strainXnum, strainX, toleranceA );
+  }
 
-      return;
-    }
-
-  } // csmp
+} // csmp

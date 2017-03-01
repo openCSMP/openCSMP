@@ -98,21 +98,18 @@
 using namespace std;
 using namespace csmp;
 
-/**  SKM 24/2/2017 - status report (XCode Mac)
+/**  Unit Test Development (status: 1/3/2017, XCode OS X)
 
      interdependent1:   fails on volume-flux integral balance of face fluxes
      new_developments:  in progress, not ready yet
      
-     TODO: BoxTest - fails because unit normals for Face objects do not point into correct direction
+     TODO: BoxTest - in some cases perimeter nodes do not seem to be recognised correctly
      TODO: ModelSubDomain - add tests to cover complete functionality
  
-     composite:
-     
-     @section Missing Unit Tests
-     
-     Triage needed to generate order:
+     @section Additional Code Coverage Required
 
-     - TODO: URGENT ModelSubDomain !!!
+     - ModelSubDomain_Test - extend to cover extensive functionality
+     - Box_Test - add unit-normal tests for prism and hexahedral mesh configurations
      - Model
      - MeshManager
      - FiniteElementManager
@@ -130,11 +127,11 @@ using namespace csmp;
      
      @section Failing Tests
      
+     - IndexTracker - problems with variables created at runtime
      - Boundary_Test (TODO: separate BoundaryInterface functionality)
      - SplitBoundary_Test
      - InterFace_Test
      - Box_Test
-          - TODO: test unit normal computations on model boundaries
           - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
  
      - TODO: delete non-unique regions with boundary names before saving the model to disk so that 
@@ -258,7 +255,7 @@ int main()
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               interdependent2.addTest( new ModelTopology_Test() );
               // model
-              interdependent2.addTest( new Box_Test() );
+              interdependent2.addTest( new Box_Test() ); // SKM OK, but does not test hexahedral or prism element meshes
               interdependent2.addTest( new ModelSubDomain_Test() );
               interdependent2.addTest( new Region_Test() );                  // SKM OK
 //  TODO: broken              interdependent2.addTest( new Boundary_Test() );
@@ -268,6 +265,7 @@ int main()
               interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
               interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
               // interfaces
+              interdependent2.addTest( new BinaryInterface_Test() );
               interdependent2.addTest( new VTU_Interface_Test() );
               interdependent2.addTest( new StatisticalAnalyzerTest() );
               // running unit tests and reporting errors
@@ -309,10 +307,10 @@ int main()
         if ( test_refactoring ) {
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+
 // TODO: REFACTOR: update this test:  refactored.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
 
 // TODO: review and get these tests to run (in this sequence)
-              refactored.addTest( new Box_Test() );
               // refactored.addTest( new Boundary_Test() );
               // composite.addTest( new SplitBoundary_Test() );
               refactored.run();

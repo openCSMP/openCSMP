@@ -400,6 +400,67 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
  
  
  
+
+
+
+/**
+    Key method for recovery of a model from binary file.
+*/
+template<size_t dim>
+bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
+ {
+     char file_name[NAME_STRING], heading[INFO_STRING];
+     strcpy( file_name, bin_file );
+     size_t  records(0);
+     string  dname;
+
+     // 1. opening the file
+     FILE*  fp;  
+     if ( (fp=fopen( file_name, "rb")) == NULL ) {
+          cout <<"\nVSet<dim>::InputFrom: File: "<< file_name;
+          cout <<" could not be opened"<< endl;
+          return false;
+       }
+     // 2. reading the file header and extracting time
+     skm_C_fread( fp, heading ); 
+     cout <<"\nVSet<dim>::InputFrom: Reading: "<< heading << endl;
+     strtok( heading, ":" ); 
+     strtok( NULL, ":" ); 
+     strtok( NULL, ":" ); 
+     strtok( NULL, ":" ); 
+     time = atof( strtok( NULL, ":") ); 
+       
+     // 3. reading the mesh connectivity to file
+     cout <<"\nVSet<dim>::InputFrom: reading finite element mesh..."<< endl;
+     InBinary( fp );
+     
+     // NEW: Reading the property data records from file
+     fread( (void*) &records, sizeof(size_t), 1, fp );
+     if ( records > 0 )
+       // reading the datasets sequentially
+       for ( size_t i=0; i<records; ++i )
+         {
+             // reading the property name
+             skm_C_fread( fp, heading );
+             dname = heading;
+             property_map_.insert( make_pair( string(heading), inBinaryPropertyData(fp) ) );
+         }
+     else cout<<"\nVSet<dim>::InputFrom: no PropertyData objects detected."<< endl;
+   
+     // 5. cleaning up
+     fclose( fp );
+     
+     cout <<"\nVSet<"<< dim <<">::InputFrom: VSet has been successfully read from: '";
+     cout << file_name <<"'."<< endl;
+     
+     return true;
+ 
+  } // end InputFrom
+
+
+
+
+
 /**
  
 Writes the content of the VSet to a binary data file (including property
@@ -457,59 +518,6 @@ bool  VSet<dim>::ParallelOutputTo( const char* bin_file, double64 time, size_t f
 
 
 
-/**
-    Key method for recovery of a model from binary file.
-*/
-template<size_t dim>
-bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
- {
-     char file_name[NAME_STRING], heading[INFO_STRING];
-     strcpy( file_name, bin_file );
-     size_t  records(0);
-     string  dname;
-
-     // 1. opening the file
-     FILE*  fp;  
-     if ( (fp=fopen( file_name, "rb")) == NULL ) {
-          cout <<"\nVSet<dim>::InputFrom: File: "<< file_name;
-          cout <<" could not be opened"<< endl;
-          return false;
-       }
-     // 2. reading the file header and extracting time
-     skm_C_fread( fp, heading ); 
-     cout <<"\nVSet<dim>::InputFrom: Reading: "<< heading << endl;
-     strtok( heading, ":" ); 
-     strtok( NULL, ":" ); 
-     strtok( NULL, ":" ); 
-     strtok( NULL, ":" ); 
-     time = atof( strtok( NULL, ":") ); 
-       
-     // 3. reading the mesh connectivity to file
-     cout <<"\nVSet<dim>::InputFrom: reading finite element mesh..."<< endl;
-     InBinary( fp );
-     
-     // NEW: Reading the property data records from file
-     fread( (void*) &records, sizeof(size_t), 1, fp );
-     if ( records > 0 )
-       // reading the datasets sequentially
-       for ( size_t i=0; i<records; ++i )
-         {
-             // reading the property name
-             skm_C_fread( fp, heading );
-             dname = heading;
-             property_map_.insert( make_pair( string(heading), inBinaryPropertyData(fp) ) );
-         }
-     else cout<<"\nVSet<dim>::InputFrom: no PropertyData objects detected."<< endl;
-   
-     // 5. cleaning up
-     fclose( fp );
-     
-     cout <<"\nVSet<"<< dim <<">::InputFrom: VSet has been successfully read from: '";
-     cout << file_name <<"'."<< endl;
-     
-     return true;
- 
-  } // end InputFrom
 
 
 /**

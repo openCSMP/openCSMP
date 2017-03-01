@@ -824,6 +824,7 @@ void TPINCFVT3D_VVCase::SetModel( Model<3>& model,
     model.InputPropertyValue( "velocity",            velocity );
     model.InputPropertyValue( "fracture aperture",   fractureAperture );
     model.InputPropertyValue( "nodal fluid volume source", makeScalar(PLAIN, 0.) );
+
 } //SetModel
 
 

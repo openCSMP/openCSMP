@@ -3,7 +3,7 @@
 #include "ANSYS_Model3D.h"
 #include "Boundary.h"
 #include "VTU_Interface.h"
-#include "vset_makers.h"
+#include "vsetMakers.h"
 #include "CSMP_mathUtilities.h"
 
 using namespace std;

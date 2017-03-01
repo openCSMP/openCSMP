@@ -30,7 +30,7 @@ bool skm_C_fread( FILE* fp, char str[] )
        }
      // read size of the record and assert this 
      size_t  characters(0);
-     char       buf[200];
+     char    buf[INFO_STRING];
 
      if ( !fread( (void*) &characters, sizeof(size_t), 1, fp ) )
        {

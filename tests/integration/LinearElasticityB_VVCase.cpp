@@ -124,9 +124,6 @@ namespace csmp
 
       _equal( Wmax, maxDisplacement, toleranceA );
       _equal( volumePost, volumePrior, toleranceB );
-
-
-      return;
-    }
+   }
 
   } // csmp

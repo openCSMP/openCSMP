@@ -27,6 +27,7 @@ class VSet : public VData {
 
     VSet();
     VSet( const VSet& );
+    VSet( VSet&& ) = default;
     VSet( size_t nodes_per_element, 
           size_t nbors_per_element,
           int32  csmp_etype, 
@@ -39,6 +40,7 @@ class VSet : public VData {
 
     ~VSet();
     VSet& operator=( const VSet& );
+    VSet& operator=( VSet&& ) = default;
 
     void Resize( size_t nodes_per_element, 
                  size_t nbors_per_element,

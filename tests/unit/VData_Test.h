@@ -15,6 +15,28 @@ public:
   virtual void run();
 };
 
+
+
+
+/** TESTING DATA MEMBERS
+
+    std::vector<double64>             px, py, pz; (1)
+    std::deque<std::vector<size_t> >  plist;      (2)
+    std::deque<std::vector<int32> >   pfverts;    (3)
+    std::map<size_t,int32>            bflags;     (4)
+    std::vector<int32>                pelmt;      (5)
+
+    (1) ... size of node# goes from 0..(n-1): node coordinates
+    (2) ... plist: deque size of element#. each entry contains
+            a vector with size of node count for that element.
+            the vector contains the node ids wrt px,py,pz index
+            that make up the given element in the csmp specific order.
+    (3) ... deque size of element#, with a vector that each holds all
+            neighbour elmt ids for given elememt wrt plist deque index.
+    (5) ... type of elmts in int, indicating number of nodes, vertices
+
+
+  */
 void VData_Test::run()
 {
   // .)CONSTRUCTORS
@@ -267,7 +289,7 @@ void VData_Test::run()
   std::ifstream inVDataText;
   inVDataText.open( "ASCII-vdata.txt" );
   _test( inVDataText.is_open() );
-  /* DOES NOT WORK(ASSERTION), PROBABLY DUE TO INCOMPATIBILITY OF OutASCII and InText formatting
+  /* TODO: DOES NOT WORK(ASSERTION), PROBABLY DUE TO INCOMPATIBILITY OF OutASCII and InText formatting
   VData orphanVDataCopy3 = orphanVData;
   orphanVDataCopy3.Erase();
   orphanVDataCopy3.InText( inVDataText );
@@ -276,25 +298,6 @@ void VData_Test::run()
   */
 
 } // run
-
-/**
-    std::vector<double64>             px, py, pz; (1)
-    std::deque<std::vector<size_t> >  plist;      (2)
-    std::deque<std::vector<int32> >   pfverts;    (3)
-    std::map<size_t,int32>            bflags;     (4)
-    std::vector<int32>                pelmt;      (5)
-
-    (1) ... size of node# goes from 0..(n-1): node coordinates
-    (2) ... plist: deque size of element#. each entry contains
-            a vector with size of node count for that element.
-            the vector contains the node ids wrt px,py,pz index
-            that make up the given element in the csmp specific order.
-    (3) ... deque size of element#, with a vector that each holds all
-            neighbour elmt ids for given elememt wrt plist deque index.
-    (5) ... type of elmts in int, indicating number of nodes, vertices
-
-
-  */
 
 } // csmp
 

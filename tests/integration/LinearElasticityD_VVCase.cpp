@@ -128,9 +128,6 @@ namespace csmp
       _equal( strainXnum, strainX, toleranceA );
       _equal( sigmaXnum, sigmaX, toleranceB );
       _equal( volumePost, volumePrior, toleranceC );
+  }
 
-
-      return;
-    }
-
-  } // csmp
+} // csmp

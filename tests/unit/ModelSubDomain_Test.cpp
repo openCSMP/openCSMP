@@ -12,7 +12,7 @@
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
 #include "VTK_Interface.h"
-#include "vset_makers.h"
+#include "vsetMakers.h"
 //#include "ModelComparator.h"
 #include "Element.h"
 #include "Box.h"

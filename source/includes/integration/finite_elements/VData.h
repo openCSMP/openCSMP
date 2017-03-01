@@ -82,9 +82,9 @@ class VData {
 
     virtual ~VData();
     VData( const VData& );
-    VData( VData&& );
+    VData( VData&& ) = default;
     VData& operator=( const VData& );
-    VData& operator=( VData&& );
+    VData& operator=( VData&& ) = default;
     bool   operator==( const VData& ) const;
 
     /// returns number of nodes in the mesh
@@ -256,7 +256,6 @@ class VData {
     std::deque<std::vector<size_t> >  plist;             ///< nodes of each element
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
     std::map<size_t,long64>           bflags;            ///< flags for those nodes that lie on model boundary
-    // NEW
     size_t                            first_interface_;  ///< faces come after elements; if none this is equal to elements
     size_t                            first_face_;       ///< interfaces come after faces; if none this is equal to elements 
 
