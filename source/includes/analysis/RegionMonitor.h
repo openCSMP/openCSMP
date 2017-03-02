@@ -8,7 +8,15 @@ namespace csmp {
 template<size_t dim> class Model; 
 
 /** 
-    @brief Monitors value ranges and integrated property values in all unique regions of a model.
+    @brief Monitors value ranges and integrated property values in all regions of a model.
+    
+    Among the non-unique (potentially overlapping) regions those with names identical to
+    BOX_BOUNDARY flags and the "All Element" region are ignored.
+    
+    @attention if the model contains lower-dimensional regions, a thickness attribute 
+    called "thickness" must be specified for these in order to get their volume right.
+    For the regions with the same dimension as the model, the thickness attribute
+    should have a value of 1.
     
     @author Stephan Matthai
     @date 1999

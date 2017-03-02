@@ -248,7 +248,7 @@ inline  double  Edge::Length() const
      double dx = dest_[0] - org_[0];
      double dy = dest_[1] - org_[1];
      
-     return std::sqrt( dx*dx + dy*dy );
+     return std::hypot( dx, dy );
  }
 
 

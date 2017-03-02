@@ -261,9 +261,7 @@ BOX_BOUNDARY  parseBoundary( const string& i )
     if ( i == "EDGE11" )   return EDGE11;
     if ( i == "EDGE12" )   return EDGE12;
     if ( i == "INTERNAL" ) return INTERNAL;
-
-    cerr <<"\nparseBoundary(BOX_BOUNDARY): unable to parse BOX_BOUNDARY: '";
-    cerr << i <<"'; returning NOT."<< endl;
+    // if the name is not recognized it is not a BOX_BOUNDARY
     return NOT;   
  }
 

@@ -240,61 +240,6 @@ void out( const Var& obj )
 
 
 
-/// Stringizing some data using snprintf().
-void uintToString( unsigned int i, string& str )
-{
-   char  buf[22U];
-   snprintf( buf, 22u, "%u", i );
-   str += buf;
-}
-
-
-void ulongToString( unsigned long i, string& str )
-{
-   char  buf[22U];
-   snprintf( buf, 22u, "%lu", i );
-   str += buf;
-}
-
-
-/// Stringizing some data using snprintf() and returning the string for declarative programming
-string uintToString( unsigned int i ) 
- {
-    string str;
-    uintToString( i, str );
-    return str;
- }
-
-
-
-
-/**
-     Rounds double prior to conversion to integer.
-*/
-int32 rint( double64 val )
- {
-    double64 integral_part;
-    // rouding up or down
-    if ( modf(val,&integral_part) > 0.5 ) integral_part += 1.;
-    
-    return static_cast<int32>(integral_part);
- }
-
-
-
-
-/**
-     Rounds double prior to conversion to integer.
-*/
-long64 lrint( double64 val )
- {
-    double64 integral_part;
-    if ( modf(val,&integral_part) > 0.5 ) integral_part += 1.;    
-    return static_cast<long64>(integral_part);
- }
-
-
-
 /// approximation of the complementary error function using a Chebyshev polynomial
 double64  erfc_Chebyshev( double64 x )
 {

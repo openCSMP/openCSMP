@@ -430,7 +430,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
               unrml[0] = XY(0,0) - XY(1,0);
               unrml[1] = XY(0,1) - XY(1,1);
               // normalise to length
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1]);
+              const double64 length = hypot(unrml[0], unrml[1]);
               unrml[0] /= length;
               unrml[1] /= length;
               return;
@@ -438,7 +438,7 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
          if ( face == 1 ) {
               unrml[0] = XY(1,0) - XY(0,0);
               unrml[1] = XY(1,1) - XY(0,1);
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1]);
+              const double64 length = hypot(unrml[0], unrml[1]);
               unrml[0] /= length;
               unrml[1] /= length;
               return;
@@ -484,8 +484,8 @@ void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double64>& u
 
 void
 LinearLineElement::OutputNodeDataToVTK( const char* file_name,
-                                                       const char* var_name,
-                                                    DenseMatrix<DM_MIN>& DATA ) const
+                                        const char* var_name,
+                                        DenseMatrix<DM_MIN>& DATA ) const
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );

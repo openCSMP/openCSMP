@@ -228,11 +228,11 @@ void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double64>& vec )
 	     // segment node 1,3
 	     double64 lenx = XY(2,0) - XY(0,0);
 	     double64 leny = XY(2,1) - XY(0,1);
-	     vec[0] = sqrt( lenx*lenx + leny*leny );
+	     vec[0] = hypot( lenx, leny );
 	     // segment node 3,2
 	     lenx = XY(1,0) - XY(2,0);
 	     leny = XY(1,1) - XY(2,1);
-	     vec[1] = sqrt( lenx*lenx + leny*leny );
+	     vec[1] = hypot( lenx, leny );
          return;
       }
 
@@ -241,7 +241,7 @@ void  IsoparametricQuadraticLineElement::EdgeLengths( vector<double64>& vec )
 	     double64 lenx = XY(2,0) - XY(0,0);
 	     double64 leny = XY(2,1) - XY(0,1);
 	     double64 lenz = XY(2,2) - XY(0,2);
-	     vec[0] = sqrt( lenx*lenx + leny*leny );
+	     vec[0] = sqrt( lenx*lenx + leny*leny + lenz*lenz );
 	     // segment node 3,2
 	     lenx = XY(1,0) - XY(2,0);
 	     leny = XY(1,1) - XY(2,1);
@@ -373,7 +373,7 @@ double64 IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<D
           double64 dxdr = JacobianFor( DNR, 0 );
           double64 dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr );
+          double64 detJinv = 1. / hypot( dxdr, dydr );
           double64 cosa = detJinv * dxdr;
           double64 sina = detJinv * dydr;
           // row 1 = x-derivatives
@@ -467,7 +467,7 @@ double64 IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, 
           double64 dxdr = JacobianFor( DNR, 0 );
           double64 dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr );
+          double64 detJinv = 1. / hypot( dxdr, dydr );
           double64 cosa = detJinv * dxdr;
           double64 sina = detJinv * dydr;
           // row 1 = x-derivatives

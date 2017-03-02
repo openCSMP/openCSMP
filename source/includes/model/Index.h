@@ -82,7 +82,7 @@ class IndexTracker;
   Index variable_key = prop_database.StorageKey("variable");
   @endcode
 
-  @todo SKM: (3-F) Provide scheme for compile-time variables
+  @todo SKM: (3-F) complete scheme for compile-time variables
  
 */
 struct Index {
@@ -92,11 +92,11 @@ struct Index {
       const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(), size_t offsetFactorSimplex = 0, 
       size_t offsetFactorSector = 0, size_t ipFactorSimplex = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 ); 
     Index( const csmp::Index& );
-    // TODO: think of implmenting the move constructor so that it is compatible with IndexTracker*
+    Index( csmp::Index&& );
     ~Index();
 
     Index&  operator=( const csmp::Index& );
-    Index&  operator=( csmp::Index&& ) = default;
+    Index&  operator=( csmp::Index&& );
     bool    operator==( const csmp::Index& ) const;
     bool    operator!=( const csmp::Index& ) const; 
     bool    operator<( const csmp::Index& ) const; 

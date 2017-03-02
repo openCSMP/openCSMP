@@ -45,7 +45,7 @@ template<size_t dim>
 RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg, 
                                    const list<string>& to_integrate_over_groups,
                                    const list<string>& to_find_ranges_in_groups,
-                                   bool integrate_pore_volume_only)
+                                   bool integrate_pore_volume_only )
     : integral_properties_(to_integrate_over_groups),
       range_properties_(to_find_ranges_in_groups),
       divide_by_volume_(false),
@@ -67,9 +67,13 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
             throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
                                    "integral property must be a scalar property");
 
+        if ( sg.Database().Placement( (*it).c_str() ) == FACE )
+            throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
+                                   "Boundary properties placed on the FACE cannot be integrated over the Region volume");
+
         if ( sg.Database().Placement( (*it).c_str() ) == INTER_FACE )
             throw csmp::Exception( FATAL_ERROR, "RegionMonitor(constructor)", (*it).c_str(),
-                                   "properties placed on the FACE cannot be integrated over the Region volume");
+                                   "SplitBoundary properties placed on the INTER_FACE cannot be integrated over the Region volume");
     }
 
     // No need for checking the externally integrated properties as these do not
@@ -101,16 +105,17 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
 
     // non-unique regions
     for ( typename map<string,Region<dim> >::const_iterator
-          git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ ) {
-        // total volume or pore volume of group
-        if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
-        else                              volume = (*git).second.Volume(false);
-        // surface area of group
-        const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+          git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
+      if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
+          // total volume or pore volume of group
+          if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
+          else                              volume = (*git).second.Volume(false);
+          // surface area of group
+          const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
-        // recording the geometric properties
-        group_specs_[ (*git).first ] = make_pair(volume,surface_area);
-    }
+          // recording the geometric properties
+          group_specs_[ (*git).first ] = make_pair(volume,surface_area);
+       }
 
 } // end constructor
 
@@ -169,16 +174,17 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
         group_specs_[ (*git).first ] = make_pair(volume,surface_area);
     }
     for ( typename map<string,Region<dim> >::const_iterator
-          git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ ) {
-        // total volume or pore volume of group
-        if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
-        else                              volume = (*git).second.Volume(false);
-        // surface area of group
-        const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
+          git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
+      if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
+          // total volume or pore volume of group
+          if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
+          else                              volume = (*git).second.Volume(false);
+          // surface area of group
+          const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
-        // recording the geometric properties
-        group_specs_[ (*git).first ] = make_pair(volume,surface_area);
-    }
+          // recording the geometric properties
+          group_specs_[ (*git).first ] = make_pair(volume,surface_area);
+       }
 
 } // end DefineProperties
 
@@ -234,15 +240,14 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property_regi
            if( isspace(property_column_header_entry[i]) )
                property_column_header_entry[i] = '_';
     }
-
     ext_calc_properties_column_headers_.insert(property_column_header_entry);
 }
 
 template<size_t dim>
-void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
-                                                                 string property,
-                                                                 string regionname,
-                                                                 double64 value)
+void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
+                                                           string property,
+                                                           string regionname,
+                                                           double64 value )
 {
     string property_column_entry=property+"_"+regionname;
     for(int i = 0; i < property_column_entry.length(); i++)
@@ -260,10 +265,14 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
                                "Property and region name combination has not been inserted. \n Call InsertExternallyCalculatedProperty() first ");
 }
 
+
+
+
+
 template<size_t dim>
-void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
-                                                                 string property_regionname,
-                                                                 double64 value)
+void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double64 time,
+                                                           string property_regionname,
+                                                           double64 value )
 {
     string property_column_entry=property_regionname;
     for(int i = 0; i < property_column_entry.length(); i++)
@@ -281,10 +290,15 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue(double64 time,
 }
 
 
+
+
+
 /**
     calculates property integrals and stores these for the current time-step and property name
     if the variable 'thickness' is defined in the PropertyDatabase, it is used to scale
     the element by element integrals.
+    
+    @attention non-unique regions that bear the name of model boundaries are ignored.
 */
 template<size_t dim>
 void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64 time )
@@ -324,34 +338,35 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
             integrals_[time][(*lit)][(*git).first] = integral;
         }
 
-        // for all regions in the model
+        // for all regions in the model (unless they are boundaries)
         for ( typename map<string,Region<dim> >::const_iterator
               git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-        {
-            // integrate the property over the group
-            if ( include_thickness_attribute_ )
+          if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" )
             {
-                if ( pore_volume_integral_ )
-                    integral = (*git).second.VolumeIntegral_x_Thickness( (*lit).c_str(), true );
-                else
-                    integral = (*git).second.VolumeIntegral_x_Thickness( (*lit).c_str(), false );
+                // integrate the property over the group
+                if ( include_thickness_attribute_ )
+                {
+                    if ( pore_volume_integral_ )
+                        integral = (*git).second.VolumeIntegral_x_Thickness( (*lit).c_str(), true );
+                    else
+                        integral = (*git).second.VolumeIntegral_x_Thickness( (*lit).c_str(), false );
+                }
+                else {
+                    if ( pore_volume_integral_ )
+                        integral = (*git).second.VolumeIntegral( (*lit).c_str(), true );
+                    else
+                        integral = (*git).second.VolumeIntegral( (*lit).c_str(), false );
+                }
+                // normalization
+                if ( divide_by_volume_ ) {
+                    typename map<string,pair<double64,double64> >::const_iterator
+                            gr_it=group_specs_.find( (*git).first );
+                    // integral value gets divided by volume/area represented by group
+                    integral /= (*gr_it).second.first;
+                }
+                // global-time  property    group-name
+                integrals_[time][(*lit)][(*git).first] = integral;
             }
-            else {
-                if ( pore_volume_integral_ )
-                    integral = (*git).second.VolumeIntegral( (*lit).c_str(), true );
-                else
-                    integral = (*git).second.VolumeIntegral( (*lit).c_str(), false );
-            }
-            // normalization
-            if ( divide_by_volume_ ) {
-                typename map<string,pair<double64,double64> >::const_iterator
-                        gr_it=group_specs_.find( (*git).first );
-                // integral value gets divided by volume/area represented by group
-                integral /= (*gr_it).second.first;
-            }
-            // global-time  property    group-name
-            integrals_[time][(*lit)][(*git).first] = integral;
-        }
     }
 
 } // end ScalarPropertyIntegrals
@@ -359,7 +374,11 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
 
 
 
+/**
+    Records the ranges of the target variables in each region.
 
+    @attention non-unique regions that bear the name of model boundaries are ignored.
+*/
 template<size_t dim>
 void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double64 time )
 {
@@ -379,10 +398,10 @@ void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double64 ti
         // other regions
         for ( typename map<string,Region<dim> >::const_iterator
               git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-        {
-            (*git).second.MinMaxOf( (*lit).c_str(), rmin, rmax );
-            ranges_[time][(*lit)][(*git).first] = make_pair(rmin,rmax);
-        }
+          if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
+               (*git).second.MinMaxOf( (*lit).c_str(), rmin, rmax );
+               ranges_[time][(*lit)][(*git).first] = make_pair(rmin,rmax);
+            }
     }
 
 } // end ScalarPropertyRanges
@@ -452,11 +471,10 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
         // the column headers: time, group1, group2...
         ofs <<" time\t";
-        size_t counter(1);
         for ( typename map<string,pair<double64,double64> >::const_iterator
               gr_it=group_specs_.begin(); gr_it!=group_specs_.end(); gr_it++ ){
-            ofs<<"("<<counter<<")"<<(*gr_it).first <<"\t";
-        }
+             ofs << (*gr_it).first <<"\t";
+          }
         ofs << endl;
 
         // for all timesteps

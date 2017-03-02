@@ -16,7 +16,7 @@ using namespace std;
 namespace csmp {
 
 // LOOSER - cannot use move constructor
-inline const ScalarVariable&  makeScalarOld( const VARIABLE_FLAG flag, const double64 val )
+inline const ScalarVariable&  makeScalarConstRef( const VARIABLE_FLAG flag, const double64 val )
   {
      return ScalarVariable(flag,val);
   }
@@ -28,7 +28,7 @@ inline ScalarVariable  makeScalar2( const VARIABLE_FLAG flag, const double64 val
   }
 
 // not inlined version
-ScalarVariable  makeScalar3( const VARIABLE_FLAG flag, const double64 val )
+ScalarVariable  makeScalarNotInlined( const VARIABLE_FLAG flag, const double64 val )
   {
      return ScalarVariable(flag,val);
   }
@@ -71,22 +71,22 @@ void VariableBenchmarking_Test::run()
 	   cerr <<"\nVariableBenchmark_Test::run: testing assignment of variable values and flags"<< endl;
  		 auto t0 = chrono::high_resolution_clock::now();
      // assigning values to scalars, vectors, tensors
-     // OLD SCHEME - in CSMP
+     // CURRENT SCHEME - in CSMP
      running_index = 0U;
      for ( auto it=scalars.begin(); it!=scalars.end(); ++it )
        scalars[running_index] = makeScalar( random_flags[running_index], random_values[running_index] );
     
  		 auto t1 = chrono::high_resolution_clock::now();
-	   cerr <<"\n\tCPU clock ticks used for old scheme " << chrono::duration_cast<chrono::nanoseconds>(t1-t0).count() << " nanoseconds." << endl;
+	   cerr <<"\n\tCPU clock ticks used for current CSMP scheme " << chrono::duration_cast<chrono::nanoseconds>(t1-t0).count() << " nanoseconds." << endl;
     
-     // IMPLICIT MOVE SCHEME
+     // CONST REFERENCE (rvalue) MOVE SCHEME
      running_index = 0U;
  		 auto t2 = chrono::high_resolution_clock::now();
      for ( auto it=scalars.begin(); it!=scalars.end(); ++it )
-       scalars[running_index] = makeScalar2( random_flags[running_index], random_values[running_index] );
+       scalars[running_index] = makeScalarConstRef( random_flags[running_index], random_values[running_index] );
     
  		 auto t3 = chrono::high_resolution_clock::now();
-	   cerr <<"\n\tCPU clock ticks used for new scheme " << chrono::duration_cast<chrono::nanoseconds>(t3-t2).count() << " nanoseconds." << endl;
+	   cerr <<"\n\tCPU clock ticks used for const value reference scheme " << chrono::duration_cast<chrono::nanoseconds>(t3-t2).count() << " nanoseconds." << endl;
    
     // there is only a point for the new scheme if it is faster !
      _test( chrono::duration_cast<chrono::nanoseconds>(t1-t0).count() > chrono::duration_cast<chrono::nanoseconds>(t3-t2).count() );
@@ -96,14 +96,14 @@ void VariableBenchmarking_Test::run()
      running_index = 0U;
  		 auto t4 = chrono::high_resolution_clock::now();
      for ( auto it=scalars.begin(); it!=scalars.end(); ++it )
-       scalars[running_index] = makeScalar3( random_flags[running_index], random_values[running_index] );
+       scalars[running_index] = makeScalarNotInlined( random_flags[running_index], random_values[running_index] );
     
  		 auto t5 = chrono::high_resolution_clock::now();
-	   cerr <<"\n\tCPU clock ticks used for explorative scheme " << chrono::duration_cast<chrono::nanoseconds>(t5-t4).count() << " nanoseconds.\n";
+	   cerr <<"\n\tCPU clock ticks used for not inlined scheme " << chrono::duration_cast<chrono::nanoseconds>(t5-t4).count() << " nanoseconds.\n";
      cout << endl;
    
     // there is only a point for the new scheme if it is faster !
-//     _test( chrono::duration_cast<chrono::nanoseconds>(t5-t4).count() < chrono::duration_cast<chrono::nanoseconds>(t3-t2).count() );
+     _test( chrono::duration_cast<chrono::nanoseconds>(t5-t4).count() < chrono::duration_cast<chrono::nanoseconds>(t3-t2).count() );
 
   } // end run
 

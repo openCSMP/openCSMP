@@ -178,7 +178,7 @@ inline double Point::Y() const { return y_; }
 
 inline  double  Point::Length() const
   {
-      return std::sqrt( x_*x_ + y_*y_ );
+      return std::hypot( x_, y_ );
   }
 
 

@@ -2471,10 +2471,14 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
 
      if (verbose) {
 #ifndef NDEBUG
-     if ( dim == 2U && !(*this->elmt_vec_.begin())->FE()->IsSurfaceElement() )
-       csmp_error.notice( INFO, "Region<2>::VolumeIntegral:", prop, "integral, region is not a surface; integral may not be correct.");
-     if ( dim == 3U && !(*this->elmt_vec_.begin())->FE()->IsVolumeElement() )
-       csmp_error.notice( INFO, "Region<3>::VolumeIntegral:", prop, "integral, region is not a volume, integral may not be correct.");
+     if ( dim == 2U && !(*this->elmt_vec_.begin())->FE()->IsSurfaceElement() ) {
+          string info(this->Name()); info +=" ('"; info += prop; info+="')";
+          csmp_error.notice( WARNING, "Region<2>::VolumeIntegral:", info, "region is not a surface; integral may not be correct.");
+       }
+     if ( dim == 3U && !(*this->elmt_vec_.begin())->FE()->IsVolumeElement() ) {
+          string info(this->Name()); info +=" ('"; info += prop; info+="')";
+          csmp_error.notice( WARNING,  "Region<3>::VolumeIntegral:", info, "region is not a volume, integral may not be correct.");
+       }
 #endif
      }
      // region properties

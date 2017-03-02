@@ -565,7 +565,8 @@ Point<2U> FiniteVolumePolicy<2U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) con
   const Point<2U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
   const Point<2U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
 
-  const double64 detJ ( 0.5 * sqrt( pow(fp0[0]-fp1[0],2) + pow(fp0[1]-fp1[1],2) ) );
+  // const double64 detJ ( 0.5 * sqrt( pow(fp0[0]-fp1[0],2) + pow(fp0[1]-fp1[1],2) ) );
+  const double64 detJ( 0.5 * hypot( fp0[0]-fp1[0], fp0[1]-fp1[1] ) );
 
   return Point<2U>( -0.5*(fp0[1]-fp1[1])/detJ, 0.5*(fp0[0]-fp1[0])/detJ );
 }

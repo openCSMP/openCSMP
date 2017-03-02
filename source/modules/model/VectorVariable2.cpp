@@ -371,7 +371,7 @@ bool VectorVariable<2U>::operator<( const VectorVariable<2U>& v ) const
 /// L2 norm
 void VectorVariable<2U>::EuclideanNormalize() 
  {
-    const double64 fNorm(std::sqrt(data[0]*data[0] + data[1]*data[1]));
+    const double64 fNorm(std::hypot(data[0],data[1]));
     
     if(fNorm == 0.) return; //added AP
     
@@ -405,7 +405,7 @@ VectorVariable<2U> VectorVariable<2U>::CrossProduct( const VectorVariable& v ) c
 
 double64  VectorVariable<2U>::Length() const 
  {
-    return std::sqrt( data[0]*data[0] + data[1]*data[1] );
+    return std::hypot( data[0], data[1] );
  }
 
 

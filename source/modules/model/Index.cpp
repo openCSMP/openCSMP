@@ -168,6 +168,9 @@ Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, size_t idx,
     localVariables(lvs), integrationPointVariables(ivs), indexTracker(nullptr)
   {}
 
+
+
+
 /** Copy constructor
 
 Creates an index based on the provided parameter
@@ -184,41 +187,101 @@ Index::Index( const csmp::Index& idx )
   // attach itself to IndexTracker and vice versa
   if(idx.indexTracker)
     {
-      Detach();
-      idx.indexTracker->Attach( this, &idx ); 
+      // attach this Index to index tracker of the argument index
+      idx.indexTracker->Attach( this, &idx );
+      // vice versa
       Attach( idx.indexTracker );
     }
   }
 
 
-/// Assignment operator
-Index&  Index::operator=( const csmp::Index& idx ) {
-  if ( this != &idx ) {
-    type                      = idx.type;
-    place                     = idx.place;
-    index                     = idx.index;
-    dataDepth                 = idx.dataDepth;
-    flagDepth                 = idx.flagDepth;
-    dataOffset                = idx.dataOffset;
-    flagOffset                = idx.flagOffset;
-    offsetFactorSimplex       = idx.offsetFactorSimplex;
-    offsetFactorSector        = idx.offsetFactorSector;
-    ipFactorSimplex           = idx.ipFactorSimplex;
-    ipFactorSector            = idx.ipFactorSector;
-    ipFactorFacet             = idx.ipFactorFacet;
-    localVariables            = idx.localVariables;
-    integrationPointVariables = idx.integrationPointVariables;
-    /// attach itself to IndexTracker and vice versa.
-    if( idx.indexTracker )
-      { 
-        Detach();
-        idx.indexTracker->Attach( this, &idx );
-        Attach( idx.indexTracker );
-      }
-    }        
-
-  return *this;
+/// move constructor that takes care of index tracker
+Index::Index( csmp::Index&& idx )
+  : type(move(idx.type)), place(move(idx.place)), index(move(idx.index)),
+    dataDepth(move(idx.dataDepth)), flagDepth(move(idx.flagDepth)), dataOffset(move(idx.dataOffset)), flagOffset(move(idx.flagOffset)),
+    offsetFactorSimplex(move(idx.offsetFactorSimplex)), offsetFactorSector(move(idx.offsetFactorSector)),
+    ipFactorSimplex(move(idx.ipFactorSimplex)), ipFactorSector(move(idx.ipFactorSector)), ipFactorFacet(move(idx.ipFactorFacet)),
+    localVariables(move(idx.localVariables)), integrationPointVariables(move(idx.integrationPointVariables)),
+    indexTracker(nullptr)
+  {
+  // attach itself to IndexTracker and vice versa
+  if ( idx.indexTracker ) {
+       idx.indexTracker->Attach( this, &idx );
+       // vice versa
+       Attach( idx.indexTracker );
+       // reset index-tracker pointer of empty Index object
+       idx.Detach();
+    }
   }
+
+
+
+
+/// Assignment operator
+Index&  Index::operator=( const csmp::Index& idx )
+{
+  if ( this != &idx ) {
+      type                      = idx.type;
+      place                     = idx.place;
+      index                     = idx.index;
+      dataDepth                 = idx.dataDepth;
+      flagDepth                 = idx.flagDepth;
+      dataOffset                = idx.dataOffset;
+      flagOffset                = idx.flagOffset;
+      offsetFactorSimplex       = idx.offsetFactorSimplex;
+      offsetFactorSector        = idx.offsetFactorSector;
+      ipFactorSimplex           = idx.ipFactorSimplex;
+      ipFactorSector            = idx.ipFactorSector;
+      ipFactorFacet             = idx.ipFactorFacet;
+      localVariables            = idx.localVariables;
+      integrationPointVariables = idx.integrationPointVariables;
+      /// attach itself to IndexTracker and vice versa.
+      if( idx.indexTracker ) {
+           Detach();
+           // attach this Index to index tracker of the argument index
+           idx.indexTracker->Attach( this, &idx );
+           // vice versa
+           Attach( idx.indexTracker );
+        }
+    }
+  return *this;
+}
+
+
+
+/// move assignment operator
+Index&  Index::operator=( csmp::Index&& idx )
+ {
+    assert( this != &idx );
+    type                      = move(idx.type);
+    place                     = move(idx.place);
+    index                     = move(idx.index);
+    dataDepth                 = move(idx.dataDepth);
+    flagDepth                 = move(idx.flagDepth);
+    dataOffset                = move(idx.dataOffset);
+    flagOffset                = move(idx.flagOffset);
+    offsetFactorSimplex       = move(idx.offsetFactorSimplex);
+    offsetFactorSector        = move(idx.offsetFactorSector);
+    ipFactorSimplex           = move(idx.ipFactorSimplex);
+    ipFactorSector            = move(idx.ipFactorSector);
+    ipFactorFacet             = move(idx.ipFactorFacet);
+    localVariables            = move(idx.localVariables);
+    integrationPointVariables = move(idx.integrationPointVariables);
+    /// attach itself to IndexTracker and vice versa.
+    if( idx.indexTracker ) {
+         // give up previous index tracker
+         Detach();
+         idx.indexTracker->Attach( this, &idx );
+         // vice versa
+         Attach( idx.indexTracker );
+         // reset index-tracker pointer of empty Index object
+         idx.Detach();
+      }
+
+   return *this;
+}
+
+
 
 /**
  @fn  void Index::UpdateData( const csmp::Index& idx )

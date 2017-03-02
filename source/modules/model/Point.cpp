@@ -504,7 +504,7 @@ bool Point<2U>::operator>( const Point<2U>& pt )  const
 
 double64  Point<2U>::Length() const
  {
-    return std::sqrt( x_ * x_ + y_ * y_ );
+    return std::hypot( x_, y_ );
  }
 
 

@@ -318,7 +318,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
                      // getting the maximum capillary flux (G= lambda overbar)
                      double64  magnitude_grad_pc(gradPc[0]); // 1D
                      if      ( dim == 3U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]+gradPc[2]*gradPc[2]);
-                     else if ( dim == 2U ) magnitude_grad_pc = sqrt(gradPc[0]*gradPc[0]+gradPc[1]*gradPc[1]);
+                     else if ( dim == 2U ) magnitude_grad_pc = hypot(gradPc[0],gradPc[1]);
 
                      // use data from barycenter: O.K. as long as grad_pc does not increase during iterations
                      velocity += fabs( magnitude_grad_pc * k_lambda_overbar );

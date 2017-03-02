@@ -299,10 +299,11 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     // 2. evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
    
+    const double64 one(1.);
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
-    cout <<"\n\tSolution steps needed = "<< std::max(rint(floor(time_interval/time_increment)),1);
+    cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
 
     cout <<"\n\n\nExplicitTransport::AdvectVariable: FV transport simulation initiated...\n";
     size_t   substep(1);

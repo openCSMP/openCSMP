@@ -369,7 +369,7 @@ void RegionMonitorTest::RegionMonitorScalarPropertyIntegrals3D()
     range_properties.push_back("permeability");
     range_properties.push_back("porosity");
     
-    RegionMonitor<3U> region_monitor(model, integral_properties, range_properties, false);
+    RegionMonitor<3U> region_monitor( model, integral_properties, range_properties, false );
     region_monitor.ScalarPropertyIntegrals(model, 0.);
     region_monitor.ScalarPropertyRanges(model, 0.);
     

@@ -2623,8 +2623,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
     }
     csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
-    string cache;
-    uintToString( dim, cache );
+    string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(SIMPLEX<dim>).name();
@@ -3116,8 +3115,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     /// @todo (2-P) Rm rtti
     csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
-    string cache;
-    uintToString( dim, cache );
+    string cache(to_string(dim));
     src += cache;
     src += ",";
     src += typeid(SIMPLEX<dim>).name();

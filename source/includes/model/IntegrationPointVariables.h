@@ -85,9 +85,9 @@ namespace csmp {
     { 
       if( this != &ivs ) 
       { 
-        ipvSimplex           = ivs.ipvSimplex;
-        ipvSector            = ivs.ipvSector;
-        ipvFacet             = ivs.ipvFacet;
+        ipvSimplex = ivs.ipvSimplex;
+        ipvSector  = ivs.ipvSector;
+        ipvFacet   = ivs.ipvFacet;
       } 
       return *this; 
     }

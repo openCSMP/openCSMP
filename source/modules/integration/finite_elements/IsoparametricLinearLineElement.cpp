@@ -249,17 +249,17 @@ void  IsoparametricLinearLineElement::EdgeLengths( vector<double64>& vec )
 
     if ( dim == 2U ) {
          // segment node 1,2
-         double64 lenx = XY(1,0) - XY(0,0);
-         double64 leny = XY(1,1) - XY(0,1);
-         vec[0] = sqrt( lenx*lenx + leny*leny );
+         const double64 lenx = XY(1,0) - XY(0,0);
+         const double64 leny = XY(1,1) - XY(0,1);
+         vec[0] = hypot( lenx, leny );
          return;
       }
 
     if ( dim == 3U ) {
          // segment node 1,2
-         double64 lenx = XY(1,0) - XY(0,0);
-         double64 leny = XY(1,1) - XY(0,1);
-         double64 lenz = XY(1,2) - XY(0,2);
+         const double64 lenx = XY(1,0) - XY(0,0);
+         const double64 leny = XY(1,1) - XY(0,1);
+         const double64 lenz = XY(1,2) - XY(0,2);
          vec[0] = sqrt( lenx*lenx + leny*leny + lenz*lenz);
          return;
       }
@@ -490,7 +490,7 @@ double64 IsoparametricLinearLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_M
           double64 dxdr = JacobianFor( DNR, 0 );
           double64 dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr );
+          double64 detJinv = 1. / hypot( dxdr, dydr );
           double64 cosa = detJinv * dxdr;
           double64 sina = detJinv * dydr;
           // row 1 = x-derivatives
@@ -581,7 +581,7 @@ double64 IsoparametricLinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, siz
           double64 dxdr = JacobianFor( DNR, 0 );
           double64 dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr );
+          double64 detJinv = 1. / hypot( dxdr, dydr );
           double64 cosa = detJinv * dxdr;
           double64 sina = detJinv * dydr;
           // row 1 = x-derivatives
@@ -649,7 +649,7 @@ double64 IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& D
           double64 dxdr = JacobianFor( DNR, 0 );
           double64 dydr = JacobianFor( DNR, 1 );
           // 1 / detJ = detJinv
-          double64 detJinv = 1. / sqrt( dxdr*dxdr + dydr*dydr );
+          double64 detJinv = 1. / hypot( dxdr, dydr );
           double64 cosa = detJinv * dxdr;
           double64 sina = detJinv * dydr;
           // row 1 = x-derivatives
@@ -762,7 +762,7 @@ void  IsoparametricLinearLineElement::UnitNormalToFace( size_t face, std::vector
               unrml[0] = XY(0,0) - XY(1,0);
               unrml[1] = XY(0,1) - XY(1,1);
               // normalise to length
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1]);
+              const double64 length = hypot( unrml[0], unrml[1] );
               unrml[0] /= length;
               unrml[1] /= length;
               return;
@@ -770,7 +770,7 @@ void  IsoparametricLinearLineElement::UnitNormalToFace( size_t face, std::vector
          if ( face == 1 ) {
               unrml[0] = XY(1,0) - XY(0,0);
               unrml[1] = XY(1,1) - XY(0,1);
-              const double64 length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1]);
+              const double64 length = hypot( unrml[0], unrml[1] );
               unrml[0] /= length;
               unrml[1] /= length;
               return;

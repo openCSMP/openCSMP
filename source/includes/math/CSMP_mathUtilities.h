@@ -36,52 +36,31 @@ T sign( T val ) {
     return static_cast<T>((T(0) < val) - (val < T(0)));
 }
 
-/// conversion of numbers to strings (in >=C++11, use to_string() function)
-void         uintToString( unsigned int i, std::string& );
-std::string  uintToString( unsigned int i );
-void         ulongToString( unsigned long i, std::string& );
-
-
-/// rounds a double to an integer
-int32  rint( double64 ); 
-
-/// rounds to an unsigned long
-long64  lrint( double64 );
-
-/// 
-template<typename var> void average( const std::vector<var>&, var& );
+/// for conversion of numbers to strings use to_string() function
 
 /// erf() and erfc() approximated with Chebyshev polynomials
 double64  erf_Chebyshev( double64 );
 double64  erfc_Chebyshev( double64 );
 
+/// L1 norm
 double64 vector_norm1( std::vector<double64>& x, std::vector<double64>& scale );
+
+/// L2 norm
 double64 vector_norm2( std::vector<double64>& x, std::vector<double64>& scale );
+
+/// L-infinity norm
 double64 vector_norm_inf( std::vector<double64>& x, std::vector<double64>& scale );
+
+/// randomly perturbs the values stored in the supplied floating-point vector
 void     vector_randomize( std::vector<double64>& x, double64 scale_fac=1. );
 
+/// averaging the floating-point values of scalar, vector and tensor variables in CSMP
+template<typename Var> void average( const std::vector<Var>&, Var& );
 
-/// min for 3 argument values
-template <typename T> inline const T& min(const T& a, const T& b, const T& c)
-{
-    double64 cmin(std::min(a,b));
-    return std::min( cmin, c );
-}
-
-/// max for 3 argument values
-template <typename T> inline const T& max(const T& a, const T& b, const T& c)
-{
-    double64 cmax(std::max(a,b));
-    return std::max( cmax, c );
-}
-
-
-// interpolation function matrix conversions for when the result variable is not a scalar, see Zienkewicz
-
-/// Zienkewicz, volume 1, p. 22
+/// FEM matrix transformations, for the case where the solution variable is a vector in 2D, Zienkewicz, volume 1, p. 22
 void  dN_To2DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
 
-/// Zienkewicz, volume 1, p. 133
+/// FEM matrix transformations, for the case where the solution variable is a vector in 3D, Zienkewicz, volume 1, p. 133
 void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
 
 /**

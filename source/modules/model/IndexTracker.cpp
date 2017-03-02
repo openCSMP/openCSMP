@@ -95,10 +95,10 @@ void IndexTracker::Detach( const csmp::Index* existingIndex )
      if ( it == trackedIndices_.end() ) {
           ErrorHandler&  csmp_error( ErrorHandler::Instance() );
           if ( verbose ) {
-               cout <<"\nIndexTracker::Detach:";
-               cout <<"\nunregistered index:\n";
+               cerr <<"\nIndexTracker::Detach:";
+               cerr <<"\nunregistered index:\n";
                if ( existingIndex != nullptr ) existingIndex->Out();
-               cout <<"\nregistered index objects: "<< trackedIndices_.size();
+               cerr <<"\nregistered index objects: "<< trackedIndices_.size();
                Out();
             }
           csmp_error.notice( WARNING, "IndexTracker::Detach:", "target Index was not registered." );

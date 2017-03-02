@@ -23,14 +23,10 @@ In the method which calculates the isotropic limiter values.
 */
 double64 NVD_Function( double64 xi, double64 U_f, double64 U_c )
  {
-    if ( U_c > 1. || U_c < 0. ) return U_c;
-    double64  U_tilde_f = std::max( 0., U_f );
-    const bool DebugOutput(false);
-    if(DebugOutput){
-        std::cout<<"xi*U_c="<<xi * U_c<<std::endl;
-        std::cout<<"U_c="<<xi * U_c<<std::endl;
-    }
-    return csmp::min( xi * U_c, U_tilde_f, 1. );
+    constexpr double64 one(1.), zero(0.);
+    if ( U_c > one || U_c < zero ) return U_c;
+    double64  U_tilde_f = fmax( zero, U_f );
+    return fmin( fmin(xi * U_c, U_tilde_f), one );
  }
 
 
@@ -366,7 +362,7 @@ double64  diffusionVelocity( const Region<2>& sg,
 	     edge[0] = sg.N( *it )->x() - nd->x();
 	     edge[1] = sg.N( *it )->y() - nd->y();
 	     // get the edge length to calculate the saturation gradient
-	     diff_flux  = sqrt(edge[0]*edge[0]+edge[1]*edge[1]);
+	     diff_flux  = hypot(edge[0],edge[1]);
 	     diff_flux *= sg.N( *it )->Read( advected_var_key ) - nd->Read( advected_var_key ) ;
 
          max_diff_flux = std::max( max_diff_flux, fabs(diff_flux) );

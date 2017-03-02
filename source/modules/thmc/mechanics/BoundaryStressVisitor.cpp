@@ -87,7 +87,7 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    double64  Sv = f->Parent(INSIDE)->Read( Sv_key_ );
    double64  SH = f->Parent(INSIDE)->Read(Ss_Hmax_key_);
    double64  Sh = f->Parent(INSIDE)->Read(Ss_Hmin_key_);
-   double64  Ss_magnitude = sqrt(SH*SH + Sh*Sh);
+   double64  Ss_magnitude = hypot(SH,Sh);
 
    // if the values are negligibly small nothing needs to be done
    if ( fabs(Sv) < std::numeric_limits<double64>::epsilon()

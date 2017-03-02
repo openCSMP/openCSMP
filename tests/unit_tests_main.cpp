@@ -255,17 +255,17 @@ int main()
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               interdependent2.addTest( new ModelTopology_Test() );
               // model
-              interdependent2.addTest( new Box_Test() ); // SKM OK, but does not test hexahedral or prism element meshes
-              interdependent2.addTest( new ModelSubDomain_Test() );
-              interdependent2.addTest( new Region_Test() );                  // SKM OK
+              interdependent2.addTest( new Box_Test() );             // XCode OK (SKM) but does not test hexahedral or prism element meshes
+              interdependent2.addTest( new ModelSubDomain_Test() );  // XCode OK (SKM)
+              interdependent2.addTest( new Region_Test() );          // XCode OK (SKM)
+              interdependent2.addTest( new ANSYS_Model2D_Test() );   // XCode OK (SKM)
+              interdependent2.addTest( new InputDataManager_Test()); // XCode OK (SKM)
+              interdependent2.addTest( new ANSYS_Model3D_Test() );   // XCode OK (SKM)
+              interdependent2.addTest( new PropertyHandle_Test() );  // XCode OK (SKM)
 //  TODO: broken              interdependent2.addTest( new Boundary_Test() );
 //  TODO: broken              interdependent2.addTest( new SplitBoundary_Test() );
-//  TODO: broken              interdependent2.addTest( new ANSYS_Model2D_Test() );
-              interdependent2.addTest( new InputDataManager_Test());
-              interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
-              interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
               // interfaces
-              interdependent2.addTest( new BinaryInterface_Test() );
+              interdependent2.addTest( new BinaryInterface_Test() ); // XCode OK (SKM)
               interdependent2.addTest( new VTU_Interface_Test() );
               interdependent2.addTest( new StatisticalAnalyzerTest() );
               // running unit tests and reporting errors
@@ -279,11 +279,6 @@ int main()
               cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
               TestSuite composite("CSMP-dependent-unit test suite", &cout );
               // misc
-// TODO: PDE_Integrator_Test (assembly of matrix for systems, elimination of boundary conditions etc.)
-
-              // composite.addTest( new FluxMismatch_Test() );
-// TODO: update this test:               composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
-// TODO: update this test:               composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
               // constitutive relationships
               composite.addTest( new ExponentialTransferFunction_Test() );
 
@@ -296,6 +291,11 @@ int main()
               TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
               twoPhaseModelTests.run();
 
+// TODO: PDE_Integrator_Test (assembly of matrix for systems, elimination of boundary conditions etc.)
+// TODO: broken                          composite.addTest( new FluxMismatch_Test() );
+// TODO: update this test:               composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
+// TODO: update this test:               composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
+
              // running unit tests and reporting errors
               composite.run();
               fails_composite = composite.report();
@@ -307,8 +307,6 @@ int main()
         if ( test_refactoring ) {
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
-
-// TODO: REFACTOR: update this test:  refactored.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
 
 // TODO: review and get these tests to run (in this sequence)
               // refactored.addTest( new Boundary_Test() );
