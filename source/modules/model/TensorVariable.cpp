@@ -12,10 +12,6 @@ TensorVariable<3U>::TensorVariable( const TensorVariable<3U>& t )
  {
  }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 TensorVariable<3U>::TensorVariable()
   : flag{{ANY,ANY,ANY}},
@@ -980,21 +976,21 @@ void  TensorVariable<3U>::In()
 
 
  /// @test tested: O.K.
- void  TensorVariable<3U>::Out(std::ostream& os) const
+ void  TensorVariable<3U>::Out() const
  {
      size_t   i, j;
      
-     os <<"\nStatus: "<< endl;
+     cout <<"\nStatus: "<< endl;
      for ( i=0; i<3U; i++ ) 
-       os << parseStatus(flag[i]) <<"  ";
+       cout << parseStatus(flag[i]) <<"  ";
        
-     os << endl;
+     cout << endl;
       
-     os <<"\nValues: "<< endl;
+     cout <<"\nValues: "<< endl;
      for ( i=0; i<3U; i++ )
        {
-          for ( j=0; j<3U; j++ ) os << data[i][j] <<"\t\t";
-          os << endl;
+          for ( j=0; j<3U; j++ ) cout << data[i][j] <<"\t\t";
+          cout << endl;
        }
  } // end Out
 
@@ -1442,7 +1438,7 @@ bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
 
         ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-        csmp_error.notice( CSMP_WARNING, "TensorVariable::EigenValues(double,double,double):",
+        csmp_error.notice( WARNING, "TensorVariable::EigenValues(double,double,double):",
                           "found complex conjugate roots when calculating the eigenvalues of a tensor.");
         return false;
       }

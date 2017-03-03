@@ -18,7 +18,7 @@ namespace csmp {
 
 // testing whether there is a flux mismatch when integrating velocity fields 
 // with the node-centered FV scheme
-int flux_mismatch( std::ostream& os, bool bPrescribedVelocity ) 
+int flux_mismatch( bool bPrescribedVelocity ) 
   { 
     VSet<3>  mesh_container;
    
@@ -27,7 +27,7 @@ int flux_mismatch( std::ostream& os, bool bPrescribedVelocity )
    //(b)test_Create_One_Prism_VSet(mesh_container,true); //0
 
    //(c)
-   test_Create_Pyramid_Hexa_VSet(os, mesh_container,true);
+   test_Create_Pyramid_Hexa_VSet(mesh_container,true);
 
    //(d)
    //test_Create_Hexahedra_VSet(mesh_container, true); //10-17
@@ -87,21 +87,21 @@ int flux_mismatch( std::ostream& os, bool bPrescribedVelocity )
         sg.InputPropertyValue( "velocity", velo );
       }
   
-    os <<"\nflux_mismatch: Measuring the time required to build basic transport algorithm: ";
+    cout <<"\nflux_mismatch: Measuring the time required to build basic transport algorithm: ";
 	  clock_t ticks = clock();
     NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg, "porosity", "concentration", "velocity", 
                                                          "nodal fluid volume source",false, false );
     ticks = clock() - ticks;
-	  os << ticks << endl << endl;
+	  cout << ticks << endl << endl;
       
-    os <<"\nflux_mismatch: total volume of the model: "<< advector.FiniteVolume( "finite volume" ) << endl; 
+    cout <<"\nflux_mismatch: total volume of the model: "<< advector.FiniteVolume( "finite volume" ) << endl; 
 
-    os <<"\n\nflux_mismatch: Measuring the divergence of fluxes."<< endl;
+    cout <<"\n\nflux_mismatch: Measuring the divergence of fluxes."<< endl;
     const size_t compareSpeedTIMES(50U);
     ticks = clock() - ticks;
     for(size_t times = 0; times < compareSpeedTIMES; times++)
      advector.Divergence( "velocity", "nodal flux mismatch" );
-	  os <<"\ncompleted 50 divergence computation in: "<<  clock() - ticks << endl << endl;
+	  cout <<"\ncompleted 50 divergence computation in: "<<  clock() - ticks << endl << endl;
         
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( sg, "nodal flux mismatch", "nodal flux mismatch", 0 );
@@ -129,20 +129,20 @@ int flux_mismatch( std::ostream& os, bool bPrescribedVelocity )
     for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ )
       if ( fabs(emax - (*it)->Read( prop_key )) <= 1e-15 ) 
         {
-           os <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: " << (*it)->Read( prop_key ) << endl;
-           (*it)->Out(os);
-           os <<"\ncomposed of the element types: "<< endl;
+           cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: " << (*it)->Read( prop_key ) << endl;
+           (*it)->Out();
+           cout <<"\ncomposed of the element types: "<< endl;
            for ( size_t i=0U; i<(*it)->Parents(); i++ )
              {
-               os << (*it)->Parent(i) << " ";             
-               os << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;       
+               cout << (*it)->Parent(i) << " ";             
+               cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;       
              }
-           os << endl << endl;
+           cout << endl << endl;
        }
     
-    os << "\nModel Inflow: " << setprecision(15) << advector.ModelInflow();
-    os << "\nModel Outflow: " << setprecision(15) << advector.ModelOutflow();
-    os << "\nDiff: " << setprecision(15) << advector.ModelOutflow()-advector.ModelInflow() << endl;
+    cout << "\nModel Inflow: " << setprecision(15) << advector.ModelInflow();
+    cout << "\nModel Outflow: " << setprecision(15) << advector.ModelOutflow();
+    cout << "\nDiff: " << setprecision(15) << advector.ModelOutflow()-advector.ModelInflow() << endl;
     
     Standard_IO_Handler  stdio;
     printRangeOfVariable( sg, stdio, "finite volume" );
@@ -154,7 +154,7 @@ int flux_mismatch( std::ostream& os, bool bPrescribedVelocity )
 //    rhinoOutput(sg);
 //    printFiniteVolumes( sg );
                                     
-	os << "\n Finished comparing nodal flux mismatch, and speed.";
+	cout << "\n Finished comparing nodal flux mismatch, and speed.";
     
   return 0;
   

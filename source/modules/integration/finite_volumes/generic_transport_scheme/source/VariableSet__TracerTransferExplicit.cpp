@@ -47,19 +47,19 @@ void VariableSet_TracerTransferExplicit<dim>::CheckVariables() const
  {
       // finite volume variables
     if ( PV_key.place != NODE || PV_key.type != SCALAR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
+       throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'pore volume' variable must be scalar placed on the nodes = node-centered finite volumes" );
 
     if ( fn_key.place != FACET_INTEGRATION_POINT || fn_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
+       throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'facet normal' variable must be vector placed on the facet integration points" );
    
     if ( fA_key.place != FACET_INTEGRATION_POINT || fA_key.type != SCALAR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
+       throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'facet area' variable must be scalar placed on the facet integration points" );
    
     if ( fn_key.place != FACET_INTEGRATION_POINT || fn_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
+       throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'facet normal' variable must be vector placed on the facet integration points" );
    
 // TODO: complete missing checks

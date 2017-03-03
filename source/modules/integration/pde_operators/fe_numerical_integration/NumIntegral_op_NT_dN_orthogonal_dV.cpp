@@ -26,15 +26,15 @@ NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::NumIntegral_op_NT_dN_orthogonal
     
     // only 2D is possible at the moment
     if ( dim == 3 )
-      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       "At the moment this RHS operator works only in 2D" );
 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE || MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       oper, "must be an node-based scalar variable." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       test, "must be an node-based scalar variable." );
 }
 

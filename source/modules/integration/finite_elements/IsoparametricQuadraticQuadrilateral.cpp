@@ -930,7 +930,7 @@ IsoparametricQuadraticQuadrilateral::PhysicalToParametric(
                 <<"N[7] = "<<N[7]<<" ;\t"
                 <<"N[8] = "<<N[8]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticQuadrilateral::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricQuadraticQuadrilateral::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -966,7 +966,7 @@ IsoparametricQuadraticQuadrilateral::dN_At( DenseMatrix<DM_MIN>& DN2,
     // As for the time being par->phys mapping is fully defined for 2D only, excude 3D case
     if ( dim == 3 )
          {
-        csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticQuadrilateral::PhysicalToParametric",
+        csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticQuadrilateral::PhysicalToParametric",
                           "Function can only be used if dim = 2");
             return -1.0;
         }
@@ -987,7 +987,7 @@ IsoparametricQuadraticQuadrilateral::dN_At( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricQuadraticQuadrilateral3D::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
     rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
     cout<<" IsoparametricQuadraticQuadrilateral3D::dN  Matrix DN2: "<<endl;
-    DN2.Out(cout);
+    DN2.Out();
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
     return detJ;
@@ -1402,12 +1402,12 @@ IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
 
      // in 3D, all nodes may be at model boundary
      if ( use2Dto3Djacobi && bnodes.size() != 2 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
      if ( bnodes.size() > 2 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 

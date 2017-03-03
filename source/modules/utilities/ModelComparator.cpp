@@ -27,14 +27,14 @@ double64 ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Mo
     const Index model2Key( model2.Database().StorageKey( property2 ) );
 
     if( model1Key.type != model2Key.type || model1Key.place != model2Key.place)
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModels",
                          "Variables seem to be of different nature" );
 
     if( model1Key.type == SCALAR )
         error = CompareRegionScalarVariable( model1, model2, model1Key, model2Key, region );
     else
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModels",
                          "Comparison for Variable type not implemented yet." );
 
@@ -86,7 +86,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& mo
     const Region<dim>& rref2( model2.Region( region ) );
 
     if( rref1.Nodes() != rref2.Nodes() )
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareScalarNodalVariable",
                          "Regions seem to be of different size." );
 
@@ -102,7 +102,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& mo
     }
     else
     {
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareScalarNodalVariable",
                          "Comparison for this variable placement not implemented." );
     }
@@ -120,7 +120,7 @@ double64 ModelComparator<dim>::CompareScalarDequesL2( const std::deque<ScalarVar
     double64 error( 0. );
 
     if( deque1.size() != deque2.size() )
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareScalarDeques",
                          "Deques unequal in size." );
 
@@ -188,14 +188,14 @@ double64 ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1,
     const Index model2Key( model2.Database().StorageKey( property2 ) );
 
     if( model1Key.type != model2Key.type or model1Key.place != model2Key.place)
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModelsAtPossiblyDifferentsMeshes",
                          "Variables seem to be of different nature" );
 
     if( model1Key.type == SCALAR )
         error = CompareRegionScalarVariableRenumberedNodes( model1, model2, property1, property2, region );
     else
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModelsRenumberedNodes",
                          "Comparison for Variable type not implemented yet." );
 
@@ -249,7 +249,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model
     const Region<dim>& rref2( model2.Region( region ) );
 
     if( rref1.Nodes() != rref2.Nodes() )
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareRegionScalarVariableRenumberedNodes",
                          "Regions seem to be of different size." );
 
@@ -264,7 +264,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model
     }
     else
     {
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareRegionScalarVariableRenumberedNodes",
                          "Comparison for this variable placement not implemented." );
     }
@@ -283,7 +283,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableRenumberedNodes( Model
             pvit_find = points_and_values2.find((*pvit1).first);
 
             if(pvit_find==points_and_values2.end()){
-                throw Exception( CSMP_ERROR,
+                throw Exception( ERROR,
                              "ModelComparator::CompareRegionScalarVariableRenumberedNodes",
                              "The node cannot be found. Probably the meshes are different" );
             }else{
@@ -331,7 +331,7 @@ double64 ModelComparator<dim>::CompareModelsAtPoints( Model<dim>& model1, Model<
     Index model2Key( model2.Database().StorageKey( property2 ) );
 
     if( model1Key.type != model2Key.type || model1Key.place != model2Key.place)
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModelsAtPoints",
                          "Variables seem to be of different nature" );
 
@@ -342,7 +342,7 @@ double64 ModelComparator<dim>::CompareModelsAtPoints( Model<dim>& model1, Model<
         cout<<"\nERROR:Variable has not valid for comparison type:"
             <<"\nFirst type: " <<parseType( model1Key.type )
             <<"\nSecond type: "<<parseType( model2Key.type )<<"\n";
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareModelsAtPossiblyDifferentsMeshes",
                          "Comparison for Variable type not implemented yet." );
     }
@@ -400,7 +400,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& 
     const Region<dim>& rref2( model2.Region( region ) );
 
     if( rref1.Nodes() != rref2.Nodes() )
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareRegionScalarVariableAtPoints",
                          "Regions seem to be of different size." );
 
@@ -416,7 +416,7 @@ double64 ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& 
         cout<<"\nERROR:Variable has not valid for comparison placement:"
             <<"\nFirst place: " <<parsePlacement( model1Key.place )
             <<"\nSecond place: "<<parsePlacement( model2Key.place )<<"\n";
-        throw Exception( CSMP_ERROR,
+        throw Exception( ERROR,
                          "ModelComparator::CompareRegionScalarVariableAtPoints",
                          "Comparison for this variable placement not implemented." );
     }

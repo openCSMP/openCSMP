@@ -200,7 +200,7 @@ namespace csmp
 
     // if (essentiallyEqual(sh(),1.0,numeric_limits<double64>::epsilon()))
     //   {
-    // 	csmp_error.notice( CSMP_FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+    // 	csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
     // 			"\nPure Halite!");
     // 	int sto;
     // 	cout << "pure halite";
@@ -215,7 +215,7 @@ namespace csmp
       {
         cerr << "\nNode: ("<<n->x()<<", "<<n->y()<<", Pressure: "<<p()<<" Pa, total enthalpy: "<<H_current_<<" J, total mass: " << mt() <<" kg, rock temperature: "<<t()<<" oC " << endl;
         ScreenOutputSowatVariables();
-        csmp_error.notice( CSMP_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
                         "\nFluid's state is undefined, not storing result from equilibration!");
       }
 	
@@ -239,7 +239,7 @@ namespace csmp
         cout << "NaClH2OPropertiesVisitorPHX<dim>::Equilibrate received message Fatal() from equilibrator ...\n";
         cout << "for conditions : \n";
         ScreenOutputSowatVariables();
-        csmp_error.notice( CSMP_FATAL_ERROR, 
+        csmp_error.notice( FATAL_ERROR, 
                         "NaClH2OPropertiesVisitorPHX<dim>::Visit( Node<dim>* n ) -",
                         "received message Fatal() from equilibrator ... teminating!!!");
       }
@@ -580,7 +580,7 @@ namespace csmp
 
         if(beta() < 0.)
         {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
         "\nWARNING: NEGATIVE BETA.");
         cout <<"\n ("<<n.x()<<", "<<n.y()<<"): beta() = "<<beta()<< endl;
         if(Bulk.state == L || Bulk.state == F)  beta() = Liquid.beta;
@@ -592,7 +592,7 @@ namespace csmp
 
         if(muv() < 0.)
         {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
         "\nWARNING: NEGATIVE VISCOSITY VAPOR.");
         cout <<"\n ("<<n.x()<<", "<<n.y()<<"): muv() = "<<muv()<<" reseting to 1.0e-5"<< endl;
         muv() = 1.0e-5;
@@ -651,7 +651,7 @@ namespace csmp
       }
     if(beta() < 0.)
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
                         "\nWARNING: NEGATIVE BETA.");
         cout <<"\n ("<<n.x()<<", "<<n.y()<<"): beta() = "<<beta()<< endl;
         if(Bulk.state == L || Bulk.state == F || Bulk.state == LH)  beta() = Liquid.beta;
@@ -665,7 +665,7 @@ namespace csmp
       }
     if(muv() < 0.)
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
                         "\nWARNING: NEGATIVE VISCOSITY VAPOR.");
         cout <<"\n ("<<n.x()<<", "<<n.y()<<"): muv() = "<<muv()<<" reseting to 1.0e-5"<< endl;
         muv() = 1.0e-5;
@@ -1018,20 +1018,20 @@ namespace csmp
         if ( p() < 101325.0 || t() < 5.0 )
           {
             cerr << "\nNode: " << it->Idx() << ", Pressure: " << p() << " Pa, T: " << t() << " oC" << endl;
-            csmp_error.notice( CSMP_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
+            csmp_error.notice( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nPressure or temperature below minimum values of lookup table, erroneous results are possible...!");
           }
         // exit if negative values are encountered
         if ( p() < 0.0 || t() < 0.0 )
           {
             cerr<<"\nNode: "<<it->Idx()<<", Pressure: "<< p() <<" Pa, T: "<< t() <<" oC"<<endl;
-            csmp_error.notice( CSMP_FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
+            csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nNegative input variable, terminating...!");
           }
         if ( p() > 5000.0e5 || t() > 1000.0 )
           {
             cerr<<"\nNode: " << it->Idx() << ", Pressure: " << p() << " Pa, T: " << t() <<" oC" <<endl;
-            csmp_error.notice( CSMP_FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
+            csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::CalculateInitialPropertiesFromPT",
                             "\nTooLarge input variable, terminating...!");
           }
 
@@ -1204,25 +1204,25 @@ namespace csmp
     // Out of range checks:
     if(hCl()<0.) 
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
                         "\nNegative hCl:");
         cout <<hCl()<< endl;
       }
     if(hCv()<0.) 
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
                         "\nNegative hCv:");
         cout <<hCv()<< endl;
       }
     if(xCl()<0.) 
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
                         "\nNegative xCl:");
         cout <<xCl()<< endl;
       }
     if(xCv()<0.) 
       {
-        csmp_error.notice( CSMP_WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
+        csmp_error.notice( WARNING, "NaClH2OPropertiesVisitorPHX_TOPBC<dim>::Visit",
                         "\nNegative xCv:");
         cout <<xCv()<< endl;
       }
@@ -1230,7 +1230,7 @@ namespace csmp
       {
         cerr << "\nNode: ("<<n->x()<<", "<<n->y()<<", Pressure: "<<p()<<" Pa, total enthalpy: "<<H_current_<<" J, total mass: " <<
           mt() <<" kg, rock temperature: "<<t()<<" oC " << endl;
-        csmp_error.notice( CSMP_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
                         "\nPressure or temperature below minimum values of lookup table, erroneous results are possible...!");
       }
     if ( mt() < 0. )
@@ -1238,7 +1238,7 @@ namespace csmp
         cerr << "\nNode: ("<<n->x()<<", "<<n->y()<<", mt: "<<mt()<<", total enthalpy: "<<H_current_<<" J, pressure: " <<
           p() <<" Pa, rock temperature: "<<t()<<" oC " << endl;
         cout <<"\ndml_ = "<<dml_<<", dmv_ = "<<dmv_<<", mtp() = "<<mtp()<<", mt() = "<<mt()<< endl;
-        csmp_error.notice( CSMP_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
+        csmp_error.notice( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit",
                         "\nmt() below zero...!");
       }
   }
@@ -1903,7 +1903,7 @@ namespace csmp
       {
         cerr<<"\nNode: "<< n->Idx()<<", volume_Factor_RHS less than zero: " << volume_factor_RHS << " for SoWat conditions:\n";
         ScreenOutputSowatVariables();
-        csmp_error.notice( CSMP_FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit()",
+        csmp_error.notice( FATAL_ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit()",
                         "\nNegative Volume Factor, terminating...!");
       }
 

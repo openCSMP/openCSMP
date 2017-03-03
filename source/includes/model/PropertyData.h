@@ -146,8 +146,7 @@ class PropertyData {
     /// writing stored flag and data values to file
     bool OutBinary( std::FILE* fp ) const;
 
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
   private:
     PropertyData() = delete;

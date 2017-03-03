@@ -49,12 +49,12 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != LINEAR_TRIANGLE and vset.ElementType(0U) != ISOPARAMETRIC_LINEAR_TRIANGLE) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles", 
                                      "This method only works for linear triangle elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -226,12 +226,12 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
           throw domain_error("VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D");
        }
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != LINEAR_TRIANGLE3D and vset.ElementType(0U) != ISOPARAMETRIC_LINEAR_TRIANGLE) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D", 
                                      "This method only works for linear triangle elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -440,12 +440,12 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != LINEAR_TRIANGLE and vset.ElementType(0U) != ISOPARAMETRIC_LINEAR_TRIANGLE ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
                                      "This method only works for linear triangle elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -584,7 +584,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
          test_it = nodeIDs.insert( make_pair(make_pair(cx,cy),nID) );
          if ( !test_it.second ) 
            {
-              csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
+              csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTriangles", 
                                    "Bary-centre node could not be added in conversion process");
               cout <<"\nCoordinates of central node which could not be added: "<< cx <<","<< cy << endl;
            }
@@ -706,7 +706,7 @@ int  VSetConverter<dim>::TestForBoundaryFlags( const map<size_t,long64>& bflags,
 
       // degenerate cases that should have been picked up by the boundary flagger
       // beforehand
-      csmp_error.notice( CSMP_WARNING, "VSetConverter<dim>::TestForBoundaryFlags:",
+      csmp_error.notice( WARNING, "VSetConverter<dim>::TestForBoundaryFlags:",
                                   "Unable to parse boundary flags.");
       
       cout <<"\nflags: flag1="<< flag1 <<", flag2="<< flag2 << endl;
@@ -1122,12 +1122,12 @@ void VSetConverter<dim>::InterpolateNodeProperties( size_t nodes, int32 enodes, 
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::InterpolateNodeProperties", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::InterpolateNodeProperties", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != ISOPARAMETRIC_QUADRATIC_TRIANGLE ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::InterpolateNodeProperties", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::InterpolateNodeProperties", 
                                      "This method only works for quadratic triangle elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -1229,7 +1229,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
                bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
            {
               if ( (*bit).first == 0U  or  (*bit).second == IRREGULAR ) {
-                   csmp_error.notice( CSMP_WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
+                   csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
                                      "Skipping node, the boundary flag of which could not be identified" );
                    cout <<"\nNode "<< (*bit).first <<", flagged: "<< (*bit).second << endl;
                 }
@@ -1250,7 +1250,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
                 }
            }
          if ( flagging_count < 4U ) {
-              csmp_error.notice( CSMP_WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
+              csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
                                           "Less than 4 corner nodes could be flagged" );
               cout <<"\nNumber of flagged nodes: "<< flagging_count << endl;
            }
@@ -1265,7 +1265,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
            bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        {
           if ( (*bit).first == 0U  or  (*bit).second == IRREGULAR ) {
-               csmp_error.notice( CSMP_WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
+               csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
                                          "Skipping node, the boundary flag of which could not be identified" );
                cout <<"\nNode "<< (*bit).first <<", flagged: "<< (*bit).second << endl;
             }
@@ -1304,7 +1304,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
             }
        }     
      if ( flagging_count < 8U ) {
-          csmp_error.notice( CSMP_WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
+          csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
                                      "Less than 8 nodes were identified as model corners" );
           cout <<"\nNumber of flagged nodes: "<< flagging_count << endl;
        }
@@ -1321,12 +1321,12 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins", 
                                          "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != ISOPARAMETRIC_QUADRATIC_TRIANGLE ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins", 
                             "This method only works for quadratic triangle elements, vs.", 
                              parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -1404,12 +1404,12 @@ void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double64 tol ) const
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::FlagEgdes", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::FlagEgdes", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != ISOPARAMETRIC_QUADRATIC_TRIANGLE) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::FlagEgdes", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::FlagEgdes", 
                                         "This method only works for linear tetrahedral elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -1427,7 +1427,7 @@ void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double64 tol ) const
           // no flagging at all
           if ( (*bit).first == 0 || (*bit).second == IRREGULAR )
             {
-               csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::FlagEdges",
+               csmp_error.notice( ERROR, "VSetConverter<dim>::FlagEdges",
                                "Skipping node, the boundary flag of which could not be identified" );
                cout <<"\nNode "<< (*bit).first <<", flagged: "<< (*bit).second << endl;
             }
@@ -1512,12 +1512,12 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins", 
                                      "This method only works for barycentric quadratic triangle elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -1663,12 +1663,12 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != LINEAR_TETRAHEDRON and vset.ElementType(0U) != ISOPARAMETRIC_LINEAR_TETRAHEDRON ) {
-          csmp_error.notice( CSMP_ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra", 
+          csmp_error.notice( ERROR, "VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra", 
                                      "This method only works for linear tetrahedral elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -1918,7 +1918,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
          for ( ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )
            {   
               cout <<"\nx,y,id: "<< endl;
-              (*ndit).first.Out(cout);
+              (*ndit).first.Out();
            }
          cout << endl << endl;
       }
@@ -2017,12 +2017,12 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
      if ( vset.HybridElementTypeMesh() ) {
-          csmp_error.notice( CSMP_FATAL_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra", 
+          csmp_error.notice( FATAL_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra", 
                                      "This method does not work for mixed element meshes" );
           return;
        }
      if ( vset.ElementType(0U) != LINEAR_TETRAHEDRON and vset.ElementType(0U) != ISOPARAMETRIC_LINEAR_TETRAHEDRON ) {
-          csmp_error.notice( CSMP_FATAL_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra", 
+          csmp_error.notice( FATAL_ERROR, "VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra", 
                          "This method only works for linear tetrahedral elements, vs.", 
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
@@ -2246,7 +2246,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
          for ( ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )
            {   
               cout <<"\nx,y,id: "<< endl;
-              (*ndit).first.Out(cout);
+              (*ndit).first.Out();
            }
          cout << endl << endl;
       }

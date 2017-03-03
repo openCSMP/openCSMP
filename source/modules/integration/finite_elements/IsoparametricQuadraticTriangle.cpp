@@ -715,7 +715,7 @@ second method argument.
 double64 IsoparametricQuadraticTriangle::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double64>& xyz  )
  {
     if ( dim == 3 )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticTriangle::dN",
+      throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticTriangle::dN",
                       "Function can only be used if dim = 2");
 
     DN.Resize(dim,npe);
@@ -1130,7 +1130,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double64>
                 <<"N[4] = "<<N[4]<<" ;\t"
                 <<"N[5] = "<<N[5]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticTriangle::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricQuadraticTriangle::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1437,12 +1437,12 @@ void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<s
 
      // in 3D, all nodes may be at model boundary
      if ( use2Dto3Djacobi && bnodes.size() != 3 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
      if ( bnodes.size() > 3 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
@@ -1721,7 +1721,7 @@ double64  IsoparametricQuadraticTriangle::JacobianInverse()
                 cerr << XY(i,j) <<" ";
             cerr<<endl;
           }
-        csmp_error.notice( CSMP_WARNING, "soparametricQuadraticTriangle::JacobianInverse:",
+        csmp_error.notice( WARNING, "soparametricQuadraticTriangle::JacobianInverse:",
                           "the value of the Jacobian is negative; check node-numbering.");
 
         return fabs(detJ);

@@ -53,7 +53,7 @@ The *= operator will always produce a temporary matrix. Therefore,
 Assignent of a vector to a tensor is done by placing the vector in the
 tensors diagonal and zeroing its off-diagonal elements.  
 
-Matrices can be input and output from streams, using the In() and
+Matrices can be input and output via the console, using the In() and
 Out() member functions. 
 
  
@@ -82,7 +82,7 @@ TensorVariable<double,2> ts;
 ts.Identity();
 vc = ts * vc;
 
-vc.Out(std::ostream& os);
+vc.Out();
 @endcode
 
 @todo (2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable
@@ -93,10 +93,7 @@ class TensorVariable<3U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
-<<<<<<< HEAD
     TensorVariable( TensorVariable&& ) = default;
-=======
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
   
     /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
     TensorVariable( VARIABLE_FLAG flag, double64 val );
@@ -259,22 +256,11 @@ class TensorVariable<3U> {
     /// converts tensor into identity matrix
     void              Identity();
   
-<<<<<<< HEAD
     /// prompts user to initialise the tensor from the command line
-=======
-    /// shorthands for efficient tensor modification for display
-    void              Fabs();
-    void              Sqrt( bool from_absolute_value=false );
-    void              Ln( bool from_absolute_value=false );
-    void              Log10( bool from_absolute_value=false );
-
-    /// prompts user to initialise the tensor from the console
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
     void              In();
   
-    /// prints the tensor to a stream
-    void              Out() const { Out(std::cout); }
-    void              Out(std::ostream& os) const;
+    /// prints the tensor to the command line
+    void              Out() const;
   
     /// reads the tensor from the supplied input file
     bool              In( FILE* fp );

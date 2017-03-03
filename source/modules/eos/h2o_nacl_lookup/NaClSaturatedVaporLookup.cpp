@@ -91,7 +91,7 @@ namespace csmp
     
     if( ip_p_max_low != ip_p_max_high )
       {
-        csmp_error.notice( CSMP_FATAL_ERROR, 
+        csmp_error.notice( FATAL_ERROR, 
                            "NaClSaturatedVaporLookup constructor -",
                            "ip_p_max_low != ip_p_max_high.\nThis probably implies that the lookup table resolution was changed.\nIf that heppened, lookup near the pressure maximum of the vlh curve is likely to fail.\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
       }
@@ -536,7 +536,7 @@ namespace csmp
       }
     else
       {
-        csmp_error.notice( CSMP_FATAL_ERROR, 
+        csmp_error.notice( FATAL_ERROR, 
                            "NaClSaturatedVaporLookup::NearVLHMaxInterpolation( const int& property_index ) -",
                            "ip_p_max_low != ip_p_max_high.missed both if-statements.\nReport issue to Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
 

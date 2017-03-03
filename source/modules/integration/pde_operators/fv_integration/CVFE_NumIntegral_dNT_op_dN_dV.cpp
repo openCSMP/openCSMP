@@ -26,17 +26,17 @@ CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFE_NumIntegral_dNT_op_dN_dV( const
     MathOperatorLHS<dim>::Name("CVFE_NumIntegral_dNT_op_dN_dV", oper, basic, test );
     
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( CSMP_ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       basic, "Operand must be a placed on the integration points." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "CVFE_NumIntegral_dNT_op_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

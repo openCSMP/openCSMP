@@ -46,17 +46,17 @@ CopyReplaceVisitor<Var,dim>::CopyReplaceVisitor( const PropertyDatabase<dim>& p,
       prop_key_b_(p.StorageKey(prop_b))
   {
      if ( prop_key_a_.place != prop_key_b_.place )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "CopyReplaceVisitor(constructor)",
+       throw csmp::Exception( FATAL_ERROR, "CopyReplaceVisitor(constructor)",
                              "input and outprop property have different placement.");
 
      if ( prop_key_a_.type != prop_key_b_.type &&
           (prop_key_a_.type!=ARRAY && prop_key_b_.type!=FLAGGEDARRAY) &&
           (prop_key_a_.type!=FLAGGEDARRAY && prop_key_b_.type!=ARRAY))
-       throw csmp::Exception( CSMP_FATAL_ERROR, "CopyReplaceVisitor(constructor)",
+       throw csmp::Exception( FATAL_ERROR, "CopyReplaceVisitor(constructor)",
                              "input and outprop property have different types.");
 
      if ( prop_key_a_.dataDepth != prop_key_b_.dataDepth )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "CopyReplaceVisitor(constructor)",
+       throw csmp::Exception( FATAL_ERROR, "CopyReplaceVisitor(constructor)",
                              "input and outprop property have different data depth (Arrays).");
 
      copyReplaceVisitorCompileTimeDispatch::initializeVariable( variable_, p, prop_a );

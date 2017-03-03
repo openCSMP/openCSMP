@@ -23,12 +23,12 @@ NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::NumIntegral_DNi_rhsop_dV( const PropertyD
 
     if ( MathOperatorRHS<dim>::BasicOperandPlacement() != NODE ||
          MathOperatorRHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
                              oper, "Operand must be a scalar property placed on the nodes." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE ||
          MathOperatorRHS<dim>::TestOperandType() != SCALAR)
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
                              test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

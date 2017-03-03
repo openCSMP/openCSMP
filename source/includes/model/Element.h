@@ -264,8 +264,7 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     // Screen Output
     // ------------------------------------------------------------------------
 
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
  private:
 

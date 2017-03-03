@@ -1093,26 +1093,26 @@ SumOfProducts class objects.
 To externalize the state of the solver to examine whether the system
 of equations has been correctly parsed from the input file. 
 */
-void ODE_StiffSolver::Out(std::ostream& os) const
+void ODE_StiffSolver::Out() const
  {
     int32 n;
-    os <<"\nODE_StiffSolver::Out:"<< endl;
-    os <<"\nrighthand sides of ODEs: "<< endl;
+    cout <<"\nODE_StiffSolver::Out:"<< endl;
+    cout <<"\nrighthand sides of ODEs: "<< endl;
     vector<SumOfProductsWithExponents>::const_iterator  it;
     vector<SumOfProducts>::const_iterator               ait;
     for ( n=0, it=odes.begin(); it!=odes.end(); it++, n++ ) 
       {
-         os <<"\nEquation: "<< n; 
-         (*it).Out(os);
+         cout <<"\nEquation: "<< n; 
+         (*it).Out();
       }
-    os << endl;
+    cout << endl;
     if ( !eqns.empty() )
       {
-          os <<"\nAdditional algebraic equations: "<< endl;
+          cout <<"\nAdditional algebraic equations: "<< endl;
           for ( n=-1, ait=eqns.begin(); ait!=eqns.end(); ait++, n-- )
             {
-               os << n <<" ";
-               (*ait).Out(os);
+               cout << n <<" ";
+               (*ait).Out();
             }
       }
  }                  

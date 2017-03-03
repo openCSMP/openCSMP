@@ -154,8 +154,7 @@ class NodeCenteredFiniteVolumeTransport {
     std::vector<FiniteElementManager> femgrs_; // one manager per thread
 #endif
 
-    void Out() const { Out(std::cout); }
-    virtual void  Out(std::ostream& os) const;
+    virtual void  Out() const;
 
     void Verbose(bool verbose){this->verbose_=verbose; if (this->baseAdvector_) this->baseAdvector_->Verbose(verbose);}
     bool Verbose(){return this->verbose_;}

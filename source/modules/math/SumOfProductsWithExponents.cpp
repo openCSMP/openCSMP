@@ -122,35 +122,35 @@ void SumOfProductsWithExponents::Erase()
 
 
 
-void SumOfProductsWithExponents::Out(std::ostream& os) const
+void SumOfProductsWithExponents::Out() const
  {
     size_t n(1U);
     
-    os <<"\nSumOfProductsWithExponents:: = ";
+    cout <<"\nSumOfProductsWithExponents:: = ";
     for ( vector<sumofproducts_pair>::const_iterator
           it=sumproducts.begin(); it!=sumproducts.end(); it++, n++ )
       {
-         os << (*it).first.second <<"(c"<< (*it).first.first <<") ";
+         cout << (*it).first.second <<"(c"<< (*it).first.first <<") ";
          for ( map<int32,pair<double64,double64> >::const_iterator
                sit=(*it).second.begin(); sit!=(*it).second.end(); sit++ )
            {
               if ( (*sit).first >= 0 )
                 {
-                   if ( (*sit).second.first < 0.0 ) os <<"-y"<< (*sit).first;
-                   else                             os <<"y"<< (*sit).first;
-                   if ( (*sit).second.second != 1.0 ) os <<"^"<< (*sit).second.second;
-                   os <<" ";
+                   if ( (*sit).second.first < 0.0 ) cout <<"-y"<< (*sit).first;
+                   else                             cout <<"y"<< (*sit).first;
+                   if ( (*sit).second.second != 1.0 ) cout <<"^"<< (*sit).second.second;
+                   cout <<" ";
                 }
               else 
                 {
-                   os << (*sit).second.first;
-                   if ( (*sit).second.second != 1.0 ) os <<"^"<< (*sit).second.second;
-                   os <<" ";
+                   cout << (*sit).second.first;
+                   if ( (*sit).second.second != 1.0 ) cout <<"^"<< (*sit).second.second;
+                   cout <<" ";
                 }
            }
-         if ( n < sumproducts.size() ) os <<"+ ";
+         if ( n < sumproducts.size() ) cout <<"+ ";
       }
-    os << endl;
+    cout << endl;
     
  } // end out
 

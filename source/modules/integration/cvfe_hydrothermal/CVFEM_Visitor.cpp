@@ -17,7 +17,7 @@ template<size_t dim>
 	variable_key = model.Database().StorageKey(variable);
     
     if ( variable_key.place != NODE || variable_key.type != SCALAR )
-      throw Exception( CSMP_ERROR, "CVFEM_Visitor::(constructor)", 
+      throw Exception( ERROR, "CVFEM_Visitor::(constructor)", 
                       variable, " must be a scalar property placed on the nodes." );
 
   }
@@ -36,11 +36,11 @@ template<size_t dim>
     operand_key = model.Database().StorageKey(operand);
 
     if ( variable_key.place != NODE || variable_key.type != SCALAR )
-      throw Exception( CSMP_ERROR, "CVFEM_Visitor::(constructor)", 
+      throw Exception( ERROR, "CVFEM_Visitor::(constructor)", 
                       variable, " must be a scalar property placed on the nodes." );
 
     if ( operand_key.type != SCALAR )
-      throw Exception( CSMP_ERROR, "CVFEM_Visitor::(constructor)", 
+      throw Exception( ERROR, "CVFEM_Visitor::(constructor)", 
                       variable, " must be a scalar property." );
 
   }
@@ -78,7 +78,7 @@ void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
 	  }
       else
 	  {
-         throw Exception( CSMP_ERROR, "CVFEM_Visitor::GetOperands", 
+         throw Exception( ERROR, "CVFEM_Visitor::GetOperands", 
                       " Operand variable must be placed on the node or element." );
 	  }
 
@@ -220,7 +220,7 @@ void CVFEM_Visitor<dim>::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )
    if ( rhs_op->AddLater() )
      rhs_operators.push_back( Operator_RHS(rhs_op) );
    else 
-     throw Exception( CSMP_ERROR, "CVFEM_Visitor::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )", 
+     throw Exception( ERROR, "CVFEM_Visitor::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )", 
                       " RHS operator must be a late accumulate." );
    
  } // Add
@@ -240,7 +240,7 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
    if ( rhs_op->AddLater() )
      rhs_operators_upwind.push_back( Operator_RHS_Upwind(pref, rhs_op, upwind_variable) );
    else 
-     throw Exception( CSMP_ERROR, "CVFEM_Visitor::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )", 
+     throw Exception( ERROR, "CVFEM_Visitor::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )", 
                       " RHS operator must be a late accumulate." );
    
  } // Add

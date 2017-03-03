@@ -423,7 +423,7 @@ double64  IsoparametricLinearTriangle::InnerRadius()
     //getchar();
 
    if( AspectRatio() > 10. )
-     throw csmp::Exception( CSMP_WARNING, "IsoparametricLinearTriangle::InnerRadius",
+     throw csmp::Exception( WARNING, "IsoparametricLinearTriangle::InnerRadius",
                     "Approximate radius - not valid for given large aspect-ratio element");
 
    return radius1;
@@ -1258,12 +1258,12 @@ IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& b
 
   // in 3D, all nodes may be at model boundary
   if ( use2Dto3Djacobi && bnodes.size() != 2 )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary",
+     throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary",
                             "Cannot resolve node sequence for element boundary",
                             "Probably because element lies at two boundaries simultaneously" );
 
   if ( bnodes.size() > 2 )
-     throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary",
+     throw csmp::Exception( ERROR, "IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 /*

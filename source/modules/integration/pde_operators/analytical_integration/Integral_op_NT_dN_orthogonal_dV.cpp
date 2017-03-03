@@ -27,11 +27,11 @@ Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::Integral_op_NT_dN_orthogonal_dV(
     MathOperatorRHS<dim>::Name("Integral_op_NT_dN_orthogonal_dV", oper, test );
     
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE || MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR,  "Integral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "Integral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       oper, "must be an node-based scalar variable." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR,  "Integral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "Integral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       test, "must be an node-based scalar variable." );
 }
 

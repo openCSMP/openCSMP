@@ -28,10 +28,7 @@ DenseMatrix<mn_max>::DenseMatrix( const DenseMatrix<mn_max>& mat )
  }
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 // constructor (i,j, value)
 // ---------------------------------------
 template<size_t mn_max>
@@ -1164,8 +1161,8 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
     if ( cols != mat.rows ) {
          cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::operator*: Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
-         Out(cout, 3);
-         mat.Out(cout, 3);
+         Out(3);
+         mat.Out(3);
          throw std::length_error("DenseMatrix<mn_max>::operator*");
       }
 
@@ -1278,8 +1275,8 @@ DenseMatrix<mn_max>&  DenseMatrix<mn_max>::operator*=( const DenseMatrix<mn_max>
          cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
          cout <<">::operator*=: Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B, see matrices below): "<< endl;
-         Out(cout);
-         mat.Out(cout);
+         Out();
+         mat.Out();
          throw length_error("DenseMatrix<mn_max>::operator*=");
       }
 #endif
@@ -1312,8 +1309,8 @@ void DenseMatrix<mn_max>::MultiplyWithTransposedOf( const DenseMatrix<mn_max>& B
          cout <<">::MultiplyWithTransposedOf: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
-         Out(cout);
-         B.Out(cout);
+         Out();
+         B.Out();
          throw length_error("DenseMatrix<mn_max>::MultiplyWithTransposedOf");
       }
     
@@ -1343,8 +1340,8 @@ DenseMatrix<mn_max>::MultiplyTransposedOfWith( const DenseMatrix<mn_max>& B,
          cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">::MultiplyTransposedOfWith: ";
          cout <<"Matrices cannot be multiplied "; 
          cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
-         Out(cout);
-         B.Out(cout);
+         Out();
+         B.Out();
          throw length_error("DenseMatrix<mn_max>::MultiplyTransposedOfWith");
       }
     
@@ -1441,8 +1438,8 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
          std::cerr <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max;
          std::cerr <<"> operator*: Matrices cannot be multiplied ";
          std::cerr <<"because of incompatible sizes (A * B, see matrices below): "<< endl;
-         a.Out(std::cerr, 3L);
-         b.Out(std::cerr, 3L);
+         a.Out(3L);
+         b.Out(3L);
          throw length_error("DenseMatrix<mn_max>::operator*");
       }
 #endif
@@ -1564,13 +1561,13 @@ void DenseMatrix<mn_max>::In()
 // Out( digits )
 // ---------------------------------------
 template<size_t mn_max>
-void DenseMatrix<mn_max>::Out( std::ostream& os, long digits ) const
+void DenseMatrix<mn_max>::Out( long digits ) const
  {
     long  prec(2);
-    os <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">: m=n="<< mn_max << endl;
+    cout <<"\nDenseMatrix<"<< typeid(double64).name() <<","<< mn_max <<">: m=n="<< mn_max << endl;
     if ( digits != 0U ) { 
-         os.setf(ios::scientific);
-         prec = os.precision(digits);
+         cout.setf(ios::scientific);
+         prec = cout.precision(digits);
       }
     size_t row_break, split_after(10U);
      
@@ -1579,23 +1576,23 @@ void DenseMatrix<mn_max>::Out( std::ostream& os, long digits ) const
          row_break = 1;
          for ( size_t j=0; j<cols; j++, row_break++ )
            {
-              if ( data[i][j] >= 0. ) os <<" ";
-              os << data[i][j] <<" ";
+              if ( data[i][j] >= 0. ) cout <<" ";
+              cout << data[i][j] <<" ";
               if ( row_break == split_after )
                 {
-                   os << endl;
+                   cout << endl;
                    row_break = 0U;
                 }
            }
-         os << endl;
+         cout << endl;
       }
       
     if ( digits != 0U ) {
-         os.unsetf( ios::scientific );
-         os.precision(prec);
+         cout.unsetf( ios::scientific );
+         cout.precision(prec);
       }
       
-    os << endl;    
+    cout << endl;    
     
  } // end Out()
 

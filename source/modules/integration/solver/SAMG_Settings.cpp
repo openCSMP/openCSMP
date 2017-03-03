@@ -330,7 +330,7 @@ int32 SAMG_Settings::Get_mode_mess() const{
 void SAMG_Settings::Set_isym(int32 isym ) {
     isym_ = isym;
     if ( isym != 1 && isym != 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_isym",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_isym",
                                "isym must have a value of 1 or 2" );
 }
 
@@ -344,7 +344,7 @@ void SAMG_Settings::Set_isym(int32 isym ) {
 void SAMG_Settings::Set_irow( int32 irow ) {
     irow_ = irow;
     if ( irow != 1 && irow != 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_irow",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_irow",
                                "irow must have a value of 1 or 2" );
 }
 
@@ -368,7 +368,7 @@ rel_eps can be accessed with the function Get_rel_eps
 void SAMG_Settings::Set_itypu( int32 itypu ) {
     itypu_ = itypu;
     if ( itypu != 0 && itypu != 1 && itypu != 2 && itypu != 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_itypu",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_itypu",
                                "itypo must have a value of 1, 2 or 3" );
 }
 
@@ -393,7 +393,7 @@ Relative convergence is used as stopping criterion "res <= eps.res0" (res0 = sta
 void SAMG_Settings::Set_rel_eps( double64 rel_eps ) {
     rel_eps_ = rel_eps;
     if ( rel_eps <= 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_rel_eps",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_rel_eps",
                                "rel_eps must have a positive value" );
 }
 
@@ -411,7 +411,7 @@ void SAMG_Settings::Set_rel_eps( double64 rel_eps ) {
 void SAMG_Settings::Set_napproach( int32 napproach ) {
     napproach_ = napproach;
     if ( napproach < 1 || napproach > 5 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_napproach",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_napproach",
                                "napproach must have an integer value between 1 and 5" );
 }
 
@@ -427,7 +427,7 @@ void SAMG_Settings::Set_napproach( int32 napproach ) {
 void SAMG_Settings::Set_nxtyp( int32 nxtyp ) {
     nxtyp_ = nxtyp;
     if ( nxtyp != 0 && nxtyp != 1 && nxtyp != 2 && nxtyp != 5 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nxtyp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nxtyp",
                                "nxtyp must have a value of 0, 1, 2 or 5" );
 }
 
@@ -438,7 +438,7 @@ int32 SAMG_Settings::Get_nxtyp() const {
 void SAMG_Settings::Set_nrd( int32 nrd ) {
     nrd_ = nrd;
     if ( nrd > 999 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nrd",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nrd",
                                "nrd must have a value only three values. Read the samg manual" );
 }
 
@@ -449,7 +449,7 @@ int32 SAMG_Settings::Get_nrd() const {
 void SAMG_Settings::Set_nru( int32 nru ) {
     nrd_ = nru;
     if ( nru > 999 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nru",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nru",
                                "nru must have a value only three values. Read the samg manual" );
 }
 
@@ -469,7 +469,7 @@ int32 SAMG_Settings::Get_nru() const {
 void SAMG_Settings::Set_internal( int32 internal ) {
     internal_ = internal;
     if ( internal < 0 || internal > 4 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_internal",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_internal",
                                "internal must have an integer value between 0 and 4" );
 }
 
@@ -481,7 +481,7 @@ void SAMG_Settings::Set_internal( int32 internal ) {
 void SAMG_Settings::Set_nprim( int32 nprim ) {
     nprim_ = nprim;
     if ( nprim < 0 || nprim > 99 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nprim",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nprim",
                                "nprim must have an integer value between 0 and 99" );
 }
 
@@ -496,7 +496,7 @@ void SAMG_Settings::Set_nprim( int32 nprim ) {
 void SAMG_Settings::Set_npr_is_dummy( int32 npr_is_dummy ) {
     npr_is_dummy_ = npr_is_dummy;
     if ( npr_is_dummy != 0 && npr_is_dummy != 1 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_npr_is_dummy",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_npr_is_dummy",
                                "npr_is_dummy must have a value of 0 or 1" );
 }
 
@@ -508,7 +508,7 @@ void SAMG_Settings::Set_npr_is_dummy( int32 npr_is_dummy ) {
 void SAMG_Settings::Set_nint_weights( int32 nint_weights ) {
     nint_weights_ = nint_weights;
     if ( nint_weights < 0 || nint_weights > 4 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nint_weights",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nint_weights",
                                "nint_weights must have an integer value between 0 and 4" );
 }
 
@@ -520,7 +520,7 @@ void SAMG_Settings::Set_nint_weights( int32 nint_weights ) {
 void SAMG_Settings::Set_nint_pat( int32 nint_pat ) {
     nint_pat = nint_pat;
     if ( nint_pat < 0 || nint_pat > 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nint_pat",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nint_pat",
                                "nint_pat must have an integer value between 0 and 2" );
 }
 
@@ -536,7 +536,7 @@ void SAMG_Settings::Set_nint_pat( int32 nint_pat ) {
 void SAMG_Settings::Set_igam( int32 igam ) {
     igam_ = igam;
     if ( igam < 1 || igam > 4 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_igam",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_igam",
                                "igam must have an integer value between 1 and 4" );
 }
 
@@ -552,7 +552,7 @@ void SAMG_Settings::Set_igam( int32 igam ) {
 void SAMG_Settings::Set_ncgrad( int32 ncgrad ) {
     ncgrad_ = ncgrad;
     if ( ncgrad < 0 || ncgrad > 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ncgrad",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncgrad",
                                "nc_grad must have an integer value between 0 and 3" );
 }
 
@@ -568,7 +568,7 @@ dimension)        9	Dimension = 20
 void SAMG_Settings::Set_nkdim( int32 nkdim ) {
     nkdim_ = nkdim;
     if ( nkdim < 0 || nkdim > 9 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nkdim",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nkdim",
                                "nkdim must have an integer value between 0 and 9" );
 }
 
@@ -580,7 +580,7 @@ void SAMG_Settings::Set_nkdim( int32 nkdim ) {
 void SAMG_Settings::Set_ncycle( int32 ncycle ) {
     ncycle_ = ncycle;
     if ( ncycle < 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ncycle",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncycle",
                                "ncycle must have a positive integer value" );
 }
 
@@ -625,7 +625,7 @@ iswit(>5) is used, and it will terminate as soon as some iswit(≤ 5) is used.
 void SAMG_Settings::Set_iswit( int32 iswit ) {
     iswit_ = iswit;
     if ( iswit < 1 || iswit > 9 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iswit",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iswit",
                                "iswit must have an integer value between 1 and 9" );
 }
 
@@ -647,7 +647,7 @@ void SAMG_Settings::Set_iswit( int32 iswit ) {
 void SAMG_Settings::Set_iextent( int32 iextent ) {
     iextent_ = iextent;
     if ( iextent < 0 || iextent > 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iextent",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iextent",
                                "iextent must have an integer value between 0 and 3" );
 }
 
@@ -670,7 +670,7 @@ void SAMG_Settings::Set_ndefault( int32 ndefault ) {
          !( ndefault >= 25 && ndefault <= 28 ) &&
          !( ndefault >= 30 && ndefault <= 38 ) &&
          !( ndefault >= 40 && ndefault <= 48 ) )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ndefault",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ndefault",
                                "ndefault must be an integer value in one of the ranges [10,13], [15,18], [20,23], or [25,28]" );
 }
 
@@ -687,7 +687,7 @@ void SAMG_Settings::Set_ndefault( int32 ndefault ) {
 void SAMG_Settings::Set_norm_typ( int32 norm_typ ) {
     norm_typ_ = norm_typ;
     if ( norm_typ < 0 || norm_typ > 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_norm_typ",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_norm_typ",
                                "norm_typ must have an integer value between 0 and 2" );
 }
 
@@ -701,7 +701,7 @@ void SAMG_Settings::Set_norm_typ( int32 norm_typ ) {
 void SAMG_Settings::Set_ioscratch( int32 ioscratch ) {
     ioscratch_ = ioscratch;
     if ( ioscratch < 0 || ioscratch > 99 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ioscratch",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ioscratch",
                                "ioscratch must have an integer value between 0 and 99" );
 }
 
@@ -719,7 +719,7 @@ Used to control the amount of checking of the input matrix.
 void SAMG_Settings::Set_chktol( double64 chktol ) {
     chktol_ = chktol;
     if ( /* DISABLES CODE */ (false) )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_chktol",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_chktol",
                                "chktol has an invaid value" );
 }
 
@@ -733,7 +733,7 @@ void SAMG_Settings::Set_chktol( double64 chktol ) {
 void SAMG_Settings::Set_idmp( int32 idmp ) {
     idmp_ = idmp;
     if ( idmp > 9 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_idmp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_idmp",
                                "idmp must have an integer value between 0 and 9" );
 }
 
@@ -751,7 +751,7 @@ Selects print output regarding the coarse levels.
 void SAMG_Settings::Set_igdp( int32 igdp ) {
     igdp_ = igdp;
     if ( igdp > 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_igdp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_igdp",
                                "igdp must have an integer value between 0 and 2" );
 }
 
@@ -770,7 +770,7 @@ Selects print output regarding the coarse-level matrices.
 void SAMG_Settings::Set_iadp( int32 iadp ) {
     iadp_ = iadp;
     if ( iadp > 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iadp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iadp",
                                "iadp must have an integer value between 0 and 2" );
 }
 
@@ -789,7 +789,7 @@ Selects print output regarding the interpolation matrices.
 void SAMG_Settings::Set_iwdp( int32 iwdp ) {
     iwdp_ = iwdp;
     if ( iwdp < 0 || iwdp > 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iwdp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iwdp",
                                "iwdp must have an integer value between 0 and 2" );
 }
 
@@ -806,7 +806,7 @@ void SAMG_Settings::Set_iwdp( int32 iwdp ) {
 void SAMG_Settings::Set_iout1( int32 iout1 ) {
     iout1_ = iout1;
     if ( iout1 > 4 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iout1",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iout1",
                                "iout1 must have an integer value between 0 and 4" );
 }
 
@@ -823,7 +823,7 @@ void SAMG_Settings::Set_iout1( int32 iout1 ) {
 void SAMG_Settings::Set_iout2( int32 iout2 ) {
     iout2_ = iout2;
     if ( iout2 > 3 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iout2",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_iout2",
                                "iout2 must have a value less than or equal to 3" );
 }
 
@@ -839,7 +839,7 @@ but it may also be as high as 4.0, say. Typical values are 1.5-3.0.
 void SAMG_Settings::Set_a_cmplx( double64 a_cmplx ) {
     a_cmplx_ = a_cmplx;
     if ( a_cmplx < 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_a_cmplx",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_a_cmplx",
                                "a_cmplx must have a positive value" );
 }
 
@@ -855,7 +855,7 @@ Usually, an upper limit is 2.0.
 void SAMG_Settings::Set_g_cmplx( double64 g_cmplx ) {
     g_cmplx_ = g_cmplx;
     if ( g_cmplx < 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_g_cmplx",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_g_cmplx",
                                "g_cmplx must have a positive value" );
 }
 
@@ -872,7 +872,7 @@ limit is 2.0.
 void SAMG_Settings::Set_p_cmplx( double64 p_cmplx ) {
     p_cmplx_ = p_cmplx;
     if ( p_cmplx < 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_p_cmplx",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_p_cmplx",
                                "p_cmplx must have a positive value" );
 }
 
@@ -888,7 +888,7 @@ value as low as 1.5, but it may also be as high as 6.0, say. A typical average v
 void SAMG_Settings::Set_w_avrge( double64 w_avrge ) {
     w_avrge_ = w_avrge;
     if ( w_avrge < 0 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_w_avrge",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_w_avrge",
                                "w_avrge must have a positive value" );
 }
 
@@ -924,7 +924,7 @@ Standard choices: ncgtyp=1 or ncgtyp=4.
  */
 void SAMG_Settings::Set_ncgtyp( int32 ncgtyp ) {
     if ( ncgtyp < 1 || ncgtyp > 5 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ncgtyp",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ncgtyp",
                                "ncgtyp must have an integer value between 1 and 5" );
     ncgtyp_ = ncgtyp;
     ExplicitSecondary( true );
@@ -949,7 +949,7 @@ is reduced from one level to the next. Standard choice: nred=0.
  */
 void SAMG_Settings::Set_nred( int32 nred ) {
     if ( nred < 0 || nred > 6 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nred",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nred",
                                "nred must have an integer value between 0 and 6" );
     nred_ = nred;
     ExplicitSecondary( true );
@@ -969,7 +969,7 @@ Only relevant if nred>0. Standard choice: nredlev=0.
  */
 void SAMG_Settings::Set_nredlev( int32 nredlev ) {
     if ( nredlev < 0 || nredlev > 9 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nredlev",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nredlev",
                                "nredlev must have an integer value between 0 and 9" );
     nredlev_ = nredlev;
     ExplicitSecondary( true );
@@ -990,7 +990,7 @@ of standard or cluster coarsening. Standard choice: nxf_clean=0.
  */
 void SAMG_Settings::Set_nxf_clean( int32 nxf_clean ) {
     if ( nxf_clean < 0 || nxf_clean > 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_nxf_clean",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_nxf_clean",
                                "nxf_clean must have an integer value between 0 and 2" );
     nxf_clean_ = nxf_clean;
     ExplicitSecondary( true );
@@ -1011,7 +1011,7 @@ with aggressive or cluster coarsening. Standard choice: npcol=0.
  */
 void SAMG_Settings::Set_npcol( int32 npcol ) {
     if ( npcol < 0 || npcol > 2 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_npcol",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_npcol",
                                "npcol must have an integer value between 0 and 2" );
     npcol_ = npcol;
     ExplicitSecondary( true );
@@ -1029,7 +1029,7 @@ Default = 25
 */
 void SAMG_Settings::Set_levelx( int32 levelx ) {
     if ( levelx < -25 || levelx > 25 )
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_levelx",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_levelx",
                                "levelx must have an integer value between -25 and 25" );
     levelx_ = levelx;
     ExplicitSecondary( true );
@@ -1051,7 +1051,7 @@ void SAMG_Settings::Set_ioform( std::string ioform ){
         std::cout <<"\n\n*** SAMG_Settings::Set_ioform 'ioform received the matrix output format setting " << ioform << " ***\n\n";
     }
     else {
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_ioform",
+        throw csmp::Exception( ERROR, "SAMG_Settings::Set_ioform",
                                "ioform must have a string character of either ‘f’, ‘u’ or ‘b’" );
     }
     if (idmp_ < 2 || idmp_ > 10 )
@@ -1090,7 +1090,7 @@ void SAMG_Settings::Set_filnam_dump( const std::string& filnam_dump ){
  */
 void SAMG_Settings::Set_iter_pre(int32 iter_pre) {
     if (iter_pre < 0 || iter_pre > 2)
-      throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::Set_iter_pre:",
+      throw csmp::Exception(ERROR, "SAMG_Settings::Set_iter_pre:",
                                    "iter_pre must have an integer value between 0 and 2");
     iter_pre_ = iter_pre;
     ExplicitSecondary(true);
@@ -1119,7 +1119,7 @@ void SAMG_Settings::SetSolverInstance( int32 instance ) {
     solver_instance_ = instance;
 
     if ( instance < 0 || instance > 5 ) {
-        throw csmp::Exception( CSMP_ERROR, "SAMG_Settings::SetSolverInstance",
+        throw csmp::Exception( ERROR, "SAMG_Settings::SetSolverInstance",
                                "SAMG Multiple Instances settings are out of range, available instances are 0, and 1" );
     }
 }

@@ -177,8 +177,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     // Screen Output
     // ------------------------------------------------------------------------
 
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
   private:
 

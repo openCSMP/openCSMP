@@ -516,7 +516,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod
             var_ncomponents_=fav.Size();
          }
         else
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod",
+        throw csmp::Exception(FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod",
             "Variable type not accepted!");
     }
 
@@ -620,35 +620,35 @@ void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
         string  msg ="The 'porosity' variable '";
         msg       += pref_.Name( phi_key_ );
         msg       +="' must be a scalar-type element variable";
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
+        throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
     if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != ULONG_MAX ) {
         string  msg ="The 'diffusivity' variable '";
         msg       += pref_.Name( diff_key_ );
         msg       +="' must be a scalar-type element variable";
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
+        throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
     if ( adv1_key_.place != NODE ){
         string  msg ="The advected variable '";
         msg       += pref_.Name( adv1_key_ );
         msg       +="' must be a scalar-type node variable";
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
+        throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
     if ( vel_key_.place != ELEMENT || vel_key_.type != VECTOR ) {
         string  msg ="The transport velocity variable '";
         msg       += pref_.Name( vel_key_ );
         msg       +="' must be a vector-type element variable";
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
+        throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
     if ( src_key_.place != NODE ){
         string  msg ="The source variable '";
         msg       += pref_.Name( src_key_ );
         msg       +="' must be a scalar-type node variable";
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
+        throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
 } // end CheckTransportVariables
@@ -1189,7 +1189,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
 #endif
 
     if ( counter == 0U )
-        throw csmp::Exception( CSMP_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement: ",
+        throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement: ",
                                "anisotropic CFL could not be determined." );
 
     if (this->Verbose()) cout <<"\nNodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement: "<< courant_increment << endl;
@@ -1426,14 +1426,14 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement( Tw
     }
 
     if ( courant_increment >= max_time_increment ) {
-        throw csmp::Exception( CSMP_INFO, "NodeCenteredFiniteVolumeTransport::AnisotropicCourantIncrement (2-phase flow)",
+        throw csmp::Exception( INFO, "NodeCenteredFiniteVolumeTransport::AnisotropicCourantIncrement (2-phase flow)",
                                "calculated courant increment is larger than maximum permitted increment, there may be no flow in the model domain" );
         cout <<"\nCFL is set to "<< max_time_increment << endl;
         return max_time_increment;
     }
 
     if ( courant_increment <= millisecond ) {
-        throw csmp::Exception( CSMP_WARNING, "NodeCenteredFiniteVolumeTransport::AnisotropicCourantIncrement (2-phase flow)",
+        throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeTransport::AnisotropicCourantIncrement (2-phase flow)",
                                "calculated courant increment is smaller than a millisecond" );
     }
 
@@ -1723,7 +1723,7 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double64& in_fl
             string  msg ="The advected variable '";
             msg       += pref_.Name( advected_var_key );
             msg       +="' must be a scalar-type node variable";
-            throw csmp::Exception( CSMP_FATAL_ERROR,
+            throw csmp::Exception( FATAL_ERROR,
                                    "NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes",
                                    msg.c_str() );
         }
@@ -1870,7 +1870,7 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable( double64 time_i
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !apply_flux_balance_correction )
-        csmp_error.notice( CSMP_WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable",
+        csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable",
                            "without flux balance correction boundary condition assignment may not be suitable; watch for erratic concentrations");
 
     // 0. backup of fluxes from last time level
@@ -1961,7 +1961,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double64 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !apply_flux_balance_correction )
-        csmp_error.notice( CSMP_WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep",
+        csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep",
                            "without flux balance correction boundary condition assignment may not be suitable; watch for erratic concentrations");
 
     // 0. backup of fluxes from last time level
@@ -2019,10 +2019,10 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double64 
 template<size_t dim>
 double64  NodeCenteredFiniteVolumeTransport<dim>::TransportPhase( TwoPhaseModel<dim>& ff, double64 )
 {
-    std::cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim;
-    std::cout <<">::TransportPhase: you called virtual method stub which cannot ";
-    std::cout <<" be used for two-phase flow. You need to call specific subclasses in stead."<< endl;
-    ff.Out(std::cout);
+    cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim;
+    cout <<">::TransportPhase: you called virtual method stub which cannot ";
+    cout <<" be used for two-phase flow. You need to call specific subclasses in stead."<< endl;
+    ff.Out();
     gref_.Nodes();
     return std::numeric_limits<double64>::quiet_NaN();
 }
@@ -2048,7 +2048,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable1stOrder( NodeCentere
 {
     const bool  with_diffusion = (diff_key_ == csmp::Index())  ? false : true;
     if (var_ncomponents_==0)
-        throw csmp::Exception (CSMP_FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable1stOrder",
+        throw csmp::Exception (FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable1stOrder",
                               "Type of the advected variable is not known or number of variable components not initialized properly.  Will not advect!\
                               Check the initialization process of your NCFVT class.");
 
@@ -2111,7 +2111,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder(
     // 1.0 finding smin/smax of trial solution in the neighborhood of each element
 
     if (adv1_key_.type != SCALAR)
-        throw csmp::Exception(CSMP_FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder"," Second order advection does not support another variable type other than SCALAR.");
+        throw csmp::Exception(FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder"," Second order advection does not support another variable type other than SCALAR.");
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     baseAdvector_->GetSolverSettings().Set_iswit(4);
@@ -2415,7 +2415,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrderInSpaceAndTim
     static bool first_call(true);
 
     if (adv1_key_.type != SCALAR)
-        throw csmp::Exception(CSMP_FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrderInSpaceAndTime"," Second order advection does not support another variable type other than SCALAR.");
+        throw csmp::Exception(FATAL_ERROR,"NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrderInSpaceAndTime"," Second order advection does not support another variable type other than SCALAR.");
     // 1. store initial advected variable values in SAT0 and initialize
     //    the array LTDSATS0
     // ----------------------------------------------------------------
@@ -2629,7 +2629,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarNodePropertyByFiniteV
     csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::MultiplyScalarNodePropertyByFiniteVolume",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::MultiplyScalarNodePropertyByFiniteVolume",
                                "This method only handles scalar node properties / node-centered finite volume variables" );
         return;
       }
@@ -2688,7 +2688,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVol
     double64     result(0.);
 
     if ( prop_key.type != SCALAR || prop_key.place == ELEMENT ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteVolumeVariable",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteVolumeVariable",
                                "This method only handles scalar node properties / node-centered finite volume variables" );
         return result;
     }
@@ -2754,7 +2754,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVol
     csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteVolumeVariable",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteVolumeVariable",
                                "This method only handles scalar node properties, i.e. node-centered finite volume variables" );
 
     double64  interim_result, result(0.);
@@ -2824,14 +2824,14 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElem
     else{
         region_name=string(region);
         if (!mref_.ContainsRegion(region_name.c_str()))
-            throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteElementVariable",
+            throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteElementVariable",
                                    "Region requested for integral is not contained in the model." );
     }
 
     Region<dim>& rref=mref_.Region(region_name.c_str());
 
     if ( prop_key.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteElementVariable",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteElementVariable",
                                "This method only handles scalar properties" );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2843,7 +2843,7 @@ double64 NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElem
         assert( phi_key.place == ELEMENT );
 
         if ( phi_key != prop_key )
-            csmp_error.notice( CSMP_WARNING, "NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElementVariable",
+            csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElementVariable",
                                "you are trying to scale the integral over the porosity with porosity");
 
         double64 interim_result;
@@ -2886,7 +2886,7 @@ double64  NodeCenteredFiniteVolumeTransport<dim>::FiniteVolume( const char* volu
     csmp::Index  prop_key = pref_.StorageKey(volume_property);
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
-        throw csmp::Exception( CSMP_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::FiniteVolume",
+        throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeTransport<dim>::FiniteVolume",
                                volume_property, "to which the finite volume is assigned, must be a scalar variable placed on the nodes" );
 
     double64          result(0.);
@@ -2923,11 +2923,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
     csmp::Index  rprop_key = pref_.StorageKey(result_property);
 
     if ( iprop_key.type != SCALAR ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "This method only integrates scalar properties" );
     }
     if ( rprop_key.type != SCALAR || rprop_key.place != NODE ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "Result property must be scalar placed on the nodes / node-centered finite volumes" );
     }
 
@@ -2951,7 +2951,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
             }
     }
     else {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "Method does not handle Face or IntegrationPoint variables" );
         return;
     }
@@ -2973,11 +2973,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
     csmp::Index  rprop_key = pref_.StorageKey(result_property);
 
     if ( iprop_key.type != SCALAR ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "This method only integrates scalar properties" );
     }
     if ( rprop_key.type != SCALAR || rprop_key.place != NODE ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "Result property must be scalar placed on the nodes / node-centered finite volumes" );
     }
 
@@ -3003,7 +3003,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
                             STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i);
                 }
         }
-        else csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        else csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                               "Method does not handle Face or IntegrationPoint integrand multipliers" );
     }
     else if ( iprop_key.place == ELEMENT ) {
@@ -3030,11 +3030,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
                     nresult[ (*eit)->N(i)->Idx() ] += iprop * mprop * STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i);
                 }
         }
-        else csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        else csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                               "Method does not handle Face or IntegrationPoint integrand multipliers" );
     }
     else {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "Method does not handle Face or IntegrationPoint variables" );
         return;
     }
@@ -3060,11 +3060,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::Divergence( const char* div_propert
     csmp::Index  rprop_key = pref_.StorageKey(result_property);
 
     if ( dprop_key.type != VECTOR  or  dprop_key.place != ELEMENT  ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                div_property, "must be a vector<double64> variable placed on the element" );
     }
     if ( rprop_key.type != SCALAR || rprop_key.place != NODE ) {
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::VolumeIntegrate",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
                                "Result property must be scalar placed on the node / node-centered finite volume" );
     }
 
@@ -3134,11 +3134,11 @@ void NodeCenteredFiniteVolumeTransport<dim>::TransformScalarBoundaryValuesIntoNe
     // here a check whether the model is box-shaped needs to be performed
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::TransformScalarBoundaryValuesIntoNeumannConditions",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::TransformScalarBoundaryValuesIntoNeumannConditions",
                                "This method only handles scalar node properties or node-centered finite volume variables" );
 
     if ( cond_key.type != SCALAR || cond_key.place != ELEMENT )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::TransformScalarBoundaryValuesIntoNeumannConditions",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::TransformScalarBoundaryValuesIntoNeumannConditions",
                                "The proportionality constant used in the Neumann gradient calculation must be a scalar element property" );
 
     // setting the normal up for the projection taking into account the model boundary
@@ -3259,7 +3259,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AssignScalarBoundaryValues(
     csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type != SCALAR || prop_key.place != ELEMENT )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::AssignScalarBoundaryValues",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::AssignScalarBoundaryValues",
                                "This method only handles scalar node properties / node-centered finite volume variables" );
 
     // setting the normal up for the projection taking into account the model boundary
@@ -3348,7 +3348,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFinit
     Region<dim>  rref(model.Region(parseBoundary(boundary).c_str()));
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
-        throw csmp::Exception( CSMP_ERROR, "FiniteVolumeTransport::ConvertScalarBoundaryValues",
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::ConvertScalarBoundaryValues",
                                "This method only handles scalar node properties / node-centered finite volume variables" );
 
     // setting the normal up for the projection taking into account the model boundary
@@ -3399,59 +3399,59 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFinit
 
 /**
 
-Writes internal (state) variables of the NCFVT to a stream. Note that
+Writes internal (state) variables of the NCFVT to the screen. Note that
 these may vary dependent on the choice of constructor which was used
 when the object was built.
 */
 template<size_t dim>
-void NodeCenteredFiniteVolumeTransport<dim>::Out(std::ostream& os) const
+void NodeCenteredFiniteVolumeTransport<dim>::Out() const
 {
-    os <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim <<">::Out: ";
-    os <<"Variable to advect '"<< advected_variable_ <<"'"<< endl;
+    cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim <<">::Out: ";
+    cout <<"Variable to advect '"<< advected_variable_ <<"'"<< endl;
 
-    os <<"\nFV_STENCIL_DATA - sectors, facets, facet-areas and normals for each finite element: "<< endl;
+    cout <<"\nFV_STENCIL_DATA - sectors, facets, facet-areas and normals for each finite element: "<< endl;
     for ( size_t i=0U; i<STENCIL_DATA.size(); i++ ) {
-        os <<"\nStencil "<< i+1;
-        STENCIL_DATA[i].Out(os);
+        cout <<"\nStencil "<< i+1;
+        STENCIL_DATA[i].Out();
     }
-    os << endl;
+    cout << endl;
 
-    os <<"\nFVPOREVOL, FLUX_BALANCE pore volumes and flux balances for each finite volume: "<< endl;
+    cout <<"\nFVPOREVOL, FLUX_BALANCE pore volumes and flux balances for each finite volume: "<< endl;
     for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
-        os << i+1 <<": "<< FVPOREVOL[i] <<" "<< FLUX_BALANCE[i] << endl;
+        cout << i+1 <<": "<< FVPOREVOL[i] <<" "<< FLUX_BALANCE[i] << endl;
 
     if ( SecondOrderInSpace() ) {
-        os <<"\nThe transport algorithm was constructed for a higher order method; It also contains the following arrays."<< endl;
+        cout <<"\nThe transport algorithm was constructed for a higher order method; It also contains the following arrays."<< endl;
 
-        os <<"\nSMINMAX - min,max of transport variable in the neighborhood of finite volume:"<< endl;
+        cout <<"\nSMINMAX - min,max of transport variable in the neighborhood of finite volume:"<< endl;
         for ( size_t i=0U; i<SMINMAX.size(); i++ )
-            os << i+1 <<": "<< SMINMAX[i].first <<" "<< SMINMAX[i].second << endl;
-        os << endl;
+            cout << i+1 <<": "<< SMINMAX[i].first <<" "<< SMINMAX[i].second << endl;
+        cout << endl;
     }
 
     if ( SecondOrderInTime() ) {
-        os <<"\nSAT0 - initial transport variable values for each finite volume: "<< endl;
+        cout <<"\nSAT0 - initial transport variable values for each finite volume: "<< endl;
         for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
-            os << i+1 <<": "<< SAT0[i] <<" ";
-        os << endl;
+            cout << i+1 <<": "<< SAT0[i] <<" ";
+        cout << endl;
 
-        os <<"\nFACETFLUXES0 - fluxes across finite volume facets in each finite element at time levels 0:"<< endl;
+        cout <<"\nFACETFLUXES0 - fluxes across finite volume facets in each finite element at time levels 0:"<< endl;
         for ( size_t i=0U; i<FACETFLUXES0.size(); i++ ) {
-            os <<" element "<< i+1;
+            cout <<" element "<< i+1;
             for ( size_t j=0U; j<FACETFLUXES0[i].size(); j++ )
-                os <<"\n\tfacet "<< j <<": "<< FACETFLUXES0[i][j] <<" ";
-            os << endl;
+                cout <<"\n\tfacet "<< j <<": "<< FACETFLUXES0[i][j] <<" ";
+            cout << endl;
         }
-        os << endl;
+        cout << endl;
 
-        os <<"\nLTDSATS0 - limited facet values of transported variable at time levels 0:"<< endl;
+        cout <<"\nLTDSATS0 - limited facet values of transported variable at time levels 0:"<< endl;
         for ( size_t i=0U; i<LTDSATS0.size(); i++ ) {
-            os <<" element "<< i+1;
+            cout <<" element "<< i+1;
             for ( size_t j=0U; j<LTDSATS0[i].size(); j++ )
-                os <<"\n\tfacet "<< j <<": "<< LTDSATS0[i][j] <<" ";
-            os << endl;
+                cout <<"\n\tfacet "<< j <<": "<< LTDSATS0[i][j] <<" ";
+            cout << endl;
         }
-        os << endl;
+        cout << endl;
     }
 
 } // end Out
@@ -3500,7 +3500,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
     cout <<"\ntestFiniteVolumeStencil(NodeCenteredFiniteVolumeTransport): Test 1, velocity integration in X-direction, velo: "<< endl;
     velo    = 0.;
     velo(0) = 1.;
-    velo.Out(cout);
+    velo.Out();
     vector<double64>  rst(3), IPOL;
 
     for ( typename vector<Element<dim>*>::const_iterator

@@ -93,8 +93,7 @@ class Node : public LocalVariableStorage<dim,Node<dim> >
     double64         y() const;
     double64         z() const;
 
-    void             Out() const { Out(std::cout); }
-    void             Out(std::ostream& os) const;
+    void             Out() const;
 
     /// an flagging to be deprecated in the future
     void             AtBoundary( BOX_BOUNDARY );

@@ -48,11 +48,11 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolate
  {
      
     if ( summed_weights_[0] > numeric_limits<double64>::epsilon() )
-       throw csmp::Exception( CSMP_ERROR, "IntegrationPointToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
+       throw csmp::Exception( ERROR, "IntegrationPointToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
                           "this visitor has to be applied beforehand to collect the weights for the nodes");
 
     if ( weighting_completed_.GetBit(0U) )
-       throw csmp::Exception( CSMP_WARNING, "IntegrationPointToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
+       throw csmp::Exception( WARNING, "IntegrationPointToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
                       "weighting appears to have been carried out already");
        
     this->ApplicationTarget(NODE);

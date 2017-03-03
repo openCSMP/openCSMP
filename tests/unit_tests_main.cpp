@@ -193,7 +193,7 @@ int main()
               basic.addTest( new TensorVariable_Test1());
               basic.addTest( new TensorVariable_Test2());
               basic.addTest( new ArrayVariable_Test());
-              //basic.addTest( new Variables_TestCase("prism_test"));
+              basic.addTest( new Variables_TestCase("prism_test"));
 
               // Math utilities tests
               basic.addTest( new Matrix_Test() );

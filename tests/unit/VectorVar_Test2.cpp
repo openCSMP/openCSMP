@@ -474,61 +474,7 @@ void VectorVariable_Test2::IsWithinRange_Function2()
 }
 
 
-<<<<<<< HEAD
 
-=======
-void VectorVariable_Test2::Ln_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             log(1.0), log(2.0) );
-   
-   csmpvector1.Ln();
-   _test( csmpvector1 == csmpvector3 );
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-      
-   csmpvector2.Ln();
-#if 0
-   // XXX FIXME Behaviour not guaranteed
-   _test( isnan(csmpvector2(0)));
-   _test( isnan(csmpvector2(1)));
-   _test( isnan(csmpvector2(2)));
-#endif
-   _equal(csmpvector2.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector2.Flag( 1 ), ROBIN, fTolerance);
-      
-}
-
-void VectorVariable_Test2::Log10_Function2()
-{
-   VectorVariable<2U> csmpvector1( PLAIN, ROBIN,
-                                             1.0, 2.0 );
-   VectorVariable<2U> csmpvector2( PLAIN, ROBIN,
-                                             -1.0, -2.0 );
-   VectorVariable<2U> csmpvector3( PLAIN, ROBIN,
-                                             log10(1.0), log10(2.0) );
-   
-   csmpvector1.Log10();
-   _test( csmpvector1 == csmpvector3 );
-   _equal(csmpvector1.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector1.Flag( 1 ), ROBIN, fTolerance);
-      
-   csmpvector2.Log10();
-#if 0
-   // XXX FIXME Behaviour not guaranteed
-   _test( isnan(csmpvector2(0)));
-   _test( isnan(csmpvector2(1)));
-   _test( isnan(csmpvector2(2)));
-#endif
-   _equal(csmpvector2.Flag( 0 ), PLAIN, fTolerance);
-   _equal(csmpvector2.Flag( 1 ), ROBIN, fTolerance);
-   
-}
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 
 void VectorVariable_Test2::Flip_Function2()

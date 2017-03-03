@@ -22,7 +22,7 @@ namespace csmp {
 /**
     This function tests the creation of a VSet (not related to the EFVT class).
 */
-VSet<2U> test_CreateVSet(std::ostream& os)
+VSet<2U> test_CreateVSet()
 {
     const size_t iNodes(9);
     const size_t iNrOfElements(4);
@@ -120,7 +120,7 @@ VSet<2U> test_CreateVSet(std::ostream& os)
     vset.AddBFlag( 8, CNR3 );
     
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
     
     return vset;
 }
@@ -132,7 +132,7 @@ VSet<2U> test_CreateVSet(std::ostream& os)
 
 
 
-void test_Create_One_Square_VSet(std::ostream& os, VSet<2U> & vset, double64 length_of_sides, bool bSkewed )
+void test_Create_One_Square_VSet(VSet<2U> & vset, double64 length_of_sides, bool bSkewed )
 {    
   	IsoparametricLinearQuadrilateral iso_quad;
   	
@@ -204,7 +204,7 @@ void test_Create_One_Square_VSet(std::ostream& os, VSet<2U> & vset, double64 len
   	vset.AddBFlag( 4, CNR4);
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -212,7 +212,7 @@ void test_Create_One_Square_VSet(std::ostream& os, VSet<2U> & vset, double64 len
 
 
 
-void test_Create_TrianglePatch_VSet( std::ostream& os, VSet<2U> & vset )
+void test_Create_TrianglePatch_VSet( VSet<2U> & vset )
 {    
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -331,7 +331,7 @@ void test_Create_TrianglePatch_VSet( std::ostream& os, VSet<2U> & vset )
   	vset.AddBFlag( 1, TOP_OUTSIDE );
   	vset.AddBFlag( 4, RIGHT_OUTSIDE);
     
-    vset.Out(os);
+    vset.Out();
     
 } // end test_Create_TrianglePatch_VSet
 
@@ -342,7 +342,7 @@ void test_Create_TrianglePatch_VSet( std::ostream& os, VSet<2U> & vset )
 
 
 
-void test_Create_One_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_One_Hexahedra_VSet(VSet<3U> & vset, bool bSkewed )
 {    
   	IsoparametricLinearHexahedron iso_hexahedron;
   	
@@ -428,7 +428,7 @@ void test_Create_One_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSke
   	vset.AddBFlag( 8, CNR8);
     
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -436,7 +436,7 @@ void test_Create_One_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSke
 
 
 
-void test_Create_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_Hexahedra_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(27);
     
@@ -623,7 +623,7 @@ void test_Create_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed 
   	}
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -636,12 +636,12 @@ void test_Create_Hexahedra_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed 
 
 
 
-void test_Create_Square_VSet( std::ostream& os, VSet<2U>& vset, size_t size_sides, double64 dimension, bool bSkewed )
+void test_Create_Square_VSet( VSet<2U>& vset, size_t size_sides, double64 dimension, bool bSkewed )
 {
   if(size_sides==1)
-    test_Create_One_Square_VSet( os, vset, dimension, bSkewed );
+    test_Create_One_Square_VSet( vset, dimension, bSkewed );
   else
-    test_Create_SlitRectangle_VSet( os, vset, size_sides, size_sides,dimension,dimension, 0, bSkewed );
+    test_Create_SlitRectangle_VSet( vset, size_sides, size_sides,dimension,dimension, 0, bSkewed );
 }
 
 
@@ -651,7 +651,7 @@ void test_Create_Square_VSet( std::ostream& os, VSet<2U>& vset, size_t size_side
 
 
 
-void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x_dimension, size_t y_dimension, 
+void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t y_dimension, 
                                      double64 x_length, double64 y_length, size_t depth_of_slit, bool bSkewed )
 {
   assert(x_dimension>0);
@@ -671,8 +671,8 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
   //elements hexahedrons
   size_t nodes(iDim_i*iDim_j);  //number of nodes: 64 on a 4x4x4 grid
   
-  os <<"\ntest_Create_SlitRectangle_VSet:\n";
-  os << "\n\tDim i: " << iDim_i << " Dim j: " << iDim_j << " nr of elements: " << iNrOfElements << " nodes: " << nodes;
+  cout <<"\ntest_Create_SlitRectangle_VSet:\n";
+  cout << "\n\tDim i: " << iDim_i << " Dim j: " << iDim_j << " nr of elements: " << iNrOfElements << " nodes: " << nodes;
      
   //------------------------CREATE VSET
   //this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle 	
@@ -746,9 +746,9 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
      const bool over_slit  = (j == y_dimension/2       && i+1 >= x_dimension-depth_of_slit);
      const bool under_slit = (j == (y_dimension/2 - 1) && i+1 >= x_dimension-depth_of_slit);
      
-     //os << "\n\nTo be over the slit: j("<<j<<") == " <<  y_dimension/2 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
-     //os << "\n\nTo be under the slit: j("<<j<<") == " <<  y_dimension/2-1 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
-     //os << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
+     //cout << "\n\nTo be over the slit: j("<<j<<") == " <<  y_dimension/2 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
+     //cout << "\n\nTo be under the slit: j("<<j<<") == " <<  y_dimension/2-1 << " and i("<<i<<") > " << x_dimension-depth_of_slit;
+     //cout << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
      if (over_slit)
   	  deqElementNeighbors[iElement][1]= static_cast<int32>(IRREGULAR_OUTSIDE);
      else if (under_slit)
@@ -792,7 +792,7 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
      }
      }
     
-    os << "\n\tIntroduce Slit Nodes...";
+    cout << "\n\tIntroduce Slit Nodes...";
     
     //go over elements, introduce slit
     for(size_t j = 0U; j < iDim_j-1; j++) //y
@@ -803,7 +803,7 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
      
      const size_t iElement((iDim_i-1)*j+i);
     
-     //os << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
+     //cout << "\nElement " << iElement << "-> i,j:" << i << "," << j << " under slit? " << (under_slit?"yes":"no") << " over slit? " << (over_slit?"yes":"no");
      
      if (over_slit)
   	 {
@@ -878,7 +878,7 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
   	    
   vset.EstablishZeroBasedNumbering();
-  vset.Out(os);
+  vset.Out();
 }
 
 
@@ -889,7 +889,7 @@ void test_Create_SlitRectangle_VSet( std::ostream& os, VSet<2U> & vset, size_t x
 
 
 //adapted ??
-void test_Create_Pyramid_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
     
@@ -1262,7 +1262,7 @@ void test_Create_Pyramid_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkew
   	}
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -1278,7 +1278,7 @@ void test_Create_Pyramid_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkew
 
 
 
-void test_Create_Prism_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);
     
@@ -1324,7 +1324,7 @@ void test_Create_Prism_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed
   	  
   	  iElement++;
   	}
-  	os << "e:" << iElement;
+  	cout << "e:" << iElement;
   	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
     
     //--------------------------ELEMENT TYPES
@@ -1809,7 +1809,7 @@ void test_Create_Prism_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed
   	}
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -1823,7 +1823,7 @@ void test_Create_Prism_Hexa_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed
 
 
 
-void test_Create_One_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 {    
   	IsoparametricLinearPrism iso_prism;
   	
@@ -1902,7 +1902,7 @@ void test_Create_One_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed 
   	vset.AddBFlag( 6, CNR7);
     
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -1910,7 +1910,7 @@ void test_Create_One_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed 
 
 
 
-void test_Create_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(54/*prisms*/);
     
@@ -2134,7 +2134,7 @@ void test_Create_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
   	}
   	
     vset.EstablishZeroBasedNumbering();
-    vset.Out(os);
+    vset.Out();
 }
 
 
@@ -2146,7 +2146,7 @@ void test_Create_Prism_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
 
 
 
-void test_Create_Pyramid_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
+void test_Create_Pyramid_VSet(VSet<3U> & vset, bool bSkewed )
 {
   	IsoparametricLinearPyramid iso_pyramid;
   	
@@ -2252,20 +2252,20 @@ void test_Create_Pyramid_VSet(std::ostream& os, VSet<3U> & vset, bool bSkewed )
   	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
   	 
   	 //pyramid 2
-  	 os << "Element:(i="<<i<<",j="<<j<<",k="<<k<<")" << iDim_km1_2*k+(iDim_j-1)*j+i + 27*2 << endl;
+  	 cout << "Element:(i="<<i<<",j="<<j<<",k="<<k<<")" << iDim_km1_2*k+(iDim_j-1)*j+i + 27*2 << endl;
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*2;
      
   	 deqElements[iElement].resize(5);
 	   deqElements[iElement][0]= 1+ iDim_k2*k+(iDim_j)*j+i+1;
-	   os << "Coord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
+	   cout << "Coord [" << iElement << "][0]: " << deqElements[iElement][0] << endl;
   	 deqElements[iElement][1]= 1+ iDim_k2*(k+1)+(iDim_j)*j+i+1;
-	   os << "Coord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
+	   cout << "Coord [" << iElement << "][1]: " << deqElements[iElement][1] << endl;
   	 deqElements[iElement][2]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i+1;
-	   os << "Coord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
+	   cout << "Coord [" << iElement << "][2]: " << deqElements[iElement][2] << endl;
 	   deqElements[iElement][3]= 1+ iDim_k2*k+(iDim_j)*(j+1)+i+1;
-	   os << "Coord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
+	   cout << "Coord [" << iElement << "][3]: " << deqElements[iElement][3] << endl;
   	 deqElements[iElement][4]= 1+ iDim_km1_2*k+(iDim_j-1)*j+i+ iDim_i*iDim_j*iDim_k;
-	   os << "Coord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
+	   cout << "Coord [" << iElement << "][4]: " << deqElements[iElement][4] << endl;
   	 
   	 //pyramid 3
   	 iElement = iDim_km1_2*k+(iDim_j-1)*j+i + iNrOfCells*3;

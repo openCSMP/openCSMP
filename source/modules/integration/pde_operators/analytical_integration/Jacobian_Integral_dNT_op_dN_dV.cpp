@@ -43,19 +43,19 @@ Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Jacobian_Integral_dNT_op_dN_dV( con
     // testing the Operands 
     // * Add tests for new operands
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() != REGION )
-      throw csmp::Exception( CSMP_ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
                     oper, "Operand must be placed on the element or group.");
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
                     test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (lambda_.place != NODE || lambda_.type != SCALAR)
-      throw csmp::Exception( CSMP_ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Jacobian_Integral_dNT_op_dN_dV::(constructor)", 
                     lambda, "Jacobian_Upwind variable must be a scalar property placed on the nodes.");
 }
 
@@ -82,7 +82,7 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
     e.NodePropertyVector( d_lambda_, el_d_lambda);
   }
   else {
-    throw csmp::Exception( CSMP_FATAL_ERROR, "Jacobian_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+    throw csmp::Exception( FATAL_ERROR, "Jacobian_Integral_dNT_op_dN_dV<dim>::GetOperands", 
                                       "Only nodal properties allowed" );
   }
     

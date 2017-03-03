@@ -130,7 +130,7 @@ size_t  findNode( const Model<3U>& sg, double64 nx, double64 ny, double64 nz,
     stringstream  out("The targeted node with the coordinate (x,y,z): ");
     out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
     out <<" returning node index="<< UINT_MAX << endl;
-    throw csmp::Exception( CSMP_WARNING, "findNode", out.str() );
+    throw csmp::Exception( WARNING, "findNode", out.str() );
     
     return UINT_MAX;
      
@@ -155,7 +155,7 @@ size_t  findNode( const Model<2U>& sg, double64 nx, double64 ny,
     stringstream  out("The targeted node with the coordinates (x,y): ");
     out << nx <<" "<< ny <<" could not be found; ";
     out <<" returning node index="<< UINT_MAX << endl;
-    throw csmp::Exception( CSMP_WARNING, "findNode", out.str() );
+    throw csmp::Exception( WARNING, "findNode", out.str() );
     
     return UINT_MAX;
      
@@ -176,7 +176,7 @@ size_t  findNode( const Model<1U>& sg, double64 nx, double64 tolerance )
     stringstream  out("The targeted node with the coordinate (x): ");
     out << nx <<" could not be found; ";
     out <<" returning node index="<< UINT_MAX << endl;
-    throw csmp::Exception( CSMP_WARNING, "findNode", out.str() );
+    throw csmp::Exception( WARNING, "findNode", out.str() );
     
     return UINT_MAX;
      
@@ -212,7 +212,7 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double64 tolerance
          stringstream  out("The targeted node with the coordinate (x): ");
          out << pxyz <<" could not be found; ";
          out <<" returning node index="<< -1 << endl;
-         csmp_error.notice( CSMP_WARNING, "findNode:", out.str() );
+         csmp_error.notice( WARNING, "findNode:", out.str() );
       }
     return -1;
      
@@ -679,19 +679,19 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     if ( eprop_key.place != ELEMENT ) {
-         csmp_error.notice( CSMP_ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
          return;
       }
     if ( nprop_key.place != NODE ) {
-         csmp_error.notice( CSMP_ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
+         csmp_error.notice( ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
          return;
       }
     if ( nprop_key.type != eprop_key.type ) {
-         csmp_error.notice( CSMP_ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
+         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
          return;
       }
     if ( n_smoothing_cycles == 0 ) {
-         csmp_error.notice( CSMP_WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
+         csmp_error.notice( WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
          return;
       }
    
@@ -720,20 +720,20 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !model.Database().IsDefined(variable) ) {
-        csmp_error.notice( CSMP_WARNING, "nearestNeighborFill:", variable, "is not defined, nothing could be done.");
+        csmp_error.notice( WARNING, "nearestNeighborFill:", variable, "is not defined, nothing could be done.");
         return;
       }
     csmp::Index var_key = model.Database().StorageKey(variable);
     if ( var_key.type != SCALAR ) {
-        csmp_error.notice( CSMP_WARNING, "nearestNeighborFill:", "method currently only handles scalars, nothing could be done.");
+        csmp_error.notice( WARNING, "nearestNeighborFill:", "method currently only handles scalars, nothing could be done.");
         return;
       }
     if ( var_key.place != ELEMENT && var_key.place != NODE ) {
-        csmp_error.notice( CSMP_WARNING, "nearestNeighborFill:", "method currently only handles variables placed on element or nodes, nothing could be done.");
+        csmp_error.notice( WARNING, "nearestNeighborFill:", "method currently only handles variables placed on element or nodes, nothing could be done.");
         return;
       }
     if ( !model.ContainsRegion(target_region) ) {
-        csmp_error.notice( CSMP_WARNING, "nearestNeighborFill:", target_region, "is not defined, nothing could be done.");
+        csmp_error.notice( WARNING, "nearestNeighborFill:", target_region, "is not defined, nothing could be done.");
         return;
       }
     Region<dim>& gref(model.Region(target_region));
@@ -749,7 +749,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
              elementsMissingDataValues.insert( (*it) );
           
          if ( elementsMissingDataValues.empty() ) {
-              csmp_error.notice( CSMP_INFO, "nearestNeighborFill:", "all elements have valid data values, nothing was done.");
+              csmp_error.notice( INFO, "nearestNeighborFill:", "all elements have valid data values, nothing was done.");
               return;
            }
          // starting nearest neighbor-fill loop
@@ -807,7 +807,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
              nodesMissingDataValues.insert( (*it) );
           
          if ( nodesMissingDataValues.empty() ) {
-              csmp_error.notice( CSMP_INFO, "nearestNeighborFill:", "all nodes have valid data values, nothing was done.");
+              csmp_error.notice( INFO, "nearestNeighborFill:", "all nodes have valid data values, nothing was done.");
               return;
            }
          // starting nearest neighbor-fill loop
@@ -872,8 +872,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t,
       if ( xy1 == xy2 ) 
         {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out(cout);
-           xy2.Out(cout);
+           xy1.Out();
+           xy2.Out();
            return (p1+p2) / 2.0;      
         }
 
@@ -938,8 +938,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       // is assigned.
       if ( xy1 == xy2 ) {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out(cout);
-           xy2.Out(cout);
+           xy1.Out();
+           xy2.Out();
            return (p1+p2+p3+p4) / 4.0;      
         }
 
@@ -1004,8 +1004,8 @@ double64 bilinearInterpolate( size_t idx_x, size_t idx_y,
       // is assigned.
       if ( xy1 == xy2 ) {
            cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
-           xy1.Out(cout);
-           xy2.Out(cout);
+           xy1.Out();
+           xy2.Out();
            return (p1+p2+p3+p4) / 4.0;      
         }
 
@@ -1320,7 +1320,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
     Region<dim>&  sgroup(sg.Region("Model"));
     
     if ( prop_key.type != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Model::RandomPerturb", 
+      throw csmp::Exception( ERROR, "Model::RandomPerturb", 
                                      "Can only perturb scalar values so far" ); 		       
 
     double64 dmin, dmax, scale_fac;
@@ -1395,7 +1395,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
     csmp::Index  prop_key = model.Database().StorageKey(variable);
    
     if ( prop_key.type != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "flagToNumber:", "method has not been implemented yet" );
+      throw csmp::Exception( ERROR, "flagToNumber:", "method has not been implemented yet" );
 
     switch( prop_key.place )
       {
@@ -1453,13 +1453,13 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
     csmp::Index  prop_key = model.Database().StorageKey(value_variable); // output
  
     if ( flag_key.type != prop_key.type )
-      throw csmp::Exception( CSMP_ERROR, "flagToNumber:", "flag and value variables must be of the same type." );
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must be of the same type." );
 
     if ( flag_key.place != prop_key.place )
-      throw csmp::Exception( CSMP_ERROR, "flagToNumber:", "flag and value variables must have the same placement." );
+      throw csmp::Exception( ERROR, "flagToNumber:", "flag and value variables must have the same placement." );
 
     if ( flag_key.type != SCALAR and flag_key.type != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "flagToNumber:", "method handles only scalar and vector variables." );
+      throw csmp::Exception( ERROR, "flagToNumber:", "method handles only scalar and vector variables." );
   
     switch( prop_key.place )
       {
@@ -1487,7 +1487,7 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
                 }
            break;
          default:
-           throw csmp::Exception( CSMP_ERROR, "flagToNumber:", "property placement not handled." );
+           throw csmp::Exception( ERROR, "flagToNumber:", "property placement not handled." );
       }
    
  } // end flagToNumber
@@ -1513,7 +1513,7 @@ double64 maximumResidual( const Model<dim>& sg,
    csmp::Index  old_key = sg.Database().StorageKey(old_property);
    
    if ( new_key.place != old_key.place ) {
-       throw csmp::Exception( CSMP_ERROR, "maximumResidual", 
+       throw csmp::Exception( ERROR, "maximumResidual", 
                              "Properties to be compared do not have the same placement, residual cannot be computed, returning 0.0...!");
      }
 
@@ -1553,7 +1553,7 @@ double64 maximumResidual( const Model<dim>& sg,
      }
    
    else {
-       throw csmp::Exception( CSMP_ERROR, "maximumResidual", 
+       throw csmp::Exception( ERROR, "maximumResidual", 
                              "Cannot identify placement of variable, residual cannot be computed, returning 0.0...!");
      }
 
@@ -1760,11 +1760,11 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
      csmp::Index  prop_key = sg.Database().StorageKey(el_prop);
 
      if ( prop_key.place != ELEMENT )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "stripDomainEdgesFor<2U>::StripDomainEdgesFor", 
+       throw csmp::Exception( FATAL_ERROR, "stripDomainEdgesFor<2U>::StripDomainEdgesFor", 
                                     "The requested property is not an element variable");
 
      if ( prop_key.type != SCALAR ) {
-          throw csmp::Exception( CSMP_WARNING, "stripDomainEdgesFor<double64oat,2U>::StripDomainEdgesFor", 
+          throw csmp::Exception( WARNING, "stripDomainEdgesFor<double64oat,2U>::StripDomainEdgesFor", 
                                    "only SCALAR variables are handled so far");
           return;
        }
@@ -1835,7 +1835,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
-         csmp_error.notice( CSMP_WARNING, "establishNeighborConnectivity( Element )", "supplied element vector is empty; nothing was done" );
+         csmp_error.notice( WARNING, "establishNeighborConnectivity( Element )", "supplied element vector is empty; nothing was done" );
          return;
       }
 
@@ -1856,7 +1856,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
       for ( size_t face=0U; face<(*it)->Faces(); face++ ) 
         {
            if ( (*it) == NULL ) {
-                csmp_error.notice( CSMP_ERROR, "establishNeighborConnectivity( Element )",
+                csmp_error.notice( ERROR, "establishNeighborConnectivity( Element )",
                                   "supplied element contains NULL pointer to elements; nothing was done" );
                 return;
              }
@@ -2029,7 +2029,7 @@ void  establishNeighborConnectivity( std::vector<csmp::Face<dim>*>& simplexVecto
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
-         csmp_error.notice( CSMP_WARNING, "establishNeighborConnectivity( Face )", "supplied element vector is empty; nothing was done" );
+         csmp_error.notice( WARNING, "establishNeighborConnectivity( Face )", "supplied element vector is empty; nothing was done" );
          return;
       }
 
@@ -2049,7 +2049,7 @@ void  establishNeighborConnectivity( std::vector<csmp::Face<dim>*>& simplexVecto
       for ( size_t face=0U; face<(*it)->Faces(); face++ )
         {
            if ( (*it) == NULL ) {
-                csmp_error.notice( CSMP_ERROR, "establishNeighborConnectivity( Face )",
+                csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )",
                                   "supplied element contains NULL pointer to elements; nothing was done" );
                 return;
              }
@@ -2064,7 +2064,7 @@ void  establishNeighborConnectivity( std::vector<csmp::Face<dim>*>& simplexVecto
            else if ( (*it)->FE()->IsLineElement() )
                line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            else{
-               csmp_error.notice( CSMP_ERROR, "establishNeighborConnectivity( Face )", "supplied element vector contains volumetric element! nothing was done" );
+               csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )", "supplied element vector contains volumetric element! nothing was done" );
                return;
            }
            key.clear();
@@ -2181,7 +2181,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
-         csmp_error.notice( CSMP_WARNING, "establishNeighborConnectivity( InterFace ):", "supplied element vector is empty; nothing was done." );
+         csmp_error.notice( WARNING, "establishNeighborConnectivity( InterFace ):", "supplied element vector is empty; nothing was done." );
          return;
       }
 
@@ -2201,7 +2201,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
       for ( size_t face=0U; face<(*it)->Faces(); face++ )
         {
            if ( (*it) == NULL ) {
-                csmp_error.notice( CSMP_ERROR, "establishNeighborConnectivity( InterFace )",
+                csmp_error.notice( ERROR, "establishNeighborConnectivity( InterFace )",
                                   "supplied element contains NULL pointer to elements; nothing was done" );
                 return;
              }
@@ -2221,7 +2221,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
            else if ( (*it)->FE()->IsLineElement() )
                line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            else{
-               csmp_error.notice( CSMP_ERROR, "establishNeighborConnectivity( InterFace )", "supplied element vector contains volumetric element! nothing was done" );
+               csmp_error.notice( ERROR, "establishNeighborConnectivity( InterFace )", "supplied element vector contains volumetric element! nothing was done" );
                return;
            }
            key.clear();
@@ -2378,7 +2378,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
        else non_surface_elements++;
    
     if ( non_surface_elements > 0U )
-      ErrorHandler::Instance().notice( CSMP_ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
+      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
                                        subdomain.Name(), "region contained not only surface elements." );
     return true;
    
@@ -2411,7 +2411,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
        else non_line_elements++;
    
     if ( non_line_elements > 0U )
-      ErrorHandler::Instance().notice( CSMP_ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
+      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
                                        subdomain.Name(), "region contained not only line elements." );
     return true;
    
@@ -2429,7 +2429,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain )
  {
-    ErrorHandler::Instance().notice( CSMP_ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
+    ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
                                      subdomain.Name(), "one-dimensional models have no boundaries." );
     return false;
    
@@ -2539,12 +2539,12 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
     if ( upper_limit && limit_value > max ) {
          cerr <<"\nIntended upper limit on variable '"<< variable <<"' exceeds that defined in database: ";
          cerr << limit_value <<" vs. "<< max << endl;
-         throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
       }
     if ( !upper_limit && limit_value < min ) {
          cerr <<"\nIntended lower limit on variable '"<< variable <<"' is lower than that defined in database: ";
          cerr << limit_value <<" vs. "<< min << endl;
-         throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
+         throw csmp::Exception( ERROR, "imposeLimitOn:", "user-defined limit is out of bounds specified in variable database." );
       }
    
     if ( prop_key.type == SCALAR ) {
@@ -2581,7 +2581,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                    }
                  break;
                default:
-                 throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "variable placement not recognized." );
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
             }
           else // if a lower limit shall be imposed
           switch( prop_key.place )
@@ -2615,7 +2615,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                    }
                  break;
                default:
-                 throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "variable placement not recognized." );
+                 throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
             }
       }
    
@@ -2678,10 +2678,10 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  }
                break;
              default:
-               throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "variable placement not recognized." );
+               throw csmp::Exception( ERROR, "imposeLimitOn:", "variable placement not recognized." );
           }
       }
-    else throw csmp::Exception( CSMP_ERROR, "imposeLimitOn:", "variable type not recognized." );
+    else throw csmp::Exception( ERROR, "imposeLimitOn:", "variable type not recognized." );
 
  } // end imposeLimitOn
 

@@ -37,8 +37,7 @@ class StressRotate {
     /// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
     double64 Sigma3() const;
     
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
   
     /// output 3 vectors representing the principal axes of the stress tensor
     void OutputToVTK( const std::string& filename, 

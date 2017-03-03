@@ -554,19 +554,20 @@ csmp::GridNode<dim>* PolygonGridManager<dim>::AddNode( const csmp::Point<dim>& p
 
 
 template<size_t dim>
-void PolygonGridManager<dim>::Out(std::ostream& os) const
+void PolygonGridManager<dim>::Out() const
  {
-    os<<"\nPolygonGridManager<"<< dim <<">::Out: points: "<< points_.size() <<", grid nodes: "<< grid_nodes_.size() <<"\n";
-    os<<"\tpoints and their indices:";
+    std::cout<<"\nPolygonGridManager<"<< dim <<">::Out: points: "<< points_.size() <<", grid nodes: "<< grid_nodes_.size() <<"\n";
+    std::cout<<"\tpoints and their indices:";
    
     for ( auto it=points_.begin(); it!=points_.end(); it++ )
-      os << (*it).first <<", "<< (*it).second;
-    os<<"\n";
+      std::cout << (*it).first <<", "<< (*it).second;
+    std::cout<<"\n";
 
-    os <<"\n\tgrid nodes:\n";
-    for ( auto it=grid_nodes_.begin(); it!=grid_nodes_.end(); ++it )
-      os << *(*it) <<" ";
-    os<<std::endl;
+    std::cout <<"\n\tgrid nodes:\n";
+    for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=grid_nodes_.begin(); it!=grid_nodes_.end(); ++it )
+      std::cout << *(*it) <<" ";
+    std::cout<<"\n";
+
  } // end Out
 
 

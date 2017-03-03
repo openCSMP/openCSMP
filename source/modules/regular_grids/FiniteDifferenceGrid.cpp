@@ -5,7 +5,7 @@
 
 #ifdef CSMP_WITH_IMAGE_OUTPUT
 #include "ColorPalette.h"
-#include "jpeg/jpeglib.h"
+#include "jpeglib.h"
 #endif
 
 using namespace std;
@@ -544,31 +544,27 @@ void   FiniteDifferenceGrid::SetRegionTo( double64 xmin, double64 xmax, double64
 
 
 
-void   FiniteDifferenceGrid::Out(std::ostream& os) const
+void   FiniteDifferenceGrid::Out() const
  { 
     int32 i, j;
-    os <<"\n\nFiniteDifferenceGrid<double64>::Out(): printing grid of size: ";
-    os << x_max-x_min <<" by "<< y_max-y_min <<" m" << endl;
-    os <<"x-range:    "<< x_min <<"-"<< x_max <<" m" << endl;
-    os <<"y-range:    "<< y_min <<"-"<< y_max <<" m" << endl;
-    os <<"resolution (X): "<< xresolution <<" m"        << endl;
-    os <<"resolution (Y): "<< yresolution <<" m"        << endl;
-    if ( HasFrame() ) os <<"grid with frame of width: "<< xfr << endl;
-    os << size_y <<" rows, "<< size_x <<" columns" << endl;
-    os  << "\n\t";
-    for ( j=-xfr; j<size_x+xfr; j++ ) os << "col "<< j <<"\t";
+    cout <<"\n\nFiniteDifferenceGrid<double64>::Out(): printing grid of size: ";
+    cout << x_max-x_min <<" by "<< y_max-y_min <<" m" << endl;
+    cout <<"x-range:    "<< x_min <<"-"<< x_max <<" m" << endl;
+    cout <<"y-range:    "<< y_min <<"-"<< y_max <<" m" << endl;
+    cout <<"resolution (X): "<< xresolution <<" m"        << endl;
+    cout <<"resolution (Y): "<< yresolution <<" m"        << endl;
+    if ( HasFrame() ) cout <<"grid with frame of width: "<< xfr << endl;
+    cout << size_y <<" rows, "<< size_x <<" columns" << endl;
+    cout  << "\n\t";
+    for ( j=-xfr; j<size_x+xfr; j++ ) cout << "col "<< j <<"\t";
     
     for ( i=-yfr; i<size_y+yfr; i++ )
       {
-         os <<"\nrow "<< i <<"\t";
+         cout <<"\nrow "<< i <<"\t";
          for ( j=-xfr; j<size_x+xfr; j++ ) 
-<<<<<<< HEAD
            cout << (*this)(i,j) <<"\t";
-=======
-           os << (*this).Value(i,j) <<"\t";
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
       }
-    os <<"\n\nDone..." << endl;
+    cout <<"\n\nDone..." << endl;
  }
 
 

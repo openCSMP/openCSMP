@@ -207,7 +207,7 @@ namespace csmp
             cerr << "bulk.beata, water.LiquidCompressibilityFromP : " << bulk.beta << "\t" <<  water.LiquidCompressibilityFromP(pcurrent) << endl;
             //	    DumpStatus();
             cerr << "---------------------------------------------------------------------------\n\n";	    
-            csmp_error.notice( CSMP_FATAL_ERROR, 
+            csmp_error.notice( FATAL_ERROR, 
                              "H2OFluidProperties::UpdatePropertiesF_LowT() - encountered error condition:",
                              "see output above, terminating ...\n");
 

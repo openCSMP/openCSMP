@@ -27,12 +27,12 @@ NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op_dNi_dV( const PropertyD
     MathOperatorRHS<dim>::Name("NumIntegral_NT_op_dNi_dV", oper, test );
     
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            oper, "Operand must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 
@@ -63,16 +63,16 @@ NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op_dNi_dV( const PropertyD
     MathOperatorRHS<dim>::Name("NumIntegral_NT_op_dNi_dV", oper, test );
     
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            oper, "Operand must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            test, "Dependent variable must be a scalar property placed on the nodes." );
 
     if ( mtrl_key.place != ELEMENT )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            mtrl, "Material operand must be placed on the element." );
  }
 

@@ -21,7 +21,7 @@ JPEG_RegionInterface::JPEG_RegionInterface( Model<2U>& sg, const char* group_nam
   
     // test if variable "inner radius" is defined
     if ( !sg.Database().IsDefined("inner radius") )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "JPEG_RegionInterface::OutputRegionDataToJPG", 
+       throw csmp::Exception( FATAL_ERROR, "JPEG_RegionInterface::OutputRegionDataToJPG", 
                                     "Element property 'inner radius' does not exist but is needed by this object! Terminating....");
 
     // get the dimensions of the group

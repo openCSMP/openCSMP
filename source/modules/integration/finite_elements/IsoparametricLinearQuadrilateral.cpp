@@ -413,7 +413,7 @@ double64  IsoparametricLinearQuadrilateral::InnerRadius()
    vol /= sum;
 
    if(AspectRatio()>7.0){
-   throw csmp::Exception( CSMP_WARNING, "IsoparametricLinearQuadrilateral::InnerRadius",
+   throw csmp::Exception( WARNING, "IsoparametricLinearQuadrilateral::InnerRadius",
                       "Approximate radius - not valid for given HAR element");
    }
 
@@ -882,7 +882,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
                 <<"N[2] = "<<N[2]<<" ;\t"
                 <<"N[3] = "<<N[3]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricLinearQuadrilateral::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricLinearQuadrilateral::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1343,12 +1343,12 @@ void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
  {
      // in 3D, all nodes may be at model boundary
      if ( use2Dto3Djacobi && bnodes.size() != 2 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
      if ( bnodes.size() > 2 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
@@ -1356,7 +1356,7 @@ void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
            cout <<"\nnodes at boundary: ";
            for ( size_t j=0; j<bnodes.size(); j++ ) cout << bnodes[j] <<" ";
            cout << endl;
-           throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
+           throw csmp::Exception( ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
                                       "correct input to meet this criterion." );
        }
@@ -1404,12 +1404,12 @@ IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
 
      // in 3D, all nodes may be at model boundary
      if ( use2Dto3Djacobi && bnodes.size() != 2 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 
      if ( bnodes.size() > 2 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
 

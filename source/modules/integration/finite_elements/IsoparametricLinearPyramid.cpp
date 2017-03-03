@@ -943,7 +943,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
                 <<"N[3] = "<<N[3]<<" ;\t"
                 <<"N[4] = "<<N[4]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricLinearPyramid::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricLinearPyramid::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1341,7 +1341,7 @@ IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<size_t>& bn
     fnids.resize(bnodes.size());
 
      if ( bnodes.size() !=4 || bnodes.size() !=3  )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 

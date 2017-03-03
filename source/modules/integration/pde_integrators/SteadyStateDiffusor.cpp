@@ -32,7 +32,7 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
    firstCall_(true)
  {
     if ( !isoparametricElementMesh( sg ) )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+        throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&  p_ref = sg.Database();
@@ -40,22 +40,22 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
     csmp::Index  conductivity_key = p_ref.StorageKey(diffusivity);
     if ( conductivity_key.place != ELEMENT and conductivity_key.place != ELEMENT_INTEGRATION_POINT 
          and conductivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( source_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar" ); 
 
     if ( source_variable_key.place != ELEMENT and source_variable_key.place != ELEMENT_INTEGRATION_POINT
          and source_variable_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be placed on element, face or their integration points" ); 
 
     // initializing the algorithm  
@@ -92,7 +92,7 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
    firstCall_(true)
  {
     if ( !isoparametricElementMesh( sg ) )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+        throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&  p_ref = sg.Database();
@@ -100,27 +100,27 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
     csmp::Index  conductivity_key = p_ref.StorageKey(diffusivity);
     if ( conductivity_key.place != ELEMENT  and  conductivity_key.place != ELEMENT_INTEGRATION_POINT 
          and conductivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                       diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                       diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( source_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar" ); 
 
     if ( source_variable_key.place != ELEMENT and source_variable_key.place != ELEMENT_INTEGRATION_POINT
          and source_variable_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be placed on element, face or their integration points" ); 
 
     csmp::Index  nsource_variable_key = p_ref.StorageKey(point_source_variable);
     if ( nsource_variable_key.place != NODE  and  nsource_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                       point_source_variable, "variable must be a scalar placed on the node" ); 
     
     // initializing the algorithm  
@@ -157,7 +157,7 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
    firstCall_(true)
  {
     if ( !isoparametricElementMesh( sg ) )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+        throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&  p_ref = sg.Database();
@@ -165,18 +165,18 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
     csmp::Index  diffusivity_key = p_ref.StorageKey(diffusivity);
     if ( diffusivity_key.place != ELEMENT  and diffusivity_key.place != ELEMENT_INTEGRATION_POINT 
          and diffusivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( gradient_variable_key.place != ELEMENT and gradient_variable_key.place != ELEMENT_INTEGRATION_POINT
          and gradient_variable_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a scalar placed on element, face or element integration point" ); 
 
@@ -213,7 +213,7 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
    firstCall_(true)
  {
     if ( !isoparametricElementMesh( sg ) )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+        throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&  p_ref = sg.Database();
@@ -221,28 +221,28 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
     csmp::Index  diffusivity_key = p_ref.StorageKey(diffusivity);
     if ( diffusivity_key.place != ELEMENT  and  diffusivity_key.place != ELEMENT_INTEGRATION_POINT 
          and diffusivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( source_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar" ); 
 
     if ( source_variable_key.place != ELEMENT and source_variable_key.place != ELEMENT_INTEGRATION_POINT
          and source_variable_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be placed on element, face or their integration points" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT and gradient_variable_key.place != FACE and gradient_variable_key.place != ELEMENT_INTEGRATION_POINT)
           && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a vector placed on element, face or integration point" ); 
 
@@ -284,7 +284,7 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
    firstCall_(true)
  {
     if ( !isoparametricElementMesh( sg ) )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+        throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
 
     const PropertyDatabase<dim>&  p_ref = sg.Database();
@@ -292,34 +292,34 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
     csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
     if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT
          and lhs_diffusivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              lhs_diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
     if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT
          and rhs_diffusivity_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              rhs_diffusivity, "variable must be placed on element, face or element integration point" ); 
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              diffusing_variable, "variable must be a scalar placed on the node" ); 
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( source_variable_key.type != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be a scalar" ); 
 
     if ( source_variable_key.place != ELEMENT and source_variable_key.place != ELEMENT_INTEGRATION_POINT
          and source_variable_key.place != FACE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              spatial_source_variable, "variable must be placed on element, face or their integration points" ); 
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT and gradient_variable_key.place != FACE and
           gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
+      throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):", 
                              gradient_variable, 
                             "variable must be a vector placed on element, face or element integration point" ); 
 

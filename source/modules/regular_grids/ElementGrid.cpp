@@ -4,7 +4,6 @@ using namespace std;
 
 namespace csmp {
 
-<<<<<<< HEAD
 
 EGridIterator  ElementGrid::Begin()
  {
@@ -111,18 +110,15 @@ int32  ElementGrid::Size() const
 
 
 void ElementGrid::Out() const
-=======
-void ElementGrid::Out(std::ostream& os) const
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
  {
     pair<int32,int32>  index;
     
-    os <<"\nElementGrid::Out(): printing grid...\n" << endl;
+    cout <<"\nElementGrid::Out(): printing grid...\n" << endl;
     for ( cEGridIterator it=grid.begin(); it!=grid.end(); it++ )
       {
           index = (*it).first;
-          os <<"ElementGrid["<< index.first <<","<< index.second <<"] ";
-          os << (*it).second << endl;
+          cout <<"ElementGrid["<< index.first <<","<< index.second <<"] ";
+          cout << (*it).second << endl;
       }
  }
 

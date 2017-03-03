@@ -51,6 +51,13 @@ TensorVariable<2U>::TensorVariable( const TensorVariable<2U>& t )
  }
 
 
+TensorVariable<2U>::TensorVariable( TensorVariable<2U>&& t )
+ : flag{t.flag},
+   data{t.data}
+ {
+ }
+
+
 
 /**
     initialises variable as diagonal isotropic tensor with flag and value
@@ -746,19 +753,19 @@ void  TensorVariable<2U>::In()
 
 /// @test tested: O.K.
 
-void  TensorVariable<2U>::Out(std::ostream& os) const
+void  TensorVariable<2U>::Out() const
  {
      size_t   i, j;
      
-     os <<"\nStatus: "<< endl;
-    for ( j=0; j<2U; j++ ) os << parseStatus(flag[j]) <<"  ";
-    os << endl;
+     cout <<"\nStatus: "<< endl;
+    for ( j=0; j<2U; j++ ) cout << parseStatus(flag[j]) <<"  ";
+    cout << endl;
 
-     os <<"\nValues: "<< endl;
+     cout <<"\nValues: "<< endl;
      for ( i=0; i<2U; i++ )
        {
-          for ( j=0; j<2U; j++ ) os << data[i][j] <<"\t\t";
-          os << endl;
+          for ( j=0; j<2U; j++ ) cout << data[i][j] <<"\t\t";
+          cout << endl;
        }
  } // end Out
 

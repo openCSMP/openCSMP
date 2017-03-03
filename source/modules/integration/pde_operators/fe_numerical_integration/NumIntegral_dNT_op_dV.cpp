@@ -21,12 +21,12 @@ NumIntegral_dNT_op_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dV( const PropertyDatabas
            MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ||
            MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE) ||
            MathOperatorRHS<dim>::MaterialOperandType() != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dV<dim>::(constructor)", 
                       oper, "Operand must be a vector property placed on the element, face or element integration point." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

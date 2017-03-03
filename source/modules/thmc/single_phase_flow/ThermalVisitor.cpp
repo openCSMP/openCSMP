@@ -57,7 +57,7 @@ ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model, std::vector<std::string>
     }
     else
     {
-        throw csmp::Exception(CSMP_FATAL_ERROR,"ThermalVisitor(constructor)"," Incorrect number of variable names provided"," Please use the correct number.");
+        throw csmp::Exception(FATAL_ERROR,"ThermalVisitor(constructor)"," Incorrect number of variable names provided"," Please use the correct number.");
     }
   // Variable initialization
   // 

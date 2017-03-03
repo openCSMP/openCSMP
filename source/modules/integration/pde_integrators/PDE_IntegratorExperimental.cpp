@@ -238,31 +238,31 @@ To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void  PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputGlobals( std::ostream& os, int32 precision )
+void  PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputGlobals( int32 precision )
  {
-   os <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
-   G_.Out( os, precision );
+   cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   G_.Out( precision );
 
-   os.setf(ios::scientific);
-   os <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
+   cout.setf(ios::scientific);
+   cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
    for ( size_t i=0U; i<rh_.size(); i++ )
      {
-        os.precision(precision);
-        if ( rh_[i] >= 0. ) os <<" ";
-        os << rh_[i] <<" ";
+        cout.precision(precision);
+        if ( rh_[i] >= 0. ) cout <<" ";
+        cout << rh_[i] <<" ";
      }
-   os << endl;
+   cout << endl;
 
-   os <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
+   cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
    for ( size_t i=0U; i<x_.size(); i++ )
      {
-        os.precision(precision);
-        if ( x_[i] >= 0 ) os <<" ";
-        os << x_[i] <<" ";
+        cout.precision(precision);
+        if ( x_[i] >= 0 ) cout <<" ";
+        cout << x_[i] <<" ";
      }
-   os << endl;
+   cout << endl;
 
-   os.unsetf(ios::scientific);
+   cout.unsetf(ios::scientific);
 
  } // end OutputGlobals
 
@@ -350,7 +350,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsLHS() 
     for ( it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out(cout);
+         (*it).second->Out();
       }
  }
 
@@ -363,7 +363,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsRHS() 
     for ( it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out(cout);
+         (*it).second->Out();
       }
  }
 
@@ -626,7 +626,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         //                                   Index,   calculation offset
         if ( unspecified != pkey ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
         else
-            throw csmp::Exception( CSMP_WARNING,
+            throw csmp::Exception( WARNING,
                                    "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                    "lefthand basic operand not found.");
         // test function operands are picked up when the righthandside is accumulated
@@ -643,7 +643,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
         if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
         else
-          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
+          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                          "righthand test operand not found.");
      }
    // including pde operators on the model boundary
@@ -656,7 +656,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
             if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
             if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
             else
-              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
+              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
                                              "righthand test operand not found.");
          }
      }
@@ -675,7 +675,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
           cout <<"\nThe system of equations is undefined. ";
           cout <<"\nCreate corresponding LHS basic or test Operand for: ";
           cout << (*lhs_it).first << endl;
-          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                          "lefthand basic or test operand missing");
        }
 
@@ -735,7 +735,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                 }
                break;
             default:
-              throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+              throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                            "Test operand placement unresolved");
          }
       }
@@ -757,13 +757,13 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
                (*iter).second = (*lhs_it).second->BasicOperandOffset();
           }
         else
-          throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                        "LHS basic operand matrix placement i unresolved");
 
         if ( (iter=test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end() )
           (*lhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( FATAL_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
    
@@ -774,7 +774,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                           (*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
@@ -785,7 +785,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( c
         if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                           (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
@@ -868,11 +868,11 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
     const size_t            dim2(dim * dim);
 
     if ( !setup_established_ )
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() ) {
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "No basic operands have been specified...");
          return;
       }
@@ -885,7 +885,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions
             typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
             if ( prop_key.place != NODE ) {
-                 throw csmp::Exception( CSMP_WARNING, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+                 throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                  "So far no conditions are assigned to elements, faces, segments");
                  return;
               }
@@ -1031,11 +1031,11 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& gref )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                       "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                              "No (basic) operands have been specified...");
 
     // ----------------------------------------------------
@@ -1062,7 +1062,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
          size_t      offset   = (*it).second;
 
          if ( prop_key.place != NODE )
-           throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                  "So far no conditions are assigned to elements, faces, segments");
 
           switch( prop_key.type )
@@ -1145,7 +1145,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditio
                   }
                  break;
                default:
-                 throw csmp::Exception( CSMP_FATAL_ERROR,
+                 throw csmp::Exception( FATAL_ERROR,
                                        "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                        "Variable type not recognised by this method" );
         }
@@ -1242,11 +1242,11 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& domain )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                       "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                              "No (basic) operands have been specified...");
 
      // 1. establish the rows (and columns) to which Dirichlet conditions were applied and storing these in a map
@@ -1262,7 +1262,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialCondi
          size_t      offset   = (*it).second;
 
          if ( prop_key.place != NODE )
-           throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
+           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                                  "So far no conditions are assigned to elements, faces, segments");
 
           switch( prop_key.type )
@@ -1317,7 +1317,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialCondi
                   }
                  break;
                default:
-                 throw csmp::Exception( CSMP_FATAL_ERROR,
+                 throw csmp::Exception( FATAL_ERROR,
                                        "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EliminateEssentialConditions:",
                                        "Variable type not recognised by this method" );
         }
@@ -1629,7 +1629,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
         offset   = (*it).second;
 
         if ( prop_key.place != NODE )
-            throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+            throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
         switch ( prop_key.type  )
          {
@@ -1683,7 +1683,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICI
                  }
                break;
         default:
-              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
             
          } // end switch(type)
@@ -1717,7 +1717,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1( SIMPLIC
         offset   = (*it).second;
 
         if ( prop_key.place != NODE )
-            throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1:",
+            throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1:",
                                            "only nodal properties can be output by this method.");
         switch ( prop_key.type  )
          {
@@ -1773,7 +1773,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults1( SIMPLIC
                  }
                break;
         default:
-              throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults:",
+              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::OutputResults:",
                                             "Output to ARRAY type variables is not supported by this method yet.");
             
          } // end switch(type)
@@ -1825,8 +1825,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICI
     
     // 6. diagnostics
     if ( debug ) {
-         Out(cout);
-         OutputGlobals(cout);
+         Out();
+         OutputGlobals();
       }
  
     // 7. invert global matrix
@@ -1872,8 +1872,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver1( SIMPLIC
    
     // 6. diagnostics
     if ( debug ) {
-         Out(cout);
-         OutputGlobals(cout);
+         Out();
+         OutputGlobals();
          // OutputInput();
       }
  
@@ -1944,8 +1944,8 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( Model<di
     
     // 7. diagnostics
     if ( debug ) {
-         Out(cout);
-         OutputGlobals(cout);
+         Out();
+         OutputGlobals();
          // OutputInput();
       }
    
@@ -2051,7 +2051,7 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMap
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
-       throw csmp::Exception( CSMP_ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
+       throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
@@ -2106,52 +2106,52 @@ void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMap
 
 */
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out(std::ostream& os) const
+void PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out() const
  {
-     os <<"\nPDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out:\n";
+     cout <<"\nPDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::Out:\n";
    
      if ( basic_operands_.empty() || test_operands_.empty() ) {
-          os <<"\nintegrator has not been initialized yet.\n";
+          cout <<"\nintegrator has not been initialized yet.\n";
           return;
        }
    
-     os <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
+     cout <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
      //  std::map<Parameter,size_t>  test_operands_;
      for ( auto it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       os <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
+       cout <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
 
-     os <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
+     cout <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
      for ( auto it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ ) {
-          os <<"\n"<< (*it).first <<": ";
-          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     os <<"\n\nrighthand element integrals that will be accumulated:\n";
+     cout <<"\n\nrighthand element integrals that will be accumulated:\n";
      for ( auto it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ ) {
-          os <<"\n"<< (*it).first <<": ";
-          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     os <<"\n\nsurface element integrals that will be accumulated:\n";
+     cout <<"\n\nsurface element integrals that will be accumulated:\n";
      for ( auto it=rhs_boundary_operators_.begin(); it!=rhs_boundary_operators_.end(); it++ ) {
-          os <<"\n"<< (*it).first <<": ";
-          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     os <<"\n\npost-processing operators:\n";
+     cout <<"\n\npost-processing operators:\n";
      for ( auto it=postpro_operators_.begin(); it!=postpro_operators_.end(); it++ ) {
-          os <<"\n"<< (*it).first <<": ";
-          //os << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     os <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
-     os <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
-     os <<"\n\tset up etablished:                  "<< setup_established_;
-     os <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
-     os <<"\n\ttime increment:                     "<< time_increment_;
-     os <<"\n\tscale factor for essential conds:   "<< scale_factor_;
+     cout <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
+     cout <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
+     cout <<"\n\tset up etablished:                  "<< setup_established_;
+     cout <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
+     cout <<"\n\ttime increment:                     "<< time_increment_;
+     cout <<"\n\tscale factor for essential conds:   "<< scale_factor_;
    
-     if ( solver_ != NULL ) os <<"\n\nSolver: "<< typeid(solver_).name() << endl;
+     if ( solver_ != NULL ) cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
    
  } // end Out
 

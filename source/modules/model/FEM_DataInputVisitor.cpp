@@ -30,12 +30,12 @@ FEM_DataInputVisitor<Var,dim>::FEM_DataInputVisitor( Model<dim>& sg,
 
      if ( prop_key_.place == NODE ) {
          if ( renumberer.VisitedNodes() != data.Size() )
-           throw csmp::Exception( CSMP_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between input data and number of nodes");
        }
      else if ( prop_key_.place == ELEMENT ) {
          if ( renumberer.VisitedElements() != data.Size() )
-           throw csmp::Exception( CSMP_ERROR, "FEM_DataInputVisitor(constructor)",
+           throw csmp::Exception( ERROR, "FEM_DataInputVisitor(constructor)",
                           "size mismatch between input data and number of elements");
        }
   }

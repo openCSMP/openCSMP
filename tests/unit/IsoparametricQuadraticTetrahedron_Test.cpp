@@ -76,7 +76,7 @@ IsoparametricQuadraticTetrahedron_Test::IsoparametricQuadraticTetrahedron_Test( 
     element2_->FE()->CurrentID(1U);
     element2_->CoordinateMatrix();
    
-    getInfoStream() <<"\nconstructor: reference element volume: "<< element2_->Volume() << endl;
+    cout <<"\nconstructor: reference element volume: "<< element2_->Volume() << endl;
 }
 
 
@@ -221,27 +221,20 @@ void IsoparametricQuadraticTetrahedron_Test::ChangeNodeCoordinatesToParametric()
 */
 void IsoparametricQuadraticTetrahedron_Test::run()
  {
-     std::ostream& os = getInfoStream();
-   os <<"\nIsoparametricQuadraticTetrahedron_Test::run: testing: "<< typeid(IsoparametricQuadraticTetrahedron()).name() <<"\n";
+   cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: testing: "<< typeid(IsoparametricQuadraticTetrahedron()).name() <<"\n";
    
    // 0. Output of element for visual check
    // -------------------------------------
    if ( verbose_ ) {
         // coordinates
         DenseMatrix<DM_MIN>  XY(element_->Nodes(),3U);
-<<<<<<< HEAD
         element_->NodeCoordinateMatrix( XY );
         cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element coordinate matrix:"<< endl;
         XY.Out();
-=======
-        element_->CoordinateMatrix( XY );
-        os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element coordinate matrix:"<< endl;
-        XY.Out(os);
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
         // nodes
         vector<size_t>  NN(element_->Nodes());
         for ( size_t i=0U; i<NN.size(); ++i ) NN[i] = element_->N(i)->Idx();
-        //os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Node number vector (element):"<< endl;
+        //cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Node number vector (element):"<< endl;
         //out(NN);
         // dummy data (nodes 1-10 translating integers to numbers)
         DenseMatrix<DM_MIN>  DATA(1,element_->Nodes());
@@ -264,7 +257,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
 
   // 1. Testing the interpolation functions
   // ----------------------------------------------------
-  if ( verbose_ ) os <<"\n\nIsoparametricQuadraticTetrahedron_Test::run: testing interpolation functions:\n";
+  if ( verbose_ ) cout <<"\n\nIsoparametricQuadraticTetrahedron_Test::run: testing interpolation functions:\n";
   // one at the corresponding node and zero everywhere else?
   TestInterpolationFunctionValues( *element_ );
   // do ipols sum up to one at integration points and barycentre
@@ -274,38 +267,38 @@ void IsoparametricQuadraticTetrahedron_Test::run()
        //setName( "interactive user-defined interpolation function test" );
        vector<double64> IP(element_->Nodes()), xyz(3U);
 
-        os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Interpolation functions at point xyz:"<< endl;
-        // os <<"Enter point: ";
+        cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Interpolation functions at point xyz:"<< endl;
+        // cout <<"Enter point: ";
         // cin >> xyz[0] >> xyz[1] >> xyz[2];
         xyz[0] = 0.1; xyz[1] = 0.1; xyz[2] = 0.1;
         element_->N_AtGlobalPoint( IP, xyz );
         out(IP);
-        os <<"\tsum interpolation functions: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
+        cout <<"\tsum interpolation functions: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
         
         element_->N_AtIntegrationPoint( 2, IP );
         out(IP);
-        os <<"\tsum intpol.f. at integration point: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
+        cout <<"\tsum intpol.f. at integration point: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
 
         // computing position of element barycenter
         csmp::Point<3U> bcenter(0.,0.,0.);
         for ( size_t i=0; i<element_->Nodes(); i++ ) bcenter += element_->N(i)->Coordinate();
         bcenter /= static_cast<double64>(element_->Nodes());
-        os <<"\nelement barycenter: "; bcenter.Out(os);
+        cout <<"\nelement barycenter: "; bcenter.Out();
         // versus 4-node approximation
         bcenter = 0.;
         for ( size_t i=0; i<4; i++ ) bcenter += element_->N(i)->Coordinate();
         bcenter /= 4.;
-        os <<"\nelement barycenter (as based on corner nodes): "; bcenter.Out(os);
+        cout <<"\nelement barycenter (as based on corner nodes): "; bcenter.Out();
         xyz = bcenter.Coordinates();
         element_->N_AtGlobalPoint( IP, xyz );
-        os <<"\nShape function values calculated at barycentre (global coordinates): "<< endl;
+        cout <<"\nShape function values calculated at barycentre (global coordinates): "<< endl;
         out(IP);
-        os <<"\tsum Ni: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
+        cout <<"\tsum Ni: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
 
-        os <<"\nShape function values at barycentre (in parametric space): "<< endl;
+        cout <<"\nShape function values at barycentre (in parametric space): "<< endl;
         element_->N_AtBaryCenter( IP );
         out(IP);
-        os <<"\tsum Ni: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
+        cout <<"\tsum Ni: "<< (IP[0]+IP[1]+IP[2]+IP[3]+IP[4]+IP[5]+IP[6]+IP[7]+IP[8]+IP[9]) << endl;
      }
 
 
@@ -320,12 +313,12 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   element_->dN( DN );
   DenseMatrix<DM_MIN> DATA2;
   DATA2 = DN;
-  os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing local interpolation function derivatives to file 'etestd2'.";
+  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing local interpolation function derivatives to file 'etestd2'.";
   element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
 
   element_->dN_AtNode( DN, 7 );
-  os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element1: Calculated interpolation function derivatives, at node 7 (n=0..n-1):";
-  DN.Out(os);
+  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element1: Calculated interpolation function derivatives, at node 7 (n=0..n-1):";
+  DN.Out();
 
   ChangeNodeCoordinatesToTestConfiguration();
   element_->Idx( 3 ); // to prompt update of coordinate matrix
@@ -333,7 +326,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   //setName( "visual interpolation function-derivative test (physical space)" );
   element_->dN( DN );
   DATA2 = DN;
-  os <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing global interpolation function derivatives to file 'etestd3'.";
+  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing global interpolation function derivatives to file 'etestd3'.";
   element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
 
 
@@ -410,8 +403,8 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   Point<3U> rst_center(0.25,0.25,0.25);
   element_->FE()->JacobianAtIntegrationPoint( 0 ); // near the origin
   const double64 detJ = element_->FE()->JacobianInverse();
-  os <<"\ninverted Jacobian matrix (should be unit-diagonal):";
-  element_->FE()->JINV.Out(os);
+  cout <<"\ninverted Jacobian matrix (should be unit-diagonal):";
+  element_->FE()->JINV.Out();
   //setName( "testing inverted Jacobian matrix" );
   _equal( element_->FE()->JINV(0,0), 1., 1.0e-7 );
   _equal( element_->FE()->JINV(1,1), 1., 1.0e-7 );
@@ -434,7 +427,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   // 5.1 linear extrapolation of integration point values to the nodes
   //setName( "integration-point to node extrapolation test 1 (const values=2)" );
   element_->ExtrapolateIntegrationPointVariableToNodes( 1, IPVF, NVF );
-  os <<"\nExtrapolated constant integration point values: ";
+  cout <<"\nExtrapolated constant integration point values: ";
   out( NVF );
   for ( int i=0; i<NVF.size(); i++ ) _equal( NVF[i], 2., 1.0e-7 );
   
@@ -448,7 +441,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   IPVF[3] = (element_->IntegrationPoint(3))[1];
   //setName( "integration-point to node extrapolation test 2 (linear variation)" );
   element_->ExtrapolateIntegrationPointVariableToNodes( 1, IPVF, NVF );
-  os <<"\nExtrapolated gradient integration point values: ";
+  cout <<"\nExtrapolated gradient integration point values: ";
   out( NVF );
   for ( size_t i=0U; i<element_->Nodes(); i++ )
     _equal( NVF[i], element_->N(i)->y(), 1.0e-7 );
@@ -487,7 +480,6 @@ void IsoparametricQuadraticTetrahedron_Test::run()
 */
 void IsoparametricQuadraticTetrahedron_Test::TestInterpolationFunctionValues( const Element<3U>& e )
  {
-     std::ostream& os = getInfoStream();
     //setName( "are ipol-function values 1 at corresponding nodes and zero everywhere else?" );
    
     vector<double64> IPOL(element_->Nodes()), xyz(3U);
@@ -557,7 +549,6 @@ void IsoparametricQuadraticTetrahedron_Test::TestSumOfInterpolationFunctionValue
 */
 void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3U>& e )
  {
-     std::ostream& os = getInfoStream();
     //setName( "interpolation function node-value- to integration-point interpolation test" );
    
     // 0. generating values at integration points from coordinates
@@ -597,13 +588,12 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
 */
 void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const Element<3U>& e )
  {
-     std::ostream& os = getInfoStream();
     vector<double64>   nrml;
     VectorVariable<3>  flux(PLAIN,PLAIN,PLAIN,0.3,0.5,1.0);
     vector<double64>   IPOL(6);
     double64           flux_balance(0.);
  
-    os <<"\nElement "<< e.Idx() <<", volume: "<< e.Volume();
+    cout <<"\nElement "<< e.Idx() <<", volume: "<< e.Volume();
  
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
@@ -613,32 +603,22 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
          VectorVariable<3U>  fn(nrml);
          // projecting flux onto normal
          // dot product fn . vc
-<<<<<<< HEAD
          double64 projflux  = dotProduct(fn,flux);
          cout <<"\nFace "<< i <<", projected flux:         "<< projflux;
-=======
-         double64 projflux  = fn & flux;
-         os <<"\nFace "<< i <<", projected flux:         "<< projflux;
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
          
          // integrating flux over the face
          double64 fflux = projflux * e.FaceArea( i );
       
          // summing flux balance
          flux_balance += fflux;  
-         os <<"\nFace "<< i <<", integrated normal flux: "<< fflux;         
+         cout <<"\nFace "<< i <<", integrated normal flux: "<< fflux;         
       }
-    os <<"\n";
+    cout <<"\n";
 
-<<<<<<< HEAD
    // accuracy is limited by the single-precision representation of the point coordinates
    //_equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
    _equal( flux_balance, 0., 1.0e-7 );
     cout <<"\nFlux balance of element "<< e.Idx() <<": "<< flux_balance << endl;
-=======
-   _equal( flux_balance, 0., tolerance_factor_ * numeric_limits<double64>::epsilon() );
-    os <<"\nFlux balance of element "<< e.Idx() <<": "<< flux_balance << endl;
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
       
  } // end CheckElementFaceConsistency
 
@@ -650,9 +630,8 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
     The integration points are coloured by number and are then output to VTK file.
     Point 1=0, point2=1...n-1.
 */
-void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const char* file, const Element<3U>& e )
+void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const char* file, const Element<3U>& e ) const
  {
-     std::ostream& os = getInfoStream();
      // 0. generating values, first integration point=0, second=1...
      // ------------------------------------------------------------
     vector<pair<Point<3U>,double64> >  ipoint_data(element_->IntegrationPoints()); // locations in physical space
@@ -710,7 +689,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
           ofs << (*it).second <<" "<< endl;
        }
      ofs << endl;
-     if ( verbose_ ) os <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;
+     if ( verbose_ ) cout <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;
       
  } // end OutputIntegrationPointsToVTK
 
@@ -725,9 +704,8 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
     Each normal is scaled by the sqrt of the element volume and placed 
     with its origin on the barycenter of the corresponding face.
 */
-void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char* file, const Element<3U>& e )
+void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char* file, const Element<3U>& e ) const
  {
-     std::ostream& os = getInfoStream();
     vector<double64>    nrml;
     size_t              counter(0);
     map<size_t,pair<Point<3>,Point<3> > >  normals;
@@ -795,7 +773,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char*
           ofs << (*it).second.second[0] <<" "<<  (*it).second.second[1] <<" "<<  (*it).second.second[2] << endl;
        }
      ofs << endl;
-     if ( verbose_ ) os <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;
+     if ( verbose_ ) cout <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;
       
  } // end OutputFaceNormalsToVTK
 

@@ -723,13 +723,13 @@ IsoparametricQuadraticPyramid::dN( DenseMatrix<DM_MIN>& DN14 )
         if(ldbug){
           cout<<" At node  #: "<<i+1<<endl<<endl;
           cout<<" Jacobian Matrix: "<<endl;
-          JAC.Out(cout);
+          JAC.Out();
         }
           JacobianInverse();
           ////////// Debug Printout////////////////////////////////
           if(ldbug){
             cout<<" Jacobian Inverse Matrix: "<<endl;
-            JINV.Out(cout);
+            JINV.Out();
           }
           /////////////////////////////////////////////////////////
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
@@ -788,7 +788,7 @@ IsoparametricQuadraticPyramid::dN_At( DenseMatrix<DM_MIN>& DN2,
       cout<<" IsoparametricQuadraticPyramid::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
       rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
       cout<<" IsoparametricQuadraticPyramid::dN  Matrix DN2: "<<endl;
-      DN2.Out(cout);
+      DN2.Out();
     }
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
@@ -1115,7 +1115,7 @@ IsoparametricQuadraticPyramid::PhysicalToParametric(
                 <<"N[12] = "<<N[12]<<" ;\t"
                 <<"N[13] = "<<N[13]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticPyramid::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricQuadraticPyramid::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1379,7 +1379,7 @@ IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary( const vector<size_t>&
      fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 8 || bnodes.size() != 6  )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricQuadraticPyramid::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1532,7 +1532,7 @@ IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes( size_
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
    if ( IVAR.size() != (gpe*nvars) )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
                                   "Input vector must have 'nvars' x 6 entries");
 
    NVAR.resize( npe * nvars );
@@ -1542,7 +1542,7 @@ IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes( size_
    if ( first_call ) {
        // checking starting conditions
        if ( gpe != 6 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticPyramid::ExtrapolateIntegrationPointVariableToNodes",
          "This method expects six integration points on which extrapolation functions will be based on" );
 
         first_call = false;

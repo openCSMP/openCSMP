@@ -99,7 +99,7 @@ bool TextFileInterface<GlobalFunction>
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
                 std::cerr <<"\nTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterface<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_.c_str() );
@@ -111,7 +111,7 @@ bool TextFileInterface<GlobalFunction>
             {
                 std::cerr <<"\nTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterface<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );
@@ -156,7 +156,7 @@ bool TextFileInterface<GlobalFunction>
             {
                 std::cerr <<"\nTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterface<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );

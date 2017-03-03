@@ -73,7 +73,7 @@ void TwoPhaseFileBased<dim>::ReadFile( const char* fileName )
  {
    relpermFile_.open( fileName, ios::in | ios::binary);
    if( !relpermFile_ ) {
-     throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseFileBased",
+     throw csmp::Exception( FATAL_ERROR, "TwoPhaseFileBased",
                             "Could not open relative permeability file!",
                             "check input file");
        }

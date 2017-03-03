@@ -167,10 +167,10 @@ stress was measured.
 void StressRotate::Rotate( char axis, double64 angle ) 
   {
     if ( axis != 'x' and axis != 'y' and axis != 'z' )
-      throw Exception( CSMP_ERROR, "StressRotate::Rotate", "axis parameter (1) could not be identified; should be x,y or z");
+      throw Exception( ERROR, "StressRotate::Rotate", "axis parameter (1) could not be identified; should be x,y or z");
   
     if ( angle < 0. or angle > 360. )
-      throw Exception( CSMP_ERROR, "StressRotate::Rotate", "rotation angle is in degrees and must be between 0 and 360");
+      throw Exception( ERROR, "StressRotate::Rotate", "rotation angle is in degrees and must be between 0 and 360");
 
     //conversion from degrees to radians
     //conversion from yaw-pitch-roll to right hand side rule
@@ -227,7 +227,7 @@ void StressRotate::Rotate( char axis, double64 angle )
        z_ += angle;
     }
     else
-    throw csmp::Exception( CSMP_ERROR, "StressRotate<dim>::Rotate",
+    throw csmp::Exception( ERROR, "StressRotate<dim>::Rotate",
                           "axis could not be recognised: possibilities are x,y,and z");      
  
     n1_ = (rotation * VectorVariable<3U>(n1_.Coordinates())).P();
@@ -238,22 +238,21 @@ void StressRotate::Rotate( char axis, double64 angle )
 
 
 /// outputs state of object
-void StressRotate::Out(std::ostream& os) const
+void StressRotate::Out() const
   {
-    os << "\nStressRotate: ";
-    os << "\nSigma1: " << sigma1_ << " Sigma2: " << sigma2_ << " Sigma3: " << sigma3_;
-    os << "\nOriginal Principal Vectors:";
-    os << "\nN1: " << original_n1_[0] << ", " << original_n1_[1] << ", " << original_n1_[2]; 
-    os << "\nN3: " << original_n3_[0] << ", " << original_n3_[1] << ", " << original_n3_[2]; 
-    os << "\nPrincipal Vectors:";
-    os << "\nN1: " << n1_[0] << ", " << n1_[1] << ", " << n1_[2]; 
-    os << "\nN3: " << n3_[0] << ", " << n3_[1] << ", " << n3_[2]; 
-    os << "\nX Axis: " << x_ << " Y Axis: " << y_ << " Z Axis: " << z_;
-    os << "\nCartesian Stress Tensor:"<< endl;
+    cout << "\nStressRotate: ";
+    cout << "\nSigma1: " << sigma1_ << " Sigma2: " << sigma2_ << " Sigma3: " << sigma3_;
+    cout << "\nOriginal Principal Vectors:";
+    cout << "\nN1: " << original_n1_[0] << ", " << original_n1_[1] << ", " << original_n1_[2]; 
+    cout << "\nN3: " << original_n3_[0] << ", " << original_n3_[1] << ", " << original_n3_[2]; 
+    cout << "\nPrincipal Vectors:";
+    cout << "\nN1: " << n1_[0] << ", " << n1_[1] << ", " << n1_[2]; 
+    cout << "\nN3: " << n3_[0] << ", " << n3_[1] << ", " << n3_[2]; 
+    cout << "\nX Axis: " << x_ << " Y Axis: " << y_ << " Z Axis: " << z_;
+    cout << "\nCartesian Stress Tensor:"<< endl;
     TensorVariable<3U>  stress;
     CartesianStressTensor(stress);
-    os << stress;
-    os.flush();
+    cout << stress;
   }
  
   

@@ -33,7 +33,7 @@ the different messages that are sent to it as INFOs, WARNINGs, ERRORs, and
 FATAL_ERRORs: 
 
 @code
-enum csmp_error{ CSMP_INFO, CSMP_EXCEPTION, CSMP_WARNING, CSMP_ERROR, CSMP_FATAL_ERROR };
+enum csmp_error{ INFO, EXCEPTION, WARNING, ERROR, FATAL_ERROR };
 @endcode
 
 If a FATAL_ERROR is reported, the ErrorHandler will terminate
@@ -129,20 +129,20 @@ A reference to the ErrorHanlder instance is acquired as such
 ...
 ErrorHandler& csmp_error( ErrorHandler::Instance() );
 ...
-csmp_error.notice( CSMP_ERROR, "MyClass::ProblematicMethod()", "what actually went wrong" );
+csmp_error.notice( ERROR, "MyClass::ProblematicMethod()", "what actually went wrong" );
 
 @endcode
 
 after which one can call the handler
 
 @code
-csmp_error.notice( CSMP_ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
+csmp_error.notice( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
 @endcode
 
 alternatively, if i.e. just a single call is to be made
 
 @code
-ErrorHandler::Instance().notice( CSMP_ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
+ErrorHandler::Instance().notice( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
 @endcode
 
 @todo SKM - resolve how ErrorHandler should interact with exception handling
@@ -194,8 +194,7 @@ class ErrorHandler : public GenericSingleton<ErrorHandler> {
     void WriteErrorsToFile( const char* err_file="ErrorHandler.log" );
 
     /// writes contents of contained maps to file
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
   private:
     /// sets default to VERBOSE, error limit to 10'000, and counters to zero; private because ErrorHandler is a singleton

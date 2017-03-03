@@ -28,12 +28,12 @@ NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const Pro
     MathOperatorRHS<dim>::Name("NumIntegral_DNT_rhsop_DN_dV", integral_multiplier, test );
     
     if ( mult_key.type != SCALAR || mult_key.place != ELEMENT )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
                    integral_multiplier, " must be a scalar element property." );
     
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 
@@ -56,17 +56,17 @@ NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const Pro
     MathOperatorRHS<dim>::Name("NumIntegral_DNT_rhsop_DN_dV", oper, test );
     
     if ( mult_key.type != SCALAR || mult_key.place != ELEMENT )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
                    integral_multiplier, " must be a scalar element property." );
     
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||
          MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
                    oper, "Dependent variable must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_rhsop_DN_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 

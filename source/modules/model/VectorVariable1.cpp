@@ -456,12 +456,13 @@ void  VectorVariable<1U>::Invert()
 
 
 
-void  VectorVariable<1U>::Out(std::ostream& os) const 
+void  VectorVariable<1U>::Out() const 
  {
-     os <<"\nStatus: "<< parseStatus(flag) <<"\t\t";
-     os << endl;
-     os << data <<"\t\t";
-     os << endl;
+     cout <<"\nStatus: "<< parseStatus(flag) <<"\t\t";
+     cout << endl;
+     cout << data <<"\t\t";
+     cout << endl;
+
  } // end Out
  
  

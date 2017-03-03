@@ -176,7 +176,7 @@ Uses the method Initialize.
     catch( Exception& ba ) {
          cout <<"\nException: Exception raised by: "<< ba.What() << endl;
          cout <<"\nDiagnostics:"<< endl;
-         ba.Out(cout);
+         ba.Out();
       }
 
    } // end Initialize

@@ -230,7 +230,7 @@ void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
 void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
   {
      InstructUser("FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )");
-     M.Out(cout);
+     M.Out();
      cout <<"\ncalled by object: "<< object_id << endl;
      throw invalid_argument("FiniteElement::IntegraldNdN");
   }
@@ -460,7 +460,7 @@ void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients
     InstructUser("FiniteElement::dN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out(cout);
+    M.Out();
     throw invalid_argument("FiniteElement::dN");
  } 
     
@@ -470,7 +470,7 @@ double64 FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double64>& x
     InstructUser("FiniteElement::dN_At");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double64> xyz):"<< endl;
-    M.Out(cout);
+    M.Out();
     for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::dN_At");
@@ -484,7 +484,7 @@ double64 FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t ga
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (gp, dof, DenseMatrix<DM_MIN> M):"<< endl;
     cout << gauss_point <<", "<< endl;
-    M.Out(cout);
+    M.Out();
     throw invalid_argument("FiniteElement::dN_AtIntegrationPoint");
     return 0.0;
  } 
@@ -496,7 +496,7 @@ double64 FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node )
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (node, dof, DenseMatrix<DM_MIN> M): ";
     cout << node <<", "<< endl;
-    M.Out(cout);
+    M.Out();
     throw invalid_argument("FiniteElement::dN_AtNode");
     return 0.0;
  } 
@@ -507,7 +507,7 @@ double64 FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M )
     InstructUser("FiniteElement::dN_AtBarycenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M): " << endl;
-    M.Out(cout);
+    M.Out();
     throw invalid_argument("FiniteElement::dN_AtBarycenter");
     return 0.0;
  } 
@@ -518,7 +518,7 @@ void   FiniteElement::IntegralNN( DenseMatrix<DM_MIN>& M )
     InstructUser("FiniteElement::IntegralNN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out(cout);
+    M.Out();
     throw invalid_argument("FiniteElement::IntegralNN");
  } 
 
@@ -531,7 +531,7 @@ void   FiniteElement::OutputNodeDataToVTK( const char* file_name, const char* va
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (filename, varname, DATA): "<< endl;
     cout <<"'"<< file_name <<"', '"<< var_name <<"'"<< endl;
-    DATA.Out(cout);
+    DATA.Out();
     throw invalid_argument("FiniteElement::OutputNodeDataToVTK");
  } 
 
@@ -820,7 +820,7 @@ double64  FiniteElement::JacobianInverse()
                       cerr << XY(i,j) <<" ";
                   cerr<<endl;
                 }
-              csmp_error.notice( CSMP_WARNING, "FiniteElement::JacobianInverse:",
+              csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                                 "the value of the Jacobian is negative; check node-numbering.");
 
               return fabs(detJ);
@@ -845,7 +845,7 @@ double64  FiniteElement::JacobianInverse()
                   cerr << XY(i,j) <<" ";
               cerr <<endl;
             }
-          csmp_error.notice( CSMP_WARNING, "FiniteElement::JacobianInverse:",
+          csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                             "the value of the Jacobian is negative; check node-numbering.");
        
           detJ = fabs(detJ);
@@ -869,38 +869,38 @@ double64  FiniteElement::JacobianInverse()
 
 
 
-void  FiniteElement::Out(std::ostream& os) const
+void  FiniteElement::Out() const
  {
-    os <<"\nFiniteElement::Out: "<< endl;
-    if ( isoparametric ) os <<"\t isoparametric ";
-    if      ( element_category == LINE )    os <<"LINE element ";
-    else if ( element_category == SURFACE ) os <<"SURFACE element ";
-    else if ( element_category == VOLUME )  os <<"VOLUME element ";
-    os <<"of ANSYS-CSMP type: "<< csp_fem_type;
-    if ( uses_local_coordinates ) os <<" and using a local coordinate system. ";
-    os << endl;
-    os <<"\n\tspatial dimension of element:        "<< dim;
-    os <<"\n\tdegree of interpolation functions:   "<< itp; 
-    os <<"\n\tnodes per element face (if applic.): "<< npf; 
-    os <<"\n\tnodes:                               "<< npe;
-    os <<"\n\tsegments per element:                "<< spe; 
-    os <<"\n\tfaces per element:                   "<< fpe; 
-    os <<"\n\tneighbors of element:                "<< epe; 
-    os <<"\n\tintegration points per element:      "<< gpe; 
-    os <<"\n\tapproximate elements that share each node:             "<< nne;
-    os <<"\n\tapproximate elements that share each constraint point: "<< cne << endl;
+    cout <<"\nFiniteElement::Out: "<< endl;
+    if ( isoparametric ) cout <<"\t isoparametric ";
+    if      ( element_category == LINE )    cout <<"LINE element ";
+    else if ( element_category == SURFACE ) cout <<"SURFACE element ";
+    else if ( element_category == VOLUME )  cout <<"VOLUME element ";
+    cout <<"of ANSYS-CSMP type: "<< csp_fem_type;
+    if ( uses_local_coordinates ) cout <<" and using a local coordinate system. ";
+    cout << endl;
+    cout <<"\n\tspatial dimension of element:        "<< dim;
+    cout <<"\n\tdegree of interpolation functions:   "<< itp; 
+    cout <<"\n\tnodes per element face (if applic.): "<< npf; 
+    cout <<"\n\tnodes:                               "<< npe;
+    cout <<"\n\tsegments per element:                "<< spe; 
+    cout <<"\n\tfaces per element:                   "<< fpe; 
+    cout <<"\n\tneighbors of element:                "<< epe; 
+    cout <<"\n\tintegration points per element:      "<< gpe; 
+    cout <<"\n\tapproximate elements that share each node:             "<< nne;
+    cout <<"\n\tapproximate elements that share each constraint point: "<< cne << endl;
     
-    os <<"\nCurrent node coordinate matrix: ";  
-    XY.Out(os);
+    cout <<"\nCurrent node coordinate matrix: ";  
+    XY.Out();
     if ( !isoparametric ) {
-         os <<"\nCurrent test function coefficient matrix: ";  
-         M.Out(os);
+         cout <<"\nCurrent test function coefficient matrix: ";  
+         M.Out();
       }         
     else {
-         os <<"\nCurrent Jacobian matrix: ";  
-         JAC.Out(os);
-         os <<"\nCurrent inverse of Jacobian matrix: ";  
-         JINV.Out(os);
+         cout <<"\nCurrent Jacobian matrix: ";  
+         JAC.Out();     
+         cout <<"\nCurrent inverse of Jacobian matrix: ";  
+         JINV.Out();     
       }
 
  } // end Out

@@ -226,7 +226,7 @@ void CornerPointCell<dim>::CheckFaceOrder()
     for( size_t fid = 0; fid<num_faces; ++fid )
         order.insert( this->GetOriginalFaceId(fid) );
     if( order.size() != num_faces )
-        csmp_error.notice( CSMP_ERROR, "CornerPointCell<dim>::CheckFaceOrder()",
+        csmp_error.notice( csmp::ERROR, "CornerPointCell<dim>::CheckFaceOrder()",
                            "Face order is not unique!!!" );
 }
 
@@ -238,7 +238,7 @@ void CornerPointCell<dim>::CheckNodeOrder()
     for( size_t nid = 0; nid<this->GetNumNodes(); ++nid )
         order.insert( this->GetOriginalNodeId(nid) );
     if( order.size() != this->GetNumNodes() )
-        csmp_error.notice( CSMP_ERROR, "CornerPointCell<dim>::CheckNodeOrder()",
+        csmp_error.notice( csmp::ERROR, "CornerPointCell<dim>::CheckNodeOrder()",
                            "Node order is not unique!!!" );
 }
 
@@ -1358,7 +1358,7 @@ void CornerPointCell<dim>
         this->AssignFaceOrder( 5, point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] );
     }
     else
-        csmp_error.notice( CSMP_FATAL_ERROR,
+        csmp_error.notice( csmp::FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly7Element():", "Unpredictable case for 7 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1611,7 +1611,7 @@ void CornerPointCell<dim>
         this->AssignFaceOrder( 5, ( point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] != this->GetOriginalFaceId(4) ? point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] : point_tri_faces.at( this->GetPointCustomOrder(3) )[ 1 ] ) );
     }
     else
-        csmp_error.notice( CSMP_FATAL_ERROR,
+        csmp_error.notice( csmp::FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly6Element():", "Unpredictable case for 6 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1841,7 +1841,7 @@ void CornerPointCell<dim>
             this->AssignFaceOrder( ++fid, *fit );
     }
     else
-        csmp_error.notice( CSMP_FATAL_ERROR,
+        csmp_error.notice( csmp::FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly5Element():", "Unpredictable case for 5 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1987,7 +1987,7 @@ void CornerPointCell<dim>
         assert( current_fid == 6 );
     }
     else
-        csmp_error.notice( CSMP_FATAL_ERROR,
+        csmp_error.notice( csmp::FATAL_ERROR,
                            "CornerPointCell<dim>::InitializePoly4Element():", "Unpredictable case for 4 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -2258,32 +2258,31 @@ std::string toString( CORNER_POINT_CELL_FACE_INDEX fidx )
     Prints object state to screen.
 */
 template<size_t dim>
-void CornerPointCell<dim>::Out(std::ostream& os) const
+void CornerPointCell<dim>::Out() const
  {
     // printing the base class first
-    PolygonCell<dim>::Out(os);
+    PolygonCell<dim>::Out();
    
-    os <<"\nCornerPointCell<"<< dim <<">Out: type: "<< toString(cell_type_) <<", category: "<< toString(cell_category_);
-    os <<"\n\tquadrilateral faces: "<< num_quad_faces_ <<", triangular faces: "<< num_tri_faces_;
-    os <<", meshing cycle: "<< meshing_cycle_;
-    os <<"\n\n\t pillar nodes (pillar_nodes_.size()):\n";
+    std::cout <<"\nCornerPointCell<"<< dim <<">Out: type: "<< toString(cell_type_) <<", category: "<< toString(cell_category_);
+    std::cout <<"\n\tquadrilateral faces: "<< num_quad_faces_ <<", triangular faces: "<< num_tri_faces_;
+    std::cout <<", meshing cycle: "<< meshing_cycle_;
+    std::cout <<"\n\n\t pillar nodes (pillar_nodes_.size()):\n";
     for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=pillar_nodes_.begin(); it!=pillar_nodes_.end(); ++it )
-      os << *(*it) <<" ";
-    os <<"\n\n\tpillar node order:\n";
+      std::cout << *(*it) <<" ";
+    std::cout <<"\n\n\tpillar node order:\n";
     for ( typename std::vector<size_t>::const_iterator it=pillar_nodes_order_.begin(); it!=pillar_nodes_order_.end(); ++it )
-      os << (*it) <<" ";
-    os <<"\n\n\torigin well face: "<< well_face_org_ <<", destination well face: "<< well_face_dst_;
+      std::cout << (*it) <<" ";
+    std::cout <<"\n\n\torigin well face: "<< well_face_org_ <<", destination well face: "<< well_face_dst_;
 
-    os <<"\n\n\twells penetrating the grid cell:\n";
+    std::cout <<"\n\n\twells penetrating the grid cell:\n";
     // vector<pair<csmp::CSMP_FEM_TYPE,vector<csmp::GridNode<dim>*> > >  wells_;
     for ( auto it=wells_.begin(); it!=wells_.end(); it++ ) {
-         os <<"\n"<< parseFiniteElementType((*it).first) <<": ";
+         std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
          for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
               nit!=(*it).second.end(); nit++ )
-           os << *(*nit) <<" ";
+           std::cout << *(*nit) <<" ";
       }
-    os <<"\n\n";
-    os.flush();
+    std::cout <<"\n\n";
  }
 
 

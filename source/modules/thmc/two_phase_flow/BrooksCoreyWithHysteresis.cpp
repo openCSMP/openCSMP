@@ -42,17 +42,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
                         "residual saturation wetting phase")
  {
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }
@@ -81,17 +81,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
  {
  
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }
@@ -351,14 +351,14 @@ double64 BrooksCoreyWithHysteresis<dim>::ShockHeight() const
 
 
 template<size_t dim>
-void BrooksCoreyWithHysteresis<dim>::Out( std::ostream& os, size_t phase ) const
+void BrooksCoreyWithHysteresis<dim>::Out( size_t phase ) const
  {
-    TwoPhaseModel<dim>::Out(os, phase);
-    os <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;
-    os <<"\nelement properties:";
-    os <<"\n       capillary entry pressure, pd: "<< pm1;
-    os <<"\n      Brooks-Corey lambda parameter: "<< pm2;
-    os <<"\n             MAX_CAPILLARY_PRESSURE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ << endl << endl;
+    TwoPhaseModel<dim>::Out(phase);
+    cout <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;
+    cout <<"\nelement properties:";
+    cout <<"\n       capillary entry pressure, pd: "<< pm1;
+    cout <<"\n      Brooks-Corey lambda parameter: "<< pm2;
+    cout <<"\n             MAX_CAPILLARY_PRESSURE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ << endl << endl;
 
  } // end Out
  

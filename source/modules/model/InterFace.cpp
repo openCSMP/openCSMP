@@ -244,7 +244,7 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
         vis.Visit(this);
         return;
       }
-    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
+    throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
   } // end Accept
 
 
@@ -314,7 +314,7 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
     else if( side == MIDDLE )
     {
         baseElement_ = parentElement;
-        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::Assign( side, Element, face_id )", "This method is not intended to be used for base element!" );
+        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( side, Element, face_id )", "This method is not intended to be used for base element!" );
     }
 
   }
@@ -366,7 +366,7 @@ void InterFace<dim>::Assign( size_t n_local, size_t parent_node, INTERFACE_SIDE 
     }
     else if( side == MIDDLE )
     {
-        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::Assign( local_id, side, parent_node )", "This method is not intended to be used for base element!" );
+        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( local_id, side, parent_node )", "This method is not intended to be used for base element!" );
     }
   }
 
@@ -436,7 +436,7 @@ void  InterFace<dim>::InitializeNodeCorrespondanceVector()
          outerParent_->FE()->NodesOfFace( numbers_of_shared_face.second, fnids_outside );
      }
      else
-         throw csmp::Exception( CSMP_ERROR,
+         throw csmp::Exception( ERROR,
                                 "csmp::InterFace<dim>::InitializeNodeCorrespondanceVector",
                                 "Cannot connect elements! Elements can have different nodes or one of it is of low dimensional type!" );
 
@@ -462,7 +462,7 @@ void  InterFace<dim>::InitializeNodeCorrespondanceVector()
     std::vector<std::pair<size_t, size_t> >( parent_elements_node_connector_ ).swap( parent_elements_node_connector_ );
 
     if( fnids_inside.size() != parent_elements_node_connector_.size() )
-        throw csmp::Exception( CSMP_ERROR, "csmp::InterFace<dim>::InitializeNodeCorrepondanceVector", "Cannot connect elements that has different nodes!" );
+        throw csmp::Exception( ERROR, "csmp::InterFace<dim>::InitializeNodeCorrepondanceVector", "Cannot connect elements that has different nodes!" );
      
  } // end InitializeNodeCorrespondanceVector
 
@@ -534,7 +534,7 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
     if( baseElement_ != nullptr )
         return baseElement_->N( n );
 
-    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
+    throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
     return innerParent_->N( parent_elements_node_connector_[n].first );
  }
 
@@ -592,7 +592,7 @@ size_t  InterFace<dim>::ParentNodeNumberOppositeTo( size_t n_from_parent, INTERF
             }
     }
 
-    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::ParentNodeNumberOppositeTo( n_from_parent, parent_side )", "Base Element does not exist!" );
+    throw csmp::Exception( ERROR, "InterFace<dim>::ParentNodeNumberOppositeTo( n_from_parent, parent_side )", "Base Element does not exist!" );
     return n_from_parent;
  }
 
@@ -659,7 +659,7 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( CSMP_WARNING, "csmp::InterFace<dim>::AssignFaceID:", "ID of outer face could not be determined." );
+    csmp_error.notice( WARNING, "csmp::InterFace<dim>::AssignFaceID:", "ID of outer face could not be determined." );
 
     return inner_parent_face_id_;
 
@@ -696,7 +696,7 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side )
     if( baseElement_ != nullptr )
         return baseElement_->UnitNormal( vc );
 
-    throw csmp::Exception( CSMP_ERROR, "InterFace<dim>::UnitNormal( side )", "Base Element does not exist!" );
+    throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal( side )", "Base Element does not exist!" );
     innerParent_->UnitNormalToFace( inner_parent_face_id_, vc );
  }
 
@@ -915,108 +915,84 @@ template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, std::vecto
 // SCREEN OUTPUT
 
 template<size_t dim>
-void  InterFace<dim>::Out(std::ostream& os) const
+void  InterFace<dim>::Out() const
  {
-    os <<"\n\n\nInterFace<"<< dim <<">::Out: number: "<< idx_;
+    cout <<"\n\n\nInterFace<"<< dim <<">::Out: number: "<< idx_;
 
-<<<<<<< HEAD
     cout <<"\nInternal data: "<< endl;
 
     cout <<"\n\tconnected nodes with boundary flags:  ";
     string str;
-=======
-    string str;
-    //str = parseBoundary(at_boundary_);
-    /// @todo (2-P) Remove typeid, implement name fct
-    os <<" ("<< typeid(fptr_).name() <<")";
-    //if ( at_boundary_ != NOT ) os <<", Boundary flag: "<< str;
-    os << endl;
-
-    os <<"\nInternal data: "<< endl;
-
-    os <<"\n\tconnected nodes with boundary flags:  ";
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i,INSIDE)->AtBoundary());
-         os << N(i,INSIDE)->Idx() <<":"<< str <<"  ";
+         cout << N(i,INSIDE)->Idx() <<":"<< str <<"  ";
       }
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i,OUTSIDE)->AtBoundary());
-         os << N(i,OUTSIDE)->Idx() <<":"<< str <<"  ";
+         cout << N(i,OUTSIDE)->Idx() <<":"<< str <<"  ";
       }
-    os << endl;
+    cout << endl;
 
-    os <<"\n\tconnected neighbor InterFace types / boundary flags:\n";
+    cout <<"\n\tconnected neighbor InterFace types / boundary flags:\n";
     for ( size_t i=0U; i<this->Neighbors(); i++ )
-<<<<<<< HEAD
       if ( Neighbor(i) != nullptr ) {
            cout <<"\t\t"<< Idx() <<":";
            cout << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
-=======
-      if ( Neighbor(i) != NULL ) {
-           os <<"\t\t"<< Idx() <<":";
-           os << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
            //str = parseBoundary(Neighbor(i)->AtBoundary());
-           //os << str;
-           os << endl;
+           //cout << str;
+           cout << endl;
         }
-      else os <<"none.  ";
-    os << endl;
+      else cout <<"none.  ";
+    cout << endl;
 
     /// @todo (2-P) Remove typeid, implement name fct
-<<<<<<< HEAD
     cout <<"\tInterFace is connected via bridge pattern to: ";
     cout << typeid(this).name() << endl;
-=======
-    os <<"\tInterFace is connected via bridge pattern to: ";
-    os << typeid(fptr_).name() << endl;
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
-    os <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
 
     Point<dim>  pt(this->BaryCenter());
 
     if ( dim == 1U )
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
     else if ( dim == 2U )
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
     else
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
 
     const size_t ipoints(this->IntegrationPoints());
     if ( ipoints > 0U ) {
-         os <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
+         cout <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
       }
 
-    os <<"\n Connected Node objects, side 1 of interface: ";
-    for ( size_t i=0U; i<this->Nodes(); i++ ) os << parent_elements_node_connector_[i].first <<",  ";
-    os << endl;
+    cout <<"\n Connected Node objects, side 1 of interface: ";
+    for ( size_t i=0U; i<this->Nodes(); i++ ) cout << parent_elements_node_connector_[i].first <<",  ";
+    cout << endl;
 
-    os <<"\n Connected Node objects, side 2 of interface: ";
-    for ( size_t i=0U; i<this->Nodes(); i++ ) os << parent_elements_node_connector_[i].second <<",  ";
-    os << endl;
+    cout <<"\n Connected Node objects, side 2 of interface: ";
+    for ( size_t i=0U; i<this->Nodes(); i++ ) cout << parent_elements_node_connector_[i].second <<",  ";
+    cout << endl;
 
     /// @todo (2-D) Rm rtti
-    os <<"\n\nParent (higher-dimensional) Element objects:     "<< endl;
+    cout <<"\n\nParent (higher-dimensional) Element objects:     "<< endl;
     if ( innerParent_ != 0 ) {
-         os <<"\tinward  facing Element: ";
-         os  <<" ("<< typeid(*(this->Parent(INSIDE)->FE())).name() <<")"<< endl;
-         this->innerParent_->Out(os);
+         cout <<"\tinward  facing Element: ";
+         cout  <<" ("<< typeid(*(this->Parent(INSIDE)->FE())).name() <<")"<< endl;
+         this->innerParent_->Out();
       }
-    else os <<"\tnone.\n";
+    else cout <<"\tnone.\n";
     if ( this->outerParent_ != 0 ) {
-         os <<"\toutward facing Element: ";
-         os <<" ("<< typeid(*(this->Parent(OUTSIDE)->FE())).name() <<")"<< endl;
-         this->outerParent_->Out(os);
+         cout <<"\toutward facing Element: ";
+         cout <<" ("<< typeid(*(this->Parent(OUTSIDE)->FE())).name() <<")"<< endl;
+         this->outerParent_->Out();
       }
-    else os <<"\tnone.\n";
+    else cout <<"\tnone.\n";
 
-    os <<"\tUnit Normal:            ";
+    cout <<"\tUnit Normal:            ";
     VectorVariable<dim> un( PLAIN, 0. );
     UnitNormal( un );
-    for ( size_t i=0U; i<dim; i++ ) os << un[i] <<", ";
-    os << endl;
+    for ( size_t i=0U; i<dim; i++ ) cout << un[i] <<", ";
+    cout << endl;
 
  } // end Out
 

@@ -22,15 +22,15 @@ Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Integral_dNT_rhsop_dN_dV( const PropertyD
 
     // testing the Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT and MathOperatorRHS<dim>::MaterialOperandPlacement() != REGION )
-    throw csmp::Exception( CSMP_ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
                     oper, "Operand must be placed on the element or group.");
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 
     if ( grad_key.place != NODE || grad_key.type != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
                     grad_var, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 }
 
@@ -60,7 +60,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
               MathOperatorRHS<dim>::MTRL[0] = ts;
            }
       }
-    else throw csmp::Exception( CSMP_FATAL_ERROR, "Integral_dNT_rhsop_dN_dV::GetOperands", 
+    else throw csmp::Exception( FATAL_ERROR, "Integral_dNT_rhsop_dN_dV::GetOperands", 
                                "The current finite element is analytically integrated and therefore has no integration points",
                                         "Hence, nodal properties cannot be integrated. Use numerically integrated elements in stead.");
    VAR.Resize(e.Nodes(),1);   

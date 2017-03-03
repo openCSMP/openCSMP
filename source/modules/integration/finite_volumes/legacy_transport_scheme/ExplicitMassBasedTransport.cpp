@@ -400,7 +400,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double64 tim
         if ( !this->SecondOrderInSpace() )
         if ( this->diff_key_ != csmp::Index() )
             // explicit 1st-order solution of advection-diffusion equation
-            throw csmp::Exception( CSMP_ERROR, "ExplicitMassBasedTransport<dim>::AdvectVariableSingleStep",
+            throw csmp::Exception( ERROR, "ExplicitMassBasedTransport<dim>::AdvectVariableSingleStep",
                                          " No diffusion is possible in ExplicitMassBasedTransport" );
         else
         {
@@ -410,7 +410,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double64 tim
 
     else {
         // explicit 2nd-order solution
-        throw csmp::Exception( CSMP_ERROR, "ExplicitMassBasedTransport<dim>::AdvectVariableSingleStep",
+        throw csmp::Exception( ERROR, "ExplicitMassBasedTransport<dim>::AdvectVariableSingleStep",
                                      " No 2nd order is possible in ExplicitMassBasedTransport" );
     }
 

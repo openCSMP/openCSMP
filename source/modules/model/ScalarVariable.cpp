@@ -2,7 +2,6 @@
 
 namespace csmp {
 
-<<<<<<< HEAD
 double64& ScalarVariable::operator()(void) { return data_; }
 double64  ScalarVariable::operator()(void) const { return data_; }
 
@@ -268,15 +267,12 @@ bool ScalarVariable::In( FILE* fp )
 
 
 void  ScalarVariable::Out() const
-=======
-void  ScalarVariable::Out(std::ostream& os) const
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
  {
-    os <<"\nStatus: "<< parseStatus(flag_);
+    std::cout <<"\nStatus: "<< parseStatus(flag_);
     if ( isnan(data_) )
-      os <<", value: NAN\n";
+      std::cout <<", value: NAN\n";
     else
-      os <<", value: " << data_ << std::endl;
+      std::cout <<", value: " << data_ << std::endl;
  }
 
  

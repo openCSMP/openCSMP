@@ -260,14 +260,14 @@ double64 FractureMatrixUpscaled<dim>::dGds( ) const
 
 
 template<size_t dim>
-void FractureMatrixUpscaled<dim>::Out( std::ostream& os, size_t phase ) const
+void FractureMatrixUpscaled<dim>::Out( size_t phase ) const
  {
-    TwoPhaseModel<dim>::Out(os, phase);
-    os <<"\nFractureMatrixUpscaled<"<< dim << ">::Out: Additional properties: "<< endl;
-    os <<"\nelement properties:";
-    os <<"\n       capillary entry pressure, pd: "<< pd_;
-    os <<"\n      Brooks-Corey lambda parameter: "<< lambda_;
-    os <<"\n             MAX_CAPILLARY_PRESSURE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ << endl << endl;
+    TwoPhaseModel<dim>::Out(phase);
+    cout <<"\nFractureMatrixUpscaled<"<< dim << ">::Out: Additional properties: "<< endl;
+    cout <<"\nelement properties:";
+    cout <<"\n       capillary entry pressure, pd: "<< pd_;
+    cout <<"\n      Brooks-Corey lambda parameter: "<< lambda_;
+    cout <<"\n             MAX_CAPILLARY_PRESSURE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ << endl << endl;
 
  } // end Out
 

@@ -23,19 +23,19 @@ Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_NT_v_dN_dV( const
     MathOperatorLHS<dim>::Name("Integral_dNT_op_dN_NT_v_dN_dV", oper, basic, test );
     
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() != REGION )
-      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
                       basic, "Operand must be a property placed on the element or group." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
                       test, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 
     if ( velo_key.place != ELEMENT || velo_key.type != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "Integral_dNT_op_dN_NT_v_dN_dV::(constructor)", 
                       test, "Operand (velocity) must be a vector property placed on the element." );
 }
 

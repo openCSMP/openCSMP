@@ -35,20 +35,20 @@ NumIntegral_DNT_v_dV<dim,SIMPLEX>::NumIntegral_DNT_v_dV( const PropertyDatabase<
     
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT || 
          MathOperatorRHS<dim>::MaterialOperandType() != VECTOR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    oper, "Dependent variable must be a vector property placed on the elements." );
 
     if ( rfac_key.type != SCALAR || rfac_key.place != ELEMENT )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                     r_factor,  " must be a scalar property on the element." );
 
     if ( rho_key.place != NODE || rho_key.type != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    dens, " operand must be a scalar placed on the nodes." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 
@@ -73,7 +73,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_DNT_v_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
    if ( MathOperatorRHS<dim>::MultiplyWithTimeIncrement() ) {
-        throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_DNT_v_dV<dim>::GetOperands", 
+        throw csmp::Exception( FATAL_ERROR, "NumIntegral_DNT_v_dV<dim>::GetOperands", 
            "Do not multiply this operator with time increment since it uses the acceleration of gravity");
         throw invalid_argument("NumIntegral_DNT_v_dV<dim>::GetOperands");
      }

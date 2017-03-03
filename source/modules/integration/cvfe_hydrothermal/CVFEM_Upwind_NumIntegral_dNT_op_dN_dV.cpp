@@ -34,23 +34,23 @@ CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_op_dN_d
     // testing the Operands 
 
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT )
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
                     oper, "Operand must be placed on the element.");
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR,  "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR,  "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
                     test, "Basic (dependent) variable must be a scalar property placed on the nodes.");
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
     
     if (uvar_.place != NODE || uvar_.type != SCALAR)
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
                     upwind, "Upwind variable must be a scalar property placed on the nodes.");
                     
     if (gtvar_.place != NODE || gtvar_.type != SCALAR)
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV::(constructor)", 
                     grav_trigger, "Upwind variable must be a scalar property placed on the nodes.");
                     
 }
@@ -65,7 +65,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands( Element<dim>& e )
   if (uvar_.place == NODE && uvar_.type == SCALAR)
     e.NodePropertyVector( uvar_, el_uvar);
   else {
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands", 
                                       "Only nodal properties allowed" );
   }
 
@@ -87,7 +87,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperandsCVFEM( Element<dim>&
      e.NodePropertyVector( upwind_var_key, upwind_var_multiplier);
     }
   else {
-    throw csmp::Exception( CSMP_ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands", 
+    throw csmp::Exception( ERROR, "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands", 
                                       "Only nodal properties allowed" );
   }
 

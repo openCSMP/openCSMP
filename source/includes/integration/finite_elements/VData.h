@@ -234,9 +234,8 @@ class VData {
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
   
-    /// print connectivity information to a stream
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    /// print connectivity information to screen
+    void Out() const;
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );

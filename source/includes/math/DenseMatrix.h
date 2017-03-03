@@ -48,10 +48,7 @@ class DenseMatrix {
     DenseMatrix( size_t m, size_t n );
     DenseMatrix( size_t m, size_t n, double64 val );
     DenseMatrix( const DenseMatrix& );
-<<<<<<< HEAD
     DenseMatrix( DenseMatrix&& )= default;
-=======
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
     ~DenseMatrix();
     size_t Rows() const;
     size_t Cols() const;
@@ -104,8 +101,7 @@ class DenseMatrix {
     double64   NormL_Infinity() const;
 
     void In();
-    void Out(long digits=5) const { Out(std::cout, digits); }
-    void Out( std::ostream& os, long digits=5L ) const;
+    void Out( long digits=5L ) const;
 
 #ifdef USED_TOGETHER_WITH_CSMP
     /// assignment of point coordinates to matrix rows or columns

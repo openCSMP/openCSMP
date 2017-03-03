@@ -39,15 +39,15 @@ BrittleFailureVisitor<dim>::BrittleFailureVisitor( Model<dim>& model,
 
     cout <<"\nBrittleFailureVisitor: diagnostics: ";
     if ( (Cohesion_key_.place != ELEMENT_INTEGRATION_POINT and Cohesion_key_.place != ELEMENT) || Cohesion_key_.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "BrittleFailureVisitor (constructor):",
+        throw csmp::Exception( ERROR, "BrittleFailureVisitor (constructor):",
                               "'cohesion' must be a scalar variable." );
 
     if ( (Failure_key_.place != ELEMENT_INTEGRATION_POINT and Failure_key_.place != ELEMENT) || Failure_key_.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "BrittleFailureVisitor (constructor):",
+        throw csmp::Exception( ERROR, "BrittleFailureVisitor (constructor):",
                                "'failure' must be a scalar variable." );
 
     if ( (Stress_key_.place != ELEMENT_INTEGRATION_POINT and Stress_key_.place != ELEMENT) || Stress_key_.type != TENSOR )
-        throw csmp::Exception( CSMP_ERROR, "BrittleFailureVisitor (constructor)",
+        throw csmp::Exception( ERROR, "BrittleFailureVisitor (constructor)",
                                "'stress' must be a tensor variable" );
 }
 

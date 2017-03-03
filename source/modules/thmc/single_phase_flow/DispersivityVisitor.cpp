@@ -25,16 +25,16 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
     alpha_l  = dispersion_long;
     
     if ( vel_key.place != ELEMENT || vel_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
           "The pore velocity must be a vector property placed on the element" ); 		       
 
     if ( disp_key.place != ELEMENT || disp_key.type != TENSOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
           "The dispersivity must be a tensor property placed on the element" ); 
     
     if ( alpha_t() > alpha_l() ) {
               cout << "\nalpha trans: " << alpha_t() << ", alpha long: " << alpha_l() << endl;
-		throw csmp::Exception( CSMP_INFO, "DispersivityVisitor< dim>::(constructor)", 
+		throw csmp::Exception( INFO, "DispersivityVisitor< dim>::(constructor)", 
           "The transversal dispersivity is larger than the longitudinal dispersivity, is this really intended?" ); 
 
           
@@ -58,23 +58,23 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
   { 
 
     if ( al_key.place != ELEMENT || al_key.type != SCALAR  )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 	       
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 	       
           "The longitudinal dispersion coefficient must be a scalar property placed on the element" ); 	
 
     if ( at_key.place != ELEMENT || at_key.type != SCALAR  )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
  	      "The transveral dispersion coefficient must be a scalar property placed on the element" );    
 
 	if ( vel_key.place != ELEMENT || vel_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
           "The pore velocity must be a vector property placed on the element" ); 		       
     
     if ( disp_key.place != ELEMENT || disp_key.type != TENSOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
           "The dispersivity must be a tensor property placed on the element" ); 		       
     
     if ( dp_key.place != ELEMENT || dp_key.type != SCALAR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "DispersivityVisitor< dim>::(constructor)", 
           "The pore diffusion coefficient must be a scalar property placed on the element" ); 		       
    
    

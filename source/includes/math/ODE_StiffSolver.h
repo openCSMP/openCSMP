@@ -196,8 +196,7 @@ class  ODE_StiffSolver {
     bool    Solve( double64 time, double64 init_stepsize, 
                    size_t n_savesteps, double64 tolerance=1.0e-10, bool print_step_numbers=false );
 
-    void    Out() const { Out(std::cout); }
-    void    Out(std::ostream& os) const;  
+    void    Out() const;  
     void    OutputResults() const;
     void    OutputResultsTo( const char* textfile ) const;
     void    OutputLastDerivatives() const;

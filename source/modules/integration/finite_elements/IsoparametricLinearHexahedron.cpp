@@ -776,9 +776,9 @@ IsoparametricLinearHexahedron::dN( DenseMatrix<DM_MIN>& DN8 )
           ////////// Debug Printout////////////////////////////////
           //cout<<" At vertice #: "<<i<<endl;
           //cout<<" Jacobian Matrix: "<<endl;
-          //JAC.Out(cout);
+          //JAC.Out();
           //cout<<" Jacobian Inverse Matrix: "<<endl;
-          //JINV.Out(cout);
+          //JINV.Out();
           /////////////////////////////////////////////////////////
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
 
@@ -833,7 +833,7 @@ IsoparametricLinearHexahedron::dN_At( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricLinearHexahedron::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
     rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
     cout<<" IsoparametricLinearHexahedron::dN  Matrix DN2: "<<endl;
-    DN2.Out(cout);
+    DN2.Out();
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
     return detJ;
@@ -1176,7 +1176,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
                 <<"N[6] = "<<N[6]<<" ;\t"
                 <<"N[7] = "<<N[7]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricLinearHexahedron::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricLinearHexahedron::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1600,7 +1600,7 @@ IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<size_t>&
      fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 4 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1759,7 +1759,7 @@ const
         for ( size_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
-            //TEMP_N.Out(cout);
+            //TEMP_N.Out();
             for ( size_t j=0; j<npe; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);

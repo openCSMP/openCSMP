@@ -122,8 +122,7 @@ struct StencilProcessor {
                                               bool with_capillary_spreading);
 
 
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+     void Out() const;
     
     /// local array index for the stencil
     size_t                 eidx_;

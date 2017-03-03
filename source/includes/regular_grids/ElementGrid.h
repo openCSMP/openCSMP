@@ -23,21 +23,12 @@ class ElementGrid {
     double64 Value( int32 i, int32 j ) const;
     double64 GridAverage() const;
     double64 Sum() const;
-<<<<<<< HEAD
     void     MinMax( double64& dmin, double64& dmax ) const;
     void     TransferDataToGrid( FiniteDifferenceGrid& ) const;
     bool     Empty() const;
     int32    Size() const;
 
     void     Out() const;
-=======
-    void  MinMax( double64& dmin, double64& dmax ) const;
-    void Out() const { Out(std::cout); }
-    void  Out(std::ostream& os) const;
-    void  TransferDataToGrid( FiniteDifferenceGrid& ) const;
-    bool  Empty() const;
-    int32  Size() const;
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
   private:
     std::map<std::pair<int32,int32>,double64>  grid;

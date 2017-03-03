@@ -232,7 +232,7 @@ namespace csmp{
             cerr << "hdummy       = " << hdummy            << endl;
             cerr << "p_current_eq = " << p_current_eq      << endl;
 
-            csmp_error.notice( CSMP_FATAL_ERROR, 
+            csmp_error.notice( FATAL_ERROR, 
                             "H2OThermalEquilibrator::Equilibrate() -",
                             "tmin == tmax but no convergence based on enthalpy-criterion, see above data!\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
             return;
@@ -261,7 +261,7 @@ namespace csmp{
         //     tmax, that's be fatal
         if( definitelyGreaterThan( tmin, tmax, numeric_limits<double64>::epsilon()) )
           {	    
-            csmp_error.notice( CSMP_FATAL_ERROR, 
+            csmp_error.notice( FATAL_ERROR, 
                             "H2OThermalEquilibrator::Equilibrate() -",
                             "tmin > tmax!\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
             return;
@@ -289,7 +289,7 @@ namespace csmp{
       cerr << "*** tmin = " << tmin << ", tmax = " << tmax << " ***\n";
       cerr << "H2OThermalEquilibrator::FindInitialValues() - \n";
       cerr << "tmin and/or tmax out of range, passing fatal to PropertiesVisitor!\n\n";
-      // 	csmp_error.notice( CSMP_FATAL_ERROR, 
+      // 	csmp_error.notice( FATAL_ERROR, 
       // 			"H2OThermalEquilibrator::FindInitialValues() -",
       // 			"tmin and/or tmax out of range!!!\n");
       fluid.InitializeToBogus();
@@ -360,7 +360,7 @@ namespace csmp{
         std::string message("in iteration #");
         message += istring.str();
         message += ": H_current_eq is less than Hmin at 5 C, and, hence, we are out of range of validity.\nFIRST: check if you initialized your domain correctly to a valid temperatur.\nIf that check doesn't indicate any anomalies, report this incident to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch\n";
-        csmp_error.notice( CSMP_FATAL_ERROR, source, message );
+        csmp_error.notice( FATAL_ERROR, source, message );
       }
     return;
   }
@@ -375,7 +375,7 @@ namespace csmp{
         std::string message("in iteration #");
         message += istring.str();
         message += ": H_current_eq is larger than Hmax at 1000 C, and, hence, we are out of range of validity.\nFIRST: check if you initialized your domain correctly to a valid temperatur.\nIf that check doesn't indicate any anomalies, report this incident to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch\n";
-        csmp_error.notice( CSMP_FATAL_ERROR, source, message );
+        csmp_error.notice( FATAL_ERROR, source, message );
       }
     return;
   }

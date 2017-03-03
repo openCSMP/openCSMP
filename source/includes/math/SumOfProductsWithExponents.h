@@ -32,8 +32,7 @@ class SumOfProductsWithExponents {
    double64  Sum( double64 a[] ) const;
    double64  DerivativeWithRespectTo( int32 spec_idx, double64 a[] ) const;
    void       Erase();
-   void       Out() const { Out(std::cout); }
-   void       Out(std::ostream& os) const;
+   void       Out() const;
    double64  Sign( double64 a ) const { return a >= 0.0 ? 1.0 : -1.0; };
 
    std::vector<sumofproducts_pair>::iterator  Begin() { return sumproducts.begin(); };

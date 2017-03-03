@@ -174,7 +174,7 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
 
     switch( v.ApplicationTarget() ) {
         case MODEL:
-          throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accept",
+          throw csmp::Exception( ERROR, "Region<dim>::Accept",
                                 "ApplicationTarget MODEL; Visitor should have never arrived at this SplitBoundary");
           break;
         case SPLIT_BOUNDARY:
@@ -191,7 +191,7 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
             (*nd_it)->Accept( v );
           return;
         default:
-          throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::Accept",
+          throw csmp::Exception( ERROR, "SplitBoundary<dim>::Accept",
                                 "ApplicationTarget was not resolved; nothing was done");
     }
   } // end Accept
@@ -216,7 +216,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
               return OUTSIDE;
           } // region elements
       } // split boundary interfaces
-    throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::RegionLocation", "Region seems not to be adjacent to split boundary!" );
+    throw csmp::Exception( ERROR, "SplitBoundary<dim>::RegionLocation", "Region seems not to be adjacent to split boundary!" );
     // shouldn't get here
     return OUTSIDE;
   }
@@ -486,7 +486,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
                 interfaceObj->Assign( innerParentPtr, interfaceParents[f][1], INSIDE );
             }
             else
-                throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::CreateFrom", "Inner interface parent cannot be NULL" );
+                throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Inner interface parent cannot be NULL" );
 
             // outer parent element
             if( interfaceParents[f][2] != NULL_IDX )
@@ -495,7 +495,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
                 interfaceObj->Assign( outerParentPtr, interfaceParents[f][3], OUTSIDE );
             }
             else
-                throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::CreateFrom", "Outer interface parent cannot be NULL" );
+                throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateFrom", "Outer interface parent cannot be NULL" );
 
             // assign base element if it exist
             if( interfaceParents[f][4] != NULL_IDX )
@@ -827,7 +827,7 @@ double64  SplitBoundary<dim>::Perimeter() const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( dim != 3U )
-       csmp_error.notice( CSMP_ERROR, "SplitBoundary<dim>::Perimeter",
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::Perimeter",
                                  "result would not be meaningful" );
 
      double64        perimeter_length(0.);
@@ -865,7 +865,7 @@ double64  SplitBoundary<dim>::Area() const
              integrated_area += (*it)->Volume();
        }
      else
-     csmp_error.notice( CSMP_ERROR, "SplitBoundary<dim>::Area", "not defined in 1D");
+     csmp_error.notice( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D");
 
      return integrated_area;
  }
@@ -877,12 +877,12 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
      csmp::Index prop_key = p.StorageKey(property);
 
      if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
-          throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+          throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                             property, "placed on IntegrationPoint or Region cannot be assigned on boundary");
           return std::numeric_limits<double64>::quiet_NaN();
        }
       if ( prop_key.type == TENSOR ) {
-          throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+          throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                             property, "is a tensor property; this method does not know how to integrate it");
           return std::numeric_limits<double64>::quiet_NaN();
        }
@@ -892,7 +892,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
      // 1. if the property is a scalar
      if ( prop_key.type == SCALAR ) {
            if ( prop_key.place == ELEMENT ) {
-                throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                                   property, "is an Element property; this method does not know how to integrate it");
              }
            else if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -909,7 +909,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
                   }
              }
            else {
-                throw csmp::Exception( CSMP_FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                throw csmp::Exception( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                                                     "Property placement not recognized");
              }
        }
@@ -935,7 +935,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
                   }
              }
            else {
-                throw csmp::Exception( CSMP_FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                throw csmp::Exception( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
                                                     "Property placement not recognized");
              }
        }
@@ -958,7 +958,7 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const V
     Index ipKey( this->pref_.StorageKey(input_prop) );
 
     if( ipKey.place != NODE )
-      throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::InputNodePropertyValue:", "This method applies to node properties only!" );
+      throw csmp::Exception(  ERROR, "SplitBoundary<dim>::InputNodePropertyValue:", "This method applies to node properties only!" );
 
     if ( part == COMPLETE ) {
         const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
@@ -1004,35 +1004,35 @@ template void SplitBoundary<3>::InputNodePropertyValue( const char*, const Tenso
 // SCREEN OUTPUT
 
 template<size_t dim>
-void SplitBoundary<dim>::Out(std::ostream& os) const
+void SplitBoundary<dim>::Out() const
  {
-    os <<"\nSplitBoundary<dim>::Out(): ";
-    os <<" member elements: interior="<< this->InteriorElements();
-    os <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
+    cout <<"\nSplitBoundary<dim>::Out(): ";
+    cout <<" member elements: interior="<< this->InteriorElements();
+    cout <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
 
     for ( typename vector<InterFace<dim>*>::const_iterator
           it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
          if ( (*it) == NULL )
-           throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::Out",
+           throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out",
                                  "member element pointer not initialised");
       }
 
-    os <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
     for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-         os <<"\nelement "<< i <<": edge face numbers: ";
+         cout <<"\nelement "<< i <<": edge face numbers: ";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
-    os <<"\n\n edge nodes: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current local numbering):"<< endl;
+    cout <<"\n\n edge nodes: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
          if ( this->node_vec_[i] == NULL )
-           throw csmp::Exception( CSMP_ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised.");
-         else os << this->node_vec_[i]->Idx() <<" ";
+           throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised.");
+         else cout << this->node_vec_[i]->Idx() <<" ";
       }
 
-    os << endl;
+    cout << endl;
  }
 
 

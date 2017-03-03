@@ -218,7 +218,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_ );
@@ -230,7 +230,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             {
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_ );
@@ -300,7 +300,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_.c_str() );
@@ -312,7 +312,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             {
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );
@@ -359,7 +359,7 @@ bool TextFileInterface<STREAM>
             {
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_ );
@@ -405,7 +405,7 @@ bool TextFileInterface<STREAM>
             {
                 std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::CSMP_FATAL_ERROR,
+                error_handler.notice( csmp::FATAL_ERROR,
                                    "TextFileInterfaceInClass<dim>::ReadFile:",
                                    "Cannot read data in block marked by keyword: ",
                                    keyword_.c_str() );

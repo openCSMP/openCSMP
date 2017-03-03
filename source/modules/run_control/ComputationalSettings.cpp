@@ -408,18 +408,18 @@ double64 ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( log_velocity_change <= zero ) {
-        csmp_error.notice( CSMP_ERROR, "ComputationalSettings::TimeIncrementFromVelocityChange",
+        csmp_error.notice( ERROR, "ComputationalSettings::TimeIncrementFromVelocityChange",
                            "The desired change in velocity (in log units) is zero or below zero",
                            "Returning user specified maximum time increment");
         return max_delta_t;
     }
     if ( log_velocity_change < min_change ) {
-        csmp_error.notice( CSMP_WARNING, "ComputationalSettings::TimeIncrementFromVelocityChange",
+        csmp_error.notice( WARNING, "ComputationalSettings::TimeIncrementFromVelocityChange",
                            "The desired change in velocity (in log units) is low",
                            "Time increment may become excessively small" );
     }
     if ( log_velocity_change > max_change ) {
-        csmp_error.notice( CSMP_WARNING, "ComputationalSettings::TimeIncrementFromVelocityChange",
+        csmp_error.notice( WARNING, "ComputationalSettings::TimeIncrementFromVelocityChange",
                            "The desired change in velocity (in log units) is large",
                            "Influence of velocity change may not be reflected in time increment");
     }
@@ -488,23 +488,23 @@ double64 ComputationalSettings::PopOutputTime()
 /** Prints the current computational settings to screen.
 
 */
-void ComputationalSettings::Out(std::ostream& os) const
+void ComputationalSettings::Out() const
 {
-    os <<"\nComputationalSettings::Out:";
-    os <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
-    os <<"\nrun duration:  "<< run_duration_;
-    os <<"\noutput times:  ";
+    cout <<"\nComputationalSettings::Out:";
+    cout <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
+    cout <<"\nrun duration:  "<< run_duration_;
+    cout <<"\noutput times:  ";
     for ( std::set<double64>::const_iterator oit=output_times_.begin();
           oit!=output_times_.end(); oit++ )
-        os << (*oit) <<", ";
-    os << endl << endl;
+        cout << (*oit) <<", ";
+    cout << endl << endl;
 
     if (!monitor_times_.empty()){
-        os <<"\nmonitor times:  ";
+        cout <<"\nmonitor times:  ";
         for ( std::set<double64>::const_iterator oit=monitor_times_.begin();
               oit!=monitor_times_.end(); oit++ )
-            os << (*oit) <<", ";
-        os << endl << endl;
+            cout << (*oit) <<", ";
+        cout << endl << endl;
     }
 }
 
@@ -564,7 +564,7 @@ TIME_STRATEGY parseTimeStrategy( const char* time_strategy )
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    csmp_error.notice( CSMP_FATAL_ERROR, "parseTimeStrategy(const char*):", "Unable to parse time-stepping strategy", time_strategy );
+    csmp_error.notice( FATAL_ERROR, "parseTimeStrategy(const char*):", "Unable to parse time-stepping strategy", time_strategy );
 
     return CONSERVATIVE; // the default value
 }
@@ -589,7 +589,7 @@ const char* parseTimeStrategy( TIME_STRATEGY  time_strategy )
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    csmp_error.notice( CSMP_FATAL_ERROR, "parseTimeStrategy(TIME_STRATEGY):","Unable to parse time-stepping strategy." );
+    csmp_error.notice( FATAL_ERROR, "parseTimeStrategy(TIME_STRATEGY):","Unable to parse time-stepping strategy." );
 
     return "conservative";
 }

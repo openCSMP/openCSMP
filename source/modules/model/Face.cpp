@@ -980,69 +980,64 @@ template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<Fla
 
 ///  outputs local variables of Face(Element) overriding corresponding method of base class
 template<size_t dim>
-void  Face<dim>::Out(std::ostream& os) const
+void  Face<dim>::Out() const
  {
-    os <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
+    cout <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
 
     string str;
-    os <<" ("<< parseFiniteElementType(this->FE_Type()) <<")";
-    if ( outerParent_ == nullptr ) os <<", face is located at model boundary.";
-    os << endl;
+    cout <<" ("<< parseFiniteElementType(this->FE_Type()) <<")";
+    if ( outerParent_ == nullptr ) cout <<", face is located at model boundary.";
+    cout << endl;
 
-    os <<"\nInternal data: "<< endl;
+    cout <<"\nInternal data: "<< endl;
 
-    os <<"\n\tconnected nodes with boundary flags:  ";
+    cout <<"\n\tconnected nodes with boundary flags:  ";
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
-         os << N(i)->Idx() <<":"<< str <<"  ";
+         cout << N(i)->Idx() <<":"<< str <<"  ";
       }
-    os << endl;
+    cout << endl;
 
-    os <<"\n\tconnected neighbor Face types / boundary flags:\n";
+    cout <<"\n\tconnected neighbor Face types / boundary flags:\n";
     for ( size_t i=0U; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
-           os <<"\t\t"<< Idx() <<":";
-           os << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
-           os << endl;
+           cout <<"\t\t"<< Idx() <<":";
+           cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
+           cout << endl;
         }
-      else os <<"none.  ";
-    os << endl;
+      else cout <<"none.  ";
+    cout << endl;
 
-<<<<<<< HEAD
     cout <<"\tFace is connected via bridge pattern to: ";
     cout << parseFiniteElementType(this->FE_Type()) << endl;
-=======
-    os <<"\tFace is connected via bridge pattern to: ";
-    os << parseFiniteElementType(fptr_->ElementType()) << endl;
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
-    os <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    cout <<"\n\tAspect ratio (b-box):   "<< this->AspectRatio() << endl;
 
     Point<dim>  pt(this->BaryCenter());
 
     if ( dim == 1U )
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] << endl;
     else if ( dim == 2U )
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
     else
-       os <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+       cout <<"\n\tBarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
 
     const size_t ipoints(this->IntegrationPoints());
     if ( ipoints > 0U ) {
-         os <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
+         cout <<"\n\tStorage sites for IntegrationPoint properties: "<< ipoints << endl;
       }
 
-    os <<"\nParent (higher-dimensional) Element objects:\n";
+    cout <<"\nParent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         os <<"\tinward  facing Element: "<< this->innerParent_->Idx();
-         os  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
+         cout <<"\tinward  facing Element: "<< this->innerParent_->Idx();
+         cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
-    else os <<"\tnone.\n";
+    else cout <<"\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         os <<"\toutward facing Element: "<< this->outerParent_->Idx();
-         os <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
+         cout <<"\toutward facing Element: "<< this->outerParent_->Idx();
+         cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
-    else os <<"\tnone.\n";
+    else cout <<"\tnone.\n";
 
  } // end Out
 

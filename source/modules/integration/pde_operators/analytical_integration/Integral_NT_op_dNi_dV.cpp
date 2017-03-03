@@ -30,16 +30,16 @@ Integral_NT_op_dNi_dV<dim,SIMPLEX>::Integral_NT_op_dNi_dV( const PropertyDatabas
     
         // testing the Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
                     oper,      "Operand must be a scalar property." );
 
     
     if ( prop_key.place != ELEMENT and prop_key.place != REGION )
-    throw csmp::Exception( CSMP_ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
                    mtrl, "Material operand must be placed on the element or group." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_NT_op_dNi_dV::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 

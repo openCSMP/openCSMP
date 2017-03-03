@@ -57,7 +57,7 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
 {
     // check that "model time" is defined.
     if (!mref_.Database().IsDefined("model time"))
-        error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", "'model time' needs to be defined as a MODEL variable",
+        error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", "'model time' needs to be defined as a MODEL variable",
                                "the simulator monitor needs to know the model time!");
 
     this->InsertValueHeader("model time",dimensional_header_indexes_);
@@ -77,15 +77,15 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           it=integrated_property_names_.begin(); it!=integrated_property_names_.end(); it++ ) {
         if ( !mref_.Database().IsDefined( (*it).c_str() ) )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( mref_.Database().Type( (*it).c_str() ) != SCALAR )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "integral property must be a scalar property");
 
         if ( mref_.Database().Placement( (*it).c_str() ) == INTER_FACE )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "properties placed on the FACE cannot be integrated over the Region volume");
     }
 
@@ -93,7 +93,7 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           it=ranged_property_names_.begin(); it!=ranged_property_names_.end(); it++ )
         if ( !mref_.Database().IsDefined( (*it).c_str() ) )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*it).c_str(),
                                    "range property is not defined in the database (file)");
     // ------------------------------------------------------------
     // FOR MONITORING VOLUMES AND AREAS OF REGIONS
@@ -146,11 +146,11 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
     for ( typename list<string>::const_iterator
           lit=single_value_property_names_.begin(); lit!=single_value_property_names_.end(); lit++ ) {
         if ( !mref_.Database().IsDefined( (*lit).c_str() ) )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    "integral property is not defined in the database (file)");
 
         if ( mref_.Database().Type( (*lit).c_str() ) != SCALAR )
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    "integral property must be a scalar property");
 
         set<PLACEMENT> placements_accepted;
@@ -163,7 +163,7 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
         if ( placements_accepted.find(mref_.Database().Placement( (*lit).c_str() )) != placements_accepted.end() )
             this->InsertValueHeader((*lit)+"_"+regionname,single_value_header_indexes_);
         else
-            error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
+            error_handler_.notice( FATAL_ERROR, "SimulatorMonitor(constructor)", (*lit).c_str(),
                                    " Externally calculated properties should be placed on MODEL (for now)");
     }
 
@@ -202,7 +202,7 @@ void SimulatorMonitor<dim>::CheckForDuplicateHeaders(){
         }
         i++;
 //        else
-//            error_handler_.notice( CSMP_FATAL_ERROR,"SimulatorMonitor::CheckForDuplicateHeaders()",(*it).c_str(),"Found duplicate monitor header.");
+//            error_handler_.notice(FATAL_ERROR,"SimulatorMonitor::CheckForDuplicateHeaders()",(*it).c_str(),"Found duplicate monitor header.");
     }
     for (auto it = single_value_header_indexes_.begin();it != single_value_header_indexes_.end();it++){
         cout<<" pre-calc header "<<*it<<endl;
@@ -342,7 +342,7 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
             this->model_time_indexes_.push_back(j);
     }
     else
-        error_handler_.notice( CSMP_FATAL_ERROR,"SimulatorMonitor::InsertValueHeader()",property_column_header_entry.c_str(),"Found duplicate monitor header.");
+        error_handler_.notice(FATAL_ERROR,"SimulatorMonitor::InsertValueHeader()",property_column_header_entry.c_str(),"Found duplicate monitor header.");
 }
 
 /**

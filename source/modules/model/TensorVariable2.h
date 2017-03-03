@@ -13,6 +13,7 @@ class TensorVariable<2U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
+    TensorVariable( TensorVariable&& );
     TensorVariable( VARIABLE_FLAG f, double64 val );
     TensorVariable( VARIABLE_FLAG f, double64 v11, double64 v12,
                     double64 v21, double64 v22 );
@@ -93,8 +94,7 @@ class TensorVariable<2U> {
  	  VectorVariable<2U> Column( size_t iCol ) const;
  		
     void             	In();
-    void             	Out() const { Out(std::cout); }
-    void             	Out(std::ostream& os) const;
+    void             	Out() const;
     bool              In( FILE* fp );
     bool              Out( FILE* fp ) const;
 

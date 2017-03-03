@@ -608,7 +608,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( elmt_vec_.empty() ) {
-         csmp_error.notice( CSMP_WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
+         csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
     cout << "\nModelSubDomain<"<< dim <<",SIMPLEX>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
@@ -628,7 +628,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
           for ( size_t face=0U; face<faces; ++face )
             {
                if ( (*it) == nullptr ) {
-                    csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
+                    csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
                                       "supplied element contains NULL pointer to elements; nothing was done." );
                     return;
                  }
@@ -719,7 +719,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
                          ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
                          ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
                       }
-                    else csmp_error.notice( CSMP_WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
+                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
                                             "discovered potentially duplicate surface simplex.");
                     ++it1;
                     ++it2;
@@ -1082,7 +1082,7 @@ cout.flush();
              interior_elmts.insert( (*it) );
 
          if ( !lesser_dim_elmts_detached.empty() ) {             
-              csmp_error.notice( CSMP_WARNING, "ModelSubdomain<dim,SIMPLEX>::PartitionCellVector:", Name().c_str(),
+              csmp_error.notice( WARNING, "ModelSubdomain<dim,SIMPLEX>::PartitionCellVector:", Name().c_str(),
                                 "subdomain contains lower-dimensional elements detached from higher dimensional domain; these will be treated as boundary.");
               // do some additional diagnostics on these elements
               // ------------------------------------------------
@@ -1249,7 +1249,7 @@ void ModelSubDomain<dim,SIMPLEX>::Apply( Interrelation<dim>& relation )
 template<size_t dim, template<size_t> class SIMPLEX>
 void ModelSubDomain<dim,SIMPLEX>::Accept( csmp::Visitor<dim>& )
  {
-    throw csmp::Exception( CSMP_ERROR,
+    throw csmp::Exception( ERROR,
                            "ModelSubDomain<dim,SIMPLEX>::Accept",
                            "Subclass method should be called; nothing was done");
 
@@ -1520,20 +1520,20 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
      ScalarVariable  sc;
 
      if ( prop_key.place != ELEMENT and prop_key.type != SCALAR ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
                                     "method assigns only to scalar element properties");
           return;
        }
      if ( dim != 1U and !strcmp( characteristic, "length" ) )
-       csmp_error.notice( CSMP_WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+       csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
                                    "'length' will only be assigned to line elements, nothing done to others");
 
      if ( dim != 2U and !strcmp( characteristic, "area" ) )
-       csmp_error.notice( CSMP_WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+       csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
                                    "'area' will only be assigned to surface elements, nothing done to others");
 
      if ( dim != 3U and !strcmp( characteristic, "volume" ) ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
                                     "'volume' can only be assigned to volume elements. Nothing was done");
           return;
        }
@@ -1584,7 +1584,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
             }
       }
      else {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
                              characteristic,  " entered as characteristic was not identified; nothing done");
           cout <<"\nYour options are: "<< endl;
           cout <<"\n\t inner radius"   << endl;
@@ -1592,7 +1592,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
           cout <<"\t length" << endl;
           cout <<"\t area (>=2D models)" << endl;
           cout <<"\t volume (3D models only)" << endl;
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo", "Now exciting");
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo", "Now exciting");
       }
 
  } // end
@@ -1638,11 +1638,11 @@ void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo(  const char* vector_v
      VectorVariable<dim>  vc;
 
       if ( prop_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a vector<double64> variable");
 
      if ( prop_key.place != NODE )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a node variable");
 
      for ( typename vector<csmp::Node<dim>*>::iterator
@@ -1663,24 +1663,24 @@ void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo( const char* scalar_va
 
      if ( c != 'x' && c != 'y' && c != 'z' &&
           c != 'X' && c != 'Y' && c != 'Z')
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "coordinate index letter is not valid",
                                     "should be either of 'x,y,z,X,Y,Z'");
 
      if ( prop_key.type != SCALAR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "Individual node coordinates can only be assigned to a scalars");
 
      if ( prop_key.place != NODE )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a node variable");
 
      if ( dim == 2U and c == 'z' )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "2D models have no z coordinates");
 
      if ( dim == 1U and c != 'x' )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
                                     "1D models only have x coordinates");
 
      for ( typename vector<csmp::Node<dim>*>::iterator
@@ -1714,7 +1714,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const char* property, double64& gmin
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
     if ( !pref_.IsDefined(property) ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf", property, "is undefined; nothing could be done" );
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf", property, "is undefined; nothing could be done" );
           return;
       }
     csmp::Index  gprop_key(pref_.StorageKey(property));
@@ -2183,7 +2183,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
     vmin = vmax = std::numeric_limits<double64>::quiet_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
-    csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf(index)",
+    csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf(index)",
                       "placement of property coould not be indentified");
 
  } // end MinMaxOf(index)
@@ -2215,7 +2215,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
      csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
           return;
        }
@@ -2257,7 +2257,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
@@ -2291,7 +2291,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else { // property is assigned only to interior of subdomain
@@ -2325,7 +2325,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                     "Property placement not supported");
        }
 
@@ -2419,7 +2419,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
      csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
           return;
        }
@@ -2464,7 +2464,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, DIRICH );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                     "Property placement not recognized");
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
@@ -2501,7 +2501,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else { // property is assigned only to interior of subdomain
@@ -2538,7 +2538,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
-           else throw csmp::Exception( CSMP_FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
                                                     "Property placement not supported");
        }
 
@@ -2618,7 +2618,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !pref_.IsDefined(property) ) {
-        csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::PropertyStatus", property, "is undefined; nothing could be done" );
+        csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
     csmp::Index  prop_key = pref_.StorageKey(property);
@@ -2637,12 +2637,12 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
          prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
          prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT )
     {
-        csmp_error.notice( CSMP_ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
+        csmp_error.notice( ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
         return ANY;
     }
 
     if ( elmt_vec_.empty() ) {
-        csmp_error.notice( CSMP_ERROR, src.c_str(), "ModelSubDomain is empty");
+        csmp_error.notice( ERROR, src.c_str(), "ModelSubDomain is empty");
         return ANY;
     }
 
@@ -2900,15 +2900,15 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     src +=">::ChangePropertyStatus:";
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( CSMP_ERROR, src.c_str(), "Method not implemented for tensor properties yet");
+      throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
 
     if ( status.empty() )
-      throw csmp::Exception( CSMP_ERROR, src.c_str(), "Status vector has not been initialized");
+      throw csmp::Exception( ERROR, src.c_str(), "Status vector has not been initialized");
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( elmt_vec_.empty() ) {
-         csmp_error.notice( CSMP_ERROR, src.c_str(), "Region is empty.");
+         csmp_error.notice( ERROR, src.c_str(), "Region is empty.");
          return;
       }
 
@@ -2945,7 +2945,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
           // if the flags shall only be changed on the Subdomain boundary
           else if ( group_flag == PERIMETER ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -2972,7 +2972,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
           // if the flags for all entities in the interior of the region shall be changed
           else if ( group_flag == INTERIOR ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3036,7 +3036,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
           // if the property shall only be changed on the Subdomain boundary
           else if ( group_flag == PERIMETER ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3065,7 +3065,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
             }
           else if ( group_flag == INTERIOR ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3096,7 +3096,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
       } // END VECTORS,TENSORS,FLAGGEDARRAYS
 
     cout <<"\n'"<< property <<"' ";
-    throw csmp::Exception( CSMP_ERROR, src.c_str(), "Property placement not recognized");
+    throw csmp::Exception( ERROR, src.c_str(), "Property placement not recognized");
 
  } // end ChangePropertyStatus
 
@@ -3122,12 +3122,12 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     src +=">::ChangePropertyStatus";
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( CSMP_ERROR, src.c_str(), "Method not implemented for tensor properties yet");
+      throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( elmt_vec_.empty() ) {
-         csmp_error.notice( CSMP_ERROR, src.c_str(), "Region is empty");
+         csmp_error.notice( ERROR, src.c_str(), "Region is empty");
          return;
       }
 
@@ -3164,7 +3164,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
           // if the property shall only be changed on the Subdomain boundary
           else if ( group_flag == PERIMETER ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3190,7 +3190,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
             }
           else if ( group_flag == INTERIOR ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3250,7 +3250,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
           // if the property shall only be changed on the Subdomain boundary
           else if ( group_flag == PERIMETER ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3276,7 +3276,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
             }
           else if ( group_flag == INTERIOR ) {
                if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
-                throw csmp::Exception( CSMP_ERROR, src.c_str(),
+                throw csmp::Exception( ERROR, src.c_str(),
                    "Flags of subdomain properties can only be assigned to complete subdomains");
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
@@ -3304,7 +3304,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
       } // END VECTORS,TENSORS, FLAGGEDARRAYS
 
     cout <<"\n'"<< property <<"' ";
-    throw csmp::Exception( CSMP_ERROR, src.c_str(), "Property placement not recognized");
+    throw csmp::Exception( ERROR, src.c_str(), "Property placement not recognized");
 
  } // end ChangePropertyStatus
 
@@ -3318,13 +3318,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
     csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
                             "Method not implemented for tensor properties yet");
     if ( status.empty() )
-      throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
                             "Status vector has not been initialized");
     if ( elmt_vec_.empty() )
-      throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
 
     if ( prop_key.type == SCALAR )
       {
@@ -3519,11 +3519,11 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
     csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
                             "Method not implemented for tensor properties yet");
 
     if ( elmt_vec_.empty() )
-      throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
 
     if ( prop_key.type == SCALAR )
       {
@@ -3749,17 +3749,17 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
                                  "Property arg2 is not an element property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
                                  "Property arg1 is not a node property, nothing was done...");
           return;
        }
      if ( e_key.type != n_key.type ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3797,7 +3797,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
               }
             break;
           default:
-            throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
                                    "Property type could not be identified, nothing was done...");
 
      } // end switch
@@ -3816,17 +3816,17 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
 
      // 1. check whether conditions for operation are O.K.
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
                                  "Property arg2 is not an constraint point property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
                                  "Property arg1 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.type != n_key.type ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3886,7 +3886,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
                 }
             break;
           default:
-            throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
                                    "Property type could not be identified, nothing was done...");
 
      } // end switch
@@ -3933,17 +3933,17 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty(
      csmp::Index  c_key = pref_.StorageKey(cprop);
 
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
                                  "Property arg2 is not an element property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( e_key.type != c_key.type ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3992,17 +3992,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
                                 "Property arg1 is not an element property, nothing was done...");
          return;
       }
     if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
       }
     if ( e_key.type != c_key.type ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
                                 "Properties are not of the same type, nothing was done...");
          return;
       }
@@ -4072,17 +4072,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Property arg1 is not an element property, nothing was done...");
          return;
       }
     if ( fip_key.place != FACET_INTEGRATION_POINT ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
       }
     if ( e_key.type != fip_key.type ) {
-         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Properties are not of the same type, nothing was done...");
          return;
       }
@@ -4172,17 +4172,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
                                  "Property arg1 is not an element property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( e_key.type != n_key.type ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4395,17 +4395,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
      if ( n_key.place != NODE ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( n_key.type != c_key.type ) {
-          csmp_error.notice( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4490,7 +4490,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
 
     // TENSOR PROPERTIES
     if ( n_key.type == TENSOR ) {
-          csmp_error.notice( CSMP_WARNING, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
          // creating a zero-initialized temporary vector<double64>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
@@ -4554,7 +4554,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
     size_t       counter(0U);
 
      if ( (elmt_vec_.empty()) ) {
-          throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionPropertyAverage",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionPropertyAverage",
                                         "Region is empty");
        }
 
@@ -4699,11 +4699,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
               }
          break;
          default:
-<<<<<<< HEAD
             throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionAverage:", "property placement not handled yet.");
-=======
-            throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionAverage", "property placement not handled yet");
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
        }
 
     return std::numeric_limits<double64>::quiet_NaN();
@@ -5047,7 +5043,7 @@ void  ModelSubDomain<dim,SIMPLEX>::CopyReplace( const char* from, const char* to
             cpvisitor( pref_, from, to );
           Accept( cpvisitor );
        }
-     else throw csmp::Exception( CSMP_ERROR,
+     else throw csmp::Exception( ERROR,
                                  "ModelSubDomain<dim,SIMPLEX>::CopyReplace",
                                  "Property type not supported yet");
 
@@ -5089,13 +5085,13 @@ To check variable values in small test problems.
 
 @section messages Messages
 
-OutputVariableHumanReadable() will report the variable type, its placement,
+OutputVariableToScreen() will report the variable type, its placement,
 and property index. Then it will print the host object IDs followed
 by the variable flags and values.
 
 */
 template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os, const char* prop ) const
+void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) const
  {
      csmp::Index          prop_key = pref_.StorageKey(prop);
      ScalarVariable       sc;
@@ -5104,24 +5100,24 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os,
 
      string place_name = parsePlacement(prop_key.place);
 
-     os <<"\n\nModelSubDomain<"<< dim << ">::OutputVariableHumanReadable: output of ";
+     cout <<"\n\nModelSubDomain<"<< dim << ">::OutputVariableToScreen: output of ";
      switch(prop_key.type)
       {
-         case SCALAR: os <<"SCALAR variable: '";
+         case SCALAR: cout <<"SCALAR variable: '";
            break;
-         case VECTOR: os <<"VECTOR variable: '";
+         case VECTOR: cout <<"VECTOR variable: '";
            break;
-         case TENSOR: os <<"TENSOR variable: '";
+         case TENSOR: cout <<"TENSOR variable: '";
            break;
-         case ARRAY:  os <<"ARRAY variable: '";
+         case ARRAY:  cout <<"ARRAY variable: '";
            break;
-         case FLAGGEDARRAY:  os <<"FLAGGEDARRAY variable: '";
+         case FLAGGEDARRAY:  cout <<"FLAGGEDARRAY variable: '";
            break;
          default:
-           os <<"\nModelSubDomain<"<< dim <<">::OutputVariableHumanReadable: type of '"<< prop <<"' not recognized."<< endl;
+           cout <<"\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: type of '"<< prop <<"' not recognized."<< endl;
            return;
       }
-     os << prop <<"' placed on the: "<< place_name << endl;
+     cout << prop <<"' placed on the: "<< place_name << endl;
 
      switch( prop_key.place )
        {
@@ -5129,36 +5125,36 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os,
               for ( typename vector<csmp::Node<dim>*>::const_iterator
                     nit=NodesBegin(); nit!=NodesEnd(); nit++ )
                 {
-                  os <<"\nIdx: " << (*nit)->Idx() <<"\t\t";
-                  os << string(parseBoundary((*nit)->AtBoundary())) <<" ";
+                  cout <<"\nIdx: " << (*nit)->Idx() <<"\t\t";
+                  cout << string(parseBoundary((*nit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
                        case SCALAR:
                            (*nit)->Read( prop_key, sc );
-                           os << sc;
+                           cout << sc;
                          break;
                        case VECTOR:
                            (*nit)->Read( prop_key, vc );
-                           os << vc;
+                           cout << vc;
                          break;
                        case TENSOR:
                            (*nit)->Read( prop_key, ts );
-                           os << ts;
+                           cout << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*nit)->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*nit)->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of Node variable not recognized." );
                     }
                 }
@@ -5167,33 +5163,33 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os,
               for ( typename vector<SIMPLEX<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
-                  os <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
+                  cout <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     switch (prop_key.type)
                       {
                          case SCALAR:
-                             (*eit)->Read( i, prop_key, sc ); os << i <<":"<< sc;
+                             (*eit)->Read( i, prop_key, sc ); cout << i <<":"<< sc;
                            break;
                          case VECTOR:
-                             (*eit)->Read( i, prop_key, vc ); os << i <<":"<< vc;
+                             (*eit)->Read( i, prop_key, vc ); cout << i <<":"<< vc;
                            break;
                          case TENSOR:
-                             (*eit)->Read( i, prop_key, ts ); os << i <<":"<< ts;
+                             (*eit)->Read( i, prop_key, ts ); cout << i <<":"<< ts;
                            break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*eit)->Read( i, prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*eit)->Read( i, prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of Element integration point variable not recognized." );
                       }
                 }
@@ -5202,128 +5198,129 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os,
               for ( typename vector<SIMPLEX<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
-                  os <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
+                  cout <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
                   /// Roman, 2014 (Face&InterFace): Should Face contain AtBoundary flag?
-                  //os << string(parseBoundary((*eit)->AtBoundary())) <<" ";
+                  //cout << string(parseBoundary((*eit)->AtBoundary())) <<" ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: (*eit)->Read( prop_key, sc ); os << sc;
+                       case SCALAR: (*eit)->Read( prop_key, sc ); cout << sc;
                          break;
-                       case VECTOR: (*eit)->Read( prop_key, vc ); os << vc;
+                       case VECTOR: (*eit)->Read( prop_key, vc ); cout << vc;
                          break;
-                       case TENSOR: (*eit)->Read( prop_key, ts ); os << ts;
+                       case TENSOR: (*eit)->Read( prop_key, ts ); cout << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             (*eit)->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             (*eit)->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of Element variable not recognized." );
                     }
                 }
               break;
            case SPLIT_BOUNDARY:
-                  os <<"\nSplitBoundary: ";
+                  cout <<"\nSplitBoundary: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); os << sc;
+                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); os << vc;
+                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); os << ts;
+                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of split boundary variable not recognized." );
                     }
                   break;
            case BOUNDARY:
                 {
-                  os <<"\nRegion: ";
+                  cout <<"\nRegion: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); os << sc;
+                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); os << vc;
+                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); os << ts;
+                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of boundary variable not recognized." );
                     }
                 }
               break;
            case REGION:
                 {
-                  os <<"\nRegion: ";
+                  cout <<"\nRegion: ";
                   switch (prop_key.type)
                     {
-                       case SCALAR: this->Read( prop_key, sc ); os << sc;
+                       case SCALAR: this->Read( prop_key, sc ); cout << sc;
                          break;
-                       case VECTOR: this->Read( prop_key, vc ); os << vc;
+                       case VECTOR: this->Read( prop_key, vc ); cout << vc;
                          break;
-                       case TENSOR: this->Read( prop_key, ts ); os << ts;
+                       case TENSOR: this->Read( prop_key, ts ); cout << ts;
                          break;
                        case ARRAY: {
                             ArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                           }
                          break;
                        case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
                             this->Read( prop_key, ary );
-                            ary.Out(os);
+                            ary.Out();
                          }
                          break;
                        default:
-                         throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
                                                "type of region variable not recognized." );
                     }
                 }
               break;
           default:
-               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableHumanReadable: The property ";
+               cerr << "\nModelSubDomain<"<< dim <<">::OutputVariableToScreen: The property ";
                cerr << prop <<"  "<< place_name <<" could not be retrieved from the Region";
                break;
        }
-    os << endl;
+    cout << endl;
+    cout.flush();
 
- } // end OutputVariableHumanReadable
+ } // end OutputVariableToScreen
 
 
 
@@ -5348,36 +5345,36 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableHumanReadable( std::ostream& os,
 
 */
 template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Out(std::ostream& os) const
+void ModelSubDomain<dim,SIMPLEX>::Out() const
  {
-    os <<"\nModelSubDomain<dim,SIMPLEX>::Out(): name: '"<< subdomain_name_ <<"'";
-    os <<" member elements: interior="<< InteriorElements();
-    os <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
+    cout <<"\nModelSubDomain<dim,SIMPLEX>::Out(): name: '"<< subdomain_name_ <<"'";
+    cout <<" member elements: interior="<< InteriorElements();
+    cout <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
 
     for ( typename vector<SIMPLEX<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
          if ( (*it) == NULL )
-           throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim,SIMPLEX>::Out",
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::Out",
                                  "member element pointer not initialised");
 //         else (*it)->Out();
       }
 
-    os <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(bd_face_vec_.begin());
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
-         os <<"\nelement "<< i <<": edge face numbers: ";
+         cout <<"\nelement "<< i <<": edge face numbers: ";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
-    os <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
+    cout <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
          if ( node_vec_[i] == NULL )
-           throw csmp::Exception( CSMP_ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
-         else os << node_vec_[i]->Idx() <<" ";
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
+         else cout << node_vec_[i]->Idx() <<" ";
       }
 
-    os << endl;
+    cout << endl;
  }
 
 

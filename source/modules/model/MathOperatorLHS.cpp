@@ -210,11 +210,11 @@ template<size_t dim>
 }
 
 template<size_t dim>
-void MathOperatorLHS<dim>::Out(std::ostream& os)  const
+void MathOperatorLHS<dim>::Out()  const
 {
-    op.Out(os);
-    bop.first.Out(os);
-    top.first.Out(os);
+    op.Out();
+    bop.first.Out();
+    top.first.Out();
 }
 
 // MATERIAL PROPERTY OPERAND
@@ -529,7 +529,7 @@ void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Element<dim>& e_ref
                                                        size_t ip, DenseMatrix<DM_MIN>& M )
  {
     if ( !e_ref.UsesLocalCoordinates() )
-       throw csmp::Exception( CSMP_FATAL_ERROR,
+       throw csmp::Exception( FATAL_ERROR,
                               "MathOperatorLHS<dim>::PropertyValueAtIntegrationPoint",
                               "Current element does not support numerical integration.");
                       
@@ -624,7 +624,7 @@ void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Element<dim>& e_ref
          return;
       }
 
-     throw csmp::Exception( CSMP_FATAL_ERROR,
+     throw csmp::Exception( FATAL_ERROR,
                             "MathOperatorLHS<dim>::PropertyValueAtIntegrationPoint",
                             "This method cannot interpolate IntegrationPoint variables.");
 
@@ -636,7 +636,7 @@ void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Face<dim>& e_ref,
                                                        size_t ip, DenseMatrix<DM_MIN>& M )
  {
     if ( !e_ref.UsesLocalCoordinates() )
-       throw csmp::Exception( CSMP_FATAL_ERROR,
+       throw csmp::Exception( FATAL_ERROR,
                               "MathOperatorLHS<dim>::PropertyValueAtIntegrationPoint",
                               "Current element does not support numerical integration.");
 
@@ -731,7 +731,7 @@ void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Face<dim>& e_ref,
          return;
       }
 
-     throw csmp::Exception( CSMP_FATAL_ERROR,
+     throw csmp::Exception( FATAL_ERROR,
                             "MathOperatorLHS<dim>::PropertyValueAtIntegrationPoint",
                             "This method cannot interpolate IntegrationPoint variables.");
 
@@ -822,7 +822,7 @@ void MathOperatorLHS<dim>::GetOperands( Element<dim>& e_ref )
                   PropertyAtIntegrationPoint(  e_ref, MaterialOperandKey(), i, MTRL[i] );
            }
          else
-             throw csmp::Exception( CSMP_FATAL_ERROR,
+             throw csmp::Exception( FATAL_ERROR,
                                     "MathOperatorLHS<dim>::GetOperands",
                                     "Face based operands cannot be accumulated with this method");
       }
@@ -902,7 +902,7 @@ void MathOperatorLHS<dim>::GetOperands( Face<dim>&  e_ref )
                   PropertyAtIntegrationPoint(  e_ref, MaterialOperandKey(), i, MTRL[i] );
            }
          else
-             throw csmp::Exception( CSMP_FATAL_ERROR,
+             throw csmp::Exception( FATAL_ERROR,
                                     "MathOperatorLHS<dim>::GetOperands",
                                     "Element based operands cannot be accumulated with this method");
       }
@@ -1027,7 +1027,7 @@ void MathOperatorLHS<dim>::AssignToGlobal( const Element<dim>& e, SparseMatrix& 
                 -LHS(i,j) * factor_ );
    }
    else
-       throw csmp::Exception( CSMP_ERROR,
+       throw csmp::Exception( ERROR,
                               "MathOperatorLHS<dim>::AssignToGlobal(Element):",
                               "accumulation instructions could not be parsed.");
 
@@ -1084,7 +1084,7 @@ void MathOperatorLHS<dim>::AssignToGlobal( const Face<dim>& e, SparseMatrix& G )
                  -LHS(i,j) * factor_ );
     }
     else
-       throw csmp::Exception( CSMP_ERROR,
+       throw csmp::Exception( ERROR,
                               "MathOperatorLHS<dim>::AssignToGlobal(Face):",
                               "accumulation instructions could not be parsed.");
 

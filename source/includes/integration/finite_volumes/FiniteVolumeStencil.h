@@ -149,8 +149,7 @@ class FiniteVolumeStencil {
     ELEMENT_DIMENSION  Geometry() const;
   
     /// returns the data (private members) stored in this finite volume stencil
-    void Out() const { Out(std::cout); }
-    void  Out(std::ostream& os) const;
+    void  Out() const;
     
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };

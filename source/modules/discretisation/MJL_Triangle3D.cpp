@@ -132,18 +132,18 @@ int  Triangle3D::FacingDirection() const
   
   
   
-void  Triangle3D::Out(std::ostream& os) const
+void  Triangle3D::Out() const
  {
-    os <<"\nTriangle3D::Out:"<< endl;
-    os <<"\nVertices: ";
-    v0_.Out(os);
-    v1_.Out(os);
-    v2_.Out(os);
-    os <<"\nEdge marking diagonal of bounding box:";
-    boundingBox_.Out(os);
-    os <<"\nCentral point (n): ";
-    n_.Out(os);
-    os << endl;
+    cout <<"\nTriangle3D::Out:"<< endl;
+    cout <<"\nVertices: ";
+    v0_.Out();
+    v1_.Out();
+    v2_.Out();
+    cout <<"\nEdge marking diagonal of bounding box:";
+    boundingBox_.Out();
+    cout <<"\nCentral point (n): ";
+    n_.Out();
+    cout << endl;
  }
   
   

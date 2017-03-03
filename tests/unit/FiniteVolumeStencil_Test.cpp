@@ -94,7 +94,7 @@ FiniteVolumeStencil_Test::~FiniteVolumeStencil_Test()
  
 void FiniteVolumeStencil_Test::run() // runs all the tests for the class (register other methods)
  {
-  getInfoStream() << "Starting...FiniteVolumeStencil_Test::run()" << endl;
+  cout << "Starting...FiniteVolumeStencil_Test::run()" << endl;
  	
  	displayReferenceCoordinates();
 	
@@ -112,7 +112,7 @@ void FiniteVolumeStencil_Test::run() // runs all the tests for the class (regist
 	
 	shapeFunctionDerivativesTest();
 	
-	getInfoStream() << "Done...FiniteVolumeStencil_Test::run()" << endl;
+	cout << "Done...FiniteVolumeStencil_Test::run()" << endl;
  }
  
  
@@ -134,15 +134,15 @@ The idea of this function is to provide insight of how elements are being constr
 tested: is a test funtion*/
 void FiniteVolumeStencil_Test::displayReferenceCoordinates()
 {
-  getInfoStream() << "TESTING: displayReferenceCoordinates()" << endl;
+  cout << "TESTING: displayReferenceCoordinates()" << endl;
  
 	for(vector<FiniteElement*>::const_iterator vIterFEs = vecFEs_.begin(); vIterFEs != vecFEs_.end(); vIterFEs++)
   {
   	//print type
-    getInfoStream() << "Type: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
+    cout << "Type: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   	DenseMatrix<DM_MIN> matCoords;
 		(*vIterFEs)->ReferenceCoordinates(matCoords);
-	  matCoords.Out(getInfoStream());
+	  matCoords.Out();
 	}	
 }
 
@@ -171,9 +171,9 @@ The idea is to test the following member functions:
 tested: is a test funtion*/
 void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for all element types
  {
-    getInfoStream() << "TESTING: facetAndSectorNumbersTest()" << endl;
+    cout << "TESTING: facetAndSectorNumbersTest()" << endl;
  	
-    getInfoStream() << vecFEs_.size() << " vs " << fvs_.size();
+    cout << vecFEs_.size() << " vs " << fvs_.size();
  	   
   	assert(vecFEs_.size() == fvs_.size());
   	
@@ -186,7 +186,7 @@ void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for
   	for(vIterFVS = fvs_.begin(); vIterFVS != vIterFVSEnd; vIterFVS++, vIterFEs++)
   	{
   	 const CSMP_FEM_TYPE elType((*vIterFEs)->ElementType());
-     getInfoStream() << "Type: " << parseFiniteElementType( elType ) << endl;
+     cout << "Type: " << parseFiniteElementType( elType ) << endl;
 		 
 		 //check number of sectors , should be = to number of nodes
      const bool bCheckNodeNr(vIterFVS->Sectors() == (*vIterFEs)->Nodes());
@@ -250,7 +250,7 @@ The idea is to test the following member functions:
 tested: is a test funtion*/
 void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that delimit a certain sector for all the element types
  {
-  getInfoStream() << "TESTING: sectorFacetConnectivityTest()" << endl;
+  cout << "TESTING: sectorFacetConnectivityTest()" << endl;
  	//temp vector to get facets
  	vector<size_t> vecFacets;
  	set<size_t> setFacets;
@@ -269,7 +269,7 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
   	if(  vIterFVS->ParentElement() == "ISOPARAMETRIC_LINEAR_TETRAHEDRON" ) continue;
   	
   	const CSMP_FEM_TYPE elType((*vIterFEs)->ElementType());
-    getInfoStream() << "Type: " << parseFiniteElementType( elType ) << endl;
+    cout << "Type: " << parseFiniteElementType( elType ) << endl;
 		
 		//build neighbors of node relationship - initialize map
  		mapNodeToSegmentNeighbors.clear();
@@ -302,7 +302,7 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
   			iMaxNodes = mapNodeToSegmentNeighbors[iSector].size(); 
    	}
    		
-    //TRACE getInfoStream() << "iMaxNodes: " << iMaxNodes << " FacetsPerSector: " << vIterFVS->FacetsPerSector() << endl;
+    //TRACE cout << "iMaxNodes: " << iMaxNodes << " FacetsPerSector: " << vIterFVS->FacetsPerSector() << endl;
   	_test(iMaxNodes == vIterFVS->FacetsPerSector(0));
    		
    		//get reference coordinates
@@ -355,14 +355,14 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
   			vertexCenterOfMass(vecPointsOfSector, vecCentroidGenerated);
   		
         //TRACE
-      getInfoStream() << "PTS(facet)::: sector:" << iSector << ":" <<endl;
+      cout << "PTS(facet)::: sector:" << iSector << ":" <<endl;
   		for(size_t i = 0U; i < vecPointsOfSector.size(); i++)
   		{
-        getInfoStream() << "P"<<i<<": ";
-  			vecPointsOfSector[i].Out(getInfoStream());
+        cout << "P"<<i<<": ";
+  			vecPointsOfSector[i].Out();
   		}	
-      getInfoStream() << "Sector " << iSector << " centroid generated:";
-  		vecCentroidGenerated.Out(getInfoStream());
+      cout << "Sector " << iSector << " centroid generated:";
+  		vecCentroidGenerated.Out();
   		
   		//get sector integration point location
   		Point<3> vecCentroidOfSector_I1, vecCentroidOfSector_I2;
@@ -378,10 +378,10 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
 			 for ( size_t j = 0U; j< vIterFVS->IntegrationPointsPerSector(); j++ ) 
 	    	vecCentroidOfSector_I2[iD] += vIterFVS->SectorIntegrationPoint(iSector, j, iD); 
 			
-			getInfoStream() << "Sector " << iSector << " centroid original (I1):";
-  		vecCentroidOfSector_I1.Out(getInfoStream());
-      getInfoStream() << "Sector " << iSector << " centroid original (I2):";
-  		vecCentroidOfSector_I2.Out(getInfoStream());
+			cout << "Sector " << iSector << " centroid original (I1):";
+  		vecCentroidOfSector_I1.Out();
+      cout << "Sector " << iSector << " centroid original (I2):";
+  		vecCentroidOfSector_I2.Out();
   		
   		//3. Compare calculated vs accessed sector centroids.
   		
@@ -403,7 +403,7 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
   	//for each sector: check that the facets surrounding a sector correspond to the segments surrounding the node 
   	for(size_t iSector = 0U; iSector < iNrOfSectors; iSector++)
   	{
-      getInfoStream() << "SECTOR "<< iSector <<": ";
+      cout << "SECTOR "<< iSector <<": ";
   		
   		// the facets surrounding a sector is to the segments surrounding the node
   		// as the sector is to the node  
@@ -439,7 +439,7 @@ The idea is to test the following member functions:
 tested: is a test funtion*/
 void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
  {
-  getInfoStream() << "TESTING: orientationAndLengthOfNormalsTest()" << endl;
+  cout << "TESTING: orientationAndLengthOfNormalsTest()" << endl;
 
 	//for each element type, for each given facet, check if the normal is correct
  	
@@ -454,27 +454,27 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
   		const CSMP_FEM_TYPE elType((*vIterFEs)->ElementType());
 
   		//print type
-      getInfoStream() << "\n******************************************************************";
-      getInfoStream() << "\nType: " << parseFiniteElementType(elType);
-      getInfoStream() << "\nNumber of Facets: " << vIterFVS->Facets();
+      cout << "\n******************************************************************";
+      cout << "\nType: " << parseFiniteElementType(elType);
+      cout << "\nNumber of Facets: " << vIterFVS->Facets();
   		
   		//step through facets
   		const size_t iNrOfFacets(vIterFVS->Facets());
   		for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
   		{
 	  	    //get facet
-					getInfoStream() << "\n******************************************************************";
-					getInfoStream() << "\nFACET " << iFacet << ": ";
+					cout << "\n******************************************************************";
+					cout << "\nFACET " << iFacet << ": ";
 	  	    vecNormal = vIterFVS->UnitParametricNormalTo( iFacet );	  	    
           
           //TRACE
-          getInfoStream() << "\nNormal: " << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2];
+          cout << "\nNormal: " << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2];
 			   
 			    //1. Test Length
 			    //length of normal, should be 1		
 			    const double64 fLength(vecNormal.Length());
 			    //test if normals are unit vectors
-					getInfoStream() << setprecision(15) << "\nLength of Normal: " << fLength << endl;
+					cout << setprecision(15) << "\nLength of Normal: " << fLength << endl;
 			    _equal( fLength, 1., 1.e-7 );
 				
 			    //2. Generate normal on-the-fly
@@ -492,7 +492,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			    for(size_t iPoint = 0; iPoint < iNrOfFacetPoints; iPoint++)
 			    {
 			      vecOfPointsOfTheFacet.push_back(vIterFVS->FacetPoint(iFacet,iPoint));
-			      vecOfPointsOfTheFacet[iPoint].Out(getInfoStream());
+			      vecOfPointsOfTheFacet[iPoint].Out();
 			    }
 			    
 			    //generate normal
@@ -500,11 +500,11 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			    Point<3U> vecGeneratedNormal, vecTemp;
 			    vecTemp = vIterFVS->FacetIntegrationPoint(iFacet, 0U);
 			    
-					getInfoStream() << "\nNumber of facet points2: " << vecOfPointsOfTheFacet.size();
+					cout << "\nNumber of facet points2: " << vecOfPointsOfTheFacet.size();
 			    normalOfPolygon(vecOfPointsOfTheFacet, vecTemp, vecGeneratedNormal);
 			
     			//print normals
-          getInfoStream() << "\nGenerated: " << vecGeneratedNormal[0] << ", " << vecGeneratedNormal[1] << ", " << vecGeneratedNormal[2] << endl;
+          cout << "\nGenerated: " << vecGeneratedNormal[0] << ", " << vecGeneratedNormal[1] << ", " << vecGeneratedNormal[2] << endl;
 	  	    
 			    //3. Test the orientation of the normal in each direction
 			    bool bEquivalent1(true), bEquivalent2(true);
@@ -545,7 +545,7 @@ The idea is to test the following member functions:
 tested: is a test funtion*/ 
 void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 {
-  getInfoStream() << "TESTING: weightsAndFacetIntegrationPointsTest()" << endl;
+  cout << "TESTING: weightsAndFacetIntegrationPointsTest()" << endl;
   
   //for each finite element type
  	vector<FiniteElement*>::const_iterator vIterFEs(vecFEs_.begin());
@@ -557,7 +557,7 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 		
 		//print type
 		static int nr(0);
-		getInfoStream() << "\nType: " << parseFiniteElementType( elType ) << ": " << nr++ << endl;
+		cout << "\nType: " << parseFiniteElementType( elType ) << ": " << nr++ << endl;
   	
 		//get reference coordinates
 		DenseMatrix<DM_MIN> matCoords;
@@ -576,16 +576,16 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
   	{
   		if(  vIterFVS->ParentElement() == "ISOPARAMETRIC_LINEAR_PYRAMID" ) continue;
   		
-      getInfoStream() << "--->FACET: " << iFacet << endl;
+      cout << "--->FACET: " << iFacet << endl;
   		fFacetWeight = 0.; fFacetArea = 0.;
 			vecOfPointsOfTheFacet = GetPointsOfFacet(iFacet, elType, *vIterFVS, **vIterFEs);
 		  
 		  //TRACE
-			getInfoStream() << "PTS::: facet:" << iFacet << ":" <<endl;
+			cout << "PTS::: facet:" << iFacet << ":" <<endl;
   		for(size_t i = 0U; i < vecOfPointsOfTheFacet.size(); i++)
   		{
-        getInfoStream() << "P"<<i<<": ";
-  			vecOfPointsOfTheFacet[i].Out(getInfoStream());
+        cout << "P"<<i<<": ";
+  			vecOfPointsOfTheFacet[i].Out();
   		}
   			
 			//get facet weight
@@ -609,12 +609,12 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
        else if (iNrOfFacetPoints == 4)
         _test(areaOfPolygon(vecOfPointsOfTheFacet, iDim, fFacetArea));
       
-      getInfoStream() << "\nFacet Area" << fFacetArea << " vs " << fFacetWeight;
+      cout << "\nFacet Area" << fFacetArea << " vs " << fFacetWeight;
       _equal( fFacetArea, fFacetWeight, 1.e-7 );
       //END TEST WEIGHT
       
       //TRACE
-      getInfoStream() << "\nFacetArea (computed): " << fFacetArea << " vs Facet Weight (stored):" << fFacetWeight << endl;
+      cout << "\nFacetArea (computed): " << fFacetArea << " vs Facet Weight (stored):" << fFacetWeight << endl;
         	
       //get facet integration point -first interface
   		Point<3> vecCentroidFacet_I1, vecCentroidFacet_I2;
@@ -635,10 +635,10 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
 			  vertexCenterOfMass(vecOfPointsOfTheFacet, vecCentroidGeneratedPointsFacets);
 			
 			//TRACE
-			getInfoStream() << "\nOriginal centroid (I1):";
-			vecCentroidFacet_I1.Out(getInfoStream());
-			getInfoStream() << "\nOriginal centroid (I2):";
-			vecCentroidFacet_I2.Out(getInfoStream());
+			cout << "\nOriginal centroid (I1):";
+			vecCentroidFacet_I1.Out();
+			cout << "\nOriginal centroid (I2):";
+			vecCentroidFacet_I2.Out();
 			
       //test first interface
       for(size_t iD = 0U; iD < iDim; iD++)
@@ -673,7 +673,7 @@ The idea is to test the following member functions:
 tested: is a test funtion*/ 
 void FiniteVolumeStencil_Test::weightsOfSectorIntegrationPointsTest() // argument list could deal with multiple integration points
  { 
-  getInfoStream() << "TESTING: weightsOfSectorIntegrationPointsTest()" << endl;
+  cout << "TESTING: weightsOfSectorIntegrationPointsTest()" << endl;
     //calculate total weight of sectors, which should correspond to the total volume of the finite element
  	double64 fSumOfWeights(0.);
  	
@@ -694,7 +694,7 @@ void FiniteVolumeStencil_Test::weightsOfSectorIntegrationPointsTest() // argumen
   	for(vIterFVS = fvs_.begin(); vIterFVS != vIterFVSEnd; vIterFVS++, vIterFEs++)
   	{
   		//print type
-      getInfoStream() << "Type: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
+      cout << "Type: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   		
  		  fSumOfWeights = 0.;
   		
@@ -704,7 +704,7 @@ void FiniteVolumeStencil_Test::weightsOfSectorIntegrationPointsTest() // argumen
   			for ( size_t j = 0U; j< vIterFVS->IntegrationPointsPerSector(); j++ ) 
         		fSumOfWeights += vIterFVS->SectorIntegrationWeight( iSector, j );
         
-      getInfoStream() << "SUM OF WEIGHTS:" << setprecision(15) << fSumOfWeights << "vs." << mapFEMTypeToArea[(*vIterFEs)->ElementType()] << endl;
+      cout << "SUM OF WEIGHTS:" << setprecision(15) << fSumOfWeights << "vs." << mapFEMTypeToArea[(*vIterFEs)->ElementType()] << endl;
 		
 		  _equal( fSumOfWeights, mapFEMTypeToArea[(*vIterFEs)->ElementType()], 1.e-9);
   	}
@@ -857,12 +857,12 @@ tested: is a test function*/
 void FiniteVolumeStencil_Test::shapeFunctionsTest()
 {
   //shape functions must sum to 1
-  getInfoStream() << "\nTESTING: shapeFunctionsTest()" << endl;
+  cout << "\nTESTING: shapeFunctionsTest()" << endl;
  
   for(vector<FiniteElement*>::const_iterator vIterFEs = vecFEs_.begin(); vIterFEs != vecFEs_.end(); vIterFEs++)
   {
   	//print type
-    getInfoStream() << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
+    cout << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   	
   	std::vector<double64> sf;
   	double64 sum(0.);
@@ -872,13 +872,13 @@ void FiniteVolumeStencil_Test::shapeFunctionsTest()
   	{
   	  (*vIterFEs)->N_AtIntegrationPoint( i, sf );
   	  sum = 0.;
-      getInfoStream() << "\n";
+      cout << "\n";
   	  for(size_t j = 0; j < sf.size(); j++)
   	  {  
   	    sum += sf[j];
-        //TRACE getInfoStream() << "(" << shapeFuncsAtIP[j] <<")";
+        //TRACE cout << "(" << shapeFuncsAtIP[j] <<")";
   	  }
-      //TRACE getInfoStream() << "\nShape functions should be 1. sum: " << sum;
+      //TRACE cout << "\nShape functions should be 1. sum: " << sum;
   	  _equal( sum, 1., 1.e-15 );
   	}	
   	//check that they sum up at the barycenters
@@ -888,12 +888,12 @@ void FiniteVolumeStencil_Test::shapeFunctionsTest()
   	  sum = 0.;
   	  for(size_t j = 0; j < sf.size(); j++)  
   	   sum += sf[j];
-      getInfoStream() << "\nShape functions should be 1. sum: " << sum;
+      cout << "\nShape functions should be 1. sum: " << sum;
   	  _equal( sum, 1., 1.e-14 ); 
   	}
   	catch( invalid_argument e ) //its not defined
     {
-       getInfoStream() << "Exception: " << e.what(); //do not fail test
+       cout << "Exception: " << e.what(); //do not fail test
     } 
 	}	
 }
@@ -917,11 +917,11 @@ tested: is a test function*/
 void FiniteVolumeStencil_Test::shapeFunctionDerivativesTest()
 {
   //shape functions must sum to 1
-  getInfoStream() << "\nTESTING: shapeFunctionDerivativesTest()" << endl;
+  cout << "\nTESTING: shapeFunctionDerivativesTest()" << endl;
   for(vector<FiniteElement*>::const_iterator vIterFEs = vecFEs_.begin(); vIterFEs != vecFEs_.end(); vIterFEs++)
   {
   	//print type
-    getInfoStream() << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
+    cout << "\nType: " << parseFiniteElementType( (*vIterFEs)->ElementType() ) << endl;
   	
   	double64 sum(0.);
   	DenseMatrix<DM_MIN> sf;
@@ -933,16 +933,16 @@ void FiniteVolumeStencil_Test::shapeFunctionDerivativesTest()
   	  {
   	    (*vIterFEs)->dN_AtIntegrationPoint( sf, i );
   	    sum = 0.;
-        getInfoStream() << "\n Integration Point: " << i;
+        cout << "\n Integration Point: " << i;
   	    for(size_t j = 0; j < sf.Rows(); j++)  
   	     sum += sf.RowSum(j);
-        getInfoStream() << "\nShape functions should be 0. sum: " << sum;
+        cout << "\nShape functions should be 0. sum: " << sum;
   	    _equal( sum, 0., 1.e-14 );
   	  }
   	  catch( std::range_error e )
   	  {
   	    //fail the test but do not die
-        getInfoStream() << "\nThere was an exception: " << e.what() << endl;
+        cout << "\nThere was an exception: " << e.what() << endl;
         _test(false);
   	  }
   	}	  
@@ -953,16 +953,16 @@ void FiniteVolumeStencil_Test::shapeFunctionDerivativesTest()
   	  {  	  
     	  (*vIterFEs)->dN_AtNode( sf, i );
     	  sum = 0.;
-        getInfoStream() << "\n Node: " << i;
+        cout << "\n Node: " << i;
     	  for(size_t j = 0; j < sf.Rows(); j++)  
     	    sum += sf.RowSum(j);
-        getInfoStream() << "\nShape functions should be 0. sum: " << sum;
+        cout << "\nShape functions should be 0. sum: " << sum;
     	  _equal( sum, 0., 1.e-14 ); 
   	  }
   	  catch( std::range_error e )
   	  {
   	    //fail the test but do not die
-        getInfoStream() << "\nThere was an exception: " << e.what() << endl;
+        cout << "\nThere was an exception: " << e.what() << endl;
         _test(false);
   	  }
  	  
@@ -972,7 +972,7 @@ void FiniteVolumeStencil_Test::shapeFunctionDerivativesTest()
   	sum = 0.;
   	for(size_t j = 0; j < sf.Rows(); j++)  
   	  sum += sf.RowSum(j);
-    getInfoStream() << "\nShape functions should be 0. sum: " << sum;
+    cout << "\nShape functions should be 0. sum: " << sum;
   	_equal( sum, 0., 1.e-14 );
   }	
 }

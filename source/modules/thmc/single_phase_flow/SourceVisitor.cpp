@@ -29,7 +29,7 @@ SourceVisitor<dim>::SourceVisitor( Model<dim>& model, std::vector<std::string>* 
     }
     else
     {
-        throw csmp::Exception(CSMP_FATAL_ERROR,"SourceVisitor(constructor)"," Incorrect number of variable names provided"," Please use the correct number.");
+        throw csmp::Exception(FATAL_ERROR,"SourceVisitor(constructor)"," Incorrect number of variable names provided"," Please use the correct number.");
     }
 }
 

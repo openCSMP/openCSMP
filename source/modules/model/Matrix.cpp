@@ -132,8 +132,8 @@ Matrix&  Matrix::operator*=( const Matrix& mat )
     if ( cols != mat.rows ) {
          std::cerr <<"\nMatrix<double>::operator*=: Matrices cannot be multiplied ";
          std::cerr <<"because of incompatible sizes (A *= B, see matrices below): "<< endl;
-         Out(std::cerr);
-         mat.Out(std::cerr);
+         Out();
+         mat.Out();
          throw length_error("Matrix<mn_max>::operator*=");
       }
 
@@ -346,10 +346,10 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
  {
 //    cout << "cols vs. rows."<<cols<<" "<<rows<<endl;
     if ( cols != mat.rows ) {
-         std::cerr <<"\nMatrix<double>::operator*: Matrices cannot be multiplied "; 
-         std::cerr <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
-         Out(std::cerr, 3);
-         mat.Out(std::cerr, 3);
+         std::cout <<"\nMatrix<double>::operator*: Matrices cannot be multiplied "; 
+         std::cout <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
+         Out(3);
+         mat.Out(3);
          throw std::length_error("Matrix<mn_max>::operator*");
       }
 
@@ -374,8 +374,8 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
 Matrix& Matrix::operator*=( const std::vector<double64>& vecT )
  {
     if ( cols != vecT.size() ) {
-         std::cerr <<"\nMatrix<double>::operator*=: ";
-         std::cerr <<"Matrix and vector<double64> cannot be multiplied "; 
+         std::cout <<"\nMatrix<double>::operator*=: ";
+         std::cout <<"Matrix and vector<double64> cannot be multiplied "; 
          std::cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << std::endl;
          throw std::length_error("Matrix<mn_max>::operator*=");
       }
@@ -430,12 +430,12 @@ void
 Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
  {
     if ( cols != B.cols ) {
-        std::cerr <<"\nMatrix<double>::MultiplyWithTransposedOf: ";
-        std::cerr <<"Matrices cannot be multiplied "; 
-        std::cerr <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
-        Out(std::cerr);
-        B.Out(std::cerr);
-        throw length_error("Matrix<mn_max>::MultiplyWithTransposedOf");
+         cout <<"\nMatrix<double>::MultiplyWithTransposedOf: ";
+         cout <<"Matrices cannot be multiplied "; 
+         cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
+         Out();
+         B.Out();
+         throw length_error("Matrix<mn_max>::MultiplyWithTransposedOf");
       }
     
     RES.Resize( rows, B.rows );
@@ -460,13 +460,13 @@ void
 Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
  {
     if ( rows != B.rows ) {
-        std::cerr <<"\nMatrix<double>::MultiplyTransposedOfWith: ";
-        std::cerr <<"Matrices cannot be multiplied "; 
-        std::cerr <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
-        Out(std::cerr);
-        B.Out(std::cerr);
-        throw length_error("Matrix<mn_max>::MultiplyTransposedOfWith");
-    }
+         cout <<"\nMatrix<double>::MultiplyTransposedOfWith: ";
+         cout <<"Matrices cannot be multiplied "; 
+         cout <<"because of incompatible sizes (A *= B^T, see matrices below): "<< endl;
+         Out();
+         B.Out();
+         throw length_error("Matrix<mn_max>::MultiplyTransposedOfWith");
+      }
     
     RES.Resize( cols, B.cols );
     double64  sum;
@@ -837,11 +837,11 @@ void Matrix::In()
 // Out( digits )
 // ---------------------------------------
 
-void Matrix::Out( std::ostream& os, long digits ) const
+void Matrix::Out( long digits ) const
  {
-    long  prec(os.precision(digits));
-    os <<"\nMatrix<double>::Out(): m="<< rows <<", n="<< cols << endl;
-    if ( digits != 0U ) os.setf(ios::scientific);
+    long  prec(cout.precision(digits));
+    cout <<"\nMatrix<double>::Out(): m="<< rows <<", n="<< cols << endl;
+    if ( digits != 0U ) cout.setf(ios::scientific);
     size_t row_break, split_adouble64er(10U);
      
     for ( size_t i=0; i<rows; i++ )
@@ -849,23 +849,23 @@ void Matrix::Out( std::ostream& os, long digits ) const
          row_break = 1;
          for ( size_t j=0; j<cols; j++, row_break++ )
            {
-              if ( data[i][j] >= 0. ) os <<" ";
-              os << data[i][j] <<" ";
+              if ( data[i][j] >= 0. ) cout <<" ";
+              cout << data[i][j] <<" ";
               if ( row_break == split_adouble64er )
                 {
-                   os << endl;
+                   cout << endl;
                    row_break = 0U;
                 }
            }
-         os << endl;
+         cout << endl;
       }
       
     if ( digits != 0U ) {
-         os.unsetf( ios::scientific );
-         os.precision(prec);
+         cout.unsetf( ios::scientific );
+         cout.precision(prec);
       }
       
-    os << endl;    
+    cout << endl;    
     
  } // end Out()
 

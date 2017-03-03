@@ -68,7 +68,7 @@ bool openFile( FileStream& fs, const std::string& fname )
     fs.open( filename );
 
     if ( !fs.is_open() )
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "openInputFile",
                                "File seems to be missing",
                                filename );
@@ -92,7 +92,7 @@ bool openFile( FileStream& fs, const std::string& fname, const std::string& file
     fs.open( filename );
 
     if ( !fs.is_open() )
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "openInputFile",
                                "File seems to be missing",
                                filename );
@@ -133,7 +133,7 @@ bool openFile( FileStream& fs, const std::string& fname, const std::vector<std::
         success = true;
 
     if(!success){
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "openInputFile",
                                "File seems to be missing",
                                filename );
@@ -402,7 +402,7 @@ bool isNO( const std::string& text_line )
     if( no.find( text_line )  != no.end() )
         return false;
 
-    throw csmp::Exception( CSMP_FATAL_ERROR,
+    throw csmp::Exception( FATAL_ERROR,
                            "yes_or_no:",
                            "The answer is uncertain!",
                            text_line );
@@ -509,7 +509,7 @@ void readPropertyValue( ScalarVariable& sc )
     if ( token == NULL ) {
         sc = std::numeric_limits<double64>::quiet_NaN();
         cout <<"\n"<< token << endl;
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception(ERROR,
                               "readPropertyValue(scalar)",
                               "Property value could not be read");
     }
@@ -517,7 +517,7 @@ void readPropertyValue( ScalarVariable& sc )
     {
         sc = std::numeric_limits<double64>::quiet_NaN();
         cout <<"\n"<< token << endl;
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception(ERROR,
                               "readPropertyValue(scalar)",
                               "Property value is not a digit");
     }
@@ -553,7 +553,7 @@ void readPropertyValue( VectorVariable<dim>& vc )
     if( i == 0 )
     {
         vc = std::numeric_limits<double64>::quiet_NaN();
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "readPropertyValue(vector)",
                                "Property value could not be read properly");
     }
@@ -594,7 +594,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
     if ( i==0 && j==0 )
     {
         ts = std::numeric_limits<double64>::quiet_NaN();
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "readPropertyValue(tensor)",
                                "Property value could not be read properly");
     }
@@ -625,7 +625,7 @@ void readPropertyValue( ArrayVariable& av )
     if ( i == 0 )
     {
         av = std::numeric_limits<double64>::quiet_NaN();
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "readPropertyValue(array)",
                                "Property value could not be read properly");
     }
@@ -656,7 +656,7 @@ void readPropertyValue( FlaggedArrayVariable& fv )
     if ( i == 0 )
     {
         fv  = std::numeric_limits<double64>::quiet_NaN();
-        throw csmp::Exception( CSMP_ERROR,
+        throw csmp::Exception( ERROR,
                                "readPropertyValue(flagged array)",
                                "Property value could not be read properly");
     }
@@ -688,7 +688,7 @@ void readPropertyStatusOfScalar( size_t depth, bool& digit, size_t& position, ve
     if ( token == NULL )
     {
         cout <<"\n"<< token << endl;
-        csmp_error.notice( CSMP_ERROR,
+        csmp_error.notice( ERROR,
                            "readPropertyStatusOfScalar:",
                            "Flag of 'scalar' property could not be read");
         terminate();
@@ -710,7 +710,7 @@ void readPropertyStatusOfScalar( size_t depth, bool& digit, size_t& position, ve
             if ( token == NULL )
             {
                 cout <<"\nflag"<< position <<": "<< token << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readPropertyStatusOfScalar:",
                                    "Flag of 'scalar' property could not be read");
                 terminate();
@@ -734,7 +734,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, ve
     if ( token == NULL )
     {
         cout <<"\n"<< token << endl;
-        csmp_error.notice( CSMP_ERROR,
+        csmp_error.notice( ERROR,
                            "readPropertyStatusOfVector:",
                            "Flag of 'vector' property could not be read");
         terminate();
@@ -770,7 +770,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, ve
             if ( token == NULL )
             {
                 cout <<"\nflag"<< position <<": "<< token << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readPropertyStatusOfVector:",
                                    "Flag of 'vector' property could not be read");
                 terminate();
@@ -794,7 +794,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, ve
     if ( token == NULL )
     {
         cout <<"\n"<< token << endl;
-        csmp_error.notice( CSMP_ERROR,
+        csmp_error.notice( ERROR,
                            "readPropertyStatusOfTensor:",
                            "Flag of 'tensor' property could not be read");
         terminate();
@@ -837,7 +837,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, ve
             if ( token == NULL )
             {
                 cout <<"\nflag"<< position <<": "<< token << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readPropertyStatusOfTensor:",
                                    "Flag of 'tensor' property could not be read");
                 terminate();
@@ -860,7 +860,7 @@ void readPropertyStatusOfArray( size_t depth, bool& digit, size_t& position, vec
     if ( token == NULL )
     {
         cout <<"\n"<< token << endl;
-        csmp_error.notice( CSMP_ERROR,
+        csmp_error.notice( ERROR,
                            "readPropertyStatusOfArray:",
                            "Flag of 'array' property could not be read");
         terminate();
@@ -882,7 +882,7 @@ void readPropertyStatusOfArray( size_t depth, bool& digit, size_t& position, vec
             if ( token == NULL )
             {
                 cout <<"\nflag"<< position <<": "<< token << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readPropertyStatusOfArray:",
                                    "Flag of 'array' property could not be read");
                 terminate();
@@ -905,7 +905,7 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& positi
     if ( token == NULL )
     {
         cout <<"\n"<< token << endl;
-        csmp_error.notice( CSMP_ERROR,
+        csmp_error.notice( ERROR,
                            "readPropertyStatusOfFlaggedArray:",
                            "Flag of 'flagged array' property could not be read");
         terminate();
@@ -941,7 +941,7 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& positi
             if ( token == NULL )
             {
                 cout <<"\nflag"<< position <<": "<< token << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readPropertyStatusOfFlaggedArray:",
                                    "Flag of 'flagged array' property could not be read");
                 terminate();
@@ -1382,7 +1382,7 @@ bool readPointData( std::map<std::string,std::vector<double64> >& pdata,
             token = strtok( text_line, delims );
             if ( token == NULL ) {
                 cout <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,"readPointData",
+                throw csmp::Exception(ERROR,"readPointData",
                                       "point name could not be read from input file.");
                 return false;
             }
@@ -1395,7 +1395,7 @@ bool readPointData( std::map<std::string,std::vector<double64> >& pdata,
             pair<typename map<string,vector<double64> >::iterator,bool>  it =
                     pdata.insert( make_pair( point_name, vector<double64>(dim+ndata)) );
             if ( !it.second )
-                throw csmp::Exception( CSMP_ERROR,"readPointData",
+                throw csmp::Exception(ERROR,"readPointData",
                                       "Duplicate record for", token );
 
             // 3. point coordinates and data
@@ -1403,7 +1403,7 @@ bool readPointData( std::map<std::string,std::vector<double64> >& pdata,
                 token = strtok( NULL, delims );
                 if ( token == NULL ) {
                     cout <<"\n"<< text_line << endl;
-                    throw csmp::Exception( CSMP_ERROR,"readPointData",
+                    throw csmp::Exception(ERROR,"readPointData",
                                           "Point data read incompletely for", point_name.c_str() );
                     return false;
                 }
@@ -1490,7 +1490,7 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
             if ( token == NULL )
             {
                 cout <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "buildRegionsBasedOnPropertyRange",
                                       "region name could not be read from input file.");
                 return false;
@@ -1507,7 +1507,7 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "buildRegionsBasedOnPropertyRange",
                                       "property name could not be read from input file.");
                 return false;
@@ -1520,7 +1520,7 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "buildRegionsBasedOnPropertyRange",
                                       "property range value 1 could not be read from input file.");
                 return false;
@@ -1533,7 +1533,7 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "buildRegionsBasedOnPropertyRange",
                                       "property range value 2 could not be read from input file.");
                 return false;
@@ -1552,7 +1552,7 @@ bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
 
             if ( !model.ContainsRegion( group_name.c_str() ) )
             {
-                throw csmp::Exception( CSMP_FATAL_ERROR,
+                throw csmp::Exception( FATAL_ERROR,
                                        "buildRegionsBasedOnPropertyRange",
                                        "region could not be build", text_line );
                 return false;
@@ -1659,7 +1659,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readBoxBoundaryPropertyValuesAndConditions",
                                    "Condition type specifier missing (Dirichlet, Neumann...");
                 return false;
@@ -1672,7 +1672,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readBoxBoundaryPropertyValuesAndConditions",
                                    "Property name could not be read");
                 return false;
@@ -1734,7 +1734,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     // reading setting condition flags for assignment
                     if ( (token=strtok( NULL, delims )) == NULL ) { // condition flag 1
                         if ( token != nullptr ) std::cerr <<"\n"<< token << endl;
-                        csmp_error.notice( CSMP_ERROR,
+                        csmp_error.notice( ERROR,
                                            "readBoxBoundaryPropertyValuesAndConditions",
                                            "Vector variable entry 1 VARIABLE_FLAG could not be read");
                         return false;
@@ -1742,7 +1742,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     else flag1 = token;
                     if ( (token=strtok( NULL, delims )) == NULL ) { // condition flag 2
                         if ( token != nullptr ) std::cerr <<"\n"<< token << endl;
-                        csmp_error.notice( CSMP_ERROR,
+                        csmp_error.notice( ERROR,
                                            "readBoxBoundaryPropertyValuesAndConditions",
                                            "Vector variable entry 2 VARIABLE_FLAG could not be read");
                         return false;
@@ -1768,7 +1768,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     // reading and setting condition flags for assignment
                     if ( (token=strtok( NULL, delims )) == NULL ) { // condition flag 1
                         std::cerr <<"\n"<< token << endl;
-                        csmp_error.notice( CSMP_ERROR,
+                        csmp_error.notice( ERROR,
                                            "readBoxBoundaryPropertyValuesAndConditions",
                                            "Vector variable entry 1 VARIABLE_FLAG could not be read");
                         return false;
@@ -1776,7 +1776,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     else flag1 = token;
                     if ( (token=strtok( NULL, delims )) == NULL ) { // condition flag 2
                         std::cerr <<"\n"<< token << endl;
-                        csmp_error.notice( CSMP_ERROR,
+                        csmp_error.notice( ERROR,
                                            "readBoxBoundaryPropertyValuesAndConditions",
                                            "Vector variable entry 2 VARIABLE_FLAG could not be read");
                         return false;
@@ -1784,7 +1784,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                     else flag2 = token;
                     if ( (token=strtok( NULL, delims )) == NULL ) { // condition flag 3
                         std::cerr <<"\n"<< token << endl;
-                        csmp_error.notice( CSMP_ERROR,
+                        csmp_error.notice( ERROR,
                                            "readBoxBoundaryPropertyValuesAndConditions",
                                            "Vector variable entry 3 VARIABLE_FLAG could not be read");
                         return false;
@@ -1835,13 +1835,13 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
             }
             else if( prop_type == ARRAY )
             {
-                throw csmp::Exception( CSMP_FATAL_ERROR,"readBoxBoundaryPropertyValuesAndConditions",
+                throw csmp::Exception( FATAL_ERROR,"readBoxBoundaryPropertyValuesAndConditions",
                                        "Array box-boundary condition assignment not implemented yet");
                 return false;
             }
             else if( prop_type == FLAGGEDARRAY )
             {
-                throw csmp::Exception( CSMP_FATAL_ERROR,"readBoxBoundaryPropertyValuesAndConditions",
+                throw csmp::Exception( FATAL_ERROR,"readBoxBoundaryPropertyValuesAndConditions",
                                        "Flagged Array box-boundary condition assignment not implemented yet");
                 return false;
             }
@@ -1910,7 +1910,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
             if ( token == NULL )
             {
                 cout <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                       "Property assignment specifier missing");
                 return false;
@@ -1926,7 +1926,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
             if ( token == NULL )
             {
                 cout <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                       "Condition type specifier missing (Dirichlet, Neumann...");
                 return false;
@@ -1938,7 +1938,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
             if ( token == NULL )
             {
                 cout <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception(ERROR,
                                       "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                       "Property name could not be read");
                 return false;
@@ -1971,7 +1971,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                     boundary.InputPropertyValue( prop_name.c_str(), sc, do_not_overwrite, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -1999,7 +1999,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                     boundary.InputPropertyValue( prop_name.c_str(), vc, do_not_overwrite, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2029,7 +2029,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2058,7 +2058,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                     boundary.InputPropertyValue( prop_name.c_str(), av, do_not_overwrite, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2090,7 +2090,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                     boundary.InputPropertyValue( prop_name.c_str(), fv, do_not_overwrite, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "InputDataManager<dim>::ReadBoundaryPropertyValuesAndConditions",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2193,7 +2193,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\nFor region '"<< boundary_name <<"' text line: "<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                   "readBoundaryPropertyConditions:",
                                   "Qualifier could not be parsed (interior, boundary or complete");
                 return false;
@@ -2209,7 +2209,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\nFor region '"<< boundary_name <<"' text_line: "<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                   "readBoundaryPropertyConditions:",
                                   "Property name could not be read");
                 return false;
@@ -2331,7 +2331,7 @@ bool readRegionPropertyConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\nFor region '"<< group_name <<"' text line: "<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readRegionPropertyConditions:",
                                   "Qualifier could not be parsed (interior, boundary or complete");
                 return false;
@@ -2347,7 +2347,7 @@ bool readRegionPropertyConditions( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\nFor region '"<< group_name <<"' text_line: "<< text_line << endl;
-                csmp_error.notice( CSMP_ERROR,
+                csmp_error.notice( ERROR,
                                    "readRegionPropertyConditions:",
                                   "Property name could not be read");
                 return false;
@@ -2464,7 +2464,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception( ERROR,
                                        "readBoundaryPropertyValues",
                                        "Property assignment specifier missing");
                 return false;
@@ -2480,7 +2480,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception( ERROR,
                                        "readBoundaryPropertyValues",
                                        "Property name could not be read");
                 return false;
@@ -2507,7 +2507,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
                     boundary.InputPropertyValue( prop_name.c_str(), sc, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readBoundaryPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2533,7 +2533,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
                     boundary.InputPropertyValue( prop_name.c_str(), vc, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readBoundaryPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2563,7 +2563,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readBoundaryPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2593,7 +2593,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
                     boundary.InputPropertyValue( prop_name.c_str(), av, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readBoundaryPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2623,7 +2623,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
                     boundary.InputPropertyValue( prop_name.c_str(), fv, COMPLETE );
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readBoundaryPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2702,7 +2702,7 @@ bool readRegionPropertyValues( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception( ERROR,
                                        "readRegionPropertyValues",
                                        "Property assignment specifier missing");
                 return false;
@@ -2718,7 +2718,7 @@ bool readRegionPropertyValues( Model<dim>& model,
             if ( token == NULL )
             {
                 std::cerr <<"\n"<< text_line << endl;
-                throw csmp::Exception( CSMP_ERROR,
+                throw csmp::Exception( ERROR,
                                        "readRegionPropertyValues",
                                        "Property name could not be read");
                 return false;
@@ -2745,7 +2745,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readRegionPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2771,7 +2771,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readRegionPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2800,7 +2800,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readRegionPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2830,7 +2830,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readRegionPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -2860,7 +2860,7 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
                 else
                 {
-                    throw csmp::Exception( CSMP_ERROR,
+                    throw csmp::Exception( ERROR,
                                            "readRegionPropertyValues",
                                            "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
                     return false;
@@ -3132,7 +3132,7 @@ bool readComputationalSettings( ComputationalSettings& settings,
                 settings.AddMonitorTime( atof(token) * monitor_time_unit );
             }
             else
-                throw csmp::Exception( CSMP_ERROR, "readComputationalSettings",
+                throw csmp::Exception( ERROR, "readComputationalSettings",
                                        "Unable to parse settings qualifier.");
         }
         ifs.getline( text_line, line_length );
@@ -3140,7 +3140,7 @@ bool readComputationalSettings( ComputationalSettings& settings,
     while ( !isBlankLine(text_line) && !ifs.eof() );
 
     if( verbose )
-        settings.Out(std::cout);
+        settings.Out();
 
     return true;
 

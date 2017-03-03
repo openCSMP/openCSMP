@@ -190,8 +190,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     /// prints state of this object
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void  Out() const;
 
   private:
     Face();

@@ -28,16 +28,16 @@ Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const Prope
     
         // testing the Operands 
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() )
-    throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
                    oper, "Operand must be a property placed on the element or group." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
+    throw csmp::Exception( ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
                    
     if (var_.key.place != NODE || var_.key.type != SCALAR)
-      throw csmp::Exception(CSMP_ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
+      throw csmp::Exception(ERROR, "Integral_var_NT_lhsop_N_dV::(constructor)", 
                    var, "Additional variable must be a scalar property placed on the nodes.");
  }
 
@@ -61,7 +61,7 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
   if ( !MathOperatorLHS<dim>::LumpedFormulation() ) { // consistent formulation
     if (e.FE_Type() != LINEAR_TRIANGLE)
-       throw csmp::Exception(CSMP_ERROR, 
+       throw csmp::Exception(ERROR, 
                       "Integral_var_NT_lhsop_N_dV::ComputeContribution",
                       "Consistent formulation only provided for elements of type LinearTriangle");
      ComputeIntegral(e);

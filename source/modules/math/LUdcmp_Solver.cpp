@@ -26,7 +26,7 @@ void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( A.Rows() > 500U )
-       csmp_error.notice( CSMP_WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
+       csmp_error.notice( WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
                          "the matrix is rather large; try SAMG to get a result in a decent time." );
 
 
@@ -54,11 +54,7 @@ void LUdcmp_Solver::ludcmp( SparseMatrix& a,
           big = 0.;
           for(j=0; j<n; j++)
               if((cache = abs(a( i,j ))) > big) big = cache;
-          if( big == 0.) {
-              throw csmp::Exception(CSMP_ERROR,
-                      "LUdcmp_Solver::ludcmp", "LU decomposition Solver: Singular Matrix!");
-          }
-
+          if( big == 0.) throw("LU decomposition Solver: Singular Matrix!");
           vv[i] = 1./big;
       }
 

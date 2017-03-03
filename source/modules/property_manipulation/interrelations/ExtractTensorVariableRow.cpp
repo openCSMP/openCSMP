@@ -20,18 +20,18 @@ ExtractTensorVariableRow<dim>::ExtractTensorVariableRow( const PropertyDatabase<
     Interrelation<dim>::ResultProperty( vector_var );
     
     if ( t.Type() != TENSOR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
                                    "Extraction variable must be of TensorVariable type");
     if ( v.Type() != VECTOR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
                                    "Extracted variable must be of VectorVariable type");
  
     if ( t.Placement() != v.Placement() )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
                                    "Incompatible placement of input variables");
    
     if ( row > dim-1 )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableRow::(constructor)", 
                                    "Row out of range.");
  }
 

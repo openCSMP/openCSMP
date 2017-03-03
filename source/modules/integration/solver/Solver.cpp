@@ -108,7 +108,7 @@ void  Solver::Solve( SparseMatrix& A,
  {
     // checking for consistent sizes 
     if ( A.Rows() != b.size() )
-      throw csmp::Exception( CSMP_ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows");
+      throw csmp::Exception( ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows");
 
     x.resize( b.size() );
     vector<double64>(x).swap(x);
@@ -118,7 +118,7 @@ void  Solver::Solve( SparseMatrix& A,
         cout <<"\nSolver::SolveMatrixEquation: Solution matrix is symmetric."<< endl;
 
       cout <<"\nSolver::SolveMatrixEquation: Global matrix before solution:"<< endl;
-      A.Out(cout);
+      A.Out();
       cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
       out( b );
     }
@@ -133,7 +133,7 @@ void  Solver::Solve( SparseMatrix& A,
                                      
     if ( Verbose() ) {
          cout <<"\nSolver::SolveMatrixEquation: Global matrix after solution:"<< endl;
-         A.Out(cout);
+         A.Out();
          cout <<"\nSolver::SolveMatrixEquation: Righthand vector:"<< endl;
          out( b );
          cout <<"\nSolver::SolveMatrixEquation: Solution vector:"<< endl;
@@ -230,7 +230,7 @@ void  Solver::Out( const vector<double64>& vec, const char* fname ) const
     strcat( file,".text" );
 
     if ((fp = fopen (file,"wt")) == NULL )
-      throw csmp::Exception( CSMP_ERROR, "Solver::Out (vector<double64>)", "output file could not be created" );
+      throw csmp::Exception( ERROR, "Solver::Out (vector<double64>)", "output file could not be created" );
 
     out( vec );
 

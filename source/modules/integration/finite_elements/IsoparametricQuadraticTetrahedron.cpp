@@ -907,7 +907,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
                 <<"N[8] = "<<N[8]<<" ;\t"
                 <<"N[9] = "<<N[9]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticTetrahedron::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricQuadraticTetrahedron::PhysicalToParametric",
                             "Newton-Raphson iteration not converged");
         }
 
@@ -1429,7 +1429,7 @@ void  IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary( const vecto
     fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 6 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1608,7 +1608,7 @@ void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNo
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
    if ( IVAR.size() != (gpe*nvars) )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
                            "Input vector must have 'nvars' x 4 entries");
 
    NVAR.resize( npe * nvars );
@@ -1618,7 +1618,7 @@ void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNo
    if ( first_call ) {
        // checking starting conditions
        if ( gpe != 4 )
-         throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
+         throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
                                "This method expects four integration points on which extrapolation functions will be based on" );
 
         // test function coefficients based on corner nodes only

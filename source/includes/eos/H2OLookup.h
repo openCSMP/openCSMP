@@ -9,6 +9,9 @@
 #include "CriticalPointH2O.h"
 #include "LookupPropertyIndex.h"
 #include "GetLookupIndices.h"
+//#include "steam4.h" //! included in iaps.h
+//#include "decl.h" //! included in iaps.h
+#include "iaps.h"
 
 namespace csmp {
 

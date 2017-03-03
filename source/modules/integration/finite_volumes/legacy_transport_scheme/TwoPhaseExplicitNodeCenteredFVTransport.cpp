@@ -284,7 +284,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantInc
          return max_time_increment;
       }
     if ( courant_increment <= millisecond ) {
-         throw csmp::Exception( CSMP_WARNING, "TwoPhaseImplicitNodeCenteredFVTransport::AnisotropicCourantIncrement (2-phase flow)",
+         throw csmp::Exception( WARNING, "TwoPhaseImplicitNodeCenteredFVTransport::AnisotropicCourantIncrement (2-phase flow)",
                                          "courant increment is smaller than a millisecond. Check your boundary conditions" );
       }
     else {
@@ -396,7 +396,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
 
     // reporting problems
     if ( error_counter > 20U ) {
-          throw csmp::Exception( CSMP_ERROR, "TwoPhaseExplicitNodeCenteredFVTransport::OutputResults",
+          throw csmp::Exception( ERROR, "TwoPhaseExplicitNodeCenteredFVTransport::OutputResults",
                                 "Output property was out of range, legal (min/max) was stored instead");
       }
     if ( error_counter > (this->gref_.Nodes() / 20U) )
@@ -461,7 +461,7 @@ double64 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const 
     if( do_range_check){
 
         if ( error_counter > 20U ) {
-              throw csmp::Exception( CSMP_ERROR, "TwoPhaseExplicitNodeCenteredFVTransport::OutputResults",
+              throw csmp::Exception( ERROR, "TwoPhaseExplicitNodeCenteredFVTransport::OutputResults",
                                          "Output property was out of range, legal (min/max) was stored instead");
           }
         if ( error_counter > (this->gref_.Nodes() / 20U) )
@@ -712,7 +712,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          // the balance can only be evaluated if there is a halo stencil
          else if ( halo_stencils_.find(eptr) != halo_stencils_.end() ) flux_balance -= flux;
          else
-         throw csmp::Exception( CSMP_ERROR, "TwoPhaseExplicitNodeCenteredFVTransport<dim>::FractionalFlowThroughBoundaryFiniteVolume",
+         throw csmp::Exception( ERROR, "TwoPhaseExplicitNodeCenteredFVTransport<dim>::FractionalFlowThroughBoundaryFiniteVolume",
                                         "Attempt to access a finite volume stencil that was not initialized" );
       }
 
@@ -874,7 +874,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
                         // the balance can only be evaluated if there is a halo stencil
                         if(!IsInteriorStencil(e)){
                                 if (halo_stencils_.find(e)!= halo_stencils_.end()) flux_balance -= flux;
-                                else throw csmp::Exception( CSMP_ERROR, "TwoPhaseExplicitNodeCenteredFVTransport<dim>::AssignGenericFlowBoundaryConditions",
+                                else throw csmp::Exception( ERROR, "TwoPhaseExplicitNodeCenteredFVTransport<dim>::AssignGenericFlowBoundaryConditions",
                                                        "Attempt to access a finite volume stencil that was not initialized" );
                         }
 

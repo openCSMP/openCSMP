@@ -544,9 +544,9 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN6 )
           ////////// Debug Printout////////////////////////////////
           //  cout<<" At vertice #: "<<i<<endl;
           //	cout<<" Jacobian Matrix: "<<endl;
-          //	JAC.Out(cout);
+          //	JAC.Out();
           //	cout<<" Jacobian Inverse Matrix: "<<endl;
-          //JINV.Out(cout);
+          //JINV.Out();
           /////////////////////////////////////////////////////////
           //for ( size_t j=0; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
@@ -607,7 +607,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricLinearPrism::dN  For given xyz=("<<xyz[0]<<","<<xyz[1]<<","<<xyz[2]<<"), rst=("<<
     rst[0]<<","<<rst[1]<<","<<rst[2]<<")"<<endl;
     cout<<" IsoparametricLinearPrism::dN  Matrix DN2: "<<endl;
-    DN2.Out(cout);
+    DN2.Out();
     getchar();
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
@@ -899,7 +899,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
                 <<"N[4] = "<<N[4]<<" ;\t"
                 <<"N[5] = "<<N[5]<<"\n";
 
-            csmp::Exception( CSMP_WARNING, "IsoparametricLinearPrism::PhysicalToParametric",
+            csmp::Exception( WARNING, "IsoparametricLinearPrism::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1329,7 +1329,7 @@ IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<size_t>& bnod
     fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 4 && bnodes.size() != 3 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearPrism::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearPrism::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1362,7 +1362,7 @@ IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( size_t nva
                                                                       vector<double64>& NVAR )
 const
 {
-  if(gpe!=1) throw csmp::Exception( CSMP_ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
+  if(gpe!=1) throw csmp::Exception( ERROR,	 "IsoparametricLinearPrism::PhysicalToParametric",
                                           "Number of Integration points should be 1");
 
  assert( gpe == 1);

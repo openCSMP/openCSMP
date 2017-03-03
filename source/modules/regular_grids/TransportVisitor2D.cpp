@@ -34,22 +34,22 @@ TransportVisitor2D::TransportVisitor2D( Model<2>& sg,
      strcpy( adv_prop,    advected_prop );
     
      if ( v_key.place != NODE )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "TransportVisitor2D::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "TransportVisitor2D::(constructor)", 
           "The transport variable must be placed on the Node." ); 		       
 
      if ( v_key.type != VECTOR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "TransportVisitor2D::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "TransportVisitor2D::(constructor)", 
           "The transport variable must be a vector variable." );
            		       
      if ( prop_key.type != SCALAR )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "TransportVisitor2D::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "TransportVisitor2D::(constructor)", 
           "The transported variable must be a scalar variable." );
           
      if ( sg.Mesh().HybridElementMesh() ||
           (!sg.FE_Manager().ContainsElementType( LINEAR_TRIANGLE ) &&
            !sg.FE_Manager().ContainsElementType( ISOPARAMETRIC_QUADRATIC_TRIANGLE ) &&
            !sg.FE_Manager().ContainsElementType( ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE ) ) )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "TransportVisitor2D::(constructor)", 
+       throw csmp::Exception( FATAL_ERROR, "TransportVisitor2D::(constructor)", 
           "This Visitor only works for triangular element meshes." );
 
      // initializing the FiniteDifferenceGrid
@@ -270,12 +270,12 @@ bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double64 final_time )
     // Checking whether advection did not screw up advected property range
     if ( p1min < p0min ) {
         cerr <<"\noriginal minimum: "<< p0min <<" vs. new minimum: "<< p1min << endl;
-        throw csmp::Exception( CSMP_INFO,"TransportVisitor2D::AdvectUntil","advection changed property minimum");
+        throw csmp::Exception( INFO,"TransportVisitor2D::AdvectUntil","advection changed property minimum");
         return false;
       }
     if ( p1max > p0max ) {
         cerr <<"\noriginal maximum: "<< p0max <<" vs. new maximum: "<< p1max << endl;
-        throw csmp::Exception( CSMP_INFO,"TransportVisitor2D::AdvectUntil","advection changed property maximum");
+        throw csmp::Exception( INFO,"TransportVisitor2D::AdvectUntil","advection changed property maximum");
         return false;
       }
     return true;
@@ -379,7 +379,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
       }
 
     if ( prop_key1.type != SCALAR ) {
-         throw csmp::Exception( CSMP_ERROR, "TransportVisitor2D::InputPropertyFromGrid",
+         throw csmp::Exception( ERROR, "TransportVisitor2D::InputPropertyFromGrid",
                                     "only scalar properties can be read from a single grid.");
          return;
       }
@@ -398,7 +398,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
 
     if ( prop_key1.place == ELEMENT ) sg.Accept( reader );
     else
-      throw csmp::Exception( CSMP_ERROR, "TransportVisitor2D::InputPropertyFromGrid",
+      throw csmp::Exception( ERROR, "TransportVisitor2D::InputPropertyFromGrid",
                         "only node and element properties can be read from grid.");
 
  } // end InputPropertyFromGrid

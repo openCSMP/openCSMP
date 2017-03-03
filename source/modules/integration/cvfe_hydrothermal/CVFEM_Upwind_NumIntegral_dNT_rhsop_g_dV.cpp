@@ -37,20 +37,20 @@ CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_rhsop
 	// testing the Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT || 
          MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
                    oper, "Operand must be a scalar property placed on the element." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
      
     if ( upwind_.Placement() != NODE || upwind_.Type() != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
                    upwind, "Upwind variable must be a scalar property placed on the nodes." );
 
     if ( rho_key.place != NODE || rho_key.type != SCALAR )
-    throw csmp::Exception( CSMP_ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
+    throw csmp::Exception( ERROR, "Upwind_Integral_dNT_rhsop_dN_dV_2<dim>::(constructor)", 
                    grav_trigger, "Upwind variable must be a scalar property placed on the nodes." );
                    
  }

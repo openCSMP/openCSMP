@@ -136,16 +136,15 @@ size_t FaceConstructionData::PatchNumber() const
 
 
 
-void FaceConstructionData::Out(std::ostream& os) const
+void FaceConstructionData::Out() const
  {
-    os <<"\nFaceConstructionData::Out: index of parent element: "<< parent_element_ <<" belonging to patch: "<< patch_number_;
-    os <<"\n\tindices of higher-dimensional elements on inside (first) and outside (second): ";
-    os << neighbors_.first <<" and "<< neighbors_.second;
-    os <<"\n\tmatching faces on inside (first) and outside (second):                         ";
-    os << nbor_faces_.first <<" and "<< nbor_faces_.second;
-    os <<"\n\tinteger codified juxtaposed regions: "<< materials_.first <<" and "<< materials_.second;
-    os <<" as well as parent region: "<< material_;
-    os.flush();
+    cout <<"\nFaceConstructionData::Out: index of parent element: "<< parent_element_ <<" belonging to patch: "<< patch_number_;
+    cout <<"\n\tindices of higher-dimensional elements on inside (first) and outside (second): ";
+    cout << neighbors_.first <<" and "<< neighbors_.second;
+    cout <<"\n\tmatching faces on inside (first) and outside (second):                         ";
+    cout << nbor_faces_.first <<" and "<< nbor_faces_.second;
+    cout <<"\n\tinteger codified juxtaposed regions: "<< materials_.first <<" and "<< materials_.second;
+    cout <<" as well as parent region: "<< material_;
  }
 
 

@@ -53,7 +53,7 @@ void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model
       }
     else {
          if ( sg.UniqueRegionsBegin() == sg.UniqueRegionsEnd() ) {
-              throw csmp::Exception( CSMP_WARNING, "NodeCenteredFiniteVolumeMonitor::MonitorPropertyIntegrals", "No regions have been defined yet.");
+              throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::MonitorPropertyIntegrals", "No regions have been defined yet.");
               return;
            }
          list<double64>  values;
@@ -90,7 +90,7 @@ void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
  {
   
      if ( integrals.empty() && group_integrals.empty() ) {
-          throw csmp::Exception( CSMP_WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data yet; no output.");
+          throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data yet; no output.");
           return;
        }
  
@@ -113,7 +113,7 @@ void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
        }
        
      if ( group_integrals.empty() ) {
-          throw csmp::Exception( CSMP_WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data for regions yet; no output.");
+          throw csmp::Exception( WARNING, "NodeCenteredFiniteVolumeMonitor::SaveToFile", "No integral data for regions yet; no output.");
           return;
        }
 

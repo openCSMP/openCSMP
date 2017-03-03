@@ -379,7 +379,6 @@ variables. These include the type and placement of a variable in the
 finite element mesh and the associated data storage index for the CSMP
 'MemoryManager'. 
 
-<<<<<<< HEAD
 */
 void Index::Out() const
 {
@@ -400,26 +399,6 @@ void Index::Out() const
   cout <<"\n\t\tip factor facet:  "<< ipFactorFacet<<" (number of integration points per finite volume facet).";
   cout << endl;
 }
-=======
-void Index::Out(std::ostream& os) const
- {
-    os <<"\nIndex::Out: ";
-    string str(parseType(type));
-    os <<"\nVARIABLE_TYPE: "<< str;
-    str = parsePlacement(place);
-    os <<"\nPLACEMENT:        "<< str;
-    os <<"\nindex:            "<< index << endl;
-    os <<"\ndata depth:       "<< dataDepth << endl;
-    os <<"\nflag depth:       "<< flagDepth << endl;
-    os <<"\ndata offset:      "<< dataOffset << endl;
-    os <<"\nflag offset:      "<< flagOffset << endl;
-    os <<"\noffset factor si: "<< offsetFactorSimplex << endl;
-    os <<"\noffset factor se: "<< offsetFactorSector << endl;
-    os <<"\nip factor si:     "<< ipFactorSimplex << endl;
-    os <<"\nip factor se:     "<< ipFactorSector << endl;
-    os <<"\nip factor fa:     "<< ipFactorFacet << endl;
- }
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 bool Index::Out( FILE* fp ) const
 {

@@ -25,26 +25,26 @@ NumIntegral_BT_D_B_dV<dim,SIMPLEX>::NumIntegral_BT_D_B_dV( const PropertyDatabas
     
     // Poisson's ratio
     if ( nu_key_.type != SCALAR or nu_key_.place == NODE or nu_key_.place == FACE )                  
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       oper2, "must be a scalar property placed on the constraint points or elements.");
       
     // Young's modulus
     if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )                  
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       oper, "Currently the Operand must be a scalar property.");
     // displacement
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       basic, "Operand (basic) must be a vector property placed on the nodes.");
     // displacement
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       test, "Operand (test) must be a vector property placed on the nodes.");
 
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != nu_key_.place )                  
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                      "Both Operands must have the same placement.");
 }
 
@@ -96,7 +96,7 @@ void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
          E_[0]  = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
          nu_[0] = e.Read( nu_key_ );
       }
-    else throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::GetOperands", 
+    else throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::GetOperands", 
                                         "The current finite element has no integration points",
                                         "Therefore properties cannot be numerically integrated.");
       
@@ -207,7 +207,7 @@ void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 
          if ( detJ <= 0. ) {
               cerr <<"\n\tElement "<< e.Idx() <<": determinant of Jacobian at Gauss point "<< i <<": "<< detJ << endl;
-              throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::ComputeContribution",
+              throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::ComputeContribution",
                              "Jacobian transformation failed. Element nodes are perhaps not numbered correctly.");
            }
 

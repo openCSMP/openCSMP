@@ -929,7 +929,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
     }
     // reporting problems
     if ( error_counter > 20U ) {
-          throw csmp::Exception( CSMP_ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResults", 
+          throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResults", 
                                      "Output property was out of range, legal (min/max) was stored instead");
       }
     if ( error_counter > (gref_.Nodes() / 20U) ) 
@@ -1047,7 +1047,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDa
       
     // reporting problems
     if ( error_counter > 20U ) {
-          throw csmp::Exception( CSMP_ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResults", 
+          throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResults", 
                                 "Output property was out of range, legal (min/max) was stored instead");
       }
     if ( error_counter > (gref_.Nodes() / 20U) ) 
@@ -1158,7 +1158,7 @@ double64 NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( con
 
     // reporting problems
     if ( error_counter > 20U ) {
-          throw csmp::Exception( CSMP_ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResultsWithL2NormRes",
+          throw csmp::Exception( ERROR, "NodeCenteredFiniteVolumeAlgorithm::OutputResultsWithL2NormRes",
                                      "Output property was out of range, legal (min/max) was stored instead");
       }
     if ( error_counter > (gref_.Nodes() / 20U) )

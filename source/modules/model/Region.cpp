@@ -220,7 +220,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
 
     switch( v.ApplicationTarget() ) {
        case MODEL:
-         throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accept",
+         throw csmp::Exception( ERROR, "Region<dim>::Accept",
                                "ApplicationTarget MODEL; Visitor should have never arrived at this region");
          break;
        case REGION:
@@ -238,7 +238,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
                (*nd_it)->Accept( v );
          return;
        default:
-         throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accept",
+         throw csmp::Exception( ERROR, "Region<dim>::Accept",
                                "ApplicationTarget was not resolved; nothing was done");
      }
 
@@ -279,7 +279,7 @@ template<size_t dim>
 void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
  {
     if ( this->elmt_vec_.empty() ) {
-         throw csmp::Exception( CSMP_ERROR, "Region<dim>::OutputTo",
+         throw csmp::Exception( ERROR, "Region<dim>::OutputTo",
                                "Attempt to output empty group to VSet. Nothing was done.");
          return;
       }
@@ -438,7 +438,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !this->pref_.IsDefined(property) )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::OutputVariableTo:", property, "is undefined." );
+      throw csmp::Exception( ERROR, "Region<dim>::OutputVariableTo:", property, "is undefined." );
 
     const csmp::Index key = this->pref_.StorageKey(property);
     assert( key.place != FACE );
@@ -455,7 +455,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
          else if ( key.place == NODE ) data.Reserve( this->Nodes(), this->Nodes() );
          else if ( key.place == ELEMENT ) data.Reserve( this->Elements(), this->Elements() );
          else
-         csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:", property, "output is not handled yet.");
+         csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:", property, "output is not handled yet.");
       }
    
     // output
@@ -494,7 +494,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                          }
                        break;
                      default:
-                       csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
+                       csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                           property, "type of variable not recognized.");
                    }
            }
@@ -542,7 +542,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                          }
                        break;
                      default:
-                       csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
+                       csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                           property, "type of variable not recognized.");
                    }
            }
@@ -590,7 +590,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                          }
                        break;
                      default:
-                       csmp_error.notice( CSMP_ERROR, "Region<dim>::OutputVariableTo:",
+                       csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
                                           property, "type of variable not recognized.");
                    }
            }
@@ -598,7 +598,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
          // finite volume-related data
          // etc.
           else
-             csmp_error.notice( CSMP_ERROR, property, "Region<dim>::OutputVariableTo:", "variable type not handled yet." );
+             csmp_error.notice( ERROR, property, "Region<dim>::OutputVariableTo:", "variable type not handled yet." );
       
       } // end not integration point
    
@@ -716,7 +716,7 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
          break;
         default: {
              ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-             csmp_error.notice( CSMP_WARNING, "Region::OutputVariableTo",
+             csmp_error.notice( WARNING, "Region::OutputVariableTo",
                                 property, "placement not identified" );
           }
       }
@@ -777,7 +777,7 @@ void Region<dim>::InputVariableFrom( const char* property,
      string warningMessage("Empty FEM_Data provided for ");
      warningMessage.append(property);
      warningMessage.append(". No data imported.");
-     csmp_error.notice( CSMP_WARNING, "Region<dim>::InputVariableFrom:", warningMessage.c_str() );
+     csmp_error.notice( WARNING, "Region<dim>::InputVariableFrom:", warningMessage.c_str() );
      return;
    }
 
@@ -841,13 +841,13 @@ void Region<dim>::InputVariableFrom( const char* property,
        break;
    case REGION:
        if ( vdata.Size() != 1U )
-           csmp_error.notice( CSMP_WARNING, "Region<dim>::InputVariableFrom:",
+           csmp_error.notice( WARNING, "Region<dim>::InputVariableFrom:",
                               "don't know which location in FEM_Data I should write the region variable to, using [0]." );
 
        this->Store( idx, vdata[0U] );
        break;
    default:
-         throw csmp::Exception( CSMP_ERROR, "Region<dim>::InputVariableFrom:",
+         throw csmp::Exception( ERROR, "Region<dim>::InputVariableFrom:",
                                 property, "Property placement could not be identified" );
      }
 
@@ -1112,14 +1112,14 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( root_node == NULL )
-       csmp_error.notice( CSMP_FATAL_ERROR, "Region<dim>::AccumulateAll:", "Root node pointer is dangling!" );
+       csmp_error.notice( FATAL_ERROR, "Region<dim>::AccumulateAll:", "Root node pointer is dangling!" );
 
      if ( root_node->Parent(0) == NULL )
-       csmp_error.notice( CSMP_FATAL_ERROR, "Region<dim>::AccumulateAll:",
+       csmp_error.notice( FATAL_ERROR, "Region<dim>::AccumulateAll:",
                          "Root node must have been assigned parent elements; else this method cannot operate." );
 
      if ( !this->elmt_vec_.empty() )
-       csmp_error.notice( CSMP_WARNING, "Region<dim>::AccumulateAll:",
+       csmp_error.notice( WARNING, "Region<dim>::AccumulateAll:",
                                    "Region is not empty; deleting all content." );
      this->elmt_vec_.clear();
      this->elmt_vec_.reserve( 100U );
@@ -1192,7 +1192,7 @@ void  Region<dim>::Accumulate( typename deque<csmp::Element<dim> >::iterator sta
                                typename deque<csmp::Element<dim> >::iterator end )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accumulate (deque)",
+      throw csmp::Exception( ERROR, "Region<dim>::Accumulate (deque)",
                             "supplied element range is empty. Nothing is done." );
 
     this->elmt_vec_.clear();
@@ -1221,7 +1221,7 @@ void  Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_itera
                                typename vector<csmp::Element<dim>*>::const_iterator end )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accumulate (vector)",
+      throw csmp::Exception( ERROR, "Region<dim>::Accumulate (vector)",
                             "supplied element range is empty. Nothing is done." );
 
     this->elmt_vec_.clear();
@@ -1253,7 +1253,7 @@ void  Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterator
                                typename set<csmp::Element<dim>*>::const_iterator end )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accumulate (set)",
+      throw csmp::Exception( ERROR, "Region<dim>::Accumulate (set)",
                             "supplied element range is empty. Nothing is done." );
     this->elmt_vec_.clear();
     this->elmt_vec_.reserve( static_cast<size_t>(distance(start,end)) );
@@ -1297,17 +1297,17 @@ void Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::c
                                          const PropertyConstraints& constraints )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateWithinRange",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                             "supplied element range is empty. Nothing is done." );
 
     if (  constraints.Constraints() == 0U  )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateWithinRange",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                                      "No property constraints are supplied");
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !this->elmt_vec_.empty() )
-      csmp_error.notice( CSMP_WARNING, "Region<dim>::AccumulateWithinRange",
+      csmp_error.notice( WARNING, "Region<dim>::AccumulateWithinRange",
                         "Region<dim> already contains elements, they will be deleted" );
 
     if ( !this->elmt_vec_.empty() ) this->elmt_vec_.clear();
@@ -1356,7 +1356,7 @@ void Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::c
                                          const char* feature, double64 min, double64 max )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateWithinRange",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                             "supplied element range is empty. Nothing is done." );
 
      set<csmp::Element<dim>*>  element_set;
@@ -1417,7 +1417,7 @@ void Region<dim>::AccumulateWithinRange( typename vector<csmp::Element<dim>*>::c
               }
             break;
           default:
-            throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateWithinRange",
+            throw csmp::Exception( ERROR, "Region<dim>::AccumulateWithinRange",
                                    feature, "placement could not be identified; REGION is not an option");
       } // end switch
 
@@ -1440,7 +1440,7 @@ void Region<dim>::AccumulateRectangularRegion( typename vector<csmp::Element<dim
                                                const Point<dim>& xyz_max )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateRectangularRegion",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateRectangularRegion",
                             "supplied element range is empty. Nothing is done." );
 
      size_t                    check;
@@ -1450,7 +1450,7 @@ void Region<dim>::AccumulateRectangularRegion( typename vector<csmp::Element<dim
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( !this->elmt_vec_.empty() ) {
-          csmp_error.notice( CSMP_WARNING, "Region<dim>::AccumulateRectangularRegion",
+          csmp_error.notice( WARNING, "Region<dim>::AccumulateRectangularRegion",
                                       "Region already contains elements");
           this->elmt_vec_.clear();
           this->node_vec_.clear();
@@ -1521,17 +1521,17 @@ void  Region<dim>::AccumulateByNumber( typename vector<csmp::Element<dim>*>::con
                                        vector<size_t>& element_ids )
  {
     if ( start == end )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateByNumber",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateByNumber",
                             "user-supplied iterator range is empty. Nothing is done." );
 
     if ( element_ids.empty() )
-      throw csmp::Exception( CSMP_ERROR, "Region<dim>::AccumulateByNumber",
+      throw csmp::Exception( ERROR, "Region<dim>::AccumulateByNumber",
                             "user-supplied element-number vector is empty. Nothing is done." );
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !this->elmt_vec_.empty() ) {
-         csmp_error.notice( CSMP_WARNING, "Region<dim>::AccumulateByNumber",
+         csmp_error.notice( WARNING, "Region<dim>::AccumulateByNumber",
                                      "Region is not empty", "erasing all members..." );
          this->elmt_vec_.clear();
       }
@@ -1544,7 +1544,7 @@ void  Region<dim>::AccumulateByNumber( typename vector<csmp::Element<dim>*>::con
       element_ids.erase( new_end, element_ids.end() );
 
     if ( element_ids.size() > static_cast<size_t>(distance(start,end)) )
-      csmp_error.notice( CSMP_ERROR, "Region<dim>::AccumulateByNumber",
+      csmp_error.notice( ERROR, "Region<dim>::AccumulateByNumber",
                         "user-supplied element-number vector is larger than iterator range." );
 
     this->elmt_vec_.reserve( element_ids.size() );
@@ -1584,7 +1584,7 @@ void  Region<dim>::Add( const Region<dim>&  grp )
     // if the added region is empty nothing needs to be done
     if ( grp.Empty() ) {
          ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-         csmp_error.notice( CSMP_WARNING, "Region<dim>::Add", "Region to add was empty; nothing was done");
+         csmp_error.notice( WARNING, "Region<dim>::Add", "Region to add was empty; nothing was done");
          return;
       }
 
@@ -1718,9 +1718,9 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( a.Empty() )
-      csmp_error.notice( CSMP_WARNING, "groupUnion", "first region is empty");
+      csmp_error.notice( WARNING, "groupUnion", "first region is empty");
     if ( b.Empty() )
-      csmp_error.notice( CSMP_WARNING, "groupUnion", "second region is empty");
+      csmp_error.notice( WARNING, "groupUnion", "second region is empty");
 
     merge( a.ElementsBegin(), a.PerimeterElementsBegin(),
            b.ElementsBegin(), b.PerimeterElementsBegin(),
@@ -1750,9 +1750,9 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( a.Empty() )
-      csmp_error.notice( CSMP_WARNING, "intersection", "first region is empty");
+      csmp_error.notice( WARNING, "intersection", "first region is empty");
     if ( b.Empty() )
-      csmp_error.notice( CSMP_WARNING, "intersection", "second region is empty");
+      csmp_error.notice( WARNING, "intersection", "second region is empty");
 
     // because region vectors are sorted into 2 seperate ranges,
     // new sorted vectors spanning the whole ranges need to be established first
@@ -1792,9 +1792,9 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( a.Empty() )
-      csmp_error.notice( CSMP_WARNING, "difference", "first region is empty");
+      csmp_error.notice( WARNING, "difference", "first region is empty");
     if ( b.Empty() )
-      csmp_error.notice( CSMP_WARNING, "difference", "second region is empty");
+      csmp_error.notice( WARNING, "difference", "second region is empty");
 
     // because region vectors are sorted into 2 seperate ranges,
     // new sorted vectors spanning the whole ranges need to be established first
@@ -1835,9 +1835,9 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( a.Empty() )
-      csmp_error.notice( CSMP_WARNING, "symmetricDifference", "first region is empty");
+      csmp_error.notice( WARNING, "symmetricDifference", "first region is empty");
     if ( b.Empty() )
-      csmp_error.notice( CSMP_WARNING, "symmetricDifference", "second region is empty");
+      csmp_error.notice( WARNING, "symmetricDifference", "second region is empty");
 
     // because region vectors are sorted into 2 seperate ranges,
     // new sorted vectors spanning the whole ranges need to be established first
@@ -1956,7 +1956,7 @@ template<>
 bool  isOfLowerDimensionalRepresentation<1>( const Region<1>& )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( CSMP_ERROR, "isOfLowerDimensionalRepresentation", "na for 1D" );
+    csmp_error.notice( csmp::ERROR, "isOfLowerDimensionalRepresentation", "na for 1D" );
     return false;
   }
 
@@ -2124,11 +2124,11 @@ void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
      VectorVariable<dim>  vc;
 
      if ( prop_key.type != VECTOR )
-       throw csmp::Exception( CSMP_ERROR, "Model<dim>::MoveNodeCoordinatesBy",
+       throw csmp::Exception( ERROR, "Model<dim>::MoveNodeCoordinatesBy",
                                       "Only vector<double64> variables can be added to coordinates");
 
      if ( prop_key.place != NODE )
-       throw csmp::Exception( CSMP_ERROR, "Model<dim>::MoveNodeCoordinatesBy",
+       throw csmp::Exception( ERROR, "Model<dim>::MoveNodeCoordinatesBy",
                                       "Only NODE variables can be added to NODE coordinates");
 
      for ( typename vector<csmp::Node<dim>*>::iterator
@@ -2187,7 +2187,7 @@ void Region<dim>::CorrectLowDimRegionOrientation(  ) const
         }
     }
     if( lowDimElement == NULL )
-        throw csmp::Exception( CSMP_ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "All perimeter elements of surface regions are lines! Cannot apply this method!" );
+        throw csmp::Exception( ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "All perimeter elements of surface regions are lines! Cannot apply this method!" );
 
     while( elements_considered.size() != this->Elements() )
     {
@@ -2225,7 +2225,7 @@ void Region<dim>::CorrectLowDimRegionOrientation(  ) const
                                 break;
                             }
                         if( !face_found )
-                            throw csmp::Exception( CSMP_ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "The neighbor connectivity in low dimensional region is wrong!" );
+                            throw csmp::Exception( ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "The neighbor connectivity in low dimensional region is wrong!" );
 
                         low_dim_edge_unit_normal          = lowDimElement->UnitNormalToFace( face );
                         low_dim_neighbor_edge_unit_normal = lowDimNeighborElement->UnitNormalToFace( neighbor_face );
@@ -2325,7 +2325,7 @@ double64  Region<dim>::Volume( bool multiply_with_porosity ) const
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( this->Empty() ) {
-         csmp_error.notice( CSMP_WARNING, "Region<dim>::Volume:", "region is empty; returning NaN." );
+         csmp_error.notice( WARNING, "Region<dim>::Volume:", "region is empty; returning NaN." );
          return std::numeric_limits<double64>::quiet_NaN();
       }
     double64  volume(0.), area(0.), length(0.);
@@ -2380,7 +2380,7 @@ double64  Region<dim>::SurfaceArea() const
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      // in 1D there is no meaningful surface area
      if ( dim == 1U ) {
-          csmp_error.notice( CSMP_WARNING, "Region<1U>::SurfaceArea:",
+          csmp_error.notice( WARNING, "Region<1U>::SurfaceArea:",
                                            "is not defined in one-dimensional model; returning NaN");
           return std::numeric_limits<double64>::quiet_NaN();
        }
@@ -2414,7 +2414,7 @@ double64  Region<dim>::SurfaceArea() const
 //              if ( etype == ISOPARAMETRIC_LINEAR_BAR or
 //                   etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
 //                     area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
-//                     csmp_error.notice( CSMP_WARNING, "Region<dim>::SurfaceArea", "line-element thickness on boundary is assumed to be one." );
+//                     csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on boundary is assumed to be one." );
 //                 }
               // additional case of point face where a line-element is perpendicular to a boundary node
            }
@@ -2455,23 +2455,22 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( prop_key.type == TENSOR ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral:",
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                                     "No rule to integrate tensor properties. Nothing was done");
           return std::numeric_limits<double64>::quiet_NaN();
        }
      if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral:",
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral:",
                                     "Vector properties can only be integrated if they are placed on the element. Nothing was done");
           return std::numeric_limits<double64>::quiet_NaN();
        }
      if ( this->elmt_vec_.empty() ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral", "Region is empty; returning NaN.");
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral", "Region is empty; returning NaN.");
           return std::numeric_limits<double64>::quiet_NaN();
        }
 
      if (verbose) {
 #ifndef NDEBUG
-<<<<<<< HEAD
      if ( dim == 2U && !(*this->elmt_vec_.begin())->FE()->IsSurfaceElement() ) {
           string info(this->Name()); info +=" ('"; info += prop; info+="')";
           csmp_error.notice( WARNING, "Region<2>::VolumeIntegral:", info, "region is not a surface; integral may not be correct.");
@@ -2480,12 +2479,6 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
           string info(this->Name()); info +=" ('"; info += prop; info+="')";
           csmp_error.notice( WARNING,  "Region<3>::VolumeIntegral:", info, "region is not a volume, integral may not be correct.");
        }
-=======
-     if ( dim == 2U && !(*this->elmt_vec_.begin())->FE()->IsSurfaceElement() )
-       csmp_error.notice( CSMP_INFO, "Region<2>::VolumeIntegral:", prop, "integral, region is not a surface; integral may not be correct.");
-     if ( dim == 3U && !(*this->elmt_vec_.begin())->FE()->IsVolumeElement() )
-       csmp_error.notice( CSMP_INFO, "Region<3>::VolumeIntegral:", prop, "integral, region is not a volume, integral may not be correct.");
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 #endif
      }
      // region properties
@@ -2521,7 +2514,7 @@ double64  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_poro
               return integral;
             }
           else {
-               throw csmp::Exception( CSMP_ERROR, "Region<dim>::VolumeIntegral",
+               throw csmp::Exception( ERROR, "Region<dim>::VolumeIntegral",
                                              "only node, integration point or element properties can be integrated over the region");
                return std::numeric_limits<double64>::quiet_NaN();
             }
@@ -2587,23 +2580,23 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( prop_key.type == TENSOR ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                                     "No rule to integrate tensor properties. Nothing was done");
           return std::numeric_limits<double64>::quiet_NaN();
        }
      if ( prop_key.type == VECTOR and prop_key.place != ELEMENT ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                                     "Vector properties can only be integrated if they are placed on the element. Nothing was done");
           return std::numeric_limits<double64>::quiet_NaN();
        }
      if ( this->elmt_vec_.empty() ) {
-          csmp_error.notice( CSMP_ERROR, "Region<dim>::VolumeIntegral_x_Thickness", "Region is empty");
+          csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness", "Region is empty");
           return std::numeric_limits<double64>::quiet_NaN();
        }
 
      // region properties (no thickness multiplier is accounted for)
      if ( prop_key.place == REGION ) {
-          csmp_error.notice( CSMP_WARNING, "Region<dim>::VolumeIntegral_x_Thickness","there is no thickness attribute for region variable, assuming t=1");
+          csmp_error.notice( WARNING, "Region<dim>::VolumeIntegral_x_Thickness","there is no thickness attribute for region variable, assuming t=1");
           if ( prop_key.type == SCALAR )
             return this->Read( prop_key ) * Volume(multiply_with_porosity);
           else if ( prop_key.type == VECTOR ) {
@@ -2635,7 +2628,7 @@ double64  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multip
               return integral;
             }
           else {
-               throw csmp::Exception( CSMP_ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
+               throw csmp::Exception( ERROR, "Region<dim>::VolumeIntegral_x_Thickness",
                                              "only node, integration point or element properties can be integrated over the region");
                return std::numeric_limits<double64>::quiet_NaN();
             }
@@ -2721,7 +2714,7 @@ void Region<dim>::Out() const
     for ( typename vector<csmp::Element<dim>*>::const_iterator
           it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
          if ( (*it) == NULL )
-           throw csmp::Exception( CSMP_ERROR, "Region<dim>::Out",
+           throw csmp::Exception( ERROR, "Region<dim>::Out",
                                  "member element pointer not initialised");
 //         else (*it)->Out();
       }
@@ -2737,7 +2730,7 @@ void Region<dim>::Out() const
     cout <<"\n\n boundary nodes: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
          if ( this->node_vec_[i] == NULL )
-           throw csmp::Exception( CSMP_ERROR, "Region<dim>::Out", "member node pointer not initialised.");
+           throw csmp::Exception( ERROR, "Region<dim>::Out", "member node pointer not initialised.");
          else cout << this->node_vec_[i]->Idx() <<" ";
       }
 

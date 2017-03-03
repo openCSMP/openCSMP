@@ -27,7 +27,7 @@ Visitor<dim>::Visitor( PLACEMENT level, PLACEMENT target )
    verbose_(false)
  {
     if ( application_level_ > application_target_ )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "Visitor<dim>(constructor):",
+      throw csmp::Exception( FATAL_ERROR, "Visitor<dim>(constructor):",
                             "The application level of a Visitor cannot be lower down in hierarchy than the target; read documentation." );
  }
 

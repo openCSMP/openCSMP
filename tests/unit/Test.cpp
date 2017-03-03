@@ -17,7 +17,6 @@ using namespace std;
 
 namespace csmp {
 
-<<<<<<< HEAD
 Test::Test(std::ostream* osptr)
   {
     m_osptr = osptr;
@@ -55,45 +54,6 @@ void Test::reset()
   }
 
 
-=======
-namespace {
-
-    struct null_streambuf : public std::streambuf
-    {
-        char m_dummy[ 64 ];
-        virtual int overflow( int c ) 
-        {
-            setp( m_dummy, m_dummy + sizeof( m_dummy ) );
-            return (c == traits_type::eof()) ? '\0' : c;
-        }
-    };
-
-    struct null_ostream : public std::ostream
-    {
-        null_streambuf m_sb;
-
-        null_ostream()
-            : std::ostream(&m_sb)
-        {
-        }
-    };
-
-    null_ostream s_nullostream;
-}
-
-Test::Test(ostream* osptr)
-{
-    m_osptr = osptr;
-    m_infoptr = &s_nullostream;
-    m_nPass = m_nFail = 0;
-}
-
-
-std::ostream& Test::getInfoStream()
-{
-    return *m_infoptr;
-}
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 void Test::do_test( bool cond, const std::string& lbl,
                     const char* fname, long lineno )

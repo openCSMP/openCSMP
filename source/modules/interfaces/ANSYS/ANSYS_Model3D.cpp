@@ -122,7 +122,7 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
   catch( Exception& ba ) {
        cout <<"\nException: Exception raised by: "<< ba.What() << endl;
        cout <<"\nDiagnostics:"<< endl;
-       ba.Out(cout);
+       ba.Out();
     }
 
  } // end Initialize
@@ -326,7 +326,7 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
               (*nit).Idx( (*onit).second );
            }
          else
-           throw csmp::Exception( CSMP_ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
+           throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
                                  "node could not be identified; has it been newly created?" );
       }
    

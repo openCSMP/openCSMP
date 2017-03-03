@@ -186,7 +186,7 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
     // 1. standard model construction
     // ------------------------------
     VSet<2U> vset;
-    test_Create_TrianglePatch_VSet( getInfoStream(), vset );
+    test_Create_TrianglePatch_VSet( vset );
     Model<2U>          model( vset, "CSMP-variables.txt", true );
     const Region<2U>&  mregion(model.Region("Model"));
    

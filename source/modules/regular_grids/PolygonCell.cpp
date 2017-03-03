@@ -177,7 +177,7 @@ const csmp::Point<dim>& PolygonCell<dim>
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
     if( !extra_nodes_.empty() )
         return extra_nodes_[0]->GetPoint();
-    csmp_error.notice( CSMP_ERROR,
+    csmp_error.notice( csmp::ERROR,
                        "GetCellCentroidPoint()",
                        "Centroid node doesn't exist!!!");
     return nodes_[0]->GetPoint();
@@ -530,7 +530,7 @@ size_t PolygonCell<dim>
     for( size_t nid = 0; nid<num_nodes_; ++nid )
         if( custom_node_order_[nid] == original_nid )
             return nid;
-    csmp_error.notice(CSMP_ERROR,
+    csmp_error.notice(csmp::ERROR,
                       "CustomNodeId()",
                       "Original node id is out of range!!!");
     return -1;
@@ -552,7 +552,7 @@ size_t PolygonCell<dim>
     for( size_t fid = 0; fid<num_faces; ++fid )
         if( custom_face_order_[fid] == original_fid )
             return fid;
-    csmp_error.notice(CSMP_ERROR,
+    csmp_error.notice(csmp::ERROR,
                       "CustomFaceId()",
                       "Original face id is out of range!!!");
     return -1;
@@ -562,75 +562,74 @@ size_t PolygonCell<dim>
 
 
 template<size_t dim>
-void PolygonCell<dim>::Out(std::ostream& os) const
+void PolygonCell<dim>::Out() const
  {
-    os<<"\nPolygonCell<"<< dim <<">::Out: ";
+    std::cout<<"\nPolygonCell<"<< dim <<">::Out: ";
     /// grid manager
     //PolygonGridManager<dim>* grid_;
-    os<<"\n\tparent grid manager 'PolygonGridManager' is not output...\n";
+    std::cout<<"\n\tparent grid manager 'PolygonGridManager' is not output...\n";
 
-    os <<"\nPolygonCell<"<< dim <<">Out:\n";
-    os <<"\tnodes: "<< num_nodes_ <<", extra nodes: "<< extra_nodes_.size();
-    os <<", custom node order:\n\t";
-    for ( size_t i=0U; i<custom_node_order_.size(); i++ ) os << custom_node_order_[i] <<" ";
+    std::cout <<"\nPolygonCell<"<< dim <<">Out:\n";
+    std::cout <<"\tnodes: "<< num_nodes_ <<", extra nodes: "<< extra_nodes_.size();
+    std::cout <<", custom node order:\n\t";
+    for ( size_t i=0U; i<custom_node_order_.size(); i++ ) std::cout << custom_node_order_[i] <<" ";
 
-    os <<"\n\tnodes:\n";
+    std::cout <<"\n\tnodes:\n";
     for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=nodes_.begin(); it!=nodes_.end(); ++it )
-      os << *(*it) <<" ";
+      std::cout << *(*it) <<" ";
 
-    os <<"\n\tnodes in custom order:\n";
+    std::cout <<"\n\tnodes in custom order:\n";
     for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=nodes_in_custom_order_.begin(); it!=nodes_in_custom_order_.end(); ++it )
-      os << *(*it) <<" ";
+      std::cout << *(*it) <<" ";
 
-    os <<"\n\textra nodes:\n";
+    std::cout <<"\n\textra nodes:\n";
     for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=extra_nodes_.begin(); it!=extra_nodes_.end(); ++it )
-      os << *(*it) <<" ";
+      std::cout << *(*it) <<" ";
    
     /// cells
-    os <<"\n\telements:\n";
+    std::cout <<"\n\telements:\n";
     //std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > elements_;
     for ( auto it=elements_.begin(); it!=elements_.end(); it++ ) {
-         os <<"\n"<< parseFiniteElementType((*it).first) <<": ";
+         std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
          for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
               nit!=(*it).second.end(); nit++ )
-           os << *(*nit) <<" ";
+           std::cout << *(*nit) <<" ";
       }
 
     /// faces
-    os <<"\n\tfaces ("<< num_faces_ << ") and their nodes:\n";
+    std::cout <<"\n\tfaces ("<< num_faces_ << ") and their nodes:\n";
     for ( size_t i=0U; i<face_nodes_.size(); i++ ) {
-         os <<"\tface "<< i+1 <<": ";
+         std::cout <<"\tface "<< i+1 <<": ";
          for ( size_t j=0U; j<face_nodes_[i].size(); j++ )
-           os << face_nodes_[i][j] <<" ";
-         os <<"\n";
+           std::cout << face_nodes_[i][j] <<" ";
+         std::cout <<"\n";
       }
 
-    os <<"\n\tfaces ("<< num_faces_ << ") and their nodes in custom order:\n";
+    std::cout <<"\n\tfaces ("<< num_faces_ << ") and their nodes in custom order:\n";
     for ( size_t i=0U; i<face_nodes_in_custom_order_.size(); i++ ) {
-         os <<"\tface "<< i+1 <<": ";
+         std::cout <<"\tface "<< i+1 <<": ";
          for ( size_t j=0U; j<face_nodes_in_custom_order_[i].size(); j++ )
-           os << face_nodes_in_custom_order_[i][j] <<" ";
-         os <<"\n";
+           std::cout << face_nodes_in_custom_order_[i][j] <<" ";
+         std::cout <<"\n";
       }
 
-    os <<"\n\tface order :\n";
+    std::cout <<"\n\tface order :\n";
     for ( size_t i=0U; i<custom_face_order_.size(); i++ )
-      os << custom_face_order_[i] <<" ";
-    os <<"\n";
+      std::cout << custom_face_order_[i] <<" ";
+    std::cout <<"\n";
 
     /// faces
     // std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > > faces_;
-    os <<"\n\tfaces:\n";
+    std::cout <<"\n\tfaces:\n";
     for ( auto fit=faces_.begin(); fit!=faces_.end(); fit++ )
       for ( auto it=(*fit).begin(); it!=(*fit).end(); it++ ) {
-           os <<"\n"<< parseFiniteElementType((*it).first) <<": ";
+           std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
            for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
                 nit!=(*it).second.end(); nit++ )
-             os << *(*nit) <<" ";
+             std::cout << *(*nit) <<" ";
         }
 
-    os <<"\n\n";
-    os.flush();
+    std::cout <<"\n\n";
 
  } // end Out
 

@@ -15,7 +15,7 @@ namespace csmp
         : tolerance_( 1.E-2 )
     {
         datafile = "cspline_test_data";
-        getInfoStream() << "input data file = " << datafile;
+        cout << "input data file = " << datafile;
 
         // x values
         x.push_back(0.0);
@@ -93,17 +93,17 @@ namespace csmp
 
     void CubicSpline_Test::OutTest()
     {
-        cspline1.Out(getInfoStream());
+        cspline1.Out();
     }
 
     void CubicSpline_Test::ValueTest()          
     {
-        getInfoStream() << "\n\n----------------------------------------------" << endl;
-        getInfoStream() << "  x\tinput f(x) \t interpolation value" << endl;
-        getInfoStream() << "----------------------------------------------" << endl;
+        cout << "\n\n----------------------------------------------" << endl;
+        cout << "  x\tinput f(x) \t interpolation value" << endl;
+        cout << "----------------------------------------------" << endl;
         for ( int i = 0; i < x.size(); i++ )
         {
-           getInfoStream() << "\n" << setprecision(2) << x[i] << fixed
+           cout << "\n" << setprecision(2) << x[i] << fixed
                 << "\t" << setprecision(4) << fx[i]  << fixed
                 << "\t\t" << setprecision(20) << cspline1.Value(x[i]) << fixed << endl;
            _equal( cspline1.Value(x[i]), fx[i], tolerance_ );
@@ -115,12 +115,12 @@ namespace csmp
 
     void CubicSpline_Test::DerivativeTest()
     {
-        getInfoStream() << "\n----------------------------------------------" << endl;
-        getInfoStream() << "  x\tinput df(x) \t derevitives" << endl;
-        getInfoStream() << "----------------------------------------------" << endl;
+        cout << "\n----------------------------------------------" << endl;
+        cout << "  x\tinput df(x) \t derevitives" << endl;
+        cout << "----------------------------------------------" << endl;
         for ( int i = 0; i < x.size(); i++ )
         {
-           getInfoStream() << "\n" << setprecision(2) << x[i] << fixed
+           cout << "\n" << setprecision(2) << x[i] << fixed
                 << "\t" << setprecision(4) << dfx[i]  << fixed
                 << "\t\t" << setprecision(10) << cspline1.Derivative( x[i] ) << fixed << endl;
            _equal( cspline1.Derivative(x[i]), dfx[i], tolerance_ );
@@ -134,8 +134,8 @@ namespace csmp
     void CubicSpline_Test::MaxDerivativeTest()
     {
         double64 mdv1 = cspline1.MaxDerivative();
-        getInfoStream() << "\nMaximum Derivative of input data f'(x)";
-        getInfoStream() << "\n" << setprecision(10) << mdv1 << fixed << endl;
+        cout << "\nMaximum Derivative of input data f'(x)";
+        cout << "\n" << setprecision(10) << mdv1 << fixed << endl;
         _equal( cspline1.MaxDerivative(), dfx[0], tolerance_ );
         _equal( cspline1_copy.MaxDerivative(), dfx[0], tolerance_ );
         _equal( cspline2.MaxDerivative(), dfx[0], tolerance_ );
@@ -145,8 +145,8 @@ namespace csmp
     void CubicSpline_Test::Range_xTest()
     {
         double64 x_range = cspline1.Range_x();
-        getInfoStream() << "\nRange of x data";
-        getInfoStream() << "\n" << setprecision(10) << x_range << fixed << endl;
+        cout << "\nRange of x data";
+        cout << "\n" << setprecision(10) << x_range << fixed << endl;
         _test( cspline1.Range_x() == 5. );
         _test( cspline1_copy.Range_x() == 5. );
         _test( cspline2.Range_x() == 5. );
@@ -156,8 +156,8 @@ namespace csmp
     void CubicSpline_Test::Range_fxTest()
     {
         double64 fx_range = cspline1.Range_fx();
-        getInfoStream() << "\nRange of f(x) data";
-        getInfoStream() << "\n" << setprecision(20) << fx_range << fixed << endl;
+        cout << "\nRange of f(x) data";
+        cout << "\n" << setprecision(20) << fx_range << fixed << endl;
         _equal( cspline1.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );
         _equal( cspline1_copy.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );
         _equal( cspline2.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );

@@ -606,11 +606,11 @@ void VData::ResizeNodes( size_t nodes )
            if ( (*i) > node_max ) node_max = (*i);
         
        if ( nodes < node_max )
-         csmp_error.notice( CSMP_WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
+         csmp_error.notice( WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
       }
       
     if ( px.size() > 0U )
-      csmp_error.notice( CSMP_WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
+      csmp_error.notice( WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
     px.resize( nodes );  vector<double64>( px ).swap( px );
     py.resize( nodes );  vector<double64>( py ).swap( py );
     pz.resize( nodes );  vector<double64>( pz ).swap( pz );
@@ -1165,71 +1165,71 @@ void VData::OutASCII( const char* file ) const
 
 
 /**
-    Prints contents of VSet to a stream;
+    Prints contents of VSet to console;
 */
-void VData::Out(std::ostream& os) const
+void VData::Out() const
   {
-     os <<"\nVData::Out: "<< endl;
+     cout<<"\nVData::Out: "<< endl;
 
      // mixed mesh
      // ----------
-     if ( hybrid_mesh_ ) os <<"mesh contains different type of elements..."<< endl;
-     else os <<"mesh contains only one type of element..."<< endl;
+     if ( hybrid_mesh_ ) cout <<"mesh contains different type of elements..."<< endl;
+     else cout <<"mesh contains only one type of element..."<< endl;
 
      // faces or interfaces
      // -------------------
      if ( first_face_ < plist.size() and first_face_ < first_interface_  )
-       os <<"\tmesh contains "<< first_interface_ - first_face_ <<" descriptors of Face objects."<< endl;
+       cout <<"\tmesh contains "<< first_interface_ - first_face_ <<" descriptors of Face objects."<< endl;
      if ( first_interface_ < plist.size() )
-       os <<"\tmesh contains "<< plist.size() - first_interface_ <<" descriptors of InterFace objects."<< endl;
+       cout <<"\tmesh contains "<< plist.size() - first_interface_ <<" descriptors of InterFace objects."<< endl;
 
      // px, py, pz
      // ----------
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
-     os<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
+     cout<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
      for ( size_t i=0U; i<px.size(); i++ )
-       os << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
+       cout << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
      // -----
-     os <<"\n'pelmt' finite element types:";
+     cout <<"\n'pelmt' finite element types:";
      size_t i(0U);
      for ( vector<int32>::const_iterator
            eit=pelmt.begin(); eit!=pelmt.end(); eit++, i++ )
-       os <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
-     os << endl;
+       cout <<"\n"<< i <<" = "<< *eit <<" = CSMP type: "<< parseFiniteElementType( static_cast<CSMP_FEM_TYPE>(*eit) );
+     cout << endl;
 
      // plist
      // -----
-     os <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
+     cout <<"\n'plist' entries of "<< plist.size() <<" elements:"<< endl;
      i = 0U;
      for ( deque<vector<size_t> >::const_iterator
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
-          os << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) os << (*pt)[j] <<"\t";
-          os << endl;
+          cout << i <<": \t";
+          for ( size_t j=0U; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
+          cout << endl;
        }
 
      // pfverts
      // -------
-     os <<"\n'pfverts':"<< endl;
+     cout <<"\n'pfverts':"<< endl;
      i = 0U;
      for ( deque<vector<long64> >::const_iterator
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
-          os << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) os << (*ft)[j] <<"\t";
-          os << endl;
+          cout << i <<": \t";
+          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t";
+          cout << endl;
        }
 
      // bflags
      // ------
-     if ( !bflags.empty() ) os <<"\nBoundary flags 'bflags':"<< endl;
+     if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
      for ( map<size_t,long64>::const_iterator
            bf=bflags.begin(); bf!=bflags.end(); bf++ )
-       os << (*bf).first <<": \t"<< (*bf).second << endl;
+       cout << (*bf).first <<": \t"<< (*bf).second << endl;
 
   } // end Out()
 
@@ -1411,9 +1411,9 @@ void VData::CoordinateRange( char coordinate_axis, double64& cmin, double64& cma
            }
       }
     else {
-        std::cout <<"\nVData::CoordinateRange: Coordinate axis specifier not recognized: ";
-        std::cout << coordinate_axis << endl;
-        std::cout <<"\n\tNot returning any values."<< endl;
+       cout <<"\nVData::CoordinateRange: Coordinate axis specifier not recognized: ";
+       cout << coordinate_axis << endl;
+       cout <<"\n\tNot returning any values."<< endl;
      }
  } 
  
@@ -1503,12 +1503,12 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
         
     // if nothing can be done because there are not enough node coordinates
     if ( node_set.size() > px.size() )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VData::CheckForOrphanNodes",
+      throw csmp::Exception( FATAL_ERROR, "VData::CheckForOrphanNodes",
                      "plist contains more nodes node coordinate arrays");
  
     // detecting discontinuities in the node numbering
     if ( (*max_element( node_set.begin(), node_set.end() )) >= node_set.size() )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VData::CheckForOrphanNodes",
+      throw csmp::Exception( FATAL_ERROR, "VData::CheckForOrphanNodes",
                      "there is a discontinuity in the node-numbers stored in 'plist'");
     
     // if there are extra nodes but everything else is OK, these can be removed 
@@ -1526,7 +1526,7 @@ bool VData::DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes )
                     pz.resize( node_set.size() );
                     vector<double64>( pz ).swap( pz );
                  }
-               //throw csmp::Exception( CSMP_INFO, "VData::CheckForOrphanNodes",
+               //throw csmp::Exception( INFO, "VData::CheckForOrphanNodes",
                               //"there were orphan nodes but they have been removed as requested");
                  cout << "\nVData::CheckForOrphanNodes -- there were orphan nodes but they have been removed as requested\n";
              }
@@ -1648,13 +1648,13 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
     for ( vector<vector<size_t> >::const_iterator
           it=new_plist.begin(); it!=new_plist.end(); it++ )
       if ( (*it).empty() )
-        throw csmp::Exception( CSMP_FATAL_ERROR, "VData::ReduceTo",
+        throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
                               "The reduced 'plist' deque contains empty entries. Unable to continue");
     if( with_connectivity )
         for ( vector<vector<long64> >::const_iterator
               it=new_pfverts.begin(); it!=new_pfverts.end(); it++ )
           if ( (*it).empty() )
-            throw csmp::Exception( CSMP_FATAL_ERROR, "VData::ReduceTo",
+            throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
                                   "The reduced 'pverts' deque contains empty entries. Unable to continue");
 
     // reassigning the plist and pfverts now
@@ -1698,7 +1698,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
               {
                   map<size_t,size_t>::const_iterator nit=o_n_node_ids.find( *pit );
                   if ( nit == o_n_node_ids.end() )
-                     throw csmp::Exception( CSMP_ERROR, "VData::ReduceTo",
+                     throw csmp::Exception( ERROR, "VData::ReduceTo",
                                                    "'plist' node ID could not be updated");
                   else *pit = (*nit).second;
                }

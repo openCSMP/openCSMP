@@ -453,10 +453,10 @@ void  TensorVariable<1U>::In()
 
 
 /// @test tested: O.K.
-void  TensorVariable<1U>::Out(std::ostream& os) const
+void  TensorVariable<1U>::Out() const
  {
-     os <<"\nStatus: "<< parseStatus( flag ) << endl;
-     os <<"\nValue:  "<< data << endl;
+     cout <<"\nStatus: "<< parseStatus( flag ) << endl;
+     cout <<"\nValue:  "<< data << endl;
 
  } // end Out
 

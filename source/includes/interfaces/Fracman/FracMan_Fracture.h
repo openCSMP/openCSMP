@@ -47,8 +47,7 @@ class FRACMAN_Fracture {
     
     void    Erase();
     
-    void    Out() const { Out(std::cout); }
-    void    Out(std::ostream& os) const;
+    void    Out() const;
   
   private:
     double64  aperture;        // always present default properties

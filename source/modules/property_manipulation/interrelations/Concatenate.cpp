@@ -34,7 +34,7 @@ Concatenate<dim,operation >::Concatenate( const PropertyDatabase<dim>& p,
     // safety
     if ( res_.Placement() != p.Placement(argumentProperty1) or 
          p.Placement(argumentProperty1) != p.Placement(argumentProperty2) )
-      throw Exception( CSMP_ERROR, "Concatenate", "in this interrelation, all variables must have the same placement");
+      throw Exception( ERROR, "Concatenate", "in this interrelation, all variables must have the same placement");
  }
  
  
@@ -60,7 +60,7 @@ Concatenate<dim,operation>::Concatenate( const PropertyDatabase<dim>& p,
     for (  vector<string>::const_iterator
            it=arguments.begin(); it!=arguments.end(); it++ )
       if ( res_.Placement() != p.Placement( (*it).c_str() )  )
-        throw Exception( CSMP_ERROR, "Concatenate", "in this interrelation, all variables must have the same placement");
+        throw Exception( ERROR, "Concatenate", "in this interrelation, all variables must have the same placement");
  }
 
 

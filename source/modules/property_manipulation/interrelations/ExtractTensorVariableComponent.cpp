@@ -21,26 +21,26 @@ ExtractTensorVariableComponent<dim>::ExtractTensorVariableComponent( const Prope
     Interrelation<dim>::ResultProperty( scalar_var );
     
     if ( T.Type() != TENSOR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Extraction variable must be of TensorVariable type");
     if ( S.Type() != SCALAR )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Extracted variable must be of ScalarVariable type");
  
     if ( T.Placement() == ELEMENT && S.Placement() != ELEMENT )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Element variable cannot be extrapolated to elsewhere");
    
     if ( T.Placement() != ELEMENT && T.Placement() != S.Placement() )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Incompatible placement of input variables");
    
     if ( comp_i > dim-1 )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Desired vector component 'i' does not exist");
 
     if ( comp_j > dim-1 )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "ExtractTensorVariableComponent::(constructor)", 
                                    "Desired vector component 'j' does not exist");
  }
 

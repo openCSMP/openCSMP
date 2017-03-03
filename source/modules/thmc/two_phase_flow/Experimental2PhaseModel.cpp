@@ -14,7 +14,7 @@ Experimental2PhaseModel<dim>::Experimental2PhaseModel()
    dfds_shock_(std::numeric_limits<double64>::quiet_NaN()),
    s1_shock_(std::numeric_limits<double64>::quiet_NaN())
  {
-    cerr <<"\nExperimental2PhaseModel: Error: this default constructor does not suffice to get this model to work.\n";
+    cout <<"\nExperimental2PhaseModel: Error: this default constructor does not suffice to get this model to work.\n";
  }
  
  
@@ -258,16 +258,16 @@ double64 Experimental2PhaseModel<dim>::dGds( ) const
 
 
 template<size_t dim>
-void Experimental2PhaseModel<dim>::Out( std::ostream& os, size_t phase ) const
+void Experimental2PhaseModel<dim>::Out( size_t phase ) const
  {
-    TwoPhaseModel<dim>::Out(os, phase);
-    os <<"\nExperimental2PhaseModel<"<< dim << ">::Out: Input data for relperm and pc calculations:"<< endl;
-    os <<"\nrelative permeability curve kr1:";
-    kr1_.Out(os);
-    os <<"\nrelative permeability curve kr2:";
-    kr2_.Out(os);
-    os <<"\ncapillary pressure saturation curve:";
-    pc_.Out(os);
+    TwoPhaseModel<dim>::Out(phase);
+    cout <<"\nExperimental2PhaseModel<"<< dim << ">::Out: Input data for relperm and pc calculations:"<< endl;
+    cout <<"\nrelative permeability curve kr1:";
+    kr1_.Out();
+    cout <<"\nrelative permeability curve kr2:";
+    kr2_.Out();
+    cout <<"\ncapillary pressure saturation curve:";
+    pc_.Out();
 
  } // end Out
  

@@ -42,8 +42,7 @@ class Point3D {
     double  Length() const;
     bool    CoincidesWithWithinTolerance( const Point3D&, double tolerance=1.0e-5 ) const;
 
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
     double x_, y_, z_;
  };

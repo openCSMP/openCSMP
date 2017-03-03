@@ -337,39 +337,39 @@ void FRACMAN_Fracture::Scale( double64 xfac, double64 yfac, double64 zfac )
  }
 
 
-void FRACMAN_Fracture::Out(std::ostream& os) const
+void FRACMAN_Fracture::Out() const
  {
-    os <<"\nFRACMAN_Fracture::Out: ID: "<< id;
-    os <<"\nAperture:               "<< aperture;
-    os <<"\nCompressibility:        "<< compressibility;
-    os <<"\nPermeability:           "<< permeability;
+    cout <<"\nFRACMAN_Fracture::Out: ID: "<< id;
+    cout <<"\nAperture:               "<< aperture;
+    cout <<"\nCompressibility:        "<< compressibility;
+    cout <<"\nPermeability:           "<< permeability;
     
     if ( props.size() > 3 ) {
          list<double64>::const_iterator  pit = props.begin();
-         os <<"\nOther property data:    "<< endl;
+         cout <<"\nOther property data:    "<< endl;
          pit++, pit++, pit++;
          
          while ( pit != props.end() ) {
-              os << (*pit) <<"  ";
+              cout << (*pit) <<"  ";
               pit++;
            }
-         os << endl;
+         cout << endl;
       }
     
-    os <<"\n\nPoints defining the perimeter of fracture: "<< endl;
+    cout <<"\n\nPoints defining the perimeter of fracture: "<< endl;
     list<mjl::Point3D>::const_iterator  ita;
     int                                a;
   
     for ( a=1, ita=boundary.begin(); ita!=boundary.end(); ita++, a++ ) 
-      os <<"\t"<< a <<": "<< (*ita).X() <<"\t"<< (*ita).Y() <<"\t"<< (*ita).Z() << endl;
+      cout <<"\t"<< a <<": "<< (*ita).X() <<"\t"<< (*ita).Y() <<"\t"<< (*ita).Z() << endl;
     
-    os <<"\nUnit normal to fracture plane:"<< endl;
-    os <<"\t"<< unit_normal.dest_.x_ <<"\t"<< unit_normal.dest_.y_;
-    os <<"\t"<< unit_normal.dest_.z_ << endl;
+    cout <<"\nUnit normal to fracture plane:"<< endl;
+    cout <<"\t"<< unit_normal.dest_.x_ <<"\t"<< unit_normal.dest_.y_;
+    cout <<"\t"<< unit_normal.dest_.z_ << endl;
     
-    os <<"\nPerimeter of fracture:  "<< Perimeter() << endl;
+    cout <<"\nPerimeter of fracture:  "<< Perimeter() << endl;
       
-    os << endl; 
+    cout << endl; 
  }
 
 } // end namespace csp 

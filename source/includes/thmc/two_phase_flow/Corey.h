@@ -78,8 +78,7 @@ class Corey : public TwoPhaseModel<dim> {
     // maximum absolute value returned by dfdS
     virtual double64 MaxFractionalFlowDerivative() const;
 
-    void Out(size_t phase) const { Out(std::cout, phase); }
-    virtual void Out( std::ostream& os, size_t phase ) const;
+    virtual void Out( size_t phase ) const;
 
   private:
 

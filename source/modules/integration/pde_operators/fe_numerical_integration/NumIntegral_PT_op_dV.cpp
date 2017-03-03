@@ -17,12 +17,12 @@ NumIntegral_PT_op_dV<dim,SIMPLEX>::NumIntegral_PT_op_dV( const PropertyDatabase<
     
     // testing the specified Operands 
     if ( MathOperatorRHS<dim>::MaterialOperandType() != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
+      throw csmp::Exception( ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
                              oper,  "Operand must be a vector variable.");
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != VECTOR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
+      throw csmp::Exception( ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
                              test,  "Test function Operand must be a vector variable placed on the nodes");
 }
 

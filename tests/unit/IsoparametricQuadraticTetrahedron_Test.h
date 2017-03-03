@@ -36,8 +36,8 @@ class IsoparametricQuadraticTetrahedron_Test : public Test {
     void CheckElementFaceConsistency( const Element<3U>& );
     void CheckInterpolation( const Element<3U>& );
   
-    void OutputIntegrationPointsToVTK( const char* file, const Element<3U>& );
-    void OutputFaceNormalsToVTK( const char* file, const Element<3U>& );
+    void OutputIntegrationPointsToVTK( const char* file, const Element<3U>& ) const;
+    void OutputFaceNormalsToVTK( const char* file, const Element<3U>& ) const;
   
   private:
     void ChangeNodeCoordinatesToTestConfiguration();

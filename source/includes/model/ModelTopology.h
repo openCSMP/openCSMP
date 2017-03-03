@@ -19,9 +19,8 @@ class ModelTopology {
     ~ModelTopology();
 
     /// output info
-    void        Out() const { Out(std::cout); }
-    void        Out(std::ostream& os) const;
-    void        Out(const char* output_file) const;
+    void        Out() const;
+    void        Out( const char* output_file ) const;
 
     /// general model info
     void        ModelName( const char* name );
@@ -66,8 +65,7 @@ class ModelTopology {
     /// output subset as another model topology
     void        ExportSelectionTo( const std::list<std::string>& regions,
                                    ModelTopology& mt ) const;
-    void        Out( std::list<std::string>& regions ) const { Out(std::cout, regions); }
-    void        Out( std::ostream& os, std::list<std::string>& regions ) const;
+    void        Out( std::list<std::string>& regions ) const;
     /// check whether region is alreday included
     bool        Contains( const char* region ) const;
     /// remove certain regions

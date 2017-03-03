@@ -908,7 +908,7 @@ for the element.
 */
 void IsoparametricLinearTetrahedron::MidSideNodes(std::vector<size_t>&) const
  {
-    throw csmp::Exception( CSMP_WARNING, "IsoparametricLinearTetrahedron::MidSideNodes:",
+    throw csmp::Exception( WARNING, "IsoparametricLinearTetrahedron::MidSideNodes:",
                                     "MidSideNodes not present",
                                      "Probably unintended use of function." );
  }
@@ -921,7 +921,7 @@ IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<size_t>
     fnids.resize(bnodes.size());
     cout <<"\nIsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary: not implemented."<< endl;
      if ( bnodes.size() != 4 && bnodes.size() != 3 )
-       throw csmp::Exception( CSMP_ERROR, "IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( ERROR, "IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -975,11 +975,11 @@ const
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
    if ( IVAR.size() != (gpe*nvars) )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
                                   "Input vector must have 'nvars' x 4 entries");
 
    if ( NVAR.size() != (npe*nvars) )
-     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
                                   "Output vector must have 'nvars' x nodes entries");
 
    // 1. Compute the local interpolation function coefficients for the tetrahedron which
@@ -987,7 +987,7 @@ const
    if ( first_call ) {
        // checking starting conditions
        if ( gpe != 4 )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
+       throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes",
          "This method expects four integration points on which extrapolation functions will be based on" );
 
         // test function coefficients

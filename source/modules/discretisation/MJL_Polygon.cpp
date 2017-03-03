@@ -100,15 +100,15 @@ void Polygon::BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) cons
 
 
 
-void Polygon::Out(std::ostream& os) const
+void Polygon::Out() const
  {
-    os <<"\nPolygon::Out: "<< size_ <<" vertices (in clockwise order): ";
+    cout <<"\nPolygon::Out: "<< size_ <<" vertices (in clockwise order): ";
     
     for ( unsigned int i=1u; i<=size_; i++, Advance(CLOCKWISE) ) {
          mjl::Point a = v_->Point();
-         os <<"\n\t"<< a.X() <<"  "<< a.Y();
+         cout <<"\n\t"<< a.X() <<"  "<< a.Y();
       }
-    os << endl;
+    cout << endl;
  }
 
 
@@ -261,7 +261,7 @@ bool Polygon::CheckAngles( double min_angle_permitted ) const
          if ( fabs(angle) < min_angle_permitted ) {
               cout <<"\nMJL_Polygon::CheckAngles: angle is too small: "<< angle;
               cout <<" vs. "<< min_angle_permitted <<" at point:";
-              p.Out(cout);
+              p.Out();
               check = false;
            }
       }

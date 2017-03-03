@@ -21,15 +21,15 @@ namespace csmp {
     vol_key_      = model.Database().StorageKey(volume);
 
     if ( property_key_.type != SCALAR || property_key_.place != NODE )
-      throw csmp::Exception( CSMP_ERROR, "PoreVolumeVisitor::(constructor)", 
+      throw csmp::Exception( ERROR, "PoreVolumeVisitor::(constructor)", 
                              pore_volume, " must be a nodal scalar property." );
 
     if ( phi_key_.type != SCALAR || phi_key_.place != NODE )
-      throw csmp::Exception( CSMP_ERROR, "PoreVolumeVisitor::(constructor)", 
+      throw csmp::Exception( ERROR, "PoreVolumeVisitor::(constructor)", 
                              porosity, " must be a scalar property." );
 
     if ( vol_key_.type != SCALAR || vol_key_.place != NODE )
-      throw csmp::Exception( CSMP_ERROR, "PoreVolumeVisitor::(constructor)", 
+      throw csmp::Exception( ERROR, "PoreVolumeVisitor::(constructor)", 
                              volume, " must be a scalar property." );
 
   }

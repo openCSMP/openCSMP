@@ -18,7 +18,7 @@ NT_op<dim,SIMPLEX>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, 
      if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR || 
           MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE ) 
      {
-        throw csmp::Exception( CSMP_FATAL_ERROR, "MathOperatorRHS->NT_op<dim>::(constructor)", 
+        throw csmp::Exception( FATAL_ERROR, "MathOperatorRHS->NT_op<dim>::(constructor)", 
                         oper, "Operand must be a scalar variable placed on the nodes." );
      }
  }

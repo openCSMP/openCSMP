@@ -667,69 +667,65 @@ template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<
 
 /// prints Element internal data and those of connected objects.
 template<size_t dim>
-void Element<dim>::Out(std::ostream& os) const
+void Element<dim>::Out() const
  {
     string str(parseBoundary(at_boundary_));
-    os <<"\n\nElement<"<< dim <<">::Out: number: "<< idx_;
-    os <<" ("<< parseFiniteElementType(this->FE_Type()) <<" = ";
-    if      ( this->IsLineElement() )    os <<"line element";
-    else if ( this->IsSurfaceElement() ) os <<"surface element";
-    else if ( this->IsVolumeElement() )  os <<"volume element";
-    os <<"), boundary flag: "<< str <<"\n";
+    cout <<"\n\nElement<"<< dim <<">::Out: number: "<< idx_;
+    cout <<" ("<< parseFiniteElementType(this->FE_Type()) <<" = ";
+    if      ( this->IsLineElement() )    cout <<"line element";
+    else if ( this->IsSurfaceElement() ) cout <<"surface element";
+    else if ( this->IsVolumeElement() )  cout <<"volume element";
+    cout <<"), boundary flag: "<< str <<"\n";
 
-    os <<"\n\tconnected nodes (indices : boundary flags):  ";
+    cout <<"\n\tconnected nodes (indices : boundary flags):  ";
     for ( size_t i=0U; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
-         os << N(i)->Idx() <<":"<< str <<"  ";
+         cout << N(i)->Idx() <<":"<< str <<"  ";
       }
-    os << endl;
+    cout << endl;
     
-    os <<"\n\tconnected neighbors (finite element types : boundary flags):\n";
+    cout <<"\n\tconnected neighbors (finite element types : boundary flags):\n";
     for ( size_t i=0U; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
-           os <<"\t\t"<< Neighbor(i)->Idx() <<": ";
-           os << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
+           cout <<"\t\t"<< Neighbor(i)->Idx() <<": ";
+           cout << parseFiniteElementType( Neighbor(i)->FE_Type()) <<": ";
            str = parseBoundary(Neighbor(i)->AtBoundary());
-           os << str << endl;
+           cout << str << endl;
         }
-<<<<<<< HEAD
       else cout <<"\t\tnone.\n";
-=======
-      else os <<"none.\n";
->>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
    
     // barycentre
     Point<dim>  pt(this->BaryCenter());
     if ( dim == 1U )
-       os <<"\n\tbarycentre at (xyz): "<< pt[0] << endl;
+       cout <<"\n\tbarycentre at (xyz): "<< pt[0] << endl;
     else if ( dim == 2U )                        
-       os <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+       cout <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
     else                          
-       os <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+       cout <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
 
     // length, area, volue
     const double64 volume(this->Volume());
     if (  this->IsLineElement() ) {
-         if ( volume > 0. ) os <<"\n\tlength: "<< volume << endl;
+         if ( volume > 0. ) cout <<"\n\tlength: "<< volume << endl;
          else cerr <<"\n\tlength: ERROR (negative value indicates numbering problem): "<< volume << endl;
       }
     if (  this->IsSurfaceElement() ) {
-         if ( volume > 0. ) os <<"\n\tarea: "<< volume << endl;
+         if ( volume > 0. ) cout <<"\n\tarea: "<< volume << endl;
          else cerr <<"\n\tarea: ERROR (negative value indicates numbering problem): "<< volume << endl;
       }
     else if ( this->IsVolumeElement() ) {
-         if ( volume > 0. ) os <<"\n\tvolume: "<< volume << endl;
+         if ( volume > 0. ) cout <<"\n\tvolume: "<< volume << endl;
          else cerr <<"\n\tvolume: ERROR (negative value indicates numbering problem): "<< volume << endl;
       }
    
     // inner radius
     if (  this->IsSurfaceElement() )
-      os <<"\n\tradius of inscribed circle: "<< this->InnerRadius() << endl;
+      cout <<"\n\tradius of inscribed circle: "<< this->InnerRadius() << endl;
     else if ( this->IsVolumeElement() )
-      os <<"\n\tradius of inscribed sphere: "<< this->InnerRadius() << endl;
+      cout <<"\n\tradius of inscribed sphere: "<< this->InnerRadius() << endl;
    
     // aspect ratio
-    if ( !this->IsLineElement() ) os <<"\n\taspect ratio (b-box):   "<< this->AspectRatio() << endl;
+    if ( !this->IsLineElement() ) cout <<"\n\taspect ratio (b-box):   "<< this->AspectRatio() << endl;
    
  } // end Out
 

@@ -174,8 +174,7 @@ class Boundary : public ModelSubDomain<dim,Face> {
     // ----------------------------------------
     // screen output
     // ----------------------------------------
-    void Out() const { Out(std::cout); }
-    void Out(std::ostream& os) const;
+    void Out() const;
 
   protected:
 

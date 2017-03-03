@@ -35,21 +35,21 @@ NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN_dV( con
       }
       
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT && MathOperatorLHS<dim>::MaterialOperandPlacement() )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
                       oper, "Operand (basic) must be placed on the element or group." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 
     if ( nkey.place != NODE || nkey.type != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_mixed_op_dN_dV<dim>::(constructor)", 
                       nodal_oper_multiplier, "Operand multiplier must be a scalar property placed on the nodes." );
 }
 

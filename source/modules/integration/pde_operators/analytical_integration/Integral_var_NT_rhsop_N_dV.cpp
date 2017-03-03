@@ -32,20 +32,20 @@ Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_rhsop_N_dV( const Prope
     MathOperatorRHS<dim>::Name(cname, oper, basic );
     // testing the Operands 
     if ( basic_.key.place != NODE || basic_.key.type != SCALAR )
-       throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)",
+       throw csmp::Exception( ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)",
                    basic, "Basic variable must be a scalar property placed on the node." );
 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT and MathOperatorRHS<dim>::MaterialOperandPlacement() != REGION )
-       throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
+       throw csmp::Exception( ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
                    oper, "Operand must be a property placed on the element or group." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-       throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
+       throw csmp::Exception( ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
      
     if ( var_.key.place != NODE || var_.key.type != SCALAR )
-      throw csmp::Exception( CSMP_ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "Integral_var_NT_rhsop_N_dV<dim>::(constructor)", 
                    var, "Additional variable must be a scalar property placed on the nodes." );
                    
     
@@ -77,7 +77,7 @@ void Integral_var_NT_rhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
   if ( !MathOperatorRHS<dim>::LumpedFormulation() ) { // consistent formulation
     if (e.FE_Type() != LINEAR_TRIANGLE)
-       throw csmp::Exception(CSMP_ERROR, 
+       throw csmp::Exception(ERROR, 
                       "Integral_var_NT_lhsop_N_dV::ComputeContribution",
                       "Consistent formulation only provided for elements of type LinearTriangle");
      ComputeIntegral(e);

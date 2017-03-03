@@ -20,7 +20,7 @@ NumIntegral_BT_op_dV<dim,SIMPLEX>::NumIntegral_BT_op_dV( const PropertyDatabase<
     
     // verify here that the operands have the correct placement and type 
    if ( MathOperatorRHS<dim>::MaterialOperandType() == TENSOR ) 
-     throw csmp::Exception( CSMP_WARNING, "NumIntegral_BT_op_dV::(constructor)", 
+     throw csmp::Exception( WARNING, "NumIntegral_BT_op_dV::(constructor)", 
                      oper, "Only diagonal part of tensor property will be used.");
      
    // checking how many variables are needed to store the components of the 
@@ -84,7 +84,7 @@ void NumIntegral_BT_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 
          if ( detJ <= 0. ) {
               cout <<"\nDeterminant of Jacobian at Gauss point: "<< i <<": "<< detJ << endl;
-              throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_BT_op_dV::ComputeContribution",
+              throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_op_dV::ComputeContribution",
                               "Jacobian transformation failed.");
            }
 

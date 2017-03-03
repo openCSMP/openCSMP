@@ -398,8 +398,8 @@ void PropertyData::ScaleRangeTo( double64 tmin, double64 tmax )
     double64 new_min, new_max;
     MinMaxOf( new_min, new_max );
     if ( new_min != tmin || new_max != tmax ) {
-        std::cout <<"\nPropertyData<T>::ScaleRangeTo: Scaling failed."<< endl;
-         Out(std::cout);
+         cout <<"\nPropertyData<T>::ScaleRangeTo: Scaling failed."<< endl;
+         Out();
          throw range_error("PropertyData<T>::ScaleRangeTo");
       }
 
@@ -537,22 +537,22 @@ PropertyData inBinaryPropertyData( FILE* fp )
 
 
 
-void PropertyData::Out(std::ostream& os) const
+void PropertyData::Out() const
  {
-    os <<"\nPropertyData::Out: storage for "<< data_.size()/data_stride_ <<" "<< string(parseType(type_)) <<" objects."<< endl;
-    os <<"Data placement: "<< string(parsePlacement(place_)) << endl;
-    os <<"Spatial dimension: "<< dim_ << endl;
-    os <<"Flag stride:       "<< flag_stride_ << endl;
-    os <<"Data stride:       "<< data_stride_ << endl;
-    os <<"\nflag values:\n";
+    cout <<"\nPropertyData::Out: storage for "<< data_.size()/data_stride_ <<" "<< string(parseType(type_)) <<" objects."<< endl;
+    cout <<"Data placement: "<< string(parsePlacement(place_)) << endl;
+    cout <<"Spatial dimension: "<< dim_ << endl;
+    cout <<"Flag stride:       "<< flag_stride_ << endl;
+    cout <<"Data stride:       "<< data_stride_ << endl;
+    cout <<"\nflag values:\n";
     for ( size_t i=0U; i<flags_.size(); i++ )
-      os << parseStatus(flags_[i]) <<" ";
-    os << endl;
+      cout << parseStatus(flags_[i]) <<" ";
+    cout << endl;
 
-    os <<"\nvariable component values:\n";
+    cout <<"\nvariable component values:\n";
     for ( size_t i=0U; i<data_.size(); i++ )
-      os << data_[i] <<" ";
-    os << endl;
+      cout << data_[i] <<" ";
+    cout << endl;
 
  } // end Out 
 

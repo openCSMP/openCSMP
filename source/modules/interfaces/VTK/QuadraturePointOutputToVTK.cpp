@@ -39,12 +39,12 @@ namespace csmp {
      assert( key.type == SCALAR );
    
      if ( key.place != ELEMENT_INTEGRATION_POINT ) {
-          ErrorHandler::Instance().notice( CSMP_ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
+          ErrorHandler::Instance().notice( ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
                                           "output variable must be placed on the element integration point; nothing was done." );
           return;
        }
      if ( !(*model_domain.ElementsBegin())->FE()->UsesLocalCoordinates() ) {
-          ErrorHandler::Instance().notice( CSMP_ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
+          ErrorHandler::Instance().notice( ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
                                           "the mesh must consist of numerically integrated elements; nothing was done." );
           return;
        }
@@ -61,7 +61,7 @@ namespace csmp {
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs ) {
-          ErrorHandler::Instance().notice( CSMP_ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
+          ErrorHandler::Instance().notice( ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
                                            outfile, "output file could not be opened; nothing was done." );
           return;
        }

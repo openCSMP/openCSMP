@@ -173,7 +173,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
        {
-           throw csmp::Exception( CSMP_ERROR, "VTK_Interface<dim>::OutputDataToVTK", 
+           throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK", 
                                   "Output file could not be opened");
            return;
        }  
@@ -298,7 +298,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                       }
                  break;
                default:
-                 throw csmp::Exception( CSMP_ERROR, "VTK_Interface::OutputNodeDataToVTK:",
+                 throw csmp::Exception( ERROR, "VTK_Interface::OutputNodeDataToVTK:",
                                        "treatment of Array and FlaggedArray variables not handled yet.");
             }
             
@@ -449,7 +449,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      csmp::Index  prop_key = sg.Database().StorageKey(var_name.c_str());
 
      if ( prop_key.place == REGION or prop_key.place == BOUNDARY )
-       throw Exception( CSMP_ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
+       throw Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
                       "Thus far variables placed on REGION or BOUNDARY cannot be visualised with VTK (this could however be done with the VTK primitive POLYGONAL)");
 
      const Region<dim>&  gref(sg.Region(group_name));
@@ -466,7 +466,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      gref.MemberElementIndexes( elmt_ids );
 
      if ( elmt_ids.empty() )     
-       throw csmp::Exception( CSMP_ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
+       throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
                               group_name, "region is empty");
 
      // 1. getting new node mapping and updating storage if geometry has changed
@@ -499,7 +499,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                   transformed_plist.push_back((*eit).second);
            }
           else
-            throw csmp::Exception( CSMP_ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
+            throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
                                   "The placement of the variable was not recognized");
        }
      last_visualized_ = prop_key.place;
@@ -622,7 +622,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                  }
              break;
            default:
-             throw csmp::Exception( CSMP_ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
+             throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
                                    "treatment of Array and FlaggedArray variables not handled yet.");
        }
      ofs << endl;
@@ -641,7 +641,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      ofstream ofs_file;
      ofs_file.open( file.c_str(), ios::out|ios::trunc );
      if ( !ofs ) {
-           throw csmp::Exception( CSMP_ERROR, 
+           throw csmp::Exception( ERROR, 
                           "VTK_Interface<dim>::OutputDataToVTK(region)",
                           "Output file could not be opened");
            return;
@@ -1051,7 +1051,7 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
                                    map<size_t,vector<double> >& pxyz_data )
  {
     if ( prop_key.place != NODE )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::NodeData", 
+      throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::NodeData", 
                                    "Method only applies to node properties" );
     ScalarVariable      sc;
     VectorVariable<dim>  vc;
@@ -1138,7 +1138,7 @@ void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( prop_key.place != ELEMENT_INTEGRATION_POINT )
-      csmp_error.notice( CSMP_FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData", 
+      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData", 
                                       "Method only applies to constraint point properties" );
     VectorVariable<dim>  vc;
     TensorVariable<dim>  ts;
@@ -1220,7 +1220,7 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
                                       map<size_t,vector<double> >& sgdata )
  {
     if ( obj_nums.empty() ) {
-         throw csmp::Exception( CSMP_ERROR, "VTK_Interface<dim>::RetrieveData",
+         throw csmp::Exception( ERROR, "VTK_Interface<dim>::RetrieveData",
                          "No output objects specified. Nothing was done." );
          return;
       }
@@ -1301,7 +1301,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
                                       map<size_t,vector<double> >& pxyz_data )
  {
     if ( prop_key.place != ELEMENT and prop_key.place != REGION )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::ElementData", 
+      throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::ElementData", 
                                    "Method only applies to element or region properties" );
     ScalarVariable      sc;
     VectorVariable<dim>  vc;
@@ -1411,7 +1411,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
                                            map<size_t,vector<double> >& pxyz_data )
  {
     if ( prop_key.place != ELEMENT and prop_key.place != REGION )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::ElementPointData", 
+      throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::ElementPointData", 
                                    "Method only applies to element or region properties" );
     ScalarVariable      sc;
     VectorVariable<dim>  vc;
@@ -1765,7 +1765,7 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
               default:
                    cerr <<"\nElement Idx: "<< sgref.E( (*it).first )->Idx();
                    cerr <<" with "<< sgref.E( (*it).first )->Nodes() <<" nodes."<< endl;
-                   throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::TransformPlist", 
+                   throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::TransformPlist", 
                                          "Unable to interpret how this element shall be broken in subelements");
            }
       }
@@ -2197,7 +2197,7 @@ void VTK_Interface<dim>::TransformFacePlist( const Model<dim>&                 s
               default:
                    cout <<"\nFace ID: "<< sg.Mesh().F( (*it).first-1 )->ID();
                    cout <<" with "<< sgref.E( (*it).first-1 )->Nodes() <<" nodes."<< endl;
-                   throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::TransformFacePlist", 
+                   throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::TransformFacePlist", 
                                   "Unable to interpret how this face shall be broken in subelements");
            }
       }
@@ -2222,7 +2222,7 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
                                    map<size_t,vector<double> >& cell_data )
  {
     if ( prop_key.place != ELEMENT  and  prop_key.place != INTER_FACE and prop_key.place != REGION )
-      throw csmp::Exception( CSMP_FATAL_ERROR, "VTK_Interface<dim>::CellData", 
+      throw csmp::Exception( FATAL_ERROR, "VTK_Interface<dim>::CellData", 
                                    "Method only applies to face, element or region properties" );
     
     cell_data.erase( cell_data.begin(), cell_data.end() );
@@ -2325,7 +2325,7 @@ void VTK_Interface<dim>::OutputRegionByRegionToVTK( const Model<dim>& model,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
     if ( !model.Database().IsDefined(var_name.c_str()) ) {
-         csmp_error.notice( CSMP_ERROR,
+         csmp_error.notice( ERROR,
                             "VTK_Interface<dim>::OutputRegionByRegionToVTK",
                             var_name.c_str(),
                             "output property is not defined. Nothing was done.");
@@ -2374,7 +2374,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
                           const char* file_name, const char* variable_name )
   {
      if ( key.place != NODE ) {
-          ErrorHandler::Instance().notice( CSMP_ERROR, "outputNodeDataToVTK:", "output variable must be placed on the node; nothing was done." );
+          ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", "output variable must be placed on the node; nothing was done." );
           return;
        }
 
@@ -2393,7 +2393,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs ) {
-          ErrorHandler::Instance().notice( CSMP_ERROR, "outputNodeDataToVTK:", "output file could not be opened; nothing was done." );
+          ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", "output file could not be opened; nothing was done." );
           return;
        }
 
@@ -2477,7 +2477,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
                ofs << endl;
             }
        }
-     else ErrorHandler::Instance().notice( CSMP_ERROR, "outputNodeDataToVTK:", parseType(key.type),
+     else ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", parseType(key.type),
                                           "node property placement cannot be output; nothing was done." );
      ofs << endl;
      ofs.close();
@@ -2521,11 +2521,11 @@ void outputNodeDataToVTK( const Element<dim>& e,
                           DenseMatrix<DM_MIN>& DATA ) 
   {
      if ( DATA.Rows() > dim )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "Element<dim>::OutputNodeDataToVTK", 
+       throw csmp::Exception( FATAL_ERROR, "Element<dim>::OutputNodeDataToVTK", 
                       "Node DATA matrix can have at most model-dimensions rows" );
 
      if ( DATA.Cols() != e.Nodes() )
-       throw csmp::Exception( CSMP_FATAL_ERROR, "Element<dim>::OutputNodeDataToVTK", 
+       throw csmp::Exception( FATAL_ERROR, "Element<dim>::OutputNodeDataToVTK", 
                       "Node DATA matrix must have as many columns as the element has nodes" );
      
      e.CoordinateMatrix();
@@ -2834,7 +2834,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
                ofs << endl;
             }
        }
-     else ErrorHandler::Instance().notice( CSMP_ERROR, "outputIntegrationPointDataToVTK:", parseType(key.type),
+     else ErrorHandler::Instance().notice( ERROR, "outputIntegrationPointDataToVTK:", parseType(key.type),
                                           "integration-point property placement cannot be output; nothing was done." );
      ofs << endl;
      cout <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;

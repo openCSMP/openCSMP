@@ -38,19 +38,19 @@ MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model,
 
     cout <<"\nMohrCoulombFailure_Visitor: diagnostics: ";
     if ( (Cohesion_key_.place != ELEMENT_INTEGRATION_POINT and Cohesion_key_.place != ELEMENT) || Cohesion_key_.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "MohrCoulombFailure_Visitor (constructor):",
+        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor):",
                               "'cohesion' must be a scalar variable." );
 
     if ( (Failure_key_.place != ELEMENT_INTEGRATION_POINT and Failure_key_.place != ELEMENT) || Failure_key_.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "MohrCoulombFailure_Visitor (constructor):",
+        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor):",
                                "'failure' must be a scalar variable." );
 
     if ( (Failure01_key_.place != ELEMENT_INTEGRATION_POINT and Failure01_key_.place != ELEMENT) || Failure01_key_.type != SCALAR )
-        throw csmp::Exception( CSMP_ERROR, "MohrCoulombFailure_Visitor (constructor)",
+        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor)",
                                "'failure01' must be a scalar variable" );
 
     if ( (Stress_key_.place != ELEMENT_INTEGRATION_POINT and Stress_key_.place != ELEMENT) || Stress_key_.type != TENSOR )
-        throw csmp::Exception( CSMP_ERROR, "MohrCoulombFailure_Visitor (constructor)",
+        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor)",
                                "'stress' must be a tensor variable" );
 }
 
