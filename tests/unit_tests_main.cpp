@@ -21,12 +21,13 @@
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
 #include "ArrayVariable_Test.h"
+#include "Variables_TestCase.h"
+#include "PropertyStorageSpeed_Test.h"
 
 #include "CommandLineParser_Test.h"
 #include "GenericSingleton_Test.h"
 
 #include "IsnanIsinf_Test.h"
-#include "ErrorFunction_Test.h"
 #include "CubicSpline_Test.h"
 #include "DenseMatrix_Test.h"
 #include "Matrix_Test.h"
@@ -175,7 +176,7 @@ int main()
               basic.addTest( new Index_Test());
               basic.addTest( new Parameter_Test());
               basic.addTest( new PropertyData_Test());
-              basic.addTest( new PropertyStorageSpeed_Test());
+              //basic.addTest( new PropertyStorageSpeed_Test( &cout ));
 
               // Model
               basic.addTest( new Node_Test() );
@@ -192,7 +193,7 @@ int main()
               basic.addTest( new TensorVariable_Test1());
               basic.addTest( new TensorVariable_Test2());
               basic.addTest( new ArrayVariable_Test());
-              basic.addTest( new Variables_TesCase());
+              //basic.addTest( new Variables_TestCase("prism_test"));
 
               // Math utilities tests
               basic.addTest( new Matrix_Test() );
@@ -200,7 +201,6 @@ int main()
               basic.addTest( new SparseMatrix_Test() );
               basic.addTest( new CompressedRowMatrix_Test() );
               basic.addTest( new CubicSpline_Test() );
-              basic.addTest( new ErrorFunction_Test() );
 
               basic.addTest( new FiniteVolumeStencil_Test());
               // also compares speed of mapping facet areas and normals versus computing them
@@ -255,17 +255,15 @@ int main()
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               interdependent2.addTest( new ModelTopology_Test() );
               // model
-              interdependent2.addTest( new Box_Test() );             // XCode OK (SKM) but does not test hexahedral or prism element meshes
-              interdependent2.addTest( new ModelSubDomain_Test() );  // XCode OK (SKM)
-              interdependent2.addTest( new Region_Test() );          // XCode OK (SKM)
-              interdependent2.addTest( new ANSYS_Model2D_Test() );   // XCode OK (SKM)
-              interdependent2.addTest( new InputDataManager_Test()); // XCode OK (SKM)
-              interdependent2.addTest( new ANSYS_Model3D_Test() );   // XCode OK (SKM)
-              interdependent2.addTest( new PropertyHandle_Test() );  // XCode OK (SKM)
-//  TODO: broken              interdependent2.addTest( new Boundary_Test() );
-//  TODO: broken              interdependent2.addTest( new SplitBoundary_Test() );
+              interdependent2.addTest( new Box_Test() );                 // XCode OK (SKM) but does not test hexahedral or prism element meshes
+              interdependent2.addTest( new ModelSubDomain_Test() );      // XCode OK (SKM)
+              interdependent2.addTest( new Region_Test() );              // XCode OK (SKM)
+              interdependent2.addTest( new ANSYS_Model2D_Test() );       // XCode OK (SKM)
+              interdependent2.addTest( new InputDataManager_Test());     // XCode OK (SKM)
+              interdependent2.addTest( new ANSYS_Model3D_Test() );       // XCode OK (SKM)
+              interdependent2.addTest( new PropertyHandle_Test() );      // XCode OK (SKM)
               // interfaces
-              interdependent2.addTest( new BinaryInterface_Test() ); // XCode OK (SKM)
+              interdependent2.addTest( new BinaryFileInterface_Test() ); // XCode OK (SKM)
               interdependent2.addTest( new VTU_Interface_Test() );
               interdependent2.addTest( new StatisticalAnalyzerTest() );
               // running unit tests and reporting errors
@@ -279,6 +277,7 @@ int main()
               cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
               TestSuite composite("CSMP-dependent-unit test suite", &cout );
               // misc
+              composite.addTest( new RegionMonitorTest() );
               // constitutive relationships
               composite.addTest( new ExponentialTransferFunction_Test() );
 
@@ -290,11 +289,6 @@ int main()
               /// Two phase flow tests
               TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
               twoPhaseModelTests.run();
-
-// TODO: PDE_Integrator_Test (assembly of matrix for systems, elimination of boundary conditions etc.)
-// TODO: broken                          composite.addTest( new FluxMismatch_Test() );
-// TODO: update this test:               composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
-// TODO: update this test:               composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
 
              // running unit tests and reporting errors
               composite.run();
@@ -308,9 +302,12 @@ int main()
               cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
               TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-// TODO: review and get these tests to run (in this sequence)
+              // TODO: review and get these tests to run (in this sequence)
               // refactored.addTest( new Boundary_Test() );
               // composite.addTest( new SplitBoundary_Test() );
+              // update composite.addTest( new ModelComparator_Test() ); // crashes on PropertyData
+              // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
+          
               refactored.run();
               long nFail = refactored.report();
               refactored.free();
@@ -323,7 +320,7 @@ int main()
               TestSuite new_developments("new tests of the CSMP base library", &cout );
           
               // EVERYTHING THAT PERTAINS TO REFACTORED TRANSPORT SCHEME
-              new_developments.addTest( new VariableBenchmarking_Test() );
+              // TODO: broken   composite.addTest( new FluxMismatch_Test() );
 
               new_developments.addTest( new GenericFiniteVolumeTransport_Test() );
 

@@ -4654,7 +4654,6 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, ts );
                         counter++;
-                        (*eit)->Read( idx, ts );
                         ts.EigenValues( evals );
                         double64 ts_avg(0.);
                         for ( size_t j=0U; j<dim; j++ ) ts_avg += evals[j];
@@ -4700,7 +4699,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
               }
          break;
          default:
-            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionAverage", "property placement not handled yet");
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionAverage:", "property placement not handled yet.");
        }
 
     return std::numeric_limits<double64>::quiet_NaN();

@@ -50,8 +50,8 @@ void PropertyStorageSpeed_Test::run()
      {
         // initialising the input properties
         sc() = static_cast<double64>(rand()) / 3.;
-        vc = static_cast<double64>(rand()) / 3.;
-        ts = static_cast<double64>(rand()) / 3.;
+        vc   = static_cast<double64>(rand()) / 3.;
+        ts   = static_cast<double64>(rand()) / 3.;
         
         // writing properties
         for ( map<string,csmp::Index>::const_iterator it=properties.begin(); it!=properties.end(); it++ ) {
