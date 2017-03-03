@@ -73,7 +73,7 @@ bool GocadPropertyClassHeader::InitializeFrom( ifstream& ifn )
     if ( strstr( text, "PROPERTY_CLASS_HEADER" ) == NULL )
       {
          ifn.seekg( pos );
-         throw csmp::Exception( FATAL_ERROR, "GocadPropertyClassHeader::InitializeFrom", 
+         throw csmp::Exception( CSMP_FATAL_ERROR, "GocadPropertyClassHeader::InitializeFrom", 
                          "No header information found..." );
          return false;
       }
@@ -152,20 +152,18 @@ void GocadPropertyClassHeader::WriteToText( ofstream& ofs ) const
 
 
 
-void GocadPropertyClassHeader::Out() const
+void GocadPropertyClassHeader::Out(std::ostream& os) const
  {
-    cout <<"\nGocadPropertyClassHeader::Out: property name: "<< property_name << endl;
-    cout <<"Property class:      "<< property_class << endl;
-    cout <<"Property components: "<< components << endl;
-    cout <<"Low clip limit:      "<< low_clip   << endl;
-    cout <<"High clip limit:     "<< high_clip  << endl;
-    cout <<"P Clip limit:        "<< p_clip     << endl;  
-    cout <<"Colormap:            "<< colormap   << endl;
-    cout <<"Colormap contrast:   "<< colormap_contrast << endl;
-    cout <<"ESIZE:               "<< components << endl;
-    cout <<"NO_DATA_VALUES:      "<< no_data_value << endl;
-    cout.flush();
-    
+    os <<"\nGocadPropertyClassHeader::Out: property name: "<< property_name << endl;
+    os <<"Property class:      "<< property_class << endl;
+    os <<"Property components: "<< components << endl;
+    os <<"Low clip limit:      "<< low_clip   << endl;
+    os <<"High clip limit:     "<< high_clip  << endl;
+    os <<"P Clip limit:        "<< p_clip     << endl;  
+    os <<"Colormap:            "<< colormap   << endl;
+    os <<"Colormap contrast:   "<< colormap_contrast << endl;
+    os <<"ESIZE:               "<< components << endl;
+    os <<"NO_DATA_VALUES:      "<< no_data_value << endl;
  } // end Out
 
 

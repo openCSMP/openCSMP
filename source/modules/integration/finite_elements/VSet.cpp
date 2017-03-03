@@ -287,7 +287,7 @@ PropertyData  VSet<dim>::Data( const char* s ) const
  {
      auto prop_it = property_map_.find(s);
      if ( prop_it == property_map_.end() )
-       throw csmp::Exception( ERROR, "VSet<dim>::Data:", s, "property data was not found in VSet.");
+       throw csmp::Exception( CSMP_ERROR, "VSet<dim>::Data:", s, "property data was not found in VSet.");
    
      return (*prop_it).second;
    
@@ -595,19 +595,19 @@ bool  VSet<dim>::InputFromTextFile( const char* text_file )
 
 
 template<size_t dim>
-void VSet<dim>::Out( bool data_as_well ) const
+void VSet<dim>::Out( std::ostream& os, bool data_as_well ) const
  {
-    VData::Out();
+    VData::Out(os);
     
     if ( data_as_well )
       {
          // scalar type data
-         cout <<"\nVSet<dim>::Out: property records stored in VSet:\n";
+         os <<"\nVSet<dim>::Out: property records stored in VSet:\n";
          for ( map<string,PropertyData>::const_iterator
                it=property_map_.begin(); it!=property_map_.end(); it++ )
            {
-              cout <<"\n"<< (*it).first << endl;
-              (*it).second.Out();
+              os <<"\n"<< (*it).first << endl;
+              (*it).second.Out(os);
            }
       }
    
@@ -625,7 +625,7 @@ template<size_t dim> //             old    new
 void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
  {
     if ( o_n_elmt_ids.empty() )
-      throw csmp::Exception( ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
+      throw csmp::Exception( CSMP_ERROR, "VSet<dim>::ReduceTo:", "new element ID set is empty.");
  
     // 'plist' and 'pfverts' in base class
     if ( Elements() > 0 ) {

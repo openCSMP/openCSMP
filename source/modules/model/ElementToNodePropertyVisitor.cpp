@@ -50,7 +50,7 @@ void ElementToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
     
     
      if ( summed_weights_[0] > numeric_limits<double64>::epsilon() )
-       throw csmp::Exception( ERROR, "ElementToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
+       throw csmp::Exception( CSMP_ERROR, "ElementToNodePropertyVisitor::ApplyWeightingToExtrapolatedValues",
                       "this visitor has to be applied beforehand to collect the weights for the nodes");
        
      this->ApplicationTarget(NODE);

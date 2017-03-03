@@ -59,7 +59,8 @@ class MathOperatorLHS {
     void          Name( const char* s, const char* bopname, const char* topname );
     void          Name( const char* s, const char* opname,  const char* bopname, const char* topname );
 
-    virtual void  Out() const;
+    void Out() const { Out(std::cout); }
+    virtual void  Out(std::ostream& os) const;
 
     const Parameter& MaterialOperand()          const;
     const Index&  MaterialOperandKey()          const;

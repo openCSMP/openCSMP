@@ -35,7 +35,7 @@ Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& 
     boundaryFlag_(flag)
   {
      if ( dim == 1 )
-       ErrorHandler::Instance().notice( ERROR, "Boundary<dim>::(custom constructor):", "boundary objects are only supported in 2 & 3D models." );
+       ErrorHandler::Instance().notice( CSMP_ERROR, "Boundary<dim>::(custom constructor):", "boundary objects are only supported in 2 & 3D models." );
      this->ResizePropertyStorage( this->pref_.LocalVariablesAt(Placement()) );
   }
   
@@ -224,7 +224,7 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
 
   switch( v.ApplicationTarget() ) {
        case MODEL:
-         throw csmp::Exception( ERROR, "Region<dim>::Accept",
+         throw csmp::Exception( CSMP_ERROR, "Region<dim>::Accept",
                                "ApplicationTarget MODEL; Visitor should have never arrived at this boundary");
          break;
       case BOUNDARY:
@@ -240,7 +240,7 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
           (*nd_it)->Accept( v );
         return;
       default:
-        throw csmp::Exception( ERROR, "Boundary<dim>::Accept",
+        throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::Accept",
                               "ApplicationTarget was not resolved; nothing was done");
   }
 
@@ -367,7 +367,7 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
          break;
        default:break; {
             ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-            csmp_error.notice( WARNING, "Boundary::OutputVariableTo",
+            csmp_error.notice( CSMP_WARNING, "Boundary::OutputVariableTo",
                                property, "placement not identified" );
          }
      }
@@ -568,14 +568,14 @@ void Boundary<dim>::InputVariableFrom( const char* property,
           }
      case BOUNDARY:
         if ( vdata.Size() != 1U )
-          csmp_error.notice( WARNING, "Boundary<dim>::InputVariableFrom:",
+          csmp_error.notice( CSMP_WARNING, "Boundary<dim>::InputVariableFrom:",
                             "don't know which location in FEM_Data I should write the boundary variable to, using [0]." );
 
         this->Store( idx, vdata[0U] );
      break;
      default:
        break;/*
-         throw csmp::Exception( ERROR, "Boundary<dim>::InputVariableFrom:",
+         throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::InputVariableFrom:",
                                 property, "Property placement could not be identified" );
          */
      }
@@ -824,7 +824,7 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
   {
     // assert lower dimensional representation
     if( !isOfLowerDimensionalRepresentation( region ) )
-        throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "Region is not of lower dimensional representation." );
+        throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::CreateFrom", "Region is not of lower dimensional representation." );
 
     // Thus the possible cases are:
     // 3D ( only surface elements ),
@@ -1144,7 +1144,7 @@ double64  Boundary<dim>::Perimeter() const
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( dim != 3U )
-       csmp_error.notice( ERROR, "Boundary<dim>::Perimeter",
+       csmp_error.notice( CSMP_ERROR, "Boundary<dim>::Perimeter",
                                  "result would not be meaningful" );
 
      double64        perimeter_length(0.);
@@ -1184,12 +1184,12 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
      csmp::Index prop_key = p.StorageKey(property);
 
      if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
-          throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
+          throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::SurfaceIntegral",
                             property, "placed on IntegrationPoint or Region cannot be assigned on boundary");
           return std::numeric_limits<double64>::quiet_NaN();
        }
       if ( prop_key.type == TENSOR ) {
-          throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
+          throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::SurfaceIntegral",
                             property, "is a tensor property; this method does not know how to integrate it");
           return std::numeric_limits<double64>::quiet_NaN();
        }
@@ -1199,7 +1199,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
      // 1. if the property is a scalar
      if ( prop_key.type == SCALAR ) {
            if ( prop_key.place == ELEMENT ) {
-                throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
+                throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::SurfaceIntegral",
                                   property, "is an Element property; this method does not know how to integrate it");
              }
            else if ( prop_key.place == FACE ) {
@@ -1216,7 +1216,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
                   }
              }
            else {
-                throw csmp::Exception( FATAL_ERROR, "Boundary<dim>::SurfaceIntegral",
+                throw csmp::Exception( CSMP_FATAL_ERROR, "Boundary<dim>::SurfaceIntegral",
                                                 "Property placement not recognized");
              }
        }
@@ -1241,7 +1241,7 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
                      property_integral += dotProduct(unrml,vc);
                   }
              }
-           else throw csmp::Exception( FATAL_ERROR, "Boundary<dim>::SurfaceIntegral",
+           else throw csmp::Exception( CSMP_FATAL_ERROR, "Boundary<dim>::SurfaceIntegral",
                                                     "Property placement not recognized");
        }
 
@@ -1261,48 +1261,48 @@ double64 Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const c
 
 
 template<size_t dim>
-void Boundary<dim>::Out() const
+void Boundary<dim>::Out(std::ostream& os) const
  {
     // high-level output
-    cout <<"\n" << "Boundary<" << dim << ">::Out: ("<< parseBoundary(boundaryFlag_) <<") '"<< this->Name();
-    cout <<"', Face objects interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements() << endl;
-    cout <<"   Node objects interior: "<< this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
+    os <<"\n" << "Boundary<" << dim << ">::Out: ("<< parseBoundary(boundaryFlag_) <<") '"<< this->Name();
+    os <<"', Face objects interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements() << endl;
+    os <<"   Node objects interior: "<< this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
 
     // member faces
-    cout <<"\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
+    os <<"\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
     for ( const auto it :  this->elmt_vec_ ) {
-          if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized.");
-          cout <<"\t\t"<< it->Idx() <<": "<< it->Area() <<", ";
+          if ( it == NULL ) throw csmp::Exception( CSMP_ERROR, "Boundary<dim>::Out:", "member element pointer not initialized.");
+          os <<"\t\t"<< it->Idx() <<": "<< it->Area() <<", ";
           // Nodes
           for ( size_t i=0U; i<it->Nodes(); ++i ) {
                const string str = ( it->N(i) == nullptr ) ? "none" : to_string( it->N(i)->Idx() );
-               cout << str <<",";
+               os << str <<",";
             }
-          cout <<"\t\t ";
+          os <<"\t\t ";
           // Face neighbors
           for ( size_t i=0U; i<it->Neighbors(); ++i ) {
                const string str = ( it->Neighbor(i) == nullptr ) ? "none" : to_string( it->Neighbor(i)->Idx() );
-               if ( i<it->Neighbors()-1 ) cout << str <<":";
-               else cout << str;
+               if ( i<it->Neighbors()-1 ) os << str <<":";
+               else os << str;
             }
-          cout <<",\t\t";
+          os <<",\t\t";
           // Element neighbors
           const string inner = ( it->InnerParent() == nullptr ) ? "none" : to_string( it->InnerParent()->Idx() );
           const string outer = ( it->OuterParent() == nullptr ) ? "none" : to_string( it->OuterParent()->Idx() );
-          cout << inner <<":"<< outer <<"\n";
+          os << inner <<":"<< outer <<"\n";
       }
 
     // printing the Faces
     //for ( auto it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )  (*it)->Out();
 
-    cout <<"\n\tperimeter Faces and edge numbers (current local numbering):\n";
+    os <<"\n\tperimeter Faces and edge numbers (current local numbering):\n";
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
     for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-         cout << i <<":";
+         os << i <<":";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
+               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) os << (*ft) <<" ";
       }
-    cout << endl;
+    os << endl;
   }
 
 

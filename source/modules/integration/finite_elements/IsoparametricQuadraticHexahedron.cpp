@@ -872,14 +872,14 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN27 )
         Jacobian( DNR, DNS, DNT );
 
         cout<<" Jacobian Matrix: "<<endl;
-        JAC.Out();
+        JAC.Out(cout);
         /////////////////////////////////////////////////////////
 
         JacobianInverse();
 
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Inverse Matrix: "<<endl;
-        JINV.Out();
+        JINV.Out(cout);
         /////////////////////////////////////////////////////////
         }
         else
@@ -889,13 +889,13 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN27 )
 
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Matrix: "<<endl;
-        JAC.Out();
+        JAC.Out(cout);
         /////////////////////////////////////////////////////////
         getchar();
          JacobianInverse();
         ////////// Debug Printout////////////////////////////////
         cout<<" Jacobian Inverse Matrix: "<<endl;
-        JINV.Out();
+        JINV.Out(cout);
         /////////////////////////////////////////////////////////
           }
 
@@ -953,7 +953,7 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN2,
     cout<<" IsoparametricQuadraticHexahedron::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
     rst[1]<<","<<rst[2]<<","<<rst[3]<<")"<<endl;
     cout<<" IsoparametricQuadraticHexahedron::dN  Matrix DN2: "<<endl;
-    DN2.Out();
+    DN2.Out(cout);
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 
     return detJ;
@@ -1253,7 +1253,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
                 <<"N[25] = "<<N[25]<<" ;\t"
                 <<"N[26] = "<<N[26]<<"\n";
 
-            csmp::Exception( WARNING, "IsoparametricQuadraticHexahedron::PhysicalToParametric",
+            csmp::Exception( CSMP_WARNING, "IsoparametricQuadraticHexahedron::PhysicalToParametric",
                           "Newton-Raphson iteration not converged");
         }
 
@@ -1522,7 +1522,7 @@ IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary( const vector<size_
     fnids.resize(bnodes.size());
 
      if ( bnodes.size() != 8 )
-       throw csmp::Exception( ERROR, "IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary",
+       throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary",
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
@@ -1672,7 +1672,7 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
    // 0. Decide which case is dealt with in terms of the integration points
    //    which are used (rr and ss contain the integr.p. locations)
    if ( IVAR.size() != (gpe*nvars) )
-     throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes",
+     throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes",
                                   "Input vector must have 'nvars' x 6 entries");
 
    NVAR.resize( npe * nvars );
@@ -1682,7 +1682,7 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
    if ( first_call ) {
        // checking starting conditions
        if ( gpe != 8 )
-       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes",
+       throw csmp::Exception( CSMP_FATAL_ERROR, "IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes",
          "This method expects 8 integration points on which extrapolation functions will be based on" );
 
         first_call = false;
@@ -1722,7 +1722,7 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
         for ( size_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
-            //TEMP_N.Out();
+            //TEMP_N.Out(cout);
             for ( size_t j=0; j<cornerNodes; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);

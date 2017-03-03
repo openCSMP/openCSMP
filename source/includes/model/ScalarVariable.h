@@ -129,11 +129,23 @@ class ScalarVariable {
 
     /// accessor: status of variable which determines how it is used in computations
     VARIABLE_FLAG    Flag() const;
+<<<<<<< HEAD
 
     /// prints flag/value pair to screen
     void             Out() const;
   
     /// reading and writing of scalar variables to binary files
+=======
+    void             Zero();
+    void             Sqrt();
+    /// natural logarithm of scalar
+    void             Ln();
+    /// base 10 logarithm
+    void             Log10();
+    void             Out() const { Out(std::cout); }
+    void             Out(std::ostream& os) const;
+    /// reading and writing scalars binary files
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
     bool             Out( FILE* fp ) const;
     bool             In( FILE* fp );
 

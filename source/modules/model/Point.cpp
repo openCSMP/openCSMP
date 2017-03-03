@@ -793,10 +793,19 @@ bool Point<3U>::IsBetween( const Point<3U>& pt1, const Point<3U>& pt2 )
     return false;
 }
 
+<<<<<<< HEAD
 
 std::vector<double64> Point<3U>::Coordinates() const
  {
     return std::vector<double64>{x_,y_,z_};
+=======
+template<size_t dim>
+void Point<dim>::Out(std::ostream& os) const
+ {
+    os << "\nPoint<" << dim << ">::Out(): coordinates: ";
+    for ( size_t i=0U; i<dim; i++ ) os << xyz_[i] <<" ";
+    os << endl;
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
  }
 
 

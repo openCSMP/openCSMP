@@ -8,14 +8,14 @@
 #include <fstream>
 
 #ifndef SAMG_MULTIPLE_INSTANCES
-#include "samg.h"
+#include "samg/samg.h"
 #else
-#include "samg.h"
-#include "samg1.h"
-#include "samg2.h"
-#include "samg3.h"
-#include "samg4.h"
-#include "samg5.h"
+#include "samg/samg.h"
+#include "samg/samg1.h"
+#include "samg/samg2.h"
+#include "samg/samg3.h"
+#include "samg/samg4.h"
+#include "samg/samg5.h"
 #endif
 
 
@@ -282,7 +282,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 
     // test for empty vectors
     if( crmat_.a.empty() || crmat_.ja.empty() || crmat_.ia.empty() || u_.empty() || f_.empty() )
-        throw csmp::Exception( FATAL_ERROR,
+        throw csmp::Exception( CSMP_FATAL_ERROR,
                                "SAMG_Solver::SolveMatrixEquation",
                                "Unable to allocate required memory for transfer arrays");
 
@@ -657,16 +657,16 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #endif
     }
     else
-        throw csmp::Exception( ERROR, "SAMG_Solver::SolveMatrixEquation:",
+        throw csmp::Exception( CSMP_ERROR, "SAMG_Solver::SolveMatrixEquation:",
                                "Desired solver instance is not available in current SAMG library" );
 #endif
 
     if ( ierr_ > 0 ) {
-        csmp_error.notice( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
+        csmp_error.notice( CSMP_ERROR, "SAMG_Solver::SolveMatrixEquation: ",
                           "SAMG solver returned with an error; error code: ", (to_string(ierr_)).c_str() );
 
     } else if ( ierr_ < 0 and ierr_ != -841 ) { // bicgstab restart
-        csmp_error.notice( WARNING, "SAMG_Solver::SolveMatrixEquation:",
+        csmp_error.notice( CSMP_WARNING, "SAMG_Solver::SolveMatrixEquation:",
                            "SAMG solver returned with a warning; code: ", (to_string(ierr_)).c_str() );
     }
 
@@ -982,7 +982,7 @@ bool SAMG_Solver::CheckConvergence( double64 eps ) const
     if ( eps < 0. )
     {
         if ( res_out_ > fabs( eps ) ) {
-            csmp_error.notice( WARNING,
+            csmp_error.notice( CSMP_WARNING,
                                "SAMG_Solver::CheckConvergence",
                                "Absolute error L2-norm solution criterion was not fulfilled");
             return false;
@@ -997,7 +997,7 @@ bool SAMG_Solver::CheckConvergence( double64 eps ) const
         cout <<"\n\trelative residual = " << relative_residual << "\n\n";
         // make sure that the target residual is strongly violated (best single prec. solution)
         if ( relative_residual > eps ) {
-            csmp_error.notice( WARNING,
+            csmp_error.notice( CSMP_WARNING,
                                "SAMG_Solver::CheckConvergence",
                                "Relative solution criterion was not fulfilled" );
             return false;

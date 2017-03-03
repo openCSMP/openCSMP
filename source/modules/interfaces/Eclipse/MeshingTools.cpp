@@ -435,7 +435,7 @@ size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >& additional_e
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addValidAndPreferablyFirstEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -501,7 +501,7 @@ size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >& additional_
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addValidAndPreferablySecondEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -568,7 +568,7 @@ size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >& a
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addValidAndShortestOrBiggerSolidAngleEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -648,7 +648,7 @@ size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& diag_nodes,
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "chooseValidAndPreferablyFirstEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -727,7 +727,7 @@ size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& diag_nodes,
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "chooseValidAndPreferablySecondEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -819,7 +819,7 @@ size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& diag_n
         return 2;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "chooseValidAndShortestOrBiggerSolidAngleEdge()",
                       "Both edges exist!!! Unpredictable case!!! ");
     return 0;
@@ -1078,7 +1078,7 @@ bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
         return true;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "chooseFaceCentroid()",
                       "The quadrilateral is unacceptable!!! ");
     return false;
@@ -1182,7 +1182,7 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
         return true;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addNewFaceCentroid()",
                       "The quadrilateral is unacceptable!!! ");
     return false;
@@ -1215,7 +1215,7 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
         return true;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addNewFaceCentroid()",
                       "The triangle is unacceptable!!! ");
     return false;
@@ -1246,7 +1246,7 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
         return true;
     }
     // both edges are not valid
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.notice( CSMP_ERROR,
                       "addNewFaceCentroid()",
                       "The triangle is unacceptable!!! ");
     return false;
@@ -1309,14 +1309,14 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                       nodes[face_nodes[fid][3]] );
             if( valid_edge == 3 )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addOverlappingCellFaceCentroids()",
                                   "Face contains two diaginals, which can lead to non-conformity!!! ");
                 return false;
             }
             else if( valid_edge == 1 || valid_edge == 2 )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addOverlappingCellFaceCentroids()",
                                   "Face contains diaginal, cannot add face centroid!!! ");
                 return false;
@@ -1329,7 +1329,7 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                       nodes[face_nodes[fid][2]],
                                       nodes[face_nodes[fid][3]] ) )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addOverlappingCellFaceCentroids()",
                                       "Cannot define appropriate quad-face centroid!!! ");
                     return false;
@@ -1349,14 +1349,14 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                           nodes[face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addOverlappingCellFaceCentroids()",
                                       "Face contains two diaginals, which can lead to non-conformity!!! ");
                     return false;
                 }
                 else if( valid_edge == 1 || valid_edge == 2 )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addOverlappingCellFaceCentroids()",
                                       "Face contains diaginal, cannot add face centroid!!! ");
                     return false;
@@ -1396,7 +1396,7 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                   nodes[face_nodes[fid][1]],
                                   nodes[face_nodes[fid][2]] ) )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addOverlappingCellFaceCentroids()",
                                   "Cannot define appropriate tri-face centroid!!! ");
                 return false;
@@ -1437,7 +1437,7 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                   nodes[face_nodes[fid][0]],
                                   nodes[face_nodes[fid][1]] ) )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addOverlappingCellFaceCentroids()",
                                   "Cannot define appropriate bar-face centroid!!! ");
                 return false;
@@ -1497,14 +1497,14 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                           nodes[face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellFaceCentroids()",
                                       "Face contains two diaginals, which can lead to non-conformity!!! ");
                     return false;
                 }
                 else if( valid_edge == 1 || valid_edge == 2 )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellFaceCentroids()",
                                       "Face contains diaginal, cannot add face centroid!!! ");
                     return false;
@@ -1517,7 +1517,7 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                           nodes[face_nodes[fid][2]],
                                           nodes[face_nodes[fid][3]] ) )
                     {
-                        csmp_error.notice(csmp::ERROR,
+                        csmp_error.notice( CSMP_ERROR,
                                           "addCellFaceCentroids()",
                                           "Cannot define appropriate quad-face centroid!!! ");
                         return false;
@@ -1537,7 +1537,7 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                       nodes[face_nodes[fid][1]],
                                       nodes[face_nodes[fid][2]] ) )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellFaceCentroids()",
                                       "Cannot define appropriate tri-face centroid!!! ");
                     return false;
@@ -1554,7 +1554,7 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
                                       nodes[face_nodes[fid][0]],
                                       nodes[face_nodes[fid][1]] ) )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellFaceCentroids()",
                                       "Cannot define appropriate bar-face centroid!!! ");
                     return false;
@@ -1635,7 +1635,7 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
                                           nodes[quad_face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellCentroid()",
                                       "Face contains two diaginals, which can lead to non-conformity!!! ");
                     return false;
@@ -1654,7 +1654,7 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
                                               nodes[quad_face_nodes[fid][2]],
                                               nodes[quad_face_nodes[fid][3]] ) )
                 {
-                    csmp_error.notice(csmp::ERROR,
+                    csmp_error.notice( CSMP_ERROR,
                                       "addCellCentroid()",
                                       "Cannot define appropriate quad-face centroid!!! ");
                     return false;
@@ -1701,7 +1701,7 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
                                       nodes[quad_face_nodes[fid][3]] );
             if( valid_edge == 3 )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addCellCentroid()",
                                   "Face contains two diaginals, which can lead to non-conformity!!! ");
                 return false;
@@ -1720,7 +1720,7 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
                                           nodes[quad_face_nodes[fid][2]],
                                           nodes[quad_face_nodes[fid][3]] ) )
             {
-                csmp_error.notice(csmp::ERROR,
+                csmp_error.notice( CSMP_ERROR,
                                   "addCellCentroid()",
                                   "Cannot define appropriate quad-face centroid!!! ");
                 return false;
@@ -2127,7 +2127,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
                                               nodes[face_nodes[fid][3]] );
                     if( valid_edge == 3 )
                     {
-                        csmp_error.notice( csmp::FATAL_ERROR,
+                        csmp_error.notice( CSMP_FATAL_ERROR,
                                            "processCell()",
                                            "Two diagonals exist!!! Unpredictable case!!!" );
                         return false;
@@ -2160,14 +2160,14 @@ bool processCellWithCentroids( bool add_edge_centroids,
                                                                                     nodes[face_nodes[fid][3]] );
                             if( valid_edge == 3 )
                             {
-                                csmp_error.notice( csmp::FATAL_ERROR,
+                                csmp_error.notice( CSMP_FATAL_ERROR,
                                                    "processCell()",
                                                    "Two diagonals exist!!! Unpredictable case!!!" );
                                 return false;
                             }
                             else if( valid_edge == 0 )
                             {
-                                csmp_error.notice( csmp::FATAL_ERROR,
+                                csmp_error.notice( CSMP_FATAL_ERROR,
                                                    "processCell()",
                                                    "Both diagonals are invalid!!! Unpredictable case!!!" );
                                 return false;
@@ -2290,7 +2290,7 @@ bool processDegenerateHexahedronElement( bool tetra_mesh,
                                   nodes[face_nodes[fid][3]] );
         if( valid_edge == 3 )
         {
-            csmp_error.notice( csmp::FATAL_ERROR,
+            csmp_error.notice( CSMP_FATAL_ERROR,
                                "processDegenerateHexahedronElement()",
                                "Two diagonals exist!!! Unpredictable case!!!" );
             return false;
@@ -2317,14 +2317,14 @@ bool processDegenerateHexahedronElement( bool tetra_mesh,
                                                                         nodes[face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processDegenerateHexahedronElement()",
                                        "Two diagonals exist!!! Unpredictable case!!!" );
                     return false;
                 }
                 else if( valid_edge == 0 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processDegenerateHexahedronElement()",
                                        "Both diagonals are invalid!!! Unpredictable case!!!" );
                     return false;
@@ -2582,7 +2582,7 @@ bool processHexahedronElement( bool tetra_mesh,
                                   nodes[face_nodes[fid][3]] );
         if( valid_edge == 3 )
         {
-            csmp_error.notice( csmp::FATAL_ERROR,
+            csmp_error.notice( CSMP_FATAL_ERROR,
                                "processHexahedronElement()",
                                "Two diagonals exist!!! Unpredictable case!!!" );
             return false;
@@ -2621,14 +2621,14 @@ bool processHexahedronElement( bool tetra_mesh,
                                                                         nodes[face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processHexahedronElement()",
                                        "Two diagonals exist!!! Unpredictable case!!!" );
                     return false;
                 }
                 else if( valid_edge == 0 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processHexahedronElement()",
                                        "Both diagonals are invalid!!! Unpredictable case!!!" );
                     return false;
@@ -3158,7 +3158,7 @@ bool processPrismElement( bool tetra_mesh,
                                   nodes[face_nodes[fid][3]] );
         if( valid_edge == 3 )
         {
-            csmp_error.notice( csmp::FATAL_ERROR,
+            csmp_error.notice( CSMP_FATAL_ERROR,
                                "processPrismElement()",
                                "Two diagonals exist!!! Unpredictable case!!!" );
             return false;
@@ -3199,14 +3199,14 @@ bool processPrismElement( bool tetra_mesh,
                                                                         nodes[face_nodes[fid][3]] );
                 if( valid_edge == 3 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processPrismElement()",
                                        "Two diagonals exist!!! Unpredictable case!!!" );
                     return false;
                 }
                 else if( valid_edge == 0 )
                 {
-                    csmp_error.notice( csmp::FATAL_ERROR,
+                    csmp_error.notice( CSMP_FATAL_ERROR,
                                        "processPrismElement()",
                                        "Both diagonals are invalid!!! Unpredictable case!!!" );
                     return false;
@@ -3415,7 +3415,7 @@ bool processPyramidElement( bool tetra_mesh,
                               nodes[face_nodes[0][3]] );
     if( valid_edge == 3 )
     {
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "processPyramidElement()",
                            "Two diagonals exist!!! Unpredictable case!!!" );
         return false;
@@ -3449,14 +3449,14 @@ bool processPyramidElement( bool tetra_mesh,
                                                                          nodes[face_nodes[0][3]] );
                  if( valid_edge == 3 )
                  {
-                     csmp_error.notice( csmp::FATAL_ERROR,
+                     csmp_error.notice( CSMP_FATAL_ERROR,
                                         "processPyramidElement()",
                                         "Two diagonals exist!!! Unpredictable case!!!" );
                      return false;
                  }
                  else if( valid_edge == 0 )
                  {
-                     csmp_error.notice( csmp::FATAL_ERROR,
+                     csmp_error.notice( CSMP_FATAL_ERROR,
                                         "processPyramidElement()",
                                         "Both diagonals are invalid!!! Unpredictable case!!!" );
                      return false;
@@ -3587,7 +3587,7 @@ bool processQuadrilateralElement( bool tetra_mesh,
                               nodes[face_nodes[0][3]] );
     if( valid_edge == 3 )
     {
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.notice( CSMP_FATAL_ERROR,
                            "processQuadrilateralElement()",
                            "Two diagonals exist!!! Unpredictable case!!!" );
         return false;
@@ -3621,14 +3621,14 @@ bool processQuadrilateralElement( bool tetra_mesh,
                                                                          nodes[face_nodes[0][3]] );
                  if( valid_edge == 3 )
                  {
-                     csmp_error.notice( csmp::FATAL_ERROR,
+                     csmp_error.notice( CSMP_FATAL_ERROR,
                                         "processQuadrilateralElement()",
                                         "Two diagonals exist!!! Unpredictable case!!!" );
                      return false;
                  }
                  else if( valid_edge == 0 )
                  {
-                     csmp_error.notice( csmp::FATAL_ERROR,
+                     csmp_error.notice( CSMP_FATAL_ERROR,
                                         "processQuadrilateralElement()",
                                         "Both diagonals are invalid!!! Unpredictable case!!!" );
                      return false;

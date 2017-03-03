@@ -44,20 +44,20 @@ namespace csmp {
   void EffectiveStressVisitor<dim>::KeyChecks() const
   {
     if ( fluidPressureKey_.place != NODE || fluidPressureKey_.type != SCALAR )
-      throw csmp::Exception( ERROR, "EffectiveStress_Visitor (constructor)",
+      throw csmp::Exception( CSMP_ERROR, "EffectiveStress_Visitor (constructor)",
       "'fluidPressure' must be a SCALAR variable on the node" );
 
     if ( sigmaKey_.place != ELEMENT_INTEGRATION_POINT || sigmaKey_.type != TENSOR )
-      throw csmp::Exception( ERROR, "EffectiveStress_Visitor (constructor)",
+      throw csmp::Exception( CSMP_ERROR, "EffectiveStress_Visitor (constructor)",
       "'stressTensor' must be a tensor variable on the integration point" );
 
     if ( sigmaEffKey_.place != ELEMENT_INTEGRATION_POINT || sigmaEffKey_.type != TENSOR )
-      throw csmp::Exception( ERROR, "EffectiveStress_Visitor (constructor)",
+      throw csmp::Exception( CSMP_ERROR, "EffectiveStress_Visitor (constructor)",
       "'effectiveStressTensor' must be a tensor variable on the integration point" );
 
     if(outputMeanStress_)
       if ( meanStressKey_.place != ELEMENT || meanStressKey_.type != SCALAR )
-        throw csmp::Exception( ERROR, "EffectiveStress_Visitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "EffectiveStress_Visitor (constructor)",
         "'meanStress' must be a SCALAR variable on the element" );
 
   }

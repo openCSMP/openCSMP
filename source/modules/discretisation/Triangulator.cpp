@@ -94,11 +94,11 @@ unsigned long Triangulator::MapVertex( unsigned int m, unsigned int n )
 
     // safety 
     if ( m >m_mtrx+1 || m < 1 ) 
-      throw csmp::Exception( FATAL_ERROR, "Triangulator::MapVertex", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Triangulator::MapVertex", 
                                    "n-array index out of range");
 
     if ( n > n_mtrx+1 || n < 1 ) 
-      throw csmp::Exception( FATAL_ERROR, "Triangulator::MapVertex", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Triangulator::MapVertex", 
                                    "n-array index out of range");
     return vert - 1U;
      

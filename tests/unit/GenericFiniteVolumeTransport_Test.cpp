@@ -229,10 +229,9 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 /**
     Executing and testing all finite-volume related methods
 */
-bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3U>& advector3D, VTK_Interface<3U>& vtk_output )
+bool test_NCFVT_methods( std::ostream& os, Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3U>& advector3D, VTK_Interface<3U>& vtk_output )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
 
   //----------------------------------------------------------------------
   //------------------------- TESTING METHODS ----------------------------
@@ -247,25 +246,25 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           const double64 timeInterval(1.e3);
           const double64 courantMultiplier(1.e5);
           double64 courantIncrement;
-          cout << "\n\n\n\n\n";
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 1.)AdvectVariable -----------------------------\n";
-          cout << "\nInputAguments - timeInterval: " << timeInterval <<
+          os << "\n\n\n\n\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 1.)AdvectVariable -----------------------------\n";
+          os << "\nInputAguments - timeInterval: " << timeInterval <<
                   ", courantMultiplier: " << courantMultiplier;
 
           courantIncrement = advector3D.AdvectVariable(timeInterval,courantMultiplier);
           //                            ^^^^^^^^^^^^^^
 
-          cout << "\nReturns courantIncrement of: " << courantIncrement;
+          os << "\nReturns courantIncrement of: " << courantIncrement;
 
 
 
           /*
           * -----------   2.)TransportPhase    -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 2.)TransportPhase 1D ONLY ---------------------\n";
-          //cout << "\nInputAguments - timeInterval: " << timeInterval;
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 2.)TransportPhase 1D ONLY ---------------------\n";
+          //os << "\nInputAguments - timeInterval: " << timeInterval;
 
           //advector1D.TransportPhase(relperms, timeInterval);
           //         ^^^^^^^^^^^^^^
@@ -276,111 +275,111 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           /*
           * -----------  3.)CourantIncrement() -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 3.)CourantIncrement() 1D ONLY -----------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 3.)CourantIncrement() 1D ONLY -----------------\n";
 
           //courantIncrement = advector1D.CourantIncrement();
           //                            ^^^^^^^^^^^^^^^^
 
-          //cout << "\nReturns courantIncrement of: " << courantIncrement;
+          //os << "\nReturns courantIncrement of: " << courantIncrement;
 
 
           /*
           * -----------   4.)CourantIncrement    -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 4.)CourantIncrement 1D ONLY -------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 4.)CourantIncrement 1D ONLY -------------------\n";
 
           //courantIncrement = advector1D.CourantIncrement(relperms);
           //                            ^^^^^^^^^^^^^^^^
 
-          //cout << "\nReturns courantIncrement of: " << courantIncrement;
+          //os << "\nReturns courantIncrement of: " << courantIncrement;
 
 
           /*
           * ----------- 5.)AnisotropicCourantIncrement() -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 5.)AnisotropicCourantIncrement() --------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 5.)AnisotropicCourantIncrement() --------------\n";
 
           courantIncrement = advector3D.AnisotropicCourantIncrement();
           //                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-          cout << "\nReturns courantIncrement of: " << courantIncrement;
+          os << "\nReturns courantIncrement of: " << courantIncrement;
 
 
           /*
           * ----------- 6.)AnisotropicCourantIncrement -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 6.)AnisotropicCourantIncrement ----------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 6.)AnisotropicCourantIncrement ----------------\n";
 
           //courantIncrement = advector3D.AnisotropicCourantIncrement(relperms);
           //                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-          cout << "\nReturns courantIncrement of: " << courantIncrement;
+          os << "\nReturns courantIncrement of: " << courantIncrement;
 
 
           /*
           * -----------    7.)CFL_Multiplier   -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 7.)CFL_Multiplier -----------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 7.)CFL_Multiplier -----------------------------\n";
 
           double64 CFLcheck(1.e2);
           advector3D.CFL_Multiplier(CFLcheck);
           //         ^^^^^^^^^^^^^^
           assert(CFLcheck == advector3D.CFL_Multiplier());
-          cout << "\nManual CFL input value: " << CFLcheck ;
-          cout << "\nReturn function for CFL multiplier gives: " << advector3D.CFL_Multiplier();
+          os << "\nManual CFL input value: " << CFLcheck ;
+          os << "\nReturn function for CFL multiplier gives: " << advector3D.CFL_Multiplier();
           //                                                                   ^^^^^^^^^^^^^^
 
 
           /*
           * -----------    8.)Inflow/Outflow   -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 8.)Model Inflow/Outflow -----------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 8.)Model Inflow/Outflow -----------------------\n";
 
           double64 outflow(advector3D.ModelOutflow());
           //                          ^^^^^^^^^^^^
           double64 inflow(advector3D.ModelInflow());
           //                         ^^^^^^^^^^^^
 
-          cout << "\nadvector.ModelOutflow(): " << outflow ;
-          cout << "\nadvector.ModelInflow(): " << inflow ;
+          os << "\nadvector.ModelOutflow(): " << outflow ;
+          os << "\nadvector.ModelInflow(): " << inflow ;
 
 
           /*
           * -----------  9.)BoundaryFluxes  -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 9.)BoundaryFluxes -----------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 9.)BoundaryFluxes -----------------------------\n";
 
           double64 boundaryFluxes(advector3D.BoundaryFluxes(inflow, outflow));
           //                                 ^^^^^^^^^^^^^^
-          cout << "\nBoundary Fluxes with previous as Input";
-          cout << " arguments returns: " << boundaryFluxes ;
+          os << "\nBoundary Fluxes with previous as Input";
+          os << " arguments returns: " << boundaryFluxes ;
 
 
           /*
           * -----------  10.)FluxBalance  -----------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 10.)FluxBalance -------------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 10.)FluxBalance -------------------------------\n";
 
           double64 fmin, fmax;
           advector3D.FluxBalance(fmin, fmax);
           //         ^^^^^^^^^^^
-          cout << "\nFluxBalance returns " << fmin << " as minimum and ";
-          cout << fmax << " as maximum FV flux balance.";
+          os << "\nFluxBalance returns " << fmin << " as minimum and ";
+          os << fmax << " as maximum FV flux balance.";
 
 
           /*
           * ----- 11.)MultiplyScalarNodePropertyByFiniteVolume  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
-          cout << "\n\n/** -- 11.)MultiplyScalarNodePropertyByFiniteVolume --\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-----------------------";
+          os << "\n\n/** -- 11.)MultiplyScalarNodePropertyByFiniteVolume --\n";
 
           advector3D.MultiplyScalarNodePropertyByFiniteVolume("fluid pressure");
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -389,36 +388,36 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           /*
           * ----- 12.)VolumeIntegrateScalarFiniteElementVariable  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS------------------------";
-          cout << "\n\n/** -- 12.)VolumeIntegrateScalarFiniteVolumeVariable --\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS------------------------";
+          os << "\n\n/** -- 12.)VolumeIntegrateScalarFiniteVolumeVariable --\n";
 
           double64 poreVolume(0.);
           poreVolume =
           advector3D.VolumeIntegrateScalarFiniteElementVariable("porosity", true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-          cout << "\nIntegration of porosity  returns " << poreVolume << " for FE Integration.";
+          os << "\nIntegration of porosity  returns " << poreVolume << " for FE Integration.";
 
 
 
           /*
           * ----- 13.)FiniteVolume  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
-          cout << "\n\n/** -- 13.)FiniteVolumes -------------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
+          os << "\n\n/** -- 13.)FiniteVolumes -------------------------------\n";
 
           poreVolume =
           advector3D.FiniteVolume("concentration");
           //         ^^^^^^^^^^^^
           vtk_output.OutputDataToVTK( model3D, "finite-volume", "concentration", 0 );
 
-          cout << "\nFinite Volumes of porosity  returns " << poreVolume;
+          os << "\nFinite Volumes of porosity  returns " << poreVolume;
 
           /*
           * ----- 14.)VolumeIntegrate  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
-          cout << "\n\n/** -- 14.)VolumeIntegrate -----------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
+          os << "\n\n/** -- 14.)VolumeIntegrate -----------------------------\n";
 
           advector3D.VolumeIntegrate("porosity", "poreVolume");
           //         ^^^^^^^^^^^^^^^
@@ -428,8 +427,8 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           /*
           * ----- 15.)AssignScalarBoundaryValues  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
-          cout << "\n\n/** -- 15.)AssignScalarBoundaryValues ------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
+          os << "\n\n/** -- 15.)AssignScalarBoundaryValues ------------------\n";
           double64 customPressure(2.e7);
           advector3D.AssignScalarBoundaryValues(LEFT, "fluid pressure", DIRICH, customPressure, true);
           //         ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -438,22 +437,22 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
           /*
           * ----- 16.)PoreVolume  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
-          cout << "\n\n/** -- 16.)PoreVolume -----------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
+          os << "\n\n/** -- 16.)PoreVolume -----------------------------\n";
 
           poreVolume =
           advector3D.PoreVolume(50);
           //         ^^^^^^^^^^
-          cout << "\nPoreVolume returns " << poreVolume;
+          os << "\nPoreVolume returns " << poreVolume;
 
 
           /*
           * ----- 17.)Out  ------
           */
-          cout << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
-          cout << "\n\n/** -- 17.)Out -----------------------------------------\n";
+          os << "\n\n\n\n\n/** -- TESTING OF NCFVT METHODS-------------------------";
+          os << "\n\n/** -- 17.)Out -----------------------------------------\n";
 
-          advector3D.Out();
+          advector3D.Out(os);
           //         ^^^
 
   return true;
@@ -464,10 +463,10 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
 
 
 
-void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
+void testNodeCenteredFiniteVolumeStencils( std::ostream& os, Model<3U>& sg, VTK_Interface<3U>& vtkOut )
 {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                    "porosity", "concentration", "velocity",
@@ -475,11 +474,11 @@ void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtk
   //Testing NodeCenteredFiniteVolumeTransport.h
   //method testFiniteVolumeStencil
 
-  cout << "Testing NodeCenteredFiniteVolumeTransport.h method testFiniteVolumeStencil " << endl;
+  os << "Testing NodeCenteredFiniteVolumeTransport.h method testFiniteVolumeStencil " << endl;
   testFiniteVolumeStencil( sg.Database(), sg.Region( "Model" ), advector );
 
-  test_NCFVT_methods( sg, advector, vtkOut );
-  cout << "End of Testing!" << endl;
+  test_NCFVT_methods( os, sg, advector, vtkOut );
+  os << "End of Testing!" << endl;
   
 } //end TestNodeCenteredFiniteVolumeStencil
 
@@ -494,28 +493,28 @@ void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtk
   are reported to the variables "finite volume" and "nodal flux mismatch", respectively.
   do not use when surface elements are also present in model!
 */
-double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
+double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( std::ostream& os, Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   VectorVariable<3U>  velo(PLAIN,PLAIN,PLAIN, 3., 7., 1. );
   velo /= velo.Length(); // unit length
-  velo.Out();
+  velo.Out(os);
   sg.InputPropertyValue( "velocity", velo );
 
-  cout <<"\n\tMeasuring the time required to build basic transport algorithm."<< endl;
+  os <<"\n\tMeasuring the time required to build basic transport algorithm."<< endl;
   clock_t ticks = clock();
   NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                    "porosity", "concentration", "velocity",
                                                    "nodal fluid volume source",false, false );
   ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+  os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
   PropertyHandle<3U>  fv( sg,"finite volume",SCALAR,NODE);
   advector.FiniteVolume( "finite volume" );
 
-  cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
+  os <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
   advector.Divergence( "velocity", "nodal flux mismatch" );
 
   // identifying the Dirichlet boundaries (since they will have in or outflow)
@@ -542,12 +541,12 @@ double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& s
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double64>::epsilon() ) {
-         cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
-         (*it)->Out();
-         cout <<"\ncomposed of the element types: "<< endl;
+         os <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
+         (*it)->Out(os);
+         os <<"\ncomposed of the element types: "<< endl;
          for ( size_t i=0U; i<(*it)->Parents(); i++ )
-           cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
-         cout << endl << endl;
+           os << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
+         os << endl << endl;
       }
 
   return emax;
@@ -563,10 +562,10 @@ double64  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& s
 
 
 
-void advectVariableExplicit( Model<3U>& sg, bool second_order )
+void advectVariableExplicit( std::ostream& os, Model<3U>& sg, bool second_order )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   ExplicitNodeCenteredFiniteVolumeTransport<3U,ExplicitStencilProcessor>  explicit_advector(
                                                                             "Model", sg,
@@ -576,28 +575,28 @@ void advectVariableExplicit( Model<3U>& sg, bool second_order )
                                                                             "nodal fluid volume source",
                                                                              second_order );
 
-   cout <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
-   if ( second_order ) cout <<" IMPES: SECOND ORDER SCHEME."<< endl;
-   else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
-   cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
-   cout <<"\nEnter advection time: ";
+   os <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
+   if ( second_order ) os <<" IMPES: SECOND ORDER SCHEME."<< endl;
+   else                os <<" IMPES: FIRST ORDER SCHEME."<< endl;
+   os <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
+   os <<"\nEnter advection time: ";
    double64 time_interval;
    cin >> time_interval;
 
-   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+   os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
    clock_t ticks = clock();
    explicit_advector.AdvectVariable( time_interval, 0.1, true, false );
    ticks = clock() - ticks;
-   cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+   os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
 } // end advectVariableExplicit
 
 
 
-void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_order )
+void advectVariableExplicit( std::ostream& os, Model<3U>& sg, const char* region, bool second_order )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   ExplicitNodeCenteredFiniteVolumeTransport<3U,ExplicitStencilProcessor>  explicit_advector(
                                                                             region, sg,
@@ -607,19 +606,19 @@ void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_orde
                                                                             "nodal fluid volume source",
                                                                              second_order );
 
-   cout <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
-   if ( second_order ) cout <<" IMPES: SECOND ORDER SCHEME."<< endl;
-   else                cout <<" IMPES: FIRST ORDER SCHEME."<< endl;
-   cout <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
-   cout <<"\nEnter advection time: ";
+   os <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
+   if ( second_order ) os <<" IMPES: SECOND ORDER SCHEME."<< endl;
+   else                os <<" IMPES: FIRST ORDER SCHEME."<< endl;
+   os <<"\nThe grid Courant number is "<< explicit_advector.AnisotropicCourantIncrement() << endl;
+   os <<"\nEnter advection time: ";
    double64 time_interval;
    cin >> time_interval;
 
-   cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+   os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
   clock_t ticks = clock();
   explicit_advector.AdvectVariable( time_interval, 0.1, true, false );
   ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+  os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
 } // end advectVariableExplicit
 
@@ -630,29 +629,29 @@ void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_orde
 
 
 
-void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
+void advectVariableFirstOrderImplicit( std::ostream& os, Model<3U>& sg, VTK_Interface<3U>& vtkOut )
  {
     // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-    //ostream &cout = *GetStream();
+    //ostream &os = *GetStream();
 
     NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                      "porosity", "concentration", "velocity",
                                                      "nodal fluid volume source",false, false );
 
-    cout <<"\n\nadvectVariableFirstOrderImplicit: Configuring TRANSPORT simulation: IMPIMS"<< endl;
-    cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement();
-    cout.flush();
-    cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
+    os <<"\n\nadvectVariableFirstOrderImplicit: Configuring TRANSPORT simulation: IMPIMS"<< endl;
+    os <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement();
+    os.flush();
+    os <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
     double64 time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
-    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+    os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
     clock_t ticks = clock();
     for ( int i=0; i<5; ++i ) {
         advector.AdvectVariable( time_interval/5, Courant_multiplier );
         vtkOut.OutputDataToVTK( sg, "concentration", "concentration", i+1 );
      }
     ticks = clock() - ticks;
-    cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+    os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
  } // end advectVariableFirstOrderImplicit
 
@@ -661,27 +660,27 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut 
 
 
 // restricted to a group
-void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
+void advectVariableFirstOrderImplicit( std::ostream& os, Model<3U>& sg, const char* group )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   NodeCenteredFiniteVolumeTransport<3U>  advector( group, sg,
                                                   "porosity", "concentration", "velocity",
                                                   "nodal fluid volume source", false, false );
 
-  cout <<"\n\nadvectVariableFirstOrderImplicit: Configuring TRANSPORT simulation: IMPIMS for region'"<< group <<"'"<< endl;
-  cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
+  os <<"\n\nadvectVariableFirstOrderImplicit: Configuring TRANSPORT simulation: IMPIMS for region'"<< group <<"'"<< endl;
+  os <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
 
-  cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
+  os <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
   double64 time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
-  cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+  os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
   clock_t ticks = clock(); //         fluxbalancecorrection=true, updateporevols=false
   advector.AdvectVariable( time_interval, Courant_multiplier, false, false );
   ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+  os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
  } // end advectVariableFirstOrderImplicit
 
@@ -689,56 +688,56 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
 
 
 
-void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
+void advectVariableSecondOrderImplicit( std::ostream& os, Model<3U>& sg, bool bijective_mapping )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
   NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                    "porosity", "concentration", "velocity",
                                                    "nodal fluid volume source", true, false );
 
-  cout <<"\n\nadvectVariableSecondOrderImplicit: Configuring TRANSPORT simulation: ";
-  if ( bijective_mapping ) cout <<" IMPIMS with BIJECTIVE MAPPING."<< endl;
-  else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
-  cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
-  cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
+  os <<"\n\nadvectVariableSecondOrderImplicit: Configuring TRANSPORT simulation: ";
+  if ( bijective_mapping ) os <<" IMPIMS with BIJECTIVE MAPPING."<< endl;
+  else                     os <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
+  os <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
+  os <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
   double64 time_interval, Courant_multiplier;
   cin >> time_interval >> Courant_multiplier;
 
-  cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+  os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
   clock_t ticks = clock(); //                  flux_balance_correction  update_pore_volumes
   advector.AdvectVariable( time_interval, Courant_multiplier, true, false );
   ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+  os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
  } // end advectVariableSecondOrderImplicit
 
 
 
 
- void advectVariableSecondOrderImplicitSecondOrderInTime( Model<3U>& sg, bool bijective_mapping )
+ void advectVariableSecondOrderImplicitSecondOrderInTime( std::ostream& os, Model<3U>& sg, bool bijective_mapping )
    {
      // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-     //ostream &cout = *GetStream();
+     //ostream &os = *GetStream();
 
     NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                      "porosity", "concentration", "velocity",
                                                      "nodal fluid volume source", true, true );
 
-    cout <<"\n\nadvectVariableSecondOrderImplicitSecondOrderInTime: Configuring TRANSPORT simulation: ";
-    if ( bijective_mapping ) cout <<" IMPIMS with BIJECTIVE MAPPING."<< endl;
-    else                     cout <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
-    cout <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
-    cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
+    os <<"\n\nadvectVariableSecondOrderImplicitSecondOrderInTime: Configuring TRANSPORT simulation: ";
+    if ( bijective_mapping ) os <<" IMPIMS with BIJECTIVE MAPPING."<< endl;
+    else                     os <<" IMPIMS without BIJECTIVE MAPPING."<< endl;
+    os <<"\nThe grid Courant number is "<< advector.AnisotropicCourantIncrement() << endl;
+    os <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds) and Courant multiplier: ";
     double64 time_interval, Courant_multiplier;
     cin >> time_interval >> Courant_multiplier;
 
-    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+    os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
     clock_t ticks = clock();
     advector.AdvectVariable( time_interval, Courant_multiplier, bijective_mapping );
     ticks = clock() - ticks;
-    cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+    os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
    } // end advectVariableSecondOrderImplicit
 
@@ -750,22 +749,22 @@ void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
 
 
 
-void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
+void testNodeCenteredFiniteVolumeTransport( std::ostream& os, Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+  //ostream &os = *GetStream();
 
-  cout <<"\n\tMeasuring the time required to build basic transport algorithm."<< endl;
+  os <<"\n\tMeasuring the time required to build basic transport algorithm."<< endl;
   clock_t ticks = clock();
   NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg,
                                                    "porosity", "concentration", "velocity",
                                                    "nodal fluid volume source",false, false );
   ticks = clock() - ticks;
-  cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+  os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
   advector.FiniteVolume( "finite volume" );
 
-  cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
+  os <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
   advector.Divergence( "velocity", "nodal flux mismatch" );
 
   // identifying the Dirichlet boundaries (since they will have in or outflow)
@@ -790,14 +789,13 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
   // finding the worst finite volume and analyzing it
   for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double64>::epsilon() ) {
-         cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
-         (*it)->Out();
-         cout <<"\ncomposed of the element types: "<< endl;
+         os <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
+         (*it)->Out(os);
+         os <<"\ncomposed of the element types: "<< endl;
          for ( size_t i=0U; i<(*it)->Parents(); i++ )
-           cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
-         cout << endl << endl;
+           os << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
+         os << endl << endl;
       }
-
  } // end TestNodeCenteredFiniteVolumeTransport
 
 
@@ -820,11 +818,12 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
 
 void testSchemeAsComponent()
   {
+      std::ostream& os = getInfoStream();
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
       string  model_name("prism_test");
-      //cout <<"\nmain: Enter name of 'ANSYS TETRA' input file (binary): ";
+      //getInfoStream() <<"\nmain: Enter name of 'ANSYS TETRA' input file (binary): ";
       //cin >> model_name;
 
       ANSYS_Model3D  model3D( model_name.c_str(), "example25.txt");
@@ -972,19 +971,19 @@ void testSchemeAsComponent()
       printRangeOfVariable( model3D, "finite volume" );
       printRangeOfVariable( model3D, "FV pore volume" );
 
-      cout <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
-    //  if ( second_order ) cout <<" IMPES: SECOND ORDER SCHEME."<< endl;
-      cout <<" FIRST ORDER SCHEME."<< endl;
-      cout <<"\nThe grid Courant number is "<< explicit_advector.TimeIncrement() << endl;
-      cout <<"\nEnter advection time: ";
+      os <<"\n\nadvectVariableExplicit: Configuring TRANSPORT simulation: ";
+    //  if ( second_order ) os <<" IMPES: SECOND ORDER SCHEME."<< endl;
+      os <<" FIRST ORDER SCHEME."<< endl;
+      os <<"\nThe grid Courant number is "<< explicit_advector.TimeIncrement() << endl;
+      os <<"\nEnter advection time: ";
       double64 time_interval;
       cin >> time_interval;
 
-      cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+      os <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
       clock_t ticks = clock();
       explicit_advector.AdvectVariable( time_interval );
       ticks = clock() - ticks;
-      cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
+      os <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
 
 
 
@@ -995,38 +994,38 @@ void testSchemeAsComponent()
 
       switch( tmethod ) {
            case 1:
-              cout <<"\nmain: Would you like to restrict computation to group (yes=1, 0=no)? ";
+              os <<"\nmain: Would you like to restrict computation to group (yes=1, 0=no)? ";
               cin >> tmethod;
-              if ( tmethod != 1 ) advectVariableExplicit( model3D, false /* second order=false */ );
+              if ( tmethod != 1 ) advectVariableExplicit( os, model3D, false /* second order=false */ );
               else {
                    string group_name;
-                   cout <<"\nmain: Enter name of model region: ";
+                   os <<"\nmain: Enter name of model region: ";
                    cin >> group_name;
-                   advectVariableExplicit( model3D, group_name.c_str() );
+                   advectVariableExplicit( os, model3D, group_name.c_str() );
                    vtk_output.OutputDataToVTK( model3D, group_name.c_str(), "new-concentration", "new concentration", 1, true );
                 }
              break;
-           case 2:  advectVariableExplicit( model3D, true );
+           case 2:  advectVariableExplicit( os, model3D, true );
              break;
            case 3:
-              cout <<"\nmain: Would you like to restrict computation to model region (yes=1, 0=no)? ";
+              os <<"\nmain: Would you like to restrict computation to model region (yes=1, 0=no)? ";
               cin >> tmethod;
-              if ( tmethod != 1 ) advectVariableFirstOrderImplicit( model3D, vtk_output );
+              if ( tmethod != 1 ) advectVariableFirstOrderImplicit( os, model3D, vtk_output );
               else {
                    string group_name;
-                   cout <<"\nmain: Enter name of region: ";
+                   os <<"\nmain: Enter name of region: ";
                    cin >> group_name;
-                   advectVariableFirstOrderImplicit( model3D, group_name.c_str() );
+                   advectVariableFirstOrderImplicit( os, model3D, group_name.c_str() );
                    vtk_output.OutputDataToVTK( model3D, group_name.c_str(), "concentration", "concentration", 1, true );
                 }
              break;
-           case 4:  advectVariableSecondOrderImplicit( model3D, false );
+           case 4:  advectVariableSecondOrderImplicit( os, model3D, false );
              break;
-           case 5:  advectVariableSecondOrderImplicit( model3D, true );
+           case 5:  advectVariableSecondOrderImplicit( os, model3D, true );
              break;
            case 6:
-               cout <<"\nmain: Calculated flux mismatch: ";
-               cout << testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( model3D ) << endl;
+               os <<"\nmain: Calculated flux mismatch: ";
+               os << testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( os, model3D ) << endl;
                printRangeOfVariable( model3D, stdio, "finite volume" );
                vtk_output.OutputDataToVTK( model3D, "finite-volume", "finite volume", 1 );
 
@@ -1039,7 +1038,7 @@ void testSchemeAsComponent()
                 }
              break;
            case 7:
-              testNodeCenteredFiniteVolumeTransport( model3D );
+              testNodeCenteredFiniteVolumeTransport( os, model3D );
               printRangeOfVariable( model3D, stdio, "finite volume" );
               vtk_output.OutputDataToVTK( model3D, "finite-volume", "finite volume", 1 );
 
@@ -1056,14 +1055,14 @@ void testSchemeAsComponent()
              break;
 
            default:
-               cout <<"\nmain: Transport method not recognized."<< endl;
+               os <<"\nmain: Transport method not recognized."<< endl;
              return;
         }
 
       printRangeOfVariable( model3D, stdio, "concentration" );
       vtk_output.OutputDataToVTK( model3D, "concentration", "concentration", 99 );
 
-      cout <<"\nmain: That's it."<< endl;
+      os <<"\nmain: That's it."<< endl;
 
   } // end run
 

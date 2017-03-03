@@ -132,16 +132,16 @@ bool Parameter::IsWithinRange( double64 value ) const
  }
 
 
-void Parameter::Out() const 
+void Parameter::Out(std::ostream& os) const 
  {
-    cout <<"\nParameter::Out: "<< name <<"\n\n" << name; 
-    cout <<"  " << notation;
-    cout <<"  " << unit;
-    cout <<"  " << min <<".."<< max;
-    cout <<"\n\n" << key << endl;
-    cout <<"  usage:       " << usage << endl;
-    cout <<"  explanation: " << explanation << endl;
-    cout <<"  reference:   " << reference << endl;
+    os <<"\nParameter::Out: "<< name <<"\n\n" << name; 
+    os <<"  " << notation;
+    os <<"  " << unit;
+    os <<"  " << min <<".."<< max;
+    os <<"\n\n" << key << endl;
+    os <<"  usage:       " << usage << endl;
+    os <<"  explanation: " << explanation << endl;
+    os <<"  reference:   " << reference << endl;
  }
 
 

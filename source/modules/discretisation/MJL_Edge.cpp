@@ -4,12 +4,12 @@ using namespace std;
 
 namespace mjl {
 
-void  Edge::Out() const
+void  Edge::Out(std::ostream& os) const
  {
-    cout <<"\norigin: "<< endl;
-    org_.Out();
-    cout <<"\ndestination: "<< endl;
-    dest_.Out();
+    os <<"\norigin: "<< endl;
+    org_.Out(os);
+    os <<"\ndestination: "<< endl;
+    dest_.Out(os);
  }
 
 

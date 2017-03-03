@@ -109,18 +109,18 @@ double  Reactant::MolalityToMolesPerVolume( double molality, double fluid_dens )
  
 
 
-void  Reactant::Out() const
+void  Reactant::Out(std::ostream& os) const
  {
-    cout <<"\nReactant::Out: Printing private data:"<< endl;
-    cout <<"Reactant name: "<< name << endl;
-    cout <<"Phase state:   ";
-    if      ( phase_state == 1 ) cout <<"solid"   << endl;
-    else if ( phase_state == 2 ) cout <<"aqueous" << endl;
-    else if ( phase_state == 3 ) cout <<"gaseous" << endl;
-    cout <<"Charge:        "<< charge << endl;
-    cout <<"Density:       "<< density << endl;
-    cout <<"Molar weight:  "<< molar_weight << endl;
-    cout << endl;
+    os <<"\nReactant::Out: Printing private data:"<< endl;
+    os <<"Reactant name: "<< name << endl;
+    os <<"Phase state:   ";
+    if      ( phase_state == 1 ) os <<"solid"   << endl;
+    else if ( phase_state == 2 ) os <<"aqueous" << endl;
+    else if ( phase_state == 3 ) os <<"gaseous" << endl;
+    os <<"Charge:        "<< charge << endl;
+    os <<"Density:       "<< density << endl;
+    os <<"Molar weight:  "<< molar_weight << endl;
+    os << endl;
  }
 
 } // csp 

@@ -32,21 +32,21 @@ NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::NumIntegral_PT_lhsop_P_dV( const Propert
       }
 
     if ( phi_key.type != SCALAR && phi_key.place != ELEMENT ) 
-      throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
                       oper2, "Must be a scalar variable placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
                       oper, "Operand must be of scalar type." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != VECTOR )
-      throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a vector<double64> property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != VECTOR )
-      throw csmp::Exception( ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_PT_lhsop_P_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a vector<double64> property placed on the nodes." );
 }
 
@@ -131,7 +131,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
       }
 
     cout <<"\nNumIntegral_PT_lhsop_P_dV<dim>::N_to_P: LHS contribution element: "<< e.Idx() << endl;    
-    MathOperatorLHS<dim>::LHS.Out();
+    MathOperatorLHS<dim>::LHS.Out(cout);
       
 } // end ComputeContribution
 

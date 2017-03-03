@@ -15,9 +15,9 @@ BoundaryFluxVisitor<dim>::BoundaryFluxVisitor( const PropertyDatabase<dim>& pdb,
 : Visitor<dim>( BOUNDARY, BOUNDARY ), property_key_( pdb.StorageKey(property_name) ), result_property_key_( pdb.StorageKey(result_property_name) )
   {
     if( property_key_.place != ELEMENT || property_key_.type != VECTOR )
-      throw csmp::Exception( ERROR, "BoundaryFluxVisitor", "Property has to be a vector placed on the element" );
+      throw csmp::Exception( CSMP_ERROR, "BoundaryFluxVisitor", "Property has to be a vector placed on the element" );
     if( result_property_key_.place != BOUNDARY || result_property_key_.type != SCALAR )
-      throw csmp::Exception( ERROR, "BoundaryFluxVisitor", "Result property has to be a scalar placed on the boundary" );
+      throw csmp::Exception( CSMP_ERROR, "BoundaryFluxVisitor", "Result property has to be a scalar placed on the boundary" );
   }
 
 template <size_t dim>

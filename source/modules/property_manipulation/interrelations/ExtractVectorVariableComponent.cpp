@@ -20,22 +20,22 @@ ExtractVectorVariableComponent<dim>::ExtractVectorVariableComponent( const Prope
     Interrelation<dim>::ResultProperty( scalar_var );
     
     if ( V.Type() != VECTOR )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
                                    "Extraction variable must be of VectorVariable type");
     if ( S.Type() != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
                                    "Extracted variable must be of ScalarVariable type");
  
     if ( V.Placement() == ELEMENT && S.Placement() != ELEMENT )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
                                    "Element variable cannot be extrapolated to elsewhere");
    
     if ( V.Placement() != ELEMENT && V.Placement() != S.Placement() )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
                                    "Incompatible placement of input variables");
    
     if ( comp > dim-1 )
-      throw csmp::Exception( FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "ExtractVectorVariableComponent::(constructor)", 
                                    "Desired vector component does not exist");
  }
 

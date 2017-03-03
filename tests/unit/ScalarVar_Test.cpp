@@ -335,5 +335,49 @@ void ScalarVariable_Test::IsWithinRange_Function()
 
 }
 
+<<<<<<< HEAD
+=======
+void ScalarVariable_Test::Sqrt_Function()
+{
+   ScalarVariable scalar1( ANY, -5. );
+   ScalarVariable scalar2( ANY, 5. );
+   
+   scalar1.Sqrt();
+   _test( isnan(scalar1.Value()) );
+   _equal( scalar1.Flag(), ANY, fTolerance);
+   scalar2.Sqrt();
+   _equal( scalar2.Value(), sqrt(5.), fTolerance);
+   _equal( scalar2.Flag(), ANY, fTolerance);
+
+}
+
+void ScalarVariable_Test::Ln_Function()
+{
+   ScalarVariable scalar1( ANY, -5 );
+   ScalarVariable scalar2( ANY, 5 );
+   
+   scalar1.Ln();
+   _test( isnan(scalar1.Value()));
+   _equal( scalar1.Flag(), ANY, fTolerance);
+   scalar2.Ln();
+   _equal( scalar2.Value(), log(5.), fTolerance);
+   _equal( scalar2.Flag(), ANY, fTolerance);
+
+}
+
+void ScalarVariable_Test::Log10_Function()
+{
+   ScalarVariable scalar1( ANY, -5 );
+   ScalarVariable scalar2( ANY, 5 );
+   
+   scalar1.Log10();
+   _test( isnan(scalar1.Value()));
+   _equal( scalar1.Flag(), ANY, fTolerance);
+   scalar2.Log10();
+   _equal( scalar2.Value(), log10(5.), fTolerance);
+   _equal( scalar2.Flag(), ANY, fTolerance);
+
+}
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 	
 } //end namespace csmp

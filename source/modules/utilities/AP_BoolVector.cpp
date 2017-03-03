@@ -164,9 +164,9 @@ void BoolVector::SetAll(const bool value)
 
 
 
-void BoolVector::Out() const
+void BoolVector::Out(std::ostream& os) const
  {
-    std::cout <<"\nBoolVector::Out: not defined yet."<< std::endl;
+    os <<"\nBoolVector::Out: not defined yet."<< std::endl;
  }
 
 } //end of namespace csmp

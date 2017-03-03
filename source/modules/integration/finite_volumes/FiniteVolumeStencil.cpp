@@ -723,7 +723,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
           if(debug) {
              cout<<"\nISOPARAMETRIC_LINEAR_BAR:" <<endl;
-             Out();         
+             Out(cout);         
            }
            
           parent_element_ = "ISOPARAMETRIC_LINEAR_BAR";
@@ -769,7 +769,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
      
           if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_TRIANGLE:" <<endl;
-              Out();         
+              Out(cout);         
           }
            
           parent_element_ = "ISOPARAMETRIC_LINEAR_TRIANGLE";
@@ -816,7 +816,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
              if(debug) {
                 cout<<"\nISOPARAMETRIC_LINEAR_TETRAHEDRON: "<<endl;
-                Out();         
+                Out(cout);         
              }
        parent_element_ = "ISOPARAMETRIC_LINEAR_TETRAHEDRON";
        return;
@@ -860,7 +860,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
           if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_QUADRILATERAL:"<<endl;
-              Out();         
+              Out(cout);         
            }
 
          parent_element_ = "ISOPARAMETRIC_LINEAR_QUADRILATERAL";
@@ -908,7 +908,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
          if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_HEXAHEDRON:"<<endl;
-              Out();         
+              Out(cout);         
           }
 
       parent_element_ = "ISOPARAMETRIC_LINEAR_HEXAHEDRON";
@@ -962,7 +962,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
          if ( debug ) {
               cout<<"\nISOPARAMETRIC_LINEAR_PYRAMID:"<<endl;
-              Out();         
+              Out(cout);         
         }
 
       parent_element_ = "ISOPARAMETRIC_LINEAR_PYRAMID";
@@ -1005,7 +1005,7 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
          if(debug) {
               cout<<"\nISOPARAMETRIC_LINEAR_PRISM:"<<endl;
-              Out();         
+              Out(cout);         
           }
 
       parent_element_ = "ISOPARAMETRIC_LINEAR_PRISM";
@@ -1025,66 +1025,66 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 
 // SKM modified version
 template<size_t dim>
-void FiniteVolumeStencil<dim>::Out() const
+void FiniteVolumeStencil<dim>::Out(std::ostream& os) const
 {
-   cout<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights: ";
+   os<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights: ";
    for(size_t i=0; i<sector_integration_weights.size(); i++)
       for(size_t j=0; j<sector_integration_weights[i].size(); j++) 
-        cout<<" "<<sector_integration_weights[i][j];
+        os<<" "<<sector_integration_weights[i][j];
    
-   cout<<endl<<endl<<" Volume IPs: "<<endl;
+   os<<endl<<endl<<" Volume IPs: "<<endl;
    for(size_t i=0; i<sector_integration_points.size(); i++) {
      for(size_t j=0; j<sector_integration_points[i].size(); j++) {
-        for(size_t k=0; k<dim; k++) cout<<" "<<sector_integration_points[i][j][k];
-          cout<<endl;
+        for(size_t k=0; k<dim; k++) os<<" "<<sector_integration_points[i][j][k];
+          os<<endl;
         }
    }
                 
-   cout<<endl<<" Facet Weights: ";
+   os<<endl<<" Facet Weights: ";
    for(size_t i=0; i<facet_integration_weights.size(); i++) {
      for(size_t j=0; j<facet_integration_weights[i].size(); j++) {
-       cout<<" "<<facet_integration_weights[i][j] ;
+       os<<" "<<facet_integration_weights[i][j] ;
       }
    }
-   cout<<endl;
+   os<<endl;
    
-   cout<<endl<<" Facet IPs: "<<endl;
+   os<<endl<<" Facet IPs: "<<endl;
    for(size_t i=0; i<facet_integration_points.size(); i++) {
      for(size_t j=0; j<facet_integration_points[i].size(); j++) {
-       for(size_t k=0; k<dim; k++) cout<<" "<<facet_integration_points[i][j][k];
-       cout<<endl;
+       for(size_t k=0; k<dim; k++) os<<" "<<facet_integration_points[i][j][k];
+       os<<endl;
      }
    }
 
-  cout<<endl<<" Facet parametric normals inside the element: "<<endl;
+  os<<endl<<" Facet parametric normals inside the element: "<<endl;
    for(size_t i=0; i<facet_parametric_normals.size(); i++) {
      for(size_t j=0; j<dim; j++) {
-       cout<<" "<<facet_parametric_normals[i][j] ;
+       os<<" "<<facet_parametric_normals[i][j] ;
      }
-     cout<<endl;
+     os<<endl;
    }
      
-   cout<<endl<<" Facet physical normals inside the element: "<<endl;
+   os<<endl<<" Facet physical normals inside the element: "<<endl;
    for(size_t i=0; i<facet_normals.size(); i++) {
      for(size_t j=0; j<dim; j++) {
-       cout<<" "<<facet_normals[i][j] ;
+       os<<" "<<facet_normals[i][j] ;
      }
-     cout<<endl;
+     os<<endl;
    }
 
-    cout<<endl<<" Facet surrounding node in the element: "<<endl;
+    os<<endl<<" Facet surrounding node in the element: "<<endl;
     for(size_t i=0; i<Sectors(); i++) {
       for(size_t j=0; j<facets_surrounding_node[i].size(); j++) {
-        cout<<" "<<facets_surrounding_node[i][j] ;
+        os<<" "<<facets_surrounding_node[i][j] ;
       }
-      cout<<endl;
+      os<<endl;
     }
     
-    cout<<endl<<" Edges pairs in the element "<<endl;
+    os<<endl<<" Edges pairs in the element "<<endl;
     for(size_t i=0; i<edges_of_element.size(); i++) {
-      cout<<" "<< edges_of_element[i].first <<", "<< edges_of_element[i].second <<" ";
+      os<<" "<< edges_of_element[i].first <<", "<< edges_of_element[i].second <<" ";
     }
-  cout << endl << endl; 
+  os << endl << endl; 
    
 } // end Out
 

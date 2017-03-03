@@ -183,10 +183,10 @@ void IAPWS_H2OPropertiesVisitor<dim>::PlacementChecks()
 {
     // testing that the variables exist on the right place and are of right type
     if ( P_key.place != NODE or P_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid pressure' must be a scalar node variable" );
     if ( T_key.place != NODE or T_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'temperature' must be a scalar node variable" );
     if (rho_key.place == NODE)
         cout<<"\nIAPWS_H2OPropertiesVisitor<dim>::fluid density is placed at the NODE!"<<endl;
@@ -194,22 +194,22 @@ void IAPWS_H2OPropertiesVisitor<dim>::PlacementChecks()
         cout<<"\nIAPWS_H2OPropertiesVisitor<dim>::fluid density is placed at the INTEGRATION POINT!"<<endl;
 
     if ( !(rho_key.place == NODE or rho_key.place == ELEMENT_INTEGRATION_POINT) or rho_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid density' must be a scalar node or integration point variable" );
     if ( !(mu_key.place == NODE or mu_key.place == ELEMENT_INTEGRATION_POINT) or mu_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid viscosity' must be a scalar node or integration point variable" );
     if ( cp_key.place != NODE or cp_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid heat capacity' must be a scalar node variable" );
     if ( h_key.place != NODE or h_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid enthalpy' must be a scalar node variable" );
     if ( beta_key.place != NODE or beta_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid compressibility' must be a scalar node variable" );
     if ( alpha_key.place != NODE or alpha_key.type != SCALAR )
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor (constructor)",
                                "'fluid expansivity' must be a scalar node variable" );
 }
 
@@ -247,7 +247,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
         errormessage += " oC and P = ";
         errormessage += p.str();
         errormessage += " Pa ";
-        throw csmp::Exception( ERROR, "\nIAPWS_H2OPropertiesVisitor<fT>::Visit:",
+        throw csmp::Exception( CSMP_ERROR, "\nIAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                errormessage.c_str() );
     }
 
@@ -269,7 +269,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
         dumpProp( stdout, props );
         cout << endl;
         failed = true;
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                "Error in PROST, duming output, nothing is written to the nodes...");
     }
     else {
@@ -301,7 +301,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
         dumpProp( stdout, props );
         cout << endl;
         alpha = 0.0;
-        throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
+        throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                "Error in PROST, duming output, expansivity is set to zero...");
     }
     
@@ -355,7 +355,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
             errormessage += " oC and P = ";
             errormessage += p.str();
             errormessage += " Pa ";
-            throw csmp::Exception( ERROR, "\nIAPWS_H2OPropertiesVisitor<fT>::Visit:",
+            throw csmp::Exception( CSMP_ERROR, "\nIAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                    errormessage.c_str() );
         }
 
@@ -378,7 +378,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
             dumpProp( stdout, props );
             cout << endl;
             failed = true;
-            throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
+            throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                    "Error in PROST, duming output, nothing is written to the nodes...");
         }
         else {
@@ -407,7 +407,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
             dumpProp( stdout, props );
             cout << endl;
             alpha = 0.0;
-            throw csmp::Exception( ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
+            throw csmp::Exception( CSMP_ERROR, "IAPWS_H2OPropertiesVisitor<fT>::Visit:",
                                    "Error in PROST, duming output, expansivity is set to zero...");
         }
 

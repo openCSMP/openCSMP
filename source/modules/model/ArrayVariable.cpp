@@ -373,29 +373,29 @@ void ArrayVariable::Ln()
 
 
 /// outputs values to screen up to 10 values per row
-void ArrayVariable::Out( long digits ) const
+void ArrayVariable::Out( std::ostream& os, long digits ) const
   {
     long   prec(cout.precision(digits));
     size_t pcols(1);
 
-    cout <<"\n\nArrayVariable::Out: array size: "<< Size() <<" values:\n";
+    os <<"\n\nArrayVariable::Out: array size: "<< Size() <<" values:\n";
     
-    if ( digits != 0 ) cout.setf(ios::scientific);
+    if ( digits != 0 ) os.setf(ios::scientific);
 
     for ( size_t i(0); i < Size(); ++i )
       {
-         cout <<"("<< i <<"):  "<< (*this)[i] <<", ";
+         os <<"("<< i <<"):  "<< (*this)[i] <<", ";
          if ( pcols == 10 ) {
-              cout << endl;
+              os << endl;
               pcols = 0;
            }
          pcols++;
       }
-    cout << endl;
+    os << endl;
 
     if ( digits != 0 ) {
-         cout.unsetf( ios::scientific );
-         cout.precision(prec);
+         os.unsetf( ios::scientific );
+         os.precision(prec);
       }
 
  } // end Out

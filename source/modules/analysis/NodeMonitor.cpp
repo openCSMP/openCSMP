@@ -23,7 +23,7 @@ NodeMonitor<dim>::NodeMonitor( const Model<dim>& sg,
           it=properties.begin(); it!=properties.end(); it++ )
       if ( !sg.Database().IsDefined( (*it).c_str() ) or 
             sg.Database().Placement( (*it).c_str() ) != NODE ) 
-        throw csmp::Exception( FATAL_ERROR, "NodeMonitor(constructor)", (*it).c_str(),
+        throw csmp::Exception( CSMP_FATAL_ERROR, "NodeMonitor(constructor)", (*it).c_str(),
                        "range property is not a node property or is not defined in the database (file)");
                        
  } // end constructor

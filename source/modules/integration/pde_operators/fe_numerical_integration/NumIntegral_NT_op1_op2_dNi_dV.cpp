@@ -32,20 +32,20 @@ NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op1_op2_dNi_dV( const
     
     
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
                     oper,      "Operand must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
                       test, "Dependent variable must be a scalar property placed on the nodes." );
 
     if ( mtrl1_key.place != ELEMENT )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
                       mtrl1, "Material operand must be placed on the element." );
 
     if ( mtrl2_key.place != ELEMENT )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_op1_op2_dNi_dV<dim>::(constructor)", 
                       mtrl2, "Material operand must be placed on the element." );
  }
 

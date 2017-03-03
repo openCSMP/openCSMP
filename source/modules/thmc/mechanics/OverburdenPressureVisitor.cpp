@@ -43,11 +43,11 @@ OverburdenPressureVisitor<dim>::OverburdenPressureVisitor( Model<dim>& model, //
     // TODO: add checks for types and placements of other variables
 
     if ( gf_key_.place != ELEMENT || gf_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "OverburdenPressureVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "OverburdenPressureVisitor (constructor):",
                               "'gravity force' must be a VECTOR element variable." );
 
     if ( (gt_key_.place != ELEMENT_INTEGRATION_POINT and gt_key_.place != ELEMENT) || gt_key_.type != VECTOR )
-        throw csmp::Exception( ERROR, "OverburdenPressureVisitor (constructor):",
+        throw csmp::Exception( CSMP_ERROR, "OverburdenPressureVisitor (constructor):",
                                "'gravity term' must be a VECTOR variable placed on the element." );
 }
 

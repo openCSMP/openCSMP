@@ -38,7 +38,8 @@ class Triangle3D {
     int         Classify( const Point3D& p ) const;
     int         FacingDirection() const;
     void        Set( const Point3D& v0, const Point3D& v1, const Point3D& v2, long id );
-    void        Out() const;
+    void        Out() const { Out(std::cout); }
+    void        Out(std::ostream& os) const;
 
     long     id_;
     int      mark_;

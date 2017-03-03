@@ -31,7 +31,7 @@ FemToGridVisitor<dim>::FemToGridVisitor( const PropertyDatabase<dim>&  p,
       overwrite(true)
   { 
      if ( dim == 3U )
-        throw csmp::Exception( FATAL_ERROR, "FemToGridVisitor(constructor 3D)",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "FemToGridVisitor(constructor 3D)",
                               "Thus far, 2D-models only, can be written to grids."); 
 
      if ( prop_key.type != SCALAR )

@@ -33,19 +33,19 @@ NumIntegral_NT_mixed_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_mixed_op_dNi_dV( con
     MathOperatorRHS<dim>::Name("NumIntegral_NT_mixed_op_dNi_dV", oper, test );
     
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
                     oper,      "Operand must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-    throw csmp::Exception( ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
 
     if ( mtrl_key.place != ELEMENT )
-    throw csmp::Exception( ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
                    mtrl, "Material operand must be placed on the element." );
 
     if ( nmult_key.place != NODE || nmult_key.type != SCALAR )
-    throw csmp::Exception( ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
+    throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::(constructor)", 
                    nodal_mtrl_multiplier, "Nodal multiplier must be a scalar placed on the nodes." );
  }
 
@@ -84,7 +84,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
    if ( MathOperatorRHS<dim>::MultiplyWithTimeIncrement() ) {
-        throw csmp::Exception( FATAL_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::GetOperands", 
+        throw csmp::Exception( CSMP_FATAL_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::GetOperands", 
            "Do not multiply this operator with time increment since it uses the acceleration of gravity");
      }
 

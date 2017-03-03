@@ -65,9 +65,9 @@ int   Point::Orientation( Point& p0, Point& p1, Point& p2 )
 
 
 
- void  Point::Out() const
+ void  Point::Out(std::ostream& os) const
   {
-     cout <<"\nPoint::Out: "<< x_ <<"  "<< y_ << endl;
+     os <<"\nPoint::Out: "<< x_ <<"  "<< y_ << endl;
   }
   
   

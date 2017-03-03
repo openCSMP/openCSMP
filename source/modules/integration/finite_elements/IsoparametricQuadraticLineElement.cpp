@@ -697,13 +697,13 @@ void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vecto
      
      if ( bnodes.size() == 2 ) {
           if ( bnodes[0] == 0 && bnodes[1] == 1 )
-            throw csmp::Exception( ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
+            throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
                            "While corner nodes lie on boundary, midside node does not ?" );
           if ( bnodes[0] == 0 && bnodes[1] == 2 )
-            throw csmp::Exception( ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
+            throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
                            "First 2 nodes lie on boundary, last node does not ?" );
           if ( bnodes[0] == 1 && bnodes[1] == 2 )
-            throw csmp::Exception( ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
+            throw csmp::Exception( CSMP_ERROR, "IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary", 
                            "Last 2 nodes lie on boundary, first node does not ?" );
           return; 
        }

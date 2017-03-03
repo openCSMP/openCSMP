@@ -114,7 +114,7 @@ void StressRegime::CheckTrend(){
   if( trend_ > 270. && trend_ < 360. )
     trend_ -= 180.;
   if( trend_ > 360. || trend_ < 0. )
-    throw csmp::Exception( FATAL_ERROR, "NormalFromStressRegime::CheckTrend",
+    throw csmp::Exception( CSMP_FATAL_ERROR, "NormalFromStressRegime::CheckTrend",
                                  "Range of stress trend exceeded (0-180)",
                                  "specify valid trend value(Maximum Horizontal Stress");
 

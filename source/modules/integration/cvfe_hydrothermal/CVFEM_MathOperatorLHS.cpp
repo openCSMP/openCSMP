@@ -38,9 +38,15 @@ CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS( const PropertyDatabase<dim>& 
 template<size_t dim>
 void CVFEM_MathOperatorLHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key )
  {
+<<<<<<< HEAD
 
 	 throw csmp::Exception( ERROR, "CVFEM_MathOperatorLHS<dim>::GetOperandsCVFEM", 
                            " not specifically defined for this operator" );
+=======
+
+	 throw csmp::Exception( CSMP_ERROR, "CVFEM_MathOperatorLHS<dim>::GetOperandsCVFEM", 
+                           " not specifically defined for this operator" );
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
  }
 

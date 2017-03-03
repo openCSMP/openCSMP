@@ -101,8 +101,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     /// integrates the property over the boundary line or surface
     double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
 
-    /// writes all contained data on the screen
-    void Out() const;
+    /// writes all contained data to a stream
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
 
     // ----------------------------------------
     // building blocks

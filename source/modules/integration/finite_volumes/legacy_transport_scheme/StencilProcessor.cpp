@@ -1672,33 +1672,33 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 /** Outputs the current internal variables of the FV sector to screen.
 */
 template<size_t dim>
-void  StencilProcessor<dim>::Out() const
+void  StencilProcessor<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\nImplicitStencilProcessor<"<< dim <<">::Out: "<< endl;
+    os <<"\n\n\nImplicitStencilProcessor<"<< dim <<">::Out: "<< endl;
     // outputting data of object
-    cout <<"Finite volume stencil data."<< endl;
-    cout <<"\n\tassociated sectors, pore volumes, and advected property values: ";
+    os <<"Finite volume stencil data."<< endl;
+    os <<"\n\tassociated sectors, pore volumes, and advected property values: ";
     for ( size_t i=0; i<sector_pore_volume_.size(); i++ )
-      cout <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
+      os <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
 
-    cout <<"\n\nFacets between nodes i, i+1, and associated properties:";
-    cout <<"\n\tintegrated volume flux and advected variable interpolated to integration points:";
+    os <<"\n\nFacets between nodes i, i+1, and associated properties:";
+    os <<"\n\tintegrated volume flux and advected variable interpolated to integration points:";
     for ( size_t i=0; i<facet_flux_.size(); i++ )
-    cout <<"\n\tfacet "<< i+1 <<": "<< facet_flux_[i] <<", "<< ipsi1_[i];
+    os <<"\n\tfacet "<< i+1 <<": "<< facet_flux_[i] <<", "<< ipsi1_[i];
 
     if ( !src_.empty() ) {
-         cout <<"\n\nFacet integrated source terms:";
+         os <<"\n\nFacet integrated source terms:";
          for ( size_t i=0; i<src_.size(); i++ )
-         cout <<"\n\tfacet "<< i+1 <<": "<< src_[i];
+         os <<"\n\tfacet "<< i+1 <<": "<< src_[i];
       }
 
     if ( !ipsi1_.empty() ) {
-         cout <<"\n\nadvected variable values at facet integration points: ";
+         os <<"\n\nadvected variable values at facet integration points: ";
          for ( size_t i=0; i<ipsi1_.size(); i++ )
-         cout <<"\n\tfacet "<< i+1 <<": "<< ipsi1_[i];
+         os <<"\n\tfacet "<< i+1 <<": "<< ipsi1_[i];
       }
 
-    cout << endl << endl;
+    os << endl << endl;
 
  } // end Out
 

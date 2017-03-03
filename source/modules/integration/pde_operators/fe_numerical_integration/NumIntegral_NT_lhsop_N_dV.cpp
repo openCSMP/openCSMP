@@ -20,17 +20,17 @@ NumIntegral_NT_lhsop_N_dV<dim,SIMPLEX>::NumIntegral_NT_lhsop_N_dV( const Propert
     MathOperatorLHS<dim>::Name("NumIntegral_NT_lhsop_N_dV", oper, basic, test );
     
     if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
                       oper, "Operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
                       test, "Dependent variable must be a scalar property placed on the nodes." );
                    
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
                       basic, "Weighting variable must be a scalar property placed on the nodes." );
  }
 

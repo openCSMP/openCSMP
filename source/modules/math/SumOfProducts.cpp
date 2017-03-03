@@ -179,10 +179,10 @@ void SumOfProducts::Erase()
 
 
 
-void SumOfProducts::Out() const
+void SumOfProducts::Out(std::ostream& os) const
  {
     size_t n=1U;
-    cout <<"\nSumOfProducts:: = ";
+    os <<"\nSumOfProducts:: = ";
     for ( vector<map<int32,double64> >::const_iterator
           it1=sumproducts.begin(); it1!=sumproducts.end(); it1++, n++ )
       {
@@ -190,14 +190,14 @@ void SumOfProducts::Out() const
            {
               if ( (*sit).first >= 0 ) 
                 {
-                   if ( (*sit).second > 0. ) cout <<"a"<< (*sit).first <<" ";
-                   else                      cout <<"-a"<< (*sit).first <<" ";
+                   if ( (*sit).second > 0. ) os <<"a"<< (*sit).first <<" ";
+                   else                      os <<"-a"<< (*sit).first <<" ";
                 }
-              else cout << (*sit).second <<" ";
+              else os << (*sit).second <<" ";
            }
-         if ( n < sumproducts.size() ) cout <<"+ ";
+         if ( n < sumproducts.size() ) os <<"+ ";
       }
-    cout << endl;
+    os << endl;
     
  } // end out
 

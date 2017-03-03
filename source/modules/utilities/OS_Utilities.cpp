@@ -105,7 +105,7 @@ std::string CompareFileModifiedTimeStamps(std::string file0_name,std::string fil
 std::string getFileModificationTime(const char *filePath)
 {
 #ifdef _WIN32
-    throw csmp::Exception(FATAL_ERROR,"CSMP_highLevelUtilities.cpp","getting file modification time is not available in Windows. Please write it!");
+    throw csmp::Exception(CSMP_FATAL_ERROR,"CSMP_highLevelUtilities.cpp","getting file modification time is not available in Windows. Please write it!");
 #endif
     struct stat attrib;
     stat(filePath, &attrib);

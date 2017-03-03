@@ -76,7 +76,8 @@ public:
     csmp::GridNode<dim>* const GetPolygonFaceNode( size_t fid, size_t nid ) const;
   
     /// print object state to screen
-    void Out() const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
 
 protected:
 

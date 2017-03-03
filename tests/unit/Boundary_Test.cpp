@@ -117,7 +117,7 @@ void Boundary_Test::TestBoxBoundary( Model<dim>& model, const string& boxBoundar
   else if( boxBoundary == "BACK" )
     boxBoundaryFlag = BACK;
   else
-    throw csmp::Exception(ERROR, "Boundary_Test::TestBoxBoundary", "Box boundary not recognized!" );
+    throw csmp::Exception(CSMP_ERROR, "Boundary_Test::TestBoxBoundary", "Box boundary not recognized!" );
   CheckNodeFlags( boundary, boxBoundaryFlag, true );
   CheckFaceUnitNormalOrientation( boundary );
   CheckNodeParents( boundary );
@@ -350,9 +350,9 @@ void Boundary_Test::runLegacy()
     string region1Name( "MATRIX_LEFT" ), region2Name( "MATRIX_RIGHT" );
     // VARIABLE PLACED ON FACE
     Index faceKey( model.Database().StorageKey( "face variable" ) );
-    cout << "\n\nFace variable:\n"; faceKey.Out();
+    getInfoStream() << "\n\nFace variable:\n"; faceKey.Out(getInfoStream());
     // CREATE BETWEEN
-    cout << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
+    getInfoStream() << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
     model.InsertBoundary( region1Name.data(), region2Name.data() );
     std::string boundary12Name;
     boundary12Name = region1Name;
@@ -360,9 +360,9 @@ void Boundary_Test::runLegacy()
     boundary12Name += region2Name;
     bool boundary12Test(  model.ContainsBoundary( boundary12Name ) );
     if( boundary12Test )
-      cout << "\nBoundary set up successful." << endl;
+      getInfoStream() << "\nBoundary set up successful." << endl;
     else
-      cout << "\nBoundary set up MATRIX_LEFT-MATRIX_RIGHT failed." << endl;
+      getInfoStream() << "\nBoundary set up MATRIX_LEFT-MATRIX_RIGHT failed." << endl;
     _test( boundary12Test );
     // testing proper parent assignment
     Boundary<SPACE>& boundaryOne( model.Boundary( boundary12Name ) );
@@ -385,7 +385,7 @@ void Boundary_Test::runLegacy()
     // BOUNDARY FACE COUNT
     Boundary<SPACE>& boundary12( model.Boundary( boundary12Name ) );
     size_t boundary12FaceCount( boundary12.Elements() );
-    cout << "\nBoundary element count: " << boundary12FaceCount << endl;
+    getInfoStream() << "\nBoundary element count: " << boundary12FaceCount << endl;
     _test( boundary12FaceCount != 0 );
     CheckFaceNeighbors( boundary12 );
     CheckFaceUnitNormalOrientation( boundary12 );
@@ -394,7 +394,7 @@ void Boundary_Test::runLegacy()
     // BOUNDARY AREA
     double boundary12Area( boundary12.Area() );
     bool boundary12AreaNotZero( !withinTolerance( 0., boundary12Area, 0.1 ) );
-    cout << "\nBoundary area: " << boundary12Area << endl;
+    getInfoStream() << "\nBoundary area: " << boundary12Area << endl;
     _test( boundary12AreaNotZero );
     vtu.OutputDataToVTU( "ElementVariable", "element variable", region1Name.data(), static_cast<int>(0) );
     model.Region( region2Name.data() ).InputPropertyValue( "element variable", makeScalar( PLAIN, 2.5 ) );
@@ -402,7 +402,7 @@ void Boundary_Test::runLegacy()
     vtu.OutputDataToVTU( "NodalVariable", "nodal variable", boundary12, static_cast<int>(0) );
     boundary12.InputPropertyValue( "face variable", makeScalar( PLAIN, 9999.0 ) );
     vtu.OutputDataToVTU( "FaceVariable_A", "face variable", boundary12, static_cast<int>(0) );
-    cout << "\nHULL_LEFT area: " << model.Region( "HULL_LEFT" ).Volume() << endl;
+    getInfoStream() << "\nHULL_LEFT area: " << model.Region( "HULL_LEFT" ).Volume() << endl;
     _test( InputElementAreaAsVolumeVariable<SPACE>( model, boundary12, "face variable" ) > 0 );
     vtu.OutputDataToVTU( "FaceVariable_B", "face variable", boundary12, static_cast<int>(0) );
     // FACE AREA
@@ -419,7 +419,7 @@ void Boundary_Test::runLegacy()
     vtu.OutputDataToVTU( "FaceVariable", "face variable", boundaryHullRight, static_cast<int>(0) );
     double boundaryHullRightArea( boundaryHullRight.Area() );
     bool boundaryHullRightAreaNotZero( !withinTolerance( 0., boundaryHullRightArea, 0.1 ) );
-    cout << "\nBoundary area: " << boundaryHullRightArea << endl;
+    getInfoStream() << "\nBoundary area: " << boundaryHullRightArea << endl;
     _test( boundary12AreaNotZero );
     CheckFaceNeighbors(boundaryHullRight);
     CheckFaceUnitNormalOrientation( boundaryHullRight );
@@ -485,7 +485,7 @@ void Boundary_Test::runLegacy()
         }
       _test( nullNeighborCount != 0 );
 
-      cout << "\nNull neighbor count: " << nullNeighborCount << endl;
+      getInfoStream() << "\nNull neighbor count: " << nullNeighborCount << endl;
 
       // for the case of an irregular model, check CreateAround and Split
       m02.AddFaces("Model");

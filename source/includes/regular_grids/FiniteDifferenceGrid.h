@@ -86,7 +86,8 @@ class FiniteDifferenceGrid {
     void  SetFirstNRowsTo( int32 n, double64 val );
     void  SetLastNRowsTo( int32 n, double64 val );
     void  SetRegionTo( double64 xmin, double64 xmax, double64 ymin, double64 ymax, double64 val );
-    void  Out() const;
+    void Out() const { Out(std::cout); }
+    void  Out(std::ostream& os) const;
     void  Out( const char* fname, int32 tstep=0, bool with_frame=false ) const;
     bool  BinaryOut( const char* bin_name, int32 tstep=0, bool with_frame=false ) const;
     bool  In( const char* fname );

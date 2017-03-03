@@ -17,7 +17,82 @@ namespace csmp {
 
 class IndexTracker;
 
+<<<<<<< HEAD
 /** @brief Accessor for discretized physical variables
+=======
+  Link between PropertyDatabase and LocalVariableStorage.
+
+  @todo SKM: (3-F) Provide scheme for compile-time variables
+  @todo (2-D) Should become class
+  */
+  struct Index {
+    Index(); 
+    Index( VARIABLE_TYPE, PLACEMENT, size_t idx ); 
+    Index( VARIABLE_TYPE, PLACEMENT, size_t idx, size_t dataDepth, size_t flagDepth, size_t dataOffset, size_t flagOffset, 
+      const LocalVariables&, const IntegrationPointVariables& = IntegrationPointVariables(), size_t offsetFactorSimplex = 0, 
+      size_t offsetFactorSector = 0, size_t ipFactorSimplex = 0, size_t ipFactorSector = 0, size_t ipFactorFacet = 0 ); 
+    Index( const csmp::Index& );
+    ~Index();
+
+    Index&  operator=( const csmp::Index& );
+    bool    operator==( const csmp::Index& ) const;
+    bool    operator!=( const csmp::Index& ) const; 
+    bool    operator<( const csmp::Index& ) const; 
+    bool    IsDefined() const;
+
+    void Attach( IndexTracker* indexTracker );
+    void Detach();
+    void UpdateData( const csmp::Index& idx );
+
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
+    bool Out( FILE* fp ) const;
+    bool In( FILE* fp );
+
+
+    VARIABLE_TYPE               type;
+    PLACEMENT                   place;
+    size_t                      index;                      ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
+    size_t                      dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
+    size_t                      flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
+    size_t                      dataOffset;                 ///< Index in data container where data start
+    size_t                      flagOffset;                 ///< Index in flag container where data start
+    size_t                      offsetFactorSimplex;        ///< Factors used in integration point variable index arithmetic
+    size_t                      offsetFactorSector;         ///< Factors used in integration point variable index arithmetic
+    size_t                      ipFactorSimplex;            ///< Factors used in integration point variable index arithmetic
+    size_t                      ipFactorSector;             ///< Factors used in integration point variable index arithmetic
+    size_t                      ipFactorFacet;              ///< Factors used in integration point variable index arithmetic
+    LocalVariables              localVariables;             ///< Description of state of physical variables at given placement (variables count etc..)
+    IntegrationPointVariables   integrationPointVariables;  ///< Description of state of physical variables at given placement (variables count etc..)
+    IndexTracker*               indexTracker;               ///< IndexTracker used for runtime updates of offsets (addition/removal of variables)
+    };   
+
+
+  /// Templatized version with allows for compile-time type selection
+  template<VARIABLE_TYPE ty,PLACEMENT pl> 
+  struct INDEX : public Index {
+    explicit INDEX( size_t i ) : Index(ty,pl,i) {}
+    };
+
+
+  // type parsing (although slow)
+  template<typename Var>  VARIABLE_TYPE variableType( const Var& );
+
+
+  // console input and output
+  std::ostream& operator<<( std::ostream&, const csmp::Index& );
+  std::istream& operator>>( std::istream&, csmp::Index& );
+
+  } // csmp
+
+
+
+
+namespace csmp {
+
+  /**
+  @struct Index Index.h "main_library/Index.h"
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
   Link between PropertyDatabase and LocalVariableStorage.
  

@@ -109,8 +109,9 @@ class VSet : public VData {
     /// deletes all content of the VSet
     void  Erase();
   
-    /// prints the VSet to the console
-    void  Out( bool data_as_well=true ) const;
+    /// prints the VSet to a stream
+    void Out(bool data_as_well=true) const { Out(std::cout, data_as_well); }
+    void Out( std::ostream& os, bool data_as_well=true ) const;
 
   protected:
 

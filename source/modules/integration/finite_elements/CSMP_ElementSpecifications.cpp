@@ -830,7 +830,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
           if ( face==1U ) return 1U;
       }
     if ( etype == ISOPARAMETRIC_CUBIC_BAR || etype == CUBIC_BAR )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "elements with cubic interpolation functions are not handled yet");
 
     // tetrahedron
@@ -903,7 +903,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
             }
       }
     if ( etype == ISOPARAMETRIC_CUBIC_TETRAHEDRON || etype == CUBIC_TETRAHEDRON )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "elements with cubic interpolation functions are not handled yet");
 
     // hexahedron
@@ -1020,7 +1020,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
             }
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 || etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "elements with cubic interpolation functions are not handled yet");
 
     // quadrilateral
@@ -1075,7 +1075,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
             }
       }
     if ( etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "elements with cubic interpolation functions are not handled yet");
 
     // triangle
@@ -1120,7 +1120,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
             }
       }
     if ( etype == ISOPARAMETRIC_CUBIC_TRIANGLE || etype == CUBIC_TRIANGLE )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "elements with cubic interpolation functions are not handled yet");
 
     // prism
@@ -1165,7 +1165,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
     if ( etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
          etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
          etype == ISOPARAMETRIC_CUBIC_PRISM )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "prism elements with quadratic or cubic interpolation functions are not handled yet");
 
     // pyramid
@@ -1208,7 +1208,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
          etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
          etype == ISOPARAMETRIC_CUBIC_PYRAMID )
-      throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
+      throw csmp::Exception( CSMP_ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "pyramid elements with quadratic or cubic interpolation functions are not handled yet");
 
     std::cout <<"\nCSMP_ElementSpecifications::FaceNodeForElementOfType: ";

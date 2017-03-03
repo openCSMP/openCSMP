@@ -75,7 +75,7 @@ and the regions file prefix is used to read the regions file.
       if( !file.is_open() )
         {
           string errorMessage( (string)("Unable to open subdomain input file " + fileName ) );
-          throw csmp::Exception( ERROR, "ANSYS_Model_Quadratic<dim>::ReadInSubDomains()", errorMessage );
+          throw csmp::Exception( CSMP_ERROR, "ANSYS_Model_Quadratic<dim>::ReadInSubDomains()", errorMessage );
         }        
 
       string line; 
@@ -112,7 +112,7 @@ and the regions file prefix is used to read the regions file.
       ifstream file( fileName.data(), ios::in );
 
       if( !file.is_open() )
-        throw csmp::Exception( ERROR, "ANSYS_Model_Quadratic<dim>::ReadInRegions()", "Unable to open ascii input file!" );
+        throw csmp::Exception( CSMP_ERROR, "ANSYS_Model_Quadratic<dim>::ReadInRegions()", "Unable to open ascii input file!" );
 
       string line; 
 
@@ -175,7 +175,7 @@ and the regions file prefix is used to read the regions file.
       ifstream file( fileName.data(), ios::in );
 
       if( !file.is_open() )
-        throw csmp::Exception( ERROR, "ANSYS_Model_Quadratic<dim>::ReadInData()", "Unable to open data input file!" );
+        throw csmp::Exception( CSMP_ERROR, "ANSYS_Model_Quadratic<dim>::ReadInData()", "Unable to open data input file!" );
 
       cout << endl << "Reading " << fileName << " Icem model data file..." << endl;
 
@@ -550,7 +550,7 @@ and the regions file prefix is used to read the regions file.
       if( interpolationOrder_ == CUBIC ) return "cubic";
 
 	  string errorMessage( "Undefined order of approximation!"  );
-      throw csmp::Exception( ERROR, "ANSYS_Model_Quadratic<dim>::ParseInterpolationOrder", errorMessage );
+      throw csmp::Exception( CSMP_ERROR, "ANSYS_Model_Quadratic<dim>::ParseInterpolationOrder", errorMessage );
 
 	  return errorMessage;
     }
@@ -563,7 +563,7 @@ and the regions file prefix is used to read the regions file.
         if( families_.find(*it) == families_.end() ) 
           {
             string errorMessage(  string( "SubDomain " + *it + " specified in -subdomain.txt file not available in mesh!" ) );
-            throw csmp::Exception( ERROR, "ANSYS_Model_Quadratic<dim>::CheckSubDomainRequest", errorMessage );
+            throw csmp::Exception( CSMP_ERROR, "ANSYS_Model_Quadratic<dim>::CheckSubDomainRequest", errorMessage );
           }
     }
 

@@ -24,7 +24,7 @@ FemFromGridVisitor<dim>::FemFromGridVisitor( const PropertyDatabase<dim>& p,
       key(pref.StorageKey(var))
   { 
      if ( dim == 3U ) 
-        throw csmp::Exception( FATAL_ERROR, "FemFromGridVisitor(constructor 3D)",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "FemFromGridVisitor(constructor 3D)",
                        "Thus far, 2D-models only, can be written to grids."); 
 
      if ( key.type != SCALAR )
@@ -32,7 +32,7 @@ FemFromGridVisitor<dim>::FemFromGridVisitor( const PropertyDatabase<dim>& p,
           cout <<"\nFemFromGridVisitor: only scalar properties can be ";
           cout <<"mapped from regular grid so far. Now exciting..." << endl;
           if ( key.type != SCALAR )
-            throw csmp::Exception( ERROR, "FemFromGridVisitor<dim>(constructor)",
+            throw csmp::Exception( CSMP_ERROR, "FemFromGridVisitor<dim>(constructor)",
                             var, "basic property must be a scalar.");
        }
      if ( key.place == INTER_FACE )
@@ -40,7 +40,7 @@ FemFromGridVisitor<dim>::FemFromGridVisitor( const PropertyDatabase<dim>& p,
           cout <<"\nFemFromGridVisitor: only nodal and element properties can be ";
           cout <<"mapped from regular grid so far. Now exciting..." << endl;
           if ( key.place == INTER_FACE )
-            throw csmp::Exception( ERROR, "FemFromGridVisitor<dim>(constructor)",
+            throw csmp::Exception( CSMP_ERROR, "FemFromGridVisitor<dim>(constructor)",
                             var, "basic property must not be placed on Face.");
        }
   }

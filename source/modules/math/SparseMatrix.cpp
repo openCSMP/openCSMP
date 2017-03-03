@@ -787,20 +787,20 @@ void SparseMatrix::In( const char* file_name_without_extension )
     entries row by row.
     Each entry is prefaced by its column index.
 */
-void SparseMatrix::Out( long digits ) const
+void SparseMatrix::Out( std::ostream& os, long digits ) const
  {
     if ( data.empty() ) {
-         cerr <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
+         os <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
          return;
       }
 
-    long    prec(cout.precision(digits));
+    long    prec(os.precision(digits));
     size_t pcols(1);
 
-    cout <<"\nSparseMatrix::Out: entries (non-zero elements): "<< Entries();
-    cout <<"\nrows: "<< data.size() <<", columns: "<< data.size() << endl;
+    os <<"\nSparseMatrix::Out: entries (non-zero elements): "<< Entries();
+    os <<"\nrows: "<< data.size() <<", columns: "<< data.size() << endl;
     
-    if ( digits != 0 ) cout.setf(ios::scientific);
+    if ( digits != 0 ) os.setf(ios::scientific);
 
     // for all rows
     for ( size_t i=0U; i<data.size(); i++ )
@@ -808,23 +808,23 @@ void SparseMatrix::Out( long digits ) const
       for ( map<size_t,double64>::const_iterator
             ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
          // print the column index
-         cout <<"("<< i <<","<< (*ditc).first;
+         os <<"("<< i <<","<< (*ditc).first;
          // prints values with extra spaces to achieve an alignment even if there are
          // negative elements
-         if ( (*ditc).second > 0 ) cout <<"):  "<< (*ditc).second <<" ";
-         else                      cout <<"): "<< (*ditc).second <<" ";
+         if ( (*ditc).second > 0 ) os <<"):  "<< (*ditc).second <<" ";
+         else                      os <<"): "<< (*ditc).second <<" ";
          // wraps the lines if there are more than 10 entries per line
          if ( pcols == 10 || pcols == data[i].size() ) {
-              cout << endl;
+              os << endl;
               pcols = 0;
            }
          pcols++;
       }
-    cout << endl << endl; 
+    os << endl << endl; 
 
     if ( digits != 0 ) {
-         cout.unsetf( ios::scientific );
-         cout.precision(prec);
+         os.unsetf( ios::scientific );
+         os.precision(prec);
       }
  }
 

@@ -28,7 +28,8 @@ class FRED_Interface {
 
     void   OutputSelectedFractureDiameters( const char* sregions ) const;
     
-    void   Out() const;
+    void   Out() const { Out(std::cout); }
+    void   Out(std::ostream& os) const;
     
   private:
     /// returns number of points

@@ -29,6 +29,7 @@ void Point_Test::run()
 
 void Point_Test::Test_1D_Point()
  {
+     std::ostream& os = getInfoStream();
    const size_t dim(1U);
 
    // constructing point from vector
@@ -127,8 +128,8 @@ void Point_Test::Test_1D_Point()
     _test( !res.CoincidesWithWithinTolerance(p3) );
     vector<double64> b(p1.Coordinates());
     _test( a == b );
-    p1.Out();
-    cout <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
+    p1.Out(os);
+    os <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
     
     // related non-member binary operators
     res = 1. * p1;
@@ -163,6 +164,7 @@ void Point_Test::Test_1D_Point()
 
 void Point_Test::Test_2D_Point()
  {
+     std::ostream& os = getInfoStream();
    const size_t dim(2U);
 
    // constructing point from vector
@@ -260,8 +262,8 @@ void Point_Test::Test_2D_Point()
     _test( !res.CoincidesWithWithinTolerance(p3) );
     vector<double64> b(p1.Coordinates());
     _test( a == b );
-    p1.Out();
-    cout <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
+    p1.Out(os);
+    os <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
     
     // related non-member binary operators
     res = 1. * p1;
@@ -300,6 +302,7 @@ void Point_Test::Test_2D_Point()
 
 void Point_Test::Test_3D_Point()
  {
+     std::ostream& os = getInfoStream();
    const size_t dim(3U);
 
    // constructing point from vector
@@ -398,8 +401,8 @@ void Point_Test::Test_3D_Point()
     _test( !res.CoincidesWithWithinTolerance(p3) );
     vector<double64> b(p1.Coordinates());
     _test( a == b );
-    p1.Out();
-    cout <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
+    p1.Out(os);
+    os <<"Point_Test::Test_3D_Point: ostream test: "<< p1 << endl << endl;
     
     // related non-member binary operators
     res = 1. * p1;

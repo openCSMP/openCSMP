@@ -25,12 +25,12 @@ CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFEM_NumIntegral_dNT_op_dN_dV( con
     
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhs_nodal_op_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_lhs_nodal_op_N_dV<dim>::(constructor)", 
                       test, "Dependent variable must be a scalar property placed on the nodes." );
                    
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhs_nodal_op_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_lhs_nodal_op_N_dV<dim>::(constructor)", 
                       basic, "Weighting variable must be a scalar property placed on the nodes." );
 
 

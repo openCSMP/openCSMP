@@ -31,19 +31,19 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_op_DN_NT_v_DN_dV(
       (*it).Resize(dim,dim);
       
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT and MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       diffusion_oper, "must be an element-based variable." );
 
     if ( (adv_key.place != ELEMENT or adv_key.place != ELEMENT_INTEGRATION_POINT) and adv_key.type != VECTOR )
-      throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       advection_oper, "must be an element-based vector variable." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 

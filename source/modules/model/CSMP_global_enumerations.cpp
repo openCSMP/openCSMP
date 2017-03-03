@@ -469,7 +469,7 @@ VARIABLE_FLAG  parseCondition( std::string& s )
     if ( S == "ROBIN"                                                          ) return ROBIN;
     if ( S == "CONST_FLUX" || S == "CONSTANT_FLUX"     || S == "CONSTANT FLUX" ) return CONSTANT_FLUX;
 
-    throw csmp::Exception( FATAL_ERROR,
+    throw csmp::Exception( CSMP_FATAL_ERROR,
                            "parseCondition:",
                            S.c_str(),
                            ": boundary condition type specifier was not recognized");

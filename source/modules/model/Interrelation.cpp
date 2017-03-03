@@ -110,7 +110,7 @@ template<size_t dim>
 Operand<dim>&  Interrelation<dim>::GlobalProperty( const char* var )
  {
     if ( p_ref.IsDefined(var) == false )
-      throw csmp::Exception( ERROR, "Interrelation<dim>::GlobalProperty", 
+      throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::GlobalProperty", 
                              "Operand does not exist in variable database");
     
     Operand<dim> op( var, p_ref );
@@ -120,7 +120,7 @@ Operand<dim>&  Interrelation<dim>::GlobalProperty( const char* var )
     typename map<string,Operand<dim> >::iterator it(operand_list_.find(op.Name())); 
      
     if ( it == operand_list_.end() )
-      throw csmp::Exception( ERROR, "Interrelation<dim>::GlobalProperty", 
+      throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::GlobalProperty", 
                              "Operand assignment to operand list failed");
     
     return (*it).second;
@@ -163,7 +163,7 @@ void  Interrelation<dim>::ResultProperty( const char* var )
     result_ = operand_list_.find( string(var) );
     
     if ( result_ == operand_list_.end() ) 
-         throw csmp::Exception( ERROR, "Interrelation<dim>::DefineResultProperty", 
+         throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::DefineResultProperty", 
                                 "Result property was not found in Operand list");
     result_property_   = var;                            
     application_level_ = (*result_).second.Placement();                            
@@ -230,7 +230,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                    csmp::Index prop_key = (*oiter).second.Key();
                    
                    if ( prop_key.place == BOUNDARY )
-                    throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                     "BOUNDARY variables cannot be involved in REGION calculations ");
                    
                    // REGION properties
@@ -251,14 +251,14 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                                    (*oiter).second = ts;
                                  }
                               break;
-                            default: throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                            default: throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                                                    "variable type could not be resolved");
                          }
                      }
                    // OTHER properties are volume averaged
                    else {
                         if ( prop_key.type != SCALAR )
-                          throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                          throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "only SCALAR non-REGION variables can be involved in REGION calculations ");
                        
                         (*oiter).second = (*git).second.VolumeIntegral( sg.Database().Name(prop_key) ,false) / (*git).second.Volume();
@@ -273,11 +273,11 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
-                   throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
+                   throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
                 }
               else
               switch( (*result_).second.Type() ) {
@@ -300,7 +300,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                         }
                       break;
                     default: 
-                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                            "variable type could not be resolved");
                  }
             } // end regions loop
@@ -317,7 +317,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                    csmp::Index prop_key = (*oiter).second.Key();
                    
                    if ( prop_key.place == BOUNDARY )
-                    throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                     "BOUNDARY variables cannot be involved in REGION calculations ");
                    
                    // REGION properties
@@ -338,14 +338,14 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                                    (*oiter).second = ts;
                                  }
                               break;
-                            default: throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                            default: throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                                                    "variable type could not be resolved");
                          }
                      }
                    // OTHER properties are volume averaged
                    else {
                         if ( prop_key.type != SCALAR )
-                          throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                          throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "only SCALAR non-REGION variables can be involved in REGION calculations ");
                        
                         (*oiter).second = (*git).second.VolumeIntegral( sg.Database().Name(prop_key) ,false) / (*git).second.Volume();
@@ -360,11 +360,11 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
-                   throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
+                   throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
                 }
               else
               switch( (*result_).second.Type() ) {
@@ -387,7 +387,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                         }
                       break;
                     default: 
-                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                            "variable type could not be resolved");
                  }
             } // end non-unique regions loop
@@ -409,7 +409,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                    csmp::Index prop_key = (*oiter).second.Key();
                    
                    if ( prop_key.place == REGION )
-                    throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                     "REGION variables cannot be involved in BOUNDARY calculations ");
                    
                    // REGION properties
@@ -430,14 +430,14 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                                    (*oiter).second = ts;
                                  }
                               break;
-                            default: throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                            default: throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                                                    "variable type could not be resolved");
                          }
                      }
                    // OTHER properties are volume averaged
                    else {
                         if ( prop_key.type != SCALAR )
-                          throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                          throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "only SCALAR non-BOUNDARY variables can be involved in BOUNDARY calculations ");
                        
                         (*oiter).second = (*git).second.SurfaceIntegral( sg.Database(), sg.Database().Name(prop_key) ) / (*git).second.Area(); 
@@ -452,11 +452,11 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
-                   throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
+                   throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
                 }
               else
               switch( (*result_).second.Type() ) {
@@ -479,7 +479,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                         }
                       break;
                     default: 
-                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                            "variable type could not be resolved");
                  }
             } // end boundaries loop
@@ -495,7 +495,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                    csmp::Index prop_key = (*oiter).second.Key();
                    
                    if ( prop_key.place == REGION )
-                    throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                     "REGION variables cannot be involved in BOUNDARY calculations ");
                    
                    // REGION properties
@@ -516,14 +516,14 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                                    (*oiter).second = ts;
                                  }
                               break;
-                            default: throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                            default: throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                                                    "variable type could not be resolved");
                          }
                      }
                    // OTHER properties are volume averaged
                    else {
                         if ( prop_key.type != SCALAR )
-                          throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                          throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "only SCALAR non-BOUNDARY variables can be involved in BOUNDARY calculations ");
                        
                         (*oiter).second = (*git).second.SurfaceIntegral( sg.Database(), sg.Database().Name(prop_key) ) / (*git).second.Area(); 
@@ -538,11 +538,11 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
               // 3. Mapping the result back to the current element or the new variable container
               // -------------------------------------------------------------------------------
               if ( ResultWithinRange() == false ) {
-                  (*result_).second.Out();
+                  (*result_).second.Out(std::cerr);
                    string message("calculated result out of range; nothing is done; this affects the result property '");
                    message += result_property_.c_str();
                    message +="'";
-                   throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
+                   throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(), message.c_str()  );
                 }
               else
               switch( (*result_).second.Type() ) {
@@ -565,7 +565,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                         }
                       break;
                     default: 
-                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
+                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "variable type could not be resolved");
                  }
             } // end split-boundaries loop
@@ -656,7 +656,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     if ( application_level_ == REGION or application_level_ == BOUNDARY )
-      throw Exception( ERROR, "Interrelation<dim>::Apply(ModelSubDomain)", name_.c_str(),
+      throw Exception( CSMP_ERROR, "Interrelation<dim>::Apply(ModelSubDomain)", name_.c_str(),
                       "attempt to apply this on the application level REGION or BOUNDARY" );
  
      typename vector<csmp::Node<dim>*>::iterator nst1 = gref.NodesBegin(),
@@ -685,7 +685,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                    csmp::Index prop_key = (*oiter).second.Key();
                    
                    if ( prop_key.place != NODE ) {
-                        throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(), 
+                        throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(), 
                                               "calculations with nodal result variables can only involve node variables");
                         return;
                      }
@@ -702,7 +702,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                              (*oiter).second = ts;
                           break;
                         default: 
-                        throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                        throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                "variable type could not be resolved");
                      }
               } // end looping through operands
@@ -715,10 +715,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
             // ----------------------------------------------------------------------------
             // 3.1 range checking
             if ( ResultWithinRange() == false ) {
-                 csmp_error.notice( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                 csmp_error.notice( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                            "calculated result out of range; nothing is done.");
-                 (*result_).second.Out();
-                 csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                 (*result_).second.Out(std::cerr);
+                 csmp_error.notice( CSMP_INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  
             else {
@@ -736,7 +736,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                           (*nst1)->Store( (*result_).second.Key(), ts );
                       break;
                     default: 
-                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                           "variable type could not be resolved.");
                   }
               }
@@ -783,7 +783,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                          (*oiter).second = ts;
                                       break;
                                     default: 
-                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                                           "node variable type could not be resolved.");
                                   }
                             break;
@@ -801,7 +801,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                          (*oiter).second = ts;
                                       break;
                                     default: 
-                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                                            "integration point variable; type could not be resolved.");
                                   }
                             break;
@@ -819,7 +819,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                          (*oiter).second = ts;
                                       break;
                                     default: 
-                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                                            "element variable type could not be resolved.");
                                   }
                             break;
@@ -837,7 +837,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                          (*oiter).second = ts;
                                       break;
                                     default: 
-                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                                            "region variable type could not be resolved.");
                                   }
                             break;
@@ -855,11 +855,11 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                          (*oiter).second = ts;
                                       break;
                                     default: 
-                                    throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                                    throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                                            "boundary variable type could not be resolved.");
                                   }
                             break;
-                           default: csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                           default: csmp_error.notice( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                   "so fR, calculations with 'IntegrationPoint' target cannot involve Face variables.");
                                   return;
                      } // end switch
@@ -875,10 +875,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                 // 3.1 range checking
                 if ( ResultWithinRange() == false )
                   {
-                     csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                     csmp_error.notice( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                             "calculated result out of range; nothing is done");
-                     (*result_).second.Out();
-                     csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                     (*result_).second.Out(std::cerr);
+                     csmp_error.notice( CSMP_INFO, "This affects the result property ", result_property_.c_str() );
                   }
                 // 3.2 if the calculated variable exists in database the result is stored in Model  
                 else 
@@ -897,7 +897,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                               (*eit)->Store( i, (*result_).second.Key(), ts );
                             break;
                           default: 
-                          throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                          throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                  "variable type could not be resolved");
                       }
                  
@@ -944,7 +944,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                        (*oiter).second = ts;
                                     break;
                                   default: 
-                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                  throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                          "variable type could not be resolved");
                                 }
                           break;
@@ -964,7 +964,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                        (*oiter).second = ts;
                                     break;
                                   default: 
-                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                  throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                          "variable type could not be resolved");
                                 }
                           break;
@@ -983,7 +983,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                        (*oiter).second = ts;
                                     break;
                                   default: 
-                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                  throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                          "variable type could not be resolved");
                                 }
                            break;
@@ -1002,11 +1002,11 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                                        (*oiter).second = ts;
                                     break;
                                   default: 
-                                  throw csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                                  throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                                          "variable type could not be resolved");
                                 }
                            break;
-                        default: csmp::Exception( ERROR, "Interrelation<dim>::Apply", name_.c_str(), 
+                        default: csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(), 
                                                  "calculation with 'Element' variable; input variable placement cannot be resolved");
                           return;
                    } // end switch
@@ -1021,10 +1021,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
             // 3.1 range checking
             if ( ResultWithinRange() == false )
               {
-                 csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                 csmp_error.notice( CSMP_ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                         "calculated result out of range; nothing is done");
-                 (*result_).second.Out();
-                 csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                 (*result_).second.Out(std::cerr);
+                 csmp_error.notice( CSMP_INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  
             else 
@@ -1044,7 +1044,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
                           (*est1)->Store( (*result_).second.Key(), ts );
                         break;
                       default: 
-                      throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                      throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                              "variable type could not be resolved.");
                   }
               }
@@ -1054,7 +1054,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
       }
 
       if ( application_level_ == FACE or application_level_ == INTER_FACE ) 
-        throw csmp::Exception( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+        throw csmp::Exception( CSMP_ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                               "calculations with Face or InterFace as result variables are not handled yet.");
  
  } // end Apply (Region level)

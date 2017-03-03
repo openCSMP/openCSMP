@@ -117,7 +117,7 @@ bool copyFile( string fileSource, string fileCopy )
    }
    else
    {
-     throw csmp::Exception( ERROR,
+     throw csmp::Exception( CSMP_ERROR,
                             "copyFile",
                             "Unable to open file",
                             "unknown" );

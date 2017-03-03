@@ -83,7 +83,8 @@ class PDE_Integrator {
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
     void          OutputGlobals( int precision=1 );
-    void          Out() const;
+    void          Out() const { Out(std::cout); }
+    void          Out(std::ostream& os) const;
     void          Verbose(bool verbose){ verbose_=verbose;}
     bool          GetVerbose(){ return verbose_;}
 

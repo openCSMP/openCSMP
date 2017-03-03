@@ -42,7 +42,8 @@ class Polygon {
     void          Move( double dx, double dy );
     void          BoundingRectangle( mjl::Point& cnr_min, mjl::Point& cnr_max ) const;
 
-    void          Out() const;
+    void          Out() const { Out(std::cout); }
+    void          Out(std::ostream& os) const;
     void          Out( const char* ) const;
     void          OutputCoordinatesTo( std::list<mjl::Point>& ) const;
 

@@ -51,7 +51,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
            prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY ) {
          if ((fp = fopen( file_name,"wt")) == NULL ) {
               strcat( file_name, ": could not be created !"); 
-              throw csmp::Exception( ERROR, "TextInterface::OutputDataAsTextColumns:", file_name );
+              throw csmp::Exception( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns:", file_name );
               return;
            }
          fprintf( fp, "%s  data (SI units)\n", var );
@@ -95,7 +95,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                   }
                   break;
                 default:
-                  throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                  throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                 "variable type not supported yet.");
            }
        }
@@ -143,7 +143,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                  }
            }
@@ -187,7 +187,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                  }
            }
@@ -239,7 +239,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                  }
            }
@@ -285,7 +285,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                  }
            }
@@ -328,7 +328,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
      if ((fp = fopen ( file_name,"wt")) == NULL )
        {
           strcat( file_name, ": could not be created !"); 
-          throw csmp::Exception( ERROR, "TextInterface::OutputDataAsTextColumns", file_name );
+          throw csmp::Exception( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns", file_name );
           return;
        }
 
@@ -378,7 +378,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                   }
               }
@@ -432,7 +432,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                       }
                       break;
                     default:
-                      throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                      throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                     "variable type not supported yet.");
                   }
               }
@@ -504,7 +504,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         }
                         break;
                       default:
-                        throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                        throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                       "variable type not supported yet.");
                     }
                 }
@@ -578,7 +578,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         }
                         break;
                       default:
-                        throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                        throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                       "variable type not supported yet.");
                     }
                 }
@@ -629,14 +629,14 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         }
                         break;
                       default:
-                        throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                        throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                       "variable type not supported yet.");
                    }
               }
              break; 
           }
         default:
-             throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumns", 
+             throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumns", 
                                              "variable placement not handled yet (Face, InterFace, and their IPs)"); 		       
       }
     fclose( fp );
@@ -660,7 +660,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !model.ContainsRegion(region) ) {
-         csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+         csmp_error.notice( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                             region, " not found, nothing was done.");
          return;
       }
@@ -669,13 +669,13 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
     csmp::Index  key = model.Database().StorageKey( (*outvars.begin()).c_str() );
     for ( list<string>::const_iterator it=outvars.begin(); it!=outvars.end(); it++ )
       if ( model.Database().Placement( (*it).c_str() ) != key.place ) {
-           csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+           csmp_error.notice( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                              (*it).c_str(), "has different placement than other variables; this cannot be handled.");
            return;
         }
 
     if ( key.place != NODE and key.place != ELEMENT ) {
-         csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+         csmp_error.notice( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                            "method works only for NODE and ELEMENT variable placements; nothing was done.");
          return;
       }
@@ -691,7 +691,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
      outfile_prefix +=".txt";
      FILE*  fp(0);
      if ((fp = fopen ( outfile_prefix.c_str(),"wt")) == NULL ) {
-          csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns",
+          csmp_error.notice( CSMP_ERROR, "TextInterface::OutputDataAsTextColumns",
                              outfile_prefix.c_str(), "could not be created." );
           return;
        }
@@ -782,7 +782,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                                for ( size_t j=0U; j<fary.Size(); j++ ) fprintf( fp, "%E\t", fary(j) );
                             break;
                           default:
-                            throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                            throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                           "variable type not supported yet.");
                         }
                     }
@@ -828,7 +828,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                                   for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                                break;
                              default:
-                               throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
+                               throw csmp::Exception( CSMP_ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
                                                              "variable type not supported yet.");
                            }
                      }
@@ -836,7 +836,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                }
              break;
          default:
-            throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumns",
+            throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumns",
                                   "variable placement not handled yet (Face, InterFace, and their IPs)");
       }
 
@@ -895,7 +895,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
      // 2. Getting the file ready
      if ((fp = fopen ( file_name,"wt")) == NULL ) {
           strcat( file_name, ": could not be created !"); 
-          throw csmp::Exception( ERROR, "Model<dim>::OutputDataAsTextColumnsNumbered", file_name );
+          throw csmp::Exception( CSMP_ERROR, "Model<dim>::OutputDataAsTextColumnsNumbered", file_name );
           return;
        }
 
@@ -932,7 +932,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                             for ( k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                      default:
-                       throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
+                       throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
                                              "variable type not handled yet (Array & FixedArray)");
                   }
               }
@@ -973,7 +973,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                             for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                      default:
-                       throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
+                       throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
                                              "variable type not handled yet (Array & FixedArray)");
                   }
               }
@@ -1009,7 +1009,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                              for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                            fprintf( fp, "\n");
                      default:
-                       throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
+                       throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
                                              "variable type not handled yet (Array & FixedArray)");
                    }
               }
@@ -1017,12 +1017,12 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
           }
         case MODEL: { 
              fprintf( fp, "%s is a scalar (global) variable. ", s );
-             throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered", 
+             throw csmp::Exception( CSMP_WARNING, "TextInterface::OutputDataAsTextColumnsNumbered", 
                                              "no Model vars so far"); 		       
              break; 
          }
         default:
-             throw csmp::Exception( ERROR, "TextInterface::OutputDataAsTextColumnsNumbered", 
+             throw csmp::Exception( CSMP_ERROR, "TextInterface::OutputDataAsTextColumnsNumbered", 
                                            "placement of output variable could not be identified"); 		       
       }
     fclose( fp );
@@ -1162,7 +1162,7 @@ void TextInterface::AppendRegionToTextFileWhere( const Model<2U>& model,
     if ( iter != group_list.end() ) 
       (*iter).second.AppendToTextFileWhere( fname, property, flag );
                              
-    else throw csmp::Exception( ERROR, "Model<dim>::AppendRegionToTextFileWhere", 
+    else throw csmp::Exception( CSMP_ERROR, "Model<dim>::AppendRegionToTextFileWhere", 
                                 "region does not exist: ", groupname );
 
  } // end AppendRegionToTextFileWhere
@@ -1189,7 +1189,7 @@ void TextInterface::SizeofPixelTextImage256( const char* fname, size_t& m, size_
     // opening the output file 
     ifs.open ( fname, ios::in );
     if ( !ifs )
-      throw csmp::Exception( FATAL_ERROR, "TextInterface::SizeofPixelTextImage256", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::SizeofPixelTextImage256", 
                                           "Input file could not be opened");
     noskipws( ifs ); 
 
@@ -1238,7 +1238,7 @@ void  TextInterface::ReadPixelTextImage256( const char* fname, Matrix& data )
     // opening the output file 
     ifs.open ( fname, ios::in );
     if ( !ifs )
-      throw csmp::Exception( FATAL_ERROR, "TextInterface::ReadPixelTextImage256", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::ReadPixelTextImage256", 
                                           "Input file could not be opened");
       
      for ( size_t i=0U; i<data.Rows(); i++ )
@@ -1269,7 +1269,7 @@ void TextInterface::WriteStringToTextFile( const char* fname,
       {
          ofs.open ( fname, ios::out|ios::trunc );
          if ( !ofs )
-           throw csmp::Exception( FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
                                         "Output file could not be opened");
          else ofs << str << endl;
       }
@@ -1277,7 +1277,7 @@ void TextInterface::WriteStringToTextFile( const char* fname,
       {
          ofs.open ( fname, ios::out|ios::app );
          if ( !ofs )
-           throw csmp::Exception( FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
                                         "Output file could not be opened");
          else ofs << str << endl;
       }
@@ -1296,7 +1296,7 @@ void TextInterface::WriteStringToTextFile( const char* fname, const char* str, b
       {
          ofs.open ( fname, ios::out|ios::trunc );
          if ( !ofs )
-           throw csmp::Exception( FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
                                         "Output file could not be opened");
          else ofs << str << endl;
       }
@@ -1304,7 +1304,7 @@ void TextInterface::WriteStringToTextFile( const char* fname, const char* str, b
       {
          ofs.open ( fname, ios::out|ios::app );
          if ( !ofs )
-           throw csmp::Exception( FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::WriteStringToTextFile", 
                                         "Output file could not be opened");
          else ofs << str << endl;
       }
@@ -1327,7 +1327,7 @@ void TextInterface::WriteMatrixToTextfile( const char* fname,
     // opening the output file 
     ofs.open ( fname, ios::out|ios::trunc );
     if ( !ofs )
-      throw csmp::Exception( FATAL_ERROR, "TextInterface::WriteMatrixToTextfile", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::WriteMatrixToTextfile", 
                                    "Output file could not be opened");
    
     // writing numbers and coords into the file as text 
@@ -1355,7 +1355,7 @@ void  TextInterface::AppendDataToText( const char* fname, double64 time, long id
     // opening the output file for appending 
     ofs.open ( fname, ios::out|ios::app );
     if ( !ofs )
-      throw csmp::Exception( FATAL_ERROR, "TextInterface::AppendDataToText", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TextInterface::AppendDataToText", 
                                    "Output file could not be opened");
      // writing out the timestep
      ofs << time <<"\t"<< idx <<"\t"<< value << endl;

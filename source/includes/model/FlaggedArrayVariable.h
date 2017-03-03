@@ -143,7 +143,8 @@ class FlaggedArrayVariable
       void           Sort();
 
       /// printing array values to screen
-      void           Out( long digits=3 ) const;
+      void           Out(long digits=3) const { Out(std::cout, digits); }
+      void           Out( std::ostream& os, long digits=3 ) const;
       bool           Out( const char* filename, size_t precision = 9 ) const;
       
       /// SKM: DO NOT USE C-STYLE I/O - for internal csmp binary IO

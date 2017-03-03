@@ -47,7 +47,7 @@ size_t BoundaryConnector<dim>::FaceParentsFromElementEquivalent( Face<dim>* face
     ErrorHandler& errorHandler( ErrorHandler::Instance() );
     // element fem type equals face fem type
     if( face->FE_Type() != element->FE_Type() )
-      errorHandler.notice( csmp::ERROR, "BoundaryConnector<dim>::FaceParentsFromElementEquivalent",
+      errorHandler.notice( CSMP_ERROR, "BoundaryConnector<dim>::FaceParentsFromElementEquivalent",
                                         "Finite element type of face and element are not equivalent" );
     // face=element node count
     const size_t elementNodes( element->Nodes() );
@@ -86,7 +86,7 @@ size_t BoundaryConnector<dim>::FaceParentsFromElementEquivalent( Face<dim>* face
         face->Assign( parents.first, parents.second );
       }
     else
-      errorHandler.notice( csmp::FATAL_ERROR, "BoundaryConnector<dim>::FaceParentsFromElementEquivalent",
+      errorHandler.notice( CSMP_FATAL_ERROR, "BoundaryConnector<dim>::FaceParentsFromElementEquivalent",
                                               "Invalid number of parent elements found" );
     // done
     return parentCount;
@@ -141,7 +141,7 @@ size_t BoundaryConnector<dim>::EligibleFaceParentElements( size_t faceNodes,
             else if( parentCount == 1 )
               faceParentElements.second = it->second.second;
             else
-              throw csmp::Exception( csmp::FATAL_ERROR, "BoundaryConnector<dim>::EligibleFaceParentElements", 
+              throw csmp::Exception( CSMP_FATAL_ERROR, "BoundaryConnector<dim>::EligibleFaceParentElements", 
                                                         "More than two eligible parent elements found" );
             ++parentCount;
           }

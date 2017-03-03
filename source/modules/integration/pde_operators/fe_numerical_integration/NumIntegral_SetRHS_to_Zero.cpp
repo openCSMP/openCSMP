@@ -19,7 +19,7 @@ NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::NumIntegral_SetRHS_to_Zero( const Prope
 
     if ( MathOperatorRHS<dim>::TestOperandType() != SCALAR ||
          MathOperatorRHS<dim>::TestOperandPlacement() != NODE )
-      throw csmp::Exception( ERROR, "MathOperatorRHS->NumIntegral_SetRHS_to_Zero<dim>::(constructor):",
+      throw csmp::Exception( CSMP_ERROR, "MathOperatorRHS->NumIntegral_SetRHS_to_Zero<dim>::(constructor):",
                              test, "Dependent-variable must be a scalar variable placed on the nodes." );
                       
  } // end constructor

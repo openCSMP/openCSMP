@@ -25,6 +25,7 @@ std::map<csmp::Index*,std::string>::const_iterator IndexTracker::IndicesBegin() 
     return trackedIndices_.begin();
   }
 
+<<<<<<< HEAD
     
 std::map<csmp::Index*,std::string>::const_iterator IndexTracker::IndicesEnd() const
   {
@@ -39,6 +40,37 @@ void IndexTracker::DetachFromAll()
       it->first->Attach(nullptr);
   trackedIndices_.clear();
   }
+=======
+  void IndexTracker::Attach( csmp::Index* newIndex, std::string parameterName )
+    {
+    if(newIndex)
+      trackedIndices_[newIndex] = parameterName;
+    }
+
+
+  void IndexTracker::Attach( csmp::Index* newIndex, const csmp::Index* existingIndex )
+    {
+    map<csmp::Index*,string>::const_iterator it = trackedIndices_.find( const_cast<csmp::Index*>(existingIndex) );
+    if( it == trackedIndices_.end() ) {
+         cerr <<"\n\texisting Index: ";
+         if ( existingIndex != NULL ) cerr << (*existingIndex) << endl;
+         cerr <<"\n\tnew Index: ";
+         if ( newIndex != NULL ) cerr << (*newIndex) << endl;
+         throw csmp::Exception( CSMP_ERROR, "IndexTracker::Attach:", "Existing Index not registered." );
+      }
+    string parameterName = it->second;
+    Attach( newIndex, parameterName );
+    }
+
+
+  void IndexTracker::Detach( const csmp::Index* existingIndex )
+    {
+    map<csmp::Index*,string>::iterator it = trackedIndices_.find( const_cast<csmp::Index*>(existingIndex) );
+    if( it == trackedIndices_.end() )
+      throw csmp::Exception( CSMP_ERROR, "IndexTracker::Detach", "Index not registered" );
+    trackedIndices_.erase(it);
+    }
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 
 void IndexTracker::Attach( csmp::Index* newIndex, std::string parameterName )

@@ -51,7 +51,8 @@ class PropertyConstraints {
     bool CheckConstraints( const Element<dim>& e, Index& idx ) const;
     
     void Erase();
-    void Out() const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
   
   private:
     std::map<std::string,std::pair<double64,double64> >  criteria;
@@ -71,6 +72,38 @@ class PropertyConstraints {
                             const csmp::Index& idx, double64 vmin, double64 vmax ) const;
 };
 
+<<<<<<< HEAD
+=======
+// templatized functions
+template<size_t dim>
+bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>& pref )
+  {
+    if ( criteria.empty() ) {
+      throw csmp::Exception( CSMP_WARNING, "PropertyConstraints::InitializePropertyIndices",
+        "No criteria have been defined so far");
+      return false;
+      }
+
+    if ( !check_list.empty() && check_list.size() == criteria.size() ) return true; 
+
+    std::map<std::string,std::pair<double64,double64> >::const_iterator  it;
+
+    for ( it=criteria.begin(); it!=criteria.end(); it++ )
+      check_list[ pref.StorageKey( (*it).first.c_str() ) ] =
+      std::make_pair((*it).second.first,(*it).second.second);
+
+    return true;
+  }
+
+template<size_t dim>
+void PropertyConstraints::DeleteConstraint( const PropertyDatabase<dim>& pref, const char* prop_name )
+  {
+  criteria.erase( prop_name );
+  check_list.erase( pref.StorageKey(prop_name) );
+  }
+
+
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 } // csmp
 
 #endif

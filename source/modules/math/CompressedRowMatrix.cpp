@@ -187,7 +187,7 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
                cout << endl;
                cout.unsetf( ios::scientific );
                cout.precision(prec);
-               A.Out();
+               A.Out(cout);
                throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
             }
         
@@ -282,22 +282,21 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
 
 /** Outputs matrix to screen.
 */
-void CompressedRowMatrix::Out() const
+void CompressedRowMatrix::Out(std::ostream& os) const
  {
-    cout << flush <<"\nCompressedRowMatrix::Out: "<< endl;
-    cout <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
+    os << flush <<"\nCompressedRowMatrix::Out: "<< endl;
+    os <<"\nrow index vector 'ia' with size = "<<ia.size()<<"\n";
     for ( vector<int32>::const_iterator it=ia.begin(); it!=ia.end(); it++ ) 
-      cout << *it <<" ";
-    cout <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
+      os << *it <<" ";
+    os <<"\ncolumn index vector 'ja' with size = "<<ja.size()<<"\n";
     for ( vector<int32>::const_iterator it=ja.begin(); it!=ja.end(); it++ ) 
-      cout << *it <<" ";
-    cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
+      os << *it <<" ";
+    os <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
     for ( size_t n=0U; n<ja.size(); n++ ) {
-           cout << ja[n] <<":"<< a[n] <<" ";
-           if ( n < ja.size()-1U and ja[n+1] < ja[n] ) cout << endl;
+           os << ja[n] <<":"<< a[n] <<" ";
+           if ( n < ja.size()-1U and ja[n+1] < ja[n] ) os << endl;
        } 
-    cout << endl;
-    cout.flush();   
+    os << endl;
  }
 
 

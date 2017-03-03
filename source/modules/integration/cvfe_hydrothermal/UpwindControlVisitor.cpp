@@ -55,23 +55,23 @@ template<size_t dim>
     facet_normal.resize(dim);
 
     if ( k_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                      permeability, " must be a scalar property." );
 
     if ( phi_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                      porosity, " must be a scalar property." );
 
     if ( densities.size() != phases )
-       throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+       throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                       " densities-vector has wrong size: " );
 
     if ( relperm_vis.size() != phases )
-       throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+       throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                       " relperm-visc-vector has wrong size: " );
 
     if ( saturations.size() != phases )
-       throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)",
+       throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)",
                       " saturations-vector has wrong size: " );
 
     rho_key.resize( phases );
@@ -96,15 +96,15 @@ template<size_t dim>
         pore_vel_key[i]  = model.Database().StorageKey(pore_velocities[i].c_str());
 
         if ( rho_key[i].place != NODE || rho_key[i].type != SCALAR )
-          throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+          throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                       densities[i].c_str(), " must be a scalar property placed on the nodes." );
 
         if ( relperm_visc_key[i].place != NODE || relperm_visc_key[i].type != SCALAR )
-          throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)", 
+          throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)", 
                       relperm_vis[i].c_str(), " must be a scalar property placed on the nodes." );
 
         if ( S_key[i].place != NODE || S_key[i].type != SCALAR )
-          throw csmp::Exception( ERROR, "UpwindControlVisitor::(constructor)",
+          throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor::(constructor)",
                       saturations[i].c_str(), " must be a scalar property placed on the nodes." );
 
        }
@@ -432,7 +432,7 @@ DenseMatrix<DM_MIN>  UpwindControlVisitor<dim>::UpwindMatrix(csmp::Index rho_ind
             return Upwinder[i][eidx];
       
       // SKM FIX FOR XCODE
-      throw csmp::Exception( ERROR, "UpwindControlVisitor<dim>::UpwindMatrix:", "density index never identified." );
+      throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor<dim>::UpwindMatrix:", "density index never identified." );
       return DenseMatrix<DM_MIN>();
             
     } // end UpwindMatrix
@@ -446,7 +446,7 @@ std::vector<DenseMatrix<DM_MIN> >& UpwindControlVisitor<dim>::UpwindMatrices(csm
             return Upwinder[i];
             
       // SKM FIX FOR XCODE
-      throw csmp::Exception( ERROR, "UpwindControlVisitor<dim>::UpwindMatrices:", "density index never identified." );
+      throw csmp::Exception( CSMP_ERROR, "UpwindControlVisitor<dim>::UpwindMatrices:", "density index never identified." );
       return Upwinder[0];
 
     } // end UpwindMatrices

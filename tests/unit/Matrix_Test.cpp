@@ -37,14 +37,15 @@ namespace csmp
 
     void Matrix_Test::run()
     {
+        std::ostream& os = getInfoStream();
 
-    cout << "\n==============";
-    cout << "\nTesting Matrix" << endl;
-    cout << "==============" << endl;
+    os << "\n==============";
+    os << "\nTesting Matrix" << endl;
+    os << "==============" << endl;
 
     //Testing Identity functions
-        cout << "\nTesting Identity function" << endl;
-        cout << "=========================" << endl;
+        os << "\nTesting Identity function" << endl;
+        os << "=========================" << endl;
 
 
         B( 0, 1 ) = 0.;
@@ -66,10 +67,10 @@ namespace csmp
         B( 3, 2 ) = 3.;
         B( 3, 3 ) = 5.;
 
-        cout << "\nB.Identity()";
+        os << "\nB.Identity()";
 
         B.Identity();
-        B.Out();
+        B.Out(os);
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -82,8 +83,8 @@ namespace csmp
 
     //Testing + and - operator
 
-        cout << "\nTesting + and += operator" << endl;
-        cout << "======================" << endl;
+        os << "\nTesting + and += operator" << endl;
+        os << "======================" << endl;
 
         A( 0, 0 ) = 1.;
         A( 0, 1 ) = 0.;
@@ -105,21 +106,21 @@ namespace csmp
         A( 3, 2 ) = 3.;
         A( 3, 3 ) = 5.;
 
-        cout << "\nTest Matrix A";
-        A.Out();
+        os << "\nTest Matrix A";
+        A.Out(os);
 
-        cout << "Test Matrix B";
+        os << "Test Matrix B";
         B.Fill(1.);
-        B.Out();
+        B.Out(os);
 
-        cout << "Matrix C = A + B";
+        os << "Matrix C = A + B";
         C = A + B;
-        C.Out();
+        C.Out(os);
         E = C;
 
-        cout << "Matrix A += B =! C";
+        os << "Matrix A += B =! C";
         A += B;
-        A.Out();
+        A.Out(os);
 
         ResC( 0, 0 ) = 2.;
         ResC( 0, 1 ) = 1.;
@@ -145,20 +146,20 @@ namespace csmp
         {
             for ( int j = 0; j < 4; j++ )
             {
-                //cout << C(i, j) << "  ";
-                //cout << A(i, j) << endl;
+                //os << C(i, j) << "  ";
+                //os << A(i, j) << endl;
                 _equal( A(i,j ), ResC(i,j), 1E-6 );
                 _equal( C(i,j ), ResC(i,j), 1E-6 );
             }
         }
 
-        cout << "Matrix D = C - B";
+        os << "Matrix D = C - B";
         D = C - B;
-        D.Out();
+        D.Out(os);
 
-        cout << "Matrix A -= B =! D";
+        os << "Matrix A -= B =! D";
         A -= B;
-        A.Out();
+        A.Out(os);
 
         ResA( 0, 0 ) = 1.;
         ResA( 0, 1 ) = 0.;
@@ -185,8 +186,8 @@ namespace csmp
         {
             for ( int j = 0; j < 4; j++ )
             {
-                //cout << D(i, j) << "  ";
-                //cout << A(i, j) << endl;
+                //os << D(i, j) << "  ";
+                //os << A(i, j) << endl;
                 _equal( D(i,j), ResA(i,j), 1E-6 );
                 _equal( A(i,j), ResA(i,j), 1E-6 );
             }
@@ -194,20 +195,20 @@ namespace csmp
 
 
 //Testing * operators
-    cout << "\nTesting * operators" << endl;
-    cout << "===================" << endl;
+    os << "\nTesting * operators" << endl;
+    os << "===================" << endl;
 
         //Matrix-scalar multiplication
-        cout << "\nMatrix-scalar multiplication method" << endl;
-        cout << "-----------------------------------" << endl;
+        os << "\nMatrix-scalar multiplication method" << endl;
+        os << "-----------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+        os << "\nTest matrix A";
+        A.Out(os);
 
-        cout << "Matrix A *= ( 3. )";
+        os << "Matrix A *= ( 3. )";
         C = A;
         C *= ( 3. );
-        C.Out();
+        C.Out(os);
 
         ResC( 0, 0 ) = 3.;
         ResC( 0, 1 ) = 0.;
@@ -241,38 +242,38 @@ namespace csmp
 
         //Matrix multiplication by vector
         //First vector-matrix multiplication method
-        cout << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
-        cout << "----------------------------------------------------" << endl;
+        os << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
+        os << "----------------------------------------------------" << endl;
 
-        cout << "\nTest matrix A";
+        os << "\nTest matrix A";
 
-        A.Out();
+        A.Out(os);
 
         x.push_back(1.);
         x.push_back(2.);
         x.push_back(0.);
         x.push_back(1.5);
 
-        cout << "Test vector x =   ";
+        os << "Test vector x =   ";
 
         vector<double64>::const_iterator it( x.begin() );
         for ( vector<double64>::const_iterator
              it = x.begin(); it != x.end(); it++ )
         {
-            cout << *it << setw(5);
+            os << *it << setw(5);
         }
 
-        cout << "\n\ny = A * x";
+        os << "\n\ny = A * x";
         y = A * x;
 
         vector<double64>::const_iterator it1(y.begin());
 
-        cout << "\n\ny = ";
+        os << "\n\ny = ";
 
         for (vector<double64>::const_iterator
              it1 = y.begin(); it1 != y.end(); it1++ )
         {
-            cout << *it1 << setw(5);
+            os << *it1 << setw(5);
         }
 
         sol_y.push_back(2.5);
@@ -285,24 +286,24 @@ namespace csmp
         for (vector<double64>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
-                //cout << "\n" << *itsol_y << setw(7) << *it1;
+                //os << "\n" << *itsol_y << setw(7) << *it1;
                 _equal( *itsol_y, *it1, 1E-6);
             }
 
 
         //\nSecond matrix-vector multiplication method
-        cout << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
-        cout << "--------------------------------------------------" << endl;
+        os << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
+        os << "--------------------------------------------------" << endl;
 
         B = A;
-        cout << "A *= x";
+        os << "A *= x";
         B.operator *= (x);
 
-        cout << "\nA = ";
+        os << "\nA = ";
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << B(i,0) << setw(5);
+            os << B(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solB.push_back(B(i,0));
@@ -310,42 +311,42 @@ namespace csmp
 
         vector<double64>::const_iterator itB( solB.begin() );
 
-        //cout << endl << "\nA  " << setw(5) << "y";
+        //os << endl << "\nA  " << setw(5) << "y";
 
         for (vector<double64>::const_iterator
              itB = solB.begin(); itB != solB.end(); itB++, itsol_y++ )
         {
-            //cout << "\n" << *itB << setw(7) << *it1;
+            //os << "\n" << *itB << setw(7) << *it1;
             _equal( *itB, *itsol_y, 1E-6 );
         }
 
-        cout << endl;
+        os << endl;
 
 
-        cout << "\nThird matrix-vector multiplication method: A *= ( C array )" << endl;
-        cout << "--------------------------------------------------" << endl;
+        os << "\nThird matrix-vector multiplication method: A *= ( C array )" << endl;
+        os << "--------------------------------------------------" << endl;
 
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        os << "\nTest matrix A";
+        D.Out(os);
 
 
         double64 Ca[4] = { 1., 2., 0., 1.5 };
 
-        cout << "Test array Ca";
+        os << "Test array Ca";
 
         for ( int i = 0; i < 4; i++ )
-            cout << "\n" << Ca[i];
+            os << "\n" << Ca[i];
 
 
-        cout << "\n\nMatrix A *= ( C array )";
+        os << "\n\nMatrix A *= ( C array )";
         D.operator *=( Ca );
-        D.Out();
+        D.Out(os);
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << D(i,0) << setw(5);
+            os << D(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solD.push_back(D(i,0));
@@ -353,32 +354,32 @@ namespace csmp
 
         vector<double64>::const_iterator itD( solD.begin() );
 
-        //cout << endl << "\nA  " << setw(5) << "y";
+        //os << endl << "\nA  " << setw(5) << "y";
 
         for (vector<double64>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, itD++ )
             {
-                //cout << "\n" << *itsol_y << setw(7) << *itD;
+                //os << "\n" << *itsol_y << setw(7) << *itD;
                 _equal( *itsol_y, *itD, 1E-6);
             }
 
-        cout << endl;
+        os << endl;
 
 
         //Matrix-by-matrix multiplication
-        cout << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
-        cout << "------------------------------------------------" << endl;
+        os << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
+        os << "------------------------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+        os << "\nTest matrix A";
+        A.Out(os);
 
-        cout << "Test matrix B";
+        os << "Test matrix B";
         B = E;
-        B.Out();
+        B.Out(os);
 
-        cout << "C = A * B";
+        os << "C = A * B";
         C = A * B;
-        C.Out();
+        C.Out(os);
 
         ResAB( 0, 0 ) = 7.;
         ResAB( 0, 1 ) = 5.;
@@ -408,21 +409,21 @@ namespace csmp
             }
         }
 
-        cout << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
-        cout << "--------------------------------------------------" << endl;
+        os << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
+        os << "--------------------------------------------------" << endl;
 
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        os << "\nTest matrix A";
+        D.Out(os);
 
-        cout << "\nTest matrix B";
-        B.Out();
+        os << "\nTest matrix B";
+        B.Out(os);
 
-        cout << "\nMatrix A *= B";
+        os << "\nMatrix A *= B";
  //D.operator *=(B);
         D*=B;
-        D.Out();
+        D.Out(os);
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -434,16 +435,16 @@ namespace csmp
 
 
     //Testing fill operators
-        cout << "\nTesting fill functions" << endl;
-        cout << "======================" << endl;
+        os << "\nTesting fill functions" << endl;
+        os << "======================" << endl;
 
         //fill
-        cout << "\nMatrix fill()" << endl;
-        cout << "-------------" << endl;
+        os << "\nMatrix fill()" << endl;
+        os << "-------------" << endl;
 
-        cout << "\nB.fill(1.)";
+        os << "\nB.fill(1.)";
         B.Fill(1.);
-        B.Out();
+        B.Out(os);
 
         C = 1.;
 
@@ -456,12 +457,12 @@ namespace csmp
         }
 
         //fillCol
-        cout << "\nMatrix fillCol()" << endl;
-        cout << "---------------" << endl;
+        os << "\nMatrix fillCol()" << endl;
+        os << "---------------" << endl;
 
-        cout << "\nB.fillCol(2,5.5)";
+        os << "\nB.fillCol(2,5.5)";
         B.FillCol(2,5.5);
-        B.Out();
+        B.Out(os);
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -469,12 +470,12 @@ namespace csmp
         }
 
         //fillRow
-        cout << "\nMatrix fillRow()" << endl;
-        cout << "----------------" << endl;
+        os << "\nMatrix fillRow()" << endl;
+        os << "----------------" << endl;
 
-        cout << "\nB.fillRow(2,3.3)";
+        os << "\nB.fillRow(2,3.3)";
         B.FillRow(2,3.3);
-        B.Out();
+        B.Out(os);
 
         for ( int j = 0; j < 4; j++ )
         {
@@ -484,14 +485,14 @@ namespace csmp
         C = B;
 
     //Testing summation functions
-        cout << "\nTesting summation function" << endl;
-        cout << "==========================" << endl;
+        os << "\nTesting summation function" << endl;
+        os << "==========================" << endl;
 
         //ColSum()
-        cout << "\nMatrix ColSum()" << endl;
-        cout << "---------------" << endl;
+        os << "\nMatrix ColSum()" << endl;
+        os << "---------------" << endl;
 
-        cout << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
+        os << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
 
         double64 ColSumB2 = B.ColSum(2);
         double64 CheckColSumB2 = 0.;
@@ -501,15 +502,15 @@ namespace csmp
             CheckColSumB2 += B(i,2);
         }
 
-        cout << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
+        os << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
         _equal( CheckColSumB2, ColSumB2, 1E-6 );
 
 
         //RowSum
-        cout << "\nMatrix RowSum()" << endl;
-        cout << "---------------" << endl;
+        os << "\nMatrix RowSum()" << endl;
+        os << "---------------" << endl;
 
-        cout << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
+        os << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
 
         double64 RowSumB2 = B.RowSum(2);
         double64 CheckRowSumB2 = 0.;
@@ -519,20 +520,20 @@ namespace csmp
             CheckRowSumB2 += B(2,j);
         }
 
-        cout << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
+        os << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
         _equal( CheckRowSumB2, RowSumB2, 1E-6 );
 
         //Testing Zero functions
-            cout << "\nTesting Zero functions" << endl;
-            cout << "======================" << endl;
+            os << "\nTesting Zero functions" << endl;
+            os << "======================" << endl;
 
             //ZeroCol
-            cout << "\nMatrix ZeroCol()" << endl;
-            cout << "----------------" << endl;
+            os << "\nMatrix ZeroCol()" << endl;
+            os << "----------------" << endl;
 
-            cout << "\nB.ZeroCol(2)";
+            os << "\nB.ZeroCol(2)";
             B.ZeroCol(2);
-            B.Out();
+            B.Out(os);
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -540,12 +541,12 @@ namespace csmp
             }
 
             //ZeroRow
-            cout << "\nMatrix ZeroRow()" << endl;
-            cout << "----------------" << endl;
+            os << "\nMatrix ZeroRow()" << endl;
+            os << "----------------" << endl;
 
-            cout << "\nB.ZeroRow(2)";
+            os << "\nB.ZeroRow(2)";
             B.ZeroRow(2);
-            B.Out();
+            B.Out(os);
 
             for ( int j = 0; j < 4; j++ )
             {
@@ -553,12 +554,12 @@ namespace csmp
             }
 
             //Zero
-            cout << "\nMatrix Zero()" << endl;
-            cout << "-------------" << endl;
+            os << "\nMatrix Zero()" << endl;
+            os << "-------------" << endl;
 
-            cout << "\nB.Zero()";
+            os << "\nB.Zero()";
             B.Zero();
-            B.Out();
+            B.Out(os);
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -570,19 +571,19 @@ namespace csmp
 
 
         //Testing operator= ()
-            cout << "\nTesting operator= ()" << endl;
-            cout << "====================" << endl;
+            os << "\nTesting operator= ()" << endl;
+            os << "====================" << endl;
 
             //Testing operator= (const Matrix& )
-            cout << "\nTesting operator= ( const Matrix& )" << endl;
-            cout << "---------------------------------------" << endl;
+            os << "\nTesting operator= ( const Matrix& )" << endl;
+            os << "---------------------------------------" << endl;
 
-            cout << "\nMatrix B";
-            B.Out();
+            os << "\nMatrix B";
+            B.Out(os);
 
-            cout << "\nMatrix B = C";
+            os << "\nMatrix B = C";
             B = C;
-            B.Out();
+            B.Out(os);
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -594,19 +595,19 @@ namespace csmp
 
 
         //Testing transposed functions
-            cout << "\nTesting transposed matrix functions" << endl;
-            cout << "===================================" << endl;
+            os << "\nTesting transposed matrix functions" << endl;
+            os << "===================================" << endl;
 
             //Transposed matrix
-            cout << "\nMatrix Transposed()" << endl;
-            cout << "-------------------" << endl;
+            os << "\nMatrix Transposed()" << endl;
+            os << "-------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            os << "\nTest matrix A";
+            A.Out(os);
 
             A.Transposed(F);
-            cout << "\nF = A^T = A.Transposed(F)";
-            F.Out();
+            os << "\nF = A^T = A.Transposed(F)";
+            F.Out(os);
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -617,15 +618,15 @@ namespace csmp
             }
 
             //Transposed product
-            cout << "\nMatrix TransposedProduct()" << endl;
-            cout << "--------------------------" << endl;
+            os << "\nMatrix TransposedProduct()" << endl;
+            os << "--------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            os << "\nTest matrix A";
+            A.Out(os);
 
             A.TransposedProduct(H);
-            cout << "\nH = A^T * A = A.TransposedProduct(F)";
-            H.Out();
+            os << "\nH = A^T * A = A.TransposedProduct(F)";
+            H.Out(os);
 
             ResH( 0, 0 ) = 11.;
             ResH( 0, 1 ) = 3.;
@@ -657,18 +658,18 @@ namespace csmp
 
 
             //MultiplyWithTransposedOf
-            cout << "\nMatrix MultiplyWithTransposedOf()" << endl;
-            cout << "---------------------------------" << endl;
+            os << "\nMatrix MultiplyWithTransposedOf()" << endl;
+            os << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            os << "\nTest matrix A";
+            A.Out(os);
 
-            cout << "\nTest matrix B";
-            B.Out();
+            os << "\nTest matrix B";
+            B.Out(os);
 
-            cout << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
+            os << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
             A.MultiplyWithTransposedOf( B, F );
-            F.Out();
+            F.Out(os);
 
             ResF( 0, 0 ) = 13.;
             ResF( 0, 1 ) = 13.;
@@ -699,18 +700,18 @@ namespace csmp
             }
 
             //MultiplyTransposedOfWith
-            cout << "\nMatrix MultiplyTransposedOfWith()" << endl;
-            cout << "---------------------------------" << endl;
+            os << "\nMatrix MultiplyTransposedOfWith()" << endl;
+            os << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+            os << "\nTest matrix A";
+            A.Out(os);
 
-            cout << "\nTest matrix B";
-            B.Out();
+            os << "\nTest matrix B";
+            B.Out(os);
 
-            cout << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
+            os << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
             A.MultiplyTransposedOfWith( B, G );
-            G.Out();
+            G.Out(os);
 
             ResG( 0, 0 ) = 7.3;
             ResG( 0, 1 ) = 7.3;
@@ -742,21 +743,21 @@ namespace csmp
 
 
         //Testing operator= ()
-            cout << "\nTesting operator= ()" << endl;
-            cout << "====================================" << endl;
+            os << "\nTesting operator= ()" << endl;
+            os << "====================================" << endl;
 
             //Operator= ( TensorVariable 2U )
-            cout << "\nOperator= ( TensorVariable 2U )" << endl;
-            cout << "-------------------------------" << endl;
+            os << "\nOperator= ( TensorVariable 2U )" << endl;
+            os << "-------------------------------" << endl;
 
-            cout << "\n2U test matrix Matrix2x2";
-            Matrix2x2.Out();
+            os << "\n2U test matrix Matrix2x2";
+            Matrix2x2.Out(os);
 
             double64 val = 16.;
 
-            cout << "\nMatrix2x2 = val";
+            os << "\nMatrix2x2 = val";
             Matrix2x2 = val;
-            Matrix2x2.Out();
+            Matrix2x2.Out(os);
 
             for ( int i = 0; i < 2; i++ )
             {
@@ -768,21 +769,21 @@ namespace csmp
 
 
             //Operator= ( TensorVariable 2U )
-            cout << "\nOperator= ( TensorVariable 2U )" << endl;
-            cout << "-------------------------------" << endl;
+            os << "\nOperator= ( TensorVariable 2U )" << endl;
+            os << "-------------------------------" << endl;
 
-            cout << "\n2U test matrix Matrix2x2";
+            os << "\n2U test matrix Matrix2x2";
             Matrix2x2.Fill(5.);
-            Matrix2x2.Out();
+            Matrix2x2.Out(os);
 
-            cout << "\n2U tensor variable TensorVariable2U";
+            os << "\n2U tensor variable TensorVariable2U";
             TensorVariable2U.Identity();
             TensorVariable2U += 1.;
-            TensorVariable2U.Out();
+            TensorVariable2U.Out(os);
 
-            cout << "\nMatrix2x2 = TensorVariable2U";
+            os << "\nMatrix2x2 = TensorVariable2U";
             Matrix2x2 = TensorVariable2U;
-            Matrix2x2.Out();
+            Matrix2x2.Out(os);
 
             for ( int i = 0; i < 2; i++ )
             {
@@ -795,21 +796,21 @@ namespace csmp
 
 
             //Operator= ( TensorVariable 3U )
-            cout << "\nOperator= ( TensorVariable 3U )" << endl;
-            cout << "-------------------------------" << endl;
+            os << "\nOperator= ( TensorVariable 3U )" << endl;
+            os << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix Matrix3x3";
+            os << "\n3U test matrix Matrix3x3";
             Matrix3x3.Fill(5.);
-            Matrix3x3.Out();
+            Matrix3x3.Out(os);
 
-            cout << "\n3U tensor variable TensorVariable3U";
+            os << "\n3U tensor variable TensorVariable3U";
             TensorVariable3U.Identity();
             TensorVariable3U += 2.;
-            TensorVariable3U.Out();
+            TensorVariable3U.Out(os);
 
-            cout << "\nMatrix3x3 = TensorVariable3U";
+            os << "\nMatrix3x3 = TensorVariable3U";
             Matrix3x3 = TensorVariable3U;
-            Matrix3x3.Out();
+            Matrix3x3.Out(os);
 
             for ( int i = 0; i < 3; i++ )
             {
@@ -821,41 +822,41 @@ namespace csmp
             }
 
             //Testing operator*= ( TensorVariable )
-                cout << "\nTesting operator*= ( TensorVariable )" << endl;
-                cout << "====================================" << endl;
+                os << "\nTesting operator*= ( TensorVariable )" << endl;
+                os << "====================================" << endl;
 
                 //Operator *= ( double64 )
-                cout << "\nOperator *= ( double64 )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nOperator *= ( double64 )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(3,3);
                 Matrix3x3.Fill(5.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
-                cout << "\nMatrix3x3 *= ( 5 )";
+                os << "\nMatrix3x3 *= ( 5 )";
                 Matrix3x3 *= ( 5 );
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 _equal( Matrix3x3(0,0), 25., 1E-6 );
 
                 //Operator *= ( TensorVariable 2U )
-                cout << "\nOperator *= ( TensorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nOperator *= ( TensorVariable 2U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(2,2);
                 Matrix3x3.Fill(5.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
-                cout << "\n2U tensor variable TensorVariable2U";
+                os << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U.Identity();
                 TensorVariable2U += 1.;
-                TensorVariable2U.Out();
+                TensorVariable2U.Out(os);
 
-                cout << "\nMatrix3x3 *= ( TensorVariable2U )";
+                os << "\nMatrix3x3 *= ( TensorVariable2U )";
                 Matrix3x3 *= ( TensorVariable2U );
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -866,22 +867,22 @@ namespace csmp
                 }
 
                 //Operator*= ( TensorVariable 3U )
-                cout << "\nOperator*= ( TensorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nOperator*= ( TensorVariable 3U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(3,3);
                 Matrix3x3.Fill(5.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
-                cout << "\n3U tensor variable TensorVariable3U";
+                os << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U.Identity();
                 TensorVariable3U += 2.;
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(os);
 
-                cout << "\nMatrix3x3 *= ( TensorVariable3U )";
+                os << "\nMatrix3x3 *= ( TensorVariable3U )";
                 Matrix3x3 *= ( TensorVariable3U );
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -893,26 +894,26 @@ namespace csmp
 
 
             //Testing operator*= ( VectorVariable )
-                cout << "\nTesting operator*= ( VectorVariable )" << endl;
-                cout << "====================================" << endl;
+                os << "\nTesting operator*= ( VectorVariable )" << endl;
+                os << "====================================" << endl;
 
                 //Operator *= ( VectorVariable 2U )
-                cout << "\nOperator *= ( VectorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nOperator *= ( VectorVariable 2U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n2U test matrix Matrix2x2";
+                os << "\n2U test matrix Matrix2x2";
                 Matrix3x3.Resize(2,2);
                 Matrix3x3.Fill(5.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
-                cout << "\n2U Vector variable VectorVariable2U";
+                os << "\n2U Vector variable VectorVariable2U";
                 VectorVariable2U = 5;
                 VectorVariable2U += 1.;
-                VectorVariable2U.Out();
+                VectorVariable2U.Out(os);
 
-                cout << "\nMatrix2x2 *= ( VectorVariable2U )";
+                os << "\nMatrix2x2 *= ( VectorVariable2U )";
                 Matrix3x3 *= ( VectorVariable2U );
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -922,22 +923,22 @@ namespace csmp
 
 
                 //Operator*= ( VectorVariable 3U )
-                cout << "\nOperator*= ( VectorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nOperator*= ( VectorVariable 3U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(3,3);
                 Matrix3x3.Fill(5.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
-                cout << "\n3U Vector variable VectorVariable3U";
+                os << "\n3U Vector variable VectorVariable3U";
                 VectorVariable3U = 5;
                 VectorVariable3U += 2.;
-                VectorVariable3U.Out();
+                VectorVariable3U.Out(os);
 
-                cout << "\nMatrix3x3 *= ( VectorVariable3U )";
+                os << "\nMatrix3x3 *= ( VectorVariable3U )";
                 Matrix3x3 *= ( VectorVariable3U );
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -946,60 +947,66 @@ namespace csmp
 
 
             //RowCondenseTo( vector<double64> )
-                cout << "\nTesting RowCondenseTo( vector<double64> )" << endl;
-                cout << "===========================================" << endl;
+                os << "\nTesting RowCondenseTo( vector<double64> )" << endl;
+                os << "===========================================" << endl;
                 //RowCondenseTo ( vector<double64> )
-                cout << "\nRowCondenseTo ( vector<double64> )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nRowCondenseTo ( vector<double64> )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(3,3);
                 Matrix3x3.Fill(9.);
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
                 vector<double64>::const_iterator itx(x.begin());
 
-                cout << "Test vector x";
+                os << "Test vector x";
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx;
+                    os << "\n" << *itx;
                 }
 
-                cout << "\n\nMatrix3x3.RowCondenseTo( x )";
+                os << "\n\nMatrix3x3.RowCondenseTo( x )";
                 Matrix3x3.RowCondenseTo( x );
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx ;
+                    os << "\n" << *itx ;
                     _equal( *itx, 27., 1E-6 );
                 }
 
-                cout << endl;
+                os << endl;
 
 
             //ExportTo ( TensorVariable )
-                cout << "\nTesting ExportTo ( TensorVariable )" << endl;
-                cout << "===========================================" << endl;
+                os << "\nTesting ExportTo ( TensorVariable )" << endl;
+                os << "===========================================" << endl;
 
                 //ExportTo ( TensorVariable 2U )
-                cout << "\nExportTo ( TensorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\nExportTo ( TensorVariable 2U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n2U test matrix Matrix2x2";
+                os << "\n2U test matrix Matrix2x2";
                 Matrix3x3.Resize(2,2);
                 Matrix3x3.Identity();
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
+<<<<<<< HEAD
                 cout << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U=0.;
                 TensorVariable2U.Out();
+=======
+                os << "\n2U tensor variable TensorVariable2U";
+                TensorVariable2U.Zero();
+                TensorVariable2U.Out(os);
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
-                cout << "\nMatrix2x2 *= ( TensorVariable2U )";
+                os << "\nMatrix2x2 *= ( TensorVariable2U )";
                 Matrix3x3.ExportTo(TensorVariable2U);
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(os);
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1008,21 +1015,27 @@ namespace csmp
 
 
                 //ExportTo ( TensorVariable 3U )
-                cout << "\n\nExportTo ( TensorVariable 3U )" << endl;
-                cout << "-------------------------------" << endl;
+                os << "\n\nExportTo ( TensorVariable 3U )" << endl;
+                os << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix Matrix3x3";
+                os << "\n3U test matrix Matrix3x3";
                 Matrix3x3.Resize(3,3);
                 Matrix3x3.Identity();
-                Matrix3x3.Out();
+                Matrix3x3.Out(os);
 
+<<<<<<< HEAD
                 cout << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U=0.;
                 TensorVariable3U.Out();
+=======
+                os << "\n3U tensor variable TensorVariable3U";
+                TensorVariable3U.Zero();
+                TensorVariable3U.Out(os);
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
-                cout << "\nMatrix3x3 *= ( TensorVariable3U )";
+                os << "\nMatrix3x3 *= ( TensorVariable3U )";
                 Matrix3x3.ExportTo(TensorVariable3U);
-                TensorVariable3U.Out();
+                TensorVariable3U.Out(os);
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1030,30 +1043,30 @@ namespace csmp
                 }
 
                 //Testing L1 matrix norm()
-                    cout << "\nTesting NormL1()" << endl;
-                    cout << "================" << endl;
+                    os << "\nTesting NormL1()" << endl;
+                    os << "================" << endl;
 
-                        cout << "\n3U test matrix A";
+                        os << "\n3U test matrix A";
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        A.Out(os);
                         double64 normL1 = A.NormL1();
 
-                        cout << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
+                        os << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
                         _equal( normL1, 201., 1E-6 );
 
 
                 //Testing L infinity matrix norm()
-                    cout << "\nTesting NormL_Infinity()" << endl;
-                    cout << "================" << endl;
+                    os << "\nTesting NormL_Infinity()" << endl;
+                    os << "================" << endl;
 
-                        cout << "\n3U test matrix A";
+                        os << "\n3U test matrix A";
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        A.Out(os);
                         double64 normInf = A.NormL_Infinity();
 
-                        cout << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
+                        os << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
                         _equal( normInf, 303., 1E-6 );
 
 

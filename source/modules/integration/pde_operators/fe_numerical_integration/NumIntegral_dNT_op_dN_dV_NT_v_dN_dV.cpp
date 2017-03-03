@@ -43,24 +43,24 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV_NT_v_
       }
       
     if ( emulti_key.place != ELEMENT and emulti_key.place != REGION )
-      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       emultiplier, "must be an element- or group-based variable." );
 
     if ( nmulti_key.place != NODE || nmulti_key.type != SCALAR )
-      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       nmultiplier, "must be an node-based scalar variable." );
 
     if ( grad_key.place != NODE || grad_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       grad_prop, "Operand to calculate 'v' from must be a scalar property placed on the nodes." );
 
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
@@ -105,29 +105,29 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV_NT_v_
       }
 
     if ( emulti_key.place != ELEMENT )
-      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       emultiplier, "must be an element-based variable." );
 
     if ( nmulti_key.place != NODE || nmulti_key.type != SCALAR )
-      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       nmultiplier, "must be an node-based scalar variable." );
 
     if ( grad_key.place != NODE || grad_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       grad_prop, "Operand to calculate 'v' from must be a scalar property placed on the nodes." );
 
     if ( rrho_key.place != NODE || rrho_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       rrho_prop, "Operand to calculate 'rho g' term from must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
@@ -174,7 +174,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
     else // if a nodal variable is dealt with
       {
          if ( e.FE()->IntegrationPoints() == 0 ) 
-           throw csmp::Exception( FATAL_ERROR, "MathOperatorLHS<dim>::GetOperands", 
+           throw csmp::Exception( CSMP_FATAL_ERROR, "MathOperatorLHS<dim>::GetOperands", 
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       

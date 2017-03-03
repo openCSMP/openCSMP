@@ -6,7 +6,7 @@ using namespace std;
 namespace csmp {
 
 Exception::Exception()
- : csmp_exception_(ERROR),
+ : csmp_exception_(CSMP_ERROR),
    originator_("probably ErrorHandler"),
    message_("unspecified")
  {
@@ -21,7 +21,7 @@ Exception::Exception( CSMP_MESSAGE err,
    message_(msg)
  {
 #ifndef NDEBUG 
-    Out();
+    Out(cout);
     cout <<"\nHit return to continue."<< endl;
     getchar();
 #endif
@@ -39,7 +39,7 @@ Exception::Exception( CSMP_MESSAGE err,
     message_ += "  ";
     message_ += msg;
 #ifndef NDEBUG 
-    Out();
+    Out(cout);
     cout <<"\nHit return to continue."<< endl;
     getchar();
 #endif
@@ -87,11 +87,17 @@ const char* Exception::what() const throw()
   }
 
 
-void Exception::Out() const
+void Exception::Out(std::ostream& os) const
  {
-    cout <<"\n"<< string(parseMessage(csmp_exception_)) <<": "<< originator_ << endl;
-    cout << message_ << endl;
+    os <<"\n"<< string(parseMessage(csmp_exception_)) <<": "<< originator_ << endl;
+    os << message_ << endl;
  }
+
+
+void Exception::Out() const
+{
+    Out(std::cout);
+}
 
 Exception::~Exception() throw()
   {
@@ -101,11 +107,11 @@ Exception::~Exception() throw()
 
 std::string  parseMessage( CSMP_MESSAGE msg )
  {
-     if ( msg == INFO ) return string("INFO");
-     if ( msg == EXCEPTION ) return string("EXCEPTION");
-     if ( msg == WARNING ) return string("WARNING");
-     if ( msg == ERROR ) return string("ERROR");
-     if ( msg == FATAL_ERROR ) return string("FATAL_ERROR");
+     if ( msg == CSMP_INFO ) return string("INFO");
+     if ( msg == CSMP_EXCEPTION ) return string("EXCEPTION");
+     if ( msg == CSMP_WARNING ) return string("WARNING");
+     if ( msg == CSMP_ERROR ) return string("ERROR");
+     if ( msg == CSMP_FATAL_ERROR ) return string("FATAL_ERROR");
      
      return string("parseMessage(CSMP_MESSAGE): cannot parse message.");
  }

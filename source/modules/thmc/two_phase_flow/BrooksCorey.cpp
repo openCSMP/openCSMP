@@ -505,14 +505,14 @@ double64 BrooksCorey<dim>::ShockHeight() const
 
 
 template<size_t dim>
-void BrooksCorey<dim>::Out( size_t phase ) const
+void BrooksCorey<dim>::Out( std::ostream& os, size_t phase ) const
  {
-    TwoPhaseModel<dim>::Out(phase);
-    cout <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;
-    cout <<"\nelement properties:";
-    cout <<"\n       capillary entry pressure, pd: "<< entry_pressure_;
-    cout <<"\n      Brooks-Corey lambda parameter: "<< lambda_;
-    cout <<"\n  MAX_CAPILLARY_PRESSURE_DERIVATIVE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_ << endl << endl;
+    TwoPhaseModel<dim>::Out(os, phase);
+    os <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;
+    os <<"\nelement properties:";
+    os <<"\n       capillary entry pressure, pd: "<< entry_pressure_;
+    os <<"\n      Brooks-Corey lambda parameter: "<< lambda_;
+    os <<"\n  MAX_CAPILLARY_PRESSURE_DERIVATIVE: "<< TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_ << endl << endl;
 
  } // end Out
  

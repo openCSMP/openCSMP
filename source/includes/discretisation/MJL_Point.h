@@ -40,7 +40,8 @@ class Point {
     void       Set( double, double );
     void       Move( double dx, double dy );
     void       Scale( double xfac, double yfac );
-    void       Out() const;
+    void       Out() const { Out(std::cout); }
+    void       Out(std::ostream& os) const;
 
   private:
     double x_, y_;

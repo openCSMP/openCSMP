@@ -28,20 +28,36 @@ INCLUDE_DIRECTORIES(
 	${BASE_INCLUDES_SUBDIR}
 	${BASE_INCLUDES_SUBSUBDIR}
 	${MODULES_SOURCE_DIR}
-	"${CMAKE_SOURCE_DIR}/lib/catch/include"
+	"${CMAKE_SOURCE_DIR}/thirdparty/catch/include"
 	"${CMAKE_BINARY_DIR}/source/generated_includes"
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
 )
 
+if(CMAKE_HOST_WIN32)
+	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/bin/windows)
+	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/build/windows)
+endif()
 
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
 FILE(GLOB TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp)
-ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
-TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
-ADD_TEST(
-	NAME csmptest
-	COMMAND csmptest -r xml
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
-)
+if(BUILD_TESTING)
+    ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
+    TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
+    if(CMAKE_HOST_WIN32)
+		ENABLE_TESTING()
+        ADD_TEST(
+        NAME csmptest
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe -r junit		
+        )
+    else()
+        ADD_TEST(
+	    NAME csmptest
+	    COMMAND csmptest -r junit
+	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+        )
+    endif()
+endif(BUILD_TESTING)
+
 

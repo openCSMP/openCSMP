@@ -374,7 +374,7 @@ bool StraightLineMeshInterface<dim>
     {
         std::string msg = "Unknown keyword: ";
         msg += keyword;
-        error_handler.notice( csmp::FATAL_ERROR,
+        error_handler.notice( CSMP_FATAL_ERROR,
                               "StraightLineMeshInterface<dim>::ReadMesh",
                               msg
                             );

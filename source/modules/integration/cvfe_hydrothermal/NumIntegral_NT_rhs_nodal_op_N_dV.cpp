@@ -26,16 +26,16 @@ NumIntegral_NT_rhs_nodal_op_N_dV<dim,SIMPLEX>::NumIntegral_NT_rhs_nodal_op_N_dV(
     MathOperatorRHS<dim>::Name("NumIntegral_NT_rhs_nodal_op_N_dV", oper, test );
 
     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
                       oper, "Operand must be a scalar property." );
 
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
                              oper, "operand has only been implemented for nodal variables." );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "NumIntegral_NT_rhs_nodal_op_N_dV<dim>::(constructor)", 
                       test, "Dependent variable must be a scalar property placed on the nodes." );
 
 

@@ -33,7 +33,8 @@ class Reactant {
     double MolalityToVolumeFraction( double molality, double fluid_mass ) const;
     double MolesPerVolumeToMolality( double moles,    double fluid_dens ) const;
     double MolalityToMolesPerVolume( double molality, double fluid_dens ) const;
-    void   Out() const;
+    void   Out() const { Out(std::cout); }
+    void   Out(std::ostream& os) const;
 };
 
 } // csmp

@@ -92,7 +92,7 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double64 pmin
              }
       }
     else
-    throw csmp::Exception( INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
+    throw csmp::Exception( CSMP_INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
     criteria[ prop_name ] = make_pair(pmin,pmax);
  }
  
@@ -152,7 +152,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e,
                                             Index& failed_upon ) const
  {  
     if ( vector_length_check ) {
-         throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::CheckConstraints",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyConstraints::CheckConstraints",
                                       "Tensor Eigenvalue check not implemented yet");
          return false;
       }      
@@ -299,7 +299,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e,
                      }
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -344,7 +344,7 @@ bool PropertyConstraints::CheckConstraints( const Element<dim>& e ) const
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -401,7 +401,7 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const Element<dim>& e ) co
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckSingleNodeConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckSingleNodeConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -448,7 +448,7 @@ bool PropertyConstraints::CheckNodeAverageConstraints( const Element<dim>& e ) c
                      return false;
                 break;
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckNodeAverageConstraints",
+                   throw csmp::Exception( CSMP_ERROR, "PropertyConstraints::CheckNodeAverageConstraints",
                                               "Placement of constraint variable could not be identified");
            }
       }
@@ -466,7 +466,7 @@ bool PropertyConstraints::VectorLengthCheck( const Element<dim>& e,
     VectorVariable<dim>  vc;
  
     if ( nodal_average ) {
-         throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
+         throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
                                       "'nodal average' and 'vector_length_check' are mutually exclusive switches");
          return false;
       }
@@ -501,22 +501,22 @@ bool PropertyConstraints::VectorLengthCheck( const Element<dim>& e,
 
 
 
-void PropertyConstraints::Out() const
+void PropertyConstraints::Out(std::ostream& os) const
  {
-    cout <<"\nPropertyConstraints::Out: "<< endl;
-    if ( vector_length_check )      cout <<"\tSet to check the length of vector variables"<< endl;
-    if ( one_node_only )            cout <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
-    if ( nodal_average )            cout <<"\tAll nodal variables are averaged"<< endl;
-    if ( check_list.empty() )       cout <<"\tIndex data are not established yet."<< endl;
-    else                            cout <<"\tIndex data have been established."<< endl;
+    os <<"\nPropertyConstraints::Out: "<< endl;
+    if ( vector_length_check )      os <<"\tSet to check the length of vector variables"<< endl;
+    if ( one_node_only )            os <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
+    if ( nodal_average )            os <<"\tAll nodal variables are averaged"<< endl;
+    if ( check_list.empty() )       os <<"\tIndex data are not established yet."<< endl;
+    else                            os <<"\tIndex data have been established."<< endl;
 
     map<string,pair<double64,double64> >::const_iterator  crit;       
     
-    cout <<"\tAssigned property constraints, and their ranges:";
+    os <<"\tAssigned property constraints, and their ranges:";
     for ( crit=criteria.begin(); crit!=criteria.end(); crit++ )
-      cout <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
+      os <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
     
-    cout << endl; 
+    os << endl; 
  }
 
  // 1d

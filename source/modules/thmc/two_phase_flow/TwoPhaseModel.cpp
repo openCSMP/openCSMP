@@ -57,31 +57,31 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
  {
 
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
 
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       snr, " variable must be scalar element property" );
 
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                       swr, " variable must be scalar element property" );
 
     if (sw_ro_mu_placement_)
     {
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                           sat, " variable must be scalar node property" );
 
     }
     else
     {
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)",
                           sat, " variable must be scalar element property" );
 
     }
@@ -128,63 +128,63 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    tensor_permeability_(false)
  {
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
                       
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       snr, " variable must be scalar element property" ); 
                       
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                       swr, " variable must be scalar element property" );
     
     if (sw_ro_mu_placement_)
     {
         if ( mun_key_.place != NODE || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           mun, " variable must be scalar node property" ); 
                           
         if ( muw_key_.place != NODE || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           muw, " variable must be scalar node property" ); 
                           
         if ( rhn_key_.place != NODE || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhn, " variable must be scalar node property" ); 
                           
         if ( rhw_key_.place != NODE || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhw, " variable must be scalar node property" ); 
                           
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           sat, " variable must be scalar node property" ); 
         
     }
     else
     {
         if ( mun_key_.place != ELEMENT || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           mun, " variable must be scalar element property" ); 
                           
         if ( muw_key_.place != ELEMENT || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           muw, " variable must be scalar element property" ); 
                           
         if ( rhn_key_.place != ELEMENT || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhn, " variable must be scalar element property" ); 
                           
         if ( rhw_key_.place != ELEMENT || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           rhw, " variable must be scalar element property" ); 
                           
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( CSMP_FATAL_ERROR, "TwoPhaseModel(constructor)", 
                           sat, " variable must be scalar element property" ); 
     
     }
@@ -1133,16 +1133,16 @@ double64 TwoPhaseModel<dim>::spline_second_derivative( double64 x, double64 x1, 
 }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::Out( size_t phase ) const
+void TwoPhaseModel<dim>::Out( std::ostream& os, size_t phase ) const
  { 
     assert( phase == 1U or phase == 2U );
-    cout <<"\nTwoPhaseModel<" << dim <<">::Out: ";
-    if ( phase == 1U ) cout <<" data for the wetting phase: ";
-    else               cout <<" data for the non-wetting phase: ";
+    os <<"\nTwoPhaseModel<" << dim <<">::Out: ";
+    if ( phase == 1U ) os <<" data for the wetting phase: ";
+    else               os <<" data for the non-wetting phase: ";
     if ( !interpolate_fluid_properties_ )
-      cout <<"fluid properties are fixed. "<< endl;
+      os <<"fluid properties are fixed. "<< endl;
     else 
-      cout <<"fluid properties are interpolated. "<< endl;
+      os <<"fluid properties are interpolated. "<< endl;
       
     //perm_key,    // permeability = scalar element property
     //sat_key,     // saturation of the wetting phase (nodal property)
@@ -1154,26 +1154,26 @@ void TwoPhaseModel<dim>::Out( size_t phase ) const
     //muw_key,     // viscosity of wetting phase (nodal property)
     //rhw_key,     // density of non-wetting phase (nodal property)
     //rhn_key;     // density of non-wetting phase (nodal property)
-    cout <<"\nelement properties:";
-    cout <<"\n       irreducible saturation of wetting phase: "<< swr_;
-    cout <<"\n   irreducible saturation of non-wetting phase: "<< snr_;
-    cout <<"\n                                  permeability: "<< k_;
-    cout <<"\nnode properties:";
-    cout <<"\n                    viscosity of wetting phase: "<< muw_;
-    cout <<"\n                viscosity of non-wetting phase: "<< mun_;
-    cout <<"\n                      density of wetting phase: "<< rhw_;
-    cout <<"\n                  density of non-wetting phase: "<< rhn_;
-    cout <<"\ninterfacial tension (surface tension of fluid): "<< ift_;
-    cout <<"\n                      saturation wetting phase: "<< sat_;
-    cout <<"\n            effective saturation wetting phase: "<< seff_;
-    cout <<"\n                               fractional flow: "<< f_Phase(phase);
-    cout <<"\n                                         df/dS: "<< dfds();
-    cout <<"\n                                   df/dSn(max): "<< MaxFractionalFlowDerivative();
-    cout <<"\n                                             G: "<< G();
-    cout <<"\n                                         dG/dS: "<< dGds();
-    cout <<"\n                                         pc(2): "<< pc_Phase();
-    cout <<"\n                                      dpcdS(2): "<< dpcds_Phase();
-    cout << endl << endl;
+    os <<"\nelement properties:";
+    os <<"\n       irreducible saturation of wetting phase: "<< swr_;
+    os <<"\n   irreducible saturation of non-wetting phase: "<< snr_;
+    os <<"\n                                  permeability: "<< k_;
+    os <<"\nnode properties:";
+    os <<"\n                    viscosity of wetting phase: "<< muw_;
+    os <<"\n                viscosity of non-wetting phase: "<< mun_;
+    os <<"\n                      density of wetting phase: "<< rhw_;
+    os <<"\n                  density of non-wetting phase: "<< rhn_;
+    os <<"\ninterfacial tension (surface tension of fluid): "<< ift_;
+    os <<"\n                      saturation wetting phase: "<< sat_;
+    os <<"\n            effective saturation wetting phase: "<< seff_;
+    os <<"\n                               fractional flow: "<< f_Phase(phase);
+    os <<"\n                                         df/dS: "<< dfds();
+    os <<"\n                                   df/dSn(max): "<< MaxFractionalFlowDerivative();
+    os <<"\n                                             G: "<< G();
+    os <<"\n                                         dG/dS: "<< dGds();
+    os <<"\n                                         pc(2): "<< pc_Phase();
+    os <<"\n                                      dpcdS(2): "<< dpcds_Phase();
+    os << endl << endl;
 }
 
 

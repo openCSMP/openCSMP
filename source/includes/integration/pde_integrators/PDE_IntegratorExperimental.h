@@ -347,11 +347,12 @@ class PDE_IntegratorExperimental {
     /// writes out the sparsity pattern of the solution matrix
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
   
-    /// outputs the system A x = b to the screen
-    void          OutputGlobals( int precision=1 );
+    /// outputs the system A x = b to a stream
+    void          OutputGlobals( std::ostream& os, int precision=1 );
   
     /// prints current parameters settings and pde operators to screen
-    void          Out() const;
+    void          Out() const { Out(std::cout); }
+    void          Out(std::ostream& os) const;
   
     /// extra detailed screen output about the assembly  solution progress
     void          Verbose( bool );

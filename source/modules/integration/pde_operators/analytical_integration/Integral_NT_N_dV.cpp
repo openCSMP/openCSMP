@@ -18,7 +18,7 @@ Integral_NT_N_dV<dim,SIMPLEX>::Integral_NT_N_dV( const PropertyDatabase<dim>& pr
         // testing the Operands 
     if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
          MathOperatorLHS<dim>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "Integral_NT_N_dV::(constructor)", 
+      throw csmp::Exception( CSMP_ERROR, "Integral_NT_N_dV::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
 

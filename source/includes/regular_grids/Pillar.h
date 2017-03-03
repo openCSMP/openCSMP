@@ -56,7 +56,8 @@ class Pillar {
     void   AssignPoint( size_t xid, size_t yid, size_t zid, size_t nid, const csmp::Point<3U>& pt );
   
     /// prints the data stored in the pillar to screen
-    void Out() const;
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
 
   protected:
 

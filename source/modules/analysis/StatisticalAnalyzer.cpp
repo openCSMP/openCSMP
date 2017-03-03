@@ -49,14 +49,14 @@ const
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( sref.UniqueRegions() == 0 ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
+           csmp_error.notice( CSMP_ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
                              "No regions are defined. Nothing was done.");
            return;
        }
      csmp::Index prop_key = pref.StorageKey(prop);
 
      if ( prop_key.place != ELEMENT ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: Area/volume normalization ",
+           csmp_error.notice( CSMP_ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: Area/volume normalization ",
                                      "only works for element properties." );
            return;
        }
@@ -101,7 +101,7 @@ const
                       val = ts.Determinant();
                    }
                 else // ARRAY VARIABLE
-                throw csmp::Exception( ERROR, "StatisticalAnalyzer<dim>::RegionPropertyHistograms:",
+                throw csmp::Exception( CSMP_ERROR, "StatisticalAnalyzer<dim>::RegionPropertyHistograms:",
                                       "Array variables are not handled yet.");
                
                 // adding the value to the corresponding column of the histogram
@@ -160,7 +160,7 @@ const
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( sref.UniqueRegions() == 0 ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
+           csmp_error.notice( CSMP_ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
                              "No regions are defined. Nothing was done.");
            return;
        }
@@ -304,7 +304,7 @@ const
                      n = (*grit).second.Elements();
                   break;
                 default:
-                  csmp_error.notice( ERROR, "StatisticalAnalyzer", "property placement not handled yet");
+                  csmp_error.notice( CSMP_ERROR, "StatisticalAnalyzer", "property placement not handled yet");
             }
          // 2. normalization of results
          // ---------------------------
@@ -1328,7 +1328,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
     ifstream ifs( bin_file );
 
     if ( !ifs.is_open() ) {
-         throw csmp::Exception( ERROR, "StatisticalAnalyzer<dim>::DefineBins",
+         throw csmp::Exception( CSMP_ERROR, "StatisticalAnalyzer<dim>::DefineBins",
                                 bin_file, "Histogram definition file could not be openend. Create it if missing.");
          return;
       }
@@ -1427,7 +1427,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const double64 minimum,
     
     if ( ( minimum >= maximum ) || ( number_of_bins <= 0 ) )
       {
-         throw csmp::Exception( ERROR, "StatisticalAnalyzer<dim>::DefineBins",
+         throw csmp::Exception( CSMP_ERROR, "StatisticalAnalyzer<dim>::DefineBins",
                                     "Unacceptable range or number of bins");
          return;
       }

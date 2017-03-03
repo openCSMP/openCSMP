@@ -156,7 +156,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
         }
     }
     else {
-        throw csmp::Exception(FATAL_ERROR,"ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution",
+        throw csmp::Exception(CSMP_FATAL_ERROR,"ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution",
                               " Placement of the gravity term vector is not supported",parsePlacement(gravityVectorKey_.place).c_str());
     }
 //    cin.get();

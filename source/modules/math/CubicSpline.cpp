@@ -171,17 +171,17 @@ void  CubicSpline::Initialize( const std::vector<double64>& xa, const std::vecto
 
 
 /// write internal data to screen
-void CubicSpline::Out() const
+void CubicSpline::Out(std::ostream& os) const
  {
-    cout <<"\nCubicSpline: internal data: ";
-    cout <<"\n x, f(x) and f'(x) at "<< xa_.size() <<" user defined points.";
+    os <<"\nCubicSpline: internal data: ";
+    os <<"\n x, f(x) and f'(x) at "<< xa_.size() <<" user defined points.";
     vector<double64>::const_iterator  it1(ya_.begin());
     vector<double64>::const_iterator  it2(y2a_.begin());
     
     for ( vector<double64>::const_iterator
           it=xa_.begin(); it!=xa_.end(); it++, it1++, it2++ )
-      cout <<"\n"<< *it <<" "<< *it1 <<" "<< *it2;
-    cout << endl;
+      os <<"\n"<< *it <<" "<< *it1 <<" "<< *it2;
+    os << endl;
  }
 
 

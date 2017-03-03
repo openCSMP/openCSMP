@@ -43,14 +43,15 @@ namespace csmp
 
     void SparseMatrix_Test::run()
     {
+        std::ostream& os = getInfoStream();
 
-    cout << "\n====================";
-    cout << "\nTesting SparseMatrix" << endl;
-    cout << "====================" << endl;
+    os << "\n====================";
+    os << "\nTesting SparseMatrix" << endl;
+    os << "====================" << endl;
 
     //Testing Assign function
-        cout << "\nTesting Assign function" << endl;
-        cout << "=======================" << endl;
+        os << "\nTesting Assign function" << endl;
+        os << "=======================" << endl;
 
         A.Assign( 0, 0, 1. );
         A.Assign( 0, 1, 2. );
@@ -72,8 +73,8 @@ namespace csmp
         A.Assign( 3, 2, 3. );
         A.Assign( 3, 3, 5. );
 
-        cout << "SparsityMatrix A = " << endl;
-        A.Out();
+        os << "SparsityMatrix A = " << endl;
+        A.Out(os);
 
         _test( A( 0,1 ) == 2. );
         _test( A( 3,3 ) == 5. );
@@ -91,8 +92,8 @@ namespace csmp
         Matrix2x2Val( 1, 1 ) = 10.;
 
         B.Assign( DenseMatrix2x2, Matrix2x2Val );
-        cout << "SparsityMatrix B = " << endl;
-        B.Out();
+        os << "SparsityMatrix B = " << endl;
+        B.Out(os);
         BB = B;
         D=A;
 
@@ -103,34 +104,34 @@ namespace csmp
 
 
     //Testing MultiplyWith function
-        cout << "\nTesting MultiplyWith function" << endl;
-        cout << "=============================" << endl;
+        os << "\nTesting MultiplyWith function" << endl;
+        os << "=============================" << endl;
 
         x.push_back(1.);
         x.push_back(2.);
         x.push_back(0.);
         x.push_back(1.5);
 
-        cout << "Test vector x =   ";
+        os << "Test vector x =   ";
 
         vector<double64>::const_iterator it( x.begin() );
         for ( vector<double64>::const_iterator
              it = x.begin(); it != x.end(); it++ )
         {
-            cout << *it << setw(5);
+            os << *it << setw(5);
         }
 
-        cout << "\n\ny = A * x";
+        os << "\n\ny = A * x";
         A.MultiplyWith( x, y );
 
         vector<double64>::const_iterator it1(y.begin());
 
-        cout << "\n\ny = ";
+        os << "\n\ny = ";
 
         for (vector<double64>::const_iterator
              it1 = y.begin(); it1 != y.end(); it1++ )
         {
-            cout << *it1 << setw(5);
+            os << *it1 << setw(5);
         }
 
         sol_y.push_back(6.5);
@@ -143,21 +144,21 @@ namespace csmp
         for (vector<double64>::const_iterator
              itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
-                //cout << "\n" << *itsol_y << setw(7) << *it1;
+                //os << "\n" << *itsol_y << setw(7) << *it1;
                 _equal( *itsol_y, *it1, 1E-6);
             }
 
 
     //Testing Operator= ( SparseMatrix )
-    cout << "\n Testing Operator= ( SparseMatrix )" << endl;
-    cout << "==========================" << endl;
+    os << "\n Testing Operator= ( SparseMatrix )" << endl;
+    os << "==========================" << endl;
 
-        cout << "\nSparseMatrix B";
-        B.Out();
+        os << "\nSparseMatrix B";
+        B.Out(os);
 
-        cout << "SparseMatrix B = SparseMatrix A";
+        os << "SparseMatrix B = SparseMatrix A";
         B = A;
-        B.Out();
+        B.Out(os);
 
         for ( int i = 0; i < 3; i++ )
         {
@@ -170,67 +171,67 @@ namespace csmp
 
 
     //Testing MultiplyEntryWith function
-        cout << "\nTesting MultiplyEntryWith function" << endl;
-        cout << "==================================" << endl;
+        os << "\nTesting MultiplyEntryWith function" << endl;
+        os << "==================================" << endl;
 
-        cout << "\nSparseMatrix B ( 0, 0 ) * 16. = 1. * 16.";
+        os << "\nSparseMatrix B ( 0, 0 ) * 16. = 1. * 16.";
         B.MultiplyEntryWith( 0, 0, 16. );
-        B.Out();
+        B.Out(os);
         B.RemoveEntry( 0, 1 );
 
-        cout << "\nSparseMatrix B ( 0, 1 ) * 99. = 0. * 99.";
+        os << "\nSparseMatrix B ( 0, 1 ) * 99. = 0. * 99.";
         B.MultiplyEntryWith( 0, 1, 99. );
-        B.Out();
+        B.Out(os);
 
         _equal( B( 0, 0 ) , 16. ,fTolerance );
         _equal( B( 0, 1 ) , 0. ,fTolerance );
 
 
     //Testing Add function
-        cout << "\nTesting Add function" << endl;
-        cout << "====================" << endl;
+        os << "\nTesting Add function" << endl;
+        os << "====================" << endl;
 
-        cout << "\nSparseMatrix B";
-        B.Out();
+        os << "\nSparseMatrix B";
+        B.Out(os);
         B.Add( 0, 0, 16. );
         B.Add( 0, 1, 15. );
-        cout << "SparseMatrix B ( 0, 0 ) + 16. = 32.";
-        cout << "\nSparseMatrix B ( 0, 1 ) + 15. = 15.";
-        B.Out();
+        os << "SparseMatrix B ( 0, 0 ) + 16. = 32.";
+        os << "\nSparseMatrix B ( 0, 1 ) + 15. = 15.";
+        B.Out(os);
 
         _test( B( 0, 0 ) == 32. );
         _test( B( 0, 1 ) == 15. );
 
 
     //Testing Rows function
-        cout << "\nTesting Rows function" << endl;
-        cout << "=====================" << endl;
+        os << "\nTesting Rows function" << endl;
+        os << "=====================" << endl;
 
-        cout << "\nSparseMatrix B";
-        B.Out();
+        os << "\nSparseMatrix B";
+        B.Out(os);
 
         _test( B.Rows() == 4. );
 
 
     //Testing Cols function
-        cout << "\nTesting Cols function" << endl;
-        cout << "=====================" << endl;
+        os << "\nTesting Cols function" << endl;
+        os << "=====================" << endl;
 
-        cout << "\nSparseMatrix B";
-        B.Out();
+        os << "\nSparseMatrix B";
+        B.Out(os);
 
         _test( B.Cols() == 4. );
 
 
     //Testing ZeroRow function
-        cout << "\nTesting ZeroRow function" << endl;
-        cout << "========================" << endl;
+        os << "\nTesting ZeroRow function" << endl;
+        os << "========================" << endl;
 
-        cout << "\nSparseMatrix B before ZeroRow(3)";
-        B.Out();
+        os << "\nSparseMatrix B before ZeroRow(3)";
+        B.Out(os);
         B.ZeroRow(3);
-        cout << "\nSparseMatrix B after ZeroRow(3)";
-        B.Out();
+        os << "\nSparseMatrix B after ZeroRow(3)";
+        B.Out(os);
 
         _test( B.Entries() == 12 );
 
@@ -239,19 +240,19 @@ namespace csmp
             for ( int j = 0; j < 4; j++ )
             {
                 _test( B( i, j ) == 0. );
-                cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
+                os << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
             }
         }
 
     //Testing ZeroColumn function
-        cout << "\nTesting ZeroColumn function" << endl;
-        cout << "===========================" << endl;
+        os << "\nTesting ZeroColumn function" << endl;
+        os << "===========================" << endl;
 
-        cout << "\nSparseMatrix B before ZeroColumn( 3 )";
-        B.Out();
+        os << "\nSparseMatrix B before ZeroColumn( 3 )";
+        B.Out(os);
         B.ZeroColumn(3);
-        cout << "\nSparseMatrix B after ZeroColumn( 3 )";
-        B.Out();
+        os << "\nSparseMatrix B after ZeroColumn( 3 )";
+        B.Out(os);
 
         _test( B.Entries() == 9 );
 
@@ -260,64 +261,64 @@ namespace csmp
             for ( int j = 3; j < 4; j++ )
             {
                 _test( B( i, j ) == 0. );
-                cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
+                os << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
             }
         }
-        cout << endl;
+        os << endl;
 
     //Testing RemoveEntry function
-        cout << "\nTesting RemoveEntry function" << endl;
-        cout << "============================" << endl;
+        os << "\nTesting RemoveEntry function" << endl;
+        os << "============================" << endl;
 
-        cout << "\nSparseMatrix B entries before RemoveEntry( 0, 0) = ";
-        cout << B.Entries() << endl;
+        os << "\nSparseMatrix B entries before RemoveEntry( 0, 0) = ";
+        os << B.Entries() << endl;
         B.RemoveEntry( 0, 0 );
-        cout << "\nSparseMatrix B entries after RemoveEntry( 0, 0 ) = ";
-        cout << B.Entries() << endl;
-        cout << "\nEntry B( 0, 0 ) = " <<  B( 0, 0 ) << endl;
+        os << "\nSparseMatrix B entries after RemoveEntry( 0, 0 ) = ";
+        os << B.Entries() << endl;
+        os << "\nEntry B( 0, 0 ) = " <<  B( 0, 0 ) << endl;
 
         _test( B.Entries() == 8. );
         _test( B( 0, 0 ) == 0. );
 
 
     //Testing Zero function
-        cout << "\nTesting Zero function" << endl;
-        cout << "=====================" << endl;
+        os << "\nTesting Zero function" << endl;
+        os << "=====================" << endl;
 
         C = B;
-        cout << "\nSparseMatrix B before Zero()";
-        B.Out();
+        os << "\nSparseMatrix B before Zero()";
+        B.Out(os);
         B.Zero();
-        cout << "SparseMatrix B after Zero()";
-        B.Out();
+        os << "SparseMatrix B after Zero()";
+        B.Out(os);
 
         _test( B.Entries() == 0. );
 
 
     //Testing Erase function
-        cout << "\nTesting Erase function" << endl;
-        cout << "======================" << endl;
+        os << "\nTesting Erase function" << endl;
+        os << "======================" << endl;
 
         B = C;
-        cout << "\nSparseMatrix B before Erase()";
-        B.Out();
+        os << "\nSparseMatrix B before Erase()";
+        B.Out(os);
         B.Erase();
-        cout << "SparseMatrix B after Erase()";
-        B.Out();
+        os << "SparseMatrix B after Erase()";
+        B.Out(os);
 
         _test( B.Entries() == 0. );
 
 
     //Testing ColumnIndices function
-        cout << "\nTesting ColumnIndices function" << endl;
-        cout << "==============================" << endl;
+        os << "\nTesting ColumnIndices function" << endl;
+        os << "==============================" << endl;
 
-        cout << "\nSparseMatrix B";
+        os << "\nSparseMatrix B";
         BB.Assign( 3, 4, 5. );
         BBB = BB;
-        BB.Out();
+        BB.Out(os);
         BB.ColumnIndices( 3, sizetVector );
-        cout << "Vector sizetVector resulting from B.ColumnIndices( 3, sizetVector ) = (" << sizetVector[0] << "," << sizetVector[1] << ")" << endl;
+        os << "Vector sizetVector resulting from B.ColumnIndices( 3, sizetVector ) = (" << sizetVector[0] << "," << sizetVector[1] << ")" << endl;
 
         _test( sizetVector.size() == 2. );
         _test( sizetVector[0] == 3. );
@@ -325,162 +326,162 @@ namespace csmp
 
 
     //Testing Resize function
-        cout << "\nTesting Resize function" << endl;
-        cout << "=======================" << endl;
+        os << "\nTesting Resize function" << endl;
+        os << "=======================" << endl;
 
-        cout << "\nSparseMatrix A before Resize()";
-        A.Out();
+        os << "\nSparseMatrix A before Resize()";
+        A.Out(os);
 
-        cout << "SparseMatrix A after Resize(2)";
+        os << "SparseMatrix A after Resize(2)";
         A.Resize(2);
-        A.Out();
+        A.Out(os);
 
         _test( A.Rows() == 2. );
         _test( A.Cols() == 2. );
 
-        cout << "SparseMatrix A after Resize(5)";
+        os << "SparseMatrix A after Resize(5)";
         A.Resize(5);
-        A.Out();
+        A.Out(os);
 
        _test( A.Rows() == 5. );
        _test( A.Cols() == 5. );
 
 
    //Testing At function
-       cout << "\nTesting At function" << endl;
-       cout << "===================" << endl;
+       os << "\nTesting At function" << endl;
+       os << "===================" << endl;
 
-       cout << "\nSparseMatrix B";
-       BB.Out();
+       os << "\nSparseMatrix B";
+       BB.Out(os);
 
-       cout << "SparseMatrix B.At( 3, 4 ) = " << BB.At( 3, 4 ) << endl;
+       os << "SparseMatrix B.At( 3, 4 ) = " << BB.At( 3, 4 ) << endl;
 
       _test( BB.At( 3, 4 ) == 5. );
 
 
    //Testing Operator() ( size_t, size_t )
-      cout << "\nTesting Operator() ( size_t, size_t )" << endl;
-      cout << "=====================================" << endl;
+      os << "\nTesting Operator() ( size_t, size_t )" << endl;
+      os << "=====================================" << endl;
 
-      cout << "\nSparseMatrix B";
-      BB.Out();
+      os << "\nSparseMatrix B";
+      BB.Out(os);
 
-      cout << "SparseMatrix B( 3, 4 ) = " << BB(3,4) << endl;
+      os << "SparseMatrix B( 3, 4 ) = " << BB(3,4) << endl;
 
      _test( BB( 3, 4 ) == 5. );
 
 
       //Testing Symmetric function
-         cout << "\nTesting Symmetric function" << endl;
-         cout << "==========================" << endl;
+         os << "\nTesting Symmetric function" << endl;
+         os << "==========================" << endl;
 
          BB.Assign( 0, 0, 10. );
          BB.Assign( 1, 1, 20. );
-         cout << "\nSparseMatrix B";
-         BB.Out();
+         os << "\nSparseMatrix B";
+         BB.Out(os);
 
-         cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
+         os << "SparseMatrix B is symmetric = " << BB.Symmetric();
 
          _test( BB.Symmetric() == 0 );
 
          BB.RemoveEntry( 3, 4 );
-         cout << "\nSparseMatrix B entries after RemoveEntry( 3, 4 )";
-         BB.Out();
+         os << "\nSparseMatrix B entries after RemoveEntry( 3, 4 )";
+         BB.Out(os);
 
-         cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
+         os << "SparseMatrix B is symmetric = " << BB.Symmetric();
 
          _test( BB.Symmetric() == 1 );
 
 
      //Testing ZeroesInDiagonal function
-         cout << "\nTesting ZeroesInDiagonal function" << endl;
-         cout << "=================================" << endl;
+         os << "\nTesting ZeroesInDiagonal function" << endl;
+         os << "=================================" << endl;
 
-         cout << "\nSparseMatrix B";
-         BB.Out();
-         cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
+         os << "\nSparseMatrix B";
+         BB.Out(os);
+         os << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
          _test( BB.ZeroesInDiagonal() == 0 );
 
          BB.RemoveEntry( 0, 0 );
          //BB.Assign( 0, 0, 0. );
-         cout << "\nSparseMatrix B entries after Assign( 0, 0, 0. )";
-         BB.Out();
-         cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
+         os << "\nSparseMatrix B entries after Assign( 0, 0, 0. )";
+         BB.Out(os);
+         os << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
          _test( BB.ZeroesInDiagonal() == 1 );
 
          BB.RemoveEntry( 0, 0 );
-         cout << "\nSparseMatrix B entries after RemoveEntry( 0, 0 )";
-         BB.Out();
-         cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal();
+         os << "\nSparseMatrix B entries after RemoveEntry( 0, 0 )";
+         BB.Out(os);
+         os << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal();
          _test( BB.ZeroesInDiagonal() == 1 );
 
 
      //Testing DiagonallyPositive function
-         cout << "\nTesting DiagonallyPositive function" << endl;
-         cout << "===================================" << endl;
+         os << "\nTesting DiagonallyPositive function" << endl;
+         os << "===================================" << endl;
 
-         cout << "\nSparseMatrix B";
-         BB.Out();
-         cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
+         os << "\nSparseMatrix B";
+         BB.Out(os);
+         os << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
          _test( BB.DiagonallyPositive() == 1 );
 
          BB.Assign( 0, 0, -5. );
          BB.Assign( 2, 2, -10. );
-         cout << "\nSparseMatrix B entries after Assign( 0, 0, -5. ) and Assign( 2, 2, -10. )";
-         BB.Out();
-         cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
+         os << "\nSparseMatrix B entries after Assign( 0, 0, -5. ) and Assign( 2, 2, -10. )";
+         BB.Out(os);
+         os << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
          _test( BB.DiagonallyPositive() == 0 );
 
 
      //Testing RecountEntries function
-         cout << "\nTesting RecountEntries function" << endl;
-         cout << "===============================" << endl;
+         os << "\nTesting RecountEntries function" << endl;
+         os << "===============================" << endl;
 
-         cout << "\nSparseMatrix B";
-         BB.Out();
-         cout << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
+         os << "\nSparseMatrix B";
+         BB.Out(os);
+         os << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
          _test( BB.RecountEntries() == BB.Entries() );
 
          BB.Assign( 0, 1, 11. );
-         cout << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
+         os << "Recounted Entries of SparseMatrix B = " << BB.RecountEntries() << endl;
          _test( BB.RecountEntries() == BB.Entries() );
 
 
      //Testing RemoveHalo function
-         cout << "\nTesting RemoveHalo function" << endl;
-         cout << "===========================" << endl;
+         os << "\nTesting RemoveHalo function" << endl;
+         os << "===========================" << endl;
 
-         cout << "\nSparseMatrix B";
-         BBB.Out();
+         os << "\nSparseMatrix B";
+         BBB.Out(os);
 
          BBB.RemoveHalo(2);
-         cout << "SparseMatrix B entries after RemoveHalo = " << BBB.Entries() << endl;
-         BBB.Out();
+         os << "SparseMatrix B entries after RemoveHalo = " << BBB.Entries() << endl;
+         BBB.Out(os);
          _test( BBB.Entries() == 3 );
 
 
      //Testing SparsityPattern function
-         cout << "\nTesting SparsityPattern function" << endl;
-         cout << "================================" << endl;
+         os << "\nTesting SparsityPattern function" << endl;
+         os << "================================" << endl;
 
-         cout << "\nSparseMatrix A";
-         BBB.Out();
+         os << "\nSparseMatrix A";
+         BBB.Out(os);
 
          BBB.SparsityPattern( "Sparsity" );
          string datafile = "cspline_test_data";
-         cout << "Data file Sparsity has been created" << endl;
+         os << "Data file Sparsity has been created" << endl;
 
      //Testing InfinityNorm function
-         cout << "\nTesting InfinityNorm function" << endl;
-         cout << "================================" << endl;
-         cout << "\nSparseMatrix D";
+         os << "\nTesting InfinityNorm function" << endl;
+         os << "================================" << endl;
+         os << "\nSparseMatrix D";
          D.MultiplyEntryWith(0,1,-1.);
          D.MultiplyEntryWith(1,2,-1.);
          D.MultiplyEntryWith(2,3,-1.);
          D.MultiplyEntryWith(3,0,-1);
-         D.Out();
+         D.Out(os);
          _test( D.InfinityNorm() == 13 );
-         cout << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
+         os << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
 
   }
 

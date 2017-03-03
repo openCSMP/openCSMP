@@ -11,6 +11,7 @@
 // (and it's impolite to usurp other users' functions!).
 
 #ifdef RUNNING_UNDER_CATCH
+#define CSMP_NO_OLD_CSMP_MESSAGE
 
 #include "catch.hpp"
 
@@ -18,8 +19,15 @@
 #define _fail(e) FAIL( e )
 #define _equal(expr,value,tol) REQUIRE( (expr) == Approx( (value) ).epsilon( (tol) ) )
 #define _succeed()
+
+#ifdef VERBOSE_TESTING
 #define _warn(e) WARN( e )
 #define _info(e) INFO( e )
+#else
+#define _warn(e)
+#define _info(e)
+#endif
+
 
 #else
 
@@ -70,6 +78,8 @@ class Test
 
     long getNumPassed() const;
     long getNumFailed() const;
+    std::ostream& getInfoStream();
+    void setInfoStream(std::ostream* osptr);
     const std::ostream* getStream() const;
     void setStream(std::ostream* osptr);
     void setName( std::string testName ) { testName_ = testName; }
@@ -93,6 +103,7 @@ class Test
     const char* prefix_;
   private:
     std::ostream* m_osptr;
+    std::ostream* m_infoptr;
     std::string testName_;
     long m_nPass;
     long m_nFail;
@@ -101,6 +112,45 @@ class Test
     Test& operator=(const Test&);
 };
 
+<<<<<<< HEAD
+=======
+  inline
+      long Test::getNumPassed() const
+  {
+    return m_nPass;
+  }
+
+  inline
+      long Test::getNumFailed() const
+  {
+    return m_nFail;
+  }
+
+  inline
+     const ostream* Test::getStream() const
+  {
+    return m_osptr;
+  }
+
+  inline
+      void Test::setStream(ostream* osptr)
+  {
+    m_osptr = osptr;
+  }
+
+  inline
+      void Test::do_succeed()
+  {
+    ++m_nPass;
+  }
+
+  inline
+      void Test::reset()
+  {
+    m_nPass = m_nFail = 0;
+  }
+
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 } // end namespace csmp
 
 #endif

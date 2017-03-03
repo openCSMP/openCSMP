@@ -280,8 +280,9 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     void WriteDomainIndexesToBinaryFile( FILE* ) const;
     // see non-member function readDomainIndexesFromBinaryFile() to read the indices back
 
-    void      OutputVariableToScreen( const char* prop ) const;
-    void      Out() const;
+    void      OutputVariableHumanReadable( std::ostream& os, const char* prop ) const;
+    void      Out() const { Out(std::cout); }
+    void      Out(std::ostream& os) const;
 
     bool      Verbose();
     void      Verbose(bool verbose);

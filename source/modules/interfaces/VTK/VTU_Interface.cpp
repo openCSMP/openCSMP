@@ -450,7 +450,7 @@ namespace vtuInterfaceDispatch
     template<>
     void dispatchCompileTimeToRuntimeVTK_Output<1U,int>( const csmp::Model<1U>&, const std::string&, const std::string&,  int )
     {
-        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+        throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
     }
 
     template<>
@@ -468,7 +468,7 @@ namespace vtuInterfaceDispatch
     template<>
     void dispatchCompileTimeToRuntimeVTK_Output<1U,long>( const csmp::Model<1U>&, const std::string&, const std::string&,  long )
     {
-        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+        throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
     }
 
     template<>
@@ -486,7 +486,7 @@ namespace vtuInterfaceDispatch
     template<>
     void dispatchCompileTimeToRuntimeVTK_Output<1U,size_t>( const csmp::Model<1U>&, const std::string&, const std::string&,  size_t )
     {
-        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+        throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
     }
 
     template<>
@@ -504,7 +504,7 @@ namespace vtuInterfaceDispatch
     template<>
     void dispatchCompileTimeToRuntimeVTK_Output<1U,double>( const csmp::Model<1U>&, const std::string&, const std::string&,  double )
     {
-        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+        throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
     }
 
 } // vtuInterfaceDispatch
@@ -848,7 +848,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
         const PLACEMENT variablePlacement( model_.Database().Placement( it->c_str() ) );
         const VARIABLE_TYPE variableType( model_.Database().Type( it->c_str() ) );
         //if( variableType != SCALAR && variableType != VECTOR && variableType != TENSOR && variableType != ARRAY && variableType != FLAGGEDARRAY)
-        //    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Output for scalar, vector, tensor, array and flagged array variables only" );
+        //    throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Output for scalar, vector, tensor, array and flagged array variables only" );
         if ( variablePlacement == MODEL )
             fieldDataIndices.push_back( model_.Database().StorageKey( it->c_str() ));
         else if ( variablePlacement == REGION || variablePlacement == BOUNDARY || variablePlacement == SPLIT_BOUNDARY )
@@ -868,7 +868,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
                 case TENSOR:
                     regionIndices.push_back( model_.Database().StorageKey( it->c_str() ) ) ;
                     break;
-                default: throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Region output for scalar, vector, tensor and array variables only" );
+                default: throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Region output for scalar, vector, tensor and array variables only" );
                 }
             }
         }
@@ -890,7 +890,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
                 case VECTOR:
                 case TENSOR: elementMatrixIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
                     break;
-                default: throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Element output for scalar, vector, tensor and array variables only" );
+                default: throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Element output for scalar, vector, tensor and array variables only" );
                 }
             }
         }
@@ -903,7 +903,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
         else{
             //vtuInterfaceDispatch::dispatchCompileTimeToRuntimeVTK_Output( model_, domainName( subDomain ).c_str(), it->c_str(), timestep );
             std::string errormsg="Placement not supported: "+*it;
-            throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", errormsg );
+            throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", errormsg );
         }
     }
 
@@ -1617,7 +1617,7 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const std::string& fileName,
 {
   for( size_t i = 0; i < vectors.size(); ++i )
     if( vectors.at( i ).size() != 3U )
-      throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
+      throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
 
   std::string fullFileName( fileName );
   fullFileName.append( ".vtu" );
@@ -1667,7 +1667,7 @@ bool VTU_Interface<dim>::OutputPrincipalVectorsToVTU( const std::string& fileNam
                                                       const std::vector<double>& xyzLengths )
 {
   if( xyzLengths.size() != 3U )
-    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
+    throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
   std::vector<double> xVector( 3, 0. ); xVector.at( 0 ) = xyzLengths.at( 0 );
   std::vector<double> yVector( 3, 0. ); yVector.at( 1 ) = xyzLengths.at( 1 );
   std::vector<double> zVector( 3, 0. ); zVector.at( 2 ) = xyzLengths.at( 2 );
@@ -1685,7 +1685,7 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const std::string& fileName, const s
                                             const std::vector<std::vector<double> >& tensor )
 {
   if( tensor.size() != 3U )
-    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Tensor required to have 3 components." );
+    throw csmp::Exception( CSMP_ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Tensor required to have 3 components." );
 
   std::string fullFileName( fileName );
   fullFileName.append( ".vtu" );
@@ -3886,7 +3886,7 @@ VTK_TYPE VTU_Interface<dim>::ElementType( SIMPLEX<dim>* elmt ) const
                                         break;
 
 
-  default:                              throw csmp::Exception( ERROR,
+  default:                              throw csmp::Exception( CSMP_ERROR,
                                                                "VTU_Interface<dim>::ElementType",
                                                                "Unable to identify element type",
                                                                "unknown" );

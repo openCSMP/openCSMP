@@ -755,7 +755,7 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
               default:
                    cout <<"\nElement ID: "<< super_group.E( (*it).first )->Idx();
                    cout <<" with "<< super_group.E( (*it).first )->Nodes() <<" nodes."<< endl;
-                   throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::TransformPlist", 
+                   throw csmp::Exception( CSMP_FATAL_ERROR, "Tecplot_Interface<dim>::TransformPlist", 
                                   "Unable to interpret how this element shall be broken in subelements");
            }
       }
@@ -803,7 +803,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
     const Region<dim>&  super_group(sg.Region("Model"));
 
     if ( prop_key.place != NODE )
-        throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::NodeData",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Tecplot_Interface<dim>::NodeData",
                               "Method only applies to node properties" );
 
     pair<typename map<size_t,vector<double64> >::iterator,bool>  dit;
@@ -881,7 +881,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
     const Region<dim>&  super_group(sg.Region("Model"));
     
     if ( prop_key.place != ELEMENT )
-      throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::ElementPointData", 
+      throw csmp::Exception( CSMP_FATAL_ERROR, "Tecplot_Interface<dim>::ElementPointData", 
                                    "Method only applies to element properties" );
     
     pair<typename map<size_t,vector<double64> >::iterator,bool>  dit;

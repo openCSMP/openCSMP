@@ -93,13 +93,13 @@ double Edge3D::AngleTo( const Edge3D& v ) const
 
 
 
-void Edge3D::Out() const
+void Edge3D::Out(std::ostream& os) const
  {
-    cout <<"\nEdge3D::Out:"<< endl;
-    cout <<"Origin: ";
-    org_.Out();
-    cout <<"\nDestination";
-    dest_.Out();
+    os <<"\nEdge3D::Out:"<< endl;
+    os <<"Origin: ";
+    org_.Out(os);
+    os <<"\nDestination";
+    dest_.Out(os);
  }
 
 } // end mjl

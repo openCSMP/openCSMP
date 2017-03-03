@@ -163,19 +163,19 @@ csmp::Point<3U> Pillar::ResolveXYcoords( double z )
 
 
 
-void Pillar::Out() const
+void Pillar::Out(std::ostream& os) const
  {
-    std::cout <<"\nPillar::Out:\n";
-    std::cout <<"\torigin: "<< a_ <<", direction: "<< b_;
-    std::cout <<"\n\tstored points ("<< points_.size() <<"):\n\t";
+    os <<"\nPillar::Out:\n";
+    os <<"\torigin: "<< a_ <<", direction: "<< b_;
+    os <<"\n\tstored points ("<< points_.size() <<"):\n\t";
     for ( auto it = points_.begin(); it!=points_.end(); ++it )
-      std::cout << (*it) <<" ";
+      os << (*it) <<" ";
 
-    std::cout <<"\n\n\tindices of attached cells ("<< attached_cells_.size() <<"):\n\t";
+    os <<"\n\n\tindices of attached cells ("<< attached_cells_.size() <<"):\n\t";
     for ( auto it = attached_cells_.begin(); it!=attached_cells_.end(); ++it )
-      std::cout <<"\t"<< (*it).first.first <<","<< (*it).first.second <<": "<< (*it).second <<"\n";
+      os <<"\t"<< (*it).first.first <<","<< (*it).first.second <<": "<< (*it).second <<"\n";
    
-    std::cout <<"\n";
+    os <<"\n";
  }
 
 

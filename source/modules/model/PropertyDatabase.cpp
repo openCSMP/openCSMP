@@ -30,7 +30,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isB
  if(isBinary)
    {
      if( !BinaryIn(variablesFileName) )
-      throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
+      throw csmp::Exception( CSMP_ERROR, "PropertyDatabase", "Not able to load from binary file" );
    }
  else
    Initialize(variablesFileName);    
@@ -555,7 +555,7 @@ void PropertyDatabase<dim>::FlushToScreen( const char* propname ) const
           return;
        }
        
-     (*iter).second.Out();
+     (*iter).second.Out(cout);
      cout.flush();
     
  } // FlushToScreen
@@ -580,7 +580,7 @@ void PropertyDatabase<dim>::CountVariables()
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
-          csmp_error.notice( WARNING, "PropertyDatabase<dim>::CountVariables", 
+          csmp_error.notice( CSMP_WARNING, "PropertyDatabase<dim>::CountVariables", 
                                       "the property list is empty");
           return;
        }
@@ -624,7 +624,7 @@ void PropertyDatabase<dim>::AssignVariableIndices()
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
-          csmp_error.notice( WARNING, "PropertyDatabase<dim>::AssignVariableIndices", 
+          csmp_error.notice( CSMP_WARNING, "PropertyDatabase<dim>::AssignVariableIndices", 
                                       "the property list is empty");
           return;
        }
@@ -647,7 +647,7 @@ void PropertyDatabase<dim>::ListVariables() const
   {
      for ( map<string,csmp::Parameter>::const_iterator
            iter=propList_.begin(); iter!=propList_.end(); iter++ )
-       (*iter).second.Out();
+       (*iter).second.Out(std::cout);
 
   } // ListVariables
 
@@ -695,7 +695,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
      ifstream  ifs( property_database_textfile );
      
      if ( !ifs.is_open() )
-       throw csmp::Exception( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
+       throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::TextToBinaryFile",
                               property_database_textfile, "could not be opened; nothing was done" );
 
      if ( !propList_.empty() ) {
@@ -769,7 +769,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
             propList_.insert( make_pair( new_param.name, new_param ) );
 
 	        // testing
-  	      if ( echo_to_screen ) new_param.Out();
+  	      if ( echo_to_screen ) new_param.Out(std::cout);
        }
      
      ifs.close();
@@ -831,7 +831,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty()
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty property '"<< new_prop <<"' already exists" << endl;
-         (*iter).second.Out();
+         (*iter).second.Out(std::cout);
          return StorageKey( new_prop.c_str() );
       }
     else  
@@ -953,7 +953,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty: '"<< s <<"' already exists. Nothing was done."<< endl;
-         (*iter).second.Out();
+         (*iter).second.Out(std::cout);
          return StorageKey(s);
       }
     else {
@@ -1018,7 +1018,7 @@ void PropertyDatabase<dim>::DeleteProperty( const char* s )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( iter == propList_.end() ) { 
-         csmp_error.notice( WARNING, "PropertyDatabase<dim>::DeleteProperty", const_cast<char*>(s), 
+         csmp_error.notice( CSMP_WARNING, "PropertyDatabase<dim>::DeleteProperty", const_cast<char*>(s), 
                                      "target property was not defined");
          return;
       }
@@ -1304,7 +1304,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
     map<string,csmp::Parameter>::const_iterator  iter = propList_.find(string(s));
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
-    else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange", "property could not be identified");
+    else throw csmp::Exception( CSMP_FATAL_ERROR, "PropertyDatabase<dim>::CheckRange", "property could not be identified");
     std::stringstream ss;
     string msg1,msg2,errmsg;
      if ( var < mn )
@@ -1315,7 +1315,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
             ss << var << ' ' << mn;
             ss >> msg1 >> msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while minimum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the minimum specified.",errmsg.c_str());
+            error_handler.notice( CSMP_FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the minimum specified.",errmsg.c_str());
          }
       else if ( var > mx )
          {
@@ -1325,7 +1325,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
             ss<<var<<' '<<mx;
             ss>>msg1>>msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while maximum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the maximum specified.",errmsg.c_str());
+            error_handler.notice( CSMP_FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the maximum specified.",errmsg.c_str());
          }
         
  } // end CheckRange
@@ -1356,22 +1356,26 @@ const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
 
 
 template<size_t dim>
-void PropertyDatabase<dim>::Out() const
+void PropertyDatabase<dim>::Out(std::ostream& os) const
  {
+<<<<<<< HEAD
      cout <<"\nPropertyDatabase::Out: variables file '"<< physvarsFile <<"'"<< endl;
      cout <<"total number of stored properties: "<< VariableCount() << endl;
+=======
+     os <<"\nPropertyDatabase::Out: variables file'"<< physvarsFile <<"'"<< endl;
+     os <<"total number of stored properties: "<< VariableCount() << endl;
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
      if ( VariableCount() > 0 ) {
-          cout <<"detailed variable counts:\n";
+          os <<"detailed variable counts:\n";
           for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
            for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
-             cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
+             os << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
-          cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
+          os <<"\nDetailed information on current properties in alphabetical order: "<< endl;
           for ( map<string,csmp::Parameter>::const_iterator
                 iter=propList_.begin(); iter!=propList_.end(); iter++ )
-            cout << iter->first << ": \n" << (*iter).second;
-          cout << endl;
-          cout.flush();
+            os << iter->first << ": \n" << (*iter).second;
+          os << endl;
        }
      
  }  // end Out
@@ -1497,6 +1501,7 @@ void PropertyDatabase<dim>::AttachIndices()
 template<size_t dim>
 void PropertyDatabase<dim>::UpdateIndexReferences()
   {
+<<<<<<< HEAD
     size_t i(0);
     // update
     for ( map<csmp::Index*,string>::const_iterator it(indexTracker_.IndicesBegin()); it != indexTracker_.IndicesEnd(); ++it, ++i )
@@ -1515,6 +1520,16 @@ void PropertyDatabase<dim>::UpdateIndexReferences()
         throw csmp::Exception( ERROR, "PropertyDatabase<dim>::UpdateIndexReferences:", "IndexTracker has Index objects that are linked to undefined properties." );
     
     if (this->Verbose()) cout << "\nPropertyDatabase<dim>::UpdateIndexReferences: updated " << i << " Index objects using IndexTracker.\n";
+=======
+  size_t i(0);
+  // update
+  for( map<csmp::Index*,string>::const_iterator it( indexTracker_.IndicesBegin() ); it != indexTracker_.IndicesEnd(); ++it, ++i )
+    if( IsDefined( it->second.c_str() ) )
+      (it->first)->UpdateData( propList_[it->second].key ); /// @todo (2-F) Buggy, only safe by design
+    else
+      throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::UpdateIndexReferences", "IndexTracker has Indexes linked to undefined properties" ); 
+  if (this->Verbose()) cout << "\nPropertyDatabase<dim>::UpdateIndexReferences() updated " << i << " Index objects using IndexTracker\n";
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
   }
 
 
@@ -1738,7 +1753,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
         key.flagDepth = tensorFlags;  
       }
     else
-      throw csmp::Exception( ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(int,Index):",
+      throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(int,Index):",
                             "Variable type not supported/identified" );
   }
 
@@ -1781,7 +1796,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
         key.flagDepth = key.dataDepth;
       }
     else
-      throw csmp::Exception( ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(int,size_t,Index):",
+      throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(int,size_t,Index):",
                             "Variable type not supported/identified" );
   }
 
@@ -1834,7 +1849,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( std::strin
         key.flagDepth = key.dataDepth;
       }
     else
-      throw csmp::Exception( ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(string,Index):",
+      throw csmp::Exception( CSMP_ERROR, "PropertyDatabase<dim>::EstablishVariableTypeDependentProperties(string,Index):",
                             "Variable type not supported/identified", vtype.c_str() );
   }
 

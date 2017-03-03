@@ -88,7 +88,8 @@ class BrooksCorey : public TwoPhaseModel<dim> {
     virtual double64 ShockSpeed() const;
     virtual double64 ShockHeight() const;
     
-    virtual void Out( size_t phase ) const;
+    void Out(size_t phase) const { Out(std::cout, phase); }
+    virtual void Out( std::ostream& os, size_t phase ) const;
 
 
     // brooks corey parameters

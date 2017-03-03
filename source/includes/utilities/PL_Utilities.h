@@ -60,9 +60,98 @@ double64 averageDifference( Model<dim>& model, const char* nodeProp1, const char
 template<size_t dim, template<size_t> class NodeOrElement>
 double64 maximumOfProperty( Model<dim>& model, const char* prop, const char* region = "Model" );
 
+<<<<<<< HEAD
+=======
+/// conversion from float number to string
+template<typename T>
+inline void floatnumberToString( T number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+#ifdef __APPLE__
+  if ( fabs(number) < 1.0e-30 ) number=0.0;
+  else if ( number >1.0e+30 ) number=1.0e+30;
+#endif
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+/// conversion from float number to string
+template<typename T>
+inline std::string floatnumberToString( T number )
+{
+  std::string cacheString;
+  floatnumberToString<T>( number, cacheString );
+  return cacheString;
+}
+
+/// conversion from number to string, no formatting specified
+template<typename T>
+inline void numberToString( T number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+  // SKM FIX
+  stringStream.setf(std::ios::scientific);
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+// Specialisations for avoiding numbers with an exponent that
+// has 3 digits (for PARAVIEW on Mac)
+#ifdef __APPLE__
+template<>
+inline void numberToString<float>( float number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+  // SKM FIX
+  stringStream.setf(std::ios::scientific);
+//  stringStream.precision(std::numeric_limits<float>::digits10);
+  if ( fabsf(number) < 1.0e-30f ) number=0.f;
+  else if ( fabsf(number) > 1.0e+30f ) number=1.0e+30f;
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+template<>
+inline void numberToString<double>( double number, std::string& recipient )
+{
+  std::ostringstream stringStream;
+  // SKM FIX
+  stringStream.setf(std::ios::scientific);
+//  stringStream.precision(std::numeric_limits<double>::digits10);
+  if ( fabs(number) < 1.0e-30 ) number=0.;
+  else if ( fabs(number) > 1.0e+30 ) number=1.0e+30;
+  stringStream << number;
+  recipient = stringStream.str();
+}
+
+#endif
+
+/// conversion from number to string, no formatting specified
+template<typename T>
+inline std::string numberToString( T number )
+{
+  std::string cacheString;
+  numberToString<T>( number, cacheString );
+  return cacheString;
+}
+
+
+template <typename T>
+inline T stringToNumber ( const std::string &Text )
+  {                               
+    std::stringstream ss(Text);
+    // SKM FIX
+    ss.setf(std::ios::scientific);
+//    ss.precision(std::numeric_limits<double>::digits10);
+
+    T result;
+    return ss >> result ? result : 0;
+  }
+
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 /// returns arithmetic average of parent elements prop to node
 template<size_t dim>
-double64 elementToNodeProperty( Node<dim>* node, Index key )
+inline double64 elementToNodeProperty( Node<dim>* node, Index key )
   {
     double cacheDouble = 0.;
     for( size_t parent = 0; parent < node->Parents(); ++parent )
@@ -137,7 +226,7 @@ Point<3U> modelMidpoint( const Model<3U>& model, const char* regionName = "Model
 
 /// NCFVT bug workaround to calculate inflow across a boundary with PP conditions. Requires add. 'nodal volume flux'
 template<size_t dim>
-double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
+inline double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
   {
     model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
     return  boundary.SurfaceIntegral( model.Database(), "nodal volume flux" );
@@ -145,7 +234,7 @@ double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
 
 
 template<size_t dim>
-double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
+inline double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
   {
   model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
   return  region.VolumeIntegral( "nodal volume flux" ,false);
@@ -191,7 +280,7 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
 
 /// looks up value for given key and passes it to parameter; returns true if found, false otherwise
 template<typename KeyType,typename ValueType>
-bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,ValueType>& mapToWriteTo )
+inline bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,ValueType>& mapToWriteTo )
   {
     const typename std::map<KeyType,ValueType>::const_iterator IT( mapToWriteTo.find( KEY ) );
     if( IT == mapToWriteTo.end() )
@@ -203,7 +292,7 @@ bool mapFind( const KeyType& KEY, ValueType& VALUE, const std::map<KeyType,Value
 
 /// returns if value is to be found
 template<typename KeyType,typename ValueType>
-bool mapFind( const KeyType& KEY, const std::map<KeyType,ValueType>& mapToWriteTo )
+inline bool mapFind( const KeyType& KEY, const std::map<KeyType,ValueType>& mapToWriteTo )
   {
     const typename std::map<KeyType,ValueType>::const_iterator IT( mapToWriteTo.find( KEY ) );
     if( IT == mapToWriteTo.end() )

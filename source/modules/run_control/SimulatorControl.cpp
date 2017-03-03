@@ -417,7 +417,7 @@ void SimulatorControl<dim>::SetThicknessFactorFromWellRadii()
                  || (containsVolumeElements(wref) &&
                      !containsSurfaceElements(wref) &&
                      !containsLineElements(wref))) )
-            error_handler_.notice( ERROR, "SimulatorControl::SetThicknessFactorFromWellRadii()",
+            error_handler_.notice( CSMP_ERROR, "SimulatorControl::SetThicknessFactorFromWellRadii()",
                                    "Wells should contain only elements of the same dimension (all volumes, all surfaces, or all lines)","Check your geometry." );
 
         if (containsLineElements(wref)){
@@ -706,7 +706,7 @@ void SimulatorControl<dim>::SetBoundaryFlag(const char* property_name, string bo
     if (this->GetSS()->GetModel()->ContainsBoundary(boundary))
         this->GetSS()->GetModel()->Boundary(boundary).ChangePropertyStatus(property_name, flag);
     else
-        error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetBoundaryFlag()","Model does not contain boundary: ",boundary.c_str() );
+        error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::SetBoundaryFlag()","Model does not contain boundary: ",boundary.c_str() );
 }
 
 template <size_t dim>
@@ -724,7 +724,7 @@ void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string bounda
     if (key.type==SCALAR)
         this->GetSS()->GetModel()->Boundary(boundary.c_str()).InputPropertyValue(prop_name, makeScalar(flag,value));
     else
-        error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetBoundaryValue()","Only scalars may be set on the boundary","(for now)" );
+        error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::SetBoundaryValue()","Only scalars may be set on the boundary","(for now)" );
 }
 
 template <size_t dim>
@@ -734,7 +734,7 @@ void SimulatorControl<dim>::SetRegionValue(string prop_name,string region,double
     if (key.type==SCALAR)
         this->GetSS()->GetModel()->Region(region.c_str()).InputPropertyValue(prop_name.c_str(), makeScalar(flag,value));
     else
-        error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetRegionValue()","Only scalars may be set","(for now)" );
+        error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::SetRegionValue()","Only scalars may be set","(for now)" );
 }
 
 template <size_t dim>
@@ -743,7 +743,7 @@ void SimulatorControl<dim>::SetRegionFlag(const char* prop_name,string region,VA
     if (this->GetSS()->GetModel()->ContainsRegion(region.c_str()))
         this->GetSS()->GetModel()->Region(region.c_str()).ChangePropertyStatus(prop_name, flag);
     else
-        error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetRegionFlag()","Model does not contain region: ",region.c_str() );
+        error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::SetRegionFlag()","Model does not contain region: ",region.c_str() );
 }
 
 
@@ -854,7 +854,7 @@ void SimulatorControl<dim>::CatchSignals()
     }
 
     if (sig.QuitSignal()){
-        error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::CatchSignals()","User has chosen to quit the simulation.","Shutting down SimulatorControl." );
+        error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::CatchSignals()","User has chosen to quit the simulation.","Shutting down SimulatorControl." );
         //exit(1);
     }
 
@@ -895,7 +895,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
             //            if (double64(simulator_setup_->GetModel()->Database().Components("output times"))>simulator_setup_->GetModel()->Read( vtu_frames_Key_) )
             //                this->SetOutputTimes(simulator_setup_->GetModel()->Read( vtu_frames_Key_ ), this->GetSimulationStartTime());
             //            else
-            //                throw csmp::Exception (ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
+            //                throw csmp::Exception (CSMP_ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
             //                                       ,"vtu frames cannot be larger than the amount of output times to save. Decrease vtu frames or increase the size of output times in the variables file.");
         }
         else{
@@ -905,7 +905,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
 
     }
     else
-        throw csmp::Exception (ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
+        throw csmp::Exception (CSMP_ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
                                ,"'vtu frames' needs to be defined variables. Set them to zero to use pre-defined output times from your configuration file as monitor and vtu output times.");
 
     if (simulator_setup_->GetModel()->Database().IsDefined("monitor frames"))
@@ -926,7 +926,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
 
     }
     else
-        throw csmp::Exception (ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
+        throw csmp::Exception (CSMP_ERROR,"SimulatorControl<dim>::SyncOutputTimesToModel()"
                                ,"'monitor frames' needs to be a defined variable. Set them to zero to use pre-defined output times from your configuration file as monitor and vtu output times.");
 
 
@@ -1044,7 +1044,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
         if (this->YesOrNo())
             this->OutputSampleControlFile();
         else
-            error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::OutputSampleControlFile", " A sample control file is needed by the simulator",
+            error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::OutputSampleControlFile", " A sample control file is needed by the simulator",
                                    " Please create it (or re-run the simulator so that it will create a sample one for you) and restart the simulator.");
     }
 
@@ -1072,7 +1072,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             // get the simulation endtime
             if (tok1.find("END TIME")!=std::string::npos) {
                 if (listoftokens.size()<3)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation duration"," set 'end time' in the -control.txt file.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation duration"," set 'end time' in the -control.txt file.");
                 double64 time_value(0);
                 token=listoftokens[2];
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
@@ -1086,7 +1086,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 else if (time_unit=="y")
                     time_value=86400.0*365.0 * std::stod(listoftokens[1]);
                 else
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," End time value or unit not recognized.","Should be one of seconds, hours, days, years");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," End time value or unit not recognized.","Should be one of seconds, hours, days, years");
 
                 this->GetSS()->RunSettings().Duration(time_value);
                 this->SetSimulationEndTime(time_value);
@@ -1096,7 +1096,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("VTU FRAMES")!=std::string::npos) {
                 if (listoftokens.size()<2)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for vtu frames"," set the number in the -control.txt file.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for vtu frames"," set the number in the -control.txt file.");
                 size_t value(0);
                 value=std::stoul(listoftokens[1]);
                 // We now modify the model variables accordingly, to fit the current control options,
@@ -1108,7 +1108,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("MONITOR FRAMES")!=std::string::npos) {
                 if (listoftokens.size()<2)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor frames");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor frames");
                 size_t value(0);
                 value=std::stoul(listoftokens[1]);
                 // We now modify the model variables accordingly, to fit the current control options,
@@ -1119,7 +1119,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("OUTPUT TIMES")!=std::string::npos) {
                 if (listoftokens.size()<3)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for output times."," Please provide a unit type and at least one output time.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for output times."," Please provide a unit type and at least one output time.");
 
                 double64 time_value(0);
                 token=listoftokens[1];
@@ -1137,7 +1137,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                     else if (time_unit=="y")
                         time_value=86400.0*365.0* std::stod(listoftokens[i]);
                     else
-                        error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
+                        error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
 
                     this->RunSettings().AddOutputTime(time_value);
                     this->RunSettings().AddMonitorTime(time_value);
@@ -1146,7 +1146,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("MONITOR TIMES")!=std::string::npos) {
                 if (listoftokens.size()<3)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor times."," Please provide a unit type and at least one output time.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for monitor times."," Please provide a unit type and at least one output time.");
 
                 double64 time_value(0);
                 token=listoftokens[1];
@@ -1163,7 +1163,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                     else if (time_unit=="y")
                         time_value=86400.0*365.0*std::stod(listoftokens[i]);
                     else
-                        error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
+                        error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Output time value or unit not recognized."," Should be one of seconds, hours, days, years");
 
                     this->RunSettings().AddMonitorTime(time_value);
                 }
@@ -1173,7 +1173,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             cout<<" TOKEN :  "<<tok1<<endl;
             if (tok1.find("RESTART FILE")!=std::wstring::npos) {
                 if (listoftokens.size()<2)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for restart file output runtime interval."," Please provide a unit type and at least one output time.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for restart file output runtime interval."," Please provide a unit type and at least one output time.");
                 //                cout<<"reading restart options: "<<listoftokens[0]<<" "<<listoftokens[1]<<endl;
                 double64 value(0);
                 value=std::stod(listoftokens[1]);
@@ -1185,7 +1185,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             // Get interval start times.
             if (tok1.find("INTERVAL NAME")!=std::string::npos) {
                 if (listoftokens.size()<3)
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation time interval"," check the interval settings of your -control.txt file.");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()"," Not enough parameters provided (or read) for simulation time interval"," check the interval settings of your -control.txt file.");
 
                 double64 time_value(0);
                 token=listoftokens[3];
@@ -1201,7 +1201,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                     time_value=86400.0*365.0*std::stod(listoftokens[2]);
                 else{
                     string errmsg="Interval start time value or unit not recognized: '"+time_unit+"' text_line: '"+text_line+"'";
-                    error_handler_.notice(EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()",errmsg.c_str()," Should be one of seconds, hours, days, years");
+                    error_handler_.notice(CSMP_EXCEPTION,"SimulatorControl<dim>::ReadControlOptions()",errmsg.c_str()," Should be one of seconds, hours, days, years");
                 }
                 this->InsertNewTimeInterval(listoftokens[1],time_value);
                 this->RunSettings().AddOutputTime(time_value);
@@ -1248,7 +1248,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                             this->GetSS()->GetMonitoredValuePropList().push_back(vname);
                         }
                         else{
-                            error_handler_.notice(FATAL_ERROR,"SimulatorControl<dim>::ReadControlOptions()"," Monitored singular values need to be variables created on the MODEL.",
+                            error_handler_.notice(CSMP_FATAL_ERROR,"SimulatorControl<dim>::ReadControlOptions()"," Monitored singular values need to be variables created on the MODEL.",
                                                   " Double check your code and/or your CreateParameterList method of your derived SimulatorSetup class ");
                         }
                     }
@@ -1497,7 +1497,7 @@ void SimulatorControl<dim>::OutputSampleControlFile()
 
     // Now, this will output the section specific to each simulator.
     OutputSimulatorSpecificControlFileSection();
-    error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::OutputSampleControlFile", "A sample control file has been output",
+    error_handler_.notice( CSMP_EXCEPTION, "SimulatorControl<dim>::OutputSampleControlFile", "A sample control file has been output",
                            "Please check it and restart the simulator.");
 }
 
@@ -1521,7 +1521,7 @@ double64 SimulatorControl<dim>::MaxDifferenceScalarNodalProperty(Index &snp1Key,
 template <size_t dim>
 void SimulatorControl<dim>::Run()
 {
-    error_handler_.notice( FATAL_ERROR, "SimulatorControl<dim>::Run",
+    error_handler_.notice( CSMP_FATAL_ERROR, "SimulatorControl<dim>::Run",
                            " Huh? You are using the Run() method from the base class!" ," Create a run method in your derived SimulatorControl class");
 }
 

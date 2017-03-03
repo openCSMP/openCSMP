@@ -356,24 +356,24 @@ double64          Node<dim>::z() const { return xyz_[2u]; }
 Outputs internal data of the node. 
 */
 template<size_t dim>
-void Node<dim>::Out() const
+void Node<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\nNode<"<< dim <<">: "<< idx_;
+    os <<"\n\nNode<"<< dim <<">: "<< idx_;
     if ( at_boundary_ != NOT ) {
          string str(parseBoundary(at_boundary_));
-         cout <<", Boundary flag: "<< str;
+         os <<", Boundary flag: "<< str;
       }
-    cout <<", Coordinates: "<< xyz_;
-    cout << endl;
+    os <<", Coordinates: "<< xyz_;
+    os << endl;
 #ifndef NDEBUG
     if ( parent_node_indexes_.size() > 0u ) {
-         cout <<"\nElement objects sharing the node / node position therein:\n"<< endl;
+         os <<"\nElement objects sharing the node / node position therein:\n"<< endl;
          for ( size_t i=0U; i<Parents(); i++ ) {
-              if ( Parent(i) == NULL ) cout <<"NONE (null pointer) ";
-              else Parent(i)->Out();
-              cout <<"(node "<< ParentNodeNumber(i) <<"), ";
+              if ( Parent(i) == NULL ) os <<"NONE (null pointer) ";
+              else Parent(i)->Out(os);
+              os <<"(node "<< ParentNodeNumber(i) <<"), ";
            }
-         cout << endl;
+         os << endl;
       } 
 #endif
  } // end out 

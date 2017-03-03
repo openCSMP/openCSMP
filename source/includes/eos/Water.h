@@ -3,7 +3,7 @@
 
 #include "CSMP_definitions.h"
 
-#include "steam4.h"
+#include "iaps_h2o_eos/steam4.h"
 
 #include "CriticalPointH2O.h"
 

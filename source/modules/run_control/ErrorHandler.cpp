@@ -237,32 +237,38 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
    // 1. logging the message
     switch( err_type )
       {
-         case INFO:        minfos_.insert( make_pair(source,msg) );
-                           message += " Info: ";
-           break;
-         case WARNING:     mwarnings_.insert( make_pair(source,msg) );
-                           message += " Warning: ";
-                           warnings_++;
-           break;
-         case ERROR:       merrors_.insert( make_pair(source,msg) );
-                           message += " Error: ";
-                           errors_++;
-           break;
-         case EXCEPTION:   merrors_.insert( make_pair(source,msg) );
-                           message += " Exception: ";
-                           errors_++;
-                           WriteErrorsToFile();
-                           throw Exception( err_type, source.c_str(), msg );
-           break;
-         case FATAL_ERROR: merrors_.insert( make_pair(source,msg) );
-                           message += " Fatal Error: ";
-                           cout <<"Fatal Error: "<< source <<" "<< msg << endl;
-                           cout.flush();
-                           errors_++;
-                           throw Exception( err_type, source.c_str(), msg );
-           break;
-         default: cerr <<"\nErrorHandler::notice: error of unknown type was detected."<< endl;
-                  terminate();
+         case CSMP_INFO:
+            minfos_.insert( make_pair(source,msg) );
+            message += " Info: ";
+            break;
+         case CSMP_WARNING:
+            mwarnings_.insert( make_pair(source,msg) );
+            message += " Warning: ";
+            warnings_++;
+            break;
+         case CSMP_ERROR:
+            merrors_.insert( make_pair(source,msg) );
+            message += " Error: ";
+            errors_++;
+            break;
+         case CSMP_EXCEPTION:
+            merrors_.insert( make_pair(source,msg) );
+            message += " Exception: ";
+            errors_++;
+            WriteErrorsToFile();
+            throw Exception( err_type, source.c_str(), msg );
+            break;
+         case CSMP_FATAL_ERROR:
+            merrors_.insert( make_pair(source,msg) );
+            message += " Fatal Error: ";
+            cout <<"Fatal Error: "<< source <<" "<< msg << endl;
+            cout.flush();
+            errors_++;
+            throw Exception( err_type, source.c_str(), msg );
+            break;
+         default:
+            cerr <<"\nErrorHandler::notice: error of unknown type was detected."<< endl;
+            terminate();
       }
    message += msg;
    total_++;
@@ -272,11 +278,11 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
    
    // reporting the error
    if ( verbose_ ) {
-        if ( err_type == INFO ) cout <<"\n"<< message << endl;
+        if ( err_type == CSMP_INFO ) cout <<"\n"<< message << endl;
         else cout <<"\n"<< message << endl; 
         cout.flush();
 #ifndef NDEBUG 
-        if ( err_type < WARNING ) {
+        if ( err_type < CSMP_WARNING ) {
              cout <<"\nErrorHandler: Hit return to continue."<< endl;
              getchar();
              getchar();
@@ -358,14 +364,14 @@ Here, all recorded messages are printed on 'stdout' in chronological
 sequence. 
 
 */
-void ErrorHandler::Out() const
+void ErrorHandler::Out(std::ostream& os) const
  {
-    cerr <<"\nErrorHandler::Out:"<< endl;
-    cerr <<"errors: "<< errors_ <<", warnings: "<< warnings_ <<", infos: "<< minfos_.size() << endl;
+    os <<"\nErrorHandler::Out:"<< endl;
+    os <<"errors: "<< errors_ <<", warnings: "<< warnings_ <<", infos: "<< minfos_.size() << endl;
      
     for ( map<string,string>::const_iterator
           it=error_sequence_.begin(); it!=error_sequence_.end(); it++ )
-      cerr << (*it).first << endl << (*it).second << endl << endl;
+      os << (*it).first << endl << (*it).second << endl << endl;
  }
 
 

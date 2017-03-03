@@ -91,7 +91,8 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
     // capillary pressure derivatives (treat seff as for previous function)
     virtual double64 dpcds_Phase( ) const { std::cout <<"\ndpcds_Phase: not needed\n"; return 0.; };
 
-    virtual void Out( size_t phase ) const;
+    void Out(size_t phase) const { Out(std::cout, phase); }
+    virtual void Out( std::ostream& os, size_t phase ) const;
 
 
   private:

@@ -554,6 +554,75 @@ void TensorVariable_Test::IsWithinRange_Function()
 }	
 
 
+<<<<<<< HEAD
+=======
+void TensorVariable_Test::Fabs_Function()
+{
+   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
+                                          -1.0, -2.0, -3.0,
+                                          -4.0, -5.0, -6.0,
+                                          -7.0, -8.0, -9.0 );
+   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
+                                          1.0, 2.0, 3.0,
+                                          4.0, 5.0, 6.0,
+                                          7.0, 8.0, 9.0 );
+   TensorVariable<3U> tensor3;
+   
+   tensor3 = tensor1;
+   tensor3.Fabs();
+   _test( tensor3 == tensor2 );
+      
+   tensor3 = tensor2;
+   tensor3.Fabs();
+   _test( tensor3 == tensor2 );
+      
+}
+
+
+void TensorVariable_Test::Ln_Function()
+{
+   TensorVariable<3U> tensor1( INIT_GUESS, PLAIN, NEUMANN,
+                                          1.0, 2.0, 3.0,
+                                          4.0, 5.0, 6.0,
+                                          7.0, 8.0, 9.0 );
+   TensorVariable<3U> tensor2( INIT_GUESS, PLAIN, NEUMANN,
+                                          -1.0, -2.0, -3.0,
+                                          -4.0, -5.0, -6.0,
+                                          -7.0, -8.0, -9.0 );
+   TensorVariable<3U> tensor3( INIT_GUESS, PLAIN, NEUMANN,
+                                          log( 1.0 ), log( 2.0 ), log( 3.0 ),
+                                          log( 4.0 ), log( 5.0 ), log( 6.0 ),
+                                          log( 7.0 ), log( 8.0 ), log( 9.0 ));
+   TensorVariable<3U> tensor5;
+   
+   tensor5 = tensor1;
+   tensor5.Ln(true);
+   _test( tensor5 == tensor3 );
+   
+   tensor5 = tensor1;
+   tensor5.Ln(false);
+   _test( tensor5 == tensor3 );
+      
+   tensor5 = tensor2;
+   tensor5.Ln(true);
+   _test( tensor5 == tensor3 );      
+      
+   tensor5 = tensor2;
+   tensor5.Ln(false);
+#if 0
+   // XXX FIXME Behaviour not guaranteed
+   _test( isnan(tensor5( 0, 0 )) == true );
+   _test( isnan(tensor5( 0, 1 )) == true );
+   _test( isnan(tensor5( 0, 2 )) == true );
+   _test( isnan(tensor5( 1, 0 )) == true );
+   _test( isnan(tensor5( 1, 1 )) == true );
+   _test( isnan(tensor5( 1, 2 )) == true );
+   _test( isnan(tensor5( 2, 0 )) == true );
+   _test( isnan(tensor5( 2, 1 )) == true );
+   _test( isnan(tensor5( 2, 2 )) == true );
+#endif
+}
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 
 
 

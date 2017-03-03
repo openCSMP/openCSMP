@@ -11,6 +11,81 @@ template<size_t> class TensorVariable;
 template<size_t> class Region;
 template<size_t> class Model;
 
+<<<<<<< HEAD
+=======
+template<size_t dim>
+class PropertyHandle {
+  public:
+    PropertyHandle( Model<dim>& sg, const char* var_name,
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
+
+    PropertyHandle( Model<dim>& sg, const char* target_group, 
+                    const char* var_name,
+                    VARIABLE_TYPE type=SCALAR, PLACEMENT place=NODE, size_t vsize=1U );
+
+    PropertyHandle( const PropertyHandle& op ); 
+
+    ~PropertyHandle();
+
+    // assignment
+    PropertyHandle&  operator=( const PropertyHandle& op );
+    PropertyHandle&  operator=( double64 val );
+    PropertyHandle&  operator=( const ScalarVariable& s );
+    PropertyHandle&  operator=( const VectorVariable<dim>& v );
+    PropertyHandle&  operator=( const TensorVariable<dim>& t );
+    PropertyHandle&  operator=( const std::vector<VectorVariable<dim> >& vc ); 
+    PropertyHandle&  operator=( const std::vector<TensorVariable<dim> >& ts ); 
+
+    // "self-assign" calculation result to PropertyHandle on the left
+    PropertyHandle&  operator+=( double64 val );
+    PropertyHandle&  operator-=( double64 val );
+    PropertyHandle&  operator*=( double64 val );
+    PropertyHandle&  operator/=( double64 val );
+
+    // "self-assign" results from spatially variable calculations
+    PropertyHandle&  operator+=( const PropertyHandle& op );
+    PropertyHandle&  operator-=( const PropertyHandle& op );
+    PropertyHandle&  operator*=( const PropertyHandle& op );
+    PropertyHandle&  operator/=( const PropertyHandle& op );
+    
+    // standard math
+    void          Squared();
+    void          Sqrt();
+    void          Ln();      // natural logarithm
+    void          Log10();   // decadic logarithm
+    void          Exp();
+    void          Pow( double64 raised_to );
+    void          ZapNAN( double64 with );
+    void          Sin();
+    void          Cos();
+    void          Tan();
+    void          Acos();
+    void          Asin();
+    void          Atan();
+    
+    // various operations
+    const char*   VariableName() const;
+    const csmp::Index&  Key() const;
+    void           Range( double64& omin, double64& omax ) const;
+    bool           IsWithinRange() const;
+    VARIABLE_FLAG  OutputCondition() const;
+    void           OutputCondition( VARIABLE_FLAG c );
+    
+    void Out() const { Out(std::cout); }
+    void Out(std::ostream& os) const;
+    void Out( const char* text_file_name ) const;
+  
+  private:
+    Model<dim>&           super_group;
+    std::string           group_name; 
+    Region<dim>&          group;
+    std::string           var_name;
+    csmp::Index           key_;
+    VARIABLE_FLAG         flag_output;
+    bool                  new_variable_created;
+};
+
+>>>>>>> b71117cb444b1539e747fa5855ab341062d3c4b3
 /**
  
 @brief PropertyHandle - a global accessor and mutator of distributed data

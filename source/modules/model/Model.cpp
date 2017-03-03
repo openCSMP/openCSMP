@@ -285,7 +285,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // 5. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
     if ( Mesh().Elements() < vset.Elements() )
-        throw csmp::Exception( FATAL_ERROR, "Model<dim>::Initialize",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Model<dim>::Initialize",
                                             "Model appears to be fragmented. Are all regions connected?" );
     cout <<"\nModel<dim>::Initialize: ";
     cout <<"Mesh has been built successfully..." << endl;
@@ -303,7 +303,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       {
           bool box_shaped(this->BoxShaped());
           if ( box_shaped and box_shaped != !non_box_shaped_model )
-            ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
+            ErrorHandler::Instance().notice( CSMP_WARNING, "Model<dim>::Initialize:",
                                             "while model contains all relevant box side boundaries it will be treated as non-box shaped." );
           
           if ( !non_box_shaped_model && box_shaped )
@@ -380,7 +380,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
     // 3. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
     if ( Mesh().Elements() < vset.Elements() )
-        throw csmp::Exception( FATAL_ERROR, "Model<dim>::Initialize",
+        throw csmp::Exception( CSMP_FATAL_ERROR, "Model<dim>::Initialize",
                                             "Model appears to be fragmented. Are all regions connected?" );
 
     cout <<"\nModel<dim>::Initialize(VSet): ";
@@ -580,7 +580,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
-     else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
+     else ErrorHandler::Instance().notice( CSMP_INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
   
      // checking whether there a finite volumes properties that require the generation of stencils
      if ( vset.ContainsFiniteVolumeIntegrationPointData() and !fvStencilManager_ ) InstantiateFiniteVolumes();
@@ -629,7 +629,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
+               csmp_error.notice( CSMP_ERROR, "Model<dim>::InputVariablesFrom:",
                                   (*pit).first, "type of Model variable not recognized.");
            }
       }
@@ -771,7 +771,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( database_.IsDefined(new_prop) ) {
-         csmp_error.notice( WARNING, "Model<dim>::CreateProperty:", new_prop, "property already exists." );
+         csmp_error.notice( CSMP_WARNING, "Model<dim>::CreateProperty:", new_prop, "property already exists." );
          return database_.StorageKey(new_prop);
       }
 
@@ -825,7 +825,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
            (*git).second.AddProperty( prop_key );
       }
     else
-    throw csmp::Exception( ERROR, "Model<dim>::CreateProperty:",
+    throw csmp::Exception( CSMP_ERROR, "Model<dim>::CreateProperty:",
                            new_prop, "placement not supported yet, nothing was done." );
 
     if( Verbose() )
@@ -848,7 +848,7 @@ void  Model<dim>::DeleteProperty( const char* property )
  {
 
     if ( !database_.IsDefined(property) ) {
-         throw csmp::Exception( INFO,
+         throw csmp::Exception( CSMP_INFO,
                                 "Model<dim>::CreateProperty",
                                 property,
                                 "property does not exist" );
@@ -903,7 +903,7 @@ void  Model<dim>::DeleteProperty( const char* property )
            (*git).second.DeleteProperty( prop_key );
       }
     else
-      throw csmp::Exception( ERROR, "Model<dim>::DeleteProperty", "Placement not supported yet" );
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::DeleteProperty", "Placement not supported yet" );
 
     database_.DeleteProperty( property );
 
@@ -1102,7 +1102,7 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
                 (*it).second.Accept(v);
             break;
         default:
-            throw csmp::Exception( WARNING, "Model<dim>::Accept:",
+            throw csmp::Exception( CSMP_WARNING, "Model<dim>::Accept:",
                                    "application target of visitor unresolved; nothing was done.");
         }
     }
@@ -1141,7 +1141,7 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
                 (*it).second.Accept( v );
         return;
     default:
-        throw csmp::Exception( WARNING, "Model<dim>::Accept",
+        throw csmp::Exception( CSMP_WARNING, "Model<dim>::Accept",
                                "application level of visitor unresolved, nothing done...");
     }
 } // end Accept
@@ -1191,7 +1191,7 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
     else if ( prop_key.place == INTER_FACE || prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
               prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
-        throw csmp::Exception( ERROR, "Model<dim>::InputPropertyValue", "SplitBoundary/InterFace properties not supported here yet" );
+        throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputPropertyValue", "SplitBoundary/InterFace properties not supported here yet" );
       }
     else if ( prop_key.place == MODEL )
       {
@@ -1286,11 +1286,11 @@ void Model<dim>::InputBoundaryValue( BOX_BOUNDARY boundary, const char* input_pr
     csmp::Index  prop_key = database_.StorageKey(input_prop);
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryValue: input variable:", input_prop,
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryValue: input variable:", input_prop,
                                     "method has not been implemented for TensorVariables.");
 
     if ( prop_key.place != NODE )
-      throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryValue: input variable:", input_prop,
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryValue: input variable:", input_prop,
                                     "method can only be applied to node variables.");
 
     csmp::Region<dim>&  super_group(this->Region("Model"));
@@ -1316,7 +1316,7 @@ void Model<dim>::InputBoundaryValue( BOX_BOUNDARY boundary, const char* input_pr
          return;
       }
 
-    throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryValue: ",
+    throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryValue: ",
                               "boundary flag could not be parsed.");
 
  } // end InputBoundaryValue
@@ -1342,15 +1342,15 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
     csmp::Index  prop_key = database_.StorageKey(property);
 
     if ( flags.empty() )
-      throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryFlags: ",
                                 "boundary flag vector is empty, nothing was done");
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryFlags: ",
                                 "method has not been implemented for TensorVariables");
 
     if ( prop_key.place != NODE )
-      throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryFlags: ",
                                 "method can only be applied to node variables");
 
     csmp::Region<dim>&  super_group(this->Region("Model"));
@@ -1379,7 +1379,7 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
       }
     else { // vector variables
           if ( flags.size() != dim )
-            throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags (vector variable): ",
+            throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryFlags (vector variable): ",
                                       "boundary flag vector has the wrong number of entries");
           if ( isSide(boundary) ) {
                for ( typename vector<Node<dim>*>::iterator
@@ -1405,7 +1405,7 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
                return;
             }
       }
-    throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags: ",
+    throw csmp::Exception( CSMP_ERROR, "Model<dim>::InputBoundaryFlags: ",
                               "boundary flag could not be handled.");
  } // end InputBoundaryFlags
 
@@ -1428,11 +1428,11 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     csmp::Index   prop_key = database_.StorageKey(input_prop);
 
     if ( prop_key.type != SCALAR )
-      throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                 "this method can only be applied to scalar variables");
 
     if ( prop_key.place != NODE )
-      throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                 "method can only be applied to node variables");
 
     // checking that the boundary flags are all consistent
@@ -1441,7 +1441,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     for ( typename vector<ScalarVariable >::const_iterator
           vit=bvalues.begin(); vit!=bvalues.end(); vit++ )
       if ( (*vit).Flag() != res.Flag() )
-        throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+        throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                        "inconsistent flagging of scalar boundary values");
 
     csmp::Region<dim>&  super_group(this->Region("Model"));
@@ -1531,12 +1531,12 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
              case IRREGULAR:
                // natural neighbor interpolation might solve this case
-                  throw csmp::Exception( WARNING, "Model::AssignBoundaryValues",
+                  throw csmp::Exception( CSMP_WARNING, "Model::AssignBoundaryValues",
                             "IRREGULAR boundaries are not handled yet. Nothing is done..." );
                break;
 
              default:
-                  throw csmp::Exception( ERROR, "Model::AssignBoundaryValues",
+                  throw csmp::Exception( CSMP_ERROR, "Model::AssignBoundaryValues",
                                  "type of boundary could not be identified. Nothing is done..." );
           } // end side
       }
@@ -1564,11 +1564,11 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     csmp::Index  prop_key = database_.StorageKey(input_prop);
 
     if ( prop_key.type == TENSOR )
-      throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                 "method has not been implemented for tensor variables");
 
     if ( prop_key.place != NODE )
-      throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+      throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                 "method can only be applied to node variables");
 
     // checking that the boundary flags are all consistent
@@ -1578,7 +1578,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
           vit=bvalues.begin(); vit!=bvalues.end(); vit++ )
       for ( size_t i=0U; i<dim; i++ )
         if ( (*vit).Flag(i) != res.Flag(i) )
-          throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
+          throw csmp::Exception( CSMP_ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                    "inconsistent flagging of boundary vector variables");
 
     csmp::Region<dim>&  super_group(this->Region("Model"));
@@ -1681,12 +1681,12 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
              case IRREGULAR:
                // natural neighbor interpolation might solve this case
-                  throw csmp::Exception( WARNING, "Model::AssignBoundaryValues",
+                  throw csmp::Exception( CSMP_WARNING, "Model::AssignBoundaryValues",
                             "IRREGULAR boundaries are not handled yet. Nothing is done..." );
                break;
 
              default:
-                  throw csmp::Exception( ERROR, "Model::AssignBoundaryValues",
+                  throw csmp::Exception( CSMP_ERROR, "Model::AssignBoundaryValues",
                                  "type of boundary could not be identified. Nothing is done..." );
           } // end side
       }
@@ -1947,7 +1947,7 @@ void Model<dim>::MinMaxCoordinates( Point<dim>& xyz_min,
 
 
 /**
-  OutputMesh() will print to 'stdout' the mesh connectivity and boundary
+  OutputMesh() will print to a specified stream the mesh connectivity and boundary
   flags of each Node, IntegrationPoint, and Element.
 
   @section implementation Implementation
@@ -1961,50 +1961,50 @@ void Model<dim>::MinMaxCoordinates( Point<dim>& xyz_min,
   output of large meshes will be prohibitively large.
 */
 template<size_t dim>
-void Model<dim>::Out() const
+void Model<dim>::Out(std::ostream& os) const
  {
-    cout <<"\n\n\n\nModel<"<< dim <<">::Out: ";
-    database_.Out();
-    fem_manager_.Out();
-    mesh_manager_.Out();
+    os <<"\n\n\n\nModel<"<< dim <<">::Out: ";
+    database_.Out(os);
+    fem_manager_.Out(os);
+    mesh_manager_.Out(os);
 
-    cout <<"\nunique Regions: ";
+    os <<"\nunique Regions: ";
     for ( typename map<string,csmp::Region<dim> >::const_iterator
           gr_it=this->uniqueGroupMap_.begin(); gr_it!=this->uniqueGroupMap_.end(); gr_it++ )
       {
-         cout <<"\n\t"<< (*gr_it).first;
-         (*gr_it).second.Out();
+         os <<"\n\t"<< (*gr_it).first;
+         (*gr_it).second.Out(os);
       }
 
     if ( !this->groupMap_.empty() ) {
-        cout <<"\n\n\nnon-unique Regions: ";
+        os <<"\n\n\nnon-unique Regions: ";
         for ( typename map<string,csmp::Region<dim> >::const_iterator
               gr_it=this->groupMap_.begin(); gr_it!=this->groupMap_.end(); gr_it++ )
           {
-             cout <<"\n\t"<< (*gr_it).first;
-             (*gr_it).second.Out();
+             os <<"\n\t"<< (*gr_it).first;
+             (*gr_it).second.Out(os);
           }
       }
 
      // boundaries
      if ( this->Boundaries() != 0U ) {
-        cout <<"\n\n\nBoundaries: "<< endl;
+        os <<"\n\n\nBoundaries: "<< endl;
         for (typename map<std::string,csmp::Boundary<dim> >::const_iterator
              it = this->BoundariesBegin(); it != this->BoundariesEnd(); it++ )
           {
-             cout <<"\n\t"<< (*it).first;
-             (*it).second.Out();
+             os <<"\n\t"<< (*it).first;
+             (*it).second.Out(os);
           }
       }
 
     // split boundaries
     if ( this->SplitBoundaries() != 0U ) {
-        cout <<"\n\n\nSplitBoundaries: "<< endl;
+        os <<"\n\n\nSplitBoundaries: "<< endl;
         for ( typename map<std::string,csmp::SplitBoundary<dim> >::const_iterator
               it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); it++ )
           {
-             cout <<"\n\t"<< (*it).first;
-             (*it).second.Out();
+             os <<"\n\t"<< (*it).first;
+             (*it).second.Out(os);
           }
       }
 
@@ -2287,7 +2287,7 @@ void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( this->uniqueGroupMap_.empty() ) {
-         csmp_error.notice( ERROR, "Model<dim>::Apply",
+         csmp_error.notice( CSMP_ERROR, "Model<dim>::Apply",
                            "cannot apply Interrelation because there is no unique group in model" );
          return;
       }
@@ -2326,16 +2326,16 @@ void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
 
   @section messages Messages
 
-  OutputVariableToScreen() will report the variable type, its placement,
+  OutputVariableHumanReadable() will report the variable type, its placement,
   and property index. Then it will print the host object IDs followed
   by the variable flags and values.
 */
 template<size_t dim>
-void Model<dim>::OutputVariableToScreen( const char* prop ) const
+void Model<dim>::OutputVariableHumanReadable( std::ostream& os, const char* prop ) const
  {
-     this->Region("Model").OutputVariableToScreen( prop );
+     this->Region("Model").OutputVariableHumanReadable( os, prop );
 
- } // end OutputVariableToScreen
+ } // end OutputVariableHumanReadable
 
 
 
@@ -2384,7 +2384,7 @@ void Model<dim>::MinMaxOf( const char* prop, double64& vmin, double64& vmax ) co
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
  
     if ( !database_.IsDefined(prop) ) {
-          csmp_error.notice( ERROR, "Model<dim>::MinMaxOf", prop, "is undefined; nothing could be done" );
+          csmp_error.notice( CSMP_ERROR, "Model<dim>::MinMaxOf", prop, "is undefined; nothing could be done" );
            return;
       }
     csmp::Index  prop_key(database_.StorageKey(prop));
@@ -2668,7 +2668,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
+               csmp_error.notice( CSMP_ERROR, "Model<dim>::OutputToBinaryFile:",
                                   (*pit).first, "type of Model variable not recognized.");
            }
          // storing the data in the VSet
@@ -2729,7 +2729,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
 
      // 5. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
      if( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
-     else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
+     else ErrorHandler::Instance().notice( CSMP_INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
 
      // properties and values stored on the model itself
      for ( auto pit=vset.PropertyValuesBegin(); pit!=vset.PropertyValuesEnd(); ++pit )
@@ -2775,7 +2775,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
                  }
                break;
              default:
-               csmp_error.notice( ERROR, "Model<dim>::InputFromBinaryFile:",
+               csmp_error.notice( CSMP_ERROR, "Model<dim>::InputFromBinaryFile:",
                                   (*pit).first, "type of Model variable not recognized.");
            }
       }
@@ -2784,7 +2784,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      this->InputAllRegionsFromBinary( BinaryRegionsFileName(model_name).c_str() );
      // making sure that the computational region has been built
      if ( !this->ContainsRegion("Model") )
-       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
+       throw csmp::Exception( CSMP_ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
      // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
     this->InputAllBoundariesFromBinary( BinaryBoundariesFileName(model_name).c_str() );

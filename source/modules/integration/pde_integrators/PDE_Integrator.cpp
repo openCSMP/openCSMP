@@ -291,7 +291,7 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings",
+    csmp_error.notice( CSMP_WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings",
                       "this call to the method did nothing, the method is defined only in the subclasses.");
 
  } // end AdjustSolverSettings
@@ -481,7 +481,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsLHS() const
     for ( it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 
@@ -494,7 +494,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::ListMathOperatorsRHS() const
     for ( it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ )
       {
          cout << (*it).first <<":  ";
-         (*it).second->Out();
+         (*it).second->Out(cout);
       }
  }
 
@@ -772,7 +772,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
         if ( unspecified != pkey )
             basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
         else
-            throw csmp::Exception( WARNING,
+            throw csmp::Exception( CSMP_WARNING,
                                    "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                    "lefthand basic operand not found");
         // test function operands are picked up when the righthandside is accumulated
@@ -792,7 +792,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
         if ( unspecified != pkey )
             test_operands_[(*rhs_it).second->TestOperand()] = 0U;
         else
-            throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+            throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                          "righthand test operand not found");
      }
 
@@ -809,7 +809,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
           cout <<"\nThe system of equations is undefined. ";
           cout <<"\nCreate corresponding LHS basic or test Operand for: ";
           cout << (*lhs_it).first << endl;
-          throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                          "lefthand basic or test operand missing");
        }
 
@@ -868,7 +868,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
                 }
                break;
             default:
-              throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+              throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                            "Test operand placement unresolved");
          }
       }
@@ -889,13 +889,13 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
                (*iter).second = (*lhs_it).second->BasicOperandOffset();
        }
        else
-           throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+           throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                   "LHS basic operand matrix placement i unresolved");
 
         if ( (iter=test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end() )
           (*lhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
    for ( typename map<string,MathOperatorRHS<dim>*>::iterator
@@ -904,7 +904,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup( const SIMPLIC
         if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+          throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
                           (*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
@@ -991,11 +991,11 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions( const SIMP
     Index                   prop_key;
 
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() ) {
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                              "No basic operands have been specified...");
          return;
       }
@@ -1008,7 +1008,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions( const SIMP
             typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
             if ( prop_key.place != NODE ) {
-                 throw csmp::Exception( WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+                 throw csmp::Exception( CSMP_WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
                  "So far no conditions are assigned to elements, faces, segments");
                  return;
               }
@@ -1154,11 +1154,11 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& gref )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                       "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+      throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                              "No (basic) operands have been specified...");
 
     // ----------------------------------------------------
@@ -1183,7 +1183,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions( const SI
          size_t      offset   = (*it).second;
 
          if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+           throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                  "So far no conditions are assigned to elements, faces, segments");
 
           switch( prop_key.type )
@@ -1266,7 +1266,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions( const SI
                   }
                  break;
                default:
-                 throw csmp::Exception( FATAL_ERROR,
+                 throw csmp::Exception( CSMP_FATAL_ERROR,
                                        "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
                                        "Variable type not recognised by this method" );
         }
@@ -1586,7 +1586,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICIAL_COMPLEX<d
         offset   = (*it).second;
 
         if ( prop_key.place != NODE )
-            throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+            throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
         switch ( prop_key.type  )
          {
@@ -1640,7 +1640,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults( SIMPLICIAL_COMPLEX<d
                  }
                break;
         default:
-              throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+              throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
             
          } // end switch(type)
@@ -1704,7 +1704,7 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText( cons
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
-       throw csmp::Exception( ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
+       throw csmp::Exception( CSMP_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
@@ -1722,6 +1722,13 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText( cons
      cout << outfile <<"' has been written successfully." << endl;
 
  } // end WriteGlobalMatrixMap
+
+
+template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
+void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::Out( std::ostream& os ) const
+ {
+     os << "XXX PDE_Integrator::Out() not yet implemented.\n";
+ }
 
 
 

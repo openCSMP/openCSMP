@@ -89,28 +89,26 @@ double64 FV_Parameter::FacetNormalProjection( size_t facet,
 
 
 
-void FV_Parameter::Out() const
+void FV_Parameter::Out(std::ostream& os) const
  {
-    cout <<"\nFV_Parameter::Out: Data of finite-volume stencil: ";
+    os <<"\nFV_Parameter::Out: Data of finite-volume stencil: ";
 
-    cout <<"area, unit normal, and velocity magnitude on the finite volume facets: "<< endl;
+    os <<"area, unit normal, and velocity magnitude on the finite volume facets: "<< endl;
     for ( size_t i=0; i<facet_v_and_A_.size(); i++ ) {
          //      facet                        area
-         cout <<"f"<< i+1 <<": A "<< facet_v_and_A_[i].second <<", fn";
+         os <<"f"<< i+1 <<": A "<< facet_v_and_A_[i].second <<", fn";
          // unit normal
          for ( size_t j=0; j<facet_unit_normal_[i].size(); j++ )
-           cout <<" "<< facet_unit_normal_[i][j];
-         cout <<", v ";
+           os <<" "<< facet_unit_normal_[i][j];
+         os <<", v ";
          // velocity
-         cout << facet_v_and_A_[i].first << endl;
+         os << facet_v_and_A_[i].first << endl;
       }
 
-    cout <<"sector volumes: "<< endl;
+    os <<"sector volumes: "<< endl;
     for ( size_t i=0; i<sector_volume_.size(); i++ )
-      cout << i+1 <<": "<< sector_volume_[i] << endl;
-    cout << endl;
-    cout.flush();
-
+      os << i+1 <<": "<< sector_volume_[i] << endl;
+    os << endl;
  } // end out
 
 

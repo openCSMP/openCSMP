@@ -115,6 +115,7 @@ ADD_LIBRARY(csmpcore
 
 ADD_DEPENDENCIES(csmpcore number_types_header)
 
+TARGET_LINK_LIBRARIES(csmpcore ${SAMG_LIBRARIES})
 TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${GEN_INCLUDES_DIR}
     ${INCLUDES_DIR}/analysis
@@ -202,10 +203,33 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/thmc
     ${MODULES_DIR}/utilities
     ${CMAKE_SOURCE_DIR}/lib/catch/include
-    ${CMAKE_SOURCE_DIR}/lib/jpeg
-    ${CMAKE_SOURCE_DIR}/lib/samg
-    ${CMAKE_SOURCE_DIR}/lib/iaps_h2o_eos
+    ${CMAKE_SOURCE_DIR}/thirdparty
     ${CMAKE_SOURCE_DIR}/examples/source
-    ${CMAKE_SOURCE_DIR}/tests
 )
+
+
+# Install targets
+
+# Header files
+FILE(GLOB_RECURSE PUBLIC_INCLUDE_FILES
+	RELATIVE "${INCLUDES_DIR}"
+	"${INCLUDES_DIR}/*"
+	)
+foreach ( I ${PUBLIC_INCLUDE_FILES} )
+    if (IS_DIRECTORY "${I}")
+	message(STATUS "Examining include directory ${I}")
+    elseif("${I}" MATCHES ".h$")
+        get_filename_component( dir ${I} DIRECTORY )
+	install( FILES "${INCLUDES_DIR}/${I}"
+		DESTINATION "include/${dir}")
+    else()
+	message(WARNING "Excluding file ${I} from installation")
+    endif()
+endforeach()
+
+INSTALL(FILES "${GEN_INCLUDES_DIR}/CSMP_number_types.h" DESTINATION include)
+
+# Libraries
+
+install(TARGETS csmpcore ARCHIVE DESTINATION lib)
 
