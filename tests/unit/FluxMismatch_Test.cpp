@@ -19,7 +19,9 @@ namespace csmp {
 // testing whether there is a flux mismatch when integrating velocity fields 
 // with the node-centered FV scheme
 int flux_mismatch( bool bPrescribedVelocity ) 
-  { 
+  {
+    const bool verbose(false);
+    
     VSet<3>  mesh_container;
    
    //(a)test_Create_One_Hexahedra_VSet(mesh_container); //0
@@ -87,21 +89,21 @@ int flux_mismatch( bool bPrescribedVelocity )
         sg.InputPropertyValue( "velocity", velo );
       }
   
-    cout <<"\nflux_mismatch: Measuring the time required to build basic transport algorithm: ";
+    if ( verbose ) cout << "\nflux_mismatch: Measuring the time required to build basic transport algorithm: ";
 	  clock_t ticks = clock();
     NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg, "porosity", "concentration", "velocity", 
                                                          "nodal fluid volume source",false, false );
     ticks = clock() - ticks;
-	  cout << ticks << endl << endl;
+	  if ( verbose ) cout << ticks << endl << endl;
       
-    cout <<"\nflux_mismatch: total volume of the model: "<< advector.FiniteVolume( "finite volume" ) << endl; 
+    if ( verbose ) cout <<"\nflux_mismatch: total volume of the model: "<< advector.FiniteVolume( "finite volume" ) << endl;
 
-    cout <<"\n\nflux_mismatch: Measuring the divergence of fluxes."<< endl;
+    if ( verbose ) cout <<"\n\nflux_mismatch: Measuring the divergence of fluxes."<< endl;
     const size_t compareSpeedTIMES(50U);
     ticks = clock() - ticks;
     for(size_t times = 0; times < compareSpeedTIMES; times++)
      advector.Divergence( "velocity", "nodal flux mismatch" );
-	  cout <<"\ncompleted 50 divergence computation in: "<<  clock() - ticks << endl << endl;
+	  if ( verbose ) cout <<"\ncompleted 50 divergence computation in: "<<  clock() - ticks << endl << endl;
         
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( sg, "nodal flux mismatch", "nodal flux mismatch", 0 );
@@ -127,7 +129,8 @@ int flux_mismatch( bool bPrescribedVelocity )
     
     // finding the worst finite volume and analyzing it
     for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ )
-      if ( fabs(emax - (*it)->Read( prop_key )) <= 1e-15 ) 
+      if ( fabs(emax - (*it)->Read( prop_key )) <= 1e-15 )
+        if ( verbose )
         {
            cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: " << (*it)->Read( prop_key ) << endl;
            (*it)->Out();
@@ -140,21 +143,25 @@ int flux_mismatch( bool bPrescribedVelocity )
            cout << endl << endl;
        }
     
-    cout << "\nModel Inflow: " << setprecision(15) << advector.ModelInflow();
-    cout << "\nModel Outflow: " << setprecision(15) << advector.ModelOutflow();
-    cout << "\nDiff: " << setprecision(15) << advector.ModelOutflow()-advector.ModelInflow() << endl;
+    if ( verbose ) {
+        cout << "\nModel Inflow: " << setprecision(15) << advector.ModelInflow();
+        cout << "\nModel Outflow: " << setprecision(15) << advector.ModelOutflow();
+        cout << "\nDiff: " << setprecision(15) << advector.ModelOutflow()-advector.ModelInflow() << endl;
+      }
     
     Standard_IO_Handler  stdio;
-    printRangeOfVariable( sg, stdio, "finite volume" );
-    printRangeOfVariable( sg, stdio, "nodal flux mismatch" );
-    printRangeOfVariable( sg, stdio, "velocity" );
+    if ( verbose ) {
+        printRangeOfVariable( sg, stdio, "finite volume" );
+        printRangeOfVariable( sg, stdio, "nodal flux mismatch" );
+        printRangeOfVariable( sg, stdio, "velocity" );
+      }
     
     vtk_output.OutputDataToVTK( sg, "nodal-flux-mismatch", "nodal flux mismatch", 0 );
   
 //    rhinoOutput(sg);
 //    printFiniteVolumes( sg );
                                     
-	cout << "\n Finished comparing nodal flux mismatch, and speed.";
+	if ( verbose ) cout << "\n Finished comparing nodal flux mismatch, and speed.";
     
   return 0;
   

@@ -10,8 +10,9 @@ namespace csmp
     class CubicSpline_Test : public Test
     {
       public:
-        CubicSpline_Test();
-		~CubicSpline_Test();
+        explicit CubicSpline_Test( bool verbose=false );
+		    ~CubicSpline_Test();
+        
         virtual void run();
 
       private:
@@ -38,7 +39,8 @@ namespace csmp
         std::vector<double64> dfx;
         double64 df1;
         double64 dfn;
-
+      
+        const bool verbose_;
     };
 }
 #endif // CUBICSPLINE_TEST_H

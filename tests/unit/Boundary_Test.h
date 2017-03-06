@@ -8,9 +8,10 @@
 namespace csmp{
 
 // P. Lang 2011
-class Boundary_Test : public Test
-{
+class Boundary_Test : public Test {
 public:
+  Boundary_Test( bool verbose ) : verbose_(verbose) {}
+
   virtual void run();
 
 private:
@@ -40,7 +41,8 @@ private:
 
   template<size_t dim>
   void NoSurfaceElementsAsNodeParents( const Region<dim>& region );
-
+  
+  bool verbose_;
 };
 
 } // csmp

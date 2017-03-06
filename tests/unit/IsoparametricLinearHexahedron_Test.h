@@ -12,16 +12,11 @@
 #include "CSMP_definitions.h"
 namespace csmp {
 
-	class IsoparametricLinearHexahedron_Test : public Test {
-	private:
-		double64 *Xcord, *Ycord, *Zcord;
-		double64 HexaVolumeUsingFVSectors_;
-		double64 HexaVolumeUsingFVSectorsIPWeight_;
-		bool verbose_;
+class IsoparametricLinearHexahedron_Test : public Test {
 	public:
-		explicit IsoparametricLinearHexahedron_Test(bool verbose=false);  //To define it in two different forms, with explanantions, and without them. 
-		//explicit IsoparametricLinearHexahedron_Test();
+		explicit IsoparametricLinearHexahedron_Test( bool verbose );
 		~IsoparametricLinearHexahedron_Test();
+    
 		virtual void run();
 		double64 HexaVolUsingCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord, double64 &HexaVolumeUsingFVSectors, double64 &HexaVolumeUsingFVSectorsIPWeight_);
 		double64 HexaVolUsingTetCSMP(double64 *Xcord, double64 *Ycord, double64 *Zcord);
@@ -30,7 +25,14 @@ namespace csmp {
 		double64 AnalyticalHexaVolume(double64 *Xcord, double64 *Ycord, double64 *Zcord);
 		double64 AnalyticalTetVol(double64 *X, double64 *Y, double64 *Z, int p0, int p1, int p2, int p3);
 		//double64 HexaVolUsingFVSectors(double64 *X, double64 *Y, double64 *Z);
-	};
+
+	private:
+		double64 *Xcord, *Ycord, *Zcord;
+		double64 HexaVolumeUsingFVSectors_;
+		double64 HexaVolumeUsingFVSectorsIPWeight_;
+		bool verbose_;
+
+};
 
 } // end csmp
 

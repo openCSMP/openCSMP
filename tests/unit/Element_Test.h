@@ -11,7 +11,7 @@ class Element_Test : public Test
 {
 
   public:
-	Element_Test();
+	explicit Element_Test( bool verbose );
 	~Element_Test();
   
 	virtual void run();
@@ -32,7 +32,7 @@ class Element_Test : public Test
   
   private:
     double64 fTolerance;
-  
+    const bool verbose_;
 };
 
 } //end csmp

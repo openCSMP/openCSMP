@@ -8,8 +8,8 @@ using namespace std;
 namespace csmp {
 
 /// TODO: @todo check why the tolerance must be so high for the test to pass
-Element_Test::Element_Test()
- : fTolerance(1.0e-3)
+Element_Test::Element_Test( bool verbose )
+ : fTolerance(1.0e-3), verbose_(verbose)
 {
 }
 	
@@ -19,6 +19,7 @@ Element_Test::~Element_Test()
 {
 }
 	
+  
   
 /**   
     Testing:
@@ -41,8 +42,6 @@ void Element_Test::run()
   
 void Element_Test::ElementLengthTest2D()
 {
-  const bool verbose(false);
-
   IsoparametricLinearQuadrilateral fe(2U);
   csmp::Element<2U>  e( &fe );
  
@@ -68,7 +67,7 @@ void Element_Test::ElementLengthTest2D()
   direction(1)=8.8595+4.45179;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\nLength: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 9.763, fTolerance);
   
   //test 2
@@ -77,7 +76,7 @@ void Element_Test::ElementLengthTest2D()
   direction(1)=7.48967+5.60591;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\nLength: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 13.663, fTolerance);
   
   //test 3a
@@ -86,7 +85,7 @@ void Element_Test::ElementLengthTest2D()
   direction(1)=7.09642-7.09642;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\nLength: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 6.964, fTolerance);
   
   //test 3b
@@ -95,7 +94,7 @@ void Element_Test::ElementLengthTest2D()
   direction(1)=-3+3;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\nLength: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 6.964, fTolerance);
 
   //test 4
@@ -104,7 +103,7 @@ void Element_Test::ElementLengthTest2D()
   direction(1)=3-0;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\nLength: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\nLength: " << fLength << std::endl;
   _equal(fLength, 13.311, fTolerance);
 }
   
@@ -113,8 +112,6 @@ void Element_Test::ElementLengthTest2D()
   
 void Element_Test::ElementLengthTest3D()
 {
-  const bool verbose(false);
-
   IsoparametricLinearQuadrilateral fe(3U);
   csmp::Element<3U> e( &fe );
 
@@ -140,7 +137,7 @@ void Element_Test::ElementLengthTest3D()
   direction(2)=-7-7;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\n3d Length: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\n3d Length: " << fLength << std::endl;
   _equal(fLength, 9.568, fTolerance);
   
    //test 1
@@ -150,7 +147,7 @@ void Element_Test::ElementLengthTest3D()
   direction(2)=0;
   //compare with measured distance
   fLength = e.LengthInDirection(direction);
-  if ( verbose ) std:: cout << "\n3d Length: " << fLength << std::endl;
+  if ( verbose_ ) std:: cout << "\n3d Length: " << fLength << std::endl;
   _equal(fLength, 6.964, fTolerance);
 }
   
@@ -167,8 +164,6 @@ void Element_Test::ElementLengthTest3D()
 */
 void Element_Test::UnitNormalTest()
  {
-    const bool verbose(true);
-   
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
@@ -183,7 +178,7 @@ void Element_Test::UnitNormalTest()
      // ------------------------------------------------------------
      std::vector<double64> unrml;
      const Region<3U>& model_domain(model.Region("Model"));
-     if ( verbose ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
+     if ( verbose_ ) cout <<"\nElement_Test::UnitNormalTest: testing normal directions...\n";
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
        {
           Point<3U> bctr((*it)->BaryCenter());
@@ -199,7 +194,7 @@ void Element_Test::UnitNormalTest()
                // the normals are aligned if dotproduct is positive
                double64 dotproduct = dotProduct( outward_vec, unitnormal );
                _test( dotproduct > 0. );
-               if ( verbose and dotproduct < 0. ) {
+               if ( verbose_ and dotproduct < 0. ) {
                     cerr <<"\nunit normal to face "<< face <<" is inward pointing:";
                     (*it)->Out();
                  }

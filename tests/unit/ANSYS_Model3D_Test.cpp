@@ -12,11 +12,13 @@ namespace csmp
 
   void ANSYS_Model3D_Test::run()
     {
+      const bool verbose(false);
       // BINARY IO
       // ---------
-      cout <<"\nStart simulation of - "<<this->getName()<<endl<<endl;
-      
-      cout <<"Building ModelOutput..."<<endl;
+      if ( verbose ) {
+           cout <<"\nStart simulation of - "<<this->getName()<<endl<<endl;
+           cout <<"Building ModelOutput..."<<endl;
+        }
       const string variablesFile("UIVariables.txt");
       Timer timer;
       timer.Start();
@@ -81,7 +83,7 @@ namespace csmp
       _test( elementCount == modelInput1.Region("Model").Elements() );
       _test( nodeCount    == modelInput1.Region("Model").Nodes() );
       
-      cerr <<"\n\nrun: Model reconstructed from file:\n";
+      if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
       for ( vector<Element<3>*>::const_iterator it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
         for ( size_t n(0); n < (*it)->Neighbors(); ++n )
@@ -128,7 +130,7 @@ namespace csmp
       _equal( modelInput1.Region("MATRIX_RIGHT").Average("permeability"), matrixRightValue, tolerance );
       _equal( modelInput1.Region("MATRIX_LEFT").Average("permeability"), matrixLeftValue, tolerance );
       modelInput1.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1. ) );
-      cout << "\nICEM time: " << icemModelTime << " vs BINARY time: " << binaryModelTime << endl;
+      if ( verbose ) cout << "\nICEM time: " << icemModelTime << " vs BINARY time: " << binaryModelTime << endl;
       
       ScalarVariable diff( ANY, 1. );
       VectorVariable<3> vv( DIRICH, 2. );
@@ -136,7 +138,7 @@ namespace csmp
       TensorVariable<3> tv( ANY, 3. );
       TensorVariable<3> tvPlain;
       
-      cout <<"Building ModelOutput..."<<endl;
+      if ( verbose ) cout <<"Building ModelOutput..."<<endl;
       ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true,true,true);
       ArrayVariable na( "nodal array", modelOutput2.Database(), 2., ROBIN );
       Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
@@ -161,7 +163,7 @@ namespace csmp
       modelOutput2.Boundary("BOUNDARY2").InputPropertyValue("boundary array", ba );
 
       modelOutput2.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput2");
-      cout<<"The Output of Model with boundaries done..."<<endl;
+      if ( verbose ) cout<<"The Output of Model with boundaries done..."<<endl;
 
       cout <<"Re-building ModelInput with boundaries..."<<endl;
       Model<3U> modelInput2("ANSYS_Model3D_Test_modelOutput2");
@@ -209,7 +211,7 @@ namespace csmp
           continue;   
         ++boundaryNodeCount;
         }
-      cout << "\nBoundary Node Count: " << boundaryNodeCount << endl;
+      if ( verbose ) cout << "\nBoundary Node Count: " << boundaryNodeCount << endl;
       _test ( boundaryNodeCount > 0 );
       VTU_Interface<3> vtu( model ); vtu.OmitZeroInFileName( true );
       //vtu.OutputDataToVTU( "ANSYS_Model3D_Test-PerimeterNodes", "nodal variable" );
@@ -294,12 +296,13 @@ namespace csmp
             }
          _test( ctrSeIps == 4 );
 
-
-          cout << "\nElement Type: " <<parseFiniteElementType( ePtr->FE_Type() ) << endl;
-          cout << "\nSectors: " << ePtr->Sectors() << endl;
-          cout << "\nFacets: " << ePtr->Facets() << endl;
-          cout << "\nFacet IPs accessed: " << ctrFaIps << endl;
-          cout << "\nSector IPs accessed: " << ctrSeIps << endl;
+        if ( verbose ) {
+            cout << "\nElement Type: " <<parseFiniteElementType( ePtr->FE_Type() ) << endl;
+            cout << "\nSectors: " << ePtr->Sectors() << endl;
+            cout << "\nFacets: " << ePtr->Facets() << endl;
+            cout << "\nFacet IPs accessed: " << ctrFaIps << endl;
+            cout << "\nSector IPs accessed: " << ctrSeIps << endl;
+          }
 
         // Instantiate Finite Volumes
         modelInput3.InstantiateFiniteVolumes();
@@ -323,17 +326,10 @@ namespace csmp
                ++ctrSeIps;
             }
             
-             _test( ctrSeIps == 4 );
-             _test( ctrFaIps == 6 );
+     _test( ctrSeIps == 4 );
+     _test( ctrFaIps == 6 );
 
-            cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
-      
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", left );
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", right );
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", bottom );
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", top );
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", front );
-      //vtu.OutputDataToVTU( "ANSYS_Model3D_Test", "nodal variable", back );
+       if ( verbose ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
     }
 
   } // csmp

@@ -6,14 +6,11 @@
 #include "ANSYS_Model3D.h"
 #include "PropertyHandle.h"
 
-//#include <iomanip>
-#include <iostream>
-
 using namespace std;
 
 namespace csmp {
 
-PropertyHandle_Test::PropertyHandle_Test( double tolerance )
+PropertyHandle_Test::PropertyHandle_Test( double tolerance, bool verbose )
     : model( new ANSYS_Model3D("BoxHalfs3D", "PH_test-variables.txt") ),
       TOLERANCE(tolerance),
       elementVariable1( *model, "element variable 1", SCALAR, ELEMENT ),
@@ -33,7 +30,8 @@ PropertyHandle_Test::PropertyHandle_Test( double tolerance )
       nodeVariable5( *model, "node variable 5", TENSOR, NODE ),
       nodeVariable6( *model, "node variable 6", TENSOR, NODE ),
       IPVariable5( *model, "integration point variable 5", TENSOR, ELEMENT_INTEGRATION_POINT ),
-      IPVariable6( *model, "integration point variable 6", TENSOR, ELEMENT_INTEGRATION_POINT )
+      IPVariable6( *model, "integration point variable 6", TENSOR, ELEMENT_INTEGRATION_POINT ),
+      verbose_(verbose)
   {
   }
 
@@ -48,9 +46,11 @@ PropertyHandle_Test::~PropertyHandle_Test()
 
 void PropertyHandle_Test::run()
     {
-        cout << "\n======================";
-        cout << "\nTesting PropertyHandle" << endl;
-        cout << "\n======================" << endl;
+        if ( verbose_ ) {
+            cout << "\n======================";
+            cout << "\nTesting PropertyHandle" << endl;
+            cout << "\n======================" << endl;
+          }
 
         // scalars
         elementVariable1 = 1.5;
@@ -77,9 +77,10 @@ void PropertyHandle_Test::run()
         IPVariable6 = 18.;
 
         //Testing  function operator +=
-        cout << "\nTesting operator += function for scalar variables" << endl;
-        cout << "===================================================" << endl;
-
+        if ( verbose_ ) {
+            cout << "\nTesting operator += function for scalar variables" << endl;
+            cout << "===================================================" << endl;
+          }
         ScalarVariable sc;
 
         // NODE
@@ -109,10 +110,11 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 10.5, numeric_limits<double64>::epsilon() );
 
-
-        cout << "\nTesting operator += function for vector variables" << endl;
-        cout << "===================================================" << endl;
-
+        if ( verbose_ ) {
+            cout << "\nTesting operator += function for vector variables" << endl;
+            cout << "===================================================" << endl;
+          }
+      
         VectorVariable<3> vc;
 
         // NODE
@@ -147,9 +149,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 19.9, numeric_limits<double64>::epsilon() );
 
-
-        cout << "\nTesting operator += function for tensor variables" << endl;
-        cout << "===================================================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator += function for tensor variables" << endl;
+            cout << "===================================================" << endl;
+          }
 
         TensorVariable<3> ts;
 
@@ -207,8 +210,10 @@ void PropertyHandle_Test::run()
         IPVariable6 = 18.;
 
         //Testing  function operator -=
-        cout << "\nTesting operator -= function for scalar variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator -= function for scalar variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 2" );
@@ -237,9 +242,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 1.5, numeric_limits<double64>::epsilon() );
 
-
-        cout << "\nTesting operator -= function for vector variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator -= function for vector variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 4" );
@@ -268,8 +274,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), -4.5, numeric_limits<double64>::epsilon() );
 
-        cout << "\nTesting operator -= function for tensor variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator -= function for tensor variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 6" );
@@ -325,8 +333,10 @@ void PropertyHandle_Test::run()
         IPVariable6 = 18.;
 
         //Testing  function operator *=
-        cout << "\nTesting operator *= function for scalar variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator *= function for scalar variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 2" );
@@ -355,9 +365,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 27., TOLERANCE );
 
-
-        cout << "\nTesting operator *= function for vector variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator *= function for vector variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 4" );
@@ -386,8 +397,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 810., TOLERANCE );
 
-        cout << "\nTesting operator *= function for tensor variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator *= function for tensor variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 6" );
@@ -444,8 +457,10 @@ void PropertyHandle_Test::run()
         IPVariable6 = 18.;
 
         //Testing  function operator /=
-        cout << "\nTesting operator /= function for scalar variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator /= function for scalar variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 2" );
@@ -474,9 +489,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 4./3., TOLERANCE );
 
-
-        cout << "\nTesting operator /= function for vector variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator /= function for vector variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 4" );
@@ -505,8 +521,10 @@ void PropertyHandle_Test::run()
         (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0) , 8./45., TOLERANCE );
 
-        cout << "\nTesting operator /= function for tensor variables" << endl;
-        cout << "=======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting operator /= function for tensor variables" << endl;
+            cout << "=======================" << endl;
+          }
 
         // NODE
         nkey   = model->Database().StorageKey( "node variable 6" );

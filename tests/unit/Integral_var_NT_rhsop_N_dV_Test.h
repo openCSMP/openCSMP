@@ -1,5 +1,5 @@
-#ifndef __Integral_var_NT_rhsop_N_dV_Test_h__
-#define __Integral_var_NT_rhsop_N_dV_Test_h__
+#ifndef Integral_var_NT_rhsop_N_dV_Test_h
+#define Integral_var_NT_rhsop_N_dV_Test_h
 
 #include "Test.h"
 #include "Model.h"
@@ -16,7 +16,7 @@ namespace csmp {
 
   class Integral_var_NT_rhsop_N_dV_Test : public Test {
   public:
-    Integral_var_NT_rhsop_N_dV_Test();
+    Integral_var_NT_rhsop_N_dV_Test( bool verbose );
     ~Integral_var_NT_rhsop_N_dV_Test();
     void run();
     void valueTest();
@@ -32,11 +32,11 @@ namespace csmp {
     void calculateGlobalMatrix( SparseMatrix& sm, MathOperatorLHS<2U>& oper);
     void calculateGlobalRHS( std::vector<double64>& rhs, MathOperatorRHS<2U>& oper);
 
-    double tol_;
-
-    Model<2U>* sg_;
+    Model<2U>*    sg_;
+    const double  tol_;
+    const bool    verbose_;
   };
 
-} // end namespace csp
+} // end namespace csmp
 
 #endif

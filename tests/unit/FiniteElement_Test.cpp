@@ -9,9 +9,13 @@ using namespace std;
 
 namespace csmp{
 
-FiniteElement_Test::FiniteElement_Test( FiniteElement* testee, const char* results_file )
+FiniteElement_Test::FiniteElement_Test( FiniteElement* testee,
+                                        const char* results_file,
+                                        bool verbose )
   : fileName_( results_file ),
-    femPtr_( testee )
+    femPtr_( testee ),
+    femData_(verbose),
+    verbose_(verbose)
 {
   // debugging
   assert( testee != NULL );
@@ -22,6 +26,9 @@ FiniteElement_Test::~FiniteElement_Test()
     if( femPtr_!=NULL)
         delete femPtr_;
 }
+
+
+
 
 /// tests fem operations against provided data in text file
 void FiniteElement_Test::run()
@@ -35,65 +42,65 @@ void FiniteElement_Test::run()
   replaceWhiteSpaceBy( testName, '_' );
   setName( testName );
   vector<double> var_v;
-  cout << "STARTING CORRESPONDING FEM TEST:\n";
+  if ( verbose_ ) cout << "STARTING CORRESPONDING FEM TEST:\n";
 
   // .) ID
-  cout << "Testing ID ops...\n";
+  if ( verbose_ ) cout << "Testing ID ops...\n";
   const size_t feID( 123 );
   femPtr_->CurrentID( feID );
   _test( femPtr_->CurrentID() == feID );
 
   // .) DIM
-  cout << "Testing DIM ops...\n";
+  if ( verbose_ ) cout << "Testing DIM ops...\n";
   _test( femData_.Dim() == femPtr_->Dim() );
 
   // .) NODES
-  cout << "Testing Node ops...\n";
+  if ( verbose_ ) cout << "Testing Node ops...\n";
   _test( femData_.NodeCount() == femPtr_->Nodes() );
 
   // .) SEGMENTS
-  cout << "Testing Segement ops...\n";
+  if ( verbose_ ) cout << "Testing Segement ops...\n";
   _test( femData_.SegmentCount() == femPtr_->Segments() );
 
   // .) FACES
-  cout << "Testing Face ops...\n";
+  if ( verbose_ ) cout << "Testing Face ops...\n";
   _test( femData_.FaceCount() == femPtr_->Faces() );
 
   // .) NEIGHBOURS
-  cout << "Testing Neighbor ops...\n";
+  if ( verbose_ ) cout << "Testing Neighbor ops...\n";
   _test( femData_.NeighborCount() == femPtr_->Neighbors() );
 
   // .) NODES PER FACE
-  cout << "Testing nodes per faces...\n";
+  if ( verbose_ ) cout << "Testing nodes per faces...\n";
   for( size_t i = 0; i < femPtr_->Faces(); ++ i )
     _test( femData_.NodesPerFace( i ) == femPtr_->NodesPerFace( i ) );
 
   // .) CONSTRAINT POINT NEIGHBORS
-  cout << "Testing constraint points...\n";
+  if ( verbose_ ) cout << "Testing constraint points...\n";
   _test( femData_.IntegrationPointNeighborCount() == femPtr_->IntegrationPointNeighbors() );
 
   // .) INTEGRATION POINTS
-  cout << "Testing Integration points...\n";
+  if ( verbose_ ) cout << "Testing Integration points...\n";
   _test( femData_.IntegrationPointCount() == femPtr_->IntegrationPoints() );
 
   // .) INTERPOLATION NUMBER
-  cout << "Testing interpolation...\n";
+  if ( verbose_ ) cout << "Testing interpolation...\n";
   _test( femData_.InterpolationNumber() == femPtr_->Interpolation() );
 
   // .) ISOPARAMETRIC
-  cout << "Testing isoparametricity...\n";
+  if ( verbose_ ) cout << "Testing isoparametricity...\n";
   _test( femData_.Isoparametric() == femPtr_->Isoparametric() );
 
   // .) LOCAL/GLOBAL COORDS
-  cout << "Testing local vs global coordinates...\n";
+  if ( verbose_ ) cout << "Testing local vs global coordinates...\n";
   _test( femData_.UsesLocalCoordinates() == femPtr_->UsesLocalCoordinates() );
 
   // .) ORDER OF SHAPE FUNCTIONS
-  cout << "Testing shape function order...\n";
+  if ( verbose_ ) cout << "Testing shape function order...\n";
   _test( femData_.OrderOfShapeFunctions() == femPtr_->OrderOfShapeFunctions() );
 
   // .) LINE ELEMENT
-  cout << "Testing element type...\n";
+  if ( verbose_ ) cout << "Testing element type...\n";
   _test( femData_.LineElement() == femPtr_->IsLineElement() );
 
   // .) SURFACE ELEMENT
@@ -106,25 +113,25 @@ void FiniteElement_Test::run()
   _test( femData_.ElementType() == femPtr_->ElementType() );
 
   //    INITIALIZING NODES/COORDINATE MATRIX
-  cout << "Initializing nodes...\n";
+  if ( verbose_ ) cout << "Initializing nodes...\n";
   femPtr_->XY.Resize( femData_.NodeCount(), 3 );
   for ( size_t i = 0; i < femData_.NodeCount(); ++i )
     femPtr_->XY.AssignRow( i, femData_.NodePtr( i )->Coordinate() );
 
   // .) VOLUME
-  cout << "Testing volume...\n";
+  if ( verbose_ ) cout << "Testing volume...\n";
   _equal( femData_.Volume(), femPtr_->Volume(), femData_.Tolerance() );
 
   // .) ASPECT RATIO
-  cout << "Testing aspect ratio...\n";
+  if ( verbose_ ) cout << "Testing aspect ratio...\n";
   _equal( femData_.AspectRatio(), femPtr_->AspectRatio(), femData_.Tolerance() );
 
   // .) INNER RADIUS
-  cout << "Testing inner radius...\n";
+  if ( verbose_ ) cout << "Testing inner radius...\n";
   _equal( femData_.InnerRadius(), femPtr_->InnerRadius(), femData_.Tolerance() );
 
   // .) EDGE LENGTHS
-  cout << "Testing edges...\n";
+  if ( verbose_ ) cout << "Testing edges...\n";
   vector<double> edgeLengths;
   femPtr_->EdgeLengths( edgeLengths );
   _test( edgeLengths.size() == femData_.EdgeCount() );
@@ -132,52 +139,52 @@ void FiniteElement_Test::run()
     _equal( edgeLengths.at( i ),  femData_.EdgeLength( i ), femData_.Tolerance() );
 
   // .) SEGMENT NODES
-  cout << "Testing segment nodes...\n";
+  if ( verbose_ ) cout << "Testing segment nodes...\n";
   vector<size_t> segmentNodes;
   for( size_t i = 0; i < femPtr_->Segments(); ++i )
   {
     femPtr_->NodesOfSegment( i, segmentNodes );
     if( global_verbose )
-      cout << "  Segment " << i << endl;
+      if ( verbose_ ) cout << "  Segment " << i << endl;
     for( size_t j = 0; j < segmentNodes.size(); ++ j )
     {
       if( global_verbose )
-        cout << "    Node " << j << ": " << segmentNodes.at( j ) << " versus " << femData_.NodeOfSegment( i, j ) << endl;
+        if ( verbose_ ) cout << "    Node " << j << ": " << segmentNodes.at( j ) << " versus " << femData_.NodeOfSegment( i, j ) << endl;
       _test( segmentNodes.at( j ) == femData_.NodeOfSegment( i, j ) );
     }
   }
 
   // .) FACE NODES
-  cout << "Testing face nodes...\n";
+  if ( verbose_ ) cout << "Testing face nodes...\n";
   vector<size_t> faceNodes;
   for( size_t i = 0; i < femPtr_->Faces(); ++i )
   {
     femPtr_->NodesOfFace( i, faceNodes );
     if( global_verbose )
-      cout << "  Face " << i << endl;
-    for( size_t j = 0; j < faceNodes.size(); ++ j )
+      if ( verbose_ ) cout << "  Face " << i << endl;
+    for( size_t j = 0; j < faceNodes.size(); ++j )
     {
       if(global_verbose )
-        cout << "    Node " << j << ": " << faceNodes.at( j ) << " versus " << femData_.NodeOfFace( i, j ) << endl;
+        if ( verbose_ ) cout << "    Node " << j << ": " << faceNodes.at( j ) << " versus " << femData_.NodeOfFace( i, j ) << endl;
       _test( faceNodes.at( j ) == femData_.NodeOfFace( i, j ) );
     }
   }
 
   // .) CORNER NODES
-  cout << "Testing corner nodes...\n";
+  if ( verbose_ ) cout << "Testing corner nodes...\n";
   vector<size_t> cornerNodes;
   femPtr_->CornerNodes( cornerNodes );
   for( size_t i = 0; i < cornerNodes.size(); ++i )
   {
     _test( cornerNodes.at( i ) == femData_.NodeAtCorner( i ) );
     if( global_verbose )
-      cout << "  Corner " << i << ": Node " << cornerNodes.at( i ) << " versus " << femData_.NodeAtCorner( i ) << endl;
+      if ( verbose_ ) cout << "  Corner " << i << ": Node " << cornerNodes.at( i ) << " versus " << femData_.NodeAtCorner( i ) << endl;
   }
   _test( cornerNodes.size() == femPtr_->CornerNodes() );
   _test( femPtr_->CornerNodes() == femData_.CornerNodeCount() );
 
   // .) MIDSIDE NODES
-  cout << "Testing midside nodes...\n";
+  if ( verbose_ ) cout << "Testing midside nodes...\n";
   if( femData_.MidsideNodeCount() != 0 )
   {
     vector<size_t> midsideNodes;
@@ -186,14 +193,14 @@ void FiniteElement_Test::run()
     {
       _test( midsideNodes.at( i ) == femData_.NodeAtMidside( i ) );
       if( global_verbose )
-        cout << "  Midside " << i << ": Node " << midsideNodes.at( i ) << " versus " << femData_.NodeAtMidside( i ) << endl;
+        if ( verbose_ ) cout << "  Midside " << i << ": Node " << midsideNodes.at( i ) << " versus " << femData_.NodeAtMidside( i ) << endl;
     }
     _test( midsideNodes.size() == femPtr_->MidSideNodes() );
     _test( femPtr_->MidSideNodes() == femData_.MidsideNodeCount() );
   }
 
   // .) INTERIOR NODES
-  cout << "Testing interior nodes...\n";
+  if ( verbose_ ) cout << "Testing interior nodes...\n";
   if( femData_.InteriorNodeCount() != 0 )
   {
     vector<size_t> interiorNodes;
@@ -202,19 +209,19 @@ void FiniteElement_Test::run()
     {
       _test( interiorNodes.at( i ) == femData_.NodeAtInterior( i ) );
       if( global_verbose )
-        cout << "  Interior " << i << ": Node " << interiorNodes.at( i ) << " versus " << femData_.NodeAtInterior( i ) << endl;
+        if ( verbose_ ) cout << "  Interior " << i << ": Node " << interiorNodes.at( i ) << " versus " << femData_.NodeAtInterior( i ) << endl;
     }
     _test( interiorNodes.size() == femPtr_->InteriorNodes() );
     _test( femPtr_->InteriorNodes() == femData_.InteriorNodeCount() );
   }
 
   // .) FACE ELEMENT TYPES
-  cout << "Testing face element types...\n";
+  if ( verbose_ ) cout << "Testing face element types...\n";
   for( size_t i = 0; i < femPtr_->Faces(); ++i )
     _test( femPtr_->ElementTypeOfFace( i ) == femData_.FaceElementType( i ) );
 
   // .) UNIT NORMAL
-  cout << "Testing unit normal...\n";
+  if ( verbose_ ) cout << "Testing unit normal...\n";
   if( femPtr_->IsSurfaceElement() )
   {
     std::vector<double64> unitNormal;
@@ -225,7 +232,7 @@ void FiniteElement_Test::run()
   }
 
   // .) COORDINATE MATRIX
-  cout << "Testing coordinate matrix...\n";
+  if ( verbose_ ) cout << "Testing coordinate matrix...\n";
   for( size_t row = 0; row < femPtr_->Nodes(); ++row )
   {
     for( size_t dim = 0; dim < femPtr_->Dim(); ++dim )
@@ -241,7 +248,7 @@ void FiniteElement_Test::run()
 
 
   // .) EXTRAPOLATE INTEGRATION POINT TO NODE
-  cout << "Testing gp to node extrapolation...\n";
+  if ( verbose_ ) cout << "Testing gp to node extrapolation...\n";
   if( femData_.ExtrapolationVariableCount() != 0 )
   {
     vector<double64> ivars( femPtr_->IntegrationPoints() * femData_.ExtrapolationVariableCount() );
@@ -263,7 +270,7 @@ void FiniteElement_Test::run()
   }
 
   // .) INTEGRATION POINT LOCAL TO GLOBAL
-  cout << "Testing local-global transformation(integration points)...\n";
+  if ( verbose_ ) cout << "Testing local-global transformation(integration points)...\n";
   if( femPtr_->IntegrationPoints() != 0 )
   {
     vector<double64> ipGlobal;
@@ -281,7 +288,7 @@ void FiniteElement_Test::run()
     _equal( femPtr_->WeightAtIntegrationPoint( ip ), femData_.IntegrationPointWeight( ip ), femData_.Tolerance() );
 
   // .) COUNTER CLOCK WISE NODES
-  cout << "Testing counter clock wise nodes...\n";
+  if ( verbose_ ) cout << "Testing counter clock wise nodes...\n";
   std::vector<size_t> counterNodes;
   femPtr_->CounterClockwiseNodes( counterNodes );
   for( size_t n = 0; n < counterNodes.size(); ++n )
@@ -289,7 +296,7 @@ void FiniteElement_Test::run()
 
 
   // .) SHAPE FUNCTION: N AT POINT
-  cout << "Testing shape function N at point...\n";
+  if ( verbose_ ) cout << "Testing shape function N at point...\n";
   std::vector<double64> shapeFunctionN;
   std::vector<double64> shapeFunctionXYZ;
   for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
@@ -299,7 +306,7 @@ void FiniteElement_Test::run()
     _equal( shapeFunctionN.at( n ), femData_.ShapeFunctionN( n ), femData_.Tolerance() );
 
   // .) SHAPE FUNCTION: N AT INTEGRATION POINT
-  cout << "Testing shape function N at integration point...\n";
+  if ( verbose_ ) cout << "Testing shape function N at integration point...\n";
   for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
   {
     shapeFunctionN.clear();
@@ -309,7 +316,7 @@ void FiniteElement_Test::run()
   }
 
   // .) SHAPE FUNCTION: N AT BARY CENTER
-  cout << "Testing shape function N at barycenter...\n";
+  if ( verbose_ ) cout << "Testing shape function N at barycenter...\n";
   shapeFunctionN.clear();
   femPtr_->N_AtBaryCenter( shapeFunctionN );
   for( size_t n = 0; n < femPtr_->Nodes(); ++n )
@@ -327,7 +334,7 @@ void FiniteElement_Test::run()
   }
   */
   // .) dN AT XYZ
-  cout << "Testing shape function derivative at point...\n";
+  if ( verbose_ ) cout << "Testing shape function derivative at point...\n";
   DenseMatrix<DM_MIN> denseMatrix;
   if( femData_.ShapeFunctionDNatXYZ() )
   {
@@ -340,7 +347,7 @@ void FiniteElement_Test::run()
   }
 
   // .) dN AT IP
-  cout << "Testing shape function derivative at integration point...\n";
+  if ( verbose_ ) cout << "Testing shape function derivative at integration point...\n";
   if( femData_.ShapeFunctionDNatIP() )
   {
     for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
@@ -355,7 +362,7 @@ void FiniteElement_Test::run()
   }
 
   // .) dN AT NODE
-  cout << "Testing shape function derivative at nodes...\n";
+  if ( verbose_ ) cout << "Testing shape function derivative at nodes...\n";
   if( femData_.ShapeFunctionDNatNode() )
   {
     for( size_t node = 0; node < femPtr_->Nodes(); ++node )
@@ -370,7 +377,7 @@ void FiniteElement_Test::run()
   }
 
   // .) dN AT BARY CENTER
-  cout << "Testing shape function derivative at bary center...\n";
+  if ( verbose_ ) cout << "Testing shape function derivative at bary center...\n";
   if( femData_.ShapeFunctionDNatBaryCenter() )
   {
     femPtr_->dN_AtBarycenter( denseMatrix );
@@ -382,7 +389,7 @@ void FiniteElement_Test::run()
   }
 
   // .) JACOBIAN AT IP
-  cout << "Testing jacobian at integration points...\n";
+  if ( verbose_ ) cout << "Testing jacobian at integration points...\n";
   size_t dim_volume=1.0;
 
   if (femPtr_->IsSurfaceElement())
@@ -405,7 +412,7 @@ void FiniteElement_Test::run()
 
 
   // .) JACOBIAN AT RST
-  cout << "Testing jacobian at rst point...\n";
+  if ( verbose_ ) cout << "Testing jacobian at rst point...\n";
   if( femData_.JACOBIANatRST() )
   {
     var_v.clear();

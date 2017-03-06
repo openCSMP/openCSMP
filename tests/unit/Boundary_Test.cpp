@@ -341,18 +341,22 @@ void Boundary_Test::runLegacy()
 
     // 3D TESTS II
     // ===========
-  
     ANSYS_Model3D model( "BoxHalfs", "CSMP-variables.txt", true );
     VTU_Interface<SPACE> vtu( model ); vtu.OmitZeroInFileName( true );
     Region<SPACE>& mref( model.Region( "Model" ) );
     mref.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 1.0 ) );
     mref.InputPropertyValue( "element variable", makeScalar( PLAIN, 2.0 ) );
     string region1Name( "MATRIX_LEFT" ), region2Name( "MATRIX_RIGHT" );
+
     // VARIABLE PLACED ON FACE
     Index faceKey( model.Database().StorageKey( "face variable" ) );
-    cout << "\n\nFace variable:\n"; faceKey.Out();
+    if ( verbose_ ) {
+        cout << "\n\nFace variable:\n";
+        faceKey.Out();
+      }
+
     // CREATE BETWEEN
-    cout << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
+    if ( verbose_ ) cout << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
     model.InsertBoundary( region1Name.data(), region2Name.data() );
     std::string boundary12Name;
     boundary12Name = region1Name;
@@ -360,9 +364,9 @@ void Boundary_Test::runLegacy()
     boundary12Name += region2Name;
     bool boundary12Test(  model.ContainsBoundary( boundary12Name ) );
     if( boundary12Test )
-      cout << "\nBoundary set up successful." << endl;
+      if ( verbose_ ) cout << "\nBoundary set up successful." << endl;
     else
-      cout << "\nBoundary set up MATRIX_LEFT-MATRIX_RIGHT failed." << endl;
+      if ( verbose_ ) cout << "\nBoundary set up MATRIX_LEFT-MATRIX_RIGHT failed." << endl;
     _test( boundary12Test );
     // testing proper parent assignment
     Boundary<SPACE>& boundaryOne( model.Boundary( boundary12Name ) );
@@ -379,13 +383,15 @@ void Boundary_Test::runLegacy()
     for( vector<Face<3>*>::const_iterator it = boundaryOne.ElementsBegin(); it != boundaryOne.ElementsEnd(); ++it )
       innerParentsIDs.push_back( (*it)->Parent(INSIDE)->Idx() );
     model.FormRegionFrom( "BOUNDARY INNER PARENTS", innerParentsIDs );
-    vtu.OutputDataToVTU( "BoundaryOuterParents", "element variable", "BOUNDARY OUTER PARENTS", static_cast<int>(0) );
-    vtu.OutputDataToVTU( "BoundaryInnerParents", "element variable", "BOUNDARY INNER PARENTS", static_cast<int>(0) );
+    if ( verbose_ ) {
+         vtu.OutputDataToVTU( "BoundaryOuterParents", "element variable", "BOUNDARY OUTER PARENTS", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "BoundaryInnerParents", "element variable", "BOUNDARY INNER PARENTS", static_cast<int>(0) );
+      }
     innerOuterParents( model, vtu, boundaryOne, "Parents1" );
     // BOUNDARY FACE COUNT
     Boundary<SPACE>& boundary12( model.Boundary( boundary12Name ) );
     size_t boundary12FaceCount( boundary12.Elements() );
-    cout << "\nBoundary element count: " << boundary12FaceCount << endl;
+    if ( verbose_ ) cout << "\nBoundary element count: " << boundary12FaceCount << endl;
     _test( boundary12FaceCount != 0 );
     CheckFaceNeighbors( boundary12 );
     CheckFaceUnitNormalOrientation( boundary12 );
@@ -394,17 +400,21 @@ void Boundary_Test::runLegacy()
     // BOUNDARY AREA
     double boundary12Area( boundary12.Area() );
     bool boundary12AreaNotZero( !withinTolerance( 0., boundary12Area, 0.1 ) );
-    cout << "\nBoundary area: " << boundary12Area << endl;
+    if ( verbose_ ) cout << "\nBoundary area: " << boundary12Area << endl;
     _test( boundary12AreaNotZero );
-    vtu.OutputDataToVTU( "ElementVariable", "element variable", region1Name.data(), static_cast<int>(0) );
+    if ( verbose_ ) vtu.OutputDataToVTU( "ElementVariable", "element variable", region1Name.data(), static_cast<int>(0) );
     model.Region( region2Name.data() ).InputPropertyValue( "element variable", makeScalar( PLAIN, 2.5 ) );
-    vtu.OutputDataToVTU( "ElementVariable", "element variable", region2Name.data(), static_cast<int>(0) );
-    vtu.OutputDataToVTU( "NodalVariable", "nodal variable", boundary12, static_cast<int>(0) );
+    if ( verbose_ )  {
+         vtu.OutputDataToVTU( "ElementVariable", "element variable", region2Name.data(), static_cast<int>(0) );
+         vtu.OutputDataToVTU( "NodalVariable", "nodal variable", boundary12, static_cast<int>(0) );
+      }
     boundary12.InputPropertyValue( "face variable", makeScalar( PLAIN, 9999.0 ) );
-    vtu.OutputDataToVTU( "FaceVariable_A", "face variable", boundary12, static_cast<int>(0) );
-    cout << "\nHULL_LEFT area: " << model.Region( "HULL_LEFT" ).Volume() << endl;
+    if ( verbose_ ) {
+         vtu.OutputDataToVTU( "FaceVariable_A", "face variable", boundary12, static_cast<int>(0) );
+         cout << "\nHULL_LEFT area: " << model.Region( "HULL_LEFT" ).Volume() << endl;
+      }
     _test( InputElementAreaAsVolumeVariable<SPACE>( model, boundary12, "face variable" ) > 0 );
-    vtu.OutputDataToVTU( "FaceVariable_B", "face variable", boundary12, static_cast<int>(0) );
+    if ( verbose_ ) vtu.OutputDataToVTU( "FaceVariable_B", "face variable", boundary12, static_cast<int>(0) );
     // FACE AREA
     const std::vector<Face<3>*>::iterator boundaryElementsEnd( boundary12.ElementsEnd() );
     for( std::vector<Face<3>*>::iterator it = boundary12.ElementsBegin(); it != boundaryElementsEnd; ++it )
@@ -485,11 +495,11 @@ void Boundary_Test::runLegacy()
         }
       _test( nullNeighborCount != 0 );
 
-      cout << "\nNull neighbor count: " << nullNeighborCount << endl;
+      if ( verbose_ ) cout << "\nNull neighbor count: " << nullNeighborCount << endl;
 
       // for the case of an irregular model, check CreateAround and Split
       m02.AddFaces("Model");
-        _test( m02.Boundaries() == 1 );
+      _test( m02.Boundaries() == 1 );
 
       _test( nodeCount == m02.Region("Model").Nodes() );
 
@@ -525,13 +535,13 @@ void Boundary_Test::runLegacy()
       for( Model<3>::boundaryIterator it( m02.BoundariesBegin() ); it != m02.BoundariesEnd(); ++it )
         {
           it->second.InputPropertyValue( "face variable", makeScalar( PLAIN, 1. ) );
-          v02.OutputDataToVTU( "ModelBoundarySplit", "face variable", it->second, static_cast<int>(0) );
+          if ( verbose_ ) v02.OutputDataToVTU( "ModelBoundarySplit", "face variable", it->second, static_cast<int>(0) );
         }
 
       m02.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 1. ) );
       
       m02.Boundary("TOP").InputPropertyValue( "nodal variable", makeScalar( PLAIN, 2. ) );
-      v02.OutputDataToVTU( "BoundaryValue", "nodal variable", "Model", static_cast<int>(0) );
+      if ( verbose_ ) v02.OutputDataToVTU( "BoundaryValue", "nodal variable", "Model", static_cast<int>(0) );
 
       ANSYS_Model3D m03( "BoxHalfs3D", "CSMP-variables.txt" );
       _test( m03.Boundaries() == 6 );

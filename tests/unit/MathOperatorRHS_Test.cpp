@@ -17,14 +17,12 @@ MathOperatorRHS_Test::MathOperatorRHS_Test()
 
 MathOperatorRHS_Test::~MathOperatorRHS_Test()
 {
-    if( model_!=NULL )
-        delete model_;
+   delete model_;
 }
 
 
 void MathOperatorRHS_Test::run()
 {
-
     MathOperatorRHS_Ctor();
     MathOperatorRHS_CopyCtor();
     MathOperatorRHS_Equal();
@@ -46,8 +44,6 @@ void MathOperatorRHS_Test::run()
     MathOperatorRHS_MaterialOperand();
     MathOperatorRHS_BasicOperand();
     MathOperatorRHS_TestFunctionOperand();
-
-
 }
 
 
@@ -72,10 +68,9 @@ void MathOperatorRHS_Test::MathOperatorRHS_Ctor()
 }
 
 
-void MathOperatorRHS_Test::MathOperatorRHS_CopyCtor()
-{
 
-/*
+/** testing
+
         MTRL                 = mo.MTRL; // basic Operand storage
         RHS                  = mo.RHS;   // solution vector to be accumulated
         ID                   = mo.ID;     // node-ID & global constraint points vector
@@ -84,10 +79,10 @@ void MathOperatorRHS_Test::MathOperatorRHS_CopyCtor()
         SC                   = mo.SC;
         VC                   = mo.VC;
         TS                   = mo.TS;
-
 */
-    
-    std::string op1("permeability");
+void MathOperatorRHS_Test::MathOperatorRHS_CopyCtor()
+{
+   std::string op1("permeability");
     std::string top1("fluid pressure");
     std::string name1("MORHS1");
     bool add_accumulate = true;
@@ -198,6 +193,8 @@ void MathOperatorRHS_Test::MathOperatorRHS_Equal()
 }
 
 
+
+
 void MathOperatorRHS_Test::MathOperatorRHS_Name()
 {
     string op("permeability");
@@ -229,6 +226,7 @@ void MathOperatorRHS_Test::MathOperatorRHS_Name()
 
 
 }
+
 
 
 void MathOperatorRHS_Test::MathOperatorRHS_OperandName()
@@ -479,8 +477,5 @@ void MathOperatorRHS_Test::MathOperatorRHS_TestFunctionOperand()
     _test( MORHS.TestOperandKey() == pf_key );
     
 }
-
-
-
 
 } // end namespace csmp

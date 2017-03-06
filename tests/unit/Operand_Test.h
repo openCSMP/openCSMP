@@ -10,5 +10,7 @@ public:
   Operand_Test();
   void run();
 };
+
 }
+
 #endif // OPERAND_TEST_H

@@ -2,57 +2,52 @@
 #define Matrix_Test_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 #include "Matrix.h"
-#include "vector"
 #include "TensorVariable.h"
 #include "Point.h"
-#include <iomanip>
 
-namespace csmp
-{
-    class Matrix_Test : public Test
-    {
-      public:
-        Matrix_Test();
-        ~Matrix_Test();
-        virtual void run();
+namespace csmp {
 
-        Matrix A;
-        Matrix ResA;
-        Matrix B;
-        Matrix ResAB;
-        Matrix C;
-        Matrix ResC;
-        Matrix D;
-        Matrix ResD;
-        Matrix E;
-        Matrix F;
-        Matrix ResF;
-        Matrix G;
-        Matrix ResG;
-        Matrix H;
-        Matrix ResH;
-        Matrix Matrix2x2;
-        Matrix Matrix3x3;
+class Matrix_Test : public Test {
+  public:
+    Matrix_Test( bool verbose );
+    ~Matrix_Test();
+  
+    virtual void run();
 
-        TensorVariable<1> TensorVariable1U;
-        TensorVariable<2> TensorVariable2U;
-        TensorVariable<3> TensorVariable3U;
-        VectorVariable<1> VectorVariable1U;
-        VectorVariable<2> VectorVariable2U;
-        VectorVariable<3> VectorVariable3U;
+    Matrix A;
+    Matrix ResA;
+    Matrix B;
+    Matrix ResAB;
+    Matrix C;
+    Matrix ResC;
+    Matrix D;
+    Matrix ResD;
+    Matrix E;
+    Matrix F;
+    Matrix ResF;
+    Matrix G;
+    Matrix ResG;
+    Matrix H;
+    Matrix ResH;
+    Matrix Matrix2x2;
+    Matrix Matrix3x3;
 
-        Point<1> Point1U;
-        Point<2> Point2U;
-        Point<3> Point3U;
+    TensorVariable<1> TensorVariable1U;
+    TensorVariable<2> TensorVariable2U;
+    TensorVariable<3> TensorVariable3U;
+    VectorVariable<1> VectorVariable1U;
+    VectorVariable<2> VectorVariable2U;
+    VectorVariable<3> VectorVariable3U;
 
-        std::vector<double64> x, y, sol_y, solB, solD;
+    Point<1> Point1U;
+    Point<2> Point2U;
+    Point<3> Point3U;
 
+    std::vector<double64> x, y, sol_y, solB, solD;
+    const bool verbose_;
+};
 
-
-
-    };
 }
 
 #endif // Matrix_Test_H

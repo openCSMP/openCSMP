@@ -2,19 +2,9 @@
 #define SPLIT_BOUNDARY_TEST_H
 
 #include "Test.h"
+#include "SplitBoundary.h"
 
-#include "CSMP_definitions.h"
-#include "ANSYS_Model.h"
-#include "BoundaryConnector.h"
-#include "InterFace.h"
-#include "VTU_Interface.h"
-
-#include <set>
-#include <vector>
-#include <string>
-#include <sstream>
-
-namespace csmp{
+namespace csmp {
 
   //template<size_t> class Element;
   //template<size_t> class Face;
@@ -27,9 +17,9 @@ namespace csmp{
   class SplitBoundary_Test : public Test
     {
     public:
-
+      explicit SplitBoundary_Test( bool verbose ) : verbose_(verbose) {}
+    
       virtual void run();
-
 
       template<size_t dim>
       void test_splitboundary_between_regions();
@@ -90,6 +80,8 @@ namespace csmp{
                          const std::vector<std::string>& fractures );
       void outputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
+      private:
+        const bool verbose_;
   };
 
   } // csmp

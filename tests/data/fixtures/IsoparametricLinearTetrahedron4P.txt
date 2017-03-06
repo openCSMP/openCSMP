@@ -50,10 +50,10 @@ Nodes of Segment													0	1
 							1	3
 							2	3
 
-Nodes of Face 													1	2	3
-							0	2	3
+Nodes of Face 						1	2	3
+							0	3	2
 							0	1	3
-							0	1	2
+							0	2	1
 
 Corner Nodes						4
 Nodes at Corners							0	1	2	3

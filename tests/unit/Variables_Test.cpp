@@ -1,4 +1,4 @@
-#include "Variables_TestCase.h"
+#include "Variables_Test.h"
 #include "Boundary.h"
 
 #include "ANSYS_Model3D.h"
@@ -6,39 +6,46 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
-  Variables_TestCase::Variables_TestCase(const char* prefix)
-    :  prefix_(prefix)
-    {
-      this->setName("Variables_TestCase");
-    }
-
-  struct IndexTrackerTestStruct
+Variables_Test::Variables_Test( const char* prefix )
+  :  prefix_(prefix)
+  {
+    this->setName("Variables_Test");
+  }
+  
+  
+struct IndexTrackerTestStruct
   {
     csmp::Index key1_, key2_;
   };
 
-  void Variables_TestCase::run()
+
+
+
+void Variables_Test::run()
   {
     // Run Test for 3D Model constructed by ANSYS mesh reader
     ANSYS_Model3D m0( prefix_, this->getName().c_str(), ((string)(this->getName()+".txt")).c_str(), true );
-    m0.OutputToBinaryFile("Variables_TestCase_BinaryModel");
+    m0.OutputToBinaryFile("Variables_Test_BinaryModel");
     runModel(m0);
 
     // Run Test for 3D Model loaded from CSMP++ binary format
-    Model<3> m1("Variables_TestCase_BinaryModel");
+    Model<3> m1("Variables_Test_BinaryModel");
     runModel(m1);
   }
-  /**
-   @fn  void Variables_TestCase::run()
   
-   @todo (2-F) Test for InterFace and SplitBoundary properties
   
-   @author  P. Lang
-   @date  9/24/2012
-   */
-  void Variables_TestCase::runModel( Model<3>& model )
+  
+/**
+ @fn  void Variables_Test::run()
+
+ @todo (2-F) Test for InterFace and SplitBoundary properties
+
+ @author  P. Lang
+ @date  9/24/2012
+ */
+void Variables_Test::runModel( Model<3>& model )
     {
       // Indices
       IndexTrackerTestStruct indexCache;
@@ -273,7 +280,6 @@ namespace csmp{
       FlaggedArrayVariable fvipFlaggedArray1_plain    ( "seip flagged array 1", model.Database() );
       FlaggedArrayVariable fvipFlaggedArray2_plain    ( "seip flagged array 2", model.Database() );
       FlaggedArrayVariable fvipFlaggedArray3_plain    ( "seip flagged array 3", model.Database() );
-
 
 
       // ========================================================================
@@ -1242,8 +1248,6 @@ namespace csmp{
 
 
 
-
-
       // ========================================================================
       // Status tests
 
@@ -1364,9 +1368,7 @@ namespace csmp{
 
               }
         }
+      
+    } // end runModel
 
-        return;
-
-    }
-
-  } // csmp
+} // csmp

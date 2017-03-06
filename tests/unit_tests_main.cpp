@@ -21,7 +21,7 @@
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
 #include "ArrayVariable_Test.h"
-#include "Variables_TestCase.h"
+#include "Variables_Test.h"
 #include "PropertyStorageSpeed_Test.h"
 
 #include "CommandLineParser_Test.h"
@@ -56,6 +56,7 @@
 #include "PropertyDatabase_Test.h"
 #include "Index_Test.h"
 #include "PropertyData_Test.hpp"
+#include "ColorPalette_Test.h"
 
 #include "InputDataManager_Test.h"
 #include "LocalVariableStorage_Test.h"
@@ -145,6 +146,8 @@ using namespace csmp;
 */
 int main()
 {
+  const bool verbose(false);
+
   const bool test_fundamentals(true),
              test_interdependent1(true),
              test_interdependent2(true),
@@ -176,11 +179,10 @@ int main()
               basic.addTest( new Index_Test());
               basic.addTest( new Parameter_Test());
               basic.addTest( new PropertyData_Test());
-              //basic.addTest( new PropertyStorageSpeed_Test( &cout ));
 
               // Model
               basic.addTest( new Node_Test() );
-              basic.addTest( new Element_Test());
+              basic.addTest( new Element_Test(verbose));
               basic.addTest( new Face_Test() );
 
               // Variable tests
@@ -193,16 +195,16 @@ int main()
               basic.addTest( new TensorVariable_Test1());
               basic.addTest( new TensorVariable_Test2());
               basic.addTest( new ArrayVariable_Test());
-              basic.addTest( new Variables_TestCase("prism_test"));
+              // basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
 
               // Math utilities tests
-              basic.addTest( new Matrix_Test() );
-              basic.addTest( new DenseMatrix_Test() );
-              basic.addTest( new SparseMatrix_Test() );
+              basic.addTest( new Matrix_Test(verbose) );
+              basic.addTest( new DenseMatrix_Test(verbose) );
+              basic.addTest( new SparseMatrix_Test(verbose) );
               basic.addTest( new CompressedRowMatrix_Test() );
               basic.addTest( new CubicSpline_Test() );
 
-              basic.addTest( new FiniteVolumeStencil_Test());
+              basic.addTest( new FiniteVolumeStencil_Test(verbose));
               // also compares speed of mapping facet areas and normals versus computing them
               basic.addTest( new FiniteVolumePolicy_Test());
               basic.addTest( new FV_Parameter_Test());
@@ -212,6 +214,7 @@ int main()
               basic.addTest( new FEM_Data_Test());
               basic.addTest( new PropertyData_Test() );
               basic.addTest( new VSet_Test() );
+              basic.addTest( new ColorPalette_Test() );
           
               // Running unit tests and reporting errors
               basic.run();
@@ -225,18 +228,19 @@ int main()
               cout <<"\n2. partially interdependent functionality: running tests..."<< endl;
               TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
               interdependent1.addTest( new FEM_Data_Test());
-              // finite elemenents
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt" ) ); // 3D case 3 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt" ) );   // 2D case 3 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt" ) );   // 2D case 4 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt" ) );  // 3D case 3 integration point
+              // TODO: add the tests for all elements
+              // finite elements
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt", verbose ) ); // 3D case 3 integration points
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt", verbose ) );   // 2D case 3 integration points
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt", verbose ) );   // 2D case 4 integration points
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );  // 3D case 3 integration point
               // non-standard element tests
-              interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(false) ); // FAIL - flux balance on constant velocity projected on sides
+              interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // FAIL - flux balance on constant velocity projected on sides
               // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
-              interdependent1.addTest(new IsoparametricLinearHexahedron_Test());
+              interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
               // math operators etc.
               interdependent1.addTest( new Operand_Test() );
               interdependent1.addTest( new MathOperatorLHS_Test());
@@ -257,7 +261,7 @@ int main()
               // model
               interdependent2.addTest( new Box_Test() );                 // XCode OK (SKM) but does not test hexahedral or prism element meshes
               interdependent2.addTest( new ModelSubDomain_Test() );      // XCode OK (SKM)
-              interdependent2.addTest( new Region_Test() );              // XCode OK (SKM)
+              interdependent2.addTest( new Region_Test(false) );         // XCode OK (SKM)
               interdependent2.addTest( new ANSYS_Model2D_Test() );       // XCode OK (SKM)
               interdependent2.addTest( new InputDataManager_Test());     // XCode OK (SKM)
               interdependent2.addTest( new ANSYS_Model3D_Test() );       // XCode OK (SKM)
@@ -284,7 +288,7 @@ int main()
               /// Property data search tests
               Visitor_TestSuite visitorTests( composite );
               visitorTests.run();
-              composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
+              composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
 
               /// Two phase flow tests
               TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
@@ -307,6 +311,7 @@ int main()
               // composite.addTest( new SplitBoundary_Test() );
               // update composite.addTest( new ModelComparator_Test() ); // crashes on PropertyData
               // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
+              // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers 
           
               refactored.run();
               long nFail = refactored.report();

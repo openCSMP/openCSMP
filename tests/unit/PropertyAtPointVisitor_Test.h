@@ -5,32 +5,33 @@
 
 #include "PropertyAtPointVisitor.h"
 
-namespace csmp{
+namespace csmp {
 
-   class PropertyAtPointVisitor_Test: public Test
+class PropertyAtPointVisitor_Test: public Test
    {
-
     public:
-            PropertyAtPointVisitor_Test();
-            ~PropertyAtPointVisitor_Test();
+      PropertyAtPointVisitor_Test( bool verbose );
+      ~PropertyAtPointVisitor_Test();
 
-            virtual void run();
+      virtual void run();
 
     private:
+      void run1D_MeshTests();
+      void run2D_MeshTests();
+      void run3D_MeshTests();
 
-            void run1D_MeshTests();
-            void run2D_MeshTests();
-            void run3D_MeshTests();
+      // 1D mesh test
+      void IsoparametricLinear1DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
+      // 2D mesh test
+      void IsoparametricLinear2DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
+      // 3D mesh test
+      void IsoparametricLinear3DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
 
-            // 1D mesh test
-            void IsoparametricLinear1DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
-            // 2D mesh test
-            void IsoparametricLinear2DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
-            // 3D mesh test
-            void IsoparametricLinear3DMesh_Test( const char* mesh_name, const char* regionfile_name, const char* varfile_name, const char* mesh_type, bool brute_force_search, double64 tolerance );
-
-            void OutputElapsedTime( clock_t start, clock_t end );
-   };
+      void OutputElapsedTime( clock_t start, clock_t end );
+     
+      const bool verbose_;
+};
 
 }
+
 #endif // PROPERTYATPOINTVISITOR_TEST_H

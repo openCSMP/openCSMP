@@ -12,10 +12,12 @@
 using namespace std;
 
 namespace csmp {
-Vset_TestCase::Vset_TestCase(const char* prefix)
+Vset_TestCase::Vset_TestCase( const char* prefix,
+                              bool verbose )
+ : model_file_(prefix),
+   verbose_(verbose)
 {
     this->setName("Vset_TestCase");
-    prefix_=prefix;
 }
 
 
@@ -31,11 +33,12 @@ void Vset_TestCase::run()
 {
     //------------------------------------
     // Parameters section
-    string input_file_name(prefix_);
+    string input_file_name(model_file_);
     enum{DIM=3U};
+  
     //end Parameters section
     //------------------------------------
-    cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
+    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
 
     //------------------------------------
     // Model Output Regions only test
@@ -48,7 +51,7 @@ void Vset_TestCase::run()
     TensorVariable<3> tvPlain;
     
     // Testing model without boundaries, variable&topology tests
-    cout <<"Building ModelOutput..."<<endl;
+    if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
     ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+".txt").c_str(),true,true,true,false);
     ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
     const size_t elementCount1( modelOutput1.Region("Model").Elements() );
@@ -57,8 +60,10 @@ void Vset_TestCase::run()
     modelOutput1.Region("Model").InputPropertyValue( "diffusivity", diff );
     modelOutput1.Region("Model").InputPropertyValue( "nodal array", na );
     modelOutput1.OutputToBinaryFile("model1");
-    cout<<"The Output of Model without boundaries done..."<<endl;
-    cout <<"Building ModelInput..."<<endl;
+    if ( verbose_ ) {
+        cout<<"The Output of Model without boundaries done..."<<endl;
+        cout <<"Building ModelInput..."<<endl;
+      }
     Model<3U> modelInput1("model1");
     Index dKey1( modelOutput1.Database().StorageKey("diffusivity") );
     Index naKey1( modelOutput1.Database().StorageKey("nodal array") );
@@ -79,7 +84,7 @@ void Vset_TestCase::run()
       }
     
     // Testing model without boundaries, variable&topology tests
-    cout <<"Building ModelOutput..."<<endl;
+    if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
     ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+".txt").c_str(),true,true,true,true);
     Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
     Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
@@ -99,8 +104,10 @@ void Vset_TestCase::run()
     modelOutput2.Boundary("BOUNDARY1").InputPropertyValue("boundary scalar", makeScalar( PLAIN, 1. ) );
     modelOutput2.Boundary("BOUNDARY2").InputPropertyValue("boundary array", ba );
     modelOutput2.OutputToBinaryFile("model2");
-    cout<<"The Output of Model with boundaries done..."<<endl;
-    cout <<"Building ModelInput with boundaries..."<<endl;
+    if ( verbose_ ) {
+        cout<<"The Output of Model with boundaries done..."<<endl;
+        cout <<"Building ModelInput with boundaries..."<<endl;
+      }
     Model<3U> modelInput2("model2");
     _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
     modelInput2.Region("Model").Read( regionVectorKey, vvPlain );
@@ -168,7 +175,7 @@ void Vset_TestCase::run()
         ++ctr;
       }
     
-    cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
+    if ( verbose_ ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
     
 } // end Vset_TestCase
 

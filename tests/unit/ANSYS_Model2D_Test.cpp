@@ -13,6 +13,8 @@ namespace csmp
 
 void ANSYS_Model2D_Test::run()
   {
+    const bool verbose(false);
+    
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
     Region<2>& rref( model.Region( "Model" ) );
 
@@ -29,7 +31,7 @@ void ANSYS_Model2D_Test::run()
         _test(false);
       }
 
-    cout << "\nModel Node Count: " << rref.Nodes() << endl;
+    if ( verbose ) cout << "\nModel Node Count: " << rref.Nodes() << endl;
     _test( rref.Nodes() == 106 );
 
     Index nodalKey( model.Database().StorageKey( "nodal variable" ) );
@@ -45,11 +47,13 @@ void ANSYS_Model2D_Test::run()
           continue;   
         ++boundaryNodeCount;
       }
-    cout << "\nBoundary Node Count: " << boundaryNodeCount << endl;
+    if ( verbose ) cout << "\nBoundary Node Count: " << boundaryNodeCount << endl;
     _test ( boundaryNodeCount == 40 );
-    VTU_Interface<2> vtu( model ); vtu.OmitZeroInFileName( true );
-    vtu.OutputDataToVTU( "ANSYS_Model2D_Test-BoxBoundary", "nodal variable", "Model", static_cast<int>(0) );
-
+    if ( verbose ) {
+         VTU_Interface<2> vtu( model );
+         vtu.OmitZeroInFileName( true );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-BoxBoundary", "nodal variable", "Model", static_cast<int>(0) );
+      }
     _test( model.ContainsBoundary( "LEFT" ) );
     _test( model.ContainsBoundary( "RIGHT" ) );
     _test( model.ContainsBoundary( "BOTTOM" ) );
@@ -90,7 +94,7 @@ void ANSYS_Model2D_Test::run()
     const size_t bottomFaces( bottom.Elements() );
     const size_t topFaces( top.Elements() );
     
-    cout << "\nModel Node Count: " << rref.Nodes() << endl;
+    if ( verbose ) cout << "\nModel Node Count: " << rref.Nodes() << endl;
     _test( rref.Nodes() == 106 );
 
     string bin1name("ANSYS2D_bin");

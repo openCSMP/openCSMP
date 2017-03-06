@@ -429,8 +429,6 @@ void Operand_Test::run()
     _test(opsc_from_sc==val);
     _test(opsc_from_sc<=val);
     _test(opsc_from_sc>=val);
-
-
   }
 
 }

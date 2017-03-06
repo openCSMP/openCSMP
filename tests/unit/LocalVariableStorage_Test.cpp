@@ -322,149 +322,149 @@ namespace csmp{
       */
     }
 
-    void LocalVariableStorage_Test::run3D()
-      {
-        // initialize storage with 3 of each (scalars, vectors, tensors)
-        const size_t dim(3);
-        Element<3> e;
+  void LocalVariableStorage_Test::run3D()
+    {
+      // initialize storage with 3 of each (scalars, vectors, tensors)
+      const size_t dim(3);
+      Element<3> e;
 
-        // LOCAL VARIABLES ONLY
+      // LOCAL VARIABLES ONLY
 
-        // one var of each type, array has length 20
-        const size_t scalars1(1), vectors1(1), tensors1(1), arrays1(1), arrayLength(20),flaggedArrays1(1),flaggedArrayLength(40);
-        const size_t totalDataDepth1( scalars1 + vectors1*dim + tensors1*dim*dim + arrays1*arrayLength + flaggedArrays1*flaggedArrayLength );
-        const size_t totalFlagDepth1( scalars1 + vectors1*dim + tensors1*dim + arrays1 + flaggedArrays1*flaggedArrayLength);
-        LocalVariables lv1( scalars1, vectors1, tensors1, arrays1, arrayLength, flaggedArrays1, flaggedArrayLength, totalDataDepth1, totalFlagDepth1 );
-        e.ResizePropertyStorage(lv1);
+      // one var of each type, array has length 20
+      const size_t scalars1(1), vectors1(1), tensors1(1), arrays1(1), arrayLength(20),flaggedArrays1(1),flaggedArrayLength(40);
+      const size_t totalDataDepth1( scalars1 + vectors1*dim + tensors1*dim*dim + arrays1*arrayLength + flaggedArrays1*flaggedArrayLength );
+      const size_t totalFlagDepth1( scalars1 + vectors1*dim + tensors1*dim + arrays1 + flaggedArrays1*flaggedArrayLength);
+      LocalVariables lv1( scalars1, vectors1, tensors1, arrays1, arrayLength, flaggedArrays1, flaggedArrayLength, totalDataDepth1, totalFlagDepth1 );
+      e.ResizePropertyStorage(lv1);
 
-        // some working indices
-        Index ks1( SCALAR, ELEMENT, 0, 1, 1, 0, 0, lv1 );
-        Index kv1( VECTOR, ELEMENT, 0, dim, dim, 1, 1, lv1 );
-        Index kt1( TENSOR, ELEMENT, 0, dim*dim, dim, dim+1, dim+1, lv1 );
-        Index ka1( ARRAY,  ELEMENT, 0, arrayLength, 1, dim+dim*dim+1, dim+dim+1, lv1 );
-        Index kfa1( FLAGGEDARRAY,  ELEMENT, 0, flaggedArrayLength, flaggedArrayLength, dim+dim*dim+1+arrayLength, dim+dim+1+1, lv1 );
-
-
-        // some working variables
-        ScalarVariable s0;
-        const ScalarVariable s1( ROBIN, 1. );
-        VectorVariable<3> v0;
-        const VectorVariable<3> v1( ANY, DIRICH, ROBIN, 2., 1., 0. );
-        const VectorVariable<3> v2( ANY, DIRICH, ROBIN, 2., 1.1, 0. );
-        TensorVariable<3> t0;
-        const TensorVariable<3> t1( NEUMANN, DIRICH, NEUMANN, 3., 4., 5., 6., 7., 8., 9., 10., 11. );
-        ArrayVariable a0( arrayLength );
-        const ArrayVariable a1( arrayLength, 4., DIRICH );
-        FlaggedArrayVariable fa0( flaggedArrayLength );
-        const FlaggedArrayVariable fa1( flaggedArrayLength, 5., DIRICH );
-
-        // STORE/READ
-
-        // scalars
-        e.Store( ks1, s1 );
-        _test( e.Read(ks1) == s1() );
-        e.Read( ks1, s0 );
-        _test( s0 == s1 );
-
-        // vectors
-        e.Store( kv1, v1 );
-        e.Read( kv1, v0 );
-        _test( v0 == v1 );
-
-        // tensors
-        e.Store( kt1, t1 );
-        e.Read( kt1, t0 );
-        _test( t0 == t1 );
-
-        // arrays
-        e.Store( ka1, a1 );
-        e.Read( ka1, a0 );
-        _test( a0 == a1 );
-
-        // flagged arrays
-        e.Store( kfa1, fa1 );
-        e.Read( kfa1, fa0 );
-        _test( fa0 == fa1 );
-
-        // STATUS
-
-        _test( e.Status(ks1) == s1.Flag() );
-        _test( e.Status(ka1) == a1.Flag() );
-        for( size_t d(0); d < flaggedArrayLength; ++d )
-            _test( e.Status(kfa1,d) == fa1.Flag(d) );
-        for( size_t d(0); d < dim; ++d )
-          {
-            _test( e.Status( kv1, d ) == v1.Flag(d) );
-            _test( e.Status( kt1, d ) == t1.Flag(d) );
-          }
-
-        e.Status(ks1, INIT_GUESS );
-        e.Status(ka1, INIT_COND );
-        for( size_t d(0); d < flaggedArrayLength; ++d )
-            e.Status(kfa1,d, FIELD_DATA);
-        for( size_t d(0); d < dim; ++d )
-          {
-          e.Status( kv1, d, CONSTANT_FLUX );
-          e.Status( kt1, d, PERIODIC );
-          }
-
-        _test( e.Status(ks1) == INIT_GUESS );
-        _test( e.Status(ka1) == INIT_COND );
-        for( size_t d(0); d < flaggedArrayLength; ++d )
-            _test( e.Status(kfa1,d) == FIELD_DATA );
-        for( size_t d(0); d < dim; ++d )
-          {
-          _test( e.Status( kv1, d ) == CONSTANT_FLUX );
-          _test( e.Status( kt1, d ) == PERIODIC );
-          }
+      // some working indices
+      Index ks1( SCALAR, ELEMENT, 0, 1, 1, 0, 0, lv1 );
+      Index kv1( VECTOR, ELEMENT, 0, dim, dim, 1, 1, lv1 );
+      Index kt1( TENSOR, ELEMENT, 0, dim*dim, dim, dim+1, dim+1, lv1 );
+      Index ka1( ARRAY,  ELEMENT, 0, arrayLength, 1, dim+dim*dim+1, dim+dim+1, lv1 );
+      Index kfa1( FLAGGEDARRAY,  ELEMENT, 0, flaggedArrayLength, flaggedArrayLength, dim+dim*dim+1+arrayLength, dim+dim+1+1, lv1 );
 
 
-        // reset
-        e.Store( ks1, s1 );
-        e.Store( kv1, v1 );
-        e.Store( kt1, t1 );
-        e.Store( ka1, a1 );
-        e.Store( kfa1, fa1 );
+      // some working variables
+      ScalarVariable s0;
+      const ScalarVariable s1( ROBIN, 1. );
+      VectorVariable<3> v0;
+      const VectorVariable<3> v1( ANY, DIRICH, ROBIN, 2., 1., 0. );
+      const VectorVariable<3> v2( ANY, DIRICH, ROBIN, 2., 1.1, 0. );
+      TensorVariable<3> t0;
+      const TensorVariable<3> t1( NEUMANN, DIRICH, NEUMANN, 3., 4., 5., 6., 7., 8., 9., 10., 11. );
+      ArrayVariable a0( arrayLength );
+      const ArrayVariable a1( arrayLength, 4., DIRICH );
+      FlaggedArrayVariable fa0( flaggedArrayLength );
+      const FlaggedArrayVariable fa1( flaggedArrayLength, 5., DIRICH );
+
+      // STORE/READ
+
+      // scalars
+      e.Store( ks1, s1 );
+      _test( e.Read(ks1) == s1() );
+      e.Read( ks1, s0 );
+      _test( s0 == s1 );
+
+      // vectors
+      e.Store( kv1, v1 );
+      e.Read( kv1, v0 );
+      _test( v0 == v1 );
+
+      // tensors
+      e.Store( kt1, t1 );
+      e.Read( kt1, t0 );
+      _test( t0 == t1 );
+
+      // arrays
+      e.Store( ka1, a1 );
+      e.Read( ka1, a0 );
+      _test( a0 == a1 );
+
+      // flagged arrays
+      e.Store( kfa1, fa1 );
+      e.Read( kfa1, fa0 );
+      _test( fa0 == fa1 );
+
+      // STATUS
+
+      _test( e.Status(ks1) == s1.Flag() );
+      _test( e.Status(ka1) == a1.Flag() );
+      for( size_t d(0); d < flaggedArrayLength; ++d )
+          _test( e.Status(kfa1,d) == fa1.Flag(d) );
+      for( size_t d(0); d < dim; ++d )
+        {
+          _test( e.Status( kv1, d ) == v1.Flag(d) );
+          _test( e.Status( kt1, d ) == t1.Flag(d) );
+        }
+
+      e.Status(ks1, INIT_GUESS );
+      e.Status(ka1, INIT_COND );
+      for( size_t d(0); d < flaggedArrayLength; ++d )
+          e.Status(kfa1,d, FIELD_DATA);
+      for( size_t d(0); d < dim; ++d )
+        {
+        e.Status( kv1, d, CONSTANT_FLUX );
+        e.Status( kt1, d, PERIODIC );
+        }
+
+      _test( e.Status(ks1) == INIT_GUESS );
+      _test( e.Status(ka1) == INIT_COND );
+      for( size_t d(0); d < flaggedArrayLength; ++d )
+          _test( e.Status(kfa1,d) == FIELD_DATA );
+      for( size_t d(0); d < dim; ++d )
+        {
+        _test( e.Status( kv1, d ) == CONSTANT_FLUX );
+        _test( e.Status( kt1, d ) == PERIODIC );
+        }
 
 
-        // DELETE
-        e.DeleteProperty(kt1);
-        ka1 = Index( ARRAY, ELEMENT, 0, arrayLength, 1, dim+1, dim+1, lv1 );
-        e.Read( ka1, a0 );
-        _test( a0 == a1 );
-        e.Read( ks1, s0 );
-        _test( s0 == s1 );
-        e.Read( kv1, v0 );
-        _test( v0 == v1 );
-
-        // ADD
-        e.AddProperty(kt1);
-        ka1 = Index( ARRAY, ELEMENT, 0, arrayLength, 1, dim+dim*dim+1, dim+dim+1, lv1 );
-        e.Read( ka1, a0 );
-        _test( a0 == a1 );
-        e.Store( kt1, t1 );
-        e.Read( ks1, s0 );
-        _test( s0 == s1 );
-        e.Read( kv1, v0 );
-        _test( v0 == v1 );
-        e.Read( kt1, t0 );
-        _test( t0 == t1 );
-
-        e.Store( kv1, v2 );
-        e.Read( kv1, v0 );
-        _test( v0 != v1 );
-
-      }
+      // reset
+      e.Store( ks1, s1 );
+      e.Store( kv1, v1 );
+      e.Store( kt1, t1 );
+      e.Store( ka1, a1 );
+      e.Store( kfa1, fa1 );
 
 
-    void LocalVariableStorage_Test::run()
-      {
-        runTest<1>();
-        runTest<2>();        
-        runTest<3>();
-        run3D();
+      // DELETE
+      e.DeleteProperty(kt1);
+      ka1 = Index( ARRAY, ELEMENT, 0, arrayLength, 1, dim+1, dim+1, lv1 );
+      e.Read( ka1, a0 );
+      _test( a0 == a1 );
+      e.Read( ks1, s0 );
+      _test( s0 == s1 );
+      e.Read( kv1, v0 );
+      _test( v0 == v1 );
 
-        cout << endl << "Size of LocalVariableStorage: " << sizeof(LocalVariableStorage<3,Element<3> >) << endl;
-      }
+      // ADD
+      e.AddProperty(kt1);
+      ka1 = Index( ARRAY, ELEMENT, 0, arrayLength, 1, dim+dim*dim+1, dim+dim+1, lv1 );
+      e.Read( ka1, a0 );
+      _test( a0 == a1 );
+      e.Store( kt1, t1 );
+      e.Read( ks1, s0 );
+      _test( s0 == s1 );
+      e.Read( kv1, v0 );
+      _test( v0 == v1 );
+      e.Read( kt1, t0 );
+      _test( t0 == t1 );
 
-  } // csmp
+      e.Store( kv1, v2 );
+      e.Read( kv1, v0 );
+      _test( v0 != v1 );
+
+    }
+
+
+  void LocalVariableStorage_Test::run()
+    {
+      runTest<1>();
+      runTest<2>();        
+      runTest<3>();
+      run3D();
+
+      //cout << endl << "Size of LocalVariableStorage: " << sizeof(LocalVariableStorage<3,Element<3> >) << endl;
+    }
+
+} // csmp

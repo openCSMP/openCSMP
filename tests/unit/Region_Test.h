@@ -7,14 +7,15 @@
 
 namespace csmp
 {
-   // class Index;
-    class Region_Test: public Test
-    {
-    public:
-        Region_Test();
-        ~Region_Test();
-        void run();
-    private:
-    };
+ // class Index;
+  class Region_Test: public Test
+  {
+  public:
+      Region_Test( bool verbose );
+      ~Region_Test();
+      void run();
+  private:
+      const bool verbose_;
+  };
 }
 #endif // REGION_TEST_H

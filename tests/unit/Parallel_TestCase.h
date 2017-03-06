@@ -12,11 +12,15 @@ namespace csmp{
   class Parallel_TestCase : public Test
     {
     public:
+      Parallel_TestCase( bool verbose ) : verbose_(verbose) {}
+      
       virtual void run();
 
     private:
       void UpdateFlowProps( Model<3>& model, TwoPhaseModel<3>& saturationFunctions );
       void ComputeTotalVelocity( csmp::Model<3U>& model ) const;
+      
+      const bool verbose_;
     };
 
   } // csmp

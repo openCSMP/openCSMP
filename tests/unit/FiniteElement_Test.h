@@ -10,14 +10,15 @@ namespace csmp{
 /// Generic Test for any FEM subclass
 class FiniteElement_Test : public Test
 {
-public:
-  FiniteElement_Test( FiniteElement* testee, const char* results_file );
-  virtual void run();
-  ~FiniteElement_Test();
-private:
-  std::string fileName_;
-  FiniteElement* femPtr_;
-  FiniteElement_TestData femData_;
+  public:
+    FiniteElement_Test( FiniteElement* testee, const char* results_file, bool verbose );
+    virtual void run();
+    ~FiniteElement_Test();
+  private:
+    std::string fileName_;
+    FiniteElement* femPtr_;
+    FiniteElement_TestData femData_;
+    const bool verbose_;
 };
 
 /**

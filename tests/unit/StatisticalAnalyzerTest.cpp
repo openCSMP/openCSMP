@@ -231,6 +231,8 @@ void StatisticalAnalyzerTest::StatisticalAnalyzerRegionPropertyHistograms()
 }
 
 
+
+
 void StatisticalAnalyzerTest::StatisticalAnalyzerTestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1()
 {
     Index por_key = model_->Database().StorageKey("porosity");

@@ -9,14 +9,7 @@
 
 using namespace std;
 
-
-
-
-
-namespace csmp
-{
-
-
+namespace csmp {
 
 template<size_t dim>
 class VolumeOutput_Visitor : public Visitor<dim> 
@@ -118,32 +111,34 @@ void CsmpIntro1_TestCase::run()
 
     // VTU output interface
     VTU_Interface<DIM> vtu( model );
-    vtu.OutputDataToVTU( "OilSaturation1", "saturation oil", "Model", static_cast<int>(0) );
-
+    if ( verbose_ )
+       vtu.OutputDataToVTU( "OilSaturation1", "saturation oil", "Model", static_cast<int>(0) );
+    
     // writing to a region & outputting
     matrixLeft.InputPropertyValue( "saturation oil", makeScalar( DIRICH, 20. ) );
 
     // new output
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", "Model", static_cast<int>(0) );
+    if ( verbose_ ) {
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", "Model", static_cast<int>(0) );
 
-    // outputting subdomains
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", left,        static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", right,       static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", bottom,      static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", front,       static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", back,        static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", top,         static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", matrixRight, static_cast<int>(0) );
-    vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", matrixLeft,  static_cast<int>(0) );
-
+        // outputting subdomains
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", left,        static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", right,       static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", bottom,      static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", front,       static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", back,        static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", top,         static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", matrixRight, static_cast<int>(0) );
+        vtu.OutputDataToVTU( "OilSaturation2", "saturation oil", matrixLeft,  static_cast<int>(0) );
+      }
+    
     VolumeOutput_Visitor<DIM> volumeVisitor( model );
     model.Accept( volumeVisitor );
 
-    vtu.OutputDataToVTU( "VolumeVariable", "conductivity", matrixRight, static_cast<int>(0) );
-    vtu.OutputDataToVTU( "VolumeVariable", "conductivity", matrixLeft,  static_cast<int>(0) );
-
-
-
+    if ( verbose_ ) {
+        vtu.OutputDataToVTU( "VolumeVariable", "conductivity", matrixRight, static_cast<int>(0) );
+        vtu.OutputDataToVTU( "VolumeVariable", "conductivity", matrixLeft,  static_cast<int>(0) );
+      }
   }
 
 

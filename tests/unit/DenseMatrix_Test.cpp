@@ -8,7 +8,8 @@ using namespace std;
 
 namespace csmp
 {
-    DenseMatrix_Test::DenseMatrix_Test()
+    DenseMatrix_Test::DenseMatrix_Test( bool verbose )
+    : verbose_(verbose)
     {       
     }
 
@@ -16,21 +17,22 @@ namespace csmp
     {
     }
 
-    void DenseMatrix_Test::run()
-    {
 
-    cout << "\n===================";
-    cout << "\nTesting DenseMatrix" << endl;
-    cout << "===================" << endl;
+void DenseMatrix_Test::run()
+  {
+     if ( verbose_ ) {
+        cout << "\n===================";
+        cout << "\nTesting DenseMatrix" << endl;
+        cout << "===================" << endl;
 
-    //Testing Identity functions
         cout << "\nTesting Identity function" << endl;
         cout << "=========================" << endl;
 
         cout << "\nB.Identity()";
+      }
         B.Identity();
-        B.Out();
-
+      if ( verbose_ ) B.Out();
+    
         for ( int i = 0; i < 4; i++ )
         {
             for ( int j = 0; j < 4; j++ )
@@ -41,10 +43,11 @@ namespace csmp
         }
 
     //Testing + and - operator
-
+    if ( verbose_ ) {
         cout << "\nTesting + and += operator" << endl;
         cout << "======================" << endl;
-
+      }
+    
         A( 0, 0 ) = 1.;
         A( 0, 1 ) = 0.;
         A( 0, 2 ) = 2.;
@@ -64,22 +67,24 @@ namespace csmp
         A( 3, 1 ) = 1.;
         A( 3, 2 ) = 3.;
         A( 3, 3 ) = 5.;
-
+    
+    if ( verbose_ ) {
         cout << "\nTest Matrix A";
         A.Out();
+      }
 
-        cout << "Test Matrix B";
+        if ( verbose_ ) cout << "Test Matrix B";
         B.Fill(1.);
-        B.Out();
+        if ( verbose_ ) B.Out();
 
-        cout << "Matrix C = A + B";
+        if ( verbose_ ) cout << "Matrix C = A + B";
         C = A + B;
-        C.Out();
+        if ( verbose_ ) C.Out();
         E = C;
 
-        cout << "Matrix A += B =! C";
+        if ( verbose_ ) cout << "Matrix A += B =! C";
         A += B;
-        A.Out();
+        if ( verbose_ ) A.Out();
 
         ResC( 0, 0 ) = 2.;
         ResC( 0, 1 ) = 1.;
@@ -112,13 +117,13 @@ namespace csmp
             }
         }
 
-        cout << "Matrix D = C - B";
+        if ( verbose_ ) cout << "Matrix D = C - B";
         D = C - B;
-        D.Out();
+        if ( verbose_ ) D.Out();
 
-        cout << "Matrix A -= B =! D";
+        if ( verbose_ ) cout << "Matrix A -= B =! D";
         A -= B;
-        A.Out();
+        if ( verbose_ ) A.Out();
 
         ResA( 0, 0 ) = 1.;
         ResA( 0, 1 ) = 0.;
@@ -152,22 +157,21 @@ namespace csmp
             }
         }
 
+     if ( verbose_ ) {
+          cout << "\nTesting * operators" << endl;
+          cout << "===================" << endl;
 
-//Testing * operators
-    cout << "\nTesting * operators" << endl;
-    cout << "===================" << endl;
+          cout << "\nMatrix-scalar multiplication method" << endl;
+          cout << "-----------------------------------" << endl;
 
-        //Matrix-scalar multiplication
-        cout << "\nMatrix-scalar multiplication method" << endl;
-        cout << "-----------------------------------" << endl;
+          cout << "\nTest matrix A";
+          A.Out();
 
-        cout << "\nTest matrix A";
-        A.Out();
-
-        cout << "Matrix A *= ( 3 )";
+          cout << "Matrix A *= ( 3 )";
+       }
         C = A;
         C.operator *= ( 3. );
-        C.Out();
+        if ( verbose_ ) C.Out();
 
         ResC( 0, 0 ) = 3.;
         ResC( 0, 1 ) = 0.;
@@ -200,16 +204,18 @@ namespace csmp
 
 
         //Matrix-scalar multiplication
-        cout << "\nMatrix-scalar multiplication method" << endl;
-        cout << "-----------------------------------" << endl;
+        if ( verbose_ ) {
+            cout << "\nMatrix-scalar multiplication method" << endl;
+            cout << "-----------------------------------" << endl;
 
-        cout << "\nTest matrix A";
-        A.Out();
+            cout << "\nTest matrix A";
+            A.Out();
 
-        cout << "Matrix A *= ( 3 )";
+            cout << "Matrix A *= ( 3 )";
+         }
         C = A;
         C.operator *= ( 3. );
-        C.Out();
+        if ( verbose_ ) C.Out();
 
 
         for ( int i = 0; i < 4; i++ )
@@ -223,38 +229,38 @@ namespace csmp
 
         //Matrix multiplication by vector
         //First vector-matrix multiplication method
-        cout << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
-        cout << "----------------------------------------------------" << endl;
-
-        cout << "\nTest matrix A";
-
-        A.Out();
-
+        if ( verbose_ ) {
+            cout << "\nFirst vector-matrix multiplication method: y = A * x" << endl;
+            cout << "----------------------------------------------------" << endl;
+            cout << "\nTest matrix A";
+            A.Out();
+          }
+    
         x.push_back(1.);
         x.push_back(2.);
         x.push_back(0.);
         x.push_back(1.5);
 
-        cout << "Test vector x =   ";
+        if ( verbose_ ) cout << "Test vector x =   ";
 
         vector<double64>::const_iterator it( x.begin() );
         for ( vector<double64>::const_iterator
              it = x.begin(); it != x.end(); it++ )
         {
-            cout << *it << setw(5);
+            if ( verbose_ ) cout << *it << setw(5);
         }
 
-        cout << "\n\ny = A * x";
+        if ( verbose_ ) cout << "\n\ny = A * x";
         y = A * x;
 
         vector<double64>::const_iterator it1(y.begin());
 
-        cout << "\n\ny = ";
+        if ( verbose_ ) cout << "\n\ny = ";
 
         for (vector<double64>::const_iterator
              it1 = y.begin(); it1 != y.end(); it1++ )
         {
-            cout << *it1 << setw(5);
+            if ( verbose_ ) cout << *it1 << setw(5);
         }
 
         sol_y.push_back(2.5);
@@ -273,18 +279,20 @@ namespace csmp
 
 
         //\nSecond matrix-vector multiplication method
-        cout << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
-        cout << "--------------------------------------------------" << endl;
-
+        if ( verbose_ ) {
+            cout << "\n\nSecond matrix-vector multiplication method: A *= x" << endl;
+            cout << "--------------------------------------------------" << endl;
+          }
+    
         B = A;
-        cout << "A *= x";
+        if ( verbose_ )  cout << "A *= x";
         B.operator *= (x);
 
-        cout << "\nA = ";
+        if ( verbose_ ) cout << "\nA = ";
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << B(i,0) << setw(5);
+            if ( verbose_ ) cout << B(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solB.push_back(B(i,0));
@@ -301,33 +309,35 @@ namespace csmp
             _equal( *itB, *itsol_y, 1E-6 );
         }
 
-        cout << endl;
-
-
-        cout << "\nThird matrix-matrix multiplication method: A *= ( C array )" << endl;
-        cout << "--------------------------------------------------" << endl;
-
+        if ( verbose_ ) {
+            cout << endl;
+            cout << "\nThird matrix-matrix multiplication method: A *= ( C array )" << endl;
+            cout << "--------------------------------------------------" << endl;
+          }
+    
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        if ( verbose_ ) {
+            cout << "\nTest matrix A";
+            D.Out();
+          }
 
 
         double64 Ca[4] = { 1., 2., 0., 1.5 };
 
-        cout << "Test array Ca";
+        if ( verbose_ ) cout << "Test array Ca";
 
         for ( int i = 0; i < 4; i++ )
-            cout << "\n" << Ca[i];
+            if ( verbose_ ) cout << "\n" << Ca[i];
 
 
-        cout << "\n\nMatrix A *= ( C array )";
+        if ( verbose_ ) cout << "\n\nMatrix A *= ( C array )";
         D.operator *=( Ca );
-        D.Out();
+        if ( verbose_ ) D.Out();
 
         for ( int i = 0; i < 4; i++ )
         {
-            cout << D(i,0) << setw(5);
+            if ( verbose_ ) cout << D(i,0) << setw(5);
 
             //Retrieving values of matrix A for comparison
             solD.push_back(D(i,0));
@@ -344,23 +354,25 @@ namespace csmp
                 _equal( *itsol_y, *itD, 1E-6);
             }
 
-        cout << endl;
+        if ( verbose_ ) cout << endl;
 
 
         //Matrix-by-matrix multiplication
-        cout << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
-        cout << "------------------------------------------------" << endl;
-
-        cout << "\nTest matrix A";
-        A.Out();
-
-        cout << "Test matrix B";
+        if ( verbose_ ) {
+            cout << "\n\nFirst matrix-matrix multiplication method: A * B" << endl;
+            cout << "------------------------------------------------" << endl;
+            cout << "\nTest matrix A";
+            A.Out();
+            cout << "Test matrix B";
+          }
         B = E;
-        B.Out();
-
-        cout << "C = A * B";
+    
+        if ( verbose_ ) {
+            B.Out();
+            cout << "C = A * B";
+          }
         C = A * B;
-        C.Out();
+        if ( verbose_ ) C.Out();
 
         ResAB( 0, 0 ) = 7.;
         ResAB( 0, 1 ) = 5.;
@@ -390,17 +402,22 @@ namespace csmp
             }
         }
 
-        cout << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
-        cout << "--------------------------------------------------" << endl;
-
+        if ( verbose_ ) {
+            cout << "\nSecond matrix-matrix multiplication method: A *= B" << endl;
+            cout << "--------------------------------------------------" << endl;
+          }
+    
         D = A;
 
-        cout << "\nTest matrix A";
-        D.Out();
+        if ( verbose_ ) {
+            cout << "\nTest matrix A";
+            D.Out();
 
-        cout << "\nMatrix A *= B";
+            cout << "\nMatrix A *= B";
+          }
         D.operator *=(B);
-        D.Out();
+    
+        if ( verbose_ ) D.Out();
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -412,16 +429,18 @@ namespace csmp
 
 
     //Testing fill operators
-        cout << "\nTesting fill functions" << endl;
-        cout << "======================" << endl;
+        if ( verbose_ ) {
+            cout << "\nTesting fill functions" << endl;
+            cout << "======================" << endl;
 
-        //fill
-        cout << "\nMatrix fill()" << endl;
-        cout << "-------------" << endl;
+            //fill
+            cout << "\nMatrix fill()" << endl;
+            cout << "-------------" << endl;
 
-        cout << "\nB.fill(1.)";
+            cout << "\nB.fill(1.)";
+          }
         B.Fill(1.);
-        B.Out();
+        if ( verbose_ ) B.Out();
 
         C = 1.;
 
@@ -434,12 +453,14 @@ namespace csmp
         }
 
         //fillCol
-        cout << "\nMatrix fillCol()" << endl;
-        cout << "---------------" << endl;
+        if ( verbose_ ) {
+            cout << "\nMatrix fillCol()" << endl;
+            cout << "---------------" << endl;
 
-        cout << "\nB.fillCol(2,5.5)";
+            cout << "\nB.fillCol(2,5.5)";
+          }
         B.FillCol(2,5.5);
-        B.Out();
+        if ( verbose_ ) B.Out();
 
         for ( int i = 0; i < 4; i++ )
         {
@@ -447,10 +468,12 @@ namespace csmp
         }
 
         //fillRow
-        cout << "\nMatrix fillRow()" << endl;
-        cout << "----------------" << endl;
+        if ( verbose_ ) {
+            cout << "\nMatrix fillRow()" << endl;
+            cout << "----------------" << endl;
 
-        cout << "\nB.fillRow(2,3.3)";
+            cout << "\nB.fillRow(2,3.3)";
+          }
         B.FillRow(2,3.3);
         B.Out();
 
@@ -462,15 +485,17 @@ namespace csmp
         C = B;
 
     //Testing summation functions
-        cout << "\nTesting summation function" << endl;
-        cout << "==========================" << endl;
+        if ( verbose_ )  {
+            cout << "\nTesting summation function" << endl;
+            cout << "==========================" << endl;
 
-        //ColSum()
-        cout << "\nMatrix ColSum()" << endl;
-        cout << "---------------" << endl;
+            //ColSum()
+            cout << "\nMatrix ColSum()" << endl;
+            cout << "---------------" << endl;
 
-        cout << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
-
+            cout << "\nB.ColSum(2) = " << B.ColSum(2) << endl;
+          }
+    
         double64 ColSumB2 = B.ColSum(2);
         double64 CheckColSumB2 = 0.;
 
@@ -479,16 +504,17 @@ namespace csmp
             CheckColSumB2 += B(i,2);
         }
 
-        cout << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
+        if ( verbose_ ) cout << "\nB.CheckColSum(2) = " << CheckColSumB2 << endl;
         _equal( CheckColSumB2, ColSumB2, 1E-6 );
 
 
         //RowSum
-        cout << "\nMatrix RowSum()" << endl;
-        cout << "---------------" << endl;
+        if ( verbose_ ) {
+            cout << "\nMatrix RowSum()" << endl;
+            cout << "---------------" << endl;
 
-        cout << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
-
+            cout << "\nB.RowSum(2) = " << B.RowSum(2) << endl;
+          }
         double64 RowSumB2 = B.RowSum(2);
         double64 CheckRowSumB2 = 0.;
 
@@ -497,10 +523,11 @@ namespace csmp
             CheckRowSumB2 += B(2,j);
         }
 
-        cout << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
+        if ( verbose_ ) cout << "\nB.CheckRowSum(2) = " << CheckRowSumB2 << endl;
         _equal( CheckRowSumB2, RowSumB2, 1E-6 );
 
         //Testing Zero functions
+        if ( verbose_ ) {
             cout << "\nTesting Zero functions" << endl;
             cout << "======================" << endl;
 
@@ -509,8 +536,10 @@ namespace csmp
             cout << "----------------" << endl;
 
             cout << "\nB.ZeroCol(2)";
+          }
             B.ZeroCol(2);
-            B.Out();
+    
+          if ( verbose_ ) B.Out();
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -518,12 +547,14 @@ namespace csmp
             }
 
             //ZeroRow
-            cout << "\nMatrix ZeroRow()" << endl;
-            cout << "----------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nMatrix ZeroRow()" << endl;
+                cout << "----------------" << endl;
 
-            cout << "\nB.ZeroRow(2)";
+                cout << "\nB.ZeroRow(2)";
+              }
             B.ZeroRow(2);
-            B.Out();
+            if ( verbose_ ) B.Out();
 
             for ( int j = 0; j < 4; j++ )
             {
@@ -531,12 +562,14 @@ namespace csmp
             }
 
             //Zero
-            cout << "\nMatrix Zero()" << endl;
-            cout << "-------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nMatrix Zero()" << endl;
+                cout << "-------------" << endl;
 
-            cout << "\nB.Zero()";
+                cout << "\nB.Zero()";
+              }
             B.Zero();
-            B.Out();
+            if ( verbose_ ) B.Out();
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -548,6 +581,7 @@ namespace csmp
 
 
         //Testing operator= ()
+        if ( verbose_ ) {
             cout << "\nTesting operator= ()" << endl;
             cout << "====================" << endl;
 
@@ -559,8 +593,9 @@ namespace csmp
             B.Out();
 
             cout << "\nMatrix B = C";
+          }
             B = C;
-            B.Out();
+            if ( verbose_ ) B.Out();
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -572,6 +607,7 @@ namespace csmp
 
 
         //Testing transposed functions
+        if ( verbose_ )  {
             cout << "\nTesting transposed matrix functions" << endl;
             cout << "===================================" << endl;
 
@@ -581,10 +617,12 @@ namespace csmp
 
             cout << "\nTest matrix A";
             A.Out();
-
+          }
             A.Transposed(F);
-            cout << "\nF = A^T = A.Transposed(F)";
-            F.Out();
+            if ( verbose_ )  {
+                cout << "\nF = A^T = A.Transposed(F)";
+                F.Out();
+              }
 
             for ( int i = 0; i < 4; i++ )
             {
@@ -595,16 +633,17 @@ namespace csmp
             }
 
             //MultiplyWithTransposedOf
-            cout << "\nMatrix MultiplyWithTransposedOf()" << endl;
-            cout << "---------------------------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nMatrix MultiplyWithTransposedOf()" << endl;
+                cout << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+                cout << "\nTest matrix A";
+                A.Out();
 
-
-            cout << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
+                cout << "\nF = A B^T = A.MultiplyWithTransposedOf( B, F )";
+              }
             A.MultiplyWithTransposedOf( B, F );
-            F.Out();
+            if ( verbose_ ) F.Out();
 
             ResF( 0, 0 ) = 13.;
             ResF( 0, 1 ) = 13.;
@@ -635,18 +674,20 @@ namespace csmp
             }
 
             //MultiplyTransposedOfWith
-            cout << "\nMatrix MultiplyTransposedOfWith()" << endl;
-            cout << "---------------------------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nMatrix MultiplyTransposedOfWith()" << endl;
+                cout << "---------------------------------" << endl;
 
-            cout << "\nTest matrix A";
-            A.Out();
+                cout << "\nTest matrix A";
+                A.Out();
 
-            cout << "\nTest matrix B";
-            B.Out();
+                cout << "\nTest matrix B";
+                B.Out();
 
-            cout << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
+                cout << "\nG = A^T B = A.MultiplyTransposedOfWith( B, G )";
+              }
             A.MultiplyTransposedOfWith( B, G );
-            G.Out();
+            if ( verbose_ ) G.Out();
 
             ResG( 0, 0 ) = 7.3;
             ResG( 0, 1 ) = 7.3;
@@ -678,6 +719,7 @@ namespace csmp
 
 
         //Testing operator= ( TensorVariable )
+        if ( verbose_ )  {
             cout << "\nTesting operator= ( TensorVariable )" << endl;
             cout << "====================================" << endl;
 
@@ -686,35 +728,38 @@ namespace csmp
             cout << "-------------------------------" << endl;
 
             cout << "\n3U test matrix DenseMatrix3x3";
+          }
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
-            cout << "\n1U tensor variable TensorVariable1U";
+            if ( verbose_ ) cout << "\n1U tensor variable TensorVariable1U";
             TensorVariable1U.Identity();
-            TensorVariable1U.Out();
+            if ( verbose_ ) TensorVariable1U.Out();
 
-            cout << "\nDenseMatrix3x3 = TensorVariable1U";
+            if ( verbose_ ) cout << "\nDenseMatrix3x3 = TensorVariable1U";
             DenseMatrix3x3 = TensorVariable1U;
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
             _equal( DenseMatrix3x3(0,0), 1., 1E-6 );
 
             //Operator= ( TensorVariable 2U )
-            cout << "\nOperator= ( TensorVariable 2U )" << endl;
-            cout << "-------------------------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nOperator= ( TensorVariable 2U )" << endl;
+                cout << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix DenseMatrix3x3";
+                cout << "\n3U test matrix DenseMatrix3x3";
+              }
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
-            cout << "\n2U tensor variable TensorVariable2U";
+            if ( verbose_ ) cout << "\n2U tensor variable TensorVariable2U";
             TensorVariable2U.Identity();
             TensorVariable2U += 1.;
-            TensorVariable2U.Out();
+            if ( verbose_ ) TensorVariable2U.Out();
 
-            cout << "\nDenseMatrix3x3 = TensorVariable2U";
+            if ( verbose_ ) cout << "\nDenseMatrix3x3 = TensorVariable2U";
             DenseMatrix3x3 = TensorVariable2U;
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
             for ( int i = 0; i < 2; i++ )
             {
@@ -727,21 +772,23 @@ namespace csmp
 
 
             //Operator= ( TensorVariable 3U )
-            cout << "\nOperator= ( TensorVariable 3U )" << endl;
-            cout << "-------------------------------" << endl;
+            if ( verbose_ ) {
+                cout << "\nOperator= ( TensorVariable 3U )" << endl;
+                cout << "-------------------------------" << endl;
 
-            cout << "\n3U test matrix DenseMatrix3x3";
+                cout << "\n3U test matrix DenseMatrix3x3";
+              }
             DenseMatrix3x3.Fill(5.);
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
-            cout << "\n3U tensor variable TensorVariable3U";
+            if ( verbose_ ) cout << "\n3U tensor variable TensorVariable3U";
             TensorVariable3U.Identity();
             TensorVariable3U += 2.;
-            TensorVariable3U.Out();
+            if ( verbose_ ) TensorVariable3U.Out();
 
-            cout << "\nDenseMatrix3x3 = TensorVariable3U";
+            if ( verbose_ ) cout << "\nDenseMatrix3x3 = TensorVariable3U";
             DenseMatrix3x3 = TensorVariable3U;
-            DenseMatrix3x3.Out();
+            if ( verbose_ ) DenseMatrix3x3.Out();
 
             for ( int i = 0; i < 3; i++ )
             {
@@ -753,6 +800,7 @@ namespace csmp
             }
 
             //Testing operator*= ( TensorVariable )
+            if ( verbose_ ) {
                 cout << "\nTesting operator*= ( TensorVariable )" << endl;
                 cout << "====================================" << endl;
 
@@ -761,33 +809,36 @@ namespace csmp
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+              }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 cout << "\nDenseMatrix3x3 *= ( 5 )";
                 DenseMatrix3x3 *= ( 5 );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 _equal( DenseMatrix3x3(0,0), 25., 1E-6 );
 
                 //Operator *= ( TensorVariable 2U )
-                cout << "\nOperator *= ( TensorVariable 2U )" << endl;
-                cout << "-------------------------------" << endl;
+                if ( verbose_ ) {
+                    cout << "\nOperator *= ( TensorVariable 2U )" << endl;
+                    cout << "-------------------------------" << endl;
 
-                cout << "\n3U test matrix DenseMatrix3x3";
+                    cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n2U tensor variable TensorVariable2U";
+                if ( verbose_ ) cout << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U.Identity();
                 TensorVariable2U += 1.;
-                TensorVariable2U.Out();
+                if ( verbose_ ) TensorVariable2U.Out();
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable2U )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3 *= ( TensorVariable2U )";
                 DenseMatrix3x3 *= ( TensorVariable2U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -799,22 +850,24 @@ namespace csmp
 
 
                 //Operator*= ( TensorVariable 3U )
+                if ( verbose_ ) {
                 cout << "\nOperator*= ( TensorVariable 3U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                 }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n3U tensor variable TensorVariable3U";
+                if ( verbose_ ) cout << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U.Identity();
                 TensorVariable3U += 2.;
-                TensorVariable3U.Out();
+                if ( verbose_ ) TensorVariable3U.Out();
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
                 DenseMatrix3x3 *= ( TensorVariable3U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -825,6 +878,7 @@ namespace csmp
                 }
 
             //Testing operator*= ( VectorVariable )
+            if ( verbose_ ) {
                 cout << "\nTesting operator*= ( VectorVariable )" << endl;
                 cout << "====================================" << endl;
 
@@ -833,18 +887,20 @@ namespace csmp
                 cout << "-------------------------------" << endl;
 
                 cout << "\n2U test matrix DenseMatrix2x2";
+               }
+    
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n2U Vector variable VectorVariable2U";
+                if ( verbose_ ) cout << "\n2U Vector variable VectorVariable2U";
                 VectorVariable2U = 5;
                 VectorVariable2U += 1.;
-                VectorVariable2U.Out();
+                if ( verbose_ ) VectorVariable2U.Out();
 
-                cout << "\nDenseMatrix2x2 *= ( VectorVariable2U )";
+                if ( verbose_ ) cout << "\nDenseMatrix2x2 *= ( VectorVariable2U )";
                 DenseMatrix3x3 *= ( VectorVariable2U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -854,22 +910,24 @@ namespace csmp
 
 
                 //Operator*= ( VectorVariable 3U )
+                if ( verbose_ ) {
                 cout << "\nOperator*= ( VectorVariable 3U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                 }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n3U Vector variable VectorVariable3U";
+                if ( verbose_ ) cout << "\n3U Vector variable VectorVariable3U";
                 VectorVariable3U = 5;
                 VectorVariable3U += 2.;
-                VectorVariable3U.Out();
+                if ( verbose_ ) VectorVariable3U.Out();
 
-                cout << "\nDenseMatrix3x3 *= ( VectorVariable3U )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3 *= ( VectorVariable3U )";
                 DenseMatrix3x3 *= ( VectorVariable3U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -878,6 +936,7 @@ namespace csmp
 
 
             //AssignToDiagonal ( TensorVariable )
+            if ( verbose_ ) {
                 cout << "\nTesting AssignToDiagonal ( VectorVariable )" << endl;
                 cout << "===========================================" << endl;
 
@@ -886,13 +945,14 @@ namespace csmp
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+             }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( 2, 6. )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3.AssignToDiagonal ( 2, 6. )";
                 DenseMatrix3x3.AssignToDiagonal(2, 6.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0, j = 0; i < 2; i++, j++ )
                 {
@@ -900,42 +960,46 @@ namespace csmp
                 }
 
                 //AssignToDiagonal ( VectorVariable1U )
+                if ( verbose_ ) {
                 cout << "\nAssignToDiagonal ( VectorVariable 1U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n1U test matrix DenseMatrix1x1";
+                  }
                 DenseMatrix3x3.Resize(1,1);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n1U Vector variable VectorVariable1U";
+                if ( verbose_ ) cout << "\n1U Vector variable VectorVariable1U";
                 VectorVariable1U = 5;
                 VectorVariable1U += 6.;
-                VectorVariable1U.Out();
+                if ( verbose_ ) VectorVariable1U.Out();
 
-                cout << "\nDenseMatrix1x1.AssignToDiagonal ( VectorVariable1U )";
+                if ( verbose_ ) cout << "\nDenseMatrix1x1.AssignToDiagonal ( VectorVariable1U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable1U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 _equal( DenseMatrix3x3(0,0), 11., 1E-6 );
 
                 //AssignToDiagonal ( VectorVariable2U )
+                if ( verbose_ ) {
                 cout << "\nAssignToDiagonal ( VectorVariable 2U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix2x2";
+                  }
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Fill(5.);
                 DenseMatrix3x3.Out();
 
-                cout << "\n2U Vector variable VectorVariable2U";
+                if ( verbose_ ) cout << "\n2U Vector variable VectorVariable2U";
                 VectorVariable2U = 9;
                 VectorVariable2U += 1.;
-                VectorVariable2U.Out();
+                if ( verbose_ ) VectorVariable2U.Out();
 
-                cout << "\nDenseMatrix2x2.AssignToDiagonal ( VectorVariable2U )";
+                if ( verbose_ ) cout << "\nDenseMatrix2x2.AssignToDiagonal ( VectorVariable2U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable2U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0, j = 0; i < 2; i++, j++ )
                 {
@@ -944,22 +1008,24 @@ namespace csmp
 
 
                 //AssignToDiagonal ( VectorVariable3U )
+                if ( verbose_ ) {
                 cout << "\nAssignToDiagonal ( VectorVariable3U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n3U Vector variable VectorVariable3U";
+                if ( verbose_ ) cout << "\n3U Vector variable VectorVariable3U";
                 VectorVariable3U = 8;
                 VectorVariable3U += 2.;
-                VectorVariable3U.Out();
+                if ( verbose_ ) VectorVariable3U.Out();
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( VectorVariable3U )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3.AssignToDiagonal ( VectorVariable3U )";
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable3U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0, j = 0 ; i < 3; i++, j++ )
                 {
@@ -968,15 +1034,17 @@ namespace csmp
 
 
                 //AssignToDiagonal ( size_t diag elmnts, double64 )
+                if ( verbose_ ) {
                 cout << "\nAssignToDiagonal ( size_t diag elmnts, double64 )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(5.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\nDenseMatrix3x3.AssignToDiagonal ( size_t diag elmnts, double64 )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3.AssignToDiagonal ( size_t diag elmnts, double64 )";
                 DenseMatrix3x3.AssignToDiagonal(3, 10.);
                 DenseMatrix3x3.Out();
 
@@ -987,6 +1055,7 @@ namespace csmp
 
 
             //RowCondenseTo( vector<double64> )
+            if ( verbose_ ) {
                 cout << "\nTesting RowCondenseTo( vector<double64> )" << endl;
                 cout << "===========================================" << endl;
                 //RowCondenseTo ( vector<double64> )
@@ -994,31 +1063,33 @@ namespace csmp
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+             }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Fill(9.);
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 vector<double64>::const_iterator itx(x.begin());
 
-                cout << "Test vector x";
+                if ( verbose_ ) cout << "Test vector x";
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx;
+                    if ( verbose_ ) cout << "\n" << *itx;
                 }
 
-                cout << "\n\nDenseMatrix3x3.RowCondenseTo( x )";
+                if ( verbose_ ) cout << "\n\nDenseMatrix3x3.RowCondenseTo( x )";
                 DenseMatrix3x3.RowCondenseTo( x );
 
                 for (vector<double64>::const_iterator
                      itx = x.begin(); itx != x.end(); itx++)
                 {
-                    cout << "\n" << *itx ;
+                    if ( verbose_ ) cout << "\n" << *itx ;
                     _equal( *itx, 27., 1E-6 );
                 }
 
-                cout << endl;
+            if ( verbose_ ) {
+               cout << endl;
 
 
             //ExportTo ( TensorVariable )
@@ -1030,17 +1101,18 @@ namespace csmp
                 cout << "-------------------------------" << endl;
 
                 cout << "\n2U test matrix DenseMatrix2x2";
+            }
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n2U tensor variable TensorVariable2U";
+                if ( verbose_ ) cout << "\n2U tensor variable TensorVariable2U";
                 TensorVariable2U = 0.;
-                TensorVariable2U.Out();
+                if ( verbose_ ) TensorVariable2U.Out();
 
-                cout << "\nDenseMatrix2x2 *= ( TensorVariable2U )";
+                if ( verbose_ ) cout << "\nDenseMatrix2x2 *= ( TensorVariable2U )";
                 DenseMatrix3x3.ExportTo(TensorVariable2U);
-                TensorVariable3U.Out();
+                if ( verbose_ ) TensorVariable3U.Out();
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1048,21 +1120,23 @@ namespace csmp
                 }
 
                 //ExportTo ( TensorVariable 3U )
+                if ( verbose_ ) {
                 cout << "\n\nExportTo ( TensorVariable 3U )" << endl;
                 cout << "-------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                 }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "\n3U tensor variable TensorVariable3U";
+                if ( verbose_ ) cout << "\n3U tensor variable TensorVariable3U";
                 TensorVariable3U = 0.;
-                TensorVariable3U.Out();
+                if ( verbose_ ) TensorVariable3U.Out();
 
-                cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
+                if ( verbose_ ) cout << "\nDenseMatrix3x3 *= ( TensorVariable3U )";
                 DenseMatrix3x3.ExportTo(TensorVariable3U);
-                TensorVariable3U.Out();
+                if ( verbose_ ) TensorVariable3U.Out();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1070,6 +1144,7 @@ namespace csmp
                 }
 
             //Assign ( size_t , Point )
+            if ( verbose_ ) {
                 cout << "\n\nTesting Assign ( size_t , Point )" << endl;
                 cout << "===========================================" << endl;
 
@@ -1078,36 +1153,39 @@ namespace csmp
                 cout << "---------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+              }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
                 DenseMatrix3x3.Out();
 
-                cout << "Point Point<1U>";
+                if ( verbose_ ) cout << "Point Point<1U>";
                 Point1U= 13.;
-                Point1U.Out();
+                if ( verbose_ ) Point1U.Out();
 
-                cout << "\nAssignRow( 1, Point1U )";
+                if ( verbose_ ) cout << "\nAssignRow( 1, Point1U )";
                 DenseMatrix3x3.AssignRow( 1, Point1U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 _equal( DenseMatrix3x3(1,0), 13., 1E-6 );
 
                 //AssignRow ( size_t i, Point<2U> )
+                if ( verbose_ ) {
                 cout << "AssignRow ( size_t i, Point<2U> )" << endl;
                 cout << "---------------------------------" << endl;
 
                 cout << "\n2U test matrix DenseMatrix2x2";
+                  }
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Zero();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "Point Point<2U>";
+                if ( verbose_ ) cout << "Point Point<2U>";
                 Point2U = 11.;
-                Point2U.Out();
+                if ( verbose_ ) Point2U.Out();
 
-                cout << "\nAssignRow( 1, Point2U )";
+                if ( verbose_ ) cout << "\nAssignRow( 1, Point2U )";
                 DenseMatrix3x3.AssignRow( 1, Point2U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1115,21 +1193,23 @@ namespace csmp
                 }
 
                 //AssignRow ( size_t i, Point<3U> )
+                if ( verbose_ ) {
                 cout << "\nAssignRow ( size_t i, Point<3U> )" << endl;
                 cout << "---------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "Point Point<3U>";
+                if ( verbose_ ) cout << "Point Point<3U>";
                 Point3U.Set (13., 12., 11.);
-                Point3U.Out();
+                if ( verbose_ ) Point3U.Out();
 
-                cout << "\nAssignRow( 1, Point2U )";
+                if ( verbose_ ) cout << "\nAssignRow( 1, Point2U )";
                 DenseMatrix3x3.AssignRow( 1, Point3U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1137,15 +1217,17 @@ namespace csmp
                 }
 
                 //AssignCol ( size_t i, Point<1U> )
+                if ( verbose_ ) {
                 cout << "\nAssignCol ( size_t i, Point<1U> )" << endl;
                 cout << "---------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "Point Point<1U>";
+                if ( verbose_ ) cout << "Point Point<1U>";
                 Point1U= 13.;
                 Point1U.Out();
 
@@ -1156,21 +1238,23 @@ namespace csmp
                 _equal( DenseMatrix3x3(0,1), 13., 1E-6 );
 
                 //AssignCol ( size_t i, Point<2U> )
+                if ( verbose_ ) {
                 cout << "\nAssignCol ( size_t i, Point<2U> )" << endl;
                 cout << "---------------------------------" << endl;
 
                 cout << "\n2U test matrix DenseMatrix2x2";
+                 }
                 DenseMatrix3x3.Resize(2,2);
                 DenseMatrix3x3.Zero();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "Point Point<2U>";
+                if ( verbose_ ) cout << "Point Point<2U>";
                 Point2U = 11.;
-                Point2U.Out();
+                if ( verbose_ ) Point2U.Out();
 
-                cout << "\nAssignCol( 1, Point2U )";
+                if ( verbose_ ) cout << "\nAssignCol( 1, Point2U )";
                 DenseMatrix3x3.AssignCol( 1, Point2U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 2; i++ )
                 {
@@ -1178,21 +1262,23 @@ namespace csmp
                 }
 
                 //AssignCol ( size_t i, Point<3U> )
+                if ( verbose_ ) {
                 cout << "\nAssignCol ( size_t i, Point<3U> )" << endl;
                 cout << "---------------------------------" << endl;
 
                 cout << "\n3U test matrix DenseMatrix3x3";
+                 }
                 DenseMatrix3x3.Resize(3,3);
                 DenseMatrix3x3.Identity();
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
-                cout << "Point Point<3U>";
+                if ( verbose_ ) cout << "Point Point<3U>";
                 Point3U.Set (13., 12., 11.);
-                Point3U.Out();
+                if ( verbose_ ) Point3U.Out();
 
-                cout << "\nAssignCol( 1, Point2U )";
+                if ( verbose_ ) cout << "\nAssignCol( 1, Point2U )";
                 DenseMatrix3x3.AssignCol( 2, Point3U );
-                DenseMatrix3x3.Out();
+                if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0; i < 3; i++ )
                 {
@@ -1201,6 +1287,7 @@ namespace csmp
 
 
                 //Testing operator*= ( Point<1U> )
+                if ( verbose_ ) {
                     cout << "\nTesting operator*= ( Point<1U> )" << endl;
                     cout << "====================================" << endl;
 
@@ -1209,84 +1296,96 @@ namespace csmp
                     cout << "-------------------------------" << endl;
 
                     cout << "\n3U test matrix DenseMatrix3x3";
+                  }
                     DenseMatrix3x3.Resize(1,1);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
+                    if ( verbose_ ) DenseMatrix3x3.Out();
 
-                    cout << "\nPoint<1U> Point1U";
-                    Point1U.Out();
+                    if ( verbose_ ) cout << "\nPoint<1U> Point1U";
+                    if ( verbose_ ) Point1U.Out();
 
-                    cout << "\nDenseMatrix3x3 *= ( Point1U )";
+                    if ( verbose_ ) cout << "\nDenseMatrix3x3 *= ( Point1U )";
                     DenseMatrix3x3 *= ( Point1U );
-                    DenseMatrix3x3.Out();
+                    if ( verbose_ ) DenseMatrix3x3.Out();
 
                     _equal( DenseMatrix3x3(0,0), 65., 1E-6 );
 
                     //Operator *= ( Point<2U> )
+                    if ( verbose_ ) {
                     cout << "\nOperator *= ( Point<2U> )" << endl;
                     cout << "-------------------------------" << endl;
 
                     cout << "\n3U test matrix DenseMatrix3x3";
+                     }
                     DenseMatrix3x3.Resize(2,2);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
-
+                    if ( verbose_ ) DenseMatrix3x3.Out();
+                    if ( verbose_ ) {
                     cout << "\nPoint<2U> Point2U";
                     Point2U.Out();
 
                     cout << "\nDenseMatrix3x3 *= ( Point2U )";
+                      }
                     DenseMatrix3x3 *= ( Point2U );
-                    DenseMatrix3x3.Out();
+                    if ( verbose_ ) DenseMatrix3x3.Out();
 
                     for ( int i = 0; i < 2; i++ )
                         _equal( DenseMatrix3x3(i,0), 110., 1E-6 );
 
 
                     //Operator*= ( Point<3U> )
+                    if ( verbose_ ) {
                     cout << "\nOperator*= ( Point<3U> )" << endl;
                     cout << "-------------------------------" << endl;
 
                     cout << "\n3U test matrix DenseMatrix3x3";
+                     }
                     DenseMatrix3x3.Resize(3,3);
                     DenseMatrix3x3.Fill(5.);
-                    DenseMatrix3x3.Out();
+                    if ( verbose_ ) DenseMatrix3x3.Out();
 
+                    if ( verbose_ ) {
                     cout << "\nPoint<3U> Point3U";
                     Point3U.Out();
 
                     cout << "\nDenseMatrix3x3 *= ( Point3U )";
+                      }
                     DenseMatrix3x3 *= ( Point3U );
-                    DenseMatrix3x3.Out();
+                    if ( verbose_ ) DenseMatrix3x3.Out();
 
                     for ( int i = 0; i < 3; i++ )
                         _equal( DenseMatrix3x3(i,0), 180., 1E-6 );
 
 
                 //Testing L1 matrix norm()
+                if ( verbose_ ) {
                     cout << "\nTesting NormL1()" << endl;
                     cout << "================" << endl;
 
                         cout << "\n3U test matrix A";
+                  }
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        if ( verbose_ ) A.Out();
                         double64 normL1 = A.NormL1();
 
-                        cout << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
+                        if ( verbose_ ) cout << "\nThe maximum absolute column sum norm of test matrix A is " << normL1 << endl;
                         _equal( normL1, 201., 1E-6 );
 
 
                 //Testing L infinity matrix norm()
+                if ( verbose_ ) {
                     cout << "\nTesting NormL_Infinity()" << endl;
                     cout << "================" << endl;
 
                         cout << "\n3U test matrix A";
+                  }
                         A(2,2) = -99.;
                         A(2,1) = -199.;
-                        A.Out();
+                        if ( verbose_ ) A.Out();
                         double64 normInf = A.NormL_Infinity();
 
-                        cout << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
+                        if ( verbose_ ) cout << "\nThe maximum absolute row sum norm of test matrix A is " << normInf << endl;
                         _equal( normInf, 303., 1E-6 );
 
 /*

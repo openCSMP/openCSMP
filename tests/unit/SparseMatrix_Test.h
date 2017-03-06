@@ -1,22 +1,17 @@
-
-#ifndef SparseMatrix_Test_H
-#define SparseMatrix_Test_H
+#ifndef SPARSE_MATRIX_TEST_H
+#define SPARSE_MATRIX_TEST_H
 
 #include "Test.h"
-#include "CSMP_number_types.h"
 #include "SparseMatrix.h"
-#include "vector"
 #include "TensorVariable.h"
 #include "Point.h"
-#include "Matrix.h"
-#include <iomanip>
 
 namespace csmp
 {
     class SparseMatrix_Test : public Test
     {
       public:
-        SparseMatrix_Test();
+        SparseMatrix_Test( bool verbose );
         ~SparseMatrix_Test();
         void run();
         SparseMatrix A;
@@ -52,13 +47,10 @@ namespace csmp
         std::vector<double64> x, y, sol_y, solB, solD;
         std::vector<size_t> sizetVector;
 
-        double64 fTolerance;
-
-
-
-
+        double64   fTolerance;
+        const bool verbose_;
     };
 }
 
-#endif // SparseMatrix_Test_H
+#endif // SPARSE_MATRIX_TEST_H
 

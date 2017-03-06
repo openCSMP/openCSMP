@@ -53,6 +53,8 @@ PDE_Integrator_Test::PDE_Integrator_Test() {
     alg_->Add(stiff_);
 }
 
+
+
 PDE_Integrator_Test::~PDE_Integrator_Test()
 {
   if( sg_ != 0 )
@@ -64,6 +66,8 @@ PDE_Integrator_Test::~PDE_Integrator_Test()
   if( alg_ != 0 )
     delete alg_;
 }
+
+
 
 void PDE_Integrator_Test::run()
 {

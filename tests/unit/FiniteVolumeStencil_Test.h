@@ -12,7 +12,7 @@ class FiniteElement;
 
 class FiniteVolumeStencil_Test : public Test {
   public:
-    FiniteVolumeStencil_Test();
+    FiniteVolumeStencil_Test( bool verbose );
     ~FiniteVolumeStencil_Test();
     void run(); // runs all the tests for the class (register other methods)
     void displayReferenceCoordinates();
@@ -33,6 +33,7 @@ class FiniteVolumeStencil_Test : public Test {
     template<size_t dim>
 	  std::vector< Point<dim> > GetPointsOfFacet( const size_t& iFacet, const CSMP_FEM_TYPE& elType, 
                                                 const FiniteVolumeStencil<dim>& fvs, const FiniteElement & fe );
+    const bool verbose_;
 };
 
 

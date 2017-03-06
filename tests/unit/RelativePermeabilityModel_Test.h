@@ -8,12 +8,11 @@
 namespace csmp {
 
 template<size_t> class PropertyDatabase;
-template<size_t> class TwoPhaseModel;
 template<size_t> class Model;
 
 class RelativePermeabilityModel_Test : public Test {
   public:
-    RelativePermeabilityModel_Test();
+    RelativePermeabilityModel_Test( bool verbose );
     virtual ~RelativePermeabilityModel_Test();
     virtual void run();
     void Test( TwoPhaseModel<1U>& relperm, bool extended_property_set );                      
@@ -23,6 +22,7 @@ class RelativePermeabilityModel_Test : public Test {
     void InitializeFlowProperties();
 
     Model<1U>*  model_ptr_;
+    const bool verbose_;
 };
 
 } 

@@ -4,8 +4,8 @@ using namespace std;
 
 namespace csmp {
 
-Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test() :
-    tol_(0.001)
+Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
+ : tol_(0.001), verbose_(verbose), sg_(nullptr)
 {
   const bool       isoparametric(true);
   ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
@@ -13,13 +13,15 @@ Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test() :
   ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
 
   // Building Region object from ANSYS data files
-  cout <<"Reading mesh..."<<endl;
+  if ( verbose_ ) cout <<"Reading mesh..."<<endl;
   string mesh_name("pde_integrator_test");
   const bool binary_file( true );
   const bool irregular_mesh( false );
   mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
-  cout <<"Finished reading mesh..."<<endl;
-  cout <<"Building Model..."<<endl;
+  if ( verbose_ ) {
+      cout <<"Finished reading mesh..."<<endl;
+      cout <<"Building Model..."<<endl;
+    }
   sg_= new Model<2U> ( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");
 
     // Set values on nodes
@@ -32,8 +34,7 @@ Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test() :
 
 Integral_var_NT_rhsop_N_dV_Test::~Integral_var_NT_rhsop_N_dV_Test()
 {
-    if(sg_!=NULL)
-        delete sg_;
+    delete sg_;
 }
 
 void Integral_var_NT_rhsop_N_dV_Test::run() {
@@ -184,7 +185,7 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     unsigned int i = 0;
     for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
         (*it)->Read(key,sc);
-        cout << "Node " << i << ": " << sc() << endl;
+        if ( verbose_ ) cout << "Node " << i << ": " << sc() << endl;
         ++i;
     }
 }
@@ -235,4 +236,4 @@ void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalRHS(vector<double64>& rhs, 
     
 }
 
-} // csp
+} // csmp

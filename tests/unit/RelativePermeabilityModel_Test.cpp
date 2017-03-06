@@ -23,19 +23,18 @@
 #include "PropertyHandle.h"
 #include "CSMP_highLevelUtilities.h"
 
-
 using namespace std;
 
 #define DIM 1U
 
 namespace csmp {
 
-RelativePermeabilityModel_Test::RelativePermeabilityModel_Test()
- : model_ptr_(0)
+RelativePermeabilityModel_Test::RelativePermeabilityModel_Test( bool verbose )
+ : model_ptr_(0), verbose_(verbose)
  {
     const uint32  N_ELEMENTS(100);
     model_ptr_ = new Model1D<1U>("Model1D", "CSMP-2phase-variables_upscaled.txt", 50., N_ELEMENTS );
-    cerr << "Number of elemnts: " << model_ptr_ -> Mesh().Elements() << endl;
+    if ( verbose_ ) cerr << "Number of elemnts: " << model_ptr_ -> Mesh().Elements() << endl;
     // making some groups: rock (elements 1-40, 61-100) and fracture (elements 41-60)
     vector<size_t>   elms;  elms.reserve( N_ELEMENTS );
     for ( uint32 i=0; i<40; i++ ) elms.push_back(i);
@@ -159,7 +158,7 @@ void RelativePermeabilityModel_Test::run()
         pc_data.close();
 
         relperm_model = new Experimental2PhaseModel<DIM>( model_ptr_->Database(),
-                                                                  "krw_data", "kro_data", "pc_data" );
+                                                         "krw_data", "kro_data", "pc_data" );
         Test( *relperm_model, true );
         delete relperm_model;
 
@@ -329,14 +328,16 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          // ---------------------------------------------
          const double64 sw(relperm.Saturation(1U));
          if ( sw < 0. or sw > 1. ) {
-              cerr <<"\nRelativePermeabilityModel_Test::Test:(";
-              cerr << typeid( relperm ).name() <<") sw out of range. Testing cannot be performed."<< endl;
+              if ( verbose_ ) {
+                  cerr <<"\nRelativePermeabilityModel_Test::Test:(";
+                  cerr << typeid( relperm ).name() <<") sw out of range. Testing cannot be performed."<< endl;
+                }
               return;
            }
          ofs << relperm.Saturation(1U) <<"\t"; 
 
          if ( relperm.EffectiveSaturation() < 0. or 1. < relperm.EffectiveSaturation() ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<" seff("<< sw <<") out of range."<< endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<" seff("<< sw <<") out of range."<< endl;
               value_out_of_range = true;
               _test(false);
            }
@@ -345,12 +346,12 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          // 1. test relative permeability
          // -------------------------------------------------------------------------------------------
          if ( relperm.krw_Phase() < 0. or relperm.krw_Phase() > 1. ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<"::krw("<< sw <<") out of range: "<< relperm.krw_Phase() << endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::krw("<< sw <<") out of range: "<< relperm.krw_Phase() << endl;
               value_out_of_range = true;
               _test(false);
            }
          if ( relperm.krn_Phase() < 0. or relperm.krn_Phase() > 1. ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<"::krn("<< sw <<") out of range: "<< relperm.krn_Phase() << endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::krn("<< sw <<") out of range: "<< relperm.krn_Phase() << endl;
               value_out_of_range = true;
               _test(false);
            }
@@ -363,7 +364,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          // 3. fractional flow and its saturation derivative
          // -------------------------------------------------------------------------------------------
          if ( relperm.f_Phase(2U) < 0. or relperm.f_Phase(2U) > 1. ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<"::f_Phase("<< sw <<") out of range: "<< relperm.f_Phase(2U) << endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::f_Phase("<< sw <<") out of range: "<< relperm.f_Phase(2U) << endl;
               value_out_of_range = true;
               _test(false);
            }
@@ -371,7 +372,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          
          if ( extended_property_set ) { 
               if ( (is_nan_test_failed=isnan(relperm.dfds())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::dfds("<< sw <<") is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::dfds("<< sw <<") is NaN (erratic value)."<< endl;
                    _test(false);
                 }
               ofs << relperm.dfds() <<"\t";
@@ -380,14 +381,14 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          // 4. G and derivative of G-function
          // -------------------------------------------------------------------------------------------
          if ( (is_nan_test_failed=isnan(relperm.G())) ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<"::G("<< sw <<") is NaN (erratic value)."<< endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::G("<< sw <<") is NaN (erratic value)."<< endl;
               _test(false);
            }
          ofs << relperm.G() <<"\t";
 
          if ( extended_property_set ) { 
               if ( (is_nan_test_failed=isnan(relperm.dGds())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::dGds("<< sw <<") is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::dGds("<< sw <<") is NaN (erratic value)."<< endl;
                    _test(false);
                 }
               ofs << relperm.dGds() <<"\t";
@@ -396,14 +397,14 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          // 5. capillary pressure and its saturation derivative
          // -------------------------------------------------------------------------------------------
          if ( (is_nan_test_failed=isnan(relperm.pc_Phase())) or relperm.pc_Phase() > 1e9 ) { // 1GPa
-              cerr <<"\n"<< typeid( relperm ).name() <<"::pc_Phase("<< sw <<") is NaN (erratic value) or greater than 1 GPa."<< endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::pc_Phase("<< sw <<") is NaN (erratic value) or greater than 1 GPa."<< endl;
               _test(false);
            }
          ofs << relperm.pc_Phase() <<"\t";
 
          if ( extended_property_set ) { 
               if ( (is_nan_test_failed=isnan(relperm.dpcds_Phase())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::dpcds_Phase("<< sw <<") is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::dpcds_Phase("<< sw <<") is NaN (erratic value)."<< endl;
                    _test(false);
                 }
               ofs << relperm.dpcds_Phase() <<"\t";
@@ -414,16 +415,16 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          if ( extended_property_set ) {
               // uses fractional flow derivative  
               if ( (is_nan_test_failed=isnan(relperm.AdvectionMultiplier())) ) {
-                    cerr <<"\n"<< typeid( relperm ).name() <<"::AdvectionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
+                    if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::AdvectionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
                     _test(false);
                 }
            }
          if ( (is_nan_test_failed=isnan(relperm.DiffusionMultiplier( 2U )) ) ) {
-              cerr <<"\n"<< typeid( relperm ).name() <<"::DiffusionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
+              if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::DiffusionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
               _test(false);
            }
          if ( (is_nan_test_failed=isnan(relperm.GravityMultiplier_G())) ) {
-               cerr <<"\n"<< typeid( relperm ).name() <<"::GravityMultiplier_G("<< sw <<") is NaN (erratic value)."<< endl;
+               if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::GravityMultiplier_G("<< sw <<") is NaN (erratic value)."<< endl;
                _test(false);
            }
            
@@ -433,15 +434,15 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
 
          if ( extended_property_set ) {  
               if ( (is_nan_test_failed=isnan(relperm.GravityMultiplier_dGds())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::GravityMultiplier_dGds("<< sw <<") is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::GravityMultiplier_dGds("<< sw <<") is NaN (erratic value)."<< endl;
                    _test(false);
                 }
               if ( (is_nan_test_failed=isnan(relperm.CapillaryDiffusionMultiplier())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::CapillaryDiffusionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::CapillaryDiffusionMultiplier("<< sw <<") is NaN (erratic value)."<< endl;
                    _test(false);
                 }
               if ( (is_nan_test_failed=isnan(relperm.ShockSpeed())) ) {
-                   cerr <<"\n"<< typeid( relperm ).name() <<"::ShockSpeed() is NaN (erratic value)."<< endl;
+                   if ( verbose_ ) cerr <<"\n"<< typeid( relperm ).name() <<"::ShockSpeed() is NaN (erratic value)."<< endl;
                    _test(false);
                 }
 
@@ -463,13 +464,12 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
          (*it)->Store( satw_key, saturation );
       }
 
-
     if ( value_out_of_range ) {
-         cerr <<"\nrelative permeability model: '"<< typeid(relperm).name() <<"' Error."<< endl;
+         if ( verbose_ ) cerr <<"\nrelative permeability model: '"<< typeid(relperm).name() <<"' Error."<< endl;
          throw out_of_range("RelativePermeabilityModel_Test::Test: relperm model produces out of range values.");
       }
     if ( is_nan_test_failed ) {
-         cerr <<"\nrelative permeability model: '"<< typeid(relperm).name() <<"' Error."<< endl;
+         if ( verbose_ ) cerr <<"\nrelative permeability model: '"<< typeid(relperm).name() <<"' Error."<< endl;
          throw range_error("RelativePermeabilityModel_Test::Test: relperm model produces NaN output.");
       }
     cout <<"\nRelativePermeabilityModel_Test::Test: file '"<< relperm_model_name <<"' written successfully."<< endl; 

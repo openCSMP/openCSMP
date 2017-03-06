@@ -1,5 +1,7 @@
 #include "SplitBoundary_Test.h"
 #include "Boundary.h"
+#include "VTU_Interface.h"
+#include "ANSYS_Model.h"
 
 using namespace std;
 
@@ -255,6 +257,8 @@ void shiftRegion( Region<dim>& region, double64 xShift, double64 yShift, double6
           }
   }
 
+
+
 template<size_t dim>
 void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 line_coordinate, double64 shift, double64 eps )
   {
@@ -293,6 +297,8 @@ void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double64 lin
         }
     }
   }
+
+
 
 
 template<size_t dim>
@@ -499,6 +505,10 @@ void SplitBoundary_Test::TestSplitNodeAssignment( const Model<dim>& model )
     }
 }
 
+
+
+
+
 template<size_t dim>
 void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& test_name )
 {
@@ -536,6 +546,10 @@ void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& 
 
     return;
 }
+
+
+
+
 
 template<size_t dim>
 void SplitBoundary_Test::VisualiseSplitBoundaries( Model<dim>& model, const std::string& test_name )
@@ -593,7 +607,7 @@ void SplitBoundary_Test::VisualiseSplitBoundaries( Model<dim>& model, const std:
         }
     }
 
-    vtu.OutputDataToVTU( test_name.c_str(), outputProps, "Model", 0.0 );
+    if ( verbose_ ) vtu.OutputDataToVTU( test_name.c_str(), outputProps, "Model", 0.0 );
 
     return;
 }
@@ -652,7 +666,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
      outputProps.push_back( "element variable" );
      ScalarVariable regionValue( ANY, 0.0 );
 
-     cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
+     if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
      model.InputPropertyValue( "element variable", regionValue );
      for ( typename Model<dim>::regionIterator it = model.RegionsBegin(); it != model.RegionsEnd(); it++ )
      {
@@ -660,7 +674,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
          (*it).second.InputPropertyValue( "element variable", regionValue );
          vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).first.c_str(), 0.0 );
      }
-     vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
+     if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
      model.OutputToDisk( model_name.c_str() );
 }
@@ -691,7 +705,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
      // 1. regions
      inputFromFile( std::string(spliboundary_regions_file+"-noncontiguous-regions.txt").c_str(), regions );
 
-     cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
+     if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
      model.InputPropertyValue( "element variable", regionValue );
      for ( std::vector<string>::const_iterator it=regions.begin(); it!=regions.end(); it++ )
      {
@@ -699,7 +713,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
          model.Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
          vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
      }
-     vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
+     if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
      // Create SplitBoundaries
      for ( std::vector<string>::const_iterator it=regions.begin(); it!=regions.end(); it++ )
@@ -707,6 +721,8 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
 
      model.OutputToDisk( model_name.c_str() );
 }
+
+
 
 template<size_t dim>
 void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
@@ -740,7 +756,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
      bool discontiguous_regions(false);
      for ( set<string>::const_iterator it=interface_basic_sets.begin(); it!=interface_basic_sets.end(); ++it )
        if ( !model.IsContiguous( (*it).c_str() ) ) {
-            cerr <<"\n\tSplitBoundary_Test::PrepareModel: discovered discontiguous region: "<< (*it);
+            if ( verbose_ ) cerr <<"\n\tSplitBoundary_Test::PrepareModel: discovered discontiguous region: "<< (*it);
             discontiguous_regions = true;
          }
      if ( discontiguous_regions ){
@@ -762,15 +778,15 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
      interfaces.push_back( "interfaces" );
      outputToFile( std::string( spliboundary_regions_file + "-contiguous-regions.txt").c_str(), interfaces );
 
-     cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
+     if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
      model.InputPropertyValue( "element variable", regionValue );
      for ( std::vector<string>::const_iterator it=interfaces.begin(); it!=interfaces.end(); it++ )
      {
          regionValue += 1.0;
          model.Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
-         vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
+         if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
      }
-     vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
+     if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
      // Create SplitBoundaries
      for ( std::vector<string>::const_iterator it=interfaces.begin(); it!=interfaces.end(); it++ )
@@ -796,7 +812,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
     // reading header line printing it to screen and swallowing empty line thereafter
     char text[256];
     ifs.getline( text, 256 );
-    cout <<"\nSplitBoundary_Test::inputFromFile: file header: "<< text << endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::inputFromFile: file header: "<< text << endl;
     ifs.getline( text, 256 );
 
     int n_interfaces(0);
@@ -815,9 +831,12 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
 
     ifs.close();
 
-    cout <<"\nSplitBoundary_Test::inputFromFile: region names stored in '"<< file_name <<"' read successfully."<< endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::inputFromFile: region names stored in '"<< file_name <<"' read successfully."<< endl;
 
  } // end inputFromFile
+
+
+
 
 // input name of regions to split
 template<size_t dim>
@@ -825,7 +844,7 @@ void SplitBoundary_Test::etablishContiguosRegionsList( Model<dim>& model,
                                                        const std::set<string>& interface_basic_set,
                                                        std::set<string>& interface_sets )
  {
-    cout <<"\nSplitBoundary_Test::etablishContiguosRegionsList:"<< endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::etablishContiguosRegionsList:"<< endl;
 
     if ( !interface_sets.empty() )
         interface_sets.clear();
@@ -845,7 +864,7 @@ void SplitBoundary_Test::etablishContiguosRegionsList( Model<dim>& model,
                  break;
              }
       }
-    cout <<"\n\n";
+    if ( verbose_ ) cout <<"\n\n";
 
  } // end inputFromFile
 
@@ -867,7 +886,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
     // reading header line printing it to screen and swallowing empty line thereafter
     char text[256];
     ifs.getline( text, 256 );
-    cout <<"\nSplitBoundary_Test::inputFromFile: file header: "<< text << endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::inputFromFile: file header: "<< text << endl;
     ifs.getline( text, 256 );
 
     int n_interfaces(0);
@@ -879,16 +898,19 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
     for ( int n=0; n<n_interfaces; n++ ) {
          ifs >> interface_name;
          if ( !interface_name.empty() )
-             interfaces.push_back(interface_name);
+           interfaces.push_back(interface_name);
          else
-             throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
+           throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name.");
       }
 
     ifs.close();
 
-    cout <<"\nSplitBoundary_Test::inputFromFile: region names stored in '"<< file_name <<"' read successfully."<< endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::inputFromFile: region names stored in '"<< file_name <<"' read successfully."<< endl;
 
  } // end inputFromFile
+
+
+
 
 
 // write contiguous regions
@@ -911,7 +933,7 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
     ofs <<"\n";
     ofs.close();
 
-    cout <<"\nSplitBoundary_Test::outputToFile: '"<< file_name <<"' written successfully."<< endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::outputToFile: '"<< file_name <<"' written successfully."<< endl;
 
  } // end outputToFile
 
@@ -935,26 +957,9 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
     ofs <<"\n";
     ofs.close();
 
-    cout <<"\nSplitBoundary_Test::outputToFile: '"<< file_name <<"' written successfully."<< endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test::outputToFile: '"<< file_name <<"' written successfully."<< endl;
 
  } // end outputToFile
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -977,7 +982,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
     dimension += ostr.str();
     dimension += "D";
 
-    std::cerr << "\nStart "<<dimension<<" SplitBoundary Test: SplitBoundary between Regions\n";
+    if ( verbose_ ) std::cerr << "\nStart "<<dimension<<" SplitBoundary Test: SplitBoundary between Regions\n";
 
     std::string test_name( "SPLITBOUNDARY_TEST_BETWEEN_REGIONS_");
     test_name += dimension;
@@ -1001,15 +1006,14 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
                               false, true, true, true );
   
     // validating the model
-    cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the regions:";
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the regions:";
     for ( auto it=modelIN.RegionsBegin(); it!=modelIN.RegionsEnd(); it++ )
-      cout <<"\n\tboundary: "<< (*it).first;
-    cout << endl;
-    cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the boundaries:";
+      if ( verbose_ ) cout <<"\n\tboundary: "<< (*it).first;
+    if ( verbose_ ) cout << endl;
+    if ( verbose_ ) cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the boundaries:";
     for ( auto it=modelIN.BoundariesBegin(); it!=modelIN.BoundariesEnd(); it++ )
-      cout <<"\n\tboundary: "<< (*it).first;
-    cout << endl;
-  
+      if ( verbose_ ) cout <<"\n\tboundary: "<< (*it).first;
+    if ( verbose_ ) cout << endl;
   
     // Create SplitBoundaries
     modelIN.InsertSplitBoundary( "ZONE1", "ZONE2", false /* do not create region between */ );
@@ -1027,8 +1031,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
     PullApartSplitboundaries( model, displacement );
     VisualiseSplitBoundaries( model, test_name );
 
-    std::cerr << "\nFinish "<<dimension<<" SplitBoundary Test: SplitBoundary between Regions\n";
-
+    if ( verbose_ ) std::cerr << "\nFinish "<<dimension<<" SplitBoundary Test: SplitBoundary between Regions\n";
 }
 
 
@@ -1048,7 +1051,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions()
     dimension += ostr.str();
     dimension += "D";
 
-    std::cerr << "\nStart "<<dimension<<" SplitBoundary Test: SplitBoundary around Regions\n";
+    if ( verbose_ ) std::cerr << "\nStart "<<dimension<<" SplitBoundary Test: SplitBoundary around Regions\n";
 
     std::string test_name( "SPLITBOUNDARY_TEST_AROUND_REGIONS_");
     test_name += dimension;
@@ -1091,7 +1094,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions()
     PullApartSplitboundaries( model, interfaces, displacement );
     VisualiseSplitBoundaries( model, test_name );
 
-    std::cerr << "\nFinish "<<dimension<<" SplitBoundary Test: SplitBoundary around Regions\n";
+    if ( verbose_ ) std::cerr << "\nFinish "<<dimension<<" SplitBoundary Test: SplitBoundary around Regions\n";
 
 }
 

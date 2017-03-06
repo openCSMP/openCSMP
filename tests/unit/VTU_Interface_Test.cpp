@@ -8,8 +8,7 @@
 
 using namespace std;
 
-namespace csmp
-{
+namespace csmp {
 
 VTU_Interface_Test::VTU_Interface_Test()
 {

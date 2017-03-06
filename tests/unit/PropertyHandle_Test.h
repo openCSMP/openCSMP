@@ -15,7 +15,7 @@ class PropertyHandle_Test : public Test {
     public:
   
       // difference that may be resolved given that tes numbers range between -3000 and 3000
-      explicit PropertyHandle_Test( double tolerance=5.0e-11 );
+      explicit PropertyHandle_Test( double tolerance=5.0e-11, bool verbose=false );
       ~PropertyHandle_Test();
       
       void run();
@@ -54,6 +54,8 @@ class PropertyHandle_Test : public Test {
 
       PropertyHandle<3> IPVariable5;
       PropertyHandle<3> IPVariable6;
+  
+      const bool verbose_;
   };
 }
 

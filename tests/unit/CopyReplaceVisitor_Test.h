@@ -12,7 +12,7 @@ namespace csmp{
 class CopyReplaceVisitor_Test : public Test
 {
 public:
-  explicit CopyReplaceVisitor_Test( Model<3U>* model) : model_( model ) {}
+  explicit CopyReplaceVisitor_Test( Model<3U>* model ) : model_( model ) {}
   ~CopyReplaceVisitor_Test();
   virtual void run();
 

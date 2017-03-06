@@ -18,7 +18,7 @@ class FiniteElement_TestData
 friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
 
 public:
-  FiniteElement_TestData() {}
+  FiniteElement_TestData( bool verbose ) : verbose_(verbose) {}
   ~FiniteElement_TestData()
   {
 	  for( std::vector<Node<3U>*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it )
@@ -224,6 +224,7 @@ private:
   std::vector<std::vector<size_t> > nodesOfSegment_;
   std::vector<std::vector<size_t> > nodesOfFace_;
   std::vector<CSMP_FEM_TYPE> faceElementTypes_;
+  const bool verbose_;
 
   void   DeleteNodes() {
                          for( std::vector<Node<3U>*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it )

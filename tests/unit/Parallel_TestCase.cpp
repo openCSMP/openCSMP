@@ -23,11 +23,13 @@ namespace csmp
       vtu.OmitZeroInFileName(true);
 
       // region refs
+      /*
       Region<3>& modelRegion( model.Region( "Model" ) );
       Region<3>& leftRegion( model.Region( "LEFT" ) );
       Region<3>& rightRegion( model.Region( "RIGHT" ) );
       Region<3>& overlapRightRegion( model.Region( "RIGHT_OVERLAP" ) );
       Region<3>& overlapLeftRegion( model.Region( "LEFT_OVERLAP" ) );
+      */
       Region<3>& boundary1( model.Region( "BOUNDARY_LEFT" ) );
       Region<3>& boundary2( model.Region( "BOUNDARY_RIGHT" ) );
 
@@ -36,10 +38,10 @@ namespace csmp
       set<string> rightSide; rightSide.insert( "RIGHT" ); rightSide.insert( "RIGHT_OVERLAP" );
       model.MergeRegions( leftSide, "LEFT_ENSEMBLE" );
       model.MergeRegions( rightSide, "RIGHT_ENSEMBLE" );
+      /*
       Region<3>& leftEnsemble( model.Region( "LEFT_ENSEMBLE" ) );
       Region<3>& rightEnsemble( model.Region( "RIGHT_ENSEMBLE" ) );
-
-         
+      */
 
       // setting material and fluid properties
       model.InputPropertyValue( "permeability", makeScalar( PLAIN, 1.0E-13 ) );
@@ -87,11 +89,13 @@ namespace csmp
       UpdateFlowProps( model, saturationFunctions );
       model.Apply( SSPS );
       ComputeTotalVelocity( model );
-      vtu.OutputDataToVTU( "InitialPressureDistribution", "fluid pressure", "Model", static_cast<int>(0) );
-      vtu.OutputDataToVTU( "InitialSaturationDistribution", "saturation oil", "Model", static_cast<int>(0) );
+      if ( verbose_ ) {
+          vtu.OutputDataToVTU( "InitialPressureDistribution", "fluid pressure", "Model", static_cast<int>(0) );
+          vtu.OutputDataToVTU( "InitialSaturationDistribution", "saturation oil", "Model", static_cast<int>(0) );
+        }
       // extrapolating to visualize streamlines
       model.ExtrapolateElementToNodeProperty( "velocity", "nodal velocity" );
-      vtu.OutputDataToVTU( "InitialVelocityField", "nodal velocity", "Model", static_cast<int>(0) );
+      if ( verbose_ ) vtu.OutputDataToVTU( "InitialVelocityField", "nodal velocity", "Model", static_cast<int>(0) );
 
       // simulation settings
       double64 model_time( 0. );
@@ -122,8 +126,10 @@ namespace csmp
           //ImposeSaturation( model, leftEnsemble, rightEnsemble );
           UpdateFlowProps( model, saturationFunctions );
           model_time += TIME_INCREMENT;
-          vtu.OutputDataToVTU( "TransientSaturation", "saturation oil", "Model", static_cast<size_t>(model_time) );
-          vtu.OutputDataToVTU( "TransientPressure", "fluid pressure", "Model", static_cast<size_t>(model_time));
+          if ( verbose_ ) {
+              vtu.OutputDataToVTU( "TransientSaturation", "saturation oil", "Model", static_cast<size_t>(model_time) );
+              vtu.OutputDataToVTU( "TransientPressure", "fluid pressure", "Model", static_cast<size_t>(model_time));
+            }
         }
 
     }
@@ -163,6 +169,7 @@ namespace csmp
     } // updateSaturationsAndComputeTotalMobility
 
 
+
   void Parallel_TestCase::ComputeTotalVelocity( csmp::Model<3U>& model ) const
     {
       VectorVariable<3U>   velo;
@@ -191,6 +198,7 @@ namespace csmp
           // storing the computed velocity
           (*it)->Store( velocityKey, velo );
         } // elements region
+        
     } // end ComputTotalVelocity
 
 

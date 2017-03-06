@@ -23,12 +23,16 @@ namespace csmp
   class CompressedRowMatrix_Test : public Test
     {
        public:
-         explicit CompressedRowMatrix_Test( double64 tolerance=std::numeric_limits<double64>::epsilon()*10. ) : tolerance_(tolerance) {}
+         explicit CompressedRowMatrix_Test( bool verbose = false,
+                                            double64 tolerance = std::numeric_limits<double64>::epsilon() * 10. )
+           : tolerance_(tolerance),
+              verbose_(verbose) {}
+              
          virtual void run();
 
     private:
         const double64 tolerance_;
-
+        const bool verbose_;
   };
   /**
   @}

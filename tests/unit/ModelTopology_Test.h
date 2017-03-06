@@ -13,7 +13,6 @@ public:
   virtual void run();
 };
 
-
 } // csmp
 
 #endif // MODELTOPOLOGY_TEST_H

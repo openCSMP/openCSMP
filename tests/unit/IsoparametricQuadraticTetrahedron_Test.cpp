@@ -76,7 +76,7 @@ IsoparametricQuadraticTetrahedron_Test::IsoparametricQuadraticTetrahedron_Test( 
     element2_->FE()->CurrentID(1U);
     element2_->CoordinateMatrix();
    
-    cout <<"\nconstructor: reference element volume: "<< element2_->Volume() << endl;
+    if ( verbose_ ) cout <<"\nconstructor: reference element volume: "<< element2_->Volume() << endl;
 }
 
 
@@ -221,7 +221,7 @@ void IsoparametricQuadraticTetrahedron_Test::ChangeNodeCoordinatesToParametric()
 */
 void IsoparametricQuadraticTetrahedron_Test::run()
  {
-   cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: testing: "<< typeid(IsoparametricQuadraticTetrahedron()).name() <<"\n";
+   if ( verbose_ ) cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: testing: "<< typeid(IsoparametricQuadraticTetrahedron()).name() <<"\n";
    
    // 0. Output of element for visual check
    // -------------------------------------
@@ -313,12 +313,16 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   element_->dN( DN );
   DenseMatrix<DM_MIN> DATA2;
   DATA2 = DN;
-  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing local interpolation function derivatives to file 'etestd2'.";
-  element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
+  if ( verbose_ ) {
+      cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing local interpolation function derivatives to file 'etestd2'.";
+      element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
+   }
 
   element_->dN_AtNode( DN, 7 );
-  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element1: Calculated interpolation function derivatives, at node 7 (n=0..n-1):";
-  DN.Out();
+  if ( verbose_ ) {
+      cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element1: Calculated interpolation function derivatives, at node 7 (n=0..n-1):";
+      DN.Out();
+    }
 
   ChangeNodeCoordinatesToTestConfiguration();
   element_->Idx( 3 ); // to prompt update of coordinate matrix
@@ -326,8 +330,10 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   //setName( "visual interpolation function-derivative test (physical space)" );
   element_->dN( DN );
   DATA2 = DN;
-  cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing global interpolation function derivatives to file 'etestd3'.";
-  element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
+  if ( verbose_ ) {
+      cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Writing global interpolation function derivatives to file 'etestd3'.";
+      element_->FE()->OutputNodeDataToVTK( "etestd", "derivatives", DATA2 );
+    }
 
 
   // 3. Element volume (first in parametric, then in physical space) and barycenter location
@@ -403,8 +409,10 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   Point<3U> rst_center(0.25,0.25,0.25);
   element_->FE()->JacobianAtIntegrationPoint( 0 ); // near the origin
   const double64 detJ = element_->FE()->JacobianInverse();
-  cout <<"\ninverted Jacobian matrix (should be unit-diagonal):";
-  element_->FE()->JINV.Out();
+  if ( verbose_ ) {
+      cout <<"\ninverted Jacobian matrix (should be unit-diagonal):";
+      element_->FE()->JINV.Out();
+    }
   //setName( "testing inverted Jacobian matrix" );
   _equal( element_->FE()->JINV(0,0), 1., 1.0e-7 );
   _equal( element_->FE()->JINV(1,1), 1., 1.0e-7 );
@@ -427,8 +435,10 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   // 5.1 linear extrapolation of integration point values to the nodes
   //setName( "integration-point to node extrapolation test 1 (const values=2)" );
   element_->ExtrapolateIntegrationPointVariableToNodes( 1, IPVF, NVF );
-  cout <<"\nExtrapolated constant integration point values: ";
-  out( NVF );
+  if ( verbose_ ) {
+      cout <<"\nExtrapolated constant integration point values: ";
+      out( NVF );
+    }
   for ( int i=0; i<NVF.size(); i++ ) _equal( NVF[i], 2., 1.0e-7 );
   
   // 5.2 variable exhibiting a linear variation (y-coordinate)
@@ -441,8 +451,10 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   IPVF[3] = (element_->IntegrationPoint(3))[1];
   //setName( "integration-point to node extrapolation test 2 (linear variation)" );
   element_->ExtrapolateIntegrationPointVariableToNodes( 1, IPVF, NVF );
-  cout <<"\nExtrapolated gradient integration point values: ";
-  out( NVF );
+  if ( verbose_ ) {
+      cout <<"\nExtrapolated gradient integration point values: ";
+      out( NVF );
+    }
   for ( size_t i=0U; i<element_->Nodes(); i++ )
     _equal( NVF[i], element_->N(i)->y(), 1.0e-7 );
 
@@ -456,7 +468,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
   for ( size_t i=0; i<element_->Nodes(); i++ ) DATA2(0,i) = NVF[i];
   element_->FE()->OutputNodeDataToVTK( "encoords", "dummy", DATA2 );
   // checking the normals of the faces for their correct orientation
-  OutputFaceNormalsToVTK( "enormals", *element_ );
+  if ( verbose_ ) OutputFaceNormalsToVTK( "enormals", *element_ );
 
   // checking the flux balance for element for constant velocity parameter
   //setName( "face-flux consistency test for constant element velocity" );

@@ -16,17 +16,17 @@ namespace csmp {
 
 class Integral_var_NT_lhsop_N_dV_Test : public Test {
 public:
-    Integral_var_NT_lhsop_N_dV_Test();
+    Integral_var_NT_lhsop_N_dV_Test( bool verbose );
     ~Integral_var_NT_lhsop_N_dV_Test();
     void run();
-  void valueTest();
-  void compareConsistentTest();
-  void compareLumpedTest();
-  void lumpedTest();
-  void rowSumTest();
+    void valueTest();
+    void compareConsistentTest();
+    void compareLumpedTest();
+    void lumpedTest();
+    void rowSumTest();
 
 private:
-  void compareTest(bool lumped);
+    void compareTest(bool lumped);
 
     void setNodeVariable(std::vector<double64>& var, const char* var_name);
     void showNodeVariable(const char* var_name);
@@ -36,7 +36,8 @@ private:
     double tol_;
 
     Model<2U>* sg_;
+    const bool verbose_;
 };
 
-} // end namespace csp
+} // end namespace csmp
 #endif

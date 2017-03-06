@@ -8,8 +8,10 @@ namespace csmp{
 
 void ModelTopology_Test::run()
 {
+  const bool verbose(false);
+
   setName( "csmp::ModelTopology_Test" );
-  cout << "\nUnit Test " << getName() << endl;
+  if ( verbose ) cout << "\nUnit Test " << getName() << endl;
   typedef ANSYS_ElementSpecifications fem_specs;
   const bool isoparametric( true );
   const size_t dim( 3 );
@@ -140,19 +142,19 @@ void ModelTopology_Test::run()
   _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_3",isoparametric,dim) ) == top6types.end() );
   _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("POLYGON",isoparametric,dim) ) == top6types.end() );
   */
-  cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
+  if ( verbose ) cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
   for( set<string>::const_iterator it = top6types.begin(); it != top6types.end(); ++it )
-    cout << *it << endl;
+    if ( verbose ) cout << *it << endl;
   set<string> csmpTypes;
   topology6.FiniteElementTypes( csmpTypes );
-  cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
+  if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
   for( set<string>::const_iterator it = csmpTypes.begin(); it != csmpTypes.end(); ++it )
-    cout << *it << endl;
+    if ( verbose ) cout << *it << endl;
   set<int32> csmpTypesENUM;
   topology6.FiniteElementTypes( csmpTypesENUM );
-  cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
+  if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
   for( set<int32>::const_iterator it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
-    cout << *it << endl;
+    if ( verbose ) cout << *it << endl;
   set<string> typesCheck;
   _test( 22 == topTypes.FiniteElementTypes( typesCheck ) );
   oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim );

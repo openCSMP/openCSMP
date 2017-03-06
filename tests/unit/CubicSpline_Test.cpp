@@ -11,11 +11,11 @@ using namespace std;
 
 namespace csmp
 {
-    CubicSpline_Test::CubicSpline_Test()
-        : tolerance_( 1.E-2 )
+    CubicSpline_Test::CubicSpline_Test( bool verbose )
+        : tolerance_( 1.0E-2 ), verbose_(verbose)
     {
         datafile = "cspline_test_data";
-        cout << "input data file = " << datafile;
+        if ( verbose_ ) cout << "input data file = " << datafile;
 
         // x values
         x.push_back(0.0);
@@ -84,7 +84,8 @@ namespace csmp
         cspline1_copy = cspline1;
     }
 
-    void CubicSpline_Test::InitializeTest( const std::vector<double64>& rx, const std::vector<double64>& rfx,
+    void CubicSpline_Test::InitializeTest( const std::vector<double64>& rx,
+                                           const std::vector<double64>& rfx,
                                            const double64 df1, const double64 dfn )
     {
         cspline2.Initialize( rx, rfx, df1, dfn);
@@ -98,11 +99,14 @@ namespace csmp
 
     void CubicSpline_Test::ValueTest()          
     {
-        cout << "\n\n----------------------------------------------" << endl;
-        cout << "  x\tinput f(x) \t interpolation value" << endl;
-        cout << "----------------------------------------------" << endl;
+        if ( verbose_ ) {
+             cout << "\n\n----------------------------------------------" << endl;
+             cout << "  x\tinput f(x) \t interpolation value" << endl;
+             cout << "----------------------------------------------" << endl;
+          }
         for ( int i = 0; i < x.size(); i++ )
         {
+           if ( verbose_ )
            cout << "\n" << setprecision(2) << x[i] << fixed
                 << "\t" << setprecision(4) << fx[i]  << fixed
                 << "\t\t" << setprecision(20) << cspline1.Value(x[i]) << fixed << endl;
@@ -115,11 +119,14 @@ namespace csmp
 
     void CubicSpline_Test::DerivativeTest()
     {
-        cout << "\n----------------------------------------------" << endl;
-        cout << "  x\tinput df(x) \t derevitives" << endl;
-        cout << "----------------------------------------------" << endl;
+        if ( verbose_ ) {
+            cout << "\n----------------------------------------------" << endl;
+            cout << "  x\tinput df(x) \t derevitives" << endl;
+            cout << "----------------------------------------------" << endl;
+          }
         for ( int i = 0; i < x.size(); i++ )
         {
+           if ( verbose_ )
            cout << "\n" << setprecision(2) << x[i] << fixed
                 << "\t" << setprecision(4) << dfx[i]  << fixed
                 << "\t\t" << setprecision(10) << cspline1.Derivative( x[i] ) << fixed << endl;
@@ -134,8 +141,10 @@ namespace csmp
     void CubicSpline_Test::MaxDerivativeTest()
     {
         double64 mdv1 = cspline1.MaxDerivative();
-        cout << "\nMaximum Derivative of input data f'(x)";
-        cout << "\n" << setprecision(10) << mdv1 << fixed << endl;
+        if ( verbose_ ) {
+            cout << "\nMaximum Derivative of input data f'(x)";
+            cout << "\n" << setprecision(10) << mdv1 << fixed << endl;
+          }
         _equal( cspline1.MaxDerivative(), dfx[0], tolerance_ );
         _equal( cspline1_copy.MaxDerivative(), dfx[0], tolerance_ );
         _equal( cspline2.MaxDerivative(), dfx[0], tolerance_ );
@@ -145,8 +154,10 @@ namespace csmp
     void CubicSpline_Test::Range_xTest()
     {
         double64 x_range = cspline1.Range_x();
-        cout << "\nRange of x data";
-        cout << "\n" << setprecision(10) << x_range << fixed << endl;
+        if ( verbose_ )  {
+            cout << "\nRange of x data";
+            cout << "\n" << setprecision(10) << x_range << fixed << endl;
+          }
         _test( cspline1.Range_x() == 5. );
         _test( cspline1_copy.Range_x() == 5. );
         _test( cspline2.Range_x() == 5. );
@@ -156,8 +167,10 @@ namespace csmp
     void CubicSpline_Test::Range_fxTest()
     {
         double64 fx_range = cspline1.Range_fx();
-        cout << "\nRange of f(x) data";
-        cout << "\n" << setprecision(20) << fx_range << fixed << endl;
+        if ( verbose_ ) {
+            cout << "\nRange of f(x) data";
+            cout << "\n" << setprecision(20) << fx_range << fixed << endl;
+          }
         _equal( cspline1.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );
         _equal( cspline1_copy.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );
         _equal( cspline2.Range_fx(), ( fx[3]-fx[9] ), tolerance_ );

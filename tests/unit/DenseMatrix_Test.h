@@ -14,7 +14,7 @@ namespace csmp
     class DenseMatrix_Test : public Test
     {
       public:
-        DenseMatrix_Test();
+        explicit DenseMatrix_Test( bool verbose=false );
         ~DenseMatrix_Test();
         virtual void run();
         DenseMatrix<4> A;
@@ -46,10 +46,8 @@ namespace csmp
         Point<3> Point3U;
 
         std::vector<double64> x, y, sol_y, solB, solD;
-
-
-
-
+      
+        const bool verbose_;
     };
 }
 
