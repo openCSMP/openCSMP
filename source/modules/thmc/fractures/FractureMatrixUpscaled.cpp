@@ -1,7 +1,6 @@
 #include "FractureMatrixUpscaled.h"
 #include "PropertyDatabase.h"
 #include "Element.h"
-#include "ErrorFunction.h"
 
 using namespace std;
 
