@@ -2,6 +2,7 @@
 #include <limits>
 #include <cassert>
 #include <fstream>
+#include <ciso646>
 #include "CompressedRowMatrix.h"
 #include "SparseMatrix.h"
 #include "Exception.h"

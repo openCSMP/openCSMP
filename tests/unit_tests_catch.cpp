@@ -17,7 +17,6 @@
 #include "GenericSingleton_Test.h"
 
 #include "IsnanIsinf_Test.h"
-#include "ErrorFunction_Test.h"
 #include "CubicSpline_Test.h"
 #include "DenseMatrix_Test.h"
 #include "Matrix_Test.h"
@@ -28,7 +27,6 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 //#include "Face_Test.h"                // sm: needs work
-//#include "Edge_Test.h"				// jc: not exist
 
 #include "FiniteElement_Test.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -38,7 +36,6 @@
 #include "IsoparametricQuadraticTriangle.h"
 
 #include "FiniteVolumeStencil_Test.h"
-#include "FiniteVolumeTraits_Test.h"
 #include "FluxMismatch_Test.h"
 #include "FV_Parameter_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
@@ -178,10 +175,8 @@ TEST_CASE("Math utilities tests", "[MathUtils]") {
     SIMPLE_TEST_SECTION(SparseMatrix)
     SIMPLE_TEST_SECTION(CompressedRowMatrix)
     SIMPLE_TEST_SECTION(CubicSpline)
-    SIMPLE_TEST_SECTION(ErrorFunction)
 
     SIMPLE_TEST_SECTION(FiniteVolumeStencil)
-    SIMPLE_TEST_SECTION(FiniteVolumeTraits)
     SIMPLE_TEST_SECTION(FV_Parameter)
 }
 
