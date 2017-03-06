@@ -160,10 +160,10 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 6" );
         nodeVariable6 += elementVariable5;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, ts );
-        _equal( ts(0,0), 29.5, numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 29.5, numeric_limits<double64>::epsilon() * 100. );
         nodeVariable6 += IPVariable5;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, ts );
-        _equal( ts(0,0), 46.5, numeric_limits<double64>::epsilon() );
+        _equal( ts(0,0), 46.5, numeric_limits<double64>::epsilon() * 100. );
 
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
@@ -219,7 +219,7 @@ void PropertyHandle_Test::run()
         nkey   = model->Database().StorageKey( "node variable 2" );
         nodeVariable2 -= elementVariable1;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
-        _equal( sc(), 2.5, numeric_limits<double64>::epsilon() );
+        _equal( sc(), 2.5, numeric_limits<double64>::epsilon() * 10. );
         nodeVariable2 -= IPVariable1;
         (*(model->Region( "Model" ).NodesBegin()))->Read( nkey, sc );
         _equal( sc(), -2.5, TOLERANCE );
