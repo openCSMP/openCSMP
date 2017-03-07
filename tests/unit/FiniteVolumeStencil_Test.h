@@ -12,7 +12,7 @@ class FiniteElement;
 
 class FiniteVolumeStencil_Test : public Test {
   public:
-    FiniteVolumeStencil_Test( bool verbose );
+    explicit FiniteVolumeStencil_Test( bool verbose=false );
     ~FiniteVolumeStencil_Test();
     void run(); // runs all the tests for the class (register other methods)
     void displayReferenceCoordinates();

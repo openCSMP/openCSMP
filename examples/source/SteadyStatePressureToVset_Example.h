@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class  SteadyStatePressureToVset_Example : public Example{
+class  SteadyStatePressureToVset_Example : public Example {
 public:
   virtual void Run();
   virtual void Specifications();

@@ -137,7 +137,7 @@ void SteadyStatePressureToVset_Example::Run()
     // Changing porosity to 1.0 in region "fractures" and 0.25 in "matrix"
     model->Region("fractures").InputPropertyValue( "porosity",  makeScalar(PLAIN,1.0) );
     model->Region("matrix").InputPropertyValue( "porosity",     makeScalar(PLAIN,0.25) );
-    model->Region("matrix").InputPropertyValue( "permeability",  makeScalar(PLAIN,0.25) );
+    model->Region("matrix").InputPropertyValue( "permeability",  makeScalar(PLAIN,1.0e-14) );
 
 
     // 4. Computing the fracture permeability from the aperture
@@ -164,6 +164,15 @@ void SteadyStatePressureToVset_Example::Run()
                                               fluid_viscosity );
     model->Apply( conductivity );
     printRangeOfVariable( *model, "conductivity" );
+
+
+    // 10. Output the boundary conditions and initial values to VTK
+    // ------------------------------------------------------------
+    VTK_Interface<2U>  vtk_output;
+
+    // VTK output
+    vtk_output.OutputDataToVTK( *model, "permeability",   "permeability",   0 );
+    vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure", 0 );
 
 
     // 7.  Building the PDE Integrator "total_pressure_quadratic" adding PDE_Operator
@@ -211,13 +220,9 @@ void SteadyStatePressureToVset_Example::Run()
 
     // 10. Output the results to VTK and JPG files
     // --------------------------------------------
-    VTK_Interface<2U>  vtk_output;
-
-    // VTK output
-    vtk_output.OutputDataToVTK( *model, "permeability",   "permeability",      0 );
-    vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    0 );
-    vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          0 );
-    vtk_output.OutputDataToVTK( *model, "volume-flux",    "volume flux",       0 );
+    vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    1 );
+    vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          1 );
+    vtk_output.OutputDataToVTK( *model, "volume-flux",    "volume flux",       1 );
 
 
     // 11. Write the entire model to a CSMP binary VSet file
@@ -260,10 +265,10 @@ void SteadyStatePressureToVset_Example::Run()
     // 16. Output the results of new Region to VTK and CSMP binary formats
     // --------------------------------------------------------------------
     // VTK output
-    vtk_output.OutputDataToVTK( model_from_vset, "fluid-pressure", "fluid pressure",    1 );
-    vtk_output.OutputDataToVTK( model_from_vset, "velocity",       "velocity",          1 );
-    vtk_output.OutputDataToVTK( model_from_vset, "nvelocity",      "nodal velocity",    1 );
-    vtk_output.OutputDataToVTK( model_from_vset, "volume-flux",    "volume flux",       1 );
+    vtk_output.OutputDataToVTK( model_from_vset, "fluid-pressure", "fluid pressure", 2 );
+    vtk_output.OutputDataToVTK( model_from_vset, "velocity",       "velocity",       2 );
+    vtk_output.OutputDataToVTK( model_from_vset, "nvelocity",      "nodal velocity", 2 );
+    vtk_output.OutputDataToVTK( model_from_vset, "volume-flux",    "volume flux",    2 );
 
     // Binary file output
     BinaryFileInterface<2U>  binary_interface;
@@ -271,9 +276,9 @@ void SteadyStatePressureToVset_Example::Run()
 
     binary_interface.WriteConnectivityFile( model_from_vset, "model_example2" );
 
-    binary_interface.WriteDataTo( model_from_vset, "fluid-pressure", "fluid pressure",  1 );
-    binary_interface.WriteDataTo( model_from_vset, "velocity",       "velocity",        1 );
-    binary_interface.WriteDataTo( model_from_vset, "volume-flux",    "volume flux",     1 );
+    binary_interface.WriteDataTo( model_from_vset, "fluid-pressure", "fluid pressure", 2 );
+    binary_interface.WriteDataTo( model_from_vset, "velocity",       "velocity",       2 );
+    binary_interface.WriteDataTo( model_from_vset, "volume-flux",    "volume flux",    2 );
 
 
     // 17. Analysis of results using StatisticalAnalyzer

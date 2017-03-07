@@ -11,7 +11,7 @@ class Element_Test : public Test
 {
 
   public:
-	explicit Element_Test( bool verbose );
+	explicit Element_Test( bool verbose=false );
 	~Element_Test();
   
 	virtual void run();

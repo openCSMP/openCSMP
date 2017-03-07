@@ -9,7 +9,7 @@ namespace csmp{
 class Box_Test : public Test
 {
   public:
-    Box_Test( const char* name="cube_flag" )
+    explicit Box_Test( const char* name="cube_flag" )
       : model_name_(name) {}
 
     virtual void run();

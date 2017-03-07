@@ -10,7 +10,7 @@ namespace csmp {
 
 class Matrix_Test : public Test {
   public:
-    Matrix_Test( bool verbose );
+    explicit Matrix_Test( bool verbose=false );
     ~Matrix_Test();
   
     virtual void run();

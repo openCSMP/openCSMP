@@ -4,8 +4,9 @@
 #include "Test.h"
 #include "VSet.h"
 #include "vsetMakers.h"
+#include "FEM_Data.h"
 
-namespace csmp{
+namespace csmp {
 
 /// PL Nov 2010
 class VSet_Test : public Test

@@ -12,7 +12,7 @@ namespace csmp {
 class Point_Test : public Test {
   public:
     Point_Test();
-    virtual ~Point_Test(){};
+    virtual ~Point_Test() {}
     
     virtual void run();
     

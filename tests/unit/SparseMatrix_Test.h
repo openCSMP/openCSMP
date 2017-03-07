@@ -11,7 +11,7 @@ namespace csmp
     class SparseMatrix_Test : public Test
     {
       public:
-        SparseMatrix_Test( bool verbose );
+        explicit SparseMatrix_Test( bool verbose=false );
         ~SparseMatrix_Test();
         void run();
         SparseMatrix A;

@@ -12,6 +12,7 @@
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
+#include "ArrayVariable_Test.h"
 
 #include "CommandLineParser_Test.h"
 #include "GenericSingleton_Test.h"
@@ -36,6 +37,8 @@
 #include "IsoparametricQuadraticTriangle.h"
 
 #include "FiniteVolumeStencil_Test.h"
+#include "FiniteVolumePolicy_Test.h"
+#include "FiniteElement_Test.h"
 #include "FluxMismatch_Test.h"
 #include "FV_Parameter_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
@@ -49,9 +52,10 @@
 #include "Parameter_Test.h"
 
 #include "ModelTopology_Test.h"
-//#include "StatisticalAnalyzerTest.h"  // sm: needs work
+#include "StatisticalAnalyzerTest.h"
 #include "RegionMonitorTest.h"
 #include "Visitor_TestSuite.h"
+#include "Box_Test.h"
 
 #include "ModelSubDomain_Test.hpp"
 //#include "Boundary_Test.h"            // sm: needs work
@@ -61,7 +65,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
-//#include "BinaryFileInterface_Test.h" // sm: needs work
+#include "BinaryFileInterface_Test.h"
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
@@ -82,57 +86,8 @@
 using namespace std;
 using namespace csmp;
 
-/**  SKM 16/12/2016 - status report (XCode Mac)
-
-     fundamentals:      24 real precision issues in FiniteVolumeTraits, VSet test needs to be rewritten for variable storage in PropertyData container
-     
-     interdependent1:   fails on volume-flux integral balance of face fluxes
-     
-     interdependent2:   fails when re-reading the 3D Model in PropertyData for a tensor variable placed on the sector integration point
- 
-     composite:
-     
-     @section Missing Unit Tests
-     
-     Triage needed to generate order:
-
-     - TODO: URGENT ModelSubDomain !!!
-     - ModelTopology
-     - Model
-     - MeshManager
-     - FiniteElementManager
-     - ModelSubDomain
-     - PDE_Integrator
-     - MathOperatorLHS
-     - MathOperatorRHS
-     - PropertyConstraints
-     - RegionInterface
-     - BoundaryInterface
-     - Point
-     - ANSYS_Interface
-     
-     - refactor   Box_Test
-     - refactor   VTU_Interface_Test
-     - refactored CompressedRowMatrix
-     
-     
-     @section Failing Tests
-     
-     - FiniteVolumeTraits_Test (TODO: urgent fixes needed)
-     - Boundary_Test (TODO: separate BoundaryInterface functionality)
-     - SplitBoundary_Test
-     - InterFace_Test
-     - TODO: test unit normal computations on model boundaries
- 
-     ? - TODO: boundary ChangePropertyStatus( INTERIOR) fails on boundary
- 
-     - TODO: delete non-unique regions with boundary names before saving the model to disk so that 
-             they do not get stored and brought back when the model is rebuild
-     
-     - AnsysModel3D - when reconstructed from file volumetric elements suddenly have surface elemenet neighbors
-     
-     @section Comments
-     - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
+/**  
+    see status report on unit_tests_main.cpp
 */
 
 
@@ -155,6 +110,7 @@ TEST_CASE("Data storage tests", "[DataStorage]") {
 TEST_CASE("Model tests", "[Model]") {
     SIMPLE_TEST_SECTION(Node)
     SIMPLE_TEST_SECTION(Element)
+    SIMPLE_TEST_SECTION(Box)
     // SIMPLE_TEST_SECTION(Face)
 }
 
@@ -175,7 +131,7 @@ TEST_CASE("Math utilities tests", "[MathUtils]") {
     SIMPLE_TEST_SECTION(SparseMatrix)
     SIMPLE_TEST_SECTION(CompressedRowMatrix)
     SIMPLE_TEST_SECTION(CubicSpline)
-
+    SIMPLE_TEST_SECTION(FiniteVolumePolicy)
     SIMPLE_TEST_SECTION(FiniteVolumeStencil)
     SIMPLE_TEST_SECTION(FV_Parameter)
 }
@@ -190,98 +146,98 @@ TEST_CASE("Interfaces and containers test", "[Interfaces]") {
 
 
 #if 0
-        if ( test_interdependent1 ) {
-              cout <<"\n2. partially interdependent functionality: running tests..."<< endl;
-              TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
-              interdependent1.addTest( new FEM_Data_Test());
-              // finite elemenents
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt" ) );
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt" ) ); // 3D case 3 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt" ) );   // 2D case 3 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt" ) );   // 2D case 4 integration points
-              interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt" ) );  // 3D case 3 integration point
-              // non-standard element tests
-              interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(false) ); // FAIL - flux balance on constant velocity projected on sides
-              // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
-              interdependent1.addTest(new IsoparametricLinearHexahedron_Test());
-              // math operators etc.
-              interdependent1.addTest( new Operand_Test() );
-              interdependent1.addTest( new MathOperatorLHS_Test());
-              interdependent1.addTest( new MathOperatorRHS_Test());
-              interdependent1.addTest( new PDE_Integrator_Test() );
-              // running unit tests and reporting errors
-              interdependent1.run();
-              nFail = interdependent1.report();
-              interdependent1.free();
-              cerr << "\nunit_tests_main: 2. CSMP interdependent-functionality1: Total unit test failures: " << nFail << endl;
-          }
+    if ( test_interdependent1 ) {
+          cout <<"\n2. partially interdependent functionality: running tests..."<< endl;
+          TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
+          interdependent1.addTest( new FEM_Data_Test());
+          // finite elemenents
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt" ) );
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt" ) );
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt" ) ); // 3D case 3 integration points
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt" ) );   // 2D case 3 integration points
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt" ) );   // 2D case 4 integration points
+          interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt" ) );  // 3D case 3 integration point
+          // non-standard element tests
+          interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(false) ); // FAIL - flux balance on constant velocity projected on sides
+          // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
+          interdependent1.addTest(new IsoparametricLinearHexahedron_Test());
+          // math operators etc.
+          interdependent1.addTest( new Operand_Test() );
+          interdependent1.addTest( new MathOperatorLHS_Test());
+          interdependent1.addTest( new MathOperatorRHS_Test());
+          interdependent1.addTest( new PDE_Integrator_Test() );
+          // running unit tests and reporting errors
+          interdependent1.run();
+          nFail = interdependent1.report();
+          interdependent1.free();
+          cerr << "\nunit_tests_main: 2. CSMP interdependent-functionality1: Total unit test failures: " << nFail << endl;
+      }
 
-        if ( test_interdependent2 ) {
-              cout <<"\n3. Model-related interdependent functionality: running tests..."<< endl;
-              TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
-              // model
-              interdependent2.addTest( new Box_Test() );
-              interdependent2.addTest( new ModelSubDomain_Test() );
-              interdependent2.addTest( new ANSYS_Model2D_Test() );
-              interdependent2.addTest( new InputDataManager_Test());
-              interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
-              interdependent2.addTest( new Region_Test() );                  // SKM OK
-              interdependent2.addTest( new ModelTopology_Test() );
-              interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
-              // interfaces
-              interdependent2.addTest( new VTU_Interface_Test() );
-              interdependent2.addTest( new StatisticalAnalyzerTest() );
-              // running unit tests and reporting errors
-              interdependent2.run();
-              nFail = interdependent2.report();
-              interdependent2.free();
-              cerr << "\nunit_tests_main: 3. CSMP Model-related, interdependent-functionality2: Total unit test failures: " << nFail << endl;
-          }
-    
-        if ( test_composite ) {
-              cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
-              TestSuite composite("CSMP-dependent-unit test suite", &cout );
-              // misc
-              // composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
-              composite.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
-              // composite.addTest( new FluxMismatch_Test() );
-              composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
-              composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
-              // constitutive relationships
-              composite.addTest( new ExponentialTransferFunction_Test() );
+    if ( test_interdependent2 ) {
+          cout <<"\n3. Model-related interdependent functionality: running tests..."<< endl;
+          TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
+          // model
+          interdependent2.addTest( new Box_Test() );
+          interdependent2.addTest( new ModelSubDomain_Test() );
+          interdependent2.addTest( new ANSYS_Model2D_Test() );
+          interdependent2.addTest( new InputDataManager_Test());
+          interdependent2.addTest( new ANSYS_Model3D_Test() );           // FAIL - PropertyData (tensor, sector-ip) when model is re-imported from binary file
+          interdependent2.addTest( new Region_Test() );                  // SKM OK
+          interdependent2.addTest( new ModelTopology_Test() );
+          interdependent2.addTest( new PropertyHandle_Test() );          // SKM OK
+          // interfaces
+          interdependent2.addTest( new VTU_Interface_Test() );
+          interdependent2.addTest( new StatisticalAnalyzerTest() );
+          // running unit tests and reporting errors
+          interdependent2.run();
+          nFail = interdependent2.report();
+          interdependent2.free();
+          cerr << "\nunit_tests_main: 3. CSMP Model-related, interdependent-functionality2: Total unit test failures: " << nFail << endl;
+      }
 
-              /// Property data search tests
-              Visitor_TestSuite visitorTests( composite );
-              visitorTests.run();
+    if ( test_composite ) {
+          cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
+          TestSuite composite("CSMP-dependent-unit test suite", &cout );
+          // misc
+          // composite.addTest( new PropertyAtPointVisitor_Test() ); // PASS
+          composite.addTest( new BinaryFileInterface_Test() );  // FAIL on assert
+          // composite.addTest( new FluxMismatch_Test() );
+          composite.addTest( new RegionMonitorTest() );         // FAILS - tolerance issues?
+          composite.addTest( new ModelComparator_Test() );      // crashes on PropertyData
+          // constitutive relationships
+          composite.addTest( new ExponentialTransferFunction_Test() );
 
-              /// Two phase flow tests
-              TwoPhaseModel_TestSuite twoPhaseModelTests( composite );
-              twoPhaseModelTests.run();
+          /// Property data search tests
+          Visitor_TestSuite visitorTests( composite );
+          visitorTests.run();
 
-             // running unit tests and reporting errors
-              composite.run();
-              nFail = composite.report();
-              composite.free();
-              cerr << "\nunit_tests_main: 4. CSMP-dependent-functionality: Total unit test failures: " << nFail << endl;
-          }
+          /// Two phase flow tests
+          TwoPhaseModel_TestSuite twoPhaseModelTests( composite );
+          twoPhaseModelTests.run();
 
-        // tests related to code that is currently being refactored
-        if ( test_refactoring ) {
-              cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
-              TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+         // running unit tests and reporting errors
+          composite.run();
+          nFail = composite.report();
+          composite.free();
+          cerr << "\nunit_tests_main: 4. CSMP-dependent-functionality: Total unit test failures: " << nFail << endl;
+      }
+
+    // tests related to code that is currently being refactored
+    if ( test_refactoring ) {
+          cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
+          TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 //              refactored.addTest( new Boundary_Test() );
-              // composite.addTest( new SplitBoundary_Test() );
-             // running unit tests and reporting errors
+          // composite.addTest( new SplitBoundary_Test() );
+         // running unit tests and reporting errors
 
-              // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
-              refactored.run();
-              nFail = refactored.report();
-              refactored.free();
-              cerr << "\nunit_tests_main: 5. CSMP refactored and new functionality: Total unit test failures: " << nFail << endl;
-          }
+          // refactored.addTest( new PropertyData_Test() ); // retested: OK - includes vectors, tensors, arrays
+          refactored.run();
+          nFail = refactored.report();
+          refactored.free();
+          cerr << "\nunit_tests_main: 5. CSMP refactored and new functionality: Total unit test failures: " << nFail << endl;
+      }
 
-        cerr << "\nunit_tests_main: Total unit test failures: " << nFail << endl;
+    cerr << "\nunit_tests_main: Total unit test failures: " << nFail << endl;
 #endif
 

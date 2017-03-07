@@ -8,8 +8,8 @@
 
 #include "CsmpIntro1_TestCase.h"
 
-#include "Vset_TestCase.h"
-#include "Variables_TestCase.h"
+#include "Vset_Test.h"
+#include "Variables_Test.h"
 
 
 using namespace std;
@@ -35,8 +35,9 @@ int main(int argc, char **argv)
         //*****************************************************************
         // SECTION 1 - HERE WE START WITH THE TESTS THAT ARE ACTUALLY ONLINE IN BUILDBOT
         //*****************************************************************
-        s.addTest("Variables_TestCase", new Variables_TestCase(argv[2]));
-        s.addTest("Vset_TestCase", new Vset_TestCase(argv[2]));
+        s.addTest("Variable_Test", new Variables_Test(argv[2]));
+//        s.addTest("Vset_Test", new VSet_Test(argv[2]));
+        s.addTest("Vset_Test", new VSet_Test());
 
         //*****************************************************************
         // SECTION 2 - TESTS BELOW ARE STILL UNDER CONSTRUCTION
