@@ -11,8 +11,9 @@ template<>
 class TensorVariable<1U> {
   public:
     TensorVariable();
-    TensorVariable( const TensorVariable& t );
-    TensorVariable( VARIABLE_FLAG f, double64 val );
+    TensorVariable( const TensorVariable& );
+    TensorVariable( VARIABLE_FLAG, double64 );
+    TensorVariable( TensorVariable&& ) = default;
                                                       
     ~TensorVariable();
     
@@ -51,7 +52,8 @@ class TensorVariable<1U> {
     TensorVariable&  operator=( const ScalarVariable& s );
     TensorVariable&  operator=( const VectorVariable<1U>& v );
     TensorVariable&  operator=( const TensorVariable& t );
-    
+    TensorVariable&  operator=( TensorVariable&& ) = default;
+  
     bool             operator==( const TensorVariable& t ) const; 
     bool             operator!=( const TensorVariable& t ) const; 
     bool             operator<( const TensorVariable& t ) const; 

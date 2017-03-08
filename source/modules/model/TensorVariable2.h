@@ -13,7 +13,7 @@ class TensorVariable<2U> {
   public:
     TensorVariable();
     TensorVariable( const TensorVariable& );
-    TensorVariable( TensorVariable&& );
+    TensorVariable( TensorVariable&& ) = default;
     TensorVariable( VARIABLE_FLAG f, double64 val );
     TensorVariable( VARIABLE_FLAG f, double64 v11, double64 v12,
                     double64 v21, double64 v22 );
@@ -59,7 +59,7 @@ class TensorVariable<2U> {
     TensorVariable&  operator=( const ScalarVariable& );
     TensorVariable&  operator=( const VectorVariable<2U>& );
     TensorVariable&  operator=( const TensorVariable& );
-    TensorVariable&  operator=( TensorVariable&& );
+    TensorVariable&  operator=( TensorVariable&& ) = default;
   
     bool             operator==( const TensorVariable& ) const;
     bool             operator!=( const TensorVariable& ) const;

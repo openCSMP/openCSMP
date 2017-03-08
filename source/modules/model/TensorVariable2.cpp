@@ -29,31 +29,12 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const TensorVariable<2U>& ts
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( TensorVariable<2U>&& ts )
- {
-    if ( &ts != this ) 
-      {
-         flag = {ts.flag};
-         data = {ts.data};
-      }  
-    return *this; 
- }
-
-
-
 /**
     @todo SKM do not use assigment when constructing a new object
 */
 TensorVariable<2U>::TensorVariable( const TensorVariable<2U>& t )
  : flag(t.flag),
    data(t.data)
- {
- }
-
-
-TensorVariable<2U>::TensorVariable( TensorVariable<2U>&& t )
- : flag{t.flag},
-   data{t.data}
  {
  }
 
