@@ -11,7 +11,7 @@ namespace csmp
   class Region_Test: public Test
   {
   public:
-      Region_Test( bool verbose );
+      Region_Test( bool verbose=false );
       ~Region_Test();
       void run();
   private:

@@ -3,11 +3,11 @@
 
 #include "Test.h"
 
-namespace csmp{
+namespace csmp {
 
 class VTU_Interface_Test : public Test
 {
-public:
+  public:
     VTU_Interface_Test();
 
     virtual void run();

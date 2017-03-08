@@ -17,7 +17,7 @@ namespace csmp {
   class SplitBoundary_Test : public Test
     {
     public:
-      explicit SplitBoundary_Test( bool verbose ) : verbose_(verbose) {}
+      explicit SplitBoundary_Test( bool verbose=false ) : verbose_(verbose) {}
     
       virtual void run();
 

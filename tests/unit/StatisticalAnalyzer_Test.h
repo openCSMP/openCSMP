@@ -8,16 +8,16 @@
 namespace csmp 
 {
 
-class StatisticalAnalyzerTest : public Test 
+class StatisticalAnalyzer_Test : public Test 
 {
   public:
-      StatisticalAnalyzerTest();
-      ~StatisticalAnalyzerTest();
+      StatisticalAnalyzer_Test();
+      ~StatisticalAnalyzer_Test();
       void run(); // runs all the tests for the class (register other methods)
       void StatisticalAnalyzerDefineBins();
       void StatisticalAnalyzerRegionPropertyHistogramsElement();
       void StatisticalAnalyzerRegionPropertyHistograms();
-      void StatisticalAnalyzerTestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1();
+      void StatisticalAnalyzer_TestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1();
   
   private:
     double64 fTolerance;

@@ -63,8 +63,8 @@
 #include "Parameter_Test.h"
 
 #include "ModelTopology_Test.h"
-#include "StatisticalAnalyzerTest.h"
-#include "RegionMonitorTest.h"
+#include "StatisticalAnalyzer_Test.h"
+#include "RegionMonitor_Test.h"
 #include "Visitor_TestSuite.h"
 
 #include "ModelSubDomain_Test.hpp"
@@ -269,7 +269,7 @@ int main()
               // interfaces
               interdependent2.addTest( new BinaryFileInterface_Test() ); // XCode OK (SKM)
               interdependent2.addTest( new VTU_Interface_Test() );
-              interdependent2.addTest( new StatisticalAnalyzerTest() );
+              interdependent2.addTest( new StatisticalAnalyzer_Test() );
               // running unit tests and reporting errors
               interdependent2.run();
               fails_interdependent2 = interdependent2.report();
@@ -281,7 +281,7 @@ int main()
               cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
               TestSuite composite("CSMP-dependent-unit test suite", &cout );
               // misc
-              composite.addTest( new RegionMonitorTest() );
+              composite.addTest( new RegionMonitor_Test() );
               // constitutive relationships
               composite.addTest( new ExponentialTransferFunction_Test() );
 

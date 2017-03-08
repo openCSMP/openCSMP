@@ -8,12 +8,12 @@
 namespace csmp 
 {
 
-class RegionMonitorTest : public Test 
+class RegionMonitor_Test : public Test 
 {
 
   public:
-	RegionMonitorTest();
-	~RegionMonitorTest();
+	RegionMonitor_Test();
+	~RegionMonitor_Test();
 	void run(); // runs all the tests for the class (register other methods)
 	void RegionMonitorScalarPropertyIntegrals2D();
 	void RegionMonitorScalarPropertyIntegrals3D();

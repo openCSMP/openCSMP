@@ -1,4 +1,4 @@
-#include "RegionMonitorTest.h"
+#include "RegionMonitor_Test.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 
@@ -7,27 +7,27 @@ using namespace std;
 namespace csmp {
 
 
-RegionMonitorTest::RegionMonitorTest()
+RegionMonitor_Test::RegionMonitor_Test()
 : fTolerance(1e-16)
 {
 }
 
 
 
-RegionMonitorTest::~RegionMonitorTest()
+RegionMonitor_Test::~RegionMonitor_Test()
 {
 }
 
 
 
-void RegionMonitorTest::run()
+void RegionMonitor_Test::run()
 {
     RegionMonitorScalarPropertyIntegrals2D();
     RegionMonitorScalarPropertyIntegrals3D();
 }
 
 
-void RegionMonitorTest::RegionMonitorScalarPropertyIntegrals2D()
+void RegionMonitor_Test::RegionMonitorScalarPropertyIntegrals2D()
 {
     ANSYS_Model2D model("LeftRight", "CSMP-2phase-variables.txt");
     
@@ -350,7 +350,7 @@ void RegionMonitorTest::RegionMonitorScalarPropertyIntegrals2D()
 
 
 
-void RegionMonitorTest::RegionMonitorScalarPropertyIntegrals3D()
+void RegionMonitor_Test::RegionMonitorScalarPropertyIntegrals3D()
 {
     ANSYS_Model3D model("Cube", "CSMP-2phase-variables.txt");
     

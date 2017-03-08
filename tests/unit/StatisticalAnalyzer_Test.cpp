@@ -1,16 +1,16 @@
-#include "StatisticalAnalyzerTest.h"
+#include "StatisticalAnalyzer_Test.h"
 
 
 namespace csmp {
 
 
-StatisticalAnalyzerTest::StatisticalAnalyzerTest()
-: model_ (new Model1D<1U>( "StatisticalAnalyzerTest", "CSMP-2phase-variables.txt", 1., 100U ))
+StatisticalAnalyzer_Test::StatisticalAnalyzer_Test()
+: model_ (new Model1D<1U>( "StatisticalAnalyzer_Test", "CSMP-2phase-variables.txt", 1., 100U ))
 
 {
   fTolerance = 1.e-8;
 
-  std::cout << "StatisticalAnalyzerTest is creating test_histogram.bins\n";
+  std::cout << "StatisticalAnalyzer_Test is creating test_histogram.bins\n";
 
   std::ofstream fout("test_histogram.bins");
 
@@ -22,24 +22,24 @@ StatisticalAnalyzerTest::StatisticalAnalyzerTest()
 }
 
 
-StatisticalAnalyzerTest::~StatisticalAnalyzerTest()
+StatisticalAnalyzer_Test::~StatisticalAnalyzer_Test()
 {
     std::remove("test_histogram.bins");
     delete model_;
 }
 
 
-void StatisticalAnalyzerTest::run()
+void StatisticalAnalyzer_Test::run()
 {
     StatisticalAnalyzerDefineBins();
     StatisticalAnalyzerRegionPropertyHistogramsElement();
     StatisticalAnalyzerRegionPropertyHistograms();
-    StatisticalAnalyzerTestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1();
+    StatisticalAnalyzer_TestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1();
 }
 
 
 
-void StatisticalAnalyzerTest::StatisticalAnalyzerDefineBins()
+void StatisticalAnalyzer_Test::StatisticalAnalyzerDefineBins()
 {
     StatisticalAnalyzer<1U> statistical_analyzer(*model_);
     HistogramBins bins;
@@ -105,7 +105,7 @@ void StatisticalAnalyzerTest::StatisticalAnalyzerDefineBins()
 
 
 
-void StatisticalAnalyzerTest::StatisticalAnalyzerRegionPropertyHistogramsElement()
+void StatisticalAnalyzer_Test::StatisticalAnalyzerRegionPropertyHistogramsElement()
 {
    Index por_key = model_->Database().StorageKey("porosity");
    Index sat_key = model_->Database().StorageKey("saturation water");
@@ -152,7 +152,7 @@ void StatisticalAnalyzerTest::StatisticalAnalyzerRegionPropertyHistogramsElement
 
 
 
-void StatisticalAnalyzerTest::StatisticalAnalyzerRegionPropertyHistograms()
+void StatisticalAnalyzer_Test::StatisticalAnalyzerRegionPropertyHistograms()
 {
    Index por_key = model_->Database().StorageKey("porosity");
    Index sat_key = model_->Database().StorageKey("saturation water");
@@ -233,7 +233,7 @@ void StatisticalAnalyzerTest::StatisticalAnalyzerRegionPropertyHistograms()
 
 
 
-void StatisticalAnalyzerTest::StatisticalAnalyzerTestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1()
+void StatisticalAnalyzer_Test::StatisticalAnalyzer_TestRegionPropertyHistogramsElementProperty2BinningBasedOnProperty1()
 {
     Index por_key = model_->Database().StorageKey("porosity");
     Index sat_key = model_->Database().StorageKey("saturation water");
