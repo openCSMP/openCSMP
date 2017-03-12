@@ -43,7 +43,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
 {
   // *****************************************************************************************
   /*
-       Stokes_discrepancy_measure:  calculates the difference between taking the laplacian
+       Stokes_discrepancy_measure:  calculates the difference between taking the Laplacian
                                     of the Darcy velocity when taking a parabolic scalar
                                     field as an operator and the Stokes flow approximation.
   */

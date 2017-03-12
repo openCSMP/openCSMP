@@ -11,7 +11,16 @@ using namespace csmp;
 
 namespace csmp{
 
-/// constructor taking a reference to the model to be handled(and an optional title to the output)
+/**
+    constructor taking a reference to the model to be handled(and an optional title to the output)
+     
+    @todo introduce option to choose XML type:
+    
+    currently:  "<VTKFile type="UnstructuredGrid" version="0.9" byte_order="LittleEndian">"
+    
+    but one should be able to switch to 1.0 etc., however this is currently not possible because the XML
+    version is not a state variable of the VTU interface.
+*/
 template<size_t dim>
 VTU_Interface<dim>::VTU_Interface( const Model<dim>& model,
                                    const std::string& problemTitle,
@@ -24,7 +33,7 @@ VTU_Interface<dim>::VTU_Interface( const Model<dim>& model,
       omitZeroInFileName_ ( true ),
       elementVecAndTensDataAtCellCenters_(false),
       regionVecAndTensDataAtCellCenters_ (false),
-      suffix_text_  ("")
+      suffix_text_("")
 {
 }
 
@@ -43,7 +52,7 @@ VTU_Interface<dim>::VTU_Interface( const Model<dim>& model,
    elementVecAndTensDataAtCellCenters_(false),
    regionVecAndTensDataAtCellCenters_ (false),
    variableNameAliases_(),
-   suffix_text_     ("")
+   suffix_text_("")
 {
 }
 
@@ -1068,7 +1077,7 @@ void VTU_Interface<dim>
                = GetConnectivityMapMultiBlock( subDomain );
     outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
-    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"0.9\" byte_order=\"LittleEndian\"" );
     /// Open multiblock section
     outputFile.OpenNode( "vtkMultiBlockDataSet");
     outputFile.OpenNode( "Block index=\"0\" name=\"Blocks\"" );
@@ -1128,7 +1137,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
 
@@ -1192,7 +1201,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1247,7 +1256,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1303,7 +1312,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1358,7 +1367,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1413,7 +1422,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1624,11 +1633,11 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const std::string& fileName,
   std::ofstream file( fullFileName.data(), std::ios::out );
 
   // header
-  file << "<?xml version=\"1.0\"?>" << std::endl << std::endl;
+  file << "<?xml version=\"0.9\"?>" << std::endl << std::endl;
   file << "<!--\n" << fileName << "\n-->" << std::endl << std::endl;
 
   // body - connectivity
-  file << "<VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\">" << std::endl;
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
   file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
@@ -1692,11 +1701,11 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const std::string& fileName, const s
   std::ofstream file( fullFileName.data(), std::ios::out );
 
   // header
-  file << "<?xml version=\"1.0\"?>" << std::endl << std::endl;
+  file << "<?xml version=\"0.9\"?>" << std::endl << std::endl;
   file << "<!--\n" << fileName << "\n-->" << std::endl << std::endl;
 
   // body - connectivity
-  file << "<VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\">" << std::endl;
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
   file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
@@ -2846,7 +2855,7 @@ template<size_t dim>
 void VTU_Interface<dim>::EstablishConnectivityFileHeader( XML_Document& connectivityFile ) const
   {
     // writing problem header
-    connectivityFile.AddInfo( "xml version=\"1.0\"" );
+    connectivityFile.AddInfo( "xml version=\"0.9\"" );
     connectivityFile.AddComment( problemTitle_.c_str() );
   }
 

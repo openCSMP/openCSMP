@@ -30,7 +30,7 @@ void StokesDiscrepancyMeasure_Example::Specifications()
   SetCategory( "Simulation of Physical Processes" );
   AddAuthor( "SKM" );
   AddDescription( "source in: StokesDiscrepancyMeasure_Example.cpp" );
-  AddDescription( "calculates the difference between taking the laplacian" );
+  AddDescription( "calculates error metric" );
   AddRequirement( "one_sphere_0.45_tetra" );
 } 
 

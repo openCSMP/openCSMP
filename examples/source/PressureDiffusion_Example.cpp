@@ -34,7 +34,7 @@ void PressureDiffusion_Example::Specifications()
    SetCategory( "Simulation of Physical Processes" );
    AddAuthor( "SKM" );
    AddDescription( "2D transient calculation of fluid pressure distribution" );
-   AddDescription( "isoparatetric quadratic finite element formulation" );
+   AddDescription( "isoparametric quadratic finite element formulation" );
    AddDescription( "source in: PresureDiffusion_Example.cpp" );
    AddRequirement( "file set: 'frac30.1'");
 }

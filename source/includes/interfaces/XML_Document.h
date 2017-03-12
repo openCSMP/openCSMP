@@ -21,7 +21,7 @@ class XML_Document
 public:
   XML_Document();
 
-  XML_Document& operator = ( const XML_Document& src ){ data_ = src.data_; currentLevel_ = src.currentLevel_; return *this; }
+  XML_Document& operator=( const XML_Document& src ){ data_ = src.data_; currentLevel_ = src.currentLevel_; return *this; }
 
   void OpenNode( const char* nodeLabel );
   void CloseNode( const char* nodeName );

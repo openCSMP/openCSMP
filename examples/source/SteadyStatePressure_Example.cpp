@@ -38,7 +38,7 @@ void SteadyStatePressure_Example::Specifications()
   SetDifficulty( 3 );
   SetCategory( "Simulation of Physical Processes" );
   AddAuthor( "SKM" );
-  AddDescription( "computes steady state pressure distribution, 2D" );
+  AddDescription( "computes steady-state pressure distribution, 2D" );
   AddDescription( "source file in: SteadyStatePressure_Example" );
   AddRequirement( "image(granite_model1), configuration(example1.txt)" );
 }

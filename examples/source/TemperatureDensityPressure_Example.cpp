@@ -26,7 +26,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void TemperatureDensityPressure_Example::Specifications()
 {
@@ -38,17 +38,18 @@ void TemperatureDensityPressure_Example::Specifications()
   AddDescription( "this example also illustrates the output of text files and Maple plots to paste into worksheets" );
   AddDescription( "source in: 'TemperatureDensityPressure_Example.cpp'" );
 
-} // Initialize()
+}
+
+
 
 
 /** *****************************************************************************************
  
    Computation of a hydrostatic (pore) pressure profile in a sedimentary basin.
-   Illustration of how to use CSMP for one dimensional models.
-   Illustration of how to use the fluid equation of state (EOS) modules.
+
+   Illustration of how to use CSMP for one-dimensional models.
+   Illustration of how to use the fluid equation of state (EOS) module.
  
-   Formerly example17:
-   
     Steps: 
     
     1. First a vertical (1D) temperature profile is computed. This can be done in a single
@@ -63,12 +64,12 @@ void TemperatureDensityPressure_Example::Specifications()
  
    *****************************************************************************************
 
-  // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
-
 */
 void TemperatureDensityPressure_Example::Run()
 {
+    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
+    //ostream &cout = *GetStream();
+
   // 1. builds 4km-tall 1D model
     // -------------------------------------------
     VSet<1U>       mesh_container;
@@ -245,6 +246,7 @@ void TemperatureDensityPressure_Example::Run()
     writeVariablesToMapleTextFile( model, "temperature", "fluid density", 0, 0. );
 
     cout <<"\nmain: That's it..."<< endl;
-} // Run()
+  
+} // end Run
 
 } // csmp
