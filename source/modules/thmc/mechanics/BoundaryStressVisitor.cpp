@@ -120,28 +120,16 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    VectorVariable<dim> Ts = T - nrml_;
    
    // going from specific- to areal stress on the face
-   const bool interpolate_Sn_across_nodes(false);
-   const size_t  face_nodes(f->Nodes());  //HA. This is added to be used throughout the method instead of reading it at few different places. 
-   
-   // smooth force-field on element boundary
-   if ( interpolate_Sn_across_nodes ) {
-        // adding the normal stress as force contribution to the nodes of the face
-        for ( size_t i=0U; i<f->Nodes(); i++ ) {
-             const double64 weighting(f->N(i)->Parents());
-             f->N(i)->Read( F_key_, vc_ );
-             vc_ += (nrml_ / weighting);
-             f->N(i)->Store( F_key_, nrml_ );
-          }
-     }
+   const size_t  face_nodes(f->Nodes());  //HA. This is added to be used throughout the method instead of reading it at few different places.
+   nrml_ = nrml_ * (f->Area() / static_cast<double64> (face_nodes));
+  
    // standard FE accumulation of stresses across a boundary
-   else {
-      nrml_ = nrml_ * (f->Area() / static_cast<double64> (face_nodes));
-        // adding the normal stress as force contribution to the nodes of the face
-        for ( size_t i=0U; i<face_nodes; i++ ) {
-             f->N(i)->Read( F_key_, vc_ );
-             vc_ += nrml_;
-             f->N(i)->Store( F_key_, vc_ );
-          }
+   // adding the normal stress as force contribution to the nodes of the face
+   for ( size_t i=0U; i<face_nodes; i++ ) {
+        // the status of the variable is not touched
+        f->N(i)->Read( F_key_, vc_ );
+        vc_ += nrml_;
+        f->N(i)->Store( F_key_, vc_ );
      }
   
    // 2. ASSIGNMENT OF THE SHEAR STRESS COMPONENT
@@ -158,6 +146,10 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    }
 
 } // end Visit(face)
+
+
+
+
 
 
 
