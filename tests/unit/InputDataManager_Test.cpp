@@ -19,43 +19,44 @@ namespace csmp {
     using namespace std;
   
 
-InputDataManager_Test::InputDataManager_Test()
-    : _model(0)
+InputDataManager_Test::InputDataManager_Test( bool verbose )
+    : verbose_(verbose)
     {
     }
     
 
 InputDataManager_Test::~InputDataManager_Test()
     {
-       delete _model;
     }
     
 
+/**
+    Reading of all basic variable types and placements.
+*/
 void InputDataManager_Test::run()
     {
-        _model=new csmp::ANSYS_Model3D("prism_test","CSMP_DataInputManager_Test-variables.txt");
+        ANSYS_Model3D model("InputDataManager_Test","CSMP_DataInputManager_Test-variables.txt");
 
         InputDataManager<3U> idm;
       
-        idm.ConfigureFromFile(*_model,"prism_test",false, true, true, true, true );
+        idm.ConfigureFromFile(model,"InputDataManager_Test",false, true, true, true, true );
 
 
         { // Create new no-name Scope
-            csmp::Index porosity_idx=_model->Database().StorageKey("porosity");
-            csmp::Index permeability_idx=_model->Database().StorageKey("permeability");
+            csmp::Index porosity_idx=model.Database().StorageKey("porosity");
+            csmp::Index permeability_idx=model.Database().StorageKey("permeability");
 
             double porosity(0.0);
             double permeability(0.0);
-            std::vector<Element<3U>*>::const_iterator eit(_model->Region("FRAC_VOLUMES").ElementsBegin());
-            for (;eit != _model->Region("FRAC_VOLUMES").ElementsEnd();++eit)
+            for ( auto eit=model.Region("FRAC_VOLUMES").ElementsBegin();
+                  eit!=model.Region("FRAC_VOLUMES").ElementsEnd(); ++eit )
             {
                 porosity=(*eit)->Read(porosity_idx);
                 permeability=(*eit)->Read(permeability_idx);
                 _test(porosity==1.000e+00);
                 _test(permeability==1.0e-10);
             }
-            eit=_model->Region("MATRIX").ElementsBegin();
-            for (;eit != _model->Region("MATRIX").ElementsEnd();++eit)
+            for ( auto eit=model.Region("MATRIX").ElementsBegin(); eit != model.Region("MATRIX").ElementsEnd();++eit)
             {
                 porosity=(*eit)->Read(porosity_idx);
                 permeability=(*eit)->Read(permeability_idx);
