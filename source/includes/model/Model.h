@@ -191,14 +191,17 @@ class Model : public RegionInterface<dim,Model>,
 public:
 
     /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-    Model( VSet<dim>&, const char* var_file, bool isoparametric=false, bool binaryVariablesFile = false );
+    Model( VSet<dim>&, const char* var_file, bool isoparametric=false, bool binaryVariablesFile=false );
   
     /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
     Model( VSet<dim>&, bool isoparametric=false );
   
-    /// constructs un-named multi-domain model
-    Model( ModelTopology&, VSet<dim>&, const char* var_file, bool binaryVariablesFile = false );
-    Model( ModelTopology&, VSet<dim>& );
+    /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
+    Model( ModelTopology&, VSet<dim>&, const char* var_file,
+           bool binaryVariablesFile=false, bool create_boundary_objects=false, bool box_shaped=true );
+  
+    /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
+    Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects=false, bool box_shaped=true );
 
     /// to read model from set of CSMP native binary files
     explicit Model( const std::string& binaryFiles );

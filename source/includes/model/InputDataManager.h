@@ -203,10 +203,6 @@ Or with the generic method, but the specific settings:
                             bool block5 );
 @endcode
 
-@todo (2) Add support for configuring properties placed on the Model 
-@todo (2) Add support for reading variables with Boundary and SplitBoundary placement
-@todo (2) Add support for reading ArrayVariable values
-
 */
 template<size_t dim>
 class  InputDataManager {
