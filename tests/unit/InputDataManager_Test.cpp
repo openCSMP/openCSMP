@@ -14,24 +14,29 @@
 #include "VSet.h"
 #include "ANSYS_Model3D.h"
 
-namespace csmp
-{
+namespace csmp {
+
     using namespace std;
-    InputDataManager_Test::InputDataManager_Test()
+  
+
+InputDataManager_Test::InputDataManager_Test()
+    : _model(0)
     {
     }
     
-    InputDataManager_Test::~InputDataManager_Test()
+
+InputDataManager_Test::~InputDataManager_Test()
     {
-        if( _model!=NULL )
-            delete _model;
+       delete _model;
     }
     
-    void InputDataManager_Test::run()
+
+void InputDataManager_Test::run()
     {
         _model=new csmp::ANSYS_Model3D("prism_test","CSMP_DataInputManager_Test-variables.txt");
 
         InputDataManager<3U> idm;
+      
         idm.ConfigureFromFile(*_model,"prism_test",false, true, true, true, true );
 
 
@@ -59,5 +64,6 @@ namespace csmp
             }
         } // End no-name Scope
 
-    }    
-}
+    }
+  
+} // end csmp

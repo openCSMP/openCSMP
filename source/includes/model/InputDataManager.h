@@ -29,78 +29,9 @@
 
 namespace csmp {
 
-/// file based configuration of CSMP models
-template<size_t dim>
-class  InputDataManager {
-
-  public:
-
-    InputDataManager();
-    ~InputDataManager();
-
-    bool ConfigureFRED_ModelFromFile( Model<dim>& sg, const char* fname,
-                                      std::map<std::string,std::vector<double64> >& well_data,
-                                      ComputationalSettings& settings );
-
-    bool Configure_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
-
-    bool ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
-
-    bool ConfigureRegionsFromFile( Model<dim>& sg, const char* fname,
-                                   std::set<std::string>& groups );
-
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname );
-
-    /// key constructor for 3D production models created with Boundary objects
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
-                            bool block1,            // groupname from parameter range
-                            bool block2,            // default property values
-                            bool block3,            // regional property values
-                            bool block4,            // boundary conditions for box-shaped model
-                            bool block5,            // essential conditions for regions
-                            bool block6,            // boundary conditions for arbitrary-shaped model
-                            ComputationalSettings& settings );
-
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
-                            bool block1,            // groupname from parameter range
-                            bool block2,            // default property values
-                            bool block3,            // regional property values
-                            bool block4,            // boundary conditions for box-shaped model
-                            bool block5,            // essential conditions for regions
-                            bool block6 = false );  // boundary conditions for arbitrary-shaped model
-
-    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
-                            bool block1,            // region name from parameter range
-                            bool block2,            // default property values for entire model
-                            bool block3,            // regional property values
-                            bool block4,            // boundary conditions for a box-shaped model
-                            bool block5,            // essential conditions applied region by region
-                            ComputationalSettings& settings );
-
-private:
-
-    bool ReadBlocks( std::ifstream& ifs,
-                     std::set<std::string>& groups,
-                     std::map<std::string,std::vector<double64> >& well_data,
-                     ComputationalSettings& settings,
-                     bool region_specifications,      // groupname from parameter range
-                     bool default_property_values,    // default property values
-                     bool region_property_values,     // regional property values
-                     bool region_property_conditions, // regional property conditions
-                     bool box_boundary_conditions,    // boundary conditions for box-shaped model
-                     bool boundary_conditions,        // boundary conditions for arbitrary-shaped model
-                     bool well_settings,              // well names, locations, rates, ratios
-                     bool computational_settings      // computational settings
-                   );
-
-    csmp::Model<dim>* model_;
-};
-
-
-/**
+/** @brief input of parameter values from block-structured text file.
  
-@class InputDataManager  InputDataManager "InputDataManager.h"
-@author S.K. Matthaei
+@author S.K. Matthai
 @author S. Geiger
 @author S.G. Roberts
 @date 2001
@@ -126,83 +57,94 @@ is because each subregion must at least consist of one finite element.
  
 @section design Design Intent
 
-As always, the design should be simple and versatile in accomodating 
-the needs of the range of potential models that shall be ran. This
-is achieved by dividing the input data into five different data blocks:  
+A simple design is achieved by dividing the input data into five 
+different data blocks, The user decides which blocks to read,
+by setting boolean flag arguments to ConfigureFromFile():
 
-Block 1 - for the association of group names with characteristic values
+Block 1 - to define named regions of elements with characteristic values
 of element properties.  
 
-Block 2 - to set default property values for entire model that will sub-
-sequently be overwritten in subregions if necessary.  
+Block 2 - to set default property values for the entire model.
+These can get overwritten in individual subregions by the values 
+and flags supplied in the data blocks 3-5.
 
-Block 3 - propert values that are unique for certain model subregions,
-here one should be able to differentiate whether these values shall be
-applied to the entire subregion (option=complete), its boundary (option=
-boundary), or only the interior of the region (option=interior). Please
-refer to the CSP user's guide to to learn about the characteristics 
-of group boundaries. Boundary elements of groups are only those which
-have at least one of their faces on the group boundary.  
+Block 3 - propert values for  model subregions. The user can determine
+whether these values are applied to the entire subregion (option=COMPLETE),
+its boundary (option=PERIMETER), or only the interior of the region 
+(option=INTERIIR). The CSMP user's guide explain how these parts 
+of a region are defined and how Region obkects work in general. 
+The perimeter elements of regions are only those which
+have at least one of their faces on the region boundary. 
 
-Block 4 - assigns boundary conditions to box-shaped models using the 
-boundary identifiers defined for the enumeriation BOX_BOUNDARY
-in 'CSMP_definitions.h'.  
+@attention Since perimeter nodes are shared between adjacent regions
+the last value assignment instruction will determine the values 
+that the target variables at these boundary nodes will have
+after initialisation is complete. This is not the case for 
+other property placements.
+
+Block 4 - (box-shaped models only): assigns boundary conditions 
+using the boundary identifiers defined by the enumeriation BOX_BOUNDARY
+in 'Box.h'. Box-shaped models offer a few extra configuration 
+possibilities. For instance,
+linear boundary property variations can be assigned,
+which is not possible for free-form models for which only
+uniform boundary values can be assigned.
+For the latter, computations performed on the boundaries can 
+achieve this goal.
 
 Block 5 - Essential conditions that are assigned by setting property
-condition flags for groups.Again the discriminators 'complete, interior,
-boundary' can be used. To assign boundary condition values to irregular
-models, one first sets the desired property value for the target group
-and then assigns the intended condition flag to this group, i.e. DIRICH
-or NEUMANN etc.  
+condition flags for specifc regions. Again the discriminators 'complete, interior,
+perimeter' can be used. To assign boundary condition values to irregular
+models, one first sets the desired property value in the target region
+and then assigns the intended condition flag to it, i.e. DIRICH
+or NEUMANN etc. in Block 5.
 
 Any of the data blocks are started and terminated by an empty line.  
 
-Apart from the blocked approach to the configuration file the interface 
-provides several interfaces defined which initialize models created with 
-specific meshing tools, like Shewchuk's triangle mesher and ICEM's
+Apart from the block-structured approach to the configuration file the 
+InputDataManager provides several methods to initialize models created with
+specific meshing tools, such as Shewchuk's triangle mesher and ICEM's
 suite of meshing tools. 
 
+Computational Settings - is an additional block that can be appended,
+allowing the user to define the time stepping strategy, during and
+times when simulation results shall be output to file.
+
+Again, a blank line indicates the end of this block and users can 
+write any comments, references, and observations made on models
+as kind of a documentation, following the configuration.
  
 @section applicability Applicability
 
-The input data manager can be used to configure any CSP model, but its
-functionality is restricted to that of the public interfaces of the 
-Model. Thus linear boundary property variations can be assigned
-to box-shaped models, but not to freeform models for which only 
-uniform boundary values can be assigned.
- 
- 
-@section structure Structure
-
-The public interface of the manager depends on a portfolio of low-level
-methods that parse the datablocks in the file.
- 
+The InputDataManager can be used to configure any CSMP model, but its
+functionality is restricted to that of public interfaces of the
+Model.
  
 @section participants Participants
  
-The data input manager requires the Model to act on and 
+The data input manager requires a Model to act on- and
 interacts with the ComputationalSettings object that is used to 
 store runtime information. 
  
  
 @section consequences Consequences
  
-The decision that CSP variable names may contain white space forced us
+The decision that CSMP variable names may contain white space forced us
 to restrict the use of token (string item) separators to the tab keys.
 Thus every item in any configuration line must be separated by a tab
 key and any other white space must be avoided (also at the end of lines).
-Comments can be inserted anywhere into configuration files but they
-must start with the # sign.  
+Comments can be inserted anywhere into configuration files.
+To write a comment, start the line with a # sign.
 
-The data input manager allows the user to configure CSP models without
-the need for compilation of a main program.
+The data input manager allows the user to configure CSMP models without
+the need for compilation of a program.
  
  
 @section examples Application Examples
 
 An example configuration file as would be used to configure a model
 created with the Triangle mesher and including comments is shown
-in the following:  
+in the following (the CSMP Example suite contains many others):
 
  @code
 'mymodel-configuration.txt' file created X/X/X - this is its title
@@ -261,10 +203,70 @@ Or with the generic method, but the specific settings:
                             bool block5 );
 @endcode
 
-@todo (2) Support for Model & ModelSubDomain Placements
-@todo (2) Support for Array type
+@todo (2) Add support for configuring properties placed on the Model 
+@todo (2) Add support for reading variables with Boundary and SplitBoundary placement
+@todo (2) Add support for reading ArrayVariable values
 
 */
+template<size_t dim>
+class  InputDataManager {
+  public:
+    /// writes configuration options to screen
+    void Help() const;
+  
+    /// reads data for blocks 1-5, assigning them to box-shaped models
+    bool ConfigureFromFile( Model<dim>& sg, const char* fname );
+
+    /// key generic configuration method for time-dependent models that can contain Boundary objects
+    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
+                            bool block1,            ///< region name from parameter range
+                            bool block2,            ///< default property values
+                            bool block3,            ///< regional property values
+                            bool block4,            ///< boundary conditions for box-shaped model
+                            bool block5,            ///< essential conditions for regions
+                            bool block6,            ///< boundary conditions for arbitrary-shaped model
+                            ComputationalSettings& settings );
+
+    /// as above but without runtime information
+    bool ConfigureFromFile( Model<dim>& sg, const char* fname,
+                            bool block1,            ///< region name from parameter range
+                            bool block2,            ///< default property values
+                            bool block3,            ///< regional property values
+                            bool block4,            ///< boundary conditions for box-shaped model
+                            bool block5,            ///< essential conditions for regions
+                            bool block6 = false );  ///< boundary conditions for arbitrary-shaped model
+
+    /// configuration restricted to unique regions in the input model
+    bool ConfigureRegionsFromFile( Model<dim>& sg, const char* fname, std::set<std::string>& groups );
+
+    /// FRED was a FRACMAN consortium of Golder Associates, this interface is used in the Fracman GUI
+    bool ConfigureFRED_ModelFromFile( Model<dim>& sg, const char* fname,
+                                      std::map<std::string,std::vector<double64> >& well_data,
+                                      ComputationalSettings& settings );
+
+    /// configures box-shaped ANSYS models output using ANSYS' csp input interface
+    bool Configure_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
+
+    /// configures arbitrarily shaped ANSYS models output to CSMP, recognising boundaries if their name contains BOUNDARY
+    bool ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& sg, const char* fname );
+
+private:
+    bool ReadBlocks( Model<dim>& model,
+                     std::ifstream& ifs,
+                     std::set<std::string>& groups,
+                     std::map<std::string,std::vector<double64> >& well_data,
+                     ComputationalSettings& settings,
+                     bool region_specifications,      // groupname from parameter range
+                     bool default_property_values,    // default property values
+                     bool region_property_values,     // regional property values
+                     bool region_property_conditions, // regional property conditions
+                     bool box_boundary_conditions,    // boundary conditions for box-shaped model
+                     bool boundary_conditions,        // boundary conditions for arbitrary-shaped model
+                     bool well_settings,              // well names, locations, rates, ratios
+                     bool computational_settings      // computational settings
+                   );
+};
+
 
 }// end namespace csmp
 
