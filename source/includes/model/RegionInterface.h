@@ -10,6 +10,7 @@
 #include <map>
 #include <set>
 #include <utility>
+#include <tuple>
 
 namespace csmp {
 
@@ -239,9 +240,13 @@ class RegionInterface
     /// boolean operation: symmetric difference (the symmetric difference is the union without the intersection)
     bool    RegionSymmetricDifference( const char* region_a, const char* region_b, const char* region_symdiff );
 
-    /// creates a lower-dimensiona region along the contact area of 2 higher dimensional ones
     // TODO: test
+    /// creates a lower-dimensiona region along the contact area of 2 higher dimensional ones
     bool    RegionBetween( const char* region_a, const char* region_b, const char* region_between );
+    
+    /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
+    size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
+                                  std::vector<std::tuple<Element<dim>*,Element<dim>*,size_t,size_t> >& shared ) const;
 
   protected:
   
@@ -256,7 +261,6 @@ class RegionInterface
 private:
     RegionInterface( const RegionInterface& );
 };
-
 
 } // csmp
 

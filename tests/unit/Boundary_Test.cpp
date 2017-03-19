@@ -166,7 +166,7 @@ void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
   }
 
 
-/// checks for that faces unit normal points toward outer parent element
+/// checks for that face unit normal points toward outer parent element
 template <size_t dim>
 void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundary )
   {
@@ -341,6 +341,7 @@ void Boundary_Test::runLegacy()
 
     // 3D TESTS II
     // ===========
+    
     ANSYS_Model3D model( "BoxHalfs", "CSMP-variables.txt", true );
     VTU_Interface<SPACE> vtu( model ); vtu.OmitZeroInFileName( true );
     Region<SPACE>& mref( model.Region( "Model" ) );

@@ -220,9 +220,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
     static bool first_call(true);
 
-
-
-    if (ifs.is_open() &&  !input_file_is_empty(ifs)){
+    if (ifs.is_open() &&  !isInputFileEmpty(ifs)){
         std::getline( ifs, text_line );
         // read the headers. (first line of every monitoring file output by this class.)
 

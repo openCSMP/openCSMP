@@ -744,11 +744,19 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
                 }
            }
          else if ( eflags.size() > 2U ) {
-               cerr <<"\n\n\nrecreateAtBoundaryFlags(2D): unable to determine box boundary flag for element:\n";
-               for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
-                 cout << parseBoundary( (*sit) ) <<" ";
-               cout << endl;
-               (*it)->Out();
+               // PATHETIC CASES where the element sits in the corner and has all nodes on the boundary
+               if      ( eflags.count(CNR1) && eflags.count(LEFT)  && eflags.count(BOTTOM) ) (*it)->AtBoundary( CNR1 );
+               else if ( eflags.count(CNR2) && eflags.count(RIGHT) && eflags.count(BOTTOM) ) (*it)->AtBoundary( CNR2 );
+               else if ( eflags.count(CNR3) && eflags.count(RIGHT) && eflags.count(TOP) ) (*it)->AtBoundary( CNR3 );
+               else if ( eflags.count(CNR4) && eflags.count(LEFT)  && eflags.count(TOP) ) (*it)->AtBoundary( CNR4 );
+               // WARNING
+               else {
+                    cerr <<"\n\n\nrecreateBoxBoundaryFlags(2D): unable to determine box boundary flag for element:\n";
+                    for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
+                      cout << parseBoundary( (*sit) ) <<" ";
+                    cout << endl;
+                    (*it)->Out();
+                 }
            }
       }
 

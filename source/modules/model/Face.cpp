@@ -182,7 +182,7 @@ Face<dim>::Face( Element<dim>& e,
     outerParent_(nullptr)
  {
     assert( boundary_face < e.Faces() );
-    assert( e.Neighbor(boundary_face) == nullptr );
+    if ( e.Neighbor(boundary_face) != nullptr ) outerParent_ = e.Neighbor(boundary_face);
     if ( dim == 2 ) assert( e.IsSurfaceElement() );
     if ( dim == 3 ) assert( e.IsVolumeElement() );
 

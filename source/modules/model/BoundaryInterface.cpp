@@ -594,8 +594,9 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
        }
     assert( nbor_elmt != nullptr );
 
-    if      ( dim == 3 ) assert( nbor_elmt->IsVolumeElement() );
-    else if ( dim == 2 ) assert( nbor_elmt->IsSurfaceElement() );
+    // TODO: check whether following assert is correct:
+    if ( dim == 3 ) assert( nbor_elmt->IsVolumeElement() );
+    if ( dim == 2 ) assert( nbor_elmt->IsSurfaceElement() );
    
     // 2. drawing the results
     // -------------------------------------------------------------------------------------------------------------

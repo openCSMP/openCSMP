@@ -5,6 +5,7 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
+#include <tuple>
 #include "BoundaryInterface_Test.h"
 #include "Boundary.h"
 #include "Region.h"
@@ -114,6 +115,9 @@ void BoundaryInterface_Test::run()
       // -----------------------------------
       // 3. testing supporting functionality
       // -----------------------------------
+      _test( TestRegionContactDetection(model) );
+    
+    
       // REDESIGN TEST - REGION WAS ALREADY REMOVED
       /*
       const size_t model_elements(model.Region("Model").Elements());
@@ -158,6 +162,46 @@ void BoundaryInterface_Test::TestBoxShapedModel()
       ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
 
  } // end TestBoxShapedModel
+
+
+
+
+
+/**
+   checks whether the contact surface of 2 contacting regions is recovered correctly
+   
+   For the model 'fault_boundary_test'  this test looks at whether the horizons juxtaposed 
+   by the fault are correctly detected.
+   
+   TODO: develop this into a test for CreateBetween()
+*/
+bool BoundaryInterface_Test::TestRegionContactDetection( const Model<3U>& model )
+ {
+    assert( string(model.Name()) == "fault_boundary_test" );
+    bool all_tests_passed(true);
+   
+    vector<tuple<Element<3U>*,Element<3U>*,size_t,size_t> > shared;
+   
+    if ( model.SharedPerimeterFaces( "LAYER_TOP", "LAYER_RESERVOIR", shared )  == 0 )
+      all_tests_passed = false;
+
+    if ( model.SharedPerimeterFaces( "LAYER_TOP", "LAYER_BOTTOM", shared )  == 0 )
+      all_tests_passed = false;
+
+    if ( model.SharedPerimeterFaces( "LAYER_BOTTOM", "LAYER_RESERVOIR", shared )  == 0 )
+      all_tests_passed = false;
+   
+    return all_tests_passed;
+   
+ } // end TestRegionContactDetection
+
+
+
+
+
+
+
+
 
  
   
@@ -1128,11 +1172,6 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
     return patch_names.size();
 
  } // end createInternalBoundaryFromLowerDimensionalRegion
-
-
-
-
-
 
 
 } // end csmp

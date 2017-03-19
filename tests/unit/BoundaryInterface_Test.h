@@ -31,6 +31,10 @@ class BoundaryInterface_Test : public Test {
     void TestBoxShapedModel();
   
   private:
+    /// checks whether the contact surface of 2 contacting regions is recovered correctly
+    bool TestRegionContactDetection( const Model<3U>& );
+  
+  private:
     bool verbose_; ///< turn off to supress output of files etc.
 };
 
