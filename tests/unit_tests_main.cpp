@@ -67,7 +67,8 @@
 #include "RegionMonitor_Test.h"
 #include "Visitor_TestSuite.h"
 
-#include "ModelSubDomain_Test.hpp"
+#include "ModelSubDomain_Test.h"
+#include "BoundaryInterface_Test.h"
 #include "Boundary_Test.h"
 #include "Region_Test.h"
 #include "Box_Test.h"
@@ -93,7 +94,7 @@
 #include "TwoPhaseModel_TestSuite.h"
 #include "ExponentialTransferFunction_Test.h"
 
-#include "CSMP_VariableBenchmarking_Test.hpp"
+#include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
 
@@ -259,15 +260,16 @@ int main()
               TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
               interdependent2.addTest( new ModelTopology_Test() );
               // model
-              interdependent2.addTest( new Box_Test() );                 // XCode OK (SKM) but does not test hexahedral or prism element meshes
-              interdependent2.addTest( new ModelSubDomain_Test() );      // XCode OK (SKM)
-              interdependent2.addTest( new Region_Test(false) );         // XCode OK (SKM)
-              interdependent2.addTest( new ANSYS_Model2D_Test() );       // XCode OK (SKM)
-              interdependent2.addTest( new InputDataManager_Test());     // XCode OK (SKM)
-              interdependent2.addTest( new ANSYS_Model3D_Test() );       // XCode OK (SKM)
-              interdependent2.addTest( new PropertyHandle_Test() );      // XCode OK (SKM)
+              interdependent2.addTest( new Box_Test() );                  // XCode OK (SKM) but does not test hexahedral or prism element meshes
+              interdependent2.addTest( new ModelSubDomain_Test() );       // XCode OK (SKM)
+              interdependent2.addTest( new Region_Test(false) );          // XCode OK (SKM)
+              interdependent2.addTest( new BoundaryInterface_Test(false); // XCode OK (SKM) but tests only the boundary creation from lower-dimensional internal objects
+              interdependent2.addTest( new ANSYS_Model2D_Test() );        // XCode OK (SKM)
+              interdependent2.addTest( new InputDataManager_Test());      // XCode OK (SKM)
+              interdependent2.addTest( new ANSYS_Model3D_Test() );        // XCode OK (SKM)
+              interdependent2.addTest( new PropertyHandle_Test() );       // XCode OK (SKM)
               // interfaces
-              interdependent2.addTest( new BinaryFileInterface_Test() ); // XCode OK (SKM)
+              interdependent2.addTest( new BinaryFileInterface_Test() );  // XCode OK (SKM)
               interdependent2.addTest( new VTU_Interface_Test() );
               interdependent2.addTest( new StatisticalAnalyzer_Test() );
               // running unit tests and reporting errors

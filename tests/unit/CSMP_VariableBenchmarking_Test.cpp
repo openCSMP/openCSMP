@@ -1,5 +1,5 @@
 //
-//  CSMP_VariableBenchmarking_Test.cpp
+//  CSMP_VariableBenchmarking_Test.h
 //  CSMP_GitHub_UnitTests
 //
 //  Created by Stephan Matthai on 1/02/2017.
@@ -9,7 +9,7 @@
 #include <chrono>
 #include <random>
 #include "CSMP_mathUtilities.h"
-#include "CSMP_VariableBenchmarking_Test.hpp"
+#include "CSMP_VariableBenchmarking_Test.h"
 
 using namespace std;
 

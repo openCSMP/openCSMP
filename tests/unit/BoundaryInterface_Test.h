@@ -1,25 +1,37 @@
 //
-//  SKM_BoundaryFunctionality_Test.hpp
+//  BoundaryInterface_Test.h
 //
 //  Created by Stephan Matthai on 23/03/2016.
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#ifndef SKM_BOUNDARY_FUNCTIONALITY_TEST_H
-#define SKM_BOUNDARY_FUNCTIONALITY_TEST_H
+#ifndef BOUNDARY_FUNCTIONALITY_TEST_H
+#define BOUNDARY_FUNCTIONALITY_TEST_H
 
 #include "Test.h"
 #include "Model.h"
 
 namespace csmp {
 
-class BoundaryFunctionality_Test : public Test {
+/**
+    @brief tests refactored functionality related to boundaries.
+    
+    Input models:
+      - fault_boundary_test   - normal fault offsetting central reservoir layer creating complex intersection relationships
+        uses the mesh stored in FaultBoundaryTest
+*/
+class BoundaryInterface_Test : public Test {
   public:
+    explicit BoundaryInterface_Test( bool verbose=false ) : verbose_(verbose) {}
+  
+    /// testing new and refactored functionality from 2016-17
     virtual void run();
   
     /// can Box-shaped model creation be accomplished and how fast
     void TestBoxShapedModel();
   
+  private:
+    bool verbose_; ///< turn off to supress output of files etc.
 };
 
 
