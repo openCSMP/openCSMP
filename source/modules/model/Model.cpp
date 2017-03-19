@@ -108,7 +108,7 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_ele
  {
     Initialize( isoparametric_elements, vset,
                 false /* do not create boundaries */,
-                false /* regular boundaries */);
+                false /* irregular boundaries */);
 
  } // end VSet constructor
 
@@ -121,7 +121,7 @@ Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
  {
     Initialize( isoparametric_elements, vset,
                 false /* do not create boundaries */,
-                false /* regular boundaries */);
+                false /* irregular boundaries */);
 
  } // end VSet constructor
 
@@ -163,32 +163,32 @@ Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
   carried out since all basic variables are initialized to NAN (not a number)
   by default.
   
-  @attention this constructor will not create any boundaries
+  @attention per default this constructor will not create any boundaries
 */
 template<size_t dim>
-Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file, bool binaryVariablesFile )
+Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file,
+                   bool binaryVariablesFile, bool create_boundary_objects, bool box_shaped )
  : database_( var_file, binaryVariablesFile ),
    fvStencilManager_(nullptr),
    model_name_("undefined"),
    verbose_(true)
  {
     Initialize( mesh_topology, vset,
-                false /* do not create boundries */,
-                false /* regular boundaries */ );
+                create_boundary_objects,
+               !box_shaped /* irregular boundaries */ );
 
  } // end VSet/ModelTopology constructor
 
 
 
 template<size_t dim>
-Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset )
- : database_( ),
-   model_name_("undefined"),
+Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, bool create_boundary_objects, bool box_shaped )
+ : model_name_("undefined"),
    fvStencilManager_(nullptr)
  {
     Initialize( mesh_topology, vset,
-                false /* do not create boundaries */,
-                false /* regular boundaries */);
+                create_boundary_objects,
+               !box_shaped /* irregular boundaries */);
    
  } // end VSet/ModelTopology constructor
 

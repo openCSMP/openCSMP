@@ -1,11 +1,12 @@
 //
-//  SKM_BoundaryFunctionality_Test.cpp
+//  BoundaryInterface_Test.cpp
 //
 //  Created by Stephan Matthai on 23/03/2016.
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#include "SKM_BoundaryFunctionality_Test.hpp"
+#include <tuple>
+#include "BoundaryInterface_Test.h"
 #include "Boundary.h"
 #include "Region.h"
 #include "ErrorHandler.h"
@@ -19,15 +20,16 @@ using namespace std;
 
 namespace csmp {
 
-
 size_t labelRegionPatches( Model<3U>&, const char* dim_1_region, const char* diagnostic_elmt_variable,
                           const char* patch_variable, const std::vector<std::string>& region_names );
 
 
-
-
-// testing
-void BoundaryFunctionality_Test::run()
+/**
+     Testing 2016-17 refactored functionality of BoundaryInterface and Boundary classes:
+     
+     CreateInternalBoundaryFrom()
+*/
+void BoundaryInterface_Test::run()
   {
       TestBoxShapedModel();
   
@@ -54,14 +56,14 @@ void BoundaryFunctionality_Test::run()
       //out( region_names );
 
       VTU_Interface<dim>  vtu(model);
-      vtu.OutputDataToVTU( "BoundaryFunctionality_Test_", region_tag, string("Model"), 0 );
+      if ( verbose_ ) vtu.OutputDataToVTU( "BoundaryInterface_Test_", region_tag, string("Model"), 0 );
 
       const string patch_tag("patch identifier");
       // creating visual output that illustrates what the boundary should look like for testing
       size_t subregions = labelRegionPatches( model, "NORMAL_FAULT", region_tag.c_str(), patch_tag.c_str(), region_names );
 
-      cout <<"\nBoundaryFunctionality_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
-      vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
+      if ( verbose_ ) cout <<"\nBoundaryInterface_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
+      if ( verbose_ ) vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
     
     
 
@@ -80,9 +82,10 @@ void BoundaryFunctionality_Test::run()
       _test( (model_faces_after - model_faces_before) == elmts_original_region );
 
       // testing for existance of the new boundary patches
-      cout << "\nBoundaryFunctionality_Test::run: Printing the name of the boundaries in the model:";
-      for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it ) {
-           cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Elements() <<" faces)";
+      if ( verbose_ ) {
+           cout << "\nBoundaryInterface_Test::run: Printing the name of the boundaries in the model:";
+           for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+             cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Elements() <<" faces)";
         }
       _test( model.Boundaries() == 12 );
 
@@ -90,14 +93,14 @@ void BoundaryFunctionality_Test::run()
       model.InputPropertyValue("nodal variable", makeScalar(PLAIN, 0.) );
       double64  bvalue(1.3e5);
       for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it ) {
-           cout << "\n Boundary: " << (*it).first;
+           if ( verbose_ ) cout << "\n Boundary: " << (*it).first;
            (*it).second.InputPropertyValue("nodal variable", makeScalar(PLAIN, bvalue) );
            // testing VTU output
-           vtu.OutputDataToVTU( "patch", string("nodal variable"), (*it).second, 0 );
+           if ( verbose_ ) vtu.OutputDataToVTU( "patch", string("nodal variable"), (*it).second, 0 );
            // creating different pressure values for each boundary patch
            bvalue += 1.0e5;
         }
-      cout << endl;
+      if ( verbose_ ) cout << endl;
 
       // testing whether boundary segments can be found by combined search criteria
       const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
@@ -112,6 +115,9 @@ void BoundaryFunctionality_Test::run()
       // -----------------------------------
       // 3. testing supporting functionality
       // -----------------------------------
+      _test( TestRegionContactDetection(model) );
+    
+    
       // REDESIGN TEST - REGION WAS ALREADY REMOVED
       /*
       const size_t model_elements(model.Region("Model").Elements());
@@ -120,7 +126,7 @@ void BoundaryFunctionality_Test::run()
       const size_t model_elements_after(model.Region("Model").Elements());
       _test( (model_elements - test_region_elements) == model_elements_after );
 
-      vtu.OutputDataToVTU( "BoundaryFunctionality_Test_without_fault", region_tag, string("Model"), 0 );
+      vtu.OutputDataToVTU( "BoundaryInterface_Test_without_fault", region_tag, string("Model"), 0 );
     
       // moving a region
       model.MoveToNonUniqueRegions( test_region.c_str() );
@@ -141,7 +147,7 @@ void BoundaryFunctionality_Test::run()
      
      3. how fast model creation is
 */
-void BoundaryFunctionality_Test::TestBoxShapedModel()
+void BoundaryInterface_Test::TestBoxShapedModel()
  {
       // ----------------------------------------------------
       // 1. Building a CSMP Model from an ANSYS input dataset
@@ -156,6 +162,46 @@ void BoundaryFunctionality_Test::TestBoxShapedModel()
       ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
 
  } // end TestBoxShapedModel
+
+
+
+
+
+/**
+   checks whether the contact surface of 2 contacting regions is recovered correctly
+   
+   For the model 'fault_boundary_test'  this test looks at whether the horizons juxtaposed 
+   by the fault are correctly detected.
+   
+   TODO: develop this into a test for CreateBetween()
+*/
+bool BoundaryInterface_Test::TestRegionContactDetection( const Model<3U>& model )
+ {
+    assert( string(model.Name()) == "fault_boundary_test" );
+    bool all_tests_passed(true);
+   
+    vector<tuple<Element<3U>*,Element<3U>*,size_t,size_t> > shared;
+   
+    if ( model.SharedPerimeterFaces( "LAYER_TOP", "LAYER_RESERVOIR", shared )  == 0 )
+      all_tests_passed = false;
+
+    if ( model.SharedPerimeterFaces( "LAYER_TOP", "LAYER_BOTTOM", shared )  == 0 )
+      all_tests_passed = false;
+
+    if ( model.SharedPerimeterFaces( "LAYER_BOTTOM", "LAYER_RESERVOIR", shared )  == 0 )
+      all_tests_passed = false;
+   
+    return all_tests_passed;
+   
+ } // end TestRegionContactDetection
+
+
+
+
+
+
+
+
 
  
   
@@ -636,7 +682,12 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
       {
          // TODO: improve these diagnostics
-         if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL ) boundary_elements++;
+         if ( (*eit)->AtBoundary() != NOT and
+              (*eit)->AtBoundary() != INTERNAL and
+              (*eit)->AtBoundary() != IRREGULAR ) {
+              cerr << parseBoundary( (*eit)->AtBoundary() ) <<" ";
+              boundary_elements++;
+           }
       }
     if ( boundary_elements > 0 ) {
          ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
@@ -1121,11 +1172,6 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
     return patch_names.size();
 
  } // end createInternalBoundaryFromLowerDimensionalRegion
-
-
-
-
-
 
 
 } // end csmp

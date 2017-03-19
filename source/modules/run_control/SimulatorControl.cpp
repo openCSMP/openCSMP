@@ -1034,7 +1034,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
     std::string token;
     std::ifstream ifs( string(this->GetSS()->GetProjectName()+"-control.txt").c_str() );
 
-    if ((input_file_is_empty(ifs) || !ifs.is_open()) && !this->restart_) {
+    if ((isInputFileEmpty(ifs) || !ifs.is_open()) && !this->restart_) {
         cout<<" ******************** ATTENTION **********************************"<<endl;
         cout<<" It seems that you are missing a file (or it is empty) named: "<<this->GetSS()->GetProjectName()<<"-control.txt"<<endl;
         cout<<" This file can be generated taking into account general and simulator-specific options. "<<endl;

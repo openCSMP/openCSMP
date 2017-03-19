@@ -69,7 +69,7 @@ class BoundaryInterface {
     csmp::Boundary<dim>&        Boundary( const std::string& bName );
     const csmp::Boundary<dim>&  Boundary( const std::string& bName ) const;
     bool                        ContainsBoundary( const std::string& bName ) const;
-    
+  
     /// searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\0') if not found
     std::string  FindBoundaryName( const std::set<std::string>& intersected_regions ) const;
 

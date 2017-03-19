@@ -3,7 +3,7 @@
  *  csmp_core
  *
  *  Created by Ali Tabatabaei on 11/4/10.
- *  Copyright 2010 csmp-project All rights reserved.
+    refactored by SKM 2016.
  *
  */
 
@@ -12,19 +12,22 @@
 
 #include "Test.h"
 
+namespace csmp {
 
-namespace csmp
-{
-    class ANSYS_Model3D;
-    class InputDataManager_Test: public Test
-    {
-    public:
-        InputDataManager_Test();
-        ~InputDataManager_Test();
-        void run();
-    private:
-        ANSYS_Model3D* _model;
-    };
-}
+class ANSYS_Model3D;
 
-#endif
+class InputDataManager_Test: public Test {
+  public:
+      explicit InputDataManager_Test( bool verbose=false );
+      ~InputDataManager_Test();
+      
+      virtual void run();
+  
+  private:
+    bool verbose_;
+
+};
+
+} // end csmp
+
+#endif /* INPUT_DATA_MANAGER_TEST_H */

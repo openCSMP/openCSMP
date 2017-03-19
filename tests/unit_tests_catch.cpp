@@ -58,7 +58,8 @@
 #include "Visitor_TestSuite.h"
 #include "Box_Test.h"
 
-#include "ModelSubDomain_Test.hpp"
+#include "ModelSubDomain_Test.h"
+#include "BoundaryInterface_Test.h"
 #include "Boundary_Test.h"            // sm: needs work
 #include "Region_Test.h"
 #include "Box_Test.h"

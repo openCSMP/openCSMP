@@ -1074,7 +1074,9 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
     // searching for elements of region1 that are neighbors of ones in group1.
     // If so, there is a shared boundary and faces or interfaces are constructed.
-    const size_t n_elements( region1.Elements() );
+    const size_t   n_elements( region1.Elements() );
+    vector<size_t> fnids;
+    
     for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
       {
         ePtr = region1.E(i);
@@ -1093,10 +1095,14 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
                       Face<dim>* faceObj = meshManager.PushBackIfUnique( Face<dim>( femPtr, NULL, lvsFaces, lvsIntegrationPoints ) );
 
+                      // nodes are assigned to the new face
+                      ePtr->FE()->NodesOfFace( face, fnids );
+                      for ( size_t node=0U; node<fnids.size(); ++node )
+                        faceObj->Assign( node, ePtr->N( fnids[node] ) );
+
                       // the new face is connected to the elements it is sandwiched between
                       // this assignment also includes connecting the face to its nodes
-                      //                 inner        outer  element w.r.t. to normal of face
-
+                      //               inner        outer  element w.r.t. to normal of face
                       faceObj->Assign( ePtr, ePtr->Neighbor(face) );
 
                       // added to boundary

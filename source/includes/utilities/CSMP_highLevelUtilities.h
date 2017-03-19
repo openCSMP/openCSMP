@@ -95,7 +95,7 @@ bool compareConnectivity( const Model<dim>&, const VSet<dim>& );
 bool areFartherApartThan( const double64* pn, const double64* pw, double64 distance );
 
 /// Returns true if file on ifstream is empty.
-bool input_file_is_empty(std::ifstream& pFile);
+bool isInputFileEmpty( std::ifstream& file );
 
 /// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
 template<size_t dim>
@@ -331,7 +331,8 @@ bool domainVariablesIn( FILE* fp, D& domain, const PropertyDatabase<dim>& pref )
  @param [in,out]  toRemoveFrom  vector from which elements are deleted.
  @param [in,out]  toRemove      vector which contains elements to be deleted from toRemoveFrom
 
- @return  .
+ @return  new size of vector.
+ 
  */
 template<typename T>
 size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRemove )
@@ -346,6 +347,8 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
   toRemoveFrom.swap(cache);
   return deleted;
 }
+
+
 #if defined _MSC_VER || defined __MINGW32__
 char * strptime(const char *s, const char *format, struct tm *tm);
 #endif

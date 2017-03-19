@@ -6,7 +6,7 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#include "ModelSubDomain_Test.hpp"
+#include "ModelSubDomain_Test.h"
 #include "Model.h"
 #include "Boundary.h"
 #include "ANSYS_Model3D.h"

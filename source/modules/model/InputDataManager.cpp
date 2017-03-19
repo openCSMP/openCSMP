@@ -18,45 +18,30 @@ The method reports on the requirements that the input must meet
 to be parsed correctly.
 */
 template<size_t dim>
-InputDataManager<dim>::InputDataManager()
-    : model_(NULL)
-{
-    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+void InputDataManager<dim>::Help() const
+ {
+    cout <<"\nInputDataManager (constructor): "<< endl;
+    cout <<"\nYou are configuring your model from an input file in text format.";
+    cout <<"\nThis file must have the extension '.configuration'.";
+    cout <<"\n\nFILE SPECIFICATIONS"<< endl;
+    cout <<"\nFile should contain the following data blocks (separated by blank lines): "<< endl << endl;
+    cout <<"\n1. Simulation title (name, date, reference)" << endl;
+    cout <<"\n2. Subregions to be identified as regions or 'no regions' text string";
+    cout <<"\n(example: fault zone	'tab' permeability	'tab' 1.0e-12 'tab' 1.0e-11)" << endl;
+    cout <<"\n3. Initial values and material properties applied to entire model";
+    cout <<"\n(example: permeability 'tab' 1.0e-13)"<< endl;
+    cout <<"\n4. Initial values and material properties applied to specific regions (see above)";
+    cout <<"\n(example: fault zone 'tab' interior 'tab' porosity 'tab' 0.25)"<< endl;
+    cout <<"\n5. Essential conditions (if of vector type, set of values must be followed by conditional flags)";
+    cout <<"\n(example: top	'tab' Dirichlet 'tab' fluid pressure 'tab' 1.0 'tab' 1.0)"<< endl;
+    cout <<"\n6. Condition flags applied to parts of or entire regions";
+    cout <<"\n(example: well 'tab' interior 'tab' fluid pressure 'tab' Dirichlet)"<< endl;
+    cout <<"\n\nNOTES: "<< endl;
+    cout <<"\nTabs delimit input fields; white space cannot be used as delimiter !";
+    cout <<"\nComments can be inserted but must be preceded by the pound (#) character.";
+    cout << endl << endl;
+ }
 
-    if ( csmp_error.Verbose() )
-    {
-        cout <<"\nInputDataManager (constructor): "<< endl;
-        cout <<"\nYou are configuring your model from an input file in text format.";
-        cout <<"\nThis file must have the extension '.configuration'.";
-        cout <<"\n\nFILE SPECIFICATIONS"<< endl;
-        cout <<"\nFile should contain the following data blocks (separated by blank lines): "<< endl << endl;
-        cout <<"\n1. Simulation title (name, date, reference)" << endl;
-        cout <<"\n2. Subregions to be identified as regions or 'no regions' text string";
-        cout <<"\n(example: fault zone	'tab' permeability	'tab' 1.0e-12 'tab' 1.0e-11)" << endl;
-        cout <<"\n3. Initial values and material properties applied to entire model";
-        cout <<"\n(example: permeability 'tab' 1.0e-13)"<< endl;
-        cout <<"\n4. Initial values and material properties applied to specific regions (see above)";
-        cout <<"\n(example: fault zone 'tab' interior 'tab' porosity 'tab' 0.25)"<< endl;
-        cout <<"\n5. Essential conditions (if of vector type, set of values must be followed by conditional flags)";
-        cout <<"\n(example: top	'tab' Dirichlet 'tab' fluid pressure 'tab' 1.0 'tab' 1.0)"<< endl;
-        cout <<"\n6. Condition flags applied to parts of or entire regions";
-        cout <<"\n(example: well 'tab' interior 'tab' fluid pressure 'tab' Dirichlet)"<< endl;
-        cout <<"\n\nNOTES: "<< endl;
-        cout <<"\nTabs delimit input fields; white space cannot be used as delimiter !";
-        cout <<"\nComments can be inserted but must be preceded by the pound (#) character.";
-        cout << endl << endl;
-    }
-}
-
-
-
-/** Destructor does nothing as the input data manager has no private
-data.
-*/
-template<size_t dim>
-InputDataManager<dim>::~InputDataManager()
-{
-}
 
 
 /**
@@ -135,8 +120,6 @@ bool InputDataManager<dim>::ConfigureFRED_ModelFromFile( Model<dim>& model,
 
     cout <<"\n\nInputDataManager<"<<  dim <<">::ConfigureFRED_ModelFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension( "-FRED-input.txt" );
@@ -157,7 +140,7 @@ bool InputDataManager<dim>::ConfigureFRED_ModelFromFile( Model<dim>& model,
     bool boundary_conditions        ( false );  // boundary conditions for arbitrary-shaped model
     bool well_settings              ( true  );  // well names, locations, rates, ratios
     bool computational_settings     ( true  );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -172,6 +155,9 @@ bool InputDataManager<dim>::ConfigureFRED_ModelFromFile( Model<dim>& model,
     return true;
 
 } // end ConfigureFRED_ModelFromFile
+
+
+
 
 
 
@@ -232,8 +218,6 @@ bool InputDataManager<dim>::Configure_ANSYS_ModelFromFile( Model<dim>& model, co
 
     cout <<"\n\nInputDataManager<"<< dim << ">::Configure_ANSYS_ModelFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -256,7 +240,7 @@ bool InputDataManager<dim>::Configure_ANSYS_ModelFromFile( Model<dim>& model, co
     bool boundary_conditions        ( false );  // boundary conditions for arbitrary-shaped model
     bool well_settings              ( false );  // well names, locations, rates, ratios
     bool computational_settings     ( false );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -320,8 +304,6 @@ bool InputDataManager<dim>::ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& 
 
     cout <<"\n\nInputDataManager<"<< dim <<">::ConfigureIrregular_ANSYS_ModelFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -344,7 +326,7 @@ bool InputDataManager<dim>::ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& 
     bool boundary_conditions        ( false );  // boundary conditions for arbitrary-shaped model
     bool well_settings              ( false );  // well names, locations, rates, ratios
     bool computational_settings     ( false );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -359,6 +341,10 @@ bool InputDataManager<dim>::ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& 
     return true;
 
 } // end ConfigureIrregular_ANSYS_ModelFromFile
+
+
+
+
 
 /**
 
@@ -388,8 +374,6 @@ bool InputDataManager<dim>::ConfigureRegionsFromFile( Model<dim>& model, const c
 
     cout <<"\n\nInputDataManager<"<<  dim <<">::ConfigureRegionsFromFile: Parsing file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -412,7 +396,7 @@ bool InputDataManager<dim>::ConfigureRegionsFromFile( Model<dim>& model, const c
     bool boundary_conditions        ( false );  // boundary conditions for arbitrary-shaped model
     bool well_settings              ( false );  // well names, locations, rates, ratios
     bool computational_settings     ( false );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -427,6 +411,8 @@ bool InputDataManager<dim>::ConfigureRegionsFromFile( Model<dim>& model, const c
     return true;
 
 } // end ConfigureRegionsFromFile
+
+
 
 
 /**
@@ -472,8 +458,6 @@ bool InputDataManager<dim>::ConfigureFromFile( Model<dim>& model, const char* fn
 
     cout <<"\n\nInputDataManager<"<< dim <<">::ConfigureFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -496,7 +480,7 @@ bool InputDataManager<dim>::ConfigureFromFile( Model<dim>& model, const char* fn
     bool boundary_conditions        ( false );  // boundary conditions for arbitrary-shaped model
     bool well_settings              ( false );  // well names, locations, rates, ratios
     bool computational_settings     ( false );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -513,7 +497,9 @@ bool InputDataManager<dim>::ConfigureFromFile( Model<dim>& model, const char* fn
 } // end ConfigureFromFile
 
 
-/** Allows for the costumized configuration of CSMP models.
+
+
+/** Allows for configuration of CSMP models.
 
 @section arguments Input Arguments
 
@@ -560,8 +546,6 @@ bool InputDataManager<dim>::ConfigureFromFile(
 
     cout <<"\n\nInputDataManager<"<< dim <<">::ConfigureFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -578,7 +562,7 @@ bool InputDataManager<dim>::ConfigureFromFile(
     ComputationalSettings settings;
     bool well_settings          ( false );  // well names, locations, rates, ratios
     bool computational_settings ( false );  // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -595,87 +579,9 @@ bool InputDataManager<dim>::ConfigureFromFile(
 
 } // end ConfigureFromFile
 
-/** Allows for the costumized configuration of CSMP models.
 
-@section arguments Input Arguments
 
-The method takes a reference to model which shall be initialized with
-the property values from the input file and the name of the file
-without the extension '-configuration.txt' which will be appended
-to the file name automatically.
 
-The boolean variables block1 to block5 enable the user to costumize the
-reading process. Thus, the desired data blocks can be switched on with
-their boolean variable values set to true. The role of the different
-input blocks is to read and create:
-
-@code
-block1 - regionname from parameter range.
-block2 - assign default property values.
-block3 - assign regional property values (i.e. values to existing regions),
-block4 - assign standard boundary conditions to box-shaped model.
-block5 - assign essential conditions via VARIABLE_FLAG flags to regions.
-@endcode
-
-@return The property values and flags are assigned to the model specified by the
-first method argument.
-
-The methood also initializes a ComputationalSettings object which allows
-the user to specify the duration of the run, the time stepping strategy,
-and the output times.
-
-@section messages Messages
-
-The method is verbose. Errors and monitors on the reading process are
-reported to stdout.
-*/
-template<size_t dim>
-bool InputDataManager<dim>::ConfigureFromFile(
-        Model<dim>& model, const char* fname,
-        bool region_specifications,       // regionname from parameter range
-        bool default_property_values,     // default property values
-        bool region_property_values,      // regional property values
-        bool box_boundary_conditions,     // boundary conditions for box-shaped model
-        bool region_property_conditions,  // regional property conditions
-        ComputationalSettings& settings )
-{
-    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
-
-    cout <<"\n\nInputDataManager<"<< dim <<">::ConfigureFromFile: Configuring model from file..."<< endl;
-
-    model_ = &model;
-
-    ifstream  ifs;
-    string    file_header;
-    const std::string file_extension ( "-configuration.txt" );
-
-    // 0. Open the file
-    openFile( ifs, fname, file_extension );
-
-    // 1. Read the title
-    readFileHeader( ifs, file_header, csmp_error.Verbose() );
-
-    // 2. Read data in blocks
-    std::set<std::string> groups;
-    std::map<std::string,std::vector<double64> > well_data;
-    bool boundary_conditions    ( false );  // boundary conditions for arbitrary-shaped model
-    bool well_settings          ( false );  // well names, locations, rates, ratios
-    bool computational_settings ( true );   // computational settings
-    ReadBlocks( ifs,
-                groups, well_data, settings,
-                region_specifications,
-                default_property_values,
-                region_property_values,
-                region_property_conditions,
-                box_boundary_conditions,
-                boundary_conditions,
-                well_settings,
-                computational_settings );
-
-    cout <<"\nInputDataManager<"<< dim <<">::ConfigureFromFile: Configuration completed."<< endl;
-    return true;
-
-} // end ConfigureFromFile (computational settings)
 
 /** Allows for the costumized configuration of CSMP models including csmp::Boundary
 
@@ -712,15 +618,15 @@ and the output times.
 The method is verbose. Errors and monitors on the reading process are
 reported to stdout.
 
-@param [in] sg The csmp::Model to set up
+@param [in] model The csmp::Model to set up
 @param [in] fname The file name (extension '-configuration.txt' appended automatically)
-@param [in] block1 Region from parameter range
-@param [in] block2 Default property values
-@param [in] block3 Region property values
-@param [in] block4 Boundary conditions for box-shaped model
-@param [in] block5 Essential conditions for Regions
-@param [in] block6 Properties & Essential conditions for Boundary
-@param [out] settings Computational settings
+@param [in] region_specifications block1 Region from parameter range
+@param [in] default_property_values block2 Default property values
+@param [in] region_property_values  block3 Region property values
+@param [in] box_boundary_conditions block4 Boundary conditions for box-shaped model
+@param [in] region_property_conditions block5 Essential conditions for Regions
+@param [in] boundary_conditions block6 Properties & Essential conditions for Boundary
+@param [in] settings Computational settings
 */
 template<size_t dim>
 bool InputDataManager<dim>
@@ -737,8 +643,6 @@ bool InputDataManager<dim>
 
     cout <<"\n\nInputDataManager<"<< dim <<">::ConfigureFromFile: Configuring model from file..."<< endl;
 
-    model_ = &model;
-
     ifstream  ifs;
     string    file_header;
     const std::string file_extension ( "-configuration.txt" );
@@ -754,7 +658,7 @@ bool InputDataManager<dim>
     std::map<std::string,std::vector<double64> > well_data;
     bool well_settings          ( false );  // well names, locations, rates, ratios
     bool computational_settings ( true );   // computational settings
-    ReadBlocks( ifs,
+    ReadBlocks( model, ifs,
                 groups, well_data, settings,
                 region_specifications,
                 default_property_values,
@@ -770,28 +674,32 @@ bool InputDataManager<dim>
 
 } // end ConfigureFromFile (computational settings)
 
+
+
+
 /**
 
 Generic function which reads blocks of data marked by flags
 
-@author Roman, 2014
+@author Roman, 2014, cleaned up by SKM 28/3/2016.
 
 */
 
 template<size_t dim>
 bool InputDataManager<dim>
-::ReadBlocks( std::ifstream& ifs,
+::ReadBlocks( Model<dim>& model,
+              std::ifstream& ifs,
               std::set<std::string>& groups,
               std::map<std::string,std::vector<double64> >& well_data,
               ComputationalSettings& settings,
-              bool region_specifications,        // groupname from parameter range
-              bool default_property_values,      // default property values
-              bool region_property_values,       // regional property values
-              bool region_property_conditions,   // regional property conditions
-              bool box_boundary_conditions,      // boundary conditions for box-shaped model
-              bool boundary_conditions,          // boundary conditions for arbitrary-shaped model
-              bool well_settings,                // well names, locations, rates, ratios
-              bool computational_settings        // computational settings
+              bool region_specifications,        ///< groupname from parameter range
+              bool default_property_values,      ///< default property values
+              bool region_property_values,       ///< regional property values
+              bool region_property_conditions,   ///< regional property conditions
+              bool box_boundary_conditions,      ///< boundary conditions for box-shaped model
+              bool boundary_conditions,          ///< boundary conditions for arbitrary-shaped model
+              bool well_settings,                ///< well names, locations, rates, ratios
+              bool computational_settings        ///< computational settings
             )
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -812,7 +720,7 @@ bool InputDataManager<dim>
             }
         }
 
-        buildRegionsBasedOnPropertyRange<dim>( *model_, groups,
+        buildRegionsBasedOnPropertyRange<dim>( model, groups,
                                                ifs, text_line, line_length, csmp_error.Verbose() );
     }
 
@@ -829,7 +737,7 @@ bool InputDataManager<dim>
             }
         }
 
-        readDefaultPropertyValues<dim>( *model_,
+        readDefaultPropertyValues<dim>( model,
                                         ifs, text_line, line_length, csmp_error.Verbose() );
     }
 
@@ -847,7 +755,7 @@ bool InputDataManager<dim>
             }
         }
 
-        readRegionPropertyValues<dim>( *model_,
+        readRegionPropertyValues<dim>( model,
                                        ifs, text_line, line_length, csmp_error.Verbose() );
     }
 
@@ -865,7 +773,7 @@ bool InputDataManager<dim>
             }
         }
 
-        readBoxBoundaryPropertyValuesAndConditions<dim>( *model_,
+        readBoxBoundaryPropertyValuesAndConditions<dim>( model,
                                                          ifs, text_line, line_length, csmp_error.Verbose() );
     }
 
@@ -883,7 +791,7 @@ bool InputDataManager<dim>
             }
         }
 
-        readRegionPropertyConditions<dim>( *model_,
+        readRegionPropertyConditions<dim>( model,
                                            ifs, text_line, line_length, csmp_error.Verbose() );
     }
 
@@ -900,7 +808,7 @@ bool InputDataManager<dim>
             }
         }
 
-        readBoundaryPropertyValuesAndConditions<dim>( *model_,
+        readBoundaryPropertyValuesAndConditions<dim>( model,
                                                       ifs, text_line, line_length, csmp_error.Verbose() );
     }
 

@@ -594,8 +594,9 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
        }
     assert( nbor_elmt != nullptr );
 
-    if      ( dim == 3 ) assert( nbor_elmt->IsVolumeElement() );
-    else if ( dim == 2 ) assert( nbor_elmt->IsSurfaceElement() );
+    // TODO: check whether following assert is correct:
+    if ( dim == 3 ) assert( nbor_elmt->IsVolumeElement() );
+    if ( dim == 2 ) assert( nbor_elmt->IsSurfaceElement() );
    
     // 2. drawing the results
     // -------------------------------------------------------------------------------------------------------------
@@ -679,41 +680,40 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     // ------------------------------------------------------------------------------------------------------------------------------------------------
     // does the parent region exist
     if ( model.ContainsRegion(dim_1_region) == false ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "does not exist; nothing was done." );
+          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "does not exist; nothing was done." );
           return 0;
       }
     // do such boundaries already exist ?
     const set<string> intersected_regions{dim_1_region};
-    set<string> pre_exisiting_boundaries;
-    if ( FindBoundaryNames( intersected_regions, pre_exisiting_boundaries ) > 0 ) {
+    set<string> pre_existing_boundaries;
+    if ( FindBoundaryNames( intersected_regions, pre_existing_boundaries ) > 0 ) {
           string error_info;
-          for ( auto it=pre_exisiting_boundaries.begin(); it!=pre_exisiting_boundaries.end(); ++it ) {
+          for ( auto it=pre_existing_boundaries.begin(); it!=pre_existing_boundaries.end(); ++it ) {
                error_info += (*it);
                error_info +=", ";
             }
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:",
+          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:",
                                            error_info.c_str(), "boundaries are already contained in this model." );
           return 0;
       }
     // does the model contain unique regions
     if ( model.UniqueRegions() < 1 ) {
-          ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", "model contains no unique regions; cannot proceed." );
+          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", "model contains no unique regions; cannot proceed." );
           return 0;
       }
     // verifying that we are indeed dealing with a region of surface elements only and that their normals all point into same direction
     Region<dim>&  subdomain(model.Region(dim_1_region));
     if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region,
+         ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
                                          "region appears to have inconstent surface-normal orientations; nothing was done." );
          return 0;
       }
     size_t boundary_elements(0);
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
-         // TODO: improve these diagnostics
-         if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL ) boundary_elements++;
+         if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL and (*eit)->AtBoundary() != IRREGULAR ) boundary_elements++;
       }
     if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "Boundary::FormInternalFromDim_m1_Region:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
+         ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
          return 0;
       }
     // creating region labels and tagging the regions with unique integer indentifiers
@@ -725,7 +725,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
    
     if ( model_regions == 1 )
-       ErrorHandler::Instance().notice( INFO, "Boundary::FormInternalFromDim_m1_Region:", region_tag.c_str(), "is single valued; so there is only one patch." );
+       ErrorHandler::Instance().notice( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(), "is single valued; so there is only one patch." );
 
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------

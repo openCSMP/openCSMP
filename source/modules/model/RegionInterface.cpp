@@ -2405,6 +2405,9 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
 /**
     Attempts to create a lower-dimensional region between higher dimensional ones.
     
+    TODO: @todo deprecate, better approach avoids search over the entire region, but looks at the perimeter
+    faces only.
+    
     @author R. Manasipov (2014)
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
@@ -2618,9 +2621,83 @@ size_t RegionInterface<dim,REGION_COMPLEX>::CountAndLabelRegions( const char* re
    return regions;
    
  } // end countAndLabelRegions
+ 
+ 
+ /**
+    Finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
+    
+    Region a will be the inner region whose perimeter Element pointers will be the first in the pairs.
+    
+    @author SKM
+    @date 18/3/2017
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+size_t RegionInterface<dim,REGION_COMPLEX>::SharedPerimeterFaces( const char* region_a, const char* region_b,
+                                                                  std::vector<std::tuple<Element<dim>*, ///< inner element
+                                                                                         Element<dim>*, ///< outer element
+                                                                                         size_t,        ///< inner face
+                                                                                         size_t> >&     ///< outer face
+                                                                                         shared ) const
+ {
+    const REGION_COMPLEX<dim>& regionComplex( static_cast<const REGION_COMPLEX<dim>& >(*this) );
 
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+    if ( !IsUnique(region_a) ) {
+          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::SharedPerimeterFaces:",
+                             region_a, "is not a unique region; cannot proceed." );
+          return true;
+      }
+    if ( !IsUnique(region_b) ) {
+          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::SharedPerimeterFaces:",
+                             region_b, "is not a unique region; cannot proceed." );
+          return true;
+      }
+
+    const csmp::Region<dim>& subdomain_a(regionComplex.Region(region_a));
+    const csmp::Region<dim>& subdomain_b(regionComplex.Region(region_b));
+   
+    if ( !shared.empty() ) shared.clear();
+    shared.reserve( subdomain_a.PerimeterElements() );
+ 
+    // 1. searching for shared faces between the regions
+    for ( size_t eid=subdomain_a.InteriorElements(); eid<subdomain_a.Elements(); ++eid )
+      for ( size_t face=0U; face<subdomain_a.PerimeterFaces(eid); ++face ) {
+           // checking whether the neighbor of the perimeter face is in region b
+           // ------------------------------------------------------------------
+           const size_t pface = subdomain_a.PerimeterFace(eid,face);
+           Element<dim>* nptr = subdomain_a.E(eid)->Neighbor(pface);
+           // avoiding searches for neighbors that do not exist because one is at the model boundary
+           if ( nptr != nullptr and subdomain_b.IsPerimeterElement(nptr) ) {
+                // finding which face is the perimeter face in the neighbor element
+                size_t opposite_pface(UINT_MAX);
+                for ( size_t i=0U; i<nptr->Faces(); ++i )
+                  if ( nptr->Neighbor(i) == subdomain_a.E(eid) ) {
+                       opposite_pface = i;
+                       break;
+                    }
+                assert( opposite_pface < nptr->Faces() );
+                // creating connection record
+                std::tuple<Element<dim>*,Element<dim>*,size_t,size_t>
+                  connection( subdomain_a.E(eid), nptr, pface, opposite_pface );
+                // storing the information
+                shared.emplace_back( connection );
+             }
+        }
+ 
+    // return how many shared faces were found
+    return shared.size();
+ 
+ } // end SharedPerimeterFaces
+
+ 
+ 
+ 
+
+// EXPLICIT TEMPLATE INSTANTIATION FOR REGION_INTERFACE
 template class RegionInterface<1U,Model>;
 template class RegionInterface<2U,Model>;
 template class RegionInterface<3U,Model>;
+
 
 } // csmp

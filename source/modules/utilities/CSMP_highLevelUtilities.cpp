@@ -84,9 +84,9 @@ bool areFartherApartThan( const double64* pn, const double64* pw, double64 dista
  * Returns true if file on ifstream is empty.(Aug 2014)
  * @author Julian E. Mindel
  */
-bool input_file_is_empty(std::ifstream& pFile)
+bool isInputFileEmpty( std::ifstream& pFile )
 {
-    return pFile.peek() == std::ifstream::traits_type::eof();
+   return pFile.peek() == std::ifstream::traits_type::eof();
 }
 
 /**
