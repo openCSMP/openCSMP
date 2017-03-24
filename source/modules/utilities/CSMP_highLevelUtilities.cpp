@@ -2455,18 +2455,21 @@ void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char*
       
       if ( coordinate == 'x' or coordinate == 'X' )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key) ), (*nit)->x() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->x() ) );
         
       if ( dim > 1 and (coordinate == 'y' or coordinate == 'Y') )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key) ), (*nit)->y() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->y() ) );
 
       if ( dim > 2 and (coordinate == 'z' or coordinate == 'Z') )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ) ), (*nit)->z() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ), (*nit)->z() ) );
  
  }  // end 
 
+template void assignNodeCoordinatesTo( Model<1U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<2U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<3U>&, const char, const char* );
 
 
 
