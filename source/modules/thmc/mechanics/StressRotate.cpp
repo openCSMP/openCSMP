@@ -11,7 +11,7 @@ namespace csmp
 
 /**
    constructs class from the orientations (vectors) of sigma1 and 3, 
-   and the magnitudes of the principal stresses 1,2 and 3
+   and the magnitudes of the principal stresses 1, 2 and 3
    
    @attention the orientations of sigma1 and sigma must be perpendicular to eachother.
 */
@@ -53,17 +53,15 @@ void StressRotate::Reset()
 
 
 
-// inline functions
-
-// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
+/// maximum (compressive) stress (Pa/m2), corresponding to max Eigenvalue of stress tensor
 double64 StressRotate::Sigma1() const
   { return sigma1_; }
   
-// intermediate principal stress (Pa/m2)
+/// intermediate principal stress (Pa/m2)
 double64 StressRotate::Sigma2() const
   { return sigma2_; }
   
-// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
+/// minimum compressive stress (Pa/m2) = mimimum Eigenvalue of stress tensor
 double64 StressRotate::Sigma3() const
   { return sigma3_; }
   

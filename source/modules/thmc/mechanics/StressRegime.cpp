@@ -6,7 +6,7 @@ using namespace std;
 
 namespace csmp{
 
-StressRegime::StressRegime( double64 Sv, double64 SH, double64 Sh, double64 trend)
+StressRegime::StressRegime( double64 Sv, double64 SH, double64 Sh, double64 trend )
   : Sv_( Sv ),
     SH_( SH ),
     Sh_( Sh ),
@@ -18,8 +18,9 @@ StressRegime::StressRegime( double64 Sv, double64 SH, double64 Sh, double64 tren
 
 }
 
-void StressRegime::EstablishPrincipalStressUnitVectors(){
 
+void StressRegime::EstablishPrincipalStressUnitVectors()
+{
   //establishing stress vectors for given regime
   double64 alpha;
   //vertical
@@ -45,8 +46,8 @@ void StressRegime::EstablishPrincipalStressUnitVectors(){
 
 }
 
-void StressRegime::EstablishMinimumHorizontalStressVector(){
-
+void StressRegime::EstablishMinimumHorizontalStressVector()
+{
   double64 alpha = trend_ + 90;
   if( alpha > 180. )
     alpha -= 180.;
@@ -107,8 +108,8 @@ VectorVariable<3U>  StressRegime::MaximumHorizontalStressUnitVector() const{
 }
 
 
-void StressRegime::CheckTrend(){
-
+void StressRegime::CheckTrend()
+{
   if( trend_ > 180. && trend_ < 270. )
     trend_ -= 90.;
   if( trend_ > 270. && trend_ < 360. )
@@ -117,8 +118,7 @@ void StressRegime::CheckTrend(){
     throw csmp::Exception( FATAL_ERROR, "NormalFromStressRegime::CheckTrend",
                                  "Range of stress trend exceeded (0-180)",
                                  "specify valid trend value(Maximum Horizontal Stress");
-
-
 }
+
 
 } //csmp

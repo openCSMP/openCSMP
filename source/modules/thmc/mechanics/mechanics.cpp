@@ -302,8 +302,9 @@ The first argument is a tensor of the Cartesian stresses (as opposed to
 the principal stresses). The second argument is the outward-pointing unit
 normal to the surface of interest.  
 
-@return The computed stress components are returned into the 3rd and 4th 
+@note The computed stress components are returned into the 3rd and 4th 
 function arguments.  
+
 */
 void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
                                   const Point<3U>& un, 
@@ -328,6 +329,35 @@ void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
     sigma_s = sqrt(vpx * vpx + vpy * vpy + vpz * vpz);
     
  } // end normalAndShearStressOnPlane
+
+
+
+
+
+/**
+    As previous method, but returning the shear stress as a vector variable.
+*/
+void normalAndShearStressOnPlane( const TensorVariable<3U>& ts,
+                                  const Point<3U>& un, 
+                                  double64& sigma_n, VectorVariable<3U>& sigma_s )
+ {
+   // Cauchy's formula applied to find traction vector components, P&F, p. 213
+   // VectorVariable<3U> t = ts * un.Coordinates();
+   double64  tx = ts(0,0) * un[0] + ts(1,0) * un[1] + ts(2,0) * un[2]; 
+   double64  ty = ts(0,1) * un[0] + ts(1,1) * un[1] + ts(2,1) * un[2]; 
+   double64  tz = ts(0,2) * un[0] + ts(1,2) * un[1] + ts(2,2) * un[2]; 
+ 
+    // (t . n) n (eqn. 6.49, P&F, p.216)
+    sigma_n  = ts(0,0) * un[0] * un[0] + ts(1,1) * un[1] * un[1] + ts(2,2) * un[2] * un[2];
+    sigma_n += 2. * ts(0,1) * un[0] * un[1] + 2. * ts(1,2) * un[1] * un[2] + 2. * ts(2,0) * un[2] * un[0];
+    
+    // n x (t x n) (eqn. 6.52, P&F, p. 216) -> vector product, = shear stress in the plane
+    sigma_s(0) = ((1. - un[0] * un[0]) * tx - un[0] * un[1] * ty - un[0] * un[2] * tz);  // * ex;
+    sigma_s(1) = (-un[0] * un[1] * tx + (1. - un[1] * un[1]) * ty - un[1] * un[2] * tz); // * ey;
+    sigma_s(2) = (-un[2] * un[0] * tx - un[2] * un[1] * ty + (1. - un[2] * un[2]) * tz); // * ez;
+   
+ } // end normalAndShearStressOnPlane
+
 
 
 

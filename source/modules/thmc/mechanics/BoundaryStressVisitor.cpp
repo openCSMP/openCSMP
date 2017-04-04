@@ -15,6 +15,8 @@
 #include "variableOperations.h"
 #include "Face.h"
 
+using namespace std;
+
 namespace csmp {
 
 /** 
@@ -22,20 +24,59 @@ namespace csmp {
     
     Application level is model so that all boundaries are visited
     followed by a visitation of their faces.
+    
+    @param model computation domain.
+    
+    @param SV_variable denotes overburden = vertical stress 
+    calculated by integration of the sediment column dry density 
+    up to the earth' surface.
 */
 template<size_t dim>
 BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
+                                                   const char* SV_variable,
                                                    bool overwrite_force_vector )
     : Visitor<dim>( BOUNDARY, FACE ),
-      Sv_key_(model.Database().StorageKey("vertical stress")),
-	    Ss_Hmax_key_(model.Database().StorageKey("max horizontal stress")),
-	    Ss_Hmin_key_(model.Database().StorageKey("min horizontal stress")),
+      Sv_key_(model.Database().StorageKey(SV_variable)),
+	    SH_max_key_(model.Database().StorageKey("max horizontal stress")),
+	    Sh_min_key_(model.Database().StorageKey("min horizontal stress")),
       F_key_(model.Database().StorageKey("force")),
+      stress_computation_(BOUNDARY_STRESS::SINGLE_VALUED),
       overwrite_previous_forces_(overwrite_force_vector)
 {
-    if ( Sv_key_.place != FACE || Sv_key_.type != SCALAR )
+    if ( Sv_key_.place != NODE || Sv_key_.type != SCALAR )
         throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
-                              "'normal stress' must be a SCALAR face variable." );
+                               SV_variable, "must be a SCALAR variable placed on the nodes." );
+
+    if ( SH_max_key_.place != FACE || SH_max_key_.type != SCALAR )
+        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+                              "the 'max horizontal stress' SHmax must be a SCALAR variable placed on the FACE." );
+
+    if ( Sh_min_key_.place != FACE || Sh_min_key_.type != SCALAR )
+        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+                              "the 'min horizontal stress' Shmin must be a SCALAR variable placed on the FACE." );
+
+    if ( F_key_.place != NODE || F_key_.type != VECTOR )
+        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+                              "'force' must be a VECTOR variable placed on the nodes." );
+}
+
+
+
+template<size_t dim>
+BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
+                                                   BOUNDARY_STRESS stress_computation,
+                                                   bool overwrite_force_vector )
+    : Visitor<dim>( BOUNDARY, FACE ),
+      bstress_key_(model.Database().StorageKey("boundary stress")),
+      F_key_(model.Database().StorageKey("force")),
+      stress_computation_(stress_computation),
+      overwrite_previous_forces_(overwrite_force_vector)
+{
+    assert( stress_computation_ == BOUNDARY_STRESS::SINGLE_VALUED );
+  
+    if ( bstress_key_.place != BOUNDARY || bstress_key_.type != VECTOR )
+        throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
+                              "'boundary stress' must be a VECTOR variable placed on the boundary." );
 
     if ( F_key_.place != NODE || F_key_.type != VECTOR )
         throw csmp::Exception( ERROR, "BoundaryStressVisitor (constructor):",
@@ -51,8 +92,12 @@ BoundaryStressVisitor<dim>::~BoundaryStressVisitor()
 }
 
 
+
+
 /**
-    To zero out initial values assigned to the boundary.
+    Collects the stress value placed on the boudary and 
+    (optionally) zeros out the initial force values assigned to 
+    this boundary.
 */
 template<size_t dim>
 void BoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
@@ -63,14 +108,24 @@ void BoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
          zero = 0.;
          b->InputPropertyValue( "force", zero, COMPLETE );
       }
+  
+   if ( stress_computation_ == BOUNDARY_STRESS::SINGLE_VALUED )
+     b->Read( bstress_key_, bstress_ );
+  
+   if ( stress_computation_ == BOUNDARY_STRESS::DEPTH_DEPENDENT ) {
+       b->Read(SH_max_key_, SHmax_ );
+       b->Read(Sh_min_key_, Shmin_ );
+    }
 }
 
 
+
+
 /**
-    This method interpolates the applied 
+    Interpolates the applied
     element-centric forces to the nodes.
  
-    An approach is used whre the contribution is
+    An approach is used where the nodal contribution is
     weighted on the basis of the distance of the 
     barycenter to the node.
     
@@ -82,82 +137,126 @@ void BoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
 template<size_t dim>
 void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 {
-   // 1. NORMAL STRESS COMPONENT
-   // --------------------------
-   double64  Sv = f->Parent(INSIDE)->Read( Sv_key_ );
-   double64  SH = f->Parent(INSIDE)->Read(Ss_Hmax_key_);
-   double64  Sh = f->Parent(INSIDE)->Read(Ss_Hmin_key_);
-   double64  Ss_magnitude = hypot(SH,Sh);
+   bool Neumann_condition(false);
+
+   // in the case of body forces
+   if ( stress_computation_ == BOUNDARY_STRESS::DEPTH_DEPENDENT ) {
+         for ( size_t i=0U; i<dim; ++i )
+           if ( SHmax_.Flag() == NEUMANN or Shmin_.Flag() == NEUMANN ) {
+                 Neumann_condition = true;
+                 break;
+             }
+         if ( !Neumann_condition ) return;
+     
+         ApplyDepthDependentBoundaryConditions( f );
+         return;
+     }
+  
+   // when body forces are not turned on
+   if ( stress_computation_ == BOUNDARY_STRESS::SINGLE_VALUED ) {
+       for ( size_t i=0U; i<dim; ++i )
+         if ( bstress_.Flag(i) == NEUMANN ) {
+               Neumann_condition = true;
+               break;
+           }
+       if ( !Neumann_condition ) return;
+
+       ApplyConstantStressBoundaryConditions( f );
+       return;
+    }
+  
+   throw csmp::Exception( ERROR, "BoundaryStressVisitor<dim>::Visit:",
+                            "boundary stress condition not implemented yet." );
+} // end Visit(face)
+
+
+
+
+/** 
+    no vertical variation
+*/
+template<size_t dim>
+void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim>* f )
+ {
+   bool Neumann_condition(false);
+   for ( size_t i=0U; i<dim; ++i )
+     if ( bstress_.Flag(i) == NEUMANN ) {
+           Neumann_condition = true;
+           break;
+       }
+   if ( !Neumann_condition ) return;
+   
+   // going from specific- to area-integrated stress values to nodal forces
+   const size_t  face_nodes(f->Nodes());
+   force_ = bstress_ * (f->Area() / static_cast<double64>(face_nodes));
+  
+   // adding the normal stress forces to the nodal forces of the nodes of the face
+   for ( size_t i=0U; i<face_nodes; i++ ) {
+        // the status of the variable is not touched
+        f->N(i)->Read( F_key_, vc_ );
+        vc_ += force_;
+        f->N(i)->Store( F_key_, vc_ );
+     }
+}
+ 
+ 
+  
+/**
+    variation with depth due to the action of body force = gravity
+*/
+template<size_t dim>
+void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim>* f )
+ {
+   ScalarVariable Sv;
+   f->Parent(INSIDE)->PropertyValueAtBaryCenter(Sv_key_, Sv );
+   double64 SH = SHmax_() * Sv();
+   double64 Sh = Shmin_() * Sv();
+   assert( Sv() > 0. );
+   assert( SH > 0. );
+   assert( Sh > 0. );
+   //double64  Ss_magnitude = hypot(SH,Sh);
+   //assert( Ss_magnitude );
 
    // if the values are negligibly small nothing needs to be done
-   if ( fabs(Sv) < std::numeric_limits<double64>::epsilon()
-        and fabs(Ss_magnitude) < std::numeric_limits<double64>::epsilon() )
-     return;
+   if ( fabs(Sv()) < numeric_limits<double64>::epsilon() ) return;
 
    // creating the Andersonian stress tensor. SH always needs to be be greater than or equal to Sh.
+   // TODO: check for rotations when one of the principal stresses is not aligned with a
+   //       coordinate axis
    constexpr bool three_dimensional( dim == 3 );
    if ( three_dimensional ) {
-        if ( Sv >= SH )
-          stressTensor_ = makeTensor(ANY,ANY,ANY, Sv, 0., 0., 0., SH, 0., 0., 0., Sh);
-        else if ( Sv < SH && Sv >= Sh )
-          stressTensor_ = makeTensor(ANY,ANY,ANY, SH, 0., 0., 0., Sv, 0., 0., 0., Sh);
-        else if ( Sv < Sh )
-          stressTensor_ = makeTensor(ANY,ANY,ANY, SH, 0., 0., 0., Sh, 0., 0., 0., Sv);
-        else throw csmp::Exception(ERROR, "BoundaryStressVisitor<dim>::Visit:",
-                                  "the input values of andersonian stresses are not correct.");
+        if ( Sv() >= SH )
+          stressTensor_ = makeTensor(ANY,ANY,ANY, Sv(), 0., 0., 0., SH, 0., 0., 0., Sh);
+        else if ( Sv() < SH && Sv() >= Sh )
+          stressTensor_ = makeTensor(ANY,ANY,ANY, SH, 0., 0., 0., Sv(), 0., 0., 0., Sh);
+        else if ( Sv() < Sh )
+          stressTensor_ = makeTensor(ANY,ANY,ANY, SH, 0., 0., 0., Sh, 0., 0., 0., Sv());
+        else throw csmp::Exception( ERROR, "BoundaryStressVisitor<dim>::Visit:",
+                                   "the input values of Andersonian stresses are not correct.");
      }
 
-   // getting the unit normal and verifying that it is outward pointing
-   // TODO: +*/normal directions have to be fixed so that this is guaranteed
-   RetrieveNormalWithCorrectDirection( f, nrml_ );  //HA. TODO: Check to make sure that it is outward pointing.
+   // getting the unit normal
+   f->UnitNormal( nrml_ );
 
-   // Stress vector on an arbitrary plane
-   VectorVariable<dim> T = stressTensor_ * nrml_;
+   // stress vector on the plane of the face (any orientation is OK, but normal must be outward pointing)
+   VectorVariable<dim> faceStressVector = stressTensor_ * nrml_;
    
-   // project stress on unit normal
-   // negative value because nrml is outward pointing
-   nrml_ = nrml_ * -dotProduct(T,nrml_);
-   VectorVariable<dim> Ts = T - nrml_;
-   
-   // going from specific- to areal stress on the face
-   const bool interpolate_Sn_across_nodes(false);
-   const size_t  face_nodes(f->Nodes());  //HA. This is added to be used throughout the method instead of reading it at few different places. 
-   
-   // smooth force-field on element boundary
-   if ( interpolate_Sn_across_nodes ) {
-        // adding the normal stress as force contribution to the nodes of the face
-        for ( size_t i=0U; i<f->Nodes(); i++ ) {
-             const double64 weighting(f->N(i)->Parents());
-             f->N(i)->Read( F_key_, vc_ );
-             vc_ += (nrml_ / weighting);
-             f->N(i)->Store( F_key_, nrml_ );
-          }
+   // going from specific- to area-integrated stress values to nodal forces
+   const size_t  face_nodes(f->Nodes());
+   faceStressVector = faceStressVector * (f->Area() / static_cast<double64>(face_nodes));
+  
+   // adding the normal stress forces to the nodal forces of the nodes of the face
+   for ( size_t i=0U; i<face_nodes; i++ ) {
+        // the status of the variable is not touched
+        f->N(i)->Read( F_key_, vc_ );
+        vc_ += faceStressVector;
+        f->N(i)->Store( F_key_, vc_ );
      }
-   // standard FE accumulation of stresses across a boundary
-   else {
-      nrml_ = nrml_ * (f->Area() / static_cast<double64> (face_nodes));
-        // adding the normal stress as force contribution to the nodes of the face
-        for ( size_t i=0U; i<face_nodes; i++ ) {
-             f->N(i)->Read( F_key_, vc_ );
-             vc_ += nrml_;
-             f->N(i)->Store( F_key_, vc_ );
-          }
-     }
-  
-   // 2. ASSIGNMENT OF THE SHEAR STRESS COMPONENT
-   // -------------------------------------------
-  
-   // computing and assigning the shear stresses
-   // Shear stress vector is divided by the number of nodes and added to the exisiting force vector at the nodes. 
-   Ts *= (f->Area() / static_cast<double64> (face_nodes));
-  
-   for (size_t i = 0U; i < face_nodes; i++) {
-      f->N(i)->Read(F_key_, vc_);
-      vc_ += Ts;
-      f->N(i)->Store(F_key_, vc_);
-   }
 
-} // end Visit(face)
+ } // end (depth dependent computation)
+
+
+
 
 
 
