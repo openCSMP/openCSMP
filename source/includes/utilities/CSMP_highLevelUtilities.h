@@ -38,6 +38,14 @@ template<size_t> class MeshManager;
 /// to fill whitespace in strings with character of choice, for instance '_'
 void replaceWhiteSpaceBy( std::string&, char ascii_char );
 
+/// converts integral types to strings without loss of precision (std::to_string limits to 6 significant digits)
+template <typename T>
+inline std::string number_to_string( const T& value ) {
+    std::stringstream sstr;
+    sstr << value;
+    return sstr.str();
+}
+
 /// returns intermediate (true) or maximum (false) model dimensions
 template<size_t  dim>
 double64  printModelDimensions( const Model<dim>&, bool intermed_or_max=false ); 

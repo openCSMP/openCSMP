@@ -414,7 +414,7 @@ std::string VTU_Interface<dim>::FullOutputFileName( const std::string& fileName,
     if( !omitZeroInFileName_ || timestep != 0 )
     {
         outputName += "_";
-        numberString = std::to_string( timestep );
+        numberString = number_to_string( timestep );
         outputName += numberString;
     }
     return outputName;
@@ -1088,7 +1088,7 @@ void VTU_Interface<dim>
     std::string vtuFileName;
     for( size_t index=0; index<files; ++index )
     {
-        stringNumber = std::to_string( index );
+        stringNumber = number_to_string( index );
         vtuFileName  = fileNames[index];
         vtuFileName += ".vtu";
         // write DataSet section
@@ -1745,7 +1745,7 @@ void VTU_Interface<dim>::WriteScalar( XML_Document& vtu, const size_t& MAX_ENTRI
                                       double scalarVariable, size_t& entriesOfLine, bool& newLine ) const
 {
     std::string stringNumber;
-    stringNumber = std::to_string( scalarVariable );
+    stringNumber = number_to_string( scalarVariable );
     vtu.InsertData( stringNumber.c_str() );
     // break or tab
     if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
@@ -1770,7 +1770,7 @@ void VTU_Interface<dim>::WriteVector( XML_Document& vtu, const size_t& MAX_ENTRI
     // inserting std::vector data
     for( size_t i = 0; i < dim; ++i )
     {
-      stringNumber = std::to_string( vectorVariable.Component( i ) );
+      stringNumber = number_to_string( vectorVariable.Component( i ) );
       vtu.InsertData( stringNumber.c_str() );
       vtu.Tab();
     }
@@ -1778,7 +1778,7 @@ void VTU_Interface<dim>::WriteVector( XML_Document& vtu, const size_t& MAX_ENTRI
     {
         for( size_t i = dim; i < 3U; ++i )
         {
-          stringNumber = std::to_string( 0. );
+          stringNumber = number_to_string( 0. );
           vtu.InsertData( stringNumber.c_str() );
           vtu.Tab();
         }
@@ -1812,7 +1812,7 @@ void VTU_Interface<dim>::WriteTensor( XML_Document& vtu, const size_t& MAX_ENTRI
       for( size_t row = 0; row < rows; ++row )
       {
         val = ( ( row < dim ) && ( column < dim ) ? tensorVariable( row, column ) : 0.0 );
-        stringNumber = std::to_string( val );
+        stringNumber = number_to_string( val );
         vtu.InsertData( stringNumber.c_str() );
         vtu.Tab();
       }
@@ -1849,7 +1849,7 @@ void VTU_Interface<dim>::WriteFieldDataArray( const Index& key, XML_Document& vt
     size_t varSize( key.dataDepth );
     std::string variableName = model_.Database().Name( key );
     variableName = FindVariableOutputAlias( variableName );
-    stringNumber = std::to_string( varSize );
+    stringNumber = number_to_string( varSize );
 
     std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
     arrayTitle += variableName;
@@ -1863,7 +1863,7 @@ void VTU_Interface<dim>::WriteFieldDataArray( const Index& key, XML_Document& vt
     for( size_t i=0 ; i<varSize; ++i )
     {
         // inserting data
-        stringNumber = std::to_string( var.Component( i ) );
+        stringNumber = number_to_string( var.Component( i ) );
         vtu.InsertData( stringNumber.c_str() );
         // break or tab
         if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
@@ -2148,7 +2148,7 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
   const size_t tensor_components( 9U ); // only 3D representation
-  stringNumber = std::to_string( tensor_components );
+  stringNumber = number_to_string( tensor_components );
   arrayTitle += stringNumber; arrayTitle += "\" format=\"ascii\"";
   vtu.OpenNode( arrayTitle.c_str() );
   vtu.BringToLevel();
@@ -2269,7 +2269,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
         arrayTitle = "DataArray type=\"Float32\" Name=\"";
         variableName = model_.Database().Name( key );
         variableName = FindVariableOutputAlias( variableName );
-        stringNumber = std::to_string( component );
+        stringNumber = number_to_string( component );
         prefix = "";
       if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
           std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
@@ -2397,7 +2397,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
         arrayTitle = "DataArray type=\"Float32\" Name=\"";
         variableName = model_.Database().Name( key );
         variableName = FindVariableOutputAlias( variableName );
-        stringNumber = std::to_string( component );
+        stringNumber = number_to_string( component );
         prefix = "";
       if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
           std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
@@ -2604,7 +2604,7 @@ void VTU_Interface<dim>::WriteElementDataArrayTensor( const Index& key, XML_Docu
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
   const size_t tensor_components( 9U ); // only 3D representation
-  stringNumber = std::to_string( tensor_components );
+  stringNumber = number_to_string( tensor_components );
   arrayTitle += stringNumber; arrayTitle += "\" format=\"ascii\"";
   vtu.OpenNode( arrayTitle.c_str() );
   vtu.BringToLevel();
@@ -2652,7 +2652,7 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML
       arrayTitle = "DataArray type=\"Float32\" Name=\"";
       variableName = model_.Database().Name( key );
       variableName = FindVariableOutputAlias( variableName );
-      stringNumber = std::to_string( component );
+      stringNumber = number_to_string( component );
       prefix = "";
       if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
           std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
@@ -2706,7 +2706,7 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarFlaggedArray( const Index& k
       arrayTitle = "DataArray type=\"Float32\" Name=\"";
       variableName = model_.Database().Name( key );
       variableName = FindVariableOutputAlias( variableName );
-      stringNumber = std::to_string( component );
+      stringNumber = number_to_string( component );
       prefix = "";
       if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
           std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
@@ -2878,9 +2878,9 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
 
   // opening piece node
   const size_t DOMAIN_NODES( subDomain.Nodes() ), DOMAIN_ELEMENTS( subDomain.Elements() );
-  stringNumber = std::to_string( DOMAIN_NODES );
+  stringNumber = number_to_string( DOMAIN_NODES );
   stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
-  stringNumber = std::to_string( DOMAIN_ELEMENTS );
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
   stringCache += "\" NumberOfCells=\""; stringCache += stringNumber; stringCache += "\"";
   connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
 
@@ -2897,13 +2897,13 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
        it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
   {
     // writing x,y and z coordinates(tab seperated)
-    stringNumber = std::to_string( (*it)->x() );
+    stringNumber = number_to_string( (*it)->x() );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( yCoordinate( (*it)->Coordinate() ) );
+    stringNumber = number_to_string( yCoordinate( (*it)->Coordinate() ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( zCoordinate( (*it)->Coordinate() ) );
+    stringNumber = number_to_string( zCoordinate( (*it)->Coordinate() ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     // if maximum of entris per line is reached, start new one, else tab
     if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -2952,7 +2952,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
       for( size_t i = 0; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
       {
          // writing node id to vtu document
-        stringNumber = std::to_string( vtkNodeNumbering[i] );
+        stringNumber = number_to_string( vtkNodeNumbering[i] );
         connectivityFile.InsertData( stringNumber.c_str() );
         // line break if limeit entries reached, else tab
         if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -2979,7 +2979,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
       for( size_t i = 0; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
       {
          // writing node id to vtu document
-        stringNumber = std::to_string( vtkNodeNumbering[i] );
+        stringNumber = number_to_string( vtkNodeNumbering[i] );
         connectivityFile.InsertData( stringNumber.c_str() );
         // line break if limeit entries reached, else tab
         if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3002,7 +3002,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
     for( size_t iit = 0; iit < (*it)->Nodes(); ++iit, ++entriesOfLine )
     {
       // writing node id to vtu document
-      stringNumber = std::to_string( (*it)->N(iit)->Idx() );
+      stringNumber = number_to_string( (*it)->N(iit)->Idx() );
       connectivityFile.InsertData( stringNumber.c_str() );
       // line break if limeit entries reached, else tab
       if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3033,7 +3033,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   {
     // imcrementing offset by node count and writing to data
     offset += (*it)->Nodes();
-    stringNumber = std::to_string( offset );
+    stringNumber = number_to_string( offset );
     connectivityFile.InsertData( stringNumber.c_str() );
     // line break if limeit entries reached, else tab
     if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3062,7 +3062,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
   {
     // imcrementing offset by node count and writing to data
-    stringNumber = std::to_string( elementTypesVTK[elementCount] );
+    stringNumber = number_to_string( elementTypesVTK[elementCount] );
     connectivityFile.InsertData( stringNumber.c_str() );
     // line break if limeit entries reached, else tab
     if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3119,7 +3119,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
 
   // opening piece node, number of nodes == number of elements (since berycenters)
   const size_t DOMAIN_ELEMENTS( subDomain.Elements() );
-  stringNumber = std::to_string( DOMAIN_ELEMENTS );
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
   stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
   // no elements
@@ -3139,13 +3139,13 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
        it = subDomain.ElementsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
     {
     // writing x,y and z coordinates(tab seperated)
-    stringNumber = std::to_string( (*it)->BaryCenter()[0] );
+    stringNumber = number_to_string( (*it)->BaryCenter()[0] );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( yCoordinate( (*it)->BaryCenter() ) );
+    stringNumber = number_to_string( yCoordinate( (*it)->BaryCenter() ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( zCoordinate( (*it)->BaryCenter() ) );
+    stringNumber = number_to_string( zCoordinate( (*it)->BaryCenter() ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     // if maximum of entris per line is reached, start new one, else tab
     if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -3177,7 +3177,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
   for( size_t pid = 0; pid < DOMAIN_ELEMENTS; ++pid  )
   {
     // writing node id to vtu document
-    stringNumber = std::to_string( pid );
+    stringNumber = number_to_string( pid );
     connectivityFile.InsertData( stringNumber.c_str() );
     // line break if limeit entries reached, else tab
     if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3198,7 +3198,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
     connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
   // cell offsets
-  stringNumber = std::to_string( DOMAIN_ELEMENTS );
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
   connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
   connectivityFile.InsertData( stringNumber.c_str() );
@@ -3206,7 +3206,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
   connectivityFile.CloseNode( "DataArray" );
   // cell types
   size_t cell_type( VTK_POLY_VERTEX );
-  stringNumber = std::to_string( cell_type );
+  stringNumber = number_to_string( cell_type );
   connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
   connectivityFile.InsertData( stringNumber.c_str() );
@@ -3249,7 +3249,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
 
     // opening piece node, number of nodes == 1U (single point per Region)
     const size_t REGION_POINTS( 1U );
-    stringNumber = std::to_string( REGION_POINTS );
+    stringNumber = number_to_string( REGION_POINTS );
     stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
     // no elements
@@ -3286,13 +3286,13 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     }
     ++entriesOfLine;
     // writing x,y and z coordinates(tab seperated)
-    stringNumber = std::to_string( pt[0] );
+    stringNumber = number_to_string( pt[0] );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( yCoordinate( pt ) );
+    stringNumber = number_to_string( yCoordinate( pt ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     connectivityFile.Tab();
-    stringNumber = std::to_string( zCoordinate( pt ) );
+    stringNumber = number_to_string( zCoordinate( pt ) );
     connectivityFile.InsertData( stringNumber.c_str() );
     // if maximum of entries per line is reached, start new one, else tab
     if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -3317,7 +3317,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     connectivityFile.OpenNode( "Cells" );
     // cell connectivity
     size_t pid( 0 );
-    stringNumber = std::to_string( pid );
+    stringNumber = number_to_string( pid );
     connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
     connectivityFile.BringToLevel();
     connectivityFile.InsertData( stringNumber.c_str() );
@@ -3325,7 +3325,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     connectivityFile.CloseNode( "DataArray" );
     // cell offsets
     size_t offset(1);
-    stringNumber = std::to_string( offset );
+    stringNumber = number_to_string( offset );
     connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
     connectivityFile.BringToLevel();
     connectivityFile.InsertData( stringNumber.c_str() );
@@ -3333,7 +3333,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     connectivityFile.CloseNode( "DataArray" );
     // cell types
     size_t cell_type( VTK_POLY_VERTEX ); // VTK_VERTEX would be also fine, but this way it's more general
-    stringNumber = std::to_string( cell_type );
+    stringNumber = number_to_string( cell_type );
     connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
     connectivityFile.BringToLevel();
     connectivityFile.InsertData( stringNumber.c_str() );
@@ -3376,7 +3376,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
 
     // opening piece node, number of nodes == number of element integration points
     const size_t INTEGRATION_POINTS( subDomain.IntegrationPoints() );
-    stringNumber = std::to_string( INTEGRATION_POINTS );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
     stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
     // no elements
@@ -3402,13 +3402,13 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
         {
           pt = (*it)->IntegrationPoint( ip );
           // writing x,y and z coordinates(tab seperated)
-          stringNumber = std::to_string( pt[0] );
+          stringNumber = number_to_string( pt[0] );
           connectivityFile.InsertData( stringNumber.c_str() );
           connectivityFile.Tab();
-          stringNumber = std::to_string( yCoordinate( pt ) );
+          stringNumber = number_to_string( yCoordinate( pt ) );
           connectivityFile.InsertData( stringNumber.c_str() );
           connectivityFile.Tab();
-          stringNumber = std::to_string( zCoordinate( pt ) );
+          stringNumber = number_to_string( zCoordinate( pt ) );
           connectivityFile.InsertData( stringNumber.c_str() );
           // if maximum of entris per line is reached, start new one, else tab
           if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -3441,7 +3441,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
       for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
       {
         // writing node id to vtu document
-        stringNumber = std::to_string( pid );
+        stringNumber = number_to_string( pid );
         connectivityFile.InsertData( stringNumber.c_str() );
         // line break if limeit entries reached, else tab
         if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3462,7 +3462,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
         connectivityFile.LineBreak();
       connectivityFile.CloseNode( "DataArray" );
       // cell offsets
-      stringNumber = std::to_string( INTEGRATION_POINTS );
+      stringNumber = number_to_string( INTEGRATION_POINTS );
       connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
@@ -3470,7 +3470,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
       connectivityFile.CloseNode( "DataArray" );
       // cell types
       size_t cell_type( VTK_POLY_VERTEX );
-      stringNumber = std::to_string( cell_type );
+      stringNumber = number_to_string( cell_type );
       connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
@@ -3512,7 +3512,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
 
     // opening piece node, number of nodes == number of sector integration points
     const size_t INTEGRATION_POINTS( subDomain.SectorIntegrationPoints() );
-    stringNumber = std::to_string( INTEGRATION_POINTS );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
     stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
     // no elements
@@ -3543,13 +3543,13 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
               pt = (*it)->FV()->SectorIntegrationPoint( sid, ip );
               pt = (*it)->RstToXYZ( pt );
               // writing x,y and z coordinates(tab seperated)
-              stringNumber = std::to_string( pt[0] );
+              stringNumber = number_to_string( pt[0] );
               connectivityFile.InsertData( stringNumber.c_str() );
               connectivityFile.Tab();
-              stringNumber = std::to_string( yCoordinate( pt ) );
+              stringNumber = number_to_string( yCoordinate( pt ) );
               connectivityFile.InsertData( stringNumber.c_str() );
               connectivityFile.Tab();
-              stringNumber = std::to_string( zCoordinate( pt ) );
+              stringNumber = number_to_string( zCoordinate( pt ) );
               connectivityFile.InsertData( stringNumber.c_str() );
               // if maximum of entris per line is reached, start new one, else tab
               if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -3583,7 +3583,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
       for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
       {
         // writing node id to vtu document
-        stringNumber = std::to_string( pid );
+        stringNumber = number_to_string( pid );
         connectivityFile.InsertData( stringNumber.c_str() );
         // line break if limeit entries reached, else tab
         if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3604,7 +3604,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
         connectivityFile.LineBreak();
       connectivityFile.CloseNode( "DataArray" );
       // cell offsets
-      stringNumber = std::to_string( INTEGRATION_POINTS );
+      stringNumber = number_to_string( INTEGRATION_POINTS );
       connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
@@ -3612,7 +3612,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
       connectivityFile.CloseNode( "DataArray" );
       // cell types
       size_t cell_type( VTK_POLY_VERTEX );
-      stringNumber = std::to_string( cell_type );
+      stringNumber = number_to_string( cell_type );
       connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
@@ -3655,7 +3655,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
 
     // opening piece node, number of nodes == number of facet integration points
     const size_t INTEGRATION_POINTS( subDomain.FacetIntegrationPoints() );
-    stringNumber = std::to_string( INTEGRATION_POINTS );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
     stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
     // no elements
@@ -3686,13 +3686,13 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
               pt = (*it)->FV()->FacetIntegrationPoint( fid, ip );
               pt = (*it)->RstToXYZ( pt );
               // writing x,y and z coordinates(tab seperated)
-              stringNumber = std::to_string( pt[0] );
+              stringNumber = number_to_string( pt[0] );
               connectivityFile.InsertData( stringNumber.c_str() );
               connectivityFile.Tab();
-              stringNumber = std::to_string( yCoordinate( pt ) );
+              stringNumber = number_to_string( yCoordinate( pt ) );
               connectivityFile.InsertData( stringNumber.c_str() );
               connectivityFile.Tab();
-              stringNumber = std::to_string( zCoordinate( pt ) );
+              stringNumber = number_to_string( zCoordinate( pt ) );
               connectivityFile.InsertData( stringNumber.c_str() );
               // if maximum of entris per line is reached, start new one, else tab
               if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
@@ -3726,7 +3726,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
       for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
       {
         // writing node id to vtu document
-        stringNumber = std::to_string( pid );
+        stringNumber = number_to_string( pid );
         connectivityFile.InsertData( stringNumber.c_str() );
         // line break if limeit entries reached, else tab
         if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
@@ -3747,7 +3747,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
         connectivityFile.LineBreak();
       connectivityFile.CloseNode( "DataArray" );
       // cell offsets
-      stringNumber = std::to_string( INTEGRATION_POINTS );
+      stringNumber = number_to_string( INTEGRATION_POINTS );
       connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
@@ -3755,7 +3755,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
       connectivityFile.CloseNode( "DataArray" );
       // cell types
       size_t cell_type( VTK_POLY_VERTEX );
-      stringNumber = std::to_string( cell_type );
+      stringNumber = number_to_string( cell_type );
       connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
       connectivityFile.BringToLevel();
       connectivityFile.InsertData( stringNumber.c_str() );
