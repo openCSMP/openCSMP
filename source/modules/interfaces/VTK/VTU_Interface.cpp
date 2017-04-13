@@ -1639,7 +1639,7 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const std::string& fileName,
   // body - connectivity
   file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
-  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Double64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
   file << "\t\t\t<Cells>" << std::endl << "\t\t\t\t<DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
@@ -1655,7 +1655,7 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const std::string& fileName,
   file << "\t\t\t<PointData Vectors=\"" << propertyCaption << " 0\">" << std::endl;
   for( size_t i = 0; i < vectors.size(); ++i )
   {
-    file << "\t\t\t\t<DataArray type=\"Float32\" Name=\"" << propertyCaption << " " << i << "\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+    file << "\t\t\t\t<DataArray type=\"Double64\" Name=\"" << propertyCaption << " " << i << "\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
     file << "\t\t\t\t\t";
     for( size_t ii = 0; ii < 3; ++ii )
       file << vectors.at( i ).at( ii ) << " ";
@@ -1707,7 +1707,7 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const std::string& fileName, const s
   // body - connectivity
   file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
-  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Double64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
   file << "\t\t\t<Cells>" << std::endl << "\t\t\t\t<DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t0" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
@@ -1721,7 +1721,7 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const std::string& fileName, const s
 
   // body - values
   file << "\t\t\t<PointData Tensors=\"" << propertyCaption << "\">" << std::endl;
-  file << "\t\t\t\t<DataArray type=\"Float32\" Name=\"" << propertyCaption << "\" NumberOfComponents=\"9\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"Double64\" Name=\"" << propertyCaption << "\" NumberOfComponents=\"9\" format=\"ascii\">" << std::endl;
   file << "\t\t\t\t\t";
   for( size_t i = 0; i < 3; ++i )
     for( size_t ii = 0; ii < 3; ++ii )
@@ -1851,7 +1851,7 @@ void VTU_Interface<dim>::WriteFieldDataArray( const Index& key, XML_Document& vt
     variableName = FindVariableOutputAlias( variableName );
     stringNumber = number_to_string( varSize );
 
-    std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+    std::string arrayTitle( "DataArray type=\"Double64\" Name=\"" );
     arrayTitle += variableName;
     arrayTitle += "\" NumberOfTuples=\"";
     arrayTitle += stringNumber;
@@ -1916,7 +1916,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
-  std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName;
@@ -2030,7 +2030,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 4 );
-  std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"3\" format=\"ascii\"";
@@ -2143,7 +2143,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 3 );
-  std::string stringNumber, arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string stringNumber, arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
@@ -2266,7 +2266,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
     ArrayVariable arrayVariable;
     for( size_t component=0; component<key.dataDepth; component++)
     {
-        arrayTitle = "DataArray type=\"Float32\" Name=\"";
+        arrayTitle = "DataArray type=\"Double64\" Name=\"";
         variableName = model_.Database().Name( key );
         variableName = FindVariableOutputAlias( variableName );
         stringNumber = number_to_string( component );
@@ -2394,7 +2394,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
     FlaggedArrayVariable flaggedArrayVariable;
     for( size_t component=0; component<key.dataDepth; component++)
     {
-        arrayTitle = "DataArray type=\"Float32\" Name=\"";
+        arrayTitle = "DataArray type=\"Double64\" Name=\"";
         variableName = model_.Database().Name( key );
         variableName = FindVariableOutputAlias( variableName );
         stringNumber = number_to_string( component );
@@ -2520,7 +2520,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WriteElementDataArrayScalar( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
-  std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
@@ -2559,7 +2559,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WriteElementDataArrayVector( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 4 );
-  std::string arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"3\" format=\"ascii\"";
@@ -2599,7 +2599,7 @@ template<template <size_t> class SIMPLEX>
 void VTU_Interface<dim>::WriteElementDataArrayTensor( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
 {
   size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 3 );
-  std::string stringNumber, arrayTitle( "DataArray type=\"Float32\" Name=\"" );
+  std::string stringNumber, arrayTitle( "DataArray type=\"Double64\" Name=\"" );
   std::string variableName = model_.Database().Name( key );
   variableName = FindVariableOutputAlias( variableName );
   arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
@@ -2649,7 +2649,7 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML
   ArrayVariable arrayVariable;
   for( size_t component=0; component<key.dataDepth; component++)
   {
-      arrayTitle = "DataArray type=\"Float32\" Name=\"";
+      arrayTitle = "DataArray type=\"Double64\" Name=\"";
       variableName = model_.Database().Name( key );
       variableName = FindVariableOutputAlias( variableName );
       stringNumber = number_to_string( component );
@@ -2703,7 +2703,7 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarFlaggedArray( const Index& k
   FlaggedArrayVariable flaggedArrayVariable;
   for( size_t component=0; component<key.dataDepth; component++)
   {
-      arrayTitle = "DataArray type=\"Float32\" Name=\"";
+      arrayTitle = "DataArray type=\"Double64\" Name=\"";
       variableName = model_.Database().Name( key );
       variableName = FindVariableOutputAlias( variableName );
       stringNumber = number_to_string( component );
