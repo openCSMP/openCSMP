@@ -7,6 +7,14 @@ using namespace std;
 
 namespace csmp {
 
+/** rsqrt -- computes reciprocal square root */
+double64
+rsqrt( double64 val )
+{
+    return 1.0 / sqrt(val);
+}
+
+
 /** _v_norm1 -- computes (scaled) 1-norms of vectors */
 double64 vector_norm1( vector<double64>& x, vector<double64>& scale )
 {

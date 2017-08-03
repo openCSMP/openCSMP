@@ -36,6 +36,16 @@ T sign( T val ) {
     return static_cast<T>((T(0) < val) - (val < T(0)));
 }
 
+/// Square function
+template<typename T>
+T square( T val ) {
+    return val*val;
+}
+
+/// Reciprocal square root function
+double64
+rsqrt( double64 val );
+
 /// for conversion of numbers to strings use to_string() function
 
 /// erf() and erfc() approximated with Chebyshev polynomials
