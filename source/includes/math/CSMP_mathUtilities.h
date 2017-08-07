@@ -15,7 +15,7 @@ namespace csmp {
 @{
 */
 
-const double64 PI( 3.14159265358979324F );
+const double64 PI( 3.14159265358979324 );
 
 /// all trigonomic functions in C++ take arguments in radians
 inline double64 degreesToRadians( double64 deg ) { return deg * PI/180.; }
@@ -24,6 +24,9 @@ inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
 /**
 @}
 */
+
+/// default random number generator
+typedef std::mt19937_64 random_generator;
 
 /**
 @addtogroup CSMPglobalFunctions
@@ -62,7 +65,7 @@ double64 vector_norm2( std::vector<double64>& x, std::vector<double64>& scale );
 double64 vector_norm_inf( std::vector<double64>& x, std::vector<double64>& scale );
 
 /// randomly perturbs the values stored in the supplied floating-point vector
-void     vector_randomize( std::vector<double64>& x, double64 scale_fac=1. );
+void     vector_randomize( random_generator& rng, std::vector<double64>& x, double64 scale_fac=1. );
 
 /// averaging the floating-point values of scalar, vector and tensor variables in CSMP
 template<typename Var> void average( const std::vector<Var>&, Var& );

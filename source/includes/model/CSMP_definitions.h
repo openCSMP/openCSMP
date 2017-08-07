@@ -72,6 +72,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <vector>
 #include <array>
 #include <ciso646>
+#include <random>
 
 /*
 ===========================
