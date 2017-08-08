@@ -147,4 +147,5 @@ Currently (March 2016) the official contact point is the Technology Transfer of 
 #include "Index.h"
 #include "CSMP_global_enumerations.h"
 
+
 #endif

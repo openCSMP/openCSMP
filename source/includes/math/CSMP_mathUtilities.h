@@ -2,6 +2,7 @@
 #define CSMP_MATH_UTILITIES_H
 
 #include "CSMP_definitions.h"
+#include "CSMP_random.h"
 #include "DenseMatrix.h"
 
 // minor convienient additions to standard C++ functionality
@@ -24,9 +25,6 @@ inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
 /**
 @}
 */
-
-/// default random number generator
-typedef std::mt19937_64 random_generator;
 
 /**
 @addtogroup CSMPglobalFunctions
