@@ -56,7 +56,7 @@ int main()
             examplesSuite.RegisterExample( new QuadraticPressure_parallelPlatePermeability_Example() );
             examplesSuite.RegisterExample( new PolicyBased_Example() );
             examplesSuite.RegisterExample( new CuriouslyRecurringTemplate_Example() );
-            examplesSuite.RegisterExample( new TDDUnitTest_Example() );
+            // examplesSuite.RegisterExample( new TDDUnitTest_Example() );
             examplesSuite.RegisterExample( new TemplatizedIndex_Example() );
             examplesSuite.RegisterExample( new ModelANSYS_Example() );
             examplesSuite.RegisterExample( new EffectiveStressDilatation2D_Example() );
