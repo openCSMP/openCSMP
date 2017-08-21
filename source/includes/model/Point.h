@@ -73,6 +73,9 @@ class Point {
     /// returns the offset of th point from the origin of the coordinate system
     double64  Length() const;
   
+    /// returns the square of the distance of the point from the origin of the coordinate system
+    double64  SquaredLength() const;
+  
     /// enforce offset of point from coordinate origin (when point is used to store a vector)
     void      NormalizeLengthTo( double64 len=1. );
   
@@ -167,6 +170,7 @@ class Point<1U> {
     bool   operator>( const Point<1U>& ) const;
     void   Set( const std::vector<double64>& );
     double64  Length() const;
+    double64  SquaredLength() const;
     void      NormalizeLengthTo( double64 len=1. );
     double64  DistanceTo( const Point<1U>& ) const;
     bool      CoincidesWithWithinTolerance( const Point<1U>&, double64 tolerance=1.0e-5 ) const;
@@ -221,6 +225,7 @@ class Point<2U> {
     void   Set( const std::vector<double64>& );
     void   Set( double64, double64 );
     double64 Length() const;
+    double64 SquaredLength() const;
     void     NormalizeLengthTo( double64 len=1. );
     double64 DistanceTo( const Point& ) const;
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;
@@ -278,6 +283,7 @@ class Point<3U> {
     void     Set( const std::vector<double64>& );
     void     Set( double64, double64, double64 );
     double64 Length() const;
+    double64 SquaredLength() const;
     void     NormalizeLengthTo( double64 len=1. );
     double64 DistanceTo( const Point& ) const;
     bool     CoincidesWithWithinTolerance( const Point&, double64 tolerance=1.0e-5 ) const;

@@ -1,4 +1,5 @@
 #include "AP_algebraUtilities.h"
+#include "CSMP_mathUtilities.h"
 
 using namespace std;
 
@@ -88,7 +89,7 @@ bool intersection(const Point<dim>& c1, const Point<dim>& c2, const Point<dim>& 
   
 	//the intersection point p is: p= p1 + a*( (cxb).(axb)/ |axb|^2 )
 	
-	vecIntersection = c1 + (a* (dotProduct(cxb,axb)/pow(axb.Length(),2)) );
+	vecIntersection = c1 + (a* (dotProduct(cxb,axb)/axb.SquaredLength()) );
 	
 	return true;
 }
@@ -281,7 +282,7 @@ bool areaOfPolygon(const vector< Point<dim> >& vecPolygon, const size_t& iNrOfFa
    	vecSum += crossProduct(vecPolygon[iPt],vecPolygon[(iPt+1)%iSize]);
     
 	//calculate area
-	fArea = fabs( dotProduct(vecNormal, vecSum)) / 2.;
+	fArea = 0.5 * fabs( dotProduct(vecNormal, vecSum));
 	
 	//successful computation
 	return true;	
@@ -310,7 +311,7 @@ double64 distanceBetweenPoints(const vector<double64>& v1, const vector<double64
 	const vector<double64>::const_iterator vIterEnd(v1.end());
 	for(vector<double64>::const_iterator vIter1 = v1.begin(); vIter1 != vIterEnd; vIter1++, vIter2++)
 	{
-		fDist += pow( *vIter1 - *vIter2 , 2);
+		fDist += square( *vIter1 - *vIter2 );
 	}
 			
 	fDist = sqrt(fDist);

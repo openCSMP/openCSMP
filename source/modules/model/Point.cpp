@@ -259,8 +259,12 @@ bool Point<1U>::operator>( const Point<1U>& pt ) const
 
 double64  Point<1U>::Length() const
  {
-    // return std::sqrt( x_ * x_ );
-    return x_; 
+    return std::fabs(x_);
+ }
+
+double64  Point<1U>::SquaredLength() const
+ {
+    return x_ * x_; 
  }
 
 
@@ -505,6 +509,11 @@ bool Point<2U>::operator>( const Point<2U>& pt )  const
 double64  Point<2U>::Length() const
  {
     return std::hypot( x_, y_ );
+ }
+
+double64  Point<2U>::SquaredLength() const
+ {
+    return x_*x_ + y_*y_;
  }
 
 
@@ -763,6 +772,11 @@ bool Point<3U>::operator>( const Point<3U>& p )  const
 double64  Point<3U>::Length() const
  {
     return std::sqrt( x_ * x_ + y_ * y_ + z_ * z_ );
+ }
+
+double64  Point<3U>::SquaredLength() const
+ {
+    return x_ * x_ + y_ * y_ + z_ * z_;
  }
 
 

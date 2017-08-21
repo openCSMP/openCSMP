@@ -5,51 +5,35 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-RandomFieldGenerator<dim>::RandomFieldGenerator()
- : m1_(0,0), m2_(0,0), m3_(0,0), pi_(4.0*atan(1.0)), k_(0), fname("random_permeability_field.txt")
+RandomFieldGenerator<dim>::RandomFieldGenerator(random_generator rng)
+ : rng_(std::move(rng)), m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
 {
 
 } 
 
-// from http://toronto.rfpk.washington.edu/doc/mat2cpp/rand.htm
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
 {    
-  // seed the random number generator with the current time
-  long seed = time(NULL);
-  std::srand(static_cast<unsigned int>(seed));
-  double64 rand_max = double64(RAND_MAX);
-
+  std::uniform_real_distribution<> rndist(0,1);
   m1_.Resize(m,n);
   for(size_t i=0; i<m; i++) {
       for(size_t j=0; j<n; j++)
-          m1_(i,j) = double64(std::rand()) / rand_max;
+          m1_(i,j) = rndist(rng_);
     } 
   return m1_;
 }
 
-// from http://toronto.rfpk.washington.edu/doc/mat2cpp/randn.htm
+
 template<size_t dim>
 Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
 {    
-  m2_.Resize(m*n+1,1);
+  std::normal_distribution<> rndist(0,1);
   m3_.Resize(m,n);
-  m2_ = UniformRandomMatrix(m*n+1,1);
-  size_t k(0);
-  double64 square, amp, angle;
-  for(size_t i=0; i<m; i++) {
-      for(size_t j=0; j<n; j++) {
-          if( k % 2 == 0 ) {   
-              square = - 2. * std::log( m2_(k,0) );
-              if( square < 0. ) square = 0.;
-              amp = std::sqrt(square);
-              angle = 2. * pi_ * m2_(k+1,0);
-              m3_(i,j) = amp * std::sin( angle );
-            }
-          else m3_(i,j) = amp * std::cos( angle );
-          k++;
-        }
+  for (size_t i=0; i<m; i++) {
+      for (size_t j=0; j<n; j++) {
+          m3_(i,j) = rndist(rng_);
       }
+  }
   return m3_;
 }
 
