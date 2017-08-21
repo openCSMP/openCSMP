@@ -249,13 +249,19 @@ class FiniteElement {
     virtual   double64  WeightAtIntegrationPoint( size_t i ) const;
   
     /// reports the local node numbers in counter clockwise order
+    // DEPRECATE, but check whether this is used by any of ther applications
     virtual   void      CounterClockwiseNodes( std::vector<size_t>& ids ) const;
 
     /// reports the values of the interpolation functions at the point given in global coordinates; @attention slow for numerically integrated elements
+    // REMOVE: use XYZtoRST(); to find the point of interest
     virtual   void      N( std::vector<double64>& N, const std::vector<double64>& xyz );
   
     /// reports the values of the interpolation functions at the given quadrature point
+    // RENAME: N_AtPoint();
     virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double64>& N );
+  
+    // MURTEZA's addition
+    virtual bool XYZtoRST() const;  // CHECKE WHETHER POINT IS LOCATED WITHIN ELEMENT
   
     /// reports the values of the interpolation functions at the center of gravity of the element
     virtual   void      N_AtBaryCenter( std::vector<double64>& N );
@@ -264,9 +270,11 @@ class FiniteElement {
     virtual   void      dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
+    // REMOVE: only RST should be supported; use XYZtoRST to compute point location
     virtual   double64  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double64>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
+    // RENAME dN_AtPoint();
     virtual   double64  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, size_t gauss_point );
 
     /// returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well
@@ -279,7 +287,7 @@ class FiniteElement {
     // are returned into the protected matrices JAC and JINV
   
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point
-    virtual   void      JacobianAtIntegrationPoint( size_t ip );
+    virtual   double64  JacobianAtIntegrationPoint( size_t ip );
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t)
     virtual   void      JacobianAt( const std::vector<double64>& rst );

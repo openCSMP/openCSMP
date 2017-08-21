@@ -37,9 +37,13 @@ class FiniteElementPolicy {
     Point<dim> IntegrationPoint( size_t ip ) const;
     double64   WeightAtIntegrationPoint( size_t i ) const;
 
+    // DEPRECATE - or call XYZtoRST() in here
     void       N_AtGlobalPoint( std::vector<double64>& N, const std::vector<double64>& xyz ) const;
+    // N_AtPoint();
     void       N_AtBaryCenter( std::vector<double64>& N ) const;
     void       N_AtIntegrationPoint( size_t ipoint, std::vector<double64>& N ) const;
+
+// ADD METHODS FOR AXISYMMETRIC CASES ?
 
     /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
     void       dN( DenseMatrix<DM_MIN>& ) const;
@@ -57,6 +61,7 @@ class FiniteElementPolicy {
     double64   det_JINV_AtIntegrationPoint( size_t ipoint ) const;
 
     /// interpolation function products matrix for analytically integrated element
+    // DEPRECATE
     void       IntegralNN( DenseMatrix<DM_MIN>& M ) const;
   
     /// initialises the nodes x dim matrix XY stored in the connected finite element class 
