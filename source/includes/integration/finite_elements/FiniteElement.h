@@ -260,9 +260,6 @@ class FiniteElement {
     // RENAME: N_AtPoint();
     virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double64>& N );
   
-    // MURTEZA's addition
-    virtual bool XYZtoRST() const;  // CHECKE WHETHER POINT IS LOCATED WITHIN ELEMENT
-  
     /// reports the values of the interpolation functions at the center of gravity of the element
     virtual   void      N_AtBaryCenter( std::vector<double64>& N );
     
@@ -287,7 +284,7 @@ class FiniteElement {
     // are returned into the protected matrices JAC and JINV
   
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point
-    virtual   double64  JacobianAtIntegrationPoint( size_t ip );
+    virtual   void      JacobianAtIntegrationPoint( size_t ip );
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t)
     virtual   void      JacobianAt( const std::vector<double64>& rst );
@@ -314,7 +311,7 @@ class FiniteElement {
     /// initialises interpolation function derivatives product matrix DN^T x DN for element where derivatives are constant
     virtual   void      IntegraldNdN( DenseMatrix<DM_MIN>& );
     
-    // local interpolation functions in elements that use a local coordinate system (r,s,t)
+    // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
 
     /// 1D element interpolation functions N(r)
     virtual void  Nr(  double64 r, std::vector<double64>& NRST ) const;

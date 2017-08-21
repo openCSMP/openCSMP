@@ -15,7 +15,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   // dummies and delimeters, io feedback
   std::string cache;
   const std::streamsize dS( std::numeric_limits<std::streamsize>::max() );
-  const char dcT( '\t' ), dcN( '\n' );
+  const char dcT( '\t' );
   bool var_b;
   using namespace std;
   bool global_verbose( GlobalVerbose::Instance().globalVerbose );
