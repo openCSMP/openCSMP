@@ -26,7 +26,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void SteadyStatePressureToVset_Example::Specifications()
 {

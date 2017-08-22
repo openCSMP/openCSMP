@@ -632,7 +632,7 @@ if ( dim == 2 && nbor_elmt->IsLineElement() ) {
 
 
 /** 
-     Converts region into Boundarie(s) of faces, decomposed into patches; 
+     Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches; 
      region is moved from "Model" to non-unique regions, connectivity is updated.
      
      Uses node-to-parent relationship to find the higher dimensional elements that will 

@@ -206,8 +206,9 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::det_JINV_AtIntegrationPoint( size_t i
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
+    // SKM_FIX
     fptr_->JacobianAtIntegrationPoint( ipoint );
-    return fptr_->JacobianInverse();
+    return fptr_->JacobianDeterminant();
   }
 
 template<size_t dim, template<size_t> class SIMPLEX>
