@@ -731,6 +731,73 @@ void Element<dim>::Out() const
 
 
 
+    /// prints Element internal data and those of connected objects.
+    template<>
+    void Element<3U>::InvasiveDebug(unsigned f) const
+    {
+        const unsigned dim=3;
+        string str(parseBoundary(at_boundary_));
+        cout <<"\n\nElement<"<< dim <<">::Out: number: "<< idx_;
+        cout <<" ("<< parseFiniteElementType(this->FE_Type()) <<" = ";
+        if      ( this->IsLineElement() )    cout <<"line element";
+        else if ( this->IsSurfaceElement() ) cout <<"surface element";
+        else if ( this->IsVolumeElement() )  cout <<"volume element";
+        cout <<"), boundary flag: "<< str <<"\n";
+        
+        cout <<"\n\tconnected nodes (indices : boundary flags):\n";
+        for ( size_t i=0U; i<this->Nodes(); i++ ) {
+            str = parseBoundary(N(i)->AtBoundary());
+            cout << "  " << N(i)->Idx() <<":"<< str << ' ' << N(i)->Coordinate() << '\n';
+        }
+        cout << endl;
+                
+        // barycentre
+        Point<dim>  pt(this->BaryCenter());
+        if ( dim == 1U )
+            cout <<"\n\tbarycentre at (xyz): "<< pt[0] << endl;
+        else if ( dim == 2U )
+            cout <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] << endl;
+        else
+            cout <<"\n\tbarycentre at (xyz): "<< pt[0] <<", "<< pt[1] <<", "<< pt[2] << endl;
+        
+        // length, area, volue
+        const double64 volume(this->Volume());
+        if (  this->IsLineElement() ) {
+            if ( volume > 0. ) cout <<"\n\tlength: "<< volume << endl;
+            else cerr <<"\n\tlength: ERROR (negative value indicates numbering problem): "<< volume << endl;
+        }
+        if (  this->IsSurfaceElement() ) {
+            if ( volume > 0. ) cout <<"\n\tarea: "<< volume << endl;
+            else cerr <<"\n\tarea: ERROR (negative value indicates numbering problem): "<< volume << endl;
+        }
+        else if ( this->IsVolumeElement() ) {
+            if ( volume > 0. ) cout <<"\n\tvolume: "<< volume << endl;
+            else cerr <<"\n\tvolume: ERROR (negative value indicates numbering problem): "<< volume << endl;
+        }
+        
+        // inner radius
+        if (  this->IsSurfaceElement() )
+            cout <<"\n\tradius of inscribed circle: "<< this->InnerRadius() << endl;
+        else if ( this->IsVolumeElement() )
+            cout <<"\n\tradius of inscribed sphere: "<< this->InnerRadius() << endl;
+        
+        // aspect ratio
+        if ( !this->IsLineElement() ) cout <<"\n\taspect ratio (b-box):   "<< this->AspectRatio() << endl;
+        
+        cout << "Parametric facet normal: " << this->ParametricFacetNormal(f) << '\n';
+        cout << "Parametric facet area: " << this->ParametricFacetArea(f) << '\n';
+        cout << "Physical facet normal: " << this->FacetNormal(f) << '\n';
+        cout << "Physical facet area: " << this->FacetArea(f) << '\n';
+        cout << "Physical facet point 0: " << this->FacetPoint(f,0) << '\n';
+        cout << "Physical facet point 1: " << this->FacetPoint(f,1) << '\n';
+        cout << "Physical facet point 2: " << this->FacetPoint(f,2) << '\n';
+        
+        Point<3U> norm = normalOfTriangle(this->FacetPoint(f,0),this->FacetPoint(f,1),this->FacetPoint(f,2));
+        cout << "Normal: " << norm << '\n';
+
+    } // end Out
+    
+    
 
 
 template class Element<1U>;

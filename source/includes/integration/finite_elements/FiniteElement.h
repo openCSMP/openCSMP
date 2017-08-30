@@ -73,6 +73,13 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
 
 enum ELEMENT_DIMENSION { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
+
+enum FV_FACET_TYPE {
+        UNIT_LINEAR_FACET,
+        TRIANGULAR_FACET,
+        QUADRILATERAL_FACET
+};
+
 /**
 @}
 */
@@ -85,6 +92,8 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE );
 CSMP_FEM_TYPE      parseFiniteElementTypeEnum( int32 csp_etype );
 CSMP_FEM_TYPE      parseFiniteElementType( const std::string& etype );
 const char*        parseFiniteElementType( int32 etype );
+FV_FACET_TYPE      parseFacetType( const std::string& ftype );
+const char*        parseFacetType( int32 ftype );
 
 
 /**

@@ -1130,6 +1130,31 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      return "UNKNOWN";
  
  } // end parseFiniteElementType
+
+
+ FV_FACET_TYPE parseFacetType( const std::string& ftype )
+ {
+     if (ftype == "UNIT_LINEAR_FACET") return UNIT_LINEAR_FACET;
+     if (ftype == "TRIANGULAR_FACET") return TRIANGULAR_FACET;
+     if (ftype == "QUADRILATERAL_FACET") return QUADRILATERAL_FACET;
+     cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+     return static_cast<FV_FACET_TYPE>(0);
+ }
+
+ const char* parseFacetType( int32 ftype )
+ {
+     switch (ftype)
+     {
+         case UNIT_LINEAR_FACET: return "UNIT_LINEAR_FACET";
+         case TRIANGULAR_FACET: return "TRIANGULAR_FACET";
+         case QUADRILATERAL_FACET: return "QUADRILATERAL_FACET";
+         default:
+             cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+             return "(unknown)";
+     }
+ } // end parseFacetType
+
+
  
  } // end namespace csp
  

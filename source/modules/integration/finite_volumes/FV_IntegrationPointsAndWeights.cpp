@@ -146,6 +146,7 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
     m_facet_edge_midpoints.resize( n_isrf*2 );  vector<Point<dim> >(m_facet_edge_midpoints).swap(m_facet_edge_midpoints);
 
     m_facet_points.resize( n_isrf );  vector<vector<Point<dim> > >(m_facet_points).swap(m_facet_points);
+    m_facet_types.resize( n_isrf );
     m_sector_points.resize( n_ivol ); 
     m_edge_of_sectors.resize( n_ivol ); 
      
@@ -236,6 +237,12 @@ void FV_IntegrationPointsAndWeights<dim>::FacetPoints( std::vector<std::vector<P
 }
 
 template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetTypes( std::vector<FV_FACET_TYPE>& facet_types )
+{
+   facet_types = m_facet_types;
+}
+
+template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
                           std::vector<std::vector<Point<dim> > >& rst_sector_points)
 {
@@ -299,6 +306,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
   m_facet_edge_midpoints[1][0] =  1./2.;
 
   m_barycenter[0] = 0.;
+
+  m_facet_types[0] = UNIT_LINEAR_FACET;
 
   m_facet_points[0].resize(1U); //nr of points in this facet
   vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
@@ -405,11 +414,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
     m_barycenter[1] = 1./3.;
     
     for ( size_t iFacet=0U; iFacet<3U; iFacet++ ) {
+        m_facet_types[iFacet] = UNIT_LINEAR_FACET;
+
         m_facet_points[iFacet].resize(2U);
         vector<Point<dim> >(m_facet_points[iFacet]).swap(m_facet_points[iFacet]);
         m_facet_points[iFacet][0] = m_facet_edge_midpoints[iFacet];
         m_facet_points[iFacet][1] = m_barycenter;
       }
+
     
     //tested: 30/Oct/2007 Hamid
     Point<dim> p;
@@ -529,6 +541,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
 
     for ( size_t iFacet = 0U; iFacet < 4; iFacet++ )
        {
+         m_facet_types[iFacet] = UNIT_LINEAR_FACET;
+
          m_facet_points[iFacet].resize(2U);
          vector<Point<dim> >(m_facet_points[iFacet]).swap(m_facet_points[iFacet]);
          m_facet_points[iFacet][0] = m_facet_edge_midpoints[iFacet];
@@ -690,6 +704,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     pt_c24[0]=1./2.;pt_c24[1]=0.;pt_c24[2]=1./2.;
     pt_c12[0]=1./2.;pt_c12[1]=0.;pt_c12[2]=0.;
    
+    m_facet_types[0] = QUADRILATERAL_FACET;
+
     m_facet_points[0].resize(4U);
     vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
     m_facet_points[0][0] = pt_c12;
@@ -697,6 +713,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[0][2] = m_barycenter;
     m_facet_points[0][3] = pt_c124;
     
+    m_facet_types[1] = QUADRILATERAL_FACET;
+
     m_facet_points[1].resize(4U);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
     m_facet_points[1][0] = pt_c23;
@@ -704,6 +722,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[1][2] = m_barycenter;
     m_facet_points[1][3] = pt_c234;
     
+    m_facet_types[2] = QUADRILATERAL_FACET;
+
     m_facet_points[2].resize(4U);
     vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
     m_facet_points[2][0] = pt_c13;
@@ -711,6 +731,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[2][2] = m_barycenter;
     m_facet_points[2][3] = pt_c134;
     
+    m_facet_types[3] = QUADRILATERAL_FACET;
+
     m_facet_points[3].resize(4U);
     vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
     m_facet_points[3][0] = pt_c14;
@@ -718,6 +740,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c134;
  
+    m_facet_types[4] = QUADRILATERAL_FACET;
+
     m_facet_points[4].resize(4U);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c124;
@@ -725,13 +749,15 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[4][2] = pt_c234;
     m_facet_points[4][3] = m_barycenter;
  
+    m_facet_types[5] = QUADRILATERAL_FACET;
+
     m_facet_points[5].resize(4U);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
     m_facet_points[5][0] = m_barycenter;
     m_facet_points[5][1] = pt_c234; 
     m_facet_points[5][2] = pt_c34;
     m_facet_points[5][3] = pt_c134;
-    
+
     // tested: 08/Nov/2007 Hamid	
     Point<dim> p;
     m_sector_points[0].resize(8U); 
@@ -986,12 +1012,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     pt_c78[0]=0.;pt_c78[1]=1.;pt_c78[2]=1.;
     pt_c58[0]=-1.;pt_c58[1]=0.;pt_c58[2]=1.;
     
+    m_facet_types[0] = QUADRILATERAL_FACET;
+
     m_facet_points[0].resize(4);
     vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
     m_facet_points[0][0] = pt_c12;
     m_facet_points[0][1] = pt_c1234; 
     m_facet_points[0][2] = m_barycenter;
     m_facet_points[0][3] = pt_c1256;
+
+    m_facet_types[1] = QUADRILATERAL_FACET;
 
     m_facet_points[1].resize(4);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
@@ -1000,12 +1030,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[1][2] = m_barycenter;
     m_facet_points[1][3] = pt_c2367;
 
+    m_facet_types[2] = QUADRILATERAL_FACET;
+
     m_facet_points[2].resize(4);
     vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
     m_facet_points[2][0] = pt_c34;
     m_facet_points[2][1] = pt_c1234; 
     m_facet_points[2][2] = m_barycenter;
     m_facet_points[2][3] = pt_c3478;
+
+    m_facet_types[3] = QUADRILATERAL_FACET;
 
     m_facet_points[3].resize(4);
     vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
@@ -1014,12 +1048,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c1458;
 
+    m_facet_types[4] = QUADRILATERAL_FACET;
+
     m_facet_points[4].resize(4);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c15;
     m_facet_points[4][1] = pt_c1256; 
     m_facet_points[4][2] = m_barycenter;
     m_facet_points[4][3] = pt_c1458;
+
+    m_facet_types[5] = QUADRILATERAL_FACET;
 
     m_facet_points[5].resize(4);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
@@ -1028,12 +1066,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[5][2] = m_barycenter;
     m_facet_points[5][3] = pt_c1256;
 
+    m_facet_types[6] = QUADRILATERAL_FACET;
+
     m_facet_points[6].resize(4);
     vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
     m_facet_points[6][0] = pt_c37;
     m_facet_points[6][1] = pt_c3478; 
     m_facet_points[6][2] = m_barycenter;
     m_facet_points[6][3] = pt_c2367;
+
+    m_facet_types[7] = QUADRILATERAL_FACET;
 
     m_facet_points[7].resize(4);
     vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
@@ -1042,12 +1084,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[7][2] = m_barycenter;
     m_facet_points[7][3] = pt_c3478;
 
+    m_facet_types[8] = QUADRILATERAL_FACET;
+
     m_facet_points[8].resize(4);
     vector<Point<dim> >(m_facet_points[8]).swap(m_facet_points[8]);
     m_facet_points[8][0] = pt_c56;
     m_facet_points[8][1] = pt_c1256; 
     m_facet_points[8][2] = m_barycenter;
     m_facet_points[8][3] = pt_c5678;
+
+    m_facet_types[9] = QUADRILATERAL_FACET;
 
     m_facet_points[9].resize(4);
     vector<Point<dim> >(m_facet_points[9]).swap(m_facet_points[9]);
@@ -1056,12 +1102,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[9][2] = m_barycenter;
     m_facet_points[9][3] = pt_c5678;
 
+    m_facet_types[10] = QUADRILATERAL_FACET;
+
     m_facet_points[10].resize(4);
     vector<Point<dim> >(m_facet_points[10]).swap(m_facet_points[10]);
     m_facet_points[10][0] = pt_c78;
     m_facet_points[10][1] = pt_c3478; 
     m_facet_points[10][2] = m_barycenter;
     m_facet_points[10][3] = pt_c5678;
+
+    m_facet_types[11] = QUADRILATERAL_FACET;
 
     m_facet_points[11].resize(4);
     vector<Point<dim> >(m_facet_points[11]).swap(m_facet_points[11]);
@@ -1346,70 +1396,88 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     pt_c56[0]=1./2.;pt_c56[1]=1./2.;pt_c56[2]=1.;
     pt_c46[0]=0.;pt_c46[1]=1./2.;pt_c46[2]=1.;
     pt_c36[0]=0.;pt_c36[1]=1.;pt_c36[2]=0.;
-    
-	  m_facet_points[0].resize(4);
+
+    m_facet_types[0] = QUADRILATERAL_FACET;
+
+	m_facet_points[0].resize(4);
     vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
     m_facet_points[0][0] = pt_c12;
     m_facet_points[0][1] = pt_c123; 
     m_facet_points[0][2] = m_barycenter;
     m_facet_points[0][3] = pt_c1245;
-    
+
+    m_facet_types[1] = QUADRILATERAL_FACET;
+
     m_facet_points[1].resize(4);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
     m_facet_points[1][0] = pt_c123;
     m_facet_points[1][1] = m_barycenter; 
     m_facet_points[1][2] = pt_c2356;
     m_facet_points[1][3] = pt_c23;
-    
-	  m_facet_points[2].resize(4);
+
+    m_facet_types[2] = QUADRILATERAL_FACET;
+
+	m_facet_points[2].resize(4);
     vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
     m_facet_points[2][0] = pt_c123;
     m_facet_points[2][1] = m_barycenter; 
     m_facet_points[2][2] = pt_c1346;
     m_facet_points[2][3] = pt_c13;
-    
-	  m_facet_points[3].resize(4);
+
+    m_facet_types[3] = QUADRILATERAL_FACET;
+
+	m_facet_points[3].resize(4);
     vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
     m_facet_points[3][0] = pt_c14;
     m_facet_points[3][1] = pt_c1245; 
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c1346;
-    
-	  m_facet_points[4].resize(4);
+
+    m_facet_types[4] = QUADRILATERAL_FACET;
+
+	m_facet_points[4].resize(4);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c25;
     m_facet_points[4][1] = pt_c2356; 
     m_facet_points[4][2] = m_barycenter;
     m_facet_points[4][3] = pt_c1245;
-    
-	  m_facet_points[5].resize(4);
+
+    m_facet_types[5] = QUADRILATERAL_FACET;
+
+	m_facet_points[5].resize(4);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
     m_facet_points[5][0] = pt_c36;
     m_facet_points[5][1] = pt_c1346; 
     m_facet_points[5][2] = m_barycenter;
     m_facet_points[5][3] = pt_c2356;
-    
-	  m_facet_points[6].resize(4);
+
+    m_facet_types[6] = QUADRILATERAL_FACET;
+
+	m_facet_points[6].resize(4);
     vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
     m_facet_points[6][0] = pt_c45;
     m_facet_points[6][1] = pt_c1245; 
     m_facet_points[6][2] = m_barycenter;
     m_facet_points[6][3] = pt_c456;
-    
+
+    m_facet_types[7] = QUADRILATERAL_FACET;
+
     m_facet_points[7].resize(4);
     vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
     m_facet_points[7][0] = pt_c56;
     m_facet_points[7][1] = pt_c2356; 
     m_facet_points[7][2] = m_barycenter;
     m_facet_points[7][3] = pt_c456;
-    
-	  m_facet_points[8].resize(4);
+
+    m_facet_types[8] = QUADRILATERAL_FACET;
+
+	m_facet_points[8].resize(4);
     vector<Point<dim> >(m_facet_points[8]).swap(m_facet_points[8]);
     m_facet_points[8][0] = pt_c46;
     m_facet_points[8][1] = pt_c1346; 
     m_facet_points[8][2] = m_barycenter;
     m_facet_points[8][3] = pt_c456;
-    
+
     // tested: 08/Nov/2007 Hamid	
     Point<dim> p;    
     m_sector_points[0].resize(8U); 
@@ -1648,20 +1716,26 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
   	pt_c235[0]=2./3.;pt_c235[1]=0.;pt_c235[2]=1./3.;
   	pt_c345[0]=0.;pt_c345[1]=2./3.;pt_c345[2]=1./3.;
   	pt_c1234[0]=0.;pt_c1234[1]=0.;pt_c1234[2]=0.;
-	
+
+    m_facet_types[0] = QUADRILATERAL_FACET;
+
   	m_facet_points[0].resize(4);
     vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
     m_facet_points[0][0] = pt_c12;
     m_facet_points[0][1] = pt_c1234; 
     m_facet_points[0][2] = m_barycenter;
     m_facet_points[0][3] = pt_c125;
-    
-	  m_facet_points[1].resize(4);
+
+    m_facet_types[1] = QUADRILATERAL_FACET;
+
+	m_facet_points[1].resize(4);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
     m_facet_points[1][0] = pt_c23;
     m_facet_points[1][1] = pt_c1234; 
     m_facet_points[1][2] = m_barycenter;
     m_facet_points[1][3] = pt_c235;    
+
+    m_facet_types[2] = QUADRILATERAL_FACET;
 
   	m_facet_points[2].resize(4);
     vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
@@ -1670,35 +1744,45 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_facet_points[2][2] = m_barycenter;
     m_facet_points[2][3] = pt_c345;    
 
-	  m_facet_points[3].resize(4);
-	  vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
+    m_facet_types[3] = QUADRILATERAL_FACET;
+
+	m_facet_points[3].resize(4);
+	vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
     m_facet_points[3][0] = pt_c14;
     m_facet_points[3][1] = pt_c1234; 
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c145;    
 
-	  m_facet_points[4].resize(4);
+    m_facet_types[4] = QUADRILATERAL_FACET;
+
+	m_facet_points[4].resize(4);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c15;
     m_facet_points[4][1] = pt_c125; 
     m_facet_points[4][2] = m_barycenter;
     m_facet_points[4][3] = pt_c145;    
 
-	  m_facet_points[5].resize(4);
+    m_facet_types[5] = QUADRILATERAL_FACET;
+
+	m_facet_points[5].resize(4);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
     m_facet_points[5][0] = pt_c25;
     m_facet_points[5][1] = pt_c235; 
     m_facet_points[5][2] = m_barycenter;
     m_facet_points[5][3] = pt_c125;    
 
-	  m_facet_points[6].resize(4);
+    m_facet_types[6] = QUADRILATERAL_FACET;
+
+	m_facet_points[6].resize(4);
     vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
     m_facet_points[6][0] = pt_c35;
     m_facet_points[6][1] = pt_c345; 
     m_facet_points[6][2] = m_barycenter;
     m_facet_points[6][3] = pt_c235;    
 
-	  m_facet_points[7].resize(4);
+    m_facet_types[7] = QUADRILATERAL_FACET;
+
+	m_facet_points[7].resize(4);
     vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
     m_facet_points[7][0] = pt_c45;
     m_facet_points[7][1] = pt_c145; 
@@ -1949,84 +2033,109 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 	  pt_c235[0]=2./3.;pt_c235[1]=0.;pt_c235[2]=1./3.;
 	  pt_c345[0]=0.;pt_c345[1]=2./3.;pt_c345[2]=1./3.;
 	  pt_c1234[0]=0.;pt_c1234[1]=0.;pt_c1234[2]=0.;
-	
-	  m_facet_points[0].resize(4);
+
+    m_facet_types[0] = QUADRILATERAL_FACET;
+
+	m_facet_points[0].resize(4);
     vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
     m_facet_points[0][0] = pt_c12;
     m_facet_points[0][1] = pt_c1234; 
     m_facet_points[0][2] = m_barycenter;
     m_facet_points[0][3] = pt_c125;
-    
-	  m_facet_points[1].resize(4);
+
+    m_facet_types[1] = QUADRILATERAL_FACET;
+
+	m_facet_points[1].resize(4);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
     m_facet_points[1][0] = pt_c23;
     m_facet_points[1][1] = pt_c1234; 
     m_facet_points[1][2] = m_barycenter;
     m_facet_points[1][3] = pt_c235;    
 
-	  m_facet_points[2].resize(4);
+    m_facet_types[2] = QUADRILATERAL_FACET;
+
+	m_facet_points[2].resize(4);
     vector<Point<dim> >(m_facet_points[2]).swap(m_facet_points[2]);
     m_facet_points[2][0] = pt_c34;
     m_facet_points[2][1] = pt_c1234; 
     m_facet_points[2][2] = m_barycenter;
     m_facet_points[2][3] = pt_c345;    
 
-	  m_facet_points[3].resize(4);
+    m_facet_types[3] = QUADRILATERAL_FACET;
+
+	m_facet_points[3].resize(4);
     vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
     m_facet_points[3][0] = pt_c14;
     m_facet_points[3][1] = pt_c1234; 
     m_facet_points[3][2] = m_barycenter;
     m_facet_points[3][3] = pt_c145;    
 
-    //new triangular facets
-	  m_facet_points[4].resize(3);
+    // triangular facets
+
+    m_facet_types[4] = TRIANGULAR_FACET;
+
+	m_facet_points[4].resize(3);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c145;
     m_facet_points[4][1] = pt_c15; 
     m_facet_points[4][2] = m_barycenter;
-    
-	  m_facet_points[5].resize(3);
+
+    m_facet_types[5] = TRIANGULAR_FACET;
+
+	m_facet_points[5].resize(3);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
     m_facet_points[5][0] = pt_c15;
     m_facet_points[5][1] = pt_c125; 
     m_facet_points[5][2] = m_barycenter;
-    
-	  m_facet_points[6].resize(3);
+
+    m_facet_types[6] = TRIANGULAR_FACET;
+
+	m_facet_points[6].resize(3);
     vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
     m_facet_points[6][0] = pt_c125;
     m_facet_points[6][1] = pt_c25; 
     m_facet_points[6][2] = m_barycenter;
-    
-	  m_facet_points[7].resize(3);
+
+    m_facet_types[7] = TRIANGULAR_FACET;
+
+	m_facet_points[7].resize(3);
     vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
     m_facet_points[7][0] = pt_c25;
     m_facet_points[7][1] = pt_c235; 
     m_facet_points[7][2] = m_barycenter;
-    
-	  m_facet_points[8].resize(3);
+
+    m_facet_types[8] = TRIANGULAR_FACET;
+
+	m_facet_points[8].resize(3);
     vector<Point<dim> >(m_facet_points[8]).swap(m_facet_points[8]);
     m_facet_points[8][0] = pt_c235;
     m_facet_points[8][1] = pt_c35; 
     m_facet_points[8][2] = m_barycenter;
-    
-	  m_facet_points[9].resize(3);
+
+    m_facet_types[9] = TRIANGULAR_FACET;
+
+	m_facet_points[9].resize(3);
     vector<Point<dim> >(m_facet_points[9]).swap(m_facet_points[9]);
     m_facet_points[9][0] = pt_c35;
     m_facet_points[9][1] = pt_c345; 
     m_facet_points[9][2] = m_barycenter;
-    
-	  m_facet_points[10].resize(3);
+
+    m_facet_types[10] = TRIANGULAR_FACET;
+
+	m_facet_points[10].resize(3);
     vector<Point<dim> >(m_facet_points[10]).swap(m_facet_points[10]);
     m_facet_points[10][0] = pt_c345;
     m_facet_points[10][1] = pt_c45; 
     m_facet_points[10][2] = m_barycenter;
-    
-	  m_facet_points[11].resize(3);
+
+    m_facet_types[11] = TRIANGULAR_FACET;
+
+	m_facet_points[11].resize(3);
     vector<Point<dim> >(m_facet_points[11]).swap(m_facet_points[11]);
     m_facet_points[11][0] = pt_c45;
     m_facet_points[11][1] = pt_c145; 
     m_facet_points[11][2] = m_barycenter;
-    
+
     // tested: 07/Nov/2007 Hamid	
     Point<dim> p;
     m_sector_points[0].resize(8U); 

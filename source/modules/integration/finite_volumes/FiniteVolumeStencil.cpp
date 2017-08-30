@@ -39,7 +39,7 @@ FiniteVolumeStencil<dim>::~FiniteVolumeStencil()
 
 /**
  
- Parametrised constructor for the FiniteVolumeStencil class.
+ Parametrised constructor for the FiniteVolumeStencil classpoints.
 
  const FiniteVolumeStencil<dim>& fvs - reference to the FiniteVolumeStencil
  object.  
@@ -63,6 +63,7 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
    facet_edge_midpoints(fvs.facet_edge_midpoints),
    barycenter(fvs.barycenter),
    facet_points(fvs.facet_points),
+   facet_types(fvs.facet_types),
    sector_points_(fvs.sector_points_),
    sector_edges_(fvs.sector_edges_),
    space_dimension_(fvs.space_dimension_)
@@ -97,6 +98,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
           facet_edge_midpoints       = fvs.facet_edge_midpoints;
      	    barycenter                 = fvs.barycenter;
     	    facet_points  		         = fvs.facet_points;
+    	    facet_types  		         = fvs.facet_types;
     	    sector_points_             = fvs.sector_points_;
      	    sector_edges_              = fvs.sector_edges_;
           space_dimension_           = fvs.space_dimension_;
@@ -142,6 +144,7 @@ void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
     facets_surrounding_node.resize( n_ivol ); // ivol = nodes
     facet_edge_midpoints.resize( n_isrf );
     facet_points.resize( n_isrf );
+    facet_types.resize( n_isrf );
     edges_of_element.resize(n_isrf);
 
     for ( size_t i=0; i<n_ivol; i++ ) 
@@ -601,12 +604,21 @@ const Point<dim>& FiniteVolumeStencil<dim>::Barycenter() const
 {
 	 return barycenter;
 }
-   
-   
+
+
 template<size_t dim>
 const Point<dim>&  FiniteVolumeStencil<dim>::FacetPoint( size_t iFacet, size_t iPoint ) const
 {
 	 return facet_points[iFacet][iPoint];
+}
+
+
+template<size_t dim>
+FV_FACET_TYPE  FiniteVolumeStencil<dim>::FacetType( size_t iFacet ) const
+{
+     assert( iFacet < facet_types.size() );
+
+	 return facet_types[iFacet];
 }
 
     
@@ -715,6 +727,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
     
     	    FV.FacetPoints(facet_points);
     	      	  
+    	    FV.FacetTypes(facet_types);
+    	      	  
     	    FV.SectorPoints(sector_points_);
     	    
      	    FV.SectorEdgePairs(sector_edges_);
@@ -808,6 +822,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
              
              FVT.FacetPoints(facet_points);
              
+             FVT.FacetTypes(facet_types);
+             
     	       FVT.SectorPoints(sector_points_);
     	    
         	   FVT.SectorEdgePairs(sector_edges_); 
@@ -851,6 +867,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 		      FVQ.Barycenter(barycenter);
 
           FVQ.FacetPoints(facet_points);
+
+          FVQ.FacetTypes(facet_types);
 
     	    FVQ.SectorPoints(sector_points_);
     	    
@@ -899,6 +917,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 		      FVH.Barycenter(barycenter);
           
           FVH.FacetPoints(facet_points);
+
+          FVH.FacetTypes(facet_types);
 
     	    FVH.SectorPoints(sector_points_);
     	    
@@ -954,6 +974,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           
           FVPy.FacetPoints(facet_points);
 
+          FVPy.FacetTypes(facet_types);
+
     	    FVPy.SectorPoints(sector_points_);
     	    
      	    FVPy.SectorEdgePairs(sector_edges_); 
@@ -1000,6 +1022,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
 		      FVP.Barycenter(barycenter);
 
           FVP.FacetPoints(facet_points);
+		  
+          FVP.FacetTypes(facet_types);
 		  
           space_dimension_ = VOLUME;
 

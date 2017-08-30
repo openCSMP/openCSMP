@@ -73,6 +73,8 @@ class FV_IntegrationPointsAndWeights {
     
     void FacetPoints( std::vector<std::vector<Point<dim> > > & rst_facet_points );
     
+    void FacetTypes( std::vector<FV_FACET_TYPE> & facet_types );
+    
     void SectorPoints( std::vector<std::vector<Point<dim> > >& rst_sector_points ); 
 
     void SectorEdgePairs( std::vector<std::vector<std::pair<size_t,size_t> > >& edges_of_sector ) const;
@@ -96,6 +98,7 @@ class FV_IntegrationPointsAndWeights {
     std::vector<Point<dim> >                 m_facet_edge_midpoints;          ///< points where the facet touches the finite element edges
     Point<dim>					                     m_barycenter;                    ///< center of gravity of finite element in parametric space
     std::vector< std::vector<Point<dim> > >  m_facet_points;                  ///< corner points of facet (counter-clockwise looking in),  starting with B.C.
+    std::vector< FV_FACET_TYPE >             m_facet_types;                   ///< types of facet
     std::vector< std::vector<Point<dim> > >  m_sector_points;                 ///< corner points of finite volume sector corresponding to node
     std::vector<std::vector<std::pair<size_t,size_t> > > m_edge_of_sectors;   ///< edges of FV sector on outside of the finite element
     
