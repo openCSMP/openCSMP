@@ -769,12 +769,14 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
              
           FV.EdgePairs(edges_of_element);
 
-		      FV.EdgeMidpoints(facet_edge_midpoints);
+          FV.EdgeMidpoints(facet_edge_midpoints);
 		  
-		      FV.Barycenter(barycenter);
+          FV.Barycenter(barycenter);
 
-		      FV.FacetPoints(facet_points);
-    	  
+          FV.FacetPoints(facet_points);
+       
+          FV.FacetTypes(facet_types);
+
     	    FV.SectorPoints(sector_points_);
     	    
      	    FV.SectorEdgePairs(sector_edges_); 

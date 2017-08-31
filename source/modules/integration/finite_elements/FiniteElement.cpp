@@ -1134,6 +1134,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
 
  FV_FACET_TYPE parseFacetType( const std::string& ftype )
  {
+     if (ftype == "POINT_FACET") return POINT_FACET;
      if (ftype == "UNIT_LINEAR_FACET") return UNIT_LINEAR_FACET;
      if (ftype == "TRIANGULAR_FACET") return TRIANGULAR_FACET;
      if (ftype == "QUADRILATERAL_FACET") return QUADRILATERAL_FACET;
@@ -1145,6 +1146,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  {
      switch (ftype)
      {
+         case POINT_FACET: return "POINT_FACET";
          case UNIT_LINEAR_FACET: return "UNIT_LINEAR_FACET";
          case TRIANGULAR_FACET: return "TRIANGULAR_FACET";
          case QUADRILATERAL_FACET: return "QUADRILATERAL_FACET";

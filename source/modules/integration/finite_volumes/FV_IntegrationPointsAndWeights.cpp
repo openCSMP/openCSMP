@@ -307,7 +307,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
 
   m_barycenter[0] = 0.;
 
-  m_facet_types[0] = UNIT_LINEAR_FACET;
+  m_facet_types[0] = POINT_FACET;
 
   m_facet_points[0].resize(1U); //nr of points in this facet
   vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);

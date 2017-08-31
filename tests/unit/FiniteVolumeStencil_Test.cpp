@@ -228,14 +228,15 @@ void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for
   	     }
       }
 
-  	  // tests which should work for all element types (but currently doesn't
-      // for ISOPARAMETRIC_LINEAR_BAR due to the lack of point facets).
-      if (vIterFVS->ParentElement() != "ISOPARAMETRIC_LINEAR_BAR")
+  	  // tests which should work for all element types
 	  for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
   	  {	
         size_t expectedFacetPoints = ~(size_t)0;
         switch (vIterFVS->FacetType(iFacet))
         {
+            case POINT_FACET:
+                expectedFacetPoints = 1;
+                break;
             case UNIT_LINEAR_FACET:
                 expectedFacetPoints = 2;
                 break;
