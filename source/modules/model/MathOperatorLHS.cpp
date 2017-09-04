@@ -630,6 +630,11 @@ void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Element<dim>& e_ref
 
  } // end PropertyValueAtIntegrationPoint( Element )
 
+
+
+
+
+
 template<size_t dim>
 void MathOperatorLHS<dim>::PropertyAtIntegrationPoint( const Face<dim>& e_ref,
                                                        const csmp::Index&  idx,
