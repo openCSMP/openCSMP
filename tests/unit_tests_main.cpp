@@ -263,7 +263,7 @@ int main()
               interdependent2.addTest( new Box_Test() );                  // XCode OK (SKM) but does not test hexahedral or prism element meshes
               interdependent2.addTest( new ModelSubDomain_Test() );       // XCode OK (SKM)
               interdependent2.addTest( new Region_Test(false) );          // XCode OK (SKM)
-              interdependent2.addTest( new BoundaryInterface_Test(false); // XCode OK (SKM) but tests only the boundary creation from lower-dimensional internal objects
+              interdependent2.addTest( new BoundaryInterface_Test(false) ); // XCode OK (SKM) but tests only the boundary creation from lower-dimensional internal objects
               interdependent2.addTest( new ANSYS_Model2D_Test() );        // XCode OK (SKM)
               interdependent2.addTest( new InputDataManager_Test());      // XCode OK (SKM)
               interdependent2.addTest( new ANSYS_Model3D_Test() );        // XCode OK (SKM)
