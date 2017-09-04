@@ -1,0 +1,12 @@
+'prism_test1-regions.txt' test model for single-phase flow analysis in 3D
+
+# (1) global material properties
+diffusivity				0.0
+porosity				1.0
+nodal source term			0.0
+velocity				1.0	0.0	0.0
+
+# (2) local material properties
+
+# essential conditions on model boundaries
+LEFT	Dirichlet	transported variable	90.0	90.0

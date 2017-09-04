@@ -7,6 +7,14 @@ using namespace std;
 
 namespace csmp {
 
+/** rsqrt -- computes reciprocal square root */
+double64
+rsqrt( double64 val )
+{
+    return 1.0 / sqrt(val);
+}
+
+
 /** _v_norm1 -- computes (scaled) 1-norms of vectors */
 double64 vector_norm1( vector<double64>& x, vector<double64>& scale )
 {
@@ -203,15 +211,12 @@ return 0.;
 }
 
 
-void  vector_randomize( vector<double64>& x, double64 scale_fac )
+void  vector_randomize( random_generator& rng, vector<double64>& x, double64 scale_fac )
  {
-    long   ltime = time(NULL);
-    uint32 stime = static_cast<uint32>(ltime/2);
-    srand( stime );
-
+     std::uniform_real_distribution<> rndist(0,scale_fac);
     for ( vector<double64>::iterator it=x.begin();
           it!=x.end(); it++ )
-      *it = scale_fac * rand();
+      *it = rndist(rng);
 
  } // end vector_randomize
 

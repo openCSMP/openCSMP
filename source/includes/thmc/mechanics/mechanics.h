@@ -53,11 +53,15 @@ void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<3U
 
 // various utile functions
 
-/// uses Cauchy's formula to resolve normal and shear stress on a surface defined by its normal
+/// uses Cauchy's formula to resolve normal and magnitude of shear stress on a surface defined by its normal
 void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
                                   const Point<3U>& plane_normal, 
                                   double64& sigma_n, double64& sigma_s );
 
+/// uses Cauchy's formula to resolve normal and shear stress on a surface defined by its normal
+void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
+                                  const Point<3U>& plane_normal, 
+                                  double64& sigma_n, VectorVariable<3U>& sigma_s );
 
 
 

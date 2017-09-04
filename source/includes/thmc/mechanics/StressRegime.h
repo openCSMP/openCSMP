@@ -6,7 +6,7 @@
 
 namespace csmp{
 
-class StressRegime{
+class StressRegime {
 public:
   StressRegime( double64 Sv, double64 SH, double64 Sh, double64 trend );
   ~StressRegime(){};

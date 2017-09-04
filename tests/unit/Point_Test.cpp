@@ -382,6 +382,7 @@ void Point_Test::Test_3D_Point()
     _test( !(p1==p3) );
     
     res = p1 * 5.;
+    // operators <, >
     _test( p1  < res );
     _test( res > p1 );
 

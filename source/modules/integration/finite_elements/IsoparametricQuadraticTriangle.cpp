@@ -1214,6 +1214,7 @@ the B matrix shall be transformed.
 the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
+
 */
 double64 IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
  {
@@ -1223,7 +1224,7 @@ double64 IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_M
 
     if ( use2Dto3Djacobi )
       {
-         static vector<double64> EFG(dim);
+         vector<double64> EFG(dim);
          RS[0] = rr[gauss_point];
          RS[1] = ss[gauss_point];
 

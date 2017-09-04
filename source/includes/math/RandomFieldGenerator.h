@@ -1,6 +1,7 @@
 #ifndef RANDOM_FIELD_GENERATOR_H
 #define RANDOM_FIELD_GENERATOR_H
 
+#include "CSMP_mathUtilities.h"
 #include "Model.h"
 #include "Matrix.h"
 
@@ -10,7 +11,7 @@ namespace csmp {
 template<size_t dim>
 class RandomFieldGenerator  {
   public:
-    RandomFieldGenerator();
+    RandomFieldGenerator(random_generator rng);
     // generating the random field
     void RandomElementField2D( Model<dim>& sg, const char* variable, double64 mean, double64 sigma, double64 xlength, double64 ylength, 
                                bool logarithmic, const char* region="Model", size_t iterations=50 );
@@ -24,6 +25,7 @@ class RandomFieldGenerator  {
     void InputRandomElementField( Model<dim>& sg, const char* variable );
 
   private:
+    random_generator rng_;
     Matrix  m1_, m2_, m3_;
     const double64 pi_;
     std::vector<double64> k_;

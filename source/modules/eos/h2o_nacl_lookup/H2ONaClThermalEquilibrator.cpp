@@ -9,8 +9,6 @@ using namespace std;
 
 namespace csmp
 {
-  extern double64                   global_time;
-
   H2ONaClThermalEquilibrator::H2ONaClThermalEquilibrator(const double64& external_mass_rock,  // [kg]
                                                          const double64& external_cp_rock,    // [J/kg/K]
                                                          const double64& external_rho_rock,   // [kg/m^3]

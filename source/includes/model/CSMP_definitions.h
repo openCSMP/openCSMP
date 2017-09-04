@@ -72,6 +72,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <vector>
 #include <array>
 #include <ciso646>
+#include <random>
 
 /*
 ===========================
@@ -145,5 +146,6 @@ Currently (March 2016) the official contact point is the Technology Transfer of 
 
 #include "Index.h"
 #include "CSMP_global_enumerations.h"
+
 
 #endif

@@ -63,7 +63,7 @@ void TimeSteppingApproaches_Example::Run()
    mesher.BuildUniformMesh( mesh_container, 10., 10 ); // 10 m sample
 
    // creating a model topological region
-   set<string>    fem_types; fem_types.insert("BAR_2");
+   set<string>    fem_types; fem_types.insert("LINEAR_BAR");
    ModelTopology  mesh_topology(true);  // isoparametric
 
    // making a rock and a fracture region of elements

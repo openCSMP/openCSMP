@@ -1295,12 +1295,6 @@ RandomPerturb() requires the name of the property which shall be perturbed
 and the percentage of the original maximum value of the property by which 
 the property shall be perturbed, in order to operate. 
 
-@section implementation Implementation
-
-RandomPerturb() uses the C function rand() as a random number generator 
-which is part of the ANSI standard C library. This random number generator 
-is initialized with the system time as a seed. 
-
 @section application Application
 
 Processes which are critically dependent on initial conditions can profit 
@@ -1314,7 +1308,7 @@ tensor variable.
 
 */
 template<size_t dim>
-void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max_value )
+void randomPerturb( random_generator& rng, Model<dim>& sg, const char* prop, double64 by_percent_of_max_value )
  {
     csmp::Index prop_key = sg.Database().StorageKey(prop);
     Region<dim>&  sgroup(sg.Region("Model"));
@@ -1323,18 +1317,12 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
       throw csmp::Exception( ERROR, "Model::RandomPerturb", 
                                      "Can only perturb scalar values so far" ); 		       
 
-    double64 dmin, dmax, scale_fac;
+    double64 dmin, dmax;
     ScalarVariable  sc;
     sgroup.MinMaxOf( prop, dmin, dmax );
-    by_percent_of_max_value = (by_percent_of_max_value*dmax) / 100.;
-    scale_fac = by_percent_of_max_value / RAND_MAX;
 
-    // 1. seeding random number generator with system time
-    // ---------------------------------------------------
-    unsigned int  stime;
-    long          ltime = time(NULL);
-    stime = static_cast<unsigned int>(ltime/2);
-    srand( stime );
+    std::uniform_real_distribution<double>
+        rngen(0, by_percent_of_max_value * dmax * 0.01);
 
     switch( prop_key.place )
       {
@@ -1343,7 +1331,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
                     nit=sgroup.NodesBegin(); nit!=sgroup.NodesEnd(); nit++ )
                 {
                    (*nit)->Read( prop_key, sc );
-                   sc -= scale_fac * rand();
+                   sc -= rngen(rng);
                    (*nit)->Store( prop_key, sc );
                 }
            break;
@@ -1353,7 +1341,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    (*eit)->Read( i, prop_key, sc );
-                   sc -= scale_fac * rand();
+                   sc -= rngen(rng);
                    (*eit)->Store( i, prop_key, sc );
                 }
            break;
@@ -1362,7 +1350,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
                     eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
                 {
                    (*eit)->Read( prop_key, sc );
-                   sc -= scale_fac * rand();
+                   sc -= rngen(rng);
                    (*eit)->Store( prop_key, sc );
                 }
            break;
@@ -1372,9 +1360,9 @@ void randomPerturb( Model<dim>& sg, const char* prop, double64 by_percent_of_max
       
  } // end RandomPerturb
 
-template void randomPerturb( Model<1U>&, const char*, double64 );
-template void randomPerturb( Model<2U>&, const char*, double64 );
-template void randomPerturb( Model<3U>&, const char*, double64 );
+template void randomPerturb( random_generator& rng, Model<1U>&, const char*, double64 );
+template void randomPerturb( random_generator& rng, Model<2U>&, const char*, double64 );
+template void randomPerturb( random_generator& rng, Model<3U>&, const char*, double64 );
 
 
 
@@ -2455,18 +2443,21 @@ void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char*
       
       if ( coordinate == 'x' or coordinate == 'X' )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key) ), (*nit)->x() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->x() ) );
         
       if ( dim > 1 and (coordinate == 'y' or coordinate == 'Y') )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key) ), (*nit)->y() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key), (*nit)->y() ) );
 
       if ( dim > 2 and (coordinate == 'z' or coordinate == 'Z') )
         for ( typename vector<Node<dim>* >::iterator nit=sgref.NodesBegin(); nit!=nodesEnd; ++nit )
-          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ) ), (*nit)->z() );
+          (*nit)->Store( nvar_key, makeScalar( (*nit)->Status(nvar_key ), (*nit)->z() ) );
  
  }  // end 
 
+template void assignNodeCoordinatesTo( Model<1U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<2U>&, const char, const char* );
+template void assignNodeCoordinatesTo( Model<3U>&, const char, const char* );
 
 
 

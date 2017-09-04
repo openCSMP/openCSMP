@@ -2,6 +2,7 @@
 #define CSMP_HIGH_LEVEL_UTILITIES_H
 
 #include "CSMP_definitions.h"
+#include "CSMP_random.h"
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
@@ -37,6 +38,14 @@ template<size_t> class MeshManager;
 
 /// to fill whitespace in strings with character of choice, for instance '_'
 void replaceWhiteSpaceBy( std::string&, char ascii_char );
+
+/// converts integral types to strings without loss of precision (std::to_string limits to 6 significant digits)
+template <typename T>
+inline std::string number_to_string( const T& value ) {
+    std::stringstream sstr;
+    sstr << value;
+    return sstr.str();
+}
 
 /// returns intermediate (true) or maximum (false) model dimensions
 template<size_t  dim>
@@ -85,7 +94,7 @@ void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_va
 
 /// using random number generator, adds percentage of Gaussian noise to variable values
 template<size_t dim> 
-void randomPerturb( Model<dim>&, const char* prop, double64 by_percent_of_max_value );
+void randomPerturb( random_generator& gen, Model<dim>&, const char* prop, double64 by_percent_of_max_value );
 
 /// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
 template<size_t dim>

@@ -28,7 +28,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void RhinoMesh_Example::Specifications()
 {
