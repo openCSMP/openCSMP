@@ -16,7 +16,8 @@ NumIntegral_BT_D_op_dV<dim,SIMPLEX>::NumIntegral_BT_D_op_dV( const PropertyDatab
                                                         const char*             oper,      // strain
                                                         const char*             youngs, 
                                                         const char*             poissons, 
-                                                        const char*             test ) 
+                                                        const char*             test,
+                                                        bool plane_strain )
   : MathOperatorRHS<dim>(pref,oper,test), 
     Y_key_(pref.StorageKey( youngs )),
     nu_key_(pref.StorageKey( poissons )),
@@ -26,7 +27,7 @@ NumIntegral_BT_D_op_dV<dim,SIMPLEX>::NumIntegral_BT_D_op_dV( const PropertyDatab
     TEMP((dim-1U)*3U,(dim-1U)*3U),
     STR((dim-1U)*3U,1U),         // column matrix
     E_(1U), nu_(1U),             // vectors of dense matrices
-    plane_strain_(true)
+    plane_strain_(plane_strain)
 {
     MathOperatorRHS<dim>::Name("NumIntegral_BT_D_op_dV", oper, test );
 
@@ -118,14 +119,21 @@ void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
               MathOperatorRHS<dim>::MTRL[0] = ts_;
            }
       }
-    else // if a constraint point or nodal variable is dealt with
+    else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
+      {
+         MathOperatorRHS<dim>::MTRL.resize(e.IntegrationPoints());
+         for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+           for ( size_t j=0U; j<dim; ++j )
+             MathOperatorRHS<dim>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim>::MaterialOperandKey() );
+      }
+    else // if a nodal variable is dealt with
       {
          for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
           MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e,
                                          MathOperatorRHS<dim>::MaterialOperandKey(), 
                                          i, MathOperatorRHS<dim>::MTRL[i] );
       }
-      
+  
 } // end GetOperands
 
 

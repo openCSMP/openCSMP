@@ -22,7 +22,8 @@ class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref, 
                            const char* oper1, const char* oper2, 
-                           const char* basic, const char* test );
+                           const char* basic, const char* test,
+                           bool plane_strain=true );
     
     virtual void GetOperands( SIMPLEX& e );
     

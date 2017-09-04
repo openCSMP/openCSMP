@@ -11,14 +11,15 @@ namespace csmp {
 
 template<size_t dim,class SIMPLEX>
 NumIntegral_BT_D_B_dV<dim,SIMPLEX>::NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref,
-                                                   const char*             oper,  // Young's modulus
-                                                   const char*             oper2, // Poisson's ratio 
-                                                   const char*             basic, 
-                                                   const char*             test ) 
-  : MathOperatorLHS<dim>(pref,oper,basic,test), 
+                                                           const char*             oper,  // Young's modulus
+                                                           const char*             oper2, // Poisson's ratio 
+                                                           const char*             basic, 
+                                                           const char*             test,
+                                                           bool plane_strain )
+  : MathOperatorLHS<dim>(pref,oper,basic,test),
     nu_key_(pref.StorageKey( oper2 )),
     D(3,3), B(2,3), BT(3,2), nu_(1U), E_(1U),
-    plane_strain_(true)
+    plane_strain_(plane_strain)
 {
     MathOperatorLHS<dim>::Name("NumIntegral_BT_D_B_dV", oper, basic, test );
     // get other csmp::Index keys
@@ -96,9 +97,29 @@ void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
          E_[0]  = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
          nu_[0] = e.Read( nu_key_ );
       }
-    else throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::GetOperands", 
-                                        "The current finite element has no integration points",
-                                        "Therefore properties cannot be numerically integrated.");
+    else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
+        const size_t ipoints(e.IntegrationPoints());
+        E_.resize(ipoints);
+        nu_.resize(ipoints);
+        for ( size_t i=0; i<ipoints; ++i )
+          {
+             // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
+             E_[i]  = e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() );
+             nu_[i] = e.Read( i, nu_key_ );
+          }
+       }
+    else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE )
+      {
+         ScalarVariable sc;
+         for ( size_t i=0U; i<e.IntegrationPoints(); i++ ) {
+             e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim>::MaterialOperandKey(), i, sc );
+             E_[i] = sc();
+             e.PropertyValueAtIntegrationPoint( nu_key_, i, sc );
+             nu_[i] = sc();
+          }
+      }
+     else throw csmp::Exception( WARNING, "umIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands",
+                                 MathOperatorLHS<dim>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
       
 } // end GetOperands
 
