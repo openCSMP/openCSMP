@@ -17,6 +17,7 @@ class GenericFiniteVolumeTransport_Test : public Test {
   public:
     virtual void run();
   
+    void TestBasics();
     void BenchmarkGlobalVersusParametricIntegration();
 };
 

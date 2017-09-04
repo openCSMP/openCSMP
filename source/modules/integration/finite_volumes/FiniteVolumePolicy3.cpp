@@ -965,8 +965,7 @@ double64  FiniteVolumePolicy<3U,SIMPLEX>::FacetAreaMapped( size_t iFacet ) const
 
 
 /**
-    TODO @todo SKM: method is a misnomer because it constructs facets in physical space 
-    and then calculates normals to these; perhaps a better name would help
+    Maps the normal from parametric space to physical space using a 1D to 3D Jacobian in a volumetric element
 */
 template<template<size_t> class SIMPLEX>
 Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) const
@@ -980,7 +979,7 @@ Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) co
       const Point<3U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
       const Point<3U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
 
-      // not needed by RST to XYZ buy by UnitNormal
+      // not needed by RST to XYZ but by UnitNormal
       e->CoordinateMatrix();
       e->FE()->UnitNormal( e->FE()->NRST );
       const double64 x(e->FE()->NRST[0]), y(e->FE()->NRST[1]), z(e->FE()->NRST[2]);
