@@ -23,7 +23,7 @@ foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
         PATHS ${PLATFORM_LIBS}
     )
 	if(CMAKE_HOST_WIN32)
-		list(APPEND SAMG_LIBRARIES "${I}")
+		list(APPEND SAMG_LIBRARIES "${L}")
 	else()
 		list(APPEND SAMG_LIBRARIES "${L}")
 	endif()
