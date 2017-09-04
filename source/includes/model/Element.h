@@ -265,7 +265,6 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     // ------------------------------------------------------------------------
 
     void Out() const;
-    void InvasiveDebug(unsigned) const;
 
 
  private:
