@@ -388,17 +388,18 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
           cout <<"\n\nStressesAndStrains<2U>::ComputeContribution: Element: "<< e.Idx() << endl; 
 
         // strain - stress components of symmetric matrix at integration points 
-        IPSTRAIN_.resize( e.FE()->IntegrationPoints() * components_ );
-        IPSTRESS_.resize( e.FE()->IntegrationPoints() * components_ );
+        IPSTRAIN_.resize( e.IntegrationPoints() * components_ );
+        IPSTRESS_.resize( e.IntegrationPoints() * components_ );
         
         // 1.1 Computing the strains at the integration points
         // ---------------------------------------------------
-        for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+        for ( size_t i=0; i<e.IntegrationPoints(); i++ ) {
              //  getting DN matrices at the node points
             (e).dN_AtIntegrationPoint( EGP_, i, 2U );
              
              // compute strain e_i = [B]_i{d}_i 3x12 * 12x1 -> 3x1 (in 2D)
              EGP_ *= DISPL_;
+             EGP_ *= -1.;
 
              // compute {sigma} = [E]([B]{d})
              if ( MathOperatorLHS<2U>::MaterialOperandPlacement() == ELEMENT )
@@ -517,7 +518,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
  {
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ )
+      for ( size_t i=0U; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------
@@ -530,9 +531,10 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
             // ----------------------------------------------------------
             if ( principal_e_and_sigma_ )
               {
-                 // principal stresses
+                 // principal stresses (normalises only the Eigenvectors)
                  // ------------------
-                 ts_.Eigen( evals_, evecs_, true );
+                 const bool bnormalise(true);
+                 ts_.Eigen( evals_, evecs_, bnormalise );
                  
                  e.Store( i, sigma1_key_, evecs_.Row(0) );
                  e.Store( i, sigma2_key_, evecs_.Row(1) );
@@ -546,8 +548,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  // principal strains
                  // -----------------
                  convertTo( IPSTRAIN_, i, ts_ );
-                 ts_.Eigen( evals_, evecs_, true );
-                
+                 ts_.Eigen( evals_, evecs_, bnormalise );
                  e.Store( i, strain1_key_, evecs_.Row(0) );
                  e.Store( i, strain2_key_, evecs_.Row(1) ); // O.K.
                  
@@ -582,7 +583,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                      // principal stresses
                      // ------------------
                      ts_.Eigen( evals_, evecs_, true );
-                     
+                    
                      e.N(i)->Store( sigma1_key_, evecs_.Row(0) );
                      e.N(i)->Store( sigma2_key_, evecs_.Row(1) );
                      
@@ -597,7 +598,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                      // getting the strain back
                      convertColumnTo( STRAIN_, i, ts_ );
                      ts_.Eigen( evals_, evecs_, true );
-                     
+                    
                      e.N(i)->Store( strain1_key_, evecs_.Row(0) );
                      e.N(i)->Store( strain2_key_, evecs_.Row(1) ); // O.K.
                      

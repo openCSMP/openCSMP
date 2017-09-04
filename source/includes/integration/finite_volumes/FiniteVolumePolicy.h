@@ -157,7 +157,7 @@ class FiniteVolumePolicy<3U, SIMPLEX> {
     /// returns the unit normal to the finite-volume facet
     Point<3U>  FacetNormal( size_t iFacet )       const;
   
-    /// transforms the facet normal from parametric to physical space and normalises it to obtain a unit length
+    /// transforms the facet normal from parametric to physical space and optionally normalises it to obtain a unit length
     Point<3U>  FacetNormalMapped( size_t iFacet ) const;
 
     /// returns the facet area in parametric space
@@ -165,6 +165,9 @@ class FiniteVolumePolicy<3U, SIMPLEX> {
   
     /// returns the normal to the facet in parametric space
     Point<3U>  ParametricFacetNormal( size_t iFacet ) const;
+    
+    // XXX Delete me
+    Point<3U>  FacetPoint(size_t iFacet, size_t iPoint) const;
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:

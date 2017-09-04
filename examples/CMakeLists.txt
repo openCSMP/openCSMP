@@ -17,7 +17,7 @@ endforeach()
 
 
 SET(INCLUDES_DIR "${CMAKE_SOURCE_DIR}/source/includes")
-SET(MODULES_DIR "${CMAKE_SOURCE_DIR}/source/modules")
+SET(THIRDPARTY_DIR "${CMAKE_SOURCE_DIR}/thirdparty")
 SET(GEN_INCLUDES_DIR "${CMAKE_BINARY_DIR}/source/generated_includes")
 
 FILE(GLOB EXAMPLES_SRC
@@ -59,9 +59,9 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${INCLUDES_DIR}/thmc/mechanics
 	${INCLUDES_DIR}/thmc/single_phase_flow
 	${INCLUDES_DIR}/thmc/two_phase_flow
-	${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos
+	${THIRDPARTY_DIR}/catch/include
+	${THIRDPARTY_DIR}/iaps_h2o_eos
 	${GEN_INCLUDES_DIR}
-	${MODULES_DIR}/model
 )
 
 TARGET_LINK_LIBRARIES(examples csmpcore csmpiaps csmpjpeg)

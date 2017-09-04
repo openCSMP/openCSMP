@@ -18,7 +18,7 @@ class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim> {
     NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref, const char* oper,     // volume strain
                                                           const char* youngs,   // Young's modulus
                                                           const char* poissons, // Poisson's ratio
-                                                          const char* test );   // displacement
+                                                          const char* test, bool plane_strain=true );   // displacement
 
     virtual void GetOperands( SIMPLEX& e );
 

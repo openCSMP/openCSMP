@@ -241,6 +241,8 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
    // stress vector on the plane of the face (any orientation is OK, but normal must be outward pointing)
    VectorVariable<dim> faceStressVector = stressTensor_ * nrml_;
    
+   // 2. ASSIGNMENT OF THE SHEAR STRESS COMPONENT
+   // -------------------------------------------
    // going from specific- to area-integrated stress values to nodal forces
    const size_t  face_nodes(f->Nodes());
    faceStressVector = faceStressVector * (f->Area() / static_cast<double64>(face_nodes));
@@ -254,6 +256,10 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
      }
 
  } // end (depth dependent computation)
+
+
+
+
 
 
 

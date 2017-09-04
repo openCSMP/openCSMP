@@ -23,9 +23,9 @@ computations, see Cook et al. p. 21.
 
 Young's modulus and  Poisson's ratio as double64 variables and a 
 Meschach matrix into which the result is returned.  
-*/
 
-void planeStressMatrix( double64 E,  // Young's modulus, 
+*/
+void planeStressMatrix( double64 E,  // Young's modulus,
                         double64 nu, // Poisson's ratio 
                         DenseMatrix<DM_MIN>& D )
  {
