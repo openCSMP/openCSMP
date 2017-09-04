@@ -2,6 +2,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "CSMP_mathUtilities.h"
 
 // invokes integration over planar- as opposed to warped facets
 // because volume conservation cannot be achieved without it
@@ -894,7 +895,12 @@ Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormal( size_t iFacet ) const
 
 
 
-
+    // XXX DELETEME
+    template<template<size_t> class SIMPLEX>
+    Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetPoint( size_t iFacet, size_t iPoint ) const
+    {
+        return RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
+    }
 
 template<template<size_t> class SIMPLEX>
 double64  FiniteVolumePolicy<3U,SIMPLEX>::FacetAreaMapped( size_t iFacet ) const
@@ -1018,7 +1024,7 @@ Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) co
                   j6( -0.25* (fp0[2]+fp1[2]-fp2[2]-fp3[2] ) );
 #endif
 
-  const double64 det( fabs((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-pow((j1*j4+j2*j5+j3*j6),2) ));
+  const double64 det( fabs((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-square(j1*j4+j2*j5+j3*j6) ));
 
   const double64 jj1 ((j1*j1+j2*j2+j3*j3)/det),
                   jj2 (-(j1*j4+j2*j5+j3*j6)/det),

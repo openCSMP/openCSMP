@@ -118,6 +118,8 @@ ADD_LIBRARY(csmpcore
 ADD_DEPENDENCIES(csmpcore number_types_header)
 
 TARGET_LINK_LIBRARIES(csmpcore ${SAMG_LIBRARIES})
+
+# XXX We shouldn't depend on the examples directory.
 TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${GEN_INCLUDES_DIR}
     ${INCLUDES_DIR}/analysis
@@ -206,8 +208,8 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/utilities
     ${CMAKE_SOURCE_DIR}/lib/catch/include
     ${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos
-	${CMAKE_SOURCE_DIR}/thirdparty/jpeg
-	${CMAKE_SOURCE_DIR}/thirdparty/samg
+    ${CMAKE_SOURCE_DIR}/thirdparty/jpeg
+    ${CMAKE_SOURCE_DIR}/thirdparty/samg
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 

@@ -29,7 +29,7 @@
 #include "EffectiveStressDilatation2D_Example.h" 
 #include "PolicyBased_Example.h"            // C++ example
 #include "CuriouslyRecurringTemplate_Example.h" // C++ technique
-// #include "TDDUnitTest_Example.h"            // C++ unit test / TDD
+#include "TDDUnitTest_Example.h"            // C++ unit test / TDD
 #include "RegionProperties_Example.h"
 #include "QuadraticPressure_parallelPlatePermeability_Example.h"
 #include "TemplatizedIndex_Example.h"

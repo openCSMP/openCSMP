@@ -165,6 +165,7 @@ The idea is to test the following member functions:
     size_t  IntegrationPointsPerFacet() const;
     size_t  IntegrationPointsPerSector() const;
     void       FacetEdgeNodes( size_t facet, size_t& inside_node, size_t& outside_node ) const;
+  	FV_FACET_TYPE FacetType() const;
 
  
 tested: is a test funtion*/
@@ -207,22 +208,47 @@ void FiniteVolumeStencil_Test::facetAndSectorNumbersTest() // are they right for
   	     _test(iNrOfFacets == (*vIterFEs)->Segments());
   	    
   	 //for each facet: check edge nodes per facet, should be = to edge nodes per segment
-#ifndef PYRAMID_TRIANGULAR_FACETS
-  	size_t iInsideNode(0U), iOutsideNode(0U);
+#ifdef PYRAMID_TRIANGULAR_FACETS
   	 //this is not valid for the pyramid finite element with 12 triangular facets 
-	   for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
-  	 {	
-	   	//get facet nodes from stencil
-	  	vIterFVS->FacetEdgeNodes(iFacet, iInsideNode, iOutsideNode);
-	  		
-	  	//get facet nodes from finite element
-  		(*vIterFEs)->NodesOfSegment(iFacet, vecNodeIdsFEs);
-	  	assert(vecNodeIdsFEs.size() >= 2);
-	  		
-			_test(vecNodeIdsFEs[0] == iInsideNode);
-	  	_test(vecNodeIdsFEs[1] == iOutsideNode);
-  	 }
+  	 if(vIterFVS->ParentElement() != "ISOPARAMETRIC_LINEAR_PYRAMID")
 #endif
+     {
+  	     size_t iInsideNode(0U), iOutsideNode(0U);
+	     for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+  	     {	
+	   	    //get facet nodes from stencil
+	  	    vIterFVS->FacetEdgeNodes(iFacet, iInsideNode, iOutsideNode);
+	  	    	
+	  	    //get facet nodes from finite element
+  		    (*vIterFEs)->NodesOfSegment(iFacet, vecNodeIdsFEs);
+	  	    assert(vecNodeIdsFEs.size() >= 2);
+	  	    	
+			_test(vecNodeIdsFEs[0] == iInsideNode);
+	  	    _test(vecNodeIdsFEs[1] == iOutsideNode);
+  	     }
+      }
+
+  	  // tests which should work for all element types
+	  for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+  	  {	
+        size_t expectedFacetPoints = ~(size_t)0;
+        switch (vIterFVS->FacetType(iFacet))
+        {
+            case POINT_FACET:
+                expectedFacetPoints = 1;
+                break;
+            case UNIT_LINEAR_FACET:
+                expectedFacetPoints = 2;
+                break;
+            case TRIANGULAR_FACET:
+                expectedFacetPoints = 3;
+                break;
+            case QUADRILATERAL_FACET:
+                expectedFacetPoints = 4;
+                break;
+        }
+        _test(vIterFVS->FacetPoints(iFacet) == expectedFacetPoints);
+      }
    }	
  }
  

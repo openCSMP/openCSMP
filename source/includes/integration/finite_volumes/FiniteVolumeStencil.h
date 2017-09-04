@@ -71,6 +71,9 @@ class FiniteVolumeStencil {
   
     /// n-th facet that delimits the FV sector in the inside of the finite element
     size_t    FacetSurroundingSector( size_t iSector, size_t n ) const;
+
+    /// reports the type of a facet
+    FV_FACET_TYPE FacetType( size_t iFacet ) const;
   
     /// choice of rst-integration point coordinate of the facet integration point
     double64  FacetIntegrationPoint( size_t iFacet, size_t ip, size_t r_or_s_or_t ) const;
@@ -144,10 +147,10 @@ class FiniteVolumeStencil {
   
     /// returns the parent element of the finite volume stencil
     const std::string& ParentElement() const { return parent_element_; }
-  
+
     /// reports whether the parent element of the stencil is a line, surface or volume
     ELEMENT_DIMENSION  Geometry() const;
-  
+
     /// returns the data (private members) stored in this finite volume stencil
     void  Out() const;
     
@@ -166,6 +169,7 @@ class FiniteVolumeStencil {
     Point<dim>					          	        barycenter;
     std::vector<std::vector<Point<dim> > >  facet_points;
     ///< for each sector, all the points delimiting the sector in parametric space
+    std::vector<FV_FACET_TYPE>              facet_types;                  ///< [isrf]
     std::vector<std::vector<Point<dim> > >  sector_points_;         
     ///< for each sector, for each sector edge, the indices of the end points
     std::vector<std::vector<std::pair<size_t,size_t> > >  sector_edges_;   
