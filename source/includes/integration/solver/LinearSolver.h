@@ -17,7 +17,7 @@ Linear Solvers Interface
 #undef CSMP_DEFAULT_LINEAR_SOLVER
 #undef CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS
 #define CSMP_DEFAULT_LINEAR_SOLVER csmp::Gauss_Solver
-#define CSMP_DEFAULT_LINEAR_SOLVER csmp::Gauss_SolverSettings
+#define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::Gauss_SolverSettings
 #include "Gauss_Solver.h"
 #endif
 
