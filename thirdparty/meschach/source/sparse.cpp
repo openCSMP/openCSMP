@@ -59,7 +59,7 @@ static char	rcsid[] = "$Id: sparse.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp 
 }
 
 /* sp_set_val -- sets the (i,j) entry of the sparse matrix A */
-  double	sp_set_val(SPMAT *A, int i, int j, double val)
+double	sp_set_val(SPMAT *A, int i, int j, double val)
 {
    SPROW	*r;
    int	idx, idx2, new_len;

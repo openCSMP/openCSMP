@@ -1,6 +1,7 @@
 #include "TwoPhaseImplicitNodeCenteredFVTransProfile.h"
 #include "PL_Utilities.h"
 
+#ifdef SAMG_WITH_CSMP_SOLVER
 namespace csmp{
 
 
@@ -194,3 +195,5 @@ template class TwoPhaseImplicitNodeCenteredFVTransProfile<2U>;
 template class TwoPhaseImplicitNodeCenteredFVTransProfile<3U>;
 
 } // csmp
+
+#endif // CSMP_WITH_SAMG_SOLVER

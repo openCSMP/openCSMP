@@ -36,7 +36,7 @@
 #include "sparse.h"
 
 
-#ifdef ANSI_C
+#if defined(ANSI_C) || defined(__cplusplus)
 SPMAT	*spCHfactor(SPMAT *), *spICHfactor(SPMAT *), *spCHsymb(SPMAT *);
 VEC	*spCHsolve(SPMAT *,VEC *,VEC *);
 

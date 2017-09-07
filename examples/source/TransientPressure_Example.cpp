@@ -174,7 +174,7 @@ void TransientPressure_Example::Run()
   transient_pressure.SetSolver(&samg_solver);
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-  transient_pressure.SetSolver(linear_solver);
+  transient_pressure.SetSolver(&linear_solver);
 #endif
 
   NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );

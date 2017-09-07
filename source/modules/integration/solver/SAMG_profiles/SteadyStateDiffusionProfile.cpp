@@ -41,6 +41,7 @@ SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model
 template<size_t dim>
 bool SteadyStateDiffusionProfile<dim>::AdjustSolverSettings()
 {
+#ifdef CSMP_WITH_SAMG_SOLVER
   std::cout <<"\n\n*** SteadyStateDiffusionProfile::AdjustSolverSettings ***\n\n";
 
   this->Solver().GetSolverSettings().Set_iout1( 1 );
@@ -106,6 +107,7 @@ bool SteadyStateDiffusionProfile<dim>::AdjustSolverSettings()
   this->Solver().GetSolverSettings().Set_w_avrge(2);
 
   #endif
+#endif
 
   return true;
 } // AdjustSolverSettings
@@ -165,6 +167,7 @@ bool SteadyStateDiffusionProfile<dim>::Solve( double64 modelTime )
     std::cout <<"\n\n*** SteadyStateDiffusionProfile::Solve ***\n\n";
     ssds_.ComputeSteadyState( model_ );
 
+#ifdef CSMP_WITH_SAMG_SOLVER
     #ifdef SAMG_MULTIPLE_INSTANCES
         if ( firstCall_ ) {
            /// Use solution of previous timestep as an initial guess
@@ -219,6 +222,7 @@ bool SteadyStateDiffusionProfile<dim>::Solve( double64 modelTime )
           firstCall_ = false;
           }
     #endif
+#endif
 
     return true;
 } // Solve
