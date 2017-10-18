@@ -131,16 +131,18 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
 
     // iterators
     typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
+    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesEnd();
     typename std::vector<SIMPLEX<dim>*>::iterator           ElementsBegin();
     typename std::vector<SIMPLEX<dim>*>::iterator           PerimeterElementsBegin();
     typename std::vector<SIMPLEX<dim>*>::iterator           ElementsEnd();
 
     // const iterators
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
-    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesEnd() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsBegin() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsBegin() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsEnd() const;

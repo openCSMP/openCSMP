@@ -62,7 +62,9 @@ class FV_IntegrationPointsAndWeights {
     void ProjectionWeights( std::vector<std::vector<double64> >& projection_weights ) const;
     
     void FacetNormals( std::vector<Point<dim> >& facet_normals ) const;
-    
+
+    void FacetNormalTransformations( std::vector<std::vector<std::pair<double64,double64>>>& facet_normal_xforms ) const;
+
     void FacetsSurroundingNode( std::vector<std::vector<size_t> >&  facets_surrounding_node ) const;
     
     void EdgePairs( std::vector<std::pair<size_t,size_t> >& edges_of_element ) const;
@@ -91,6 +93,7 @@ class FV_IntegrationPointsAndWeights {
     std::vector<std::vector<Point<dim> > >   m_facet_integration_points;      ///< [isrf][spts][dim] = 1 for lowest-order integration
     std::vector<std::vector<double64> >      m_facet_integration_weights;     ///< [isrf][spts]
     std::vector< Point<dim> >                m_facet_normals;                 ///< [isrf][dim]
+    std::vector<std::vector<std::pair<double64,double64>>> m_facet_normal_xforms; ///< [isrf][node]
     std::vector<std::vector<Point<dim> > >   m_volume_integration_points1;    ///< [ivol][vpts][dim]
     std::vector<std::vector<double64> >      m_volume_integration_weights;    ///< [ivol][vpts]
     std::vector<std::vector<double64> >      m_projection_weights;            ///< [isrf][spts]

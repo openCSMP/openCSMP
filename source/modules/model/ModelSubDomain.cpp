@@ -507,11 +507,15 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPL
 
 
 template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd() const
+ { return node_vec_.end(); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
 typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesEnd() const
  { return node_vec_.end(); }
 
 
@@ -536,12 +540,17 @@ typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::N
 
 
 template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd()
+ { return node_vec_.end(); }
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
 typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin()
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 
 template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd()
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesEnd()
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class SIMPLEX>

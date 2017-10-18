@@ -144,6 +144,8 @@ class FiniteVolumeStencil {
   
     /// returns x,y or z component of unit normal in parametric space
     double64           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const;
+
+    std::pair<double64,double64>    FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const;
   
     /// returns the parent element of the finite volume stencil
     const std::string& ParentElement() const { return parent_element_; }
@@ -163,6 +165,7 @@ class FiniteVolumeStencil {
     std::vector<std::vector<double64> >     facet_projection_weights;     ///< [isrf][spts]
     std::vector<std::vector<double64> >     facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<Point<dim> >                facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::vector<std::pair<double64,double64>>> facet_normal_xforms; ///< [isrf][node]
     std::vector<std::vector<Point<dim> > >  sector_integration_points;    ///< [ivol][vpts][dim]
     std::vector<std::vector<double64> >     sector_integration_weights;   ///< [ivol][vpts]
     std::vector<Point<dim> >                facet_edge_midpoints;
