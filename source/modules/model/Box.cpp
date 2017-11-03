@@ -1231,8 +1231,8 @@ void recreateBoxBoundaryFlags( Model<3>& model )
      all elements.
 */
 template<size_t dim>
-void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename deque<csmp::Element<dim> >::iterator it,
-                                               typename deque<csmp::Element<dim> >::iterator last_elmt )
+void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp::Element<dim> >::iterator it,
+                                               typename PrimitiveContainer<csmp::Element<dim> >::iterator last_elmt )
  {
     assert( it != last_elmt );
     while ( it != last_elmt ) {
@@ -1334,9 +1334,9 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename deque<csmp::Element<dim>
  } // end flagElementUsingNodalAtBoundaryFlags
 
 
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<1U>( deque<csmp::Element<1U> >::iterator, deque<csmp::Element<1U> >::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<2U>( deque<csmp::Element<2U> >::iterator, deque<csmp::Element<2U> >::iterator );
-template void flagElementUsingNodal_BOX_BOUNDARY_Flags<3U>( deque<csmp::Element<3U> >::iterator, deque<csmp::Element<3U> >::iterator );
+template void flagElementUsingNodal_BOX_BOUNDARY_Flags<1U>( typename PrimitiveContainer<csmp::Element<1U> >::iterator, typename PrimitiveContainer<csmp::Element<1U> >::iterator );
+template void flagElementUsingNodal_BOX_BOUNDARY_Flags<2U>( typename PrimitiveContainer<csmp::Element<2U> >::iterator, typename PrimitiveContainer<csmp::Element<2U> >::iterator );
+template void flagElementUsingNodal_BOX_BOUNDARY_Flags<3U>( typename PrimitiveContainer<csmp::Element<3U> >::iterator, typename PrimitiveContainer<csmp::Element<3U> >::iterator );
 
 
 

@@ -6,6 +6,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
+#include "PrimitiveContainer.h"
 
 namespace csmp {
 
@@ -35,8 +36,8 @@ class MeshManager {
   public:
     MeshManager();
     MeshManager( const PropertyDatabase<dim>&, const FiniteElementManager&, VSet<dim>& );
-    MeshManager( const MeshManager& );
     MeshManager&  operator=( const MeshManager& );
+    MeshManager( const MeshManager& );
     ~MeshManager();
 
     /// sets up distributed storage for variables, finite elements, and mesh connectivity
@@ -82,29 +83,38 @@ class MeshManager {
     csmp::InterFace<dim>&   RootInterFace();
   
     // mutator iterators
-    typename std::deque<csmp::Node<dim> >::iterator        NodesBegin();
-    typename std::deque<csmp::Node<dim> >::iterator        NodesEnd();
-    typename std::deque<csmp::Element<dim> >::iterator     ElementsBegin();
-    typename std::deque<csmp::Element<dim> >::iterator     ElementsEnd();
-    typename std::deque<csmp::Face<dim> >::iterator        FacesBegin();
-    typename std::deque<csmp::Face<dim> >::iterator        FacesEnd();
-    typename std::deque<csmp::InterFace<dim> >::iterator   InterFacesBegin();
-    typename std::deque<csmp::InterFace<dim> >::iterator   InterFacesEnd();
+    typename PrimitiveContainer<csmp::Node<dim> >::iterator        NodesBegin();
+    typename PrimitiveContainer<csmp::Node<dim> >::iterator        NodesEnd();
+    typename PrimitiveContainer<csmp::Element<dim> >::iterator     ElementsBegin();
+    typename PrimitiveContainer<csmp::Element<dim> >::iterator     ElementsEnd();
+    typename PrimitiveContainer<csmp::Face<dim> >::iterator        FacesBegin();
+    typename PrimitiveContainer<csmp::Face<dim> >::iterator        FacesEnd();
+    typename PrimitiveContainer<csmp::InterFace<dim> >::iterator   InterFacesBegin();
+    typename PrimitiveContainer<csmp::InterFace<dim> >::iterator   InterFacesEnd();
 
     // const iterators
-    typename std::deque<csmp::Node<dim> >::const_iterator  NodesBegin()      const;
-    typename std::deque<csmp::Node<dim> >::const_iterator  NodesEnd()        const;
-    typename std::deque<Element<dim> >::const_iterator     ElementsBegin()   const;
-    typename std::deque<Element<dim> >::const_iterator     ElementsEnd()     const;
-    typename std::deque<Face<dim> >::const_iterator        FacesBegin()      const;
-    typename std::deque<Face<dim> >::const_iterator        FacesEnd()        const;
-    typename std::deque<InterFace<dim> >::const_iterator   InterFacesBegin() const;
-    typename std::deque<InterFace<dim> >::const_iterator   InterFacesEnd()   const;
+    typename PrimitiveContainer<csmp::Node<dim> >::const_iterator  NodesBegin()      const;
+    typename PrimitiveContainer<csmp::Node<dim> >::const_iterator  NodesEnd()        const;
+    typename PrimitiveContainer<Element<dim> >::const_iterator     ElementsBegin()   const;
+    typename PrimitiveContainer<Element<dim> >::const_iterator     ElementsEnd()     const;
+    typename PrimitiveContainer<Face<dim> >::const_iterator        FacesBegin()      const;
+    typename PrimitiveContainer<Face<dim> >::const_iterator        FacesEnd()        const;
+    typename PrimitiveContainer<InterFace<dim> >::const_iterator   InterFacesBegin() const;
+    typename PrimitiveContainer<InterFace<dim> >::const_iterator   InterFacesEnd()   const;
 
     const csmp::Element<dim>&   RootElement()   const;
     const csmp::Node<dim>&      RootNode()      const;
     const csmp::Face<dim>&      RootFace()      const;
     const csmp::InterFace<dim>& RootInterFace() const;
+
+    // Accessors
+    /// IMPORTANT: This should only be used during mesh construction fom a file.
+    csmp::Node<dim>& NodeAtIndex(size_t i);
+    const csmp::Node<dim>& NodeAtIndex(size_t i) const;
+    csmp::Element<dim>& ElementAtIndex(size_t i);
+    const csmp::Element<dim>& ElementAtIndex(size_t i) const;
+    csmp::Face<dim>& FaceAtIndex(size_t i);
+    const csmp::Face<dim>& FaceAtIndex(size_t i) const;
 
     // Insertion
     /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
@@ -126,11 +136,11 @@ class MeshManager {
     csmp::Face<dim>*      PushBackIfUnique( csmp::Face<dim>&& );
     csmp::InterFace<dim>* PushBackIfUnique( csmp::InterFace<dim>&& );
 
-    /// removes node without invalidating any other pointers, references or values of the container unless the last element is deleted (return = false)
-    bool Erase( const csmp::Node<dim>& );
-    bool Erase( const csmp::Element<dim>& );
-    bool Erase( const csmp::Face<dim>& );
-    bool Erase( const csmp::InterFace<dim>& );
+    /// removes primitives
+    void Erase( csmp::Node<dim>& );
+    void Erase( csmp::Element<dim>& );
+    void Erase( csmp::Face<dim>& );
+    void Erase( csmp::InterFace<dim>& );
 
     /// erase all objects of the given type
     bool EraseNodes();
@@ -177,10 +187,10 @@ class MeshManager {
     /// these collections are used only if adaptive remeshing is turned off, else access is via root node or element only
     bool                              adaptive_remeshing_;
     bool                              hybrid_element_mesh_;
-    std::deque<csmp::Node<dim> >      node_collection_;
-    std::deque<csmp::Element<dim> >   elmt_collection_;
-    std::deque<csmp::Face<dim> >      face_collection_;
-    std::deque<csmp::InterFace<dim> > interface_collection_;
+    PrimitiveContainer<csmp::Node<dim> >      node_collection_;
+    PrimitiveContainer<csmp::Element<dim> >   elmt_collection_;
+    PrimitiveContainer<csmp::Face<dim> >      face_collection_;
+    PrimitiveContainer<csmp::InterFace<dim> > interface_collection_;
 };
 
 } // end namespace csmp

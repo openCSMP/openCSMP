@@ -594,9 +594,24 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
        }
     assert( nbor_elmt != nullptr );
 
-    // TODO: check whether following assert is correct:
-    if ( dim == 3 ) assert( nbor_elmt->IsVolumeElement() );
-    if ( dim == 2 ) assert( nbor_elmt->IsSurfaceElement() );
+#ifndef NDEBUG
+     // TODO: check whether following assert is correct:
+
+     if ( dim == 3 ) {
+         if (e.IsVolumeElement())
+             assert( nbor_elmt->IsVolumeElement() );
+         else if (e.IsSurfaceElement())
+             assert( nbor_elmt->IsSurfaceElement() );
+         else if (e.IsLineElement())
+             assert( nbor_elmt->IsLineElement() );
+     }
+     if ( dim == 2 ) {
+         if (e.IsSurfaceElement())
+             assert( nbor_elmt->IsSurfaceElement() );
+         else if (e.IsLineElement())
+             assert( nbor_elmt->IsLineElement() );
+     }
+#endif
    
     // 2. drawing the results
     // -------------------------------------------------------------------------------------------------------------
@@ -991,7 +1006,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     if ( remove_original_region ) {
          // NOTE: works, but then the VTU interface cannot output the boundary anymore
          for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) model.Mesh().Erase( *(*eit) );
-         model.RemoveRegion( dim_1_region );
+         model.RemoveRegion( dim_1_region, false );
       }
    
     return patch_names.size();
@@ -1285,7 +1300,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* group1
                csmp_error.notice( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary(between):",
                                  "one of the supplied regions is not unique and they overlap",
                                  "It was therefore impossible to insert a boundary");
-               boundaryComplex->RemoveRegion( "groupintersection" );
+               boundaryComplex->RemoveRegion( "groupintersection", false );
                return false;
         }
       }

@@ -111,12 +111,20 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior elements
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.ElementsBegin(),(*it))) );
+    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it ) {
+      // XXX This may be an expensive operation
+      auto eit = mesh.ElementsBegin();
+      std::advance(eit, *it);
+      this->elmt_vec_.push_back( &*eit );
+    }
    
     // assigning pointers to the perimeter elements
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.ElementsBegin(),(*it))) );
+    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it ) {
+      // XXX This may be an expensive operation
+      auto eit = mesh.ElementsBegin();
+      std::advance(eit, *it);
+      this->elmt_vec_.push_back( &*eit );
+    }
    
     // sorting the subvectors for future searching (upsets original numbering)
     const auto perimeterElementsBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
@@ -139,13 +147,21 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
+    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it ) {
+      // XXX This may be an expensive operation
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
    
     // assigning pointers to the perimeter nodes
     this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
+    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it ) {
+      // XXX This may be an expensive operation
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
    
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
@@ -1215,6 +1231,33 @@ void  Region<dim>::Accumulate( typename deque<csmp::Element<dim> >::iterator sta
     this->IdentifyPerimeter( );
 
  } // end Accumulate (deque)
+
+template<size_t dim>
+void  Region<dim>::Accumulate( typename PrimitiveContainer<csmp::Element<dim> >::iterator start,
+                               typename PrimitiveContainer<csmp::Element<dim> >::iterator end )
+ {
+    if ( start == end )
+      throw csmp::Exception( ERROR, "Region<dim>::Accumulate (deque)",
+                            "supplied element range is empty. Nothing is done." );
+
+    this->elmt_vec_.clear();
+    this->elmt_vec_.reserve( static_cast<size_t>(distance(start,end)) );
+
+    set<csmp::Node<dim>*>  node_set;
+    for ( auto it=start; it!=end; it++ )
+    {
+        this->elmt_vec_.push_back( &(*it) );
+        for ( auto nit=(*it).NodesBegin(); nit!=(*it).NodesEnd(); nit++ )
+          node_set.insert( (*nit) );
+    }
+
+    vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+
+    this->node_vec_.assign( node_set.begin(), node_set.end() );
+
+    this->IdentifyPerimeter( );
+
+ } // end Accumulate (PrimitiveContainer non-const)
 
 template<size_t dim>
 void  Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,

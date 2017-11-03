@@ -73,13 +73,21 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
     // -----------------------------
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior interfaces
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),(*it))) );
+    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it ) {
+      // XXX This operation may be expensive.
+      auto ifit = mesh.InterFacesBegin();
+      std::advance(ifit, *it);
+      this->elmt_vec_.push_back( &*ifit );
+    }
    
     // assigning pointers to the perimeter interfaces
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),(*it))) );
-   
+    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it ) {
+      // XXX This operation may be expensive.
+      auto ifit = mesh.InterFacesBegin();
+      std::advance(ifit, *it);
+      this->elmt_vec_.push_back( &*ifit );
+     }
+
     // sorting the subvectors for future searching
     const auto perimeterInterFacesBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
     sort( this->elmt_vec_.begin(), perimeterInterFacesBegin );
@@ -101,14 +109,20 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
+    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it ) {
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
    
     // assigning pointers to the perimeter nodes
     this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
-   
+    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it ) {
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
+
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
     sort( this->node_vec_.begin(), perimeterNodesBegin );

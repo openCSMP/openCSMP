@@ -82,12 +82,12 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
     const size_t elements(mesh.Elements());
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior faces
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),(*it)-elements)) );
+   for ( auto e : info.interior_elmts )
+      this->elmt_vec_.push_back( &mesh.FaceAtIndex(e - elements) );
 
     // assigning pointers to the perimeter faces
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
-      this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),(*it)-elements)) );
+   for ( auto e : info.perimeter_elmts )
+      this->elmt_vec_.push_back( &mesh.FaceAtIndex(e - elements) );
    
     // sorting the subvectors for future searching
     const auto perimeterFacesBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
@@ -102,8 +102,8 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
           const size_t perimeter_faces((*it).size());
           std::vector<ONE_BYTE_NUMBER> face_vec;
           face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+           for ( auto f : *it )
+            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( f ) );
           // storing the perimeter faces
           this->bd_face_vec_.emplace_back( face_vec );
       }
@@ -113,13 +113,13 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
     for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
+      this->node_vec_.push_back( &mesh.NodeAtIndex(*it) );
    
     // assigning pointers to the perimeter nodes
     this->first_bd_node_ = info.interior_nodes.size();
     for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
-      this->node_vec_.push_back( &(*next( mesh.NodesBegin(),(*it))) );
-   
+      this->node_vec_.push_back( &mesh.NodeAtIndex(*it) );
+
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
     sort( this->node_vec_.begin(), perimeterNodesBegin );

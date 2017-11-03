@@ -341,7 +341,7 @@ bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( con
          succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
          if( deleteRegionAndItsElements ) {
               // SKM FIX
-              splitboundaryComplex->RemoveRegion( group.c_str() );
+              splitboundaryComplex->RemoveRegion( group.c_str(), false );
               splitboundaryComplex->MoveToNonUniqueRegions( group.c_str() );
            }
        }
@@ -431,7 +431,7 @@ bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( con
                                   "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary",
                                   "one of the supplied regions is not unique and they overlap",
                                   "It was therefore impossible to insert a boundary");
-               splitboundaryComplex->RemoveRegion( "groupintersection" );
+               splitboundaryComplex->RemoveRegion( "groupintersection", false );
                return false;
          }
       }

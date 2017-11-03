@@ -142,9 +142,13 @@ class Region : public ModelSubDomain<dim,Element> {
     size_t AccumulateAll( const csmp::Node<dim>* root_node,
                           bool reestablishNeighborConnectivity = true );
 
-    /// accumulate a range of elements into a region defined by iterators over an STL vector container
+    /// accumulate a range of elements into a region defined by iterators over an STL deque container
     void   Accumulate( typename std::deque<csmp::Element<dim> >::iterator start,
                        typename std::deque<csmp::Element<dim> >::iterator end );
+
+    /// accumulate a range of elements into a region defined by iterators over a CSMP primitive container
+    void   Accumulate( typename PrimitiveContainer<csmp::Element<dim> >::iterator start,
+                       typename PrimitiveContainer<csmp::Element<dim> >::iterator end );
 
     /// accumulate a range of elements into a region defined by constant iterators (accessors only) over an STL vector container
     void   Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,

@@ -983,10 +983,8 @@ namespace csmp
 
     cout <<"\nNaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX(): Initialising fluid properties"<< endl;
 
-    typename std::deque<Node<dim> >::iterator it;
-
     int count(0);
-    for ( it = pmesh.NodesBegin(); it != pmesh.NodesEnd(); it++ )
+    for ( auto it = pmesh.NodesBegin(); it != pmesh.NodesEnd(); it++ )
       {
         //	cout << count << endl;
         count++;

@@ -214,8 +214,8 @@ class RegionInterface
     void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
     size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-    /// removes region and associated variable storage (however not the underlying elements, nodes etc.)
-    void    RemoveRegion( const char* regionname );
+    /// removes region and associated variable storage, and optionally the underlying elements, nodes etc.
+    void    RemoveRegion( const char* regionname, bool delete_elements );
 
     // NEW!
     /// excludes the intersection of elements of the 2 regions from the non-unique region

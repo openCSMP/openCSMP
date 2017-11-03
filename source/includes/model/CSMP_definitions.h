@@ -73,6 +73,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <array>
 #include <ciso646>
 #include <random>
+#include <unordered_set>
 
 /*
 ===========================

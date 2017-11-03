@@ -180,6 +180,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     void Out() const;
 
   private:
+    friend struct PrimitiveTraits<InterFace<dim>>;
 
     void InitializeNodeCorrespondanceVector();
   
@@ -206,6 +207,18 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
 
     Element<dim>* outerParent_;           ///< higher-dimensional neighbor element in direction of interface normal
     size_t        outer_parent_face_id_;  ///< face number of outside higher-dimensional parent element
+};
+
+
+template<size_t dim>
+struct PrimitiveTraits<InterFace<dim>>
+{
+  void Clear(InterFace<dim>* i)
+  {
+    decltype(i->node_connector_)().swap(i->node_connector_);
+    decltype(i->interface_connector_)().swap(i->interface_connector_);
+    decltype(i->parent_elements_node_connector_)().swap(i->parent_elements_node_connector_);
+  }
 };
 
 

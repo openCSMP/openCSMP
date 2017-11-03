@@ -6,6 +6,7 @@
 #include <deque>
 #include "CSMP_number_types.h"
 #include "Point.h"
+#include "PrimitiveContainer.h"
 
 
 namespace csmp {
@@ -157,8 +158,8 @@ void recreateBoxBoundaryFlags( Model<3U>& );
 
 /// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
 template<size_t dim>
-void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim> >::iterator first_elmt,
-                                               typename std::deque<csmp::Element<dim> >::iterator last_elmt );
+void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp::Element<dim> >::iterator first_elmt,
+                                               typename PrimitiveContainer<csmp::Element<dim> >::iterator last_elmt );
 
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
 template<size_t dim>
