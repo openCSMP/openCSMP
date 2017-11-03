@@ -229,8 +229,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
 
     cout <<"\nMeshManager<"<< dim <<">::BuildElementsAndVariableStorage(VSet): ";
     cout <<"input VSet contains the following finite element types:\n\t";
-    for ( typename set<CSMP_FEM_TYPE>::const_iterator
-          iit=input_etypes.begin(); iit!=input_etypes.end(); iit++ ) {
+    for ( auto iit=input_etypes.begin(); iit!=input_etypes.end(); iit++ ) {
          cerr << parseFiniteElementType((*iit)) <<"  ";
          if ( !fem_manager.ContainsElementType(*iit) ) {
               cerr <<"\n\n\tFinite element type not available: "<< parseFiniteElementType( *iit ) << endl;
@@ -645,7 +644,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
     // --------------------------------------------------
     if( csmp_error.Verbose() )
         cout <<"\nMeshManager<"<< dim <<">::InitializeConnectivity: assigning nodes to elements..."<< endl;
-    for ( auto e : elmt_collection_ ) {
+    for ( auto& e : elmt_collection_ ) {
        for ( size_t j=0U; j<e.Nodes(); j++ )
           e.Assign( j, &node_collection_.Index( vset.Plist(e.Idx(),j) ) );
     }
@@ -675,8 +674,7 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
     if ( vset.BFlags() > 0 )
       {
         // nodes were initially constructed as not located at the model boundary
-        for ( typename map<size_t,long64>::const_iterator
-              bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit )
+        for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); ++bit )
           node_collection_.Index( (*bit).first ).AtBoundary( intToBOX_BOUNDARY( (*bit).second ) );
       }
     
