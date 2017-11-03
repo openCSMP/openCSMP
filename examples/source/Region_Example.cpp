@@ -135,11 +135,11 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "permeability_regions", "permeability_regions", "permeability", 1, true );
    // test 3: O.K.
    cout <<"\n\n\nmain: RemoveRegion()  removing region 'permeability_regions' and other new regions."<< endl;
-   model.RemoveRegion( "permeability_regions" );
+   model.RemoveRegion( "permeability_regions", false );
    //    ^^^^^^^^^^^^
    // removal of the new permeability-based unique regions:
    for ( set<string>::const_iterator it=group_names.begin(); it!=group_names.end(); it++ )
-     model.RemoveRegion( (*it).c_str() );
+     model.RemoveRegion( (*it).c_str(), false );
 
 
    // creation of a region from combined property values using PropertyConstraints
@@ -157,8 +157,8 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap1", "region_kpf1", "fluid pressure", 1, true );
    vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap1", "region_kpf1", "fluid pressure", 1, true );
    // removal
-   model.RemoveRegion( "pressure_permeability_overlap1" );
-   model.RemoveRegion( "pressure_permeability_overlap2" );
+   model.RemoveRegion( "pressure_permeability_overlap1", false );
+   model.RemoveRegion( "pressure_permeability_overlap2", false );
 
 
    // creating a region from element-, node- or other properties within a specified range
@@ -169,7 +169,7 @@ void Region_Example::Run()
    // visualisation
    vtk_output.OutputDataToVTK( model, "pf_window", "pf_window", "fluid pressure", 1, true );
    // removal
-   model.RemoveRegion( "pf_window" );
+   model.RemoveRegion( "pf_window", false );
 
    // breaking a region into contiguous sub-regions
    cout <<"\n\n\nmain: number of contiguous sub regions: ";
@@ -203,7 +203,7 @@ void Region_Example::Run()
    model.FormRectangularRegion( "rectangular region", p1, p2 );
    //    ^^^^^^^^^^^^^^^^^^^^^^
    vtk_output.OutputDataToVTK( model, "rectangular region", "box", "fluid pressure", 1, true );
-   model.RemoveRegion( "rectangular region" );
+   model.RemoveRegion( "rectangular region", false );
 
 
    // building a region from a subset of element numbers
@@ -229,7 +229,7 @@ void Region_Example::Run()
    cout << model.Region("elements10to100").Elements() << endl;
 
    vtk_output.OutputDataToVTK( model, "elements10to100", "fluid-pressure", "fluid pressure", 1, true );
-   model.RemoveRegion( "elements110to200" );
+   model.RemoveRegion( "elements110to200", false );
 
 
 
@@ -250,7 +250,7 @@ void Region_Example::Run()
    model.RegionUnion( "FRACS", "MATRIX", "MODEL" );
    //    ^^^^^^^^^^^
    assert( model.Region("Model").Elements() == model.Region("MODEL").Elements() );
-   model.RemoveRegion( "MODEL" );
+   model.RemoveRegion( "MODEL", false );
 
    cout <<"\n\n\nmain: RegionIntersection() between FRACS and MATRIX."<< endl;
    // test: O.K.
@@ -277,7 +277,7 @@ void Region_Example::Run()
    cout <<"\n\n\nmain: Add()  adding difference and FRACS."<< endl;
    model.Region("difference").Add( model.Region("FRACS") );
    //                         ^^^
-   model.RemoveRegion( "difference" );
+   model.RemoveRegion( "difference", false );
 
 
   // -----------------------------------------------------------------------
