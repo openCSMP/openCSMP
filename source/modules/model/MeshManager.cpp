@@ -257,7 +257,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
         if ( !vset.HybridElementTypeMesh() ) {
              const int32 csmpElementType = vset.ElementType(0U);
              while( first != last ) {
-                  auto e = elmt_collection_.EmplaceBack( fem_manager.E(csmpElementType) );
+                  auto e = elmt_collection_.Emplace( fem_manager.E(csmpElementType) );
                   e->ResizePropertyStorage( evars, cvars );
                   e->Idx(idx);
                   idx++;
@@ -274,7 +274,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
                        cout <<" has a different number of nodes than are stored in the VSet: "<< (*first).size() << endl;
                     } 
                   int32 csmpElementType = vset.ElementType(idx);
-                  auto e = elmt_collection_.EmplaceBack( fem_manager.E(csmpElementType) );
+                  auto e = elmt_collection_.Emplace( fem_manager.E(csmpElementType) );
                   e->ResizePropertyStorage( evars, cvars );
                   e->Idx(idx);
                   idx++;
@@ -287,7 +287,7 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
 
         Node<dim>  default_node;
         for ( size_t i=0U; i<vset.Vertices(); i++ ) {
-             auto n = node_collection_.EmplaceBack( default_node );
+             auto n = node_collection_.Emplace( default_node );
              n->ResizePropertyStorage(nvars);
              n->Idx(i);
           } 
@@ -419,7 +419,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
              assert( vset.ElementTypes() == 1 );
              const int32 csmpElementType = vset.ElementType(0U);
              while( first != last ) {
-                  elmt_collection_.EmplaceBack( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
+                  elmt_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
                   first++;
               }
           }
@@ -436,7 +436,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                     } 
 #endif
                   const int32 csmpElementType = vset.ElementType(idx);
-                  elmt_collection_.EmplaceBack( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
+                  elmt_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
                   first++;
                }
 
@@ -461,7 +461,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                     } 
 #endif
                   const int32 csmpElementType = vset.ElementType(idx);
-                  face_collection_.EmplaceBack( idx++, fem_manager.E(csmpElementType), evars, cvars );
+                  face_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars );
                   first++;
                }
           } // end faces
@@ -485,7 +485,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                         } 
 #endif
                       const int32 csmpElementType = vset.ElementType(idx);
-                     interface_collection_.EmplaceBack( idx++, fem_manager.E(csmpElementType), evars, cvars );
+                     interface_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars );
                       first++;
                    }
 
@@ -500,7 +500,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
         for ( size_t i=0U; i<vset.Vertices(); ++i ) {
              for ( size_t j=0U; j<dim; ++j ) coord[j] = vset.P( j, i );
              // emplaced construction: Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY=NOT );
-             node_collection_.EmplaceBack( i, Point<dim>(coord), nvars, NOT );
+             node_collection_.Emplace( i, Point<dim>(coord), nvars, NOT );
           }
      }
     // catching all possible standard exceptions & csmp::Exceptions
@@ -1066,25 +1066,25 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<di
 template<size_t dim>
 Node<dim>* MeshManager<dim>::PushBack( Node<dim>&& node )
 {
-    return node_collection_.EmplaceBack( node );
+    return node_collection_.Emplace( node );
 }
 
 template<size_t dim>
 Element<dim>* MeshManager<dim>::PushBack( Element<dim>&& elmt )
 {
-    return elmt_collection_.EmplaceBack( elmt );
+    return elmt_collection_.Emplace( elmt );
 }
 
 template<size_t dim>
 Face<dim>* const MeshManager<dim>::PushBack( Face<dim>&& face )
 {
-    return face_collection_.EmplaceBack( face );
+    return face_collection_.Emplace( face );
 }
 
 template<size_t dim>
 InterFace<dim>* MeshManager<dim>::PushBack( InterFace<dim>&& interface )
 {
-    return interface_collection_.EmplaceBack( interface );
+    return interface_collection_.Emplace( interface );
 }
 
 
@@ -1096,7 +1096,7 @@ Node<dim>* MeshManager<dim>::PushBackIfUnique( Node<dim>&& node )
     if ( nit != node_collection_.end() )
        return ( &(*nit) );
 
-    return node_collection_.EmplaceBack( node );
+    return node_collection_.Emplace( node );
 }
 
 template<size_t dim>
@@ -1106,7 +1106,7 @@ Element<dim>* MeshManager<dim>::PushBackIfUnique( Element<dim>&& elmt )
     if( eit != elmt_collection_.end() )
         return ( &(*eit) );
 
-    return elmt_collection_.EmplaceBack( elmt );
+    return elmt_collection_.Emplace( elmt );
 }
 
 template<size_t dim>
@@ -1116,7 +1116,7 @@ Face<dim>* MeshManager<dim>::PushBackIfUnique( Face<dim>&& face )
     if( fit != face_collection_.end() )
         return ( &(*fit) );
 
-    return face_collection_.EmplaceBack( face );
+    return face_collection_.Emplace( face );
 }
 
 template<size_t dim>
@@ -1126,7 +1126,7 @@ InterFace<dim>* MeshManager<dim>::PushBackIfUnique( InterFace<dim>&& interface )
     if( ifit != interface_collection_.end() )
         return ( &(*ifit) );
   
-    return interface_collection_.EmplaceBack( interface );
+    return interface_collection_.Emplace( interface );
 }
 
 
