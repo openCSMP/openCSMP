@@ -193,6 +193,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void  Out() const;
 
   private:
+    friend struct PrimitiveTraits<Face<dim>>;
+
     Face();
   
     // TODO: SKM: deprecate this inefficient method
@@ -209,6 +211,17 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // not references or constant pointers because these may need to change during remeshing
     Element<dim>*            innerParent_;     ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;     ///< (optional) higher-dimensional neighbor in direction of unit normal
+};
+
+
+template<size_t dim>
+struct PrimitiveTraits<Face<dim>>
+{
+  void Clear(Face<dim>* f)
+  {
+    decltype(f->node_connector_)().swap(f->node_connector_);
+    decltype(f->face_connector_)().swap(f->face_connector_);
+  }
 };
 
 

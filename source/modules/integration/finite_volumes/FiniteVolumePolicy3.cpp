@@ -3,6 +3,7 @@
 #include "Face.h"
 #include "InterFace.h"
 #include "CSMP_mathUtilities.h"
+#include "Exception.h"
 
 // invokes integration over planar- as opposed to warped facets
 // because volume conservation cannot be achieved without it
@@ -857,21 +858,26 @@ Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormal( size_t iFacet ) const
     assert( iFacet < fvptr_->Facets());
 #endif
 
-#ifdef PYRAMID_TRIANGULAR_FACETS
   if ( e->IsVolumeElement() ) {
-         return normalOfTriangle ( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
-                                   RstToXYZ(fvptr_->FacetPoint(iFacet,1U)),
-                                   RstToXYZ(fvptr_->FacetPoint(iFacet,2U)));
-    }
-#else
- if ( e->IsVolumeElement() ) {
-         return normalAtFacetCenter( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
-                                     RstToXYZ(fvptr_->FacetPoint(iFacet,1U)),
-                                     RstToXYZ(fvptr_->FacetPoint(iFacet,2U)),
-                                     RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
+      switch (fvptr_->FacetPoints(iFacet)) {
+          case 3:
+              return normalOfTriangle ( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
+                                       RstToXYZ(fvptr_->FacetPoint(iFacet,1U)),
+                                       RstToXYZ(fvptr_->FacetPoint(iFacet,2U)));
+              
+          case 4:
+              return normalAtFacetCenter( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
+                                         RstToXYZ(fvptr_->FacetPoint(iFacet,1U)),
+                                         RstToXYZ(fvptr_->FacetPoint(iFacet,2U)),
+                                         RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
+
+          default:
+              throw Exception(ERROR, "FiniteVolumePolicy<3U,SIMPLEX>::FacetNormal", "Unexpected facet point count" );
+
       }
-#endif
-   assert( e != nullptr );
+    }
+
+    assert( e != nullptr );
    if ( e->IsSurfaceElement() ) {
        // this version has the best definition
        Point<3U> segment(midPoint(e->N(fvptr_->InsideNode(iFacet))->Coordinate(),
@@ -998,30 +1004,44 @@ Point<3U>  FiniteVolumePolicy<3U,SIMPLEX>::FacetNormalMapped( size_t iFacet ) co
     }
 
   //e->IsVolumeElement
-#ifdef PYRAMID_TRIANGULAR_FACETS
-  const Point<3U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
-  const Point<3U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
-  const Point<3U> fp2( RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
-
-  const double64 j1( -fp0[0]+fp1[0] ),
-                  j2( -fp0[1]+fp1[1] ),
-                  j3( -fp0[2]+fp1[2] ),
-                  j4( -fp0[0]+fp2[0] ),
-                  j5( -fp0[1]+fp2[1] ),
-                  j6( -fp0[2]+fp2[2] );
-#else
-  const Point<3U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
-  const Point<3U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
-  const Point<3U> fp2( RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
-  const Point<3U> fp3( RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
-
-  const double64 j1( -0.25* (fp0[0]-fp1[0]-fp2[0]+fp3[0] ) ),
-                  j2( -0.25* (fp0[1]-fp1[1]-fp2[1]+fp3[1] ) ),
-                  j3( -0.25* (fp0[2]-fp1[2]-fp2[2]+fp3[2] ) ),
-                  j4( -0.25* (fp0[0]+fp1[0]-fp2[0]-fp3[0] ) ),
-                  j5( -0.25* (fp0[1]+fp1[1]-fp2[1]-fp3[1] ) ),
-                  j6( -0.25* (fp0[2]+fp1[2]-fp2[2]-fp3[2] ) );
-#endif
+    double64 j1,j2,j3,j4,j5,j6;
+    switch (fvptr_->FacetPoints(iFacet))
+    {
+        case 3:
+        {
+            const Point<3U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
+            const Point<3U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+            const Point<3U> fp2( RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
+            j1 = -fp0[0]+fp1[0];
+            j2 = -fp0[1]+fp1[1];
+            j3 = -fp0[2]+fp1[2];
+            j4 = -fp0[0]+fp2[0];
+            j5 = -fp0[1]+fp2[1];
+            j6 = -fp0[2]+fp2[2];
+            break;
+        }
+            
+        case 4:
+        {
+            const Point<3U> fp0( RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
+            const Point<3U> fp1( RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
+            const Point<3U> fp2( RstToXYZ(fvptr_->FacetPoint(iFacet,2U)) );
+            const Point<3U> fp3( RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
+            
+            j1 = -0.25 * (fp0[0]-fp1[0]-fp2[0]+fp3[0] );
+            j2 = -0.25 * (fp0[1]-fp1[1]-fp2[1]+fp3[1] );
+            j3 = -0.25 * (fp0[2]-fp1[2]-fp2[2]+fp3[2] );
+            j4 = -0.25 * (fp0[0]+fp1[0]-fp2[0]-fp3[0] );
+            j5 = -0.25 * (fp0[1]+fp1[1]-fp2[1]-fp3[1] );
+            j6 = -0.25 * (fp0[2]+fp1[2]-fp2[2]-fp3[2] );
+            break;
+        }
+            
+        default:
+        {
+            throw Exception(ERROR, "FiniteVolumePolicy<3U,SIMPLEX>::FacetNormalMapped", "Unexpected facet point count" );
+        }
+    }
 
   const double64 det( fabs((j1*j1+j2*j2+j3*j3)*(j4*j4+j5*j5+j6*j6)-square(j1*j4+j2*j5+j3*j6) ));
 

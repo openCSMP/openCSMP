@@ -268,6 +268,7 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
 
 
  private:
+    friend struct PrimitiveTraits<Element<dim>>;
 
     // ------------------------------------------------------------------------
     // Data members
@@ -279,6 +280,16 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     BOX_BOUNDARY                   at_boundary_;
 };
 
+
+template<size_t dim>
+struct PrimitiveTraits<Element<dim>>
+{
+  void Clear(Element<dim>* n)
+  {
+    decltype(n->elmt_connector_)().swap(n->elmt_connector_);
+    decltype(n->node_connector_)().swap(n->node_connector_);
+  }
+};
 
 } // csmp
 

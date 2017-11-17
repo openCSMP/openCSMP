@@ -6,9 +6,13 @@
 
 namespace csmp {
 
+struct Gauss_SolverSettings : public SolverSettings {
+};
+
 class Gauss_Solver : public Meschach_Solver {
 
 public:
+    explicit Gauss_Solver( Gauss_SolverSettings& settings );
     Gauss_Solver();
     virtual ~Gauss_Solver();
 protected:
@@ -18,6 +22,7 @@ protected:
                                    double64 solver_tolerance);
 
 private:
+    Gauss_SolverSettings settings;
     double64 pivot_factor;
 };
 

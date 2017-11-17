@@ -5,6 +5,7 @@
 #include "Box.h"
 #include "Point.h"
 #include "LocalVariableStorage.h"
+#include "PrimitiveContainer.h"
 
 namespace csmp {
 
@@ -100,12 +101,25 @@ class Node : public LocalVariableStorage<dim,Node<dim> >
     BOX_BOUNDARY     AtBoundary() const;
 
   private:
+    friend struct PrimitiveTraits<Node>;
     mutable size_t                 idx_;                      ///< 0..n-1
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     Point<dim>                     xyz_;                      ///< coordinate array
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     std::vector<Element<dim>*>     parent_element_pointers_;  ///< parent element pointers
 };
+
+
+template<size_t dim>
+struct PrimitiveTraits<Node<dim>>
+{
+  void Clear(Node<dim>* n)
+  {
+    decltype(n->parent_node_indexes_)().swap(n->parent_node_indexes_);
+    decltype(n->parent_element_pointers_)().swap(n->parent_element_pointers_);
+  }
+};
+
 
 } // csmp
 

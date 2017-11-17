@@ -196,6 +196,13 @@ void FV_IntegrationPointsAndWeights<dim>::ProjectionWeights(
 }
 
 template<size_t dim>
+void FV_IntegrationPointsAndWeights<dim>::FacetNormalTransformations( 
+                                                   std::vector<std::vector<std::pair<double64,double64>>>&  facet_normal_xforms ) const
+{
+   facet_normal_xforms = m_facet_normal_xforms;
+}
+
+template<size_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormals( 
                                                    std::vector<Point<dim> >&  facet_normals ) const
 {
@@ -313,6 +320,11 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
   vector<Point<dim> >(m_facet_points[0]).swap(m_facet_points[0]);
   m_facet_points[0][0] = m_barycenter; 
 
+   m_facet_normal_xforms.resize(1u);
+   m_facet_normal_xforms[0].resize(2u);
+   m_facet_normal_xforms[0][0] = std::make_pair(-0.5, -0.5);
+   m_facet_normal_xforms[0][1] = std::make_pair(0.5, 0.5);
+
   m_sector_points[0].resize(2U);
   m_sector_points[0][0] = -1.; 
   m_sector_points[0][1] = m_barycenter; 
@@ -413,6 +425,18 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
     m_barycenter[0] = 1./3.;
     m_barycenter[1] = 1./3.;
     
+    // tested: 25/Oct/2017 AJB
+    double64 facet_normal_transform_scale[3] = {
+        4.0 * sqrt(5.0) / 3.0,
+        8.0 / (3.0 * sqrt(2.0)),
+        4.0 * sqrt(5.0) / 3.0
+    };
+    const double64 facet_normal_transforms[3][2][3] = {
+        { { -1.0/6.0,-1.0/6.0,1.0/3.0 }, { -5.0/12.0,1.0/3.0,1.0/12.0 } },
+        { { 1.0/3.0,-1.0/6.0,-1.0/6.0 }, { 1.0/12.0,-5.0/12.0,1.0/3.0 } },
+        { { -1.0/6.0,1.0/3.0,-1.0/6.0 }, { 1.0/3.0,1.0/12.0,-5.0/12.0 } }
+    };
+    m_facet_normal_xforms.resize(3u);
     for ( size_t iFacet=0U; iFacet<3U; iFacet++ ) {
         m_facet_types[iFacet] = UNIT_LINEAR_FACET;
 
@@ -420,6 +444,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
         vector<Point<dim> >(m_facet_points[iFacet]).swap(m_facet_points[iFacet]);
         m_facet_points[iFacet][0] = m_facet_edge_midpoints[iFacet];
         m_facet_points[iFacet][1] = m_barycenter;
+
+        m_facet_normal_xforms[iFacet].resize(3u);
+        for (size_t j = 0; j < 3; ++j) {
+            m_facet_normal_xforms[iFacet][j]
+                = std::make_pair(
+                        facet_normal_transforms[iFacet][0][j],
+                        facet_normal_transforms[iFacet][1][j] * facet_normal_transform_scale[iFacet]);
+        }
       }
 
     
@@ -539,9 +571,25 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     m_barycenter[0] = 0.;
     m_barycenter[1] = 0.;
 
+    const double64 facet_normal_transforms[4][2][4] = {
+        { { -1.0/4.0, -1.0/4.0, 1.0/4.0, 1.0/4.0 }, { -3.0/8.0, 3.0/8.0, 1.0/8.0, -1.0/8.0 } },
+        { { 1.0/4.0, -1.0/4.0, -1.0/4.0, 1.0/4.0 }, { -1.0/8.0, -3.0/8.0, 3.0/8.0, 1.0/8.0 } },
+        { { 1.0/4.0, 1.0/4.0, -1.0/4.0, -1.0/4.0 }, { 1.0/8.0, -1.0/8.0, -3.0/8.0, 3.0/8.0 } },
+        { { -1.0/4.0, 1.0/4.0, 1.0/4.0, -1.0/4.0 }, { 3.0/8.0, 1.0/8.0, -1.0/8.0, -3.0/8.0 } }
+    };
+    m_facet_normal_xforms.resize(4u);
+
     for ( size_t iFacet = 0U; iFacet < 4; iFacet++ )
        {
          m_facet_types[iFacet] = UNIT_LINEAR_FACET;
+
+         m_facet_normal_xforms[iFacet].resize(4u);
+         for (size_t j = 0; j < 4; ++j) {
+             m_facet_normal_xforms[iFacet][j]
+                 = std::make_pair(
+                        facet_normal_transforms[iFacet][0][j],
+                        facet_normal_transforms[iFacet][1][j]);
+         }
 
          m_facet_points[iFacet].resize(2U);
          vector<Point<dim> >(m_facet_points[iFacet]).swap(m_facet_points[iFacet]);
@@ -757,6 +805,26 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     m_facet_points[5][1] = pt_c234; 
     m_facet_points[5][2] = pt_c34;
     m_facet_points[5][3] = pt_c134;
+
+    // tested: 18/Oct/2017 AJB
+    const double64 facet_normal_transforms[6][2][4] = {
+        { { -1.0/8.0,-1.0/8.0,-1.0/24.0,7.0/24.0 }, { -1.0/8.0,-1.0/8.0,7.0/24.0,-1.0/24.0 } },
+        { { -1.0/24.0,-1.0/8.0,-1.0/8.0,7.0/24.0 }, { 7.0/24.0,-1.0/8.0,-1.0/8.0,-1.0/24.0 } },
+        { { -1.0/8.0,-1.0/24.0,-1.0/8.0,7.0/24.0 }, { -1.0/8.0,7.0/24.0,-1.0/8.0,-1.0/24.0 } },
+        { { -1.0/8.0,-1.0/24.0,7.0/24.0,-1.0/8.0 }, { -1.0/8.0,7.0/24.0,-1.0/24.0,-1.0/8.0 } },
+        { { -1.0/24.0,-1.0/8.0,7.0/24.0,-1.0/8.0 }, { -7.0/24.0,1.0/8.0,1.0/24.0,1.0/8.0 } },
+        { { 1.0/24.0,-7.0/24.0,1.0/8.0,1.0/8.0 }, { -7.0/24.0,1.0/24.0,1.0/8.0,1.0/8.0 } }
+    };
+    m_facet_normal_xforms.resize(6u);
+    for (size_t f = 0; f < 6u; ++f) {
+        m_facet_normal_xforms[f].resize(4u);
+        for (size_t n = 0; n < 4u; ++n) {
+            m_facet_normal_xforms[f][n] = std::make_pair(
+                    facet_normal_transforms[f][0][n],
+                    facet_normal_transforms[f][1][n]
+                );
+        }
+    }
 
     // tested: 08/Nov/2007 Hamid	
     Point<dim> p;
@@ -1120,6 +1188,44 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_facet_points[11][2] = m_barycenter;
     m_facet_points[11][3] = pt_c5678;
 
+    // tested: 18/Oct/2017 AJB
+    const double64 facet_normal_transforms[12][2][8] = {
+        { { -3.0/16.0, -3.0/16.0, -1.0/16.0, -1.0/16.0, 3.0/16.0, 3.0/16.0, 1.0/16.0, 1.0/16.0 },
+          { -3.0/16.0, -3.0/16.0, 3.0/16.0, 3.0/16.0, -1.0/16.0, -1.0/16.0, 1.0/16.0, 1.0/16.0 } },
+        { { -1.0/16.0, -3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, 3.0/16.0, 1.0/16.0 },
+          { 3.0/16.0, -3.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -1.0/16.0, 1.0/16.0 } },
+        { { -1.0/16.0, -1.0/16.0, -3.0/16.0, -3.0/16.0, 1.0/16.0, 1.0/16.0, 3.0/16.0, 3.0/16.0 },
+          { 3.0/16.0, 3.0/16.0, -3.0/16.0, -3.0/16.0, 1.0/16.0, 1.0/16.0, -1.0/16.0, -1.0/16.0 } },
+        { { -3.0/16.0, -1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, 1.0/16.0, 3.0/16.0 },
+          { -3.0/16.0, 3.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 1.0/16.0, -1.0/16.0 } },
+        { { -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0 },
+          { -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0 } },
+        { { 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0 },
+          { -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0 } },
+        { { 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0 },
+          { 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0 } },
+        { { -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0 },
+          { 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0 } },
+        { { -1.0/16.0, -1.0/16.0, 1.0/16.0, 1.0/16.0, -3.0/16.0, -3.0/16.0, 3.0/16.0, 3.0/16.0 },
+          { 3.0/16.0, 3.0/16.0, 1.0/16.0, 1.0/16.0, -3.0/16.0, -3.0/16.0, -1.0/16.0, -1.0/16.0 } },
+        { { 1.0/16.0, -1.0/16.0, -1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -3.0/16.0, 3.0/16.0 },
+          { 1.0/16.0, 3.0/16.0, 3.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, -3.0/16.0, -1.0/16.0 } },
+        { { 1.0/16.0, 1.0/16.0, -1.0/16.0, -1.0/16.0, 3.0/16.0, 3.0/16.0, -3.0/16.0, -3.0/16.0 },
+          { 1.0/16.0, 1.0/16.0, 3.0/16.0, 3.0/16.0, -1.0/16.0, -1.0/16.0, -3.0/16.0, -3.0/16.0 } },
+        { { -1.0/16.0, 1.0/16.0, 1.0/16.0, -1.0/16.0, -3.0/16.0, 3.0/16.0, 3.0/16.0, -3.0/16.0 },
+          { 3.0/16.0, 1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, -1.0/16.0, -3.0/16.0 } }
+    };
+    m_facet_normal_xforms.resize(12u);
+    for (size_t f = 0; f < 12u; ++f) {
+        m_facet_normal_xforms[f].resize(8u);
+        for (size_t n = 0; n < 8u; ++n) {
+            m_facet_normal_xforms[f][n] = std::make_pair(
+                    facet_normal_transforms[f][0][n],
+                    facet_normal_transforms[f][1][n]
+                );
+        }
+    }
+
     // tested: 07/Nov/2007 Hamid
     Point<dim> p;
     m_sector_points[0].resize(8U); 
@@ -1477,6 +1583,38 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_facet_points[8][1] = pt_c1346; 
     m_facet_points[8][2] = m_barycenter;
     m_facet_points[8][3] = pt_c456;
+
+    // tested: 18/Oct/2017 AJB
+    const double64 facet_normal_transforms[9][2][6] = {
+        { { -5.0/24.0, -5.0/24.0, -1.0/12.0, 5.0/24.0, 5.0/24.0, 1.0/12.0 },
+          { -1.0/8.0, -1.0/8.0, 1.0/4.0, -1.0/24.0, -1.0/24.0, 1.0/12.0 } },
+        { { -1.0/4.0, 1.0/8.0, 1.0/8.0, -1.0/12.0, 1.0/24.0, 1.0/24.0 },
+          { -1.0/12.0, -5.0/24.0, -5.0/24.0, 1.0/12.0, 5.0/24.0, 5.0/24.0 } },
+        { { 1.0/8.0, -1.0/4.0, 1.0/8.0, 1.0/24.0, -1.0/12.0, 1.0/24.0 },
+          { -5.0/24.0, -1.0/12.0, -5.0/24.0, 5.0/24.0, 1.0/12.0, 5.0/24.0 } },
+        { { -1.0/6.0, -1.0/24.0, 5.0/24.0, -1.0/6.0, -1.0/24.0, 5.0/24.0 },
+          { -1.0/6.0, 5.0/24.0, -1.0/24.0, -1.0/6.0, 5.0/24.0, -1.0/24.0 } },
+        { { 5.0/24.0, -1.0/6.0, -1.0/24.0, 5.0/24.0, -1.0/6.0, -1.0/24.0 },
+          { -1.0/24.0, -1.0/6.0, 5.0/24.0, -1.0/24.0, -1.0/6.0, 5.0/24.0 } },
+        { { -1.0/24.0, 5.0/24.0, -1.0/6.0, -1.0/24.0, 5.0/24.0, -1.0/6.0 },
+          { 5.0/24.0, -1.0/24.0, -1.0/6.0, 5.0/24.0, -1.0/24.0, -1.0/6.0 } },
+        { { -1.0/24.0, -1.0/24.0, 1.0/12.0, -1.0/8.0, -1.0/8.0, 1.0/4.0 },
+          { 5.0/24.0, 5.0/24.0, 1.0/12.0, -5.0/24.0, -5.0/24.0, -1.0/12.0 } },
+        { { 1.0/12.0, -1.0/24.0, -1.0/24.0, 1.0/4.0, -1.0/8.0, -1.0/8.0 },
+          { 1.0/12.0, 5.0/24.0, 5.0/24.0, -1.0/12.0, -5.0/24.0, -5.0/24.0 } },
+        { { -1.0/24.0, 1.0/12.0, -1.0/24.0, -1.0/8.0, 1.0/4.0, -1.0/8.0 },
+          { 5.0/24.0, 1.0/12.0, 5.0/24.0, -5.0/24.0, -1.0/12.0, -5.0/24.0 } }
+    };
+    m_facet_normal_xforms.resize(9u);
+    for (size_t f = 0; f < 9u; ++f) {
+        m_facet_normal_xforms[f].resize(6u);
+        for (size_t n = 0; n < 6u; ++n) {
+            m_facet_normal_xforms[f][n] = std::make_pair(
+                    facet_normal_transforms[f][0][n],
+                    facet_normal_transforms[f][1][n]
+                );
+        }
+    }
 
     // tested: 08/Nov/2007 Hamid	
     Point<dim> p;    
@@ -2135,6 +2273,46 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_facet_points[11][0] = pt_c45;
     m_facet_points[11][1] = pt_c145; 
     m_facet_points[11][2] = m_barycenter;
+
+
+    // tested: 18/Oct/2017 AJB
+    const double64 sqrt2 = 1.41421356237309504880168872420969807856967187537694807317667973799;
+    const double64 facet_normal_transforms[12][2][5] = {
+        { { -11.0/96.0, -11.0/96.0, -1.0/32.0, -1.0/32.0, 7.0/24.0 },
+            { -19.0/96.0, -19.0/96.0, 7.0/32.0, 7.0/32.0, -1.0/24.0 } },
+        { { -1.0/32.0, -11.0/96.0, -11.0/96.0, -1.0/32.0, 7.0/24.0 },
+            { 7.0/32.0, -19.0/96.0, -19.0/96.0, 7.0/32.0, -1.0/24.0 } },
+        { { -1.0/32.0, -1.0/32.0, -11.0/96.0, -11.0/96.0, 7.0/24.0 },
+            { 7.0/32.0, 7.0/32.0, -19.0/96.0, -19.0/96.0, -1.0/24.0 } },
+        { { -11.0/96.0, -1.0/32.0, -1.0/32.0, -11.0/96.0, 7.0/24.0 },
+            { -19.0/96.0, 7.0/32.0, 7.0/32.0, -19.0/96.0, -1.0/24.0 } },
+        { { -7.0*sqrt2/96.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -7.0*sqrt2/96.0, -sqrt2/24.0 },
+            { sqrt2/12.0, 0.0, 0.0, -sqrt2/6.0, sqrt2/12.0 } },
+        { { -5.0*sqrt2/32.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -sqrt2/8.0 },
+            { -sqrt2/12.0, sqrt2/6.0, 0.0, 0.0, -sqrt2/12.0 } },
+        { { -7.0*sqrt2/96.0, -7.0*sqrt2/96.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -sqrt2/24.0 },
+            { -sqrt2/6.0, sqrt2/12.0, 0.0, 0.0, sqrt2/12.0 } },
+        { { 3.0*sqrt2/32.0, -5.0*sqrt2/32.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -sqrt2/8.0 },
+            { 0.0, -sqrt2/12.0, sqrt2/6.0, 0.0, -sqrt2/12.0 } },
+        { { 3.0*sqrt2/32.0, -7.0*sqrt2/96.0, -7.0*sqrt2/96.0, 3.0*sqrt2/32.0, -sqrt2/24.0 },
+            { 0.0, -sqrt2/6.0, sqrt2/12.0, 0.0, sqrt2/12.0 } },
+        { { 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -5.0*sqrt2/32.0, 3.0*sqrt2/32.0, -sqrt2/8.0 },
+            { 0.0, 0.0, -sqrt2/12.0, sqrt2/6.0, -sqrt2/12.0 } },
+        { { 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -7.0*sqrt2/96.0, -7.0*sqrt2/96.0, -sqrt2/24.0 },
+            { 0.0, 0.0, -sqrt2/6.0, sqrt2/12.0, sqrt2/12.0 } },
+        { { 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, 3.0*sqrt2/32.0, -5.0*sqrt2/32.0, -sqrt2/8.0 },
+            { sqrt2/6.0, 0.0, 0.0, -sqrt2/12.0, -sqrt2/12.0 } }
+    };
+    m_facet_normal_xforms.resize(12u);
+    for (size_t f = 0; f < 12u; ++f) {
+        m_facet_normal_xforms[f].resize(5u);
+        for (size_t n = 0; n < 5u; ++n) {
+            m_facet_normal_xforms[f][n] = std::make_pair(
+                    facet_normal_transforms[f][0][n],
+                    facet_normal_transforms[f][1][n]
+                );
+        }
+    }
 
     // tested: 07/Nov/2007 Hamid	
     Point<dim> p;

@@ -364,7 +364,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     /// add extra functionality for alternative solver if needed
-    transient_pressure.SetSolver(linear_solver);
+    transient_pressure.SetSolver(&linear_solver);
 #endif
 
     NumIntegral_dNT_op_dN_dV<2U,InterFace<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );

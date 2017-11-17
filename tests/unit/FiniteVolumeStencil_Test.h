@@ -19,6 +19,7 @@ class FiniteVolumeStencil_Test : public Test {
     void facetAndSectorNumbersTest(); // are they right for all element types
     void sectorFacetConnectivityTest(); // facets that delimit a certain sector for all the element types
     void orientationAndLengthOfNormalsTest();
+    void normalTransformationTest();
     void locationOfSectorIntegrationPointsTest(); // argument list could deal with multiple integration points
     void weightsAndFacetIntegrationPointsTest(); //test location and weights of facet inetgration points
     void weightsOfSectorIntegrationPointsTest(); // argument list could deal with multiple integration points

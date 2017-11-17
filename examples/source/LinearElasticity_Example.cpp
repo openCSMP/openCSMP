@@ -172,7 +172,11 @@ void LinearElasticity_Example::Run()
     if ( with_body_forces )       deformation.Add( &bodyforce );
     if ( with_volume_strains )    deformation.Add( &volstrain );
     if ( with_pore_pressure )     deformation.Add( &porepressure );
+
+    // XXX FIX ME
+#ifdef CSMP_WITH_SAMG_SOLVER
     if ( with_boundary_stresses ) deformation.AddBoundaryIntegrals( &bstresses );
+#endif
 
     const bool plane_strain(true);
     const bool principal_vectors(true);

@@ -64,5 +64,5 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${GEN_INCLUDES_DIR}
 )
 
-TARGET_LINK_LIBRARIES(examples csmpcore csmpiaps csmpjpeg)
+TARGET_LINK_LIBRARIES(examples csmpmeschach csmpcore csmpiaps csmpjpeg)
 

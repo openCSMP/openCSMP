@@ -299,6 +299,10 @@ class Point<3U> {
     double64 x_, y_, z_;
 };
 
+/// The length of the exterior product.
+template<size_t dim>
+double64 exteriorProductLength( const Point<dim>& p1, const Point<dim>& p2 );
+
 Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 );
 
 std::ostream&   operator<<( std::ostream& stream, const Point<1U>& pt );

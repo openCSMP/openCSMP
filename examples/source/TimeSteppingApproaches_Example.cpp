@@ -193,7 +193,7 @@ void TimeSteppingApproaches_Example::Run()
    CrankNicholson2_pf.SetSolver(&samg_solver);
 #else
    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-   CrankNicholson2_pf.SetSolver(linear_solver);
+   CrankNicholson2_pf.SetSolver(&linear_solver);
 #endif
 
    // conductance matrix dt/2 * [K] at pressure t+dt

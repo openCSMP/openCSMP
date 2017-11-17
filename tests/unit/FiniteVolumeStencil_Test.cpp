@@ -102,9 +102,11 @@ void FiniteVolumeStencil_Test::run() // runs all the tests for the class (regist
 	facetAndSectorNumbersTest(); // are they right for all element types
 	
 	orientationAndLengthOfNormalsTest();
+     
+    normalTransformationTest();
 	
 	weightsAndFacetIntegrationPointsTest(); //does not apply for pyramids
-	
+     
 	sectorFacetConnectivityTest(); // facets that delimit a certain sector for all the element types
 	
 	weightsOfSectorIntegrationPointsTest(); // argument list could deal with multiple integration points
@@ -551,7 +553,148 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 		  }
   	}
  }
+    
+    struct FE_Transformation {
+        FE_Transformation(csmp::FiniteElement* element)
+        : element_(element)
+        {
+        }
 
+        FiniteElement* element_;
+    };
+    
+    /**   void FiniteVolumeStencil_Test::normalTransformationTest()
+     
+     Description:
+     
+     This test checks for each facet normal transformation, and ensures that
+     it matches the computed facet normal.
+
+     @section arguments Input Arguments
+     
+     @section application Application
+     The idea is to test the following member functions:
+     
+     wp   FacetNormalTransformationNodeWeights( size_t facet, size_t node ) const;
+     
+     */
+    void FiniteVolumeStencil_Test::normalTransformationTest()
+    {
+        if ( verbose_ ) cout << "TESTING: normalTransformationTest()" << endl;
+        
+        //for each element type, for each given facet, check if the normal is correct
+        
+        vector<FiniteElement*>::const_iterator vIterFEs(vecFEs_.begin());
+        vector<FiniteVolumeStencil< 3> >::const_iterator vIterFVS;
+        const vector<FiniteVolumeStencil< 3> >::const_iterator vIterFVSEnd(fvs_.end());
+        DenseMatrix<DM_MIN> matCoords;
+
+        for(vIterFVS = fvs_.begin(); vIterFVS != vIterFVSEnd; vIterFVS++, vIterFEs++)
+        {
+            //get finite element type
+            const CSMP_FEM_TYPE elType((*vIterFEs)->ElementType());
+            
+#ifndef PYRAMID_TRIANGULAR_FACETS
+            if((*vIterFEs)->ElementType() == ISOPARAMETRIC_LINEAR_PYRAMID ) {
+                std::cerr "XXX WARNING: ISOPARAMETRIC_LINEAR_PYRAMID with quadrilateral apex facets NYI\n"
+            }
+#endif
+
+            // Get coordinates
+            (*vIterFEs)->ReferenceCoordinates( matCoords );
+            
+            //print type
+            if ( verbose_ ) {
+                cout << "\n******************************************************************";
+                cout << "\nType: " << parseFiniteElementType(elType);
+                cout << "\nNumber of Facets: " << vIterFVS->Facets();
+            }
+            
+            //step through facets
+            const size_t iNrOfFacets(vIterFVS->Facets());
+            const size_t iNrOfNodes((*vIterFEs)->Nodes());
+
+            for(size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++)
+            {
+                if ( verbose_ ) {
+                    //get facet
+                    cout << "\n******************************************************************";
+                    cout << "\nFACET " << iFacet << ": ";
+                }
+                const Point<3> parametricNormal(vIterFVS->UnitParametricNormalTo( iFacet ));
+
+                //TRACE
+                if ( verbose_ ) cout << "\nParametric normal: " << parametricNormal[0] << ", " << parametricNormal[1] << ", " << parametricNormal[2];
+                
+                Point<3> computedNormal;
+
+                //1. Compute normal by transformation
+                if ((*vIterFEs)->IsVolumeElement()) {
+                    Point<3> v0(0,0,0);
+                    Point<3> v1(0,0,0);
+
+                    for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                        const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                        v0 += weights.first * n;
+                        v1 += weights.second * n;
+                    }
+                    computedNormal = crossProduct(v1,v0);
+                }
+                else if ((*vIterFEs)->IsSurfaceElement()) {
+                    Point<3u> tangent(0,0,0);
+                    Point<3u> bitangent(0,0,0);
+
+                    for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                        const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                        tangent += weights.first * n;
+                        bitangent += weights.second * n;
+                    }
+                    double64 length = exteriorProductLength(tangent, bitangent);
+                    tangent.NormalizeLengthTo(1.0);
+                    computedNormal = bitangent - dotProduct(tangent,bitangent) * tangent;
+                    computedNormal.NormalizeLengthTo(length);
+                }
+                else if ((*vIterFEs)->IsLineElement()) {
+                    Point<3u> v0(0,0,0);
+                    for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
+                        const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                        v0 += weights.first * n;
+                    }
+                    computedNormal = v0;
+                }
+
+
+                double64 computedNormalLength(computedNormal.Length());
+                computedNormal.NormalizeLengthTo(1.0);
+                if ( verbose_ ) cout << "\nComputed normal: " << computedNormal[0] << ", " << computedNormal[1] << ", " << computedNormal[2];
+                if ( verbose_ ) cout << "\nComputed normal length: " << computedNormalLength;
+
+                //2. Find normal and area from the stencil
+                
+                const Point<3U> stencilNormal = vIterFVS->UnitParametricNormalTo(iFacet);
+                const double64 stencilArea = vIterFVS->FacetIntegrationWeight(iFacet, 0);
+                
+                //print normals
+                if ( verbose_ ) cout << "\nFrom stencil: " << stencilNormal[0] << ", " << stencilNormal[1] << ", " << stencilNormal[2] << endl;
+                
+                //3. Test the orientation of the normal and calcualted area
+                bool bEquivalent(true);
+                
+                for(size_t iVal = 0; iVal < 3; iVal++)
+                    bEquivalent &= ( fabs(computedNormal[iVal] - stencilNormal[iVal]) < 1.e-7 );
+                
+                _test(bEquivalent);
+                std::cerr << "\nElement type " << parseFiniteElementType(elType) << " facet " << iFacet << '\n';
+                _equal(stencilArea, computedNormalLength, 1.0e-8);
+            }
+        }
+    }
+    
+    
+    
 
 
 

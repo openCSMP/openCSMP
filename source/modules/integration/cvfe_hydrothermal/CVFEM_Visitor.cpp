@@ -67,7 +67,7 @@ void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
 {
 
     e.NodePropertyVector( variable_key, variable );
-    if (with_operand)
+  if (with_operand) {
       if (operand_key.place == NODE)
 	  {
          e.NodePropertyVector( operand_key, nodal_operand );
@@ -81,6 +81,7 @@ void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
          throw Exception( ERROR, "CVFEM_Visitor::GetOperands", 
                       " Operand variable must be placed on the node or element." );
 	  }
+  }
 
     for (lhs_it = lhs_operators.begin(); lhs_it < lhs_operators.end(); lhs_it++)
      {

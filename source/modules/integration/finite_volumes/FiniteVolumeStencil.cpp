@@ -57,6 +57,7 @@ FiniteVolumeStencil<dim>::FiniteVolumeStencil( const FiniteVolumeStencil<dim>& f
    facet_integration_weights(fvs.facet_integration_weights),
    facet_normals(fvs.facet_normals),
    facet_parametric_normals(fvs.facet_parametric_normals),
+   facet_normal_xforms(fvs.facet_normal_xforms),
    sector_integration_points(fvs.sector_integration_points),
    sector_integration_weights(fvs.sector_integration_weights),
    parent_element_(fvs.parent_element_),
@@ -91,6 +92,7 @@ FiniteVolumeStencil<dim>&  FiniteVolumeStencil<dim>::operator=( const FiniteVolu
           facet_integration_points   = fvs.facet_integration_points;  // [isrf][spts][dim]
           facet_integration_weights  = fvs.facet_integration_weights; // [isrf][spts]
           facet_normals              = fvs.facet_normals;             // [isrf][dim]
+          facet_normal_xforms        = fvs.facet_normal_xforms;       // [isrf][node]
           facet_parametric_normals   = fvs.facet_parametric_normals;  // [isrf][dim]
           sector_integration_points  = fvs.sector_integration_points;   // [ivol][vpts][dim]
           sector_integration_weights = fvs.sector_integration_weights;  // [ivol][vpts]
@@ -139,6 +141,7 @@ void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
     facet_integration_points.resize( n_isrf );
     facet_integration_weights.resize( n_isrf );
     facet_normals.resize( n_isrf );
+    facet_normal_xforms.resize( n_isrf );
     facet_parametric_normals.resize( n_isrf );
     facet_projection_weights.resize( n_isrf );    
     facets_surrounding_node.resize( n_ivol ); // ivol = nodes
@@ -154,6 +157,7 @@ void FiniteVolumeStencil<dim>::Resize( size_t n_isrf,
          facet_integration_points[i].resize( n_spts );
          facet_projection_weights[i].resize( n_spts );
          facet_integration_weights[i].resize( n_spts );
+         facet_normal_xforms[i].resize( n_ivol ); // ivol = nodes
       } 
     
     sector_integration_points.resize( n_ivol );
@@ -561,7 +565,7 @@ size_t  FiniteVolumeStencil<dim>::FacetSurroundingSector( size_t iSector, size_t
 
 /**
 
-Returns STL vector of the normal vector coordinates in parametric space of the FE.
+Returns the normal vector in parametric space of the FE.
  
 @param iFacet is the number 0..n-1 of the internal facet inside of the FE
 
@@ -589,6 +593,32 @@ double64 FiniteVolumeStencil<dim>::UnitParametricNormalComponent( size_t iFacet,
 
    return facet_parametric_normals[iFacet][x_or_y_or_z];
 } 
+
+
+/**
+
+Returns the component of the transformation from nodes to normals in physical space.
+ 
+@param iFacet is the number 0..n-1 of the internal facet inside of the FE
+
+@param iNode is the number 0..n-1 of the FE node
+
+@return a pair of weights, one for each tangent vector
+
+@section implementation Implementation
+
+Accesses the private data of the class, retreiving tabulated vector.
+
+*/
+
+template<size_t dim>
+std::pair<double64,double64>
+FiniteVolumeStencil<dim>::FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const
+{
+    assert( iFacet < facet_normal_xforms.size() );
+    assert( iNode < facet_normal_xforms[iFacet].size() );
+    return facet_normal_xforms[iFacet][iNode];
+}
 
 
 template<size_t dim>
@@ -716,7 +746,9 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FV.FacetIntegrationPoints(facet_integration_points);
              
           FV.FacetNormals(facet_parametric_normals);
-             
+
+          FV.FacetNormalTransformations(facet_normal_xforms);
+
           FV.FacetsSurroundingNode(facets_surrounding_node);
              
           FV.EdgePairs(edges_of_element);
@@ -764,7 +796,9 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FV.FacetIntegrationPoints(facet_integration_points);
              
           FV.FacetNormals(facet_parametric_normals);
-             
+
+          FV.FacetNormalTransformations(facet_normal_xforms);
+
           FV.FacetsSurroundingNode(facets_surrounding_node);
              
           FV.EdgePairs(edges_of_element);
@@ -811,7 +845,9 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
              FVT.FacetIntegrationPoints(facet_integration_points);
              
              FVT.FacetNormals(facet_parametric_normals);
-             
+
+             FVT.FacetNormalTransformations(facet_normal_xforms);
+
              FVT.FacetsSurroundingNode(facets_surrounding_node);
              
              FVT.EdgePairs(edges_of_element);
@@ -859,7 +895,9 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FVQ.FacetIntegrationPoints(facet_integration_points);
              
           FVQ.FacetNormals(facet_parametric_normals);
-             
+
+          FVQ.FacetNormalTransformations(facet_normal_xforms);
+
           FVQ.FacetsSurroundingNode(facets_surrounding_node);
             
           FVQ.EdgePairs(edges_of_element);
@@ -907,6 +945,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FVH.FacetIntegrationPoints(facet_integration_points);
              
           FVH.FacetNormals(facet_parametric_normals);
+
+          FVH.FacetNormalTransformations(facet_normal_xforms);
              
           FVH.FacetsSurroundingNode(facets_surrounding_node);
 
@@ -963,6 +1003,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FVPy.FacetIntegrationPoints(facet_integration_points);
              
           FVPy.FacetNormals(facet_parametric_normals);
+
+          FVPy.FacetNormalTransformations(facet_normal_xforms);
              
           FVPy.FacetsSurroundingNode(facets_surrounding_node);
           
@@ -1012,6 +1054,8 @@ void FiniteVolumeStencil<dim>::Initialize( const char* csp_finite_element_type )
           FVP.FacetIntegrationPoints(facet_integration_points);
              
           FVP.FacetNormals(facet_parametric_normals);
+
+          FVP.FacetNormalTransformations(facet_normal_xforms);
              
           FVP.FacetsSurroundingNode(facets_surrounding_node);
           

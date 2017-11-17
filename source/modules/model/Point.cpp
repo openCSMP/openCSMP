@@ -947,6 +947,25 @@ Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 )
 
 
 
+template<>
+double64 exteriorProductLength( const Point<1u>& p1, const Point<1u>& p2 )
+{
+    return 0.0;
+}
+
+template<>
+double64 exteriorProductLength( const Point<2u>& p1, const Point<2u>& p2 )
+{
+    return p1[0] * p2[1] - p1[1] * p2[0];
+}
+
+template<>
+double64 exteriorProductLength( const Point<3u>& p1, const Point<3u>& p2 )
+{
+    return crossProduct(p1,p2).Length();
+}
+
+
 /** crossProduct(2D)
 
 Watch out in 2D the cross product is not uniquely defined:

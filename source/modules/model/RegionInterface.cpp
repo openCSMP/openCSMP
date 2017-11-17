@@ -327,22 +327,18 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
     inside of the Model object. If the region was unique and element
     region IDs were set to it, these are reset to ULONG_MAX.
 
-    @attention Element objects will not be deleted but remain in the csmp::Mesh deque
-
     @param  regionName The name of the group object which shall be removed.
 
 
     @section messages Messages
 
-    @note: regions have no responsibility for element creation or deletion.
-    Thus, the element-deletion code in this method is flawed and creates defunct mutilated elements.
-    Avoid calling this option.
+    @note: this can trigger removal of elements
 
     @note If the region which shall be removed does not exist, the method reports a warning.
    
   */
   template<size_t dim, template<size_t> class REGION_COMPLEX>
-  void RegionInterface<dim,REGION_COMPLEX>::RemoveRegion( const char* regionName )
+  void RegionInterface<dim,REGION_COMPLEX>::RemoveRegion( const char* regionName, bool delete_elements )
    {
       // check whether region exists (should be a notice only, nothrow)
       if( !ContainsRegion( regionName ) )
@@ -356,12 +352,33 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                iterRegion      ( groupMap_.find( std::string(regionName) ) ),
                iterUniqueRegion( uniqueGroupMap_.find( std::string(regionName) ));
 
+       if (delete_elements) {
+           if (iterRegion != groupMap_.end()) {
+               ErrorHandler::Instance().notice(ERROR,
+                                     "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
+                                     "Attempt to delete elements from a non-unique region: ", regionName );
+
+           }
+           else {
+               auto& subdomain = iterUniqueRegion->second;
+
+               REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+               auto& meshMgr = regionComplex->Mesh();
+               auto spatialDimensions = subdomain.ElementSpatialDimensions();
+             
+
+               for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
+                   // XXX Bulk erase would be more efficient
+                   meshMgr.Erase( *(*eit) );
+               }
+           }
+     
+
       // if the group was found in the list, it is erased
       if ( iterRegion != groupMap_.end() )
            groupMap_.erase( std::string(regionName) );
       if ( iterUniqueRegion != uniqueGroupMap_.end() )
            uniqueGroupMap_.erase( std::string(regionName) );
-
    } // end RemoveRegion
 
 
@@ -1555,7 +1572,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
 
       // if the region has been partitioned succesfully and its name is not model, it will be removed
       if ( IsUnique(group) && !(strncmp( group, masterRegion_.c_str(), NAME_STRING ) == 0) )
-        RemoveRegion( group );
+        RemoveRegion( group, false );
 
       return n_subgroups;
     
@@ -1652,7 +1669,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
         }
 
       if( IsUnique( group ) && !(strncmp( group, "Model", NAME_STRING ) == 0) )
-          RemoveRegion( group );
+          RemoveRegion( group, false );
 
       return n_subgroups;
     
@@ -1761,7 +1778,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
       if ( !groups_to_remove.empty() ) std::cout <<"\nRegionsInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor: removing region(s): ";
       for ( std::set<std::string>::const_iterator it=groups_to_remove.begin(); it!=groups_to_remove.end(); it++ ) {  
            std::cout <<"'"<< (*it) <<"' ";
-           RemoveRegion( (*it).c_str() );
+           RemoveRegion( (*it).c_str(), false );
            groups_removed++;
         }
       if ( !groups_to_remove.empty() ) std::cout << std::endl << std::endl;
@@ -2440,7 +2457,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::RegionBetween( const char* group1, con
                  csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetween",
                                    "one of the supplied regions is not unique and they overlap",
                                    "It was therefore impossible to insert a boundary");
-                 regionComplex->RemoveRegion( "groupintersection" );
+                 regionComplex->RemoveRegion( "groupintersection", false );
                  return false;
              }
         }
