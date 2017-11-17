@@ -142,6 +142,7 @@ void TransientPressure_Example::Run()
   // 8.0 Variables for transient loop
   // --------------------------------
   VTK_Interface<2U>  vtk_output;
+  vtk_output.OutputDataToVTK( model, "hydraulic-condunctivity", "conductivity",  0 );
   // only write the results of the fault zone to jpg files because they will be too large otherwise
   JPEG_RegionInterface  jpg_output( model, "fault zone" );
 

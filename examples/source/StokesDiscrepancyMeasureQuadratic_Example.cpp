@@ -39,16 +39,17 @@ void StokesDiscrepancyMeasureQuadratic_Example::Specifications()
   AddRequirement( "one_sphere_0.45_tetra" );
 } // Initialize()
 
-void StokesDiscrepancyMeasureQuadratic_Example::Run()
-{
-  // *****************************************************************************************
-  /*
+
+  /** *****************************************************************************************
+  
        Stokes_discrepancy_measure:  calculates the difference between taking the Laplacian
                                     of the Darcy velocity when taking a parabolic scalar
                                     field as an operator and the Stokes flow approximation.
-  */
-  // *****************************************************************************************
 
+  *****************************************************************************************  */
+  
+void StokesDiscrepancyMeasureQuadratic_Example::Run()
+{
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
 
