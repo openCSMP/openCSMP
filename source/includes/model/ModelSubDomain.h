@@ -141,6 +141,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     // const iterators
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  InteriorNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  InteriorNodesEnd() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesEnd() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsBegin() const;

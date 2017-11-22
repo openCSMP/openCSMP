@@ -28,10 +28,13 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
     
     /// executes incremental time-stepping (a suitable time increment is computed by scheme)
     void AdvectVariable( double64 time_interval );
+
+    /// gets the model
+    const Model<dim>& GetModel() const;
   
   private:
     /// 1.a computations of facet flux using FacetFlux (facet flux) policy
-    void UpdateFacetFluxes();
+    void UpdateFacetFluxes(bool reuse_previous_velocity);
     
     /// 1.b computations of piecewise constatn element velocities and facet fluxes using FacetFlux (facet flux) policy
     void PostProcessVelocityAndUpdateFacetFluxes();
@@ -52,6 +55,7 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
     double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
   
   private:
+    Model<dim>& model_;
     Region<dim>& gref_;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
 };

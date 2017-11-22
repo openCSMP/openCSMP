@@ -1,4 +1,3 @@
-//
 //  FacetFlux_TracerTransferExplicit.cpp
 //
 //  Created by Stephan Matthai on 2/21/13.
@@ -11,10 +10,12 @@
 #include "Model.h"
 #include "TwoPhaseModel.h"
 #include "ExplicitTransport.h"
+#include "finiteVolumeFunctions.h"
 
 using namespace std;
 
 namespace csmp {
+
 
 
 /** 
@@ -27,39 +28,51 @@ namespace csmp {
  
 */
 template<size_t dim, template<size_t> class USER>
-void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( Element<dim>* eptr ) const
+void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>* eptr ) const
  {
    assert( eptr != NULL );
 
-   // element-based Darcy velocity
-   eptr->Read( User()->vD_key, vD_ );
+   FiniteVolumeHelper<dim> helper(eptr);
+   Point<dim> vD;
+   
+    if (!reuse_previous_velocity) {
+      // Compute Darcy velocity
+      const double64 K(eptr->Read(User()->k_key));
+      const double64 mu = User()->GetModel().Read(User()->mu_key);
+
+      helper.SetParametricCoordinate(eptr->FV()->Barycenter());
+      vD = -K/mu * helper.GradientOfScalarNodeProperty(User()->pf_key);
+      VectorVariable<dim> vD_var(vD);
+      eptr->Store(User()->propdb_.StorageKey("velocity"), vD_var);
+    }
 
    // computing total facet fluxes by projecting vt onto facet normals
-   const size_t facets(eptr->FV()->Facets());
-   for ( size_t j=0U; j<facets; ++j ) {
-        eptr->Read( j, 0U, User()->fn_key, nrml_ );
-        // projection (dot product)
-        double64 facet_flux = nrml_[0] * vD_[0];
-        if ( dim != 1U ) facet_flux += nrml_[1] * vD_[1];
-        if ( dim >  2U ) facet_flux += nrml_[2] * vD_[2];
-        // multiplication with facet area
-        facet_flux *= eptr->Read( j, 0U, User()->fA_key );
+   const size_t iNrOfFacets(eptr->FV()->Facets());
+   for ( size_t iFacet=0U; iFacet<iNrOfFacets; ++iFacet ) {
+     double64 facet_flux;
+     if (reuse_previous_velocity) {
+       facet_flux = eptr->Read( iFacet, 0U, User()->ff_key );
+     }
+     else {
+
+        // Calulate local normal
+        Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
+
+        // Projection. Note that facetNormal is scaled by the area.
+        facet_flux = dotProduct(facetNormal, vD);
 
         // storing the volumetric facet flux without altering the variables flag
-        const VARIABLE_FLAG flag1 = eptr->Status( j, 0U, User()->ff_key );
-        eptr->Store( j, 0U, User()->ff_key, makeScalar(flag1,facet_flux) );
-
-        // multiplying the volumetric flux with the upstream concentration
-        const size_t inside_node  = eptr->FV()->InsideNode( j );
-        const size_t outside_node = eptr->FV()->OutsideNode( j );
-        // fluxes are multiplied with upstream concentrations
-        if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->C0_key );
-        else                   facet_flux *= eptr->N(inside_node)->Read( User()->C0_key );
-
-        // storing facet flux concentration product without altering the variables flag
-        const VARIABLE_FLAG flag2 = eptr->Status( j, 0U, User()->ffC_key );
-        eptr->Store( j, 0U, User()->ffC_key, makeScalar(flag2,facet_flux) );
+        const VARIABLE_FLAG flag1 = eptr->Status( iFacet, 0U, User()->ff_key );
+        eptr->Store( iFacet, 0U, User()->ff_key, makeScalar(flag1,facet_flux) );
      }
+     // Get concentration from upwind node
+     auto upwind_node = (facet_flux < 0) ? eptr->FV()->OutsideNode(iFacet) :  eptr->FV()->InsideNode(iFacet);
+     const double64 c = eptr->N(upwind_node)->Read( User()->C0_key );
+     
+     // Store facet flux concentration
+     const double64 ffc = c * facet_flux;
+     eptr->Store( iFacet, 0u, User()->ffC_key, makeScalar(eptr->Status(iFacet, 0u, User()->ffC_key), ffc) );
+  }
    
  } // end AdvectiveFluxes
 
@@ -125,7 +138,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
      if ( nd_ptr->Status( User()->C0_key ) == DIRICH ) {
           // the new value is initialised to the old one and the flag is kept
           nd_ptr->Store( User()->C1_key, makeScalar( nd_ptr->Status( User()->C1_key ), nd_ptr->Read( User()->C0_key ) ) );
-// TODO: is this the correct treatment of the flux balance
+          // TODO: is this the correct treatment of the flux balance
           // the flux balance is set to zero
           nd_ptr->Store( User()->fb_key, makeScalar( nd_ptr->Status( User()->fb_key ), 0. ) );
           // and returned
@@ -135,14 +148,13 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
      // 2. a full finite volume is available so that influxes and outfluxes can be balanced
      // -----------------------------------------------------------------------------------
      if ( nd_ptr->AtBoundary() == NOT ) {
-          double64 flux_balance(0.), accumulation(0.);
+          double64 flux_balance(0.);
           const size_t node_parent_elements(nd_ptr->Parents());
           for ( size_t t=0U; t<node_parent_elements; t++ )
             {
               Element<dim>* const eptr(nd_ptr->Parent(t));
               assert( eptr != NULL );
               const size_t pnid(nd_ptr->ParentNodeNumber(t));
-              eptr->Read( User()->vD_key, vD_ );
 
               const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
               for ( size_t i=0U; i<sector_facets; i++ )
@@ -151,23 +163,18 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
                    const size_t inside_node(eptr->FV()->InsideNode(iFacet));
                    const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
 
-                   eptr->Read( iFacet, 0U, User()->fn_key, nrml_ );
-                   const double64  vD_n = vD_.DotProduct(nrml_);
-                   const double64  facetArea = eptr->Read( iFacet, 0U, User()->fA_key );
-                  
+                   const double64 ff = eptr->Read( iFacet, 0U, User()->ff_key );
+
                    // finding the upstream concentration
-                   const double64 C_upstream = (vD_n < 0.) ? eptr->N(outside_node)->Read( User()->C0_key ) :
+                   const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( User()->C0_key ) :
                                                              eptr->N(inside_node)->Read( User()->C0_key );
-                  
                    const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
                    // storing the facet flux
-                   eptr->Store( iFacet, 0U, User()->ff_key, makeScalar(eptr->Status(iFacet, 0U, User()->ff_key), sign * vD_n * facetArea * C_upstream) );
-                   flux_balance += sign * vD_n * facetArea;
-                   accumulation += sign * vD_n * facetArea * C_upstream;
+                   eptr->Store( iFacet, 0U, User()->ffC_key, makeScalar(eptr->Status(iFacet, 0U, User()->ffC_key), sign * ff * C_upstream) );
+                   flux_balance += sign * ff;
                 }
             } // end for loop for parent elements
      
-          nd_ptr->Store( User()->C1_key, makeScalar( nd_ptr->Status( User()->C1_key ), accumulation ) );
           nd_ptr->Store( User()->fb_key, makeScalar( nd_ptr->Status( User()->fb_key ), flux_balance ) );
           return flux_balance;
        }
@@ -184,38 +191,54 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
      //
      double64  inflow(0.); // (+) at an inflow boundary and negative at an outflow one
      double64  influx(0.); // the inflow upstream concentration product
-
+     const double64 mu = User()->GetModel().Read(User()->mu_key);
+    
      // for all FV SECTORS of FE_FV-stencils of this boundary finite volume
      const size_t node_parent_elements(nd_ptr->Parents());
      for ( size_t t=0U; t<node_parent_elements; t++ )
        {
-          const Element<dim>* const eptr(nd_ptr->Parent(t));
+          Element<dim>* const eptr(nd_ptr->Parent(t));
           assert( eptr != NULL );
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
-          eptr->Read( User()->vD_key, vD_ );
+           
+          const double64 K(eptr->Read(User()->k_key));
+           if (isnan(K)) {
+             // XXX AJB HACK
+             // Deleting boundaries during model creation means you can't set
+             // properties during configuration. Retaining the boundaries means
+             // that they are still included in the parents of a node.
+             //
+             // For now, we skip over any element which doesn't have a
+             // permeability. They are not the flow domain.
+             continue;
+           }
+           FiniteVolumeHelper<dim> helper(eptr);
+           helper.SetParametricCoordinate(eptr->FV()->Barycenter());
+          Point<dim> vD = -K/mu * helper.GradientOfScalarNodeProperty(User()->pf_key);
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
           const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+
           for ( size_t i=0U; i<sector_facets; i++ )
             {
                const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
                const size_t inside_node(eptr->FV()->InsideNode(iFacet));
                const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+                
+                Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
 
-               eptr->Read( iFacet, 0U, User()->fn_key, nrml_ );
-               const double64  normal_vel_component = vD_.DotProduct(nrml_);
-               const double64  facetArea = eptr->Read( iFacet, 0U, User()->fA_key );
+               const double64  normal_vel_component = dotProduct(vD, facetNormal);
               
                const double64 C_upstream = (normal_vel_component < 0.) ? eptr->N(outside_node)->Read( User()->C0_key ) :
                                                                          eptr->N(inside_node)->Read( User()->C0_key );
                if ( pnid == inside_node ) {
-                    inflow += normal_vel_component * facetArea;
-                    influx += normal_vel_component * facetArea * C_upstream;
+                    inflow -= normal_vel_component;
+                    influx -= normal_vel_component * C_upstream;
                  }
                else {
-                    inflow -= normal_vel_component * facetArea;
-                    influx -= normal_vel_component * facetArea * C_upstream;
+                    inflow += normal_vel_component;
+                    influx += normal_vel_component * C_upstream;
                  }
             }
        } // end for loop for parent elements

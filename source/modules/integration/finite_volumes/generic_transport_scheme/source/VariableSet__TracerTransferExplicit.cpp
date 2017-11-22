@@ -13,13 +13,10 @@ namespace csmp {
 
 template<size_t dim>
 VariableSet_TracerTransferExplicit<dim>::VariableSet_TracerTransferExplicit( const PropertyDatabase<dim>& p )
- : fA_key(p.StorageKey("facet area")),
-   fn_key(p.StorageKey("facet normal")),
-   fnk_key(p.StorageKey("facet normal permeability")),
+ : propdb_(p),
    ff_key(p.StorageKey("facet flux")),
-   ffC_key(p.StorageKey("facet flux concentration product")),
+   ffC_key(p.StorageKey("facet flux concentration")),
    PV_key(p.StorageKey("FV pore volume")),
-   spv_key(p.StorageKey("sector pore volume")),
    fb_key(p.StorageKey("flux balance")),
    nsrc_key(p.StorageKey("nodal fluid volume source")),
    //
@@ -27,7 +24,6 @@ VariableSet_TracerTransferExplicit<dim>::VariableSet_TracerTransferExplicit( con
    k_key(p.StorageKey("permeability")),
    phi_key(p.StorageKey("porosity")),
    thi_key(p.StorageKey("thickness")),
-   vD_key(p.StorageKey("velocity")),
    //
    mu_key(p.StorageKey("fluid viscosity")),
    rhof_key(p.StorageKey("fluid density")),
@@ -50,18 +46,23 @@ void VariableSet_TracerTransferExplicit<dim>::CheckVariables() const
        throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'pore volume' variable must be scalar placed on the nodes = node-centered finite volumes" );
 
-    if ( fn_key.place != FACET_INTEGRATION_POINT || fn_key.type != VECTOR )
+
+    if ( phi_key.place != ELEMENT || phi_key.type != SCALAR )
        throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
-                      "The 'facet normal' variable must be vector placed on the facet integration points" );
-   
-    if ( fA_key.place != FACET_INTEGRATION_POINT || fA_key.type != SCALAR )
+                      "The 'porosity' variable must be scalar placed on the nodes = node-centered finite volumes" );
+
+    if ( k_key.place != MODEL || k_key.type != SCALAR )
        throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
-                      "The 'facet area' variable must be scalar placed on the facet integration points" );
-   
-    if ( fn_key.place != FACET_INTEGRATION_POINT || fn_key.type != VECTOR )
+                      "The 'permeability' variable must be scalar placed on the model (this will be extended in the future)" );
+
+    if ( ff_key.place != FACET_INTEGRATION_POINT || ff_key.type != SCALAR )
        throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
-                      "The 'facet normal' variable must be vector placed on the facet integration points" );
-   
+                      "The 'facet flux' variable must be scalar placed on the facet integration points" );
+
+    if ( ffC_key.place != FACET_INTEGRATION_POINT || ffC_key.type != SCALAR )
+       throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
+                      "The 'facet flux concentration' variable must be scalar placed on the facet integration points" );
+
 // TODO: complete missing checks
 
 } // end CheckVariables

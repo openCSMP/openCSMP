@@ -16,16 +16,27 @@ using namespace std;
 
 namespace csmp {
 
+
+template<size_t dim>
+const Model<dim>&
+ExplicitTransport<dim>::GetModel() const
+{
+    return model_;
+}
+    
+
 template<size_t dim>
 ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region )
   : VariableSet_TracerTransferExplicit<dim>(m.Database()),
+    model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.)
  {
     m.InstantiateFiniteVolumes();
+     m.Region("Model").InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
+
     initializeFiniteVolumeProperties( m, m.Region(target_region) );
     // 0. model-wide initialisation: results will be accumulated into this variable
-    m.Region("Model").InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
    
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->C0_key), lower_limit_, upper_limit_ );
@@ -42,7 +53,7 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
     This method writes the correct balances onto the nodes on the perimeter.
 */
 template<size_t dim>
-void ExplicitTransport<dim>::UpdateFacetFluxes()
+void ExplicitTransport<dim>::UpdateFacetFluxes(bool reuse_previous_velocity)
  {
      // 1. element-by-element processing of the facet fluxes
      const typename vector<Element<dim>*>::iterator elements_end(gref_.ElementsEnd());
@@ -52,13 +63,13 @@ void ExplicitTransport<dim>::UpdateFacetFluxes()
           // 1.1 computation of transport velocity from fluid pressure gradient
        
           // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
-          this->Advective_O1_FluxesInterior( (*eit) );
+          this->Advective_O1_FluxesInterior( reuse_previous_velocity, (*eit) );
        }
 
      // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
-     const typename vector<Node<dim>*>::iterator nodes_end(gref_.NodesEnd());
+     const typename vector<Node<dim>*>::iterator pnodes_end(gref_.PerimeterNodesEnd());
      for ( typename vector<Node<dim>*>::iterator
-           nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
+           nit=gref_.PerimeterNodesBegin(); nit!=pnodes_end; ++nit )
        {
           // computing flux balances and concentration-facet flux products where possible,
           // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
@@ -87,9 +98,8 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      double64 dt_min(max_time_increment);
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
-     const typename vector<Node<dim>*>::iterator interior_nodes_end(gref_.PerimeterNodesBegin());
-     for ( typename vector<Node<dim>*>::iterator
-           nit=gref_.NodesBegin(); nit!=interior_nodes_end; ++nit )
+     auto interior_nodes_end(gref_.InteriorNodesEnd());
+     for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
           // computes time-increment, flux balance, and flux-concentration product balance
@@ -98,7 +108,7 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
        }
 
      // 2. collecting time-stepping constraints from FVs on region perimeter
-     const typename vector<Node<dim>*>::const_iterator nodes_end(gref_.NodesEnd());
+     const typename vector<Node<dim>*>::const_iterator nodes_end(gref_.PerimeterNodesEnd());
      for ( typename vector<Node<dim>*>::const_iterator
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
@@ -119,7 +129,6 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
 template<size_t dim>
 double64 ExplicitTransport<dim>::TimeIncrement()
  {
-    UpdateFacetFluxes();
     return TimeIncrementAndFluxBalance( 356. * 86400. );
  }
 
@@ -148,21 +157,55 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
          // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
-         double64 accumulation = (*nit)->Read(this->C1_key);
-        
-         // 2. correcting this sum for div vD using 'flux balance' except for at model boundary
-         //if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulation * (*nit)->Read( this->fb_key );
-         accumulation -= accumulation * (*nit)->Read( this->fb_key );
-        
-         // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-         accumulation = (*nit)->Read(this->C0_key) - (delta_t/(*nit)->Read(this->PV_key)) * accumulation;
+        const double64 c0 = (*nit)->Read(this->C0_key);
+        const double64 pv = (*nit)->Read(this->PV_key);
+        const double64 fb = (*nit)->Read(this->fb_key);
 
-         // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
-         // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-         const double64 source((*nit)->Read(this->nsrc_key));
-         //                               new concentration
-         accumulation += source * (*nit)->Read(this->C1_key) * delta_t;
+        const double64 source((*nit)->Read(this->nsrc_key));
+        const size_t node_parent_elements((*nit)->Parents());
+        double64 accumulation = 0;
+        // Solve C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [C vD]
+
+        for ( size_t t=0U; t<node_parent_elements; t++ )
+        {
+          Element<dim>* const eptr((*nit)->Parent(t));
+          assert( eptr != NULL );
+          const size_t pnid((*nit)->ParentNodeNumber(t));
+          FiniteVolumeHelper<dim> helper(eptr);
+          
+          const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+          for ( size_t i=0U; i<sector_facets; i++ )
+          {
+            size_t facet = eptr->FV()->FacetSurroundingSector(pnid, i);
+            double64 ffc = eptr->Read(facet, 0, this->ffC_key);
+            if (isnan(ffc)) {
+              // XXX AJB HACK
+              // Facets with no facet flux concentration are boundary facets
+              // which haven't been removed. This is a hacky solution.
+              continue;
+            }
+
+            const size_t inside_node  = eptr->FV()->InsideNode( facet );
+            double64 sign = (*nit == eptr->N(inside_node)) ? +1.0 : -1.0;
+            accumulation += sign * ffc;
+            
+          }
+        }
+        // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
+        accumulation = c0 - (delta_t/pv) * accumulation;
         
+        // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
+        // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
+        //                               new concentration
+        accumulation += source * c0 * delta_t;
+        
+#if 0
+        // XXX AJB VERIFY THIS
+        // correcting this sum for div vD using 'flux balance' except for at model boundary
+        //if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulatio * (*nit)->Read( this->fb_key );
+        accumulation -= accumulation * fb;
+#endif
+
          // 5. storing the new concentration
          (*nit)->Store( this->C1_key, makeScalar( (*nit)->Status(this->C1_key), accumulation ) );
     }
@@ -226,16 +269,18 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
     typename vector<Node<dim>*>::iterator nit = gref_.NodesBegin();
 
-    double64        amin(1.),  // = (*nit)->Read( this->so1_key ),
-                    amax(0.),  // = (*nit)->Read( this->so1_key ),
+    double64        amin(+std::numeric_limits<double64>::max()),  // = (*nit)->Read( this->so1_key ),
+                    amax(-std::numeric_limits<double64>::max()),  // = (*nit)->Read( this->so1_key ),
                     difference_to_last_output(0.);
     size_t          error_counter(0);
     ScalarVariable  C1;
    
+    std::map<VARIABLE_FLAG,size_t> histo;
     while ( nit != nodes_end )
        {
           const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
-          if ( status != DIRICH )
+         ++histo[status];
+          if ((*nit)->AtBoundary() != NOT )
             {
                // reading the newly computed saturation values
                (*nit)->Read( this->C1_key, C1 );
@@ -294,11 +339,12 @@ template<size_t dim>
 void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
     // 1. computing (velocity and) facet fluxes as necessary
-    UpdateFacetFluxes();
+    const bool reuse_previous_velocity = false;
+    UpdateFacetFluxes(reuse_previous_velocity);
    
     // 2. evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
-   
+
     const double64 one(1.);
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
     cout <<"\n\tTime interval         = "<< time_interval;
@@ -312,30 +358,35 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     // time incrementation loop
     while ( time < time_interval ) {
           cout <<"\n\n\tadvection (sub)step: "<< substep;
+
           if ( (time_interval - time) < time_increment ) time_increment = time_interval - time;
 
           // 3. Solve C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [C vD]
           //     - a single loop over all nodes is required
           //     - this steps also considers in and outflow of finite volume cells
           //     - (distributed) sources and sinks will be considered
+
           const bool with_divergence_correction(false);
           AssembleSolution( time_increment, with_divergence_correction );
-      
+    
+#if 1
 // testing
 double64 so1_min, so1_max;
 gref_.MinMaxOf( "new concentration", so1_min, so1_max );
 cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
+#endif
 
           // 4. 'new saturation oil' is used to replace 'saturation oil' performing a range check
           const bool range_check(true);
           const bool show_range(true);
           VerifyAndAssignResults( show_range, range_check );
 
-          UpdateFacetFluxes();
-      
+          time += time_increment;
           time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
 
-          time += time_increment;
+          const bool reuse_previous_velocity = true;
+          UpdateFacetFluxes(reuse_previous_velocity);
+
           substep++;
       }
 

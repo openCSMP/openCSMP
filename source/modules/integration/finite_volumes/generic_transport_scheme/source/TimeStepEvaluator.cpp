@@ -102,7 +102,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
      // 3. recording the flux concentration product balance
      nptr->Store( User()->C1_key, makeScalar(nptr->Status(User()->C1_key),flux_concentration_products) );
 
-     return std::max( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrement
 
@@ -126,7 +126,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
          // 1.1 (phi * V) / q_out = dt
          const double64 flux_balance = std::max( fabs( nptr->Read( User()->fb_key )), fluid_source );
          if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-         return std::max( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+         return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
       }
  
     // 2. for a perimeter FV that is intact, the volumetric outflow needs to be calculated 
@@ -148,7 +148,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
 
      // (phi * V) / q_out = dt
      if ( outflow < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-     return std::max( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrementBoundary
 

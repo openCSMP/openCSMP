@@ -16,6 +16,7 @@
 
 using namespace std;
 
+
 namespace csmp {
 
 /**
@@ -38,22 +39,18 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
     const csmp::Index phi_key = model.Database().StorageKey("porosity");
     const csmp::Index thi_key = model.Database().StorageKey("thickness");
     const csmp::Index vt_key  = model.Database().StorageKey("velocity");
+    const csmp::Index k_key  = model.Database().StorageKey("permeability");
+     const csmp::Index pf_key  = model.Database().StorageKey("fluid pressure");
 
-    const csmp::Index fv_key  = model.Database().StorageKey("finite volume");
     const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
-    const csmp::Index sv_key  = model.Database().StorageKey("sector volume");
-    const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::Index fa_key  = model.Database().StorageKey("facet area");
+    // const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
     const csmp::Index ff_key  = model.Database().StorageKey("facet flux");
-    const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
     const csmp::Index fb_key  = model.Database().StorageKey("flux balance");
    
-    Point<dim>           nrml;
-    VectorVariable<dim>  fnrml, vt;
+     Point<dim> vD;
    
     // 0. zeroing sector pore volumes for accumulation in element loop
     // ---------------------------------------------------------------
-    gref.InputPropertyValue( "finite volume", makeScalar(PLAIN,0.), COMPLETE );
     gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
     gref.InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );
    
@@ -62,10 +59,16 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
     for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
       {
          const size_t sectors((*it)->Sectors());
-         const size_t facets((*it)->Facets());
+          const size_t facets((*it)->Facets());
+
+         FiniteVolumeHelper<dim> helper(*it);
 
          // element-based total velocity
-         if ( initialize_flux ) (*it)->Read( vt_key, vt );
+          if ( initialize_flux ) {
+              const double64 K((*it)->Read(k_key));
+              helper.SetParametricCoordinate((*it)->FV()->Barycenter());
+              vD = -K * helper.GradientOfScalarNodeProperty(pf_key);
+          }
 
          // 1. computing sector pore volumes
          // --------------------------------
@@ -74,67 +77,32 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
          for ( size_t i=0U; i<sectors; ++i ) {
               // sector pore volume
               const double64 sector_volume = (*it)->SectorVolume(i);
-              (*it)->Store( i, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
-              (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
+              // (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
               // sector volume is added to  pore volume of FV's containing this sector
-              double64 finite_volume = (*it)->N(i)->Read( fv_key );
               double64 pore_volume   = (*it)->N(i)->Read( pv_key );
               // sector volume from FV traits
-              finite_volume += sector_volume;
               pore_volume   += phi * sector_volume;
-              (*it)->N(i)->Store( fv_key, makeScalar(PLAIN,finite_volume) );
               (*it)->N(i)->Store( pv_key, makeScalar(PLAIN,pore_volume) );
            }
-
-         // 2. computing facet normals and areas
-         // ------------------------------------
-         for ( size_t j=0U; j<facets; ++j ) {
-              // computing facet areas
-              const double64 facet_area = (*it)->FacetArea(j);
-              (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
-              // computing facet normals
-              nrml = (*it)->FacetNormal(j);
-              fnrml(0) = nrml[0];
-              if ( dim != 1U ) fnrml(1) = nrml[1];
-              if ( dim == 3U ) fnrml(2) = nrml[2];
-              (*it)->Store( j, 0U, fn_key, fnrml );
-           
-              // 3. computing total facet fluxes and flux balance
-              // ------------------------------------------------
-              if ( initialize_flux ) {
-                   double64 facet_flux(nrml[0] * vt[0]);
-                   if ( dim != 1U ) facet_flux += nrml[1] * vt[1];
-                   if ( dim == 3U ) facet_flux += nrml[2] * vt[2];
-                   facet_flux *= facet_area;
-                   (*it)->Store( j, 0U, ff_key, makeScalar((*it)->Status( j, 0U, ff_key),facet_flux) );
-                }
-           }
+          if ( initialize_flux ) {
+              for ( size_t i=0U; i<facets; ++i ) {
+                  Point<dim> facetNormal(helper.NormalOfFacet(i));
+                  const double64  facet_flux = dotProduct(vD, facetNormal);
+                  (*it)->Store( i, 0U, ff_key, makeScalar( PLAIN, facet_flux ) );
+              }
+          }
       }
 
-   // 4. initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
+   // 4. initialising sector pore volume in the elements surrounding perimeter nodes
    // -------------------------------------------------------------------------------------------------------------------
    // (here the pore volumes do not include the sectors outside the region)
+#if 0
    const typename vector<Node<dim>*>::iterator nit_end(gref.NodesEnd());
-   
    for ( typename vector<Node<dim>*>::iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const size_t parent_elements((*nit)->Parents());
         for ( size_t i=0U; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
-             // ---------------------------------
-             // computing facet normals and areas
-             // ---------------------------------
-             const size_t facets(eptr->Facets());
-             for ( size_t j=0U; j<facets; ++j ) {
-                  // computing facet areas
-                  const double64 facet_area = eptr->FacetArea(j);
-                  eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
-                  // computing facet normals
-                  nrml = eptr->FacetNormal(j);
-                  fnrml(0) = nrml[0];
-                  if ( dim != 1U ) fnrml(1) = nrml[1];
-                  if ( dim == 3U ) fnrml(2) = nrml[2];
-                  eptr->Store( j, 0U, fn_key, fnrml );
-               }
+
              // ---------------------------------------
              // computing sector volumes & pore volumes
              // ---------------------------------------
@@ -142,27 +110,32 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
              const size_t sectors(eptr->Sectors());
              for ( size_t j=0U; j<sectors; ++j ) {
                   const double64 sector_volume = eptr->SectorVolume(j);
-                  eptr->Store( j, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
                }
           }
      }
-         
+#endif
+     
    // 5. computing FV flux balances over the complete stencils
    // --------------------------------------------------------
-   if ( initialize_flux ) {
-        // loop over FV stencils, computing the relevant variable values
-     
+   if ( initialize_flux ) {        // loop over FV stencils, computing the relevant variable values
         const typename vector<Node<dim>*>::iterator nit_end(gref.NodesEnd());
         double64 bmin(1e30), bmax(-1e30);
      
-        for ( typename vector<Node<dim>*>::iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit )
+     for ( typename vector<Node<dim>*>::iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit ) {
+       if (!model.Mesh().VerifyNode(*nit)) {
+         std::cerr << "Problem!\n";
+       }
+
           if ( (*nit)->AtBoundary() != NOT )
             {
                const size_t parent_elements((*nit)->Parents());
                double64 flux_balance(0.);
                for ( size_t i=0U; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
+                 if (!model.Mesh().VerifyElement(eptr)) {
+                   std::cerr << "Problem!\n";
+                 }
                     const size_t sector_node      = (*nit)->ParentNodeNumber(i);
                     for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                          const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
@@ -176,6 +149,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
                bmin = std::min( bmin, (*nit)->Read( fb_key ) );
                bmax = std::max( bmax, (*nit)->Read( fb_key ) );
             }
+     }
         cout <<"\ninitializeFiniteVolumeProperties: initial flux balance: "<< std::max(fabs(bmin), fabs(bmax)) << endl;
      }
  
@@ -228,6 +202,171 @@ template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>& );
 
 
 
+
+
+template<size_t dim>
+FiniteVolumeHelper<dim>::FiniteVolumeHelper(Element<dim>* eptr)
+    : eptr_(eptr)
+{
+    if (eptr_->IsLineElement()) {
+        element_dim_ = 1;
+    }
+    else if (eptr_->IsSurfaceElement()) {
+        element_dim_ = 2;
+    }
+    else if (eptr_->IsVolumeElement()) {
+        element_dim_ = 3;
+    }
+
+    num_nodes_ = eptr->Nodes();
+    eptr->CoordinateMatrix();
+}
+
+
+
+template<size_t dim>
+void
+FiniteVolumeHelper<dim>::SetParametricCoordinate( const Point<dim>& p )
+{
+    for (unsigned i = 0; i < element_dim_; ++i) {
+        DN_[i].resize(num_nodes_);
+    }
+
+    CalculateDN(p);
+}
+
+
+
+template<size_t dim>
+Point<dim>
+FiniteVolumeHelper<dim>::GradientOfScalarNodeProperty( const csmp::Index& prop ) const
+{
+    Point<dim> grad(0.);
+    for ( size_t i=0U; i<num_nodes_; ++i ) {
+        const double64 value_at_node(eptr_->N(i)->Read(prop));
+        for (size_t j = 0; j < element_dim_; ++j) {
+            grad[j] += DN_[j][i] * value_at_node;
+        }
+    }
+    eptr_->FE()->JacobianInverse();
+    
+    return Point<dim>(eptr_->FE()->JINV * grad.Coordinates());
+}
+
+
+template<size_t dim>
+Point<dim>
+FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
+{
+    switch (element_dim_) {
+        case 1:
+        {
+            Point<dim> normal;
+            const size_t iNrNodes(eptr_->Nodes());
+            for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+                const Point<dim> n(eptr_->N(iNode)->Coordinate());
+                auto weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                normal += weights.first * n;
+            }
+            return normal;
+        }
+
+        case 2:
+        {
+            Point<dim> tangent;
+            Point<dim> bitangent;
+            const size_t iNrNodes(eptr_->Nodes());
+            for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+                const Point<dim> n(eptr_->N(iNode)->Coordinate());
+                auto weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                tangent += weights.first * n;
+                bitangent += weights.second * n;
+            }
+            double64 length = exteriorProductLength(tangent, bitangent);
+            tangent.NormalizeLengthTo(1.0);
+            Point<dim> normal = bitangent - dotProduct(tangent,bitangent) * tangent;
+            normal.NormalizeLengthTo(length);
+            return normal;
+        }
+
+        case 3:
+        {
+            Point<dim> v0(0.0);
+            Point<dim> v1(0.0);
+            const size_t iNrNodes(eptr_->Nodes());
+            for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
+                auto xform_weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                const Point<dim> n(eptr_->N(iNode)->Coordinate());
+                v0 += xform_weights.first * n;
+                v1 += xform_weights.second * n;
+            }
+            return crossProduct(v1, v0);
+        }
+    }
+}
+
+
+template<>
+void
+FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p)
+{
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+        case 1:
+            fe->dNr(p[0], DN_[0]);
+            fe->Jacobian( DN_[0] );
+            
+    }
+}
+
+
+template<>
+void
+FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p)
+{
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+        case 1:
+            fe->dNr(p[0], DN_[0]);
+            fe->Jacobian( DN_[0] );
+            break;
+
+        case 2:
+            fe->dNr(p[0], p[1], DN_[0]);
+            fe->dNs(p[0], p[1], DN_[1]);
+            fe->Jacobian( DN_[0], DN_[1] );
+            break;
+    }
+}
+
+
+template<>
+void
+FiniteVolumeHelper<3u>::CalculateDN(const Point<3u>& p)
+{
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+        case 3:
+            fe->dNr(p[0], p[1], p[2], DN_[0]);
+            fe->dNs(p[0], p[1], p[2], DN_[1]);
+            fe->dNt(p[0], p[1], p[2], DN_[2]);
+            fe->Jacobian( DN_[0], DN_[1], DN_[2] );
+            break;
+        case 2:
+            fe->dNs(p[0], p[1], DN_[1]);
+            fe->Jacobian( DN_[0], DN_[1] );
+            break;
+        case 1:
+            fe->dNr(p[0], DN_[0]);
+            fe->Jacobian( DN_[0] );
+            break;
+    }
+}
+
+
+template class FiniteVolumeHelper<1u>;
+template class FiniteVolumeHelper<2u>;
+template class FiniteVolumeHelper<3u>;
 
 
 } // end csmp

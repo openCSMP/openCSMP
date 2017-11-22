@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
 
+#define CATCH_CONFIG_RUNNER
+#include "catch.hpp"
+
 #include "CSMP_definitions.h"
 #include "Exception.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -162,6 +165,12 @@ int main()
        fails_composite(0),
        fails_new_developments(0),
        total_failures(0);
+
+  {
+      // Run Catch tests.
+      Catch::Session session;
+      session.run();
+  }
 
   try {
         cout <<"\nunit_test_main: running tests..."<< endl;

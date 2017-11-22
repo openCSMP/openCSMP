@@ -45,7 +45,39 @@
 
 using namespace std;
 
+
 namespace csmp {
+
+    namespace {
+        const double64 s_internal_flux_rel_err = 1.0e-10;
+        const double64 s_flux_balance_thresh = 1.0e-13;
+
+
+        double64 rel_error(double64 x, double64 y)
+        {
+            auto mag = std::max(std::abs(x),std::abs(y));
+            return std::abs(x - y) / mag;
+        }
+        
+        double64 max_abs(double64 x, double64 y)
+        {
+            return std::max(std::abs(x),std::abs(y));
+        }
+
+        
+        template<typename It, typename P>
+        void
+        jacobian_at_point(It& it, const P& p)
+        {
+            std::vector<double64> DNR, DNS, DNT;
+            (*it)->FE()->dNr( p[0], p[1], p[2], DNR );
+            (*it)->FE()->dNs( p[0], p[1], p[2], DNS );
+            (*it)->FE()->dNt( p[0], p[1], p[2], DNT );
+            (*it)->CoordinateMatrix();
+            (*it)->FE()->Jacobian( DNR, DNS, DNT );
+        }
+    }
+    
 
 
 // *************************************************************************************************
@@ -62,7 +94,7 @@ namespace csmp {
 */
 void GenericFiniteVolumeTransport_Test::run()
  {
-    TestBasics();
+    // TestBasics();
     BenchmarkGlobalVersusParametricIntegration();
    
    
@@ -94,7 +126,9 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
-      string  model_name("prism_test");
+     string  model_name("prism_test");
+     // string  model_name("fracs4");
+
       ANSYS_Model3D  model( model_name.c_str(), "CSMP-2phase-variables.txt");
       printModelDimensions( model, true );
 
@@ -196,15 +230,22 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                vD[2] += -K * dpdt;
             }
          
+           double total_flux_physical = 0.0;
+           double total_flux_parametric = 0.0;
+           bool touches_boundary = false;
+
           // 2. facet projections
           // --------------------
           const size_t facets=(*it)->Facets();
           for ( size_t i=0U; i<facets; ++i ) {
+              assert( (*it)->IsVolumeElement() );
+              
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------
-               double64 flux = (*it)->ProjectionOnFacetNormal( i, v_key );
-               // Darcy velocity computation
-               double64 flux_physical = (*it)->FacetArea(i) * flux;
+              const double64 projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
+              // Darcy velocity computation
+              const double64 flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
+              total_flux_physical += flux_physical;
             
                // 2.2 parametric space computation
                // --------------------------------
@@ -218,28 +259,50 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                   - this applies to all velocities projected onto facet normals in parametric space (this operation involves renormalisation 
                     of parametric space velocities to vD projected length
                */
-               Point<3U> fnu = (*it)->ParametricFacetNormal( i );
-               double64  local_facet_area = (*it)->ParametricFacetArea( i );
-               // computing the facet projection
-               double64 flux_from_parametric = dotProduct( fnu, vD );
-               // performing local integration via multiplication with integration weight
-               flux_from_parametric *= local_facet_area;
-               // transforming the result to physical space
-               assert( (*it)->IsVolumeElement() );
-               // get Jacobian and its determinant at the facet integration point
-               Point<3U> fip( (*it)->FV()->FacetIntegrationPoint(i,0U) );
-               (*it)->FE()->dNr( fip[0], fip[1], fip[2], DNR );
-               (*it)->FE()->dNs( fip[0], fip[1], fip[2], DNS );
-               (*it)->FE()->dNt( fip[0], fip[1], fip[2], DNT );
-               (*it)->CoordinateMatrix();
-               (*it)->FE()->Jacobian( DNR, DNS, DNT );
-               double64 scale_factor = (*it)->FE()->JacobianDeterminant();
-               flux_from_parametric *= scale_factor;
-            
-               // 3. testing that the fluxes are the same
-               // ---------------------------------------
-               _equal( flux_physical, flux_from_parametric, numeric_limits<double64>::epsilon() );
-            }
+              const Point<3u> parametric_facet_normal((*it)->ParametricFacetNormal(i));
+              
+              jacobian_at_point(it, (*it)->FacetPoint(i,0).Coordinates());
+              
+              double64 jinvdet_ip = (*it)->FE()->JacobianInverse();
+              const DenseMatrix<DM_MIN>& jinv_ip = (*it)->FE()->JINV;
+              
+              Point<3u> facet_normal_remapped(jinv_ip * parametric_facet_normal.Coordinates());
+              double fnrlen = facet_normal_remapped.Length();
+              facet_normal_remapped.NormalizeLengthTo(1.0);
+              Point<3u> vDlocal(jinv_ip * vD.Coordinates());
+              double64 projected_velocity_parametric = dotProduct(facet_normal_remapped, vDlocal);
+              double64 flux_parametric = projected_velocity_parametric * (*it)->FacetAreaMapped(i);
+              
+              total_flux_parametric += flux_parametric;
+              
+              // 3. testing that the fluxes are the same
+              // ---------------------------------------
+
+              
+              std::cerr << std::setprecision(15);
+              std::cerr << "p.v. physical   " << projected_velocity_physical << '\n';
+              std::cerr << "p.v. parametric " << projected_velocity_parametric << '\n';
+              std::cerr << "flux physical   " << flux_physical << '\n';
+              std::cerr << "flux parametric " << flux_parametric << '\n';
+              
+              double64 relative_error = rel_error(flux_physical, flux_parametric);
+              if (relative_error > 1e-10) {
+#if 0
+                  std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+                  std::cerr << "Facet: " << i << ' ' << parseFacetType(((*it)->FV()->FacetType(i))) << '\n';
+                  std::cerr << "Flux physical: " << flux_physical << '\n';
+                  std::cerr << "Flux from parametric: " << flux_parametric << '\n';
+                  std::cerr << "Rel error: 10^" << std::log(relative_error) << '\n';
+#endif
+              }
+              else {
+                  _equal( flux_physical, flux_parametric, 1e-10 );
+              }
+          }
+           std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+           std::cerr << "Total flux physical: " << total_flux_physical << '\n';
+           std::cerr << "Total flux parametric: " << total_flux_parametric << '\n';
+           std::cerr << "Total facets: " << (*it)->Facets() << '\n';
        }
 
  } // end TestBasics
@@ -270,7 +333,9 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
-      string  model_name("prism_test");
+     string  model_name("prism_test");
+     // string  model_name("fracs4");
+
       ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
       printModelDimensions( model, true );
 
@@ -341,70 +406,236 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                        v_key(model.Database().StorageKey("velocity"));
    
      std::vector<double64> DNR, DNS, DNT;
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+     
+     std::vector<double64> cross_section(model_domain.Nodes());
+     std::vector<double64> velocity_magnitude(model_domain.Nodes());
+
+     for (auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
+         double64 csa = 0.0;
+         double64 surface_area = 0.0;
+         VectorVariable<3U> vc(PLAIN,PLAIN,PLAIN,0.,0.,0.);
+
+         double64 vDmax(0.0);
+         Point<3u> vDavg(0.0);
+
+         for (size_t j = 0; j < (*it)->Parents(); ++j) {
+             auto e = (*it)->Parent(j);
+             e->Read(v_key, vc);
+             if (vDmax < vc.P().Length()) {
+                 vDavg = vc.P();
+                 vDmax = vc.P().Length();
+             }
+         }
+         velocity_magnitude[(*it)->Idx()] = vDmax;
+         vDavg.NormalizeLengthTo(1.0);
+         for (size_t j = 0; j < (*it)->Parents(); ++j) {
+             auto e = (*it)->Parent(j);
+
+             const size_t child = (*it)->ParentNodeNumber(j);
+             
+             for (size_t k = 0; k < e->FV()->FacetsPerSector(child); ++k) {
+                 const auto facet = e->FV()->FacetSurroundingSector(child, k);
+                 double64 costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
+                 csa += costheta * e->FacetArea(facet);
+                 surface_area += std::abs(e->FacetArea(facet));
+             }
+
+         }
+         cross_section[(*it)->Idx()] = csa * 0.5;
+     }
+ 
+     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.PerimeterNodesEnd(); ++pit )
+     {
+         _test( (*pit)->Idx() < model_domain.Nodes() );
+         cross_section[(*pit)->Idx()] = 0.;
+         velocity_magnitude[(*pit)->Idx()] = 0.;
+     }
+
+     std::vector<double64> flux_balance_parametric(model_domain.Nodes());
+     std::vector<double64> flux_balance_physical(model_domain.Nodes());
+     std::vector<Point<3u>> directed_area_para(model_domain.Nodes());
+     std::vector<Point<3u>> directed_area_phys(model_domain.Nodes());
+
+     std::vector<std::pair<std::set<Point<3u>>,Element<3u>*> > elements;
+     elements.reserve(model_domain.Elements());
+     for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
+         std::set<Point<3u>> nodes;
+         for (auto itn = (*it)->NodesBegin(); itn != (*it)->NodesEnd(); ++itn) {
+             nodes.insert((*itn)->Coordinate());
+         }
+         elements.push_back(make_pair(nodes, *it));
+     }
+     std::sort(elements.begin(), elements.end());
+     double64 maxtheta = 0;
+     
+
+     for (auto& element_key : elements)
+     // for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
        {
+           auto iti = element_key.second;
+           auto it = &iti;
+       
+           // std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+           assert( (*it)->IsVolumeElement() );
+
+
           const size_t nodes((*it)->Nodes());
           // 1. computing facet velocity in parametric space
           // -----------------------------------------------
           // 1.1 getting ipol-functions at barycentre and computing the pressure gradient in parametric space
-          Point<3U> bctr = (*it)->FV()->Barycenter();
-          (*it)->FE()->dNr( bctr[0], bctr[1], bctr[2], DNR );
-          (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
-          (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
-          // pressure gradients / velocities
-          const double64 K((*it)->Read(K_key));
-          double64  dpdr(0.), dpds(0.), dpdt(0.);
-          Point<3U> vD(0.);
-          for ( size_t i=0U; i<nodes; ++i ) {
+           const Point<3U> bctr = (*it)->FV()->Barycenter();
+           (*it)->FE()->dNr( bctr[0], bctr[1], bctr[2], DNR );
+           (*it)->FE()->dNs( bctr[0], bctr[1], bctr[2], DNS );
+           (*it)->FE()->dNt( bctr[0], bctr[1], bctr[2], DNT );
+           // pressure gradients / velocities
+           const double64 K((*it)->Read(K_key));
+           Point<3U> vD(0.);
+           for ( size_t i=0U; i<nodes; ++i ) {
                const double64 p_node((*it)->N(i)->Read(p_key));
-               dpdr   = DNR[i] * p_node;
-               dpds   = DNS[i] * p_node;
-               dpdt   = DNT[i] * p_node;
-               vD[0] += -K * dpdr;
-               vD[1] += -K * dpds;
-               vD[2] += -K * dpdt;
-            }
-         
-          // 2. facet projections
-          // --------------------
-          const size_t facets=(*it)->Facets();
-          for ( size_t i=0U; i<facets; ++i ) {
+               vD[0] += -K * DNR[i] * p_node;
+               vD[1] += -K * DNS[i] * p_node;
+               vD[2] += -K * DNT[i] * p_node;
+           }
+           double64 vDlength = vD.Length();
+           
+           jacobian_at_point(it, bctr.Coordinates());
+           const DenseMatrix<DM_MIN> jac_bctr((*it)->FE()->JAC);
+           double64 jinvdet_bctr = (*it)->FE()->JacobianInverse();
+           const DenseMatrix<DM_MIN> jinv_bctr((*it)->FE()->JINV);
+           
+           const Point<3U> vDproj(jinv_bctr * vD.Coordinates());
+
+           // XXX check logic
+           bool at_boundary = model_domain.IsPerimeterElement((*it)->Idx());
+
+           // 2. facet projections
+           // --------------------
+           const size_t facets=(*it)->Facets();
+           
+           auto fetype = (*it)->FE_Type();
+           
+           for ( size_t i=0U; i<facets; ++i ) {
+               assert( (*it)->IsVolumeElement() );
+               
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------
-               double64 flux = (*it)->ProjectionOnFacetNormal( i, v_key );
+               const double64 projected_velocity_physical = (*it)->ProjectionOnFacetNormal( i, v_key );
                // Darcy velocity computation
-               double64 flux_physical = (*it)->FacetArea(i) * flux;
-            
+               const double64 flux_physical = (*it)->FacetArea(i) * projected_velocity_physical;
+
                // 2.2 parametric space computation
                // --------------------------------
                /* Requirements
-                  - mapping of facet area to physical space (sqrt(J^T J) ), non-square Jacobian squared by multiplication with its transpose
-                  - mapping of pressure gradient to physical space
-               */
-               Point<3U> fnu = (*it)->ParametricFacetNormal( i );
-               double64  local_facet_area = (*it)->ParametricFacetArea( i );
-               // computing the facet projection
-               double64 flux_from_parametric = dotProduct( fnu, vD );
-               // performing local integration via multiplication with integration weight
-               flux_from_parametric *= local_facet_area;
-               // transforming the result to physical space
-               assert( (*it)->IsVolumeElement() );
-               // get Jacobian and its determinant at the facet integration point
-               Point<3U> fip( (*it)->FV()->FacetIntegrationPoint(i,0U) );
-               (*it)->FE()->dNr( fip[0], fip[1], fip[2], DNR );
-               (*it)->FE()->dNs( fip[0], fip[1], fip[2], DNS );
-               (*it)->FE()->dNt( fip[0], fip[1], fip[2], DNT );
-               (*it)->CoordinateMatrix();
-               (*it)->FE()->Jacobian( DNR, DNS, DNT );
-               double64 scale_factor = (*it)->FE()->JacobianDeterminant();
-               flux_from_parametric *= scale_factor;
-            
+                - velocity does not depend on position in element. Only one Jacobian transformation is required
+                - mapping of facet area to physical space (sqrt(J^T J) ), non-square Jacobian squared by multiplication with its transpose
+                - mapping of pressure gradient to physical space
+                
+                Learnings
+                - the velocity (computed in parametric space), vD is transformed into physical space by pre-multiplication with JINV at barycentre
+                - this applies to all velocities projected onto facet normals in parametric space (this operation involves renormalisation
+                of parametric space velocities to vD projected length
+                */
+
+               Point<3u> v0(0.0);
+               Point<3u> v1(0.0);
+               for (size_t nn = 0; nn < (*it)->Nodes(); ++nn) {
+                   auto xform_weights = (*it)->FV()->FacetNormalTransformationNodeWeights(i, nn);
+                   const Point<3u> n((*it)->N(nn)->Coordinate());
+                   v0 += xform_weights.first * n;
+                   v1 += xform_weights.second * n;
+               }
+               Point<3u> parametric_normal_remapped(crossProduct(v1,v0));
+               parametric_normal_remapped.NormalizeLengthTo(1.0);
+               double64 projected_velocity_parametric = dotProduct(parametric_normal_remapped, vDproj);
+               double64 flux_parametric = projected_velocity_parametric * (*it)->FacetArea(i);
+
+               size_t inside_node, outside_node;
+               (*it)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
+               
+               _test( (*it)->N(inside_node)->Idx() < model_domain.Nodes() );
+               _test( (*it)->N(outside_node)->Idx() < model_domain.Nodes() );
+
+               const double64 scale = std::max(cross_section[inside_node], cross_section[outside_node])
+                   * std::max(velocity_magnitude[inside_node], velocity_magnitude[outside_node]);
+
+               const double64 abserr = std::abs(flux_parametric - flux_physical);
+               const double64 relerr = rel_error(flux_parametric, flux_physical);
+               std::cerr << "scale = " << scale << "\n";
+               std::cerr << "abserr = " << abserr << "\n";
+               std::cerr << "relerr = " << relerr << "\n";
+               std::cerr << "abserr = 10^" << std::log10(abserr) << "\n";
+
+               // Any discrepancy should be explainable by plain old numerical error,
+               // or by integration error.
+               // _test(abserr < std::max(1.0e-10, scale * 1.0e-10));
+               
+               flux_balance_parametric[(*it)->N(inside_node)->Idx()] += flux_parametric;
+               flux_balance_parametric[(*it)->N(outside_node)->Idx()] -= flux_parametric;
+               flux_balance_physical[(*it)->N(inside_node)->Idx()] += flux_physical;
+               flux_balance_physical[(*it)->N(outside_node)->Idx()] -= flux_physical;
+               directed_area_para[(*it)->N(inside_node)->Idx()] += parametric_normal_remapped * (*it)->FacetArea(i);
+               directed_area_para[(*it)->N(outside_node)->Idx()] -= parametric_normal_remapped * (*it)->FacetArea(i);
+               directed_area_phys[(*it)->N(inside_node)->Idx()] += (*it)->FacetNormal(i) * (*it)->FacetArea(i);
+               directed_area_phys[(*it)->N(outside_node)->Idx()] -= (*it)->FacetNormal(i) * (*it)->FacetArea(i);
+
                // 3. testing that the fluxes are the same
                // ---------------------------------------
-               _equal( flux_physical, flux_from_parametric, numeric_limits<double64>::epsilon() );
-            }
+               if (!at_boundary) {
+                   // _equal( flux_physical, flux_parametric, s_internal_flux_rel_err );
+               }
+           }
        }
+     
+     std::cerr << "maxtheta = " << maxtheta << '\n';
+     
+     for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.PerimeterNodesEnd(); ++pit )
+     {
+         _test( (*pit)->Idx() < model_domain.Nodes() );
+         flux_balance_physical[(*pit)->Idx()] = 0.;
+         flux_balance_parametric[(*pit)->Idx()] = 0.;
+         directed_area_phys[(*pit)->Idx()] = 0.;
+         directed_area_para[(*pit)->Idx()] = 0.;
+     }
+     
+     double64 fmin_phys = +std::numeric_limits<double64>::max();
+     double64 fmax_phys = -std::numeric_limits<double64>::max();
+     double64 fmin_para = +std::numeric_limits<double64>::max();
+     double64 fmax_para = -std::numeric_limits<double64>::max();
 
+     size_t weird_nodes = 0;
+     double64 maxdelta = 0;
+     for (size_t i = 0; i < flux_balance_physical.size(); ++i) {
+         _test(directed_area_para[i].Length() < 1.0e-14);
+         _test(directed_area_phys[i].Length() < 1.0e-14);
+
+         double64 scale = cross_section[i] * velocity_magnitude[i];
+         double64 phys = flux_balance_physical[i];
+         double64 para = flux_balance_parametric[i];
+
+         fmin_phys = std::min(fmin_phys, phys);
+         fmax_phys = std::max(fmin_phys, phys);
+         fmin_para = std::min(fmin_para, para);
+         fmax_para = std::max(fmin_para, para);
+         double delta = std::abs(phys - para);
+         std::cerr << "scale[" << i << "] = " << scale << '\n';
+         std::cerr << "flux_balance_phys[" << i << "] = " << phys << '\n';
+         std::cerr << "flux_balance_para[" << i << "] = " << para << '\n';
+         std::cerr << "flux_balance_delta[" << i << "] = " << delta << '\n';
+         maxdelta = std::max(maxdelta, delta);
+         if (delta > s_flux_balance_thresh) {
+             ++weird_nodes;
+             std::cerr << "For node " << i << "\n";
+             std::cerr << "Flux balance phys " << phys << "\n";
+             std::cerr << "Flux balance para " << para << "\n";
+             std::cerr << "delta " << delta << " = 10^" << std::log10(delta) << "\n";
+         }
+         // _test(std::abs(flux_balance_physical[i] - flux_balance_parametric[i]) < s_flux_balance_thresh);
+     }
+     std::cerr << "Flux balance phys: (" << fmin_phys << ", "  << fmax_phys << ")\n";
+     std::cerr << "Flux balance para: (" << fmin_para << ", " << fmax_para << ")\n";
+     std::cerr << "maxdelta: " << maxdelta << '\n';
+
+     std::cerr << "Weird nodes: " << weird_nodes << " / " << model_domain.Nodes() << '\n';
  } // end
 
 

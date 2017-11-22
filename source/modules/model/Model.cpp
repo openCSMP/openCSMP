@@ -315,7 +315,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                      assert( created_edges );
                   }
             }
-          else this->EstablishBoundaries();
+          else this->EstablishBoundaries( true );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
@@ -392,7 +392,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
                 this->EstablishBoxBoundaries();
                 if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
             }
-          else this->EstablishBoundaries();
+          else this->EstablishBoundaries( true );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 

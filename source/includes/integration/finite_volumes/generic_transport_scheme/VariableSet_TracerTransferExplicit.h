@@ -12,7 +12,7 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<size_t> struct PropertyDatabase;
 
 /**
     Variables used by the tracer-transfer scheme.
@@ -20,14 +20,14 @@ template<size_t> class PropertyDatabase;
 template<size_t dim>
 struct VariableSet_TracerTransferExplicit {
      explicit VariableSet_TracerTransferExplicit( const PropertyDatabase<dim>& );
+
+     // XXX delete me
+     const PropertyDatabase<dim>& propdb_;
+
      // finite volume variables
-     const csmp::Index  fA_key;  ///< facet area
-     const csmp::Index  fn_key;  ///< facet normal
-     const csmp::Index  fnk_key; ///< facet normal permeability
      const csmp::Index  ff_key;  ///< facet flux
      const csmp::Index  ffC_key; ///< facet flux concentration product
      const csmp::Index  PV_key;  ///< FV pore volume (FV)
-     const csmp::Index  spv_key; ///< sector pore volume
      const csmp::Index  fb_key;  ///< flux balance (FV)
      const csmp::Index  nsrc_key;  ///< nodal fluid volume source (absolute concentration*volume product assigned to FV)
      // general
@@ -41,11 +41,11 @@ struct VariableSet_TracerTransferExplicit {
      const csmp::Index  rhof_key; ///< fluid density
      const csmp::Index  C0_key;   ///< concentration
      const csmp::Index  C1_key;   ///< new concentration
- 
+
    private:
-     VariableSet_TracerTransferExplicit() {}; // = delete;
-     VariableSet_TracerTransferExplicit( const VariableSet_TracerTransferExplicit& ) {}; // = delete;
-     VariableSet_TracerTransferExplicit<dim>& operator=( const VariableSet_TracerTransferExplicit& ) { return *this; }; // = delete;
+     VariableSet_TracerTransferExplicit() = delete;
+     VariableSet_TracerTransferExplicit( const VariableSet_TracerTransferExplicit& ) = delete;
+     VariableSet_TracerTransferExplicit<dim>& operator=( const VariableSet_TracerTransferExplicit& ) = delete;
 
      /// verifies types and placements
      void CheckVariables() const;

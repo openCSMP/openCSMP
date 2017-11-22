@@ -116,6 +116,14 @@ class MeshManager {
     csmp::Face<dim>& FaceAtIndex(size_t i);
     const csmp::Face<dim>& FaceAtIndex(size_t i) const;
 
+    // TODO: AJB: Delete these
+    bool VerifyNode(const Node<dim>* n) const {
+        return !node_collection_.OnFreeList(n);
+    }
+    bool VerifyElement(const Element<dim>* n) const {
+        return !elmt_collection_.OnFreeList(n);
+    }
+
     // Insertion
     /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
     csmp::Node<dim>*      PushBack( csmp::Node<dim>&& );
@@ -161,6 +169,9 @@ class MeshManager {
     void OutputStoredVariablesTo( const PropertyDatabase<dim>&, VSet<dim>& ) const;
     void InputStoredVariablesFrom( const PropertyDatabase<dim>&, const VSet<dim>& );
 
+    /// Rebuild parent relationships, for example after a region was removed
+    void RebuildParentRelationships(typename std::vector<csmp::Node<dim>*>::iterator begin, typename std::vector<csmp::Node<dim>*>::iterator end);
+  
     /// prints stored objects and their connectivity to screen
     void Out() const;
     
@@ -181,8 +192,6 @@ class MeshManager {
 
     /// 'native' method that does not do any connectivity testing anymore; use if model is loaded from CSMP binary
     bool InitializeVerifiedConnectivity( const VSet<dim>& );
-  
-  private:
 
     /// these collections are used only if adaptive remeshing is turned off, else access is via root node or element only
     bool                              adaptive_remeshing_;
