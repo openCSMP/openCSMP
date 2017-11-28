@@ -49,12 +49,11 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bo
    // computing total facet fluxes by projecting vt onto facet normals
    const size_t iNrOfFacets(eptr->FV()->Facets());
    for ( size_t iFacet=0U; iFacet<iNrOfFacets; ++iFacet ) {
-     double64 facet_flux;
+     double64 facet_flux = 0;
      if (reuse_previous_velocity) {
        facet_flux = eptr->Read( iFacet, 0U, User()->ff_key );
      }
      else {
-
         // Calulate local normal
         Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
 
@@ -62,16 +61,17 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bo
         facet_flux = dotProduct(facetNormal, vD);
 
         // storing the volumetric facet flux without altering the variables flag
-        const VARIABLE_FLAG flag1 = eptr->Status( iFacet, 0U, User()->ff_key );
-        eptr->Store( iFacet, 0U, User()->ff_key, makeScalar(flag1,facet_flux) );
+        const auto ff_flag = eptr->Status( iFacet, 0U, User()->ff_key );
+        eptr->Store( iFacet, 0U, User()->ff_key, makeScalar(ff_flag,facet_flux) );
      }
+     
      // Get concentration from upwind node
      auto upwind_node = (facet_flux < 0) ? eptr->FV()->OutsideNode(iFacet) :  eptr->FV()->InsideNode(iFacet);
      const double64 c = eptr->N(upwind_node)->Read( User()->C0_key );
-     
+
      // Store facet flux concentration
-     const double64 ffc = c * facet_flux;
-     eptr->Store( iFacet, 0u, User()->ffC_key, makeScalar(eptr->Status(iFacet, 0u, User()->ffC_key), ffc) );
+     const auto ffc_flag = eptr->Status(iFacet, 0u, User()->ffC_key);
+     eptr->Store( iFacet, 0u, User()->ffC_key, makeScalar(ffc_flag, c * facet_flux) );
   }
    
  } // end AdvectiveFluxes
@@ -131,7 +131,7 @@ template<size_t dim, template<size_t> class USER>
 double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBoundary( Node<dim>* nd_ptr ) const
   {
      assert( nd_ptr != NULL );
-    
+
      // 1. Dirichlet FV
      // ---------------
      // nothing needs to be done for FVs the saturation of which is flagged as Dirichlet
@@ -191,8 +191,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
      //
      double64  inflow(0.); // (+) at an inflow boundary and negative at an outflow one
      double64  influx(0.); // the inflow upstream concentration product
-     const double64 mu = User()->GetModel().Read(User()->mu_key);
-    
+
      // for all FV SECTORS of FE_FV-stencils of this boundary finite volume
      const size_t node_parent_elements(nd_ptr->Parents());
      for ( size_t t=0U; t<node_parent_elements; t++ )
@@ -212,9 +211,6 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
              // permeability. They are not the flow domain.
              continue;
            }
-           FiniteVolumeHelper<dim> helper(eptr);
-           helper.SetParametricCoordinate(eptr->FV()->Barycenter());
-          Point<dim> vD = -K/mu * helper.GradientOfScalarNodeProperty(User()->pf_key);
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
@@ -225,20 +221,17 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
                const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
                const size_t inside_node(eptr->FV()->InsideNode(iFacet));
                const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
-                
-                Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
+              const double64 ff = eptr->Read( iFacet, 0u, User()->ff_key );
 
-               const double64  normal_vel_component = dotProduct(vD, facetNormal);
-              
-               const double64 C_upstream = (normal_vel_component < 0.) ? eptr->N(outside_node)->Read( User()->C0_key ) :
-                                                                         eptr->N(inside_node)->Read( User()->C0_key );
+               const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( User()->C0_key ) :
+                                                       eptr->N(inside_node)->Read( User()->C0_key );
                if ( pnid == inside_node ) {
-                    inflow -= normal_vel_component;
-                    influx -= normal_vel_component * C_upstream;
+                    inflow += ff;
+                    influx += ff * C_upstream;
                  }
                else {
-                    inflow += normal_vel_component;
-                    influx += normal_vel_component * C_upstream;
+                    inflow -= ff;
+                    influx -= ff * C_upstream;
                  }
             }
        } // end for loop for parent elements
@@ -246,25 +239,22 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
       // the volume flux balance is stored (source terms are not subtracted if such were applied)
       nd_ptr->Store( User()->fb_key, makeScalar( nd_ptr->Status( User()->fb_key ), inflow ) );
 
-      // computing the flux - concentration products for the sliced FV
-      // -------------------------------------------------------------
-      // inflow: cases 3.1 and 3.2
-      // -------------------------
-      if (inflow < 0.) {
-           // if there is a nodal fluid volume source causing inflow, it is assumed that a concentration value wat set for the FV
-           if ( fabs(nd_ptr->Read(User()->nsrc_key)) > numeric_limits<double64>::epsilon() ) {
-               VARIABLE_FLAG influx_FV_concentration_status(nd_ptr->Status(User()->C0_key));
-               assert( influx_FV_concentration_status == DIRICH or influx_FV_concentration_status == CONSTANT_FLUX );
-               // source terms are accumulated later
-             }
-           // the influx concentration product is assigned
-           nd_ptr->Store( User()->C1_key, makeScalar( nd_ptr->Status( User()->C1_key ), inflow * nd_ptr->Read( User()->C0_key ) ) );
-        }
-      // case 3.3: free outflow
-      // ----------------------
-      // (the upstream values of the concentration from within the model domain are used)
-      else nd_ptr->Store( User()->C1_key, makeScalar( nd_ptr->Status( User()->C1_key ), influx ) );
-   
+      //   3.1: prescribed C value at inflow boundary
+      //        in this case, inflow > 0 and influx > 0. The amount of concentration flux
+      //        which we need to adjust the flux is exactly inflow * C.
+      //
+      //   3.2: prescribed flux (which has an effect only at inflow boundary)
+      //        this is the same as case 3.1 because nsrc should already have been added by this point.
+      //
+      //   3.3: free outflow (where flux balance missing the outflow facets is negative)
+      //        in this case, inflow < 0.
+
+      const double64 c0 = nd_ptr->Read( User()->C0_key );
+      const double64 c1 = nd_ptr->Read( User()->C1_key );
+
+      // If this is a boundary 
+      nd_ptr->Store( User()->C1_key, makeScalar( nd_ptr->Status( User()->C1_key ), influx - inflow * c0 ) );
+
       // the influx is returned
       return inflow; // positive when outgoing
    

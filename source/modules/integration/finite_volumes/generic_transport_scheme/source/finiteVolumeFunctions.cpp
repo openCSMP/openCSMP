@@ -123,19 +123,12 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
         double64 bmin(1e30), bmax(-1e30);
      
      for ( typename vector<Node<dim>*>::iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit ) {
-       if (!model.Mesh().VerifyNode(*nit)) {
-         std::cerr << "Problem!\n";
-       }
-
           if ( (*nit)->AtBoundary() != NOT )
             {
                const size_t parent_elements((*nit)->Parents());
                double64 flux_balance(0.);
                for ( size_t i=0U; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
-                 if (!model.Mesh().VerifyElement(eptr)) {
-                   std::cerr << "Problem!\n";
-                 }
                     const size_t sector_node      = (*nit)->ParentNodeNumber(i);
                     for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                          const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );

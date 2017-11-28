@@ -1,4 +1,5 @@
-	#include "FiniteVolumeTransportBasics_Test.h"
+
+#include "FiniteVolumeTransportBasics_Test.h"
 
 #include "vsetMakers.h"
 #include "Boundary.h"
@@ -389,6 +390,11 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
       string  model_name("cube100");
       string  variables_name("cube100-variables.txt");
 #endif
+#if 0
+      string  model_name("brick");
+      string  variables_name("cube100-variables.txt");
+#endif
+
 
         ANSYS_Model3D  model( model_name.c_str(), model_name.c_str(), variables_name.c_str(), false, true, true, true);
 
@@ -429,7 +435,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
         vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       0 );
 
-#if 0
+#if 1
         NodeCenteredFiniteVolumeTransport<3U> advector( "Model", model,
                                                         "porosity", "concentration", "velocity",
                                                         "nodal fluid volume source",false, false );
@@ -444,7 +450,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         // the calculation of fluid pressure
       
 #if 1
-        vtk_output.OutputDataToVTK( model, "concentration", "concentration", 0 );
+        vtk_output.OutputDataToVTK( model, "oldconcentration", "concentration", 0 );
         vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", 0 );
 
 #endif
@@ -454,7 +460,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
             // advector.AdvectVariable(1000.0);
 #if 1
             vtk_output.OutputDataToVTK( model, "velocity", "velocity", i );
-            vtk_output.OutputDataToVTK( model, "concentration", "concentration", i );
+            vtk_output.OutputDataToVTK( model, "oldconcentration", "concentration", i );
             vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", i );
             vtk_output.OutputDataToVTK( model, "fluxbalance", "flux balance", i );
             vtk_output.OutputDataToVTK( model, "ff", "facet flux", i );

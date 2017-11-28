@@ -82,13 +82,21 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
           for ( size_t j=0U; j<sector_facets; ++j )
             {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 ffc = eptr->Read(facet, 0, User()->ffC_key);
+               if (isnan(ffc)) {
+                 // XXX AJB HACK
+                 // Facets with no facet flux concentration are boundary facets
+                 // which haven't been removed. This is a hacky solution.
+                 continue;
+               }
+
                const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric facet flow into flux balance
                const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
                if ( facet_flux > 0. ) outflow += facet_flux;
                flux_balance += facet_flux;
                // temporary accumulation of flux-concentration products into the variable 'new concentration'
-               flux_concentration_products += sign * eptr->Read( facet, 0U, User()->ffC_key );
+               flux_concentration_products += sign * ffc;
             }
        }
 

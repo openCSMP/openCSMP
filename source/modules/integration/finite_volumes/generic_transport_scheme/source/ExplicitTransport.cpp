@@ -156,56 +156,27 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
-         // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
+        // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
         const double64 c0 = (*nit)->Read(this->C0_key);
+        const double64 c1 = (*nit)->Read(this->C1_key);
         const double64 pv = (*nit)->Read(this->PV_key);
         const double64 fb = (*nit)->Read(this->fb_key);
 
         const double64 source((*nit)->Read(this->nsrc_key));
-        const size_t node_parent_elements((*nit)->Parents());
-        double64 accumulation = 0;
+        double64 accumulation = c1;
         // Solve C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [C vD]
 
-        for ( size_t t=0U; t<node_parent_elements; t++ )
-        {
-          Element<dim>* const eptr((*nit)->Parent(t));
-          assert( eptr != NULL );
-          const size_t pnid((*nit)->ParentNodeNumber(t));
-          FiniteVolumeHelper<dim> helper(eptr);
-          
-          const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-          for ( size_t i=0U; i<sector_facets; i++ )
-          {
-            size_t facet = eptr->FV()->FacetSurroundingSector(pnid, i);
-            double64 ffc = eptr->Read(facet, 0, this->ffC_key);
-            if (isnan(ffc)) {
-              // XXX AJB HACK
-              // Facets with no facet flux concentration are boundary facets
-              // which haven't been removed. This is a hacky solution.
-              continue;
-            }
+        // correcting this sum for div vD using 'flux balance' except for at model boundary
+        if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulation * fb;
 
-            const size_t inside_node  = eptr->FV()->InsideNode( facet );
-            double64 sign = (*nit == eptr->N(inside_node)) ? +1.0 : -1.0;
-            accumulation += sign * ffc;
-            
-          }
-        }
         // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
         accumulation = c0 - (delta_t/pv) * accumulation;
         
         // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
         // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
         //                               new concentration
-        accumulation += source * c0 * delta_t;
+        accumulation += source * c1 * delta_t;
         
-#if 0
-        // XXX AJB VERIFY THIS
-        // correcting this sum for div vD using 'flux balance' except for at model boundary
-        //if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulatio * (*nit)->Read( this->fb_key );
-        accumulation -= accumulation * fb;
-#endif
-
          // 5. storing the new concentration
          (*nit)->Store( this->C1_key, makeScalar( (*nit)->Status(this->C1_key), accumulation ) );
     }
@@ -275,12 +246,10 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     size_t          error_counter(0);
     ScalarVariable  C1;
    
-    std::map<VARIABLE_FLAG,size_t> histo;
     while ( nit != nodes_end )
        {
           const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
-         ++histo[status];
-          if ((*nit)->AtBoundary() != NOT )
+          if ( status != DIRICH )
             {
                // reading the newly computed saturation values
                (*nit)->Read( this->C1_key, C1 );
@@ -382,10 +351,10 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
           VerifyAndAssignResults( show_range, range_check );
 
           time += time_increment;
-          time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
 
           const bool reuse_previous_velocity = true;
           UpdateFacetFluxes(reuse_previous_velocity);
+          time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
 
           substep++;
       }
