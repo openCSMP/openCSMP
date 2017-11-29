@@ -152,7 +152,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // ------------------------------------------------------------
      // 3. Building the transport scheme
      // ------------------------------------------------------------
-     ExplicitTransport<3>  transport_scheme( model, "Model" );
+     ExplicitTransport<3>  transport_scheme( model, "Model", false, false );
      model.InstantiateFiniteVolumes();
 
 
@@ -1382,7 +1382,7 @@ void testSchemeAsComponent()
 
 
       // first order version only
-      ExplicitTransport<3U>  explicit_advector( model3D, "Model" );
+      ExplicitTransport<3U>  explicit_advector( model3D, "Model", false, false );
       printRangeOfVariable( model3D, "sector volume" );
       printRangeOfVariable( model3D, "sector pore volume" );
       printRangeOfVariable( model3D, "finite volume" );
