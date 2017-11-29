@@ -21,7 +21,7 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
   public:
     // TODO: add choice of transport scheme: 1st versus 2nd order in space
     /// constructor for target region; by default all driving forces are considered
-    ExplicitTransport( Model<dim>&, const char* target_region );
+    ExplicitTransport( Model<dim>&, const char* target_region, bool second_order_in_space, bool second_order_in_time );
   
     /// computes the time constraint
     double64 TimeIncrement();
@@ -35,6 +35,8 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
   private:
     /// 1.a computations of facet flux using FacetFlux (facet flux) policy
     void UpdateFacetFluxes(bool reuse_previous_velocity);
+    void UpdateFacetFluxes_O1(bool reuse_previous_velocity);
+    void UpdateFacetFluxes_O2(bool reuse_previous_velocity);
     
     /// 1.b computations of piecewise constatn element velocities and facet fluxes using FacetFlux (facet flux) policy
     void PostProcessVelocityAndUpdateFacetFluxes();
@@ -58,6 +60,8 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit<dim>,
     Model<dim>& model_;
     Region<dim>& gref_;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
+    bool second_order_in_space_;
+    bool second_order_in_time_;
 };
 
 

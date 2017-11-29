@@ -37,9 +37,10 @@ class FacetFlux_TracerTransferExplicit {
     void UpwindDirection();
   
     /// computes (A_i vD . n_i) * upstream C on all facets in element stencil and stores them there
-    void      Advective_O1_FluxesInterior_Old( Element<dim>* ) const;
     void      Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>* ) const;
     double64  Advective_O1_FluxesAtBoundary( Node<dim>* ) const;
+    void      Advective_O2_FluxesInterior( bool reuse_previous_velocity, Element<dim>* ) const;
+    double64  Advective_O2_FluxesAtBoundary( Node<dim>* ) const;
   
     /// stores and returns FV flux balance computed from current facet fluxes
     double64  FluxBalance( Node<dim>* const ) const;

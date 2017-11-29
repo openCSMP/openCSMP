@@ -66,8 +66,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
          // element-based total velocity
           if ( initialize_flux ) {
               const double64 K((*it)->Read(k_key));
-              helper.SetParametricCoordinate((*it)->FV()->Barycenter());
-              vD = -K * helper.GradientOfScalarNodeProperty(pf_key);
+              vD = -K * helper.GradientOfScalarNodeProperty((*it)->FV()->Barycenter(), pf_key);
           }
 
          // 1. computing sector pore volumes
@@ -218,27 +217,41 @@ FiniteVolumeHelper<dim>::FiniteVolumeHelper(Element<dim>* eptr)
 
 
 template<size_t dim>
-void
-FiniteVolumeHelper<dim>::SetParametricCoordinate( const Point<dim>& p )
+double64
+FiniteVolumeHelper<dim>::InterpolateScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const
 {
-    for (unsigned i = 0; i < element_dim_; ++i) {
-        DN_[i].resize(num_nodes_);
+    std::vector<double64> NRST;
+  
+    CalculateN(p, NRST);
+
+    double64 var(0.0);
+    const size_t nodes(eptr_->Nodes());
+    for ( size_t i=0; i<nodes; i++ ) {
+      var += eptr_->N(i)->Read( prop ) * NRST[i];
     }
 
-    CalculateDN(p);
+    return var;
 }
+
 
 
 
 template<size_t dim>
 Point<dim>
-FiniteVolumeHelper<dim>::GradientOfScalarNodeProperty( const csmp::Index& prop ) const
+FiniteVolumeHelper<dim>::GradientOfScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const
 {
+    std::vector<double64> DN[dim];
+    for (unsigned i = 0; i < element_dim_; ++i) {
+        DN[i].resize(num_nodes_);
+    }
+    CalculateDN(p, DN);
+
+
     Point<dim> grad(0.);
     for ( size_t i=0U; i<num_nodes_; ++i ) {
         const double64 value_at_node(eptr_->N(i)->Read(prop));
         for (size_t j = 0; j < element_dim_; ++j) {
-            grad[j] += DN_[j][i] * value_at_node;
+            grad[j] += DN[j][i] * value_at_node;
         }
     }
     eptr_->FE()->JacobianInverse();
@@ -301,13 +314,13 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
 
 template<>
 void
-FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p)
+FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p, std::vector<double64>* DN) const
 {
     auto fe = eptr_->FE();
     switch (element_dim_) {
         case 1:
-            fe->dNr(p[0], DN_[0]);
-            fe->Jacobian( DN_[0] );
+            fe->dNr(p[0], DN[0]);
+            fe->Jacobian( DN[0] );
             
     }
 }
@@ -315,19 +328,19 @@ FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p)
 
 template<>
 void
-FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p)
+FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p, std::vector<double64>* DN) const
 {
     auto fe = eptr_->FE();
     switch (element_dim_) {
         case 1:
-            fe->dNr(p[0], DN_[0]);
-            fe->Jacobian( DN_[0] );
+            fe->dNr(p[0], DN[0]);
+            fe->Jacobian( DN[0] );
             break;
 
         case 2:
-            fe->dNr(p[0], p[1], DN_[0]);
-            fe->dNs(p[0], p[1], DN_[1]);
-            fe->Jacobian( DN_[0], DN_[1] );
+            fe->dNr(p[0], p[1], DN[0]);
+            fe->dNs(p[0], p[1], DN[1]);
+            fe->Jacobian( DN[0], DN[1] );
             break;
     }
 }
@@ -335,26 +348,76 @@ FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p)
 
 template<>
 void
-FiniteVolumeHelper<3u>::CalculateDN(const Point<3u>& p)
+FiniteVolumeHelper<3u>::CalculateDN(const Point<3u>& p, std::vector<double64>* DN) const
 {
     auto fe = eptr_->FE();
     switch (element_dim_) {
         case 3:
-            fe->dNr(p[0], p[1], p[2], DN_[0]);
-            fe->dNs(p[0], p[1], p[2], DN_[1]);
-            fe->dNt(p[0], p[1], p[2], DN_[2]);
-            fe->Jacobian( DN_[0], DN_[1], DN_[2] );
+            fe->dNr(p[0], p[1], p[2], DN[0]);
+            fe->dNs(p[0], p[1], p[2], DN[1]);
+            fe->dNt(p[0], p[1], p[2], DN[2]);
+            fe->Jacobian( DN[0], DN[1], DN[2] );
             break;
         case 2:
-            fe->dNs(p[0], p[1], DN_[1]);
-            fe->Jacobian( DN_[0], DN_[1] );
+            fe->dNs(p[0], p[1], DN[1]);
+            fe->Jacobian( DN[0], DN[1] );
             break;
         case 1:
-            fe->dNr(p[0], DN_[0]);
-            fe->Jacobian( DN_[0] );
+            fe->dNr(p[0], DN[0]);
+            fe->Jacobian( DN[0] );
             break;
     }
 }
+
+  
+  template<>
+  void
+  FiniteVolumeHelper<1u>::CalculateN(const Point<1u>& p, std::vector<double64>& N) const
+  {
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+      case 1:
+        fe->Nr( p[0], N );
+    }
+  }
+  
+  
+  template<>
+  void
+  FiniteVolumeHelper<2u>::CalculateN(const Point<2u>& p, std::vector<double64>& N) const
+  {
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+      case 1:
+        fe->Nr( p[0], N );
+        break;
+        
+      case 2:
+        fe->Nrs( p[0], p[1], N );
+        break;
+    }
+  }
+  
+  
+  template<>
+  void
+  FiniteVolumeHelper<3u>::CalculateN(const Point<3u>& p, std::vector<double64>& N) const
+  {
+    auto fe = eptr_->FE();
+    switch (element_dim_) {
+      case 3:
+        fe->Nrst( p[0], p[1], p[2], N );
+        break;
+      case 2:
+        fe->Nrs( p[0], p[1], N );
+        break;
+      case 1:
+        fe->Nr( p[0], N );
+        break;
+    }
+  }
+  
+  
 
 
 template class FiniteVolumeHelper<1u>;

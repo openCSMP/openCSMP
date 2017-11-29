@@ -26,19 +26,21 @@ class FiniteVolumeHelper
 public:
     FiniteVolumeHelper( Element<dim>* eptr );
 
-    void SetParametricCoordinate( const Point<dim>& p );
+    // Gradient of a scalar node-based property, at a point in parametric space
+    Point<dim> GradientOfScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const;
 
-    Point<dim> GradientOfScalarNodeProperty( const csmp::Index& prop ) const;
+    // Interpolation of a scalar node-based property, at a point in parametric space
+    double64 InterpolateScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const;
 
     Point<dim> NormalOfFacet( size_t iFacet ) const;
 
 private:
-    void CalculateDN(const Point<dim>& p);
-    
+    void CalculateDN(const Point<dim>& p, std::vector<double64>* dn) const;
+    void CalculateN(const Point<dim>& p, std::vector<double64>& n) const;
+
     Element<dim>* eptr_;
     size_t element_dim_;
     size_t num_nodes_;
-    std::vector<double64> DN_[dim];
     
 };
 
