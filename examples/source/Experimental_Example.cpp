@@ -19,6 +19,7 @@
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
 #endif
 #ifdef CSMP_WITH_MESCHACH
 #include "Gauss_Solver.h"
@@ -34,8 +35,6 @@
 #include "CSMP_highLevelUtilities.h"
 #include "ComputationalSettings.h"
 #include "IAPWS_H2OPropertiesVisitor.h"
-#include "SAMG_Settings.h"
-#include "SAMG_Solver.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"
@@ -281,15 +280,20 @@ void Experimental_Example::Run()
 
   model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
   
-  // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+  // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and 
+#ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Settings  samg_settings;
-  SAMG_Solver    samg_solver(&samg_settings);
-  PDE_Integrator<DIM,Region>  hydrostatic_pressure(samg_solver);
   // minimizing screen output
-  samg_settings.Set_iout1( 0 );
-  samg_settings.Set_iout2( 0 );
-  samg_settings.Set_idmp( -1 );
+  samg_settings.Set_iout1(0);
+  samg_settings.Set_iout2(0);
+  samg_settings.Set_idmp(-1);
   samg_settings.SetSolverInstance(2);
+
+  SAMG_Solver    samg_solver(&samg_settings);
+#else
+  Gauss_Solver  samg_solver;
+#endif
+  PDE_Integrator<DIM,Region>  hydrostatic_pressure(samg_solver);
 
   NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
@@ -342,11 +346,15 @@ void Experimental_Example::Run()
   // -----------------------------------------------------------
   // mechanical properties are placed on the element integration points
   // computes the increase in pore-pressure due to the gravitational loading
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  samg_mechanics_settings;
     samg_mechanics_settings.Set_napproach(2); // sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
     samg_mechanics_settings.SetSolverInstance(2);
                                // which is needed for deformation simulations
     SAMG_Solver                 samg_solver2(&samg_mechanics_settings);
+#else
+    Gauss_Solver samg_solver2;
+#endif
     PDE_Integrator<DIM,Region>  deformation(samg_solver2);
     deformation.ScaleEssentialConditions(1.0e15);
 
