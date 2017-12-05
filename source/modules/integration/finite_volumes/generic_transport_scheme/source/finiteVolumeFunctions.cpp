@@ -309,6 +309,9 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
             return crossProduct(v1, v0);
         }
     }
+    
+    // TODO: create proper return value
+    return Point<dim>();
 }
 
 

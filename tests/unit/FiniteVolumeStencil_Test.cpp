@@ -596,7 +596,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
             
 #ifndef PYRAMID_TRIANGULAR_FACETS
             if((*vIterFEs)->ElementType() == ISOPARAMETRIC_LINEAR_PYRAMID ) {
-                std::cerr "XXX WARNING: ISOPARAMETRIC_LINEAR_PYRAMID with quadrilateral apex facets NYI\n"
+                cerr <<"XXX WARNING: ISOPARAMETRIC_LINEAR_PYRAMID with quadrilateral apex facets NYI\n";
             }
 #endif
 
