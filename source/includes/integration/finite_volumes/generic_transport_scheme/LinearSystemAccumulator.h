@@ -1,66 +1,11 @@
 #ifndef CSMP_MATRIX_ACCUMULATOR_H
 #define CSMP_MATRIX_ACCUMULATOR_H
 
-#include "DenseMatrix.h"
-#include "SparseMatrix.h"
-#include "LinearSolver.h"
+#include "GenericTransportScheme.h"
+#include "Solver.h"
 #include <memory>
 
 namespace csmp {
-
-  template<size_t dim> class Model;
-  template<size_t dim> class Region;
-  template<size_t dim> class Element;
-  template<size_t dim> class Node;
-
-enum ACCUMULATION_MODE {
-    ADD_ACCUMULATE,
-    ADD_LATER,
-    MULTIPLY_ACCUMULATE
-};
-
-
-template<size_t dim>
-class MatrixOperator
-{
-public:
-    ACCUMULATION_MODE AccumulationMode() const { return mode_; }
-
-    virtual void AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& mat ) const = 0;
-
-    virtual ~MatrixOperator() { }
-
-protected:
-    MatrixOperator( ACCUMULATION_MODE mode )
-       : mode_(mode)
-    {
-    }
-
-    ACCUMULATION_MODE mode_;
-};
-
-
-template<size_t dim>
-class VectorOperator
-{
-public:
-    ACCUMULATION_MODE AccumulationMode() const { return mode_; }
-
-    virtual void AccumulateStencil( Element<dim>& fe, std::vector<double64>& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, std::vector<double64>& mat ) const = 0;
-
-    virtual ~VectorOperator() { }
-
-protected:
-    VectorOperator( ACCUMULATION_MODE mode )
-       : mode_(mode)
-    {
-    }
-
-    ACCUMULATION_MODE mode_;    
-};
-
 
 template<size_t dim>
 class LinearSystemAccumulator {
