@@ -1,8 +1,8 @@
 //
-//  ImplicitTransport.cpp
+//  ImplicitTransport.h
 //
-//  Created by Stephan Matthai on 2/21/13.
-//  Copyright (c) 2013 Stephan Matthai. All rights reserved.
+//  Created by Andrew J. Bromage on 5/12/2017.
+//  Copyright (c) 2017 The University of Melbourne. All rights reserved.
 //
 
 #include "ImplicitTransport.h"
@@ -23,7 +23,7 @@ ImplicitTransport<dim>::GetModel() const
 {
     return model_;
 }
-    
+
 
 template<size_t dim>
 ImplicitTransport<dim>::ImplicitTransport( Model<dim>& m, const char* target_region, bool second_order )

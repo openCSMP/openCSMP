@@ -4,9 +4,14 @@
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
 #include "LinearSolver.h"
+#include <memory>
 
 namespace csmp {
 
+  template<size_t dim> class Model;
+  template<size_t dim> class Region;
+  template<size_t dim> class Element;
+  template<size_t dim> class Node;
 
 enum ACCUMULATION_MODE {
     ADD_ACCUMULATE,
@@ -62,12 +67,38 @@ class LinearSystemAccumulator {
   public:
     LinearSystemAccumulator( Model<dim>& model, const char* region );
 
+    void AddOperatorPerimeter( MatrixOperator<dim>* op );
+    void AddOperatorInterior( MatrixOperator<dim>* op );
+    void AddOperatorPerimeter( VectorOperator<dim>* op );
+    void AddOperatorInterior( VectorOperator<dim>* op );
+
+    void AccumulateByStencil();
+    void AccumulateByFiniteVolume();
+
+    void SolveSystem();
+
   private:
-    std::vector<MatrixOperator*> interior_lhs_;
-    std::vector<MatrixOperator*> perimeter_lhs_;
+    LinearSystemAccumulator( ) = delete;
+    LinearSystemAccumulator( const LinearSystemAccumulator& ) = delete;
+    LinearSystemAccumulator( LinearSystemAccumulator&& ) = delete;
+    LinearSystemAccumulator& operator=( const LinearSystemAccumulator& ) = delete;
+
+    Model<dim>& model_;
+    Region<dim>& gref_;
+
+    size_t fvs_;
+
+    std::unique_ptr<Solver> solver_;
+
+    SparseMatrix LHS_;
+    std::vector<double64> RHS_;
+    std::vector<double64> RESULT_;
+
+    std::vector<MatrixOperator<dim>*> interior_lhs_;
+    std::vector<MatrixOperator<dim>*> perimeter_lhs_;
     
-    std::vector<VectorOperator*> interior_rhs_;
-    std::vector<VectorOperator*> perimeter_rhs_;
+    std::vector<VectorOperator<dim>*> interior_rhs_;
+    std::vector<VectorOperator<dim>*> perimeter_rhs_;
 };
 
 
