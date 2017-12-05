@@ -449,7 +449,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
         advector.Divergence( "velocity", "nodal flux mismatch" );
 #else
-        ImplicitTransport<3U> advector(model, "Model", false);
+        ExplicitTransport<3U> advector(model, "Model", true);
         advector.StepSizeReductionFactor(0.9);
 #endif
         
