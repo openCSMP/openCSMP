@@ -757,9 +757,32 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
  } // end InitializeConnectivity(VSet)
 
 
+/**
+   Rebuild parent relationships.
 
- 
-
+TODO: Better docs
+*/
+template<size_t dim>
+void MeshManager<dim>::RebuildParentRelationships(
+        typename std::vector<csmp::Node<dim>*>::iterator begin, typename std::vector<csmp::Node<dim>*>::iterator end)
+{
+   std::deque< std::pair<size_t,Element<dim>*>> parents;
+   for ( auto it = begin; it != end; ++it ) {
+      auto n = *it;
+      for ( size_t i = 0; i < n->Parents(); ++i ) {
+          auto e = n->Parent(i);
+          if (VerifyElement(e)) {
+              parents.push_back(std::make_pair(n->ParentNodeNumber(i),e));
+          }
+      }
+      n->EraseParents();
+      n->ResizeParentStorage(parents.size());
+      for ( auto& p : parents ) {
+          n->Assign(p.first, p.second);
+      }
+      parents.clear();
+   }
+}
 
 
 /**

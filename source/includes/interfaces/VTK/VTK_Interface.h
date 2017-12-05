@@ -97,7 +97,10 @@ class VTK_Interface {
     void NodeOutputOfElementData( bool yes_or_no );
 
  private:
-
+    struct PointDescriptor {
+        size_t element_or_node_;
+        size_t sector_or_facet_;
+    };
    bool toFolder_;                                           ///< output to folder
    bool toSubFolder_;                                        ///< output to subfolder
    std::string problemTitle_;                                ///< title that goes into xml header
@@ -105,7 +108,7 @@ class VTK_Interface {
    std::deque<VTK_TYPE>                     geometric_primitives_VTK;
    std::map<size_t,std::vector<size_t> >    plist;
    std::deque<std::vector<size_t> >         transformed_plist;
-   std::map<size_t,size_t>                  node_mapping;
+   std::map<size_t,PointDescriptor>         node_mapping;
    std::map<size_t,std::vector<double64> >  pxyz_data;
    PLACEMENT                                last_visualized_;
    bool                                     node_output_of_element_data_;
@@ -115,12 +118,17 @@ class VTK_Interface {
    void NodeBasedTopology( const Region<dim>&,
                            const std::vector<size_t>& elmt_ids,
                            std::map<size_t,std::vector<size_t> >& plist,
-                           std::map<size_t,size_t>&  node_nums );
-                                
-   void IntegrationPointBasedTopology( const Region<dim>&,
+                           std::map<size_t,PointDescriptor>&  node_nums );
+
+   void ElmtIntegrationPointBasedTopology( const Region<dim>&,
                                       const std::vector<size_t>& elmt_ids,
                                       std::map<size_t,std::vector<size_t> >& clist,
-                                      std::map<size_t,size_t>&  cpoint_nums );
+                                      std::map<size_t,PointDescriptor>&  cpoint_nums );
+
+   void FacetIntegrationPointBasedTopology( const Region<dim>&,
+                                      const std::vector<size_t>& elmt_ids,
+                                      std::map<size_t,std::vector<size_t> >& clist,
+                                      std::map<size_t,PointDescriptor>&  cpoint_nums );
 
    void ElementBasedTopology( const Region<dim>&,
                               const std::vector<size_t>& elmt_ids,
@@ -130,7 +138,7 @@ class VTK_Interface {
    void PointBasedTopology( const Region<dim>&,
                             const std::vector<size_t>& elmt_ids,
                             std::map<size_t,std::vector<size_t> >&   plist,
-                            std::map<size_t,size_t>&  node_nums );
+                            std::map<size_t,PointDescriptor>&  node_nums );
                                 
    void TransformPlist( const Region<dim>&,
                         const std::map<size_t,std::vector<size_t> >& plist,
@@ -138,20 +146,28 @@ class VTK_Interface {
 
    void RetrieveData( const Region<dim>&,
                       const csmp::Index&,
-                      const std::map<size_t,size_t>& obj_nums,
+                      const std::map<size_t,PointDescriptor>& obj_nums,
                       std::map<size_t,std::vector<double64> >& sgdata );
 
    void NodeCoordinates( const Region<dim>&,
-                         const std::map<size_t,size_t>& node_nums,
+                         const std::map<size_t,PointDescriptor>& node_nums,
                          std::map<size_t,std::vector<double64> >& pxyz_data );
 
    void IntegrationPointData( const Region<dim>&,
                              const csmp::Index&,
                              std::map<size_t,std::vector<double64> >& pxyz_data );   
-   
+
+   void ElmtIntegrationPointData( const Region<dim>&,
+                             const csmp::Index&,
+                             std::map<size_t,std::vector<double64> >& pxyz_data );   
+
+   void FacetIntegrationPointData( const Region<dim>&,
+                             const csmp::Index&,
+                             std::map<size_t,std::vector<double64> >& pxyz_data );   
+
    void NodeData( const Region<dim>&,
                   const csmp::Index&,
-                  const std::map<size_t,size_t>& node_nums,
+                  const std::map<size_t,PointDescriptor>& node_nums,
                   std::map<size_t,std::vector<double64> >& pxyz_data );
 
    void ElementData( const Region<dim>&,
@@ -161,7 +177,7 @@ class VTK_Interface {
 
    void ElementPointData( const Region<dim>&,
                           const csmp::Index&,
-                          const std::map<size_t,size_t>& node_nums,
+                          const std::map<size_t,PointDescriptor>& node_nums,
                           std::map<size_t,std::vector<double64> >& pxyz_data );
 
    void CellData( const Region<dim>&,

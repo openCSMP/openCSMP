@@ -120,6 +120,11 @@ class PrimitiveContainer
         return prim;
       }
 
+      // TODO: AJB: Delete this
+      bool OnFreeList(const T* item) const {
+          return free_list_.count(const_cast<T*>(item)) > 0;
+      }
+
   private:
       std::deque<T> storage_;
       std::unordered_set<T*> free_list_;

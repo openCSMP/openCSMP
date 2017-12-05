@@ -19,6 +19,7 @@ class FiniteVolumeTransportBasics_Test : public Test
   private:
     void test_constant_velocity_field(Model<3U>& model);
 
+    void test_b25();
   }; //end class
 
 } //end csmp

@@ -53,7 +53,7 @@ using namespace std;
 
 namespace csmp {
 
-const size_t DIM(2U);
+const size_t DIM(3U);
 
 void Experimental_Example::Specifications()
   {
@@ -218,9 +218,9 @@ void Experimental_Example::Run()
   // ----------------------------------------------------------
   // 1. building and configering model from ANSYS - csp dataset
   // ----------------------------------------------------------
-   string input_file("Jura-slope1");
-   ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
-  // ANSYS_Model3D  model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt");
+   string input_file("cylinder");
+   // ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
+  ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
    Region<DIM>& model_domain(model.Region("Model"));
 
    printModelDimensions( model, true );

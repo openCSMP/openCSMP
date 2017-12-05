@@ -1,9 +1,12 @@
-#ifndef CSMP_EXPLICIT_TRANSPORT_H
-#define CSMP_EXPLICIT_TRANSPORT_H
+#ifndef CSMP_IMPLICIT_TRANSPORT_H
+#define CSMP_IMPLICIT_TRANSPORT_H
 
-#include "VariableSet_TracerTransferExplicit.h"
+#include "VariableSet_TracerTransferImplicit.h"
 #include "FacetFlux_TracerTransferExplicit.h"
 #include "TimeStepEvaluator.h"
+#include "DenseMatrix.h"
+#include "SparseMatrix.h"
+#include "LinearSolver.h"
 
 namespace csmp {
 
@@ -12,16 +15,14 @@ template<size_t> class Region;
 template<size_t> class Model;
 template<size_t> class TwoPhaseModel;
 
-// TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode computing and averaging element gradients vs. node by node approach)
-// TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
 template<size_t dim>
-class ExplicitTransport : public VariableSet_TracerTransferExplicit,
-                          public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,
-                          public TimeStepEvaluator<dim,ExplicitTransport> {
+class ImplicitTransport : public VariableSet_TracerTransferImplicit,
+                          public FacetFlux_TracerTransferExplicit<dim,ImplicitTransport>,
+                          public TimeStepEvaluator<dim,ImplicitTransport> {
   public:
     // TODO: add choice of transport scheme: 1st versus 2nd order in space
     /// constructor for target region; by default all driving forces are considered
-    ExplicitTransport( Model<dim>&, const char* target_region, bool second_order_in_space );
+    ImplicitTransport( Model<dim>&, const char* target_region, bool second_order );
   
     /// computes the time constraint
     double64 TimeIncrement();
@@ -37,45 +38,45 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit,
     void UpdateFacetFluxes(bool reuse_previous_velocity);
     void UpdateFacetFluxes_O1(bool reuse_previous_velocity);
     void UpdateFacetFluxes_O2(bool reuse_previous_velocity);
-    
+
     /// 1.b computations of piecewise constatn element velocities and facet fluxes using FacetFlux (facet flux) policy
     void PostProcessVelocityAndUpdateFacetFluxes();
-    
+
     /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV
     double64 TimeIncrementAndFluxBalance( double64 max_time_increment );
-    
-    /// 3. inflow and outflow flux compensation
-    void AccumulateBoundaryConditions();
-    
-    /// 4. composes 'new concentration': C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]
-    void AssembleSolution( double64 delta_t, bool enforce_divergence_free_vt_field );
 
-    /// if we know beforehand that velocity field will be divergence free, this method compensates for small abberations from this
-    void AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval );
-    
-    /// 5. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
+    /// 3. process 
+    void AccumulateSystem();
+
+    /// 4. inflow and outflow flux compensation
+    void AccumulateBoundaryConditions();
+
+    /// 5. composes 'new concentration': C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]
+    void Solve();
+
+    /// 6. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
     double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
-  
+
   private:
     Model<dim>& model_;
     Region<dim>& gref_;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
-    bool second_order_in_space_;
+    bool second_order_;
 };
 
 
 /**
-@class ExplicitTransport ExplicitTransport "reservoir_simulator/TransportEquationSolver.h"
+@class ImplicitTransport ImplicitTransport "integration/finite_volumes/generic_transport_scheme/ImplicitTransport.h"
 
-\brief     For implicit transport calculations
+\brief     Implicit transport calculations
 \details   Part of the Colleoli transport scheme.
-\author    Stephan K. Matthai
-\version   1a
-\date      21/2/2013
+\author    Andrew J. Bromage
+\version   0a
+\date      28/11/2017
 \pre       high-level class depending on CSMP++ API
 \bug
 \warning
-\copyright Stephan K. Matthai
+\copyright The University of Melbourne
 
 @section motivation Motivation
 
@@ -103,4 +104,4 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit,
 } // end csmp
 
 
-#endif /* CSMP_EXPLICIT_TRANSPORT_H */
+#endif /* CSMP_IMPLICIT_TRANSPORT_H */

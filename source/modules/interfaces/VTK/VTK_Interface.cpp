@@ -14,7 +14,7 @@
 using namespace std;
 
 namespace csmp {
-
+  
 template<size_t dim>
 VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
                                    bool use_propblem_title_as_output_folder_name )
@@ -445,6 +445,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                                           bool  update_topology )
   {
      std::string file_name( this->OutputFileAndSubFolderName( initial_file_name ) );
+    bool use_cells = true;
 
      csmp::Index  prop_key = sg.Database().StorageKey(var_name.c_str());
 
@@ -486,28 +487,41 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                   // SKM FIX (only single point needs to be stored) transformed_plist.push_back((*eit).second);
                   transformed_plist.push_back(vector<size_t>(1,eidx++));
             }
-          else if ( prop_key.place != ELEMENT_INTEGRATION_POINT ) {
+          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
+            ElmtIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            // fill transform plist - AP Aug2006
+            transformed_plist.clear();
+            for ( auto& p : plist )
+              transformed_plist.push_back(p.second);
+          }
+          else if ( prop_key.place == FACET_INTEGRATION_POINT ) {
+            FacetIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            use_cells = false;
+            transformed_plist.clear();
+            size_t idx(0u);
+            for (auto& p : plist) {
+              for (auto q : p.second) {
+                transformed_plist.push_back(vector<size_t>(1, idx++));
+              }
+            }
+          }
+          else if ( prop_key.place == SECTOR_INTEGRATION_POINT ) {
+            throw Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
+                            "Sector integration point placement not yet supported");
+          }
+          else {
                NodeBasedTopology( gref, elmt_ids, plist, node_mapping );
                TransformPlist( gref, plist, transformed_plist );
             }
-          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-               IntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
-               // fill transform plist - AP Aug2006
-               transformed_plist.clear();
-               for ( std::map<size_t,std::vector<size_t> >::const_iterator
-                     eit=plist.begin(); eit!=plist.end(); eit++ ) 
-                  transformed_plist.push_back((*eit).second);
-           }
-          else
-            throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
-                                  "The placement of the variable was not recognized");
        }
      last_visualized_ = prop_key.place;
 
      // not the topology but only the data have to be updated
      if ( prop_key.place == NODE ) 
        NodeData( gref, prop_key, node_mapping, pxyz_data );
-     else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) 
+     else if ( prop_key.place == ELEMENT_INTEGRATION_POINT
+              || prop_key.place == FACET_INTEGRATION_POINT
+              || prop_key.place == SECTOR_INTEGRATION_POINT )
        IntegrationPointData( gref, prop_key, pxyz_data );
      else if ( prop_key.place == ELEMENT  or  prop_key.place == FACE  or prop_key.place == INTER_FACE  ) {
           if ( prop_key.type != SCALAR ) {
@@ -531,7 +545,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      
      // 3.2 writing coordinates
      // ---------------------------
-     ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
+     ofs <<"DATASET " << (use_cells ? "UNSTRUCTURED_GRID" : "POLYDATA") << endl;
      ofs <<"POINTS " << pxyz_data.size() <<" double"<< endl;
      
      typename map<size_t,vector<double> >::const_iterator  nit;
@@ -543,10 +557,11 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
           ofs << endl;
        }
      ofs << endl;  
-       
-     // 3.3 getting total number of connections + numbers giving connections per element
-     // -------------------------------------------------------------------------------
-     size_t cell_list_size(0);                            
+    
+    if (use_cells) {
+      // 3.3 getting total number of connections + numbers giving connections per element
+      // -------------------------------------------------------------------------------
+     size_t cell_list_size(0);
      deque<vector<size_t> >::const_iterator  eit;
      const deque<vector<size_t> >::const_iterator  eit_end(transformed_plist.end());
      for ( eit=transformed_plist.begin(); eit!=eit_end; eit++ )
@@ -561,7 +576,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
           for ( vector<size_t>::const_iterator
                 it=(*eit).begin(); it!=(*eit).end(); it++ ) ofs << *it <<" ";
           ofs << endl;
-       }   
+       }
      ofs << endl;
      
      // 3.5 writing CELL_TYPES
@@ -569,9 +584,10 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
      deque<VTK_TYPE>::const_iterator  vit;
      const deque<VTK_TYPE>::const_iterator  vit_end(geometric_primitives_VTK.end());
-     for ( vit=geometric_primitives_VTK.begin(); vit!=vit_end; vit++ ) 
-       ofs << (*vit) << endl;    
+     for ( vit=geometric_primitives_VTK.begin(); vit!=vit_end; vit++ )
+       ofs << (*vit) << endl;
      ofs << endl;
+    }
 
      // 3.6 writing POINT_DATA or CELL_DATA point-type data values
      // ----------------------------------------------------------
@@ -759,7 +775,7 @@ template<size_t dim>
 void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
                                             const vector<size_t>& elmt_ids,
                                             map<size_t,vector<size_t> >& plist,
-                                            map<size_t,size_t>& node_nums )
+                                            map<size_t,PointDescriptor>& node_nums )
  {
     size_t             nodes(0U);
     vector<size_t>     pentry(3);
@@ -775,23 +791,21 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
       {
          // getting node ids and renumbering them 0...n-1
          for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) {
-              pair<typename map<size_t,size_t>::iterator,bool>
-                node_it = node_nums.insert( make_pair( sgref.E( (*lit) )->N(i)->Idx(), nodes ) );
-              if ( node_it.second == true ) nodes++;
-           }
+           PointDescriptor pt = { nodes, 0u };
+           auto node_it = node_nums.insert( make_pair( sgref.E( (*lit) )->N(i)->Idx(), pt ) );
+           if ( node_it.second ) nodes++;
+          }
          
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
          pentry.resize( sgref.E( (*lit) )->Nodes() );
          for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) {
-              typename map<size_t,size_t>::const_iterator
-                nit = node_nums.find( sgref.E( (*lit) )->N(i)->Idx() );
-              pentry[i] = (*nit).second;
+              auto nit = node_nums.find( sgref.E( (*lit) )->N(i)->Idx() );
+              pentry[i] = (*nit).second.element_or_node_;
            }
          
          // inserting new element id and empty vector<double> into the plist
-         pair<typename map<size_t,vector<size_t> >::iterator,bool>
-           pit = plist.insert( make_pair( (*lit), empty_vec ) );
+         auto pit = plist.insert( make_pair( (*lit), empty_vec ) );
          if ( pit.second == true ) {
               // initializing plist vector
               (*pit.first).second.reserve( sgref.E( (*lit) )->Nodes() );
@@ -869,7 +883,7 @@ void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
 
 /**
  
-IntegrationPoints are visualized as point data. Such points are introduced
+ELEMENT_INTEGRATION_POINTs are visualized as point data. Such points are introduced
 as nodes with locations that correspond to those of the integration points
 of the corresponding finite elements. Thus, each element has its own 
 unique set of constraint points. 
@@ -886,14 +900,14 @@ among the the elements.
 Output of variables that are stored at IntegrationPoints. These might
 be strain, stress or similar computational variables. 
 
-@todo SKM: sector and facet integration point placements have to be added
+@todo SKM: sector integration point placements have to be added
  
 */
 template<size_t dim>
-void VTK_Interface<dim>::IntegrationPointBasedTopology( const Region<dim>& sgref,
+void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& sgref,
                                                        const vector<size_t>& elmt_ids,
                                                        map<size_t,vector<size_t> >&  clist,
-                                                       map<size_t,size_t>&  cpoint_nums )
+                                                       map<size_t,PointDescriptor>&  cpoint_nums )
  {
     vector<size_t>                pentry(3);
     pair<size_t,vector<size_t> >  alpha_help;
@@ -917,14 +931,14 @@ void VTK_Interface<dim>::IntegrationPointBasedTopology( const Region<dim>& sgref
            {
               // associate the unique number of the constraint-point with the parent element 
               // for later retrieval in IntegrationPointData method
-              cpoint_nums.insert( make_pair( cpoints, (*lit) ) ); 
+             PointDescriptor pt = { *lit, 0u };
+              cpoint_nums.insert( make_pair( cpoints, pt ) );
               pentry[i] = cpoints++;
            }
          // inserting new element idx and empty vector<double> into the clist
          alpha_help.first  = (*lit);
          alpha_help.second = alpha_vec;
-         pair<typename map<size_t,vector<size_t> >::iterator,bool> 
-         cit = clist.insert( alpha_help );
+         auto cit = clist.insert( alpha_help );
          assert( cit.second == true );
          
          // initializing clist vector
@@ -939,10 +953,81 @@ void VTK_Interface<dim>::IntegrationPointBasedTopology( const Region<dim>& sgref
     geometric_primitives_VTK.resize( clist.size() );
     fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
 
+  } // end ElmtIntegrationPointBasedTopology
+
+
+  /**
+   
+   FACET_INTEGRATION_POINTs are visualized as point data. Such points are introduced
+   as nodes with locations that correspond to those of the integration points
+   of the corresponding finite elements. Thus, each element has its own
+   unique set of constraint points.
+   
+   The constraint point properties are assigned later to each of these.
+   
+   @section implementation Implementation
+   
+   The constraint points are treated like nodes which are not shared
+   among the the elements.
+   
+   @section application Application
+   
+   Output of variables that are stored at IntegrationPoints. These might
+   be strain, stress or similar computational variables.
+   
+   */
+  template<size_t dim>
+  void VTK_Interface<dim>::FacetIntegrationPointBasedTopology( const Region<dim>& sgref,
+                                                             const vector<size_t>& elmt_ids,
+                                                             map<size_t,vector<size_t> >&  clist,
+                                                             map<size_t,PointDescriptor>&  cpoint_nums )
+  {
+    vector<size_t>                pentry;
+    pentry.reserve(12);
+    pair<size_t,vector<size_t> >  alpha_help;
+    vector<size_t>                alpha_vec;
+    
+    // the clist will be used to hold the constraint point ids per element
+    // -------------------------------------------------------------------
+    clist.clear();
+    cpoint_nums.clear();
+    
+    // 1. creating unique constraint point number list, and entering the cpoints into the
+    //    plist by looping over the selected elements
+    // ------------------------------------------------------------------------------------
+    size_t  cpoints(0U);
+    for ( typename vector<size_t>::const_iterator
+         lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    {
+      // getting constraint point ids and data
+      auto iNrFacets = sgref.E( (*lit) )->Facets();
+      for (size_t iFacet = 0U; iFacet < iNrFacets; ++iFacet) {
+        PointDescriptor pt = { *lit, iFacet };
+        cpoint_nums.insert( make_pair( cpoints, pt ) );
+        pentry.push_back(cpoints++);
+      }
+      // inserting new element idx and empty vector<double> into the clist
+      alpha_help.first  = (*lit);
+      alpha_help.second = alpha_vec;
+      pair<typename map<size_t,vector<size_t> >::iterator,bool>
+      cit = clist.insert( alpha_help );
+      assert( cit.second == true );
+      
+      // initializing clist vector
+      (*cit.first).second.reserve( pentry.size() );
+      for ( auto p : pentry )
+        (*cit.first).second.push_back( p );
+      pentry.clear();
+    }
+    
+    // 2. assigning the VTK type for the clist entries
+    // -----------------------------------------------
+    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
+    geometric_primitives_VTK.resize( clist.size() );
+    fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
+    
   } // end IntegrationPointBasedTopology
-
-
-
+  
 
 
 
@@ -956,7 +1041,7 @@ template<size_t dim>
 void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
                                              const vector<size_t>&  elmt_ids,
                                              map<size_t,vector<size_t> >&  plist,
-                                             map<size_t,size_t>&  node_nums )
+                                             map<size_t,PointDescriptor>&  node_nums )
  {
     size_t          nodes(0U);
     vector<size_t>  pentry(1);
@@ -970,11 +1055,11 @@ void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
           lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting node ids and renumbering them including duplicates 0...elmts * npe's
-         node_nums[ nodes ] = sgref.E( (*lit) )->Idx();
+        PointDescriptor pt = { sgref.E( (*lit) )->Idx(), 0u };
+         node_nums[ nodes ] = pt;
          pentry[0] = nodes++;
          // inserting new element id and single-element vector<double> into plist
-         pair<typename map<size_t,vector<size_t> >::iterator,bool>
-           pit = plist.insert( make_pair( (*lit), pentry ) );
+        auto pit = plist.insert( make_pair( (*lit), pentry ) );
          assert( pit.second == true );
       }   
 
@@ -988,7 +1073,7 @@ void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
 // only the coordinates of the nodes - no data
 template<size_t dim>
 void VTK_Interface<dim>::NodeCoordinates( const Region<dim>& sgref,
-                                          const map<size_t,size_t>& node_nums,
+                                          const map<size_t,PointDescriptor>& node_nums,
                                           map<size_t,vector<double> >& pxyz_data )
  {
     assert( !node_nums.empty() );
@@ -999,12 +1084,11 @@ void VTK_Interface<dim>::NodeCoordinates( const Region<dim>& sgref,
     // results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  empty_vec;
-    for ( typename map<size_t,size_t>::const_iterator
-          nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
+    for ( auto nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
          pair<typename map<size_t,vector<double> >::iterator,bool>
-         dit = pxyz_data.insert( make_pair( (*nit).second, empty_vec ) );
+         dit = pxyz_data.insert( make_pair( (*nit).second.element_or_node_, empty_vec ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -1047,7 +1131,7 @@ scalar, vector, or tensor type, the data segment of the vector<double> contains
 template<size_t dim>
 void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
                                    const csmp::Index&  prop_key,
-                                   const map<size_t,size_t>& node_nums,
+                                   const map<size_t,PointDescriptor>& node_nums,
                                    map<size_t,vector<double> >& pxyz_data )
  {
     if ( prop_key.place != NODE )
@@ -1063,12 +1147,11 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
     // results are put into the first three elements of 'pxz_data'
     // --------------------------------------------------------------------------
     vector<double>  empty_vec;
-    for ( typename map<size_t,size_t>::const_iterator
-          nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
+    for ( auto nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
          pair<typename map<size_t,vector<double> >::iterator,bool>
-           dit = pxyz_data.insert( make_pair( (*nit).second, empty_vec ) );
+           dit = pxyz_data.insert( make_pair( (*nit).second.element_or_node_, empty_vec ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -1122,6 +1205,39 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
 
 
 
+/*  adds the variable values at the constraint points to the 'pxyz_data' array
+ 
+ clist contains the coordinates of the constraint points
+ 
+ */
+template<size_t dim>
+void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
+                                                  const csmp::Index&  prop_key,
+                                                  map<size_t,vector<double> >& pxyz_data )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  switch (prop_key.place) {
+    case ELEMENT_INTEGRATION_POINT:
+    {
+      ElmtIntegrationPointData(gref, prop_key, pxyz_data);
+      break;
+    }
+      
+    case FACET_INTEGRATION_POINT:
+    {
+      FacetIntegrationPointData(gref, prop_key, pxyz_data);
+      break;
+    }
+
+      
+    default:
+    {
+      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData",
+                        "Placement currently not handled", parsePlacement(prop_key.place) );
+    }
+  }
+}
 
 
 
@@ -1131,15 +1247,15 @@ clist contains the coordinates of the constraint points
 
 */
 template<size_t dim>
-void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
+void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                                               const csmp::Index&  prop_key,
                                               map<size_t,vector<double> >& pxyz_data )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( prop_key.place != ELEMENT_INTEGRATION_POINT )
-      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData", 
-                                      "Method only applies to constraint point properties" );
+      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
+                                      "Method only applies to element integration points" );
     VectorVariable<dim>  vc;
     TensorVariable<dim>  ts;
     
@@ -1203,9 +1319,89 @@ void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
          
       } // cpoint map
      
- } // end IntegrationPointData
+ } // end ElmtIntegrationPointData
 
 
+  /*  adds the variable values at the constraint points to the 'pxyz_data' array
+   
+   clist contains the coordinates of the constraint points
+   
+   */
+  template<size_t dim>
+  void VTK_Interface<dim>::FacetIntegrationPointData( const Region<dim>& gref,
+                                                    const csmp::Index&  prop_key,
+                                                    map<size_t,vector<double> >& pxyz_data )
+  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( prop_key.place != FACET_INTEGRATION_POINT )
+      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
+                        "Method only applies to element integration points" );
+    VectorVariable<dim>  vc;
+    TensorVariable<dim>  ts;
+    
+    pxyz_data.erase( pxyz_data.begin(), pxyz_data.end() );
+    
+    // extracting constraint point coordinates and property values from Model
+    // results are put into the first three elements of 'pxz_data'
+    // --------------------------------------------------------------------------
+    vector<double>  dentry;
+    size_t            cpoints(0U);
+    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    {
+      // getting the coordinates of the constraint point
+      for ( size_t i=0U; i<(*it)->Facets(); i++, cpoints++ )
+      {
+        auto fv = (*it)->FV();
+        // inserting new point into the cordinate map using new constraint-point coordinate number
+        auto dit = pxyz_data.insert( make_pair( cpoints, dentry ) );
+        assert( dit.second == true );
+        // making space for missing coordinates and at least one scalar variable value
+        (*dit.first).second.reserve(4U);
+        Point<dim>  cp((*it)->RstToXYZ(fv->FacetIntegrationPoint( i, 0u )));
+        (*dit.first).second.push_back( cp[0] );
+        (*dit.first).second.push_back( cp[1] );
+        (*dit.first).second.push_back( ((dim==3U) ? cp[2] : 0.) );
+        
+        // adding the variable data
+        if ( prop_key.type == SCALAR ) (*dit.first).second.push_back( (*it)->Read( i, 0u, prop_key ) );
+        else if ( prop_key.type == VECTOR ) {
+          // storage for 3 coordinate values and 3 data values (in 2D 3rd place = 0.0)
+          (*dit.first).second.reserve(6U);
+          (*it)->Read( i, 0u, prop_key, vc );
+          // variables have always 3 components since view screen is 3D
+          for ( size_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+          if ( dim == 3U ) (*dit.first).second.push_back( vc[2U] );
+          else             (*dit.first).second.push_back( 0. );
+        }
+        else if ( prop_key.type == TENSOR ) {
+          // storage for 3 coordinate values and 9 data values (in 2D 3rd row, column = 0.0)
+          (*dit.first).second.reserve(12U);
+          (*it)->Read( i, 0u, prop_key, ts );
+          // variables have always 3 components since view screen is 3D
+          if ( dim == 3U )
+            for ( size_t k=0U; k<3U; k++ )
+              for ( size_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+          else {
+            (*dit.first).second.push_back( ts(0,0) );
+            (*dit.first).second.push_back( ts(0,1) );
+            (*dit.first).second.push_back( 0.0 );
+            (*dit.first).second.push_back( ts(1,0) );
+            (*dit.first).second.push_back( ts(1,1) );
+            (*dit.first).second.push_back( 0.0 );
+            (*dit.first).second.push_back( 0.0 );
+            (*dit.first).second.push_back( 0.0 );
+            (*dit.first).second.push_back( 0.0 );
+          }
+        } // tensor
+        dentry.clear();
+      } // cpoints
+      
+    } // cpoint map
+    
+  } // end FacetIntegrationPointData
+  
+  
 
 
 
@@ -1216,7 +1412,7 @@ void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
 template<size_t dim>
 void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
                                       const csmp::Index&     prop_key,
-                                      const map<size_t,size_t>& obj_nums,
+                                      const map<size_t,PointDescriptor>& obj_nums,
                                       map<size_t,vector<double> >& sgdata )
  {
     if ( obj_nums.empty() ) {
@@ -1231,12 +1427,10 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
     
     sgdata.erase( sgdata.begin(), sgdata.end() );
 
-    for ( typename map<size_t,size_t>::const_iterator
-          nit=obj_nums.begin(); nit!=obj_nums.end(); nit++ )
+    for ( auto nit=obj_nums.begin(); nit!=obj_nums.end(); nit++ )
       {
          // inserting new element into the data map using new node number
-         pair<typename map<size_t,vector<double> >::iterator,bool>
-           dit = sgdata.insert( make_pair((*nit).second, vector<double>() ) );
+         auto dit = sgdata.insert( make_pair((*nit).second.element_or_node_, vector<double>() ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for a scalar data value)
@@ -1407,7 +1601,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
 template<size_t dim>
 void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
                                            const csmp::Index&     prop_key,
-                                           const map<size_t,size_t>& node_nums,
+                                           const map<size_t,PointDescriptor>& node_nums,
                                            map<size_t,vector<double> >& pxyz_data )
  {
     if ( prop_key.place != ELEMENT and prop_key.place != REGION )
@@ -1423,8 +1617,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
     //    results are put into the first three elements of 'pxz_data'
     // -------------------------------------------------------------------------- 
     vector<double> empty_vec;
-    for ( typename map<size_t,size_t>::const_iterator
-          nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
+    for ( auto nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
          pair<typename map<size_t,vector<double> >::iterator,bool>
@@ -1433,7 +1626,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
          (*dit.first).second.reserve(4);
-         Point<dim>  bc(sgref.E( (*nit).second )->BaryCenter());
+         Point<dim>  bc(sgref.E( (*nit).second.element_or_node_ )->BaryCenter());
          (*dit.first).second.push_back( bc[0] );
          (*dit.first).second.push_back( bc[1] );
          if ( dim == 3 ) (*dit.first).second.push_back( bc[2] );

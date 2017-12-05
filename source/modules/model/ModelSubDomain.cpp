@@ -511,6 +511,14 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPL
  { return node_vec_.end(); }
 
 template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorNodesBegin() const
+ { return node_vec_.begin(); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorNodesEnd() const
+ { return std::next( node_vec_.begin(), InteriorNodes() ); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
 typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 

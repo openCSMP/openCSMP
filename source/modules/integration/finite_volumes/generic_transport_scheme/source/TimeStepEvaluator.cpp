@@ -8,6 +8,7 @@
 
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
 #include "Exception.h"
 #include "Element.h"
 #include "Region.h"
@@ -76,19 +77,27 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
 
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
           const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j )
             {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 ffc = eptr->Read(facet, 0, User()->ffC_key);
+               if (isnan(ffc)) {
+                 // XXX AJB HACK
+                 // Facets with no facet flux concentration are boundary facets
+                 // which haven't been removed. This is a hacky solution.
+                 continue;
+               }
+
                const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric facet flow into flux balance
                const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
                if ( facet_flux > 0. ) outflow += facet_flux;
                flux_balance += facet_flux;
                // temporary accumulation of flux-concentration products into the variable 'new concentration'
-               flux_concentration_products += sign * eptr->Read( facet, 0U, User()->ffC_key );
+               flux_concentration_products += sign * ffc;
             }
        }
 
@@ -102,7 +111,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
      // 3. recording the flux concentration product balance
      nptr->Store( User()->C1_key, makeScalar(nptr->Status(User()->C1_key),flux_concentration_products) );
 
-     return std::max( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrement
 
@@ -126,7 +135,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
          // 1.1 (phi * V) / q_out = dt
          const double64 flux_balance = std::max( fabs( nptr->Read( User()->fb_key )), fluid_source );
          if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-         return std::max( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+         return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
       }
  
     // 2. for a perimeter FV that is intact, the volumetric outflow needs to be calculated 
@@ -134,7 +143,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
 
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
           const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j ) {
@@ -148,7 +157,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
 
      // (phi * V) / q_out = dt
      if ( outflow < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-     return std::max( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrementBoundary
 
@@ -355,7 +364,10 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
 
 */
 
+template class TimeStepEvaluator<2U,ExplicitTransport>;
+template class TimeStepEvaluator<2U,ImplicitTransport>;
 template class TimeStepEvaluator<3U,ExplicitTransport>;
+template class TimeStepEvaluator<3U,ImplicitTransport>;
 
 } // end csmp
 

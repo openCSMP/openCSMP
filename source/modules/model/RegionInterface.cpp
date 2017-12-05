@@ -360,18 +360,26 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
 
            }
            else {
-               auto& subdomain = iterUniqueRegion->second;
+              auto& subdomain = iterUniqueRegion->second;
 
-               REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
-               auto& meshMgr = regionComplex->Mesh();
-               auto spatialDimensions = subdomain.ElementSpatialDimensions();
-             
+              REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+              auto& meshMgr = regionComplex->Mesh();
+              auto spatialDimensions = subdomain.ElementSpatialDimensions();
 
-               for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
-                   // XXX Bulk erase would be more efficient
-                   meshMgr.Erase( *(*eit) );
-               }
+              for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
+                meshMgr.Erase( *(*eit) );
+              }
+              if (spatialDimensions.second == dim) {
+                for ( auto nit=subdomain.InteriorNodesBegin(); nit!=subdomain.InteriorNodesEnd(); ++nit ) {
+                  meshMgr.Erase( *(*nit) );
+                }
+                regionComplex->Mesh().RebuildParentRelationships(subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd());
+              }
+              else {
+                regionComplex->Mesh().RebuildParentRelationships(subdomain.NodesBegin(), subdomain.NodesEnd());
+              }
            }
+       }
      
 
       // if the group was found in the list, it is erased
@@ -2548,6 +2556,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion( const char* region, 
                            region2.begin(), region2.end(), std::inserter( overlap, overlap.begin() ) );
     // region1 -= region2
     // TODO: is there a more efficient way to remove these elements?
+   // TODO: Yes there is. In-place merge. (AJB)
     for ( auto it=overlap.begin(); it!=overlap.end(); ++it )
       region1.erase( remove( region1.begin(), region1.end(), (*it) ), region1.end() );
 

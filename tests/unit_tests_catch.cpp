@@ -1,8 +1,12 @@
 // Disable wingdi.h because it steps on our toes
 #define NOGDI
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Exception.h"
+#endif
 
 
 #include "ScalarVar_Test.h"
@@ -178,7 +182,35 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
  }
 
 
-#if 0
+
+int
+main()
+{
+  const bool verbose(false);
+
+  const bool test_fundamentals(true),
+             test_interdependent1(true),
+             test_interdependent2(true),
+             test_composite(true),
+             test_refactoring(false),
+             test_new_developments(false);
+  
+  long fails_fundamentals(0),
+       fails_interdependent1(0),
+       fails_interdependent2(0),
+       fails_composite(0),
+       fails_new_developments(0),
+       total_failures(0);
+
+    long nFail(0);
+    
+    // Run Catch tests.
+    {
+        Catch::Session session;
+        session.run();
+    }
+
+
     if ( test_interdependent1 ) {
           const bool verbose(false);
           cout <<"\n2. Finite-element functionality: running tests..."<< endl;
@@ -207,6 +239,9 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
           cerr << "\nunit_tests_main: 2. CSMP interdependent-functionality1: Total unit test failures: " << nFail << endl;
       }
 
+    // Run non-Catch tests
+    try {
+
     if ( test_interdependent2 ) {
           const bool verbose(false);
           cout <<"\n3. Model-related interdependent functionality: running tests..."<< endl;
@@ -223,7 +258,7 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
           interdependent2.addTest( new PropertyHandle_Test() );
           // interfaces
           interdependent2.addTest( new VTU_Interface_Test() );
-          interdependent2.addTest( new StatisticalAnalyzerTest() );
+          interdependent2.addTest( new StatisticalAnalyzer_Test() );
           // running unit tests and reporting errors
           interdependent2.run();
           nFail = interdependent2.report();
@@ -241,7 +276,7 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
           Visitor_TestSuite visitorTests( composite );
           visitorTests.run();
 
-          composite.addTest( new PropertyAtPointVisitor_Test() );
+          composite.addTest( new PropertyAtPointVisitor_Test(verbose) );
 
           /// Two phase flow tests
           TwoPhaseModel_TestSuite twoPhaseModelTests( composite );
@@ -255,7 +290,82 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
           cerr << "\nunit_tests_main: 4. CSMP-dependent-functionality: Total unit test failures: " << nFail << endl;
       }
 
+
+
+    } // Exception handling (warnings etc. are caught at a much lower level)
+    catch( bad_alloc& ba ) {
+        cerr <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( bad_cast& ba ) {
+        cerr <<"\nbad_cast: Type casting error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( bad_exception& ba ) {
+        cerr <<"\nbad_exception: Exception error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( bad_typeid& ba ) {
+        cerr <<"\nbad_typeid: Type ID error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( ios_base::failure& ba ) {
+        cerr <<"\nios_base::failure: Probable I/O error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    // standard logic errors
+    catch( domain_error& ba ) {
+        cerr <<"\ndomain_error: Logic error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( invalid_argument& ba ) {
+        cerr <<"\ninvalid_argument: Logic error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( length_error& ba ) {
+        cerr <<"\nlength_error: Logic error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( out_of_range& ba ) {
+        cerr <<"\nout_of_range: Logic error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    // runtime errors
+    catch( overflow_error& ba ) {
+        cerr <<"\noverflow_error: Runtime error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( range_error& ba ) {
+        cerr <<"\nrange_error: Runtime error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( underflow_error& ba ) {
+        cerr <<"\nunderflow_error: Runtime error caused by: "<< ba.what() << endl;
+        system("pause");
+    }
+    catch( Exception& ba ) {
+#ifdef __GNUC__
+        // this is a fix for gcc name demangling.
+        const std::type_info  &ti = typeid(ba);
+        int status;
+        char* realname = abi::__cxa_demangle(ti.name(), 0, 0, &status );
+        cout<<"\nException: Exception raised by: "<<realname<<endl;
+#else
+        cout<<"\nException: Exception raised by: "<< typeid(ba).name() << endl;
+#endif
+        cout <<"\nDiagnostics:"<< endl;
+        ba.Out();
+    }
+#ifdef CSMP_WITH_SAMG_SOLVER
+    catch( SAMG_Exception& ba ) {
+        cout <<"\nSAMG_Exception: "<< ba.what() << endl;
+        system("pause");
+    }
+#endif
     cerr << "\nunit_tests_main: Total unit test failures: " << nFail << endl;
 
-#endif
+  // tell operating system that no error occurred (by returning 0 as opposed to
+  // some error number)
+  return total_failures;
+}
 

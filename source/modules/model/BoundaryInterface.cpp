@@ -594,6 +594,7 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
        }
     assert( nbor_elmt != nullptr );
 
+#if 0
 #ifndef NDEBUG
      // TODO: check whether following assert is correct:
 
@@ -611,6 +612,7 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
          else if (e.IsLineElement())
              assert( nbor_elmt->IsLineElement() );
      }
+#endif
 #endif
    
     // 2. drawing the results
@@ -2157,7 +2159,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
      @test updated by SKM 2016
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries()
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries(bool remove_original_lower_dimensional_regions)
   {
 
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
@@ -2193,13 +2195,20 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries()
     if ( count( eligibleRegions.begin(), eligibleRegions.end(), "Model" ) == 0 ) faceBoundaryMap_.erase("Model");
 
     // moving the original regions from which the boundaries were created from model and into the non-unique regions map
-    for ( size_t i = 0; i < eligibleRegions.size(); ++i )
-      if ( eligibleRegions[i] != "Model" ) {
-            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Removing region '";
-            std::cout << eligibleRegions[i] << "' from 'Model' since it was transformed into Boundary...";
-            boundaryComplex->RemoveFromRegion( "Model", eligibleRegions[i].c_str() );
-            boundaryComplex->MoveToNonUniqueRegions( eligibleRegions[i].c_str() );
+    for ( size_t i = 0; i < eligibleRegions.size(); ++i ) {
+      auto& region_name = eligibleRegions[i];
+      if ( region_name != "Model" ) {
+        std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Removing region '";
+        std::cout << region_name << "' from 'Model' since it was transformed into Boundary...";
+        boundaryComplex->RemoveFromRegion( "Model", region_name.c_str() );
+        if (remove_original_lower_dimensional_regions) {
+            boundaryComplex->RemoveRegion( region_name.c_str(), true );
         }
+        else {
+            boundaryComplex->MoveToNonUniqueRegions( region_name.c_str() );
+        }
+      }
+    }
 
     // changing all BOX_BOUNDARY flags on the outside of the model to IRREGULAR, unless a box-boundary name is recognised
     // (edges are not considered)

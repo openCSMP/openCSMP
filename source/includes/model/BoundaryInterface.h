@@ -142,7 +142,7 @@ class BoundaryInterface {
     bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
 
     /// inserts irregular csmp::Boundary for all eligible regions in the model
-    bool EstablishBoundaries();
+    bool EstablishBoundaries(bool remove_original_lower_dimensional_regions);
 
     // -----------------------------------------------
     // Binary input/output

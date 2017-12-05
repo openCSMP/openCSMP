@@ -8,6 +8,9 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
+struct VariableSet_TracerTransferExplicit;
+
+
 
 /**
 
@@ -34,8 +37,10 @@ class FacetFlux_TracerTransferExplicit {
     void UpwindDirection();
   
     /// computes (A_i vD . n_i) * upstream C on all facets in element stencil and stores them there
-    void      Advective_O1_FluxesInterior( Element<dim>* ) const;
+    void      Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>* ) const;
     double64  Advective_O1_FluxesAtBoundary( Node<dim>* ) const;
+    void      Advective_O2_FluxesInterior( bool reuse_previous_velocity, Element<dim>* ) const;
+    double64  Advective_O2_FluxesAtBoundary( Node<dim>* ) const;
   
     /// stores and returns FV flux balance computed from current facet fluxes
     double64  FluxBalance( Node<dim>* const ) const;
@@ -51,7 +56,7 @@ class FacetFlux_TracerTransferExplicit {
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
   
   private:
-    mutable VectorVariable<dim>  vD_, nrml_, gradC_; ///< for efficient re-use
+    mutable VectorVariable<dim>  nrml_, gradC_; ///< for efficient re-use
     mutable Point<dim>           pt_;
     mutable DenseMatrix<DM_MIN>  DN_;
 };

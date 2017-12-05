@@ -1,3 +1,4 @@
+
 #include "FiniteVolumeTransportBasics_Test.h"
 
 #include "vsetMakers.h"
@@ -12,6 +13,21 @@
 #include "CSMP_highLevelUtilities.h"
 #include "PropertyHandle.h"
 #include "VTK_Interface.h"
+
+#include "finiteVolumeFunctions.h"
+#include "ExplicitNodeCenteredFiniteVolumeTransport.h"
+#include "NodeCenteredFiniteVolumeTransport.h"
+
+#include "SteadyStateDiffusor.h"
+#include "VelocityAndVolumeFlux.h"
+#include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
+
+#include "ConstantFactor.h"
+
+
+#include "InputDataManager.h"
+#include "Standard_IO_Handler.h"
 
 #include "ANSYS_Model3D.h"
 
@@ -37,6 +53,7 @@ FiniteVolumeTransportBasics_Test::~FiniteVolumeTransportBasics_Test()
 void
 FiniteVolumeTransportBasics_Test::run()
 {
+#if 0
     {
         VSet<3U> vset;
         test_Create_Hexahedra_VSet(vset, true);
@@ -60,6 +77,9 @@ FiniteVolumeTransportBasics_Test::run()
         std::cerr << "Testing pyramid\n";
         test_constant_velocity_field(model);
     }
+#endif
+    
+    test_b25();
 }
 
 
@@ -150,12 +170,11 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
     {
         // std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
 
-        if (!(*it)->IsVolumeElement() ) {
+        if (!(*it)->IsSurfaceElement()) {
             continue;
         }
-        assert( (*it)->IsVolumeElement() );
 
-        // std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';        
+        std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
 
         const size_t nodes((*it)->Nodes());
         
@@ -200,8 +219,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
                 v1 += xform_weights.second * n;
             }
 
-            Point<3u> facet_normal_remapped = crossProduct(v1, v0);
-            const double64 fnr_length = facet_normal_remapped.Length();
+            Point<3u> facet_normal_remapped(crossProduct(v1, v0));
             facet_normal_remapped.NormalizeLengthTo(1.0);
 
             double64 projected_velocity_parametric = dotProduct(facet_normal_remapped, vDremapped);
@@ -364,6 +382,100 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
     
      std::cerr << "Flux balance: (" << fmin << ", "  << fmax << ")\n";
 }
+    
+    
+    void FiniteVolumeTransportBasics_Test::test_b25()
+    {
+        using namespace std;
+#if 0
+        string  model_name("cylinder");
+        string  variables_name("cylinder-variables.txt");
+#endif
+#if 1
+      string  model_name("cube100");
+      string  variables_name("cube100-variables.txt");
+#endif
+#if 0
+      string  model_name("brick");
+      string  variables_name("cube100-variables.txt");
+#endif
+
+
+        ANSYS_Model3D  model( model_name.c_str(), model_name.c_str(), variables_name.c_str(), false, true, true, true);
+
+        printModelDimensions( model, true );
+
+        InputDataManager<3U>   model_configuration;
+        ComputationalSettings  run_settings;
+        model_configuration.ConfigureFromFile( model,
+                                              model_name.c_str(),
+                                              false,
+                                              true,   // 2) default prop.values
+                                              true,   // 3) region prop.values
+                                              true,   // 4) essential box-boundary conditions
+                                              true,   // 5) essential flags
+                                              true,   // 6) boundary conditions
+                                              run_settings );
+        model.InstantiateFiniteVolumes();
+
+        Standard_IO_Handler  stdio;
+        printRangeOfVariable( model, stdio, "permeability" );
+    
+        const double64  fluid_viscosity(1.0e-03);
+        ConstantFactor<3U,divides>  conductivity( model.Database(),
+                                                 "conductivity", "permeability",
+                                                 fluid_viscosity );
+        model.Apply( conductivity );
+
+        SteadyStateDiffusor<3U,Region> steady_state_pressure( model,
+                                                             "conductivity", "fluid pressure",
+                                                             "fluid volume source" );
+        VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+        steady_state_pressure.AddPostProcess( &postpro0 );
+        steady_state_pressure.ComputeSteadyState( model );
+
+        
+        VTK_Interface<3U>  vtk_output;
+        vtk_output.OutputDataToVTK( model, "permeability", "permeability", 0 );
+        vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
+        vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       0 );
+
+#if 0
+        NodeCenteredFiniteVolumeTransport<3U> advector( "Model", model,
+                                                        "porosity", "concentration", "velocity",
+                                                        "nodal fluid volume source",false, false );
+        PropertyHandle<3U>  fv( model,"finite volume",SCALAR,NODE);
+        advector.FiniteVolume( "finite volume" );
+        cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
+        advector.Divergence( "velocity", "nodal flux mismatch" );
+#else
+        ExplicitTransport<3U> advector(model, "Model", true);
+        advector.StepSizeReductionFactor(0.9);
+#endif
+        
+        // the calculation of fluid pressure
+      
+#if 1
+        vtk_output.OutputDataToVTK( model, "o2concentration", "concentration", 0 );
+        vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", 0 );
+
+#endif
+
+        for (unsigned i = 1; i < 100; ++i) {
+            advector.AdvectVariable(50.0);
+            // advector.AdvectVariable(1000.0);
+#if 1
+            vtk_output.OutputDataToVTK( model, "velocity", "velocity", i );
+            vtk_output.OutputDataToVTK( model, "o2concentration", "concentration", i );
+            vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", i );
+            vtk_output.OutputDataToVTK( model, "fluxbalance", "flux balance", i );
+            vtk_output.OutputDataToVTK( model, "ff", "facet flux", i );
+            vtk_output.OutputDataToVTK( model, "ffC", "facet flux concentration", i );
+
+            vtk_output.OutputDataToVTK( model, "newconcentration", "new concentration", i );
+#endif
+        }
+    }
 
 
 } //end namespace csmp

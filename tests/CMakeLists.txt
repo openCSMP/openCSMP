@@ -38,12 +38,13 @@ if(CMAKE_HOST_WIN32)
 	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/build/windows)
 endif()
 
+FILE(GLOB TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp)
+
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
-FILE(GLOB TEST_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp)
 if(BUILD_TESTING)
     ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
-    TARGET_LINK_LIBRARIES(csmptest csmpcore ${SAMG_LIBRARIES})
+    TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
 		ENABLE_TESTING()
         ADD_TEST(
@@ -59,5 +60,4 @@ if(BUILD_TESTING)
         )
     endif()
 endif(BUILD_TESTING)
-
 
