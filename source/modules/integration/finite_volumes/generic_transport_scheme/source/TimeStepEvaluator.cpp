@@ -8,6 +8,7 @@
 
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
 #include "Exception.h"
 #include "Element.h"
 #include "Region.h"
@@ -76,7 +77,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
 
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
           const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j )
@@ -142,7 +143,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
 
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
           const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j ) {
@@ -363,7 +364,10 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
 
 */
 
+template class TimeStepEvaluator<2U,ExplicitTransport>;
+template class TimeStepEvaluator<2U,ImplicitTransport>;
 template class TimeStepEvaluator<3U,ExplicitTransport>;
+template class TimeStepEvaluator<3U,ImplicitTransport>;
 
 } // end csmp
 

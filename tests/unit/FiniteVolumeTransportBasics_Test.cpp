@@ -21,6 +21,8 @@
 #include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
+
 #include "ConstantFactor.h"
 
 
@@ -447,8 +449,8 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
         advector.Divergence( "velocity", "nodal flux mismatch" );
 #else
-        ExplicitTransport<3U> advector(model, "Model", true, false);
-        advector.StepSizeReductionFactor(0.1);
+        ImplicitTransport<3U> advector(model, "Model", false);
+        advector.StepSizeReductionFactor(0.9);
 #endif
         
         // the calculation of fluid pressure

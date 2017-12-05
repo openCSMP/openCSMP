@@ -8,7 +8,7 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
-template<size_t> struct VariableSet_TracerTransferExplicit;
+struct VariableSet_TracerTransferExplicit;
 
 
 
