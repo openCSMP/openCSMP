@@ -14,15 +14,15 @@
 
 namespace csmp {
 
-template<size_t dim> {
-class DiffusionLHS {
+template<size_t dim>
+    class DiffusionLHS : public MatrixOperator<dim> {
   public:
     DiffusionLHS();
     DiffusionLHS( const DiffusionLHS& );
-    virtual void ~DiffusionLHS();
+    virtual ~DiffusionLHS();
   
-    virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& );
-    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& );
+    virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& ) const;
+    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& ) const;
   
   private:
     DenseMatrix<DM_MIN>  DN_, DNT_;
