@@ -103,7 +103,7 @@ void LinearSystemAccumulator<dim>::EnsureSolver()
     settings.Set_iout2(0);
     solver_= std::unique_ptr<Solver>(new SAMG_Solver(&settings));
 #else
-    solver_= std::unique_ptr<Solver>(new CSMP_DEFAULT_SOLVER);
+    solver_= std::unique_ptr<Solver>(new CSMP_DEFAULT_LINEAR_SOLVER);
 #endif
   }
 }
