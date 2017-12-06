@@ -23,12 +23,16 @@ class LinearSystemAccumulator {
     void AccumulateByFiniteVolume();
 
     void SolveSystem();
+  
+    void WriteResultIntoModel();
 
   private:
     LinearSystemAccumulator( ) = delete;
     LinearSystemAccumulator( const LinearSystemAccumulator& ) = delete;
     LinearSystemAccumulator( LinearSystemAccumulator&& ) = delete;
     LinearSystemAccumulator& operator=( const LinearSystemAccumulator& ) = delete;
+  
+    void EnsureSolver();
 
     Model<dim>& model_;
     Region<dim>& gref_;
