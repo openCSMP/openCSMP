@@ -533,13 +533,24 @@ typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>
 
 
 template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin() const
- { return std::next( elmt_vec_.begin(), InteriorElements() ); }
-
-
-template<size_t dim, template<size_t> class SIMPLEX>
 typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::ElementsEnd() const
  { return elmt_vec_.end(); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorElementsBegin() const
+  { return elmt_vec_.begin(); }
+   
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorElementsEnd() const
+  { return std::next( elmt_vec_.begin(), InteriorElements() ); }
+
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin() const
+  { return std::next( elmt_vec_.begin(), InteriorElements() ); }
+   
+template<size_t dim, template<size_t> class SIMPLEX>
+typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsEnd() const
+  { return elmt_vec_.end(); }
 
 
 template<size_t dim, template<size_t> class SIMPLEX>

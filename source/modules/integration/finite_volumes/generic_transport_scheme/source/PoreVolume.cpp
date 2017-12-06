@@ -11,8 +11,8 @@ namespace csmp {
 
 		}
 
-		template<size_t dim>
-		void AccumulateFV(Node<dim> *nptr, SparseMatrix &A) {
+  template<size_t dim>
+  void PoreVolume<dim>::AccumulateFiniteVolume(Node<dim> *nptr, SparseMatrix &A) const {
 			double64 pv = nptr->Read(pv_key_);
 			size_t i = nptr->Idx();
 			A(i, i) = pv / dt_;

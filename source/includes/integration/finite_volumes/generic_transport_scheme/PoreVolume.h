@@ -9,7 +9,7 @@ template <size_t dim>
 class PoreVolume : public MatrixOperator<dim> {	
 	public: 
 	PoreVolume(Model<dim>& ,const char * ,double64 delta_t);
-	virtual void AccumulateFV(Node<dim>* nptr, SparseMatrix& A, double64 dt);
+	virtual void AccumulateFiniteVolume(Node<dim>* nptr, SparseMatrix& A) const;
 	
 	private:
 	double64 dt_;

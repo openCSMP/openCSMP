@@ -2,7 +2,7 @@
 #define CSMP_MATRIX_ACCUMULATOR_H
 
 #include "GenericTransportScheme.h"
-#include "Solver.h"
+#include "LinearSolver.h"
 #include <memory>
 
 namespace csmp {
@@ -10,7 +10,7 @@ namespace csmp {
 template<size_t dim>
 class LinearSystemAccumulator {
   public:
-    LinearSystemAccumulator( Model<dim>& model, const char* region );
+    LinearSystemAccumulator( Solver& solver, Model<dim>& model, const char* region );
 
     void AddOperatorPerimeter( MatrixOperator<dim>* op );
     void AddOperatorInterior( MatrixOperator<dim>* op );
@@ -32,14 +32,11 @@ class LinearSystemAccumulator {
     LinearSystemAccumulator( LinearSystemAccumulator&& ) = delete;
     LinearSystemAccumulator& operator=( const LinearSystemAccumulator& ) = delete;
   
-    void EnsureSolver();
-
     Model<dim>& model_;
-    Region<dim>& gref_;
+    const Region<dim>& gref_;
+    Solver& solver_;
 
     size_t fvs_;
-
-    std::unique_ptr<Solver> solver_;
 
     SparseMatrix LHS_;
     std::vector<double64> RHS_;

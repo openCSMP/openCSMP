@@ -44,8 +44,8 @@ class VectorOperator
 public:
     ACCUMULATION_MODE AccumulationMode() const { return mode_; }
 
-    virtual void AccumulateStencil( Element<dim>& fe, std::vector<double64>& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, std::vector<double64>& mat ) const = 0;
+    virtual void AccumulateStencil( const Element<dim>* fe, std::vector<double64>& mat ) const = 0;
+    virtual void AccumulateFiniteVolume( const Node<dim>* fv, std::vector<double64>& mat ) const = 0;
 
     virtual ~VectorOperator() { }
 

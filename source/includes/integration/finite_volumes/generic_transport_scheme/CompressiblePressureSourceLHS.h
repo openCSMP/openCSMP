@@ -1,0 +1,24 @@
+#ifndef COMPRESSIBLE_PRESSURE_SOURCE_LHS_H
+#define COMPRESSIBLE_PRESSURE_SOURCE_LHS_H
+
+#include "MatrixOperator.h"
+
+
+namespace csmp {
+
+template<size_t dim>
+class CompressiblePressureSourceLHS : public MatrixOperator<dim> {
+  public:
+    CompressiblePressureSourceLHS(Model<dim>& model, const char*, const char*, const char*, const char*);
+    CompressiblePressureSourceLHS( const CompressiblePressureSourceLHS&);
+  
+    virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
+
+  private:
+    const csmp::Index phi_key_, CT_key_, pf0_key_, pf1_key_;
+};
+
+}
+
+#endif /* COMPRESSIBLE_PRESSURE_SOURCE_LHS_H */
