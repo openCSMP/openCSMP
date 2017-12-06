@@ -38,6 +38,8 @@ struct VariableSet_TracerTransfer {
      const csmp::Index  rhof_key; ///< fluid density
      const csmp::Index  C0_key;   ///< concentration
      const csmp::Index  C1_key;   ///< new concentration
+     // other
+     const csmp::Index  diff_key; ///< diffusion coefficient (computed from fluid and material properties)
 
    private:
      VariableSet_TracerTransfer() = delete;

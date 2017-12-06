@@ -17,6 +17,8 @@ class LinearSystemAccumulator {
     void AddOperatorPerimeter( VectorOperator<dim>* op );
     void AddOperatorInterior( VectorOperator<dim>* op );
 
+    void FinaliseOperators();
+
     void AccumulateByStencil();
     void AccumulateByFiniteVolume();
 
@@ -52,7 +54,7 @@ class LinearSystemAccumulator {
 
 \brief     Linear system accumulator
 \details   Part of the Colleoli transport scheme.
-\author    
+\author    Andrew J. Bromage
 \version   0a
 \date      5/12/2017
 \pre       high-level class depending on CSMP++ API

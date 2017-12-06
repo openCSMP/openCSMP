@@ -10,6 +10,8 @@
 #include "Region.h"
 #include "Element.h"
 #include "Node.h"
+#include "MatrixOperator.h"
+#include "VectorOperator.h"
 
 using namespace std;
 
@@ -52,6 +54,34 @@ void LinearSystemAccumulator<dim>::AddOperatorInterior( VectorOperator<dim>* op 
     interior_rhs_.push_back(op);
 }
 
+
+template<size_t dim>
+void LinearSystemAccumulator<dim>::FinaliseOperators()
+{
+    auto matrix_operator_ordering = [](const MatrixOperator<dim>* x, const MatrixOperator<dim>* y) {
+        return x->AccumulationMode() < y->AccumulationMode();
+    };
+    std::sort(interior_lhs_.begin(), interior_lhs_.end(), matrix_operator_ordering);
+    std::sort(perimeter_lhs_.begin(), perimeter_lhs_.end(), matrix_operator_ordering);
+
+    auto vector_operator_ordering = [](const VectorOperator<dim>* x, const VectorOperator<dim>* y) {
+        return x->AccumulationMode() < y->AccumulationMode();
+    };
+    std::sort(interior_rhs_.begin(), interior_rhs_.end(), vector_operator_ordering);
+    std::sort(perimeter_rhs_.begin(), perimeter_rhs_.end(), vector_operator_ordering);
+}
+
+
+template<size_t dim>
+void LinearSystemAccumulator<dim>::AccumulateByStencil()
+{
+}
+
+
+template<size_t dim>
+void LinearSystemAccumulator<dim>::AccumulateByFiniteVolume()
+{
+}
 
 
 template class LinearSystemAccumulator<1U>;
