@@ -22,6 +22,7 @@ SET(GEN_INCLUDES_DIR "${CMAKE_BINARY_DIR}/source/generated_includes")
 
 FILE(GLOB EXAMPLES_SRC
 	${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/source/*.h
 	)
 
 ADD_EXECUTABLE(examples

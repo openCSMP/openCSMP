@@ -25,41 +25,6 @@ namespace csmp {
   };
 
 
-/**
-
-\brief     Generic transport scheme basics
-\details   Part of the Colleoli transport scheme.
-\author    
-\version   0a
-\date      6/12/2017
-\pre       
-\bug
-\warning
-\copyright The University of Melbourne
-
-@section motivation Motivation
-
-
-@section design Design Intent
-
-
-@section applicability Applicability
-
-
-@section collaborations Collaborations
-
-
-@section implementation Implementation
-
-
-@section examples Application Examples
-
-@code
-
-@endcode
-
-*/
-
 } // end csmp
 
 
