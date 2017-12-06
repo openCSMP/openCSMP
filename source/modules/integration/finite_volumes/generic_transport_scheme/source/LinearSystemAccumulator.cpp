@@ -12,6 +12,7 @@
 #include "Node.h"
 #include "MatrixOperator.h"
 #include "VectorOperator.h"
+#include "LinearSolver.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
