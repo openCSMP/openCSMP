@@ -36,11 +36,11 @@ class DiffusionLHS : public MatrixOperator<dim> {
     // virtual void AccumulateFiniteVolume( Node<dim>*, SparseMatrix& );
   
     /// element-by-element accumulation of matrix terms
-    virtual void AccumulateStencil( Element<dim>*, SparseMatrix& );
+    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& );
   
   private:
-    DenseMatrix<DM_MIN>  DN_, DNT_;
-    csmp::Index          diff_key_;  ///< diffusion coefficient
+    DenseMatrix<DM_MIN>  DN_, DNT_, RESULT_;
+    const csmp::Index    diff_key_;  ///< diffusion coefficient
     size_t               dof_;       ///< degrees of freedom (for scalar variables dof=1, for array variables their size)
 };
 

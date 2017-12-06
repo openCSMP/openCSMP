@@ -184,6 +184,9 @@ class FiniteElement {
     bool               IsSurfaceElement() const;
     bool               IsVolumeElement() const;
   
+    /// true for linear line-, triangle- or tetrahedral elements for which the Jacobian matrix is constant throughout
+    bool               IsSimplex() const;
+  
     CSMP_FEM_TYPE      ElementType() const;
   
     /// computes and returns the volume of the element which is an area for a surface- and a length for a line element
