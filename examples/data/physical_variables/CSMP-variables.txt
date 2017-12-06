@@ -9,7 +9,7 @@ absolute fluid pressure			pf	Pa	1	1.00E+05	1.00E+09	node
 total system compressibility		ct	Pa-1	1	1.00E-15	1.00E-05	element
 capillary diffusivity			kap	m2 s-1	1	1.00E-50	1.00E+00	element
 permeability				K	m2	1	1.00E-25	1.00E+00	element
-tensor permeability				K	m2	3	1.00E-25	1.00E+00	element
+tensor permeability			K	m2	3	1.00E-25	1.00E+00	element
 porosity				PHI	X	1	1.00E-05	1.00E+00	element
 velocity				VT	m s-1	2	-1.00E+02	1.00E+02	element
 pore velocity				VP	m s-1	2	-1.00E+03	1.00E+03	element

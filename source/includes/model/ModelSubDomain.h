@@ -146,8 +146,11 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesEnd() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsBegin() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsBegin() const;
     typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsEnd() const;
+    typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsBegin() const;
+    typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsEnd() const;
+    typename std::vector<SIMPLEX<dim>*>::const_iterator     InteriorElementsBegin() const;
+    typename std::vector<SIMPLEX<dim>*>::const_iterator     InteriorElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,

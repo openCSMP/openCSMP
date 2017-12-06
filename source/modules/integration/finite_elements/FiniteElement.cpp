@@ -139,6 +139,18 @@ bool  FiniteElement::IsSurfaceElement() const
  
 bool  FiniteElement::IsVolumeElement()  const     
  { if ( element_category == VOLUME )  return true; return false; }
+ 
+bool FiniteElement::IsSimplex() const
+ {
+    if ( csp_fem_type == ISOPARAMETRIC_LINEAR_TETRAHEDRON ) return true;
+    if ( csp_fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE ) return true;
+    if ( csp_fem_type == ISOPARAMETRIC_LINEAR_BAR ) return true;
+    if ( csp_fem_type == LINEAR_TETRAHEDRON ) return true;
+    if ( csp_fem_type == LINEAR_TRIANGLE3D ) return true;
+    if ( csp_fem_type == LINEAR_TRIANGLE ) return true;
+    if ( csp_fem_type == LINEAR_BAR ) return true;
+    return false;
+ }
 
 void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; }
 
