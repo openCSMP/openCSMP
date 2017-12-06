@@ -20,7 +20,7 @@ CompressiblePressureSourceLHS<dim>::CompressiblePressureSourceLHS(Model<dim>& mo
 
 
 template<size_t dim>
-void CompressiblePressureSourceLHS<dim>::AccumulateStencil( Element<dim>* fe, SparseMatrix& mat )
+void CompressiblePressureSourceLHS<dim>::AccumulateStencil( const Element<dim>* fe, SparseMatrix& mat ) const
 {
     const size_t sectors(fe->Sectors());
     const double64 phi = fe->Read( phi_key_ );
@@ -36,7 +36,7 @@ void CompressiblePressureSourceLHS<dim>::AccumulateStencil( Element<dim>* fe, Sp
 
 
 template<size_t dim>
-void CompressiblePressureSourceLHS<dim>::AccumulateFiniteVolume( Node<dim>* nd, SparseMatrix& mat )
+void CompressiblePressureSourceLHS<dim>::AccumulateFiniteVolume( const Node<dim>* nd, SparseMatrix& mat ) const
 {
     const size_t parent_elements(nd->Parents());
     for ( size_t i=0U; i<parent_elements; ++i ) {

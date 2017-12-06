@@ -12,8 +12,8 @@ class CompressiblePressureSourceLHS : public MatrixOperator<dim> {
     CompressiblePressureSourceLHS(Model<dim>& model, const char*, const char*, const char*, const char*);
     CompressiblePressureSourceLHS( const CompressiblePressureSourceLHS&);
   
-    virtual void AccumulateFiniteVolume( Node<dim>*, SparseMatrix& );
-    virtual void AccumulateStencil( Element<dim>*, SparseMatrix& );
+    virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
 
   private:
     const csmp::Index phi_key_, CT_key_, pf0_key_, pf1_key_;
