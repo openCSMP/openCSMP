@@ -5,30 +5,7 @@
 
 namespace csmp {
 
-
-template<size_t dim>
-class MatrixOperator
-{
-public:
-    ACCUMULATION_MODE AccumulationMode() const { return mode_; }
-
-    virtual void AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& mat ) const = 0;
-
-    virtual ~MatrixOperator() { }
-
-protected:
-    MatrixOperator( ACCUMULATION_MODE mode )
-       : mode_(mode)
-    {
-    }
-
-    ACCUMULATION_MODE mode_;
-};
-
-
 /**
-@class MatrixOperator MatrixOperator "integration/finite_volumes/generic_transport_scheme/MatrixOperator.h"
 
 \brief     Matrix operator
 \details   Part of the Colleoli transport scheme.
@@ -62,6 +39,26 @@ protected:
 @endcode
 
 */
+template<size_t dim>
+class MatrixOperator
+{
+public:
+    ACCUMULATION_MODE AccumulationMode() const { return mode_; }
+
+    virtual void AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const = 0;
+    virtual void AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& mat ) const = 0;
+
+    virtual ~MatrixOperator() { }
+
+protected:
+    MatrixOperator( ACCUMULATION_MODE mode )
+       : mode_(mode)
+    {
+    }
+
+    ACCUMULATION_MODE mode_;
+};
+
 
 } // end csmp
 
