@@ -20,8 +20,8 @@ namespace csmp {
   /// What mode a system accumulation performs in
   enum ACCUMULATION_MODE {
     ADD_ACCUMULATE,
-    ADD_LATER,
-    MULTIPLY_ACCUMULATE
+    MULTIPLY_ACCUMULATE,
+    ADD_LATER
   };
 
 

@@ -12,8 +12,8 @@ class FluxLHS : public MatrixOperator<dim> {
     FluxLHS(Model<dim>& model, const char*);
     FluxLHS( const FluxLHS&);
   
-    virtual void AccumulateFiniteVolume( Node<dim>*, SparseMatrix& );
-    virtual void AccumulateStencil( Element<dim>*, SparseMatrix& );
+    virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
 
   private:
     const csmp::Index ff_key_;

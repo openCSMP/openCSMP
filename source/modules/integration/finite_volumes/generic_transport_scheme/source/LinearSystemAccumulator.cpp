@@ -23,12 +23,14 @@ namespace csmp {
 
 
 template<size_t dim>
-LinearSystemAccumulator<dim>::LinearSystemAccumulator( Model<dim>& model, const char* region )
+LinearSystemAccumulator<dim>::LinearSystemAccumulator( Solver& solver, Model<dim>& model, const char* region )
   : model_(model),
     gref_(model_.Region(region)),
+    solver_(solver),
     fvs_(gref_.Nodes()),
     LHS_(fvs_),
-    RHS_(fvs_)
+    RHS_(fvs_),
+    RESULT_(fvs_)
 {
 }
 
@@ -84,22 +86,22 @@ void LinearSystemAccumulator<dim>::AccumulateByStencil()
   auto interior_elmts_end = gref_.InteriorElementsEnd();
   for (auto eit = gref_.InteriorElementsBegin(); eit != interior_elmts_end; ++eit) {
     for (auto lhs: interior_lhs_) {
-      lhs->AccumulateStencil( **eit, LHS_ );
+      lhs->AccumulateStencil( *eit, LHS_ );
     }
 
     for (auto rhs: interior_rhs_) {
-      rhs->AccumulateStencil( **eit, RHS_ );
+      rhs->AccumulateStencil( *eit, RHS_ );
     }
   }
   
   auto perimeter_elmts_end = gref_.PerimeterElementsEnd();
   for (auto eit = gref_.PerimeterElementsBegin(); eit != perimeter_elmts_end; ++eit) {
     for (auto lhs: perimeter_lhs_) {
-      lhs->AccumulateStencil( **eit, LHS_ );
+      lhs->AccumulateStencil( *eit, LHS_ );
     }
     
     for (auto rhs: perimeter_rhs_) {
-      rhs->AccumulateStencil( **eit, RHS_ );
+      rhs->AccumulateStencil( *eit, RHS_ );
     }
   }
 }
@@ -111,49 +113,32 @@ void LinearSystemAccumulator<dim>::AccumulateByFiniteVolume()
   auto interior_nodes_end = gref_.InteriorNodesEnd();
   for (auto nit = gref_.InteriorNodesBegin(); nit != interior_nodes_end; ++nit) {
     for (auto lhs: interior_lhs_) {
-      lhs->AccumulateFiniteVolume( **nit, LHS_ );
+      lhs->AccumulateFiniteVolume( *nit, LHS_ );
     }
     
     for (auto rhs: interior_rhs_) {
-      rhs->AccumulateFiniteVolume( **nit, RHS_ );
+      rhs->AccumulateFiniteVolume( *nit, RHS_ );
     }
   }
   
   auto perimeter_nodes_end = gref_.PerimeterNodesEnd();
   for (auto nit = gref_.PerimeterNodesBegin(); nit != perimeter_nodes_end; ++nit) {
     for (auto lhs: perimeter_lhs_) {
-      lhs->AccumulateFiniteVolume( **nit, LHS_ );
+      lhs->AccumulateFiniteVolume( *nit, LHS_ );
     }
     
     for (auto rhs: perimeter_rhs_) {
-      rhs->AccumulateFiniteVolume( **nit, RHS_ );
+      rhs->AccumulateFiniteVolume( *nit, RHS_ );
     }
   }
 }
 
   
 template<size_t dim>
-void LinearSystemAccumulator<dim>::EnsureSolver()
-{
-  if (!solver_) {
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings settings;
-    settings.Set_iout1(1);
-    settings.Set_iout2(0);
-    solver_= std::unique_ptr<Solver>(new SAMG_Solver(&settings));
-#else
-    solver_= std::unique_ptr<Solver>(new CSMP_DEFAULT_LINEAR_SOLVER);
-#endif
-  }
-}
-
-template<size_t dim>
 void LinearSystemAccumulator<dim>::SolveSystem()
 {
-  EnsureSolver();
-  
 #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings* settings = static_cast<SAMG_Settings*>(solver_->GetSolverSettings());
+    SAMG_Settings* settings = static_cast<SAMG_Settings*>(solver_.GetSolverSettings());
     cout <<"\n\nLinearSystemAccumulator::SolveMatrixEquation: calling solver instance: ";
     cout << settings->GetSolverInstance() << endl;
     cout <<"\tSAMG settings:";
@@ -163,7 +148,7 @@ void LinearSystemAccumulator<dim>::SolveSystem()
     cout << endl;
 #endif
   
-  solver_->Solve( LHS_, RHS_, RESULT_ );
+  solver_.Solve( LHS_, RHS_, RESULT_ );
 }
   
 

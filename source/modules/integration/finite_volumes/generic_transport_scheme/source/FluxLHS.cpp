@@ -17,7 +17,7 @@ FluxLHS<dim>::FluxLHS(Model<dim>& model, const char* facet_flux)
 
 
 template<size_t dim>
-void FluxLHS<dim>::AccumulateStencil( Element<dim>* fe, SparseMatrix& mat )
+void FluxLHS<dim>::AccumulateStencil( const Element<dim>* fe, SparseMatrix& mat ) const
 {
     const size_t iNrOfFacets(fe->FV()->Facets());
     for ( size_t iFacet=0U; iFacet<iNrOfFacets; ++iFacet ) {
@@ -45,7 +45,7 @@ void FluxLHS<dim>::AccumulateStencil( Element<dim>* fe, SparseMatrix& mat )
 
 
 template<size_t dim>
-void FluxLHS<dim>::AccumulateFiniteVolume( Node<dim>* nd, SparseMatrix& mat )
+void FluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>* nd, SparseMatrix& mat ) const
 {
     const size_t parent_elements(nd->Parents());
     for ( size_t i=0U; i<parent_elements; ++i ) {

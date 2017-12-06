@@ -45,8 +45,8 @@ class MatrixOperator
 public:
     ACCUMULATION_MODE AccumulationMode() const { return mode_; }
 
-    virtual void AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( Node<dim>& fv, SparseMatrix& mat ) const = 0;
+    virtual void AccumulateStencil( const Element<dim>* fe, SparseMatrix& mat ) const = 0;
+    virtual void AccumulateFiniteVolume( const Node<dim>* fv, SparseMatrix& mat ) const = 0;
 
     virtual ~MatrixOperator() { }
 
