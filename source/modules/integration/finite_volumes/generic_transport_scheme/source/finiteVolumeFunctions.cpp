@@ -309,6 +309,7 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
             return crossProduct(v1, v0);
         }
     }
+  throw csmp::Exception(ERROR, "FiniteVolumeHelper::NormalOfFacet", "Element dimension must be 1, 2, or 3");
 }
 
 
