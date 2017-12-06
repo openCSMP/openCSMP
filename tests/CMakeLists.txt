@@ -61,3 +61,6 @@ if(BUILD_TESTING)
     endif()
 endif(BUILD_TESTING)
 
+ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
+TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore ${SAMG_LIBRARIES})
+
