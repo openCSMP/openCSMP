@@ -9,26 +9,41 @@
 #ifndef CSMP_DIFFUSION_LHS_H
 #define CSMP_DIFFUSION_LHS_H
 
+#include "CSMP_definitions.h"
 #include "MatrixOperator.h"
 #include "DenseMatrix.h"
+#include "VariableSet_TracerTransferImplicit.h"
 
 namespace csmp {
 
-template<size_t dim> {
-class DiffusionLHS {
+/**
+
+@brief accumulates finite-element stencils for
+diffusion into a sparse solution matrix.
+
+@author SKM
+@date 6/12/2017
+
+*/
+template<size_t dim>
+class DiffusionLHS : public MatrixOperator<dim> {
   public:
-    DiffusionLHS();
+    DiffusionLHS( const Model<dim>&, const char* diffusivity, ACCUMULATION_MODE );
     DiffusionLHS( const DiffusionLHS& );
-    virtual void ~DiffusionLHS();
+    virtual ~DiffusionLHS() {}
   
-    virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& );
-    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& );
+    /// not available for this Element-based stencil
+    // virtual void AccumulateFiniteVolume( Node<dim>*, SparseMatrix& );
+  
+    /// element-by-element accumulation of matrix terms
+    virtual void AccumulateStencil( Element<dim>*, SparseMatrix& );
   
   private:
     DenseMatrix<DM_MIN>  DN_, DNT_;
-
+    csmp::Index          diff_key_;  ///< diffusion coefficient
+    size_t               dof_;       ///< degrees of freedom (for scalar variables dof=1, for array variables their size)
 };
 
-}
+} // end csmp
 
 #endif /* CSMP_DIFFUSION_LHS_H */

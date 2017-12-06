@@ -309,6 +309,9 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
             return crossProduct(v1, v0);
         }
     }
+  
+  // SKM fix
+  return Point<dim>();
 }
 
 
