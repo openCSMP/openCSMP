@@ -200,7 +200,13 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderFluxSaturation
 
  } // end AccumulateHigherOrderFluxSaturationProducts 	                                       
 
+
+
+
 /** Uses the finite element method to add diffusion to the FV scheme.
+
+@attention this method relies on uptodate Node indices.
+
 */
 template<size_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DNT_op_DN_dV_LHS( 

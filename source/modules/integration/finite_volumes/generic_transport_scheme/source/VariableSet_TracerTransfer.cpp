@@ -1,20 +1,20 @@
 //
-//  VariableSet_TracerTransferExplicit.cpp
+//  VariableSet_TracerTransfer.cpp
 //
 //  Created by Stephan Matthai on 19/06/2015.
 //  Copyright (c) 2015 Stephan K. Matthai. All rights reserved.
 //
 
-#include "VariableSet_TracerTransferExplicit.h"
+#include "VariableSet_TracerTransfer.h"
 #include "Exception.h"
 #include "PropertyDatabase.h"
 
 namespace csmp {
 
 template<size_t dim>
-VariableSet_TracerTransferExplicit<dim>::VariableSet_TracerTransferExplicit( const PropertyDatabase<dim>& p )
- : propdb_(p),
-   ff_key(p.StorageKey("facet flux")),
+VariableSet_TracerTransfer::VariableSet_TracerTransfer( const PropertyDatabase<dim>& p )
+
+ : ff_key(p.StorageKey("facet flux")),
    ffC_key(p.StorageKey("facet flux concentration")),
    PV_key(p.StorageKey("FV pore volume")),
    fb_key(p.StorageKey("flux balance")),
@@ -29,17 +29,14 @@ VariableSet_TracerTransferExplicit<dim>::VariableSet_TracerTransferExplicit( con
    rhof_key(p.StorageKey("fluid density")),
    C0_key(p.StorageKey("concentration")),
    C1_key(p.StorageKey("new concentration"))
- {
-   // potentially these properties could be created here from scratch to have them only
-   // when there is a need for a transport calculation.
- }
 
 
+{
+}
 
 
  
-template<size_t dim>
-void VariableSet_TracerTransferExplicit<dim>::CheckVariables() const
+void VariableSet_TracerTransfer::CheckVariables() const
  {
       // finite volume variables
     if ( PV_key.place != NODE || PV_key.type != SCALAR )
@@ -63,13 +60,12 @@ void VariableSet_TracerTransferExplicit<dim>::CheckVariables() const
        throw csmp::Exception( FATAL_ERROR, "VariableSet_TracerTransferExplicit::CheckVariables:",
                       "The 'facet flux concentration' variable must be scalar placed on the facet integration points" );
 
-// TODO: complete missing checks
-
 } // end CheckVariables
 
  
-template class VariableSet_TracerTransferExplicit<1U>;
-template class VariableSet_TracerTransferExplicit<2U>;
-template class VariableSet_TracerTransferExplicit<3U>;
+
+template VariableSet_TracerTransfer::VariableSet_TracerTransfer( const PropertyDatabase<1U>& );
+template VariableSet_TracerTransfer::VariableSet_TracerTransfer( const PropertyDatabase<2U>& );
+template VariableSet_TracerTransfer::VariableSet_TracerTransfer( const PropertyDatabase<3U>& );
  
 } // end csmp

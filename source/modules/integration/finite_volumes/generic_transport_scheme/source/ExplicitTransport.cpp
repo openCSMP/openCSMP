@@ -26,16 +26,15 @@ ExplicitTransport<dim>::GetModel() const
     
 
 template<size_t dim>
-ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region, bool second_order_in_space, bool second_order_in_time )
-  : VariableSet_TracerTransferExplicit<dim>(m.Database()),
+ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region, bool second_order_in_space )
+  : VariableSet_TracerTransferExplicit(m.Database()),
     model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
-    second_order_in_space_(second_order_in_space),
-    second_order_in_time_(second_order_in_time)
+    second_order_in_space_(second_order_in_space)
  {
     m.InstantiateFiniteVolumes();
-     m.Region("Model").InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
+     m.Region(target_region).InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
 
     initializeFiniteVolumeProperties( m, m.Region(target_region) );
     // 0. model-wide initialisation: results will be accumulated into this variable
@@ -422,12 +421,7 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
 
 
 
-
-
-
-
-
-
+template class ExplicitTransport<2U>;
 template class ExplicitTransport<3U>;
 
 } // end csmp

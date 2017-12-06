@@ -10,6 +10,7 @@
 #include "Model.h"
 #include "TwoPhaseModel.h"
 #include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
 #include "finiteVolumeFunctions.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
 
@@ -42,8 +43,6 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bo
       const double64 mu = User()->GetModel().Read(User()->mu_key);
 
       vD = -K/mu * helper.GradientOfScalarNodeProperty(eptr->FV()->Barycenter(), User()->pf_key);
-      VectorVariable<dim> vD_var(vD);
-      eptr->Store(User()->propdb_.StorageKey("velocity"), vD_var);
     }
 
    // computing total facet fluxes by projecting vt onto facet normals
@@ -100,8 +99,6 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bo
       const double64 mu = User()->GetModel().Read(User()->mu_key);
 
       vD = -K/mu * helper.GradientOfScalarNodeProperty(eptr->FV()->Barycenter(), User()->pf_key);
-      VectorVariable<dim> vD_var(vD);
-      eptr->Store(User()->propdb_.StorageKey("velocity"), vD_var);
     }
 
    // computing total facet fluxes by projecting vt onto facet normals
@@ -582,7 +579,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
      const size_t parent_elements(nptr->Parents());
      double64 flux_balance(0.);
      for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
+          const Element<dim>* const eptr = nptr->Parent(i);
           const size_t sector_node      = nptr->ParentNodeNumber(i);
           for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
@@ -607,6 +604,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
 
 
 
+template class FacetFlux_TracerTransferExplicit<2U,ExplicitTransport>;
+template class FacetFlux_TracerTransferExplicit<2U,ImplicitTransport>;
 template class FacetFlux_TracerTransferExplicit<3U,ExplicitTransport>;
+template class FacetFlux_TracerTransferExplicit<3U,ImplicitTransport>;
 
 } // end csmp
