@@ -29,7 +29,7 @@ class PoreVolumeRHS : public VectorOperator<dim> {
                    const char* pv_variable, const char* advected_variable,
                    double64 time_increment );
   
-    virtual void AccumulateFV( const Node<dim>*, std::vector<double64>& right_hand_vector );
+    virtual void AccumulateFV( const Node<dim>*, std::vector<double64>& right_hand_vector ) const;
   
   private:
     const csmp::Index  pv_key_;   ///< the pore volume of the FV as integrated over the sectors surrounding the node
