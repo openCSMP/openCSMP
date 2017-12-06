@@ -44,19 +44,27 @@ class MatrixOperator
 {
 public:
     ACCUMULATION_MODE AccumulationMode() const { return mode_; }
+  
+    void AccumulationMode( ACCUMULATION_MODE mode ) { mode_ = mode; }
 
-    virtual void AccumulateStencil( const Element<dim>* fe, SparseMatrix& mat ) const = 0;
-    virtual void AccumulateFiniteVolume( const Node<dim>* fv, SparseMatrix& mat ) const = 0;
+    bool MultiplyWithTimeIncrement() const { return multiply_with_dt_; }
+    void MultiplyWithTimeIncrement( bool multiply_with_dt ) { multiply_with_dt_ = multiply_with_dt; }
+
+    void TimeIncrement( double64 dt ) { dt_ = dt; }
+    virtual void AccumulateStencil( const Element<dim>* fe, SparseMatrix& lhs ) const = 0;
+    virtual void AccumulateFiniteVolume( const Node<dim>* fv, SparseMatrix& lhs ) const = 0;
 
     virtual ~MatrixOperator() { }
 
 protected:
     MatrixOperator( ACCUMULATION_MODE mode )
-       : mode_(mode)
+      : mode_(mode), multiply_with_dt_(false), dt_(std::numeric_limits<double64>::quiet_NaN())
     {
     }
-
+  
     ACCUMULATION_MODE mode_;
+    bool multiply_with_dt_;
+    double64 dt_;
 };
 
 

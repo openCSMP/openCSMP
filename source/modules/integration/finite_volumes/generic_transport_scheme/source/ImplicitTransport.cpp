@@ -174,8 +174,9 @@ void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
 
 
 
-template class ImplicitTransport<2U>;
-template class ImplicitTransport<3U>;
+  template class ImplicitTransport<1U>;
+  template class ImplicitTransport<2U>;
+  template class ImplicitTransport<3U>;
 
 } // end csmp
 

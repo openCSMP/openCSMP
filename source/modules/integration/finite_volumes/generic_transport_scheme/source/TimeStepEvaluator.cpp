@@ -364,9 +364,12 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
 
 */
 
+template class TimeStepEvaluator<1U,ExplicitTransport>;
 template class TimeStepEvaluator<2U,ExplicitTransport>;
-template class TimeStepEvaluator<2U,ImplicitTransport>;
 template class TimeStepEvaluator<3U,ExplicitTransport>;
+
+template class TimeStepEvaluator<1U,ImplicitTransport>;
+template class TimeStepEvaluator<2U,ImplicitTransport>;
 template class TimeStepEvaluator<3U,ImplicitTransport>;
 
 } // end csmp

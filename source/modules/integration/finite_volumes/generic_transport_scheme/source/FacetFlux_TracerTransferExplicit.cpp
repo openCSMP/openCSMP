@@ -604,9 +604,11 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
 
 
 
-template class FacetFlux_TracerTransferExplicit<2U,ExplicitTransport>;
-template class FacetFlux_TracerTransferExplicit<2U,ImplicitTransport>;
-template class FacetFlux_TracerTransferExplicit<3U,ExplicitTransport>;
-template class FacetFlux_TracerTransferExplicit<3U,ImplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<1U,ImplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<2U,ImplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<3U,ImplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<1U,ExplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<2U,ExplicitTransport>;
+  template class FacetFlux_TracerTransferExplicit<3U,ExplicitTransport>;
 
 } // end csmp

@@ -420,7 +420,7 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
  } // end AdvectVariable
 
 
-
+template class ExplicitTransport<1U>;
 template class ExplicitTransport<2U>;
 template class ExplicitTransport<3U>;
 
