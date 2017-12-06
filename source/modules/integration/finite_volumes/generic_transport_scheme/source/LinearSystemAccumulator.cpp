@@ -16,6 +16,7 @@
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
 #else
+#include "GaussJordan_Solver.h"
 #include "Meschach_Solver.h"
 #endif
 
@@ -102,7 +103,7 @@ void LinearSystemAccumulator<dim>::EnsureSolver()
     settings.Set_iout2(0);
     solver_= std::unique_ptr<Solver>(new SAMG_Solver(&settings));
 #else
-    solver_= std::unique_ptr<Solver>(new Meschach_Solver);
+    solver_= std::unique_ptr<Solver>(new CSMP_DEFAULT_SOLVER);
 #endif
   }
 }
@@ -131,8 +132,6 @@ template<size_t dim>
 void LinearSystemAccumulator<dim>::WriteResultIntoModel()
 {
 }
-
-  
 
 
 template class LinearSystemAccumulator<1U>;
