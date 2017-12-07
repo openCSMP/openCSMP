@@ -57,7 +57,7 @@ public:
     virtual ~MatrixOperator() { }
 
 protected:
-    MatrixOperator( ACCUMULATION_MODE mode )
+    explicit MatrixOperator( ACCUMULATION_MODE mode = ADD_ACCUMULATE )
       : mode_(mode), multiply_with_dt_(false), dt_(std::numeric_limits<double64>::quiet_NaN())
     {
     }

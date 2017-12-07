@@ -29,7 +29,7 @@ PoreVolumeRHS<dim>::PoreVolumeRHS( const Model<dim>& model,
     domain.
 */
 template<size_t dim>
-void PoreVolumeRHS<dim>::AccumulateFV( const Node<dim>* nptr, std::vector<double64>& rhs ) const
+void PoreVolumeRHS<dim>::AccumulateFiniteVolume( const Node<dim>* nptr, std::vector<double64>& rhs ) const
  {
      const double64 pore_volume(nptr->Read(pv_key_));
      const double64 advection_value(nptr->Read(adv_key_));

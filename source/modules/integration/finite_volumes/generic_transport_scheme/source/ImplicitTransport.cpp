@@ -11,6 +11,7 @@
 #include "finiteVolumeFunctions.h"
 #include "CSMP_mathUtilities.h"
 #include "VTK_Interface.h"
+#include "LinearSystemAccumulator.h"
 
 using namespace std;
 
@@ -26,8 +27,10 @@ ImplicitTransport<dim>::GetModel() const
 
 
 template<size_t dim>
-ImplicitTransport<dim>::ImplicitTransport( Model<dim>& m, const char* target_region, bool second_order )
+ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const char* target_region, bool second_order )
   : VariableSet_TracerTransferImplicit(m.Database()),
+    Equation_TracerTransferImplicit<dim>( m, target_region ),
+    solver_(solver),
     model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
@@ -43,56 +46,6 @@ ImplicitTransport<dim>::ImplicitTransport( Model<dim>& m, const char* target_reg
     m.Database().RangeOf( m.Database().Name(this->C0_key), lower_limit_, upper_limit_ );
  }
   
-
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-*/
-template<size_t dim>
-void ImplicitTransport<dim>::UpdateFacetFluxes(bool reuse_previous_velocity)
- {
-
- } // end UpdateFacetFluxes
-
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-    1st order accurate in space and time
-    
-    @attention this means that facet fluxes in FV sectors outside the domain are not considered.
-    This is done in TimeIncrementAndFluxBalance() by Advective_O1_FluxesBoundary().
-    This method writes the correct balances onto the nodes on the perimeter.
-*/
-template<size_t dim>
-void ImplicitTransport<dim>::UpdateFacetFluxes_O1(bool reuse_previous_velocity)
- {
- } // end UpdateFacetFluxes_O1
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-    2nd order accurate in space
-    
-    @attention this means that facet fluxes in FV sectors outside the domain are not considered.
-    This is done in TimeIncrementAndFluxBalance() by Advective_O1_FluxesBoundary().
-    This method writes the correct balances onto the nodes on the perimeter.
-*/
-template<size_t dim>
-void ImplicitTransport<dim>::UpdateFacetFluxes_O2(bool reuse_previous_velocity)
- { 
- } // end UpdateFacetFluxes_O2
-
-  
-
-
-
-
-
-
-
-
 /**
     Computation of time increment, flux balance, and temporary new concentration.
 */
@@ -136,6 +89,107 @@ double64 ImplicitTransport<dim>::TimeIncrement()
     return TimeIncrementAndFluxBalance( 356. * 86400. );
  }
 
+  
+  
+  
+  template<size_t dim>
+  void ImplicitTransport<dim>::AccumulateSystem( double64 dt )
+  {
+    // Reset the linear system
+    const size_t nodes = gref_.Nodes();
+    LHS_.Erase();
+    LHS_.Resize( nodes );
+    
+    if ( RHS_.size() != nodes ) {
+      RHS_.resize( nodes );
+      vector<double64>(RHS_).swap(RHS_);
+    }
+    fill( RHS_.begin(), RHS_.end(), static_cast<double64>(0.) );
+    
+    if ( RESULT_.size() != nodes ) {
+      RESULT_.resize( nodes );
+      vector<double64>(RESULT_).swap(RESULT_);
+    }
+    fill( RESULT_.begin(), RESULT_.end(), static_cast<double64>(0.) );
+    
+    this->EquationTimeIncrement(dt);
+    this->accumulator.AccumulateByFiniteVolume(LHS_, RHS_);
+} // end AccumulateSystem
+
+  
+  template<size_t dim>
+  void ImplicitTransport<dim>::AssignBoundaryConditions()
+  {
+    const auto nodes_end(gref_.PerimeterNodesEnd());
+    for ( auto nit = gref_.PerimeterNodesBegin(); nit != nodes_end; ++nit ) {
+      const auto i = (*nit)->Idx();
+      
+      const auto status = (*nit)->Status( C0_key );
+      
+      // Dirichlet boundary condition: concentration should be unaltered.
+      if (status == DIRICH) {
+        LHS_.Assign(i, i, 1.0);
+        continue;
+      }
+      
+      // Calculate flow through boundary
+      double64 inflow = 0.0;
+      double64 influx = 0.0;
+      
+      const size_t iNrParents = (*nit)->Parents();
+      for ( size_t iParent = 0; iParent < iNrParents; ++iParent ) {
+        const size_t pnid = (*nit)->ParentNodeNumber( iParent );
+        const auto eptr = (*nit)->Parent( iParent );
+        
+        const double64 K(eptr->Read(k_key));
+        if (isnan(K)) {
+          // XXX AJB HACK
+          // Deleting boundaries during model creation means you can't set
+          // properties during configuration. Retaining the boundaries means
+          // that they are still included in the parents of a node.
+          //
+          // For now, we skip over any element which doesn't have a
+          // permeability. They are not the flow domain.
+          continue;
+        }
+
+        const size_t iNrSectorFacets(eptr->FV()->FacetsPerSector(pnid));
+        for ( size_t iSectorFacet=0U; iSectorFacet<iNrSectorFacets; ++iSectorFacet ) {
+          const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,iSectorFacet) );
+          const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+          const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+          const double64 ff = eptr->Read( iFacet, 0u, ff_key );
+          
+          const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( C0_key ) :
+          eptr->N(inside_node)->Read( C0_key );
+          if ( pnid == inside_node ) {
+            inflow += ff;
+            influx += ff * C_upstream;
+          }
+          else {
+            inflow -= ff;
+            influx -= ff * C_upstream;
+          }
+        }
+      }
+
+      if ( inflow >= 0 ) {
+        // inflow compensation
+        RHS_[i] += influx;
+      }
+      else {
+        // outflow compensation
+        LHS_.Add( i, i, -inflow );
+      }
+    }
+  }
+  
+  template<size_t dim>
+  void ImplicitTransport<dim>::Solve()
+  {
+    solver_.Solve(LHS_, RHS_, RESULT_);
+  } // end Solve
+  
 
 
 /** 
@@ -147,7 +201,52 @@ double64 ImplicitTransport<dim>::TimeIncrement()
 template<size_t dim>
 double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool do_range_check ) const
   {
-      return 0.;
+    double64 amin(+std::numeric_limits<double64>::max());
+    double64 amax(-std::numeric_limits<double64>::max());
+    double64 difference_to_last_output(0.);
+    size_t          error_counter(0);
+    
+    const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
+    for ( auto nit = gref_.NodesBegin(); nit != nodes_end; ++nit )
+    {
+      const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
+      if ( status != DIRICH )
+      {
+        // reading the newly computed saturation values
+        const double64 c1 = RESULT_[ (*nit)->Idx() ];
+        amin = std::min( amin, c1 );
+        amax = std::max( amax, c1 );
+        
+        // reading the previous values and calculating the maximum change per node
+        const double64 C0 = (*nit)->Read( this->C0_key );
+
+        difference_to_last_output = std::max( difference_to_last_output, fabs(c1 - C0) );
+        
+        // result checking and assignment
+        if ( c1 <= upper_limit_ && c1 >= lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar(status, c1) );
+        else {
+          cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
+          cerr <<"value: "<< c1 <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
+          if ( c1 > upper_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, upper_limit_ ) );
+          else if ( c1 < lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, lower_limit_ ) );
+          error_counter++;
+        }
+      }
+    }
+    
+    if ( do_range_check ) {
+      if ( error_counter > (this->gref_.Nodes() * 1000000U) )
+        throw out_of_range("ExplicitTransport<dim>::VerifyAndAssignResults: Advected variable out of range");
+    }
+    
+    if ( show_range ) {
+      cout <<"\n\nExplicitTransport<"<< dim;
+      cout <<">::VerifyAndAssignResults: Variable range after advection: ";
+      cout << amin <<" to "<< amax << endl << endl;
+    }
+    
+    return difference_to_last_output / std::max( amax - amin, 1.0e-20 );
+    
  } // end VerifyAndAssignResults
 
 
@@ -169,6 +268,63 @@ double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
 template<size_t dim>
 void ImplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
+   // 1. computing (velocity and) facet fluxes as necessary
+   const bool reuse_previous_velocity = false;
+   this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
+   
+   // 2. evaluation of time increment
+   double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
+   
+   const double64 one(1.);
+   cout <<"\nImplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
+   cout <<"\n\tTime interval         = "<< time_interval;
+   cout <<"\n\tScaled time increment = "<< time_increment;
+   cout <<"\n\tSolution steps needed = "<< max(floor(time_interval/time_increment),one);
+   
+   cout <<"\n\n\nImplicitTransport::AdvectVariable: FV transport simulation initiated...\n";
+   size_t   substep(1);
+   double64 time(0.);
+   
+   // time incrementation loop
+   while ( time < time_interval ) {
+     cout <<"\n\n\tadvection (sub)step: "<< substep;
+     
+     if ( (time_interval - time) < time_increment ) time_increment = time_interval - time;
+     
+     AccumulateSystem(time_increment);
+     AssignBoundaryConditions();
+     Solve();
+     
+#if 1
+     // testing
+     double64 so1_min = +std::numeric_limits<double64>::max();
+     double64 so1_max = -std::numeric_limits<double64>::max();
+     
+     for (auto so : RESULT_) {
+       so1_min = std::min(so1_min, so);
+       so1_max = std::max(so1_max, so);
+
+     }
+     cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
+#endif
+     
+     // 4. 'new saturation oil' is used to replace 'saturation oil' performing a range check
+     const bool range_check(true);
+     const bool show_range(true);
+     VerifyAndAssignResults( show_range, range_check );
+     
+     time += time_increment;
+     
+     const bool reuse_previous_velocity = true;
+     this->FacetFluxes(gref_, reuse_previous_velocity, second_order_);
+     
+     time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
+     
+     substep++;
+   }
+   
+   cout <<"\nExplicitTransport::AdvectVariable: 'transport completed.\n";
+   
 
  } // end AdvectVariable
 

@@ -21,9 +21,11 @@
 #include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "ExplicitTransport.h"
-#include "ImplicitTransport.h"
 
 #include "ConstantFactor.h"
+
+#include "ImplicitTransport.h"
+#include "LinearSystemAccumulator.h"
 
 
 #include "InputDataManager.h"
@@ -448,25 +450,34 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         advector.FiniteVolume( "finite volume" );
         cout <<"\n\nadvectVariableFirstOrderImplicit: Measuring the divergence of fluxes."<< endl;
         advector.Divergence( "velocity", "nodal flux mismatch" );
-#else
+#endif
+      
+#if 0
         ExplicitTransport<3U> advector(model, "Model", true);
         advector.StepSizeReductionFactor(0.9);
 #endif
-        
+#if 1
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+
+      ImplicitTransport<3U> advector(solver, model, "Model", false);
+      advector.StepSizeReductionFactor(1.0);
+#endif
+
         // the calculation of fluid pressure
       
 #if 1
-        vtk_output.OutputDataToVTK( model, "o2concentration", "concentration", 0 );
+        vtk_output.OutputDataToVTK( model, "impl_concentration", "concentration", 0 );
         vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", 0 );
 
 #endif
 
-        for (unsigned i = 1; i < 100; ++i) {
+      model.Region("Model").RenumberNodes();
+        for (unsigned i = 1; i < 60; ++i) {
             advector.AdvectVariable(50.0);
             // advector.AdvectVariable(1000.0);
 #if 1
             vtk_output.OutputDataToVTK( model, "velocity", "velocity", i );
-            vtk_output.OutputDataToVTK( model, "o2concentration", "concentration", i );
+            vtk_output.OutputDataToVTK( model, "impl_concentration", "concentration", i );
             vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", i );
             vtk_output.OutputDataToVTK( model, "fluxbalance", "flux balance", i );
             vtk_output.OutputDataToVTK( model, "ff", "facet flux", i );

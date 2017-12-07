@@ -28,18 +28,18 @@ diffusion into a sparse solution matrix.
 template<size_t dim>
 class DiffusionLHS : public MatrixOperator<dim> {
   public:
-    DiffusionLHS( const Model<dim>&, const char* diffusivity, ACCUMULATION_MODE );
+    DiffusionLHS( const Model<dim>&, const char* diffusivity );
     DiffusionLHS( const DiffusionLHS& );
     virtual ~DiffusionLHS() {}
   
     /// not available for this Element-based stencil
-    // virtual void AccumulateFiniteVolume( Node<dim>*, SparseMatrix& );
+  virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const { }
   
     /// element-by-element accumulation of matrix terms
-    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& );
+    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
   
   private:
-    DenseMatrix<DM_MIN>  DN_, DNT_, RESULT_;
+    mutable DenseMatrix<DM_MIN>  DN_, DNT_, RESULT_;
     const csmp::Index    diff_key_;  ///< diffusion coefficient
     size_t               dof_;       ///< degrees of freedom (for scalar variables dof=1, for array variables their size)
 };

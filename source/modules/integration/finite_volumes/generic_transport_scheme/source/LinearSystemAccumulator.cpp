@@ -23,13 +23,9 @@ namespace csmp {
 
 
 template<size_t dim>
-LinearSystemAccumulator<dim>::LinearSystemAccumulator( Model<dim>& model, const char* region, SparseMatrix& lhs, std::vector<double64>& rhs, std::vector<double64>& result )
+LinearSystemAccumulator<dim>::LinearSystemAccumulator( Model<dim>& model, const char* region )
   : model_(model),
-    gref_(model_.Region(region)),
-    fvs_(gref_.Nodes()),
-    LHS_(lhs),
-    RHS_(rhs),
-    RESULT_(result)
+    gref_(model_.Region(region))
 {
 }
 
@@ -78,56 +74,80 @@ void LinearSystemAccumulator<dim>::FinaliseOperators()
     std::sort(perimeter_rhs_.begin(), perimeter_rhs_.end(), vector_operator_ordering);
 }
 
+  
+template<size_t dim>
+  void LinearSystemAccumulator<dim>::TimeIncrement(double64 dt)
+  {
+    for (auto op: interior_lhs_) {
+      if (op->MultiplyWithTimeIncrement())
+        op->TimeIncrement( dt );
+    }
+    
+    for (auto op: interior_rhs_) {
+      if (op->MultiplyWithTimeIncrement())
+        op->TimeIncrement( dt );
+    }
+    
+    for (auto op: perimeter_lhs_) {
+      if (op->MultiplyWithTimeIncrement())
+        op->TimeIncrement( dt );
+    }
+    
+    for (auto op: perimeter_rhs_) {
+      if (op->MultiplyWithTimeIncrement())
+        op->TimeIncrement( dt );
+    }
+  }
 
 template<size_t dim>
-void LinearSystemAccumulator<dim>::AccumulateByStencil()
+void LinearSystemAccumulator<dim>::AccumulateByStencil(SparseMatrix& lhs, std::vector<double64>& rhs)
 {
   auto interior_elmts_end = gref_.InteriorElementsEnd();
   for (auto eit = gref_.InteriorElementsBegin(); eit != interior_elmts_end; ++eit) {
-    for (auto lhs: interior_lhs_) {
-      lhs->AccumulateStencil( *eit, LHS_ );
+    for (auto op: interior_lhs_) {
+      op->AccumulateStencil( *eit, lhs );
     }
 
-    for (auto rhs: interior_rhs_) {
-      rhs->AccumulateStencil( *eit, RHS_ );
+    for (auto op: interior_rhs_) {
+      op->AccumulateStencil( *eit, rhs );
     }
   }
   
   auto perimeter_elmts_end = gref_.PerimeterElementsEnd();
   for (auto eit = gref_.PerimeterElementsBegin(); eit != perimeter_elmts_end; ++eit) {
-    for (auto lhs: perimeter_lhs_) {
-      lhs->AccumulateStencil( *eit, LHS_ );
+    for (auto op: perimeter_lhs_) {
+      op->AccumulateStencil( *eit, lhs );
     }
     
-    for (auto rhs: perimeter_rhs_) {
-      rhs->AccumulateStencil( *eit, RHS_ );
+    for (auto op: perimeter_rhs_) {
+      op->AccumulateStencil( *eit, rhs );
     }
   }
 }
 
 
 template<size_t dim>
-void LinearSystemAccumulator<dim>::AccumulateByFiniteVolume()
+void LinearSystemAccumulator<dim>::AccumulateByFiniteVolume(SparseMatrix& lhs, std::vector<double64>& rhs)
 {
   auto interior_nodes_end = gref_.InteriorNodesEnd();
   for (auto nit = gref_.InteriorNodesBegin(); nit != interior_nodes_end; ++nit) {
-    for (auto lhs: interior_lhs_) {
-      lhs->AccumulateFiniteVolume( *nit, LHS_ );
+    for (auto op: interior_lhs_) {
+      op->AccumulateFiniteVolume( *nit, lhs );
     }
     
-    for (auto rhs: interior_rhs_) {
-      rhs->AccumulateFiniteVolume( *nit, RHS_ );
+    for (auto op: interior_rhs_) {
+      op->AccumulateFiniteVolume( *nit, rhs );
     }
   }
   
   auto perimeter_nodes_end = gref_.PerimeterNodesEnd();
   for (auto nit = gref_.PerimeterNodesBegin(); nit != perimeter_nodes_end; ++nit) {
-    for (auto lhs: perimeter_lhs_) {
-      lhs->AccumulateFiniteVolume( *nit, LHS_ );
+    for (auto op: perimeter_lhs_) {
+      op->AccumulateFiniteVolume( *nit, lhs );
     }
     
-    for (auto rhs: perimeter_rhs_) {
-      rhs->AccumulateFiniteVolume( *nit, RHS_ );
+    for (auto op: perimeter_rhs_) {
+      op->AccumulateFiniteVolume( *nit, rhs );
     }
   }
 }
