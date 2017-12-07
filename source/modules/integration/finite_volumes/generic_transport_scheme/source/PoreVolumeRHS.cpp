@@ -14,13 +14,11 @@ namespace csmp {
 
 template<size_t dim>
 PoreVolumeRHS<dim>::PoreVolumeRHS( const Model<dim>& model,
-                                   const char* pv_variable, const char* advected_variable,
-                                   double64 time_increment )
+                                   const char* pv_variable, const char* advected_variable )
  :  VectorOperator<dim>(ADD_ACCUMULATE),
     pv_key_(model.Database().StorageKey(pv_variable)),
-    adv_key_(model.Database().StorageKey(advected_variable)),
-    dt_(time_increment)
- {
+    adv_key_(model.Database().StorageKey(advected_variable))
+{
  }
   
 
@@ -36,7 +34,12 @@ void PoreVolumeRHS<dim>::AccumulateFV( const Node<dim>* nptr, std::vector<double
      const double64 pore_volume(nptr->Read(pv_key_));
      const double64 advection_value(nptr->Read(adv_key_));
    
-     rhs[ nptr->Idx() ] += (pore_volume * advection_value) / dt_;
+   if (this->multiply_with_dt_) {
+     rhs[ nptr->Idx() ] += pore_volume * advection_value * this->dt_;
+   }
+   else {
+     rhs[ nptr->Idx() ] += pore_volume * advection_value;
+   }
  }
 
 

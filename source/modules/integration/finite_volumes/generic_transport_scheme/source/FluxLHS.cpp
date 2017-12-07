@@ -26,7 +26,10 @@ void FluxLHS<dim>::AccumulateStencil( const Element<dim>* fe, SparseMatrix& mat 
         const size_t outside(fe->FV()->OutsideNode(iFacet));
         auto outside_node = fe->N(outside);
 
-        const double64 facet_flux = fe->Read( iFacet, 0U, this->ff_key_ );
+        double64 facet_flux = fe->Read( iFacet, 0U, this->ff_key_ );
+        if (this->MultiplyWithTimeIncrement()) {
+          facet_flux *= this->dt_;
+        }
         if ( facet_flux < 0. ) {
             // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
             //    (outside node = upstream)
@@ -62,6 +65,9 @@ void FluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>* nd, SparseMatrix& ma
 
               double64 facet_flux = eptr->Read( iFacet, 0U, this->ff_key_ );
               if (pnid != inside) facet_flux *= -1.;
+              if (this->MultiplyWithTimeIncrement()) {
+                facet_flux *= this->dt_;
+              }
 
               if ( facet_flux < 0. ) {
                   // 1. fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added

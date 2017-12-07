@@ -18,7 +18,7 @@ namespace csmp {
 			double64 pv = nptr->Read(pv_key_);
 			size_t i = nptr->Idx();
     if (this->multiply_with_dt_) {
-      A.Assign(i, i, pv / this->dt_);
+      A.Assign(i, i, pv * this->dt_);
     }
     else {
       A.Assign(i, i, pv);
