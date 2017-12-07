@@ -10,7 +10,7 @@ namespace csmp {
 template<size_t dim>
 class LinearSystemAccumulator {
   public:
-    LinearSystemAccumulator( Solver& solver, Model<dim>& model, const char* region );
+  LinearSystemAccumulator( Model<dim>& model, const char* region, SparseMatrix& lhs, std::vector<double64>& rhs, std::vector<double64>& result );
 
     void AddOperatorPerimeter( MatrixOperator<dim>* op );
     void AddOperatorInterior( MatrixOperator<dim>* op );
@@ -22,10 +22,6 @@ class LinearSystemAccumulator {
     void AccumulateByStencil();
     void AccumulateByFiniteVolume();
 
-    void SolveSystem();
-  
-    void WriteResultIntoModel();
-
   private:
     LinearSystemAccumulator( ) = delete;
     LinearSystemAccumulator( const LinearSystemAccumulator& ) = delete;
@@ -34,13 +30,12 @@ class LinearSystemAccumulator {
   
     Model<dim>& model_;
     const Region<dim>& gref_;
-    Solver& solver_;
 
     size_t fvs_;
 
-    SparseMatrix LHS_;
-    std::vector<double64> RHS_;
-    std::vector<double64> RESULT_;
+    SparseMatrix& LHS_;
+    std::vector<double64>& RHS_;
+    std::vector<double64>& RESULT_;
 
     std::vector<MatrixOperator<dim>*> interior_lhs_;
     std::vector<MatrixOperator<dim>*> perimeter_lhs_;

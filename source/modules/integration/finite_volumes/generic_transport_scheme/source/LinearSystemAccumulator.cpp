@@ -23,14 +23,13 @@ namespace csmp {
 
 
 template<size_t dim>
-LinearSystemAccumulator<dim>::LinearSystemAccumulator( Solver& solver, Model<dim>& model, const char* region )
+LinearSystemAccumulator<dim>::LinearSystemAccumulator( Model<dim>& model, const char* region, SparseMatrix& lhs, std::vector<double64>& rhs, std::vector<double64>& result )
   : model_(model),
     gref_(model_.Region(region)),
-    solver_(solver),
     fvs_(gref_.Nodes()),
-    LHS_(fvs_),
-    RHS_(fvs_),
-    RESULT_(fvs_)
+    LHS_(lhs),
+    RHS_(rhs),
+    RESULT_(result)
 {
 }
 
@@ -134,30 +133,6 @@ void LinearSystemAccumulator<dim>::AccumulateByFiniteVolume()
 }
 
   
-template<size_t dim>
-void LinearSystemAccumulator<dim>::SolveSystem()
-{
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings* settings = static_cast<SAMG_Settings*>(solver_.GetSolverSettings());
-    cout <<"\n\nLinearSystemAccumulator::SolveMatrixEquation: calling solver instance: ";
-    cout << settings->GetSolverInstance() << endl;
-    cout <<"\tSAMG settings:";
-    cout <<"\n\t\tiswit  = " << settings->Get_iswit();
-    cout <<"\n\t\titypu  = " << settings->Get_ifirst();
-    cout <<"\n\t\tlevelx = " << settings->Get_levelx();
-    cout << endl;
-#endif
-  
-  solver_.Solve( LHS_, RHS_, RESULT_ );
-}
-  
-
-template<size_t dim>
-void LinearSystemAccumulator<dim>::WriteResultIntoModel()
-{
-}
-
-
 template class LinearSystemAccumulator<1U>;
 template class LinearSystemAccumulator<2U>;
 template class LinearSystemAccumulator<3U>;
