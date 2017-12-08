@@ -459,7 +459,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 #if 1
       CSMP_DEFAULT_LINEAR_SOLVER solver;
 
-      ImplicitTransport<3U> advector(solver, model, "Model", false);
+      ImplicitTransport<3U> advector(solver, model, "Model", true);
       advector.StepSizeReductionFactor(1.0);
 #endif
 

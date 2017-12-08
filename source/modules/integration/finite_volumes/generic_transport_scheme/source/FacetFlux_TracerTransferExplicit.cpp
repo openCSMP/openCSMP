@@ -30,7 +30,7 @@ FacetFlux_TracerTransferExplicit<dim,USER>::FacetFlux_TracerTransferExplicit()
 void
   FacetFlux_TracerTransferExplicit<dim,USER>::FacetFluxes( Region<dim>& gref, bool reuse_velocity, bool second_order )
   {
-    if (second_order) {
+    if (!second_order) {
       // 1. element-by-element processing of the facet fluxes
       const typename vector<Element<dim>*>::iterator elements_end(gref.ElementsEnd());
       for ( typename vector<Element<dim>*>::iterator

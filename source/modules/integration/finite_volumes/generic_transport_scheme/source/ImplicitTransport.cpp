@@ -113,7 +113,7 @@ double64 ImplicitTransport<dim>::TimeIncrement()
     fill( RESULT_.begin(), RESULT_.end(), static_cast<double64>(0.) );
     
     this->EquationTimeIncrement(dt);
-    this->accumulator.AccumulateByFiniteVolume(LHS_, RHS_);
+    this->accumulator.AccumulateByStencil(LHS_, RHS_);
 } // end AccumulateSystem
 
   
@@ -128,7 +128,11 @@ double64 ImplicitTransport<dim>::TimeIncrement()
       
       // Dirichlet boundary condition: concentration should be unaltered.
       if (status == DIRICH) {
+        const auto c0 = (*nit)->Read( C0_key );
+
+        LHS_.ZeroRow(i);
         LHS_.Assign(i, i, 1.0);
+        RHS_[i] = c0;
         continue;
       }
       

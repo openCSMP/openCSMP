@@ -20,10 +20,10 @@ namespace csmp {
 template<size_t dim>
 Equation_TracerTransferImplicit<dim>::Equation_TracerTransferImplicit( Model<dim>& model, const char* region )
     : accumulator(model,region),
-      pv_op(model, "FV pore volume"),
+      pv_op(model, "FV pore volume", "porosity"),
       flux_op(model, "facet flux"),
       // diffusion_op(model, "diffusivity"),
-      pvrhs_op(model, "FV pore volume", "concentration")
+      pvrhs_op(model, "FV pore volume", "concentration", "porosity")
       // srclhs_op(model, "porosity", "total systems compressibility", "fluid pressure", "fluid pressure")
 {
       pv_op.AccumulationMode(ADD_ACCUMULATE);
