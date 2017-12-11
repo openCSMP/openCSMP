@@ -55,6 +55,11 @@ class StatisticalAnalyzer {
     void RegionPropertyHistogramsElement( const char* prop, 
                                           const HistogramBins& bins,
                                           std::map<std::string,std::pair<HistogramBins,size_t> >& results) const;
+    
+    /// analyzes properties element by element, integral over interpolation points of each element; written for velocity
+    void RegionPropertyHistogramsIntegrationPoint( const char* prop,
+                                                  const HistogramBins& bins,
+                                                  std::map<std::string,std::pair<HistogramBins,size_t> >& results, const std::string& flow_domain) const;
                                   
     /// as previous method, but binning second property based on first property occurance                         
     void RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1( const char* prop1,
