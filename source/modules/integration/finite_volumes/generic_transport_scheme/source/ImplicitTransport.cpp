@@ -129,7 +129,6 @@ double64 ImplicitTransport<dim>::TimeIncrement()
       // Dirichlet boundary condition: concentration should be unaltered.
       if (status == DIRICH) {
         const auto c0 = (*nit)->Read( C0_key );
-
         LHS_.ZeroRow(i);
         LHS_.Assign(i, i, 1.0);
         RHS_[i] = c0;
@@ -139,7 +138,8 @@ double64 ImplicitTransport<dim>::TimeIncrement()
       // Calculate flow through boundary
       double64 inflow = 0.0;
       double64 influx = 0.0;
-      
+      const auto c0 = (*nit)->Read( C0_key );
+
       const size_t iNrParents = (*nit)->Parents();
       for ( size_t iParent = 0; iParent < iNrParents; ++iParent ) {
         const size_t pnid = (*nit)->ParentNodeNumber( iParent );
@@ -179,7 +179,7 @@ double64 ImplicitTransport<dim>::TimeIncrement()
 
       if ( inflow >= 0 ) {
         // inflow compensation
-        RHS_[i] += influx;
+        RHS_[i] += inflow * c0;
       }
       else {
         // outflow compensation
