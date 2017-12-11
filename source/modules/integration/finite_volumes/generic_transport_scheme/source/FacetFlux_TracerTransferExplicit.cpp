@@ -8,6 +8,7 @@
 #include "Node.h"
 #include "Element.h"
 #include "Model.h"
+#include "Region.h"
 #include "TwoPhaseModel.h"
 #include "ExplicitTransport.h"
 #include "ImplicitTransport.h"
@@ -18,7 +19,67 @@ using namespace std;
 
 namespace csmp {
 
+  
+template<size_t dim, template<size_t> class USER>
+FacetFlux_TracerTransferExplicit<dim,USER>::FacetFlux_TracerTransferExplicit()
+{
+}
 
+  
+  template<size_t dim, template<size_t> class USER>
+void
+  FacetFlux_TracerTransferExplicit<dim,USER>::FacetFluxes( Region<dim>& gref, bool reuse_velocity, bool second_order )
+  {
+    if (!second_order) {
+      // 1. element-by-element processing of the facet fluxes
+      const typename vector<Element<dim>*>::iterator elements_end(gref.ElementsEnd());
+      for ( typename vector<Element<dim>*>::iterator
+           eit=gref.ElementsBegin(); eit!=elements_end; ++eit )
+      {
+        // 1.1 computation of transport velocity from fluid pressure gradient
+        
+        // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
+        this->Advective_O1_FluxesInterior( reuse_velocity, (*eit) );
+      }
+      
+      // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
+      const typename vector<Node<dim>*>::iterator pnodes_end(gref.PerimeterNodesEnd());
+      for ( typename vector<Node<dim>*>::iterator
+           nit=gref.PerimeterNodesBegin(); nit!=pnodes_end; ++nit )
+      {
+        // computing flux balances and concentration-facet flux products where possible,
+        // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
+        // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
+        // in this case the influx is found from the flux balance and FV cell's concentration
+        this->Advective_O1_FluxesAtBoundary( (*nit) );
+      }
+    }
+    else {
+      // 1. element-by-element processing of the facet fluxes
+      const typename vector<Element<dim>*>::iterator elements_end(gref.ElementsEnd());
+      for ( typename vector<Element<dim>*>::iterator
+           eit=gref.ElementsBegin(); eit!=elements_end; ++eit )
+      {
+        // 1.1 computation of transport velocity from fluid pressure gradient
+        
+        // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
+        this->Advective_O2_FluxesInterior( reuse_velocity, (*eit) );
+      }
+      
+      // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
+      const typename vector<Node<dim>*>::iterator pnodes_end(gref.PerimeterNodesEnd());
+      for ( typename vector<Node<dim>*>::iterator
+           nit=gref.PerimeterNodesBegin(); nit!=pnodes_end; ++nit )
+      {
+        // computing flux balances and concentration-facet flux products where possible,
+        // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
+        // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
+        // in this case the influx is found from the flux balance and FV cell's concentration
+        this->Advective_O2_FluxesAtBoundary( (*nit) );
+      }
+    }
+    
+  }
 
 /** 
     Computes A_i vD . n_i for all facets and its product with the upstream concentrations
@@ -596,12 +657,6 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
      return flux_balance;
 
  } // end FluxBalance
-
-  
-  
-  
-
-
 
 
   template class FacetFlux_TracerTransferExplicit<1U,ImplicitTransport>;

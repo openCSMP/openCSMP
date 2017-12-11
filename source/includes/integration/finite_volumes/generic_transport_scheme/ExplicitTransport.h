@@ -11,6 +11,7 @@ template<size_t> class PropertyDatabase;
 template<size_t> class Region;
 template<size_t> class Model;
 template<size_t> class TwoPhaseModel;
+template<size_t> class ExplicitTransport;
 
 // TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode computing and averaging element gradients vs. node by node approach)
 // TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
@@ -32,12 +33,7 @@ class ExplicitTransport : public VariableSet_TracerTransferExplicit,
     /// gets the model
     const Model<dim>& GetModel() const;
   
-  private:
-    /// 1.a computations of facet flux using FacetFlux (facet flux) policy
-    void UpdateFacetFluxes(bool reuse_previous_velocity);
-    void UpdateFacetFluxes_O1(bool reuse_previous_velocity);
-    void UpdateFacetFluxes_O2(bool reuse_previous_velocity);
-    
+  private:    
     /// 1.b computations of piecewise constatn element velocities and facet fluxes using FacetFlux (facet flux) policy
     void PostProcessVelocityAndUpdateFacetFluxes();
     
