@@ -616,6 +616,19 @@ void  IsoparametricQuadraticTriangle::JacobianAtIntegrationPoint( size_t gauss_p
  }
 
 
+/**
+     Assumes that RS, EFG and the local JAC matrix were initialised before.
+ */
+double64 IsoparametricQuadraticTriangle::JacobianDeterminant()
+  {
+        if ( !use2Dto3Djacobi )
+          return FiniteElement::JacobianDeterminant();
+    
+        return Jacobi( RS, EFG, JAC );
+    }
+    
+    
+    
 
 void  IsoparametricQuadraticTriangle::N_AtBaryCenter( std::vector<double64>& N )
  {
