@@ -50,7 +50,7 @@ struct VariableSet_TracerTransfer {
      /// verifies types and placements
      void CheckVariables() const;
 };
- 
+
 } // end csmp
 
 #endif /* defined(VARIABLE_SET_TRACER_TRANSFER_H) */

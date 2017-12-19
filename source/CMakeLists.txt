@@ -1,25 +1,60 @@
 
 SET(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/includes")
 SET(MODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules")
-SET(GEN_INCLUDES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_includes")
 
-FILE(MAKE_DIRECTORY ${GEN_INCLUDES_DIR})
-
+# Preprocessors and generators
+SET_SOURCE_FILES_PROPERTIES(CSMP_number_types_main PROPERTIES GENERATED TRUE)
 ADD_EXECUTABLE(CSMP_number_types_main
-	generate_number_types.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/generate_number_types.cpp
 )
 
+SET_SOURCE_FILES_PROPERTIES(CSMP_variable_set_processor PROPERTIES GENERATED TRUE)
+ADD_EXECUTABLE(CSMP_variable_set_processor
+	${CMAKE_CURRENT_SOURCE_DIR}/variable_set_processor.cpp
+)
+
+# Generated includes
+ADD_CUSTOM_TARGET(GeneratedIncludes)
+SET_SOURCE_FILES_PROPERTIES(GeneratedIncludes PROPERTIES SYMBOLIC TRUE)
+
+# CSMP number types header
+
+SET_SOURCE_FILES_PROPERTIES(CSMP_number_types.h PROPERTIES GENERATED TRUE)
+ADD_CUSTOM_TARGET(GenerateNumberTypes DEPENDS CSMP_number_types.h)
 ADD_CUSTOM_COMMAND(
-    OUTPUT "${GEN_INCLUDES_DIR}/CSMP_number_types.h"
+    OUTPUT CSMP_number_types.h
     COMMAND $<TARGET_FILE:CSMP_number_types_main>
     MAIN_DEPENDENCY CSMP_number_types_main
     WORKING_DIRECTORY "${GEN_INCLUDES_DIR}"
+    COMMENT "Generating CSMP_number_types.h"
 )
+ADD_DEPENDENCIES(GeneratedIncludes GenerateNumberTypes)
 
-ADD_CUSTOM_TARGET(number_types_header DEPENDS "${GEN_INCLUDES_DIR}/CSMP_number_types.h")
+
+# Variables
+macro(GenerateVariables source_csv target_header)
+    SET_SOURCE_FILES_PROPERTIES(${target_header} PROPERTIES GENERATED TRUE)
+    ADD_CUSTOM_TARGET("Generate${target_header}")
+    ADD_CUSTOM_COMMAND(
+	OUTPUT ${target_header}
+        COMMAND $<TARGET_FILE:CSMP_variable_set_processor>
+	ARGS ${source_csv} ${target_header}
+	DEPENDS CSMP_variable_set_processor ${source_csv}
+        COMMENT "Generating ${target_header}"
+    )
+    ADD_DEPENDENCIES(GeneratedIncludes "Generate${target_header}")
+endmacro()
+
+GenerateVariables(${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
+
+
+
+# CSMP core library
 
 file(GLOB_RECURSE CSMP_CORE_SOURCE_FILES "*.cpp")
 FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
+	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
 	${MODULES_DIR}/thmc/mechanics/*.old.cpp
@@ -72,7 +107,7 @@ GroupHeaders(includes)
 
 ADD_LIBRARY(csmpcore ${CSMP_CORE_SOURCE_FILES} ${CSMP_CORE_HEADER_FILES})
 
-ADD_DEPENDENCIES(csmpcore number_types_header)
+ADD_DEPENDENCIES(csmpcore GeneratedIncludes)
 
 TARGET_LINK_LIBRARIES(csmpcore ${SAMG_LIBRARIES})
 

@@ -40,6 +40,7 @@ public:
     virtual void        N_AtBaryCenter( std::vector<double64>& N );
     virtual void        JacobianAtIntegrationPoint( size_t ip );
     virtual double64    JacobianInverse();
+    virtual double64    JacobianDeterminant();
 
     virtual double64    dN_At( DenseMatrix<DM_MIN>& dn, const std::vector<double64>& xyz  );
     virtual void        dN( DenseMatrix<DM_MIN>& M );

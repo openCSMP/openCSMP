@@ -44,107 +44,6 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
  }
   
 
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-*/
-template<size_t dim>
-void ExplicitTransport<dim>::UpdateFacetFluxes(bool reuse_previous_velocity)
- {
-     if (!second_order_in_space_) {
-        UpdateFacetFluxes_O1(reuse_previous_velocity);
-     }
-     else {
-        UpdateFacetFluxes_O2(reuse_previous_velocity);
-     }
-   
- } // end UpdateFacetFluxes
-
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-    1st order accurate in space and time
-    
-    @attention this means that facet fluxes in FV sectors outside the domain are not considered.
-    This is done in TimeIncrementAndFluxBalance() by Advective_O1_FluxesBoundary().
-    This method writes the correct balances onto the nodes on the perimeter.
-*/
-template<size_t dim>
-void ExplicitTransport<dim>::UpdateFacetFluxes_O1(bool reuse_previous_velocity)
- {
-     // 1. element-by-element processing of the facet fluxes
-     const typename vector<Element<dim>*>::iterator elements_end(gref_.ElementsEnd());
-     for ( typename vector<Element<dim>*>::iterator
-           eit=gref_.ElementsBegin(); eit!=elements_end; ++eit )
-       {
-          // 1.1 computation of transport velocity from fluid pressure gradient
-       
-          // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
-          this->Advective_O1_FluxesInterior( reuse_previous_velocity, (*eit) );
-       }
-
-     // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
-     const typename vector<Node<dim>*>::iterator pnodes_end(gref_.PerimeterNodesEnd());
-     for ( typename vector<Node<dim>*>::iterator
-           nit=gref_.PerimeterNodesBegin(); nit!=pnodes_end; ++nit )
-       {
-          // computing flux balances and concentration-facet flux products where possible,
-          // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
-          // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
-          // in this case the influx is found from the flux balance and FV cell's concentration
-          this->Advective_O1_FluxesAtBoundary( (*nit) );
-       }
-   
- } // end UpdateFacetFluxes_O1
-
-
-/**
-    Velocity and flux calculation (element by element), for all elements in the domain
-    2nd order accurate in space
-    
-    @attention this means that facet fluxes in FV sectors outside the domain are not considered.
-    This is done in TimeIncrementAndFluxBalance() by Advective_O1_FluxesBoundary().
-    This method writes the correct balances onto the nodes on the perimeter.
-*/
-template<size_t dim>
-void ExplicitTransport<dim>::UpdateFacetFluxes_O2(bool reuse_previous_velocity)
- {
-     // 1. element-by-element processing of the facet fluxes
-     const typename vector<Element<dim>*>::iterator elements_end(gref_.ElementsEnd());
-     for ( typename vector<Element<dim>*>::iterator
-           eit=gref_.ElementsBegin(); eit!=elements_end; ++eit )
-       {
-          // 1.1 computation of transport velocity from fluid pressure gradient
-       
-          // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
-          this->Advective_O2_FluxesInterior( reuse_previous_velocity, (*eit) );
-       }
-
-     // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
-     const typename vector<Node<dim>*>::iterator pnodes_end(gref_.PerimeterNodesEnd());
-     for ( typename vector<Node<dim>*>::iterator
-           nit=gref_.PerimeterNodesBegin(); nit!=pnodes_end; ++nit )
-       {
-          // computing flux balances and concentration-facet flux products where possible,
-          // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
-          // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
-          // in this case the influx is found from the flux balance and FV cell's concentration
-          this->Advective_O2_FluxesAtBoundary( (*nit) );
-       }
-   
- } // end UpdateFacetFluxes_O2
-
-  
-
-
-
-
-
-
-
-
 /**
     Computation of time increment, flux balance, and temporary new concentration.
 */
@@ -365,7 +264,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
     // 1. computing (velocity and) facet fluxes as necessary
     const bool reuse_previous_velocity = false;
-    UpdateFacetFluxes(reuse_previous_velocity);
+    this->FacetFluxes(gref_, reuse_previous_velocity, second_order_in_space_);
    
     // 2. evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
@@ -409,7 +308,8 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
           time += time_increment;
 
           const bool reuse_previous_velocity = true;
-          UpdateFacetFluxes(reuse_previous_velocity);
+          this->FacetFluxes(gref_, reuse_previous_velocity, second_order_in_space_);
+
           time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
 
           substep++;
@@ -420,7 +320,7 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
  } // end AdvectVariable
 
 
-
+template class ExplicitTransport<1U>;
 template class ExplicitTransport<2U>;
 template class ExplicitTransport<3U>;
 

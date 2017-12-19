@@ -148,6 +148,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
  } // end initializeFiniteVolumeProperties
 
 // explicit instantiation of function template in 2 and 3D
+template void initializeFiniteVolumeProperties( Model<1U>&, Region<1U>& );
 template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>& );
 template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>& );
 

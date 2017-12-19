@@ -524,7 +524,118 @@ const
  } // end RegionPropertyHistogramsElement
 
 
-
+    /**
+     
+     Goes through all Regions of current Model and calculates the area/volume of the region with property values
+     within the ranges defined in 'bins'. Normalizes the computed values by the total area/volume of the Region.
+     Returns a map of bins and area/volume normalized values for each region
+     using the region name as key / identifier.
+     
+     */
+    
+    template<size_t dim>
+    void StatisticalAnalyzer<dim>::RegionPropertyHistogramsIntegrationPoint( const char* prop,
+                                                                            const HistogramBins& bins,
+                                                                            //  region_name  up.bin.lt, value, n-samples
+                                                                            map<std::string,pair<HistogramBins,size_t> >& results, const std::string& flow_domain )
+    const
+    {
+        csmp::Index  prop_key = pref.StorageKey(prop);
+        HistogramBins        result( bins.size() );
+        double64             total_volume(0.), volume, element_vol(0.);
+        VectorVariable<dim>  vc;
+        double64             val;
+        int count(0);
+        
+        // for tubes
+        double64 patm(100325.);
+        const csmp::Index p_key(pref.StorageKey("fluid pressure"));
+        
+        double64 max(0.), min(1e300);
+        
+        cout<<"RegionPropertyHistogramsIntegrationPoint: "<<prop<<endl;
+        
+        // defining upper bin limits in result vector (lowest limit is always 0.)
+        HistogramBins::iterator rit=result.begin();
+        for ( HistogramBins::const_iterator
+             vit=bins.begin(); vit!=bins.end(); vit++, rit++ ) {
+            (*rit).first  = (*vit).second;
+            (*rit).second = 0.;
+        }
+        
+        if ( !results.empty() ) results.clear();
+        
+        // 1. go through all groups and do the binning
+        // -------------------------------------------
+        const Region<dim>& subdomain(sref.Region(flow_domain));
+        //    cout<<"velocity"<<endl;
+        for ( typename vector<Element<dim>*>::const_iterator
+             it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
+        {
+            // will work for BCC but not for tubes
+            //total_volume += fabs( volume = (*it)->Volume() );
+            // 1.1 reading the property value, taking length of vectors, and determinant of tensors
+            // ------------------------------------------------------------------------------------
+            val = 0.;
+            element_vol = 0.;
+            //volume = (*it)->Volume();
+            for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
+                if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
+                    (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
+                    double64 det_J((*it)->det_JINV_AtIntegrationPoint(n));
+                    //total_volume += fabs( volume );
+                    volume = det_J * (*it)->WeightAtIntegrationPoint(n);
+                    val += vc.Length() * volume;
+                    element_vol += volume;
+                } //if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
+            } // for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
+            //val /= static_cast<double64>((*it)->FE()->IntegrationPoints());
+            if (element_vol > 0.) {
+                val /= element_vol;
+                total_volume += element_vol;
+                count++;
+                if (val < min) min = val;
+                if (val > max) max = val;
+                
+                // 1.2 binning the value
+                // ---------------------
+                size_t i=0;
+                for ( typename HistogramBins::const_iterator
+                     vit=bins.begin(); vit!=bins.end(); vit++, i++ ) {
+                    if (vit == bins.begin()) {
+                        if ( val >= (*vit).first && val <= (*vit).second )
+                            result[i].second += fabs( element_vol );
+                        //result[i].second += 1.;
+                    }
+                    else {
+                        if ( val > (*vit).first && val <= (*vit).second )
+                            result[i].second += fabs( element_vol );
+                        //result[i].second += 1.;
+                    }
+                }
+            } // if (element_vol > 0.) {
+            
+        }
+        //    cout<<endl;
+        cout<<"min= "<<min<<" max= "<<max<<" count= "<<count<<" total_volume= "<<total_volume<<endl;
+        // normalizing by volume, i.e. how much of total volume has this characteristic
+        // ------------------------------------------------------------------------
+        //for ( rit=result.begin(); rit !=result.end(); rit++ ) (*rit).second /= total_volume;
+        for ( rit=result.begin(); rit !=result.end(); rit++ ) {
+            //(*rit).second /= count;
+            (*rit).second /= total_volume;
+            cout<<(*rit).second<<endl;
+        }
+        cout<<endl;
+        // 2. storing result map and zeroing vector for next group
+        //--------------------------------------------------------
+        results[ flow_domain ] = pair<HistogramBins,uint32>(result,subdomain.Elements());
+        for ( HistogramBins::iterator
+             rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
+        
+        //    } // end for all regions
+        
+    } // end RegionPropertyHistogramsIntegrationPoint
 
 
 

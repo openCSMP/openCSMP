@@ -15,9 +15,8 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivity, ACCUMULATION_MODE mode )
-  : MatrixOperator<dim>(mode),
-    diff_key_(model.Database().StorageKey(diffusivity)),
+DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivity )
+  : diff_key_(model.Database().StorageKey(diffusivity)),
     dof_(model.Database().Components(diffusivity))
  {
  }
@@ -29,7 +28,7 @@ DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivit
      accumulate it into the solution matrix A of Ax=b.
 */
 template<size_t dim>
-void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>* eptr, SparseMatrix& A )
+void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>* eptr, SparseMatrix& A ) const
  {
     // assuming a scalar diffusivity
     double64  diffusion_coeff = eptr->Read( diff_key_ );
