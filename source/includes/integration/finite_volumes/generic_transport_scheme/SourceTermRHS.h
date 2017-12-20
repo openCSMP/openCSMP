@@ -17,7 +17,7 @@ template<size_t dim>
 class SourceTermRHS : public VectorOperator<dim> {
   public:
     /// note that this source variable may be an element or a nodal one
-    SourceTermRHS( const Model<dim>&, const char* source_variable, ACCUMULATION_MODE accumulation_mode );
+    SourceTermRHS( const Model<dim>&, const char* source_variable );
   
     /// accumulates integrated (single) values of source term onto the finite volume centered on the Node
     virtual void AccumulateFV( const Node<dim>*, std::vector<double64>& rhs ) const;

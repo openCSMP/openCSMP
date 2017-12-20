@@ -614,6 +614,30 @@ void IsoparametricLinearHexahedron::Nrst(
    N[7] = 0.125*rMinus*sPlus*tPlus;
 }
 
+void IsoparametricLinearHexahedron::Nrst(
+                    double64 r,
+                    double64 s,
+                    double64 t,
+                    double64* N ) const
+{
+   const double64 rPlus(1.0+r);
+   const double64 sPlus(1.0+s);
+   const double64 tPlus(1.0+t);
+   const double64 rMinus(1.0-r);
+   const double64 sMinus(1.0-s);
+   const double64 tMinus(1.0-t);
+
+   N[0] = 0.125*rMinus*sMinus*tMinus;
+   N[1] = 0.125*rPlus*sMinus*tMinus;
+   N[2] = 0.125*rPlus*sPlus*tMinus;
+   N[3] = 0.125*rMinus*sPlus*tMinus;
+
+   N[4] = 0.125*rMinus*sMinus*tPlus;
+   N[5] = 0.125*rPlus*sMinus*tPlus;
+   N[6] = 0.125*rPlus*sPlus*tPlus;
+   N[7] = 0.125*rMinus*sPlus*tPlus;
+}
+
 
 
 /**

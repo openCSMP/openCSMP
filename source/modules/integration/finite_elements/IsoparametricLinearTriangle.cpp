@@ -133,6 +133,17 @@ IsoparametricLinearTriangle::Nrs(
    N[2] = s;
 }
 
+void
+IsoparametricLinearTriangle::Nrs(
+                    double64 r,
+                    double64 s,
+                    double64* N ) const
+{
+   N[0] = 1-r-s;
+   N[1] = r;
+   N[2] = s;
+}
+
 
 
 

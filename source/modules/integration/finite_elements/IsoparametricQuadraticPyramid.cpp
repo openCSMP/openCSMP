@@ -466,8 +466,39 @@ void IsoparametricQuadraticPyramid::Nrst(
   N[10]= t*(1+r-t)*(1-s-t)/(1-t);
   N[11]= t*(1+r-t)*(1+s-t)/(1-t);
   N[12]= t*(1-r-t)*(1+s-t)/(1-t);
-
 }
+
+void IsoparametricQuadraticPyramid::Nrst(
+                    double64 r,
+                    double64 s,
+                    double64 t,
+                    double64* N ) const
+{
+  N[13]= (1-r*r)*(1-s*s)*(1-t)*(0.5-r*r);
+
+  // These shape functions are the corrected version of the ones that appear in the paper:
+  // "A new family of finite elements: The pyramidal elements" by Zganski et al 1996
+  // The isoparametric quadratic pyramid is a second order complete element. AP2006
+
+  // Bedrosian paper - corrected, AAM, 20/08/04
+  N[0] = 0.25*(-r-s-1)*((1-r)*(1-s)-t+r*s*t/(1-t)) + 0.25*N[13];
+  N[1] = 0.25*( r-s-1)*((1+r)*(1-s)-t-r*s*t/(1-t)) + 0.25*N[13];
+  N[2] = 0.25*( r+s-1)*((1+r)*(1+s)-t+r*s*t/(1-t)) + 0.25*N[13];
+  N[3] = 0.25*(-r+s-1)*((1-r)*(1+s)-t-r*s*t/(1-t)) + 0.25*N[13];
+  N[4] = t*(2*t-1);
+
+  N[5] = (1+r-t)*(1-r-t)*(1-s-t)/(2*(1-t)) - 0.5*N[13];
+  N[6] = (1+s-t)*(1-s-t)*(1+r-t)/(2*(1-t)) - 0.5*N[13];
+  N[7] = (1+r-t)*(1-r-t)*(1+s-t)/(2*(1-t)) - 0.5*N[13];
+  N[8] = (1+s-t)*(1-s-t)*(1-r-t)/(2*(1-t)) - 0.5*N[13];
+
+  N[9] = t*(1-r-t)*(1-s-t)/(1-t);
+  N[10]= t*(1+r-t)*(1-s-t)/(1-t);
+  N[11]= t*(1+r-t)*(1+s-t)/(1-t);
+  N[12]= t*(1-r-t)*(1+s-t)/(1-t);
+}
+
+/**
 
 /**
 

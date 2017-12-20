@@ -966,6 +966,23 @@ void IsoparametricQuadraticTetrahedron::Nrst( double64 L2, double64 L3, double64
    IPOL[9] = 4.0 * L3 * L4;
 }
 
+void IsoparametricQuadraticTetrahedron::Nrst( double64 L2, double64 L3, double64 L4,
+                                              double64* IPOL ) const
+{
+   // note that L1 = 1 - r - s - t, L2 = r, L3 = s, L4 = t
+   // see Bathe, page 256 (midside nodes) and Huyakorn and Pinder page 91 (corner nodes)
+   const double64 L1 = 1.0 - L2 - L3 - L4;
+   IPOL[0] = L1 * ( 2.0 * L1 - 1.0 );
+   IPOL[1] = L2 * ( 2.0 * L2 - 1.0 );
+   IPOL[2] = L3 * ( 2.0 * L3 - 1.0 );
+   IPOL[3] = L4 * ( 2.0 * L4 - 1.0 );
+   IPOL[4] = 4.0 * L1 * L2;
+   IPOL[5] = 4.0 * L2 * L3;
+   IPOL[6] = 4.0 * L3 * L1;
+   IPOL[7] = 4.0 * L1 * L4;
+   IPOL[8] = 4.0 * L2 * L4;
+   IPOL[9] = 4.0 * L3 * L4;
+}
 
 
 

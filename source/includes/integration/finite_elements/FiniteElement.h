@@ -325,14 +325,19 @@ class FiniteElement {
     virtual   void      IntegraldNdN( DenseMatrix<DM_MIN>& );
     
     // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
+    // TODO AJB: Consolidate N() methods; we don't need both std::vector and pointer versions.
 
     /// 1D element interpolation functions N(r)
     virtual void  Nr(  double64 r, std::vector<double64>& NRST ) const;
+    virtual void  Nr(  double64 r, double64* NRST ) const;
+
     /// 1D element interpolation functions derivatives N(r)/dr
     virtual void  dNr( double64 r, std::vector<double64>& DNR ) const;
 
     /// 2D element interpolation functions N(r,s)
     virtual void  Nrs( double64 r, double64 s, std::vector<double64>& NRST ) const;
+    virtual void  Nrs( double64 r, double64 s, double64* NRST ) const;
+
     /// 2D element interpolation functions derivatives N(r,s)/dr
     virtual void  dNr( double64 r, double64 s, std::vector<double64>& DNR ) const;
     /// 2D element interpolation functions derivatives N(r,s)/ds
@@ -340,6 +345,8 @@ class FiniteElement {
 
     /// 3D element interpolation functions N(r,s,t)
     virtual void  Nrst( double64 r, double64 s, double64 t, std::vector<double64>& NRST ) const;
+    virtual void  Nrst( double64 r, double64 s, double64 t, double64* NRST ) const;
+
     /// 2D element interpolation functions derivatives N(r,s,t)/dr
     virtual void  dNr( double64 r,  double64 s, double64 t, std::vector<double64>& DNR ) const;
     /// 2D element interpolation functions derivatives N(r,s,t)/ds

@@ -10,7 +10,7 @@ using namespace std;
 namespace csmp {
 template<size_t dim>
 CompressiblePressureSourceLHS<dim>::CompressiblePressureSourceLHS(Model<dim>& model, const char* porosity, const char* compressibility, const char* previous_pressure, const char* current_pressure)
- : MatrixOperator<dim>(ADD_ACCUMULATE),
+ : MatrixOperator<dim>(0),
    phi_key_(model.Database().StorageKey(porosity)),
    CT_key_(model.Database().StorageKey(compressibility)),
    pf0_key_(model.Database().StorageKey(previous_pressure)),

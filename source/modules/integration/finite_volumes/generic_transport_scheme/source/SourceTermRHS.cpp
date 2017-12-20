@@ -17,8 +17,8 @@ namespace csmp {
 
     /// note that this source variable may be an element or a nodal one
 template<size_t dim>
-SourceTermRHS<dim>::SourceTermRHS( const Model<dim>& model, const char* source_variable, ACCUMULATION_MODE accumulation_mode )
- : VectorOperator<dim>(accumulation_mode),
+SourceTermRHS<dim>::SourceTermRHS( const Model<dim>& model, const char* source_variable )
+ : VectorOperator<dim>(0),
    src_key_(model.Database().StorageKey(source_variable))
  {
  }

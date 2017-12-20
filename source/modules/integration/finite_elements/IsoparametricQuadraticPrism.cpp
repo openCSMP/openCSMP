@@ -476,9 +476,36 @@ void IsoparametricQuadraticPrism::Nrst(
    N[15]=  4*L1*r*(1.-t*t);
    N[16]=  4*r*s*(1.-t*t);
    N[17]=  4*s*L1*(1.-t*t);
-
 }
 
+void IsoparametricQuadraticPrism::Nrst(
+                    double64 r, // L2
+                    double64 s, // L3
+                    double64 t,
+                    double64* N ) const
+{
+   const double64 L1=1.-r-s;
+   N[0] =  0.5*L1*(2*L1-1.)*t*(t-1.);
+   N[1] =  0.5*r*(2*r-1.)*t*(t-1.);
+   N[2] =  0.5*s*(2*s-1.)*t*(t-1.);
+   N[3] =  0.5*L1*(2*L1-1.)*t*(t+1.);
+   N[4] =  0.5*r*(2*r-1.)*t*(t+1.);
+   N[5] =  0.5*s*(2*s-1.)*t*(t+1.);
+   N[6] =  2*L1*r*t*(t-1.);
+   N[7] =  2*r*s*t*(t-1.);
+
+   N[8] =  2*s*L1*t*(t-1.);
+   N[9] =  L1*(2*L1-1.)*(1.-t*t);
+   N[10]=  r*(2*r-1.)*(1.-t*t);
+   N[11]=  s*(2*s-1.)*(1.-t*t);
+   N[12]=  2*L1*r*t*(t+1.);
+   N[13]=  2*r*s*t*(t+1.);
+   N[14]=  2*s*L1*t*(t+1.);
+
+   N[15]=  4*L1*r*(1.-t*t);
+   N[16]=  4*r*s*(1.-t*t);
+   N[17]=  4*s*L1*(1.-t*t);
+}
 
 
 

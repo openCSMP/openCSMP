@@ -22,24 +22,24 @@ struct VariableSet_TracerTransfer {
      explicit VariableSet_TracerTransfer( const PropertyDatabase<dim>& );
 
      // finite volume variables
-     const csmp::Index  ff_key;  ///< facet flux
-     const csmp::Index  ffC_key; ///< facet flux concentration product
-     const csmp::Index  PV_key;  ///< FV pore volume (FV)
-     const csmp::Index  fb_key;  ///< flux balance (FV)
-     const csmp::Index  nsrc_key;  ///< nodal fluid volume source (absolute concentration*volume product assigned to FV)
+     const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>  ff_key;  ///< facet flux
+     const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>  ffC_key; ///< facet flux concentration product
+     const csmp::INDEX<SCALAR,NODE>  PV_key;  ///< FV pore volume (FV)
+     const csmp::INDEX<SCALAR,NODE>  fb_key;  ///< flux balance (FV)
+     const csmp::INDEX<SCALAR,NODE>  nsrc_key;  ///< nodal fluid volume source (absolute concentration*volume product assigned to FV)
      // general
-     const csmp::Index  pf_key;  ///< fluid pressure
-     const csmp::Index  k_key;   ///< permeability
-     const csmp::Index  phi_key; ///< porosity
-     const csmp::Index  thi_key; ///< thickness
-     const csmp::Index  vD_key;  ///< Darcy velocity
+     const csmp::INDEX<SCALAR,NODE>  pf_key;  ///< fluid pressure
+     const csmp::INDEX<SCALAR,ELEMENT>  k_key;   ///< permeability
+     const csmp::INDEX<SCALAR,ELEMENT>  phi_key; ///< porosity
+     const csmp::INDEX<SCALAR,ELEMENT>  thi_key; ///< thickness
+     const csmp::INDEX<VECTOR,ELEMENT>  vD_key;  ///< Darcy velocity
      // fluid properties
-     const csmp::Index  mu_key;   ///< fluid viscosity
-     const csmp::Index  rhof_key; ///< fluid density
-     const csmp::Index  C0_key;   ///< concentration
-     const csmp::Index  C1_key;   ///< new concentration
+     const csmp::INDEX<SCALAR,MODEL>  mu_key;   ///< fluid viscosity
+     const csmp::INDEX<SCALAR,MODEL>  rhof_key; ///< fluid density
+     const csmp::INDEX<SCALAR,NODE>  C0_key;   ///< concentration
+     const csmp::INDEX<SCALAR,NODE>  C1_key;   ///< new concentration
      // other
-     const csmp::Index  diff_key; ///< diffusion coefficient (computed from fluid and material properties)
+     const csmp::INDEX<SCALAR,ELEMENT>  diff_key; ///< diffusion coefficient (computed from fluid and material properties)
 
    private:
      VariableSet_TracerTransfer() = delete;

@@ -42,9 +42,9 @@ template<size_t dim>
 class VectorOperator
 {
 public:
-  ACCUMULATION_MODE AccumulationMode() const { return mode_; }
+  size_t Stage() const { return stage_; }
   
-  void AccumulationMode( ACCUMULATION_MODE mode ) { mode_ = mode; }
+  void Stage( size_t stage ) { stage_ = stage; }
   
   bool MultiplyWithTimeIncrement() const { return multiply_with_dt_; }
   void MultiplyWithTimeIncrement( bool multiply_with_dt ) { multiply_with_dt_ = multiply_with_dt; }
@@ -56,12 +56,12 @@ public:
   virtual ~VectorOperator() { }
   
 protected:
-  VectorOperator( ACCUMULATION_MODE mode )
-  : mode_(mode), multiply_with_dt_(false), dt_(std::numeric_limits<double64>::quiet_NaN())
+  explicit VectorOperator( size_t stage )
+  : stage_(stage), multiply_with_dt_(false), dt_(std::numeric_limits<double64>::quiet_NaN())
   {
   }
   
-  ACCUMULATION_MODE mode_;
+  size_t stage_;
   bool multiply_with_dt_;
   double64 dt_;
 };

@@ -36,16 +36,16 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
  {
     const bool initialize_flux(true);
    
-    const csmp::Index phi_key = model.Database().StorageKey("porosity");
-    const csmp::Index thi_key = model.Database().StorageKey("thickness");
-    const csmp::Index vt_key  = model.Database().StorageKey("velocity");
-    const csmp::Index k_key  = model.Database().StorageKey("permeability");
-     const csmp::Index pf_key  = model.Database().StorageKey("fluid pressure");
+    const csmp::INDEX<SCALAR,ELEMENT> phi_key(model.Database().StorageKey("porosity"));
+    const csmp::INDEX<SCALAR,ELEMENT>  thi_key(model.Database().StorageKey("thickness"));
+    const csmp::INDEX<VECTOR,ELEMENT>  vt_key(model.Database().StorageKey("velocity"));
+    const csmp::INDEX<SCALAR,ELEMENT>  k_key(model.Database().StorageKey("permeability"));
+    const csmp::INDEX<SCALAR,NODE>  pf_key(model.Database().StorageKey("fluid pressure"));
 
-    const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
+    const csmp::INDEX<SCALAR,NODE>  pv_key(model.Database().StorageKey("FV pore volume"));
     // const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::Index ff_key  = model.Database().StorageKey("facet flux");
-    const csmp::Index fb_key  = model.Database().StorageKey("flux balance");
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>  ff_key(model.Database().StorageKey("facet flux"));
+    const csmp::INDEX<SCALAR,NODE>  fb_key(model.Database().StorageKey("flux balance"));
    
      Point<dim> vD;
    
@@ -54,25 +54,30 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
     gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
     gref.InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );
    
+   FiniteElementHelper<dim> fe;
+  
     // For the interior elements of the region compute relevant variable values
     const typename vector<Element<dim>*>::iterator it_end(gref.ElementsEnd());
     for ( typename vector<Element<dim>*>::iterator it=gref.ElementsBegin(); it!=it_end; ++it )
       {
+         fe.FiniteElement(*it);
          const size_t sectors((*it)->Sectors());
           const size_t facets((*it)->Facets());
-
-         FiniteVolumeHelper<dim> helper(*it);
 
          // element-based total velocity
           if ( initialize_flux ) {
               const double64 K((*it)->Read(k_key));
-              vD = -K * helper.GradientOfScalarNodeProperty((*it)->FV()->Barycenter(), pf_key);
+              vD = -K * fe.ReadGradientAtBarycenter(pf_key);
           }
 
          // 1. computing sector pore volumes
          // --------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
-         const double64 phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
+         ScalarVariable var_phi, var_thi;
+         fe.ReadAtBarycenter( phi_key, var_phi );
+         fe.ReadAtBarycenter( thi_key, var_thi );
+
+         const double64 phi = var_phi() * var_thi();
          for ( size_t i=0U; i<sectors; ++i ) {
               // sector pore volume
               const double64 sector_volume = (*it)->SectorVolume(i);
@@ -85,7 +90,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
            }
           if ( initialize_flux ) {
               for ( size_t i=0U; i<facets; ++i ) {
-                  Point<dim> facetNormal(helper.NormalOfFacet(i));
+                  Point<dim> facetNormal(fe.NormalOfFacet(i));
                   const double64  facet_flux = dotProduct(vD, facetNormal);
                   (*it)->Store( i, 0U, ff_key, makeScalar( PLAIN, facet_flux ) );
               }
@@ -194,85 +199,403 @@ template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>& );
 */
 
 
+enum InterpolatorType {
+    ELMT_ELMT,
+    NODE_NODE,
+    NODE_ELMT,
+    NODE_EIP,
+    NODE_FIP,
+    NODE_SIP,
+    INTERPOLATOR_COUNT
+};
 
+
+
+
+  template<PLACEMENT from,PLACEMENT to>
+  struct PropertyInterpolation
+  {
+    template<size_t dim>
+    void Recalculate( const Element<dim>* eptr, size_t element_dim );
+
+    template<size_t dim,VARIABLE_TYPE ty>
+    void
+    Interpolate( const INDEX<ty,from>& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var );
+  };
+
+  template<size_t dim>
+  void CalculateN(const Element<dim>* eptr, size_t element_dim, const Point<dim>& p, double64* coeff);
+  
+  template<>
+  void CalculateN<1u>(const Element<1u>* eptr, size_t element_dim, const Point<1u>& p, double64* coeff)
+  {
+    auto fe = eptr->FE();
+    switch (element_dim) {
+      case 1:
+        fe->Nr( p[0], coeff );
+    }
+  }
+
+  template<>
+  void CalculateN<2u>(const Element<2u>* eptr, size_t element_dim, const Point<2u>& p, double64* coeff)
+  {
+    auto fe = eptr->FE();
+    switch (element_dim) {
+      case 1:
+        fe->Nr( p[0], coeff );
+        break;
+        
+      case 2:
+        fe->Nrs( p[0], p[1], coeff );
+        break;
+    }
+  }
+
+  template<>
+  void CalculateN<3u>(const Element<3u>* eptr, size_t element_dim, const Point<3u>& p, double64* coeff)
+  {
+    auto fe = eptr->FE();
+    switch (element_dim) {
+      case 3:
+        fe->Nrst( p[0], p[1], p[2], coeff );
+        break;
+      case 2:
+        fe->Nrs( p[0], p[1], coeff );
+        break;
+      case 1:
+        fe->Nr( p[0], coeff );
+        break;
+    }
+  }
+  
+
+  template<>
+  struct PropertyInterpolation<ELEMENT,ELEMENT>
+  {
+    const InterpolatorType type_ = ELMT_ELMT;
+    
+    template<size_t dim>
+    void Recalculate( const Element<dim>* eptr, size_t element_dim_ )
+    {
+    }
+    
+    template<size_t dim,VARIABLE_TYPE ty>
+    void
+    Interpolate( const INDEX<ty,ELEMENT>& prop, const Element<dim>* eptr, size_t idx1, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    {
+      eptr->Read( prop, var );
+    }
+  };
+  
+
+  
+  
+  template<>
+  struct PropertyInterpolation<NODE,NODE>
+  {
+    const InterpolatorType type_ = NODE_NODE;
+    
+    template<size_t dim>
+    void Recalculate( const Element<dim>* eptr, size_t element_dim_ )
+    {
+    }
+    
+    template<size_t dim,VARIABLE_TYPE ty>
+    void
+    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t idx1, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    {
+      eptr->N(idx1)->Read( prop, var );
+    }
+  };
+  
+
+  template<>
+  struct PropertyInterpolation<NODE,ELEMENT>
+  {
+    const InterpolatorType type_ = NODE_ELMT;
+
+    std::vector<double64> coeff_;
+    
+    PropertyInterpolation()
+    {
+      coeff_.resize(DM_MAX);
+    }
+
+    InterpolatorType Type() const { return NODE_ELMT; }
+
+    template<size_t dim>
+    void Recalculate( const Element<dim>* eptr, size_t element_dim )
+    {
+      const size_t num_nodes(eptr->Nodes());
+      if (coeff_.size() < num_nodes) {
+        coeff_.resize(num_nodes);
+      }
+      CalculateN(eptr, element_dim, eptr->FV()->Barycenter(), &coeff_[0]);
+    }
+
+    template<size_t dim,VARIABLE_TYPE ty>
+    void
+    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    {
+      const size_t num_nodes(eptr->Nodes());
+      for (size_t i = 0; i < var.Size(); ++i) {
+        var.Component( i, 0. );
+      }
+      for ( size_t i=0; i<num_nodes; i++ ) {
+        var += eptr->N(i)->Read( prop ) * coeff_[i];
+      }
+    }
+  };
+
+  template<>
+  struct PropertyInterpolation<NODE,FACET_INTEGRATION_POINT>
+  {
+    const InterpolatorType type_ = NODE_FIP;
+    
+    size_t facets_, ips_per_facet_, num_nodes_;
+    std::vector<double64> coeff_;
+
+    PropertyInterpolation()
+    {
+      coeff_.resize(DM_MAX);
+    }
+    
+    InterpolatorType Type() const { return NODE_ELMT; }
+    
+    template<size_t dim>
+    void Recalculate( const Element<dim>* eptr, size_t element_dim )
+    {
+      auto fv = eptr->FV();
+      num_nodes_ = eptr->Nodes();
+      facets_ = fv->Facets();
+      ips_per_facet_ = fv->IntegrationPointsPerFacet();
+      
+      const size_t coeff_size = facets_ * ips_per_facet_ * num_nodes_;
+
+      if (coeff_.size() < coeff_size) {
+        coeff_.resize(coeff_size);
+      }
+      size_t offset = 0;
+      for (size_t iFacet = 0; iFacet < facets_; ++iFacet) {
+        for (size_t iFip = 0; iFip < ips_per_facet_; ++iFip) {
+          CalculateN(eptr, element_dim, fv->FacetIntegrationPoint(iFacet, iFip), &coeff_[offset]);
+          offset += num_nodes_;
+        }
+      }
+    }
+    
+    template<size_t dim,VARIABLE_TYPE ty>
+    void
+    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t facet, size_t fip, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    {
+      auto fv = eptr->FV();
+      const size_t num_nodes = eptr->Nodes();
+      const size_t offset = (facet * fv->IntegrationPointsPerFacet() + fip) * num_nodes;
+      for (size_t i = 0; i < var.Size(); ++i) {
+        var.Component( i, 0. );
+      }
+      for ( size_t i=0; i<num_nodes; i++ ) {
+        var += eptr->N(i)->Read( prop ) * coeff_[offset+i];
+      }
+    }
+  };
+  
+
+struct PropertyInterpolators
+{
+    std::bitset<INTERPOLATOR_COUNT> interp_valid_;
+  
+    PropertyInterpolation<ELEMENT,ELEMENT> elmt_elmt_;
+    PropertyInterpolation<NODE,NODE> node_node_;
+    PropertyInterpolation<NODE,ELEMENT> node_elmt_;
+    // PropertyInterpolation<NODE,ELEMENT_INTEGRATION_POINT> node_eip_;
+    PropertyInterpolation<NODE,FACET_INTEGRATION_POINT> node_fip_;
+    // PropertyInterpolation<NODE,SECTOR_INTEGRATION_POINT> node_sip_;
+
+    template<PLACEMENT from, PLACEMENT to>
+    PropertyInterpolation<from,to>& GetInterpolator();
+};
+
+
+
+  template<>
+  PropertyInterpolation<ELEMENT,ELEMENT>&
+  PropertyInterpolators::GetInterpolator<ELEMENT,ELEMENT>()
+  {
+    return elmt_elmt_;
+  }
+  
+
+template<>
+PropertyInterpolation<NODE,NODE>&
+PropertyInterpolators::GetInterpolator<NODE,NODE>()
+{
+    return node_node_;
+}
+
+template<>
+PropertyInterpolation<NODE,ELEMENT>&
+PropertyInterpolators::GetInterpolator<NODE,ELEMENT>()
+{
+    return node_elmt_;
+}
+
+  
+  template<>
+  PropertyInterpolation<NODE,FACET_INTEGRATION_POINT>&
+  PropertyInterpolators::GetInterpolator<NODE,FACET_INTEGRATION_POINT>()
+  {
+    return node_fip_;
+  }
+  
+  
+  
 
 
 template<size_t dim>
-FiniteVolumeHelper<dim>::FiniteVolumeHelper(Element<dim>* eptr)
-    : eptr_(eptr)
+struct FiniteElementHelper<dim>::Impl : public PropertyInterpolators
 {
+  Element<dim>* eptr_;
+  size_t element_dim_;
+  size_t num_nodes_;
+  std::vector<double64> DN_bctr_[dim];
+  
+  void FiniteElement( Element<dim>* eptr )
+  {
+    eptr_ = eptr;
     if (eptr_->IsLineElement()) {
-        element_dim_ = 1;
+      element_dim_ = 1;
     }
     else if (eptr_->IsSurfaceElement()) {
-        element_dim_ = 2;
+      element_dim_ = 2;
     }
     else if (eptr_->IsVolumeElement()) {
-        element_dim_ = 3;
+      element_dim_ = 3;
     }
 
-    num_nodes_ = eptr->Nodes();
+    auto fe = eptr_->FE();
+    num_nodes_ = fe->Nodes();
+
     eptr->CoordinateMatrix();
-}
+    interp_valid_.reset();
+  }
+};
+
+
 
 
 
 template<size_t dim>
-double64
-FiniteVolumeHelper<dim>::InterpolateScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const
+FiniteElementHelper<dim>::FiniteElementHelper()
+  : pimpl_(new FiniteElementHelper::Impl())
 {
-    std::vector<double64> NRST;
-  
-    CalculateN(p, NRST);
-
-    double64 var(0.0);
-    const size_t nodes(eptr_->Nodes());
-    for ( size_t i=0; i<nodes; i++ ) {
-      var += eptr_->N(i)->Read( prop ) * NRST[i];
-    }
-
-    return var;
 }
 
+  
+template<size_t dim>
+void FiniteElementHelper<dim>::FiniteElement( Element<dim>* eptr )
+  {
+      pimpl_->FiniteElement(eptr);
+  }
 
+
+template<size_t dim>
+FiniteElementHelper<dim>::~FiniteElementHelper()
+{
+}
+
+  
+template<size_t dim>
+Element<dim>* FiniteElementHelper<dim>::FiniteElement( )
+  {
+      return pimpl_->eptr_;
+  }
+
+  
+  
+template<size_t dim> template<VARIABLE_TYPE ty,PLACEMENT pl>
+void FiniteElementHelper<dim>::ReadAtBarycenter( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var )
+{
+  auto& interpolator = pimpl_->template GetInterpolator<pl,ELEMENT>();
+  if (!pimpl_->interp_valid_[interpolator.type_]) {
+    pimpl_->interp_valid_[interpolator.type_] = true;
+    interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
+  }
+
+  interpolator.Interpolate( prop, pimpl_->eptr_, 0, 0, var );
+}
+
+template<size_t dim>
+template<VARIABLE_TYPE ty,PLACEMENT pl>
+void FiniteElementHelper<dim>::ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_t n, typename VariableTypeTraits<dim,ty>::VariableType& var )
+{
+  auto& interpolator = pimpl_->template GetInterpolator<pl,NODE>();
+  if (!pimpl_->interp_valid_[interpolator.type_]) {
+    pimpl_->interp_valid_[interpolator.type_] = true;
+    interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
+  }
+  
+  interpolator.Interpolate( prop, pimpl_->eptr_, n, 0, var );
+}
+
+  
+  template<size_t dim>
+  template<VARIABLE_TYPE ty,PLACEMENT pl>
+  void FiniteElementHelper<dim>::ReadAtFacetIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t facet, size_t fip, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    auto& interpolator = pimpl_->template GetInterpolator<pl,FACET_INTEGRATION_POINT>();
+    if (!pimpl_->interp_valid_[interpolator.type_]) {
+      pimpl_->interp_valid_[interpolator.type_] = true;
+      interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
+    }
+    
+    interpolator.Interpolate( prop, pimpl_->eptr_, facet, fip, var );
+  }
+  
+  
 
 
 template<size_t dim>
 Point<dim>
-FiniteVolumeHelper<dim>::GradientOfScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const
+FiniteElementHelper<dim>::ReadGradientAtBarycenter( const csmp::INDEX<SCALAR,NODE>& prop )
 {
-    std::vector<double64> DN[dim];
-    for (unsigned i = 0; i < element_dim_; ++i) {
-        DN[i].resize(num_nodes_);
+  const size_t num_nodes = pimpl_->num_nodes_;
+  const size_t element_dim = pimpl_->element_dim_;
+  auto& DN_bctr = pimpl_->DN_bctr_;
+  auto eptr = pimpl_->eptr_;
+    for (unsigned i = 0; i < element_dim; ++i) {
+      if (DN_bctr[i].size() < num_nodes) {
+        DN_bctr[i].resize(num_nodes);
+      }
     }
-    CalculateDN(p, DN);
-
+    CalculateDN(eptr->FV()->Barycenter(), DN_bctr);
 
     Point<dim> grad(0.);
-    for ( size_t i=0U; i<num_nodes_; ++i ) {
-        const double64 value_at_node(eptr_->N(i)->Read(prop));
-        for (size_t j = 0; j < element_dim_; ++j) {
-            grad[j] += DN[j][i] * value_at_node;
+    for ( size_t i=0U; i<num_nodes; ++i ) {
+        const double64 value_at_node(eptr->N(i)->Read(prop));
+        for (size_t j = 0; j < element_dim; ++j) {
+            grad[j] += DN_bctr[j][i] * value_at_node;
         }
     }
-    eptr_->FE()->JacobianInverse();
-    
-    return Point<dim>(eptr_->FE()->JINV * grad.Coordinates());
+    eptr->FE()->JacobianInverse();
+
+    return Point<dim>(eptr->FE()->JINV * grad.Coordinates());
 }
 
 
 template<size_t dim>
 Point<dim>
-FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
+FiniteElementHelper<dim>::NormalOfFacet(size_t iFacet)
 {
-    switch (element_dim_) {
+  auto eptr = pimpl_->eptr_;
+    switch (pimpl_->element_dim_) {
         case 1:
         {
             Point<dim> normal;
-            const size_t iNrNodes(eptr_->Nodes());
+            const size_t iNrNodes(eptr->Nodes());
             for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
-                const Point<dim> n(eptr_->N(iNode)->Coordinate());
-                auto weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                const Point<dim> n(eptr->N(iNode)->Coordinate());
+                auto weights = eptr->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
                 normal += weights.first * n;
             }
             return normal;
@@ -282,10 +605,10 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
         {
             Point<dim> tangent;
             Point<dim> bitangent;
-            const size_t iNrNodes(eptr_->Nodes());
+            const size_t iNrNodes(eptr->Nodes());
             for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
-                const Point<dim> n(eptr_->N(iNode)->Coordinate());
-                auto weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                const Point<dim> n(eptr->N(iNode)->Coordinate());
+                auto weights = eptr->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
                 tangent += weights.first * n;
                 bitangent += weights.second * n;
             }
@@ -300,26 +623,26 @@ FiniteVolumeHelper<dim>::NormalOfFacet(size_t iFacet) const
         {
             Point<dim> v0(0.0);
             Point<dim> v1(0.0);
-            const size_t iNrNodes(eptr_->Nodes());
+            const size_t iNrNodes(eptr->Nodes());
             for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
-                auto xform_weights = eptr_->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
-                const Point<dim> n(eptr_->N(iNode)->Coordinate());
+                auto xform_weights = eptr->FV()->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                const Point<dim> n(eptr->N(iNode)->Coordinate());
                 v0 += xform_weights.first * n;
                 v1 += xform_weights.second * n;
             }
             return crossProduct(v1, v0);
         }
     }
-  throw csmp::Exception(ERROR, "FiniteVolumeHelper::NormalOfFacet", "Element dimension must be 1, 2, or 3");
+  throw csmp::Exception(ERROR, "FiniteElementHelper::NormalOfFacet", "Element dimension must be 1, 2, or 3");
 }
 
 
 template<>
 void
-FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p, std::vector<double64>* DN) const
+FiniteElementHelper<1u>::CalculateDN(const Point<1u>& p, std::vector<double64>* DN)
 {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
+    auto fe = pimpl_->eptr_->FE();
+    switch (pimpl_->element_dim_) {
         case 1:
             fe->dNr(p[0], DN[0]);
             fe->Jacobian( DN[0] );
@@ -330,10 +653,10 @@ FiniteVolumeHelper<1u>::CalculateDN(const Point<1u>& p, std::vector<double64>* D
 
 template<>
 void
-FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p, std::vector<double64>* DN) const
+FiniteElementHelper<2u>::CalculateDN(const Point<2u>& p, std::vector<double64>* DN)
 {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
+  auto fe = pimpl_->eptr_->FE();
+  switch (pimpl_->element_dim_) {
         case 1:
             fe->dNr(p[0], DN[0]);
             fe->Jacobian( DN[0] );
@@ -350,10 +673,10 @@ FiniteVolumeHelper<2u>::CalculateDN(const Point<2u>& p, std::vector<double64>* D
 
 template<>
 void
-FiniteVolumeHelper<3u>::CalculateDN(const Point<3u>& p, std::vector<double64>* DN) const
+FiniteElementHelper<3u>::CalculateDN(const Point<3u>& p, std::vector<double64>* DN)
 {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
+    auto fe = pimpl_->eptr_->FE();
+    switch (pimpl_->element_dim_) {
         case 3:
             fe->dNr(p[0], p[1], p[2], DN[0]);
             fe->dNs(p[0], p[1], p[2], DN[1]);
@@ -371,60 +694,67 @@ FiniteVolumeHelper<3u>::CalculateDN(const Point<3u>& p, std::vector<double64>* D
     }
 }
 
-  
-  template<>
-  void
-  FiniteVolumeHelper<1u>::CalculateN(const Point<1u>& p, std::vector<double64>& N) const
-  {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
-      case 1:
-        fe->Nr( p[0], N );
-    }
-  }
-  
-  
-  template<>
-  void
-  FiniteVolumeHelper<2u>::CalculateN(const Point<2u>& p, std::vector<double64>& N) const
-  {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
-      case 1:
-        fe->Nr( p[0], N );
-        break;
-        
-      case 2:
-        fe->Nrs( p[0], p[1], N );
-        break;
-    }
-  }
-  
-  
-  template<>
-  void
-  FiniteVolumeHelper<3u>::CalculateN(const Point<3u>& p, std::vector<double64>& N) const
-  {
-    auto fe = eptr_->FE();
-    switch (element_dim_) {
-      case 3:
-        fe->Nrst( p[0], p[1], p[2], N );
-        break;
-      case 2:
-        fe->Nrs( p[0], p[1], N );
-        break;
-      case 1:
-        fe->Nr( p[0], N );
-        break;
-    }
-  }
-  
-  
 
+#define READ_AT_BARYCENTER(from) \
+  template void FiniteElementHelper<1u>::ReadAtBarycenter<SCALAR,from>(INDEX<SCALAR,from> const&, VariableTypeTraits<1u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtBarycenter<SCALAR,from>(INDEX<SCALAR,from> const&, VariableTypeTraits<2u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtBarycenter<SCALAR,from>(INDEX<SCALAR,from> const&, VariableTypeTraits<3u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtBarycenter<VECTOR,from>(INDEX<VECTOR,from> const&, VariableTypeTraits<1u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtBarycenter<VECTOR,from>(INDEX<VECTOR,from> const&, VariableTypeTraits<2u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtBarycenter<VECTOR,from>(INDEX<VECTOR,from> const&, VariableTypeTraits<3u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtBarycenter<TENSOR,from>(INDEX<TENSOR,from> const&, VariableTypeTraits<1u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtBarycenter<TENSOR,from>(INDEX<TENSOR,from> const&, VariableTypeTraits<2u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtBarycenter<TENSOR,from>(INDEX<TENSOR,from> const&, VariableTypeTraits<3u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtBarycenter<ARRAY,from>(INDEX<ARRAY,from> const&, VariableTypeTraits<1u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtBarycenter<ARRAY,from>(INDEX<ARRAY,from> const&, VariableTypeTraits<2u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtBarycenter<ARRAY,from>(INDEX<ARRAY,from> const&, VariableTypeTraits<3u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtBarycenter<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, VariableTypeTraits<1u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtBarycenter<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, VariableTypeTraits<2u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtBarycenter<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, VariableTypeTraits<3u,FLAGGEDARRAY>::VariableType&);
 
-template class FiniteVolumeHelper<1u>;
-template class FiniteVolumeHelper<2u>;
-template class FiniteVolumeHelper<3u>;
+#define READ_AT_NODE(from) \
+  template void FiniteElementHelper<1u>::ReadAtNode<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, VariableTypeTraits<1u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtNode<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, VariableTypeTraits<2u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtNode<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, VariableTypeTraits<3u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtNode<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, VariableTypeTraits<1u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtNode<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, VariableTypeTraits<2u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtNode<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, VariableTypeTraits<3u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtNode<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, VariableTypeTraits<1u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtNode<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, VariableTypeTraits<2u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtNode<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, VariableTypeTraits<3u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtNode<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, VariableTypeTraits<1u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtNode<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, VariableTypeTraits<2u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtNode<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, VariableTypeTraits<3u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtNode<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, VariableTypeTraits<1u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtNode<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, VariableTypeTraits<2u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtNode<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, VariableTypeTraits<3u,FLAGGEDARRAY>::VariableType&);
 
+#define READ_AT_FACET_INTEGRATION_POINT(from) \
+  template void FiniteElementHelper<1u>::ReadAtFacetIntegrationPoint<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, size_t, VariableTypeTraits<1u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtFacetIntegrationPoint<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, size_t, VariableTypeTraits<2u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtFacetIntegrationPoint<SCALAR,from>(INDEX<SCALAR,from> const&, size_t, size_t, VariableTypeTraits<3u,SCALAR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtFacetIntegrationPoint<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, size_t, VariableTypeTraits<1u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtFacetIntegrationPoint<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, size_t, VariableTypeTraits<2u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtFacetIntegrationPoint<VECTOR,from>(INDEX<VECTOR,from> const&, size_t, size_t, VariableTypeTraits<3u,VECTOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtFacetIntegrationPoint<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, size_t, VariableTypeTraits<1u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtFacetIntegrationPoint<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, size_t, VariableTypeTraits<2u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtFacetIntegrationPoint<TENSOR,from>(INDEX<TENSOR,from> const&, size_t, size_t, VariableTypeTraits<3u,TENSOR>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtFacetIntegrationPoint<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, size_t, VariableTypeTraits<1u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtFacetIntegrationPoint<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, size_t, VariableTypeTraits<2u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtFacetIntegrationPoint<ARRAY,from>(INDEX<ARRAY,from> const&, size_t, size_t, VariableTypeTraits<3u,ARRAY>::VariableType&); \
+  template void FiniteElementHelper<1u>::ReadAtFacetIntegrationPoint<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, size_t, VariableTypeTraits<1u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<2u>::ReadAtFacetIntegrationPoint<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, size_t, VariableTypeTraits<2u,FLAGGEDARRAY>::VariableType&); \
+  template void FiniteElementHelper<3u>::ReadAtFacetIntegrationPoint<FLAGGEDARRAY,from>(INDEX<FLAGGEDARRAY,from> const&, size_t, size_t, VariableTypeTraits<3u,FLAGGEDARRAY>::VariableType&);
+
+template class FiniteElementHelper<1u>;
+template class FiniteElementHelper<2u>;
+template class FiniteElementHelper<3u>;
+
+  READ_AT_BARYCENTER(NODE)
+  READ_AT_BARYCENTER(ELEMENT)
+
+  READ_AT_NODE(NODE)
+
+  READ_AT_FACET_INTEGRATION_POINT(NODE)
 
 } // end csmp

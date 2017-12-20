@@ -10,7 +10,7 @@ ADD_EXECUTABLE(CSMP_number_types_main
 
 SET_SOURCE_FILES_PROPERTIES(CSMP_variable_set_processor PROPERTIES GENERATED TRUE)
 ADD_EXECUTABLE(CSMP_variable_set_processor
-	${CMAKE_CURRENT_SOURCE_DIR}/variable_set_processor.cpp
+	variable_set_processor.cpp csv.h
 )
 
 # Generated includes

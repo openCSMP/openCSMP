@@ -30,6 +30,7 @@ FacetFlux_TracerTransferExplicit<dim,USER>::FacetFlux_TracerTransferExplicit()
 void
   FacetFlux_TracerTransferExplicit<dim,USER>::FacetFluxes( Region<dim>& gref, bool reuse_velocity, bool second_order )
   {
+    FiniteElementHelper<dim> fe;
     if (!second_order) {
       // 1. element-by-element processing of the facet fluxes
       const typename vector<Element<dim>*>::iterator elements_end(gref.ElementsEnd());
@@ -39,7 +40,8 @@ void
         // 1.1 computation of transport velocity from fluid pressure gradient
         
         // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
-        this->Advective_O1_FluxesInterior( reuse_velocity, (*eit) );
+        fe.FiniteElement(*eit);
+        this->Advective_O1_FluxesInterior( reuse_velocity, fe );
       }
       
       // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
@@ -51,7 +53,7 @@ void
         // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
         // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
         // in this case the influx is found from the flux balance and FV cell's concentration
-        this->Advective_O1_FluxesAtBoundary( (*nit) );
+        this->Advective_O1_FluxesAtBoundary( fe, (*nit) );
       }
     }
     else {
@@ -63,7 +65,8 @@ void
         // 1.1 computation of transport velocity from fluid pressure gradient
         
         // 1.2 computation of facet fluxes (including upstream concentrations, but no-time increment yet)
-        this->Advective_O2_FluxesInterior( reuse_velocity, (*eit) );
+        fe.FiniteElement(*eit);
+        this->Advective_O2_FluxesInterior( reuse_velocity, fe );
       }
       
       // 2. processing fluxes through the FVs on regions perimeter computing outside facet fluxes as necessary
@@ -75,7 +78,7 @@ void
         // at sliced boundaries 3-typed of conditions are applied: 1) prescribed value (only at inflow),
         // 2) prescribed flux (has consequence only where there is inflow), 3) free outflow (outflow)
         // in this case the influx is found from the flux balance and FV cell's concentration
-        this->Advective_O2_FluxesAtBoundary( (*nit) );
+        this->Advective_O2_FluxesAtBoundary( fe, (*nit) );
       }
     }
     
@@ -91,19 +94,21 @@ void
  
 */
 template<size_t dim, template<size_t> class USER>
-void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>* eptr ) const
+void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, FiniteElementHelper<dim>& fe ) const
  {
+   auto eptr = fe.FiniteElement();
    assert( eptr != NULL );
 
-   FiniteVolumeHelper<dim> helper(eptr);
    Point<dim> vD;
    
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
-      const double64 K(eptr->Read(User()->k_key));
-      const double64 mu = User()->GetModel().Read(User()->mu_key);
+      ScalarVariable var_K;
+      fe.ReadAtBarycenter(User()->k_key, var_K);
 
-      vD = -K/mu * helper.GradientOfScalarNodeProperty(eptr->FV()->Barycenter(), User()->pf_key);
+      const double64 mu = User()->GetModel().Read( User()->mu_key );
+
+      vD = -var_K()/mu * fe.ReadGradientAtBarycenter(User()->pf_key);
     }
 
    // computing total facet fluxes by projecting vt onto facet normals
@@ -115,7 +120,7 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bo
      }
      else {
         // Calulate local normal
-        Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
+        Point<dim> facetNormal(fe.NormalOfFacet(iFacet));
 
         // Projection. Note that facetNormal is scaled by the area.
         facet_flux = dotProduct(facetNormal, vD);
@@ -146,20 +151,23 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bo
  
 */
 template<size_t dim, template<size_t> class USER>
-void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bool reuse_previous_velocity, Element<dim>* eptr ) const
+void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bool reuse_previous_velocity, FiniteElementHelper<dim>& fe ) const
  {
+   auto eptr = fe.FiniteElement();
    assert( eptr != NULL );
 
-   FiniteVolumeHelper<dim> helper(eptr);
    Point<dim> vD;
-   auto c0_key = User()->C0_key;
+   auto& c0_key = User()->C0_key;
    
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
-      const double64 K(eptr->Read(User()->k_key));
-      const double64 mu = User()->GetModel().Read(User()->mu_key);
+      ScalarVariable var_k;
+      fe.ReadAtBarycenter( User()->k_key, var_k );
 
-      vD = -K/mu * helper.GradientOfScalarNodeProperty(eptr->FV()->Barycenter(), User()->pf_key);
+      ScalarVariable var_mu;
+      const double64 mu = User()->GetModel().Read( User()->mu_key );
+
+      vD = -var_k()/mu * fe.ReadGradientAtBarycenter( User()->pf_key );
     }
 
    // computing total facet fluxes by projecting vt onto facet normals
@@ -171,7 +179,7 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bo
      }
      else {
         // Calulate local normal
-        Point<dim> facetNormal(helper.NormalOfFacet(iFacet));
+        Point<dim> facetNormal(fe.NormalOfFacet(iFacet));
 
         // Projection. Note that facetNormal is scaled by the area.
         facet_flux = dotProduct(facetNormal, vD);
@@ -185,7 +193,13 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bo
      const double64 c_outside = outside_node->Read( c0_key );
      auto inside_node = eptr->N(eptr->FV()->InsideNode(iFacet));
      const double64 c_inside = inside_node->Read( c0_key );
-     const double64 c_fip = helper.InterpolateScalarNodeProperty( eptr->FV()->FacetIntegrationPoint( iFacet, 0u ), c0_key );
+     ScalarVariable cvar_fip;
+     fe.ReadAtFacetIntegrationPoint( c0_key, iFacet, 0u, cvar_fip );
+     const double64 c_fip = cvar_fip();
+     if (c_fip > 0) {
+       std::cerr << "Interesting case\n";
+       fe.ReadAtFacetIntegrationPoint( c0_key, iFacet, 0u, cvar_fip );
+     }
      const auto ffc_flag = eptr->Status(iFacet, 0u, User()->ffC_key);
 
      if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
@@ -274,7 +288,7 @@ if (error ) {
     TODO: USE NO-FLOW BOUNDARY CONDITION TO GET EXACT FLUXES AND FLUX-BALANCES through facets at such boundaries
 */
 template<size_t dim, template<size_t> class USER>
-double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBoundary( Node<dim>* nd_ptr ) const
+double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBoundary( FiniteElementHelper<dim>& fe, Node<dim>* nd_ptr ) const
   {
      assert( nd_ptr != NULL );
     auto c0_key = User()->C0_key;
@@ -424,7 +438,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
     TODO: USE NO-FLOW BOUNDARY CONDITION TO GET EXACT FLUXES AND FLUX-BALANCES through facets at such boundaries
 */
 template<size_t dim, template<size_t> class USER>
-double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBoundary( Node<dim>* nd_ptr ) const
+double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBoundary( FiniteElementHelper<dim>& fe, Node<dim>* nd_ptr ) const
   {
      assert( nd_ptr != NULL );
      const auto c0_key = User()->C0_key;
@@ -451,7 +465,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
             {
               Element<dim>* const eptr(nd_ptr->Parent(t));
               assert( eptr != NULL );
-              FiniteVolumeHelper<dim> helper(eptr);
+              fe.FiniteElement(eptr);
 
               const size_t pnid(nd_ptr->ParentNodeNumber(t));
 
@@ -467,7 +481,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
                    const size_t outside(eptr->FV()->OutsideNode(iFacet));
                    auto outside_node = eptr->N(outside);
                    const double64 c_outside = outside_node->Read( c0_key );
-                   const double64 c_fip = helper.InterpolateScalarNodeProperty( eptr->FV()->FacetIntegrationPoint( iFacet, 0u ), c0_key );
+                  ScalarVariable cvar_fip;
+                  fe.ReadAtFacetIntegrationPoint(c0_key, iFacet, 0u, cvar_fip);
+                  const double64 c_fip = cvar_fip();
                    
                    const double64 facet_flux = eptr->Read( iFacet, 0U, User()->ff_key );
 
@@ -530,7 +546,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
        {
           Element<dim>* const eptr(nd_ptr->Parent(t));
           assert( eptr != NULL );
-          FiniteVolumeHelper<dim> helper(eptr);
+          fe.FiniteElement(eptr);
          
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
            
@@ -558,7 +574,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
             const size_t outside(eptr->FV()->OutsideNode(iFacet));
             auto outside_node = eptr->N(outside);
             const double64 c_outside = outside_node->Read( c0_key );
-            const double64 c_fip = helper.InterpolateScalarNodeProperty( eptr->FV()->FacetIntegrationPoint( iFacet, 0u ), c0_key );
+            ScalarVariable cvar_fip;
+            fe.ReadAtFacetIntegrationPoint(c0_key, iFacet, 0u, cvar_fip);
+            const double64 c_fip = cvar_fip();
             
             const double64 facet_flux = eptr->Read( iFacet, 0U, User()->ff_key );
             double64 c(0.0);

@@ -133,6 +133,7 @@ struct Index {
 template<VARIABLE_TYPE ty,PLACEMENT pl>
 struct INDEX : public Index {
    explicit INDEX( size_t i ) : Index(ty,pl,i) {}
+   explicit INDEX( csmp::Index&& idx ) : Index(idx) {}
 };
 
 

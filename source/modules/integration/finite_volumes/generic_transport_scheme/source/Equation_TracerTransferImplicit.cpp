@@ -26,28 +26,32 @@ Equation_TracerTransferImplicit<dim>::Equation_TracerTransferImplicit( Model<dim
       pvrhs_op(model, "FV pore volume", "concentration", "porosity")
       // srclhs_op(model, "porosity", "total systems compressibility", "fluid pressure", "fluid pressure")
 {
-      pv_op.AccumulationMode(ADD_ACCUMULATE);
+  // stage 0: A = PV + Flux + diffusion
+  //          b = PV/dt
+
+      pv_op.Stage(0);
       pv_op.MultiplyWithTimeIncrement(true);
       accumulator.AddOperatorInterior(&pv_op);
       accumulator.AddOperatorPerimeter(&pv_op);
 
-      flux_op.AccumulationMode(ADD_ACCUMULATE);
+      flux_op.Stage(0);
       accumulator.AddOperatorInterior(&flux_op);
       accumulator.AddOperatorPerimeter(&flux_op);
 
 #if 0
-      diffusion_op.AccumulationMode(ADD_ACCUMULATE);
+      diffusion_op.Stage(0);
       accumulator.AddOperatorInterior(&diffusion_op);
       accumulator.AddOperatorPerimeter(&diffusion_op);
 #endif
-      
-      pvrhs_op.AccumulationMode(MULTIPLY_ACCUMULATE);
+  
+      pvrhs_op.Stage(0);
       pvrhs_op.MultiplyWithTimeIncrement(true);
       accumulator.AddOperatorInterior(&pvrhs_op);
       accumulator.AddOperatorPerimeter(&pvrhs_op);
-      
+  
 #if 0
-      srclhs_op.AccumulationMode(ADD_ACCUMULATE);
+  // stage 1: A += src
+      srclhs_op.Stage(1);
       accumulator.AddOperatorInterior(&srclhs_op);
       accumulator.AddOperatorPerimeter(&srclhs_op);
 #endif

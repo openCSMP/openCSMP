@@ -8,7 +8,7 @@ namespace csmp {
 
 	template<size_t dim>
 		PoreVolume<dim>::PoreVolume(Model<dim>& model, const char* porevolume, const char* porosity)
-			: MatrixOperator<dim>(ADD_ACCUMULATE), pv_key_(model.Database().StorageKey(porevolume)),
+			: MatrixOperator<dim>(0), pv_key_(model.Database().StorageKey(porevolume)),
   phi_key_(model.Database().StorageKey(porosity))
 		{
 

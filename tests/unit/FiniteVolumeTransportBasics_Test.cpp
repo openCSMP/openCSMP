@@ -454,7 +454,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
       
 #if 0
         ExplicitTransport<3U> advector(model, "Model", true);
-        advector.StepSizeReductionFactor(0.9);
+        advector.StepSizeReductionFactor(1.0);
 #endif
 #if 1
       CSMP_DEFAULT_LINEAR_SOLVER solver;
@@ -473,7 +473,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 
       model.Region("Model").RenumberNodes();
         for (unsigned i = 1; i < 60; ++i) {
-            advector.AdvectVariable(50.0);
+            advector.AdvectVariable(10.0);
             // advector.AdvectVariable(1000.0);
 #if 1
             vtk_output.OutputDataToVTK( model, "velocity", "velocity", i );

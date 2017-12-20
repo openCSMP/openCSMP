@@ -67,6 +67,14 @@ void IsoparametricQuadraticLineElement::Nr( double64 r, std::vector<double64>& N
    N[2] = 1. - r2;
 }
 
+void IsoparametricQuadraticLineElement::Nr( double64 r, double64* N ) const
+{
+   double64 r2 = r * r;
+   N[0] = 0.5 * (-r + r2);
+   N[1] = 0.5 * ( r + r2);
+   N[2] = 1. - r2;
+}
+
 
 /// Cheung et al. p. 26
 void IsoparametricQuadraticLineElement::dNr( double64 r, std::vector<double64>& dnr ) const

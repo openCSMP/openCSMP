@@ -5,10 +5,16 @@
 //  Copyright (c) 2015 Stephan Matthai. All rights reserved.
 //
 
-#include "Point.h"
-
 #ifndef FINITE_VOLUME_FUNCTIONS_H
 #define FINITE_VOLUME_FUNCTIONS_H
+
+#include "ScalarVariable.h"
+#include "VectorVariable.h"
+#include "TensorVariable.h"
+#include "ArrayVariable.h"
+#include "FlaggedArrayVariable.h"
+
+#include <bitset>
 
 namespace csmp {
 
@@ -20,28 +26,82 @@ struct Index;
 /// sector volume, finite volume, FV pore volume
 template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&  );
 
+
+
+template<size_t dim, VARIABLE_TYPE vt>
+struct VariableTypeTraits
+{
+};
+
+
 template<size_t dim>
-class FiniteVolumeHelper
+struct VariableTypeTraits<dim,SCALAR>
+{
+    typedef ScalarVariable VariableType;
+};
+
+template<size_t dim>
+struct VariableTypeTraits<dim,VECTOR>
+{
+    typedef VectorVariable<dim> VariableType;
+};
+
+template<size_t dim>
+struct VariableTypeTraits<dim,TENSOR>
+{
+    typedef TensorVariable<dim> VariableType;
+};
+
+template<size_t dim>
+struct VariableTypeTraits<dim,ARRAY>
+{
+    typedef ArrayVariable VariableType;
+};
+
+template<size_t dim>
+struct VariableTypeTraits<dim,FLAGGEDARRAY>
+{
+    typedef FlaggedArrayVariable VariableType;
+};
+
+
+template<size_t dim>
+class FiniteElementHelper
 {
 public:
-    FiniteVolumeHelper( Element<dim>* eptr );
+    FiniteElementHelper( );
+  
+    Element<dim>* FiniteElement( );
+    void FiniteElement( Element<dim>* eptr );
+    ~FiniteElementHelper();
 
-    // Gradient of a scalar node-based property, at a point in parametric space
-    Point<dim> GradientOfScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const;
+    // Normal of a facet, scaled by facet area
+    Point<dim> NormalOfFacet( size_t iFacet );
 
-    // Interpolation of a scalar node-based property, at a point in parametric space
-    double64 InterpolateScalarNodeProperty( const Point<dim>& p, const csmp::Index& prop ) const;
+    // Gradient of a scalar node-based property
+    Point<dim> ReadGradientAtBarycenter( const csmp::INDEX<SCALAR,NODE>& prop );
 
-    Point<dim> NormalOfFacet( size_t iFacet ) const;
+    // Read scalar properties
+    template<VARIABLE_TYPE ty, PLACEMENT pl>
+    void ReadAtBarycenter( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var );
+
+    template<VARIABLE_TYPE ty, PLACEMENT pl>
+    void ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_t n, typename VariableTypeTraits<dim,ty>::VariableType& var );
+
+    template<VARIABLE_TYPE ty, PLACEMENT pl>
+    void ReadAtElementIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
+
+    template<VARIABLE_TYPE ty, PLACEMENT pl>
+    void ReadAtFacetIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t facet, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
+
+    template<VARIABLE_TYPE ty, PLACEMENT pl>
+    void ReadAtSectorIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t sector, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
 
 private:
-    void CalculateDN(const Point<dim>& p, std::vector<double64>* dn) const;
-    void CalculateN(const Point<dim>& p, std::vector<double64>& n) const;
+    void CalculateDN(const Point<dim>& p, std::vector<double64>* DN);
 
-    Element<dim>* eptr_;
-    size_t element_dim_;
-    size_t num_nodes_;
-    
+    struct Impl;
+    std::unique_ptr<Impl> pimpl_;
 };
 
 } // csmp

@@ -50,6 +50,7 @@ public:
                                            DenseMatrix<DM_MIN>& DATA ) const;
 
     virtual void        Nr( double64 r, std::vector<double64>& nr ) const;
+    virtual void        Nr( double64 r, double64* nr ) const;
     virtual void        dNr( double64 r, std::vector<double64>& dnr ) const;
     
     virtual void        ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) const;

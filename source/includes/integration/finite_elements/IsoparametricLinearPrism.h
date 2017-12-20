@@ -57,6 +57,7 @@ class IsoparametricLinearPrism : public FiniteElement {
 
     /// interpolation functions in parametric space
     virtual void        Nrst(double64 r, double64 s, double64 t, std::vector<double64>& N ) const;
+    virtual void        Nrst(double64 r, double64 s, double64 t, double64* N ) const;
 
     virtual void        dNr (
                             double64 r,

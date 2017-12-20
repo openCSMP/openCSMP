@@ -365,6 +365,15 @@ void IsoparametricQuadraticTriangle::Nrs( double64 r, double64 s, std::vector<do
    nrst[2] = s - nrst[4]/2. - nrst[5]/2.;
 }
 
+void IsoparametricQuadraticTriangle::Nrs( double64 r, double64 s, double64* nrst ) const
+{
+   nrst[3] = 4. * r * (1. - r - s);
+   nrst[4] = 4. * r * s;
+   nrst[5] = 4. * s * (1. - r - s);
+   nrst[0] = 1. - r - s - nrst[3]/2. - nrst[5]/2.;
+   nrst[1] = r - nrst[3]/2. - nrst[4]/2.;
+   nrst[2] = s - nrst[4]/2. - nrst[5]/2.;
+}
 
 
 /**

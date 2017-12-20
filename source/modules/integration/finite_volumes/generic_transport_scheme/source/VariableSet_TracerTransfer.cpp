@@ -14,22 +14,24 @@ namespace csmp {
 template<size_t dim>
 VariableSet_TracerTransfer::VariableSet_TracerTransfer( const PropertyDatabase<dim>& p )
 
- : ff_key(p.StorageKey("facet flux")),
-   ffC_key(p.StorageKey("facet flux concentration")),
-   PV_key(p.StorageKey("FV pore volume")),
-   fb_key(p.StorageKey("flux balance")),
-   nsrc_key(p.StorageKey("nodal fluid volume source")),
+ : ff_key(INDEX<SCALAR,FACET_INTEGRATION_POINT>(p.StorageKey("facet flux"))),
+   ffC_key(INDEX<SCALAR,FACET_INTEGRATION_POINT>(p.StorageKey("facet flux concentration"))),
+   PV_key(INDEX<SCALAR,NODE>(p.StorageKey("FV pore volume"))),
+   fb_key(INDEX<SCALAR,NODE>(p.StorageKey("flux balance"))),
+   nsrc_key(INDEX<SCALAR,NODE>(p.StorageKey("nodal fluid volume source"))),
    //
-   pf_key(p.StorageKey("fluid pressure")),
-   k_key(p.StorageKey("permeability")),
-   phi_key(p.StorageKey("porosity")),
-   thi_key(p.StorageKey("thickness")),
-   //
-   mu_key(p.StorageKey("fluid viscosity")),
-   rhof_key(p.StorageKey("fluid density")),
-   C0_key(p.StorageKey("concentration")),
-   C1_key(p.StorageKey("new concentration"))
+   pf_key(INDEX<SCALAR,NODE>(p.StorageKey("fluid pressure"))),
+   k_key(INDEX<SCALAR,NODE>(p.StorageKey("permeability"))),
+   phi_key(INDEX<SCALAR,ELEMENT>(p.StorageKey("porosity"))),
+   thi_key(INDEX<SCALAR,ELEMENT>(p.StorageKey("thickness"))),
+   vD_key(INDEX<VECTOR,ELEMENT>(p.StorageKey("velocity"))),
 
+   //
+   mu_key(INDEX<SCALAR,MODEL>(p.StorageKey("fluid viscosity"))),
+   rhof_key(INDEX<SCALAR,MODEL>(p.StorageKey("fluid density"))),
+   C0_key(INDEX<SCALAR,NODE>(p.StorageKey("concentration"))),
+   C1_key(INDEX<SCALAR,NODE>(p.StorageKey("new concentration"))),
+   diff_key(INDEX<SCALAR,ELEMENT>(p.StorageKey("diffusivity")))
 
 {
 }
