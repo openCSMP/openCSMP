@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
         ofs << "    if ( key_" << var.notation << ".place != " << var.placement
             << " || key_" << var.notation << ".type != " << varType(var.dimension)
             << " )\n      throw csmp::Exception( FATAL_ERROR, \""
-            << argv[3] << "::" << argv[3] << ":\",\n        "
+            << argv[1] << "::" << argv[1] << ":\",\n        "
             << "\"The '" << var.name << "' variable must be " << varType(var.dimension)
             << " and placed on " << var.placement << "\"  );\n";
     }
