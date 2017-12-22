@@ -1,6 +1,8 @@
 
 SET(INCLUDES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/includes")
 SET(MODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules")
+SET(GEN_INCLUDES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_includes")
+FILE(MAKE_DIRECTORY ${GEN_INCLUDES_DIR})
 
 # Preprocessors and generators
 SET_SOURCE_FILES_PROPERTIES(CSMP_number_types_main PROPERTIES GENERATED TRUE)
@@ -20,32 +22,37 @@ SET_SOURCE_FILES_PROPERTIES(GeneratedIncludes PROPERTIES SYMBOLIC TRUE)
 # CSMP number types header
 
 SET_SOURCE_FILES_PROPERTIES(CSMP_number_types.h PROPERTIES GENERATED TRUE)
-ADD_CUSTOM_TARGET(GenerateNumberTypes DEPENDS CSMP_number_types.h)
+SET_SOURCE_FILES_PROPERTIES(GenerateNumberTypes PROPERTIES SYMBOLIC TRUE)
+ADD_CUSTOM_TARGET(GenerateNumberTypes DEPENDS ${GEN_INCLUDES_DIR}/CSMP_number_types.h)
 ADD_CUSTOM_COMMAND(
-    OUTPUT CSMP_number_types.h
+    OUTPUT ${GEN_INCLUDES_DIR}/CSMP_number_types.h
     COMMAND $<TARGET_FILE:CSMP_number_types_main>
     MAIN_DEPENDENCY CSMP_number_types_main
-    WORKING_DIRECTORY "${GEN_INCLUDES_DIR}"
+    WORKING_DIRECTORY ${GEN_INCLUDES_DIR}
     COMMENT "Generating CSMP_number_types.h"
 )
 ADD_DEPENDENCIES(GeneratedIncludes GenerateNumberTypes)
+INSTALL(FILES "${GEN_INCLUDES_DIR}/CSMP_number_types.h" DESTINATION include)
 
 
 # Variables
-macro(GenerateVariables source_csv target_header)
+macro(GenerateVariables structname source_csv target_header)
+    SET_SOURCE_FILES_PROPERTIES(Generate${structname} PROPERTIES SYMBOLIC TRUE)
     SET_SOURCE_FILES_PROPERTIES(${target_header} PROPERTIES GENERATED TRUE)
-    ADD_CUSTOM_TARGET("Generate${target_header}")
+    ADD_CUSTOM_TARGET(Generate${structname} DEPENDS ${GEN_INCLUDES_DIR}/${target_header})
     ADD_CUSTOM_COMMAND(
-	OUTPUT ${target_header}
+        OUTPUT ${GEN_INCLUDES_DIR}/${target_header}
         COMMAND $<TARGET_FILE:CSMP_variable_set_processor>
-	ARGS ${source_csv} ${target_header}
-	DEPENDS CSMP_variable_set_processor ${source_csv}
+        ARGS ${structname} ${source_csv} ${target_header}
+	      DEPENDS CSMP_variable_set_processor ${source_csv}
+        WORKING_DIRECTORY ${GEN_INCLUDES_DIR}
         COMMENT "Generating ${target_header}"
     )
-    ADD_DEPENDENCIES(GeneratedIncludes "Generate${target_header}")
+    ADD_DEPENDENCIES(GeneratedIncludes Generate${structname})
+    INSTALL(FILES "${GEN_INCLUDES_DIR}/${target_header}" DESTINATION include)
 endmacro()
 
-GenerateVariables(${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
+GenerateVariables(Variables_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
 
 
 
@@ -226,7 +233,6 @@ foreach ( I ${PUBLIC_INCLUDE_FILES} )
     endif()
 endforeach()
 
-INSTALL(FILES "${GEN_INCLUDES_DIR}/CSMP_number_types.h" DESTINATION include)
 
 # Libraries
 

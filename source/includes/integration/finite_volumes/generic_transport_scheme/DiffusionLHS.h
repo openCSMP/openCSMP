@@ -12,7 +12,6 @@
 #include "CSMP_definitions.h"
 #include "MatrixOperator.h"
 #include "DenseMatrix.h"
-#include "VariableSet_TracerTransferImplicit.h"
 
 namespace csmp {
 

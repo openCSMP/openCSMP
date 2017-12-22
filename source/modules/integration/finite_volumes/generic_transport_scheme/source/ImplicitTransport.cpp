@@ -28,7 +28,7 @@ ImplicitTransport<dim>::GetModel() const
 
 template<size_t dim>
 ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const char* target_region, bool second_order )
-  : VariableSet_TracerTransferImplicit(m.Database()),
+  : variables::Variables_TracerTransfer(m.Database()),
     Equation_TracerTransferImplicit<dim>( m, target_region ),
     solver_(solver),
     model_(m),
@@ -43,7 +43,7 @@ ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const 
     // 0. model-wide initialisation: results will be accumulated into this variable
    
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->C0_key), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
  }
   
 /**
@@ -124,11 +124,11 @@ double64 ImplicitTransport<dim>::TimeIncrement()
     for ( auto nit = gref_.PerimeterNodesBegin(); nit != nodes_end; ++nit ) {
       const auto i = (*nit)->Idx();
       
-      const auto status = (*nit)->Status( C0_key );
+      const auto status = (*nit)->Status( key_C );
       
       // Dirichlet boundary condition: concentration should be unaltered.
       if (status == DIRICH) {
-        const auto c0 = (*nit)->Read( C0_key );
+        const auto c0 = (*nit)->Read( key_C );
         LHS_.ZeroRow(i);
         LHS_.Assign(i, i, 1.0);
         RHS_[i] = c0;
@@ -138,14 +138,14 @@ double64 ImplicitTransport<dim>::TimeIncrement()
       // Calculate flow through boundary
       double64 inflow = 0.0;
       double64 influx = 0.0;
-      const auto c0 = (*nit)->Read( C0_key );
+      const auto c0 = (*nit)->Read( key_C );
 
       const size_t iNrParents = (*nit)->Parents();
       for ( size_t iParent = 0; iParent < iNrParents; ++iParent ) {
         const size_t pnid = (*nit)->ParentNodeNumber( iParent );
         const auto eptr = (*nit)->Parent( iParent );
         
-        const double64 K(eptr->Read(k_key));
+        const double64 K(eptr->Read(key_k));
         if (isnan(K)) {
           // XXX AJB HACK
           // Deleting boundaries during model creation means you can't set
@@ -162,10 +162,10 @@ double64 ImplicitTransport<dim>::TimeIncrement()
           const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,iSectorFacet) );
           const size_t inside_node(eptr->FV()->InsideNode(iFacet));
           const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
-          const double64 ff = eptr->Read( iFacet, 0u, ff_key );
+          const double64 ff = eptr->Read( iFacet, 0u, key_ff );
           
-          const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( C0_key ) :
-          eptr->N(inside_node)->Read( C0_key );
+          const double64 C_upstream = (ff < 0.) ? eptr->N(outside_node)->Read( key_C ) :
+          eptr->N(inside_node)->Read( key_C );
           if ( pnid == inside_node ) {
             inflow += ff;
             influx += ff * C_upstream;
@@ -213,7 +213,7 @@ double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
     for ( auto nit = gref_.NodesBegin(); nit != nodes_end; ++nit )
     {
-      const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
+      const VARIABLE_FLAG status((*nit)->Status( this->key_C ));
       if ( status != DIRICH )
       {
         // reading the newly computed saturation values
@@ -222,17 +222,17 @@ double64 ImplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
         amax = std::max( amax, c1 );
         
         // reading the previous values and calculating the maximum change per node
-        const double64 C0 = (*nit)->Read( this->C0_key );
+        const double64 C0 = (*nit)->Read( this->key_C );
 
         difference_to_last_output = std::max( difference_to_last_output, fabs(c1 - C0) );
         
         // result checking and assignment
-        if ( c1 <= upper_limit_ && c1 >= lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar(status, c1) );
+        if ( c1 <= upper_limit_ && c1 >= lower_limit_ ) (*nit)->Store( this->key_C, makeScalar(status, c1) );
         else {
           cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
           cerr <<"value: "<< c1 <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-          if ( c1 > upper_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, upper_limit_ ) );
-          else if ( c1 < lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, lower_limit_ ) );
+          if ( c1 > upper_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, upper_limit_ ) );
+          else if ( c1 < lower_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, lower_limit_ ) );
           error_counter++;
         }
       }
