@@ -46,6 +46,7 @@ class IsoparametricLinearLineElement : public FiniteElement {
 
     /// constant partial derivatives of interpolation functions on the element
     virtual void      Nr( double64 r, std::vector<double64>& nr ) const;
+    virtual void      Nr( double64 r, double64* nr ) const;
     virtual void      dNr( double64 r, std::vector<double64>& dnr ) const;
     virtual void      dN( DenseMatrix<DM_MIN>& M );
     virtual double64  dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );

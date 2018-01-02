@@ -27,7 +27,7 @@ ExplicitTransport<dim>::GetModel() const
 
 template<size_t dim>
 ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region, bool second_order_in_space )
-  : VariableSet_TracerTransferExplicit(m.Database()),
+  : variables::Variables_TracerTransfer(m.Database()),
     model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
@@ -40,7 +40,7 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
     // 0. model-wide initialisation: results will be accumulated into this variable
    
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->C0_key), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
  }
   
 
@@ -112,12 +112,12 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
         // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
-        const double64 c0 = (*nit)->Read(this->C0_key);
-        const double64 c1 = (*nit)->Read(this->C1_key);
-        const double64 pv = (*nit)->Read(this->PV_key);
-        const double64 fb = (*nit)->Read(this->fb_key);
+        const double64 c0 = (*nit)->Read(this->key_C);
+        const double64 c1 = (*nit)->Read(this->key_NC);
+        const double64 pv = (*nit)->Read(this->key_FVPV);
+        const double64 fb = (*nit)->Read(this->key_FB);
 
-        const double64 source((*nit)->Read(this->nsrc_key));
+        const double64 source((*nit)->Read(this->key_NQV));
         double64 accumulation = c1;
         // Solve C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [C vD]
 
@@ -133,7 +133,7 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
         accumulation += source * c1 * delta_t;
         
          // 5. storing the new concentration
-         (*nit)->Store( this->C1_key, makeScalar( (*nit)->Status(this->C1_key), accumulation ) );
+         (*nit)->Store( this->key_NC, makeScalar( (*nit)->Status(this->key_NC), accumulation ) );
     }
    
 } // end AssembleSolution
@@ -166,14 +166,14 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
                for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
                     size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
-                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->vD_key );
+                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
                     if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
                     else div -= velo;
                 }
            }
-          ScalarVariable result( makeScalar( (*nit)->Status(this->C1_key), (*nit)->Read(this->C1_key) ) );
+          ScalarVariable result( makeScalar( (*nit)->Status(this->key_NC), (*nit)->Read(this->key_NC) ) );
           result() += div;
-          (*nit)->Store( this->C1_key, result );
+          (*nit)->Store( this->key_NC, result );
       
       } // end for cycle for nodes
 
@@ -195,33 +195,33 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
     typename vector<Node<dim>*>::iterator nit = gref_.NodesBegin();
 
-    double64        amin(+std::numeric_limits<double64>::max()),  // = (*nit)->Read( this->so1_key ),
-                    amax(-std::numeric_limits<double64>::max()),  // = (*nit)->Read( this->so1_key ),
+    double64        amin(+std::numeric_limits<double64>::max()),
+                    amax(-std::numeric_limits<double64>::max()),
                     difference_to_last_output(0.);
     size_t          error_counter(0);
     ScalarVariable  C1;
    
     while ( nit != nodes_end )
        {
-          const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
+          const VARIABLE_FLAG status((*nit)->Status( this->key_C ));
           if ( status != DIRICH )
             {
                // reading the newly computed saturation values
-               (*nit)->Read( this->C1_key, C1 );
+               (*nit)->Read( this->key_NC, C1 );
                amin = std::min( amin, C1() );
                amax = std::max( amax, C1() );
 
                // reading the previous values and calculating the maximum change per node
-               const double64 C0 = (*nit)->Read( this->C0_key );
+               const double64 C0 = (*nit)->Read( this->key_C );
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
   
                // result checking and assignment
-               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->C0_key, C1 );
+               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C, C1 );
                else {
                     cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
                     cerr <<"value: "<< C1() <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-                    if ( C1() > upper_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, upper_limit_ ) );
-                    else if ( C1() < lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, lower_limit_ ) );
+                    if ( C1() > upper_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, upper_limit_ ) );
+                    else if ( C1() < lower_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, lower_limit_ ) );
                     error_counter++;
                  }
             }

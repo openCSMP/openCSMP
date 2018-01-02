@@ -10,7 +10,7 @@ using namespace std;
 namespace csmp {
 template<size_t dim>
 FluxLHS<dim>::FluxLHS(Model<dim>& model, const char* facet_flux)
- : MatrixOperator<dim>(ADD_ACCUMULATE),
+ : MatrixOperator<dim>(0),
    ff_key_(model.Database().StorageKey(facet_flux))
 {
 } // end constructor

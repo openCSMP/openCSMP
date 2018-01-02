@@ -577,6 +577,21 @@ void   FiniteElement::Nr( double64 r, vector<double64>& NR ) const
  }
 
 
+
+    // 1D
+void   FiniteElement::Nr( double64 r, double64* NR ) const
+ {
+    InstructUser("FiniteElement::Nr");
+    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
+    if ( !uses_local_coordinates || !isoparametric )
+      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
+    cout <<"\nMethod arguments: "<< endl;
+    cout <<"\nLocal coordinate r: "<< r << endl;
+    cout << endl;
+    throw invalid_argument("FiniteElement::Nr");
+ }
+
+
 void   FiniteElement::dNr( double64 r, vector<double64>& DNR ) const
  {
     InstructUser("FiniteElement::dNr");
@@ -601,6 +616,19 @@ void   FiniteElement::Nrs( double64 r, double64 s, vector<double64>& NRS ) const
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
     out( NRS );
+    cout << endl;
+    throw invalid_argument("FiniteElement::Nrs");
+ }
+
+    // 2D
+void   FiniteElement::Nrs( double64 r, double64 s, double64* NRS ) const
+ {
+    InstructUser("FiniteElement::Nrs");
+    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
+    if ( !uses_local_coordinates || !isoparametric )
+      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
+    cout <<"\nMethod arguments: "<< endl;
+    cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
     cout << endl;
     throw invalid_argument("FiniteElement::Nrs");
  }
@@ -644,6 +672,20 @@ void   FiniteElement::Nrst( double64 r, double64 s, double64 t, vector<double64>
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
     out( NRST );
+    cout << endl;
+    throw invalid_argument("FiniteElement::Nrst");
+ }
+
+
+    // 3D
+void   FiniteElement::Nrst( double64 r, double64 s, double64 t, double64* NRST ) const
+ {
+    InstructUser("FiniteElement::Nrst");
+    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
+    if ( !uses_local_coordinates || !isoparametric )
+      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
+    cout <<"\nMethod arguments: "<< endl;
+    cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
     cout << endl;
     throw invalid_argument("FiniteElement::Nrst");
  }

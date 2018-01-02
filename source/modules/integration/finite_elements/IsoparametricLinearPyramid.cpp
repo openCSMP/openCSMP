@@ -139,7 +139,40 @@ void IsoparametricLinearPyramid::Nrst( double64 r,
 //   N[2] = 0.25*rPlus *sPlus *tMinus;
 //   N[3] = 0.25*rMinus*sPlus *tMinus;
 //   N[4] = t;
+}
 
+void IsoparametricLinearPyramid::Nrst( double64 r,
+                                       double64 s,
+                                       double64 t,
+                                       double64* N ) const
+{
+
+   /// Zganski et. al.,1996. "A new family of finite elements: The pyramidal elements"
+   /// G.Bedrosian, 1992. "Shape functions for three-dimentional finite element analysis"
+
+   const double64 tMinus(1.-t);
+
+   double64 fRationalTerm( 0. );
+   if( t != 1. )
+       fRationalTerm = r*s/tMinus;
+
+   N[0] = 0.25*( tMinus + fRationalTerm - r - s );
+   N[1] = 0.25*( tMinus - fRationalTerm + r - s );
+   N[2] = 0.25*( tMinus + fRationalTerm + r + s );
+   N[3] = 0.25*( tMinus - fRationalTerm - r + s );
+   N[4] = t;
+
+//   // alternative approximation
+//   const double64 rPlus(1.+r);
+//   const double64 sPlus(1.+s);
+//   const double64 rMinus(1.-r);
+//   const double64 sMinus(1.-s);
+//   const double64 tMinus(1.-t);
+//   N[0] = 0.25*rMinus*sMinus*tMinus;
+//   N[1] = 0.25*rPlus *sMinus*tMinus;
+//   N[2] = 0.25*rPlus *sPlus *tMinus;
+//   N[3] = 0.25*rMinus*sPlus *tMinus;
+//   N[4] = t;
 }
 
 

@@ -517,7 +517,29 @@ IsoparametricQuadraticQuadrilateral::Nrs(
    N[6] = 0.5*s*sPlus *(1.-r*r);
    N[7] =-0.5*r*rMinus*(1.-s*s);
    N[8] = (1.-r*r)*(1.-s*s);
+}
 
+void
+IsoparametricQuadraticQuadrilateral::Nrs(
+                    double64 r,
+                    double64 s,
+                    double64* N ) const
+{
+   const double64 rPlus=1.0+r;
+   const double64 sPlus=1.0+s;
+   const double64 rMinus=1.0-r;
+   const double64 sMinus=1.0-s;
+
+   N[0] = 0.25*r*s*rMinus*sMinus;
+   N[1] =-0.25*r*s*rPlus *sMinus;
+   N[2] = 0.25*r*s*rPlus *sPlus;
+   N[3] =-0.25*r*s*rMinus*sPlus;
+
+   N[4] =-0.5*s*sMinus*(1.-r*r);
+   N[5] = 0.5*r*rPlus *(1.-s*s);
+   N[6] = 0.5*s*sPlus *(1.-r*r);
+   N[7] =-0.5*r*rMinus*(1.-s*s);
+   N[8] = (1.-r*r)*(1.-s*s);
 }
 
 

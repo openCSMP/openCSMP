@@ -622,9 +622,61 @@ void IsoparametricQuadraticHexahedron::Nrst(
    N[24] =-0.5*r*rMinus *(1-s*s)*(1-t*t);
    N[25] = 0.5*t*(1-r*r)*(1-s*s)*tPlus;
    N[26] = (1-r*r)*(1-s*s)*(1-t*t);
-
 }
 
+void IsoparametricQuadraticHexahedron::Nrst(
+                    double64 r,
+                    double64 s,
+                    double64 t,
+                    double64* N ) const
+{
+   const double64 rPlus=1.0+r;
+   const double64 sPlus=1.0+s;
+   const double64 tPlus=1.0+t;
+   const double64 rMinus=1.0-r;
+   const double64 sMinus=1.0-s;
+   const double64 tMinus=1.0-t;
+
+    // corner nodes
+   N[0] = -0.125*r*s*t*rMinus*sMinus*tMinus;
+   N[1] =  0.125*r*s*t*rPlus *sMinus*tMinus;
+   N[2] = -0.125*r*s*t*rPlus *sPlus *tMinus;
+   N[3] =  0.125*r*s*t*rMinus*sPlus *tMinus;
+   N[4] =  0.125*r*s*t*rMinus*sMinus*tPlus;
+   N[5] = -0.125*r*s*t*rPlus *sMinus*tPlus;
+   N[6] =  0.125*r*s*t*rPlus *sPlus *tPlus;
+   N[7] = -0.125*r*s*t*rMinus*sPlus *tPlus;
+
+   N[8] =   0.25*s*t*(1-r*r)*sMinus *tMinus;
+   N[9] =  -0.25*r*t*rPlus  *(1-s*s)*tMinus;
+   N[10] = -0.25*s*t*(1-r*r)*sPlus  *tMinus;
+   N[11] =  0.25*r*t*rMinus *(1-s*s)*tMinus;
+
+    // Sign error? should be -
+   N[12] =0.25*r*s*rMinus*sMinus*(1-t*t);
+   // Should be +
+   N[13] =-0.25*r*s*rPlus *sMinus*(1-t*t);
+
+   //N[12] =-0.25*r*s*rPlus *sMinus*(1-t*t);
+   //N[13] = 0.25*r*s*rMinus*sMinus*(1-t*t);
+
+   N[14] = 0.25*r*s*rPlus *sPlus *(1-t*t);
+   N[15] =-0.25*r*s*rMinus*sPlus *(1-t*t);
+
+   N[16] =-0.25*s*t*(1-r*r)*sMinus *tPlus;
+   N[17] = 0.25*r*t*rPlus  *(1-s*s)*tPlus;
+   N[18] = 0.25*s*t*(1-r*r)*sPlus  *tPlus;
+   N[19] =-0.25*r*t*rMinus *(1-s*s)*tPlus;
+
+   N[20] =-0.5*t*(1-r*r)*(1-s*s)*tMinus;
+   N[21] =-0.5*s*(1-r*r)*sMinus *(1-t*t);
+   N[22] = 0.5*r*rPlus  *(1-s*s)*(1-t*t);
+
+   N[23] = 0.5*s*(1-r*r)*sPlus  *(1-t*t);
+   N[24] =-0.5*r*rMinus *(1-s*s)*(1-t*t);
+   N[25] = 0.5*t*(1-r*r)*(1-s*s)*tPlus;
+   N[26] = (1-r*r)*(1-s*s)*(1-t*t);
+}
 
 
 

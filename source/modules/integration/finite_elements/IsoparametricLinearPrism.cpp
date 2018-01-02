@@ -158,7 +158,28 @@ void IsoparametricLinearPrism::Nrst(
    N[3] = 0.5*L1*tPlus;
    N[4] = 0.5*L2*tPlus;
    N[5] = 0.5*L3*tPlus;
+ }
 
+void IsoparametricLinearPrism::Nrst(
+                    double64 r,
+                    double64 s,
+                    double64 t,
+                    double64* N ) const
+{
+   const double64 tPlus   = 1.0+t;
+   const double64 tMinus  = 1.0-t;
+   const double64 L1      = 1.0-r-s;
+   const double64 L2      = r;
+   const double64 L3      = s;
+
+   //cout<<" IsoparametricLinearPrism::Nrst L1="<<L1<<", L2="<<L2<<", L3="<<L3<<" Sum="<<L1+L2+L3<<endl;
+
+   N[0] = 0.5*L1*tMinus;
+   N[1] = 0.5*L2*tMinus;
+   N[2] = 0.5*L3*tMinus;
+   N[3] = 0.5*L1*tPlus;
+   N[4] = 0.5*L2*tPlus;
+   N[5] = 0.5*L3*tPlus;
  }
 
 /**

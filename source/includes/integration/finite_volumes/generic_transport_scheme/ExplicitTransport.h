@@ -1,7 +1,7 @@
 #ifndef CSMP_EXPLICIT_TRANSPORT_H
 #define CSMP_EXPLICIT_TRANSPORT_H
 
-#include "VariableSet_TracerTransferExplicit.h"
+#include "Variables_TracerTransfer.h"
 #include "FacetFlux_TracerTransferExplicit.h"
 #include "TimeStepEvaluator.h"
 
@@ -16,7 +16,7 @@ template<size_t> class ExplicitTransport;
 // TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode computing and averaging element gradients vs. node by node approach)
 // TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
 template<size_t dim>
-class ExplicitTransport : public VariableSet_TracerTransferExplicit,
+  class ExplicitTransport : public variables::Variables_TracerTransfer,
                           public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,
                           public TimeStepEvaluator<dim,ExplicitTransport> {
   public:

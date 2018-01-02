@@ -16,15 +16,6 @@ namespace csmp {
   template<size_t dim> class MatrixOperator;
   template<size_t dim> class VectorOperator;
   template<size_t dim> class LinearSystemAccumulator;
-
-  /// What mode a system accumulation performs in
-  enum ACCUMULATION_MODE {
-    ADD_ACCUMULATE,
-    MULTIPLY_ACCUMULATE,
-    ADD_LATER
-  };
-
-
 } // end csmp
 
 

@@ -63,8 +63,8 @@ const char* varType(size_t dimension)
 
 int main(int argc, char* argv[])
 {
-    if (argc < 3) {
-        cerr << "Usage: " << argv[0] << " variables.csv variables.h\n";
+    if (argc < 4) {
+        cerr << "Usage: " << argv[0] << " VariableStructName variables.csv variables.h\n";
         return 1;
     }
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     std::deque<variable> vars;
     try
     {
-        io::CSVReader<7> csv(argv[1]);
+        io::CSVReader<7> csv(argv[2]);
         csv.read_header(0, "name", "notation", "units", "dimension", "minval", "maxval", "placement");
         variable var;
         while (csv.read_row(var.name, var.notation, var.units, var.dimension,
@@ -86,28 +86,55 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    ofstream ofs(argv[2]);
+    ofstream ofs(argv[3]);
 
-    string header_guard = headerGuard(argv[2]);
+    string header_guard = headerGuard(argv[3]);
 
     ofs <<"#ifndef " << header_guard << '\n';
     ofs <<"#define " << header_guard << "\n\n";
     ofs <<"/**\n";
-    ofs <<"@file " << argv[2] << '\n';
-    ofs <<"@author A.J. Bromage\n\n";
+    ofs <<"@file " << argv[3] << '\n';
+    ofs <<"Automatically generated from " << argv[2] << '\n';
+    ofs <<"DO NOT EDIT!\n";
     ofs <<"*/\n\n";
+    ofs <<"#include \"Index.h\"\n";
+    ofs <<"#include \"Exception.h\"\n";
+    ofs <<"#include \"PropertyDatabase.h\"\n\n";
     ofs <<"namespace csmp { namespace variables {\n\n";
 
+    ofs << "struct " << argv[1] << " {\n";
     for (auto& var : vars) {
-        ofs << "    csmp::INDEX<" << varType(var.dimension) << ','
+        ofs << "  csmp::INDEX<" << varType(var.dimension) << ','
             << var.placement << "> key_" << var.notation << "; // " << var.name << "\n";
     }
+
+    ofs << "\n  template<size_t dim>\n";
+    ofs << "  explicit " << argv[1] << "( const PropertyDatabase<dim>& db )\n";
+    bool first = true;
+    for (auto& var : vars) {
+        ofs << (first ? "    : " : "    , ")
+            << "key_" << var.notation << "( INDEX<"
+            << varType(var.dimension) << ',' << var.placement
+            << ">( db.StorageKey(\"" << var.name << "\") ))\n";
+        first = false;
+    }
+    ofs << "  {\n";
+    for (auto& var : vars) {
+        ofs << "    if ( key_" << var.notation << ".place != " << var.placement
+            << " || key_" << var.notation << ".type != " << varType(var.dimension)
+            << " )\n      throw csmp::Exception( FATAL_ERROR, \""
+            << argv[1] << "::" << argv[1] << ":\",\n        "
+            << "\"The '" << var.name << "' variable must be " << varType(var.dimension)
+            << " and placed on " << var.placement << "\"  );\n";
+    }
+    ofs << "  }\n";
+    ofs << "};\n";
 
     ofs <<"\n} } // end namespace csmp\n\n";
 
     ofs <<"#endif // " << header_guard << "\n";
 
-    cout <<"\nCSMP header file '"<< argv[2] <<"' written successfully.\n";
+    cout <<"\nCSMP header file '"<< argv[3] <<"' written successfully.\n";
 
     return 0;
 

@@ -83,7 +83,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
           for ( size_t j=0U; j<sector_facets; ++j )
             {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
-               const double64 ffc = eptr->Read(facet, 0, User()->ffC_key);
+               const double64 ffc = eptr->Read(facet, 0, User()->key_ffC);
                if (isnan(ffc)) {
                  // XXX AJB HACK
                  // Facets with no facet flux concentration are boundary facets
@@ -93,7 +93,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
 
                const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric facet flow into flux balance
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
+               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
                if ( facet_flux > 0. ) outflow += facet_flux;
                flux_balance += facet_flux;
                // temporary accumulation of flux-concentration products into the variable 'new concentration'
@@ -102,14 +102,14 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
        }
 
      // 1. (phi * V) / q_out = dt
-     double64 time_increment = nptr->Read( User()->PV_key ) / outflow;
+     double64 time_increment = nptr->Read( User()->key_FVPV ) / outflow;
      assert( time_increment > 0. );
 
      // 2. recording the flux balance
-     nptr->Store( User()->fb_key, makeScalar(nptr->Status(User()->fb_key),flux_balance) );
+     nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
    
      // 3. recording the flux concentration product balance
-     nptr->Store( User()->C1_key, makeScalar(nptr->Status(User()->C1_key),flux_concentration_products) );
+     nptr->Store( User()->key_NC, makeScalar(nptr->Status(User()->key_NC),flux_concentration_products) );
 
      return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
@@ -126,14 +126,14 @@ template<size_t dim, template<size_t> class USER>
 double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr ) const
  {
     assert( nptr != NULL );
-    const double64 pore_volume = nptr->Read( User()->PV_key );
+    const double64 pore_volume = nptr->Read( User()->key_FVPV );
    
     // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance
     if ( nptr->AtBoundary() != NOT ) {
          // 1.0 (Q) checking sources because these will not be picked up in the fluxes correctly if the FV is truncated
-         const double64 fluid_source = ( nptr->Read(User()->nsrc_key) > 0. ) ? nptr->Read(User()->nsrc_key) : 0.;
+         const double64 fluid_source = ( nptr->Read(User()->key_NQV) > 0. ) ? nptr->Read(User()->key_NQV) : 0.;
          // 1.1 (phi * V) / q_out = dt
-         const double64 flux_balance = std::max( fabs( nptr->Read( User()->fb_key )), fluid_source );
+         const double64 flux_balance = std::max( fabs( nptr->Read( User()->key_FB )), fluid_source );
          if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
          return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
       }
@@ -150,7 +150,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric outflow
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->ff_key );
+               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
                if ( facet_flux > 0. ) outflow += facet_flux;
             }
        }
@@ -219,18 +219,18 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const ) const
     double64                    velocity,
                                 courant_increment(max_time_increment_);
     const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (User()->thi_key == csmp::Index()) ? false : true;
+    const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
 /*
            // 1. limit imposed by advection
            // -----------------------------
-           (*eit)->Read( User()->vD_key, vc );
+           (*eit)->Read( User()->key_V, vc );
            velocity = vc.Length();
 
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->phi_key );
-           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->thi_key );
+           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->key_PHI );
+           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->key_THI );
 
 
            // 4. calculating the CFL criterion from the cell diameter
@@ -277,7 +277,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
     double64                    velocity,
                                 courant_increment(max_time_increment);
     const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (User()->thi_key == csmp::Index()) ? false : true;
+    const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
     for ( typename vector<Element<dim>*>::const_iterator 
@@ -292,7 +292,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
 
            // 1. limit imposed by advection
            // -----------------------------
-           (*eit)->Read( User()->vD_key, vc );
+           (*eit)->Read( User()->key_V, vc );
            velocity = vc.Length();
 
            // NB: This may be a too conservative estimate for the implicit scheme but is necessary for the explicit one
@@ -300,8 +300,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
            // thus for implicit scheme is better:
            velocity *= relperm.dfds();
 
-           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->phi_key );
-           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->thi_key );
+           double64 cell_diameter = (*eit)->LengthInDirection(vc) * (*eit)->Read( User()->key_PHI );
+           if ( multiply_with_cell_thickess ) cell_diameter *= (*eit)->Read( User()->key_THI );
 
            // 2. additional buoyancy-related flow
            // -------------------------------------
@@ -318,7 +318,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
                      fill( gradPc.begin(), gradPc.end(), 0. );
                      (*(*eit)).dN_AtBaryCenter( DN );
                      for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
-                         const double64 sn = (*eit)->N(j)->Read( User()->C0_key );
+                         const double64 sn = (*eit)->N(j)->Read( User()->key_C );
                          relperm.SaturationWettingPhase( 1. - sn );
                          relperm.EffectiveSaturation();
                          const double64 pc = relperm.pc_Phase();

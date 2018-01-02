@@ -15,7 +15,7 @@ namespace csmp {
 template<size_t dim>
 PoreVolumeRHS<dim>::PoreVolumeRHS( const Model<dim>& model,
                                    const char* pv_variable, const char* advected_variable, const char* porosity_variable )
- :  VectorOperator<dim>(ADD_ACCUMULATE),
+ :  VectorOperator<dim>(0),
     pv_key_(model.Database().StorageKey(pv_variable)),
     adv_key_(model.Database().StorageKey(advected_variable)),
   phi_key_(model.Database().StorageKey(porosity_variable))

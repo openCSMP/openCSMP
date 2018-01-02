@@ -45,6 +45,7 @@ public:
     virtual double64    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
     virtual void        Nrs( double64 r, double64 s, std::vector<double64>& N ) const;
+    virtual void        Nrs( double64 r, double64 s, double64* N ) const;
     virtual void        dNr( double64 r, double64 s, std::vector<double64>& dNr ) const;
     virtual void        dNs( double64 r, double64 s, std::vector<double64>& dNs ) const;
 

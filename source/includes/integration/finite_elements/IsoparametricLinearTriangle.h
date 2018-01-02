@@ -52,6 +52,7 @@ class IsoparametricLinearTriangle : public FiniteElement {
 
     // interpolation functions and their derivatives in local coordinates r,s,t.
     virtual void        Nrs( double64 r, double64 s, std::vector<double64>& nrst ) const;
+    virtual void        Nrs( double64 r, double64 s, double64* nrst ) const;
     virtual void        dNr( double64 r, double64 s, std::vector<double64>& dNr ) const;
     virtual void        dNs( double64 r, double64 s, std::vector<double64>& dNs ) const;
 

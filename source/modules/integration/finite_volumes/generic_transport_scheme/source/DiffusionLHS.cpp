@@ -16,7 +16,8 @@ namespace csmp {
 
 template<size_t dim>
 DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivity )
-  : diff_key_(model.Database().StorageKey(diffusivity)),
+  : MatrixOperator<dim>(0),
+    diff_key_(model.Database().StorageKey(diffusivity)),
     dof_(model.Database().Components(diffusivity))
  {
  }

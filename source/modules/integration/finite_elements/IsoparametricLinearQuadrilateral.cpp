@@ -130,7 +130,22 @@ IsoparametricLinearQuadrilateral::Nrs( double64 r,
    N[1] = 0.25*rPlus *sMinus;
    N[2] = 0.25*rPlus *sPlus;
    N[3] = 0.25*rMinus*sPlus;
+}
 
+void
+IsoparametricLinearQuadrilateral::Nrs( double64 r,
+                                       double64 s,
+                                       double64* N ) const
+{
+   const double64 rPlus(1.0+r);
+   const double64 sPlus(1.0+s);
+   const double64 rMinus(1.0-r);
+   const double64 sMinus(1.0-s);
+
+   N[0] = 0.25*rMinus*sMinus;
+   N[1] = 0.25*rPlus *sMinus;
+   N[2] = 0.25*rPlus *sPlus;
+   N[3] = 0.25*rMinus*sPlus;
 }
 
 /**

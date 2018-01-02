@@ -74,6 +74,12 @@ void IsoparametricLinearLineElement::Nr( double64 r, std::vector<double64>& N ) 
    N[1] = 0.5 * (1.+r );
 }
 
+void IsoparametricLinearLineElement::Nr( double64 r, double64* N ) const
+{
+   N[0] = 0.5 * (1.-r );
+   N[1] = 0.5 * (1.+r );
+}
+
 
 
 // tested: OK1

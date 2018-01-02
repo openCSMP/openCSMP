@@ -132,6 +132,18 @@ void IsoparametricLinearTetrahedron::Nrst(
     N[3] = t; // L4
  }
 
+void IsoparametricLinearTetrahedron::Nrst(
+                    double64 r,
+                    double64 s,
+                    double64 t,
+                    double64* N ) const
+{
+    N[0] = 1. - r - s - t; // L1
+    N[1] = r; // L2
+    N[2] = s; // L3
+    N[3] = t; // L4
+ }
+
 /**
 
 This method and the complementary method dNs() compute the shape function
