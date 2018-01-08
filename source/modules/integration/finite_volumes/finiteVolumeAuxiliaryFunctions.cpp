@@ -153,7 +153,7 @@ double64  limitProperty( double64 psi_hat_c, double64 psi_hat_d,
     double64 U_tilde_f = NVD_Function( xi, U_f, U_c );
 
     // finding the slope limited value of the advected property at the segment according to eqn. 36
-    U_tilde_f = U_tilde_f * (psi_hat_d - psi_hat_u) + psi_hat_u;
+    U_tilde_f = U_tilde_f * psi_hat_d + (1.0 - U_tilde_f) * psi_hat_u;
 
     return U_tilde_f;
  }
