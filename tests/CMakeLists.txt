@@ -59,6 +59,24 @@ if(BUILD_TESTING)
 	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
         )
     endif()
+
+    ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
+    TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore ${SAMG_LIBRARIES})
+    if(CMAKE_HOST_WIN32)
+	ENABLE_TESTING()
+        ADD_TEST(
+        NAME csmptest_main
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
+        )
+    else()
+        ADD_TEST(
+	    NAME csmptest_main
+	    COMMAND csmptest_main
+	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+        )
+    endif()
+
 endif(BUILD_TESTING)
 
 ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
