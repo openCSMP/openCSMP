@@ -580,7 +580,8 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
             if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
               if (facet_flux > 0) {
                 // XXX This is inefficient!
-                std::pair<double64,double64> cminmax(c_inside, c_inside);
+                std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                     -std::numeric_limits<double64>::max());
                 for ( size_t iNeighbour=0U; iNeighbour < inside_node->Neighbors(); ++iNeighbour ) {
                   const double64 c_neighbour(inside_node->Neighbor(iNeighbour)->Read( key_C ));
                   cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -591,7 +592,8 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
               }
               else {
                 // XXX This is inefficient!
-                std::pair<double64,double64> cminmax(c_outside, c_outside);
+                std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                     -std::numeric_limits<double64>::max());
                 for ( size_t iNeighbour=0U; iNeighbour < outside_node->Neighbors(); ++iNeighbour ) {
                   const double64 c_neighbour(outside_node->Neighbor(iNeighbour)->Read( key_C ));
                   cminmax.first = std::min(cminmax.first, c_neighbour);

@@ -2128,11 +2128,10 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
       for ( size_t i = 0; i < regionsToRemove.size(); ++i )
         if ( regionsToRemove[i] != "Model" ) {
               std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Removing region " << regionsToRemove[i] << " since it was transformed to Boundary...";
-              // SKM FIX boundaryComplex->RemoveRegion( regionsToRemove[i].c_str(), true );
-              boundaryComplex->RemoveFromRegion( "Model", regionsToRemove[i].c_str() );
-              boundaryComplex->MoveToNonUniqueRegions( regionsToRemove[i].c_str() );
+            boundaryComplex->RemoveFromRegion( "Model", regionsToRemove[i].c_str() );
+            boundaryComplex->RemoveRegion( regionsToRemove[i].c_str(), true );
           }
-
+     
       // from Box.h
       recreateBoxBoundaryFlags( *boundaryComplex );
       std::cout << "\n\n EstablishBoxBoundaries: done!\n";
