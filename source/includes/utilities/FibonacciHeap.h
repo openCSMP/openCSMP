@@ -130,7 +130,7 @@ class FibonacciHeap
     node_ptr root_;
     size_t count_;
     size_t max_degree_;
-    node_ptr consolidation_[std::numeric_limits<size_t>::digits()+1];
+    node_ptr consolidation_[std::numeric_limits<size_t>::digits+1];
 
     node_ptr insert_node(node_ptr new_node)
     {
