@@ -354,7 +354,7 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
 
        if (delete_elements) {
            if (iterRegion != groupMap_.end()) {
-               ErrorHandler::Instance().notice(ERROR,
+               ErrorHandler::Instance().notice(WARNING,
                                      "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
                                      "Attempt to delete elements from a non-unique region: ", regionName );
 

@@ -399,7 +399,7 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
              
              // compute strain e_i = [B]_i{d}_i 3x12 * 12x1 -> 3x1 (in 2D)
              EGP_ *= DISPL_;
-             EGP_ *= -1.;
+             EGP_ *= -1.;  // enforcing that compression is positive and dilatation negative
 
              // compute {sigma} = [E]([B]{d})
              if ( MathOperatorLHS<2U>::MaterialOperandPlacement() == ELEMENT )
@@ -556,8 +556,8 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  // directions = Eigenvalues of strain tensor   
                  e.Store( i, pstrain_key_, evals_ ); // O.K.
                                     
-                 // dilatation = sum of absolute principal strains i.e. Eigenvalues
-                 e.Store( i, dilat_key_, ScalarVariable(PLAIN,evals_[0]+evals_[1]) );
+                 // dilatation = sum of absolute principal strains i.e. Eigenvalues * -1 (since compression is positive)
+                 e.Store( i, dilat_key_, ScalarVariable(PLAIN, -(evals_[0]+evals_[1]) ) );
              }
          }
 
@@ -607,7 +607,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                      e.N(i)->Store( pstrain_key_, evals_ ); // O.K.
                                         
                      // dilatation = sum of absolute principal strains i.e. Eigenvalues
-                     e.N(i)->Store( dilat_key_, ScalarVariable(PLAIN,evals_[0]+evals_[1]) );
+                     e.N(i)->Store( dilat_key_, ScalarVariable(PLAIN, -(evals_[0]+evals_[1]) ) );
                  }
                   
                 // 3. flagging the node to prevent further computations
