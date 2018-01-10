@@ -150,12 +150,12 @@ double64  limitProperty( double64 psi_hat_c, double64 psi_hat_d,
     const double64 U_c = (psi_hat_c  - psi_hat_u) / psi_diff;
 
     // computing normalized (always positive) slope-limiter value at face (eqn 38, Pain et al. 2001)
-    double64 U_tilde_f = NVD_Function( xi, U_f, U_c );
+    const double64 U_tilde_f = NVD_Function( xi, U_f, U_c );
 
     // finding the slope limited value of the advected property at the segment according to eqn. 36
-    U_tilde_f = U_tilde_f * (psi_hat_d - psi_hat_u) + psi_hat_u;
+    const double64 psi_hat = lerp(U_tilde_f, psi_hat_u, psi_hat_d);
 
-    return U_tilde_f;
+    return psi_hat;
  }
 
 

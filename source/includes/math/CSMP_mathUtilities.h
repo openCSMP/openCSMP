@@ -113,6 +113,13 @@ T vector_product( const std::vector<T>& a,
   }
 
 
+/// linearly interpolate between two values
+template<typename T>
+T lerp(const double64 t, T x0, T x1) {
+    return (1.0-t) * x0 + t * x1;
+}
+
+
 } // csmp
 
 #endif

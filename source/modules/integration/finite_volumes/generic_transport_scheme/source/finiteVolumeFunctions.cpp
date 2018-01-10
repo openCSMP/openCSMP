@@ -200,19 +200,19 @@ template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>& );
 
 
 enum InterpolatorType {
-    ELMT_ELMT,
-    NODE_NODE,
-    NODE_ELMT,
-    NODE_EIP,
-    NODE_FIP,
-    NODE_SIP,
+    READ_ELMT,
+    READ_NODE,
+    NODE_TO_ELMT,
+    NODE_TO_EIP,
+    NODE_TO_FIP,
+    NODE_TO_SIP,
     INTERPOLATOR_COUNT
 };
 
 
 
 
-  template<PLACEMENT from,PLACEMENT to>
+  template<InterpolatorType interp>
   struct PropertyInterpolation
   {
     template<size_t dim>
@@ -220,7 +220,7 @@ enum InterpolatorType {
 
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const INDEX<ty,from>& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var );
+    Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var );
   };
 
   template<size_t dim>
@@ -270,18 +270,20 @@ enum InterpolatorType {
   
 
   template<>
-  struct PropertyInterpolation<ELEMENT,ELEMENT>
+  struct PropertyInterpolation<READ_ELMT>
   {
-    const InterpolatorType type_ = ELMT_ELMT;
+    const InterpolatorType type_ = READ_ELMT;
     
     template<size_t dim>
     void Recalculate( const Element<dim>* eptr, size_t element_dim_ )
     {
     }
     
+    InterpolatorType Type() const { return type_; }
+    
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const INDEX<ty,ELEMENT>& prop, const Element<dim>* eptr, size_t idx1, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    Interpolate( const Index& prop, const Element<dim>* eptr, size_t, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
     {
       eptr->Read( prop, var );
     }
@@ -291,18 +293,20 @@ enum InterpolatorType {
   
   
   template<>
-  struct PropertyInterpolation<NODE,NODE>
+  struct PropertyInterpolation<READ_NODE>
   {
-    const InterpolatorType type_ = NODE_NODE;
+    const InterpolatorType type_ = READ_NODE;
     
     template<size_t dim>
     void Recalculate( const Element<dim>* eptr, size_t element_dim_ )
     {
     }
     
+    InterpolatorType Type() const { return type_; }
+    
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t idx1, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
     {
       eptr->N(idx1)->Read( prop, var );
     }
@@ -310,9 +314,9 @@ enum InterpolatorType {
   
 
   template<>
-  struct PropertyInterpolation<NODE,ELEMENT>
+  struct PropertyInterpolation<NODE_TO_ELMT>
   {
-    const InterpolatorType type_ = NODE_ELMT;
+    const InterpolatorType type_ = NODE_TO_ELMT;
 
     std::vector<double64> coeff_;
     
@@ -321,7 +325,7 @@ enum InterpolatorType {
       coeff_.resize(DM_MAX);
     }
 
-    InterpolatorType Type() const { return NODE_ELMT; }
+    InterpolatorType Type() const { return type_; }
 
     template<size_t dim>
     void Recalculate( const Element<dim>* eptr, size_t element_dim )
@@ -335,10 +339,10 @@ enum InterpolatorType {
 
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    Interpolate( const Index& prop, const Element<dim>* eptr, size_t, size_t, typename VariableTypeTraits<dim, ty>::VariableType& var )
     {
       const size_t num_nodes(eptr->Nodes());
-      for (size_t i = 0; i < var.Size(); ++i) {
+      for (size_t i = 0; i < var.Components(); ++i) {
         var.Component( i, 0. );
       }
       for ( size_t i=0; i<num_nodes; i++ ) {
@@ -348,9 +352,9 @@ enum InterpolatorType {
   };
 
   template<>
-  struct PropertyInterpolation<NODE,FACET_INTEGRATION_POINT>
+  struct PropertyInterpolation<NODE_TO_FIP>
   {
-    const InterpolatorType type_ = NODE_FIP;
+    const InterpolatorType type_ = NODE_TO_FIP;
     
     size_t facets_, ips_per_facet_, num_nodes_;
     std::vector<double64> coeff_;
@@ -360,7 +364,7 @@ enum InterpolatorType {
       coeff_.resize(DM_MAX);
     }
     
-    InterpolatorType Type() const { return NODE_ELMT; }
+    InterpolatorType Type() const { return type_; }
     
     template<size_t dim>
     void Recalculate( const Element<dim>* eptr, size_t element_dim )
@@ -386,7 +390,7 @@ enum InterpolatorType {
     
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const INDEX<ty,NODE>& prop, const Element<dim>* eptr, size_t facet, size_t fip, typename VariableTypeTraits<dim, ty>::VariableType& var )
+    Interpolate( const Index& prop, const Element<dim>* eptr, size_t facet, size_t fip, typename VariableTypeTraits<dim, ty>::VariableType& var )
     {
       auto fv = eptr->FV();
       const size_t num_nodes = eptr->Nodes();
@@ -399,58 +403,64 @@ enum InterpolatorType {
       }
     }
   };
-  
 
 struct PropertyInterpolators
 {
     std::bitset<INTERPOLATOR_COUNT> interp_valid_;
   
-    PropertyInterpolation<ELEMENT,ELEMENT> elmt_elmt_;
-    PropertyInterpolation<NODE,NODE> node_node_;
-    PropertyInterpolation<NODE,ELEMENT> node_elmt_;
-    // PropertyInterpolation<NODE,ELEMENT_INTEGRATION_POINT> node_eip_;
-    PropertyInterpolation<NODE,FACET_INTEGRATION_POINT> node_fip_;
-    // PropertyInterpolation<NODE,SECTOR_INTEGRATION_POINT> node_sip_;
-
-    template<PLACEMENT from, PLACEMENT to>
-    PropertyInterpolation<from,to>& GetInterpolator();
+    PropertyInterpolation<READ_ELMT> read_elmt_;
+    PropertyInterpolation<READ_NODE> read_node_;
+    PropertyInterpolation<NODE_TO_ELMT> node_elmt_;
+    // PropertyInterpolation<NODE_TO_EIP> node_eip_;
+    PropertyInterpolation<NODE_TO_FIP> node_fip_;
+    // PropertyInterpolation<NODE_TO_SIP> node_sip_;
 };
 
 
-
-  template<>
-  PropertyInterpolation<ELEMENT,ELEMENT>&
-  PropertyInterpolators::GetInterpolator<ELEMENT,ELEMENT>()
+  template<PLACEMENT from,PLACEMENT to>
+  struct InterpolatorDispatch
   {
-    return elmt_elmt_;
-  }
-  
-
-template<>
-PropertyInterpolation<NODE,NODE>&
-PropertyInterpolators::GetInterpolator<NODE,NODE>()
-{
-    return node_node_;
-}
-
-template<>
-PropertyInterpolation<NODE,ELEMENT>&
-PropertyInterpolators::GetInterpolator<NODE,ELEMENT>()
-{
-    return node_elmt_;
-}
-
+  };
   
   template<>
-  PropertyInterpolation<NODE,FACET_INTEGRATION_POINT>&
-  PropertyInterpolators::GetInterpolator<NODE,FACET_INTEGRATION_POINT>()
+  struct InterpolatorDispatch<ELEMENT,ELEMENT>
   {
-    return node_fip_;
-  }
+    typedef PropertyInterpolation<READ_ELMT> Interpolator;
+    
+    static Interpolator& GetInterpolator(PropertyInterpolators& interps) {
+      return interps.read_elmt_;
+    }
+  };
   
+  template<>
+  struct InterpolatorDispatch<NODE,NODE>
+  {
+    typedef PropertyInterpolation<READ_NODE> Interpolator;
+    
+    static Interpolator& GetInterpolator(PropertyInterpolators& interps) {
+      return interps.read_node_;
+    }
+  };
   
-  
+  template<>
+  struct InterpolatorDispatch<NODE,ELEMENT>
+  {
+    typedef PropertyInterpolation<NODE_TO_ELMT> Interpolator;
+    
+    static Interpolator& GetInterpolator(PropertyInterpolators& interps) {
+      return interps.node_elmt_;
+    }
+  };
 
+  template<>
+  struct InterpolatorDispatch<NODE,FACET_INTEGRATION_POINT>
+  {
+    typedef PropertyInterpolation<NODE_TO_FIP> Interpolator;
+    
+    static Interpolator& GetInterpolator(PropertyInterpolators& interps) {
+      return interps.node_fip_;
+    }
+  };
 
 template<size_t dim>
 struct FiniteElementHelper<dim>::Impl : public PropertyInterpolators
@@ -516,26 +526,26 @@ Element<dim>* FiniteElementHelper<dim>::FiniteElement( )
 template<size_t dim> template<VARIABLE_TYPE ty,PLACEMENT pl>
 void FiniteElementHelper<dim>::ReadAtBarycenter( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var )
 {
-  auto& interpolator = pimpl_->template GetInterpolator<pl,ELEMENT>();
+  auto& interpolator = InterpolatorDispatch<pl,ELEMENT>::GetInterpolator(*pimpl_);
   if (!pimpl_->interp_valid_[interpolator.type_]) {
     pimpl_->interp_valid_[interpolator.type_] = true;
     interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
   }
 
-  interpolator.Interpolate( prop, pimpl_->eptr_, 0, 0, var );
+  interpolator.template Interpolate<dim,ty>( prop, pimpl_->eptr_, 0, 0, var );
 }
 
 template<size_t dim>
 template<VARIABLE_TYPE ty,PLACEMENT pl>
 void FiniteElementHelper<dim>::ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_t n, typename VariableTypeTraits<dim,ty>::VariableType& var )
 {
-  auto& interpolator = pimpl_->template GetInterpolator<pl,NODE>();
+  auto& interpolator = InterpolatorDispatch<pl,NODE>::GetInterpolator(*pimpl_);
   if (!pimpl_->interp_valid_[interpolator.type_]) {
     pimpl_->interp_valid_[interpolator.type_] = true;
     interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
   }
   
-  interpolator.Interpolate( prop, pimpl_->eptr_, n, 0, var );
+  interpolator.template Interpolate<dim,ty>( prop, pimpl_->eptr_, n, 0, var );
 }
 
   
@@ -543,13 +553,13 @@ void FiniteElementHelper<dim>::ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_
   template<VARIABLE_TYPE ty,PLACEMENT pl>
   void FiniteElementHelper<dim>::ReadAtFacetIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t facet, size_t fip, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
-    auto& interpolator = pimpl_->template GetInterpolator<pl,FACET_INTEGRATION_POINT>();
+    auto& interpolator = InterpolatorDispatch<pl,FACET_INTEGRATION_POINT>::GetInterpolator(*pimpl_);
     if (!pimpl_->interp_valid_[interpolator.type_]) {
       pimpl_->interp_valid_[interpolator.type_] = true;
       interpolator.Recalculate(pimpl_->eptr_, pimpl_->element_dim_);
     }
     
-    interpolator.Interpolate( prop, pimpl_->eptr_, facet, fip, var );
+    interpolator.template Interpolate<dim,ty>( prop, pimpl_->eptr_, facet, fip, var );
   }
   
   
