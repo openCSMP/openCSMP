@@ -214,6 +214,7 @@ void PropertyData_Test::run()
     _test( (dataset8 == dataset9) == true );
     // changing last element of ary1 to 4
     ary2(3) = 4.;
+    // comparing with that element in the array storage
     dataset9.Value( 1, 3 ) = 4.;
     _equal( ary2(3), dataset9.Value(1,3), numeric_limits<double64>::epsilon() );
    

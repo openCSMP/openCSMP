@@ -12,18 +12,24 @@ template<size_t> class StressesAndStrains;
 template<size_t> class Element;
 template<size_t> class Model;
 
-/// 2D stress & strain are output as tensor variables, if they
-/// are nodal variables they are extrapolated to the nodes in two
-/// application cycles
+/**
+    @brief 2D stress & strain are output as tensor variables, if they
+    are nodal variables they are extrapolated to the nodes in two
+    application cycles.
+    
+    @note Compressive strains and stresses are positive.
+    
+    @note the strain and stress component vectors are normalised to 1.
+*/
 template<>
 class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
   public:
     StressesAndStrains( const Model<2U> & sg, 
-                        const char* oper,   /// < Young's modulus
-                        const char* basic,  /// < Poisson's ratio
-                        const char* test,   /// < displacement
-                        bool  plane_strain,
-                        bool  principal_vectors ); // principal stresses and strains 
+                        const char* oper,   ///< Young's modulus
+                        const char* basic,  ///< Poisson's ratio
+                        const char* test,   ///< displacement
+                        bool  plane_strain, ///< stresses will be computed suppressing any displacement perpendicular to the 2D model
+                        bool  principal_vectors ); ///< compute principal stresses and strains
     
     /// get displacement values to compute {d} vector
     virtual void GetOperands( Element<2U>& );
@@ -47,11 +53,11 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
   private:
     const size_t  components_;  /// < stress strain components
     
-    csmp::Index strain_key_, stress_key_,                  /// < tensor variables
-               strain1_key_, strain2_key_, strain3_key_,  /// < vector<double64> variables (Eigenvectors)
-               sigma1_key_, sigma2_key_, sigma3_key_,
-               pstrain_key_, pstress_key_,                /// < principal strains / stresses (Eigenvalues)
-               means_key_, dilat_key_;                    /// < scalar variables
+    csmp::Index strain_key_, stress_key_,                 ///< tensor variables
+               strain1_key_, strain2_key_, strain3_key_,  ///< vector<double64> variables (Eigenvectors)
+               sigma1_key_, sigma2_key_, sigma3_key_,     ///< eigenvectors scaled to unit length
+               pstrain_key_, pstress_key_,                ///< principal strains / stresses (Eigenvalues)
+               means_key_, dilat_key_;                    ///< scalar variables
 
     DenseMatrix<DM_MIN>     DISPL_,
                             STRESS_, STRAIN_,

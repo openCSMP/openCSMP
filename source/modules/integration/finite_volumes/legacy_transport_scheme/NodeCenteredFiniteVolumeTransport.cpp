@@ -1528,6 +1528,9 @@ bool NodeCenteredFiniteVolumeTransport<dim>::FluxThroughBoundaryFiniteVolume(
             size_t iFacet( nd_ptr->Parent(t)->FV()->FacetSurroundingSector(nid,i) );
             // fluxes are determined for the sectors inside and outside of the advection region
             nd_ptr->Parent(t)->Read( vel_key_, vel );
+// SKM FIX - ignoring Face objects
+if ( dim == 2U and nd_ptr->Parent(t)->IsLineElement() ) continue;
+          
             if ( nid == nd_ptr->Parent(t)->FV()->InsideNode( iFacet ) )
                 flux += STENCIL_DATA[ nd_ptr->Parent(t)->Idx() ].FacetArea(iFacet) *
                         STENCIL_DATA[ nd_ptr->Parent(t)->Idx() ].FacetNormalProjection( iFacet, vel );
