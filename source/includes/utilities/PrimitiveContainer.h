@@ -99,7 +99,7 @@ class PrimitiveContainer
       const_iterator begin() const;
       const_iterator end() const;
 
-      // Only usable during mesh construction or after Assign().
+      /// Dereference operator. Only usable during mesh construction or after Assign().
       T& Index(size_t i);
       const T& Index(size_t i) const;
 
