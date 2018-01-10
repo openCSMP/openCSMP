@@ -1007,8 +1007,8 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     if ( remove_original_region ) {
          // NOTE: works, but then the VTU interface cannot output the boundary anymore
-         for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) model.Mesh().Erase( *(*eit) );
-         model.RemoveRegion( dim_1_region, false );
+         const bool delete_elements(true);
+         model.RemoveRegion( dim_1_region, delete_elements );
       }
    
     return patch_names.size();
