@@ -61,7 +61,7 @@ if(BUILD_TESTING)
     endif()
 
     ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
-    TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore ${SAMG_LIBRARIES})
+    TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
 	ENABLE_TESTING()
         ADD_TEST(
