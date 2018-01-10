@@ -200,8 +200,9 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bo
 
      if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
        if (facet_flux > 0) {
-         // XXX This is inefficient!
-         std::pair<double64,double64> cminmax(c_inside, c_inside);
+         // XXX Is this too inefficient?
+         std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                              -std::numeric_limits<double64>::max());
          for ( size_t iNeighbour=0U; iNeighbour < inside_node->Neighbors(); ++iNeighbour ) {
            const double64 c_neighbour(inside_node->Neighbor(iNeighbour)->Read( key_C ));
            cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -212,8 +213,9 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesInterior( bo
          eptr->Store( iFacet, 0u, User()->key_ffC, makeScalar(ffc_flag, c * facet_flux) );
        }
        else {
-         // XXX This is inefficient!
-         std::pair<double64,double64> cminmax(c_outside, c_outside);
+         // XXX Is this too inefficient?
+         std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                              -std::numeric_limits<double64>::max());
          for ( size_t iNeighbour=0U; iNeighbour < outside_node->Neighbors(); ++iNeighbour ) {
            const double64 c_neighbour(outside_node->Neighbor(iNeighbour)->Read( key_C ));
            cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -354,18 +356,6 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
           Element<dim>* const eptr(nd_ptr->Parent(t));
           assert( eptr != NULL );
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
-           
-          const double64 K(eptr->Read(User()->key_k));
-           if (isnan(K)) {
-             // XXX AJB HACK
-             // Deleting boundaries during model creation means you can't set
-             // properties during configuration. Retaining the boundaries means
-             // that they are still included in the parents of a node.
-             //
-             // For now, we skip over any element which doesn't have a
-             // permeability. They are not the flow domain.
-             continue;
-           }
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
@@ -485,8 +475,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
 
                    if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
                      if (facet_flux > 0) {
-                       // XXX This is inefficient!
-                       std::pair<double64,double64> cminmax(c_inside, c_inside);
+                       // XXX Is this too inefficient?
+                       std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                            -std::numeric_limits<double64>::max());
                        for ( size_t iNeighbour=0U; iNeighbour < inside_node->Neighbors(); ++iNeighbour ) {
                          const double64 c_neighbour(inside_node->Neighbor(iNeighbour)->Read( key_C ));
                          cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -497,8 +488,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
                        eptr->Store( iFacet, 0u, User()->key_ffC, makeScalar(ffc_flag, c * facet_flux) );
                      }
                      else {
-                       // XXX This is inefficient!
-                       std::pair<double64,double64> cminmax(c_outside, c_outside);
+                       // XXX Is this too inefficient?
+                       std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                            -std::numeric_limits<double64>::max());
                        for ( size_t iNeighbour=0U; iNeighbour < outside_node->Neighbors(); ++iNeighbour ) {
                          const double64 c_neighbour(outside_node->Neighbor(iNeighbour)->Read( key_C ));
                          cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -546,18 +538,6 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
          
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
            
-          const double64 K(eptr->Read(User()->key_k));
-           if (isnan(K)) {
-             // XXX AJB HACK
-             // Deleting boundaries during model creation means you can't set
-             // properties during configuration. Retaining the boundaries means
-             // that they are still included in the parents of a node.
-             //
-             // For now, we skip over any element which doesn't have a
-             // permeability. They are not the flow domain.
-             continue;
-           }
-
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
           const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
@@ -579,8 +559,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
 
             if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
               if (facet_flux > 0) {
-                // XXX This is inefficient!
-                std::pair<double64,double64> cminmax(c_inside, c_inside);
+                // XXX Is this too inefficient?
+                std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                     -std::numeric_limits<double64>::max());
                 for ( size_t iNeighbour=0U; iNeighbour < inside_node->Neighbors(); ++iNeighbour ) {
                   const double64 c_neighbour(inside_node->Neighbor(iNeighbour)->Read( key_C ));
                   cminmax.first = std::min(cminmax.first, c_neighbour);
@@ -590,8 +571,9 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O2_FluxesAtBounda
                 c = limitProperty( c_inside, c_outside, c_fip, cminmax );
               }
               else {
-                // XXX This is inefficient!
-                std::pair<double64,double64> cminmax(c_outside, c_outside);
+                // XXX Is this too inefficient?
+                std::pair<double64,double64> cminmax(+std::numeric_limits<double64>::max(),
+                                                     -std::numeric_limits<double64>::max());
                 for ( size_t iNeighbour=0U; iNeighbour < outside_node->Neighbors(); ++iNeighbour ) {
                   const double64 c_neighbour(outside_node->Neighbor(iNeighbour)->Read( key_C ));
                   cminmax.first = std::min(cminmax.first, c_neighbour);

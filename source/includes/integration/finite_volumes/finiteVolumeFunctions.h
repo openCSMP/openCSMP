@@ -75,25 +75,29 @@ public:
     void FiniteElement( Element<dim>* eptr );
     ~FiniteElementHelper();
 
-    // Normal of a facet, scaled by facet area
+    /// Normal of a facet, scaled by facet area
     Point<dim> NormalOfFacet( size_t iFacet );
 
-    // Gradient of a scalar node-based property
+    /// Gradient of a scalar node-based property
     Point<dim> ReadGradientAtBarycenter( const csmp::INDEX<SCALAR,NODE>& prop );
 
-    // Read scalar properties
+    /// Read a property at the barycenter of the FE
     template<VARIABLE_TYPE ty, PLACEMENT pl>
     void ReadAtBarycenter( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var );
 
+    /// Read a property at a node around the FE
     template<VARIABLE_TYPE ty, PLACEMENT pl>
     void ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_t n, typename VariableTypeTraits<dim,ty>::VariableType& var );
-
+  
+    /// Read a property at an element integration point
     template<VARIABLE_TYPE ty, PLACEMENT pl>
     void ReadAtElementIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
 
+    /// Read a property at a facet integration point
     template<VARIABLE_TYPE ty, PLACEMENT pl>
     void ReadAtFacetIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t facet, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
 
+    /// Read a property at a sector integration point
     template<VARIABLE_TYPE ty, PLACEMENT pl>
     void ReadAtSectorIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t sector, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
 
