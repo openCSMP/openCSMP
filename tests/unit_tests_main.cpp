@@ -36,6 +36,7 @@
 #include "Matrix_Test.h"
 #include "SparseMatrix_Test.h"
 #include "CompressedRowMatrix_Test.h"
+#include "FibonacciHeap_Test.h"
 
 #include "Point_Test.h"
 #include "Node_Test.h"
@@ -207,12 +208,13 @@ int main()
               basic.addTest( new ArrayVariable_Test());
               // basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
 
-              // Math utilities tests
+              // utilities tests
               basic.addTest( new Matrix_Test(verbose) );
               basic.addTest( new DenseMatrix_Test(verbose) );
               basic.addTest( new SparseMatrix_Test(verbose) );
               basic.addTest( new CompressedRowMatrix_Test() );
               basic.addTest( new CubicSpline_Test() );
+              basic.addTest( new FibonacciHeap_Test() );
 
               basic.addTest( new FiniteVolumeStencil_Test(verbose));
               // also compares speed of mapping facet areas and normals versus computing them

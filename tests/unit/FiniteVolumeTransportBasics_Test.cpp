@@ -452,11 +452,11 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         advector.Divergence( "velocity", "nodal flux mismatch" );
 #endif
       
-#if 0
+#if 1
         ExplicitTransport<3U> advector(model, "Model", true);
         advector.StepSizeReductionFactor(1.0);
 #endif
-#if 1
+#if 0
       CSMP_DEFAULT_LINEAR_SOLVER solver;
 
       ImplicitTransport<3U> advector(solver, model, "Model", true);

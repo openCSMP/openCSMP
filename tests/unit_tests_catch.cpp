@@ -28,6 +28,7 @@
 #include "SparseMatrix_Test.h"
 #include "CompressedRowMatrix_Test.h"
 #include "ColorPalette_Test.h"
+#include "FibonacciHeap_Test.h"
 
 #include "Point_Test.h"
 #include "Node_Test.h"
@@ -106,6 +107,7 @@ TEST_CASE("Auxiliary tests", "[Auxiliaries]") {
     SIMPLE_TEST_SECTION(CommandLineParser)
     SIMPLE_TEST_SECTION(IsnanIsinf)
     SIMPLE_TEST_SECTION(ColorPalette)
+    SIMPLE_TEST_SECTION(FibonacciHeap)
 }
 
 TEST_CASE("Variable database tests", "[Variables]") {
