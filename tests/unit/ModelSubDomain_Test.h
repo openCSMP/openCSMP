@@ -11,6 +11,7 @@
 
 #include "Test.h"
 #include "ModelSubDomain.h"
+#include "CSMP_mathUtilities.h"
 
 namespace csmp {
 
@@ -170,6 +171,8 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
          for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
+std::cerr <<"\n"<< (*it)->Idx() <<": ";
+out(nodes);
          plist_entries2.insert( move(nodes) );
       }
     // comparing plists

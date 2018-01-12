@@ -39,7 +39,7 @@ void RhinoMesh_Example::Specifications()
   AddDescription( "source in: RhinoMesh_Example.cpp" );
   AddDescription( "3D fracture-only flow & transport simulation using Rhino meshes as input" );
   AddDescription( "transport is computed with the higher-order theta-limited implicit scheme" );
-  AddRequirement( "file set: 'example20'");
+  AddRequirement( "file set: 'fault1'; variables file: 'example20.txt'");
 } 
 
 
