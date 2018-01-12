@@ -5,14 +5,12 @@ namespace csmp {
 
   template<size_t dim, template<size_t> class REGION_COMPLEX>
   RegionInterface<dim,REGION_COMPLEX>::RegionInterface()
-   : masterRegion_("All Elements")
   {}
 
   template<size_t dim, template<size_t> class REGION_COMPLEX>
   RegionInterface<dim,REGION_COMPLEX>::RegionInterface( const RegionInterface& re )
   : uniqueGroupMap_( re.uniqueGroupMap_ ),
-    groupMap_( re.groupMap_ ),
-    masterRegion_( re.masterRegion_ )
+    groupMap_( re.groupMap_ )
   {}
 
   template<size_t dim, template<size_t> class REGION_COMPLEX>
@@ -20,22 +18,6 @@ namespace csmp {
   {}
   
   
-/// non-unique root region that includes all elements so that other regions can be constructed from it
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void  RegionInterface<dim,REGION_COMPLEX>::MasterRegion( const std::string region_from_which_others_will_be_constructed )
- {
-    masterRegion_ = region_from_which_others_will_be_constructed;
- }
-    
-/// returns region that is used for the construction of other regions
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-std::string  RegionInterface<dim,REGION_COMPLEX>::MasterRegion() const
- {
-    return masterRegion_;
- }
-
-
-
   template<size_t dim, template<size_t> class REGION_COMPLEX>
   typename std::map<std::string,csmp::Region<dim> >::iterator  RegionInterface<dim,REGION_COMPLEX>::UniqueRegionsBegin()
     { return uniqueGroupMap_.begin(); }
@@ -150,32 +132,6 @@ Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::Region( const std::string& re
  }
 
 
-/** 
-    Read-only access to root region from which all elements are formed.
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-const Region<dim>&  RegionInterface<dim,REGION_COMPLEX>::AllElementRegion() const
- {
-    if ( masterRegion_.empty() )
-      throw csmp::Exception( ERROR,
-                             "RegionsInterface<dim,REGION_COMPLEX>::AllElementRegion:",
-                              masterRegion_, "appears to not have been initialized." );
-
-    // first a look in the unique group list
-    typename std::map<std::string,csmp::Region<dim> >::const_iterator  iter(groupMap_.find(masterRegion_) );
-    if ( iter != groupMap_.end() )
-        return (*iter).second;
-    else
-        throw csmp::Exception( ERROR,
-                               "RegionsInterface<dim,REGION_COMPLEX>::AllElementRegion: ",
-                               (std::string("region does not exist: ") + masterRegion_) );
-
-    return Region(masterRegion_);
- }
-
-
-
-
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool  RegionInterface<dim,REGION_COMPLEX>::IsUnique( const std::string& region_name ) const
   {
@@ -200,6 +156,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::ContainsRegion( const std::string& reg
 
 
 
+#if 0
 /**
     Forms non-unique user-defined region by graph traversal, relying only on node-to-parent element connections.
 
@@ -251,6 +208,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
    
     return true;
  }
+#endif
 
 
 
@@ -306,6 +264,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManager( bool model_is_unique )
  {
+#if 0
     REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
    
     std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
@@ -317,6 +276,7 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                                                  static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) ) ;
     if( newModelRegion.second )
         (*newModelRegion.first).second.Accumulate( regionComplex->Mesh().ElementsBegin(), regionComplex->Mesh().ElementsEnd() );
+#endif
 }
 
 
@@ -435,6 +395,8 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      // 1. writing the "All Elements" master region that will later need to be read first
      // ---------------------------------------------------------------------------------
      size_t records(1U);
+   // XXX AJB This needs to be done in a non-region way
+#if 0
      const typename std::map<std::string,csmp::Region<dim> >::const_iterator allElmts(groupMap_.find(masterRegion_));
      // one record
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
@@ -443,6 +405,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      // 2. writing the values ofthe variables associated with the region
      domainVariablesOut( fp, (*allElmts).second, database );
      std::cout << masterRegion_ <<", unique regions: ";
+#endif
 
      // -----------------------------
      // 2. writing the unique regions
@@ -467,11 +430,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      records = this->Regions() - this->UniqueRegions() - 1U;
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
-     for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
-           git=RegionsBegin(); git!=RegionsEnd(); git++ )
-       // master region was already written above
-       if ( (*git).first != masterRegion_ )
-         {
+     for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             domainVariablesOut( fp, (*git).second, database );
             std::cout << (*git).first <<" ";
@@ -528,6 +487,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
    
      // there should just be the region of interest, else something is wrong
      SubDomainInfo  info;
+#if 0
      if ( records == 1 ) {
          readDomainIndexesFromBinaryFile( fp, info );
          // if the region info record is not empty the region is reconstructed
@@ -547,6 +507,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
        }
      else csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                              masterRegion_.c_str(), "inconsistent binary record for region; no data could be read." );
+#endif
    
      // getting a reference to this newly created master region
      std::cout <<"\n\tunique regions: ";
@@ -592,7 +553,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              // reading name and element indices for each unique region
              readDomainIndexesFromBinaryFile( fp, info );
              // if the region info record is not empty the region is reconstructed
-             if ( info.name != masterRegion_ and !info.interior_elmts.empty() ) {
+             if ( !info.interior_elmts.empty() ) {
                  std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
                    it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
                  //   ^^^^^^^^^
@@ -731,18 +692,14 @@ void RegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary( const char* fil
           domainVariablesOut( fp, (*git).second, database );
        }
 
-     // --------------------------------------------------------
-     // writing non-unique regions, except for the master region
-     // --------------------------------------------------------
-     // number of non-unique groups (-1) because the "All Elements" will be omitted
-     records = this->Regions() - this->UniqueRegions() - 1U;
+     // --------------------------
+     // writing non-unique regions
+     // --------------------------
+     records = this->Regions() - this->UniqueRegions();
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
-     for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
-           git=RegionsBegin(); git!=RegionsEnd(); git++ )
+     for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
        // avoiding the region which is the master region since it was already written before
-       if ( (*git).first != masterRegion_ )
-         {
            skm_C_fwrite( fp, (*git).first.c_str() );
            (*git).second.MemberElementIndexes( elmtIDs );
            skm_C_fwrite( fp, elmtIDs );
@@ -825,12 +782,6 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* file_name )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    // does this region already exist
-    if ( !ContainsRegion(masterRegion_.c_str()) ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
-                            masterRegion_, "that all the regions shall be created from is missing; nothing can be done." );
-         return;
-      }
 
     REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
     const PropertyDatabase<dim>& database( static_cast<const REGION_COMPLEX<dim>& >(*this).Database() );
@@ -855,10 +806,12 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      skm_C_fread( fp, text );    // name of region
      skm_C_fread( fp, elmtIDs ); // element indices
      // TODO: deal with this redundant step although it does not affect many variable values
+#if 0
+   // XXX AJB FIXME
      domainVariablesIn( fp, this->Region(masterRegion_), database );
+#endif
 
-     // getting the master region that contains all elements and nodes of the model
-     const csmp::Region<dim>&  gref(AllElementRegion());
+     auto& meshmgr = regionComplex.Mesh();
 
      // ------------------
      // unique regions
@@ -880,7 +833,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                    it=uniqueGroupMap_.insert( std::make_pair( text, binRegion ) );
                  //   ^^^^^^^^^^^^^^^
                  if ( it.second )
-                   (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), elmtIDs );
+                   (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), elmtIDs );
 
                  if ( (*it.first).second.Elements() == 0U ) {
                       uniqueGroupMap_.erase( it.first );
@@ -903,7 +856,6 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
            skm_C_fread( fp, elmtIDs );
            csmp::Region<dim> binRegion( text, database );
            // the master region should not have been stored to disk via the corresponding append to binary function
-           assert( masterRegion_ != text );
            domainVariablesIn( fp, binRegion, database );
 
            if ( !elmtIDs.empty() ) {
@@ -911,7 +863,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                it=groupMap_.insert( std::make_pair( text, binRegion ) );
              //   ^^^^^^^^^
              if ( it.second )
-               (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), elmtIDs );
+               (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), elmtIDs );
 
              if ( (*it.first).second.Elements() == 0U ) {
                this->groupMap_.erase( it.first );
@@ -990,7 +942,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                                   "method can only be applied to SCALAR variables", 
                                   "no assignments were made" );
 
-       const csmp::Region<dim>&        gref(AllElementRegion());
+       auto& meshmgr = regionComplex->Mesh();
        std::map<double64,std::string>  groups;
        ScalarVariable                  sc;
      
@@ -999,27 +951,24 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
        switch( prop_key.place )
          {
             case NODE:
-                for ( typename std::vector<csmp::Node<dim>*>::const_iterator
-                      nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
+                for ( auto nit=meshmgr.NodesBegin(); nit!=meshmgr.NodesEnd(); nit++ )
                   {
-                     (*nit)->Read( prop_key, sc );
+                     nit->Read( prop_key, sc );
                      groups[ sc() ] = "undefined";
                   }
                 break;
             case ELEMENT_INTEGRATION_POINT: 
-                for ( typename std::vector<csmp::Element<dim>*>::const_iterator
-                      eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
-                  for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+                for ( auto eit=meshmgr.ElementsBegin(); eit!=meshmgr.ElementsEnd(); eit++ )
+                  for ( size_t i=0U; i<eit->IntegrationPoints(); i++ )
                     {
-                       (*eit)->Read( i, prop_key, sc );
+                       eit->Read( i, prop_key, sc );
                        groups[ sc() ] = "undefined";
                     }
                 break;
-            case ELEMENT: 
-                for ( typename std::vector<csmp::Element<dim>*>::const_iterator
-                      eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+            case ELEMENT:
+                for ( auto eit=meshmgr.ElementsBegin(); eit!=meshmgr.ElementsEnd(); eit++ )
                   {
-                     (*eit)->Read( prop_key, sc );
+                     eit->Read( prop_key, sc );
                      groups[ sc() ] = "undefined";
                   }
                 break;
@@ -1123,9 +1072,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       if ( it.second )
         {
           constraints.InitializePropertyIndices( regionComplex->Database() );
-        
-          const csmp::Region<dim>&  gref(AllElementRegion());
-          (*it.first).second.AccumulateWithinRange( gref.ElementsBegin(), gref.ElementsEnd(), constraints );
+          auto& meshmgr = regionComplex->Mesh();
+          (*it.first).second.AccumulateWithinRange( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), constraints );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -1218,9 +1166,10 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       if ( it.second )
         {
-          const csmp::Region<dim>&  gref(AllElementRegion());
-          (*it.first).second.AccumulateWithinRange( gref.ElementsBegin(), 
-                                                    gref.ElementsEnd(), 
+          REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
+          auto& meshmgr = regionComplex->Mesh();
+          (*it.first).second.AccumulateWithinRange( meshmgr.ElementsBegin(),
+                                                    meshmgr.ElementsEnd(),
                                                     prop, min, max );
     
           // removing the group if it contains no elements
@@ -1265,8 +1214,9 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
         it = groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
 
       if ( it.second ) {
-          const csmp::Region<dim>&  gref(AllElementRegion());
-          (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), element_ids );
+          REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
+          auto& meshmgr = regionComplex->Mesh();
+          (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), element_ids );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -1381,7 +1331,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       // 2. assigning the regions to groups in the Model
       std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom: Forming the regions: ";
-      const csmp::Region<dim>&  gref(AllElementRegion());
+      REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
+      auto& meshmgr = regionComplex->Mesh();
 
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1403,7 +1354,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                       back_inserter(element_ids) );
                     
                 // assigning the element IDs to the group & cleaning up
-                (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), element_ids );
+                (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), element_ids );
                 element_ids.erase( element_ids.begin(), element_ids.end() );
     
                 // removing the group if it contains no elements
@@ -1505,7 +1456,7 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-      if ( std::string("Model") == group or masterRegion_ == group ) {
+      if ( std::string("Model") == group ) {
          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
                            "this operation is not allowed for region 'Model' or the master region." );
             return 0U;
@@ -1579,7 +1530,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
         }
 
       // if the region has been partitioned succesfully and its name is not model, it will be removed
-      if ( IsUnique(group) && !(strncmp( group, masterRegion_.c_str(), NAME_STRING ) == 0) )
+      if ( IsUnique(group) )
         RemoveRegion( group, false );
 
       return n_subgroups;
@@ -1602,9 +1553,9 @@ template<size_t dim, template<size_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegionsByIdx( const char* group )
    {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-      if ( std::string("Model") == group or masterRegion_ == group ) {
+      if ( std::string("Model") == group  ) {
          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegionsByIdx:",
-                           "this operation is not allowed for region 'Model' or the master region." );
+                           "this operation is not allowed for region 'Model'." );
             return 0U;
         }
       // the region gref remains intact
@@ -1853,14 +1804,15 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
         }
     
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
+     REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+
       // the 'bool' member of pair indicates whether insertion into map worked or not
       std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-      it = groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
+      it = groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, regionComplex->Database()) ) );
       if ( it.second )
         {
-          const csmp::Region<dim>&  gref(AllElementRegion());
-          (*it.first).second.AccumulateRectangularRegion( gref.ElementsBegin(), gref.ElementsEnd(), min_xyz, max_xyz );
+          auto& meshMgr = regionComplex->Mesh();
+          (*it.first).second.AccumulateRectangularRegion( meshMgr.ElementsBegin(), meshMgr.ElementsEnd(), min_xyz, max_xyz );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -2007,8 +1959,9 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
       typename std::map<std::string,csmp::Region<dim> >::const_iterator  iter;
     
       // renumbering elements and nodes of model
-      const csmp::Region<dim>&  gref = AllElementRegion();
-      gref.UpdateMemberIndexes();
+       REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+       auto& meshMgr = regionComplex->Mesh();
+       regionComplex->UpdateIndices();
     
       // collecting element indexes from input groups into set for output
       std::vector<size_t>  element_ids;
@@ -2036,7 +1989,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
              throw csmp::Exception( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                                     output_region.c_str(), "region could not be formed." );
                            
-           else (*it.first).second.AccumulateByNumber( gref.ElementsBegin(), gref.ElementsEnd(), element_ids );
+           else (*it.first).second.AccumulateByNumber( meshMgr.ElementsBegin(), meshMgr.ElementsEnd(), element_ids );
         }
       else
       throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions", 
