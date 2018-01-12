@@ -105,6 +105,9 @@ bool areFartherApartThan( const double64* pn, const double64* pw, double64 dista
 
 /// Returns true if file on ifstream is empty.
 bool isInputFileEmpty( std::ifstream& file );
+  
+/// find all elements in a model that contact eachother across split interfaces and are node-matched
+bool splitInterfaceElements( const Region<3U>&, std::set<std::pair<Element<3U>,Element<3U> > >& );
 
 /// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
 template<size_t dim>
