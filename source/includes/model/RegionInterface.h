@@ -37,10 +37,6 @@ namespace csmp {
   is either unique or non-unique, depending on whether there are other unique regions
   (in this latter case it is non-unique).
 
-  @attention region construction is performed starting with a master region that is created 
-  directly from the MeshManager. This region called 'All Elements' can be set but is hidden in the sense of C++
-  encapsulation and implementation hiding.
-  
   @attention there is a second "fixed" master region that is always there. It is always called "Model" and
   its purpose is as the default computational domain, i.e. when you compute something on the mdel
   this region called "Model" will include all parts of the model's computational domain.
@@ -87,15 +83,6 @@ class RegionInterface
     /// returns reference to region
     csmp::Region<dim>&  Region( const std::string& region_name );
     
-    /// non-unique root region that includes all elements so that other regions can be constructed from it
-    void MasterRegion( const std::string region_from_which_others_will_be_constructed );
-    
-    /// returns region that is used for the construction of other regions
-    std::string  MasterRegion() const;
-    
-    /// accesses master region that should contain all elements
-    const csmp::Region<dim>&  AllElementRegion() const;
-
     /// checks whether the region is space exclusive, i.e. does not contain any other regions
     bool IsUnique( const std::string& regionname ) const;
 
@@ -153,9 +140,6 @@ class RegionInterface
     // -----------------------------------------------
     // Regions creation
     // -----------------------------------------------
-    
-    /// initialises the root region from which all other regions are created
-    bool CreateNonUniqueMasterRegionFromRootNode( bool reestablishNeighborConnectivity );
     
     /// forms non-unique region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
     bool CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity=true );
@@ -253,8 +237,6 @@ class RegionInterface
     /// creates a region that contains all elements of the model
     void CreateOverallModelRegionFromMeshManager( bool model_is_unique );
 
-    // TODO: discuss with team whether the 'All Elements' region is needed
-    std::string                               masterRegion_;   ///< 'All Elements' (non-unique) region for forming other regions rather than region 'Model' that may be a subset 
     std::map<std::string,csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap
     std::map<std::string,csmp::Region<dim> >  groupMap_;       ///< map of potentially overlapping regions
 

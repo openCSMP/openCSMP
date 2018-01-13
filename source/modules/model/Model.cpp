@@ -36,9 +36,9 @@ namespace csmp {
 */
 template<size_t dim>
 Model<dim>::Model()
-  : database_(),
+  : model_name_("undefined"),
+    database_(),
     fvStencilManager_(nullptr),
-    model_name_("undefined"),
     verbose_(true)
   {
   }
@@ -54,9 +54,9 @@ Model<dim>::Model()
 */
 template<size_t dim>
 Model<dim>::Model( const std::string& varFile, bool binary )
-  : database_( varFile.c_str(), binary ),
+  : model_name_("undefined"),
+    database_( varFile.c_str(), binary ),
     fvStencilManager_(nullptr),
-    model_name_("undefined"),
     verbose_(true)
 {
    InitializeLocalVariableStorage();
@@ -71,8 +71,8 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 */
 template<size_t dim>
 Model<dim>::Model( const std::string& binaryFileNames )
-  : database_( BinaryVariablesFileName(binaryFileNames.c_str()).c_str(), true ),
-    model_name_(binaryFileNames),
+  : model_name_(binaryFileNames),
+    database_( BinaryVariablesFileName(binaryFileNames.c_str()).c_str(), true ),
     fvStencilManager_(nullptr)
 {
   InitializeLocalVariableStorage();
@@ -101,8 +101,8 @@ Model<dim>::Model( const std::string& binaryFileNames )
 */
 template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements, bool binaryVariablesFile )
-  : database_( var_file, binaryVariablesFile ),
-    model_name_("undefined"),
+  : model_name_("undefined"),
+    database_( var_file, binaryVariablesFile ),
     fvStencilManager_(nullptr),
     verbose_(true)
  {
@@ -115,8 +115,8 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_ele
 
 template<size_t dim>
 Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
-  : database_(),
-    model_name_("undefined"),
+  : model_name_("undefined"),
+    database_(),
     fvStencilManager_(nullptr)
  {
     Initialize( isoparametric_elements, vset,
@@ -168,9 +168,9 @@ Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
 template<size_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file,
                    bool binaryVariablesFile, bool create_boundary_objects, bool box_shaped )
- : database_( var_file, binaryVariablesFile ),
+ : model_name_("undefined"),
+   database_( var_file, binaryVariablesFile ),
    fvStencilManager_(nullptr),
-   model_name_("undefined"),
    verbose_(true)
  {
     Initialize( mesh_topology, vset,
@@ -275,12 +275,11 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
-    // 4. forming unique root Region called "All Elements" as well as default computational domain called "Model"
+    // 4. forming default computational domain called "Model"
     const bool withNeighborConnectivity(true);
-    const bool valid_master_region = this->CreateNonUniqueMasterRegionFromRootNode( withNeighborConnectivity );
-    assert( valid_master_region );
-    const bool place_copy_in_unique_regions( (mesh_topology.ModelRegions()==0) );
-    this->CopyRegion( "All Elements", "Model", place_copy_in_unique_regions );
+    const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
+    const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
+    assert( valid_model_region );
 
     // 5. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
@@ -371,11 +370,11 @@ void Model<dim>::Initialize( bool isoparametric_elements,
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
-    // 2. forming unique root Region called "All Elements"
+    // 2. forming root Region called "Model"
     const bool withNeighborConnectivity(true);
-    this->CreateNonUniqueMasterRegionFromRootNode( withNeighborConnectivity );
-    const bool place_copy_in_unique_regions(true);
-    this->CopyRegion( "All Elements", "Model", place_copy_in_unique_regions );
+    const bool place_in_unique_regions(true);
+    const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
+    assert(valid_model_region);
 
     // 3. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
@@ -540,9 +539,12 @@ template<size_t dim>
 template<class Var>
 void  Model<dim>::OutputVariableTo( const char* out_var, FEM_Data<Var>& data ) const
  {
+   throw csmp::Exception(ERROR, "Model::OutputVariableTo", out_var, "NYI");
+#if 0
     this->Region(this->MasterRegion().c_str()).OutputVariableTo( out_var, data );
- } // end OutputVariableTo
+#endif
 
+ } // end OutputVariableTo
 
 template void Model<1U>::OutputVariableTo( const char*, FEM_Data<ScalarVariable>& ) const;
 template void Model<1U>::OutputVariableTo( const char*, FEM_Data<VectorVariable<1U> >& ) const;

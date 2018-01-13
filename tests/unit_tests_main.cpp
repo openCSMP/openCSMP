@@ -1,3 +1,6 @@
+// Disable wingdi.h because it steps on our toes
+#define NOGDI
+
 #include <iostream>
 #include <string>
 

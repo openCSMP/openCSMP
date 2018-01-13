@@ -65,6 +65,7 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
 	${MODULES_DIR}/thmc/mechanics/*.old.cpp
+	${MODULES_DIR}/thmc/two_phase_flow/*.new.cpp
 )
 LIST(REMOVE_ITEM CSMP_CORE_SOURCE_FILES ${CSMP_CORE_SOURCE_EXCLUSIONS} )
 

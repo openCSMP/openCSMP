@@ -17,7 +17,7 @@ namespace csmp {
 template<size_t> class Element;
 template<size_t> class Region;
 template<size_t> class Model;
-
+  
 ///
 /**
     @brief 2-phase flow functions
@@ -42,8 +42,7 @@ template<size_t> class Model;
     Code serves as an example of how static polymorphism can be used to implement constitutive relationships for multiphase flow.
 */
 template<size_t dim>
-FlowFunctions : public VariableSet2PhaseSlightlyCompressible,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-                public InitialisationPolicy<dim,FlowFunctions>,            ///< reading and interpolating variable values
+class FlowFunctions : public VariableSet2PhaseSlightlyCompressible,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
                 public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
                 public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
   public:
@@ -52,7 +51,7 @@ FlowFunctions : public VariableSet2PhaseSlightlyCompressible,              ///< 
     // INITIALISATION (relperm models etc.) - maybe put this into a separate policy
                 
     /// reads region and element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement
-    void Initialize( const Region<dim>& const Element<dim>& e );
+    void Initialize( const Region<dim>&, const Element<dim>& e );
     
     /// interpolates node properties to element barycenter
     void InitializeForBaryCenter( const Element<dim>& e );
@@ -130,7 +129,7 @@ FlowFunctions : public VariableSet2PhaseSlightlyCompressible,              ///< 
                 mu1_key_, mu2_key;           ///< dynamic fluid viscosities (Pa.s)
   
     double64  P_, T_, sw_;
-    double64  rhow_; rhon_, muw_, mun_;
+    double64  rhow_, rhon_, muw_, mun_;
     
 };
 

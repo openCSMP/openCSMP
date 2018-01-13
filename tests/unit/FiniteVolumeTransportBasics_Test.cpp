@@ -104,8 +104,8 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
     velocity_direction.NormalizeLengthTo(1.0);
 
     ScalarVariable k(PLAIN, target_k);
-    
-    const auto& model_domain = model.AllElementRegion();
+  
+    const auto& model_domain = model.Region("Model");
 
     for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
         (*it)->Store(K_key, k);
