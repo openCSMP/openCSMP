@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "LocalVariableStorage.h"
 #include "PrimitiveContainer.h"
+#include "Event.h" 
 
 namespace csmp {
 
@@ -42,7 +43,8 @@ Elements are registered as parents, Faces and InterFaces are not.
  
 */
 template<size_t dim>
-class Node : public LocalVariableStorage<dim,Node<dim> >
+class Node : public LocalVariableStorage<dim,Node<dim> >,
+             public Event
 // TODO: class Node : public LocalVariableStorage<dim,Node>
   {
   public:
