@@ -2679,7 +2679,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
    
     vset.OutputTo( BinaryVsetFileName(file_string).c_str(), model_time );
 
-    // 3. regions: "All Elements" region first appending the unique and then the non-unique regions
+    // 3. regions: unique and then the non-unique regions
     this->OutputAllRegionsToBinary( BinaryRegionsFileName(file_string).c_str() );
    
     // 4. boundaries "All Faces"
