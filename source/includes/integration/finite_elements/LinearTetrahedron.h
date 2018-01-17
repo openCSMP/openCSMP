@@ -2,7 +2,6 @@
 #define LINEAR_TETRAHEDRON_H
 
 #include "FiniteElement.h"
-#include "Element.h"
 
 namespace csmp {
 

@@ -1,4 +1,5 @@
 #include "LinearTetrahedron.h"
+#include "TriangularFacet.h"
 
 using namespace std;
 
