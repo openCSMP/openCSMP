@@ -88,6 +88,9 @@
 #include "GenericFiniteVolumeTransport_Test.h"
 #include "FiniteVolumeTransportBasics_Test.h"
 
+// new tests from SKM
+#include "ANSYS_SplitBoundaryMatch_Test.h"
+
 #include "Vset_TestCase.h"
 
 using namespace std;
@@ -96,8 +99,11 @@ using namespace csmp;
 TEST_CASE("Development tests", "[Dev]") {
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
+    ANSYS_SplitBoundaryMatch_Test  skm_test;
     FiniteVolumeTransportBasics_Test test;
+    
     // FiniteVolumeStencil_Test test;
+    skm_test.run();
     test.run();
 }
 

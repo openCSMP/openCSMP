@@ -90,6 +90,8 @@
 #include "TwoPhaseModel_TestSuite.h"
 #include "ExponentialTransferFunction_Test.h"
 
+#include "ANSYS_SplitBoundaryMatch_Test.h"
+
 using namespace std;
 using namespace csmp;
 
@@ -183,18 +185,24 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
 
+// skm 15/01/2018
+TEST_CASE("SplitBoundary creation from ANSYS models with split interfaces", "[Model]" ) {
+    SIMPLE_TEST_SECTION(SplitBoundary)
+ }
+
+
 
 int
 main()
 {
   const bool verbose(false);
 
-  const bool test_fundamentals(true),
-             test_interdependent1(true),
-             test_interdependent2(true),
-             test_composite(true),
+  const bool test_fundamentals(false),
+             test_interdependent1(false),
+             test_interdependent2(false),
+             test_composite(false),
              test_refactoring(false),
-             test_new_developments(false);
+             test_new_developments(true);
   
   long fails_fundamentals(0),
        fails_interdependent1(0),
@@ -207,8 +215,8 @@ main()
     
     // Run Catch tests.
     {
-        Catch::Session session;
-        session.run();
+//        Catch::Session session;
+//        session.run();
     }
 
 
@@ -282,7 +290,6 @@ main()
           /// Two phase flow tests
           TwoPhaseModel_TestSuite twoPhaseModelTests( composite );
           twoPhaseModelTests.run();
-          composite.addTest( new ExponentialTransferFunction_Test() );
 
          // running unit tests and reporting errors
           composite.run();
@@ -292,6 +299,18 @@ main()
       }
 
 
+    if ( test_new_developments ) {
+          cout <<"\nX. new developmentyds: running tests..."<< endl;
+          TestSuite new_developments("CSMP-new-developments test suite", &cout );
+ 
+          new_developments.addTest( new ANSYS_SplitBoundaryMatch_Test() );
+
+         // running unit tests and reporting errors
+          new_developments.run();
+          nFail = new_developments.report();
+          new_developments.free();
+          cerr << "\nunit_tests_main: CSMP-new-developments: Total unit test failures: " << nFail << endl;
+      }
 
     } // Exception handling (warnings etc. are caught at a much lower level)
     catch( bad_alloc& ba ) {
