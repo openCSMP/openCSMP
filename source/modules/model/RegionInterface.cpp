@@ -350,69 +350,6 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
    } // end RemoveRegion
 
   
-#define BINARY_FILE_HDR_SIZE  8
-  
-  struct BinaryFileSectionRead {
-    BinaryFileSectionRead(FILE* fp, const char* header)
-      : fp_(fp)
-    {
-      char readhdr[BINARY_FILE_HDR_SIZE];
-      size_t hdrlen = strlen(header);
-      assert(hdrlen <= BINARY_FILE_HDR_SIZE);
-      memset(hdr_, 0, sizeof(hdr_));
-      memcpy(hdr_, header, std::min(hdrlen, (size_t)BINARY_FILE_HDR_SIZE));
-      fread(readhdr, sizeof(char), BINARY_FILE_HDR_SIZE, fp);
-      fread(&offset_, sizeof(offset_), 1, fp);
-      assert(!memcmp(hdr_, readhdr, BINARY_FILE_HDR_SIZE));
-      sectoffset_ = ftello(fp);
-    }
-    
-    ~BinaryFileSectionRead() {
-      long off = ftell(fp_);
-      if (off != offset_) {
-        throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
-      }
-    }
-    
-    char hdr_[BINARY_FILE_HDR_SIZE+1];
-    FILE* fp_;
-    long offset_, sectoffset_;
-  };
-  
-  struct BinaryFileSectionWrite {
-    BinaryFileSectionWrite(FILE* fp, const char* header)
-    : fp_(fp), committed_(false)
-    {
-      char hdr[8];
-      size_t hdrlen = strlen(header);
-      assert(hdrlen <= sizeof(hdr));
-      memset(hdr, 0, sizeof(hdr));
-      memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
-      fwrite(hdr, sizeof(char), sizeof(hdr) / sizeof(char), fp);
-      offset_ = ftell(fp);
-      fwrite(&offset_, sizeof(offset_), 1, fp);
-    }
-    
-    void commit() {
-      if (!committed_) {
-        committed_ = true;
-        off_t off = ftello(fp_);
-        fseek(fp_, offset_, SEEK_SET);
-        fwrite(&off, sizeof(off), 1, fp_);
-        fseek(fp_, off, SEEK_SET);
-      }
-    }
-    
-    ~BinaryFileSectionWrite() {
-      commit();
-    }
-    
-    FILE* fp_;
-    long offset_;
-    bool committed_;
-  };
-
-
   // -----------------------------------------------
   // Binary input/output
   // -----------------------------------------------
@@ -433,12 +370,6 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
     const PropertyDatabase<dim>& database( regionComplex.Database() );
    
     std::string bin_file(file_name);
-    std::string heading("RegionInterface::OutputAllRegionsToBinary: ");
-    heading +="region information for Model '";
-    heading += regionComplex.Name();
-    heading +="' to file: ";
-    heading += bin_file;
-    heading +="'.";
 
     FILE*  fp(0);
     if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
@@ -446,11 +377,22 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
                             bin_file, "file could not be opened; nothing was done." );
          return;
       }
-     // writing the file header
-   {
-     BinaryFileSectionWrite hdr(fp, "REGFHEDR");
-     skm_C_fwrite( fp, heading.c_str() );
-   }
+   
+    // -----------------------------
+    // 1. File header
+    // -----------------------------
+    {
+      BinaryFileSectionWrite hdr(fp, "REGFHEDR");
+
+      std::string heading("RegionInterface::OutputAllRegionsToBinary: ");
+      heading +="region information for Model '";
+      heading += regionComplex.Name();
+      heading +="' to file: ";
+      heading += bin_file;
+      heading +="'.";
+
+      skm_C_fwrite( fp, heading.c_str() );
+    }
 
      std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary: regions written to binary file: ";
      std::cout << "Unique regions: ";
@@ -458,30 +400,32 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      // -----------------------------
      // 2. writing the unique regions
      // -----------------------------
-     // writing number of unique regions
-     size_t records = this->UniqueRegions();
-   {
-     BinaryFileSectionWrite hdr(fp, "UNIQREGN");
+    {
+      BinaryFileSectionWrite hdr(fp, "UNIQREGN");
+      
+      size_t records = this->UniqueRegions();
 
-     fwrite( (void*) &records, sizeof(size_t), 1, fp );
+      // writing number of unique regions
+      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
-     for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
+      for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
            git=UniqueRegionsBegin(); git!=UniqueRegionsEnd(); ++git )
        {
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";
        }
-   }
+    }
      std::cout <<", non-unique (potentially overlapping) regions: ";
 
      // -----------------------------
      // 3. writing non-unique regions
      // -----------------------------
-     records = this->Regions() - this->UniqueRegions();
    {
      BinaryFileSectionWrite hdr(fp, "NONUREGN");
      
+     size_t records = this->Regions() - this->UniqueRegions();
+
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
      for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
@@ -492,17 +436,24 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      std::cout << std::endl;
    }
    
+   // -----------------------------
+   // 3. writing model variables
+   // -----------------------------
    {
      BinaryFileSectionWrite hdr(fp, "MODLVARS");
 
      // writing the Model variables here TODO: check for correctness
      domainVariablesOut( fp, regionComplex, database );
    }
+   
+   // -----------------------------
+   // 4. writing file footer
+   // -----------------------------
    {
      BinaryFileSectionWrite hdr(fp, "REGFFOTR");
    }
 
-    // 6. cleaning up
+    // 5. clean up
     fclose( fp );
     std::cout <<"\nRegionInterface<"<< dim <<",REGION_COMPLEX>::OutputAllRegionsToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
@@ -536,32 +487,31 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
           return;
        }
 
-     // reading the file header and printing it to screen
-     char  text[500U];
+     // 1. File header
      {
        BinaryFileSectionRead hdr(fp, "REGFHEDR");
+       char  text[500U];
+
        skm_C_fread( fp, text );
+       std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary: Reading file header:\n\t"<< text << std::endl;
      }
-     std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary: Reading file header:\n\t"<< text << std::endl;
      std::cout <<"\n\timporting the regions: ";
    
-     // --------------------------------------------------------------------------------------
-     // 1. reading the "All Elements" master region that will be used to create all other ones
-     // --------------------------------------------------------------------------------------
      const PropertyDatabase<dim>& database( static_cast<const REGION_COMPLEX<dim>& >(*this).Database() );
    
      // getting a reference to this newly created master region
      std::cout <<"\n\tunique regions: ";
    
      // -----------------------------
-     // 2. reading the unique regions
+     // 2. unique regions
      // -----------------------------
-     // getting number of unique region records from file
-     SubDomainInfo  info;
-     size_t  records(0);  // region records
+   SubDomainInfo  info;
+
    {
      BinaryFileSectionRead hdr(fp, "UNIQREGN");
+     size_t  records(0);  // region records
 
+     // number of regions
      fread( (void*) &records, sizeof(size_t), 1, fp );
      if ( records > 0 )
         // reading the regions sequentially
@@ -594,6 +544,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      BinaryFileSectionRead hdr(fp, "NONUREGN");
 
      // getting number of non-unique region records from file
+     size_t records(0);
      fread( (void*) &records, sizeof(size_t), 1, fp );
      if ( records > 0 )
         // reading the regions sequentially
@@ -618,18 +569,28 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
                              bin_file, "does not contain any non-unique region descriptions; no regions were initialised." );
    }
    
+   // -----------------------------
+   // 4. reading model vars
+   // -----------------------------
+
    {
      BinaryFileSectionRead hdr(fp, "MODLVARS");
      
-     // readsing the Model variables here TODO: check for correctness
+     // reading the Model variables here TODO: check for correctness
      domainVariablesIn( fp, regionComplex, database );
    }
 
 
-    // 6. cleaning up
+   // -----------------------------
+   // 5. file footer
+   // -----------------------------
    {
      BinaryFileSectionRead hdr(fp, "REGFFOTR");
    }
+
+   // -----------------------------
+   // 6. cleanup
+   // -----------------------------
 
     fclose( fp );
     std::cout <<"\n\nRegionInterface<"<< dim <<",REGION_COMPLEX>::InputAllRegionsFromBinary: file '";
