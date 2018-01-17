@@ -15,7 +15,7 @@ bool skm_C_fwrite( FILE* fp, const char* str )
      fwrite( (void*) &characters, sizeof(size_t), 1, fp );
      
      // writing the character string
-     fwrite( (void*) str, sizeof(char) * characters, 1, fp );
+     fwrite( (void*) str, sizeof(char), characters, fp );
     
      return true;
  }

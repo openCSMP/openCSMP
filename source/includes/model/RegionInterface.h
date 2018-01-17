@@ -233,7 +233,6 @@ class RegionInterface
                                   std::vector<std::tuple<Element<dim>*,Element<dim>*,size_t,size_t> >& shared ) const;
 
   protected:
-  
     /// creates a region that contains all elements of the model
     void CreateOverallModelRegionFromMeshManager( bool model_is_unique );
 
