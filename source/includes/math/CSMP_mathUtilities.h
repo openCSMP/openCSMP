@@ -22,6 +22,16 @@ const double64 PI( 3.14159265358979324 );
 inline double64 degreesToRadians( double64 deg ) { return deg * PI/180.; }
 inline double64 radiansToDegrees( double64 rad ) { return rad * 180./PI; }
 
+
+inline double64
+quantiseToScale(double64 x, double64 scale)
+{
+    double ipart;
+    const double frac = std::modf(x, &ipart);
+    return ipart + scale * (int64_t)(frac / scale + 0.5);
+} 
+
+
 /**
 @}
 */
