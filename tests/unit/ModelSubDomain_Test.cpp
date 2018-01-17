@@ -62,7 +62,6 @@ void ModelSubDomain_Test::run()
          // TODO: numbering of boundary nodes does not seem to be correct
          vset.Out();
          //if ( verbose ) model1.Out();
-         //model1.Region("All Elements").Out();
         
          model1.OutputToBinaryFile("ModelSubDomain_Test");
         
@@ -74,7 +73,6 @@ void ModelSubDomain_Test::run()
          cerr <<"\nModelSubDomain_Test::run: model reconstructed from disk.";
          //if ( verbose ) model2.Out();
         
-         _test( CompareModelSubdomains( model1.Region("All Elements"), model2.Region("All Elements"), verbose ) );
          _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );
        }
     
@@ -282,9 +280,6 @@ void ModelSubDomain_Test::run()
         
          // bringing the model back from binary file
          Model<3U>  model2( string("ModelSubDomain_Test2") );
-
-         _test( CompareModelSubdomains( model1.Region("All Elements"),
-                                        model2.Region("All Elements"), verbose ) );
         
          _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );
 

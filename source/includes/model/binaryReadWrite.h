@@ -11,6 +11,38 @@ namespace csmp {
     @file binaryReadWrite.h
     */
 
+#define CSMP_BINARY_FILE_HDR_SIZE  8
+
+/// Helper class to read sections from a binary file
+class BinaryFileSectionRead
+{
+public:
+    BinaryFileSectionRead(FILE* fp, const char* header);
+
+    ~BinaryFileSectionRead();
+
+private:
+    char hdr_[CSMP_BINARY_FILE_HDR_SIZE+1];
+    FILE* fp_;
+
+    // fseek()/ftell() returns long
+    long offset_, sectoffset_;
+};
+
+
+/// Helper class to write sections to a binary file
+class BinaryFileSectionWrite {
+public:
+    BinaryFileSectionWrite(FILE* fp, const char* header);
+
+    ~BinaryFileSectionWrite();
+
+private:
+    FILE* fp_;
+    long offset_;
+};
+    
+
     /**
     @addtogroup CSMPglobalFunctions
     */
