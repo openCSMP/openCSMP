@@ -5422,14 +5422,14 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     skm_C_fwrite( fp, Name().c_str() );
    
     // 2. writing the interior element records of the region
-    std::vector<size_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin()) );
-    transform( ElementsBegin(), PerimeterElementsBegin(),
+    std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
+    transform( InteriorElementsBegin(), InteriorElementsEnd(),
                IDs.begin(), []( const SIMPLEX<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
-    IDs.resize( distance(PerimeterElementsBegin(), ElementsEnd()) );
-    transform( PerimeterElementsBegin(), ElementsEnd(),
+    IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
+    transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
                IDs.begin(), []( const SIMPLEX<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    

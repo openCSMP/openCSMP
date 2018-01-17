@@ -13,7 +13,8 @@ namespace csmp {
 */
 template<size_t dim>
 Node<dim>::Node()
-    : idx_(ULONG_MAX),
+    : Event(),
+      idx_(ULONG_MAX),
       at_boundary_(NOT)
   {
   }
@@ -25,7 +26,8 @@ Node<dim>::Node()
 */
 template<size_t dim>
 Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BOX_BOUNDARY boundary_flag )
- : LocalVariableStorage<dim,Node>(lvs),
+ : Event(),
+   LocalVariableStorage<dim,Node>(lvs),
    idx_(idx),
    xyz_(pt),
    at_boundary_(boundary_flag)

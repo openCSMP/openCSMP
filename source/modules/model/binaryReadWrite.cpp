@@ -1,4 +1,5 @@
 #include "binaryReadWrite.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ bool skm_C_fwrite( FILE* fp, const char* str )
      fwrite( (void*) &characters, sizeof(size_t), 1, fp );
      
      // writing the character string
-     fwrite( (void*) str, sizeof(char) * characters, 1, fp );
+     fwrite( (void*) str, sizeof(char), characters, fp );
     
      return true;
  }
@@ -50,6 +51,51 @@ bool skm_C_fread( FILE* fp, char str[] )
     
      return true;
  } 
+
+
+
+  BinaryFileSectionRead::BinaryFileSectionRead(FILE* fp, const char* header)
+      : fp_(fp)
+  {
+    char readhdr[CSMP_BINARY_FILE_HDR_SIZE];
+    size_t hdrlen = strlen(header);
+    assert(hdrlen <= CSMP_BINARY_FILE_HDR_SIZE);
+    memset(hdr_, 0, sizeof(hdr_));
+    memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
+    fread(readhdr, sizeof(char), CSMP_BINARY_FILE_HDR_SIZE, fp);
+    fread(&offset_, sizeof(offset_), 1, fp);
+    assert(!memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE));
+    sectoffset_ = ftell(fp);
+  }
+
+  BinaryFileSectionRead::~BinaryFileSectionRead()
+  {
+      long off = ftell(fp_);
+      if (off != offset_) {
+        throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
+      }
+  }
+
+  BinaryFileSectionWrite::BinaryFileSectionWrite(FILE* fp, const char* header)
+      : fp_(fp)
+  {
+    char hdr[8];
+    size_t hdrlen = strlen(header);
+    assert(hdrlen <= sizeof(hdr));
+    memset(hdr, 0, sizeof(hdr));
+    memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
+    fwrite(hdr, sizeof(char), sizeof(hdr) / sizeof(char), fp);
+    offset_ = ftell(fp);
+    fwrite(&offset_, sizeof(offset_), 1, fp);
+  }
+
+  BinaryFileSectionWrite::~BinaryFileSectionWrite()
+  {
+      long off = ftell(fp_);
+      fseek(fp_, offset_, SEEK_SET);
+      fwrite(&off, sizeof(off), 1, fp_);
+      fseek(fp_, off, SEEK_SET);
+  }
  
  
 } // end namespace csmp

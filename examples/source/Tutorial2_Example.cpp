@@ -14,6 +14,7 @@
 // FV algorithms
 #include "ExplicitNodeCenteredFiniteVolumeTransport.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
+#include "DESTransport.h"
 
 // output interfaces
 #include "VTK_Interface.h"
@@ -115,7 +116,9 @@ void Tutorial2_Example::Run()
     // assigning initial conditions
     model.InputPropertyValue( "fluid pressure",        makeScalar(PLAIN,1.0e+07) );  // always in Pascal
     model.InputPropertyValue( "fluid volume source",   makeScalar(PLAIN,0.0) );      // no sources/sinks (units m3 m-2 s-1)
+    model.InputPropertyValue( "nodal fluid volume source",   makeScalar(PLAIN,0.0) ); 
     model.InputPropertyValue( "concentration",         makeScalar(PLAIN,1.0) );      // initially one (units kg m-3)
+    model.InputPropertyValue( "new concentration",     makeScalar(PLAIN,0.0) );
     model.InputPropertyValue( "concentration source",  makeScalar(PLAIN,0.0) );      // no sources/sinks for solute (units kg m-3 s-1)
 
 
@@ -223,7 +226,9 @@ void Tutorial2_Example::Run()
     // 8.0 Construct the finite volume grid and transport algorithms
     // -------------------------------------------------------------
     Standard_IO_Handler  stdio;
-    double64 cfl_multiplier(0.5); // for explicit transport, CFL should be mulitplied by 0.5
+    double64 cfl_multiplier; // for explicit transport, CFL should be mulitplied by 0.5
+    cout <<"\nEnter Courant multiplier: ";
+    cin  >> cfl_multiplier;    
 
     // query user if implicit or explicit FV scheme should be used
     cerr << "\nHit enter to continue..." << endl;
@@ -231,6 +236,10 @@ void Tutorial2_Example::Run()
 
     // NULL pointer to FV transport algorithm
     NodeCenteredFiniteVolumeTransport<2U>*  transport(NULL);
+    DESTransport<2U>*  DES_transport(NULL);
+
+    bool DES(false);
+    if (!implicit) DES = stdio.YesNo("Do you want to use DES to solve the advection equation");
 
     if ( implicit ) {
         // implicit finite volume scheme
@@ -246,28 +255,37 @@ void Tutorial2_Example::Run()
         cfl_multiplier = 10000.0; // overstep the CFL critertion by a factor 10000 in implict method
       }
     else {
+        if (!DES) {
         // query user if higher order FV scheme with slope reconstruction should be used
         bool second_order = stdio.YesNo("Do you want to use a second order accurate FV advection algorithm in space (n=first order accuracy)");
 
         // explicit finite volume scheme
-        transport = new ExplicitNodeCenteredFiniteVolumeTransport<2U,ExplicitStencilProcessor>
-                                                                  ( "Model",                          // default region is named 'Model'
-                                                                     model,
-                                                                     "porosity",                      // porosity multiplier
-                                                                     "concentration",                 // advected variable
-                                                                     "velocity",                      // advecting variable
-                                                                     "concentration source",          // source terms
-                                                                     second_order );                  // second-order accuracy
-      }
+        
+            transport = new ExplicitNodeCenteredFiniteVolumeTransport<2U,ExplicitStencilProcessor>
+                                                                      ( "Model",                          // default region is named 'Model'
+                                                                         model,
+                                                                         "porosity",                      // porosity multiplier
+                                                                         "concentration",                 // advected variable
+                                                                         "velocity",                      // advecting variable
+                                                                         "concentration source",          // source terms
+                                                                         second_order );                  // second-order accuracy
+        } else {       
+            DES_transport = new DESTransport<2U>(model, "Model");             
+       }
+   }
 
     // -----------------------
     // 9.0 Time Loop Variables
     // -----------------------
     // define some constant variables
     const double64    hour(3600.0);
-    const double64    max_time (240.0*hour);    // run for 10 days
+    double64    hours;   
+    cout <<"\nEnter max_time (hours, enter 0 to use default value: 240.0): ";
+    cin  >> hours;
+    if (hours == 0.0) hours = 240.0;
+    double64 max_time=hours*hour;    
     double64          time_increment(2.0*hour); // timestep 2 hours
-    const long        save_frequency(6);        // write results to file every 12 hours
+    const long        save_frequency(hours/40);        // write results to file
     size_t	          save_counter(1), time;
 
 
@@ -276,6 +294,8 @@ void Tutorial2_Example::Run()
     // -----------------------
     // define the variables used throughout the simulation
     double64  model_time(0.);                                 // global time for simulated runtime
+    double64 PEP_factor=0.;
+    size_t n_threads=1;    
 
     while ( model_time < max_time )
       {
@@ -283,7 +303,11 @@ void Tutorial2_Example::Run()
          // compute advection of solute
          // first boolean: check and correct for divergence of flow field
          // second boolean: update velocity field (set to true if it changes in time)
-         transport->AdvectVariable( time_increment, cfl_multiplier, true, false );
+         if ( implicit ) {transport->AdvectVariable( time_increment, cfl_multiplier, true, false );}
+         else {
+             if (DES) DES_transport->AdvectVariable_DES( model_time+time_increment, cfl_multiplier, PEP_factor, n_threads);   
+             else transport->AdvectVariable( time_increment, cfl_multiplier, true, false );
+         };        
 
          // increment time
          model_time += time_increment;
@@ -292,9 +316,20 @@ void Tutorial2_Example::Run()
          if ( save_counter == save_frequency ) {
               time = static_cast<long>(model_time/hour);
               // to VTK files
-              vtk_output.OutputDataToVTK( model, "concentration", "concentration", time );
-              // to Matlab files
-              matlab.Write2DMatlabFile(  model, "concentration", "concentration", time );
+              if ( implicit ) {
+                  vtk_output.OutputDataToVTK( model, "implicit_concentration", "concentration", time );
+              } else {
+                  if (DES) {
+                      vtk_output.OutputDataToVTK( model, "DES_concentration", "concentration", time );
+                      vtk_output.OutputDataToVTK( model, "DES_update_count", "update count", time );
+                      vtk_output.OutputDataToVTK( model, "DES_variation_rate_count", "rate count", time );
+                      vtk_output.OutputDataToVTK( model, "DES_schedule_count", "schedule count", time );
+                      vtk_output.OutputDataToVTK( model, "DES_synchronization_count", "synchronize count", time );
+                  } else {
+                      vtk_output.OutputDataToVTK( model, "Explicit_concentration", "concentration", time );
+                  };
+              }              
+              
               save_counter = 0;
           }
          save_counter++;

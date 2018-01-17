@@ -28,6 +28,7 @@
 #include "ExplicitStencilProcessor.h"
 #include "ExplicitNodeCenteredFiniteVolumeTransport.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
+#include "DESTransport.h"
 
 #include "MeshDiagnostics.h"
 
@@ -153,7 +154,7 @@ void PassiveAdvectionOfTracer_Example::Run()
 
   cout <<"\nmain: Choose method of transport (1=explicit, 2=explicit, O(2), ";
   cout <<"3=implicit, 4=implicit O(2), 5=4+bijective mapping, 6,7=tests of volume integration. ";
-  cout <<"8=TestNodeCenteredFiniteVolumeStencil ";
+  cout <<"8=TestNodeCenteredFiniteVolumeStencil, 9=DES ";
   cout <<" Try (3)=implicit single-step computation to get an idea of transport distance: ";
   int32     tmethod;
   double64  max_error(1.0e-5);
@@ -220,6 +221,9 @@ void PassiveAdvectionOfTracer_Example::Run()
 
        case 8:  TestNodeCenteredFiniteVolumeStencil( model3D, vtk_output );
          break;
+         
+       case 9: AdvectVariableDES( model3D, vtk_output );
+         break;         
 
        default:
            cout <<"\nmain: Transport method not recognized."<< endl;
@@ -422,7 +426,36 @@ void PassiveAdvectionOfTracer_Example::AdvectVariableSecondOrderImplicit( Model<
    } // end advectVariableSecondOrderImplicit
 
 
+void PassiveAdvectionOfTracer_Example::AdvectVariableDES( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
+ {
+    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
+    //ostream &cout = *GetStream();
 
+    DESTransport<3U>  advector( sg, "Model");
+
+    double64 time_interval;
+    cout <<"\nEnter advection time deduced from flow velocity and model-X extent (in seconds)";
+    cin >> time_interval;
+    double64 Courant_multiplier = 0.01;
+    double64 PEP_factor = 0.01;
+    size_t n_threads = 1;
+
+    cout <<"\n\tMeasuring the time required to solve the advection problem."<< endl;
+    clock_t ticks = clock();
+    double64  model_time(0.);
+    for ( int i=0; i<20; ++i ) {
+        advector.AdvectVariable_DES( model_time+time_interval/20., Courant_multiplier, PEP_factor, n_threads);
+        model_time += time_interval/20.;
+        vtkOut.OutputDataToVTK( sg, "concentration", "concentration", i+1 );
+        vtkOut.OutputDataToVTK( sg, "DES_update_count", "update count", i+1 );
+        vtkOut.OutputDataToVTK( sg, "DES_variation_rate_count", "rate count", i+1 );
+        vtkOut.OutputDataToVTK( sg, "DES_schedule_count", "schedule count", i+1 );
+        vtkOut.OutputDataToVTK( sg, "DES_synchronization_count", "synchronize count", i+1 );
+     }
+    ticks = clock() - ticks;
+    cout <<"\n\n\tCPU time (s) used for advection step: "<< ticks/double64(CLOCKS_PER_SEC) << endl;
+
+ } // end AdvectVariableDES
 
 
 /**
