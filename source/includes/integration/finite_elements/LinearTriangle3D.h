@@ -1,7 +1,6 @@
 #ifndef LINEAR_TRIANGLE_3D_H
 #define LINEAR_TRIANGLE_3D_H
 
-#include "CSMP_definitions.h"
 #include "FiniteElement.h"
 
 namespace csmp {

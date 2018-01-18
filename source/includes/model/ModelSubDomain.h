@@ -78,7 +78,6 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     typedef typename VertexContainer::const_iterator   vertexConstIterator;
 
   public:
-
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
     ModelSubDomain( const ModelSubDomain& );
@@ -174,13 +173,19 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     bool              Contains( const Node<dim>* ) const;
     bool              IsPerimeterNode( const csmp::Node<dim>* ) const;
     bool              IsPerimeterElement( const SIMPLEX<dim>* ) const;
+    /// number of faces of perimeter element #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
     size_t            PerimeterFaces( size_t eid ) const;
+    /// returns local face id of face #face that lies on perimeter of model subdomain
     size_t            PerimeterFace( size_t eid, size_t face ) const;
-    csmp::Node<dim>*  N( size_t n ) const;  // contained nodes
-    SIMPLEX<dim>*     E( size_t n ) const;  // contained elements
+    /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
+    csmp::Node<dim>*  N( size_t n ) const;
+    /// pointer to element #n of model subdomain
+    SIMPLEX<dim>*     E( size_t n ) const;
 
     // access via object indexes( note: use with caution )
+    /// is the node located on the surface of the model subdomain?
     bool              IsPerimeterNode( const size_t nidx ) const;
+    /// does the element have at least on face on the surface of the model subdomain?
     bool              IsPerimeterElement( const size_t eidx ) const;
 
     // ----------------------------------------

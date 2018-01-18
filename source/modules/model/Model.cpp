@@ -279,7 +279,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     const bool withNeighborConnectivity(true);
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
-    assert( valid_model_region );
+// will not apply if a region is disconnected from rest of model
+//    assert( valid_model_region );
 
     // 5. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
