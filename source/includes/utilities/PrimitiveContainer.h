@@ -99,8 +99,13 @@ class PrimitiveContainer
       const_iterator begin() const;
       const_iterator end() const;
 
+      /// True if it's safe to call Index()
+      bool IndexOperationIsSafe() const { return free_list_.empty(); }
+
       /// Dereference operator. Only usable during mesh construction or after Assign().
       T& Index(size_t i);
+
+      /// Dereference operator. Only usable during mesh construction or after Assign().
       const T& Index(size_t i) const;
 
       /// Emplace a primitive.

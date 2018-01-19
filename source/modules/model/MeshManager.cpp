@@ -4068,6 +4068,10 @@ csmp::Node<dim>& MeshManager<dim>::NodeAtIndex(size_t i)
 template<size_t dim>
 const csmp::Node<dim>& MeshManager<dim>::NodeAtIndex(size_t i) const
   { return node_collection_.Index(i); }
+
+template<size_t dim>
+bool MeshManager<dim>::ElementAtIndexIsSafe() const
+  { return elmt_collection_.IndexOperationIsSafe(); }
 template<size_t dim>
 csmp::Element<dim>& MeshManager<dim>::ElementAtIndex(size_t i)
   { return elmt_collection_.Index(i); }
