@@ -111,19 +111,19 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior elements
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it ) {
-      // XXX This may be an expensive operation
-      auto eit = mesh.ElementsBegin();
-      std::advance(eit, *it);
-      this->elmt_vec_.push_back( &*eit );
+    if (info.interior_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe()) {
+      throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::ElementAtIndex is unsafe here" );
+    }
+    for ( auto elmt : info.interior_elmts ) {
+      this->elmt_vec_.push_back( &mesh.ElementAtIndex(elmt) );
     }
    
     // assigning pointers to the perimeter elements
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it ) {
-      // XXX This may be an expensive operation
-      auto eit = mesh.ElementsBegin();
-      std::advance(eit, *it);
-      this->elmt_vec_.push_back( &*eit );
+    if (info.perimeter_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe()) {
+      throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::ElementAtIndex is unsafe here" );
+    }
+    for ( auto elmt : info.perimeter_elmts ) {
+      this->elmt_vec_.push_back( &mesh.ElementAtIndex(elmt) );
     }
    
     // sorting the subvectors for future searching (upsets original numbering)
@@ -147,21 +147,24 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it ) {
-      // XXX This may be an expensive operation
-      auto nit = mesh.NodesBegin();
-      std::advance(nit, *it);
-      this->node_vec_.push_back( &*nit );
+    if (info.interior_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe()) {
+      throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::NodeAtIndex is unsafe here" );
+    }
+
+   for ( auto node : info.interior_nodes ){
+      this->node_vec_.push_back( &mesh.NodeAtIndex(node) );
     }
    
     // assigning pointers to the perimeter nodes
     this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it ) {
-      // XXX This may be an expensive operation
-      auto nit = mesh.NodesBegin();
-      std::advance(nit, *it);
-      this->node_vec_.push_back( &*nit );
+   if (info.perimeter_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe()) {
+     throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::NodeAtIndex is unsafe here" );
+   }
+
+    for ( auto node : info.perimeter_nodes ){
+      this->node_vec_.push_back( &mesh.NodeAtIndex(node) );
     }
+
    
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );

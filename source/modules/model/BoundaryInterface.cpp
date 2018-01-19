@@ -1117,12 +1117,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
     const PropertyDatabase<dim>& database( boundaryComplex.Database() );
 
     std::string bin_file(file_name);
-    std::string heading("BoundaryInterface::OutputAllBoundariesToBinary: ");
-    heading +="boundary information for Model '";
-    heading += boundaryComplex.Name();
-    heading +="' to file: ";
-    heading += bin_file;
-    heading +="'.";
 
     FILE*  fp(0);
     if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
@@ -1131,10 +1125,22 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
          return false;
       }
      // 0. writing the file header
-     skm_C_fwrite( fp, heading.c_str() );
+   {
+      BinaryFileSectionWrite sect(fp, "BNDFHEDR");
+      std::string heading("BoundaryInterface::OutputAllBoundariesToBinary: ");
+      heading +="boundary information for Model '";
+      heading += boundaryComplex.Name();
+      heading +="' to file: ";
+      heading += bin_file;
+      heading +="'.";
+      skm_C_fwrite( fp, heading.c_str() );
+   }
 
      std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: boundaries written to binary file: ";
      // 1. writing all boundary objects to binary file
+   {
+     BinaryFileSectionWrite sect(fp, "BOUNDARY");
+
      const size_t records(this->Boundaries());
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
@@ -1152,11 +1158,20 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";
        }
+   }
 
-     // 2. writing the Model variables here
+     // 2. writing the boundary complex variables here
+   {
+     BinaryFileSectionWrite sect(fp, "BOUNDVAR");
+
      domainVariablesOut( fp, boundaryComplex, database );
+   }
 
-    // 3. cleaning up
+    // 3. footer, and clean up
+   {
+     BinaryFileSectionWrite sect(fp, "BNDFFOTR");
+   }
+
     fclose( fp );
     std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
@@ -1187,14 +1202,21 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
        }
    
      // 0. reading the file header and printing it to screen
+   {
+     BinaryFileSectionRead sect(fp, "BNDFHEDR");
+
      char  text[500U];
      skm_C_fread( fp, text );
      std::cout <<"\nBoundaryInterface<"<< dim <<">::InputAllBoundariesFromBinary: Reading file header:\n\t"<< text << std::endl;
+   }
      std::cout <<"\n\timporting the boundaries: ";
    
      // 1. reading the boundaries
      const PropertyDatabase<dim>& database( static_cast<const BOUNDARY_COMPLEX<dim>& >(*this).Database() );
      MeshManager<dim>& mesh( static_cast<BOUNDARY_COMPLEX<dim>& >(*this).Mesh() );
+   {
+     BinaryFileSectionRead sect(fp, "BOUNDARY");
+     
      SubDomainInfo  info;
      size_t  records(0);  // region records
      // getting number of unique region records from file
@@ -1231,8 +1253,21 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
          }
      else csmp_error.notice( WARNING, "BoundaryInterface::InputAllBoundariesFromBinary:",
                             bin_file, "does not contain any boundary descriptions; no boundaries were initialised." );
+   }
 
-    // 2. cleaning up
+   // 2. read boundary complex variables here
+   {
+     BinaryFileSectionRead sect(fp, "BOUNDVAR");
+     BOUNDARY_COMPLEX<dim>& boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>& >(*this) );
+     PropertyDatabase<dim>& database( boundaryComplex.Database() );
+     domainVariablesIn( fp, boundaryComplex, database );
+   }
+
+    // 3. cleaning up
+   {
+     BinaryFileSectionRead sect(fp, "BNDFFOTR");
+   }
+
     fclose( fp );
     std::cout <<"\n\nBoundaryInterface<"<< dim <<",BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary: file '";
     std::cout << bin_file <<"' has been read successfully.\n";

@@ -141,43 +141,43 @@ Point<1U>& Point<1U>::operator=( double64 val )
 
 Point<1U>  Point<1U>::operator+( const Point<1U>& pt ) const
  {
-    return std::move(Point<1U>(x_ + pt.x_));
+    return (Point<1U>(x_ + pt.x_));
  }
 
 Point<1U> Point<1U>::operator-( const Point<1U>& pt ) const
  {
-    return std::move(Point<1U>(x_ - pt.x_));
+    return (Point<1U>(x_ - pt.x_));
  }
 
 Point<1U> Point<1U>::operator*( const Point<1U>& pt ) const
  {
-    return std::move(Point<1U>(x_ * pt.x_));
+    return (Point<1U>(x_ * pt.x_));
  }
 
 Point<1U>  Point<1U>::operator/( const Point<1U>& pt ) const
  {
-    return std::move(Point<1U>(x_ / pt.x_));
+    return (Point<1U>(x_ / pt.x_));
  }
     
 
 Point<1U>  Point<1U>::operator+( double64 val ) const
  {
-    return std::move(Point<1U>(x_ + val));
+    return (Point<1U>(x_ + val));
  }
 
 Point<1U> Point<1U>::operator-( double64 val ) const
  {
-    return std::move(Point<1U>(x_ - val));
+    return (Point<1U>(x_ - val));
  }
 
 Point<1U> Point<1U>::operator*( double64 val ) const
  {
-    return std::move(Point<1U>(x_ * val));
+    return (Point<1U>(x_ * val));
  }
 
 Point<1U> Point<1U>::operator/( double64 val ) const
  {
-    return std::move(Point<1U>(x_ / val));
+    return (Point<1U>(x_ / val));
  }
 
 
@@ -385,43 +385,43 @@ Point<2U>& Point<2U>::operator=( double64 val )
 
 Point<2U>  Point<2U>::operator+( const Point<2U>& pt ) const
  {
-    return std::move(Point<2U>(x_ + pt.x_,y_ + pt.y_));
+    return (Point<2U>(x_ + pt.x_,y_ + pt.y_));
  }
 
 Point<2U>  Point<2U>::operator-( const Point<2U>& pt ) const
  {
-    return std::move(Point<2U>(x_ - pt.x_,y_ - pt.y_));
+    return (Point<2U>(x_ - pt.x_,y_ - pt.y_));
  }
 
 Point<2U> Point<2U>::operator*( const Point<2U>& pt ) const
  {
-    return std::move(Point<2U>(x_ * pt.x_,y_ * pt.y_));
+    return (Point<2U>(x_ * pt.x_,y_ * pt.y_));
  }
 
 Point<2U>  Point<2U>::operator/( const Point<2U>& pt ) const
  {
-    return std::move(Point<2U>(x_ / pt.x_,y_ / pt.y_));
+    return (Point<2U>(x_ / pt.x_,y_ / pt.y_));
  }
     
 
 Point<2U>  Point<2U>::operator+( double64 val ) const
  {
-    return std::move(Point<2U>(x_ + val, y_ + val));
+    return (Point<2U>(x_ + val, y_ + val));
  }
 
 Point<2U>  Point<2U>::operator-( double64 val ) const
  {
-    return std::move(Point<2U>(x_ - val, y_ - val));
+    return (Point<2U>(x_ - val, y_ - val));
  }
 
 Point<2U>  Point<2U>::operator*( double64 val ) const
  {
-    return std::move(Point<2U>(x_ * val, y_ * val));
+    return (Point<2U>(x_ * val, y_ * val));
  }
 
 Point<2U>  Point<2U>::operator/( double64 val ) const
  {
-    return std::move(Point<2U>(x_ / val, y_ / val));
+    return (Point<2U>(x_ / val, y_ / val));
  }
 
 
@@ -642,43 +642,43 @@ Point<3U>& Point<3U>::operator=( double64 val )
 
 Point<3U>  Point<3U>::operator+( const Point<3U>& pt ) const
  {
-    return std::move(Point<3U>(x_ + pt.x_, y_ + pt.y_, z_ + pt.z_));
+    return (Point<3U>(x_ + pt.x_, y_ + pt.y_, z_ + pt.z_));
  }
 
 Point<3U>  Point<3U>::operator-( const Point<3U>& pt ) const
  {
-    return std::move(Point<3U>(x_ - pt.x_,y_ - pt.y_, z_ - pt.z_));
+    return (Point<3U>(x_ - pt.x_,y_ - pt.y_, z_ - pt.z_));
  }
 
 Point<3U>  Point<3U>::operator*( const Point<3U>& pt ) const
  {
-    return std::move(Point<3U>(x_ * pt.x_,y_ * pt.y_, z_ * pt.z_));
+    return (Point<3U>(x_ * pt.x_,y_ * pt.y_, z_ * pt.z_));
  }
 
 Point<3U>  Point<3U>::operator/( const Point<3U>& pt ) const
  {
-    return std::move(Point<3U>(x_ / pt.x_,y_ / pt.y_, z_ / pt.z_));
+    return (Point<3U>(x_ / pt.x_,y_ / pt.y_, z_ / pt.z_));
  }
     
 
 Point<3U>  Point<3U>::operator+( double64 val ) const
  {
-    return std::move(Point<3U>(x_ + val, y_ + val, z_ + val));
+    return (Point<3U>(x_ + val, y_ + val, z_ + val));
  }
 
 Point<3U>  Point<3U>::operator-( double64 val ) const
  {
-    return std::move(Point<3U>(x_ - val, y_ - val, z_ - val));
+    return (Point<3U>(x_ - val, y_ - val, z_ - val));
  }
 
 Point<3U>  Point<3U>::operator*( double64 val ) const
  {
-    return std::move(Point<3U>(x_ * val, y_ * val, z_ * val));
+    return (Point<3U>(x_ * val, y_ * val, z_ * val));
  }
 
 Point<3U>  Point<3U>::operator/( double64 val ) const
  {
-    return std::move(Point<3U>(x_ / val, y_ / val, z_ / val));
+    return (Point<3U>(x_ / val, y_ / val, z_ / val));
  }
 
 
@@ -760,12 +760,12 @@ bool Point<3U>::operator!=( const Point<3U>& pt ) const
 
 bool Point<3U>::operator<( const Point<3U>& p )  const
  {
-    return (x_<p.x_ || (x_==p.x_ && y_<p.y_) || (x_==p.x_ &&  y_==p.y_ && z_<p.z_) );
+    return x_<p.x_ || (x_==p.x_ && y_<p.y_) || (x_==p.x_ &&  y_==p.y_ && z_<p.z_);
  }
 
 bool Point<3U>::operator>( const Point<3U>& p )  const
  {
-    return (x_>p.x_ || (x_==p.x_ && y_>p.y_) || (x_==p.x_ && y_==p.y_ && z_>p.z_) );
+    return x_>p.x_ || (x_==p.x_ && y_>p.y_) || (x_==p.x_ && y_==p.y_ && z_>p.z_);
  }
 
 
@@ -843,19 +843,19 @@ template<size_t dim>
 Point<dim> operator-( double64 val, const Point<dim>& pt )
  {
     Point<dim> temp(val);
-    return std::move(temp - pt);
+    return (temp - pt);
  } 
 
 template<size_t dim>
 Point<dim> operator+( double64 val, const Point<dim>& pt )
  {
-    return std::move(pt + val);
+    return (pt + val);
  } 
   
 template<size_t dim>
 Point<dim> operator*( double64 val, const Point<dim>& pt )
  {
-    return std::move(pt * val);
+    return (pt * val);
  }   
 */
 
@@ -863,58 +863,58 @@ Point<dim> operator*( double64 val, const Point<dim>& pt )
 
 Point<1U> operator-( double64 val, const Point<1U>& pt )
  {
-    return std::move(Point<1U>( val - pt.x_ ));
+    return (Point<1U>( val - pt.x_ ));
  }   
 
 Point<1U> operator+( double64 val, const Point<1U>& pt )
  {
-    return std::move(Point<1U>( pt.x_ + val ));
+    return (Point<1U>( pt.x_ + val ));
  }   
 
 Point<1U> operator*( double64 val, const Point<1U>& pt )
  {
-    return std::move(Point<1U>( pt.x_ * val ));
+    return (Point<1U>( pt.x_ * val ));
  }   
 
 // 2D
 
 Point<2U> operator-( double64 val, const Point<2U>& pt )
  {
-    return std::move(Point<2U>( val - pt.x_, val - pt.y_ ));
+    return (Point<2U>( val - pt.x_, val - pt.y_ ));
  }   
 
 Point<2U> operator+( double64 val, const Point<2U>& pt )
  {
-    return std::move(Point<2U>( pt.x_ + val, pt.y_ + val ));
+    return (Point<2U>( pt.x_ + val, pt.y_ + val ));
  }   
 
 Point<2U> operator*( double64 val, const Point<2U>& pt )
  {
-    return std::move(Point<2U>( pt.x_ * val, pt.y_ * val ));
+    return (Point<2U>( pt.x_ * val, pt.y_ * val ));
  }   
  
 // 3D
 
 Point<3U> operator-( double64 val, const Point<3U>& pt )
  {
-    return std::move(Point<3U>( val - pt.x_, val - pt.y_, val - pt.z_ ));
+    return (Point<3U>( val - pt.x_, val - pt.y_, val - pt.z_ ));
  }   
 
 Point<3U> operator+( double64 val, const Point<3U>& pt )
  {
-    return std::move(Point<3U>( pt.x_ + val, pt.y_ + val, pt.z_ + val ));
+    return (Point<3U>( pt.x_ + val, pt.y_ + val, pt.z_ + val ));
  }   
 
 Point<3U> operator*( double64 val, const Point<3U>& pt )
  {
-    return std::move(Point<3U>( pt.x_ * val, pt.y_ * val, pt.z_ * val ));
+    return (Point<3U>( pt.x_ * val, pt.y_ * val, pt.z_ * val ));
  }   
 
 
 template<size_t dim>
 Point<dim>  midPoint( const Point<dim>& p1, const Point<dim>& p2 )
  { 
-    return std::move(Point<dim>( p1 + p2 ) / 2.);
+    return (Point<dim>( p1 + p2 ) / 2.);
  }
 
 template Point<1U>  midPoint( const Point<1U>&, const Point<1U>& );
@@ -942,7 +942,7 @@ double64 dotProduct( const Point<3U>& p1, const Point<3U>& p2 )
 
 Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 )
   {
-     return std::move(Point<1U>( p1[0U] * p2[0U] ));
+     return (Point<1U>( p1[0U] * p2[0U] ));
   }
 
 
@@ -984,13 +984,13 @@ To avoid ambiguities, NAN is returned in the second component of Point.
 */
 Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 )
   {
-     return std::move(Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], std::numeric_limits<double64>::quiet_NaN() ));
+     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], std::numeric_limits<double64>::quiet_NaN() ));
   }
 
  // tested: SKM O.K.
 Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 )
   {
-     return std::move(Point<3U>( p1[1U] * p2[2U] - p1[2U] * p2[1U],
+     return (Point<3U>( p1[1U] * p2[2U] - p1[2U] * p2[1U],
                                  p1[2U] * p2[0U] - p1[0U] * p2[2U],
                                  p1[0U] * p2[1U] - p1[1U] * p2[0U] ));
   }
@@ -1007,14 +1007,5 @@ Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
      cerr <<"\ncrossProduct<dim>: not defined for generic case."<< endl;
      return std::numeric_limits<double64>::quiet_NaN();
   }
-
- 
-
-#ifndef _MSC_VER
-//template class Point<4U>;
-template class Point<1U>;
-template class Point<2U>;
-template class Point<3U>;
-#endif
 
 } // end namespace csmp

@@ -99,6 +99,7 @@ void ANSYS_Model2D_Test::run()
 
     string bin1name("ANSYS2D_bin");
     model.OutputToBinaryFile(bin1name.c_str());
+    model.Out();
 
     Model<2U> modelBinIn0(bin1name);
     Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );

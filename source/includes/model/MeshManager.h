@@ -108,11 +108,15 @@ class MeshManager {
     const csmp::InterFace<dim>& RootInterFace() const;
 
     // Accessors
-    /// IMPORTANT: This should only be used during mesh construction fom a file.
+    // IMPORTANT: This should only be used during mesh construction fom a file.
+    bool NodeAtIndexIsSafe() const;
     csmp::Node<dim>& NodeAtIndex(size_t i);
     const csmp::Node<dim>& NodeAtIndex(size_t i) const;
+
+    bool ElementAtIndexIsSafe() const;
     csmp::Element<dim>& ElementAtIndex(size_t i);
     const csmp::Element<dim>& ElementAtIndex(size_t i) const;
+
     csmp::Face<dim>& FaceAtIndex(size_t i);
     const csmp::Face<dim>& FaceAtIndex(size_t i) const;
 
@@ -128,14 +132,43 @@ class MeshManager {
     /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
     csmp::Node<dim>*      PushBack( csmp::Node<dim>&& );
 
+    /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Node<dim>* EmplaceNode(Args&&... args)
+    {
+        node_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
+
     /// emplaces (no copying) an element at the end of the deque in which the Element objects may be stored (when adaptive_remeshing_ false)
     csmp::Element<dim>*   PushBack( csmp::Element<dim>&& );
+
+    /// emplaces (no copying) an element at the end of the deque in which the Element objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Element<dim>* EmplaceElement(Args&&... args)
+    {
+        elmt_collection_.Emplace(std::forward<Args>(args)...);
+    }
 
     /// emplaces (no copying) a face at the end of the deque in which the Face objects may be stored (when adaptive_remeshing_ false)
     csmp::Face<dim>* const PushBack( csmp::Face<dim>&& );
 
+    /// emplaces (no copying) a face at the end of the deque in which the Face objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Face<dim>* EmplaceFace(Args&&... args)
+    {
+        face_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
     /// emplaces (no copying) an interface at the end of the deque in which the InterFace objects may be stored (when adaptive_remeshing_ false)
     csmp::InterFace<dim>* PushBack( csmp::InterFace<dim>&& );
+
+    /// emplaces (no copying) an interface at the end of the deque in which the InterFace objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::InterFace<dim>* EmplaceInterFace(Args&&... args)
+    {
+        interface_collection_.Emplace(std::forward<Args>(args)...);
+    }
 
     // TODO: SKM: check these (which do not make much sense for deque containers); remove what is not needed
     /// pushes back Node object if it does not already exist in the node deque

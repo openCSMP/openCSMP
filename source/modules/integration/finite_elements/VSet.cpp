@@ -348,11 +348,6 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
      char file_name[200], num[20];
      sprintf( num, "%lf", time ); 
      strcpy( file_name, bin_file );
-     char heading[200];
-     strcpy( heading, "VSet<dim>::OutputTo: Binary version of VSet: "); 
-     strcat( heading, bin_file );
-     strcat( heading, " saved at time: " );
-     strcat( heading, num );
      size_t  records(0);
      
      // 1. opening the file
@@ -362,13 +357,26 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
           cout <<" could not be opened"<< endl;
           return false;
        }
-     // 2. writing the file header   
-     skm_C_fwrite( fp, heading ); 
+     // 2. writing the file header
+   {
+     BinaryFileSectionWrite sect(fp, "VSETHEDR");
+     char heading[200];
+     strcpy( heading, "VSet<dim>::OutputTo: Binary version of VSet: ");
+     strcat( heading, bin_file );
+     strcat( heading, " saved at time: " );
+     strcat( heading, num );
+     skm_C_fwrite( fp, heading );
+   }
      
      // 3. Writing the mesh connectivity to file
+   {
+     BinaryFileSectionWrite sect(fp, "VSETCONN");
      OutBinary(fp);
+    }
    
      // NEW: Writing the property data records to file
+   {
+     BinaryFileSectionWrite sect(fp, "VSETPROP");
      if ( !property_map_.empty() ) {
          // number of property records
          records = property_map_.size();
@@ -385,9 +393,14 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
           records = 0U;
           fwrite( (void*) &records, sizeof(size_t), 1, fp );
        }
+   }
    
 
      // 5. cleaning up
+   {
+     BinaryFileSectionWrite sect(fp, "VSETFOTR");
+   }
+
      fclose(fp);
      cout <<"\nVSet<"<< dim <<">::OutputTo: VSet has been successfully written to: ";
      cout << file_name << endl;
@@ -409,7 +422,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double64 time ) const
 template<size_t dim>
 bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
  {
-     char file_name[NAME_STRING], heading[INFO_STRING];
+     char file_name[NAME_STRING];
      strcpy( file_name, bin_file );
      size_t  records(0);
      string  dname;
@@ -422,32 +435,50 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double64& time )
           return false;
        }
      // 2. reading the file header and extracting time
+   {
+     BinaryFileSectionRead sect(fp, "VSETHEDR");
+     char heading[INFO_STRING];
+
      skm_C_fread( fp, heading ); 
      cout <<"\nVSet<dim>::InputFrom: Reading: "<< heading << endl;
      strtok( heading, ":" ); 
      strtok( NULL, ":" ); 
      strtok( NULL, ":" ); 
      strtok( NULL, ":" ); 
-     time = atof( strtok( NULL, ":") ); 
+     time = atof( strtok( NULL, ":") );
+   }
        
      // 3. reading the mesh connectivity to file
+   {
+     BinaryFileSectionRead sect(fp, "VSETCONN");
+
      cout <<"\nVSet<dim>::InputFrom: reading finite element mesh..."<< endl;
      InBinary( fp );
+   }
      
      // NEW: Reading the property data records from file
+  {
+    BinaryFileSectionRead sect(fp, "VSETPROP");
+
      fread( (void*) &records, sizeof(size_t), 1, fp );
      if ( records > 0 )
        // reading the datasets sequentially
        for ( size_t i=0; i<records; ++i )
          {
              // reading the property name
+             char heading[INFO_STRING];
              skm_C_fread( fp, heading );
              dname = heading;
-             property_map_.insert( make_pair( string(heading), inBinaryPropertyData(fp) ) );
+             property_map_.insert( make_pair( dname, inBinaryPropertyData(fp) ) );
          }
      else cout<<"\nVSet<dim>::InputFrom: no PropertyData objects detected."<< endl;
+       }
    
      // 5. cleaning up
+     {
+       BinaryFileSectionRead sect(fp, "VSETFOTR");
+     }
+
      fclose( fp );
      
      cout <<"\nVSet<"<< dim <<">::InputFrom: VSet has been successfully read from: '";

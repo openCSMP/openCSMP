@@ -211,10 +211,19 @@ class VData {
     /// iterator to CSMP finite element type of first interface stored in mesh
     std::vector<int32>::const_iterator                 PelmtInterfacesEnd() const;
   
-    /// node iterator for first face in plist (use PlistInterFacesBegin() to find last one)
+    // node iterators for subsets of the Plist
+    /// Iterator to beginning of elements in the Plist
+    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsBegin() const;
+    /// Iterator to end of elements in the Plist
+    std::deque<std::vector<size_t> >::const_iterator    PlistElmtsEnd() const;
+    /// Iterator to beginning of faces in the Plist
     std::deque<std::vector<size_t> >::const_iterator    PlistFacesBegin() const;
-    /// node iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
+    /// Iterator to end of faces in the Plist
+    std::deque<std::vector<size_t> >::const_iterator    PlistFacesEnd() const;
+    /// Iterator to beginning of interfaces in the Plist
     std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesBegin() const;
+    /// Iterator to end of interfaces in the Plist
+    std::deque<std::vector<size_t> >::const_iterator    PlistInterFacesEnd() const;
 
     /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
     std::deque<std::vector<long64> >::const_iterator    PfvertsFacesBegin() const;

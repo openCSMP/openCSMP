@@ -2723,6 +2723,99 @@ template void distanceWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<
 
 
 
+ 
+  
+  
+  
+/**
+    finds those elements in a model that contact eachother across split interfaces.
+    Only those elements are discovered that are node-matched.
+ 
+    @param subdomain (non-unique) region which contains the split boundary
+ 
+    @return returns false if none of the perimeter elements are node matched
+ 
+    @attention method only looks at highest dimensional elements in the model;
+    thus, lower dimensional elements are ignored and the neighborhood relations
+    on either side of them are returned.
+ 
+    @attention the elements inside the model that are located along the splitboundary
+    do not have neighbor pointers yet.
+ 
+    @author SKM
+    @date 14/01/2018
+ 
+    @TODO do we need to remember which side of the interface we are on?
+    @todo test method on Chloe's dataset
+*/
+bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElements>& interface_elmt_pairs )
+ {
+    // synchronize perimeter face vector with element vector
+    subdomain.UpdateMemberIndexes();
+   
+    // multi-element container for all elements that are located on split boundaries
+    //       face search key      element      face number
+    multimap<set<Point<3U> >,pair<Element<3U>*,size_t> > element_face_keys;
+   
+    // 1. for all elements on the perimeter of the model subdomain,
+    //    generate keys from their node coordinates that are then matched with one-another
+    //    in order to connect these elements
+    for ( auto it=subdomain.PerimeterElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
+      // only if the elements are not located on the model boundary
+//      if ( (*it)->AtBoundary() == NOT && (*it)->AtBoundary() != REGION_BOUNDARY )
+        {
+           // for those element faces that define the perimeter surface
+           for ( size_t i=0U; i<subdomain.PerimeterFaces( (*it)->Idx() ); ++i )
+             {
+                // get the local node numbers of the perimeter face
+                vector<size_t> fnids;
+                (*it)->FE()->NodesOfFace( subdomain.PerimeterFace( (*it)->Idx(), i ), fnids );
+                // add the corresponding node points to a set that will form the element face key
+                pair<set<Point<3U> >,size_t> face_key;
+                for ( size_t j=0U; j<fnids.size(); ++j )
+                  face_key.first.insert( (*it)->N( fnids[j] )->Coordinate() );
+                // remembering the face id
+                face_key.second = subdomain.PerimeterFace( (*it)->Idx(), i );
+                // storing the key in the correspondance search map
+                //                              node-coordinate set  element pointer   local face id
+                element_face_keys.insert( make_pair( face_key.first, make_pair( (*it), face_key.second ) ) );
+             }
+        }
+   
+    // 2. searching map for matching interface elements
+    //    - a match is obtained if the element pointers are different
+    //    - if there is a match, the element pair is added to the OppositeElement container
+    if ( !interface_elmt_pairs.empty() ) interface_elmt_pairs.clear();
+    // searching
+    for ( auto it=element_face_keys.begin(); it!=element_face_keys.end(); ++it ) {
+         // multimap iterator containing the range of shared keys
+         auto result = element_face_keys.equal_range( (*it).first );
+for ( auto i=result.first; i!=result.second; ++i ) cerr <<" "<< (*i).second.first;
+cerr <<" | ";
+         // if more than one value was found
+//cerr << distance( result.first, result.second ) <<" ";
+         if ( distance( result.first, result.second ) > 1U ) {
+             // there should not be any manyfolds
+             assert( distance( result.first, result.second ) == 2U );
+             // advancing the result range iterator as necessary to find an Element different from (*it).second.first
+             while ( (*result.first).second.first != (*it).second.first ) {
+                  result.first++;
+               }
+           // we store the matching element pair
+           interface_elmt_pairs.insert( make_pair(
+                                        make_pair( (*it).second.first, (*it).second.second ),
+                                        make_pair( (*result.first).second.first, (*result.first).second.second ) )
+                                      );
+          }
+      }
+  
+    // 3. checking the results
+    if (  interface_elmt_pairs.empty() ) return false;
+ 
+    return true;
+    
+ } // end findSplitInterfaceElements
+
 
 
 

@@ -279,7 +279,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     const bool withNeighborConnectivity(true);
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
-    assert( valid_model_region );
+// will not apply if a region is disconnected from rest of model
+//    assert( valid_model_region );
 
     // 5. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
@@ -2618,6 +2619,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
     const bool simplices_numbered_in_a_single_sequence(true);
     mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
     mesh_manager_.OutputMeshTo( vset );
+   vset.Out();
 
     // 2. property output into VSet including Face and InterFace data
     mesh_manager_.OutputStoredVariablesTo( Database(), vset );

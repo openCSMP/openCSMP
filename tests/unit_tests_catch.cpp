@@ -184,7 +184,6 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
  }
 
 
-
 int
 main()
 {
