@@ -1,4 +1,4 @@
-#include "TwoPhaseModel.h"
+#include "SaturationFunction.h"
 
 using namespace std;
 
@@ -6,7 +6,7 @@ namespace csmp {
 
 
 template<size_t dim>
-TwoPhaseModel<dim>::TwoPhaseModel()
+SaturationFunction<dim>::SaturationFunction()
  : mun_(2.0e-3), muw_(1.6e-3),
    rhn_(800.), rhw_(1000.),
    sat_(std::numeric_limits<double64>::quiet_NaN()),
@@ -26,7 +26,7 @@ TwoPhaseModel<dim>::TwoPhaseModel()
  
  
 template<size_t dim>
-TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
+SaturationFunction<dim>::SaturationFunction( const PropertyDatabase<dim>& database,
                                       double64 viscosity_nw, double64 viscosity_w,
                                       double64 density_nw, double64 density_w,
                                       const char* kkk,
@@ -57,31 +57,31 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
  {
 
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)",
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
 
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)",
                       snr, " variable must be scalar element property" );
 
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)",
                       swr, " variable must be scalar element property" );
 
     if (sw_ro_mu_placement_)
     {
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)",
                           sat, " variable must be scalar node property" );
 
     }
     else
     {
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)",
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)",
                           sat, " variable must be scalar element property" );
 
     }
@@ -91,7 +91,7 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
 
 
 template<size_t dim>
-TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
+SaturationFunction<dim>::SaturationFunction( const PropertyDatabase<dim>& database,
                                   const char* kkk,
                                   const char* mun,
                                   const char* muw,
@@ -128,63 +128,63 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
    tensor_permeability_(false)
  {
     if ( perm_key_.place != ELEMENT || (perm_key_.type != SCALAR && perm_key_.type != TENSOR) )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                       kkk, " variable must be scalar or tensor element property" );
 
     if( perm_key_.type == TENSOR)
         tensor_permeability_ = true;
                       
     if ( snr_key_.place != ELEMENT || snr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                       snr, " variable must be scalar element property" ); 
                       
     if ( swr_key_.place != ELEMENT || swr_key_.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+      throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                       swr, " variable must be scalar element property" );
     
     if (sw_ro_mu_placement_)
     {
         if ( mun_key_.place != NODE || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           mun, " variable must be scalar node property" ); 
                           
         if ( muw_key_.place != NODE || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           muw, " variable must be scalar node property" ); 
                           
         if ( rhn_key_.place != NODE || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           rhn, " variable must be scalar node property" ); 
                           
         if ( rhw_key_.place != NODE || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           rhw, " variable must be scalar node property" ); 
                           
         if ( sat_key_.place != NODE || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           sat, " variable must be scalar node property" ); 
         
     }
     else
     {
         if ( mun_key_.place != ELEMENT || mun_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           mun, " variable must be scalar element property" ); 
                           
         if ( muw_key_.place != ELEMENT || muw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           muw, " variable must be scalar element property" ); 
                           
         if ( rhn_key_.place != ELEMENT || rhn_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           rhn, " variable must be scalar element property" ); 
                           
         if ( rhw_key_.place != ELEMENT || rhw_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           rhw, " variable must be scalar element property" ); 
                           
         if ( sat_key_.place != ELEMENT || sat_key_.type != SCALAR )
-          throw csmp::Exception( FATAL_ERROR, "TwoPhaseModel(constructor)", 
+          throw csmp::Exception( FATAL_ERROR, "SaturationFunction(constructor)", 
                           sat, " variable must be scalar element property" ); 
     
     }
@@ -194,92 +194,92 @@ TwoPhaseModel<dim>::TwoPhaseModel( const PropertyDatabase<dim>& database,
  
  
 template<size_t dim>
-TwoPhaseModel<dim>::~TwoPhaseModel()
+SaturationFunction<dim>::~SaturationFunction()
  {
  }
 
 
 
 template<size_t dim>
-double64 csmp::TwoPhaseModel<dim>::Swr() const
+double64 csmp::SaturationFunction<dim>::Swr() const
   {
     return swr_;
   }
 
 template<size_t dim>
-double csmp::TwoPhaseModel<dim>::Snr() const
+double csmp::SaturationFunction<dim>::Snr() const
   {
     return snr_;
   }
 
 template<size_t dim>
-void csmp::TwoPhaseModel<dim>::Swr( double wettingResidual )
+void csmp::SaturationFunction<dim>::Swr( double wettingResidual )
   {
      swr_ = wettingResidual;
   }
 
 template<size_t dim>
-void csmp::TwoPhaseModel<dim>::Snr( double wettingNonResidual )
+void csmp::SaturationFunction<dim>::Snr( double wettingNonResidual )
   {
     snr_ = wettingNonResidual;
   }
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::SaturationWettingPhase( double64 s_wetting )
+void SaturationFunction<dim>::SaturationWettingPhase( double64 s_wetting )
 { sat_ = s_wetting; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ViscosityNonWettingPhase( double64 visc )
+void SaturationFunction<dim>::ViscosityNonWettingPhase( double64 visc )
 { mun_ = visc; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ViscosityWettingPhase( double64 visc )
+void SaturationFunction<dim>::ViscosityWettingPhase( double64 visc )
 { muw_ = visc; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::DensityNonWettingPhase( double64 dens )
+void SaturationFunction<dim>::DensityNonWettingPhase( double64 dens )
 { rhn_ = dens; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::DensityWettingPhase( double64 dens )
+void SaturationFunction<dim>::DensityWettingPhase( double64 dens )
 { rhw_ = dens; }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Permeability() const
+double64 SaturationFunction<dim>::Permeability() const
 { return k_; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::Permeability( double64 permeability )
+void SaturationFunction<dim>::Permeability( double64 permeability )
   { k_ = permeability; }
 
 template<size_t dim>
-TensorVariable<dim> TwoPhaseModel<dim>::TensorPermeability() const
+TensorVariable<dim> SaturationFunction<dim>::TensorPermeability() const
   { return K_; }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::TensorPermeability( TensorVariable<dim> permeability )
+void SaturationFunction<dim>::TensorPermeability( TensorVariable<dim> permeability )
   { K_ = permeability; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityNonWettingPhase() const
+double64 SaturationFunction<dim>::ViscosityNonWettingPhase() const
 { return mun_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityWettingPhase() const
+double64 SaturationFunction<dim>::ViscosityWettingPhase() const
 { return muw_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DensityNonWettingPhase() const
+double64 SaturationFunction<dim>::DensityNonWettingPhase() const
 { return rhn_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DensityWettingPhase() const
+double64 SaturationFunction<dim>::DensityWettingPhase() const
 { return rhw_; }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
+double64 SaturationFunction<dim>::MaxCapillaryPressure( size_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
    if ( phase == 2U ) return MAX_CAPILLARY_PRESSURE_;
@@ -288,7 +288,7 @@ double64 TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Saturation( size_t phase ) const
+double64 SaturationFunction<dim>::Saturation( size_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
    if ( phase == 2U ) return static_cast<double64>(1.) - sat_;
@@ -297,7 +297,7 @@ double64 TwoPhaseModel<dim>::Saturation( size_t phase ) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const 
+double64 SaturationFunction<dim>::MobilityPhase( size_t phase ) const 
  {
     assert( phase == 1U or phase == 2U );
     if ( phase == 1U ) return krw_Phase() / muw_;
@@ -306,19 +306,19 @@ double64 TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::TotalMobilityMultiplier() const 
+double64 SaturationFunction<dim>::TotalMobilityMultiplier() const 
  {
     return krn_Phase() / mun_ + krw_Phase() / muw_;
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::TotalMobility() const 
+double64 SaturationFunction<dim>::TotalMobility() const 
  {
     return k_ * TotalMobilityMultiplier();
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ViscosityRatio() const
+double64 SaturationFunction<dim>::ViscosityRatio() const
 {
   return mun_ / muw_;
 }
@@ -329,7 +329,7 @@ double64 TwoPhaseModel<dim>::ViscosityRatio() const
     @todo SKM averages tensor properties, but should create tensor mobilities in stead
 */
 template<size_t dim>
-void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
+void SaturationFunction<dim>::Initialize( const Element<dim>& e )
  {
     swr_ = e.Read( swr_key_ );
     snr_ = e.Read( snr_key_ );
@@ -357,7 +357,7 @@ void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
  
  
 template<size_t dim>
-void TwoPhaseModel<dim>::InitializeForBaryCenter( const Element<dim>& e )
+void SaturationFunction<dim>::InitializeForBaryCenter( const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
         e.N_AtBaryCenter( e.FE()->NRST );
@@ -367,7 +367,7 @@ void TwoPhaseModel<dim>::InitializeForBaryCenter( const Element<dim>& e )
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::InitializeForNode( const Element<dim>& e,
+void SaturationFunction<dim>::InitializeForNode( const Element<dim>& e,
                                                    size_t fem_node )
  {
     if (sw_ro_mu_placement_) {
@@ -382,7 +382,7 @@ void TwoPhaseModel<dim>::InitializeForNode( const Element<dim>& e,
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::InitializeForIntegrationPoint( size_t ip, 
+void SaturationFunction<dim>::InitializeForIntegrationPoint( size_t ip, 
                                                                const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -396,7 +396,7 @@ void TwoPhaseModel<dim>::InitializeForIntegrationPoint( size_t ip,
  
  
 template<size_t dim>
-void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_t ip,
+void SaturationFunction<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_t ip,
                                                                     const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -409,7 +409,7 @@ void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::InitializeForSectorIntegrationPoint( size_t sector, size_t ip,
+void SaturationFunction<dim>::InitializeForSectorIntegrationPoint( size_t sector, size_t ip,
                                                                      const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -433,7 +433,7 @@ phase; note also that Initialize() must be called first to get input
 parameters like residual saturations).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::EffectiveSaturation() const 
+double64 SaturationFunction<dim>::EffectiveSaturation() const 
  {
     return seff_ = std::min( std::max( (sat_ - swr_) / (1. - swr_ - snr_), 0. ), 1. );
     
@@ -442,7 +442,7 @@ double64 TwoPhaseModel<dim>::EffectiveSaturation() const
 
 /// return wetting-phase saturation based on effective saturation
 template<size_t dim>
-double64 TwoPhaseModel<dim>::SeffToSw() const
+double64 SaturationFunction<dim>::SeffToSw() const
  {
     return sat_ = seff_*(1. - swr_ - snr_) + swr_;
 
@@ -450,7 +450,7 @@ double64 TwoPhaseModel<dim>::SeffToSw() const
 
 /// return wetting-phase saturation based on effective saturation ( useful for numerical calculations )
 template<size_t dim>
-double64 TwoPhaseModel<dim>::SeffToSw( double64 seff ) const
+double64 SaturationFunction<dim>::SeffToSw( double64 seff ) const
  {
     return sat_ = seff*(1. - swr_ - snr_) + swr_;
 
@@ -463,7 +463,7 @@ Computes the fractional flow of the wetting (phase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::f_Phase( size_t phase ) const
+double64 SaturationFunction<dim>::f_Phase( size_t phase ) const
  {
     assert( phase == 1U or phase == 2U );
       if ( phase == 1U )
@@ -479,7 +479,7 @@ Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn
 and de Neef (1998). Note that Initialize() must be called first.  
  */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::G() const
+double64 SaturationFunction<dim>::G() const
  {
     const double64 lambda_w(krw_Phase() / muw_),
              lambda_n(krn_Phase() / mun_);
@@ -495,7 +495,7 @@ Returns the diffusion coefficient for the phase of interest. If not
 overloaeded, the hydraulic conductivity is returned.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DiffusionMultiplier( size_t phase ) const
+double64 SaturationFunction<dim>::DiffusionMultiplier( size_t phase ) const
 {
      assert( phase == 1U or phase == 2U );
      return k_ / ( (phase==1u) ? muw_ : mun_ );
@@ -508,7 +508,7 @@ See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
 permeability in direction of flow  x  lambda_overbar  x pc-gradient.  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::CapillaryDiffusionMultiplier( ) const
+double64 SaturationFunction<dim>::CapillaryDiffusionMultiplier( ) const
 {
    return k_ * G() * dpcds_Phase( );
 } 
@@ -522,13 +522,13 @@ function at the current saturation of the wetting phase (see Helmig, 1997,
 p. 108, eqn. 3.74, term 2 (first part).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::AdvectionMultiplier( ) const
+double64 SaturationFunction<dim>::AdvectionMultiplier( ) const
  {
     return dfds();
  } 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityTerm() const
+double64 SaturationFunction<dim>::GravityTerm() const
 {
   // note that the projected gravity acts opposite the y-axis
   const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
@@ -543,7 +543,7 @@ double64 TwoPhaseModel<dim>::GravityTerm() const
 /** See Sebastian Geiger's thesis (2004), closed form.
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityMultiplier_G( ) const
+double64 SaturationFunction<dim>::GravityMultiplier_G( ) const
 {
   // note that the projected gravity acts opposite the y-axis
   const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
@@ -564,7 +564,7 @@ lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
 p. 108, eqn. 3.74, term 2 (second part).  
 */
 template<size_t dim>
-double64 TwoPhaseModel<dim>::GravityMultiplier_dGds( ) const
+double64 SaturationFunction<dim>::GravityMultiplier_dGds( ) const
 {
     // SKM flow equations worked out with Adrian
     const double64 k_g_drho = k_ * -acc_gravity_ * (rhw_ - rhn_);
@@ -577,21 +577,21 @@ double64 TwoPhaseModel<dim>::GravityMultiplier_dGds( ) const
 } 
 
 template<size_t dim>
-csmp::Index TwoPhaseModel<dim>::WettingPhaseSaturationKey() const
+csmp::Index SaturationFunction<dim>::WettingPhaseSaturationKey() const
 {
   return sat_key_;
 }
 
 template<size_t dim>
-csmp::Index TwoPhaseModel<dim>::NonWettingPhaseSaturationKey() const
+csmp::Index SaturationFunction<dim>::NonWettingPhaseSaturationKey() const
 {
-    throw csmp::Exception( ERROR, "TwoPhaseModel<dim>::NonWettingPhaseSaturationKey()",
+    throw csmp::Exception( ERROR, "SaturationFunction<dim>::NonWettingPhaseSaturationKey()",
                            "It appears someone decided this should be the irreducible non-wet. phase saturation. Wrong." );
     return snr_key_;
 }
 
 template<size_t dim>
-csmp::Index TwoPhaseModel<dim>::TotalMobilityKey() const
+csmp::Index SaturationFunction<dim>::TotalMobilityKey() const
 {
   return lt_key_;
 }
@@ -599,7 +599,7 @@ csmp::Index TwoPhaseModel<dim>::TotalMobilityKey() const
 
 
 template<size_t dim>
-void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
+void SaturationFunction<dim>::InterpolateNodeProperties( const Element<dim>& e )
  {
     if ( interpolate_fluid_properties_ ) {
          mun_ = muw_ = rhn_ = rhw_ = sat_ = static_cast<double64>(0.);
@@ -621,28 +621,28 @@ void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
 
 /// relative permeabilities
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krw_Phase() const
+double64 SaturationFunction<dim>::krw_Phase() const
  {
-    cout <<"\nTwoPhaseModel<dim>::krw_Phase (base class): ";
+    cout <<"\nSaturationFunction<dim>::krw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-    throw logic_error("TwoPhaseModel<dim>::krw_Phase: Method not defined in subclass");
+    throw logic_error("SaturationFunction<dim>::krw_Phase: Method not defined in subclass");
     return std::numeric_limits<double64>::quiet_NaN();
  }
 
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krn_Phase() const
+double64 SaturationFunction<dim>::krn_Phase() const
  {
-    cout <<"\nTwoPhaseModel<"<< dim <<">::krn_Phase (base class): ";
+    cout <<"\nSaturationFunction<"<< dim <<">::krn_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-    throw logic_error("TwoPhaseModel<dim>::krn_Phase: Method not defined in subclass");
+    throw logic_error("SaturationFunction<dim>::krn_Phase: Method not defined in subclass");
     return std::numeric_limits<double64>::quiet_NaN();
  }
 
 /// derivatives of relative permeabilities
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_Phase() const
+double64 SaturationFunction<dim>::dkrwds_Phase() const
  {
     return dkrwds_numerical();
  }
@@ -650,53 +650,53 @@ double64 TwoPhaseModel<dim>::dkrwds_Phase() const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_Phase() const
+double64 SaturationFunction<dim>::dkrnds_Phase() const
  {
     return dkrnds_numerical();
  }
 
 /// capillary pressure
 template<size_t dim>
-double64 TwoPhaseModel<dim>::pc_Phase() const
+double64 SaturationFunction<dim>::pc_Phase() const
  {
-    cout <<"\nTwoPhaseModel<"<< dim <<">::pc_Phase (base class): ";
+    cout <<"\nSaturationFunction<"<< dim <<">::pc_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-    throw logic_error("TwoPhaseModel<dim>::pc_Phase: Method not defined in subclass");
+    throw logic_error("SaturationFunction<dim>::pc_Phase: Method not defined in subclass");
     return std::numeric_limits<double64>::quiet_NaN();
  }
 
 /// inverse capillary pressure function
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Sw_Phase(double64 ) const
+double64 SaturationFunction<dim>::Sw_Phase(double64 ) const
  {
-    cout <<"\nTwoPhaseModel<"<< dim <<">::SwFromPc(base class): ";
+    cout <<"\nSaturationFunction<"<< dim <<">::SwFromPc(base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-    throw logic_error("TwoPhaseModel<dim>::SwFromPc: Method not defined in subclass");
+    throw logic_error("SaturationFunction<dim>::SwFromPc: Method not defined in subclass");
     return std::numeric_limits<double64>::quiet_NaN();
  }
 
     /// capillary pressure derivatives
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_Phase( ) const
+double64 SaturationFunction<dim>::dpcds_Phase( ) const
  {
     return dpcds_numerical();
  }
 
 /// derivatives of inverse capillary pressure function
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dsdpc_Phase( double64 ) const
+double64 SaturationFunction<dim>::dsdpc_Phase( double64 ) const
  {
-    cout <<"\nTwoPhaseModel<"<<  dim <<">::dpcdsw_Phase (base class): ";
+    cout <<"\nSaturationFunction<"<<  dim <<">::dpcdsw_Phase (base class): ";
     cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
-    throw logic_error("TwoPhaseModel<dim>::dpcdsw_Phase: Method not defined in subclass");
+    throw logic_error("SaturationFunction<dim>::dpcdsw_Phase: Method not defined in subclass");
     return std::numeric_limits<double64>::quiet_NaN();
  }
 
 // linearized diffusion multiplier for large-timestep calculations
 template<size_t dim>
-double64 TwoPhaseModel<dim>::DiffusionCharacteristic( size_t ) const
+double64 SaturationFunction<dim>::DiffusionCharacteristic( size_t ) const
 {
-cout <<"\nTwoPhaseModel<"<<  dim <<">::DiffusionCharacteristic (base class): ";
+cout <<"\nSaturationFunction<"<<  dim <<">::DiffusionCharacteristic (base class): ";
 cout <<"This method needs to be defined in this subclass to achieve desired functionality."<< endl;
 return std::numeric_limits<double64>::quiet_NaN();
 }
@@ -704,7 +704,7 @@ return std::numeric_limits<double64>::quiet_NaN();
 
 /// derivative of wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlwds() const
+double64 SaturationFunction<dim>::dlwds() const
  {
     return dkrwds_Phase() / muw_;
 
@@ -712,7 +712,7 @@ double64 TwoPhaseModel<dim>::dlwds() const
 
 /// derivative of non-wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlnds() const
+double64 SaturationFunction<dim>::dlnds() const
  {
     return dkrnds_Phase() / mun_;
 
@@ -720,7 +720,7 @@ double64 TwoPhaseModel<dim>::dlnds() const
 
 /// derivative of fractional flow function (advection multipliers)
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds() const
+double64 SaturationFunction<dim>::dfds() const
  {
 
     //if ( ( seff_ < static_cast<double64>(0.) ) || ( seff_ > static_cast<double64>(1.) ) )
@@ -742,7 +742,7 @@ double64 TwoPhaseModel<dim>::dfds() const
      
 /// derivatives of gravitational flow
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dGds( ) const
+double64 SaturationFunction<dim>::dGds( ) const
  {
 
     //if ( ( seff_ < static_cast<double64>(0.) ) || ( seff_ > static_cast<double64>(1.) ) )
@@ -768,7 +768,7 @@ double64 TwoPhaseModel<dim>::dGds( ) const
 
 /// derivative of wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlwds_numerical( double64 h ) const
+double64 SaturationFunction<dim>::dlwds_numerical( double64 h ) const
  {
     return dkrwds_numerical( h ) / muw_;
 
@@ -776,14 +776,14 @@ double64 TwoPhaseModel<dim>::dlwds_numerical( double64 h ) const
 
 /// derivative of non-wetting phase mobility
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dlnds_numerical( double64 h) const
+double64 SaturationFunction<dim>::dlnds_numerical( double64 h) const
  {
     return dkrnds_numerical( h ) / mun_;
 
  }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_numerical( double64 h ) const
+double64 SaturationFunction<dim>::dkrwds_numerical( double64 h ) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
@@ -801,7 +801,7 @@ double64 TwoPhaseModel<dim>::dkrwds_numerical( double64 h ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_numerical( double64 h ) const
+double64 SaturationFunction<dim>::dkrnds_numerical( double64 h ) const
 {
   //if ( seff_ < 0.0 || seff_ > 1.0 )
   //      return static_cast<double64>(0.);
@@ -818,7 +818,7 @@ double64 TwoPhaseModel<dim>::dkrnds_numerical( double64 h ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds_numerical( double64 h) const
+double64 SaturationFunction<dim>::dfds_numerical( double64 h) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
@@ -853,7 +853,7 @@ double64 TwoPhaseModel<dim>::dfds_numerical( double64 h) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dGds_numerical( double64 h ) const
+double64 SaturationFunction<dim>::dGds_numerical( double64 h ) const
 {
   //if ( seff_ < 0.0 || seff_ > 1.0 )
   //      return static_cast<double64>(0.);
@@ -888,7 +888,7 @@ double64 TwoPhaseModel<dim>::dGds_numerical( double64 h ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_numerical( double64 h) const
+double64 SaturationFunction<dim>::dpcds_numerical( double64 h) const
 {
 
   //if ( seff_ < 0.0 || seff_ > 1.0 )
@@ -913,7 +913,7 @@ double64 TwoPhaseModel<dim>::dpcds_numerical( double64 h) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
+double64 SaturationFunction<dim>::MaxFractionalFlowDerivative() const
  {
     double64 speed, height;
     ShockSpeedHeight( speed, height );
@@ -922,7 +922,7 @@ double64 TwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
 
     /// linearized fractional flow derivative
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ShockSpeed() const
+double64 SaturationFunction<dim>::ShockSpeed() const
  {
     double64 speed, height;
     ShockSpeedHeight( speed, height );
@@ -931,7 +931,7 @@ double64 TwoPhaseModel<dim>::ShockSpeed() const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::ShockHeight() const
+double64 SaturationFunction<dim>::ShockHeight() const
  {
     double64 speed, height;
     ShockSpeedHeight( speed, height );
@@ -939,7 +939,7 @@ double64 TwoPhaseModel<dim>::ShockHeight() const
  }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::ShockSpeedHeight( double64& speed, double64& height)const
+void SaturationFunction<dim>::ShockSpeedHeight( double64& speed, double64& height)const
 {
   double64 se(0.);
   speed = 0;
@@ -958,32 +958,32 @@ void TwoPhaseModel<dim>::ShockSpeedHeight( double64& speed, double64& height)con
 /// General accessory functions
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::mobility_w_at( double64 se ) const
+double64 SaturationFunction<dim>::mobility_w_at( double64 se ) const
 {
   return krw_at( se ) / muw_;
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::mobility_n_at( double64 se ) const
+double64 SaturationFunction<dim>::mobility_n_at( double64 se ) const
 {
   return krn_at( se ) / mun_;
 }
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::fw_at( double64 se ) const
+double64 SaturationFunction<dim>::fw_at( double64 se ) const
 {
   return 1.0 / ( 1.0 + mobility_n_at( se ) / mobility_w_at( se ) );
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::fn_at( double64 se ) const
+double64 SaturationFunction<dim>::fn_at( double64 se ) const
 {
   return 1.0 / ( 1.0 + mobility_w_at( se ) / mobility_n_at( se ) );
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krw_at( double64 se) const
+double64 SaturationFunction<dim>::krw_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -995,7 +995,7 @@ double64 TwoPhaseModel<dim>::krw_at( double64 se) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::krn_at( double64 se) const
+double64 SaturationFunction<dim>::krn_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -1007,7 +1007,7 @@ double64 TwoPhaseModel<dim>::krn_at( double64 se) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
+double64 SaturationFunction<dim>::dkrwds_at( double64 se) const
 {
   const double64 cache = seff_;
   seff_ = se;
@@ -1018,7 +1018,7 @@ double64 TwoPhaseModel<dim>::dkrwds_at( double64 se) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
+double64 SaturationFunction<dim>::dkrnds_at( double64 se) const
 {
 
   const double64 cache = seff_;
@@ -1031,7 +1031,7 @@ double64 TwoPhaseModel<dim>::dkrnds_at( double64 se) const
 
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
+double64 SaturationFunction<dim>::dfds_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -1043,7 +1043,7 @@ double64 TwoPhaseModel<dim>::dfds_at( double64 se ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::G_at( double64 se ) const
+double64 SaturationFunction<dim>::G_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -1055,7 +1055,7 @@ double64 TwoPhaseModel<dim>::G_at( double64 se ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
+double64 SaturationFunction<dim>::pc_at( double64 se ) const
 {
 
   const double64 cache = seff_;
@@ -1067,7 +1067,7 @@ double64 TwoPhaseModel<dim>::pc_at( double64 se ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
+double64 SaturationFunction<dim>::dpcds_at( double64 se) const
 {
     double64 cache = seff_;
     seff_ = se;
@@ -1078,7 +1078,7 @@ double64 TwoPhaseModel<dim>::dpcds_at( double64 se) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
+double64 SaturationFunction<dim>::Sw_at( double64 pc ) const
 {
   const double64 cache = seff_;
   const double64 Sw = Sw_Phase( pc );
@@ -1088,7 +1088,7 @@ double64 TwoPhaseModel<dim>::Sw_at( double64 pc ) const
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
+double64 SaturationFunction<dim>::dsdpc_at( double64 pc ) const
 {
     const double64 cache = seff_;
     const double64 dsdpc = dsdpc_Phase( pc );
@@ -1100,7 +1100,7 @@ double64 TwoPhaseModel<dim>::dsdpc_at( double64 pc ) const
 
 /// Interpolations
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double64 SaturationFunction<dim>::spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
 {
     const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
     const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
@@ -1111,7 +1111,7 @@ double64 TwoPhaseModel<dim>::spline_value( double64 x, double64 x1, double64 x2,
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double64 SaturationFunction<dim>::spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
 {
     const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
     const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
@@ -1122,7 +1122,7 @@ double64 TwoPhaseModel<dim>::spline_derivative( double64 x, double64 x1, double6
 }
 
 template<size_t dim>
-double64 TwoPhaseModel<dim>::spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
+double64 SaturationFunction<dim>::spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const
 {
     const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
     const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
@@ -1133,10 +1133,10 @@ double64 TwoPhaseModel<dim>::spline_second_derivative( double64 x, double64 x1, 
 }
 
 template<size_t dim>
-void TwoPhaseModel<dim>::Out( size_t phase ) const
+void SaturationFunction<dim>::Out( size_t phase ) const
  { 
     assert( phase == 1U or phase == 2U );
-    cout <<"\nTwoPhaseModel<" << dim <<">::Out: ";
+    cout <<"\nSaturationFunction<" << dim <<">::Out: ";
     if ( phase == 1U ) cout <<" data for the wetting phase: ";
     else               cout <<" data for the non-wetting phase: ";
     if ( !interpolate_fluid_properties_ )
@@ -1178,9 +1178,9 @@ void TwoPhaseModel<dim>::Out( size_t phase ) const
 
 
 
-template class TwoPhaseModel<1U>;
-template class TwoPhaseModel<2U>;
-template class TwoPhaseModel<3U>;
+template class SaturationFunction<1U>;
+template class SaturationFunction<2U>;
+template class SaturationFunction<3U>;
 
 
 } // end namespace csp

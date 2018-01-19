@@ -11,6 +11,7 @@
 
 
 #include "BrooksCoreySaturationFunctions.h"
+#include "Variables_TwoPhaseFlow.h"
 
 namespace csmp {
 
@@ -41,96 +42,69 @@ template<size_t> class Model;
     
     Code serves as an example of how static polymorphism can be used to implement constitutive relationships for multiphase flow.
 */
-template<size_t dim>
-class FlowFunctions : public VariableSet2PhaseSlightlyCompressible,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-                public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
-                public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
+class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+                      public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
+                      public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
   public:
     FlowFunctions();
-                
-    // INITIALISATION (relperm models etc.) - maybe put this into a separate policy
-                
-    /// reads region and element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement
-    void Initialize( const Region<dim>&, const Element<dim>& e );
     
-    /// interpolates node properties to element barycenter
-    void InitializeForBaryCenter( const Element<dim>& e );
+    /// current water saturation initialised inside of the model
+    double64 Sw() const;
+    
+    /// 0 for water, 1 for the non-wetting phase
+    double64 Mobility( double64 sw, size_t phase ) const;
 
-    /// finite element integration points
-    void InitializeForIntegrationPoint( size_t ip, const Element<dim>& e );
-    /// finite volume facets
-    void InitializeForFacetIntegrationPoint( size_t facet, size_t ip, const Element<dim>& e );
-    /// finite volume sectors
-    void InitializeForSectorIntegrationPoint( size_t sector, size_t ip, const Element<dim>& e );
-                
-    // OUTPUTS
-    
-    double64 Mobility( size_t phase ) const;
-    
-    /// sum of all phase mobilities * k
-    double64 TotalMobility() const;
-    
     /// sum of all phase mobilities
-    double64 TotalMobilityMultiplier() const;
+    double64 TotalMobility( double64 sw ) const;
     
-    /// l1 * l2 / l1 + l2
-    double64 MobilityProduct() const;
+    /// k * l1 * l2 / l1 + l2 (in the case where permeability is a scalar)
+    double64 MobilityProduct( double64 sw ) const;
+ 
+     /// fractional flow; 0=water, 1=non-wetting phase
+    double64 f_Phase( double64 sw, size_t phase ) const;
 
-    // multiplier for diffusion coefficient in the case of non-linear diffusion
-    // uses viscosity(phase) 
-    double64 DiffusionMultiplier( size_t phase ) const;
+    /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
+    double64 dfds_Phase( double64 sw, size_t phase ) const;
+    
+        /// linearized fractional flow derivative
+    double64 ShockSpeed() const;
+    double64 ShockHeight() const;
+    void ShockSpeedHeight( double64& speed, double64& height) const;
+
+    /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase) 
+    double64 DiffusionMultiplier( double64 sw, size_t phase ) const;
     
     /// driven by capillary pressure gradient
-    double64 CapillaryDiffusionMultiplier() const;
+    double64 CapillaryDiffusionMultiplier( double64 sw ) const;
     
     /// multipliers for gravity-driven flow (advection multiplier and source term)
-    double64 GravityTerm() const;
-    double64 GravityMultiplier_G() const;
-    double64 GravityMultiplier_dGds() const;
+    double64 GravityTerm( double64 sw ) const;
+    double64 GravityMultiplier_G( double64 sw ) const;
+    double64 GravityMultiplier_dGds( double64 sw ) const;
 
     /// G multiplier
-    double64 G() const;
+    double64 G( double64 sw ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-   	double64 AdvectionMultiplier() const;
+   	double64 AdvectionMultiplier( double64 sw ) const;
 
     /// maximum value of previous derivative
-    double64 MaxFractionalFlowDerivative() const;
+    double64 MaxFractionalFlowDerivative( double64 sw ) const;
 
     /// maximum value of dpcdS
-    double64 MaxCapillaryPressure( size_t phase = 1U ) const;
+    double64 MaxCapillaryPressure( double64 sw, size_t phase = 1U ) const;
 
     /// always of the wetting phase by convention
-    double64  EffectiveSaturation() const;
-
-    /// fractional flow
-    double64 f_Phase( size_t phase ) const;
-                  
-    /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double64 dfds() const;
+    double64  EffectiveSaturation( double64 sw ) const;
 
     /// derivatives of gravitational flow (advection multipliers)
-    double64 dGds() const;
-    
-    // BASIC ACCESSORS - element properties are read from model, others are stored.
-    double64 Permeability() const;
-    double64 Porosity() const;
-    double64 Density( size_t phase ) const;
-    double64 Viscosity( size_t phase ) const;
-    double64 IrreducibleWaterSaturation() const;
-    double64 ResidualSaturation() const;
-    /// defaults to water phase
-    double64 Saturation( size_t phase=1 ) const;
-    
-  private:
-    csmp::Index pf0_key_, pf1_key_, T_key_,  ///< pressures at previous and current time levels
-                s1_key_, s2_key_,            ///< convention that water is the first phase
-                rho1_key_, rho2_key,         ///< fluid densities (kg/m3)
-                mu1_key_, mu2_key;           ///< dynamic fluid viscosities (Pa.s)
-  
-    double64  P_, T_, sw_;
-    double64  rhow_, rhon_, muw_, mun_;
-    
+    double64 dGds( double64 sw ) const;
+
+    /// h=saturation neighborhood increment used in the differentiation
+    double64 MobilityDerivativeNumerical( double64 sw, size_t phase, double64 h = 0.001 ) const;
+    double64 dfds_Numerical ( double64 sw, size_t phase, double64 h = 0.001 ) const;
+    double64 dGds_Numerical ( double64 sw, double64 h = 0.000001 ) const;
+    double64 dpcds_Numerical( double64 sw, double64 h = 0.00001 ) const;
 };
 
 } // end csmp
