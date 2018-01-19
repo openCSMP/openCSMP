@@ -4063,6 +4063,9 @@ typename PrimitiveContainer<csmp::InterFace<dim> >::const_iterator  MeshManager<
 
 
 template<size_t dim>
+bool MeshManager<dim>::NodeAtIndexIsSafe() const
+  { return node_collection_.IndexOperationIsSafe(); }
+template<size_t dim>
 csmp::Node<dim>& MeshManager<dim>::NodeAtIndex(size_t i)
   { return node_collection_.Index(i); }
 template<size_t dim>
@@ -4078,6 +4081,7 @@ csmp::Element<dim>& MeshManager<dim>::ElementAtIndex(size_t i)
 template<size_t dim>
 const csmp::Element<dim>& MeshManager<dim>::ElementAtIndex(size_t i) const
   { return elmt_collection_.Index(i); }
+
 template<size_t dim>
 csmp::Face<dim>& MeshManager<dim>::FaceAtIndex(size_t i)
   { return face_collection_.Index(i); }

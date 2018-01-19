@@ -108,12 +108,15 @@ class MeshManager {
     const csmp::InterFace<dim>& RootInterFace() const;
 
     // Accessors
-    /// IMPORTANT: This should only be used during mesh construction fom a file.
+    // IMPORTANT: This should only be used during mesh construction fom a file.
+    bool NodeAtIndexIsSafe() const;
     csmp::Node<dim>& NodeAtIndex(size_t i);
     const csmp::Node<dim>& NodeAtIndex(size_t i) const;
+
     bool ElementAtIndexIsSafe() const;
     csmp::Element<dim>& ElementAtIndex(size_t i);
     const csmp::Element<dim>& ElementAtIndex(size_t i) const;
+
     csmp::Face<dim>& FaceAtIndex(size_t i);
     const csmp::Face<dim>& FaceAtIndex(size_t i) const;
 
