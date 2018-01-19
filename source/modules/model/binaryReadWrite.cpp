@@ -99,16 +99,3 @@ bool skm_C_fread( FILE* fp, char str[] )
  
  
 } // end namespace csmp
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 

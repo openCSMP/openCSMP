@@ -404,7 +404,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
     try {
         // 2. constructing the elements using the VSet element type information
         // --------------------------------------------------------------------
-        typename deque<vector<size_t> >::const_iterator  first(vset.PlistBegin()), last(vset.PlistFacesBegin());
+        typename deque<vector<size_t> >::const_iterator  first(vset.PlistElmtsBegin()), last(vset.PlistElmtsEnd());
         // running index that is associated with the assumption that the elements are numbered consecutively
         // followed by the faces and the interfaces
         size_t  idx(0U);
@@ -419,11 +419,11 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
              const int32 csmpElementType = vset.ElementType(0U);
              while( first != last ) {
                   elmt_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
-                  first++;
+                  ++first;
               }
           }
         // 2.2 If there are multiple element types
-        else
+        else {
             while( first != last ) { 
 #ifndef NDEBUG
                   assert( vset.ElementTypes() == vset.Elements() + vset.Faces() + vset.InterFaces() );
@@ -435,9 +435,13 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                     } 
 #endif
                   const int32 csmpElementType = vset.ElementType(idx);
-                  elmt_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars, NOT );
-                  first++;
+                  elmt_collection_.Emplace( idx, fem_manager.E(csmpElementType), evars, cvars, NOT );
+                  ++idx;
+                  ++first;
                }
+          std::cerr << "Number of elements: " << idx << '\n';
+          std::cerr << "Number of elements: " << elmt_collection_.size() << '\n';
+        }
 
         // 3. constructing the faces using the VSet nodes information
         // ----------------------------------------------------------
@@ -449,7 +453,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
             const LocalVariables evars( phys_vars.LocalVariablesAt(FACE) );
             const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt(FACE) );
           
-            typename deque<vector<size_t> >::const_iterator  first(vset.PlistFacesBegin()), last(vset.PlistInterFacesBegin());
+            typename deque<vector<size_t> >::const_iterator  first(vset.PlistFacesBegin()), last(vset.PlistFacesEnd());
             while( first != last ) {
 #ifndef NDEBUG
                   // checking whether the element type matches the number of nodes for the given element
@@ -460,8 +464,9 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                     } 
 #endif
                   const int32 csmpElementType = vset.ElementType(idx);
-                  face_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars );
-                  first++;
+                  face_collection_.Emplace( idx, fem_manager.E(csmpElementType), evars, cvars );
+                  ++first;
+                  ++idx;
                }
           } // end faces
           
@@ -473,7 +478,7 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
             const LocalVariables evars( phys_vars.LocalVariablesAt(INTER_FACE) );
             const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt(INTER_FACE) );
 
-            typename deque<vector<size_t> >::const_iterator  first(vset.PlistInterFacesBegin()), last(vset.PlistEnd());
+            typename deque<vector<size_t> >::const_iterator  first(vset.PlistInterFacesBegin()), last(vset.PlistInterFacesEnd());
             while( first != last ) {
 #ifndef NDEBUG
                       // checking whether the element type matches the number of nodes for the given element
@@ -484,8 +489,9 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
                         } 
 #endif
                       const int32 csmpElementType = vset.ElementType(idx);
-                     interface_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars );
-                      first++;
+                      interface_collection_.Emplace( idx++, fem_manager.E(csmpElementType), evars, cvars );
+                      ++idx;
+                      ++first;
                    }
 
             } // end interfaces
@@ -875,13 +881,15 @@ bool MeshManager<dim>::InitializeVerifiedConnectivity( const VSet<dim>& vset )
       cout <<"\nMeshManager<"<< dim <<">::InitializeVerifiedConnectivity: assigning neighbors to elements..."<< endl;
     for ( auto& e : elmt_collection_ ) {
           const size_t neighbors(e.Neighbors());
-          for ( size_t j=0U; j<neighbors; ++j ) {
+          for ( size_t j=0U, nidx=0u; j<neighbors; ++j ) {
             // if there is a neighbor (as is the case if the stored index is greater than zero)
             const int32 index(static_cast<int32>(vset.Pfvert( e.Idx(), j )) );
-            if (  index >= 0 )
-                e.Assign( j, &elmt_collection_.Index( static_cast<size_t>(index) ) );
-            else
-                e.Assign( j, static_cast<Element<dim>*>(nullptr) );
+            if (index >= 0) {
+              e.Assign( nidx++, &elmt_collection_.Index( static_cast<size_t>(index) ) );
+            }
+            else {
+                e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
+            }
         }
       }
     // 3.2 faces

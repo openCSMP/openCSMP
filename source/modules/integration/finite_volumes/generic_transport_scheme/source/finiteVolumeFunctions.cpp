@@ -401,9 +401,7 @@ enum InterpolatorType {
       auto fv = eptr->FV();
       const size_t num_nodes = eptr->Nodes();
       const size_t offset = (facet * fv->IntegrationPointsPerFacet() + fip) * num_nodes;
-      for (size_t i = 0; i < var.Size(); ++i) {
-        var.Component( i, 0. );
-      }
+      var = 0.;
       for ( size_t i=0; i<num_nodes; i++ ) {
         var += eptr->N(i)->Read( prop ) * coeff_[offset+i];
       }

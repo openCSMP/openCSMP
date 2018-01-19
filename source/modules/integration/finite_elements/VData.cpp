@@ -358,14 +358,28 @@ std::vector<int32>::const_iterator  VData::PelmtInterfacesEnd() const {
     return std::next( pelmt.begin(), first_interface_ );
  }
 
-/// node iterator for first face in plist (use PlistInterFacesBegin() to find last one)
+std::deque<std::vector<size_t> >::const_iterator  VData::PlistElmtsBegin() const {
+    return plist.begin();
+ }
+
+std::deque<std::vector<size_t> >::const_iterator  VData::PlistElmtsEnd() const {
+    return std::next( plist.begin(), first_face_ );
+ }
+
 std::deque<std::vector<size_t> >::const_iterator  VData::PlistFacesBegin() const {
     return std::next( plist.begin(), first_face_ );
  }
 
-/// node iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
+std::deque<std::vector<size_t> >::const_iterator  VData::PlistFacesEnd() const {
+    return std::next( plist.begin(), first_interface_ );
+ }
+
 std::deque<std::vector<size_t> >::const_iterator  VData::PlistInterFacesBegin() const {
     return std::next( plist.begin(), first_interface_ );
+ }
+
+std::deque<std::vector<size_t> >::const_iterator  VData::PlistInterFacesEnd() const {
+    return plist.end();
  }
 
 /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
@@ -983,7 +997,9 @@ void VData::OutBinary( FILE* fp ) const
     
     // 2. writing all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
-    // px
+   {
+     BinaryFileSectionWrite sect(fp, "VSETCORD");
+     // px
     if ( (records=px.size()) > 0 && (ptr=const_cast<double64*>( &(*px.begin()) )) != NULL ) 
       {
          fwrite( (void*) &records, sizeof(size_t), 1, fp );
@@ -1004,13 +1020,26 @@ void VData::OutBinary( FILE* fp ) const
          fwrite( (void*) ptr, sizeof(double64), records, fp );
       }
     else fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+   }
 
     // 3. writing pelmt, plist, pfverts, bflags
     // ----------------------------------------
+   {
+     BinaryFileSectionWrite sect(fp, "VSETPELT");
     skm_C_fwrite( fp, pelmt );
+   }
+   {
+     BinaryFileSectionWrite sect(fp, "VSETPLST");
     skm_C_fwrite( fp, plist );
+   }
+   {
+     BinaryFileSectionWrite sect(fp, "VSETPFVT");
     skm_C_fwrite( fp, pfverts );
+   }
+   {
+     BinaryFileSectionWrite sect(fp, "VSETBFLG");
     skm_C_fwrite( fp, bflags );
+   }
    
     // 4. offsets for faces and interfaces
     // -----------------------------------
@@ -1040,6 +1069,9 @@ void VData::InBinary( FILE* fp )
     
     // 2. reading all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
+   {
+     BinaryFileSectionRead sect(fp, "VSETCORD");
+
     // px
     fread( (void*) &records, sizeof(size_t), 1, fp );
     if ( records > 0U ) {
@@ -1063,13 +1095,26 @@ void VData::InBinary( FILE* fp )
          vector<double64>( pz ).swap( pz );
          fread( (void*) &(*pz.begin()), sizeof(double64), records, fp );
       }
+   }
 
     // 3. reading pelmt, plist, pfverts, bflags
     // ----------------------------------------
+   {
+     BinaryFileSectionRead sect(fp, "VSETPELT");
     skm_C_fread( fp, pelmt );
+   }
+   {
+     BinaryFileSectionRead sect(fp, "VSETPLST");
     skm_C_fread( fp, plist );
+   }
+  {
+       BinaryFileSectionRead sect(fp, "VSETPFVT");
     skm_C_fread( fp, pfverts );
+  }
+   {
+     BinaryFileSectionRead sect(fp, "VSETBFLG");
     skm_C_fread( fp, bflags );
+   }
     
     // 4. offsets for faces and interfaces
     // -----------------------------------

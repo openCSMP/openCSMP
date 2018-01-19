@@ -326,16 +326,39 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
               auto& meshMgr = regionComplex->Mesh();
               auto spatialDimensions = subdomain.ElementSpatialDimensions();
 
+              // 1. Delete elements
               for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
-                meshMgr.Erase( *(*eit) );
+                Element<dim>* e = *eit;
+                
+                // 1.1 Remove this element from its neighbour's connections
+                for (auto& neighbour : e->NeighborElementVector()) {
+                  if (neighbour) {
+                    for (auto& nn : neighbour->NeighborElementVector()) {
+                      if (nn == e) {
+                        nn = nullptr;
+                      }
+                    }
+                  }
+                }
+                
+                // 1.2. Remove it
+                meshMgr.Erase( *e );
               }
+             
+              // 2. Rebuild node connections
               if (spatialDimensions.second == dim) {
+                // 2.1 This is a region whose dimension is dim, so interior
+                // nodes must be removed.
                 for ( auto nit=subdomain.InteriorNodesBegin(); nit!=subdomain.InteriorNodesEnd(); ++nit ) {
                   meshMgr.Erase( *(*nit) );
                 }
+                
+                // Update node connections on the nodes that were retained.
                 regionComplex->Mesh().RebuildParentRelationships(subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd());
               }
               else {
+                // 2.2 This is a region whose dimension is less than dim (i.e.
+                // a boundary or split boundary). Just update nodes.
                 regionComplex->Mesh().RebuildParentRelationships(subdomain.NodesBegin(), subdomain.NodesEnd());
               }
            }
