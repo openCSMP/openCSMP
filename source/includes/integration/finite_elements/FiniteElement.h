@@ -35,6 +35,8 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     QUADRATIC_TETRAHEDRON, 								              // TETRA_10         = 5,
                     BARYCENTRIC_QUADRATIC_TETRAHEDRON,                  // PYRA_5           = 18,
                     CUBIC_TETRAHEDRON,
+                    LINEAR_RECTANGLE,                                   // right-angle quadrilateral
+                    LINEAR_CUBOID,                                      // right-angle brick
                     ISOPARAMETRIC_LINEAR_BAR,    						            // BAR_2            = 2,
                     ISOPARAMETRIC_QUADRATIC_BAR, 						            // BAR_3            = 3,
                     ISOPARAMETRIC_CUBIC_BAR, 

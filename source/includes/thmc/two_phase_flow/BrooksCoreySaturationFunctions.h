@@ -16,8 +16,8 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class BrooksCoreySaturationFunctions {
   public:
-    BrooksCorey( const Model<dim>&, const char* bc_param, const char* pd_param );
-     ~BrooksCorey();
+    BrooksCoreySaturationFunctions( const Model<dim>&, const char* bc_param, const char* pd_param );
+     ~BrooksCoreySaturationFunctions();
     
     /// relative permeabilities - parameters come from subclass FlowFunctions
     double64 krn_Phase() const;

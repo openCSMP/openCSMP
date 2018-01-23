@@ -1,14 +1,7 @@
-#ifndef CSMP_TWO_PHASE_MODEL_H
-#define CSMP_TWO_PHASE_MODEL_H
+#ifndef CSMP_SATURATION_FUNCTION_H
+#define CSMP_SATURATION_FUNCTION_H
 
-#include "Node.h"
-#include "Element.h"
-#include "PropertyDatabase.h"
-#include "Exception.h"
-#include "FiniteVolumeStencil.h"
-#include "TensorVariable.h"
-#include "TensorVariable1.h"
-#include "TensorVariable2.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 
@@ -23,67 +16,56 @@ now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting...
 template<size_t dim, template<size_t> class USER>
 class SaturationFunction {
   public:
+    SaturationFunction() : pc_max_(1e7), dpcds_max_(1e6) {}
   
-    virtual ~SaturationFunction();
-
-    /// maximum value of dpcdS
-    double64 MaxCapillaryPressure( size_t phase = 1U ) const;
-
     /// always of the wetting phase by convention
-    virtual double64  EffectiveSaturation() const;
-    virtual double64  SeffToSw() const;
-    virtual double64  SeffToSw( double64 seff) const;
+    double64  EffectiveSaturation( double64 sw ) const;
+    double64  SeffToSw( double64 seff ) const;
 
     /// relative permeabilities
-    virtual double64 krn() const = 0;
-    virtual double64 krw() const = 0;
+    double64 krw( double64 sw ) const;
+    double64 krn( double64 sw ) const;
 
     /// derivatives of relative permeabilities
-    virtual double64 dkrnds() const;
-    virtual double64 dkrwds() const;
+    double64 dkrwds( double64 sw, bool evaluate_numerically=true ) const;
+    double64 dkrnds( double64 sw, bool evaluate_numerically=true ) const;
 
     /// capillary pressure (limit this to 4e7, the max strength of the rock)
     /// do this by computing seff for which pc=4e7, then use this seff as
     /// a limiting value @attention absolute saturation is used
-    virtual double64 pc() const = 0;
+    double64 pc( double64 sw ) const;
 
-    /// capillary pressure derivatives (treat seff as for previous function)
-    virtual double64 dpcds() const = 0;
+    /// maximum value of pc
+    double64 MaxCapillaryPressure() const;
 
-    /// inverse capillary pressure function
-    virtual double64 Sw( double64 pc ) const;
+     /// inverse capillary pressure function
+    double64 Sw( double64 pc ) const;
+
+    /// maximum value of dpcdS
+    double64 MaxCapillaryPressureDerivative() const;
+
+   /// capillary pressure derivatives; @attention always use sw and not seff
+    double64 dpcds( double64 sw, bool evaluate_numerically=true ) const;
 
     /// derivatives of inverse capillary pressure function
-    virtual double64 dsdpc( double64 pc ) const;
+    double64 dsdpc( double64 pc, bool evaluate_numerically=true ) const;
   
-    /// Numerical derivatives
-    double64  krw_at( double64 ) const;
-    double64  krn_at( double64 ) const;
-    double64  dkrwds_at( double64 ) const;
-    double64  dkrnds_at( double64 ) const;
-    double64  pc_at( double64 se ) const;
-    double64  dpcds_at( double64 se) const;
-    double64  Sw_at( double64 se) const;
-    double64  dsdpc_at( double64 se) const;
-
-    virtual double64 dkrwds_numerical( double64 h = 0.001 ) const;
-    virtual double64 dkrnds_numerical( double64 h = 0.001 ) const;
-    virtual double64 dpcds_numerical(  double64 h = 0.00001 ) const;
-
-    // TODO: check what these splines are?
-    double64 spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
-    double64 spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
-    double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2) const;
-
     /// default is the wetting phase
-    virtual void Out() const;
+    void Out() const;
     
   protected:
-    SaturationFunction();
-  
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+
+    /// Numerical derivatives
+    double64 dkrwds_Numerical( double64 sw, double64 h = 0.001 ) const;
+    double64 dkrnds_Numerical( double64 sw, double64 h = 0.001 ) const;
+    double64 dpcds_Numerical(  double64 sw, double64 h = 0.00001 ) const;
+  
+  private:
+    const double64 pc_max_, dpcds_max_;
+  
 };
 
 } // end namespace csmp

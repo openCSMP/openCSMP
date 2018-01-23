@@ -33,7 +33,7 @@ public:
 	virtual double64   dN_At(DenseMatrix<DM_MIN>& B, const std::vector<double64>& xyz);
 	virtual void       CounterClockwiseNodes(std::vector<size_t>& ids) const;
 	virtual CSMP_FEM_TYPE  ElementTypeOfSegment(size_t) const { return LINEAR_BAR; };
-	virtual CSMP_FEM_TYPE  ElementTypeOfFace(size_t) const { return LINEAR_QUADRILATERAL; };
+	virtual CSMP_FEM_TYPE  ElementTypeOfFace(size_t) const { return LINEAR_RECTANGLE; };
 	// void TestElementIntegrals(DenseMatrix<DM_MIN>& XY);
 private:
 	void dN_Partial_At(std::vector<double64>& V, const std::vector<double64>& xyz, size_t partial);

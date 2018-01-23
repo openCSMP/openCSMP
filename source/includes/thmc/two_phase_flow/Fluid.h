@@ -9,6 +9,8 @@
 #ifndef CSMP_FLUID_H
 #define CSMP_FLUID_H
 
+#include "CSMP_definitions.h"
+
 namespace csmp {
 
 //  unit conversions
@@ -37,42 +39,46 @@ namespace csmp {
 
     double64  KelvinTodegreeC( double64 temperatureInK );
 
-
+/**
+    blueprint for any specific Fluid property class to be used in the generic transport scheme.
+*/
 template<size_t dim, template<size_t> class USER>
 class Fluid {
   public:
     /// temperature oC at current initialisation point in Element
-    double64 Temperature() const;
+    double64 Temperature() const { return User()->T; }
   
     /// fluid pressure (Pa) at current initialisation point in Element
-    double64 Pressure() const;
+    double64 Pressure() const { return User()->P; }
   
     /// salinity, mSalt (molality = moles/kg)
-    double64 Salinity() const;
+    double64 Salinity() const { return User()->salinity; }
   
     /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    double64 XCO2() const;
+    double64 XCO2_AqueousPhase() const { return User()->XCO2; }
 
     /// composition: mass fraction (0..1) of water in the aqueous phase
-    double64 XH2O() const;
+    double64 XH2O_AqueousPhase() const { return User()->XH2O; }
 
     /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    double64 YCO2() const;
+    double64 YCO2_CarbonicPhase() const { return User()->YCO2; }
 
     /// composition: mass fraction (0..1) of water in the carbonic phase
-    double64 YH2O() const;
+    double64 YH2O_CarbonicPhase() const { return User()->YH2O; }
   
     double64 Viscosity( double64 pf, double64 T, double64 salinity=0., size_t phase=0 ) const;
     double64 Density( double64 pf, double64 T, double64 salinity=0., size_t phase=0 ) const;
     double64 DensityMixture( double64 pf, double64 T, double64 sw, double64 salinity=0. ) const;
 
     // versions that account for dissolved CO2
-    double64 Viscosity( double64 pf, double64 T, double64 salinity=0., double64 XCO2, double64 YH2O, size_t phase=0 ) const;
-    double64 Density( double64 pf, double64 T, double64 salinity=0., double64 XCO2, double64 YH2O, size_t phase=0 ) const;
-    double64 DensityMixture( double64 pf, double64 T, double64 sw, double64 XCO2, double64 YH2O, double64 salinity=0. ) const;
+    double64 Viscosity( double64 pf, double64 T, double64 salinity, double64 XCO2, double64 YH2O, size_t phase=0 ) const;
+    double64 Density( double64 pf, double64 T, double64 salinity, double64 XCO2, double64 YH2O, size_t phase=0 ) const;
+    double64 DensityMixture( double64 pf, double64 T, double64 sw, double64 salinity, double64 XCO2, double64 YH2O ) const;
+  
+    double64 ViscosityRatio( double64 pf, double64 T, double64 msalt=0. ) const;
 
   protected:
-    Fluid();
+    Fluid() = delete;
     ~Fluid() = delete;
   
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of

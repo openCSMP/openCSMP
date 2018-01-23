@@ -31,6 +31,12 @@ void outputIntegrationPointDataToVTK( const Element<dim>&, const csmp::Index&, c
 template<size_t dim>
 void outputIntegrationPointsToVTK( const Element<dim>&, const char* file );
 
+/// output the perimeter line of a region to VTK file
+void outputRegionBoundaryToVTK( const Model<2U>&, const char* region, const char* file );
+
+/// output the perimeter surface of a region to VTK file
+void outputRegionBoundaryToVTK( const Model<3U>&, const char* region, const char* file );
+
 
 
 /** Outputs csmp data to VTK Ascii text format

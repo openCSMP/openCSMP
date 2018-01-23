@@ -146,8 +146,8 @@ class TwoPhaseModel {
     double64 f_Phase( size_t phase ) const;
   
     /// fractional flow of water at water saturation sw
-    double64 fw( double64 sw ) const;
-    double64 fn( double64 sw ) const;
+    double64 fw_at( double64 sw ) const;
+    double64 fn_at( double64 sw ) const;
 
     /// relative permeabilities
     virtual double64 krn_Phase() const = 0;
