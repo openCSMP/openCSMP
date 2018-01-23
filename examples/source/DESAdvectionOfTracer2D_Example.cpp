@@ -1,4 +1,4 @@
-#include "Tutorial2_Example.h"
+#include "DESAdvectionOfTracer2D_Example.h"
 
 // the CSMP model
 #include "Model.h"
@@ -11,9 +11,8 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
-// FV algorithms
-#include "ExplicitNodeCenteredFiniteVolumeTransport.h"
-#include "NodeCenteredFiniteVolumeTransport.h"
+// DES algorithms
+#include "DESTransport.h"
 
 // output interfaces
 #include "VTK_Interface.h"
@@ -31,47 +30,34 @@ using namespace std;
 
 namespace csmp {
 
-void Tutorial2_Example::Specifications()
+void DESAdvectionOfTracer2D_Example::Specifications()
 {
-  SetTitle( "Tutorial 2: Diffusion - advection" );
+  SetTitle( "2D Passive advection of concentration using DES (discrete event simulation)" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
-  AddAuthor( "Sebastian Geiger" );
+  SetCategory( "Numerical Methods" );
+  AddAuthor( "Qi Shao" );
   AddDescription( "A steady state pressure diffusion equation solved using a fully" );
   AddDescription( "implicit FE discretisation and computes the velocity field averwards. This velocity field is" );
-  AddDescription( "then used to compute the advection of a non-reacting chemical species with the FV method " );
-  AddDescription( "(explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from" );
-  AddDescription( "which the Model is built. Output is written to VTK and Matlab files." );
-  AddRequirement( " tutorial2_input (10 x 10m), tutorial2_variables.txt");
+  AddDescription( "then used to compute the advection of a non-reacting chemical species with both the " );
+  AddDescription( "discrete event simulation (DES) and the time-driven simulation (TDS)." );
+  AddDescription( "Their outputs are written to VTK files and and their efficiency are compared." );
+  AddDescription( "A simple quadrilateral FE mesh is generated automatically in CSMP from which the Model is built." );
+  AddRequirement( " tutorial2_input_20x20 (20 x 20m), DES_variables.txt");
 } // Initialize()
 
 // **********************************************************************************************
 //
 // A CSMP main file that first solves the steady state pressure diffusion equation using a fully
 // implicit FE discretisation and computes the velocity field averwards. This velocity field is
-// then used to compute the advection of a non-reacting chemical species with the FV method
-// (explicit or implicit). A simple quadrilateral FE mesh is generated automatically in CSMP from
-// which the Model is built. Output is written to VTK and Matlab files.
-//
-//
-// Tasks and exercises:
-//
-// 1. Change the permeability and/or porosity of the central Region and observe how solute
-//    transport behaviour varies.
-// 2. Compare different time-stepping schemes
-// 3. Use tutorial 1 as a template and generate a transient FE algorithm that solves the
-//    diffusion of the solute.
-// 4. Generate a simple mesh that is only 1 FE high, use a uniform permeability and apply
-//    boundary conditions such that you can compare numerical results for advection and diffusion
-//    with an analytical solution. Vary the different Peclet number (ratio of advection over
-//    diffusion) and investigate different time-stepping and spatial approximation schemes.
-//
-// TODO: SKM implicit version produces artifacts at edges
-// TODO: SKM remove right-hand side fixed concentration BC
+// then used to compute the advection of a non-reacting chemical species with both the
+// discrete event simulation (DES) and the time-driven simulation (TDS).
+// Their outputs are written to VTK files and and their efficiency are compared.
+// A simple quadrilateral FE mesh is generated automatically in CSMP from
+// which the Model is built.
 //
 // **********************************************************************************************
 
-void Tutorial2_Example::Run()
+void DESAdvectionOfTracer2D_Example::Run()
 {
     // -----------------------------------------------------------------------
     // 1.0 Generate a simple quadrilateral FE mesh from color-coded input file
@@ -80,9 +66,9 @@ void Tutorial2_Example::Run()
     VSet<2U>           mesh_container;  // container to store the input mesh
     string             file_name;
     double64           x, y;
-    cout << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
+    cerr << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
     cin >> file_name;
-    cout << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
+    cerr << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
     cin >> x;
     cin >> y;
 
@@ -98,7 +84,7 @@ void Tutorial2_Example::Run()
     // --------------------------------------------
     // 2.0 Create Model with isoparametric FEs
     // --------------------------------------------
-    Model<2U>                  model( mesh_container, "tutorial2_variables.txt", true ); // true = isoparametric FEs
+    Model<2U>                  model( mesh_container, "DES_variables.txt", true ); // true = isoparametric FEs
     const PropertyDatabase<2>& p_ref = model.Database();
 
     // give the model dimensions
@@ -115,7 +101,9 @@ void Tutorial2_Example::Run()
     // assigning initial conditions
     model.InputPropertyValue( "fluid pressure",        makeScalar(PLAIN,1.0e+07) );  // always in Pascal
     model.InputPropertyValue( "fluid volume source",   makeScalar(PLAIN,0.0) );      // no sources/sinks (units m3 m-2 s-1)
+    model.InputPropertyValue( "nodal fluid volume source",   makeScalar(PLAIN,0.0) ); 
     model.InputPropertyValue( "concentration",         makeScalar(PLAIN,1.0) );      // initially one (units kg m-3)
+    model.InputPropertyValue( "new concentration",     makeScalar(PLAIN,0.0) );
     model.InputPropertyValue( "concentration source",  makeScalar(PLAIN,0.0) );      // no sources/sinks for solute (units kg m-3 s-1)
 
 
@@ -213,78 +201,47 @@ void Tutorial2_Example::Run()
     vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", 0 );
     vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       0 );
     vtk_output.OutputDataToVTK( model, "volume_flux",    "volume flux",    0 );
-    // to Matlab files
-    matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure",    0 );
-    matlab.Write2DMatlabFile(  model, "concentration",  "concentration",     0 );
-    matlab.Write2DMatlabFile(  model, "volume_flux",    "nodal volume flux", 0 );
-
 
     // -------------------------------------------------------------
     // 8.0 Construct the finite volume grid and transport algorithms
     // -------------------------------------------------------------
     Standard_IO_Handler  stdio;
-    double64 cfl_multiplier(0.5); // for explicit transport, CFL should be mulitplied by 0.5
-
-    // query user if implicit or explicit FV scheme should be used
-    cerr << "\nHit enter to continue..." << endl;
-    bool  implicit = stdio.YesNo("Do you want to solve the advection equation implicitly (n=explicitly)");
-
-    // NULL pointer to FV transport algorithm
-    NodeCenteredFiniteVolumeTransport<2U>*  transport(NULL);
-
-    if ( implicit ) {
-        // implicit finite volume scheme
-        transport = new NodeCenteredFiniteVolumeTransport<2U>( "Model",                         // default region is named 'Model'
-                                                               model,
-                                                               "porosity",                      // porosity multiplier
-                                                               "concentration",                 // advected variable
-                                                               "velocity",                      // advecting variable
-                                                               "concentration source",          // source terms
-                                                               false,                           // second-order accuracy
-                                                               false );                         // higher-order temporal approximation should not be used
-
-        cfl_multiplier = 10000.0; // overstep the CFL critertion by a factor 10000 in implict method
-      }
-    else {
-        // query user if higher order FV scheme with slope reconstruction should be used
-        bool second_order = stdio.YesNo("Do you want to use a second order accurate FV advection algorithm in space (n=first order accuracy)");
-
-        // explicit finite volume scheme
-        transport = new ExplicitNodeCenteredFiniteVolumeTransport<2U,ExplicitStencilProcessor>
-                                                                  ( "Model",                          // default region is named 'Model'
-                                                                     model,
-                                                                     "porosity",                      // porosity multiplier
-                                                                     "concentration",                 // advected variable
-                                                                     "velocity",                      // advecting variable
-                                                                     "concentration source",          // source terms
-                                                                     second_order );                  // second-order accuracy
-      }
+    double64 cfl_multiplier; // for explicit transport, CFL should be mulitplied by 0.5
+    cerr <<"\nEnter CFL multiplier: (suggested value 0.3 ~ 0.7)";
+    cin  >> cfl_multiplier;    
 
     // -----------------------
     // 9.0 Time Loop Variables
     // -----------------------
     // define some constant variables
     const double64    hour(3600.0);
-    const double64    max_time (240.0*hour);    // run for 10 days
-    double64          time_increment(2.0*hour); // timestep 2 hours
-    const long        save_frequency(6);        // write results to file every 12 hours
-    size_t	          save_counter(1), time;
+    double64	hours = 720.0;
+    double64	max_time=hours*hour;    
+    double64	time_increment(2.0*hour); // timestep 2 hours
+    const long	save_frequency(hours/40);  // write results to file
+    
+    double64	model_time(0.);	// global time for simulated runtime
+    size_t	save_counter(1), time;     
+    double64	PEP_factor=1.0;
+    size_t	n_threads=1;    
 
+    bool  DES = stdio.YesNo("Do you want to solve the advection equation with DES (y=DES, n=TDS)");
 
-    // -----------------------
-    // 10.0 Transient loop
-    // -----------------------
-    // define the variables used throughout the simulation
-    double64  model_time(0.);                                 // global time for simulated runtime
-
+    if (DES)
+    {
+    // ----------------------------------------
+    // 10.0 Transient loop using DES simulation
+    // ----------------------------------------
+    cerr <<"\n\nmain: Starting DES simulation: "<<endl;
+    clock_t T_begin= clock();    
+    DESTransport<2U>* DES_transport = new DESTransport<2U>(model, "Model");        
+   
     while ( model_time < max_time )
-      {
-
-         // compute advection of solute
-         // first boolean: check and correct for divergence of flow field
-         // second boolean: update velocity field (set to true if it changes in time)
-         transport->AdvectVariable( time_increment, cfl_multiplier, true, false );
-
+    {
+         // compute advection of solute with DES
+         DES_transport->AdvectVariable_DES( model_time+time_increment, cfl_multiplier, PEP_factor, n_threads);   
+         //DES_transport->AdvectVariable_TDS( time_increment, model_time+time_increment, cfl_multiplier, PEP_factor);
+                 
          // increment time
          model_time += time_increment;
 
@@ -292,27 +249,57 @@ void Tutorial2_Example::Run()
          if ( save_counter == save_frequency ) {
               time = static_cast<long>(model_time/hour);
               // to VTK files
-              vtk_output.OutputDataToVTK( model, "concentration", "concentration", time );
-              // to Matlab files
-              matlab.Write2DMatlabFile(  model, "concentration", "concentration", time );
+              vtk_output.OutputDataToVTK( model, "DES_concentration", "concentration", time );
+              vtk_output.OutputDataToVTK( model, "DES_update_count", "update count", time );
+              vtk_output.OutputDataToVTK( model, "DES_variation_rate_count", "rate count", time );
+              vtk_output.OutputDataToVTK( model, "DES_schedule_count", "schedule count", time );
+              vtk_output.OutputDataToVTK( model, "DES_synchronization_count", "synchronize count", time );
+                          
               save_counter = 0;
           }
          save_counter++;
-
+         
          // runtime info
          cout <<"\n\nmain: RUNTIME (HRS): "<< model_time/hour << endl << endl;
+    }
+    cerr <<"\nmain: Finished DES simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;
+    }
 
-      }
+    else
+    {
+    // ----------------------------------------
+    // 11.0 Transient loop using TDS simulation
+    // ----------------------------------------
+    cerr <<"\n\nmain: Starting TDS simulation: "<<endl;
+    clock_t	T_begin= clock();   
+    DESTransport<2U>* TDS_transport = new DESTransport<2U>(model, "Model");      
+    
+    while ( model_time < max_time )
+    {
+         // compute advection of solute with DES
+         TDS_transport->AdvectVariable_TDS( time_increment, cfl_multiplier, PEP_factor);
+                 
+         // increment time
+         model_time += time_increment;
 
-    // final output
-    // to VTK files
-    time = static_cast<long>(model_time/hour);
-    vtk_output.OutputDataToVTK( model, "concentration", "concentration", time );
-    // to Matlab files
-    matlab.Write2DMatlabFile(  model, "concentration", "concentration", time );
-
+         // output variables
+         if ( save_counter == save_frequency ) {
+              time = static_cast<long>(model_time/hour);
+              // to VTK files
+              vtk_output.OutputDataToVTK( model, "TDS_concentration", "concentration", time );
+                          
+              save_counter = 0;
+          }
+         save_counter++;
+         
+         // runtime info
+         cout <<"\n\nmain: RUNTIME (HRS): "<< model_time/hour << endl << endl;
+    }
+    cerr <<"\nmain: Finished TDS simulation, using time (sec): "<< (clock() - T_begin)/double64(CLOCKS_PER_SEC) << endl;
+    }
+    
     // terminate
-    cout <<"\nmain: That's it..."<< endl;
+    cerr <<"\nmain: That's it..."<< endl;
 
 } // Run()
 
