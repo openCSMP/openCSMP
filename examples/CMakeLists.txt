@@ -59,7 +59,7 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${INCLUDES_DIR}/integration/finite_elements
 	${INCLUDES_DIR}/integration/finite_volumes
 	${INCLUDES_DIR}/integration/finite_volumes/legacy_transport_scheme
-	${INCLUDES_DIR}/integration/finite_volumes/generic_transport_scheme
+	${INCLUDES_DIR}/integration/finite_volumes/DES_transport_scheme
 	${INCLUDES_DIR}/integration/solver
 	${INCLUDES_DIR}/integration/pde_integrators
 	${INCLUDES_DIR}/integration/pde_operators

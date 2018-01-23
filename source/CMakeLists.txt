@@ -144,6 +144,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${INCLUDES_DIR}/integration/finite_volumes
     ${INCLUDES_DIR}/integration/finite_volumes/generic_transport_scheme
     ${INCLUDES_DIR}/integration/finite_volumes/legacy_transport_scheme
+    ${INCLUDES_DIR}/integration/finite_volumes/DES_transport_scheme
     ${INCLUDES_DIR}/integration/pde_integrators
     ${INCLUDES_DIR}/integration/pde_operators
     ${INCLUDES_DIR}/integration/pde_operators/analytical

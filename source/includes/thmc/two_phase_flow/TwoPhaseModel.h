@@ -144,6 +144,10 @@ class TwoPhaseModel {
 
     /// fractional flow
     double64 f_Phase( size_t phase ) const;
+  
+    /// fractional flow of water at water saturation sw
+    double64 fw_at( double64 sw ) const;
+    double64 fn_at( double64 sw ) const;
 
     /// relative permeabilities
     virtual double64 krn_Phase() const = 0;
@@ -153,16 +157,16 @@ class TwoPhaseModel {
     virtual double64 dkrnds_Phase() const;
     virtual double64 dkrwds_Phase() const;
 
-    virtual double64 dlnds( ) const;
-    virtual double64 dlwds( ) const;
+    virtual double64 dlnds() const;
+    virtual double64 dlwds() const;
 
     /// capillary pressure (limit this to 4e7, the max strength of the rock)
     /// do this by computing seff for which pc=4e7, then use this seff as
     /// a limiting value
-    virtual double64 pc_Phase( ) const = 0;
+    virtual double64 pc_Phase() const = 0;
 
     /// capillary pressure derivatives (treat seff as for previous function)
-    virtual double64 dpcds_Phase( ) const = 0;
+    virtual double64 dpcds_Phase() const = 0;
 
     /// inverse capillary pressure function
     virtual double64 Sw_Phase( double64 pc_Phase ) const;
@@ -171,16 +175,15 @@ class TwoPhaseModel {
     virtual double64 dsdpc_Phase( double64 pc_Phase ) const;
                                   
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    virtual double64 dfds( ) const;
+    virtual double64 dfds() const;
 
     /// derivatives of gravitational flow (advection multipliers)
-    virtual double64 dGds( ) const;
+    virtual double64 dGds() const;
     
     /// Numerical derivatives
+    // mobility ratio?
     double64  mobility_w_at( double64 ) const;
     double64  mobility_n_at( double64 ) const;
-    double64  fw_at( double64 ) const;
-    double64  fn_at( double64 ) const;
     double64  krw_at( double64 ) const;
     double64  krn_at( double64 ) const;
     double64  dkrwds_at( double64 ) const;

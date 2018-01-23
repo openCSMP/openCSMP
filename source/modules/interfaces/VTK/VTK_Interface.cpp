@@ -3039,6 +3039,208 @@ template void outputIntegrationPointDataToVTK( const Element<2>&, const csmp::In
 template void outputIntegrationPointDataToVTK( const Element<3>&, const csmp::Index&, const char*, const char* );
 
 
+
+// -------------------------------------------------------------------------------------------
+// 2018 code additions
+// -------------------------------------------------------------------------------------------
+
+/// output the perimeter line of a region to VTK file
+void outputRegionBoundaryToVTK( const Model<2U>&, const char* region, const char* file )
+ {
+    cerr <<"\noutputRegionBoundaryToVTK: 2D version not implemented yet.\n";
+ }
+
+
+
+/// output the perimeter surface of a region to VTK file
+void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, const char* file )
+ {
+    // generate unique node map
+   
+     // 0. creating list of consecutive nodes
+     // -------------------------------------------------
+     const Region<3U>&  subdomain(model.Region(region));
+     subdomain.UpdateMemberIndexes();
+
+     //   reading node properties in alphabetical order
+     // -----------------------------------------------
+     string       variable;
+     set<string>  node_props;
+
+     model.Database().ListProperties( NODE, node_props );
+     csmp::Index  prop_key(model.Database().StorageKey((*node_props.begin()).c_str()));
+     
+
+     // 2. opening data output file in ascii format
+     // -------------------------------------------
+     string region_name(region);
+     replaceWhiteSpaceBy( region_name, '_' );
+     char  outfile[NAME_STRING];
+     if ( region_name != "Model" ) {
+          strcpy( outfile, region_name.c_str() );
+          strcat( outfile, "_" );
+          strcat( outfile, region_name.c_str() );
+       }
+     else strcpy( outfile, file );
+     strcat( outfile, to_string(0U).c_str() );
+     strcat( outfile, ".vtk" );
+       
+     ofstream ofs;
+     ofs.open( outfile, ios::out|ios::trunc );
+     if ( !ofs )
+        throw csmp::Exception( ERROR, "outputRegionBoundaryToVTK",
+                              "Output file could not be opened");
+   
+     // 2. writing the file header
+     // --------------------------
+     ofs.precision(15); // double precision has at list 15 significant digits
+     ofs <<"# vtk DataFile Version 2.0"<< endl;
+     ofs <<"Finite-element dataset (CSMP): Complete set of NODE properties at timestep: "<< 0U << endl;
+     ofs <<"ASCII"<< endl << endl;
+     
+     // 3. writing node coordinates & getting the first dataset
+     // -------------------------------------------------------
+     variable = (*node_props.begin());
+     replaceWhiteSpaceBy( variable, '_' );     
+     ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
+     ofs <<"POINTS " << subdomain.PerimeterNodes() <<" double"<< endl;
+     for ( size_t i=subdomain.PerimeterNodes(); i<subdomain.Nodes(); ++i ) {
+          for ( size_t j=0U; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
+          ofs << endl;
+       }
+     ofs << endl;  
+       
+     // 4. getting total number of connections + numbers giving connections per element
+     // -------------------------------------------------------------------------------
+     deque<VTK_TYPE> geometric_primitives_VTK;
+     // 2 options: triangle and quadrilateral
+     size_t cell_list_size(0);
+     for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
+       for ( size_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+             CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j));
+             geometric_primitives_VTK.push_back( parseElementType(fem_type) );
+             cell_list_size += ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE ||
+                                 fem_type == LINEAR_TRIANGLE3D ||             // # face nodes
+                                 fem_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) ? 3U : 4U;
+             cell_list_size += 1U; // to store number of nodes per face
+         }
+   
+     // 5. writing CELLS (cell-size and member nodes (point)) = plist equivalent
+     // ------------------------------------------------------------------------
+     ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
+     vector<size_t> fnids;
+     for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
+       for ( size_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+             // writing out the number of nodes per face
+             CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j) );
+             if      ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE )    ofs << 3U <<" ";
+             else if ( fem_type == LINEAR_TRIANGLE3D )                ofs << 3U <<" ";
+             else if ( fem_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) ofs << 6U <<" ";
+             // writing out the node numbers (indexes)
+             subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j), fnids );
+             for ( size_t k=0U; k<fnids.size(); ++k )
+               ofs << subdomain.E(i)->N( fnids[k] )->Idx() <<" ";
+             ofs << endl;
+         }
+     ofs << endl;
+   
+     // 6. writing CELL_TYPES
+     // ---------------------
+     ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
+     for ( auto vit=geometric_primitives_VTK.begin(); vit!=geometric_primitives_VTK.end(); vit++ )
+       ofs << (*vit) << endl;
+     ofs << endl;
+
+     // 7. writing POINT_DATA point-type data values
+     // --------------------------------------------
+     size_t  line_break, offset(3); // offset for case where x,y,z are stored
+     bool    first_iteration(true);
+
+     // property after property
+     for ( set<string>::const_iterator
+           npit=node_props.begin(); npit!=node_props.end(); npit++ )
+       {
+          cout <<"\n\tOutputting property: '"<< (*npit) <<"' to VTK file..."<< endl;
+          line_break = 1;
+          // getting the property data, but only after first set was written
+          if ( first_iteration ) {
+               ofs <<"POINT_DATA "<< subdomain.PerimeterNodes() << endl;
+               ofs.setf( ios::scientific );
+               first_iteration = false;
+            }
+          else {
+               csmp::Index prop_key1(model.Database().StorageKey((*npit).c_str()));
+               variable = (*npit).c_str();
+               replaceWhiteSpaceBy( variable, '_');
+               // now only get data without coordinates
+               offset = 0;
+            }
+       
+          // writing the property data
+          switch( prop_key.type )
+            {
+               case SCALAR: { // 6 scalars per line
+                    ofs <<"SCALARS "<< variable <<" double"<< endl;
+                    ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
+                    // writing the node data
+                    size_t max_items_per_line(6U), items(0U);
+                    for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+                          ofs << (*nit)->Read( prop_key ) <<" ";
+                          if ( items == max_items_per_line ) {
+                              ofs <<"\n";
+                              items = 0U;
+                            }
+                          items++;
+                      }
+                    ofs << endl;
+                    }
+                 break;
+
+               case VECTOR: { // 2 vecs per line
+                    VectorVariable<3U> vc;
+                    ofs <<"VECTORS "<< variable <<" double"<< endl;
+                    size_t max_items_per_line(2U), items(0U);
+                    for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+                          (*nit)->Read( prop_key, vc );
+                          for ( size_t n=0U; n<3U; ++n )
+                            ofs << vc[n] <<" ";
+                          if ( items == max_items_per_line ) {
+                              ofs <<"\n";
+                              items = 0U;
+                            }
+                          items++;
+                       }
+                    ofs << endl;
+                  }
+                break;
+                
+               case TENSOR: { // 1 tensor per line
+                    TensorVariable<3U> ts;
+                    ofs <<"TENSORS "<< variable <<" double"<< endl;
+                   for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+                          (*nit)->Read( prop_key, ts );
+                          for ( size_t m=0U; m<3U; ++m )
+                            for ( size_t n=0U; n<3U; ++n )
+                              ofs << ts(m,n) <<" ";
+                       }
+                    ofs << endl;
+                    }
+                 break;
+               default:
+                 throw csmp::Exception( ERROR, "outputRegionBoundaryToVTK:",
+                                       "treatment of Array and FlaggedArray variables not handled yet.");
+            }
+            
+       } // end for properties
+       
+     ofs.close();
+     cout <<"\noutputRegionBoundaryToVTK: file '"<< outfile <<"' written successfully."<< endl;
+   
+ } // end outputRegionBoundaryToVTK(3D)
+
+
+
+
 } // end namespace csmp
 
 

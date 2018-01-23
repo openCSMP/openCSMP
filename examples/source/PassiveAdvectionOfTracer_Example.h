@@ -29,7 +29,6 @@ class  PassiveAdvectionOfTracer_Example : public Example {
     void AdvectVariableFirstOrderImplicit( Model<3U>&, const char* group );
     void AdvectVariableSecondOrderImplicit( Model<3U>&, bool bijective_mapping );
     void AdvectVariableSecondOrderImplicitSecondOrderInTime( Model<3U>&, bool bijective_mapping );
-    void AdvectVariableDES( Model<3U>&, VTK_Interface<3U>& );
 };
 
 } // csmp
