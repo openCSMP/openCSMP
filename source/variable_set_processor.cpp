@@ -23,13 +23,15 @@ using namespace std;
 
 
 struct variable {
-    string name;
-    string notation;
-    string units;
-    size_t dimension;
-    double minval;
-    double maxval;
-    string placement;
+  string name;
+  string notation;
+  string units;
+  string type;
+  double minval;
+  double maxval;
+  string placement;
+  string usage;
+  string explanation;
 };
 
 
@@ -46,21 +48,6 @@ string headerGuard(const char* fname)
 }
 
 
-const char* varType(size_t dimension)
-{
-    if (dimension == 1) {
-        return "SCALAR";
-    }
-    if (dimension == 2) {
-        return "VECTOR";
-    }
-    if (dimension == 3) {
-        return "TENSOR";
-    }
-    return "ARRAY";
-}
-
-
 int main(int argc, char* argv[])
 {
     if (argc < 4) {
@@ -72,19 +59,21 @@ int main(int argc, char* argv[])
     std::deque<variable> vars;
     try
     {
-        io::CSVReader<7> csv(argv[2]);
-        csv.read_header(0, "name", "notation", "units", "dimension", "minval", "maxval", "placement");
+        io::CSVReader<9> csv(argv[2]);
+        csv.read_header(0, "name", "notation", "units", "type", "minval", "maxval", "placement", "usage", "explanation");
         variable var;
-        while (csv.read_row(var.name, var.notation, var.units, var.dimension,
-                    var.minval, var.maxval, var.placement)) {
+        while (csv.read_row(var.name, var.notation, var.units, var.type,
+                    var.minval, var.maxval, var.placement, var.usage, var.explanation)) {
             vars.emplace_back(std::move(var));
         }
     }
-    catch (std::exception e)
+    catch (io::error::base& e)
     {
         std::cerr << "Error in processing input file: " << e.what() << '\n';
         return 1;
     }
+  
+    std::sort(vars.begin(), vars.end(), [](auto& lhs, auto& rhs) { return lhs.explanation < rhs.explanation; });
 
     ofstream ofs(argv[3]);
 
@@ -103,8 +92,13 @@ int main(int argc, char* argv[])
     ofs <<"namespace csmp { namespace variables {\n\n";
 
     ofs << "struct " << argv[1] << " {\n";
+    string explanation("");
     for (auto& var : vars) {
-        ofs << "  csmp::INDEX<" << varType(var.dimension) << ','
+      if (var.explanation != explanation) {
+        explanation = var.explanation;
+        ofs << "  // " << explanation << '\n';
+      }
+        ofs << "  csmp::INDEX<" << var.type << ','
             << var.placement << "> key_" << var.notation << "; // " << var.name << "\n";
     }
 
@@ -114,17 +108,17 @@ int main(int argc, char* argv[])
     for (auto& var : vars) {
         ofs << (first ? "    : " : "    , ")
             << "key_" << var.notation << "( INDEX<"
-            << varType(var.dimension) << ',' << var.placement
+            << var.type << ',' << var.placement
             << ">( db.StorageKey(\"" << var.name << "\") ))\n";
         first = false;
     }
     ofs << "  {\n";
     for (auto& var : vars) {
         ofs << "    if ( key_" << var.notation << ".place != " << var.placement
-            << " || key_" << var.notation << ".type != " << varType(var.dimension)
+            << " || key_" << var.notation << ".type != " << var.placement
             << " )\n      throw csmp::Exception( FATAL_ERROR, \""
             << argv[1] << "::" << argv[1] << ":\",\n        "
-            << "\"The '" << var.name << "' variable must be " << varType(var.dimension)
+            << "\"The '" << var.name << "' variable must be " << var.type
             << " and placed on " << var.placement << "\"  );\n";
     }
     ofs << "  }\n";

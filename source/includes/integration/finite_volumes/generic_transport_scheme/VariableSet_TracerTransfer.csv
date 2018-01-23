@@ -1,17 +1,17 @@
-name,notation,units,dimension,minval,maxval,placement
-facet flux,ff,m2 s-1,1,-1e+10,+1e+10,FACET_INTEGRATION_POINT
-facet flux concentration,ffC,m2 s-1,1,-1e+10,+1e+10,FACET_INTEGRATION_POINT
-FV pore volume,FVPV,m s-1,1,0,1e+10,NODE
-flux balance,FB,m3 s-1,1,-1.e+10,1.000E+10,NODE
-nodal fluid volume source,NQV,m3,1,-1.00E+01,1.00E+01,NODE
-fluid pressure,PF,Pa,1,0.00E+00,1.00E+10,NODE
-permeability,k,m2,1,1.00E-25,1.00E+02,ELEMENT
-porosity,PHI,X,1,1.00E-05,1.00E+01,ELEMENT
-thickness,THI,m,1,0.0E+0,1.00E+10,ELEMENT
-velocity,V,m s-1,2,-1.00E+02,1.00E+02,ELEMENT
-fluid viscosity,MU,Pa s,1,1.00E-05,1.00E+10,MODEL
-fluid density,RHO,kg m-3,1,0.00E-10,1.00E+04,MODEL
-concentration,C,kg m-3,1,-5.00E-01,1.00E+03,NODE
-new concentration,NC,kg m-3,1,-5.00E-01,1.00E+03,NODE
-conductivity,K,m s-1,1,1.00E-25,1.00E+02,ELEMENT
-diffusivity,D,m2 s-1,1,1.00E-50,1.00E+00,ELEMENT
+name,notation,units,type,minval,maxval,placement,usage,explanation
+facet flux,ff,m2 s-1,SCALAR,-1e+10,+1e+10,FACET_INTEGRATION_POINT,,single phase flow
+facet flux concentration,ffC,m2 s-1,SCALAR,-1e+10,+1e+10,FACET_INTEGRATION_POINT,,single phase flow
+FV pore volume,FVPV,m s-1,SCALAR,0,1e+10,NODE,,single phase flow
+flux balance,FB,m3 s-1,SCALAR,-1.e+10,1.000E+10,NODE,,single phase flow
+nodal fluid volume source,NQV,m3,SCALAR,-1.00E+01,1.00E+01,NODE,,single phase flow
+fluid pressure,PF,Pa,SCALAR,0.00E+00,1.00E+10,NODE,,single phase flow
+permeability,k,m2,SCALAR,1.00E-25,1.00E+02,ELEMENT,,single phase flow
+porosity,PHI,X,SCALAR,1.00E-05,1.00E+01,ELEMENT,,single phase flow
+thickness,THI,m,SCALAR,0.0E+0,1.00E+10,ELEMENT,,single phase flow
+velocity,V,m s-1,VECTOR,-1.00E+02,1.00E+02,ELEMENT,,single phase flow
+fluid viscosity,MU,Pa s,SCALAR,1.00E-05,1.00E+10,MODEL,,single phase flow
+fluid density,RHO,kg m-3,SCALAR,0.00E-10,1.00E+04,MODEL,,single phase flow
+concentration,C,kg m-3,SCALAR,-5.00E-01,1.00E+03,NODE,,single phase flow
+new concentration,NC,kg m-3,SCALAR,-5.00E-01,1.00E+03,NODE,,single phase flow
+conductivity,K,m s-1,SCALAR,1.00E-25,1.00E+02,ELEMENT,,single phase flow
+diffusivity,D,m2 s-1,SCALAR,1.00E-50,1.00E+00,ELEMENT,,single phase flow
