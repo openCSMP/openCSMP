@@ -45,5 +45,7 @@
 #include "Geothermal_Example.h"
 #include "LinearSolver_Example.h"
 #include "EclipseMeshInterface_Example.h"
+#include "DESAdvectionOfTracer2D_Example.h"
+#include "DESAdvectionOfTracer3D_Example.h"
 
 #endif
