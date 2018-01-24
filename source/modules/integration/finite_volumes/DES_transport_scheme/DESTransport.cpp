@@ -628,7 +628,10 @@ void DESTransport<dim>::Synchronize_openmp(Event<dim>* event,double64 t_clock, s
 template<size_t dim>
 void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl_multiplication_factor, double64 PEP_parameter )
 {
+    double64 begin=clock();
     double64 time_increment(time_interval); 
+    
+    clock_t T_begin= clock();
     const typename vector<Event<dim>*>::iterator stack_end(PEPStack.end());
     for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )   
     {     
@@ -638,6 +641,7 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
         double64 dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*cfl_multiplication_factor);
     }
+    T_RateOfChange_ += clock() - T_begin; 
 
     const double64 one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
@@ -650,12 +654,15 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
     while (time < time_interval)
     {
         cout <<"\n\tadvection (sub)step: "<< substep << endl;
+        T_begin= clock();
         if ( (time_interval - time) < time_increment ) time_increment = time_interval - time;
         for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )
         { 
             Update_TDS((*it),time_increment);
         };
-
+        T_Update_ += clock() - T_begin;
+        
+        T_begin= clock();
         double64 new_time_increment(time_interval); 
         for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )
         { 
@@ -665,11 +672,24 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
             double64 dt_CFL = array2[2];//CFL time increment
             new_time_increment=min(new_time_increment, dt_CFL*cfl_multiplication_factor);
         };
+        T_RateOfChange_ += clock() - T_begin; 
 
         time += time_increment;
         substep++;
     };
-    cout<<endl<<"rate_count_ = "<<rate_count_<<" update_count_ = "<<update_count_<<endl;
+    
+    T_AdvectVariable_+= clock() - begin;
+
+    cout <<"Finish DESTransport<dim>::AdvectVariable_TDS "<<endl;
+    cout <<"rate_count_ = "<<rate_count_<<endl;
+    cout <<"update_count_ = "<<update_count_<<endl;  
+    cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_SortQueue_ = "<< T_SortQueue_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_Synchronize_ = "<< T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RemoveFromQueue_ = "<< T_RemoveFromQueue_/double64(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;  
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl; 
 }
 
 
@@ -810,8 +830,9 @@ void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64
     };
     T_AdvectVariable_+=omp_get_wtime()-begin; 
 
-    cout<<"Finish DESTransport<dim>::AdvectVariable "<<endl;
-    cout<<"rate_count_ = "<<rate_count_<<" update_count_ = "<<update_count_<<endl;    
+    cout <<"Finish DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout <<"rate_count_ = "<<rate_count_<<endl;
+    cout <<"update_count_ = "<<update_count_<<endl;   
     cout <<"T_Schedule_ = "<< T_Schedule_ << endl;
     cout <<"T_SortQueue_ = "<< T_SortQueue_ << endl;
     cout <<"T_Update_  = "<< T_Update_ << endl;
@@ -883,8 +904,13 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
         size_t count = 0U;
         while (!Queue.empty())
         {
-            count++;
+            
             const typename vector<Event<dim>*>::iterator top(Queue.begin()); 
+            if((*top)->valid() == false) {
+                Queue.erase(top);
+                continue;
+            }
+            count++;            
             ArrayVariable array;
             (*top)->getNode()->Read(time_key, array);
             double64 dt_target = array[3];//target time stamp
@@ -902,26 +928,28 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
             Synchronize((*top),time);
             T_Synchronize_ += clock() - T_begin;
             Queue.erase(top); 
-            //remove invalid events/nodes from Queue
-            T_begin= clock();
-            if(!Queue.empty()) {
-                size_t queue_size = Queue.size();
-                for ( size_t n = 0U; n<queue_size; n++ )
-                {  
-                    if (Queue[n]->valid() == false) {
-                        Queue.erase(Queue.begin()+n);
-                        queue_size --;
-                    };
+        };
+        //remove invalid events/nodes from Queue
+        T_begin= clock();
+        if(!Queue.empty()) {
+            size_t queue_size = Queue.size();
+            for ( size_t n = 0U; n<queue_size; n++ )
+            {  
+                if (Queue[n]->valid() == false) {
+                    Queue.erase(Queue.begin()+n);
+                    queue_size --;
+                    n--;
                 };
             };
-            T_RemoveFromQueue_ += clock() - T_begin;
         };
+        T_RemoveFromQueue_ += clock() - T_begin;        
         cout<<"  count =  "<<count<<endl;
     };
     T_AdvectVariable_+= clock() - begin;
 
-    cout<<"Finish DESTransport<dim>::AdvectVariable "<<endl;
-    cout<<"rate_count_ = "<<rate_count_<<" update_count_ = "<<update_count_<<endl;    
+    cout<<"Finish DESTransport<dim>::AdvectVariable_DES_serial "<<endl;
+    cout <<"rate_count_ = "<<rate_count_<<endl;
+    cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_SortQueue_ = "<< T_SortQueue_ /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
