@@ -2619,7 +2619,6 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
     const bool simplices_numbered_in_a_single_sequence(true);
     mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
     mesh_manager_.OutputMeshTo( vset );
-   vset.Out();
 
     // 2. property output into VSet including Face and InterFace data
     mesh_manager_.OutputStoredVariablesTo( Database(), vset );
