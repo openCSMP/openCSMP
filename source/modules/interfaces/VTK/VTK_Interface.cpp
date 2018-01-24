@@ -3052,15 +3052,19 @@ void outputRegionBoundaryToVTK( const Model<2U>&, const char* region, const char
 
 
 
-/// output the perimeter surface of a region to VTK file
+/**
+    outputRegionBoundaryToVTK() outputs the perimeter surface of a region to VTK file.
+ 
+    @author SKM
+    @date 24/01/2018
+ 
+    @tested OK for tetrahedral-triangular element meshes
+*/
 void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, const char* file )
  {
-    // generate unique node map
-   
-     // 0. creating list of consecutive nodes
-     // -------------------------------------------------
+     ErrorHandler& csmp_error( ErrorHandler::Instance() );
+
      const Region<3U>&  subdomain(model.Region(region));
-     subdomain.UpdateMemberIndexes();
 
      //   reading node properties in alphabetical order
      // -----------------------------------------------
@@ -3068,8 +3072,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      set<string>  node_props;
 
      model.Database().ListProperties( NODE, node_props );
-     csmp::Index  prop_key(model.Database().StorageKey((*node_props.begin()).c_str()));
-     
 
      // 2. opening data output file in ascii format
      // -------------------------------------------
@@ -3101,12 +3103,15 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 3. writing node coordinates & getting the first dataset
      // -------------------------------------------------------
      variable = (*node_props.begin());
-     replaceWhiteSpaceBy( variable, '_' );     
+     replaceWhiteSpaceBy( variable, '_' );
+     size_t node_counter(0U);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
-     ofs <<"POINTS " << subdomain.PerimeterNodes() <<" double"<< endl;
-     for ( size_t i=subdomain.PerimeterNodes(); i<subdomain.Nodes(); ++i ) {
+     ofs <<"POINTS " << subdomain.PerimeterNodes() <<" float"<< endl;
+     for ( size_t i=subdomain.InteriorNodes(); i<subdomain.Nodes(); ++i ) {
           for ( size_t j=0U; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
           ofs << endl;
+          // numbering the perimeter nodes in consecutive order from 0..n-1
+          subdomain.N(i)->Idx( node_counter++ );
        }
      ofs << endl;  
        
@@ -3157,10 +3162,12 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      bool    first_iteration(true);
 
      // property after property
+     csmp::Index  prop_key(model.Database().StorageKey((*node_props.begin()).c_str()));
      for ( set<string>::const_iterator
            npit=node_props.begin(); npit!=node_props.end(); npit++ )
        {
-          cout <<"\n\tOutputting property: '"<< (*npit) <<"' to VTK file..."<< endl;
+          if ( prop_key.type != ARRAY || prop_key.type != FLAGGEDARRAY )
+            cout <<"\n\tWriting property: '"<< (*npit) <<"' to VTK file..."<< endl;
           line_break = 1;
           // getting the property data, but only after first set was written
           if ( first_iteration ) {
@@ -3169,7 +3176,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                first_iteration = false;
             }
           else {
-               csmp::Index prop_key1(model.Database().StorageKey((*npit).c_str()));
+               prop_key = model.Database().StorageKey((*npit).c_str());
                variable = (*npit).c_str();
                replaceWhiteSpaceBy( variable, '_');
                // now only get data without coordinates
@@ -3227,8 +3234,8 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                     }
                  break;
                default:
-                 throw csmp::Exception( ERROR, "outputRegionBoundaryToVTK:",
-                                       "treatment of Array and FlaggedArray variables not handled yet.");
+                 csmp_error.notice( WARNING, "outputRegionBoundaryToVTK:",
+                                   "treatment of Array and FlaggedArray variables not handled yet.");
             }
             
        } // end for properties

@@ -2760,25 +2760,23 @@ bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElemen
     // 1. for all elements on the perimeter of the model subdomain,
     //    generate keys from their node coordinates that are then matched with one-another
     //    in order to connect these elements
-    for ( auto it=subdomain.PerimeterElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
-      // only if the elements are not located on the model boundary
-//      if ( (*it)->AtBoundary() == NOT && (*it)->AtBoundary() != REGION_BOUNDARY )
+    for ( size_t n=subdomain.InteriorElements(); n<subdomain.Elements(); ++n )
         {
            // for those element faces that define the perimeter surface
-           for ( size_t i=0U; i<subdomain.PerimeterFaces( (*it)->Idx() ); ++i )
+           for ( size_t i=0U; i<subdomain.PerimeterFaces(n); ++i )
              {
                 // get the local node numbers of the perimeter face
                 vector<size_t> fnids;
-                (*it)->FE()->NodesOfFace( subdomain.PerimeterFace( (*it)->Idx(), i ), fnids );
+                subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
                 // add the corresponding node points to a set that will form the element face key
                 pair<set<Point<3U> >,size_t> face_key;
                 for ( size_t j=0U; j<fnids.size(); ++j )
-                  face_key.first.insert( (*it)->N( fnids[j] )->Coordinate() );
+                  face_key.first.insert( subdomain.E(n)->N( fnids[j] )->Coordinate() );
                 // remembering the face id
-                face_key.second = subdomain.PerimeterFace( (*it)->Idx(), i );
+                face_key.second = subdomain.PerimeterFace( n, i );
                 // storing the key in the correspondance search map
                 //                              node-coordinate set  element pointer   local face id
-                element_face_keys.insert( make_pair( face_key.first, make_pair( (*it), face_key.second ) ) );
+                element_face_keys.insert( make_pair( face_key.first, make_pair( subdomain.E(n), face_key.second ) ) );
              }
         }
    
@@ -2790,10 +2788,8 @@ bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElemen
     for ( auto it=element_face_keys.begin(); it!=element_face_keys.end(); ++it ) {
          // multimap iterator containing the range of shared keys
          auto result = element_face_keys.equal_range( (*it).first );
-for ( auto i=result.first; i!=result.second; ++i ) cerr <<" "<< (*i).second.first;
-cerr <<" | ";
          // if more than one value was found
-//cerr << distance( result.first, result.second ) <<" ";
+cerr << distance( result.first, result.second ) <<" ";
          if ( distance( result.first, result.second ) > 1U ) {
              // there should not be any manyfolds
              assert( distance( result.first, result.second ) == 2U );

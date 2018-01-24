@@ -5,7 +5,8 @@
 
 namespace csmp
 {
-    class Parameter;
+    struct Parameter;
+    
     class Parameter_Test :public Test
     {
     public:
