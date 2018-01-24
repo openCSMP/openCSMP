@@ -2795,6 +2795,9 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      // 8. reconstructing the splitboundaries
 //    this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
 
+   // 9. do a final sanity check
+   CheckElementsAfterBuilding();
+
     cout << "\nModel<"<< dim <<">::InputFromBinaryFile: input from binaries (file set: "<< model_name <<") completed successfully.\n\n";
 
  } // end InputFromBinaryFile
@@ -2804,6 +2807,153 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
 //for ( auto bit=this->BoundariesBegin(); bit!=this->BoundariesEnd(); ++bit )
 //  (*bit).second.Out();
 
+
+  
+  template<size_t dim>
+  void  Model<dim>::CheckElementsAfterBuilding()
+  {
+    ErrorHandler&  csmp_error(ErrorHandler::Instance());
+    
+    MeshManager<dim>& mesh = Mesh();
+    
+    if ( !mesh.Elements() )
+      throw csmp::Exception(ERROR, "Model<dim>::CheckElementsAfterBuilding", "the model contains no elements" );
+
+    // --------------------------------------------------------------------
+    // 0. detecting whether this region contains lower-dimensional elements
+    // --------------------------------------------------------------------
+    int32 dimension_counter(0);
+    int32 highest_spatial_dim(1);
+    {
+      bool with_volume_elements(false);
+      bool with_surface_elements(false);
+      bool with_line_elements(false);
+      
+      for( auto it= mesh.ElementsBegin(); it!=mesh.ElementsEnd(); it++ ) {
+        if      ( !with_line_elements && it->IsLineElement() )    with_line_elements = true;
+        else if ( !with_surface_elements && it->IsSurfaceElement() ) with_surface_elements = true;
+        else if ( !with_volume_elements && it->IsVolumeElement() )  with_volume_elements = true;
+      }
+      
+      if ( with_volume_elements )  dimension_counter++;
+      if ( with_surface_elements ) dimension_counter++;
+      if ( with_line_elements )    dimension_counter++;
+      if      ( with_volume_elements )  highest_spatial_dim = 3;
+      else if ( with_surface_elements ) highest_spatial_dim = 2;
+    }
+    
+    // -----------------------------------------------------------------
+    // 1. distinguishing boundary from interior elements, same for nodes
+    //   (at this point the elements and nodes are already known)
+    // -----------------------------------------------------------------
+    size_t interior_elmts(0);
+    size_t boundary_elmts(0);
+    unordered_set<Node<dim>*> boundary_nodes;
+    vector<size_t>  fnids;
+    
+    // 1.1 If all elements have the same spatial dimension
+    // ---------------------------------------------------
+    if ( dimension_counter == 1 )
+    {
+      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit )
+      {
+        // identifying the boundary faces and their nodes
+        // (each face potentially has a neighbor element)
+        long  nbors_that_belong_to_group(eit->Neighbors());
+        for ( size_t i=0U; i<eit->Faces(); i++ )
+          // if the face is at a model boundary
+          if ( eit->Neighbor(i) == NULL )
+          {
+            // boundary nodes
+            assert( eit->FE() != NULL );
+            eit->FE()->NodesOfFace( i, fnids );
+            for ( size_t j=0U; j<fnids.size(); ++j )
+              boundary_nodes.insert( eit->N(fnids[j]) );
+            // counting neighbors
+            nbors_that_belong_to_group--;
+          }
+        
+        // storing the distinguished elements in the respective vectors
+        // ------------------------------------------------------------
+        // interior elements
+        if ( nbors_that_belong_to_group == eit->Neighbors() )
+          ++interior_elmts;
+        // elements with at least one face on the region boundary
+        else
+          ++boundary_elmts;
+      }
+    }
+    
+    // 1.2 If there are elements with different spatial dimensions
+    // -----------------------------------------------------------
+    //     the ones with highest dimensions are used to define perimeter
+    //     all lower dimensional mesh that sticks out is flagged as perimeter as well.
+    else
+    {
+      // a. identify the boundary elements among the highest dimensional elements,
+      //    also collecting all their node pointers into a set.
+      unordered_set<Element<dim>*> lesser_dim_elmts;
+      unordered_set<Node<dim>*>    highest_dim_elmt_nodes;
+      
+      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit )
+      {
+        // elements of the highest spatial dimension are used to define the boundary
+        assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
+        if ( parseFiniteElementDimension( eit->FE_Type() ) == highest_spatial_dim )
+        {
+          // creating a subset with their nodes
+          for ( size_t i=0U; i<eit->Nodes(); ++i ) {
+            assert( eit->N(i) != NULL );
+            highest_dim_elmt_nodes.insert( eit->N(i) );
+          }
+          // if the element has faces that lie on the region boundary
+          // it is considered a boudary element
+          long  nbors_that_belong_to_group(eit->Neighbors());
+          for ( size_t i=0U; i<eit->Faces(); ++i )
+            // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
+            if ( eit->Neighbor(i) == NULL )
+            {
+              nbors_that_belong_to_group--;
+            }
+          if ( nbors_that_belong_to_group == eit->Neighbors() ) ++interior_elmts;
+          else ++boundary_elmts;
+        }
+        else lesser_dim_elmts.insert( &*eit );
+      }
+      assert( /* all elements are accounted for */ mesh.Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
+      
+      set<Element<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
+      
+      for ( auto e : lesser_dim_elmts )
+      {
+        // a) lower-dim elements sticking out
+        // ----------------------------------
+        // lower-dimensional elements with nodes that do not belong to the node set of the
+        // higher dimensional elements must be boundary elements
+        size_t  exterior_nodes(0U);
+        for ( size_t i=0U; i<e->Nodes(); ++i )
+          if ( !highest_dim_elmt_nodes.count( e->N(i) ) )
+            exterior_nodes++;
+        
+        // if individual nodes stick out the parent element sticks out as well.
+          if ( exterior_nodes == e->Nodes() )
+            lesser_dim_elmts_detached.insert( e );
+      }
+      
+      if ( !lesser_dim_elmts_detached.empty() ) {
+        csmp_error.notice( WARNING, "Model<dim>::CheckElementsAfterBuilding:",
+                          "model contains lower-dimensional elements detached from higher dimensional elements");
+        // do some additional diagnostics on these elements
+        // ------------------------------------------------
+        cerr <<"\n\tdetached elements: "<< lesser_dim_elmts_detached.size() <<":";
+        for ( auto e : lesser_dim_elmts_detached )
+             cerr <<" "<< e->Idx();
+        cerr << endl;
+      }
+    } // end multi-dim element region
+    
+    
+  } // end PartitionElementVector
 
 
 

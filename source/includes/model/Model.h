@@ -415,6 +415,8 @@ public:
     /// prevent accidential copy construction of large object
     Model( const Model& );
     Model& operator=( const Model& );
+
+    void CheckElementsAfterBuilding();
   
     std::string                       model_name_;       ///< name of simulation model
     PropertyDatabase<dim>             database_;         ///< where variable specifications are stored
