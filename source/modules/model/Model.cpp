@@ -325,6 +325,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 9. assigning properties to mesh
     InputVariablesFrom( vset );
+  
+    // 10. final sanity check
+    CheckElementsAfterBuilding();
 
     cout << "\n============================================================================";
     cout << "\nModel '"<< Name() <<"' has been established successfully!";
