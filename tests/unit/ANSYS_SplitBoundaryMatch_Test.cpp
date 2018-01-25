@@ -37,7 +37,8 @@ void ANSYS_SplitBoundaryMatch_Test::run()
       const string variablesFile("CSMP-variables.txt");
       //                          fileset       regions-file
 //      ANSYS_Model3D model( "Model_Split_wall", "Model_Split_wall", variablesFile.c_str(), true );
-      ANSYS_Model3D model( "NotSplitWall", "NotSplitWall", variablesFile.c_str(), true );
+//      ANSYS_Model3D model( "NotSplitWall", "NotSplitWall", variablesFile.c_str(), true );
+      ANSYS_Model3D model( "Split_Edges", "Split_Edges", variablesFile.c_str(), true );
       Region<3U> model_domain(model.Region("Model"));
 
     // 0. visualising the model and its regions
@@ -50,18 +51,22 @@ void ANSYS_SplitBoundaryMatch_Test::run()
           evar += 1.;
        }
      cerr << endl;
-     // painting all perimeter elements red
+     // painting internal boundary elements (they are flagged neither REGION_BOUNDARY nor IRREGULAR
+     const double64 color(0.);
      const csmp::Index evar_key(model.Database().StorageKey("element variable"));
      for ( auto eit=model_domain.PerimeterElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit )
-       (*eit)->Store( evar_key, makeScalar(PLAIN,5.) );
+       (*eit)->Store( evar_key, makeScalar(PLAIN,color) );
 
      // regularising node positions
     cerr <<"\nrun: focusing on inner box region that has "<< model.Region("INNER_BOX_VOL").Nodes() <<" perimeter nodes.\n";
-    const double n_dec_places(1.0e-3);
-    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
-         (*nit)->x( quantiseToScale( (*nit)->x(), n_dec_places ) );
-         (*nit)->y( quantiseToScale( (*nit)->y(), n_dec_places ) );
-         (*nit)->z( quantiseToScale( (*nit)->z(), n_dec_places ) );
+    // TESTING WHETHER PRECISION HAS AN IMPACT
+    if ( verbose ) {
+        const double n_dec_places(1.0e-3);
+        for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
+             (*nit)->x( quantiseToScale( (*nit)->x(), n_dec_places ) );
+             (*nit)->y( quantiseToScale( (*nit)->y(), n_dec_places ) );
+             (*nit)->z( quantiseToScale( (*nit)->z(), n_dec_places ) );
+          }
       }
   
      // nodes at model perimeter
@@ -76,10 +81,13 @@ void ANSYS_SplitBoundaryMatch_Test::run()
                split_nodes.insert( (*nit)->Coordinate() );
             }
        }
-     cerr <<"\nrun: points on ANSYS split boundary:\n";
-     size_t counter(0);
-     for (auto pt=split_nodes.begin(); pt!=split_nodes.end(); ++pt )
-       cerr << fixed << setprecision(3) <<"\n\t"<< counter++ <<": "<< (*pt)[0] <<" "<< (*pt)[1] <<" "<< (*pt)[2];
+  
+     if ( verbose ) {
+          cerr <<"\nrun: points on ANSYS split boundary:\n";
+          size_t counter(0);
+          for (auto pt=split_nodes.begin(); pt!=split_nodes.end(); ++pt )
+            cerr << fixed << setprecision(3) <<"\n\t"<< counter++ <<": "<< (*pt)[0] <<" "<< (*pt)[1] <<" "<< (*pt)[2];
+       }
   
      VTK_Interface<3U>  vtk_output;
      vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0U );
