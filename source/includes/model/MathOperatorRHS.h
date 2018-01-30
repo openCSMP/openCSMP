@@ -75,6 +75,7 @@ class MathOperatorRHS {
 
     virtual void  Out() const;
 
+    /// op
     const Parameter& MaterialOperand()          const;
     const Index&  MaterialOperandKey()          const;
     std::string   MaterialOperandName()         const;
@@ -82,6 +83,7 @@ class MathOperatorRHS {
     PLACEMENT     MaterialOperandPlacement()    const;
     size_t        MaterialOperandDataDepth()    const;
 
+    /// bop
     const Parameter& BasicOperand()             const;
     const Index&  BasicOperandKey()             const;
     std::string   BasicOperandName()            const;
@@ -91,6 +93,7 @@ class MathOperatorRHS {
     size_t        BasicOperandOffset()          const;
     void          BasicOperandOffset( size_t );
 
+    /// top
     const Parameter& TestOperand()              const;
     const Index&  TestOperandKey()              const;
     std::string   TestOperandName()             const;

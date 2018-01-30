@@ -9,17 +9,11 @@ namespace csmp {
 
 template<size_t dim,class SIMPLEX>
 Integral_dNT_dN_dV<dim,SIMPLEX>::Integral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
-                                                     const char*             oper,
-                                                     const char*             test )
-  : MathOperatorRHS<dim>(pref,oper,test),
+                                                     const char* test )
+  : MathOperatorRHS<dim>(pref,test),
     DN(2,3), DNT(3,2), UNITY(3,1)
 {
-    MathOperatorRHS<dim>::Name("Integral_dNT_dN_dV", oper, test );
-
-    // testing the Operands 
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT or MathOperatorRHS<dim>::MaterialOperandPlacement() != REGION )
-      throw csmp::Exception( ERROR, "Integral_dNT_dN_dV::(constructor)", 
-                    oper, "Operand must be placed on the element or group.");
+    MathOperatorRHS<dim>::Name("Integral_dNT_dN_dV", test );
 
     if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "Integral_dNT_dN_dV::(constructor)", 
@@ -31,6 +25,9 @@ Integral_dNT_dN_dV<dim,SIMPLEX>::Integral_dNT_dN_dV( const PropertyDatabase<dim>
 template<size_t dim,class SIMPLEX>
 void Integral_dNT_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     e.dN( DN );
     // transpose the shape function derivative matrix
     DNT.Resize(e.Nodes(),dim); 

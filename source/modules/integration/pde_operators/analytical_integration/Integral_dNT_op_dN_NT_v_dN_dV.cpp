@@ -50,6 +50,9 @@ variable describing the advection part of the operator.
 template<size_t dim,class SIMPLEX>
 void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     // only if the property is an element property  something is done here
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT or MathOperatorLHS<dim>::MaterialOperandPlacement() == REGION ) 
       {

@@ -46,6 +46,9 @@ Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const Prope
 template<size_t dim,class SIMPLEX,typename var>
 void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
    // reading oper and basic
    MathOperatorRHS< dim>::GetOperands(e);
    e.NodePropertyVector( basic_.key, basic_var_ );

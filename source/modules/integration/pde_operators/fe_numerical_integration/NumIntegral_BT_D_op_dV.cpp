@@ -85,7 +85,8 @@ the time-increment over which the deformation shall occur.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
-   // getting the properties from the element
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.Isoparametric() == true );
  
     // Young's modulus and Poisson's ratio
     if ( Y_key_.place == ELEMENT ) {

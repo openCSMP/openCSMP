@@ -70,6 +70,8 @@ interpolation to the integration points.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.Isoparametric() == true );
 
    // 1. reading Operand (fluid density or something like that)
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) 

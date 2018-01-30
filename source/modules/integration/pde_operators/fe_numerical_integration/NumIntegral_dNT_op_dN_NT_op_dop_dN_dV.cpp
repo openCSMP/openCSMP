@@ -139,6 +139,9 @@ The operand is read
 template<size_t dim,class SIMPLEX>
 void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.Isoparametric() == true );
+
     // 1. read Operand
     // ---------------
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 

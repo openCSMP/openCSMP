@@ -60,6 +60,9 @@ In linear elasticity computations.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_BT_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.Isoparametric() == true );
+
     // initialize output vector
     MathOperatorRHS<dim>::RHS.resize( dim * e.Nodes() );
     

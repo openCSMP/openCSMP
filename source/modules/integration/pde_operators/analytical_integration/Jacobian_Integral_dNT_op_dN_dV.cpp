@@ -74,18 +74,21 @@ first vector entry MTRL[0]. Else,
 template<size_t dim,class SIMPLEX>
 void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
- 	MathOperatorLHS<dim>::GetOperands(e);
-      
-  if (lambda_.place == NODE && lambda_.type == SCALAR) {
-    e.NodePropertyVector( lambda_, el_lambda);
-    e.NodePropertyVector( test_orig_, el_test_orig);
-    e.NodePropertyVector( d_lambda_, el_d_lambda);
-  }
-  else {
-    throw csmp::Exception( FATAL_ERROR, "Jacobian_Integral_dNT_op_dN_dV<dim>::GetOperands", 
-                                      "Only nodal properties allowed" );
-  }
-    
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
+    MathOperatorLHS<dim>::GetOperands(e);
+        
+    if (lambda_.place == NODE && lambda_.type == SCALAR) {
+      e.NodePropertyVector( lambda_, el_lambda);
+      e.NodePropertyVector( test_orig_, el_test_orig);
+      e.NodePropertyVector( d_lambda_, el_d_lambda);
+    }
+    else {
+      throw csmp::Exception( FATAL_ERROR, "Jacobian_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+                                        "Only nodal properties allowed" );
+    }
+   
  } // end GetOperands
 
 

@@ -48,6 +48,9 @@ NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV( const PropertyD
 template<size_t dim,class SIMPLEX>
 void NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.Isoparametric() == true );
+
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
