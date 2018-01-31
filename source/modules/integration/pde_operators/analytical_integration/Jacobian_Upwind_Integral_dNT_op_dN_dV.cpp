@@ -84,18 +84,21 @@ first vector entry MTRL[0]. Else,
 template<size_t dim,class SIMPLEX>
 void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
- 	MathOperatorLHS<dim>::GetOperands(e);
-      
-  if (upwind_.place == NODE && upwind_.type == SCALAR && trigger_.place == NODE && trigger_.type == SCALAR) {
-    e.NodePropertyVector( upwind_, el_upwind);
-    e.NodePropertyVector( trigger_, el_trigger);
-    e.NodePropertyVector( test_orig_, el_test_orig);
-    e.NodePropertyVector( d_upwind_, el_d_upwind);
-  }
-  else {
-    throw csmp::Exception( FATAL_ERROR, "Jacobian_Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
-                                 "Only nodal properties allowed" );
-  }
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
+    MathOperatorLHS<dim>::GetOperands(e);
+        
+    if (upwind_.place == NODE && upwind_.type == SCALAR && trigger_.place == NODE && trigger_.type == SCALAR) {
+      e.NodePropertyVector( upwind_, el_upwind);
+      e.NodePropertyVector( trigger_, el_trigger);
+      e.NodePropertyVector( test_orig_, el_test_orig);
+      e.NodePropertyVector( d_upwind_, el_d_upwind);
+    }
+    else {
+      throw csmp::Exception( FATAL_ERROR, "Jacobian_Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+                                   "Only nodal properties allowed" );
+    }
     
  } // end GetOperands
 

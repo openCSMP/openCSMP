@@ -39,6 +39,9 @@ Integral_NT_M_dV_Triangle<dim,SIMPLEX>::Integral_NT_M_dV_Triangle( const Propert
 template<size_t dim,class SIMPLEX>
 void Integral_NT_M_dV_Triangle<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
    // reading Young's modulus (must be an element variables)
    e.NodePropertyVector( MathOperatorRHS<dim>::TestOperandKey(), NPROP );
 }

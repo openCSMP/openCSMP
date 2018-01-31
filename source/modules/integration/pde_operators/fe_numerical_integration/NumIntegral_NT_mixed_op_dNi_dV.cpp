@@ -83,6 +83,9 @@ the acceleration of gravity must not be multiplied with delta t.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
    if ( MathOperatorRHS<dim>::MultiplyWithTimeIncrement() ) {
         throw csmp::Exception( FATAL_ERROR, "NumIntegral_NT_mixed_op_dNi_dV<dim>::GetOperands", 
            "Do not multiply this operator with time increment since it uses the acceleration of gravity");

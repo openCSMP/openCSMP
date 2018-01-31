@@ -40,6 +40,9 @@ Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Integral_dNT_rhsop_dN_dV( const PropertyD
 template<size_t dim,class SIMPLEX>
 void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     // only if the property is an element property  something is done here
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or MathOperatorRHS<dim>::MaterialOperandPlacement() == REGION ) 
       {

@@ -40,21 +40,24 @@ by the face unit normal and assumed to act inward if positive.
 template<size_t dim>
 void NumIntegral_PT_op_dS<dim>::GetOperands( Face<dim>& f )
 {
-  if( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
-  {
-    f.Read( this->MaterialOperandKey(), oper_ );
-    for( size_t i(0); i < dim; ++i )
-      if( oper_.Flag(i) != NEUMANN )
-        oper_(i) = 0.;
-    return;
-  }
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( f.FE()->Isoparametric() == true );
 
-  // scalar, multiply negative since positive assumed compressive and unit normal of faces pointing out
-  f.Read( this->MaterialOperandKey(), scalar_ );
-  if( scalar_.Flag() != NEUMANN )
-    scalar_() = 0.;
-  f.UnitNormal(oper_);
-  oper_ *= -scalar_();
+    if( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
+      {
+        f.Read( this->MaterialOperandKey(), oper_ );
+        for( size_t i(0); i < dim; ++i )
+          if( oper_.Flag(i) != NEUMANN )
+            oper_(i) = 0.;
+        return;
+      }
+
+    // scalar, multiply negative since positive assumed compressive and unit normal of faces pointing out
+    f.Read( this->MaterialOperandKey(), scalar_ );
+    if( scalar_.Flag() != NEUMANN )
+      scalar_() = 0.;
+    f.UnitNormal(oper_);
+    oper_ *= -scalar_();
 }
 
 /**

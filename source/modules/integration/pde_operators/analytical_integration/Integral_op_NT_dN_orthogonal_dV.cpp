@@ -49,6 +49,9 @@ The operand is read
 template<size_t dim,class SIMPLEX>
 void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     // read node variable which must be a scalar
     NPROP.resize( e.Nodes() );
     for ( size_t i=0; i<e.Nodes(); i++ )

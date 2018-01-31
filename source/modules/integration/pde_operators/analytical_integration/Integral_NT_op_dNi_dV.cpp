@@ -103,6 +103,9 @@ coordinate axis.
 template<size_t dim,class SIMPLEX>
 void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     e.dN( DN );
     

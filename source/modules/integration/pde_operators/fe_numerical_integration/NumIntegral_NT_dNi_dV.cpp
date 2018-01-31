@@ -56,6 +56,9 @@ void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::Transposed()
 template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();

@@ -36,9 +36,12 @@ The result is returned into the MathOperatorRHS vector<fT> V.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
-   // create a RHS vector of zeros
-   MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-   fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
+    // create a RHS vector of zeros
+    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
+    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 
 } // end ComputeContribution
 

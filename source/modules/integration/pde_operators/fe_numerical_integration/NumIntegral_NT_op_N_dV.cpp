@@ -46,6 +46,9 @@ integral is naturally 1 as well.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_op_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 

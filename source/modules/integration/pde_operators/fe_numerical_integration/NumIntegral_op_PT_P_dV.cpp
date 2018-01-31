@@ -41,7 +41,9 @@ NumIntegral_op_PT_P_dV<dim,SIMPLEX>::NumIntegral_op_PT_P_dV( const PropertyDatab
 template<size_t dim,class SIMPLEX>
 void NumIntegral_op_PT_P_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
-    static vector<double64> INTPOL(e.Nodes());
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
     double64 volume = e.Volume();

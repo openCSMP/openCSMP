@@ -73,16 +73,19 @@ first vector entry MTRL[0]. */
 template<size_t dim,class SIMPLEX>
 void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
- 	MathOperatorLHS<dim>::GetOperands(e);
-      
-  if (uvar_.place == NODE && uvar_.type == SCALAR && tvar_.place == NODE && tvar_.type == SCALAR) {
-    e.NodePropertyVector( uvar_, el_uvar);
-    e.NodePropertyVector( tvar_, el_tvar);
-  }
-  else {
-    throw csmp::Exception( FATAL_ERROR, "Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
-                                      "Only nodal properties allowed" );
-  }
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
+    MathOperatorLHS<dim>::GetOperands(e);
+        
+    if (uvar_.place == NODE && uvar_.type == SCALAR && tvar_.place == NODE && tvar_.type == SCALAR) {
+      e.NodePropertyVector( uvar_, el_uvar);
+      e.NodePropertyVector( tvar_, el_tvar);
+    }
+    else {
+      throw csmp::Exception( FATAL_ERROR, "Upwind_Integral_dNT_op_dN_dV<dim>::GetOperands", 
+                                        "Only nodal properties allowed" );
+    }
     
  } // end GetOperands
 

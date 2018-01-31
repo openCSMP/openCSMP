@@ -47,6 +47,9 @@ Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const Prope
 template<size_t dim,class SIMPLEX>
 void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
    // reading oper and var
    e.Read(MathOperatorLHS<dim>::MaterialOperandKey(), op_ );
    e.NodePropertyVector(var_.key, vvar_ );
