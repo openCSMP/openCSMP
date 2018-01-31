@@ -57,7 +57,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
       {

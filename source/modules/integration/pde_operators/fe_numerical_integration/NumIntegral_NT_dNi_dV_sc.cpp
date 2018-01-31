@@ -50,7 +50,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );

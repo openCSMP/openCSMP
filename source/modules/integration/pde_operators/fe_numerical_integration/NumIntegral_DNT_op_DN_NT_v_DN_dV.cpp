@@ -64,7 +64,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     // 1. read diffusion Operand
     // -------------------------

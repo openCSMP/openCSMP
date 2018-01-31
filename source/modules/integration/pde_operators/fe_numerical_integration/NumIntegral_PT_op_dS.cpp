@@ -41,7 +41,7 @@ template<size_t dim>
 void NumIntegral_PT_op_dS<dim>::GetOperands( Face<dim>& f )
 {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( f.FE()->Isoparametric() == true );
 
     if( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
       {

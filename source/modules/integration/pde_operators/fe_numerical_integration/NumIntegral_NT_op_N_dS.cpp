@@ -51,7 +51,7 @@ template<size_t dim, template<size_t> class SIMPLEX>
 void NumIntegral_NT_op_N_dS<dim,SIMPLEX>::ComputeContribution( SIMPLEX<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );

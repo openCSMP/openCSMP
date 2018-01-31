@@ -59,7 +59,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     // only if the property is an element property  something is done here
      MathOperatorLHS<dim>::MTRL[0].Resize(dim,dim);

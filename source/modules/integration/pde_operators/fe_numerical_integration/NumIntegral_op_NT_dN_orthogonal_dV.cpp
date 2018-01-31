@@ -58,7 +58,7 @@ template<size_t dim,class SIMPLEX>
 void NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.Isoparametric() == true );
+    assert( e.FE()->Isoparametric() == true );
 
     // read node variable which must be a scalar
     // --------------------------------------------
