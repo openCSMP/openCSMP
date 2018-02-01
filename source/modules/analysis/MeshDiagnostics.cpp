@@ -275,38 +275,234 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
  } // end scrutinize mesh
 
 
+
+
+
+/**
+    tests for negative element volumes
+*/
+template<size_t dim>
+bool MeshDiagnostics<dim>::DetectPotentiallyMisnumberedElements( const Model<dim>& model ) const
+ {
+    const Region<dim> model_domain(model.Region("Model"));
+    bool discovered_negative_element_volume(false);
+   
+   
+    for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit )
+      if ( (*eit)->Volume() < 0. ) {
+           discovered_negative_element_volume = true;
+           cerr <<"\nMeshDiagnostics: Deteceted element with negative volume: ";
+           (*eit)->Out();
+        }
+    
+    return false;
+ 
+ } // end
+
+
+
+
+/**
+    detects whether different Dirichlet conditions have been assigned to a single finite element.
+    
+    @attention method has been implemented only for scalar and vector variables.
+*/
+template<size_t dim>
+bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim>& model, const char* variable_of_interest, VARIABLE_FLAG status ) const
+ {
+    const csmp::Index key = model.Database().StorageKey( variable_of_interest );
+    const Region<dim> model_domain(model.Region("Model"));
+    assert( key.place == NODE );
+    assert( key.type == SCALAR || key.type == VECTOR );
+   
+    bool duplicate_constraits(false);
+   
+    // scalar node variables
+    if ( key.type == SCALAR )
+      for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+           double64 value(numeric_limits<double64>::quiet_NaN());
+           bool     detected_status(false);
+           for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
+                // finding status-flagged nodes and reading their stored values
+                if ( !detected_status && (*eit)->N(i)->Status(key) == status ) {
+                     value           = (*eit)->N(i)->Read(key);
+                     detected_status = true;
+                  }
+                // if such nodes were already discovered, a comparison with previous values is made
+                if ( detected_status && (*eit)->N(i)->Status(key) == status ) {
+                     double64 next_value = (*eit)->N(i)->Read(key);
+                     if ( next_value != value ) {
+                          cerr <<"\nMeshDiagnostics<dim>::DetectConflictingDirichletConditions: detected conflicting constrained ScalarVariable values ";
+                          cerr << value <<" vs. "<< next_value <<" ";
+                          cerr <<"for variable '"<< variable_of_interest <<"' in Element: "<< (*eit)->Idx() <<"\n";
+                          (*eit)->Out();
+                          duplicate_constraits = true;
+                       }
+                  }
+             }
+        }
+   
+    if ( key.type == VECTOR ) {
+          for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+               VectorVariable<dim> vc;
+               bool     detected_status(false);
+               for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
+                    // recovering the variable
+                    (*eit)->N(i)->Read( key, vc );
+                 
+                    // for each variable component
+                    for ( size_t j=0U; j<dim; j++ )
+                      {
+                         double64 value(numeric_limits<double64>::quiet_NaN());
+                         // finding status-flagged nodes and reading their stored values
+                         if ( !detected_status && vc.Flag(j) == status ) {
+                              value = vc[j];
+                              detected_status = true;
+                           }
+                         // if such nodes were already discovered, a comparison with previous values is made
+                         if ( detected_status && vc.Flag(j) == status ) {
+                              double64 next_value = vc[j];
+                              if ( next_value != value ) {
+                                   cerr <<"\nMeshDiagnostics<dim>::DetectConflictingDirichletConditions: detected conflicting constrained VectorVariable component values, component ";
+                                   cerr << j <<": "<< value <<" vs. "<< next_value <<" ";
+                                   cerr <<"for variable '"<< variable_of_interest <<"' in Element: "<< (*eit)->Idx() <<"\n";
+                                   (*eit)->Out();
+                                   duplicate_constraits = true;
+                                }
+                            }
+                      }
+                }
+            }
+     } // end for
+ 
+    return duplicate_constraits;
+   
+ } // end DetectConflictingDirichletConditions
+ 
+ 
+ 
+  
+/**
+    checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood
+*/
+template<size_t dim>
+bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const char* variable_of_interest ) const
+ {
+    const csmp::Index key = model.Database().StorageKey( variable_of_interest );
+
+    const Region<dim> model_domain(model.Region("Model"));
+    assert( key.place == NODE );
+    assert( key.type == SCALAR );
+   
+    bool local_peak_values(false);
+   
+    // scalar node variables
+    if ( key.type == SCALAR )
+      for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
+           double64 n_value = (*nit)->Read(key);
+           double64 val_min(1e30), val_max(-1e30);
+           for ( size_t i=0U; i<(*nit)->Neighbors(); ++i ) {
+                val_min = std::min( val_min, (*nit)->Neighbor(i)->Read(key) );
+                val_max = std::max( val_max, (*nit)->Neighbor(i)->Read(key) );
+             }
+           // checking that the value lies within range of node neighbors
+           if ( n_value < val_min || n_value > val_max ) {
+                cerr <<"\nvalue: "<< n_value <<" vs. "<< val_min <<"-"<< val_max;
+                (*nit)->Out();
+                local_peak_values = true;
+             }
+        }
+ 
+    return local_peak_values;
+   
+ } // end CheckMonotonicity
+
+
+
+
+
+/// elements where all nodes have a status constraint so that they do not participate in the computation
+template<size_t dim>
+bool MeshDiagnostics<dim>::DetectOverConstrainedElements( const Model<dim>& model, const char* variable_of_interest, VARIABLE_FLAG status ) const
+{
+    const csmp::Index key = model.Database().StorageKey( variable_of_interest );
+
+    const Region<dim> model_domain(model.Region("Model"));
+    assert( key.place == NODE );
+  
+    bool over_constrained_elmts(false);
+   
+    for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+           const size_t nodes = (*eit)->Nodes();
+           size_t status_constraints(0U);
+           if ( key.type == SCALAR ) {
+                for ( size_t i=0U; i<nodes; ++i )
+                  if ( (*eit)->N(i)->Status(key) == status )
+                    status_constraints++;
+              }
+           if ( status_constraints == nodes ) {
+                over_constrained_elmts = true;
+                (*eit)->Out();
+             }
+      }
+ 
+   return over_constrained_elmts;
+  
+} // end CheckMonotonicity
+  
+
+
+
 template class MeshDiagnostics<2>;
 template class MeshDiagnostics<3>;
 
+
+// ==================================================================================================
+//
+//   NON-MEMBER FUNCTIONS
+//
+// ==================================================================================================
 
 
 
 ///@return true if there are duplicate elements in the model
 template<size_t dim>
-bool detectDuplicateElement( const Model<dim>& m )
+bool detectDuplicateElements( const Model<dim>& m )
  {
     set<csmp::Point<dim> >  element_barycenters;
+    bool                    coincident_barycenters(false);
     
     const Region<dim>&  gref(m.Region("Model"));
     
     for ( typename vector<Element<dim>*>::const_iterator
-        it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ ) {
+          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ ) {
           csmp::Point<dim> bc = (*it)->BaryCenter();
           pair<typename set<csmp::Point<dim> >::iterator,bool>
           bc_it = element_barycenters.insert( bc );
           // if we were not able to insert this barycenter point
           // this means it is already in the set and we are dealing
           // with a duplicate element
-          if ( !bc_it.second ) return true;
+          if ( !bc_it.second ) {
+               cerr <<"\ndetectDuplicateElements: detected element whose barycentre coincides with other element.\n";
+               (*it)->Out();
+               coincident_barycenters = true;
+            }
+      
       }
  
-    return false;
+    return coincident_barycenters;
  
  } // detectDuplicateElement
  
- template bool detectDuplicateElement( const Model<1U>& );
- template bool detectDuplicateElement( const Model<2U>& );
- template bool detectDuplicateElement( const Model<3U>& );
+ template bool detectDuplicateElements( const Model<1U>& );
+ template bool detectDuplicateElements( const Model<2U>& );
+ template bool detectDuplicateElements( const Model<3U>& );
+
+
+
+
+
+
 
 
 } // end namespace csmp
