@@ -104,6 +104,8 @@
 #include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
+#include "DirichletPressureBoxModel_VVCase.h"
+
 
 using namespace std;
 using namespace csmp;
@@ -156,14 +158,23 @@ using namespace csmp;
 TEST_CASE("Unported tests", "[Unported]") {
   
   const bool verbose(false);
-  
+
+// /* STANDARD
   const bool test_fundamentals(true),
   test_interdependent1(true),
   test_interdependent2(true),
   test_composite(true),
   test_refactoring(false),
   test_new_developments(false);
-  
+// */
+/* TESTING
+  const bool test_fundamentals(false),
+  test_interdependent1(false),
+  test_interdependent2(false),
+  test_composite(false),
+  test_refactoring(true),
+  test_new_developments(false);
+*/
   long fails_fundamentals(0),
   fails_interdependent1(0),
   fails_interdependent2(0),
@@ -324,6 +335,9 @@ TEST_CASE("Unported tests", "[Unported]") {
       // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
       // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers
       
+//      refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
+      refactored.addTest( new DirichletPressureBoxModel_VVCase() );
+
       refactored.run();
       long nFail = refactored.report();
       refactored.free();

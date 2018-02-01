@@ -35,7 +35,7 @@ InputDataManager_Test::~InputDataManager_Test()
 */
 void InputDataManager_Test::run()
   {
-      ANSYS_Model3D  model( "InputDataManager_Test", "CSMP_DataInputManager_Test-variables.txt" );
+      ANSYS_Model3D  model( "InputDataManager_Test", "InputDataManager_Test-variables.txt" );
     
       // TESTING
       InputDataManager<3U>().ConfigureFromFile( model,"InputDataManager_Test", false, true, true, true, true, true );
