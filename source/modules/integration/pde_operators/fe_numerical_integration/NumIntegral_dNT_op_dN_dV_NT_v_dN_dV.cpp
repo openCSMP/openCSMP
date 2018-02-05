@@ -144,6 +144,9 @@ nodal and element variables, respectively.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
     // 1. read Operand
     // ---------------
     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 

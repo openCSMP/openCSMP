@@ -48,6 +48,9 @@ Integral_NT_rhsop_N_dV<dim,SIMPLEX>::Integral_NT_rhsop_N_dV( const PropertyDatab
 template<size_t dim,class SIMPLEX>
 void Integral_NT_rhsop_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
    // reading oper and basic
    e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), sc );
    e.NodePropertyVector( basic_.key, basic_var_ );

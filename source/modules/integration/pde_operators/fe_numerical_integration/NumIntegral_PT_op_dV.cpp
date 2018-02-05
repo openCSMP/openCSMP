@@ -43,6 +43,9 @@ reference to the Element from which the Operand shall be read.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_PT_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
    BFORCE.resize( e.Nodes() * dim );
 
    // reading the nodal "body" forces

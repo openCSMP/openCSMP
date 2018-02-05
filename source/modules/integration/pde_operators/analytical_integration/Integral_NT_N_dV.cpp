@@ -33,6 +33,9 @@ multiplied with the Operand.
 template<size_t dim,class SIMPLEX>
 void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
     // consistent formulation
     if ( !MathOperatorLHS<dim>::LumpedFormulation() )
       {

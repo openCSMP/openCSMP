@@ -53,6 +53,9 @@ see, for instance, J.Istock p. 132.
 template<size_t dim,class SIMPLEX>
 void NumIntegral_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
  {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim>::LHS.Zero();
 

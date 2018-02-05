@@ -10,7 +10,7 @@ namespace csmp {
 
 template<size_t dim,class SIMPLEX>
 Integral_NT_op_N_dV<dim,SIMPLEX>::Integral_NT_op_N_dV( const PropertyDatabase<dim>& pref,
-                                                  const char* oper, const char* test )
+                                                       const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
     INN(3,3)
  {
@@ -36,7 +36,10 @@ Integral_NT_op_N_dV<dim,SIMPLEX>::Integral_NT_op_N_dV( const PropertyDatabase<di
 template<size_t dim,class SIMPLEX>
 void Integral_NT_op_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
-   // reading Young's modulus (must be an element variables)
+     // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
+
+  // reading Young's modulus (must be an element variables)
    e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), sc );
 }
 

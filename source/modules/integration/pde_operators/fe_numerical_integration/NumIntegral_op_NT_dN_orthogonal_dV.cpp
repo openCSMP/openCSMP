@@ -57,15 +57,14 @@ The operand is read
 template<size_t dim,class SIMPLEX>
 void NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
-    ScalarVariable  sc;
-   
-    // 4. read node variable which must be a scalar
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
+    // read node variable which must be a scalar
     // --------------------------------------------
     NPROP.resize( e.Nodes() );
-    for ( size_t i=0; i<e.Nodes(); i++ ) {
-         e.N(i)->Read( MathOperatorRHS<dim>::MaterialOperandKey(), sc );
-         NPROP[i] = sc();
-      }
+    for ( size_t i=0; i<e.Nodes(); ++i )
+      NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim>::MaterialOperandKey() );
     
 } // end GetOperands
 

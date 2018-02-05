@@ -77,6 +77,9 @@ NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const Pro
 template<size_t dim,class SIMPLEX>
 void NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 {
+    // this integral is only for numerically integrated isoparametric finite elements
+    assert( e.FE()->Isoparametric() == true );
+
    // 0. reading the integral multiplier, e.g., permeability or so
    e.Read( mult_key, multiplier ); 
 

@@ -72,13 +72,15 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_
 template<size_t dim,class SIMPLEX>
 void Upwind_Integral_dNT_rhsop_g_dV<dim,SIMPLEX>::GetOperands(  SIMPLEX& e )
 {
-   // reading operand
-  MathOperatorRHS<dim>::GetOperands(e);
-   
-  // basic, upwind and trigger
-  e.NodePropertyVector(upwind_.key, upwind_var_);
-  e.NodePropertyVector(trigger_.key, trigger_var_);
+    // this integral is only for analytically integrated finite elements
+    assert( e.FE()->UsesLocalCoordinates() == false );
 
+     // reading operand
+    MathOperatorRHS<dim>::GetOperands(e);
+     
+    // basic, upwind and trigger
+    e.NodePropertyVector(upwind_.key, upwind_var_);
+    e.NodePropertyVector(trigger_.key, trigger_var_);
 }
 
 
