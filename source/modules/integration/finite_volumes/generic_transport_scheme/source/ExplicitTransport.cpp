@@ -216,7 +216,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
   
                // result checking and assignment
-               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C, C1 );
+              if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C, C1 );
                else {
                     cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
                     cerr <<"value: "<< C1() <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;

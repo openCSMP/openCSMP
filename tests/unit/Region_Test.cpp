@@ -127,13 +127,13 @@ void Region_Test::run()
         if ( verbose_ ) cout << (*it) <<" ";
         if ( verbose_ ) vtk_output.OutputDataToVTK( model, (*it).c_str(), "permeability", "permeability", 1, true );
         count++;
-        if  ((  model.Region((*it).c_str()).Elements() == model.Region("MATRIX").Elements()  )
-             or  ( model.Region((*it).c_str()).Elements() == model.Region("FRAC_VOLUMES").Elements() ))
-            _equal(  1 , 1., 0 ) ;
+        size_t num_elements_perm_region(model.Region((*it).c_str()).Elements());
+        _test((  num_elements_perm_region == model.Region("MATRIX").Elements()  )
+                 or  ( num_elements_perm_region == model.Region("FRAC_VOLUMES").Elements() ));
     }
     if ( verbose_ ) cout << endl;
     cout.flush();
-    _equal(  count , 2., 0 ) ;
+    _test( count == 2 ) ;
 
 
     // merging these regions into a single group 'permeability_regions'
