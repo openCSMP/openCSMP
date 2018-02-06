@@ -53,6 +53,7 @@ macro(GenerateVariables structname source_csv target_header)
 endmacro()
 
 GenerateVariables(Variables_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
+GenerateVariables(Variables_TwoPhaseFlow ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TwoPhaseFlow.csv Variables_TwoPhaseFlow.h)
 
 
 

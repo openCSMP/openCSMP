@@ -460,6 +460,9 @@ namespace csmp {
       auto outside_node = fip.OutsideNode();
       const double64 c_outside = outside_node.Read( key_C );
       const double64 c_fip = fip.Interpolate(key_C);
+      if (c_inside != c_outside) {
+        std::cerr << "Interesting case\n";
+      }
       
       const double64 facet_flux = fip.Read( User()->key_ff );
       double64 c(0.0);
