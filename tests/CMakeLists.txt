@@ -31,6 +31,7 @@ INCLUDE_DIRECTORIES(
 	"${CMAKE_SOURCE_DIR}/thirdparty/catch/include"
 	"${CMAKE_BINARY_DIR}/source/generated_includes"
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
+	"${CMAKE_CURRENT_SOURCE_DIR}/integration"
 )
 
 if(CMAKE_HOST_WIN32)
