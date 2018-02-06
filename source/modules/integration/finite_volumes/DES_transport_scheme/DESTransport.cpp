@@ -920,10 +920,10 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
             if ((*top)->inPEPStack() == false) {
                 PEPStack.push_back((*top));
                 (*top)->inPEPStack(true);
+                T_begin= clock();
+                Update_DES((*top),time);
+                T_Update_ += clock() - T_begin;                
             }; 
-            T_begin= clock();
-            Update_DES((*top),time);
-            T_Update_ += clock() - T_begin;
             T_begin= clock();
             Synchronize((*top),time);
             T_Synchronize_ += clock() - T_begin;
