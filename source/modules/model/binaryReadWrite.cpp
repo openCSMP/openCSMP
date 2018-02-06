@@ -38,6 +38,11 @@ bool skm_C_fread( FILE* fp, char str[] )
           cout <<"\nskm_C_fread(char[]): ERROR: could not read string length."<< endl;
           return false;
        }
+
+     if (characters > INFO_STRING) {
+       throw csmp::Exception(ERROR, "skm_C_fread", "Binary file appears to be corrupt");
+     }
+
      // reading the character string
      if ( characters != fread( (void*) buf, sizeof(char), characters, fp ) )
        {
