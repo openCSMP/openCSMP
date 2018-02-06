@@ -427,12 +427,6 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     }
 
   public:
-    Node<dim>* Node() const
-    {
-      auto user = User();
-      return user->e_.N(user->idx_);
-    }
-
     double64 SectorVolume() const
     {
       auto user = User();
