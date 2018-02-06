@@ -9,7 +9,6 @@ namespace csmp {
 template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Region;
-template<size_t> class FiniteElementHelper;
 
 struct VariableSet_TracerTransferExplicit;
 
@@ -56,10 +55,10 @@ class FacetFlux_TracerTransferExplicit {
   
   private:
   /// computes (A_i vD . n_i) * upstream C on all facets in element stencil and stores them there
-  void      Advective_O1_FluxesInterior( bool reuse_previous_velocity, FiniteElementHelper<dim>& ) const;
-  double64  Advective_O1_FluxesAtBoundary( FiniteElementHelper<dim>& fe, Node<dim>* ) const;
-  void      Advective_O2_FluxesInterior( bool reuse_previous_velocity, FiniteElementHelper<dim>& ) const;
-  double64  Advective_O2_FluxesAtBoundary( FiniteElementHelper<dim>& fe, Node<dim>* ) const;
+  void      Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>& ) const;
+  double64  Advective_O1_FluxesAtBoundary( Node<dim>& ) const;
+  void      Advective_O2_FluxesInterior( bool reuse_previous_velocity, Element<dim>& ) const;
+  double64  Advective_O2_FluxesAtBoundary( Node<dim>& ) const;
   
 };
 

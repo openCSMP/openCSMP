@@ -13,6 +13,7 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
+#include "ElementDiscretisationPolicy.h"
 
 #include <bitset>
 
@@ -25,88 +26,6 @@ struct Index;
 
 /// sector volume, finite volume, FV pore volume
 template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&  );
-
-
-
-template<size_t dim, VARIABLE_TYPE vt>
-struct VariableTypeTraits
-{
-};
-
-
-template<size_t dim>
-struct VariableTypeTraits<dim,SCALAR>
-{
-    typedef ScalarVariable VariableType;
-};
-
-template<size_t dim>
-struct VariableTypeTraits<dim,VECTOR>
-{
-    typedef VectorVariable<dim> VariableType;
-};
-
-template<size_t dim>
-struct VariableTypeTraits<dim,TENSOR>
-{
-    typedef TensorVariable<dim> VariableType;
-};
-
-template<size_t dim>
-struct VariableTypeTraits<dim,ARRAY>
-{
-    typedef ArrayVariable VariableType;
-};
-
-template<size_t dim>
-struct VariableTypeTraits<dim,FLAGGEDARRAY>
-{
-    typedef FlaggedArrayVariable VariableType;
-};
-
-
-template<size_t dim>
-class FiniteElementHelper
-{
-public:
-    FiniteElementHelper( );
-  
-    Element<dim>* FiniteElement( );
-    void FiniteElement( Element<dim>* eptr );
-    ~FiniteElementHelper();
-
-    /// Normal of a facet, scaled by facet area
-    Point<dim> NormalOfFacet( size_t iFacet );
-
-    /// Gradient of a scalar node-based property
-    Point<dim> ReadGradientAtBarycenter( const csmp::INDEX<SCALAR,NODE>& prop );
-
-    /// Read a property at the barycenter of the FE
-    template<VARIABLE_TYPE ty, PLACEMENT pl>
-    void ReadAtBarycenter( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var );
-
-    /// Read a property at a node around the FE
-    template<VARIABLE_TYPE ty, PLACEMENT pl>
-    void ReadAtNode( const csmp::INDEX<ty,pl>& prop, size_t n, typename VariableTypeTraits<dim,ty>::VariableType& var );
-  
-    /// Read a property at an element integration point
-    template<VARIABLE_TYPE ty, PLACEMENT pl>
-    void ReadAtElementIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
-
-    /// Read a property at a facet integration point
-    template<VARIABLE_TYPE ty, PLACEMENT pl>
-    void ReadAtFacetIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t facet, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
-
-    /// Read a property at a sector integration point
-    template<VARIABLE_TYPE ty, PLACEMENT pl>
-    void ReadAtSectorIntegrationPoint( const csmp::INDEX<ty,pl>& prop, size_t sector, size_t ip, typename VariableTypeTraits<dim,ty>::VariableType& var );
-
-private:
-    void CalculateDN(const Point<dim>& p, std::vector<double64>* DN);
-
-    struct Impl;
-    std::unique_ptr<Impl> pimpl_;
-};
 
 } // csmp
 

@@ -434,6 +434,8 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
       for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
            git=UniqueRegionsBegin(); git!=UniqueRegionsEnd(); ++git )
        {
+         BinaryFileSectionWrite hdr(fp, "ONE_REGN");
+
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";
@@ -452,6 +454,8 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
      for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
+       BinaryFileSectionWrite hdr(fp, "ONE_REGN");
+
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             domainVariablesOut( fp, (*git).second, database );
             std::cout << (*git).first <<" ";
@@ -540,20 +544,19 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
         // reading the regions sequentially
         for ( size_t i=0U; i<records; i++ )
           {
+             BinaryFileSectionRead hdr(fp, "ONE_REGN");
              // reading name and element indices for each unique region
              readDomainIndexesFromBinaryFile( fp, info );
-             // if the region info record is not empty the region is reconstructed
-             if ( !info.interior_elmts.empty() ) {
-                 std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                   it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
-                 //   ^^^^^^^^^^^^^^^
-                 if ( !it.second )
-                    throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
-                                           info.name, "Region could not be formed; issue with binary file." );
-               
-                  std::cout <<"\n\t\t'"<< (*it.first).first <<"'("<< (*it.first).second.Elements() <<" elements).";
-                  domainVariablesIn( fp, (*it.first).second, database );
-               }
+             // reconstruct the region
+             std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
+               it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
+             //   ^^^^^^^^^^^^^^^
+             if ( !it.second )
+                throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
+                                       info.name, "Region could not be formed; issue with binary file." );
+             
+              std::cout <<"\n\t\t'"<< (*it.first).first <<"'("<< (*it.first).second.Elements() <<" elements).";
+              domainVariablesIn( fp, (*it.first).second, database );
          }
      else csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                             bin_file, "does not contain any unique region descriptions; no regions were initialised." );
@@ -573,6 +576,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
         // reading the regions sequentially
         for ( size_t i=0U; i<records; i++ )
           {
+            BinaryFileSectionRead hdr(fp, "ONE_REGN");
+
              // reading name and element indices for each unique region
              readDomainIndexesFromBinaryFile( fp, info );
              // if the region info record is not empty the region is reconstructed

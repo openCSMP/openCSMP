@@ -5499,7 +5499,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-    assert( !info.interior_elmts.empty() );
+    // assert( !info.interior_elmts.empty() );
    
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
@@ -5536,7 +5536,7 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
 
     // 5. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
-    assert( !info.interior_nodes.empty() );
+    // assert( !info.interior_nodes.empty() );
   
     // 6. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );

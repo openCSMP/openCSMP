@@ -11,7 +11,7 @@
 
 #include "SaturationFunction.h"
 #include "BrooksCoreySaturationFunctions.h"
-#include "Variables_TwoPhaseFlow.h"
+#include "VariableSet_TwoPhaseFlow.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -50,7 +50,7 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 template<size_t dim>
-class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+class FlowFunctions : public variables::VariableSet_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
                       public SaturationFunction<dim,FlowFunctions>,
                       public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
                       public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface

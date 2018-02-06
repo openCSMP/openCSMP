@@ -32,6 +32,8 @@ struct variable {
   string placement;
   string usage;
   string explanation;
+  string reference;
+  string notes;
 };
 
 
@@ -59,11 +61,12 @@ int main(int argc, char* argv[])
     std::deque<variable> vars;
     try
     {
-        io::CSVReader<9> csv(argv[2]);
-        csv.read_header(0, "name", "notation", "units", "type", "minval", "maxval", "placement", "usage", "explanation");
+        io::CSVReader<11> csv(argv[2]);
+        csv.read_header(0, "variable name", "notation", "units", "type", "minval", "maxval", "placement", "usage", "explanation", "reference", "notes");
         variable var;
         while (csv.read_row(var.name, var.notation, var.units, var.type,
-                    var.minval, var.maxval, var.placement, var.usage, var.explanation)) {
+                    var.minval, var.maxval, var.placement, var.usage, var.explanation,
+                    var.reference, var.notes)) {
             vars.emplace_back(std::move(var));
         }
     }
@@ -115,7 +118,7 @@ int main(int argc, char* argv[])
     ofs << "  {\n";
     for (auto& var : vars) {
         ofs << "    if ( key_" << var.notation << ".place != " << var.placement
-            << " || key_" << var.notation << ".type != " << var.placement
+            << " || key_" << var.notation << ".type != " << var.type
             << " )\n      throw csmp::Exception( FATAL_ERROR, \""
             << argv[1] << "::" << argv[1] << ":\",\n        "
             << "\"The '" << var.name << "' variable must be " << var.type

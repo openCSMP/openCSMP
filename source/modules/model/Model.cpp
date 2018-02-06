@@ -19,6 +19,7 @@
 #include "FiniteVolumeStencilManager.h"
 
 #include <cstring>
+#include <unordered_set>
 
 using namespace std;
 
@@ -2954,8 +2955,48 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
         cerr << endl;
       }
     } // end multi-dim element region
-    
-    
+
+
+    // --------------------------------------------------------------------
+    // 2. Search for detached elements
+    // --------------------------------------------------------------------
+
+    {
+      Node<dim>* root_node = &Mesh().RootNode();
+      unordered_set<csmp::Element<dim>*>       explored_elements;
+      unordered_set<csmp::Node<dim>*>    discovered_nodes;
+      deque<csmp::Node<dim>*>  current_nodes;
+      // starting at the root element
+      discovered_nodes.insert( root_node );
+      current_nodes.push_back( root_node );
+      
+      while ( !current_nodes.empty() ) {
+        const csmp::Node<dim>*  n_ptr(current_nodes.front());
+        current_nodes.pop_front();
+        
+        // for all parent elements of the current node
+        for ( size_t i=0U; i<n_ptr->Parents(); i++ ) {
+          // for all the nodes of each parent element
+          for ( size_t j=0U; j<n_ptr->Parent(i)->Nodes(); j++ )
+            // if this node is not the one from which we started
+            if ( j != n_ptr->ParentNodeNumber(i) ) {
+              auto new_node = discovered_nodes.insert( n_ptr->Parent(i)->N(j) );
+              if ( new_node.second ) current_nodes.push_back( n_ptr->Parent(i)->N(j) );
+            }
+          // storing the explored element
+          explored_elements.insert( n_ptr->Parent(i) );
+        }
+      }
+      
+      size_t found_elements = explored_elements.size();
+      size_t expected_elements = Mesh().Elements();
+      
+      if ( found_elements < expected_elements ) {
+        std::cerr <<"\n\n\tdiscovered only "<< found_elements <<" versus "<< expected_elements <<" elements.\n\n";
+        csmp_error.notice( ERROR, "Model<dim>::CheckElementsAfterBuilding:",
+                          "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
+      }
+    }
   } // end PartitionElementVector
 
 

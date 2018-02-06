@@ -404,7 +404,7 @@ class FiniteElement {
   
     size_t  order_of_shape_functions,    ///< order of element shape functions
             object_id;                   ///< number used to track operations done on a particular element
-    
+  
     enum { LINE, SURFACE, VOLUME } element_category; ///< element classifier
     enum CSMP_FEM_TYPE             csp_fem_type;     ///< elements supported by CSMP, see definition above
   
