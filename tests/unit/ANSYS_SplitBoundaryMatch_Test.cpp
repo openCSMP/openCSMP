@@ -119,6 +119,8 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 
    // 2. build CSMP SplitBoundary
    // ---------------------------------------------------------------------------------------
+   model.DetectAndCreateSplitBoundaries();
+   
 
    // 3. change some property along split boundary to verify that assignments are made correctly
    // ---------------------------------------------------------------------------------------

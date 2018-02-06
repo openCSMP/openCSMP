@@ -32,8 +32,8 @@ struct LocalVariables {
       vectors           (vectorVars),
       tensors           (tensorVars),
       arrayCount        (array_count),
-      flaggedArrayCount (flag_array_count),
       arrayLength       (array_length),
+      flaggedArrayCount (flag_array_count),
       flaggedArrayLength(flag_array_length),
       totalDataDepth    (total_data_depth),
       totalFlagDepth    (total_flag_depth)
