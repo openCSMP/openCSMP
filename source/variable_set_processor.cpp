@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
     ofs << "  {\n";
     for (auto& var : vars) {
         ofs << "    if ( key_" << var.notation << ".place != " << var.placement
-            << " || key_" << var.notation << ".type != " << var.placement
+            << " || key_" << var.notation << ".type != " << var.type
             << " )\n      throw csmp::Exception( FATAL_ERROR, \""
             << argv[1] << "::" << argv[1] << ":\",\n        "
             << "\"The '" << var.name << "' variable must be " << var.type
