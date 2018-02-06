@@ -959,8 +959,10 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     {
       auto user = User();
       auto e = user->n_.Parent(user->idx1_);
+      auto fv = e->FV();
       auto pnid = user->n_.ParentNodeNumber(user->idx1_);
-      return e->FV()->InsideNode(user->idx2_) == pnid;
+      size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+      return fv->InsideNode(facet) == pnid;
     }
 
     Point<dim> DirectedArea() const;
@@ -987,7 +989,10 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     {
       auto user = User();
       auto e = user->n_.Parent(user->idx1_);
-      auto nid = e->FV()->InsideNode(user->idx2_);
+      auto fv = e->FV();
+      auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+      size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+      auto nid = fv->InsideNode(facet);
       return FiniteVolumePlacement<dim,NODE>(*e->N(nid), 0, 0, 0);
     }
 
@@ -995,7 +1000,10 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     {
       auto user = User();
       auto e = user->n_.Parent(user->idx1_);
-      auto nid = e->FV()->OutsideNode(user->idx2_);
+      auto fv = e->FV();
+      auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+      size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+      auto nid = fv->OutsideNode(facet);
       return FiniteVolumePlacement<dim,NODE>(*e->N(nid), 0, 0, 0);
     }
 
