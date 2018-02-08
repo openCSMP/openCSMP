@@ -325,7 +325,7 @@ template<size_t dim,template<size_t> class SIMPLEX>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,SIMPLEX>&, const ModelSubDomain<dim,SIMPLEX>& );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
-void readDomainIndexesFromBinaryFile( FILE*, SubDomainInfo& );
+void readDomainIndexesFromBinaryFile( size_t dim, FILE*, SubDomainInfo& );
 
 
 } // end namespace
