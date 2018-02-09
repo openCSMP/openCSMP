@@ -546,7 +546,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
           {
              BinaryFileSectionRead hdr(fp, "ONE_REGN");
              // reading name and element indices for each unique region
-             readDomainIndexesFromBinaryFile( fp, info );
+             readDomainIndexesFromBinaryFile( dim, fp, info );
              // reconstruct the region
              std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
                it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
@@ -579,7 +579,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
             BinaryFileSectionRead hdr(fp, "ONE_REGN");
 
              // reading name and element indices for each unique region
-             readDomainIndexesFromBinaryFile( fp, info );
+             readDomainIndexesFromBinaryFile( dim, fp, info );
              // if the region info record is not empty the region is reconstructed
              if ( !info.interior_elmts.empty() ) {
                  std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>

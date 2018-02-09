@@ -5487,7 +5487,7 @@ out( IDs );
 /**
     Reads all the data required to fully reconstruct a ModelSubDomain (without search operations)
 */
-void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
+void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
  {
     assert( fp != nullptr );
    
@@ -5499,7 +5499,10 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-    // assert( !info.interior_elmts.empty() );
+    if (dim > 2 && !info.interior_elmts.empty() ) {
+        throw csmp::Exception( ERROR, "readDomainIndexesFromBinaryFile",
+                "Model appears to have a region with no interior elements");
+    }
    
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
@@ -5536,7 +5539,6 @@ void readDomainIndexesFromBinaryFile( FILE* fp, SubDomainInfo& info )
 
     // 5. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
-    // assert( !info.interior_nodes.empty() );
   
     // 6. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );

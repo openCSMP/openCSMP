@@ -1226,7 +1226,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
         for ( size_t i=0U; i<records; ++i )
           {
              // 1.1 reading name and face indices for each boundaries
-             readDomainIndexesFromBinaryFile( fp, info );
+             readDomainIndexesFromBinaryFile( dim, fp, info );
             
              // if the boundary info record is not empty the boundary is reconstructed
              if ( !info.interior_elmts.empty() ) {
