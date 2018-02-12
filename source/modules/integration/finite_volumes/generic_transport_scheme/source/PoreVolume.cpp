@@ -14,13 +14,13 @@ namespace csmp {
 
 		}
   template<size_t dim>
-  void PoreVolume<dim>::AccumulateStencil(const Element<dim> *eptr, SparseMatrix &A) const {
-    const size_t iNrNodes(eptr->Nodes());
-    const double64 phi(eptr->Read(phi_key_));
+  void PoreVolume<dim>::AccumulateStencil(Element<dim>& fe, SparseMatrix &A) const {
+    const size_t iNrNodes(fe.Nodes());
+    const double64 phi(fe.Read(phi_key_));
     
     for (size_t iNode = 0; iNode < iNrNodes; ++iNode ) {
-      const auto nptr = eptr->N(iNode);
-      const double64 sector_volume = eptr->SectorVolume(iNode);
+      const auto nptr = fe.N(iNode);
+      const double64 sector_volume = fe.SectorVolume(iNode);
       const size_t i = nptr->Idx();
       
       if (this->multiply_with_dt_) {
@@ -34,9 +34,9 @@ namespace csmp {
   
 
   template<size_t dim>
-  void PoreVolume<dim>::AccumulateFiniteVolume(const Node<dim> *nptr, SparseMatrix &A) const {
-			double64 pv = nptr->Read(pv_key_);
-			size_t i = nptr->Idx();
+  void PoreVolume<dim>::AccumulateFiniteVolume(Node<dim>& fv, SparseMatrix &A) const {
+			double64 pv = fv.Read(pv_key_);
+			size_t i = fv.Idx();
     if (this->multiply_with_dt_) {
       A.Assign(i, i, pv * this->dt_);
     }

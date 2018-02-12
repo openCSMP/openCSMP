@@ -57,18 +57,18 @@ namespace csmp {
   };
 
   enum ElementInterpolatorType {
-    // READ_MODEL,
-    // READ_REGION,
-    READ_ELMT,
-    READ_NODE,
-    READ_EIP,
-    READ_FIP,
-    READ_SIP,
-    NODE_TO_BCTR,
-    NODE_TO_EIP,
-    NODE_TO_FIP,
-    NODE_TO_SIP,
-    ELMT_INTERPOLATOR_COUNT
+    // FE_READ_MODEL,
+    // FE_READ_REGION,
+    FE_READ_ELMT,
+    FE_READ_NODE,
+    FE_READ_EIP,
+    FE_READ_FIP,
+    FE_READ_SIP,
+    FE_NODE_TO_BCTR,
+    FE_NODE_TO_EIP,
+    FE_NODE_TO_FIP,
+    FE_NODE_TO_SIP,
+    FE_INTERPOLATOR_COUNT
   };
 
   template<ElementInterpolatorType interp>
@@ -90,36 +90,87 @@ namespace csmp {
 #define CSMP_ELEMENT_INTERPOLATOR_DISPATCH(from,to,interp) \
 template<> struct ElementInterpolatorDispatch<from,to> { static constexpr ElementInterpolatorType TYPE = interp; };
 
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,MODEL,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,REGION,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,NODE,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,REGION,READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT,READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,NODE,READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,READ_REGION)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,NODE,READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,NODE,READ_NODE)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,ELEMENT,NODE_TO_BCTR)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,NODE_TO_FIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,READ_EIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,READ_FIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,READ_SIP)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,MODEL,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,REGION,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,NODE,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,REGION,FE_READ_REGION)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT,FE_READ_REGION)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,NODE,FE_READ_REGION)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FE_READ_REGION)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FE_READ_REGION)
+  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FE_READ_ELMT)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FE_READ_ELMT)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,NODE,FE_READ_NODE)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,ELEMENT,FE_NODE_TO_BCTR)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FE_NODE_TO_FIP)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,ELEMENT_INTEGRATION_POINT,FE_NODE_TO_EIP)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FE_NODE_TO_SIP)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_READ_EIP)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_READ_FIP)
+  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_READ_SIP)
 
   template<size_t dim, PLACEMENT pl>
   struct ElementPlacementOperations
   {
   };
 
+
+  template<size_t dim>
+  struct ElementPlacementOperations<dim,NODE>
+  {
+  private:
+    typedef ElementPlacement<dim,NODE> user_type;
+
+    const user_type* User() const
+    {
+      return static_cast<const user_type*>(this);
+    }
+
+  public:
+    size_t NodeIdx() const
+    {
+      auto user = User();
+      return user->e_.N(user->idx1_)->Idx();
+    }
+
+    double64 SectorVolume() const
+    {
+      auto user = User();
+      return user->e_.SectorVolume(user->idx1_);
+    }
+
+    NeighbourNodeCollection<dim> AllNeighbourNodes() const
+    {
+      auto user = User();
+      return NeighbourNodeCollection<dim>(*user->e_.N(user->idx1_));
+    }
+  };
+
+  template<size_t dim>
+  struct ElementPlacementOperations<dim,ELEMENT_INTEGRATION_POINT>
+  {
+  private:
+    typedef ElementPlacement<dim,ELEMENT_INTEGRATION_POINT> user_type;
+
+    const user_type* User() const
+    {
+      return static_cast<const user_type*>(this);
+    }
+
+  public:
+    double64 IntegrationWeight() const
+    {
+      return 1.0;
+    }
+  };
 
   template<size_t dim>
   struct ElementPlacementOperations<dim,FACET_INTEGRATION_POINT>
@@ -151,6 +202,13 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       VectorVariable<dim> v;
       User()->Interpolate(prop, v);
       return ProjectOntoDirectedArea(v);
+    }
+
+    double64 IntegrationWeight() const
+    {
+      auto user = User();
+      auto fv = user->e_.FV();
+      return fv->FacetIntegrationWeight(user->idx1_, user->idx2_);
     }
 
     ElementPlacement<dim,NODE> InsideNode() const
@@ -415,31 +473,6 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   //  INTER_FACE_FACET_INTEGRATION_POINT,
   //  SPLIT_NODE
 
-  template<size_t dim>
-  struct ElementPlacementOperations<dim,NODE>
-  {
-  private:
-    typedef ElementPlacement<dim,NODE> user_type;
-
-    const user_type* User() const
-    {
-      return static_cast<const user_type*>(this);
-    }
-
-  public:
-    double64 SectorVolume() const
-    {
-      auto user = User();
-      return user->e_.SectorVolume(user->idx1_);
-    }
-
-    NeighbourNodeCollection<dim> AllNeighbourNodes() const
-    {
-      auto user = User();
-      return NeighbourNodeCollection<dim>(*user->e_.N(user->idx1_));
-    }
-  };
-
 
   template<size_t dim>
   struct ElementPlacementOperations<dim,ELEMENT>
@@ -454,6 +487,38 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     
   public:
       Point<dim> Gradient(const csmp::INDEX<SCALAR,NODE>& prop);
+  };
+
+  template<size_t dim>
+  struct ElementPlacementOperations<dim,SECTOR_INTEGRATION_POINT>
+  {
+  private:
+    typedef ElementPlacement<dim,SECTOR_INTEGRATION_POINT> user_type;
+
+    const user_type* User() const
+    {
+      return static_cast<const user_type*>(this);
+    }
+
+  public:
+    double64 IntegrationWeight() const
+    {
+      auto user = User();
+      auto fv = user->e_.FV();
+      return fv->SectorIntegrationWeight(user->idx1_, user->idx2_);
+    }
+
+    size_t NodeIdx() const
+    {
+      auto user = User();
+      return user->e_.N(user->idx1_)->Idx();
+    }
+
+    double64 SectorVolume() const
+    {
+      auto user = User();
+      return user->e_.SectorVolume(user->idx1_);
+    }
   };
 
 
@@ -545,6 +610,8 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     FV_READ_FIP,
     FV_READ_SIP,
     FV_NODE_TO_FIP,
+    FV_NODE_TO_SIP,
+
     FV_INTERPOLATOR_COUNT
   };
 
@@ -580,9 +647,14 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
   // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,READ_REGION)
   // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,READ_REGION)
   // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,READ_REGION)
+  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FV_READ_ELMT)
+  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FV_READ_ELMT)
+  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FV_READ_ELMT)
+  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FV_READ_ELMT)
   CSMP_FV_INTERPOLATOR_DISPATCH(NODE,NODE,FV_READ_NODE)
   CSMP_FV_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FV_READ_FIP)
   CSMP_FV_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FV_NODE_TO_FIP)
+  CSMP_FV_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FV_NODE_TO_SIP)
 
   template<size_t dim>
   struct NeighbourNodeIterator
@@ -949,6 +1021,16 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     }
 
   public:
+    double64 IntegrationWeight() const
+    {
+      auto user = User();
+      auto e = user->n_.Parent(user->idx1_);
+      auto fv = e->FV();
+      auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+      size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+      return fv->FacetIntegrationWeight(facet, user->idx3_);
+    }
+
     bool FromInside() const
     {
       auto user = User();
@@ -1046,6 +1128,42 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     }
   };
 
+  template<size_t dim>
+  struct FiniteVolumePlacementOperations<dim,SECTOR_INTEGRATION_POINT>
+  {
+  private:
+    typedef FiniteVolumePlacement<dim,SECTOR_INTEGRATION_POINT> user_type;
+
+    const user_type* User() const
+    {
+      return static_cast<const user_type*>(this);
+    }
+
+  public:
+    double64 IntegrationWeight() const
+    {
+      auto user = User();
+      auto e = user->n_.Parent(user->idx1_);
+      auto fv = e->FV();
+      auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+      return fv->SectorIntegrationWeight(pnid, user->idx2_);
+    }
+
+    size_t NodeIdx() const
+    {
+        auto user = User();
+        user->n_.Idx();
+    }
+
+    double64 SectorVolume() const
+    {
+        auto user = User();
+        auto e = user->n_.Parent(user->idx1_);
+        auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+        return e->SectorVolume(pnid);
+    }
+  };
+
   template<size_t dim, PLACEMENT pl>
   class FiniteVolumePlacement : public FiniteVolumePlacementOperations<dim,pl>
   {
@@ -1060,20 +1178,25 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     {
     }
 
+    size_t NodeIdx() const
+    {
+        return n_.Idx();
+    }
+
     Point<dim> Gradient( const csmp::INDEX<SCALAR,NODE>& prop ) const;
 
     template<VARIABLE_TYPE ty>
     void Read( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
     {
       FiniteVolumePlacementWorker<dim,pl> worker;
-      worker.Read(n_, idx1_, idx2_, var);
+      worker.Read(n_, idx1_, idx2_, idx3_, prop, var);
     }
 
-    template<VARIABLE_TYPE ty>
-    typename VariableTypeTraits<dim,ty>::ReturnType Read( const csmp::INDEX<ty,pl>& prop ) const
+    double64 Read( const csmp::INDEX<SCALAR,pl>& prop ) const
     {
-      FiniteVolumePlacementWorker<dim,pl> worker;
-      return worker.Read(n_, idx1_, idx2_, idx3_, prop);
+      ScalarVariable var;
+      Read(prop, var);
+      return var();
     }
 
     template<VARIABLE_TYPE ty>

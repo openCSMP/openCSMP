@@ -23,7 +23,7 @@ ExplicitTransport<dim>::GetModel() const
 {
     return model_;
 }
-    
+
 
 template<size_t dim>
 ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region, bool second_order_in_space )
@@ -38,11 +38,11 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
 
     initializeFiniteVolumeProperties( m, m.Region(target_region) );
     // 0. model-wide initialisation: results will be accumulated into this variable
-   
+
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
  }
-  
+
 
 /**
     Computation of time increment, flux balance, and temporary new concentration.
@@ -51,7 +51,7 @@ template<size_t dim>
 double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_increment )
  {
      double64 dt_min(max_time_increment);
- 
+
      // 1. processing interior and FVs for which all facet fluxes have been initialised
      auto interior_nodes_end(gref_.InteriorNodesEnd());
      for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
@@ -70,7 +70,7 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
           // boundary fluxes must be part of the time-increment calculation
           dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( (*nit) ) );
        }
-   
+
     return dt_min;
  }
 
@@ -97,11 +97,11 @@ double64 ExplicitTransport<dim>::TimeIncrement()
 /**  AssembleSolution()
 
       S^t+1 = S^t - dt/(phi Vi) * (sum_j^faces Aj n . [f vt] + sources/sinks)
- 
+
     - a single loop over all nodes is required
     - this steps also considers in and outflow of finite volume cells
     - (distributed) sources and sinks will be considered in the future
-    
+
     @todo update water saturations after every step
 */
 template<size_t dim>
@@ -126,16 +126,16 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
 
         // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
         accumulation = c0 - (delta_t/pv) * accumulation;
-        
+
         // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
         // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
         //                               new concentration
         accumulation += source * c1 * delta_t;
-        
+
          // 5. storing the new concentration
          (*nit)->Store( this->key_NC, makeScalar( (*nit)->Status(this->key_NC), accumulation ) );
     }
-   
+
 } // end AssembleSolution
 
 
@@ -147,7 +147,7 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     For all nodes on the perimeter of the target region, this method
     loops over the finite-element sectors of the associated finite volume
     integrating facet fluxes based on total velocity.
-    
+
     This flux balance is added to the node variable 'new saturation oil'
 */
 template<size_t dim>
@@ -174,7 +174,7 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
           ScalarVariable result( makeScalar( (*nit)->Status(this->key_NC), (*nit)->Read(this->key_NC) ) );
           result() += div;
           (*nit)->Store( this->key_NC, result );
-      
+
       } // end for cycle for nodes
 
 } // end AdjustResultsAssumingDivergenceFreeVelocityField
@@ -200,7 +200,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
                     difference_to_last_output(0.);
     size_t          error_counter(0);
     ScalarVariable  C1;
-   
+
     while ( nit != nodes_end )
        {
           const VARIABLE_FLAG status((*nit)->Status( this->key_C ));
@@ -214,7 +214,7 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
                // reading the previous values and calculating the maximum change per node
                const double64 C0 = (*nit)->Read( this->key_C );
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
-  
+
                // result checking and assignment
               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C, C1 );
                else {
@@ -249,13 +249,13 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
 
 /**
     1. Computation of (velocity and) facet fluxes
-    
+
     2. Evaluation of time increment, flux balances and flux balance concentration products
- 
+
     3. Assembly of solution
 
     4. Assignment of boundary conditions (treatment of truncated FVs at the boundary)
- 
+
     5. tranfer of results into 'concentration', vacating 'new concentration' for 
        next assembly.
 */
@@ -265,7 +265,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     // 1. computing (velocity and) facet fluxes as necessary
     const bool reuse_previous_velocity = false;
     this->FacetFluxes(gref_, reuse_previous_velocity, second_order_in_space_);
-   
+
     // 2. evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
 
@@ -292,7 +292,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
 
           const bool with_divergence_correction(false);
           AssembleSolution( time_increment, with_divergence_correction );
-    
+
 #if 1
 // testing
 double64 so1_min, so1_max;

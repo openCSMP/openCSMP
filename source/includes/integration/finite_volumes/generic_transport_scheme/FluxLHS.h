@@ -12,11 +12,11 @@ class FluxLHS : public MatrixOperator<dim> {
     FluxLHS(Model<dim>& model, const char*);
     FluxLHS( const FluxLHS&);
   
-    virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const;
-    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& ) const;
+    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& ) const;
 
   private:
-    const csmp::Index ff_key_;
+    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> ff_key_;
 };
 
 }

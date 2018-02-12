@@ -50,8 +50,8 @@ public:
   void MultiplyWithTimeIncrement( bool multiply_with_dt ) { multiply_with_dt_ = multiply_with_dt; }
   
   void TimeIncrement( double64 dt ) { dt_ = dt; }
-  virtual void AccumulateStencil( const Element<dim>* fe, std::vector<double64>& rhs ) const = 0;
-  virtual void AccumulateFiniteVolume( const Node<dim>* fv, std::vector<double64>& rhs ) const = 0;
+  virtual void AccumulateStencil( Element<dim>& fe, std::vector<double64>& rhs ) const = 0;
+  virtual void AccumulateFiniteVolume( Node<dim>& fv, std::vector<double64>& rhs ) const = 0;
   
   virtual ~VectorOperator() { }
   

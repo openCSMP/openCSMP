@@ -152,7 +152,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
 #if 0
 
   template<>
-  ElementPropertyInterpolator<READ_MODEL>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_MODEL>::ElementPropertyInterpolator()
   {
   }
 
@@ -160,101 +160,101 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_MODEL>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_MODEL>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
-    throw csmp::Exception(ERROR, "ElementPropertyInterpolator<READ_MODEL>::Interpolate", "READ_MODEL NYI");
+    throw csmp::Exception(ERROR, "ElementPropertyInterpolator<FE_READ_MODEL>::Interpolate", "FE_READ_MODEL NYI");
   }
 
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_MODEL)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_MODEL)
 #endif
 
 
   template<>
-  ElementPropertyInterpolator<READ_ELMT>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_ELMT>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_ELMT>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_ELMT>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     eptr->Read(prop, var);
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_ELMT)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_ELMT)
 
   template<>
-  ElementPropertyInterpolator<READ_NODE>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_NODE>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_NODE>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_NODE>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     eptr->N(idx1)->Read(prop, var);
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_NODE)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_NODE)
 
   template<>
-  ElementPropertyInterpolator<READ_EIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_EIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_EIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_EIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     eptr->Read(idx1, prop, var);
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_EIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_EIP)
 
   template<>
-  ElementPropertyInterpolator<READ_FIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_FIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_FIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_FIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     eptr->Read(idx1, idx2, prop, var);
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_FIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_FIP)
 
   template<>
-  ElementPropertyInterpolator<READ_SIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_READ_SIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<READ_SIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_READ_SIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     eptr->Read(idx1, idx2, prop, var);
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(READ_SIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_SIP)
 
 
   template<>
-  ElementPropertyInterpolator<NODE_TO_BCTR>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_NODE_TO_BCTR>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<NODE_TO_BCTR>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_NODE_TO_BCTR>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
@@ -266,17 +266,17 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     }
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(NODE_TO_BCTR)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_NODE_TO_BCTR)
 
   template<>
-  ElementPropertyInterpolator<NODE_TO_EIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_NODE_TO_EIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<NODE_TO_EIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_NODE_TO_EIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
@@ -288,17 +288,17 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     }
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(NODE_TO_EIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_NODE_TO_EIP)
 
   template<>
-  ElementPropertyInterpolator<NODE_TO_FIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_NODE_TO_FIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<NODE_TO_FIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_NODE_TO_FIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
@@ -310,17 +310,17 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     }
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(NODE_TO_FIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_NODE_TO_FIP)
 
   template<>
-  ElementPropertyInterpolator<NODE_TO_SIP>::ElementPropertyInterpolator()
+  ElementPropertyInterpolator<FE_NODE_TO_SIP>::ElementPropertyInterpolator()
   {
   }
 
   template<>
   template<size_t dim,VARIABLE_TYPE ty>
   void
-  ElementPropertyInterpolator<NODE_TO_SIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  ElementPropertyInterpolator<FE_NODE_TO_SIP>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
@@ -332,7 +332,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     }
   }
 
-  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(NODE_TO_SIP)
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_NODE_TO_SIP)
 
 
 

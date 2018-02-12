@@ -32,10 +32,10 @@ class DiffusionLHS : public MatrixOperator<dim> {
     virtual ~DiffusionLHS() {}
   
     /// not available for this Element-based stencil
-  virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const { }
+  virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& ) const { }
   
     /// element-by-element accumulation of matrix terms
-    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& ) const;
   
   private:
     mutable DenseMatrix<DM_MIN>  DN_, DNT_, RESULT_;

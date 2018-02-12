@@ -29,41 +29,41 @@ DiffusionLHS<dim>::DiffusionLHS( const Model<dim>& model, const char* diffusivit
      accumulate it into the solution matrix A of Ax=b.
 */
 template<size_t dim>
-void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>* eptr, SparseMatrix& A ) const
+void DiffusionLHS<dim>::AccumulateStencil( Element<dim>& fe, SparseMatrix& A ) const
  {
     // assuming a scalar diffusivity
-    double64  diffusion_coeff = eptr->Read( diff_key_ );
+    double64  diffusion_coeff = fe.Read( diff_key_ );
    
     // if there is only a single Jacobian needed because the element is a simplex
     double64 detJ(0U);
-    if ( eptr->FE()->IsSimplex() ) {
+    if ( fe.FE()->IsSimplex() ) {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         detJ = eptr->dN_AtBaryCenter( DN_, dof_ );
+         detJ = fe.dN_AtBaryCenter( DN_, dof_ );
          DN_.Transposed( DNT_ );
          DN_  *= diffusion_coeff;
          DNT_ *= DN_;
       }
  
-    const size_t integration_points(eptr->IntegrationPoints());
+    const size_t integration_points(fe.IntegrationPoints());
     for ( size_t i=0U; i<integration_points; ++i )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
-         if ( !eptr->FE()->IsSimplex() ) {
-              detJ = eptr->dN_AtIntegrationPoint( DN_, i, dof_ );
+         if ( !fe.FE()->IsSimplex() ) {
+              detJ = fe.dN_AtIntegrationPoint( DN_, i, dof_ );
               DN_.Transposed( DNT_ );
               DN_  *= diffusion_coeff;
               DNT_ *= DN_;
               RESULT_ = DNT_;
            }
          RESULT_  = DNT_;
-         RESULT_ *= eptr->WeightAtIntegrationPoint(i) * detJ;
+         RESULT_ *= fe.WeightAtIntegrationPoint(i) * detJ;
 
          // assigning the matrix contribution to the solution matrix
          for ( size_t j=0U; j<DNT_.Rows(); j++ )
            for ( size_t k=0U; k<DNT_.Cols(); k++ )
-             A.Add( eptr->N(j)->Idx(), eptr->N(k)->Idx(), RESULT_(j,k) );
+             A.Add( fe.N(j)->Idx(), fe.N(k)->Idx(), RESULT_(j,k) );
       }
 
  }
