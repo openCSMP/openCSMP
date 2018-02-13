@@ -22,10 +22,10 @@ namespace {
   }
 
   template<size_t dim>
-  void CalculateN(const Element<dim>* eptr, size_t element_dim, const Point<dim>& p, double64* coeff);
+  void calculateN(const Element<dim>* eptr, size_t element_dim, const Point<dim>& p, double64* coeff);
 
   template<>
-  void CalculateN<1u>(const Element<1u>* eptr, size_t element_dim, const Point<1u>& p, double64* coeff)
+  void calculateN<1u>(const Element<1u>* eptr, size_t element_dim, const Point<1u>& p, double64* coeff)
   {
     auto fe = eptr->FE();
     switch (element_dim) {
@@ -35,7 +35,7 @@ namespace {
   }
 
   template<>
-  void CalculateN<2u>(const Element<2u>* eptr, size_t element_dim, const Point<2u>& p, double64* coeff)
+  void calculateN<2u>(const Element<2u>* eptr, size_t element_dim, const Point<2u>& p, double64* coeff)
   {
     auto fe = eptr->FE();
     switch (element_dim) {
@@ -50,7 +50,7 @@ namespace {
   }
 
   template<>
-  void CalculateN<3u>(const Element<3u>* eptr, size_t element_dim, const Point<3u>& p, double64* coeff)
+  void calculateN<3u>(const Element<3u>* eptr, size_t element_dim, const Point<3u>& p, double64* coeff)
   {
     auto fe = eptr->FE();
     switch (element_dim) {
@@ -68,11 +68,11 @@ namespace {
 
   template<size_t dim>
   void
-  CalculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double64>* DN);
+  calculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double64>* DN);
 
   template<>
   void
-  CalculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double64>* DN)
   {
     auto fe = e.FE();
     switch (elementDimension(e)) {
@@ -85,7 +85,7 @@ namespace {
 
   template<>
   void
-  CalculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double64>* DN)
   {
     auto fe = e.FE();
     switch (elementDimension(e)) {
@@ -105,7 +105,7 @@ namespace {
 
   template<>
   void
-  CalculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double64>* DN)
+  calculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double64>* DN)
   {
     auto fe = e.FE();
     switch (elementDimension(e)) {
@@ -125,6 +125,62 @@ namespace {
         break;
     }
   }
+  
+  template<size_t dim>
+  Point<dim>
+  directedAreaOfFacet(const Element<dim>& e, size_t iFacet)
+  {
+    auto fv = e.FV();
+    switch (elementDimension(e)) {
+      case 1:
+      {
+        Point<dim> normal;
+        const size_t iNrNodes(e.Nodes());
+        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+          const Point<dim> n(e.N(iNode)->Coordinate());
+          auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
+          normal += weights.first * n;
+        }
+        return normal;
+      }
+        
+      case 2:
+      {
+        Point<dim> tangent;
+        Point<dim> bitangent;
+        const size_t iNrNodes(e.Nodes());
+        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+          const Point<dim> n(e.N(iNode)->Coordinate());
+          auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
+          tangent += weights.first * n;
+          bitangent += weights.second * n;
+        }
+        double64 length = exteriorProductLength(tangent, bitangent);
+        tangent.NormalizeLengthTo(1.0);
+        Point<dim> normal = bitangent - dotProduct(tangent,bitangent) * tangent;
+        normal.NormalizeLengthTo(length);
+        return normal;
+      }
+        
+      case 3:
+      {
+        Point<dim> v0(0.0);
+        Point<dim> v1(0.0);
+        const size_t iNrNodes(e.Nodes());
+        for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
+          auto xform_weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
+          const Point<dim> n(e.N(iNode)->Coordinate());
+          v0 += xform_weights.first * n;
+          v1 += xform_weights.second * n;
+        }
+        return crossProduct(v1, v0);
+      }
+    }
+    throw csmp::Exception(ERROR,
+                          "directedAreaOfFacet",
+                          "Element dimension must be 1, 2, or 3");
+  }
+
 }
 
 
@@ -258,7 +314,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    CalculateN(eptr, elementDimension(*eptr), eptr->FV()->Barycenter(), &coeff[0]);
+    calculateN(eptr, elementDimension(*eptr), eptr->FV()->Barycenter(), &coeff[0]);
 
     var = 0.;
     for ( size_t i=0; i<iNrNodes; i++ ) {
@@ -280,7 +336,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    CalculateN(eptr, elementDimension(*eptr), eptr->IntegrationPoint(idx1), &coeff[0]);
+    calculateN(eptr, elementDimension(*eptr), eptr->IntegrationPoint(idx1), &coeff[0]);
 
     var = 0.;
     for ( size_t i=0; i<iNrNodes; i++ ) {
@@ -302,7 +358,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    CalculateN(eptr, elementDimension(*eptr), eptr->FV()->FacetIntegrationPoint(idx1, idx2), &coeff[0]);
+    calculateN(eptr, elementDimension(*eptr), eptr->FV()->FacetIntegrationPoint(idx1, idx2), &coeff[0]);
 
     var = 0.;
     for ( size_t i=0; i<iNrNodes; i++ ) {
@@ -324,7 +380,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    CalculateN(eptr, elementDimension(*eptr), eptr->FV()->SectorIntegrationPoint(idx1, idx2), &coeff[0]);
+    calculateN(eptr, elementDimension(*eptr), eptr->FV()->SectorIntegrationPoint(idx1, idx2), &coeff[0]);
 
     var = 0.;
     for ( size_t i=0; i<iNrNodes; i++ ) {
@@ -356,7 +412,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     for (size_t i = 0; i < element_dim; ++i) {
       DN[i].resize(num_nodes);
     }
-    CalculateDN(e, fv->Barycenter(), DN);
+    calculateDN(e, fv->Barycenter(), DN);
 
     Point<dim> grad(0.);
     for ( size_t i=0U; i<num_nodes; ++i ) {
@@ -370,9 +426,9 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     return Point<dim>(fe->JINV * grad.Coordinates());
   }
 
-  template Point<1ul> csmp::ElementPlacementOperations<1ul, (csmp::PLACEMENT)5>::Gradient(csmp::INDEX<(csmp::VARIABLE_TYPE)1, (csmp::PLACEMENT)17> const&);
-  template Point<2ul> csmp::ElementPlacementOperations<2ul, (csmp::PLACEMENT)5>::Gradient(csmp::INDEX<(csmp::VARIABLE_TYPE)1, (csmp::PLACEMENT)17> const&);
-  template Point<3ul> csmp::ElementPlacementOperations<3ul, (csmp::PLACEMENT)5>::Gradient(csmp::INDEX<(csmp::VARIABLE_TYPE)1, (csmp::PLACEMENT)17> const&);
+  template Point<1ul> csmp::ElementPlacementOperations<1ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<2ul> csmp::ElementPlacementOperations<2ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<3ul> csmp::ElementPlacementOperations<3ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
 
   template<size_t dim>
   Point<dim>
@@ -382,60 +438,12 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     auto& e = user->e_;
     auto fv = e.FV();
     size_t iFacet(user->idx1_);
-
-    switch (elementDimension(e)) {
-      case 1:
-      {
-        Point<dim> normal;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
-          const Point<dim> n(e.N(iNode)->Coordinate());
-          auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
-          normal += weights.first * n;
-        }
-        return normal;
-      }
-
-      case 2:
-      {
-        Point<dim> tangent;
-        Point<dim> bitangent;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
-          const Point<dim> n(e.N(iNode)->Coordinate());
-          auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
-          tangent += weights.first * n;
-          bitangent += weights.second * n;
-        }
-        double64 length = exteriorProductLength(tangent, bitangent);
-        tangent.NormalizeLengthTo(1.0);
-        Point<dim> normal = bitangent - dotProduct(tangent,bitangent) * tangent;
-        normal.NormalizeLengthTo(length);
-        return normal;
-      }
-
-      case 3:
-      {
-        Point<dim> v0(0.0);
-        Point<dim> v1(0.0);
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
-          auto xform_weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
-          const Point<dim> n(e.N(iNode)->Coordinate());
-          v0 += xform_weights.first * n;
-          v1 += xform_weights.second * n;
-        }
-        return crossProduct(v1, v0);
-      }
-    }
-    throw csmp::Exception(ERROR, "FiniteElementHelper::NormalOfFacet", "Element dimension must be 1, 2, or 3");
+    return directedAreaOfFacet(e, iFacet);
   }
 
   template Point<1u> ElementPlacementOperations<1u,FACET_INTEGRATION_POINT>::DirectedArea() const;
   template Point<2u> ElementPlacementOperations<2u,FACET_INTEGRATION_POINT>::DirectedArea() const;
   template Point<3u> ElementPlacementOperations<3u,FACET_INTEGRATION_POINT>::DirectedArea() const;
-
-
 
 
 
@@ -502,10 +510,10 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
     size_t pnid = n->ParentNodeNumber(idx1);
     auto fv = eptr->FV();
     size_t facet = fv->FacetSurroundingSector(pnid, idx2);
-    
+
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    CalculateN(eptr, elementDimension(*eptr), fv->FacetIntegrationPoint( facet, idx3 ), &coeff[0]);
+    calculateN(eptr, elementDimension(*eptr), fv->FacetIntegrationPoint( facet, idx3 ), &coeff[0]);
     
     var = 0.;
     for ( size_t i=0; i<iNrNodes; i++ ) {
@@ -514,6 +522,24 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
   }
 
   INSTANTIATE_FV_PROPERTY_INTERPOLATOR(FV_NODE_TO_FIP)
+
+
+  template<size_t dim>
+  Point<dim>
+  FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::DirectedArea() const
+  {
+    auto user = User();
+    auto& e = *user->n_.Parent(user->idx1_);
+    size_t pnid = user->n_.ParentNodeNumber(user->idx1_);
+    auto fv = e.FV();
+    size_t iFacet = fv->FacetSurroundingSector(pnid, user->idx2_);
+    return directedAreaOfFacet(e, iFacet);
+  }
+
+  template Point<1u> FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+  template Point<2u> FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+  template Point<3u> FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+
 
 #if 0
   template<>
@@ -557,7 +583,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
       auto fv = eptr->FV();
       num_nodes_ = eptr->Nodes();
       facets_ = fv->Facets();
-      ips_per_facet_ = fv->IntegrationPointsPerFacet();
+      ips_pehttps://www.youtube.com/watch?v=GYLBjScgb7or_facet_ = fv->IntegrationPointsPerFacet();
 
       const size_t coeff_size = facets_ * ips_per_facet_ * num_nodes_;
 
@@ -567,7 +593,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
       size_t offset = 0;
       for (size_t iFacet = 0; iFacet < facets_; ++iFacet) {
         for (size_t iFip = 0; iFip < ips_per_facet_; ++iFip) {
-          CalculateN(eptr, element_dim, fv->FacetIntegrationPoint(iFacet, iFip), &coeff_[offset]);
+          calculateN(eptr, element_dim, fv->FacetIntegrationPoint(iFacet, iFip), &coeff_[offset]);
           offset += num_nodes_;
         }
       }
@@ -721,7 +747,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
    DN_bctr[i].resize(num_nodes);
    }
    }
-   CalculateDN(eptr->FV()->Barycenter(), DN_bctr);
+   calculateDN(eptr->FV()->Barycenter(), DN_bctr);
 
    Point<dim> grad(0.);
    for ( size_t i=0U; i<num_nodes; ++i ) {
@@ -739,7 +765,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
 
    template<>
    void
-   FiniteElementHelper<1u>::CalculateDN(const Point<1u>& p, std::vector<double64>* DN)
+   FiniteElementHelper<1u>::calculateDN(const Point<1u>& p, std::vector<double64>* DN)
    {
    auto fe = pimpl_->eptr_->FE();
    switch (pimpl_->element_dim_) {
@@ -753,7 +779,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
 
    template<>
    void
-   FiniteElementHelper<2u>::CalculateDN(const Point<2u>& p, std::vector<double64>* DN)
+   FiniteElementHelper<2u>::calculateDN(const Point<2u>& p, std::vector<double64>* DN)
    {
    auto fe = pimpl_->eptr_->FE();
    switch (pimpl_->element_dim_) {
@@ -773,7 +799,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
 
    template<>
    void
-   FiniteElementHelper<3u>::CalculateDN(const Point<3u>& p, std::vector<double64>* DN)
+   FiniteElementHelper<3u>::calculateDN(const Point<3u>& p, std::vector<double64>* DN)
    {
    auto fe = pimpl_->eptr_->FE();
    switch (pimpl_->element_dim_) {

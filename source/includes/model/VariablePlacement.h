@@ -1021,6 +1021,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     }
 
   public:
+
     double64 IntegrationWeight() const
     {
       auto user = User();
@@ -1043,9 +1044,16 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
     Point<dim> DirectedArea() const;
 
+    Point<dim> FacetNormal() const
+    {
+        Point<dim> norm = DirectedArea();
+        norm.NormalizeLengthTo(1.0);
+        return norm;
+    }
+
     double64 ProjectOntoDirectedArea(const VectorVariable<dim>& v) const
     {
-      return dotProduct(v, DirectedArea());
+      return dotProduct(v.P(), DirectedArea());
     }
 
     double64 ProjectOntoDirectedArea(const Point<dim>& v) const
@@ -1059,6 +1067,24 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
       VectorVariable<dim> v;
       User()->Interpolate(prop, v);
       return ProjectOntoDirectedArea(v);
+    }
+
+    double64 ProjectOntoFacetNormal(const VectorVariable<dim>& v) const
+    {
+      return dotProduct(v.P(), FacetNormal());
+    }
+
+    double64 ProjectOntoFacetNormal(const Point<dim>& v) const
+    {
+      return dotProduct(v, FacetNormal());
+    }
+
+    template<PLACEMENT from>
+    double64 ProjectOntoFacetNormal(const csmp::INDEX<VECTOR,from>& prop) const
+    {
+      VectorVariable<dim> v;
+      User()->Interpolate(prop, v);
+      return ProjectOntoFacetNormal(v);
     }
 
     FiniteVolumePlacement<dim,NODE> InsideNode() const
@@ -1122,10 +1148,30 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
   template<size_t dim>
   struct FiniteVolumePlacementOperations<dim,NODE>
   {
+  private:
+    typedef FiniteVolumePlacement<dim,NODE> user_type;
+
+    const user_type* User() const
+    {
+      return static_cast<const user_type*>(this);
+    }
+      
+  public:
     NeighbourNodeCollection<dim> AllNeighbourNodes() const
     {
-       return NeighbourNodeCollection<dim>(static_cast<const FiniteVolumePlacement<dim,NODE>*>(this)->n_);
+       return NeighbourNodeCollection<dim>(User()->n_);
     }
+
+    FiniteVolumePlacementCollection<dim,FACET_INTEGRATION_POINT> AllFacetIntegrationPoints() const
+    {
+       return FiniteVolumePlacementCollection<dim,FACET_INTEGRATION_POINT>(User()->n_);
+    }
+
+    FiniteVolumePlacementCollection<dim,SECTOR_INTEGRATION_POINT> AllSectorIntegrationPoints() const
+    {
+       return FiniteVolumePlacementCollection<dim,SECTOR_INTEGRATION_POINT>(User()->n_);
+    }
+
   };
 
   template<size_t dim>

@@ -58,7 +58,7 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
        {
           assert( (*nit)->AtBoundary() == NOT );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( (*nit) );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( **nit );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -68,7 +68,7 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( (*nit) ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( **nit ) );
        }
 
     return dt_min;
@@ -153,30 +153,25 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
 template<size_t dim>
 void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval )
  {
-    const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
-    for ( typename vector<Node<dim>*>::iterator nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
+    const auto nodes_end(gref_.PerimeterNodesEnd());
+    for ( auto nit = gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
       {
+          auto n = (*nit)->AtNode();
+
           double64 div(0.);
-          // for each finite volume, f is evaluated on a sector by sector basis
-          const size_t parents((*nit)->Parents());
-          for ( size_t t=0U; t<parents; t++ ) {
-               Element<dim>* const eptr((*nit)->Parent(t));
-               const size_t nid((*nit)->ParentNodeNumber(t));
 
-               // for all FACETS per SECTOR surrounding the finite volume at the boundary
-               for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
-                    size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
-                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
-                    if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
-                    else div -= velo;
-                }
+          for (auto fip : n.AllFacetIntegrationPoints()) {
+            const double64 velo = fip.ProjectOntoFacetNormal( this->key_V );
+            if ( fip.FromInside() )
+              div += velo;
+            else
+              div -= velo;
            }
-          ScalarVariable result( makeScalar( (*nit)->Status(this->key_NC), (*nit)->Read(this->key_NC) ) );
-          result() += div;
-          (*nit)->Store( this->key_NC, result );
-
+        ScalarVariable result;
+        n.Read(this->key_NC, result);
+        result() += div;
+        n.Store( this->key_NC, result );
       } // end for cycle for nodes
-
 } // end AdjustResultsAssumingDivergenceFreeVelocityField
 
 
@@ -192,40 +187,37 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
 template<size_t dim>
 double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool do_range_check ) const
   {
-    const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
-    typename vector<Node<dim>*>::iterator nit = gref_.NodesBegin();
-
     double64        amin(+std::numeric_limits<double64>::max()),
                     amax(-std::numeric_limits<double64>::max()),
                     difference_to_last_output(0.);
     size_t          error_counter(0);
     ScalarVariable  C1;
 
-    while ( nit != nodes_end )
-       {
-          const VARIABLE_FLAG status((*nit)->Status( this->key_C ));
+    const auto nodes_end(gref_.NodesEnd());
+    for ( auto nit = gref_.NodesBegin(); nit != nodes_end; ++nit) {
+        auto n = (*nit)->AtNode();
+          const VARIABLE_FLAG status(n.Status( this->key_C ));
           if ( status != DIRICH )
             {
                // reading the newly computed saturation values
-               (*nit)->Read( this->key_NC, C1 );
+               n.Read( this->key_NC, C1 );
                amin = std::min( amin, C1() );
                amax = std::max( amax, C1() );
 
                // reading the previous values and calculating the maximum change per node
-               const double64 C0 = (*nit)->Read( this->key_C );
+               const double64 C0 = n.Read( this->key_C );
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
 
                // result checking and assignment
-              if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C, C1 );
+              if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) n.Store( this->key_C, C1 );
                else {
                     cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
                     cerr <<"value: "<< C1() <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-                    if ( C1() > upper_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-                    else if ( C1() < lower_limit_ ) (*nit)->Store( this->key_C, makeScalar( status, lower_limit_ ) );
+                    if ( C1() > upper_limit_ ) n.Store( this->key_C, makeScalar( status, upper_limit_ ) );
+                    else if ( C1() < lower_limit_ ) n.Store( this->key_C, makeScalar( status, lower_limit_ ) );
                     error_counter++;
                  }
             }
-          nit++;
        }
 
     if ( do_range_check ) {
