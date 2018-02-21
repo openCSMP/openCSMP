@@ -71,45 +71,31 @@ double64 TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
     3) the flux concentration products are accumulated into the new concentration variable
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr ) const
+double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>& n ) const
  {
      double64 flux_balance(0.), outflow(0.), flux_concentration_products(0.);
 
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<dim>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
-          for ( size_t j=0U; j<sector_facets; ++j )
-            {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
-               const double64 ffc = eptr->Read(facet, 0, User()->key_ffC);
-               if (isnan(ffc)) {
-                 // XXX AJB HACK
-                 // Facets with no facet flux concentration are boundary facets
-                 // which haven't been removed. This is a hacky solution.
-                 continue;
-               }
-
-               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-               // accumulation of volumetric facet flow into flux balance
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
-               if ( facet_flux > 0. ) outflow += facet_flux;
-               flux_balance += facet_flux;
-               // temporary accumulation of flux-concentration products into the variable 'new concentration'
-               flux_concentration_products += sign * ffc;
-            }
-       }
+     for (auto fip : n.AllFacetIntegrationPoints()) {
+       const double64 ffc = fip.Read(User()->key_ffC);
+       const double64 sign = fip.FromInside() ? 1. : -1.;
+       // accumulation of volumetric facet flow into flux balance
+       const double64 facet_flux = sign * fip.Read( User()->key_ff );
+       auto w = fip.IntegrationWeight();
+       if ( facet_flux > 0. ) outflow += facet_flux * w;
+       flux_balance += facet_flux * w;
+       // temporary accumulation of flux-concentration products into the variable 'new concentration'
+       flux_concentration_products += sign * ffc * w;
+     }
 
      // 1. (phi * V) / q_out = dt
-     double64 time_increment = nptr->Read( User()->key_FVPV ) / outflow;
+     double64 time_increment = n.Read( User()->key_FVPV ) / outflow;
      assert( time_increment > 0. );
 
      // 2. recording the flux balance
-     nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
+     n.Store( User()->key_FB, makeScalar(n.Status(User()->key_FB),flux_balance) );
    
      // 3. recording the flux concentration product balance
-     nptr->Store( User()->key_NC, makeScalar(nptr->Status(User()->key_NC),flux_concentration_products) );
+     n.Store( User()->key_NC, makeScalar(n.Status(User()->key_NC),flux_concentration_products) );
 
      return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
@@ -123,17 +109,16 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
     by the model boundary.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr ) const
+double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( Node<dim>& n ) const
  {
-    assert( nptr != NULL );
-    const double64 pore_volume = nptr->Read( User()->key_FVPV );
+    const double64 pore_volume = n.Read( User()->key_FVPV );
    
     // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance
-    if ( nptr->AtBoundary() != NOT ) {
+    if ( n.AtBoundary() != NOT ) {
          // 1.0 (Q) checking sources because these will not be picked up in the fluxes correctly if the FV is truncated
-         const double64 fluid_source = ( nptr->Read(User()->key_NQV) > 0. ) ? nptr->Read(User()->key_NQV) : 0.;
+         const double64 fluid_source = ( n.Read(User()->key_NQV) > 0. ) ? n.Read(User()->key_NQV) : 0.;
          // 1.1 (phi * V) / q_out = dt
-         const double64 flux_balance = std::max( fabs( nptr->Read( User()->key_FB )), fluid_source );
+         const double64 flux_balance = std::max( fabs( n.Read( User()->key_FB )), fluid_source );
          if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
          return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
       }
@@ -141,19 +126,12 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
     // 2. for a perimeter FV that is intact, the volumetric outflow needs to be calculated 
      double64 outflow(0.);
 
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<dim>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
-          for ( size_t j=0U; j<sector_facets; ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
-               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-               // accumulation of volumetric outflow
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
-               if ( facet_flux > 0. ) outflow += facet_flux;
-            }
-       }
+     for (auto fip : n.AllFacetIntegrationPoints()) {
+       const double64 sign = fip.FromInside() ? 1. : -1.;
+       // accumulation of volumetric outflow
+       const double64 facet_flux = sign * fip.Read( User()->key_ff );
+       if ( facet_flux > 0. ) outflow += facet_flux * fip.IntegrationWeight();
+     }
 
      // (phi * V) / q_out = dt
      if ( outflow < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
@@ -211,7 +189,7 @@ TODO: implement streamline CFL
 
 */
 template<size_t dim, template<size_t> class USER>
-double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const ) const
+double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
  {
     static DenseMatrix<DM_MIN>  DN;
     vector<double64>            gradPc(dim);

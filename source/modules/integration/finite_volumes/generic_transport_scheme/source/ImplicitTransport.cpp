@@ -60,7 +60,7 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
        {
           assert( (*nit)->AtBoundary() == NOT );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( (*nit) );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( **nit );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -70,7 +70,7 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( (*nit) ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( **nit ) );
        }
    
     return dt_min;
@@ -145,18 +145,6 @@ double64 ImplicitTransport<dim>::TimeIncrement()
         const size_t pnid = (*nit)->ParentNodeNumber( iParent );
         const auto eptr = (*nit)->Parent( iParent );
         
-        const double64 K(eptr->Read(key_k));
-        if (isnan(K)) {
-          // XXX AJB HACK
-          // Deleting boundaries during model creation means you can't set
-          // properties during configuration. Retaining the boundaries means
-          // that they are still included in the parents of a node.
-          //
-          // For now, we skip over any element which doesn't have a
-          // permeability. They are not the flow domain.
-          continue;
-        }
-
         const size_t iNrSectorFacets(eptr->FV()->FacetsPerSector(pnid));
         for ( size_t iSectorFacet=0U; iSectorFacet<iNrSectorFacets; ++iSectorFacet ) {
           const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,iSectorFacet) );

@@ -12,11 +12,14 @@ class CompressiblePressureSourceLHS : public MatrixOperator<dim> {
     CompressiblePressureSourceLHS(Model<dim>& model, const char*, const char*, const char*, const char*);
     CompressiblePressureSourceLHS( const CompressiblePressureSourceLHS&);
   
-    virtual void AccumulateFiniteVolume( const Node<dim>*, SparseMatrix& ) const;
-    virtual void AccumulateStencil( const Element<dim>*, SparseMatrix& ) const;
+    virtual void AccumulateFiniteVolume( Node<dim>&, SparseMatrix& ) const;
+    virtual void AccumulateStencil( Element<dim>&, SparseMatrix& ) const;
 
   private:
-    const csmp::Index phi_key_, CT_key_, pf0_key_, pf1_key_;
+    const csmp::INDEX<SCALAR,ELEMENT> key_PHI; // porosity
+    const csmp::INDEX<SCALAR,NODE> key_CT;
+    const csmp::INDEX<SCALAR,NODE> key_PF0;
+    const csmp::INDEX<SCALAR,NODE> key_PF1;
 };
 
 }
