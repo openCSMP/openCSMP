@@ -1,0 +1,41 @@
+name	MParameter	unit	index	min.	max.	place
+									
+fluid volume source						QV		m3		1	-1.00E+01	1.00E+01	element
+nodal fluid volume source				QVN		m3		1	-1.00E+01	1.00E+01	node
+fluid pressure							PF		Pa		1	0.00E+00	1.00E+10	node
+entry pressure							PD		Pa		1	0.00E+00	5.00E+07	element
+permeability							K		m2		1	1.00E-25	1.00E+07	element
+porosity								PHI		X		1	1.00E-05	1.00E+01	element
+diffusivity								D		m2 s-1	1	0.00E+00	1.00E+00	element
+inner radius							IR		m		1	1.00E-30	1.00E+04	element
+velocity								V		m s-1	2	-1.00E+08	1.00E+08	element
+pore velocity							VP		m s-1	2	-1.00E+08	1.00E+08	element
+volume flux								F		m s-1	1	-1.00E+08	1.00E+08	element
+nodal velocity							nV		m s-1	2	-1.00E+08	1.00E+08	node
+nodal pore velocity						nVP		m s-1	2	-1.00E+08	1.00E+08	node
+nodal volume flux						nF		m s-1	1	-1.00E+08	1.00E+08	node
+brooks corey parameter					BC		X		1	1.00E+00	4.00E+00	element
+residual saturation wetting phase		SWR		X		1	0.00E+00	2.50E-01	element
+residual saturation non-wetting phase	SNR		X		1	0.00E+00	2.50E-01	element
+viscosity oil							MUO		Pa s-1	1	1.00E-04	1.00E+02	node
+viscosity water							MUW		Pa s-1	1	1.00E-04	1.00E+03	node
+density oil								RHOO	kg m-3	1	1.00E+01	1.20E+03	node
+density water							RHOW	kg m-3	1	1.00E+01	1.20E+03	node
+saturation oil							SO		X		1	0.00E+00	1.00E+00	node
+saturation water						SW		X		1	0.00E+00	1.00E+00	node
+total mobility							LT		m2		1	1.00E-23	1.00E+00	element
+facet area			A	m2	1	0.		1.00E+07	facet_integration_point
+facet normal			UN	m	2	0.		1.0		facet_integration_point
+facet flux			QFT	m3 s-1	1	-1e8		1e8		facet_integration_point
+FV pore volume			FVP	m3	1	0.		1e10		node
+sector volume			VS	m3	1	0.		2.0e+10		sector integration point
+sector pore volume		PVS	m3	1	0.		2.0e+10		sector integration point
+flux balance			FB	m3	1	-1e8		1e8		node
+nodal fluid volume source	NQV	m3		1	-1.00E+01	1.00E+01	node
+finite volume			FV	m3		1	-1.00E+05	1.00E+05	node
+event index			EVI	none		1	0.00E+00	1.00E+10	node
+update count			UPC	none		1	0.00E+00	1.00E+10	node
+rate count			RAC	none		1	0.00E+00	1.00E+10	node
+schedule count			SCC	none		1	0.00E+00	1.00E+10	node
+synchronize count		SYC	none		1	0.00E+00	1.00E+10	node
+non-wetting phase timing array	NTA	none		6	-1.00E+10	1.00E+10	node
