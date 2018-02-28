@@ -436,7 +436,6 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     auto user = User();
     auto& e = user->e_;
-    auto fv = e.FV();
     size_t iFacet(user->idx1_);
     return directedAreaOfFacet(e, iFacet);
   }

@@ -168,7 +168,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   public:
     double64 IntegrationWeight() const
     {
-      return 1.0;
+      return User()->e_.IntegrationWeight();
     }
   };
 
@@ -184,16 +184,23 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     }
 
   public:
+    double64 IntegrationWeight() const
+    {
+      auto user = User();
+      auto fv = user->e_.FV();
+      return fv->FacetIntegrationWeight(user->idx1_, user->idx2_);
+    }
+
     Point<dim> DirectedArea() const;
 
     double64 ProjectOntoDirectedArea(const VectorVariable<dim>& v) const
     {
-        return dotProduct(DirectedArea(), v.P());
+      return dotProduct(v.P(), DirectedArea());
     }
 
     double64 ProjectOntoDirectedArea(const Point<dim>& v) const
     {
-        return dotProduct(DirectedArea(), v);
+      return dotProduct(v, DirectedArea());
     }
 
     template<PLACEMENT from>
@@ -204,11 +211,29 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       return ProjectOntoDirectedArea(v);
     }
 
-    double64 IntegrationWeight() const
+    Point<dim> FacetNormal() const
     {
-      auto user = User();
-      auto fv = user->e_.FV();
-      return fv->FacetIntegrationWeight(user->idx1_, user->idx2_);
+        Point<dim> norm = DirectedArea();
+        norm.NormalizeLengthTo(1.0);
+        return norm;
+    }
+
+    double64 ProjectOntoFacetNormal(const VectorVariable<dim>& v) const
+    {
+      return dotProduct(v.P(), FacetNormal());
+    }
+
+    double64 ProjectOntoFacetNormal(const Point<dim>& v) const
+    {
+      return dotProduct(v, FacetNormal());
+    }
+
+    template<PLACEMENT from>
+    double64 ProjectOntoFacetNormal(const csmp::INDEX<VECTOR,from>& prop) const
+    {
+      VectorVariable<dim> v;
+      User()->Interpolate(prop, v);
+      return ProjectOntoFacetNormal(v);
     }
 
     ElementPlacement<dim,NODE> InsideNode() const
@@ -238,7 +263,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       return UpstreamNode(ProjectOntoDirectedArea(v));
     }
 
-    ElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT>& ff) const
+    ElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
       return UpstreamNode(this->Interpolate(ff));
     }
@@ -254,7 +279,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       return DownstreamNode(ProjectOntoDirectedArea(vel));
     }
 
-    ElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT>& ff) const
+    ElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
       return DownstreamNode(this->Interpolate(ff));
     }
@@ -276,7 +301,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     template<class VarType>
     void Read(Element<dim>& e, size_t idx1, size_t idx2, const csmp::Index& prop, VarType& var);
 
-    double64 Read(Element<dim>e, size_t idx1, size_t idx2, const csmp::Index& prop);
+    double64 Read(Element<dim>& e, size_t idx1, size_t idx2, const csmp::Index& prop);
   };
 
 
@@ -310,7 +335,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       e.Read(prop, var);
     }
 
-    double64 Read(Element<dim>e, size_t, size_t, const csmp::Index& prop)
+    double64 Read(Element<dim>& e, size_t, size_t, const csmp::Index& prop)
     {
       return e.Read(prop);
     }
@@ -347,7 +372,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       e.N(idx1)->Read(prop, var);
     }
 
-    double64 Read(Element<dim>e, size_t idx1, size_t, const csmp::Index& prop)
+    double64 Read(Element<dim>& e, size_t idx1, size_t, const csmp::Index& prop)
     {
       return e.N(idx1)->Read(prop);
     }
@@ -383,7 +408,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       e.Read(idx2, prop, var);
     }
 
-    double64 Read(Element<dim>e, size_t, size_t idx2, const csmp::Index& prop)
+    double64 Read(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop)
     {
       return e.Read(idx2, prop);
     }
@@ -419,7 +444,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       e.Read(idx1, idx2, prop, var);
     }
 
-    double64 Read(Element<dim>e, size_t idx1, size_t idx2, const csmp::Index& prop)
+    double64 Read(Element<dim>& e, size_t idx1, size_t idx2, const csmp::Index& prop)
     {
       return e.Read(idx1, idx2, prop);
     }
@@ -761,7 +786,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     template<class VarType>
     void Read(Node<dim>& n, size_t idx1, size_t idx2, size_t idx3, const csmp::Index& prop, VarType& var);
 
-    double64 Read(Node<dim>e, size_t idx1, size_t idx2, size_t idx3, const csmp::Index& prop);
+    double64 Read(Node<dim>& e, size_t idx1, size_t idx2, size_t idx3, const csmp::Index& prop);
   };
 
   template<size_t dim>
