@@ -5500,7 +5500,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-    if (dim > 2 && !info.interior_elmts.empty() ) {
+    if (dim > 2 && info.interior_elmts.empty() ) {
         csmp_error.notice( ERROR, "readDomainIndexesFromBinaryFile",
                 "Model appears to have a region with no interior elements: ", name);
     }
