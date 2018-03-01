@@ -436,7 +436,6 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
   {
     auto user = User();
     auto& e = user->e_;
-    auto fv = e.FV();
     size_t iFacet(user->idx1_);
     return directedAreaOfFacet(e, iFacet);
   }
@@ -522,6 +521,32 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
   }
 
   INSTANTIATE_FV_PROPERTY_INTERPOLATOR(FV_NODE_TO_FIP)
+
+  template<>
+  FiniteVolumePropertyInterpolator<FV_NODE_TO_SIP>::FiniteVolumePropertyInterpolator()
+  {
+  }
+
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  FiniteVolumePropertyInterpolator<FV_NODE_TO_SIP>::Interpolate( const Index& prop, const Node<dim>* n, size_t idx1, size_t idx2, size_t idx3, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    auto eptr = n->Parent(idx1);
+    size_t pnid = n->ParentNodeNumber(idx1);
+    auto fv = eptr->FV();
+
+    const size_t iNrNodes(eptr->Nodes());
+    std::vector<double64> coeff(iNrNodes);
+    calculateN(eptr, elementDimension(*eptr), fv->SectorIntegrationPoint( pnid, idx3 ), &coeff[0]);
+    
+    var = 0.;
+    for ( size_t i=0; i<iNrNodes; i++ ) {
+      var += eptr->N(i)->Read( prop ) * coeff[i];
+    }
+  }
+
+  INSTANTIATE_FV_PROPERTY_INTERPOLATOR(FV_NODE_TO_SIP)
 
 
   template<size_t dim>

@@ -84,9 +84,14 @@ namespace csmp {
    @tested
 
    */
+  
+  bool approxeq(double64 x, double64 y) {
+    return std::abs(x-y) < 1e-3;
+  }
   template<size_t dim, template<size_t> class USER>
   void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>& e ) const
   {
+    Point<dim> vDvec;
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
       auto bctr = e.AtBarycenter();
@@ -96,12 +101,20 @@ namespace csmp {
 
       VectorVariable<dim> vD(bctr.Read(User()->key_V));
       vD = -k/mu * grad_p;
+      vDvec = vD.P();
       bctr.Store( User()->key_V, vD );
+    }
+    else {
+      auto bctr = e.AtBarycenter();
+      VectorVariable<dim> vD(bctr.Read(User()->key_V));
+      vDvec = vD.P();
     }
 
     // computing total facet fluxes by projecting vt onto facet normals
+    size_t i = 0;
     for (auto fip : e.AllFacetIntegrationPoints()) {
       double64 facet_flux = 0;
+
       if (reuse_previous_velocity) {
         facet_flux = fip.Read( User()->key_ff );
       }
@@ -115,7 +128,9 @@ namespace csmp {
       }
 
       // Get concentration from upwind node
-      auto ffc = facet_flux * fip.UpstreamNode( User()->key_V ).Read( User()->key_C );
+      auto upstream_node = fip.UpstreamNode( User()->key_V );
+      auto c = upstream_node.Read( User()->key_C );
+      auto ffc = facet_flux * c;
 
       // Store facet flux concentration
       const auto ffc_flag = fip.Status(User()->key_ffC);
@@ -464,9 +479,6 @@ namespace csmp {
       auto outside_node = fip.OutsideNode();
       const double64 c_outside = outside_node.Read( key_C );
       const double64 c_fip = fip.Interpolate(key_C);
-      if (c_inside != c_outside) {
-        std::cerr << "Interesting case\n";
-      }
 
       const double64 facet_flux = fip.Read( User()->key_ff );
       double64 c(0.0);

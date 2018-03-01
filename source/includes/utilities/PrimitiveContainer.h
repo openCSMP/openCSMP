@@ -72,16 +72,16 @@ class PrimitiveContainer
       /// Root primitive
       const T& Root() const
       {
-        assert(!storage_.empty());
-        assert(!free_list_.count(const_cast<T*>(&storage_[0])));
-        return storage_.front();
+        auto ii = begin();
+        assert(ii != end());
+        return *ii;
       }
 
       T& Root()
       {
-        assert(!storage_.empty());
-        assert(!free_list_.count(&storage_[0]));
-        return storage_.front();
+        auto ii = begin();
+        assert(ii != end());
+        return *ii;
       }
 
       /// The number of primitives in the container.

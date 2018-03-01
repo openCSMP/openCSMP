@@ -111,13 +111,15 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
+        auto n = (*nit)->AtNode();
+        
         // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
-        const double64 c0 = (*nit)->Read(this->key_C);
-        const double64 c1 = (*nit)->Read(this->key_NC);
-        const double64 pv = (*nit)->Read(this->key_FVPV);
-        const double64 fb = (*nit)->Read(this->key_FB);
+        const double64 c0 = n.Read(this->key_C);
+        const double64 c1 = n.Read(this->key_NC);
+        const double64 pv = n.Read(this->key_FVPV);
+        const double64 fb = n.Read(this->key_FB);
 
-        const double64 source((*nit)->Read(this->key_NQV));
+        const double64 source(n.Read(this->key_NQV));
         double64 accumulation = c1;
         // Solve C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [C vD]
 
@@ -131,9 +133,14 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
         // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
         //                               new concentration
         accumulation += source * c1 * delta_t;
+#if 1
+        if (accumulation < 0) {
+          std::cerr << "Buggy case\n";
+        }
+#endif
 
          // 5. storing the new concentration
-         (*nit)->Store( this->key_NC, makeScalar( (*nit)->Status(this->key_NC), accumulation ) );
+         n.Store( this->key_NC, makeScalar( n.Status(this->key_NC), accumulation ) );
     }
 
 } // end AssembleSolution
