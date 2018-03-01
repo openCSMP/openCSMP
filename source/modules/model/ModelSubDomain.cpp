@@ -5490,6 +5490,7 @@ out( IDs );
 void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
  {
     assert( fp != nullptr );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the region
     char name[INFO_STRING];
@@ -5500,8 +5501,8 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
     if (dim > 2 && !info.interior_elmts.empty() ) {
-        throw csmp::Exception( ERROR, "readDomainIndexesFromBinaryFile",
-                "Model appears to have a region with no interior elements");
+        csmp_error.notice( ERROR, "readDomainIndexesFromBinaryFile",
+                "Model appears to have a region with no interior elements: ", name);
     }
    
     // 3. reading the perimeter element records of the region
