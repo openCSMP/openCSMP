@@ -1,6 +1,7 @@
 #include "TwoPhaseDESTransport.h"
 #include "Region.h"
 #include "Model.h"
+#include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
 #if defined(_OPENMP )
 #include "omp.h"
@@ -11,8 +12,10 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m, const char* target_region )
+TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m, const char* target_region, bool with_capillary_spreading, bool with_gravity_forces)
     : gref_(m.Region(target_region)),
+      with_capillary_spreading_(with_capillary_spreading),
+      with_gravity_forces_(with_gravity_forces),
       upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
       T_RateOfChange_(0.), T_Schedule_(0.), T_SortQueue_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromQueue_(0.), T_AdvectVariable_(0.)
 {
@@ -82,9 +85,13 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
     dsn_key = m.Database().StorageKey("variation rate"); // variation rate of non-wetting phase saturation (node)      
     muw_key = m.Database().StorageKey("viscosity water"); // fluid viscosity (node)
     mun_key = m.Database().StorageKey("viscosity oil"); // oil viscosity (node)
+    rhw_key = m.Database().StorageKey("density water"); // water density (node)
+    rhn_key = m.Database().StorageKey("density oil"); // oil density (node)
     swr_key = m.Database().StorageKey("residual saturation wetting phase"); // irreducible saturation wetting phase (element)
     snr_key = m.Database().StorageKey("residual saturation non-wetting phase"); // residual saturation non-wetting phase (element)
-    bcp_key = m.Database().StorageKey("brooks corey parameter"); // Brooks-Corey parameter (element)       
+    bcp_key = m.Database().StorageKey("brooks corey parameter"); // Brooks-Corey parameter (element) 
+    k_key = m.Database().StorageKey("permeability"); // permeability (element)    
+    pd_key = m.Database().StorageKey("entry pressure"); // entry pressure (element)      
     
     EventIndex_key = m.Database().StorageKey("event index");     
     update_key = m.Database().StorageKey("update count");
@@ -143,7 +150,13 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
         "The 'residual saturation non-wetting phase' variable must be SCALAR and placed on ELEMENT"  );
     if ( bcp_key.place != ELEMENT || bcp_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'brooks corey parameter' variable must be SCALAR and placed on ELEMENT"  );         
+        "The 'brooks corey parameter' variable must be SCALAR and placed on ELEMENT"  );          
+    if ( k_key.place != ELEMENT || k_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'permeability' variable must be SCALAR and placed on ELEMENT"  );
+    if ( pd_key.place != ELEMENT || pd_key.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'entry pressure' variable must be SCALAR and placed on ELEMENT"  );                               
     if ( EventIndex_key.place != NODE || EventIndex_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
         "The 'event index' variable must be SCALAR and placed on NODE"  );       
@@ -288,10 +301,25 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         };
 
         if (!isNAN){
+        
+            const size_t v( (dim==1u) ? 0u : 1u );
             //read in variables placed on element
             const double64 swr = eptr->Read(  swr_key );//irreducible saturation wetting phase  
             const double64 snr = eptr->Read(  snr_key );//irreducible saturation non-wetting phase    
             const double64 lambda = eptr->Read(  bcp_key );//Brooks-Corey parameter   
+            const double64 k = eptr->Read(  k_key );//permeability
+            const double64 pd = eptr->Read(  pd_key );//entry pressure
+            
+            std::vector<double64> dsdn_(dim);
+            DenseMatrix<DM_MIN> DN_;
+            if(with_capillary_spreading_){                
+                fill( dsdn_.begin(), dsdn_.end(), 0. );
+                eptr->dN_AtBaryCenter( DN_ );
+                for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
+                    const double64 sn = eptr->N(j)->Read( sn_key);
+                    for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+                }
+            }
              
             const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
             for ( size_t i=0U; i<sector_facets; i++ )
@@ -310,10 +338,9 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
                 const double64 sw = 1.-sn;//wetting phase saturation
                 const double64 muw = eptr->N(upstream_node)->Read(  muw_key );//viscosity wetting phase
                 const double64 mun = eptr->N(upstream_node)->Read(  mun_key );//viscosity non-wetting phase
-               
-                //compute fractional flow for non-wetting phase
-                double64 f_n = ComputeNonWettingFractionalFlow( sw, swr, snr, muw, mun, lambda);                                      
-                                                                    
+                const double64 rhw = eptr->N(upstream_node)->Read(  rhw_key );//density wetting phase
+                const double64 rhn = eptr->N(upstream_node)->Read(  rhn_key );//density non-wetting phase
+                                                                                   
                 const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
                 //compute facet fluid flux
                 double64 flux = sign * vD_n * facetArea;
@@ -321,8 +348,110 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
                 flux_balance += flux;
                 //update outflow
                 if ( flux > 0. ) outflow += flux;  
-                //update facet flux for non-wetting phase 
-                accumulation += flux* f_n;                    
+               
+                double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0),gravity_velocity_component(0.0);
+                if( !with_gravity_forces_ && !with_capillary_spreading_ ){ //viscous effect only               
+                    //compute fractional flow for non-wetting phase
+                    double64 f_n = ComputeNonWettingFractionalFlow( sw, swr, snr, muw, mun, lambda);               
+                    //compute viscous effect
+                    viscous_velocity_component = vD_n* f_n;
+                    
+                } else { // with gravity or capillary effects
+                    //compute gravity and capillary effects
+                    double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+                    double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+                    if( with_gravity_forces_ ){                       
+                        vn_gravity_component_of_velocity = ComputeMobilityPhase(2U,sw,swr,snr,muw,mun,lambda)*ComputeGravityTerm(k, rhw, rhn) * nrml(v);
+                        vw_gravity_component_of_velocity = ComputeMobilityPhase(1U,sw,swr,snr,muw,mun,lambda)*ComputeGravityTerm(k, rhw, rhn) * nrml(v);
+                    }                    
+                    
+                    if(with_capillary_spreading_){
+                        //compute dsdn       
+                        double64  dsdn = dsdn_[0]*nrml[0];
+                        if (dim != 1) dsdn += dsdn_[1]*nrml[1];
+                        if (dim == 3) dsdn += dsdn_[2]*nrml[2]; 
+                        double64 dpcdn = -dsdn*Compute_dpcds(sw,swr,snr,muw,mun,lambda,pd); 
+                        vn_capillary_component_of_velocity = ComputeMobilityPhase(2U,sw,swr,snr,muw,mun,lambda) * k * dpcdn;
+                        vw_capillary_component_of_velocity = ComputeMobilityPhase(1U,sw,swr,snr,muw,mun,lambda) * k * dpcdn;
+                    }                    
+                    
+                    double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
+                    double64 vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity;    
+                    
+                    // mixture moving inside the CV        mixture moving outside the CV
+                    //
+                    //       |  vt                                 /|\ vt
+                    //       |                                      |
+                    //      \|/              /|\                    |
+                    //     -----              |  N_up             -----
+                    //   /       \                              /       \
+                    //   \       /                              \       /
+                    //     -----              |                   -----
+                    //      /|\              \|/  N_down            |
+                    //       |                                      |
+                    //       |  vt                                 \|/ vt
+
+                    double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0)/*, upstream_sn(0.0), upstream_sw(0.0)*/;
+                    //read in variables placed on inside and outside nodes
+                    const double64 sn_inside_node = eptr->N(inside_node)->Read(  sn_key );//non-wetting phase saturation                                         
+                    const double64 sw_inside_node = 1.-sn_inside_node;//wetting phase saturation
+                    const double64 muw_in = eptr->N(inside_node)->Read(  muw_key );//viscosity wetting phase
+                    const double64 mun_in = eptr->N(inside_node)->Read(  mun_key );//viscosity non-wetting phase     
+                    
+                    const double64 sn_outside_node = eptr->N(outside_node)->Read(  sn_key );//non-wetting phase saturation                                         
+                    const double64 sw_outside_node = 1.-sn_outside_node;//wetting phase saturation
+                    const double64 muw_out = eptr->N(outside_node)->Read(  muw_key );//viscosity wetting phase
+                    const double64 mun_out = eptr->N(outside_node)->Read(  mun_key );//viscosity non-wetting phase   
+                    
+                    //computes mobilities on inside and outside nodes
+                    const double64 ln_inside_node  = ComputeMobilityPhase(2U,sw_inside_node,swr,snr,muw_in,mun_in,lambda);
+                    const double64 lw_inside_node  = ComputeMobilityPhase(1U,sw_inside_node,swr,snr,muw_in,mun_in,lambda);
+                    
+                    const double64 ln_outside_node  = ComputeMobilityPhase(2U,sw_outside_node,swr,snr,muw_out,mun_out,lambda);
+                    const double64 lw_outside_node  = ComputeMobilityPhase(1U,sw_outside_node,swr,snr,muw_out,mun_out,lambda);
+                    
+                    double64 zero(0.0);
+                    if((vn_at_facet_int_point>zero)&&(vw_at_facet_int_point>zero)){
+                        upstream_mobility_n=ln_inside_node;
+                        upstream_mobility_w=lw_inside_node;
+                        //upstream_sn = sn_inside_node;
+                        //upstream_sw = 1.0 - sn_inside_node;
+                    }else if ((vn_at_facet_int_point>zero)&&(vw_at_facet_int_point<zero)){
+                        upstream_mobility_n=ln_inside_node;
+                        upstream_mobility_w=lw_outside_node;
+                        //upstream_sn = sn_inside_node;
+                        //upstream_sw = 1.0 - sn_outside_node;
+                    }else if ((vn_at_facet_int_point<zero)&&(vw_at_facet_int_point>zero)){
+                        upstream_mobility_n=ln_outside_node;
+                        upstream_mobility_w=lw_inside_node;
+                        //upstream_sn = sn_outside_node;
+                        //upstream_sw = 1.0 - sn_inside_node;
+                    }else if ((vn_at_facet_int_point<zero)&&(vw_at_facet_int_point<zero)){
+                        upstream_mobility_n=ln_outside_node;
+                        upstream_mobility_w=lw_outside_node;
+                        //upstream_sn = sn_outside_node;
+                        //upstream_sw = 1.0 - sn_outside_node;
+                    }else{
+                        upstream_mobility_n=0.5*(ln_inside_node+ln_outside_node);
+                        upstream_mobility_w=0.5*(lw_inside_node+lw_outside_node);
+                        //upstream_sn = 0.5*(sn_inside_node + sn_outside_node);
+                        //upstream_sw = 1.0 - upstream_sn;
+                    }                    
+                    
+                    total_mobility=upstream_mobility_n+upstream_mobility_w;
+                    double64 upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
+                    double64 upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);
+                    
+                    viscous_velocity_component = vD_n * upstream_fn;
+                                       
+                    if( with_gravity_forces_ )
+                        gravity_velocity_component = upstream_lambda_overbar * ComputeGravityTerm(k, rhw, rhn) * nrml(v);
+
+                    if( with_capillary_spreading_ )
+                        capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
+                }                
+                                                        
+                accumulation += sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                  
             }
         }
     }
@@ -366,6 +495,97 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 } 
 
 
+//Computes the mobility of phase
+template<size_t dim>
+double64 TwoPhaseDESTransport<dim>::ComputeMobilityPhase( size_t phase, double64 sw, double64 swr, double64 snr, double64 muw, double64 mun, double64 lambda)
+ {
+    //computes effective saturation for wetting phase
+    double64 seff = std::min( std::max( (sw - swr) / (1. - swr - snr), 0. ), 1. );
+    
+    //computes relative k for non-wetting and wetting phases (based on brooks corey model)
+    double64 krn, krw;
+    if ( lambda == static_cast<double64>(0.) ) { //  switch to linear relperm model if lambda = 0
+        krw = seff;
+        krn = 1. - seff;
+    } else {
+        krw = std::pow( seff, 2./lambda + 3.0 );
+        double64  seffn = 1.-seff;
+        krn = (seffn * seffn) * (1. - pow( seff, 2./lambda + 1.0) );
+    }    
+        
+    if ( phase == 1U ) return krw / muw;
+    return krn / mun; 
+ } 
+ 
+ 
+//Computes dpcds
+template<size_t dim>
+double64 TwoPhaseDESTransport<dim>::Compute_dpcds(double64 sw, double64 swr, double64 snr, double64 muw, double64 mun, double64 lambda, double64 pd)
+{
+    const double64 dSedSw( 1.0/ (1.0 - swr - snr) );
+      
+    //computes effective saturation for wetting phase
+    double64 seff = std::min( std::max( (sw - swr) / (1. - swr - snr), 0. ), 1. );  
+    
+    double64 dpcds;
+    double64 h = 0.00001;
+    if( seff < 0.+h )
+        dpcds = ( Compute_pc(lambda, seff + h, pd, swr, snr ) - Compute_pc(lambda, seff, pd, swr, snr ) ) / h * dSedSw;
+    else if( seff > 1.-h )
+        dpcds = ( Compute_pc(lambda, seff, pd, swr, snr ) - Compute_pc(lambda, seff - h, pd, swr, snr ) ) / h * dSedSw;
+    else
+        dpcds = ( Compute_pc(lambda, seff + h, pd, swr, snr ) - Compute_pc(lambda, seff - h, pd, swr, snr ) )/ (2.0*h) * dSedSw;
+
+  return dpcds;
+
+}
+
+
+//Computes pc
+template<size_t dim>
+double64 TwoPhaseDESTransport<dim>::Compute_pc( double64 lambda, double64 se, double64 entry_pressure, double64 swr, double64 snr)
+{
+    // linear relperm model
+    double64 MAX_CAPILLARY_PRESSURE_= 4e7;
+    double64 MAX_CAPILLARY_PRESSURE_SLOPE_ = 1e7;
+    if ( lambda == 0. ){
+        if ( se <= 0. )
+            return MAX_CAPILLARY_PRESSURE_;
+
+        if ( se >= 1. )
+            return entry_pressure;
+		
+        if (entry_pressure == MAX_CAPILLARY_PRESSURE_)
+	    return entry_pressure;
+
+        return entry_pressure + ( 1. - se ) * ( MAX_CAPILLARY_PRESSURE_ - entry_pressure );
+   }
+
+   // for zero entry pressure capillary pressure always is zero
+   if ( entry_pressure == 0. )
+       return 0.;
+
+   const double64 se_mult( 1.0/ (1.0 - swr - snr ) );
+
+   // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
+   // applying the limit on capillary pressure
+   double64 pcmax = entry_pressure * pow( ( entry_pressure / ( lambda * MAX_CAPILLARY_PRESSURE_SLOPE_/se_mult ) ),
+                                           ( -1. / ( 1. + lambda ) ) );
+
+   if ( se <= std::pow( pcmax / entry_pressure, -lambda ) )
+   {
+      // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
+       const double64 Se_min =  pow( ( entry_pressure / ( lambda * MAX_CAPILLARY_PRESSURE_SLOPE_/se_mult ) ),
+                                ( lambda / ( 1. + lambda ) ) );
+       // assuming linear changes in capillary pressure below Se_min with slope of MAXIMUM_DPCDS
+       return pcmax + ( Se_min - se ) * MAX_CAPILLARY_PRESSURE_SLOPE_/se_mult;
+   }
+
+   return entry_pressure * std::pow( se, -1. / lambda );
+}
+
+
+
 //Computes the fractional flow of the non-wetting phase (gravitational and capillary effects are not included)
 template<size_t dim>
 double64 TwoPhaseDESTransport<dim>::ComputeNonWettingFractionalFlow( double64 sw, double64 swr, double64 snr, double64 muw, double64 mun, double64 lambda)
@@ -392,6 +612,21 @@ double64 TwoPhaseDESTransport<dim>::ComputeNonWettingFractionalFlow( double64 sw
     double64 f_n = mobility/total_mobility;
     return f_n;    
  } // ComputeNonWettingFractionalFlow
+
+
+//Computes the gravity term
+template<size_t dim>
+double64 TwoPhaseDESTransport<dim>::ComputeGravityTerm( double64 k, double64 rhw, double64 rhn)
+ {
+  // note that the projected gravity acts opposite the y-axis
+  const double64 k_g_drho = k * -9.8066 * (rhw - rhn);
+
+    // economizing the calculation
+    if ( std::fabs(k_g_drho) < 1.0e-17 ) return static_cast<double64>(0.);
+
+    // else compute result using G saturation derivative
+    return k_g_drho;
+}
 
 
 

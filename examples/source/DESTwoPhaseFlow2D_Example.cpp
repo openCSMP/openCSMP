@@ -72,7 +72,10 @@ void DESTwoPhaseFlow2D_Example::Run()
     bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES (y=DES, n=TDS)"); 
     double64 Courant_multiplier, PEP_parameter;
     cerr <<"\nEnter CFL multiplier (suggested value: 0.3) and PEP parameter (suggested value: 0.1)" << endl;
-    cin >> Courant_multiplier >> PEP_parameter;     
+    cin >> Courant_multiplier >> PEP_parameter;  
+     
+    bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
+    bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
     
     ANSYS_Model2D                model( input_file.c_str(), "DES_2phase_variables.txt" );
     const PropertyDatabase<2>&   p_ref = model.Database();  
@@ -138,7 +141,7 @@ void DESTwoPhaseFlow2D_Example::Run()
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
     // -------------------------------------------------------------
-    TwoPhaseDESTransport<2U> DEStransport(model, "Model");
+    TwoPhaseDESTransport<2U> DEStransport(model, "Model", with_capillary_spreading, with_gravity_forces);
 
     model.InputPropertyValue( "nodal fluid volume source", makeScalar( PLAIN,0.0) ); // no FV sources/sinks
     model.InputPropertyValue( "diffusivity", makeScalar(PLAIN,1.0e-25) ); // very small value
