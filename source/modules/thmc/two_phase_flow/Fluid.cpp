@@ -25,7 +25,11 @@ double64 Fluid<dim,USER>::Viscosity( TARGET_PLACEMENT& p, size_t phase ) const
     return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
  }
  
- 
+template double64 Fluid<3U,FlowFunctions>::Viscosity( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions>::Viscosity( ElementPlacement<3U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions>::Viscosity( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+
+
  
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
@@ -36,7 +40,11 @@ double64 Fluid<dim,USER>::Density( TARGET_PLACEMENT& p, size_t phase ) const
     return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
  
- 
+template double64 Fluid<3U,FlowFunctions>::Density( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions>::Density( ElementPlacement<3U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions>::Density( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+
+
  
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
@@ -45,6 +53,10 @@ double64 Fluid<dim,USER>::DensityMixture( TARGET_PLACEMENT& p, double64 msalt ) 
     return p.Interpolate( User()->key_sw ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
           (1. - p.Interpolate(User()->key_sw)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
+
+template double64 Fluid<3U,FlowFunctions>::DensityMixture( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions>::DensityMixture( ElementPlacement<3U,NODE>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions>::DensityMixture( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -57,6 +69,10 @@ double64 Fluid<dim,USER>::ViscosityRatio( TARGET_PLACEMENT& p, double64 salinity
  {
     return eos.mu_AqueousPhase( Pressure(p), Temperature(p), Salinity(p) ) / eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
  }
+
+template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( ElementPlacement<3U,NODE>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
 
 

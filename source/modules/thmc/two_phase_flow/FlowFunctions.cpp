@@ -23,6 +23,8 @@ double64 FlowFunctions<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase ) const
 
 template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
 
 
@@ -47,6 +49,9 @@ double64 FlowFunctions<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size_t pha
  
 template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,NODE>&, size_t, bool ) const;
 template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, bool ) const;
 
 
 
@@ -63,6 +68,9 @@ double64 FlowFunctions<dim>::TotalMobility( TARGET_PLACEMENT& p ) const
  }
 
 template double64 FlowFunctions<3U>::TotalMobility( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -81,6 +89,9 @@ double64 FlowFunctions<dim>::MobilityProduct( TARGET_PLACEMENT& p ) const
  }
 
 template double64 FlowFunctions<3U>::MobilityProduct( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::MobilityProduct( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::MobilityProduct( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::MobilityProduct( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -111,6 +122,9 @@ double64 FlowFunctions<dim>::MobilityProductDerivative( TARGET_PLACEMENT& p, boo
  }
 
 template double64 FlowFunctions<3U>::MobilityProductDerivative( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::MobilityProductDerivative( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::MobilityProductDerivative( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::MobilityProductDerivative( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
 
 
@@ -130,6 +144,9 @@ double64 FlowFunctions<dim>::f( TARGET_PLACEMENT& p, size_t phase ) const
  }
 
 template double64 FlowFunctions<3U>::f( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctions<3U>::f( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::f( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::f( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
  
 
@@ -162,6 +179,9 @@ double64 FlowFunctions<dim>::dfds( TARGET_PLACEMENT& p, size_t phase, bool evalu
  }
 
 template double64 FlowFunctions<3U>::dfds( ElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::dfds( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::dfds( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::dfds( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, bool ) const;
 
 
 
@@ -176,6 +196,9 @@ double64 FlowFunctions<dim>::MaxFractionalFlowDerivative( TARGET_PLACEMENT& p ) 
  }
 
 template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -246,6 +269,9 @@ double64 FlowFunctions<dim>::AdvectionMultiplier( TARGET_PLACEMENT& p, bool eval
  }
 
 template double64 FlowFunctions<3U>::AdvectionMultiplier( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::AdvectionMultiplier( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::AdvectionMultiplier( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::AdvectionMultiplier( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
 
 
@@ -268,6 +294,9 @@ double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
 }
 
 template double64 FlowFunctions<3U>::GravityTerm( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::GravityTerm( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityTerm( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityTerm( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -284,6 +313,9 @@ double64 FlowFunctions<dim>::GravityMultiplier_G( TARGET_PLACEMENT& p ) const
 }
 
 template double64 FlowFunctions<3U>::GravityMultiplier_G( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_G( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_G( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_G( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
  
@@ -300,6 +332,9 @@ double64 FlowFunctions<dim>::GravityMultiplier_dGds( TARGET_PLACEMENT& p, bool e
 }
 
 template double64 FlowFunctions<3U>::GravityMultiplier_dGds( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_dGds( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_dGds( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_dGds( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
 
 
@@ -318,6 +353,9 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
 } 
  
 template double64 FlowFunctions<3U>::DiffusionMultiplier( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctions<3U>::DiffusionMultiplier( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::DiffusionMultiplier( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::DiffusionMultiplier( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
 
 
@@ -334,6 +372,9 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p )
 } 
 
 template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( ElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -396,6 +437,9 @@ double64 FlowFunctions<dim>::dfds_Numerical( TARGET_PLACEMENT& p, size_t phase, 
 }
 
 template double64 FlowFunctions<3U>::dfds_Numerical( ElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::dfds_Numerical( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::dfds_Numerical( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::dfds_Numerical( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
 
 
 
@@ -434,6 +478,9 @@ double64 FlowFunctions<dim>::dGds_Numerical( TARGET_PLACEMENT& p, double64 h ) c
 }
 
 template double64 FlowFunctions<3U>::dGds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dGds_Numerical( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dGds_Numerical( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dGds_Numerical( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -448,6 +495,9 @@ double64 FlowFunctions<dim>::dlwds_Numerical( TARGET_PLACEMENT& p, double64 h ) 
  }
 
 template double64 FlowFunctions<3U>::dlwds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlwds_Numerical( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlwds_Numerical( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlwds_Numerical( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -462,6 +512,9 @@ double64 FlowFunctions<dim>::dlnds_Numerical( TARGET_PLACEMENT& p, double64 h ) 
  }
 
 template double64 FlowFunctions<3U>::dlnds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlnds_Numerical( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlnds_Numerical( ElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlnds_Numerical( ElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
