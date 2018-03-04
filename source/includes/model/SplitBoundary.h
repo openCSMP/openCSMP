@@ -70,9 +70,9 @@ efficiency.
 template<size_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
+    SplitBoundary() = delete;
     /// constructs split boundary with given name from the set of juxtaposed elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, MeshManager<dim>&, const InterFaceElementSet<dim>& );
-  
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
@@ -169,9 +169,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     LocalVariables InterFaceVariables() const;
 
     void Split( Model<dim>& , Boundary<dim>& );
-
-private:
-    SplitBoundary();
 };
 
 

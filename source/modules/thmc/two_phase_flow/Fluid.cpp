@@ -15,40 +15,59 @@ namespace csmp {
 
 EOS_CO2H2ONaCl_Spycher04  eos;
 
+
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( double64 pf, double64 T, double64 msalt, size_t phase ) const
+template<class TARGET_PLACEMENT>
+double64 Fluid<dim,USER>::Viscosity( TARGET_PLACEMENT& p, size_t phase ) const
  {
-    assert( phase <= 1U );
-    if ( phase == 0U ) return eos.mu_brine( pf, T, msalt );
-    return eos.mu_CarbonicPhase( pf, T );
+    assert( phase == 0U or phase == 1U );
+    if ( phase == 0U ) return eos.mu_brine( Pressure(p), Temperature(p), Salinity(p) );
+    return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
  }
  
  
  
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( double64 pf, double64 T, double64 msalt, size_t phase ) const
+template<class TARGET_PLACEMENT>
+double64 Fluid<dim,USER>::Density( TARGET_PLACEMENT& p, size_t phase ) const
  {
-    assert( phase <= 1U );
-    if ( phase == 0U ) return eos.Rho_brine( pf, T, msalt );
-    return eos.Rho_CarbonicPhase( pf, T );
+    assert( phase == 0U or phase == 1U );
+    if ( phase == 0U ) return eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) );
+    return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
  
  
  
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::DensityMixture( double64 pf, double64 T, double64 sw, double64 msalt ) const
+template<class TARGET_PLACEMENT>
+double64 Fluid<dim,USER>::DensityMixture( TARGET_PLACEMENT& p, double64 msalt ) const
  {
-    return sw * eos.Rho_brine( pf, T, msalt ) + (1. - sw) * eos.Rho_CarbonicPhase( pf, T );
+    return p.Interpolate( User()->key_sw ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
+          (1. - p.Interpolate(User()->key_sw)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
 
 
+
+/**
+     aqueous phase viscosity / carbonic phase viscosity
+*/
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 Fluid<dim,USER>::ViscosityRatio( TARGET_PLACEMENT& p, double64 salinity ) const
+ {
+    return eos.mu_AqueousPhase( Pressure(p), Temperature(p), Salinity(p) ) / eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
+ }
+
+
+
+/*
     // versions that account for dissolved CO2; TODO: check where the XCO2 and YH2) can be taken into account
 template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
  {
     assert( phase <= 1U );
-    if ( phase == 0U ) return eos.mu_AqueousPhase( pf, T, msalt );
-    return eos.mu_CarbonicPhase( pf, T );
+    if ( phase == 0U ) return eos.mu_AqueousPhase( Pressure(p), Temperature(p), msalt );
+    return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
  }
  
  
@@ -69,16 +88,9 @@ double64 Fluid<dim,USER>::DensityMixture( double64 pf, double64 T, double64 sw, 
     // TODO: check how to get XCO2, YH2O accounted for?
     return sw * eos.Rho_AqueousPhase( pf, T, msalt ) + (1. - sw) * eos.Rho_CarbonicPhase( pf, T );
  }
- 
- 
-/**
-     aqueous phase viscosity / carbonic phase viscosity
 */
-template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::ViscosityRatio( double64 pf, double64 T, double64 msalt ) const
- {
-    return eos.mu_AqueousPhase( pf, T, msalt ) / eos.mu_CarbonicPhase( pf, T );
- }
+ 
+ 
 
 
 template class Fluid<1U,FlowFunctions>;

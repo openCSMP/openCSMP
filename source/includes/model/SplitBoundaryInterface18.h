@@ -1,5 +1,5 @@
-#ifndef SPLIT_BOUNDARY_INTERFACE_H
-#define SPLIT_BOUNDARY_INTERFACE_H
+#ifndef SPLIT_BOUNDARY_INTERFACE_18_H
+#define SPLIT_BOUNDARY_INTERFACE_18_H
 
 #include "SplitBoundary.h"
 
@@ -33,7 +33,6 @@ class SplitBoundaryInterface18 {
     splitBoundaryConstIterator   SplitBoundariesBegin() const;
     splitBoundaryConstIterator   SplitBoundariesEnd() const;
     size_t                       SplitBoundaries() const;
-
 
     // -----------------------------------------------
     // SplitBoundaries creation and deletion

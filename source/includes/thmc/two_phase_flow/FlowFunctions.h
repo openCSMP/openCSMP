@@ -9,9 +9,9 @@
 #ifndef CSMP_FLOW_FUNCTIONS_H
 #define CSMP_FLOW_FUNCTIONS_H
 
-#include "SaturationFunction.h"
 #include "BrooksCoreySaturationFunctions.h"
-#include "VariableSet_TwoPhaseFlow.h"
+#include "Variables_TwoPhaseFlow.h"
+#include "VariablePlacement.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -40,7 +40,7 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     InitializeForBaryCenter( e );
     double lt = TotalMobility();
     
-    @attention the phases are numbered, phase 1 is the water phase (usually the wetting phase)
+    @attention the phases are numbered 0..2, phase 0 is the water phase (usually the wetting phase)
     
     @attention for simplicity and efficiency, fluid property values are always computed at the nodes by respective EOS modules.
     Subsequently these values are interpolated to the points of interest.
@@ -50,65 +50,88 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 template<size_t dim>
-class FlowFunctions : public variables::VariableSet_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-                      public SaturationFunction<dim,FlowFunctions>,
+class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
                       public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
                       public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
   public:
-    FlowFunctions();
-    ~FlowFunctions();
+    FlowFunctions() = delete;
+    ~FlowFunctions() = delete;
     
     /// current water saturation initialised inside of the model
-    double64 Sw() const;
+    template<class TARGET_PLACEMENT>
+    double64 Sw( TARGET_PLACEMENT& p ) const { return p.Interpolate(this->key_sw); }
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
-    double64 Mobility( double64 sw, size_t phase ) const;
+    template<class TARGET_PLACEMENT>
+    double64 Mobility( TARGET_PLACEMENT&, size_t phase ) const;
 
     /// d lambda_i / dsw
-    double64 MobilityDerivative( double64 sw, size_t phase, bool evaluate_numerically=true ) const;
+    template<class TARGET_PLACEMENT>
+    double64 MobilityDerivative( TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=true ) const;
  
     /// lambda_t: sum of phase mobilities
-    double64 TotalMobility( double64 sw ) const;
+    template<class TARGET_PLACEMENT>
+    double64 TotalMobility( TARGET_PLACEMENT& ) const;
     
     /// lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G
-    double64 MobilityProduct( double64 sw ) const;
+    template<class TARGET_PLACEMENT>
+    double64 MobilityProduct( TARGET_PLACEMENT& ) const;
 
     /// d lambda overbar / dsw also known as dGds
-    double64 MobilityProductDerivative( double64 sw, bool evaluate_numerically=true ) const;
+    template<class TARGET_PLACEMENT>
+    double64 MobilityProductDerivative( TARGET_PLACEMENT&, bool evaluate_numerically=true ) const;
 
      /// fractional flow; 0=water, 1=non-wetting phase
-    double64 f( double64 sw, size_t phase ) const;
+    template<class TARGET_PLACEMENT>
+    double64 f( TARGET_PLACEMENT&, size_t phase ) const;
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double64 dfds( double64 sw, size_t phase, bool evaluate_numerically=true ) const;
+    template<class TARGET_PLACEMENT>
+    double64 dfds( TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=true ) const;
     
     /// maximum value of previous derivative
-    double64 MaxFractionalFlowDerivative() const;
+    template<class TARGET_PLACEMENT>
+    double64 MaxFractionalFlowDerivative( TARGET_PLACEMENT& ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-   	double64 AdvectionMultiplier( double64 sw, bool evaluate_numerically=true ) const;
+    template<class TARGET_PLACEMENT>
+   	double64 AdvectionMultiplier( TARGET_PLACEMENT&, bool evaluate_numerically=true ) const;
 
     /// linearized fractional flow derivative
-    double64 ShockSpeed() const;
-    double64 ShockHeight() const;
-    void ShockSpeedHeight( double64& speed, double64& height) const;
+    template<class TARGET_PLACEMENT> double64 ShockSpeed( TARGET_PLACEMENT& ) const;
+    template<class TARGET_PLACEMENT> double64 ShockHeight( TARGET_PLACEMENT& ) const;
+    template<class TARGET_PLACEMENT> void     ShockSpeedHeight( TARGET_PLACEMENT&, double64& speed, double64& height) const;
 
     /// multipliers for gravity-driven flow (advection multiplier and source term)
-    double64 GravityTerm( double64 sw ) const;
-    double64 GravityMultiplier_G( double64 sw ) const;
-    double64 GravityMultiplier_dGds( double64 sw, bool evaluate_numerically=true ) const;
+    template<class TARGET_PLACEMENT>
+    double64 GravityTerm( TARGET_PLACEMENT& ) const;
+    
+    template<class TARGET_PLACEMENT>
+    double64 GravityMultiplier_G( TARGET_PLACEMENT& ) const;
+    
+    template<class TARGET_PLACEMENT>
+    double64 GravityMultiplier_dGds( TARGET_PLACEMENT&, bool evaluate_numerically=true ) const;
 
     /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase)
-    double64 DiffusionMultiplier( double64 sw, size_t phase ) const;
+    template<class TARGET_PLACEMENT>
+    double64 DiffusionMultiplier( TARGET_PLACEMENT&, size_t phase ) const;
     
     /// driven by capillary pressure gradient
-    double64 CapillaryDiffusionMultiplier( double64 sw ) const;
+    template<class TARGET_PLACEMENT>
+    double64 CapillaryDiffusionMultiplier( TARGET_PLACEMENT& ) const;
     
   private:
-    double64 dfds_Numerical( double64 sw, size_t phase, double64 h = 0.001 ) const;
-    double64 dGds_Numerical( double64 sw, double64 h = 0.000001 ) const;
-    double64 dlwds_Numerical( double64 sw, double64 h = 0.001 ) const;
-    double64 dlnds_Numerical( double64 sw, double64 h = 0.001 ) const;
+    template<class TARGET_PLACEMENT>
+    double64 dfds_Numerical( TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dGds_Numerical( TARGET_PLACEMENT&, double64 h = 0.000001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dlwds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dlnds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
 };
 
 } // end csmp

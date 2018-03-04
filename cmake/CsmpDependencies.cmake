@@ -17,7 +17,7 @@ find_path(SAMG_INCLUDE_DIR NAMES samg.h
 
 set(SAMG_LIBRARIES)
 foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
-    set(L)
+    set(L "NOTFOUND")
     find_library(L
 	"${I}"
         PATHS ${PLATFORM_LIBS}
