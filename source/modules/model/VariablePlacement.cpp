@@ -223,6 +223,24 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
 
 
   INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_MODEL)
+
+  template<>
+  ElementPropertyInterpolator<FE_READ_REGION>::ElementPropertyInterpolator()
+  {
+  }
+
+
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  ElementPropertyInterpolator<FE_READ_REGION>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    throw csmp::Exception(ERROR, "ElementPropertyInterpolator<FE_READ_REGION>::Interpolate", "FE_READ_REGION NYI");
+  }
+
+
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_READ_REGION)
+
 #endif
 
 
@@ -390,8 +408,86 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
 
   INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_NODE_TO_SIP)
 
+  template<>
+  ElementPropertyInterpolator<FE_FIP_TO_ELMT>::ElementPropertyInterpolator()
+  {
+  }
 
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  ElementPropertyInterpolator<FE_FIP_TO_ELMT>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    const size_t iNrFacets(eptr->Facets());
 
+    var = 0.;
+    size_t count = 0;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
+    for ( size_t iFacet=0; iFacet<iNrFacets; iFacet++ ) {
+        const size_t iNrIps = eptr->IntegrationPointsPerFacet();
+        for ( size_t iIp=0; iIp<iNrIps; iIp++ ) {
+            eptr->Read(iFacet, iIp, prop, v);
+            var += v;
+            ++count;
+        }
+    }
+    var *= 1.0 / (double64)count;
+  }
+
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_FIP_TO_ELMT)
+
+  template<>
+  ElementPropertyInterpolator<FE_SIP_TO_ELMT>::ElementPropertyInterpolator()
+  {
+  }
+
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  ElementPropertyInterpolator<FE_SIP_TO_ELMT>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    const size_t iNrSectors(eptr->Nodes());
+
+    var = 0.;
+    size_t count = 0;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
+    for ( size_t iSector=0; iSector<iNrSectors; iSector++ ) {
+        const size_t iNrIps = eptr->IntegrationPointsPerSector();
+        for ( size_t iIp=0; iIp<iNrIps; iIp++ ) {
+            eptr->Read(iSector, iIp, prop, v);
+            var += v;
+            ++count;
+        }
+    }
+    var *= 1.0 / (double64)count;
+  }
+
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_SIP_TO_ELMT)
+
+  template<>
+  ElementPropertyInterpolator<FE_EIP_TO_ELMT>::ElementPropertyInterpolator()
+  {
+  }
+
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  ElementPropertyInterpolator<FE_EIP_TO_ELMT>::Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    const size_t iNrIps(eptr->IntegrationPoints());
+
+    var = 0.;
+    size_t count = 0;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
+    for ( size_t iIp=0; iIp<iNrIps; iIp++ ) {
+        eptr->Read(iIp, prop, v);
+        var += v;
+        ++count;
+    }
+    var *= 1.0 / (double64)count;
+  }
+
+  INSTANTIATE_ELEMENT_PROPERTY_INTERPOLATOR(FE_EIP_TO_ELMT)
 
 
   template<size_t dim>

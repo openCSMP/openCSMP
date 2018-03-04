@@ -18,15 +18,13 @@ find_path(SAMG_INCLUDE_DIR NAMES samg.h
 set(SAMG_LIBRARIES)
 foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
     set(L "NOTFOUND")
+    message(STATUS "Looking for SAMG library ${I}")
     find_library(L
 	"${I}"
         PATHS ${PLATFORM_LIBS}
     )
-	if(CMAKE_HOST_WIN32)
-		list(APPEND SAMG_LIBRARIES "${L}")
-	else()
-		list(APPEND SAMG_LIBRARIES "${L}")
-	endif()
+    message(STATUS "Found library ${L}")
+    list(APPEND SAMG_LIBRARIES "${L}")
 endforeach()
 
 include(FindPackageHandleStandardArgs)
