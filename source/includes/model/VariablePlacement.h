@@ -12,9 +12,9 @@ namespace csmp {
 
   template<size_t dim> class Element;
   template<size_t dim> class Node;
-  template<size_t dim, PLACEMENT pl> class ElementPlacement;
+  template<size_t dim, PLACEMENT pl> class ElementPlacement;  ///< use this for FV finite-element stencils
   template<size_t dim, PLACEMENT pl> struct ElementPlacementCollection;
-  template<size_t dim, PLACEMENT pl> class FiniteVolumePlacement;
+  template<size_t dim, PLACEMENT pl> class FiniteVolumePlacement; ///< use this for operations on finite volumes
   template<size_t dim, PLACEMENT pl> struct FiniteVolumePlacementCollection;
   template<size_t dim> struct NeighbourNodeCollection;
 

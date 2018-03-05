@@ -13,6 +13,7 @@ now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting...
 @todo (3) To improve calculation speed, change relperm models from dynamic to static polymorphism (C)
  
  */
+ // TODO: adapt to Andrew's variable interpolators
 template<size_t dim, template<size_t> class USER>
 class SaturationFunction {
   public:
@@ -65,7 +66,6 @@ class SaturationFunction {
   
   private:
     const double64 pc_max_, dpcds_max_;
-  
 };
 
 } // end namespace csmp

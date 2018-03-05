@@ -5,20 +5,13 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-double64 FlowFunctions<dim>::Sw() const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase ) const
  {
-    return this->sw; // TODO: use Andrew's scheme to get current saturation
- }
-
-
-
-template<size_t dim>
-double64 FlowFunctions<dim>::Mobility( double64 sw, size_t phase ) const
- {
-    assert( phase == 1U or phase == 2U );
+    assert( phase == 0U or phase == 1U );
     // salinity=0
-    if ( phase == 1U ) return this->krw(sw) / this->Viscosity( this->Pressure(), this->Temperature() );
-    return this->krn(sw) / this->Viscosity( this->Pressure(), this->Temperature(), 1 );
+    if ( phase == 0U ) return this->krw(p) / this->Viscosity( p, 0U );
+    return this->krn(p) / this->Viscosity( p, 1U );
  }
 
 
@@ -27,9 +20,11 @@ double64 FlowFunctions<dim>::Mobility( double64 sw, size_t phase ) const
     Mobility saturation derivative
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::MobilityDerivative( double64 sw, size_t phase, bool evaluate_numerically ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size_t phase, bool evaluate_numerically ) const
  {
-    if ( evaluate_numerically ) return (phase == 0U ) ? dlwds_Numerical(sw) : dlnds_Numerical(sw);
+    assert( phase == 0U or phase == 1U );
+    if ( evaluate_numerically ) return (phase == 0U) ? dlwds_Numerical(p.Interpolate(this->key_sw)) : dlnds_Numerical(p.Interpolate(this->key_sw));
     // TODO: deal with the non-numerical case
     return numeric_limits<double64>::quiet_NaN();
  }
@@ -37,10 +32,11 @@ double64 FlowFunctions<dim>::MobilityDerivative( double64 sw, size_t phase, bool
  
 
 template<size_t dim>
-double64 FlowFunctions<dim>::TotalMobility( double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::TotalMobility( TARGET_PLACEMENT& p ) const
  {
-    return this->krn(sw) / this->Viscosity( this->Pressure(), this->Temperature(), 1U )
-         + this->krw(sw) / this->Viscosity( this->Pressure(), this->Temperature() );
+    return this->krn(p) / this->Viscosity( p, 1U )
+         + this->krw(p) / this->Viscosity( p, 0U );
  }
 
 
@@ -52,10 +48,11 @@ double64 FlowFunctions<dim>::TotalMobility( double64 sw ) const
     and de Neef (1998). Note that Initialize() must be called first.
  */
 template<size_t dim>
-double64 FlowFunctions<dim>::MobilityProduct( double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::MobilityProduct( TARGET_PLACEMENT& p ) const
  {
     assert( key_k.type == SCALAR );
-    return Mobility(sw,0U) * Mobility(sw,1U) / TotalMobility(sw);
+    return Mobility(p,0U) * Mobility(p,1U) / TotalMobility(p);
  }
 
 
@@ -64,23 +61,24 @@ double64 FlowFunctions<dim>::MobilityProduct( double64 sw ) const
     saturation derivative of mobility product
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::MobilityProductDerivative( double64 sw, bool evaluate_numerically ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::MobilityProductDerivative( TARGET_PLACEMENT& p, bool evaluate_numerically ) const
  {
     // product is zero at endmember saturations
-    if ( this->EffectiveSaturation(sw) < 0. || this->EffectiveSaturation(sw) > 1. )
+    if ( this->EffectiveSaturation(p) < 0. || this->EffectiveSaturation(p) > 1. )
       return static_cast<double64>(0.);
 
-    if ( evaluate_numerically ) return dGds_Numerical(sw);
+    if ( evaluate_numerically ) return dGds_Numerical(p);
 
-    const double64 lw  = this->krw(sw) / this->Viscosity( this->Pressure(), this->Temperature() );
-    const double64 ln  = this->krn(sw) / this->Viscosity( this->Pressure(), this->Temperature(), 1U );
+    const double64 lw  = this->krw(p) / this->Viscosity( p, 0U );
+    const double64 ln  = this->krn(p) / this->Viscosity( p, 1U );
     const double64 lt  = lw + ln;
     const double64 lt2 = lt*lt;
     const double64 ln2 = ln*ln;
     const double64 lw2 = lw*lw;
 
-    const double64 dlwds = this->dkrwds(sw) / this->Viscosity( this->Pressure(), this->Temperature() );
-    const double64 dlnds = this->dkrnds(sw) / this->Viscosity( this->Pressure(), this->Temperature(), 1U );
+    const double64 dlwds = this->dkrwds(p) / this->Viscosity( p, 0U );
+    const double64 dlnds = this->dkrnds(p) / this->Viscosity( p, 1U );
 
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
  }
@@ -94,10 +92,11 @@ Computes the fractional flow of the wetting (phase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::f( double64 sw, size_t phase ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::f( TARGET_PLACEMENT& p, size_t phase ) const
  {
-    assert( phase == 1U or phase == 2U );
-    return Mobility( sw, phase ) / TotalMobility(sw);
+    assert( phase == 0U or phase == 1U );
+    return Mobility( p, phase ) / TotalMobility(p);
  }
 
 
@@ -105,8 +104,11 @@ double64 FlowFunctions<dim>::f( double64 sw, size_t phase ) const
 
 /// derivative of fractional flow function (advection multipliers)
 template<size_t dim>
-double64 FlowFunctions<dim>::dfds( double64 sw, size_t phase, bool evaluate_numerically ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::dfds( TARGET_PLACEMENT& p, size_t phase, bool evaluate_numerically ) const
  {
+    assert( phase == 0U or phase == 1U );
+
     // end-member derivatives do not require relperms
     if ( this->EffectiveSaturation(sw) < 0. || this->EffectiveSaturation(sw) > 1. )
       return static_cast<double64>(0.);
@@ -128,6 +130,7 @@ double64 FlowFunctions<dim>::dfds( double64 sw, size_t phase, bool evaluate_nume
 
 
 template<size_t dim>
+template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::MaxFractionalFlowDerivative() const
  {
     double64 speed, height;
@@ -145,7 +148,8 @@ double64 FlowFunctions<dim>::MaxFractionalFlowDerivative() const
     p. 108, eqn. 3.74, term 2 (first part).
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::AdvectionMultiplier( double64 sw, bool evaluate_numerically ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::AdvectionMultiplier( TARGET_PLACEMENT& p, bool evaluate_numerically ) const
  {
     if ( evaluate_numerically ) return dfds_Numerical( sw, 0U );
     return dfds(sw,0U);
@@ -155,6 +159,7 @@ double64 FlowFunctions<dim>::AdvectionMultiplier( double64 sw, bool evaluate_num
 
 /// linearized fractional flow derivative
 template<size_t dim>
+template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::ShockSpeed() const
  {
     double64 speed, height;
@@ -165,6 +170,7 @@ double64 FlowFunctions<dim>::ShockSpeed() const
 
 
 template<size_t dim>
+template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::ShockHeight() const
  {
     double64 speed, height;
@@ -175,6 +181,7 @@ double64 FlowFunctions<dim>::ShockHeight() const
 
 
 template<size_t dim>
+template<class TARGET_PLACEMENT>
 void FlowFunctions<dim>::ShockSpeedHeight( double64& speed, double64& height )const
 {
   double64 se(0.), dfds_s;
@@ -195,7 +202,8 @@ void FlowFunctions<dim>::ShockSpeedHeight( double64& speed, double64& height )co
     k * delta_rho * g
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::GravityTerm( double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
 {
    // note that the projected gravity acts opposite the y-axis, term rhow - rhoo
    const double64 delta_rho = this->Density( this->Pressure(), this->Temperature() ) -
@@ -212,7 +220,8 @@ double64 FlowFunctions<dim>::GravityTerm( double64 sw ) const
 /** See Sebastian Geiger's thesis (2004), closed form.
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::GravityMultiplier_G( double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::GravityMultiplier_G( TARGET_PLACEMENT& p, double64 sw ) const
 {
    return GravityTerm(sw) * MobilityProduct(sw);
 }
@@ -225,7 +234,8 @@ double64 FlowFunctions<dim>::GravityMultiplier_G( double64 sw ) const
     p. 108, eqn. 3.74, term 2 (second part).
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::GravityMultiplier_dGds( double64 sw, bool evaluate_numerically ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::GravityMultiplier_dGds( TARGET_PLACEMENT& p, bool evaluate_numerically ) const
 {
    return GravityTerm(sw) * MobilityProductDerivative(sw,evaluate_numerically);
 }
@@ -237,7 +247,8 @@ double64 FlowFunctions<dim>::GravityMultiplier_dGds( double64 sw, bool evaluate_
     overloaeded, the hydraulic conductivity is returned.
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::DiffusionMultiplier( double64 sw, size_t phase ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t phase ) const
 {
      assert( phase == 1U or phase == 2U );
      return this->k / ( (phase==1u) ?
@@ -252,7 +263,8 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( double64 sw, size_t phase ) co
     permeability in direction of flow  x  lambda_overbar  x pc-gradient.
 */
 template<size_t dim>
-double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p ) const
 {
    return this->k * MobilityProduct(sw) * this->dpcds(sw);
 } 
@@ -286,8 +298,10 @@ return std::numeric_limits<double64>::quiet_NaN();
 // ===============================================================================================
 
 template<size_t dim>
-double64 FlowFunctions<dim>::dfds_Numerical( double64 sw, size_t phase, double64 h ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::dfds_Numerical( TARGET_PLACEMENT& p, size_t phase, double64 h ) const
 {
+  assert( phase == 0U or phase == 1U );
   /*
   // first version: direct differentiation
   const double64 dSedSw( 1.0/ (1.0 - swr_ - snr_ ) );
@@ -315,8 +329,12 @@ double64 FlowFunctions<dim>::dfds_Numerical( double64 sw, size_t phase, double64
 
 }
 
+
+
+
 template<size_t dim>
-double64 FlowFunctions<dim>::dGds_Numerical( double64 sw, double64 h ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::dGds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
 {
   /*
   // first version: direct differentiation
@@ -353,7 +371,8 @@ double64 FlowFunctions<dim>::dGds_Numerical( double64 sw, double64 h ) const
 
 /// derivative of wetting phase mobility
 template<size_t dim>
-double64 FlowFunctions<dim>::dlwds_Numerical( double64 sw, double64 h ) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::dlwds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
  {
     return this->dkrwds_Numerical( sw, h ) / this->Viscosity( this->Pressure(), this->Temperature() );
 
@@ -363,7 +382,8 @@ double64 FlowFunctions<dim>::dlwds_Numerical( double64 sw, double64 h ) const
 
 /// derivative of non-wetting phase mobility
 template<size_t dim>
-double64 FlowFunctions<dim>::dlnds_Numerical( double64 sw, double64 h) const
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::dlnds_Numerical( TARGET_PLACEMENT& p, double64 h) const
  {
     return this->dkrnds_Numerical( sw, h ) / this->Viscosity( this->Pressure(), this->Temperature(), 1U );
 
