@@ -103,7 +103,7 @@ void FiniteVolumeStencil_Test::run() // runs all the tests for the class (regist
 	
 	orientationAndLengthOfNormalsTest();
      
-    normalTransformationTest();
+  normalTransformationTest();
 	
 	weightsAndFacetIntegrationPointsTest(); //does not apply for pyramids
      
@@ -583,7 +583,59 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
         if ( verbose_ ) cout << "TESTING: normalTransformationTest()" << endl;
         
         //for each element type, for each given facet, check if the normal is correct
-        
+      
+      // The reference coordinates for most stencils contain a lot of zeroes.
+      // This has the unfortunate effect that most of the interesting weights
+      // are not tested. So we use transformed coordinates.
+      //
+      // Any nonsingular transformation should work for this test.
+      //
+#if 0
+      DenseMatrix<DM_MIN> A(3,3);
+      A(0,0) =  0.5000000000000000000;
+      A(1,0) =  0.1464466094067262378;
+      A(2,0) =  0.8535533905932737622;
+      A(0,1) =  0.5000000000000000000;
+      A(1,1) = -0.8535533905932737622;
+      A(2,1) = -0.1464466094067262378;
+      A(0,2) =  0.7071067811865475244;
+      A(1,2) =  0.5000000000000000000;
+      A(2,2) = -0.5000000000000000000;
+
+      Point<3> translate(3.0, 3.1, 3.2);
+#endif
+      
+#if 1
+      DenseMatrix<DM_MIN> A(3,3);
+
+      A(0,0) =  0.5000000000000000000;
+      A(1,0) =  0.18305826175840779725;
+      A(2,0) =  0.64016504294495532165;
+      A(0,1) =  0.5000000000000000000;
+      A(1,1) = -1.0669417382415922028;
+      A(2,1) = -0.10983495705504467835;
+      A(0,2) =  0.7071067811865475244;
+      A(1,2) =  0.62500000000000000000;
+      A(2,2) = -0.37500000000000000000;
+      
+      Point<3> translate(3.0, 3.1, 3.2);
+#endif
+
+#if 0
+      DenseMatrix<DM_MIN> A(3,3);
+      A(0,0) = 1.0;
+      A(1,0) = 0.0;
+      A(2,0) = 0.0;
+      A(0,1) = 0.0;
+      A(1,1) = 1.0;
+      A(2,1) = 0.0;
+      A(0,2) = 0.0;
+      A(1,2) = 0.0;
+      A(2,2) = 1.0;
+      
+      Point<3> translate(0, 0, 0);
+#endif
+
         vector<FiniteElement*>::const_iterator vIterFEs(vecFEs_.begin());
         vector<FiniteVolumeStencil< 3> >::const_iterator vIterFVS;
         const vector<FiniteVolumeStencil< 3> >::const_iterator vIterFVSEnd(fvs_.end());
@@ -621,12 +673,9 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     cout << "\n******************************************************************";
                     cout << "\nFACET " << iFacet << ": ";
                 }
-                const Point<3> parametricNormal(vIterFVS->UnitParametricNormalTo( iFacet ));
-
-                //TRACE
-                if ( verbose_ ) cout << "\nParametric normal: " << parametricNormal[0] << ", " << parametricNormal[1] << ", " << parametricNormal[2];
                 
                 Point<3> computedNormal;
+                Point<3> mappedNormal(0,0,0);
 
                 //1. Compute normal by transformation
                 if ((*vIterFEs)->IsVolumeElement()) {
@@ -634,61 +683,99 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     Point<3> v1(0,0,0);
 
                     for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
-                        const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
-                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
-                        v0 += weights.first * n;
-                        v1 += weights.second * n;
+                      const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                      const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
+                      auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                      v0 += weights.first * nt;
+                      v1 += weights.second * nt;
                     }
-                    computedNormal = crossProduct(v1,v0);
+                    computedNormal = crossProduct(v0, v1);
+
+                  size_t iNrFacetPts = vIterFVS->FacetPoints(iFacet);
+                  
+                  std::vector<double> NRST0, NRST1;
+                  NRST0.reserve(iNrOfNodes);
+                  NRST1.reserve(iNrOfNodes);
+
+                  for (size_t iFacetPt = 0; iFacetPt < iNrFacetPts; ++iFacetPt) {
+                    Point<3> rst0 = vIterFVS->FacetPoint(iFacet, iFacetPt);
+                    Point<3> rst1 = vIterFVS->FacetPoint(iFacet, (iFacetPt+1) % iNrFacetPts);
+
+                    (*vIterFEs)->Nrst( rst0[0], rst0[1], rst0[2], NRST0 );
+                    (*vIterFEs)->Nrst( rst1[0], rst1[1], rst1[2], NRST1 );
+
+                    Point<3> v0(0,0,0), v1(0,0,0);
+                    for (size_t iNode = 0; iNode < iNrOfNodes; ++iNode) {
+                      const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                      const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
+                      v0 += NRST0[iNode] * nt;
+                      v1 += NRST1[iNode] * nt;
+                    }
+                    mappedNormal += 0.5 * crossProduct(v1, v0);
+                  }
                 }
                 else if ((*vIterFEs)->IsSurfaceElement()) {
                     Point<3u> tangent(0,0,0);
                     Point<3u> bitangent(0,0,0);
 
                     for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
-                        const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                      const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
+                      const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
                         auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
-                        tangent += weights.first * n;
-                        bitangent += weights.second * n;
+                        tangent += weights.first * nt;
+                        bitangent += weights.second * nt;
                     }
                     double64 length = exteriorProductLength(tangent, bitangent);
                     tangent.NormalizeLengthTo(1.0);
                     computedNormal = bitangent - dotProduct(tangent,bitangent) * tangent;
                     computedNormal.NormalizeLengthTo(length);
+                  
+                  size_t iNrFacetPts = vIterFVS->FacetPoints(iFacet);
+                  _test(iNrFacetPts == 2);
+                  
+                  // XXX Need a better way to test this
+                  mappedNormal = computedNormal;
                 }
                 else if ((*vIterFEs)->IsLineElement()) {
                     Point<3u> v0(0,0,0);
                     for (size_t iNode = 0U; iNode < iNrOfNodes; ++iNode) {
                         const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
-                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
-                        v0 += weights.first * n;
-                    }
-                    computedNormal = v0;
-                }
+                        const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
 
+                        auto weights = vIterFVS->FacetNormalTransformationNodeWeights(iFacet, iNode);
+                        v0 += weights.first * nt;
+                    }
+                  computedNormal = v0;
+                  
+                  _test(iNrOfNodes == 2);
+                  const Point<3u> n0(matCoords(0,0),matCoords(0,1),matCoords(0,2));
+                  const Point<3u> nt0 = Point<3u>(A * n0.Coordinates()) + translate;
+                  const Point<3u> n1(matCoords(1,0),matCoords(1,1),matCoords(1,2));
+                  const Point<3u> nt1 = Point<3u>(A * n1.Coordinates()) + translate;
+                  mappedNormal = 0.5 * (nt1 - nt0);
+                }
 
                 double64 computedNormalLength(computedNormal.Length());
                 computedNormal.NormalizeLengthTo(1.0);
                 if ( verbose_ ) cout << "\nComputed normal: " << computedNormal[0] << ", " << computedNormal[1] << ", " << computedNormal[2];
                 if ( verbose_ ) cout << "\nComputed normal length: " << computedNormalLength;
 
-                //2. Find normal and area from the stencil
-                
-                const Point<3U> stencilNormal = vIterFVS->UnitParametricNormalTo(iFacet);
-                const double64 stencilArea = vIterFVS->FacetIntegrationWeight(iFacet, 0);
-                
-                //print normals
-                if ( verbose_ ) cout << "\nFrom stencil: " << stencilNormal[0] << ", " << stencilNormal[1] << ", " << stencilNormal[2] << endl;
-                
+              double64 mappedNormalLength(mappedNormal.Length());
+              _test(mappedNormalLength > 0);
+              mappedNormal.NormalizeLengthTo(1.0);
+
+              //print normals
+              if ( verbose_ ) cout << "\nCalculated from facets: " << mappedNormal[0] << ", " << mappedNormal[1] << ", " << mappedNormal[2] << endl;
+              
                 //3. Test the orientation of the normal and calcualted area
                 bool bEquivalent(true);
                 
                 for(size_t iVal = 0; iVal < 3; iVal++)
-                    bEquivalent &= ( fabs(computedNormal[iVal] - stencilNormal[iVal]) < 1.e-7 );
+                    bEquivalent &= ( fabs(computedNormal[iVal] - mappedNormal[iVal]) < 1.e-7 );
                 
                 _test(bEquivalent);
                 std::cerr << "\nElement type " << parseFiniteElementType(elType) << " facet " << iFacet << '\n';
-                _equal(stencilArea, computedNormalLength, 1.0e-8);
+                _equal(mappedNormalLength, computedNormalLength, 1.0e-8);
             }
         }
     }

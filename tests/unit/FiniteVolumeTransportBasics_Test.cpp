@@ -31,6 +31,7 @@
 #include "InputDataManager.h"
 #include "Standard_IO_Handler.h"
 
+#include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
 
 #include<cmath>
@@ -55,6 +56,15 @@ FiniteVolumeTransportBasics_Test::~FiniteVolumeTransportBasics_Test()
 void
 FiniteVolumeTransportBasics_Test::run()
 {
+#if 1
+  {
+    ANSYS_Model3D model( "HeuristicModel1coarse", "HeuristicModel1coarse",  "CSMP-brine-CO2-phase-variables.txt", true, true, true, true );
+    model.OutputToBinaryFile("TestThisModel");
+    Model<3> m1("TestThisModel");
+	  }
+
+#endif
+
 #if 0
     {
         VSet<3U> vset;
@@ -62,6 +72,9 @@ FiniteVolumeTransportBasics_Test::run()
         Model<3U> model( vset, "CSMP-2phase-variables.txt", true );
         std::cerr << "Testing hexahedra\n";
         test_constant_velocity_field(model);
+        model.OutputToBinaryFile("TestThisModel");
+        Model<3> m1("TestThisModel");
+        test_constant_velocity_field(m1);
     }
     
     {
@@ -80,8 +93,9 @@ FiniteVolumeTransportBasics_Test::run()
         test_constant_velocity_field(model);
     }
 #endif
-    
+#if 0
     test_b25();
+#endif
 }
 
 
@@ -453,8 +467,8 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 #endif
       
 #if 1
-        ExplicitTransport<3U> advector(model, "Model", true);
-        advector.StepSizeReductionFactor(1.0);
+        ExplicitTransport<3U> advector(model, "Model", false);
+        advector.StepSizeReductionFactor(0.1);
 #endif
 #if 0
       CSMP_DEFAULT_LINEAR_SOLVER solver;
@@ -472,7 +486,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 #endif
 
       model.Region("Model").RenumberNodes();
-        for (unsigned i = 1; i < 60; ++i) {
+        for (unsigned i = 1; i < 200; ++i) {
             advector.AdvectVariable(10.0);
             // advector.AdvectVariable(1000.0);
 #if 1
