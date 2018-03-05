@@ -353,9 +353,7 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
 } 
 
 template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
 
 
@@ -372,9 +370,7 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p )
 } 
 
 template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>& ) const;
-template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
