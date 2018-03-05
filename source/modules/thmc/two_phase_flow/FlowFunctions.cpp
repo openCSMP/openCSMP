@@ -21,8 +21,8 @@ double64 FlowFunctions<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase ) const
     return this->krn(p) / this->Viscosity( p, 1U );
  }
 
-template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctions<3U>::Mobility( ElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 
 
 
@@ -45,8 +45,8 @@ double64 FlowFunctions<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size_t pha
     return numeric_limits<double64>::quiet_NaN();
  }
  
-template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,NODE>&, size_t, bool ) const;
-template double64 FlowFunctions<3U>::MobilityDerivative( ElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,NODE>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
 
 
 
@@ -62,7 +62,7 @@ double64 FlowFunctions<dim>::TotalMobility( TARGET_PLACEMENT& p ) const
          + this->krw(p) / this->Viscosity( p, 0U );
  }
 
-template double64 FlowFunctions<3U>::TotalMobility( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -80,7 +80,7 @@ double64 FlowFunctions<dim>::MobilityProduct( TARGET_PLACEMENT& p ) const
     return Mobility(p,0U) * Mobility(p,1U) / TotalMobility(p);
  }
 
-template double64 FlowFunctions<3U>::MobilityProduct( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -110,7 +110,7 @@ double64 FlowFunctions<dim>::MobilityProductDerivative( TARGET_PLACEMENT& p, boo
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
  }
 
-template double64 FlowFunctions<3U>::MobilityProductDerivative( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
 
 
@@ -129,7 +129,7 @@ double64 FlowFunctions<dim>::f( TARGET_PLACEMENT& p, size_t phase ) const
     return Mobility( p, phase ) / TotalMobility(p);
  }
 
-template double64 FlowFunctions<3U>::f( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctions<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
  
 
@@ -161,7 +161,7 @@ double64 FlowFunctions<dim>::dfds( TARGET_PLACEMENT& p, size_t phase, bool evalu
     return ( dlwds*ln - dlnds*lw ) / lt2;
  }
 
-template double64 FlowFunctions<3U>::dfds( ElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctions<3U>::dfds( FiniteElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
 
 
 
@@ -175,7 +175,7 @@ double64 FlowFunctions<dim>::MaxFractionalFlowDerivative( TARGET_PLACEMENT& p ) 
     return speed;
  }
 
-template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::MaxFractionalFlowDerivative( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -189,7 +189,7 @@ double64 FlowFunctions<dim>::ShockSpeed( TARGET_PLACEMENT& p ) const
     return speed;
  }
 
-template double64 FlowFunctions<3U>::ShockSpeed( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::ShockSpeed( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -202,7 +202,7 @@ double64 FlowFunctions<dim>::ShockHeight( TARGET_PLACEMENT& p ) const
     return height;
  }
 
-template double64 FlowFunctions<3U>::ShockHeight( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::ShockHeight( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -226,7 +226,7 @@ void FlowFunctions<dim>::ShockSpeedHeight( TARGET_PLACEMENT& p,
     }
 }
 
-template void FlowFunctions<3U>::ShockSpeedHeight( ElementPlacement<3U,ELEMENT>&, double64&, double64& ) const;
+template void FlowFunctions<3U>::ShockSpeedHeight( FiniteElementPlacement<3U,ELEMENT>&, double64&, double64& ) const;
 
 
 
@@ -245,7 +245,7 @@ double64 FlowFunctions<dim>::AdvectionMultiplier( TARGET_PLACEMENT& p, bool eval
     return dfds(p,0U,evaluate_numerically);
  }
 
-template double64 FlowFunctions<3U>::AdvectionMultiplier( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::AdvectionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
 
 
@@ -267,7 +267,7 @@ double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
    return k_g_drho;
 }
 
-template double64 FlowFunctions<3U>::GravityTerm( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::GravityTerm( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -283,7 +283,7 @@ double64 FlowFunctions<dim>::GravityMultiplier_G( TARGET_PLACEMENT& p ) const
    return GravityTerm(p) * MobilityProduct(p);
 }
 
-template double64 FlowFunctions<3U>::GravityMultiplier_G( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
  
@@ -299,7 +299,7 @@ double64 FlowFunctions<dim>::GravityMultiplier_dGds( TARGET_PLACEMENT& p, bool e
    return GravityTerm(p) * MobilityProductDerivative(p,evaluate_numerically);
 }
 
-template double64 FlowFunctions<3U>::GravityMultiplier_dGds( ElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_dGds( FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
 
 
@@ -317,7 +317,7 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
     return p.Interpolate(key_kfn) / ( (phase==1u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
 } 
  
-template double64 FlowFunctions<3U>::DiffusionMultiplier( ElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
 
 
@@ -333,7 +333,7 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p )
    return p.Interpolate(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
 } 
 
-template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( ElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>& ) const;
 
 
 
@@ -395,7 +395,7 @@ double64 FlowFunctions<dim>::dfds_Numerical( TARGET_PLACEMENT& p, size_t phase, 
 
 }
 
-template double64 FlowFunctions<3U>::dfds_Numerical( ElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::dfds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 
 
 
@@ -433,7 +433,7 @@ double64 FlowFunctions<dim>::dGds_Numerical( TARGET_PLACEMENT& p, double64 h ) c
 
 }
 
-template double64 FlowFunctions<3U>::dGds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dGds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
 
 
@@ -447,7 +447,7 @@ double64 FlowFunctions<dim>::dlwds_Numerical( TARGET_PLACEMENT& p, double64 h ) 
     return this->dkrwds_Numerical( seff, h ) / this->Viscosity( p, 0U );
  }
 
-template double64 FlowFunctions<3U>::dlwds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlwds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
 
 
@@ -461,7 +461,7 @@ double64 FlowFunctions<dim>::dlnds_Numerical( TARGET_PLACEMENT& p, double64 h ) 
 
  }
 
-template double64 FlowFunctions<3U>::dlnds_Numerical( ElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctions<3U>::dlnds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
 
 

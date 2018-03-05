@@ -1,5 +1,5 @@
-#ifndef CSMP_ELEMENT_DISCRETISATION_POLICY_H
-#define CSMP_ELEMENT_DISCRETISATION_POLICY_H
+#ifndef CSMP_FINITE_ELEMENT_DISCRETISATION_POLICY_H
+#define CSMP_FINITE_ELEMENT_DISCRETISATION_POLICY_H
 
 #include "VariablePlacement.h"
 
@@ -34,15 +34,15 @@ and iteration over integration points, etc.
 */
 
 template<size_t dim>
-class ElementDiscretisationPolicy
+class FiniteElementDiscretisationPolicy
 {
 public:
-    ElementPlacement<dim,ELEMENT> AtBarycenter();
+    FiniteElementPlacement<dim,ELEMENT> AtBarycenter();
 
-    ElementPlacementCollection<dim,NODE> AllNodes();
-    ElementPlacementCollection<dim,ELEMENT_INTEGRATION_POINT> AllElementIntegrationPoints();
-    ElementPlacementCollection<dim,FACET_INTEGRATION_POINT> AllFacetIntegrationPoints();
-    ElementPlacementCollection<dim,SECTOR_INTEGRATION_POINT> AllSectorIntegrationPoints();
+    FiniteElementPlacementCollection<dim,NODE> AllNodes();
+    FiniteElementPlacementCollection<dim,ELEMENT_INTEGRATION_POINT> AllElementIntegrationPoints();
+    FiniteElementPlacementCollection<dim,FACET_INTEGRATION_POINT> AllFacetIntegrationPoints();
+    FiniteElementPlacementCollection<dim,SECTOR_INTEGRATION_POINT> AllSectorIntegrationPoints();
 };
 
 } // csmp

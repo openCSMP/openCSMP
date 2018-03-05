@@ -492,7 +492,7 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
 
   template<size_t dim>
   Point<dim>
-  ElementPlacementOperations<dim,ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop)
+  FiniteElementPlacementOperations<dim,ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop)
   {
     auto user = User();
     auto& e = user->e_;
@@ -522,13 +522,13 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     return Point<dim>(fe->JINV * grad.Coordinates());
   }
 
-  template Point<1ul> csmp::ElementPlacementOperations<1ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
-  template Point<2ul> csmp::ElementPlacementOperations<2ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
-  template Point<3ul> csmp::ElementPlacementOperations<3ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<1ul> csmp::FiniteElementPlacementOperations<1ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<2ul> csmp::FiniteElementPlacementOperations<2ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<3ul> csmp::FiniteElementPlacementOperations<3ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
 
   template<size_t dim>
   Point<dim>
-  ElementPlacementOperations<dim,FACET_INTEGRATION_POINT>::DirectedArea() const
+  FiniteElementPlacementOperations<dim,FACET_INTEGRATION_POINT>::DirectedArea() const
   {
     auto user = User();
     auto& e = user->e_;
@@ -536,9 +536,9 @@ template void ElementPropertyInterpolator<interp>::Interpolate<3,FLAGGEDARRAY>(I
     return directedAreaOfFacet(e, iFacet);
   }
 
-  template Point<1u> ElementPlacementOperations<1u,FACET_INTEGRATION_POINT>::DirectedArea() const;
-  template Point<2u> ElementPlacementOperations<2u,FACET_INTEGRATION_POINT>::DirectedArea() const;
-  template Point<3u> ElementPlacementOperations<3u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+  template Point<1u> FiniteElementPlacementOperations<1u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+  template Point<2u> FiniteElementPlacementOperations<2u,FACET_INTEGRATION_POINT>::DirectedArea() const;
+  template Point<3u> FiniteElementPlacementOperations<3u,FACET_INTEGRATION_POINT>::DirectedArea() const;
 
 
 
@@ -666,7 +666,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
   template<>
   struct ElementPropertyInterpolator<NODE_TO_ELMT>
   {
-    const ElementInterpolatorType type_ = NODE_TO_ELMT;
+    const FiniteElementInterpolatorType type_ = NODE_TO_ELMT;
 
     static const bool needs_recalculation_ = true;
 
@@ -677,14 +677,14 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
       coeff_.resize(DM_MAX);
     }
 
-    ElementInterpolatorType Type() const { return type_; }
+    FiniteElementInterpolatorType Type() const { return type_; }
 
   };
 
   template<>
   struct ElementPropertyInterpolator<NODE_TO_FIP>
   {
-    const ElementInterpolatorType type_ = NODE_TO_FIP;
+    const FiniteElementInterpolatorType type_ = NODE_TO_FIP;
 
     static const bool needs_recalculation_ = true;
 
@@ -696,7 +696,7 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
       coeff_.resize(DM_MAX);
     }
 
-    ElementInterpolatorType Type() const { return type_; }
+    FiniteElementInterpolatorType Type() const { return type_; }
 
     template<size_t dim>
     void Recalculate( const Element<dim>* eptr, size_t element_dim )
