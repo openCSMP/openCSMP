@@ -1,13 +1,14 @@
 #ifndef CSMP_BROOKS_COREY_SATURATION_FUNCTIONS_H
 #define CSMP_BROOKS_COREY_SATURATION_FUNCTIONS_H
 
-#include "TwoPhaseModel.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 
 /** @brief saturation function policy based on the Brooks-Corey (1964) model
 
     @attention relies on sw, swr, snr, variable values stored by the USER. 
+    @attention phases are numbered 0..2 (water=0)
 
     @note for lambda=0, this implementation of Brooks-Corey model switches to linear
     @note for linear case capillary pressure is a constant value equal to entry pressure
@@ -16,41 +17,69 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class BrooksCoreySaturationFunctions {
   public:
-    BrooksCoreySaturationFunctions( const Model<dim>&, const char* bc_param, const char* pd_param );
-     ~BrooksCoreySaturationFunctions();
+    BrooksCoreySaturationFunctions() = delete;
+     ~BrooksCoreySaturationFunctions() = delete;
     
-    /// relative permeabilities - parameters come from subclass FlowFunctions
-    double64 krn_Phase() const;
-    double64 krw_Phase() const;
+    /// always of the wetting phase by convention
+    template<class TARGET_PLACEMENT>
+    double64  EffectiveSaturation( TARGET_PLACEMENT& ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64  SeffToSw( TARGET_PLACEMENT&, double64 seff ) const;
+
+    /// relative permeabilities as a function of water saturation - parameters come from subclass FlowFunctions
+    template<class TARGET_PLACEMENT>
+    double64 krw( TARGET_PLACEMENT& ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 krn( TARGET_PLACEMENT& ) const;
 
     /// derivatives of relative permeabilities
-    double64 dkrnds_Phase() const;
-    double64 dkrwds_Phase() const;
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds( TARGET_PLACEMENT& ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds( TARGET_PLACEMENT& ) const;
 
     /// capillary pressure
-    double64 pc_Phase( ) const;
+    template<class TARGET_PLACEMENT>
+    double64 pc( TARGET_PLACEMENT& ) const;
 
-    /// capillary pressure derivatives
-    double64 dpcds_Phase( ) const;
+    /// maximum value of pc
+    double64 MaxCapillaryPressure() const { return 1e7; /* Pa */ }
 
     /// inverse capillary pressure function
-    double64 Sw_Phase( double64 pc_Phase ) const;
+    template<class TARGET_PLACEMENT>
+    double64 Sw( TARGET_PLACEMENT&, double64 pc ) const;
+
+    /// maximum value of dpcdS
+    double64 MaxCapillaryPressureDerivative() const { return 1e6; /* Pa m-1 */ }
+
+    /// capillary pressure derivatives
+    template<class TARGET_PLACEMENT>
+    double64 dpcds( TARGET_PLACEMENT& ) const;
 
     /// inverse capillary pressure derivative
-    double64 dsdpc_Phase( double64 pc_Phase ) const;
+    template<class TARGET_PLACEMENT>
+    double64 dsdpc( TARGET_PLACEMENT&, double64 pc ) const;
 
-    void Out( size_t phase ) const;
+    /// Numerical derivatives
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dpcds_Numerical(  TARGET_PLACEMENT&, double64 h = 0.00001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    void Out( TARGET_PLACEMENT& ) const;
 
   private:
-    /// reads Brooks-Corey  model parameters (always element properties)
-    void UpdateModelParameters();
-
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-
-    const csmp::Index  pd_key_, pc_max_key_, lamda_key_;
-    double64           lambda_, entry_pressure_, pc_max_;
 };
 
 } // end namespace csmp

@@ -10,6 +10,7 @@
 #define CSMP_FLUID_H
 
 #include "CSMP_definitions.h"
+#include "VariablePlacement.h"
 
 namespace csmp {
 
@@ -46,36 +47,49 @@ template<size_t dim, template<size_t> class USER>
 class Fluid {
   public:
     /// temperature oC at current initialisation point in Element
-    double64 Temperature() const { return User()->T; }
+    template<class TARGET_PLACEMENT>
+    double64 Temperature( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_T); }
   
     /// fluid pressure (Pa) at current initialisation point in Element
-    double64 Pressure() const { return User()->P; }
+    template<class TARGET_PLACEMENT>
+    double64 Pressure( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_pf); }
   
     /// salinity, mSalt (molality = moles/kg)
-    double64 Salinity() const { return User()->salinity; }
+    template<class TARGET_PLACEMENT>
+    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_msalt); }
   
+    /// salinity, mass fraction
+    template<class TARGET_PLACEMENT>
+    double64 MassFractionNaCl( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xSalt); }
+
     /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    double64 XCO2_AqueousPhase() const { return User()->XCO2; }
+    template<class TARGET_PLACEMENT>
+    double64 XCO2_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xCO2); }
 
     /// composition: mass fraction (0..1) of water in the aqueous phase
-    double64 XH2O_AqueousPhase() const { return User()->XH2O; }
+    template<class TARGET_PLACEMENT>
+    double64 XH2O_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xH2O); }
 
     /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    double64 YCO2_CarbonicPhase() const { return User()->YCO2; }
+    template<class TARGET_PLACEMENT>
+    double64 YCO2_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_YCO2); }
 
     /// composition: mass fraction (0..1) of water in the carbonic phase
-    double64 YH2O_CarbonicPhase() const { return User()->YH2O; }
+    template<class TARGET_PLACEMENT>
+    double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_YH2O); }
   
-    double64 Viscosity( double64 pf, double64 T, double64 salinity=0., size_t phase=0 ) const;
-    double64 Density( double64 pf, double64 T, double64 salinity=0., size_t phase=0 ) const;
-    double64 DensityMixture( double64 pf, double64 T, double64 sw, double64 salinity=0. ) const;
+    // with or without dissolved CO2
+    template<class TARGET_PLACEMENT>
+    double64 Viscosity( TARGET_PLACEMENT&, size_t phase=0 ) const;
 
-    // versions that account for dissolved CO2
-    double64 Viscosity( double64 pf, double64 T, double64 salinity, double64 XCO2, double64 YH2O, size_t phase=0 ) const;
-    double64 Density( double64 pf, double64 T, double64 salinity, double64 XCO2, double64 YH2O, size_t phase=0 ) const;
-    double64 DensityMixture( double64 pf, double64 T, double64 sw, double64 salinity, double64 XCO2, double64 YH2O ) const;
+    template<class TARGET_PLACEMENT>
+    double64 Density( TARGET_PLACEMENT&, size_t phase=0 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 DensityMixture( TARGET_PLACEMENT&, double64 salinity=0. ) const;
   
-    double64 ViscosityRatio( double64 pf, double64 T, double64 msalt=0. ) const;
+    template<class TARGET_PLACEMENT>
+    double64 ViscosityRatio( TARGET_PLACEMENT&, double64 salinity=0. ) const;
 
   protected:
     Fluid() = delete;

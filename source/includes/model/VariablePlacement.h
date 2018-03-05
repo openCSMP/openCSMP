@@ -12,8 +12,8 @@ namespace csmp {
 
   template<size_t dim> class Element;
   template<size_t dim> class Node;
-  template<size_t dim, PLACEMENT pl> class ElementPlacement;
-  template<size_t dim, PLACEMENT pl> struct ElementPlacementCollection;
+  template<size_t dim, PLACEMENT pl> class FiniteElementPlacement;
+  template<size_t dim, PLACEMENT pl> struct FiniteElementPlacementCollection;
   template<size_t dim, PLACEMENT pl> class FiniteVolumePlacement;
   template<size_t dim, PLACEMENT pl> struct FiniteVolumePlacementCollection;
   template<size_t dim> struct NeighbourNodeCollection;
@@ -56,9 +56,9 @@ namespace csmp {
     typedef FlaggedArrayVariable VariableType;
   };
 
-  enum ElementInterpolatorType {
-    // FE_READ_MODEL,
-    // FE_READ_REGION,
+  enum FiniteElementInterpolatorType {
+    FE_READ_MODEL,
+    FE_READ_REGION,
     FE_READ_ELMT,
     FE_READ_NODE,
     FE_READ_EIP,
@@ -68,10 +68,19 @@ namespace csmp {
     FE_NODE_TO_EIP,
     FE_NODE_TO_FIP,
     FE_NODE_TO_SIP,
+    FE_FIP_TO_ELMT,
+    FE_SIP_TO_ELMT,
+    FE_EIP_TO_ELMT,
+    FE_EIP_TO_FIP,
+    FE_EIP_TO_SIP,
+    FE_SIP_TO_FIP,
+    FE_SIP_TO_EIP,
+    FE_FIP_TO_EIP,
+    FE_FIP_TO_SIP,
     FE_INTERPOLATOR_COUNT
   };
 
-  template<ElementInterpolatorType interp>
+  template<FiniteElementInterpolatorType interp>
   struct ElementPropertyInterpolator
   {
     template<size_t dim,VARIABLE_TYPE ty>
@@ -87,47 +96,58 @@ namespace csmp {
   {
   };
 
-#define CSMP_ELEMENT_INTERPOLATOR_DISPATCH(from,to,interp) \
-template<> struct ElementInterpolatorDispatch<from,to> { static constexpr ElementInterpolatorType TYPE = interp; };
+#define CSMP_FE_INTERPOLATOR_DISPATCH(from,to,interp) \
+template<> struct ElementInterpolatorDispatch<from,to> { static constexpr FiniteElementInterpolatorType TYPE = interp; };
 
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,MODEL,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,REGION,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,NODE,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,REGION,FE_READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT,FE_READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,NODE,FE_READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FE_READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FE_READ_REGION)
-  // CSMP_ELEMENT_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FE_READ_REGION)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FE_READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FE_READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,NODE,FE_READ_NODE)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,ELEMENT,FE_NODE_TO_BCTR)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FE_NODE_TO_FIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,ELEMENT_INTEGRATION_POINT,FE_NODE_TO_EIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FE_NODE_TO_SIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_READ_EIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_READ_FIP)
-  CSMP_ELEMENT_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_READ_SIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,MODEL,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,REGION,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,NODE,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,SECTOR_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,REGION,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,ELEMENT,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,NODE,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FE_READ_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FE_READ_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,NODE,FE_READ_NODE)
+  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,ELEMENT,FE_NODE_TO_BCTR)
+  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FE_NODE_TO_FIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,ELEMENT_INTEGRATION_POINT,FE_NODE_TO_EIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FE_NODE_TO_SIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_READ_EIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_READ_FIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_READ_SIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT,FE_FIP_TO_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT,FE_SIP_TO_ELMT)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT,FE_EIP_TO_ELMT)
+# if 0
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_EIP_TO_FIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_EIP_TO_SIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_SIP_TO_FIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_SIP_TO_EIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_FIP_TO_EIP)
+  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_FIP_TO_SIP)
+#endif
 
   template<size_t dim, PLACEMENT pl>
-  struct ElementPlacementOperations
+  struct FiniteElementPlacementOperations
   {
   };
 
 
   template<size_t dim>
-  struct ElementPlacementOperations<dim,NODE>
+  struct FiniteElementPlacementOperations<dim,NODE>
   {
   private:
-    typedef ElementPlacement<dim,NODE> user_type;
+    typedef FiniteElementPlacement<dim,NODE> user_type;
 
     const user_type* User() const
     {
@@ -155,10 +175,10 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementOperations<dim,ELEMENT_INTEGRATION_POINT>
+  struct FiniteElementPlacementOperations<dim,ELEMENT_INTEGRATION_POINT>
   {
   private:
-    typedef ElementPlacement<dim,ELEMENT_INTEGRATION_POINT> user_type;
+    typedef FiniteElementPlacement<dim,ELEMENT_INTEGRATION_POINT> user_type;
 
     const user_type* User() const
     {
@@ -173,10 +193,10 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementOperations<dim,FACET_INTEGRATION_POINT>
+  struct FiniteElementPlacementOperations<dim,FACET_INTEGRATION_POINT>
   {
   private:
-    typedef ElementPlacement<dim,FACET_INTEGRATION_POINT> user_type;
+    typedef FiniteElementPlacement<dim,FACET_INTEGRATION_POINT> user_type;
 
     const user_type* User() const
     {
@@ -236,50 +256,50 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
       return ProjectOntoFacetNormal(v);
     }
 
-    ElementPlacement<dim,NODE> InsideNode() const
+    FiniteElementPlacement<dim,NODE> InsideNode() const
     {
       auto user = User();
       auto nid = user->e_.FV()->InsideNode(user->idx1_);
-      return ElementPlacement<dim,NODE>(user->e_, nid, 0);
+      return FiniteElementPlacement<dim,NODE>(user->e_, nid, 0);
     }
 
-    ElementPlacement<dim,NODE> OutsideNode() const
+    FiniteElementPlacement<dim,NODE> OutsideNode() const
     {
       auto user = User();
       auto nid = user->e_.FV()->OutsideNode(user->idx1_);
-      return ElementPlacement<dim,NODE>(user->e_, nid, 0);
+      return FiniteElementPlacement<dim,NODE>(user->e_, nid, 0);
     }
 
-    ElementPlacement<dim,NODE> UpstreamNode(double64 ff) const
+    FiniteElementPlacement<dim,NODE> UpstreamNode(double64 ff) const
     {
       return ff < 0 ? OutsideNode() : InsideNode();
     }
 
     template<PLACEMENT from>
-    ElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
+    FiniteElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
     {
       VectorVariable<dim> v;
       User()->Interpolate(vel, v);
       return UpstreamNode(ProjectOntoDirectedArea(v));
     }
 
-    ElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
+    FiniteElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
       return UpstreamNode(this->Interpolate(ff));
     }
 
-    ElementPlacement<dim,NODE> DownstreamNode(double64 ff) const
+    FiniteElementPlacement<dim,NODE> DownstreamNode(double64 ff) const
     {
       return ff > 0 ? OutsideNode() : InsideNode();
     }
 
     template<PLACEMENT from>
-    ElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
+    FiniteElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
     {
       return DownstreamNode(ProjectOntoDirectedArea(vel));
     }
 
-    ElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
+    FiniteElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
       return DownstreamNode(this->Interpolate(ff));
     }
@@ -287,7 +307,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
 
 
   template<size_t dim, PLACEMENT pl>
-  struct ElementPlacementWorker
+  struct FiniteElementPlacementWorker
   {
     size_t FeaturesPerElement(Element<dim>& e);
 
@@ -306,7 +326,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
 
 
   template<size_t dim>
-  struct ElementPlacementWorker<dim,ELEMENT>
+  struct FiniteElementPlacementWorker<dim,ELEMENT>
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
@@ -343,7 +363,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
 
 
   template<size_t dim>
-  struct ElementPlacementWorker<dim,NODE>
+  struct FiniteElementPlacementWorker<dim,NODE>
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
@@ -379,7 +399,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementWorker<dim,ELEMENT_INTEGRATION_POINT>
+  struct FiniteElementPlacementWorker<dim,ELEMENT_INTEGRATION_POINT>
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
@@ -415,7 +435,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementWorker<dim,FACET_INTEGRATION_POINT>
+  struct FiniteElementPlacementWorker<dim,FACET_INTEGRATION_POINT>
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
@@ -451,7 +471,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementWorker<dim,SECTOR_INTEGRATION_POINT>
+  struct FiniteElementPlacementWorker<dim,SECTOR_INTEGRATION_POINT>
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
@@ -500,10 +520,10 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
 
 
   template<size_t dim>
-  struct ElementPlacementOperations<dim,ELEMENT>
+  struct FiniteElementPlacementOperations<dim,ELEMENT>
   {
   private:
-    typedef ElementPlacement<dim,ELEMENT> user_type;
+    typedef FiniteElementPlacement<dim,ELEMENT> user_type;
     
     const user_type* User() const
     {
@@ -515,10 +535,10 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
   };
 
   template<size_t dim>
-  struct ElementPlacementOperations<dim,SECTOR_INTEGRATION_POINT>
+  struct FiniteElementPlacementOperations<dim,SECTOR_INTEGRATION_POINT>
   {
   private:
-    typedef ElementPlacement<dim,SECTOR_INTEGRATION_POINT> user_type;
+    typedef FiniteElementPlacement<dim,SECTOR_INTEGRATION_POINT> user_type;
 
     const user_type* User() const
     {
@@ -548,16 +568,16 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
 
 
   template<size_t dim, PLACEMENT pl>
-  class ElementPlacement : public ElementPlacementOperations<dim,pl>
+  class FiniteElementPlacement : public FiniteElementPlacementOperations<dim,pl>
   {
   private:
-    friend struct ElementPlacementOperations<dim,pl>;
+    friend struct FiniteElementPlacementOperations<dim,pl>;
 
     Element<dim>& e_;
     size_t idx1_, idx2_;
 
   public:
-    ElementPlacement(Element<dim>& e, size_t idx1, size_t idx2)
+    FiniteElementPlacement(Element<dim>& e, size_t idx1, size_t idx2)
     : e_(e), idx1_(idx1), idx2_(idx2)
     {
     }
@@ -565,19 +585,19 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     template<VARIABLE_TYPE ty>
     void Read( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       worker.Read(e_, idx1_, idx2_, prop, var);
     }
 
     double Read( const csmp::INDEX<SCALAR,pl>& prop ) const
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       return worker.Read(e_, idx1_, idx2_, prop);
     }
 
     Point<dim> Read( const csmp::INDEX<VECTOR,pl>& prop ) const
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       VectorVariable<dim> var;
       worker.Read(e_, idx1_, idx2_, prop, var);
       return var.P();
@@ -586,7 +606,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     template<VARIABLE_TYPE ty>
     VARIABLE_FLAG Status( const csmp::INDEX<ty,pl>& prop ) const
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       return worker.Status(e_, idx1_, idx2_, prop);
     }
 
@@ -594,7 +614,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Elemen
     template<VARIABLE_TYPE ty>
     void Store( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType const & var )
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       worker.Store(e_, idx1_, idx2_, prop, var);
     }
 
@@ -725,19 +745,19 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
 
   template<size_t dim, PLACEMENT pl>
-  struct ElementPlacementIterator
+  struct FiniteElementPlacementIterator
   {
-    typedef ElementPlacement<dim,pl> value_type;
+    typedef FiniteElementPlacement<dim,pl> value_type;
 
     Element<dim>& e_;
     size_t idx1_, idx2_, max_idx2_;
 
-    bool operator==(const ElementPlacementIterator<dim,pl>& rhs) const
+    bool operator==(const FiniteElementPlacementIterator<dim,pl>& rhs) const
     {
       return &e_ == &rhs.e_ && idx1_ == rhs.idx1_ && idx2_ == rhs.idx2_;
     }
 
-    bool operator!=(const ElementPlacementIterator<dim,pl>& rhs) const
+    bool operator!=(const FiniteElementPlacementIterator<dim,pl>& rhs) const
     {
       return &e_ != &rhs.e_ || idx1_ != rhs.idx1_ || idx2_ != rhs.idx2_;
     }
@@ -746,7 +766,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
       return value_type(e_, idx1_, idx2_);
     }
 
-    const ElementPlacementIterator& operator++()
+    const FiniteElementPlacementIterator& operator++()
     {
       if (++idx2_ >= max_idx2_) {
         ++idx1_;
@@ -755,17 +775,17 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
       return *this;
     }
 
-    ElementPlacementIterator operator++(int)
+    FiniteElementPlacementIterator operator++(int)
     {
       auto result = *this;
       ++(*this);
       return result;
     }
 
-    ElementPlacementIterator(Element<dim>& e, size_t idx1)
+    FiniteElementPlacementIterator(Element<dim>& e, size_t idx1)
     : e_(e), idx1_(idx1), idx2_(0)
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       max_idx2_ = worker.PlacementsPerFeature(e);
     }
   };
@@ -1003,19 +1023,19 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
   };
 
   template<size_t dim, PLACEMENT pl>
-  struct ElementPlacementCollection
+  struct FiniteElementPlacementCollection
   {
-    typedef ElementPlacement<dim,pl> value_type;
-    typedef ElementPlacementIterator<dim,pl> iterator;
-    typedef ElementPlacementIterator<dim,pl> const_iterator;
+    typedef FiniteElementPlacement<dim,pl> value_type;
+    typedef FiniteElementPlacementIterator<dim,pl> iterator;
+    typedef FiniteElementPlacementIterator<dim,pl> const_iterator;
 
     Element<dim>& e_;
     size_t idx_max_;
 
-    ElementPlacementCollection(Element<dim>& e)
+    FiniteElementPlacementCollection(Element<dim>& e)
     : e_(e)
     {
-      ElementPlacementWorker<dim,pl> worker;
+      FiniteElementPlacementWorker<dim,pl> worker;
       idx_max_ = worker.FeaturesPerElement(e);
     }
 

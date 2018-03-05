@@ -13,7 +13,6 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
-#include "ElementDiscretisationPolicy.h"
 
 #include <bitset>
 
