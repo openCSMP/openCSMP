@@ -48,7 +48,7 @@ class EclipseModel : public csmp::Model<dim>
   
       template<class Container>  void GetFaults( Container& data );
   
-      template<class Container>  void GetWells ( Container& data );
+      template<class Container>  void GetWells( Container& data );
 
       /// processing special regions
       void CreateBoundariesAroundFaults( bool keep_fault_regions = false );
