@@ -17,6 +17,10 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( TARGET_P
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteElementPlacement<3U,NODE>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -29,6 +33,10 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::SeffToSw( TARGET_PLACEMENT& p
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -45,6 +53,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw( TARGET_PLACEMENT& p ) co
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -62,6 +72,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn( TARGET_PLACEMENT& p ) co
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -78,6 +90,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( TARGET_PLACEMENT& p )
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -97,6 +111,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( TARGET_PLACEMENT& p )
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -144,6 +160,9 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc( TARGET_PLACEMENT& p ) con
 }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::pc( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::pc( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::pc( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+
 
 // helper for numerical differentiation
 double64 pcBC( double64 sw, double64 swr, double64 snr, double64 bcp, double64 pd )
@@ -208,6 +227,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( TARGET_PLACEMENT& p ) 
 }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
@@ -257,6 +278,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::Sw( TARGET_PLACEMENT& p, doub
 } // Sw(pc) inverse function
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::Sw( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::Sw( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::Sw( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -289,6 +312,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dsdpc( TARGET_PLACEMENT& p, d
 } // end dsdpc
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dsdpc( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dsdpc( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dsdpc( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -312,6 +337,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_Numerical( TARGET_PLAC
 }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_Numerical( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -337,6 +364,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_Numerical( TARGET_PLAC
 }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numerical( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -361,6 +390,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( TARGET_PLACE
 }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds_Numerical( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dpcds_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -380,6 +411,8 @@ void BrooksCoreySaturationFunctions<dim,USER>::Out( TARGET_PLACEMENT& p ) const
  } // end Out
  
  template void BrooksCoreySaturationFunctions<3U,FlowFunctions>::Out( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template void BrooksCoreySaturationFunctions<3U,FlowFunctions>::Out( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template void BrooksCoreySaturationFunctions<3U,FlowFunctions>::Out( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 
