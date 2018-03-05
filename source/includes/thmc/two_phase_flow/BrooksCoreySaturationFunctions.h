@@ -1,7 +1,7 @@
 #ifndef CSMP_BROOKS_COREY_SATURATION_FUNCTIONS_H
 #define CSMP_BROOKS_COREY_SATURATION_FUNCTIONS_H
 
-#include "TwoPhaseModel.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 
@@ -24,7 +24,8 @@ class BrooksCoreySaturationFunctions {
     template<class TARGET_PLACEMENT>
     double64  EffectiveSaturation( TARGET_PLACEMENT& ) const;
 
-    double64  SeffToSw( double64 seff ) const;
+    template<class TARGET_PLACEMENT>
+    double64  SeffToSw( TARGET_PLACEMENT&, double64 seff ) const;
 
     /// relative permeabilities as a function of water saturation - parameters come from subclass FlowFunctions
     template<class TARGET_PLACEMENT>
@@ -61,6 +62,16 @@ class BrooksCoreySaturationFunctions {
     /// inverse capillary pressure derivative
     template<class TARGET_PLACEMENT>
     double64 dsdpc( TARGET_PLACEMENT&, double64 pc ) const;
+
+    /// Numerical derivatives
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dpcds_Numerical(  TARGET_PLACEMENT&, double64 h = 0.00001 ) const;
 
     template<class TARGET_PLACEMENT>
     void Out( TARGET_PLACEMENT& ) const;

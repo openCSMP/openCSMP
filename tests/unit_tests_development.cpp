@@ -104,7 +104,7 @@ TEST_CASE("Development tests", "[Dev]") {
     ANSYS_SplitBoundaryMatch_Test  skm_test;
     skm_test.run();
 
-    ANSYS_Model2D_Test test;
-    test.run();
+ //   ANSYS_Model2D_Test test;
+ //   test.run();
 }
 

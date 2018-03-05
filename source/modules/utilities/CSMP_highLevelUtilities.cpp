@@ -2748,14 +2748,13 @@ template void distanceWeights<3>( vector<Node<3>*>::const_iterator, vector<Node<
     @TODO do we need to remember which side of the interface we are on?
     @todo test method on Chloe's dataset
 */
-bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElements>& interface_elmt_pairs )
+template<size_t dim>
+bool findSplitInterfaceElements( const Region<dim>& subdomain,
+                                 set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >& interface_elmt_pairs )
  {
-    // synchronize perimeter face vector with element vector
-    subdomain.UpdateMemberIndexes();
-   
     // multi-element container for all elements that are located on split boundaries
     //       face search key      element      face number
-    multimap<set<Point<3U> >,pair<Element<3U>*,size_t> > element_face_keys;
+    multimap<set<Point<dim> >,pair<Element<dim>*,size_t> > element_face_keys;
    
     // 1. for all elements on the perimeter of the model subdomain,
     //    generate keys from their node coordinates that are then matched with one-another
@@ -2769,7 +2768,7 @@ bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElemen
                 vector<size_t> fnids;
                 subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
                 // add the corresponding node points to a set that will form the element face key
-                pair<set<Point<3U> >,size_t> face_key;
+                pair<set<Point<dim> >,size_t> face_key;
                 for ( size_t j=0U; j<fnids.size(); ++j )
                   face_key.first.insert( subdomain.E(n)->N( fnids[j] )->Coordinate() );
                 // remembering the face id
@@ -2789,7 +2788,7 @@ bool findSplitInterfaceElements( const Region<3U>& subdomain, set<OppositeElemen
          // multimap iterator containing the range of shared keys
          auto result = element_face_keys.equal_range( (*it).first );
          // if more than one value was found
-cerr << distance( result.first, result.second ) <<" ";
+//cerr << distance( result.first, result.second ) <<" ";
          if ( distance( result.first, result.second ) > 1U ) {
              // there should not be any manyfolds
              assert( distance( result.first, result.second ) == 2U );
@@ -2812,7 +2811,9 @@ cerr << distance( result.first, result.second ) <<" ";
     
  } // end findSplitInterfaceElements
 
-
+template bool findSplitInterfaceElements( const Region<3U>&, set<pair<pair<Element<3U>*,size_t>,pair<Element<3U>*,size_t> > >& );
+template bool findSplitInterfaceElements( const Region<2U>&, set<pair<pair<Element<2U>*,size_t>,pair<Element<2U>*,size_t> > >& );
+template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Element<1U>*,size_t>,pair<Element<1U>*,size_t> > >& );
 
 
 

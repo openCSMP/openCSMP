@@ -135,6 +135,21 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
  
  
  
+/**
+   Constructor for split boundaries within the mesh with given name from the set of juxtaposed elements
+*/
+/*
+template<size_t dim>
+SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
+                                   const PropertyDatabase<dim>& pref,
+                                   MeshManager<dim>& mgr,
+                                   const InterFaceElementSet<dim>& )
+: ModelSubDomain<dim,InterFace>(ed)
+ {
+ } // end constructor
+*/
+ 
+
 
 
 

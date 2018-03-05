@@ -108,8 +108,11 @@ bool isInputFileEmpty( std::ifstream& file );
   
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
 typedef std::pair<std::pair<Element<3U>*,size_t>,std::pair<Element<3U>*,size_t> > OppositeElements;
+
 /// find all elements in a model that contact eachother across split interfaces and are node-matched
-bool findSplitInterfaceElements( const Region<3U>&, std::set<OppositeElements>& );
+template<size_t dim>
+bool findSplitInterfaceElements( const Region<dim>&,
+                                 std::set<std::pair<std::pair<Element<dim>*,size_t>,std::pair<Element<dim>*,size_t> > >& opposite_elmts_and_face_ids );
 
 /// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
 template<size_t dim>

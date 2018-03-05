@@ -9,9 +9,8 @@
 #ifndef CSMP_FLOW_FUNCTIONS_H
 #define CSMP_FLOW_FUNCTIONS_H
 
-#include "SaturationFunction.h"
 #include "BrooksCoreySaturationFunctions.h"
-#include "VariableSet_TwoPhaseFlow.h"
+#include "Variables_TwoPhaseFlow.h"
 #include "VariablePlacement.h"
 #include "Fluid.h"
 
@@ -51,17 +50,16 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 template<size_t dim>
-class FlowFunctions : public variables::VariableSet_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-                      public SaturationFunction<dim,FlowFunctions>,
+class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
                       public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
                       public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
   public:
-    FlowFunctions();
-    ~FlowFunctions();
+    FlowFunctions() = delete;
+    ~FlowFunctions() = delete;
     
     /// current water saturation initialised inside of the model
     template<class TARGET_PLACEMENT>
-    double64 Sw( TARGET_PLACEMENT& p ) const { return p.Interpolate(key_sw); }
+    double64 Sw( TARGET_PLACEMENT& p ) const { return p.Interpolate(this->key_sw); }
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
     template<class TARGET_PLACEMENT>
@@ -93,16 +91,16 @@ class FlowFunctions : public variables::VariableSet_TwoPhaseFlow,              /
     
     /// maximum value of previous derivative
     template<class TARGET_PLACEMENT>
-    double64 MaxFractionalFlowDerivative() const;
+    double64 MaxFractionalFlowDerivative( TARGET_PLACEMENT& ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     template<class TARGET_PLACEMENT>
    	double64 AdvectionMultiplier( TARGET_PLACEMENT&, bool evaluate_numerically=true ) const;
 
     /// linearized fractional flow derivative
-    double64 ShockSpeed() const;
-    double64 ShockHeight() const;
-    void ShockSpeedHeight( double64& speed, double64& height) const;
+    template<class TARGET_PLACEMENT> double64 ShockSpeed( TARGET_PLACEMENT& ) const;
+    template<class TARGET_PLACEMENT> double64 ShockHeight( TARGET_PLACEMENT& ) const;
+    template<class TARGET_PLACEMENT> void     ShockSpeedHeight( TARGET_PLACEMENT&, double64& speed, double64& height) const;
 
     /// multipliers for gravity-driven flow (advection multiplier and source term)
     template<class TARGET_PLACEMENT>

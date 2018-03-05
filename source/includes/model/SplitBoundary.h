@@ -11,8 +11,15 @@ template<size_t> class PropertyDatabase;
 template<size_t> class InterFace;
 template<size_t> class MeshManager;
 template<size_t> class Boundary;
+template<size_t> class Element;
+template<size_t> class InterFace;
 template<size_t> class Region;
 template<typename> class FEM_Data;
+
+
+template<size_t dim>
+struct InterFaceElementSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>,
+                                             std::pair<Element<dim>*,size_t> > > {};
 
 /** 
 
@@ -63,6 +70,9 @@ efficiency.
 template<size_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
+    SplitBoundary() = delete;
+    /// constructs split boundary with given name from the set of juxtaposed elements
+    SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, MeshManager<dim>&, const InterFaceElementSet<dim>& );
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
@@ -159,9 +169,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     LocalVariables InterFaceVariables() const;
 
     void Split( Model<dim>& , Boundary<dim>& );
-
-private:
-    SplitBoundary();
 };
 
 

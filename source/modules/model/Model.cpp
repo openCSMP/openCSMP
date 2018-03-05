@@ -744,13 +744,13 @@ Model<dim>& Model<dim>::operator=( const Model<dim>& model )
  {
     if ( &model != this )
       {
-        database_                           = model.database_;
-        fem_manager_                        = model.fem_manager_;
-        mesh_manager_                       = model.mesh_manager_;
-        this->uniqueGroupMap_               = model.uniqueGroupMap_;
-        this->groupMap_                     = model.groupMap_;
-        this->faceBoundaryMap_              = model.faceBoundaryMap_;
-        this->interFaceSplitBoundaryMap_    = model.interFaceSplitBoundaryMap_;
+        database_               = model.database_;
+        fem_manager_            = model.fem_manager_;
+        mesh_manager_           = model.mesh_manager_;
+        this->uniqueGroupMap_   = model.uniqueGroupMap_;
+        this->groupMap_         = model.groupMap_;
+        this->faceBoundaryMap_  = model.faceBoundaryMap_;
+        this->splitBoundaryMap_ = model.splitBoundaryMap_;
         this->LVS( model.LVS() );
       }
     return *this;
@@ -3055,9 +3055,9 @@ template class BoundaryInterface<1U,Model>;
 template class BoundaryInterface<2U,Model>;
 template class BoundaryInterface<3U,Model>;
 
-template class SplitBoundaryInterface<1U,Model>;
-template class SplitBoundaryInterface<2U,Model>;
-template class SplitBoundaryInterface<3U,Model>;
+template class SplitBoundaryInterface18<1U,Model>;
+template class SplitBoundaryInterface18<2U,Model>;
+template class SplitBoundaryInterface18<3U,Model>;
 
 template class Model<1U>;
 template class Model<2U>;
