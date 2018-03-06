@@ -166,7 +166,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
       auto user = User();
       return user->e_.SectorVolume(user->idx1_);
     }
-
+    
     NeighbourNodeCollection<dim> AllNeighbourNodes() const
     {
       auto user = User();
@@ -564,6 +564,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
       auto user = User();
       return user->e_.SectorVolume(user->idx1_);
     }
+   
   };
 
 
@@ -1067,6 +1068,31 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
   public:
 
+    double64 FacetArea() const
+    {
+        auto user = User();
+        auto e = user->n_.Parent(user->idx1_);
+        auto fv = e->FV();
+        auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+        size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+        return e->FacetArea(facet);
+    }
+    
+    VectorVariable<dim> Normal() const
+    {
+        auto user = User();
+        auto e = user->n_.Parent(user->idx1_);
+        auto fv = e->FV();
+        auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+        size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+        Point<dim> nrml = e->FacetNormal(facet);
+        VectorVariable<dim> fnrml;
+        fnrml(0) = nrml[0];
+        if ( dim != 1U ) fnrml(1) = nrml[1];
+        if ( dim == 3U ) fnrml(2) = nrml[2];        
+        return fnrml;
+    }    
+
     double64 IntegrationWeight() const
     {
       auto user = User();
@@ -1253,6 +1279,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
         auto pnid = user->n_.ParentNodeNumber(user->idx1_);
         return e->SectorVolume(pnid);
     }
+        
   };
 
   template<size_t dim, PLACEMENT pl>
