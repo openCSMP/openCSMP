@@ -10,6 +10,7 @@
 #include "FlowFunctions.h"
 // this specific incarnation
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
+#include "FiniteElementPlacement.h"
 
 namespace csmp {
 

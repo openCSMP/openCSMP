@@ -5,6 +5,7 @@
 #include "Node.h"
 #include "Index.h"
 #include "Event.h"
+#include "Variables_TracerTransfer.h"
 
 
 namespace csmp {
@@ -15,7 +16,7 @@ template<size_t> class Model;
 
 
 template<size_t dim>
-class DESTransport{
+class DESTransport : public variables::Variables_TracerTransfer {
 
   public:
     DESTransport ( Model<dim>& m, const char* target_region);
@@ -26,7 +27,7 @@ class DESTransport{
 
   private:
     void initializeVariablsAndKeys(Model<dim>& m);
-    void initializeFiniteVolumeProperties();
+    void initializeFiniteVolumeProperties(Node<dim>* node);
     void ComputeFluxBalanceAndCFL( Event<dim>* event);    
     void ComputeRateofChange( Event<dim>* event );
     bool Schedule(Event<dim>* nd, double64 t_end, double64 cfl_multiplier);
@@ -42,8 +43,7 @@ class DESTransport{
     size_t	update_count_;
     double64 T_RateOfChange_, T_Schedule_, T_SortQueue_, T_Update_, T_Synchronize_, T_RemoveFromQueue_, T_AdvectVariable_; //time recordings
     
-    csmp::Index phi_key, vD_key, fv_key, PV_key, sv_key, spv_key, fA_key, ff_key, fn_key, fb_key, nsrc_key, EventIndex_key, C0_key, C1_key;
-    csmp::Index update_key, rate_key, schedule_key, synchronize_key; //keys for counting
+    csmp::INDEX<SCALAR,NODE> key_EventIndex, key_update, key_rate, key_schedule, key_synchronize;
     
     // time_key - an ArrayVariable key for DES releated variables:
     // [0] current time stamp
@@ -52,7 +52,7 @@ class DESTransport{
     // [3] target time increment
     // [4] cumulative change of solution
     // [5] target change of solution
-    csmp::Index time_key;
+    csmp::INDEX<ARRAY,NODE> key_time;
 };
 
 

@@ -1,7 +1,7 @@
 #ifndef CSMP_FINITE_ELEMENT_DISCRETISATION_POLICY_H
 #define CSMP_FINITE_ELEMENT_DISCRETISATION_POLICY_H
 
-#include "VariablePlacement.h"
+#include "FiniteElementPlacement.h"
 
 namespace csmp {
 
