@@ -1,6 +1,6 @@
 #include "BrooksCoreySaturationFunctions.h"
 #include "FlowFunctions.h"
-#include "VariablePlacement.h"
+#include "FiniteElementPlacement.h"
 
 using namespace std;
 

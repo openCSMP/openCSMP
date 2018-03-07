@@ -1,7 +1,7 @@
 #ifndef CSMP_FINITE_VOLUME_DISCRETISATION_POLICY_H
 #define CSMP_FINITE_VOLUME_DISCRETISATION_POLICY_H
 
-#include "VariablePlacement.h"
+#include "FiniteVolumePlacement.h"
 
 namespace csmp {
 

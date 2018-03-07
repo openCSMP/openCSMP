@@ -1,6 +1,7 @@
 #include "FlowFunctions.h"
 #include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
+#include "FiniteElementPlacement.h"
 
 using namespace std;
 
