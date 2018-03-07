@@ -138,10 +138,8 @@ void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     for (auto fip : nd->AllFacetIntegrationPoints()) {
         const double64 sign = fip.FromInside() ? 1. : -1.;
         fip.Interpolate( this->key_V, vD );
-        VectorVariable<dim>  nrml = fip.Normal();
-        const double64 vD_n = vD.DotProduct(nrml);
-        double64 facet_area = fip.FacetArea();
-        const double64 facet_flux = sign * vD_n * facet_area;
+        const double64 vD_nA = vD.DotProduct(fip.DirectedArea());
+        const double64 facet_flux = sign * vD_nA;
         flux_balance += facet_flux;       
         if ( facet_flux > 0. ) outflow += facet_flux ;        
     }
@@ -179,10 +177,7 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     VectorVariable<dim> vD;
     for (auto fip : nd->AllFacetIntegrationPoints()) {
         fip.Interpolate( this->key_V, vD );
-        VectorVariable<dim>  nrml = fip.Normal();
-        const double64  vD_n = vD.DotProduct(nrml);        
-        double64 facet_area = fip.FacetArea();      
-        const double64 facet_flux = vD_n * facet_area;
+        const double64 facet_flux = vD.DotProduct(fip.DirectedArea());        
       
         auto upstream_node = fip.UpstreamNode(facet_flux);
         const double64 C_upstream = upstream_node.Read( this->key_C );
@@ -190,7 +185,7 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         const double64 sign = ( fip.FromInside() ) ? 1. : -1.;
         accumulation += sign * facet_flux * C_upstream;    
     }
-        
+
     nd->Store(  this->key_NC, makeScalar( nd->Status( this->key_NC ), accumulation ) );    
 } 
 
