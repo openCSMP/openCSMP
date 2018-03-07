@@ -13,7 +13,6 @@ namespace csmp {
   template<size_t dim, PLACEMENT pl> struct FiniteVolumePlacementCollection;
   template<size_t dim> struct NeighbourNodeCollection;
 
-
   template<size_t dim>
   void calculateN(const Element<dim>& e, const Point<dim>& p, double64* coeff);
 
@@ -22,8 +21,6 @@ namespace csmp {
 
   template<size_t dim>
   Point<dim> directedAreaOfFacet(const Element<dim>& e, size_t iFacet);
-  
-
 }
 
 #endif
