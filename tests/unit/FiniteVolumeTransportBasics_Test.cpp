@@ -56,7 +56,7 @@ FiniteVolumeTransportBasics_Test::~FiniteVolumeTransportBasics_Test()
 void
 FiniteVolumeTransportBasics_Test::run()
 {
-#if 1
+#if 0
   {
     ANSYS_Model3D model( "HeuristicModel1coarse", "HeuristicModel1coarse",  "CSMP-brine-CO2-phase-variables.txt", true, true, true, true );
     model.OutputToBinaryFile("TestThisModel");
@@ -65,7 +65,40 @@ FiniteVolumeTransportBasics_Test::run()
 
 #endif
 
+  
+#if 1
+  {
+    ANSYS_Model2D model( "2DCSP", "2DCSP",  "CSMP-brine-CO2-phase-variables.txt", true, true, true, true );
+    test_placements(model);
+  }
+
+  {
+    VSet<3U> vset;
+    test_Create_Hexahedra_VSet(vset, true);
+    Model<3U> model( vset, "CSMP-2phase-variables.txt", true );
+    std::cerr << "Testing hexahedra\n";
+    test_placements(model);
+  }
+  
+  {
+    VSet<3U> vset;
+    test_Create_Prism_VSet(vset, true);
+    Model<3U> model( vset, "CSMP-2phase-variables.txt", true );
+    std::cerr << "Testing prism\n";
+    test_placements(model);
+  }
+  
+  {
+    VSet<3U> vset;
+    test_Create_Pyramid_VSet(vset, true);
+    Model<3U> model( vset, "CSMP-2phase-variables.txt", true );
+    std::cerr << "Testing pyramid\n";
+    test_placements(model);
+  }
+#endif
+
 #if 0
+
     {
         VSet<3U> vset;
         test_Create_Hexahedra_VSet(vset, true);
@@ -97,6 +130,50 @@ FiniteVolumeTransportBasics_Test::run()
     test_b25();
 #endif
 }
+
+  
+  template<size_t dim>
+  void FiniteVolumeTransportBasics_Test::test_placements(Model<dim>& model)
+  {
+    model.InstantiateFiniteVolumes();
+    auto& gref = model.Region("Model");
+    VectorVariable<dim> vD;
+    switch (dim) {
+      case 3:
+        vD(2) = 0.3;
+      case 2:
+        vD(1) = 0.2;
+      case 1:
+        vD(0) = 0.1;
+    }
+
+    for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); ++it ) {
+      auto& n = **it;
+      for (auto fip : n.AllFacetIntegrationPoints()) {
+        auto& e = fip.Element();
+        const size_t iFacet = fip.FacetId();
+        const size_t iFacetIp = fip.FacetIp();
+        
+        const double64 facet_area = e.FacetArea(iFacet);
+        const Point<dim> facet_normal = e.FacetNormal(iFacet);
+        
+        const Point<dim> directed_area_stencil = facet_area * facet_normal;
+        const Point<dim> directed_area_parametric = fip.DirectedArea();
+        
+        for (size_t i = 0; i < dim; ++i) {
+          _equal(directed_area_parametric[i], directed_area_stencil[i], 1e-12);
+        }
+        
+#if 0
+        const double64 vD_n = vD.DotProduct(facet_area_mapped);
+        const double64 facet_flux_prev = vD_n * facet_area;
+        
+        const double64 facet_flux_new = vD.DotProduct(fip.DirectedArea());
+        _equal(facet_flux_prev, facet_flux_new, 1e-15);
+#endif
+      }
+    }
+  }
 
 
 void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& model)

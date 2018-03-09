@@ -318,6 +318,27 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
   public:
 
+    Element<dim>& Element()
+    {
+      auto user = User();
+      return *user->n_.Parent(user->idx1_);
+    }
+
+    size_t FacetId() const
+    {
+      auto user = User();
+      auto e = user->n_.Parent(user->idx1_);
+      auto fv = e->FV();
+      auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+      return fv->FacetSurroundingSector(pnid, user->idx2_);
+    }
+
+    size_t FacetIp() const
+    {
+      auto user = User();
+      return user->idx3_;
+    }
+
     double64 IntegrationWeight() const
     {
       auto user = User();

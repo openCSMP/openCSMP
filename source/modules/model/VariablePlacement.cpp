@@ -152,6 +152,8 @@ namespace csmp {
           auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           normal += weights.first * n;
         }
+        // By convention, the area of a facet for a line element is 1.
+        normal.NormalizeLengthTo(1.0);
         return normal;
       }
 
@@ -166,7 +168,7 @@ namespace csmp {
           tangent += weights.first * n;
           bitangent += weights.second * n;
         }
-        double64 length = exteriorProductLength(tangent, bitangent);
+        double64 length = tangent.Length();
         tangent.NormalizeLengthTo(1.0);
         Point<dim> normal = bitangent - dotProduct(tangent,bitangent) * tangent;
         normal.NormalizeLengthTo(length);
