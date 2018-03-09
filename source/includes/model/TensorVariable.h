@@ -151,10 +151,13 @@ class TensorVariable<3U> {
     TensorVariable   operator+(  const TensorVariable& ) const;
     TensorVariable   operator-(  const TensorVariable& ) const;
     TensorVariable   operator*(  const TensorVariable& ) const;
-    
+
     /// (A x) matrix-vector multiplication -> vector (v treated as column vector)
     VectorVariable<3U>  operator*( const VectorVariable<3U>& ) const;
-    
+
+    /// (A x) matrix-vector multiplication -> vector (v treated as column vector)
+    Point<3U>  operator*( const Point<3U>& ) const;
+
     /// value by value division of the elements of the tensor with another one
     TensorVariable   operator/( const TensorVariable& ) const;
 

@@ -126,7 +126,7 @@ FiniteVolumeTransportBasics_Test::run()
         test_constant_velocity_field(model);
     }
 #endif
-#if 0
+#if 1
     test_b25();
 #endif
 }
@@ -515,10 +515,18 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         printRangeOfVariable( model, stdio, "permeability" );
     
         const double64  fluid_viscosity(1.0e-03);
-        ConstantFactor<3U,divides>  conductivity( model.Database(),
-                                                 "conductivity", "permeability",
-                                                 fluid_viscosity );
-        model.Apply( conductivity );
+        variables::Variables_TracerTransfer	 vars(model.Database());
+        auto& gref = model.Region("Model");
+        {
+          csmp::INDEX<TENSOR,ELEMENT> conductivity(model.Database().StorageKey("conductivity"));
+          for (auto it = gref.ElementsBegin(); it != gref.ElementsEnd(); ++it) {
+            auto e = (*it)->AtBarycenter();
+            TensorVariable<3u> k;
+            e.Read(conductivity, k);
+            k *= 1.0 / fluid_viscosity;
+            e.Store(vars.key_k, k);
+          }
+        }
 
         SteadyStateDiffusor<3U,Region> steady_state_pressure( model,
                                                              "conductivity", "fluid pressure",
@@ -562,7 +570,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 
 #endif
 
-      model.Region("Model").RenumberNodes();
+      gref.RenumberNodes();
         for (unsigned i = 1; i < 200; ++i) {
             advector.AdvectVariable(10.0);
             // advector.AdvectVariable(1000.0);

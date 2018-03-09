@@ -95,14 +95,16 @@ namespace csmp {
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
       auto bctr = e.AtBarycenter();
-      const auto k = bctr.Interpolate(User()->key_k);
-      const auto mu = User()->GetModel().Read(User()->key_MU); // XXX Should be able to Interpolate
-      const auto grad_p = bctr.Gradient(User()->key_PF);
+      auto user = User();
+      TensorVariable<dim> k;
+      bctr.Interpolate(user->key_k, k);
+      const auto mu = User()->GetModel().Read(user->key_MU); // XXX Should be able to Interpolate
+      const auto grad_p = bctr.Gradient(user->key_PF);
 
-      VectorVariable<dim> vD(bctr.Read(User()->key_V));
-      vD = -k/mu * grad_p;
+      VectorVariable<dim> vD(bctr.Read(user->key_V));
+      vD = -(1/mu) * (k * grad_p);
       vDvec = vD.P();
-      bctr.Store( User()->key_V, vD );
+      bctr.Store( user->key_V, vD );
     }
     else {
       auto bctr = e.AtBarycenter();
@@ -111,7 +113,6 @@ namespace csmp {
     }
 
     // computing total facet fluxes by projecting vt onto facet normals
-    size_t i = 0;
     for (auto fip : e.AllFacetIntegrationPoints()) {
       double64 facet_flux = 0;
 
@@ -157,13 +158,15 @@ namespace csmp {
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
       auto bctr = e.AtBarycenter();
-      const auto k = bctr.Interpolate(User()->key_k);
+      
+      TensorVariable<dim> k;
+      bctr.Interpolate(User()->key_k, k);
       const auto mu = User()->GetModel().Read(User()->key_MU); // XXX Should be able to interpolate
       const auto grad_p = bctr.Gradient(User()->key_PF);
 
-      VectorVariable<dim> vD;
-      bctr.Read(User()->key_V, vD);
-      vD = -k/mu * grad_p;
+      VectorVariable<dim> vD(bctr.Read(User()->key_V));
+      vD = -(1/mu) * (k * grad_p);
+
       bctr.Store( User()->key_V, vD );
     }
 

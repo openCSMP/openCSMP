@@ -388,6 +388,14 @@ VectorVariable<3U>  TensorVariable<3U>::operator*( const VectorVariable<3U>& vc 
     return std::move(temp);
  } 
 
+Point<3U>  TensorVariable<3U>::operator*( const Point<3U>& v ) const
+ {
+     return Point<3U>(
+         data[0][0] * v[0] + data[0][1] * v[1] + data[0][2] * v[2],
+         data[1][0] * v[0] + data[1][1] * v[1] + data[1][2] * v[2],
+         data[2][0] * v[0] + data[2][1] * v[1] + data[2][2] * v[2] );
+ } 
+
 
 
 // re-tested: SKM 29-9-2001

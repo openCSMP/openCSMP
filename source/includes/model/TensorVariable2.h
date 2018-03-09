@@ -49,6 +49,8 @@ class TensorVariable<2U> {
 
     VectorVariable<2U>  operator*( const VectorVariable<2U>& ) const;
 
+    Point<2U>  operator*( const Point<2U>& ) const;
+
     TensorVariable   operator/(  const TensorVariable& ) const;
     TensorVariable&  operator+=( const TensorVariable& );
     TensorVariable&  operator-=( const TensorVariable& );

@@ -340,6 +340,13 @@ VectorVariable<2U>  TensorVariable<2U>::operator*( const VectorVariable<2U>& vc 
     return temp;
  } 
 
+Point<2U>  TensorVariable<2U>::operator*( const Point<2U>& v ) const
+ {
+    return Point<2U>(
+        data[0][0] * v[0] + data[0][1] * v[1],
+        data[1][0] * v[0] + data[1][1] * v[1] );
+ } 
+
 
 
 // re-tested: SKM 29-9-2001

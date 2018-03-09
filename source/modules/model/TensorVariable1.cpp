@@ -144,6 +144,12 @@ VectorVariable<1U>  TensorVariable<1U>::operator*( const VectorVariable<1U>& vc 
  } 
 
 
+Point<1U>  TensorVariable<1U>::operator*( const Point<1U>& v ) const
+ {
+    return Point<1U>( data * v[0] );
+ } 
+
+
 
 
 TensorVariable<1U> TensorVariable<1U>::Adjoint() const

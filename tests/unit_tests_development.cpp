@@ -100,7 +100,6 @@ TEST_CASE("Development tests", "[Dev]") {
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
     FiniteVolumeTransportBasics_Test test;
-    // FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
     test.run();
