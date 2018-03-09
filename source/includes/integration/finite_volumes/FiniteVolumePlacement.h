@@ -318,7 +318,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
   public:
 
-    Element<dim>& Element();
+    Element<dim>& TheElement();
 
     size_t FacetId() const
     {

@@ -9,15 +9,15 @@ namespace csmp {
 
     template<size_t dim>
     Element<dim>&
-    FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::Element()
+    FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::TheElement()
     {
       auto user = User();
       return *user->n_.Parent(user->idx1_);
     }
 
-    template Element<1u>& FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::Element();
-    template Element<2u>& FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::Element();
-    template Element<3u>& FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::Element();
+    template Element<1u>& FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::TheElement();
+    template Element<2u>& FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::TheElement();
+    template Element<3u>& FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::TheElement();
     
 
 #define INSTANTIATE_FV_PROPERTY_INTERPOLATOR(interp) \

@@ -150,7 +150,7 @@ FiniteVolumeTransportBasics_Test::run()
     for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); ++it ) {
       auto& n = **it;
       for (auto fip : n.AllFacetIntegrationPoints()) {
-        auto& e = fip.Element();
+        auto& e = fip.TheElement();
         const size_t iFacet = fip.FacetId();
         const size_t iFacetIp = fip.FacetIp();
         
