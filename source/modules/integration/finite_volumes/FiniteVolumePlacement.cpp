@@ -7,6 +7,19 @@
 
 namespace csmp {
 
+    template<size_t dim>
+    Element<dim>&
+    FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::Element()
+    {
+      auto user = User();
+      return *user->n_.Parent(user->idx1_);
+    }
+
+    template Element<1u>& FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::Element();
+    template Element<2u>& FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::Element();
+    template Element<3u>& FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::Element();
+    
+
 #define INSTANTIATE_FV_PROPERTY_INTERPOLATOR(interp) \
 template void FiniteVolumePropertyInterpolator<interp>::Interpolate<1,SCALAR>(Index const&, Node<1> const*, size_t, size_t, size_t, VariableTypeTraits<1,SCALAR>::VariableType&); \
 template void FiniteVolumePropertyInterpolator<interp>::Interpolate<2,SCALAR>(Index const&, Node<2> const*, size_t, size_t, size_t, VariableTypeTraits<2,SCALAR>::VariableType&); \
