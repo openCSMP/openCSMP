@@ -60,6 +60,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
   // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FV_READ_REGION)
   // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FV_READ_REGION)
   CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FV_READ_ELMT)
+  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FV_READ_ELMT)
   CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FV_READ_ELMT)
   CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FV_READ_ELMT)
   CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FV_READ_ELMT)
@@ -319,6 +320,8 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
   public:
 
     Element<dim>& TheElement();
+    
+    Point<dim> Gradient( const csmp::INDEX<SCALAR,NODE>& prop ) const;
 
     size_t FacetId() const
     {
@@ -356,6 +359,16 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     }
 
     Point<dim> DirectedArea() const;
+    
+    double64 FacetArea() const
+    {
+        auto user = User();
+        auto e = user->n_.Parent(user->idx1_);
+        auto fv = e->FV();
+        auto pnid = user->n_.ParentNodeNumber(user->idx1_);
+        size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);
+        return e->FacetArea(facet);
+    }    
 
     Point<dim> FacetNormal() const
     {
@@ -542,7 +555,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
         return n_.Idx();
     }
 
-    Point<dim> Gradient( const csmp::INDEX<SCALAR,NODE>& prop ) const;
+    //Point<dim> Gradient( const csmp::INDEX<SCALAR,NODE>& prop ) const;
 
     template<VARIABLE_TYPE ty>
     void Read( const csmp::INDEX<ty,pl>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const

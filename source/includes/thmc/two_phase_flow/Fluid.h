@@ -92,8 +92,7 @@ class Fluid {
     double64 ViscosityRatio( TARGET_PLACEMENT&, double64 salinity=0. ) const;
 
   protected:
-    Fluid() = delete;
-    ~Fluid() = delete;
+    Fluid();
   
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }

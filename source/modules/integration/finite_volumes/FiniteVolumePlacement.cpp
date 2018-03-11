@@ -68,6 +68,26 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
   }
 
   INSTANTIATE_FV_PROPERTY_INTERPOLATOR(FV_READ_ELMT)
+  
+  template<>
+  FiniteVolumePropertyInterpolator<FV_READ_FIP>::FiniteVolumePropertyInterpolator()
+  {
+  }
+
+  template<>
+  template<size_t dim,VARIABLE_TYPE ty>
+  void
+  FiniteVolumePropertyInterpolator<FV_READ_FIP>::Interpolate( const Index& prop, const Node<dim>* n, size_t idx1, size_t idx2, size_t idx3, typename VariableTypeTraits<dim,ty>::VariableType& var )
+  {
+    auto eptr = n->Parent(idx1);
+    size_t pnid = n->ParentNodeNumber(idx1);
+    auto fv = eptr->FV();
+    size_t facet = fv->FacetSurroundingSector(pnid, idx2);
+    
+    eptr->Read(facet, 0U, prop, var);
+  }
+
+  INSTANTIATE_FV_PROPERTY_INTERPOLATOR(FV_READ_FIP)  
 
   template<>
   FiniteVolumePropertyInterpolator<FV_NODE_TO_FIP>::FiniteVolumePropertyInterpolator()
@@ -139,5 +159,42 @@ template void FiniteVolumePropertyInterpolator<interp>::Interpolate<3,FLAGGEDARR
   template Point<2u> FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::DirectedArea() const;
   template Point<3u> FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::DirectedArea() const;
 
+  template<size_t dim>
+  Point<dim>
+  FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const
+  {
+    auto user = User();
+    auto& e = *user->n_.Parent(user->idx1_);
+    
+    auto fv = e.FV();
+    auto fe = e.FE();
+
+    const size_t element_dim = (size_t)fv->Geometry();
+    const size_t num_nodes = e.Nodes();
+
+    e.CoordinateMatrix();
+
+    std::vector<double64> DN[dim];
+    for (size_t i = 0; i < element_dim; ++i) {
+      DN[i].resize(num_nodes);
+    }
+    calculateDN(e, fv->Barycenter(), DN);
+
+    Point<dim> grad(0.);
+    for ( size_t i=0U; i<num_nodes; ++i ) {
+      const double64 value_at_node(e.N(i)->Read(prop));
+      for (size_t j = 0; j < element_dim; ++j) {
+        grad[j] += DN[j][i] * value_at_node;
+      }
+    }
+    fe->JacobianInverse();
+
+    return Point<dim>(fe->JINV * grad.Coordinates());
+  }
+  
+  template Point<1u> FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const;
+  template Point<2u> FiniteVolumePlacementOperations<2u,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const;
+  template Point<3u> FiniteVolumePlacementOperations<3u,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const;   
+  
 }
 
