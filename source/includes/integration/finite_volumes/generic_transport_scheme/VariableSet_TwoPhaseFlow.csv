@@ -102,7 +102,7 @@ default time increment,dt,s,SCALAR,1.00e-03,8.64e+06,MODEL,input,numeric modelli
 element number,Ne,none,SCALAR,0.00e+00,1.00e+10,ELEMENT,calculated,numeric modelling,,
 face dip vector,dipf,none,VECTOR,-1.00e+00,1.00e+00,FACE,calculated,numeric modelling,,
 node number,Nn,int,SCALAR,0.00e+00,1.00e+10,NODE,calculated,numeric modelling,,
-output times,t-out,s,ARRAY,0.00e+00,1.00e+15,MODEL,input ,numeric modelling,,
+output times,t_out,s,ARRAY,0.00e+00,1.00e+15,MODEL,input ,numeric modelling,,
 previous fluid pressure,pf0,Pa,SCALAR,-1.00e+09,1.00e+09,NODE,computed,numeric modelling,,
 previous fluid volume source,QV0,m3(m3.s),SCALAR,-1.00e+00,1.00e+00,ELEMENT,computed,numeric modelling,,
 previous nodal fluid volume source,nQV0,m3(m3.s),SCALAR,-1.00e+00,1.00e+00,NODE,computed,numeric modelling,,

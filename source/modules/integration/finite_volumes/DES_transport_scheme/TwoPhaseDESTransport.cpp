@@ -51,7 +51,7 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
     }
          
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->key_snw), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
     cout<<"events created for all nodes and added to PEPStack - size = "<<PEPStack.size()<<endl;
     cout<<"TwoPhaseDESTransport constructed"<<endl;
 } // end constructor  
@@ -124,7 +124,7 @@ void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
         if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
         pore_volume += sector_volume * phi;
     }
-    nd->Store( this->key_poreFV, makeScalar(PLAIN, pore_volume) ); 
+    nd->Store( this->key_fvPV, makeScalar(PLAIN, pore_volume) );
           
 } // end initializeFiniteVolumeProperties
 
@@ -138,7 +138,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     assert( nd  != NULL );
 
     //ignore DIRICH node
-    if(nd->Status(  this->key_snw ) == DIRICH) {   
+    if(nd->Status(  this->key_sCO2 ) == DIRICH) {
         nd->Store(  this->key_fb, makeScalar( nd->Status(  this->key_fb ), 0. ) );//flux balance
         ArrayVariable array;
         nd->Read(key_time, array);
@@ -171,8 +171,8 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);
         
         if ( vD_n != 0. ) {
-            const double64 sn_inside_node  = inside_node.Read( this->key_snw );
-            const double64 sn_outside_node = outside_node.Read( this->key_snw );   
+            const double64 sn_inside_node  = inside_node.Read( this->key_sCO2 );
+            const double64 sn_outside_node = outside_node.Read( this->key_sCO2 );
                           
             const double64  psi_hat_c( (vD_n < 0.) ? sn_outside_node : sn_inside_node );         
             double64 f_n = flowfunctions_.f(fip, 1U, 1.-psi_hat_c);                         
@@ -183,7 +183,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
             gravity_velocity_component = flowfunctions_.GravityMultiplier_G(fip) * facetNrml[v];
         
         if(with_capillary_spreading_) {
-            Point<dim> snw_gradient = fip.Gradient (this->key_snw);                                 
+            Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);
             double64 dsdn = dotProduct(snw_gradient, facetNrml);
             capillary_velocity_component = flowfunctions_.CapillaryDiffusionMultiplier(fip) * (-dsdn);
         }          
@@ -197,7 +197,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     if (outflow < numeric_limits<double64>::epsilon())
         array2.Component(2, numeric_limits<double64>::max());
     else 
-        array2.Component(2, nd->Read(  this->key_poreFV ) / outflow);  
+        array2.Component(2, nd->Read(  this->key_fvPV ) / outflow);
     nd->Store(key_time, array2);
     
      
@@ -212,7 +212,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         accumulation -= fn_avg*flux_balance;     
     }     
     
-    double64 PV = nd->Read(  this->key_poreFV );
+    double64 PV = nd->Read(  this->key_fvPV );
     //store variation rate
     nd->Store(  key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );         
         
@@ -227,7 +227,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange_upstream( Event<dim>* event 
     assert( nd  != NULL );
 
     //ignore DIRICH node
-    if(nd->Status(  this->key_snw ) == DIRICH) {   
+    if(nd->Status(  this->key_sCO2 ) == DIRICH) {
         nd->Store(  this->key_fb, makeScalar( nd->Status(  this->key_fb ), 0. ) );//flux balance
         ArrayVariable array;
         nd->Read(key_time, array);
@@ -260,8 +260,8 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange_upstream( Event<dim>* event 
         double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);
         if( !with_gravity_forces_ && !with_capillary_spreading_ ){ //viscous effect only                                           
             if ( vD_n != 0. ) {
-                const double64 sn_inside_node  = inside_node.Read( this->key_snw );
-                const double64 sn_outside_node = outside_node.Read( this->key_snw );   
+                const double64 sn_inside_node  = inside_node.Read( this->key_sCO2 );
+                const double64 sn_outside_node = outside_node.Read( this->key_sCO2 );
                           
                 const double64  psi_hat_c( (vD_n < 0.) ? sn_outside_node : sn_inside_node );         
                 double64 f_n = flowfunctions_.f(fip, 1U, 1.-psi_hat_c);                         
@@ -278,7 +278,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange_upstream( Event<dim>* event 
             }         
             
             if(with_capillary_spreading_){                
-                Point<dim> snw_gradient = fip.Gradient (this->key_snw);
+                Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);
                                              
                 double64 dsdn = dotProduct(snw_gradient, facetNrml);
                 
@@ -351,7 +351,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange_upstream( Event<dim>* event 
     if (outflow < numeric_limits<double64>::epsilon())
         array2.Component(2, numeric_limits<double64>::max());
     else 
-        array2.Component(2, nd->Read(  this->key_poreFV ) / outflow);  
+        array2.Component(2, nd->Read(  this->key_fvPV ) / outflow);
     nd->Store(key_time, array2);
     
      
@@ -366,7 +366,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange_upstream( Event<dim>* event 
         accumulation -= fn_avg*flux_balance;     
     }     
     
-    double64 PV = nd->Read(  this->key_poreFV );
+    double64 PV = nd->Read(  this->key_fvPV );
     //store variation rate
     nd->Store(  key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );         
         
@@ -383,7 +383,7 @@ bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, doub
     ArrayVariable array;
     nd->Read(key_time, array);
     //ignore DIRICH node
-    if(nd->Status(  this->key_snw ) == DIRICH) {
+    if(nd->Status(  this->key_sCO2 ) == DIRICH) {
         return false;
     } else {
         nd->Store( key_schedule, makeScalar( nd->Status( key_schedule), nd->Read( key_schedule) + 1 ) );
@@ -427,25 +427,25 @@ void TwoPhaseDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     assert( nd  != NULL );
     ArrayVariable array;
     nd->Read(key_time, array);
-    const VARIABLE_FLAG status(nd->Status( this->key_snw ));
+    const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
     if ( status != DIRICH )
     {    
         double64 ChangeRate = nd->Read( key_dsnw);//variaition rate   
-        double64 solution = nd->Read( this->key_snw);//old solution
+        double64 solution = nd->Read( this->key_sCO2);//old solution
         double64 t_current = array[0]; //current time stamp
         double64 new_solution = solution - (t_clock - t_current) * ChangeRate;//compute new solution
         const double64 source(nd->Read(this->key_NQV));
         new_solution += source * (t_clock - t_current);//add source to new solution
         
-        //check new solution value against range and stored it to key_snw
-        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_snw, makeScalar( status, new_solution ));
+        //check new solution value against range and stored it to key_sCO2
+        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
         else {
             cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-            if ( new_solution > upper_limit_ ) nd->Store( this->key_snw, makeScalar( status, upper_limit_ ) );
-            else if ( new_solution < lower_limit_ ) nd->Store( this->key_snw, makeScalar( status, lower_limit_ ) );
+            if ( new_solution > upper_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, upper_limit_ ) );
+            else if ( new_solution < lower_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, lower_limit_ ) );
         }
         
-        new_solution = nd->Read(this->key_snw);//stored new solution
+        new_solution = nd->Read(this->key_sCO2);//stored new solution
         double64 dsn_cumulative = array[4];
         array.Component(4, dsn_cumulative + (new_solution-solution));//update cumulative change
         
@@ -465,21 +465,21 @@ void TwoPhaseDESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
     update_count_++;//recording
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );    
-    const VARIABLE_FLAG status(nd->Status( this->key_snw ));
+    const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
     if ( status != DIRICH )
     {    
         double64 ChangeRate = nd->Read(key_dsnw);//variation rate  
-        double64 solution = nd->Read(this->key_snw);//old solution
+        double64 solution = nd->Read(this->key_sCO2);//old solution
         double64 new_solution = solution - delta_t * ChangeRate;//compute new solution
         const double64 source(nd->Read( this->key_NQV));
         new_solution += source * delta_t;//add source to new solution.
                 
-        //check new solution value against range and stored it to key_snw
-        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_snw, makeScalar( status, new_solution ));
+        //check new solution value against range and stored it to key_sCO2
+        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
         else {
             cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-            if ( new_solution > upper_limit_ ) nd->Store( this->key_snw, makeScalar( status, upper_limit_ ) );
-            else if ( new_solution < lower_limit_ ) nd->Store( this->key_snw, makeScalar( status, lower_limit_ ) );
+            if ( new_solution > upper_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, upper_limit_ ) );
+            else if ( new_solution < lower_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, lower_limit_ ) );
         }
         
         nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );   
