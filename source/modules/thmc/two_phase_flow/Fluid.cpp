@@ -76,8 +76,8 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 Fluid<dim,USER>::DensityMixture( TARGET_PLACEMENT& p, double64 msalt ) const
  {
-    return p.Interpolate( User()->key_sw ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
-          (1. - p.Interpolate(User()->key_sw)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    return p.Interpolate( User()->key_sH2O ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
+          (1. - p.Interpolate(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
 
 template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
