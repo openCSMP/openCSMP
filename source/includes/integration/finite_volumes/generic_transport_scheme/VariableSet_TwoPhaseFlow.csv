@@ -88,7 +88,7 @@ horizontal permeability,kh,m2,SCALAR,1.00e-21,1.00e-07,ELEMENT,computed/input,mu
 volume flux,qf,m3/s,SCALAR,0.00e+00,1.00e+02,ELEMENT,computed,multiphase flow,,
 model time,t,s,SCALAR,0.00e+00,1.00e+15,MODEL,computed,multiphase flow,,
 brooks corey parameter,bcp,none,SCALAR,0.00e+00,8.00e+00,ELEMENT,input ,multiphase flow,,
-gravity force,Fg,kg/(m.s2),VECTOR,-1.00e+15,1.00e+15,ELEMENT,calculated,multiphase fow,,
+gravity force,Fg,kg/(m.s2),VECTOR,-1.00e+15,1.00e+15,ELEMENT,calculated,multiphase flow,,
 dip vector,dip,none,VECTOR,-1.00e+00,1.00e+00,ELEMENT,computed,numeric modelling,,
 sector pore volume,sPV,m3,SCALAR,1.00e-08,1.00e+06,SECTOR_INTEGRATION_POINT,computed,numeric modelling,,
 facet normal permeability,kfn,m2,SCALAR,1.00e-21,1.00e-07,FACET_INTEGRATION_POINT,computed,numeric modelling,,
