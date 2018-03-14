@@ -66,7 +66,7 @@ FiniteVolumeTransportBasics_Test::run()
 #endif
 
   
-#if 1
+#if 0
   {
     ANSYS_Model2D model( "2DCSP", "2DCSP",  "CSMP-brine-CO2-phase-variables.txt", true, true, true, true );
     test_placements(model);
@@ -526,7 +526,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
             k *= 1.0 / fluid_viscosity;
             e.Store(vars.key_k, k);
           }
-        }
+        } 
 
         SteadyStateDiffusor<3U,Region> steady_state_pressure( model,
                                                              "conductivity", "fluid pressure",
