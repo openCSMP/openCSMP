@@ -54,8 +54,8 @@ class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///
                       public BrooksCoreySaturationFunctions<dim,FlowFunctions>,  ///< placeholder for saturation function model
                       public Fluid<dim,FlowFunctions> {                          ///< placeholder for fluids module / EOS interface
   public:
-    FlowFunctions() = delete;
-    ~FlowFunctions() = delete;
+    
+    FlowFunctions(const PropertyDatabase<dim>& db);
     
     /// current water saturation initialised inside of the model
     template<class TARGET_PLACEMENT>
@@ -64,6 +64,10 @@ class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
     template<class TARGET_PLACEMENT>
     double64 Mobility( TARGET_PLACEMENT&, size_t phase ) const;
+    
+    /// lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw)
+    template<class TARGET_PLACEMENT>
+    double64 Mobility( TARGET_PLACEMENT&, size_t phase, double64 ) const;     
 
     /// d lambda_i / dsw
     template<class TARGET_PLACEMENT>
@@ -72,6 +76,10 @@ class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///
     /// lambda_t: sum of phase mobilities
     template<class TARGET_PLACEMENT>
     double64 TotalMobility( TARGET_PLACEMENT& ) const;
+    
+    /// lambda_t: sum of phase mobilities (using prescribed sw)
+    template<class TARGET_PLACEMENT>
+    double64 TotalMobility( TARGET_PLACEMENT&, double64 ) const;     
     
     /// lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G
     template<class TARGET_PLACEMENT>
@@ -84,6 +92,14 @@ class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///
      /// fractional flow; 0=water, 1=non-wetting phase
     template<class TARGET_PLACEMENT>
     double64 f( TARGET_PLACEMENT&, size_t phase ) const;
+    
+     /// fractional flow; 0=water, 1=non-wetting phase  (using prescribed sw)
+    template<class TARGET_PLACEMENT>
+    double64 f( TARGET_PLACEMENT&, size_t phase, double64 ) const;     
+    
+    /// Permeability
+    template<class TARGET_PLACEMENT>
+    double64 Permeability( TARGET_PLACEMENT& ) const;    
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
     template<class TARGET_PLACEMENT>

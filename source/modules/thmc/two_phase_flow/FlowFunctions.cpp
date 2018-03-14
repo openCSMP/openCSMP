@@ -2,10 +2,18 @@
 #include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
 #include "FiniteElementPlacement.h"
+#include "FiniteVolumePlacement.h"
 
 using namespace std;
 
 namespace csmp {
+
+template<size_t dim>
+FlowFunctions<dim>::FlowFunctions( const PropertyDatabase<dim>& db)
+    : variables::Variables_TwoPhaseFlow(db) 
+{
+}
+
 
 /**
     Mobility of phase i, kri(sw) / mu_i.
@@ -22,10 +30,41 @@ double64 FlowFunctions<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase ) const
     return this->krn(p) / this->Viscosity( p, 1U );
  }
 
+template double64 FlowFunctions<1U>::Mobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<2U>::Mobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<1U>::Mobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<2U>::Mobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<1U>::Mobility( FiniteVolumePlacement<1U,NODE>&, size_t ) const;
+template double64 FlowFunctions<2U>::Mobility( FiniteVolumePlacement<2U,NODE>&, size_t ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteVolumePlacement<3U,NODE>&, size_t ) const;
+
 template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctions<3U>::Mobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+
+/**
+    Mobility of phase i, kri(sw) / mu_i.
+    Using prescribed sw value, instead of intepolated value.
+*/
+template<size_t dim>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase, double64 sw ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    // salinity=0
+    if ( phase == 0U )
+      return this->krw(p,sw) / this->Viscosity( p, 0U );
+   
+    return this->krn(p,sw) / this->Viscosity( p, 1U );
+ }
+
+template double64 FlowFunctions<1U>::Mobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<2U>::Mobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::Mobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
 
 
 
@@ -48,7 +87,7 @@ double64 FlowFunctions<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size_t pha
     return numeric_limits<double64>::quiet_NaN();
  }
  
-template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,NODE>&, size_t, bool ) const;
+//template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,NODE>&, size_t, bool ) const;
 template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
 template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, bool ) const;
 template double64 FlowFunctions<3U>::MobilityDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
@@ -68,10 +107,36 @@ double64 FlowFunctions<dim>::TotalMobility( TARGET_PLACEMENT& p ) const
          + this->krw(p) / this->Viscosity( p, 0U );
  }
 
+template double64 FlowFunctions<1U>::TotalMobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::TotalMobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<1U>::TotalMobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::TotalMobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::TotalMobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctions<2U>::TotalMobility( FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctions<3U>::TotalMobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctions<3U>::TotalMobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+
+
+
+/**
+    Sum of mobilities (not multiplied with permeability).
+    Using prescribed sw value, instead of intepolated value.
+*/
+template<size_t dim>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::TotalMobility( TARGET_PLACEMENT& p, double64 sw ) const
+ {
+    return this->krn(p,sw) / this->Viscosity( p, 1U )
+         + this->krw(p,sw) / this->Viscosity( p, 0U );
+ }
+ 
+template double64 FlowFunctions<1U>::TotalMobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<2U>::TotalMobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctions<3U>::TotalMobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -85,9 +150,13 @@ template<size_t dim>
 template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::MobilityProduct( TARGET_PLACEMENT& p ) const
  {
-    assert( key_k.type == SCALAR );
+    //assert( key_k.type == SCALAR );
     return Mobility(p,0U) * Mobility(p,1U) / TotalMobility(p);
  }
+
+template double64 FlowFunctions<1U>::MobilityProduct( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::MobilityProduct( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::MobilityProduct( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 template double64 FlowFunctions<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
@@ -130,6 +199,26 @@ template double64 FlowFunctions<3U>::MobilityProductDerivative( FiniteElementPla
 
 
 /**
+    permeability
+*/
+template<size_t dim>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::Permeability( TARGET_PLACEMENT& p ) const
+{
+    assert( this->key_k.type == TENSOR);
+    TensorVariable<dim> K;
+    p.Interpolate(this->key_k, K);
+    double64 k = K.Trace()/static_cast<double64>(dim); 
+    return k;
+}
+
+template double64 FlowFunctions<1U>::Permeability( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctions<2U>::Permeability( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctions<3U>::Permeability( FiniteElementPlacement<3U,ELEMENT>& ) const;
+
+
+
+/**
  
 Computes the fractional flow of the wetting (phase=1) and non-wetting
 (phase=2) phases using the relative k's. and viscosities. Note that 
@@ -144,12 +233,37 @@ double64 FlowFunctions<dim>::f( TARGET_PLACEMENT& p, size_t phase ) const
     return Mobility( p, phase ) / TotalMobility(p);
  }
 
+template double64 FlowFunctions<1U>::f( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<2U>::f( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctions<3U>::f( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
 template double64 FlowFunctions<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctions<3U>::f( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctions<3U>::f( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctions<3U>::f( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
  
+
+/**
+ 
+Computes the fractional flow of the wetting (phase=1) and non-wetting
+(phase=2) phases using prescribed sw value, instead of intepolated value.
+
+*/
+template<size_t dim>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctions<dim>::f( TARGET_PLACEMENT& p, size_t phase, double64 sw ) const
+ {
+    assert( phase == 0U or phase == 1U );
+   
+    return Mobility( p, phase, sw) / TotalMobility(p, sw);
+ }
+
+template double64 FlowFunctions<1U>::f( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<2U>::f( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctions<3U>::f( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+
+
 
 /**
     Derivative of fractional flow function (advection multipliers).
@@ -294,6 +408,10 @@ double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
    return k_g_drho;
 }
 
+template double64 FlowFunctions<1U>::GravityTerm( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::GravityTerm( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityTerm( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
 template double64 FlowFunctions<3U>::GravityTerm( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::GravityTerm( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctions<3U>::GravityTerm( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
@@ -312,6 +430,10 @@ double64 FlowFunctions<dim>::GravityMultiplier_G( TARGET_PLACEMENT& p ) const
 {
    return GravityTerm(p) * MobilityProduct(p);
 }
+
+template double64 FlowFunctions<1U>::GravityMultiplier_G( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::GravityMultiplier_G( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::GravityMultiplier_G( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 template double64 FlowFunctions<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
@@ -370,6 +492,10 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p )
    return p.Interpolate(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
 } 
 
+template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<2U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
 template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctions<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
@@ -418,15 +544,15 @@ double64 FlowFunctions<dim>::dfds_Numerical( TARGET_PLACEMENT& p, size_t phase, 
 
   */
 
-  const double64 seff(this->EffectiveSaturation(p));
+  //const double64 seff(this->EffectiveSaturation(p));
   // second version: mixed analytical and numerical differentiation
-  const double64 lw  = this->krw(seff) / this->Viscosity( p, 0U );
-  const double64 ln  = this->krn(seff) / this->Viscosity( p, 1U );
+  const double64 lw  = this->krw(p) / this->Viscosity( p, 0U );
+  const double64 ln  = this->krn(p) / this->Viscosity( p, 1U );
   const double64 lt  = lw + ln;
   const double64 lt2 = lt*lt;
 
-  const double64 dlwds = this->dkrwds_Numerical( seff,h ) / this->Viscosity( p, 0U );
-  const double64 dlnds = this->dkrnds_Numerical( seff,h ) / this->Viscosity( p, 1U );
+  const double64 dlwds = this->dkrwds_Numerical( p,h ) / this->Viscosity( p, 0U );
+  const double64 dlnds = this->dkrnds_Numerical( p,h ) / this->Viscosity( p, 1U );
 
   return ( dlwds * ln - dlnds * lw ) / lt2;
   //*/
@@ -459,16 +585,16 @@ double64 FlowFunctions<dim>::dGds_Numerical( TARGET_PLACEMENT& p, double64 h ) c
   */
 
   // second version: mixed analytical and numerical differentiation
-  const double64 seff(this->EffectiveSaturation(p));
-  const double64 lw  = this->krw(seff) / this->Viscosity( p, 0U );
-  const double64 ln  = this->krn(seff) / this->Viscosity( p, 1U );
+  //const double64 seff(this->EffectiveSaturation(p));
+  const double64 lw  = this->krw(p) / this->Viscosity( p, 0U );
+  const double64 ln  = this->krn(p) / this->Viscosity( p, 1U );
   const double64 lt  = lw + ln;
   const double64 lt2 = lt*lt;
   const double64 ln2 = ln*ln;
   const double64 lw2 = lw*lw;
 
-  const double64 dlwds = this->dkrwds_Numerical( h ) / this->Viscosity( p, 0U );
-  const double64 dlnds = this->dkrnds_Numerical( h ) / this->Viscosity( p, 1U );
+  const double64 dlwds = this->dkrwds_Numerical(p, h ) / this->Viscosity( p, 0U );
+  const double64 dlnds = this->dkrnds_Numerical(p, h ) / this->Viscosity( p, 1U );
 
   return ( dlwds*ln2 + dlnds*lw2 )/lt2;
 
@@ -487,8 +613,8 @@ template<size_t dim>
 template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::dlwds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
  {
-    const double64 seff(this->EffectiveSaturation(p));
-    return this->dkrwds_Numerical( seff, h ) / this->Viscosity( p, 0U );
+    //const double64 seff(this->EffectiveSaturation(p));
+    return this->dkrwds_Numerical( p, h ) / this->Viscosity( p, 0U );
  }
 
 template double64 FlowFunctions<3U>::dlwds_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
@@ -503,8 +629,8 @@ template<size_t dim>
 template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::dlnds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
  {
-    const double64 seff(this->EffectiveSaturation(p));
-    return this->dkrnds_Numerical( seff, h ) / this->Viscosity( p, 1U );
+    //const double64 seff(this->EffectiveSaturation(p));
+    return this->dkrnds_Numerical( p, h ) / this->Viscosity( p, 1U );
 
  }
 

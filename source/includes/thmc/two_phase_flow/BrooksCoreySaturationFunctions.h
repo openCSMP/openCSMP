@@ -17,12 +17,15 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class BrooksCoreySaturationFunctions {
   public:
-    BrooksCoreySaturationFunctions() = delete;
-     ~BrooksCoreySaturationFunctions() = delete;
+    BrooksCoreySaturationFunctions();
     
     /// always of the wetting phase by convention
     template<class TARGET_PLACEMENT>
     double64  EffectiveSaturation( TARGET_PLACEMENT& ) const;
+    
+    /// always of the wetting phase by convention (using prescribed sw)
+    template<class TARGET_PLACEMENT>
+    double64  EffectiveSaturation( TARGET_PLACEMENT&, double64 ) const;    
 
     template<class TARGET_PLACEMENT>
     double64  SeffToSw( TARGET_PLACEMENT&, double64 seff ) const;
@@ -30,9 +33,16 @@ class BrooksCoreySaturationFunctions {
     /// relative permeabilities as a function of water saturation - parameters come from subclass FlowFunctions
     template<class TARGET_PLACEMENT>
     double64 krw( TARGET_PLACEMENT& ) const;
-
+    
     template<class TARGET_PLACEMENT>
     double64 krn( TARGET_PLACEMENT& ) const;
+    
+    /// relative permeabilities as a function of water saturation - parameters come from subclass FlowFunctions (using prescribed sw)
+    template<class TARGET_PLACEMENT>
+    double64 krw( TARGET_PLACEMENT&, double64 ) const; 
+        
+    template<class TARGET_PLACEMENT>
+    double64 krn( TARGET_PLACEMENT&, double64 ) const;    
 
     /// derivatives of relative permeabilities
     template<class TARGET_PLACEMENT>
