@@ -13,6 +13,7 @@
 #include "Region.h"
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"
+#include "Variables_TracerTransfer.h"
 
 using namespace std;
 
@@ -36,18 +37,7 @@ namespace csmp {
   {
     const bool initialize_flux(true);
     
-    const csmp::INDEX<SCALAR,ELEMENT> phi_key(model.Database().StorageKey("porosity"));
-    const csmp::INDEX<SCALAR,ELEMENT>  thi_key(model.Database().StorageKey("thickness"));
-    const csmp::INDEX<VECTOR,ELEMENT>  vt_key(model.Database().StorageKey("velocity"));
-    const csmp::INDEX<SCALAR,ELEMENT>  k_key(model.Database().StorageKey("permeability"));
-    const csmp::INDEX<SCALAR,MODEL>  mu_key(model.Database().StorageKey("fluid viscosity"));
-    
-    const csmp::INDEX<SCALAR,NODE>  pf_key(model.Database().StorageKey("fluid pressure"));
-    
-    const csmp::INDEX<SCALAR,NODE>  pv_key(model.Database().StorageKey("FV pore volume"));
-    // const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
-    const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>  ff_key(model.Database().StorageKey("facet flux"));
-    const csmp::INDEX<SCALAR,NODE>  fb_key(model.Database().StorageKey("flux balance"));
+    variables::Variables_TracerTransfer vars(model.Database());
     
     Point<dim> vD;
     
@@ -65,31 +55,32 @@ namespace csmp {
       
       // element-based total velocity
       if ( initialize_flux ) {
-        const auto k = bctr.Interpolate(k_key);
-        const auto mu = model.Read(mu_key); // XXX Should be able to interpolate
-        const auto grad_p = bctr.Gradient(pf_key);
-        vD = -k/mu * grad_p;
+        TensorVariable<dim> k;
+        bctr.Interpolate(vars.key_k, k);
+        const auto mu = model.Read(vars.key_MU); // XXX Should be able to interpolate
+        const auto grad_p = bctr.Gradient(vars.key_PF);
+        vD = -1.0/mu * (k * grad_p);
       }
       
       // 1. computing sector pore volumes
       // --------------------------------
       // (scaled by the cell thickness attribute=1 for volumetric elements)
-      const auto phi = bctr.Read( phi_key ) * bctr.Read( thi_key );
+      const auto phi = bctr.Read( vars.key_PHI ) * bctr.Read( vars.key_THI );
       
       for (auto n : e.AllNodes()) {
         // sector pore volume
         const double64 sector_volume = n.SectorVolume();
         // (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
         // sector volume is added to  pore volume of FV's containing this sector
-        double64 pore_volume  = n.Read( pv_key );
+        double64 pore_volume  = n.Read( vars.key_FVPV );
         // sector volume from FV traits
         pore_volume   += phi * sector_volume;
-        n.Store( pv_key, makeScalar(PLAIN,pore_volume) );
+        n.Store( vars.key_FVPV, makeScalar(PLAIN,pore_volume) );
       }
       if ( initialize_flux ) {
         for (auto fip : e.AllFacetIntegrationPoints()) {
           const double64  facet_flux = fip.ProjectOntoDirectedArea(vD);
-          fip.Store( ff_key, makeScalar( PLAIN, facet_flux ) );
+          fip.Store( vars.key_ff, makeScalar( PLAIN, facet_flux ) );
         }
       }
     }
@@ -134,14 +125,14 @@ namespace csmp {
             for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-              const double64 facet_flux = sign * eptr->Read( facet, 0U, ff_key );
+              const double64 facet_flux = sign * eptr->Read( facet, 0U, vars.key_ff );
               flux_balance += facet_flux;
             }
           }
-          (*nit)->Store( fb_key, makeScalar((*nit)->Status(fb_key),flux_balance) );
+          (*nit)->Store( vars.key_FB, makeScalar((*nit)->Status(vars.key_FB),flux_balance) );
           
-          bmin = std::min( bmin, (*nit)->Read( fb_key ) );
-          bmax = std::max( bmax, (*nit)->Read( fb_key ) );
+          bmin = std::min( bmin, flux_balance );
+          bmax = std::max( bmax, flux_balance );
         }
       }
       cout <<"\ninitializeFiniteVolumeProperties: initial flux balance: "<< std::max(fabs(bmin), fabs(bmax)) << endl;

@@ -522,9 +522,9 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
           for (auto it = gref.ElementsBegin(); it != gref.ElementsEnd(); ++it) {
             auto e = (*it)->AtBarycenter();
             TensorVariable<3u> k;
-            e.Read(conductivity, k);
+            e.Read(vars.key_k, k);
             k *= 1.0 / fluid_viscosity;
-            e.Store(vars.key_k, k);
+            e.Store(conductivity, k);
           }
         } 
 
