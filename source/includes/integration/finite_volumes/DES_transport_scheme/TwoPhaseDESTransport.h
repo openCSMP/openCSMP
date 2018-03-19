@@ -29,7 +29,6 @@ class TwoPhaseDESTransport : public variables::Variables_TwoPhaseFlow {
     void initializeVariablsAndKeys(Model<dim>& m);
     void initializeFiniteVolumeProperties(Node<dim>* node);
     void ComputeRateofChange( Event<dim>* event );
-    void ComputeRateofChange_upstream( Event<dim>* event );
     bool Schedule(Event<dim>* nd, double64 t_end, double64 cfl_multiplier);
     void Update_DES(Event<dim>* nd, double64 t_clock);
     void Update_TDS(Event<dim>* nd, double64 delta_t);
@@ -44,7 +43,7 @@ class TwoPhaseDESTransport : public variables::Variables_TwoPhaseFlow {
     size_t	update_count_;
     double64 T_RateOfChange_, T_Schedule_, T_SortQueue_, T_Update_, T_Synchronize_, T_RemoveFromQueue_, T_AdvectVariable_; //time recordings
     
-    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_NQV;
+    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize;
         
     // key_time - an ArrayVariable key for DES releated variables:
     // [0] current time stamp

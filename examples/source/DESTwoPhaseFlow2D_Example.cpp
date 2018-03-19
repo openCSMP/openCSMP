@@ -135,7 +135,7 @@ void DESTwoPhaseFlow2D_Example::Run()
 
     vtu.OutputDataToVTU( "volume_flux",    "nodal volume flux", "Model", 0 );
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", 0 );
-    vtu.OutputDataToVTU( "saturation oil", "saturation nonwetting phase",    "Model", 0 );
+    vtu.OutputDataToVTU( "saturation oil", "saturation carbonic phase",    "Model", 0 );
     vtu.OutputDataToVTU( "fluid_velocity", "total velocity",    "Model", 0 );
 
     // -------------------------------------------------------------
@@ -153,9 +153,9 @@ void DESTwoPhaseFlow2D_Example::Run()
 
     // define some constant variables
     const double64    day(86400.0);
-    const double64    max_time (30.0*day);     // run for 30 days
-    double64          time_increment(0.3*day);      // timestep 0.3 day
-    const long        save_frequency(2);       // write results to file every 2 days
+    const double64    max_time (60.0*day);     // run for 30 days
+    double64          time_increment(0.6*day);      // timestep 0.3 day
+    const long        save_frequency(3);       // write results to file every 3 days
     size_t	      time, save_counter(1);    
     
     // -----------------------
@@ -183,7 +183,7 @@ void DESTwoPhaseFlow2D_Example::Run()
          // echo variables to screen
          printRangeOfVariable( model, "fluid pressure" );
          printRangeOfVariable( model, "total velocity" );
-         printRangeOfVariable( model, "saturation nonwetting phase" );
+         printRangeOfVariable( model, "saturation carbonic phase" );
 
          // output variables
          if ( save_counter == save_frequency ) {
@@ -191,13 +191,13 @@ void DESTwoPhaseFlow2D_Example::Run()
               // to VTU files
               if(DES) {
                   vtu.OutputDataToVTU( "DES_fluid_pressure", "fluid pressure",    "Model", time );
-                  vtu.OutputDataToVTU( "DES_saturation_oil", "saturation nonwetting phase",    "Model", time );
+                  vtu.OutputDataToVTU( "DES_saturation_oil", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "DES_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "DES_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "DES_Update_count", "update count", "Model",  time );
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
-                  vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation nonwetting phase",    "Model", time );
+                  vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "TDS_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );           
@@ -227,9 +227,8 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
     static const Region<2U>& mref = mdl.Region("Model"); 
     // keys to properties
     static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
-    static Index  k_key(mdl.Database().StorageKey("permeability"));
-    static Index  sw_key(mdl.Database().StorageKey("saturation wetting phase"));
-    static Index  snw_key(mdl.Database().StorageKey("saturation nonwetting phase"));    
+    static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
+    static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));    
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
