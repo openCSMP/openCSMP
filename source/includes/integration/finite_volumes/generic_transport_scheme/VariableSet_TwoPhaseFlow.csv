@@ -22,7 +22,7 @@ interfacial tension,IFT,N/m,SCALAR,0.00e+00,5.00e-02,MODEL,computed,fluid proper
 viscosity carbonic phase,muCO2,Pa.s,SCALAR,1.00e-05,1.00e-01,NODE,calculated,fluid properties,,
 viscosity aqueous phase,muH2O,Pa.s,SCALAR,1.00e-05,1.60e-03,NODE,calculated,fluid properties,,
 electric conductivity,eC,S/m,SCALAR,0.00e+00,1.00e+08,ELEMENT,computed,geophysics,,
-thermal conductivity aqueous phase ,KH2O,W/(m.K),SCALAR,5.00e-01,1.00e+01,MODEL,calculated,heat flow,,
+thermal conductivity aqueous phase,KH2O,W/(m.K),SCALAR,5.00e-01,1.00e+01,MODEL,calculated,heat flow,,
 heat source,Qh,W/m3,SCALAR,0.00e+00,1.00e-05,ELEMENT,calculated,heat flow,,
 thermal conductivity carbonic phase,KCO2,W/(m.K),SCALAR,1.00e-02,1.00e+01,MODEL,calculated,heat transfer,KCO2_key,
 thermal conductivity,Kr,W/(m.K),SCALAR,1.00e+00,7,ELEMENT,input,heat transfer,,
