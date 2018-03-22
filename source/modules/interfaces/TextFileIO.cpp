@@ -2813,10 +2813,10 @@ bool readRegionPropertyValues( Model<dim>& model,
                 csmp_error.notice(FATAL_ERROR,"readRegionPropertyValues",
                         "Cannot eigendecompose the tensor for property", prop_name.c_str());
               }
-              double64  val = eigVals(dim-1);
-              model.Database().CheckRange( prop_name.c_str(), val );
-              val = eigVals(0);
-              model.Database().CheckRange( prop_name.c_str(), val );
+              for ( size_t i = 0; i < dim; ++i ) {
+                double64  val = eigVals(i);
+                model.Database().CheckRange( prop_name.c_str(), val );
+              }
               if      ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
                   model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, INTERIOR );
               else if ( strcmp( "BOUNDARY", assignment_spec.c_str() ) == 0 )
@@ -3004,10 +3004,10 @@ bool readDefaultPropertyValues( Model<dim>& model,
                 error_handler.notice(FATAL_ERROR,"readDefaultPropertyValues",
                         "Cannot eigendecompose the tensor for property", prop_name.c_str());
               }
-              double64  val = eigVals(dim-1);
-              model.Database().CheckRange( prop_name.c_str(), val );
-              val = eigVals(0);
-              model.Database().CheckRange( prop_name.c_str(), val );
+              for ( size_t i = 0; i < dim; ++i ) {
+                double64  val = eigVals(i);
+                model.Database().CheckRange( prop_name.c_str(), val );
+              }
               model.InputPropertyValue( prop_name.c_str(), ts );
               if( verbose )
               {
