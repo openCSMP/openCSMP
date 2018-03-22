@@ -484,10 +484,17 @@ bool  TensorVariable<1U>::Eigen( VectorVariable<1U>& vvEigenvalues,
                                  bool bNormalize ) const
  {
     vvEigenvalues  = data;
-    tvEigenvectors = data;
-    if ( bNormalize ) tvEigenvectors = 1.;
+    tvEigenvectors = bNormalize ? 1. : data;
     return true;
  }
+
+bool TensorVariable<1U>::EigenNonSymmetric( VectorVariable<1U>& eigenVals,
+                                            TensorVariable<1U>& eigenVecs ) const
+{
+    eigenVals = data;
+    eigenVecs = 1.;
+    return true;
+}
 
 } // end namespace csmp
 
