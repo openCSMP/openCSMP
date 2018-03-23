@@ -87,6 +87,7 @@ class TensorVariable<2U> {
                             
     bool 				     EigenValues( VectorVariable<2U>& vvEigenvalues) const;
     bool             EigenValues( std::vector<double64>& vecEigenvalues ) const;
+    bool             EigenNonSymmetric( VectorVariable<2U>& eigenVals, TensorVariable<2U>& eigenVecs ) const;
  	  void				     DiagonalValues( double64 f_00, double64 f_11);
  	  void				     DiagonalValues( const std::vector<double64>& vecDiags );
  	  void				     DiagonalValues( const VectorVariable<2U>& vecDiags );

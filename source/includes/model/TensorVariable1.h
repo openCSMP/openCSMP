@@ -77,6 +77,7 @@ class TensorVariable<1U> {
     TensorVariable   Transposed()  const;
     bool 		  	     EigenValues( VectorVariable<1U>& vecEigenvalues ) const;
     bool             Eigen( VectorVariable<1U>& vvEigenvalues, TensorVariable<1U>& tvEigenvectors, bool bNormalize ) const;
+    bool             EigenNonSymmetric( VectorVariable<1U>& eigenVals, TensorVariable<1U>& eigenVecs ) const;
     void             AssignToRow( size_t, VectorVariable<1U>& vc );
     void             AssignToColumn( size_t, VectorVariable<1U>& vc );
 
