@@ -26,6 +26,7 @@
 #include <vector>
 #include <limits>
 #include <deque>
+#include <iostream>
 
 namespace ajb {
 
@@ -104,6 +105,9 @@ namespace detail {
             n->mark_ = false;
             --degree_;
         }
+        
+        V getV() {return value_;}
+        K getK() {return key_;}
     };
 }
 
@@ -132,20 +136,6 @@ class FibonacciHeap
     size_t max_degree_;
     node_ptr consolidation_[std::numeric_limits<size_t>::digits+1];
 
-    node_ptr insert_node(node_ptr new_node)
-    {
-        if (!root_) {
-            root_ = new_node;
-        }
-        else {
-            root_->link(new_node);
-            if (new_node->key_ < root_->key_)
-            {
-                root_ = new_node;
-            }
-        }
-        return new_node;
-    }
 
     void promote_children_of_root()
     {
@@ -225,7 +215,7 @@ class FibonacciHeap
             }
             consolidation_[d] = current;
         } while (curr != root_);
-
+         
         {
             node_ptr root = root_;
             root_ = 0;
@@ -247,6 +237,22 @@ class FibonacciHeap
 
         max_degree_ = newMaxDegree;
     }
+    
+    node_ptr insert_node(node_ptr new_node)
+    {
+        if (!root_) {
+            root_ = new_node;
+        }
+        else {
+            root_->link(new_node);
+            if (new_node->key_ < root_->key_)
+            {
+                root_ = new_node;
+            }
+        }
+        return new_node;
+    }    
+    
 
 public:
     typedef node_ptr finger;
@@ -295,12 +301,19 @@ public:
         return count_ == 0;
     }
 
+
     /// Insert an element in the heap (move semantics)
     finger insert(K key, V value)
     {
         ++count_;
         return insert_node(new detail::FibonacciHeap_Node<K,V>(key, value));
     }
+    
+    finger insert(node_ptr new_node)
+    {
+        ++count_;
+        return insert_node(new_node);
+    }    
 
     /// Get the minimum element in the heap
     finger minimum()
@@ -350,6 +363,7 @@ public:
         root_ = node;
         remove_current_root();
     }
+
 };
 
 }

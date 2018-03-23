@@ -15,37 +15,13 @@ DESTransport<dim>::DESTransport( Model<dim>& m, const char* target_region )
   : variables::Variables_TracerTransfer(m.Database()),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
-    T_RateOfChange_(0.), T_Schedule_(0.), T_SortQueue_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromQueue_(0.), T_AdvectVariable_(0.)
+    T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
+    first_step_(true)
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
-    //create events for all nodes and add them to PEPStack and EntireQueue
-    int index = 0;
-    const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
-    for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
-    { 
-        (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index        
-        (*nit)->Store( key_update, makeScalar( (*nit)->Status( key_update), 0 ) ); //update count
-        (*nit)->Store( key_rate, makeScalar( (*nit)->Status( key_rate), 0 ) ); //changerate count
-        (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
-        (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
-        
-        ArrayVariable arrayVariable( 6, 0., PLAIN );         
-        (*nit)->Store( key_time, arrayVariable );  
-                   
-        initializeFiniteVolumeProperties(*nit);
-        Event<dim>* event = new Event<dim>(*nit);
-        ComputeFluxBalanceAndCFL(event); //compute flux balance and CFL number
-        event->inPEPStack(true);
-        event->valid(false);
-        PEPStack.push_back(event); //add event to PEPStack
-        EntireQueue.push_back(event); //add event to EntireQueue
-        index++;
-    }
-         
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
-    cout<<"events created for all nodes and added to PEPStack - size = "<<PEPStack.size()<<endl;
     cout<<"DESTransport constructed"<<endl;
 }
 
@@ -120,19 +96,9 @@ void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
+    assert( nd->Status(  this->key_C ) != DIRICH);
 
     double64 flux_balance(0.), outflow(0.);
-
-    //ignore DIRICH node
-    if(nd->Status(  this->key_C ) == DIRICH) {    
-        nd->Store(  this->key_FB, makeScalar( nd->Status(  this->key_FB ), 0. ) );//flux balance
-        nd->Store(  this->key_NC, makeScalar( nd->Status(  this->key_NC ), nd->Read(  this->key_C ) ) ); //new concentration=concentration
-        ArrayVariable array;
-        nd->Read(key_time, array);
-        array.Component(2, numeric_limits<double64>::max()); //CFL time increment
-        nd->Store(key_time, array);
-        return;
-    };
     
     VectorVariable<dim> vD;
     for (auto fip : nd->AllFacetIntegrationPoints()) {
@@ -164,11 +130,7 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
-
-    //ignore DIRICH node
-    if(nd->Status(  this->key_C ) == DIRICH) {   
-        return;
-    };
+    assert( nd->Status(  this->key_C ) != DIRICH);
 
     rate_count_++;//recording
     nd->Store(  key_rate, makeScalar( nd->Status( key_rate), nd->Read( key_rate) + 1 ) );
@@ -191,48 +153,48 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 
 
 
+
 //schedule an event associated with a node/FV
 template<size_t dim>
 bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl_multiplier)
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
+    assert( nd->Status(  this->key_C ) != DIRICH);
     ArrayVariable array;
     nd->Read(key_time, array);
-    //ignore DIRICH node
-    if(nd->Status(  this->key_C ) == DIRICH) {
+
+    nd->Store( key_schedule, makeScalar( nd->Status( key_schedule), nd->Read( key_schedule) + 1 ) );
+    event->valid(true);
+    //compute target change
+    double64 CFL = array[2];//CFL number
+    double64 PV = nd->Read( this->key_FVPV);//Pore volume
+    double64 ChangeRate = nd->Read( this->key_NC);//rate of change
+    double64 C0 = nd->Read(  this->key_C);//concentration
+    double64 flux_balance = nd->Read(  this->key_FB);//flux balance
+
+    double64 dC_CFL = -CFL*cfl_multiplier/PV*(ChangeRate-C0*flux_balance);//targe change
+
+    if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
+        array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
+        array.Component(3, numeric_limits<double64>::max());//target time increment          
+    } else {
+        array.Component(5, dC_CFL);//target change of solution
+        array.Component(3, cfl_multiplier*CFL);//target time increment          
+    };
+
+    double64 t_current = array[0];//current time stamp
+    double64 dt_target = array[3];//target time increment
+    if ((dt_target + t_current) >= t_end) {
+        event->t_schedule(t_end);
+        array.Component(1, t_end);//schedule time stamp
+        nd->Store(key_time, array);
         return false;
     } else {
-        nd->Store( key_schedule, makeScalar( nd->Status( key_schedule), nd->Read( key_schedule) + 1 ) );
-        event->valid(true);
-        //compute target change
-        double64 CFL = array[2];//CFL number
-        double64 PV = nd->Read( this->key_FVPV);//Pore volume
-        double64 ChangeRate = nd->Read( this->key_NC);//rate of change
-        double64 C0 = nd->Read(  this->key_C);//concentration
-        double64 flux_balance = nd->Read(  this->key_FB);//flux balance
-
-        double64 dC_CFL = -CFL*cfl_multiplier/PV*(ChangeRate-C0*flux_balance);//targe change
-
-        if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
-            array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
-            array.Component(3, numeric_limits<double64>::max());//target time increment          
-        } else {
-            array.Component(5, dC_CFL);//target change of solution
-            array.Component(3, cfl_multiplier*CFL);//target time increment          
-        };
-
-        double64 t_current = array[0];//current time stamp
-        double64 dt_target = array[3];//target time increment
-        if ((dt_target + t_current) >= t_end) {
-            nd->Store(key_time, array);
-            return false;
-        } else {
-            event->t_schedule(t_current + dt_target);
-            array.Component(1, t_current + dt_target);//schedule time stamp
-            nd->Store(key_time,array);
-            return true;
-        };
+        event->t_schedule(t_current + dt_target);
+        array.Component(1, t_current + dt_target);//schedule time stamp
+        nd->Store(key_time,array);
+        return true;
     };
 }
 
@@ -244,43 +206,42 @@ void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     update_count_++;//recording
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
+    assert( nd->Status(  this->key_C ) != DIRICH);
+    const VARIABLE_FLAG status(nd->Status( this->key_C ));
     ArrayVariable array;
     nd->Read(key_time, array);
-    const VARIABLE_FLAG status(nd->Status( this->key_C ));
-    if ( status != DIRICH )
-    {    
-        // 1. starting with the sum of facet flux-concentration products stored in C1
-        double64 ChangeRate = nd->Read( this->key_NC);   
-        double64 solution = nd->Read( this->key_C);//concentration
-        // 2. correcting this sum for div vD using 'flux balance'   
-        ChangeRate -= solution * nd->Read( this->key_FB ); 
-        // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-        double64 t_current = array[0]; //current time stamp
-        double64 new_solution = solution - ((t_clock - t_current)/nd->Read( this->key_FVPV)) * ChangeRate;
-        // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
-        // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-        const double64 source(nd->Read(this->key_NQV));
-        // new concentration
-        new_solution += source * (t_clock - t_current);
 
-        double64 C_last = nd->Read(this->key_C);//last concentration
-        
-        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
-        else {
-            cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-            if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-            else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
-        }
-        
-        double64 C_current = nd->Read(this->key_C);//current concentration
-        double64 dC_cumulative = array[4];
-        array.Component(4, dC_cumulative + (C_current-C_last));//update cumulative change
-        
-        array.Component(0, t_clock); //current time stamp
-        nd->Store(key_time, array);
+    // 1. starting with the sum of facet flux-concentration products stored in C1
+    double64 ChangeRate = nd->Read( this->key_NC);   
+    double64 solution = nd->Read( this->key_C);//concentration
+    // 2. correcting this sum for div vD using 'flux balance'   
+    ChangeRate -= solution * nd->Read( this->key_FB ); 
+    // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
+    double64 t_current = array[0]; //current time stamp
+    double64 new_solution = solution - ((t_clock - t_current)/nd->Read( this->key_FVPV)) * ChangeRate;
+    // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
+    // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
+    const double64 source(nd->Read(this->key_NQV));
+    // new concentration
+    new_solution += source * (t_clock - t_current);
 
-        nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
+    double64 C_last = nd->Read(this->key_C);//last concentration
+        
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
+    else {
+        cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
+        if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
+        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
     }
+        
+    double64 C_current = nd->Read(this->key_C);//current concentration
+    double64 dC_cumulative = array[4];
+    array.Component(4, dC_cumulative + (C_current-C_last));//update cumulative change
+        
+    array.Component(0, t_clock); //current time stamp
+    nd->Store(key_time, array);
+
+    nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
 }
 
 
@@ -291,39 +252,42 @@ void DESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
     update_count_++;//recording
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );    
+    assert( nd->Status(  this->key_C ) != DIRICH);
     const VARIABLE_FLAG status(nd->Status( this->key_C ));
-    if ( status != DIRICH )
-    {    
-        // 1. starting with the sum of facet flux-concentration products stored in C1
-        double64 ChangeRate = nd->Read(this->key_NC);   
-        double64 solution = nd->Read(this->key_C);//concentration
-        // 2. correcting this sum for div vD using 'flux balance'   
-        ChangeRate -= solution * nd->Read(  this->key_FB ); 
-        // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-        double64 new_solution = solution - (delta_t/nd->Read( this->key_FVPV)) * ChangeRate;
-        // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
-        // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-        const double64 source(nd->Read( this->key_NQV));
-        // new concentration
-        new_solution += source * delta_t;
+    
+    // 1. starting with the sum of facet flux-concentration products stored in C1
+    double64 ChangeRate = nd->Read(this->key_NC);   
+    double64 solution = nd->Read(this->key_C);//concentration
+    // 2. correcting this sum for div vD using 'flux balance'   
+    ChangeRate -= solution * nd->Read(  this->key_FB ); 
+    // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
+    double64 new_solution = solution - (delta_t/nd->Read( this->key_FVPV)) * ChangeRate;
+    // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
+    // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
+    const double64 source(nd->Read( this->key_NQV));
+    // new concentration
+    new_solution += source * delta_t;
  
-        if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
-        else {
-            cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-            if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-            else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
-        }
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
+    else {
+        cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
+        if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
+        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
     }
+    
+    nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) ); 
 }
 
 
 
 //Synchronize neighbor nodes/FVs
 template<size_t dim>
-void DESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock)
+void DESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,double64& t_remove )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL ); 
+    assert( nd->Status(  this->key_C ) != DIRICH);
+    
     nd->Store( key_synchronize, makeScalar( nd->Status(key_synchronize), nd->Read(key_synchronize) + 1 ) );
     event->valid(false);
     ArrayVariable array;
@@ -332,18 +296,29 @@ void DESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock)
     nd->Store(key_time, array);
     for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
-        int index = neighbor_node->Read(key_EventIndex);
-        Event<dim>* neighbor_event = EntireQueue[index];  
-        assert( neighbor_event  != NULL ); 
-        if (neighbor_event->inPEPStack() == false) {
-            PEPStack.push_back(neighbor_event);
-            neighbor_event->inPEPStack(true);
-            Update_DES(neighbor_event,t_clock);
-            ArrayVariable neighbor_array;
-            neighbor_node->Read(key_time, neighbor_array); 
-            double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
-            double64 dC_target = neighbor_array[5];//target change of solution
-            if (fabs(dC_cumulative) >= fabs(dC_target)) Synchronize (neighbor_event, t_clock); 
+        if( neighbor_node->Status(  this->key_C ) != DIRICH){
+            int index = neighbor_node->Read(key_EventIndex);
+            Event<dim>* neighbor_event = FullList[index];  
+            assert( neighbor_event  != NULL ); 
+            if (neighbor_event->inPEPStack() == false) {
+                PEPList.push_back(neighbor_event);
+                neighbor_event->inPEPStack(true);
+                Update_DES(neighbor_event,t_clock);
+                ArrayVariable neighbor_array;
+                neighbor_node->Read(key_time, neighbor_array); 
+                double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
+                double64 dC_target = neighbor_array[5];//target change of solution
+                if (fabs(dC_cumulative) >= fabs(dC_target)) {
+                    clock_t t_begin = clock();
+                    if (neighbor_event->inQueue()){
+                        Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
+                        EventHeap.remove(neighbor_heap_node);
+                        neighbor_event->inQueue(false);
+                    }
+                    t_remove += clock() - t_begin; 
+                    Synchronize (neighbor_event, t_clock,t_remove); 
+                };
+            };
         };
     };
 }
@@ -354,6 +329,7 @@ void DESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock)
 template<size_t dim>
 void DESTransport<dim>::Synchronize_openmp(Event<dim>* event,double64 t_clock, size_t num_threads)
 {
+    /*
     std::vector<Event<dim>*> UpdateList, SynList;
     SynList.push_back(event);
     
@@ -405,6 +381,7 @@ void DESTransport<dim>::Synchronize_openmp(Event<dim>* event,double64 t_clock, s
             UpdateList.clear();
         }
     }
+    */
 }
 #endif
 
@@ -413,18 +390,47 @@ void DESTransport<dim>::Synchronize_openmp(Event<dim>* event,double64 t_clock, s
 template<size_t dim>
 void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl_multiplication_factor, double64 PEP_parameter )
 {
+    if(first_step_){
+        //create events for all nodes and add them to PEPList
+        size_t dirich_count = 0;
+        const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+        for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+        { 
+            (*nit)->Store( key_update, makeScalar( (*nit)->Status( key_update), 0 ) ); //update count
+            (*nit)->Store( key_rate, makeScalar( (*nit)->Status( key_rate), 0 ) ); //changerate count
+            (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
+            (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
+        
+            ArrayVariable arrayVariable( 6, 0., PLAIN );         
+            (*nit)->Store( key_time, arrayVariable );  
+                   
+            initializeFiniteVolumeProperties(*nit);
+            if((*nit)->Status(  this->key_C ) != DIRICH) {
+                Event<dim>* event = new Event<dim>(*nit);
+                event->valid(false);
+                ComputeFluxBalanceAndCFL(event);
+                PEPList.push_back(event);
+                event->inPEPStack(true);
+            } else {
+                dirich_count++;
+            }
+        }
+        cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
+        first_step_=false;
+    } 
+
+
     double64 begin=clock();
     double64 time_increment(time_interval); 
     
     clock_t T_begin= clock();
-    const typename vector<Event<dim>*>::iterator stack_end(PEPStack.end());
-    for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )   
+    const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
+    for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )   
     {     
         ComputeRateofChange((*it));  
         ArrayVariable array;
         (*it)->getNode()->Read(key_time, array);
         double64 dt_CFL = array[2];//CFL time increment
-        //cout << "readed CFL = " << array[2] << endl;
         time_increment=min(time_increment, dt_CFL*cfl_multiplication_factor);
     }
     T_RateOfChange_ += clock() - T_begin; 
@@ -442,7 +448,7 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
         cout <<"\n\tadvection (sub)step: "<< substep << endl;
         T_begin= clock();
         if ( (time_interval - time) < time_increment ) time_increment = time_interval - time;
-        for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )
+        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
             Update_TDS((*it),time_increment);
         };
@@ -450,7 +456,7 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
         
         T_begin= clock();
         double64 new_time_increment(time_interval); 
-        for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )
+        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
             ComputeRateofChange((*it));
             ArrayVariable array2;
@@ -466,16 +472,16 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
     
     T_AdvectVariable_+= clock() - begin;
 
-    cout <<"Finish DESTransport<dim>::AdvectVariable_TDS "<<endl;
+    cout<<"Finish DESTransport<dim>::AdvectVariable_TDS "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
-    cout <<"update_count_ = "<<update_count_<<endl;  
+    cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_SortQueue_ = "<< T_SortQueue_ /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_Synchronize_ = "<< T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RemoveFromQueue_ = "<< T_RemoveFromQueue_/double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;  
-    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
 }
 
 
@@ -514,10 +520,13 @@ void DESTransport<dim>::AdvectVariable_DES( double64 model_time, double64 cfl_mu
 template<size_t dim>
 void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64 cfl_multiplication_factor, double64 PEP_parameter, size_t num_threads)
 {
+    /*
     double64 begin=omp_get_wtime();
     cout<<"Start DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
     double64 time(0.);
     bool Finished = false;
+    */
+    
     //uncomment for recording events at each time interval
     /*
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
@@ -526,7 +535,8 @@ void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64
         (*nit)->Store(  this->count_key, makeScalar( (*nit)->Status( this->count_key), 0 ) );
     }
     */
-
+    
+    /*
     double64 T_begin;
 
     while (!Finished)
@@ -625,7 +635,8 @@ void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64
     cout <<"T_Synchronize_ = "<< T_Synchronize_ << endl;
     cout <<"T_RemoveFromQueue_ = "<< T_RemoveFromQueue_ << endl;   
     cout <<"T_RateOfChange_ = "<< T_RateOfChange_ << endl;   
-    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;      
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;   
+    */   
 }  
 #endif
 
@@ -648,88 +659,136 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
     }
     */
     
-    while (!Finished)
-    {    
-        clock_t T_begin= clock();
-        const typename vector<Event<dim>*>::iterator stack_end(PEPStack.end());
-        for ( typename vector<Event<dim>*>::iterator it=PEPStack.begin(); it!=stack_end; ++it )       
-        {   
-            ComputeRateofChange((*it));            
-            if ((*it)->valid() == false)
-                if (Schedule((*it), model_time, cfl_multiplication_factor))
-                    Queue.push_back((*it));    
-           (*it)->inPEPStack(false);          
-        };    
-        T_RateOfChange_ += clock() - T_begin; 
-        cout <<" Queue size = "<< Queue.size()<<endl;   
+    
+    if(first_step_){
+        //create events for all nodes and add them to PEPStack and EntireQueue
+        size_t index = 0;
+        size_t dirich_count = 0;
+        const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+        for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+        { 
+            (*nit)->Store( key_update, makeScalar( (*nit)->Status( key_update), 0 ) ); //update count
+            (*nit)->Store( key_rate, makeScalar( (*nit)->Status( key_rate), 0 ) ); //changerate count
+            (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
+            (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
+        
+            ArrayVariable arrayVariable( 6, 0., PLAIN );         
+            (*nit)->Store( key_time, arrayVariable );  
+                   
+            initializeFiniteVolumeProperties(*nit);
+            if((*nit)->Status(  this->key_C ) != DIRICH) {
+                (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
+                Event<dim>* event = new Event<dim>(*nit);
+                event->valid(false);
+                ComputeFluxBalanceAndCFL(event);
+                PEPList.push_back(event);
+                event->inPEPStack(true);
+                ComputeRateofChange(event);
+                Schedule(event, model_time, cfl_multiplication_factor);
+                Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
+                HeapNodeFullList.push_back(heap_node);
+                FullList.push_back(event);
+                event->inQueue(false);
 
-        T_begin= clock();        
-        if (Queue.empty()) {
-            time=model_time;
-        } else {
-            sort(Queue.begin(),Queue.end(),sort_queue<dim>());                       
-            const typename vector<Event<dim>*>::iterator begin(Queue.begin());
-            ArrayVariable begin_array;
-            (*begin)->getNode()->Read(key_time, begin_array);
-            time = begin_array[1]; //scheduled time stamp
-        };
-        T_SortQueue_ += clock() - T_begin;
+                index++;
+        
+            } else {
+                dirich_count++;
+            }
+        }
+        cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
+        first_step_=false;
+    }  
+        
+    
+    while (!Finished)
+    { 
+        clock_t T_begin;
+        const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
+        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )          
+        {   
+            Event<dim>* event = *it;
+            T_begin= clock();
+            ComputeRateofChange(event);  
+            T_RateOfChange_ += clock() - T_begin;          
+            if (event->valid() == false) {
+                T_begin= clock();
+                bool isactive = Schedule(event, model_time, cfl_multiplication_factor);
+                T_Schedule_ += clock() - T_begin; 
+                if (isactive) {
+                    T_begin= clock();
+                    double64 scheduled_time = event->t_schedule();
+                    size_t index = event->getNode()->Read(key_EventIndex);
+                    Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
+                    EventHeap.insert(heap_node);
+                    HeapNodeFullList[index] = heap_node;
+                    event->inQueue(true);
+                    T_InsertToHeap_ += clock() - T_begin; 
+                }
+            }
+            event->inPEPStack(false);          
+        };   
+        cout <<"  PEPList size = " << PEPList.size() << "  Queue size = "<< EventHeap.size()<<endl;   
+
+        if (EventHeap.empty()) time=model_time;
+        else time = EventHeap.minimum()->getK();
         cout<<"  time = "<<time<<" model_time = "<<model_time<<endl;
 
         if (time == model_time) {
             Finished = true;
-            const typename vector<Event<dim>*>::iterator End(PEPStack.end());
-            for ( typename vector<Event<dim>*>::iterator e=PEPStack.begin(); e!=End; ++e )
-                (*e)->valid(false);
+            
+            const typename vector<Event<dim>*>::iterator End(PEPList.end());
+            for ( typename vector<Event<dim>*>::iterator e=PEPList.begin(); e!=End; ++e )
+                (*e)->valid(false);        
             break;
         };
 
-        PEPStack.clear();
+        PEPList.clear();
     
         double64 dt_PEP=numeric_limits<double64>::max();
         size_t count = 0U;
-        while (!Queue.empty())
+        while (!EventHeap.empty())
         {
+            Heap_Node* root_node = EventHeap.minimum();
+            size_t top_index = root_node->getV();
+            Event<dim>* top_event = FullList[top_index];
             
-            const typename vector<Event<dim>*>::iterator top(Queue.begin()); 
-            if((*top)->valid() == false) {
-                Queue.erase(top);
+            if(top_event->valid() == false) {
+                T_begin= clock();
+                EventHeap.remove(root_node);
+                top_event->inQueue(false);
+                T_RemoveFromHeap_ += clock() - T_begin;
                 continue;
             }
+            
             count++;            
             ArrayVariable array;
-            (*top)->getNode()->Read(key_time, array);
+            top_event->getNode()->Read(key_time, array);
             double64 dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, PEP_parameter*dt_target);
             double64 t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
-            if ((*top)->inPEPStack() == false) {
-                PEPStack.push_back((*top));
-                (*top)->inPEPStack(true);
+            if (top_event->inPEPStack() == false) {
+                PEPList.push_back(top_event);
+                top_event->inPEPStack(true);
                 T_begin= clock();
-                Update_DES((*top),time);
+                Update_DES(top_event,time);
                 T_Update_ += clock() - T_begin;                
             }; 
+
             T_begin= clock();
-            Synchronize((*top),time);
-            T_Synchronize_ += clock() - T_begin;
-            Queue.erase(top); 
+            EventHeap.remove(root_node); 
+            top_event->inQueue(false);
+            T_RemoveFromHeap_ += clock() - T_begin;
+            
+            T_begin= clock();
+            double64 t_remove(0.);    
+            Synchronize(top_event,time,t_remove);
+            T_RemoveFromHeap_ += t_remove;
+            T_Synchronize_ += clock() - T_begin - t_remove;
         };
-        //remove invalid events/nodes from Queue
-        T_begin= clock();
-        if(!Queue.empty()) {
-            size_t queue_size = Queue.size();
-            for ( size_t n = 0U; n<queue_size; n++ )
-            {  
-                if (Queue[n]->valid() == false) {
-                    Queue.erase(Queue.begin()+n);
-                    queue_size --;
-                    n--;
-                };
-            };
-        };
-        T_RemoveFromQueue_ += clock() - T_begin;        
-        cout<<"  count =  "<<count<<endl;
+        
+        cout<<"  iteration count = "<<count<<endl;
     };
     T_AdvectVariable_+= clock() - begin;
 
@@ -737,11 +796,11 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_SortQueue_ = "<< T_SortQueue_ /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_Update_  = "<< T_Update_  /double64(CLOCKS_PER_SEC) << endl;
     cout <<"T_Synchronize_ = "<< T_Synchronize_/double64(CLOCKS_PER_SEC) << endl;
-    cout <<"T_RemoveFromQueue_ = "<< T_RemoveFromQueue_/double64(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;  
+    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double64(CLOCKS_PER_SEC) << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double64(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
     cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
 }   
 
