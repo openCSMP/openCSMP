@@ -15,8 +15,13 @@ using namespace std;
 
 namespace csmp {
 
+	double LinearCuboid::ddx_ = -1., LinearCuboid::ddy_ = -1.,  LinearCuboid::ddz_ = -1., 
+		    LinearCuboid::Kx_ = -1.,  LinearCuboid::Ky_ = -1.,   LinearCuboid::Kz_ = -1.;
+	DenseMatrix<DM_MIN> LinearCuboid::IntdNdN_(8, 8);
+
 	// CSMP_FEM_TYPE, isoparametric, uses_local_coordinates, order_of_shape_functions
-	LinearCuboid::LinearCuboid():FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8)
+	LinearCuboid::LinearCuboid():FiniteElement(LINEAR_CUBOID,false,false,1U), 
+		V_(28), Vx_(28), Vy_(28), Vz_(28)
 	{
 		dim = 3;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */
@@ -26,45 +31,194 @@ namespace csmp {
 		fpe = 6;       /**< faces per element  */
 		epe = 6;       /**< neighbors of element */
 		nne = 4;       /**< typical number of elements that share each node */
-		cne = 1;       /**< typical number of elements that share each integration point */
-		gpe = 1;       /**< Gauss points per element for numerical integration */
+		cne = 0;       /**< typical number of elements that share each integration point */
+		gpe = 0;       /**< Gauss points per element for numerical integration */
 
 		UsesLocalCoordinates(false);
 		Isoparametric(false);
+		VolumeElement();
+		ElementType(LINEAR_CUBOID);
+		XY.Resize(npe, dim);
 	}
 
 	 LinearCuboid::~LinearCuboid() {}
 
-	 double64 LinearCuboid::Volume()
-	 {
-		 return (XY(5, 0) - XY(3, 0))*(XY(5, 1) - XY(3, 1))*(XY(5, 2) - XY(3, 2));
-	 }
+	 double64 LinearCuboid::Volume() { return (XY(6, 0) - XY(0, 0))*(XY(6, 1) - XY(0, 1))*(XY(6, 2) - XY(0, 2)); }
 
-	 double64 LinearCuboid::AspectRatio()
-	 {
-		 double64 dx = XY(5, 0) - XY(3, 0);
-		 double64 dy = XY(5, 1) - XY(3, 1);
-		 double64 dz = XY(5, 2) - XY(3, 2);
-		 return max({dx,dy,dz}) / min({dx,dy,dz}) / 2.0;
-	 }
+	/** 
+	To calculate each shape function corresponding to a node, we use the symmetric point (with
+	respect to barycenter) and care about sign of it. Dividing by volume() gives one at that node.
+	*/
+	void LinearCuboid::N(std::vector<double64>& N, const std::vector<double64>& xyz) 
+	{
+		double64 vol = Volume();
+		for(size_t i = 0; i < 8; ++i)
+			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
 
-	 /** In cuboid diameter of the biggest inside sphere is the minimum edge length */
-	 double64 LinearCuboid::InnerRadius()
-	 {
-		 double64 dx = XY(5, 0) - XY(3, 0);
-		 double64 dy = XY(5, 1) - XY(3, 1);
-		 double64 dz = XY(5, 2) - XY(3, 2);
-		 return min({ dx,dy,dz }) / 2.0;
-	 }
+		N.resize(8);
+		N = { -V_[6], V_[7], -V_[4], V_[5], V_[2], -V_[3], V_[0], -V_[1] };
+	}
 
-	 /** To integrate multiplication of shape functions over element.
-	     We use the values of shape functions at nodes, mid-sigments, face center and barycenter.
-	 */
+	// We assumed K is a TENSOR!
+	void LinearCuboid::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+	{
+		double ddx = (XY(6, 0) - XY(0, 0))*(XY(6, 0) - XY(0, 0)), 
+			   ddy = (XY(6, 1) - XY(0, 1))*(XY(6, 1) - XY(0, 1)),
+			   ddz = (XY(6, 2) - XY(0, 2))*(XY(6, 2) - XY(0, 2)), 
+			    Kx = K(0,0), Ky = K(1,1), Kz = K(2,2);
+		
+		if (ddx == ddx_ && ddy == ddy_ && ddz == ddz_ && 
+			Kx == Kx_ && Ky == Ky_ && Kz == Kz_) { M = IntdNdN_; return; }
+		
+		ddx_ = ddx; ddy_ = ddy; ddz_ = ddz; 
+		Kx_ = Kx; Ky_ = Ky; Kz_ = Kz;
+		double vol = Volume();
+
+		// 4->2, 5->-3, 1->7, 0->-6, 7->-1, 6->0, 2->-4, 3->5,
+		// Order 4,5,1,0,7,6,2,3 ----> 2,3,7,6,1,0,4,5 -----> + - + - - + - +
+
+		double c56 = -1.0 / 6.0, c13 = 1.0 / 3.0, dxy = ddx*ddy, dxz = ddx*ddz, dyz = ddy*ddz, 
+		      dxyz = (Kx*dyz + Ky*dxz + Kz*dxy) / vol / 9.0;
+		Vx_ = { c56, c56, c13, c13, c56, c56, c13, c13, c56, c56, c13, c13, c56, c56, c56, c13, c13, c56, c13, c56, c56, c13, c56, c56, c13, c13, c56, c56 };
+		Vy_ = { c13, c56, c56, c13, c13, c56, c56, c56, c56, c13, c13, c56, c56, c13, c56, c56, c13, c13, c56, c56, c13, c13, c13, c56, c56, c56, c56, c13 };
+		Vz_ = { c13, c13, c13, c56, c56, c56, c56, c13, c13, c56, c56, c56, c56, c13, c56, c56, c56, c56, c56, c56, c56, c56, c13, c13, c13, c13, c13, c13 };
+		
+		V_.resize(28); 
+		size_t k,j;
+		for (k = 0; k < 28; ++k) 
+			V_[k] = ( Kx*dyz*Vy_[k] * Vz_[k] + Ky*dxz*Vx_[k] * Vz_[k] + Kz*dxy*Vx_[k] * Vy_[k]) / vol;
+		
+		k = 0;
+		double sgn[] = {-1., 1., -1., 1., 1., -1., 1., -1.};
+		for (size_t i = 0; i < 8; ++i) { // 8 = npe
+			for (j = 0; j < i; ++j) IntdNdN_(i, j) = IntdNdN_(j, i);
+			IntdNdN_(i, i) = dxyz;
+			for (j = i + 1; j < 8; ++j) IntdNdN_(i, j) = sgn[i]*sgn[j]*V_[k++];
+		}
+		M = IntdNdN_;
+
+	}
+
+	/** Outputs shape function derivative matrix of the form:
+		 dN0dx ... dN7dx
+	DN = dN0dy ... dN7dy
+		 dN0dz ... dN7dz
+	*/
+	double64 LinearCuboid::dN_At(DenseMatrix<DM_MIN>& DN, const vector<double64>& xyz) 
+	{
+		DN.Resize(3, 8); //DN_size = dim x npe
+		double64 vol = Volume(), sgn[] = {-1., 1., -1., 1., 1., -1., 1., -1.}, sgnk;
+		size_t ind[] = { 6, 7, 4, 5, 2, 3, 0, 1}, kb;
+		for (auto k = 0; k < 8; ++k) {
+			kb = ind[k]; sgnk = sgn[k];
+			DN(0, k) = sgnk*(xyz[1] - XY(kb, 1))*(xyz[2] - XY(kb, 2)) / vol;
+			DN(1, k) = sgnk*(xyz[0] - XY(kb, 0))*(xyz[2] - XY(kb, 2)) / vol;
+			DN(2, k) = sgnk*(xyz[0] - XY(kb, 0))*(xyz[1] - XY(kb, 1)) / vol;
+		}
+		return 0.0; // To satisfy base function and compiler!
+	}
+	
+	//----------------------------------
+	//**********************************
+
+	double64 LinearCuboid::AspectRatio()
+	{
+		double64 dx = XY(6, 0) - XY(0, 0),
+			dy = XY(6, 1) - XY(0, 1),
+			dz = XY(6, 2) - XY(0, 2);
+		return max({ dx,dy,dz }) / min({ dx,dy,dz }) / 2.0;
+	}
+
+	/** In cuboid diameter of the biggest inside sphere is the minimum edge length */
+	double64 LinearCuboid::InnerRadius()
+	{ return min({ XY(6, 0) - XY(0, 0) , XY(6, 1) - XY(0, 1), XY(6, 2) - XY(0, 2) }) / 2.0; }
+	
+	void LinearCuboid::N_AtGlobalPoint(std::vector<double64>& M, const std::vector<double64>& xyz)
+	{ return N(M, xyz); }
+
+	void LinearCuboid::N_AtBaryCenter(std::vector<double64>& M)
+	{
+		N(M, { 0.5*(XY(0, 0) + XY(6, 0)), 0.5*(XY(0, 1) + XY(6, 1)), 0.5*(XY(0, 2) + XY(6, 2)) });
+	}
+
+	// dN returns dN at barcy center of the element (Stephan's opinion)
+	void LinearCuboid::dN(DenseMatrix<DM_MIN>& DN)
+	{
+		double64 x = XY(0, 0) + (XY(6, 0) - XY(0, 0)) / sqrt(3.),
+			y = XY(0, 1) + (XY(6, 1) - XY(0, 1)) / sqrt(3.),
+			z = XY(0, 2) + (XY(6, 2) - XY(0, 2)) / sqrt(3.);
+		// double64 x = 0.5*(XY(6, 0) + XY(0, 0)), y = 0.5*(XY(6, 1) + XY(0, 1)), z = 0.5*(XY(6, 2) + XY(0, 2));
+		dN_At(DN, { x, y, z });
+	}
+	
+	
+	/*
+	*****************************************************************
+	Part #2
+	******************************************************************
+	These functions are copied from ISOLINEARHEX
+	*/
+	/** Standard ordering is un-counter clockwise */
+	void LinearCuboid::CounterClockwiseNodes(std::vector<size_t>& ids) const
+	{
+		ids = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	}
+
+	void LinearCuboid::MidSideNodes(std::vector<size_t>& ids) const
+	{
+		cout << " IsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
+		ids[0] = 0;
+	}
+	void LinearCuboid::CornerNodes(std::vector<size_t>& ids) const
+	{ ids = { 0, 1, 2, 3, 4, 5, 6, 7 }; }
+
+	void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+	{
+		switch (segm_id) {
+		case 0: snids = {0,1}; return;
+		case 1: snids = {1,2}; return;
+		case 2: snids = {2,3}; return;
+		case 3: snids = {3,0}; return;
+		case 4: snids = {0,4}; return;
+		case 5: snids = {1,5}; return;
+		case 6: snids = {2,6}; return;
+		case 7: snids = {3,7}; return;
+		case 8: snids = {4,5}; return;
+		case 9: snids = {5,6}; return;
+		case 10: snids = {6,7}; return;
+		case 11: snids = {7,4}; return;
+		}
+	}
+
+	void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
+	{
+		switch (face_id) {
+		case 0: fnids = {0,3,2,1}; return; 
+		case 1: fnids = {0,1,5,4}; return;
+		case 2: fnids = {1,2,6,5}; return;
+		case 3: fnids = {2,3,7,6}; return;
+		case 4: fnids = {0,4,7,3}; return;
+		case 5: fnids = {4,5,6,7}; return;
+		}
+	}
+
+	
+	/*
+	*****************************************************************
+	Part #3
+	******************************************************************
+	The following functions will generate an error message, currently
+	*/
+
+
 	void LinearCuboid::IntegralNN(DenseMatrix<DM_MIN>& V) {
+		cout << "\n NOT CORRECTED YET : LinearCubiod::IntegralNN\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
 		DenseMatrix<DM12>& X = M1_, VS = M2_, VF = M3_;
 
 		MidSegmentPoints(X); // mide-sigments
-		// VS : Values of Shapes at mid-sigments (X)
+							 // VS : Values of Shapes at mid-sigments (X)
 		VS.Resize(12, 8);
 		for (auto i = 0; i < 12; ++i) {
 			N(V_, { X(i,0),X(i,1),X(i,2) });
@@ -72,7 +226,7 @@ namespace csmp {
 		}
 
 		CenterOfFacePoints(X); // center of each face 
-		// VF : Values of Shapes at center of faces
+							   // VF : Values of Shapes at center of faces
 		VF.Resize(6, 8);
 		for (auto i = 0; i < 6; ++i) {
 			N(V_, { X(i,0),X(i,1),X(i,2) });
@@ -82,30 +236,33 @@ namespace csmp {
 		// M : Values of Shapes at center of element
 		vector<double64>& M = V_;
 		N(M, { 0.5*(XY(3,0) + XY(5, 0)), 0.5*(XY(3,1) + XY(5, 1)), 0.5*(XY(3,2) + XY(5, 2)) });
-	
+
 		//--- Computing integral N_i*N_j
 		double64 vol = Volume();
 		V.Resize(8, 8);
-		for (auto i = 0; i < 8 ; ++i)
+		for (auto i = 0; i < 8; ++i)
 			for (auto j = i; j < 8; ++j) {
-				double64 sum = 64*M[i]*M[j]; // for center
-				// if (i == j) sum += 1; // for nodes ! We add a for loop instead of this if
+				double64 sum = 64 * M[i] * M[j]; // for center
+												 // if (i == j) sum += 1; // for nodes ! We add a for loop instead of this if
 				for (auto k = 0; k < 12; ++k) sum += 4 * VS(k, i)*VS(k, j); // for mid-segment
 				for (auto k = 0; k < 6; ++k) sum += 16 * VF(k, i)*VF(k, j); // for center of face
-				V(i, j) = sum*vol/216;
-				V(j, i) = V(i,j);
+				V(i, j) = sum*vol / 216;
+				V(j, i) = V(i, j);
 			}
-		for (auto i = 0; i < 8; ++i) V(i, i) += vol/216; // if(i==j)
+		for (auto i = 0; i < 8; ++i) V(i, i) += vol / 216; // if(i==j)
 	}
 
 	void LinearCuboid::IntegraldNdN(DenseMatrix<DM_MIN>& V)
 	{
-		for (auto partial=0; partial < 3; ++partial)
+		cout << "\n NOT CORRECTED YET : LinearCubiod::IntegraldNdN\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
+		for (auto partial = 0; partial < 3; ++partial)
 		{
 			DenseMatrix<DM12>& X = M1_, DS = M2_, DF = M3_;
-		
+
 			MidSegmentPoints(X); // mide-sigments.
-			// DS = Values of Partial Shapes at mid-sigments
+								 // DS = Values of Partial Shapes at mid-sigments
 			DS.Resize(12, 8);
 			for (auto i = 0; i < 12; ++i) {
 				dN_Partial_At(V_, { X(i,0),X(i,1),X(i,2) }, partial);
@@ -113,7 +270,7 @@ namespace csmp {
 			}
 
 			CenterOfFacePoints(X); // center of each face 
-			// DF = Values of Partial Shapes at center of faces
+								   // DF = Values of Partial Shapes at center of faces
 			DF.Resize(6, 8);
 			for (auto i = 0; i < 6; ++i) {
 				dN_Partial_At(V_, { X(i,0), X(i,1), X(i,2) }, partial);
@@ -124,9 +281,9 @@ namespace csmp {
 			DenseMatrix<DM12>& DN = M1_;
 			DN.Resize(8, 8);
 			for (auto i = 0; i < 8; ++i) {
-				dN_Partial_At(V_ , { XY(i,0), XY(i,1), XY(i,2) }, partial);
+				dN_Partial_At(V_, { XY(i,0), XY(i,1), XY(i,2) }, partial);
 				for (auto j = 0; j < 8; ++j) DN(i, j) = V_[j];
-			}		
+			}
 
 			// M = Values of Partial Shapes at center of element
 			vector<double64>& M = V_;
@@ -142,98 +299,37 @@ namespace csmp {
 					for (auto k = 0; k < 8; ++k) sum += DN(k, i)*DN(k, j); // for nodes
 					for (auto k = 0; k < 12; ++k) sum += 4 * DS(k, i)*DS(k, j); // for mid-segment
 					for (auto k = 0; k < 6; ++k) sum += 16 * DF(k, i)*DF(k, j); // for center of face
-					V(i, j) += sum*vol/216;
-					V(j, i) = V(i,j);
+					V(i, j) += sum*vol / 216;
+					V(j, i) = V(i, j);
 				}
 		}
 	}
 
-	/** 
-	To calculate each shape function corresponding to a node, we use the symmetric point (with
-	respect to barycenter) and care about sign of it. Dividing by volume() gives one at that node.
-	*/
-	void LinearCuboid::N(std::vector<double64>& N, const std::vector<double64>& xyz) 
+	void LinearCuboid::dN_Partial_At(vector<double64>& DN, const vector<double64>& xyz, size_t partial)
 	{
-		double64 vol = Volume();
-		for(auto i = 0; i < 8; ++i)
-			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
-		// 0->6 1->(-7) 2->4 3->(-5)
-		N[0] =  V_[6]; N[6] = -V_[0];
-		N[1] = -V_[7]; N[7] =  V_[1];
-		N[2] =  V_[4]; N[4] = -V_[2];
-		N[3] = -V_[5]; N[5] =  V_[3];
-	}
-
-	void LinearCuboid::N_AtGlobalPoint(std::vector<double64>& M, const std::vector<double64>& xyz)
-	{
-		return N(M, xyz);
-	}
-
-	void LinearCuboid::N_AtBaryCenter(std::vector<double64>& N)
-	{
-		// xyz Center of cuboid or center of gravity
-		double64 xyz[] = { 0.5*(XY(3, 0) + XY(5, 0)), 0.5*(XY(3, 1) + XY(5, 1)), 0.5*(XY(3, 2) + XY(5, 2)) };
-		double64 vol = Volume();
-		for (auto i = 0; i<8; ++i)
-			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
-		N.resize(8);
-		// 0->6 1->(-7) 2->4 3->(-5)
-		N[0] = V_[6]; N[6] = -V_[0];
-		N[1] = -V_[7]; N[7] = V_[1];
-		N[2] = V_[4]; N[4] = -V_[2];
-		N[3] = -V_[5]; N[5] = V_[3];
-	}
-
-	/** Outputs shape function derivative matrix of the form:
-		dN0dx ... dN7dx
-	DN = dN0dy ... dN7dy
-		dN0dz ... dN7dz
-	*/
-	double64 LinearCuboid::dN_At(DenseMatrix<DM_MIN>& DN, const vector<double64>& xyz) 
-	{
-		// 0->6 1->(-7) 2->4 3->(-5) for N0 use node6 ....
-		DN.Resize(3, 8); //DN_size = dim x npe
-		double64 vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
-		size_t ind[] = {6,7,4,5,2,3,0,1};
-		for (auto k = 0; k < 8; ++k) {
-			DN(0, k) = sgn[k]*(xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
-			DN(1, k) = sgn[k]*(xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
-			DN(2, k) = sgn[k]*(xyz[0] - XY(ind[k], 0))*(xyz[1] - XY(ind[k], 1)) / vol;
-		}
-		return 0.0; // To satisfy base function and compiler!
-	}
-
-	/** Standard ordering is un-counter clockwise */
-	void LinearCuboid::CounterClockwiseNodes(std::vector<size_t>& ids) const
-	{
-		ids.resize(8);
-		ids[0] = 0; ids[1] = 3; ids[2] = 2; ids[3] = 1;
-		ids[4] = 4; ids[5] = 7; ids[6] = 6; ids[7] = 5;
-	}
-
-	void LinearCuboid::dN_Partial_At(vector<double64>& DN, const vector<double64>& xyz, size_t partial) 
-	{
+		cout << "\n NOT CORRECTED YET : LinearCubiod::dN_Partial_At\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
 		double64 vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
 		size_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
-			case 0:	for (auto k = 0; k < 8; ++k)
-						DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
-			case 1: for (auto k = 0; k < 8; ++k)
-						DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
-			case 2: for (auto k = 0; k < 8; ++k)
-						DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[1] - XY(ind[k], 1)) / vol;
-		}	
+		case 0:	for (auto k = 0; k < 8; ++k)
+			DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
+		case 1: for (auto k = 0; k < 8; ++k)
+			DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
+		case 2: for (auto k = 0; k < 8; ++k)
+			DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[1] - XY(ind[k], 1)) / vol;
+		}
 	}
 
-	void LinearCuboid::MidSideNodes(std::vector<size_t>& ids) const
-	{
-		cout << " IsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
-		ids[0] = 0;
-	}
+
 
 	// mide-sigments by averaging of corresponding nodes
 	void LinearCuboid::MidSegmentPoints(DenseMatrix<DM12>& XS)
 	{
+		cout << "\n NOT CORRECTED YET : LinearCubiod::MidSegmentPoints\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
 		XS.Resize(12, 3); // 12 npe , 3 coordinates
 		for (auto i = 0; i < 3; ++i) {
 			XS(0, i) = 0.5*(XY(0, i) + XY(1, i));
@@ -254,6 +350,9 @@ namespace csmp {
 	//center of each face by average of mid-sigments
 	void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM12>& XF)
 	{
+		cout << "\n NOT CORRECTED YET : LinearCubiod::CenterOfFacePoints\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
 		XF.Resize(6, 3); // 6 number of faces, 3 coordinates
 		for (auto i = 0; i < 3; ++i) {
 			XF(0, i) = 0.5*(XY(0, i) + XY(2, i));
@@ -265,70 +364,35 @@ namespace csmp {
 		}
 	}
 
-	/** for cuboid and with standard ordering */
 	void LinearCuboid::EdgeLengths(std::vector<double64> v)
 	{
-		double64 dx = XY(5, 0) - XY(3, 0);
-		double64 dy = XY(5, 1) - XY(3, 1);
-		double64 dz = XY(5, 2) - XY(3, 2);
-		v = {dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz};
-	}
-
-	void LinearCuboid::CornerNodes(std::vector<size_t>& ids) const
-	{
-		ids.resize(8);
-		ids[0] = 0; ids[1] = 1; ids[2] = 2; ids[3] = 3;
-		ids[4] = 4; ids[5] = 5; ids[6] = 6; ids[7] = 7;
-	}
-
-	void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
-	{
-		snids.resize(2);
-		switch (segm_id) {
-		case 0: snids = {0,1}; break;
-		case 1: snids = {1,2}; break;
-		case 2: snids = {2,3}; break;
-		case 3: snids = {0,3}; break;
-		case 4: snids = {0,4}; break;
-		case 5: snids = {1,5}; break;
-		case 6: snids = {2,6}; break;
-		case 7: snids = {3,7}; break;
-		case 8: snids = {4,5}; break;
-		case 9: snids = {5,6}; break;
-		case 10: snids = {6,7}; break;
-		case 11: snids = {4,7}; break;
-		}
-	}
-
-	void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
-	{
-		fnids.resize(4);
-		switch (face_id) {
-		case 0: fnids = {0,1,2,3}; break;
-		case 1: fnids = {0,1,4,5}; break;
-		case 2: fnids = {1,2,5,6}; break;
-		case 3: fnids = {2,3,6,7}; break;
-		case 4: fnids = {0,3,4,7}; break;
-		case 5: fnids = {4,5,6,7}; break;
-		}
+		cout << "\n NOT CORRECTED YET : LinearCubiod::EdgeLengths\n hit return to EXIT  \n";
+		getchar();
+		double64 dx = XY(6, 0) - XY(0, 0), dy = XY(6, 1) - XY(0, 1), dz = XY(6, 2) - XY(0, 2);
+		v = { dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz };
 	}
 
 	void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double64>& unrml) const
 	{
+		cout << "\n NOT CORRECTED YET : LinearCubiod::UnitNormal\n hit return to EXIT  \n";
+		getchar();
 		unrml.resize(3);
 		switch (face) {
-		case 0: unrml = {0, -1, 0}; break;
-		case 1: unrml = {0,  0, 1}; break;
-		case 2: unrml = {1,  0, 0}; break;
-		case 3: unrml = {0,  0, -1}; break;
-		case 4: unrml = {-1, 0, 0}; break;
-		case 5: unrml = {0, 1, 0}; break;
+		case 0: unrml = {0, -1., 0}; break;
+		case 1: unrml = {0,  0, 1.}; break;
+		case 2: unrml = {1.,  0, 0}; break;
+		case 3: unrml = {0,  0, -1.}; break;
+		case 4: unrml = {-1., 0, 0}; break;
+		case 5: unrml = {0, 1., 0}; break;
 		}
 	}
 
 	void LinearCuboid::OutputNodeDataToVTK(const char* file_name, const char* var_name,
 		DenseMatrix<DM_MIN>& DATA) const
 	{
+		cout << "\n NOT CORRECTED YET : LinearCubiod::OutputNodeDataToVTK\n hit return to EXIT  \n";
+		getchar();
+		exit(EXIT_SUCCESS);
 		char  outfile[NAME_STRING], elmt[30];
 		strcpy(outfile, file_name);
 		sprintf(elmt, "%lu", CurrentID());
@@ -407,33 +471,4 @@ namespace csmp {
 		cout << "\nLinearCuboid::OutputNodeDataToVTK: file '" << outfile << "' written successfully." << endl;
 
 	} // end OutputNodeDataToVTK
-
-	/*
-	// This function is implemented in LinearCuboid_Test
-	void LinearCuboid::TestElementIntegrals(DenseMatrix<DM_MIN>& tXY)
-	{
-		XY = tXY;
-		cout << "Nodes Position\n";
-		XY.Out();
-		double64 dx = XY(5, 0) - XY(3, 0);
-		double64 dy = XY(5, 1) - XY(3, 1);
-		double64 dz = XY(5, 2) - XY(3, 2);
-		double64 vol = dx*dy*dz;
-
-		// IntegralNN over Element
-		DenseMatrix<DM_MIN> V;
-		V.Resize(8, 8);
-		IntegralNN(V);
-		cout << " Integral NN \n ";
-		V.Out();
-
-
-		// IntegralNN over Element
-		DenseMatrix<DM_MIN> W;
-		W.Resize(8, 8);
-		IntegraldNdN(W);
-		cout << " Integral DNDN \n";
-		W.Out();
-	}
-	*/
 }

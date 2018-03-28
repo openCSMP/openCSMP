@@ -16,7 +16,8 @@ class ANSYS_Model2D : public Model<2U> {
                    bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
                    bool binary_file       = true,   /* true = binary, false = ascii */
                    bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool create_boundaries = true, /* true = creates boundaries around model, false = does not create boundaries */
+                   bool isoparametric = true);
 
     /// input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model2D( const char* icem_file_set,
@@ -24,7 +25,8 @@ class ANSYS_Model2D : public Model<2U> {
                    bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
                    bool binary_file       = true,   /* true = binary, false = ascii */
                    bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool create_boundaries = true,  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool isoparametric = true);
 
     /// input from ANSYS *.asc, *.dat files
     /// creates empty property database
@@ -32,18 +34,20 @@ class ANSYS_Model2D : public Model<2U> {
                    bool irregular_mesh    = false,  /* true = non-box shaped model, false = box shaped model */
                    bool binary_file       = true,   /* true = binary, false = ascii */
                    bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
-                   bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool create_boundaries = true,  /* true = creates boundaries around model, false = does not create boundaries */
+                   bool isoparametric = true);
 
     virtual ~ANSYS_Model2D();
 
   private:
 
-    void Initialize( const char* icem_file_set,
+	  void Initialize( const char* icem_file_set,
                      const char* regions_file_prefix,
                      bool irregular_mesh,
                      bool binary_file,
                      bool use_regions_file,
-                     bool create_boundaries);
+                     bool create_boundaries,
+                     bool isoparametric);
 };
 
 } // end csmp

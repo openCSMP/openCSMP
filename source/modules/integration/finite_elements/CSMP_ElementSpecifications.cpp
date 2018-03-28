@@ -82,6 +82,8 @@ bool  CSMP_ElementSpecifications::LinearElement( int32 etype )
     if ( etype == LINEAR_BAR ||
          etype == LINEAR_TRIANGLE ||
          etype == LINEAR_TRIANGLE3D ||
+		 etype == LINEAR_CUBOID ||
+		 etype == LINEAR_RECTANGLE ||
          etype == BARYCENTRIC_LINEAR_TRIANGLE ||
          etype == LINEAR_TETRAHEDRON ||
          etype == ISOPARAMETRIC_LINEAR_BAR ||
@@ -92,7 +94,7 @@ bool  CSMP_ElementSpecifications::LinearElement( int32 etype )
          etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
          etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
          etype == ISOPARAMETRIC_LINEAR_PRISM ||
-         etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+         etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON)
         return true;
     return false;
  }
@@ -309,6 +311,7 @@ void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_
     surf_elements.push_back("QUADRATIC_TRIANGLE");
     surf_elements.push_back("BARYCENTRIC_QUADRATIC_TRIANGLE");
     surf_elements.push_back("CUBIC_TRIANGLE");
+	surf_elements.push_back("LINEAR_RECTANGLE");
     // isoparametric elements
     surf_elements.push_back("ISOPARAMETRIC_LINEAR_TRIANGLE");
     surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE");
@@ -329,6 +332,7 @@ Returns true is the CSMP input element name is a surface element.
 bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TRIANGLE" ||
+		 etype == "LINEAR_RECTANGLE" ||
          etype == "LINEAR_TRIANGLE3D" ||
          etype == "BARYCENTRIC_LINEAR_TRIANGLE" ||
          etype == "QUADRATIC_TRIANGLE" ||
@@ -354,6 +358,7 @@ bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype )
 bool  CSMP_ElementSpecifications::SurfaceElement( int32 etype )
  {
     if ( etype == LINEAR_TRIANGLE ||
+		 etype == LINEAR_RECTANGLE ||
          etype == LINEAR_TRIANGLE3D ||
          etype == BARYCENTRIC_LINEAR_TRIANGLE ||
          etype == QUADRATIC_TRIANGLE ||
@@ -405,6 +410,7 @@ void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_el
     vol_elements.push_back("QUADRATIC_TETRAHEDRON");
     vol_elements.push_back("BARYCENTRIC_QUADRATIC_TETRAHEDRON");
     vol_elements.push_back("CUBIC_TETRAHEDRON");
+	vol_elements.push_back("LINEAR_CUBOID");
     // isoparametric elements
     vol_elements.push_back("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
     vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_TETRAHEDRON");
@@ -431,6 +437,7 @@ Return true if the ANSYS input element name corresponds to a volumetric element.
 bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TETRAHEDRON" ||
+		 etype == "LINEAR_CUBOID" ||
          etype == "QUADRATIC_TETRAHEDRON" ||
          etype == "BARYCENTRIC_QUADRATIC_TETRAHEDRON" ||
          etype == "CUBIC_TETRAHEDRON" ||
@@ -460,6 +467,7 @@ bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype )
 bool  CSMP_ElementSpecifications::VolumeElement( int32 etype )
  {
     if ( etype == LINEAR_TETRAHEDRON ||
+		 etype == LINEAR_CUBOID ||
          etype == QUADRATIC_TETRAHEDRON ||
          etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
          etype == CUBIC_TETRAHEDRON ||
@@ -516,7 +524,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype )
         return 16U;
 
     // hexahedron
-    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID)
         return 8U;
     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 )
         return 20U;
@@ -526,7 +534,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype )
         return 32U;
 
     // quadrilateral
-    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL )
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL || etype == LINEAR_RECTANGLE )
         return 4U;
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL )
         return 5U;
@@ -611,7 +619,8 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
     if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ||
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ||
          etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ||
-         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ||
+		 etype == LINEAR_CUBOID)
         return 6U;
 
     // quadrilateral
@@ -620,7 +629,8 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int32 etype )
          etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ||
          etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL ||
          etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ||
-         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL )
+         etype == ISOPARAMETRIC_CUBIC_QUADRILATERAL ||
+		 etype == LINEAR_RECTANGLE)
         return 4U;
 
     // triangle
@@ -693,7 +703,7 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
 
     // hexahedron
     // ----------
-    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
+	if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID ) {
           assert( face < 6U );
           return 4U;
       }
@@ -712,7 +722,7 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
 
     // quadrilateral
     // -------------
-    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL || etype == LINEAR_RECTANGLE ||
          etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) {
          assert( face < 4U );
          return 2U;
@@ -907,7 +917,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
                             "elements with cubic interpolation functions are not handled yet");
 
     // hexahedron
-    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID)
       {
           assert( face < 6U );
           assert( face_node < 4U );
@@ -1025,7 +1035,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
 
     // quadrilateral
     // -------------
-    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ||
+    if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL || etype == LINEAR_RECTANGLE ||
          etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL )
       {
           assert( face < 4U );

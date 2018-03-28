@@ -2,6 +2,9 @@
 #include "Standard_IO_Handler.h"
 #include "Exception.h"
 
+#include "LinearCuboid.h"
+#include "LinearRectangle.h"
+
 #include "LinearLineElement.h"
 #include "IsoparametricQuadraticLineElement.h"
 #include "LinearTriangle.h"
@@ -252,6 +255,8 @@ void FiniteElementManager::InitializeElements( size_t dim, size_t interpolation_
                    line_ptr = new IsoparametricLinearLineElement(3);
                 }
               else {
+				   hexa_ptr = new LinearCuboid();
+				   quad_ptr = new LinearRectangle(3);
                    tetr_ptr = new LinearTetrahedron(); 
                    tria_ptr = new LinearTriangle3D();
                    line_ptr = new LinearLineElement(3);

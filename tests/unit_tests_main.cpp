@@ -49,6 +49,7 @@
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
+#include "LinearCuboid_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricQuadraticTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
@@ -248,12 +249,13 @@ TEST_CASE("Unported tests", "[Unported]") {
     if ( test_interdependent1 ) {
       cout <<"\n2. partially interdependent functionality: running tests..."<< endl;
       TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
-      interdependent1.addTest( new FEM_Data_Test());
-      // TODO: add the tests for all elements
-      // finite elements
-      interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
-      interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
-      interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
+              interdependent1.addTest( new FEM_Data_Test());
+              // TODO: add the tests for all elements
+              // finite elements
+			  interdependent1.addTest( new LinearCuboid_Test(verbose));
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
+              interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt", verbose ) ); // 3D case 3 integration points
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt", verbose ) );   // 2D case 3 integration points
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt", verbose ) );   // 2D case 4 integration points

@@ -94,6 +94,8 @@ class SparseMatrix {
 
     void      Out( long precis=5L ) const;
     void      Out( const char* file ) const;
+
+	void OutForMatlab(const char * file) const;
     
   private:
     std::vector<std::map<size_t,double64> >  data;

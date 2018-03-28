@@ -64,7 +64,7 @@ int main()
             examplesSuite.RegisterExample( new Averaging_Example() );
             examplesSuite.RegisterExample( new Tutorial1_Example() );
             examplesSuite.RegisterExample( new Tutorial2_Example() );
-            examplesSuite.RegisterExample( new Tutorial3_Example() );
+			examplesSuite.RegisterExample( new Tutorial3_Example());
             examplesSuite.RegisterExample( new Tutorial4_Example() );
             examplesSuite.RegisterExample( new Geothermal_Example() );
             examplesSuite.RegisterExample( new LinearSolver_Example() );
@@ -76,7 +76,7 @@ int main()
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI
-            examplesSuite.Run();
+			examplesSuite.Run(); 
 #else
             QApplication app( argc, argv );
             PL::ExampleSuiteMainWindow exampleSuiteMainWindow;

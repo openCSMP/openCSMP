@@ -8,7 +8,6 @@
 #include "SAMG_Exception.h"
 #endif
 
-
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
 #include "VectorVar_Test1.h"
@@ -41,6 +40,7 @@
 #include "IsoparametricQuadraticTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTriangle.h"
+#include "LinearCuboid_Test.h"
 
 #include "FiniteVolumeStencil_Test.h"
 #include "FiniteVolumePolicy_Test.h"
@@ -101,6 +101,11 @@ using namespace csmp;
 
 #define SIMPLE_TEST_SECTION(n)  SECTION(#n) { n##_Test test; test.run(); }
 #define SIMPLE_TEST_SECTION_N(n,num)  SECTION(#n) { n##_Test##num test; test.run(); }
+
+TEST_CASE("LinearCuboid", "[Element]") {
+	LinearCuboid_Test E(true);
+	E.run();
+}
 
 TEST_CASE("Auxiliary tests", "[Auxiliaries]") {
     SIMPLE_TEST_SECTION(GenericSingleton)
@@ -183,13 +188,13 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
 
-
 int
 main()
 {
+
   const bool verbose(false);
 
-  const bool test_fundamentals(true),
+  const bool test_fundamentals(false),
              test_interdependent1(true),
              test_interdependent2(true),
              test_composite(true),
@@ -218,6 +223,8 @@ main()
           TestSuite interdependent1("Finite element test suite", &cout );
           interdependent1.addTest( new FEM_Data_Test());
           // finite elements
+		  // LinearCuboid Test
+		  interdependent1.addTest( new LinearCuboid_Test(true));
           interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
           interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
           interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
@@ -233,8 +240,8 @@ main()
           interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // FAIL - flux balance on constant velocity projected on sides
           // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
           interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
-          // running unit tests and reporting errors
-          interdependent1.run();
+		  // running unit tests and reporting errors
+		  interdependent1.run();
           nFail = interdependent1.report();
           interdependent1.free();
           cerr << "\nunit_tests_main: 2. CSMP interdependent-functionality1: Total unit test failures: " << nFail << endl;

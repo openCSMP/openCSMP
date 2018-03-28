@@ -27,7 +27,9 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     CUBIC_BAR, 										                      // BAR_4  
                     LINEAR_TRIANGLE,   
                     LINEAR_TRIANGLE3D, 									                // TRI_3            = 8,
-                    BARYCENTRIC_LINEAR_TRIANGLE, 			    	           	// TRI_3_X          = 9,
+					LINEAR_QUADRILATERAL,
+                    LINEAR_RECTANGLE,                                   // right-angle quadrilateral
+					BARYCENTRIC_LINEAR_TRIANGLE, 			    	           	// TRI_3_X          = 9,
                     QUADRATIC_TRIANGLE, 								                // 2D & 3D TRI_6    = 10,
                     BARYCENTRIC_QUADRATIC_TRIANGLE, 					          // TRI_6_X          = 11,
                     CUBIC_TRIANGLE,
@@ -35,7 +37,6 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     QUADRATIC_TETRAHEDRON, 								              // TETRA_10         = 5,
                     BARYCENTRIC_QUADRATIC_TETRAHEDRON,                  // PYRA_5           = 18,
                     CUBIC_TETRAHEDRON,
-                    LINEAR_RECTANGLE,                                   // right-angle quadrilateral
                     LINEAR_CUBOID,                                      // right-angle brick
                     ISOPARAMETRIC_LINEAR_BAR,    						            // BAR_2            = 2,
                     ISOPARAMETRIC_QUADRATIC_BAR, 						            // BAR_3            = 3,
@@ -71,7 +72,9 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     POINT_ELEMENT,
                     POLYGONAL_ELEMENT,
                     POLYHEDRAL_ELEMENT,
-                    EXPERIMENTAL_ELEMENT };
+                    EXPERIMENTAL_ELEMENT,
+					
+};
 
 enum ELEMENT_DIMENSION { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
@@ -278,7 +281,8 @@ class FiniteElement {
     /// reports the values of the interpolation functions at the center of gravity of the element
     virtual   void      N_AtBaryCenter( std::vector<double64>& N );
     
-    /// first derivatives of interpolation functions for elements where this is a single constant value
+	virtual   void		Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
+	/// first derivatives of interpolation functions for elements where this is a single constant value
     virtual   void      dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well

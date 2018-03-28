@@ -13,8 +13,6 @@ gradient of shape functions over element and prints the result.
 It also tests sum of values of shape functions at barycenter that must be one :
 TestSumShapesAtBaryCenter(const Element<3U>& )
 
-4- _equalTest(a,b,tol) returns false if |a-b| > tol.
-
 */
 #ifndef LINEARCUBOID_TEST_H
 #define LINEARCUBOID_TEST_H
@@ -31,7 +29,6 @@ namespace csmp {
 		virtual void run(); // It tests integrals of NN and dNdN as well.
 		void TestInterpolationFunctionValues(const Element<3U>& e);
 		void TestSumShapesAtBaryCenter(const Element<3U>& e);
-		bool _equalTest(double a, double b, double tol) const;
 
 	private:
 		FiniteElement*  lcuboid_;

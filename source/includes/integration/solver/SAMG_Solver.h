@@ -73,6 +73,11 @@ namespace csmp {
                                         std::vector<double64>& b,
                                         std::vector<double64>& x,
                                         size_t no_unknowns );
+	  virtual void SolveMatrixEquation(CompressedRowMatrix& A,
+		  std::vector<double64>& b,
+		  std::vector<double64>& x,
+		  size_t no_unknowns);
+
     private:
       SAMG_Settings*        settings_;
 
