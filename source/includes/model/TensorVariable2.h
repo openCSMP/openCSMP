@@ -11,6 +11,8 @@ namespace csmp {
 template<>
 class TensorVariable<2U> {
   public:
+    static constexpr VARIABLE_TYPE VariableType = TENSOR;
+
     TensorVariable();
     TensorVariable( const TensorVariable& );
     TensorVariable( TensorVariable&& ) = default;

@@ -77,6 +77,8 @@ v3.Out();
 template<>
 class VectorVariable<3U> {
   public:
+    static constexpr VARIABLE_TYPE VariableType = VECTOR;
+
     VectorVariable();                             ///< default constructor
     ~VectorVariable();                            ///< destructor
     VectorVariable( const VectorVariable& );      ///< copy constructor

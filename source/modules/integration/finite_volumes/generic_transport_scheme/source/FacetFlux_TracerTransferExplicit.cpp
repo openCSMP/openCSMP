@@ -339,6 +339,9 @@ namespace csmp {
 
       const double64 C_upstream = (ff < 0.) ? outside_node.Read( User()->key_C ) :
       inside_node.Read( User()->key_C );
+      if (C_upstream > 0.5) {
+        std::cerr << "Boundary, upstream concentration\n";
+      }
       const double64 sign = ( fip.FromInside() ) ? 1. : -1.;
 
       auto w = fip.IntegrationWeight();
