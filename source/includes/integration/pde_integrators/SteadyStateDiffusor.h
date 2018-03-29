@@ -25,12 +25,6 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
 
     typedef typename SIMPLICIAL_COMPLEX<dim>::Simplex Simplex;
 
-	SteadyStateDiffusor(Model<dim>& sg,
-		const char* diffusivity,
-		const char* diffusing_variable,
-		const char* spatial_source_variable,
-		bool LumpedRHS);
-
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* diffusivity,
                                 const char* diffusing_variable,

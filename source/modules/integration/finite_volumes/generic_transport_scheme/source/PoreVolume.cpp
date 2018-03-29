@@ -35,15 +35,16 @@ namespace csmp {
 
   template<size_t dim>
   void PoreVolume<dim>::AccumulateFiniteVolume(Node<dim>& fv, SparseMatrix &A) const {
-                       double64 pv = fv.Read(pv_key_);
-                       size_t i = fv.Idx();
+			double64 pv = fv.Read(pv_key_);
+			size_t i = fv.Idx();
     if (this->multiply_with_dt_) {
       A.Assign(i, i, pv * this->dt_);
     }
     else {
       A.Assign(i, i, pv);
     }
-  }
+  
+		}
 
   template class PoreVolume<1U>;
   template class PoreVolume<2U>;

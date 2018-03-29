@@ -870,28 +870,6 @@ void SparseMatrix::Out( const char* file ) const
       }
  }
 
-void SparseMatrix::OutForMatlab(const char* file) const
-{
-	ofstream  ofs(file);
 
-	long         prec;
-	const long   digits(3);
-
-	if (digits != 0) {
-		ofs.setf(ios::scientific);
-		prec = ofs.precision(digits);
-	}
-
-	for (size_t i = 0; i<data.size(); i++)
-		for (map<size_t, double64>::const_iterator
-			ditc = data[i].begin(); ditc != data[i].end(); ditc++) {
-			ofs << i + 1 << " " << ((*ditc).first) + 1 << " " << (*ditc).second << "\n";
-		}
-
-	if (digits != 0) {
-		ofs.unsetf(ios::scientific);
-		ofs.precision(prec);
-	}
-}
 } // csmp
 

@@ -63,9 +63,7 @@ namespace csmp {
 		//_equal(HexaVolumeUsingFVSectors_, HexaVolumeUsingFVSectorsIPWeight_, 1e-15);
 		
 		//Testing Hexahedron volume calculated by CSMP against volume calculated from dividing the Hexa into 6 Tetra and summing up their volumes.
-		_equal(HexaVolUsingCSMP(CubeXcord, CubeYcord, CubeZcord, HexaVolumeUsingFVSectors_, HexaVolumeUsingFVSectorsIPWeight_), 
-			   HexaVolUsingTetCSMP(CubeXcord, CubeYcord, CubeZcord), 
-			   1e-15);
+		_equal(HexaVolUsingCSMP(CubeXcord, CubeYcord, CubeZcord, HexaVolumeUsingFVSectors_, HexaVolumeUsingFVSectorsIPWeight_), HexaVolUsingTetCSMP(CubeXcord, CubeYcord, CubeZcord), 1e-15);
 		_equal(HexaVolUsingCSMP(TopTwXcord, TopTwYcord, TopTwZcord, HexaVolumeUsingFVSectors_, HexaVolumeUsingFVSectorsIPWeight_), HexaVolUsingTetCSMP(TopTwXcord, TopTwYcord, TopTwZcord), 1e-15);
 		_equal(HexaVolUsingCSMP(SideTwXcord, SideTwYcord, SideTwZcord, HexaVolumeUsingFVSectors_, HexaVolumeUsingFVSectorsIPWeight_), HexaVolUsingTetCSMP(SideTwXcord, SideTwYcord, SideTwZcord), 1e-15);
 		

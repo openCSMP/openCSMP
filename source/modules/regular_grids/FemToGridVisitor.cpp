@@ -200,7 +200,7 @@ void FemToGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_
                 fe_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
                if ( IsInsideTriangle(grid.X(j),grid.Y(i)) ) 
                  egrids[ idx ].AddPoint( i, j, grid(i,j) );
-           if ( fe_type == ISOPARAMETRIC_LINEAR_QUADRILATERAL || fe_type == LINEAR_RECTANGLE ||
+           if ( fe_type == ISOPARAMETRIC_LINEAR_QUADRILATERAL || 
                 fe_type == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) 
                if ( IsInsideQuadrilateral(grid.X(j),grid.Y(i)) ) 
                  egrids[ idx ].AddPoint( i, j, grid(i,j) );

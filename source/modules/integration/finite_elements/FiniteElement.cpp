@@ -102,7 +102,6 @@ bool isTriangularElement( CSMP_FEM_TYPE etype )
 bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
-	if ( etype == LINEAR_RECTANGLE) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL ) return true;
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;
@@ -465,16 +464,7 @@ void   FiniteElement::N_AtBaryCenter( vector<double64>& N )
     cout <<"\nMethod arguments for single-element mesh output, input (ip, N vector<double64>):"<< endl;
     out( N );
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
- }
-
-void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
-{
-	InstructUser("FiniteElement::Integral_dNT_K_dN");
-	cout << "\nThis method is not defined for the FE element type which you are using" << endl;
-	cout << "\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):" << endl;
-	M.Out();
-	throw invalid_argument("FiniteElement::dN");
-}
+ } 
 
 
 void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients 
@@ -974,9 +964,7 @@ void  FiniteElement::Out() const
  
 ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
  {
-     if ( etype == LINEAR_CUBOID) return VOLUME;
-	 if ( etype == LINEAR_RECTANGLE) return SURFACE;
-	 if ( etype == LINEAR_BAR ) return LINE;    										
+     if ( etype == LINEAR_BAR ) return LINE;    										
      if ( etype == QUADRATIC_BAR ) return LINE;
      if ( etype == CUBIC_BAR ) return LINE;										   
      if ( etype == LINEAR_TRIANGLE ) return SURFACE;   
@@ -1033,8 +1021,6 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
 CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int32 etype )
   {
      if ( etype == UNKNOWN ) return UNKNOWN;
-	 if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
-	 if (etype == LINEAR_CUBOID) return LINEAR_CUBOID;
      if ( etype == LINEAR_BAR ) return LINEAR_BAR;    										
      if ( etype == QUADRATIC_BAR ) return QUADRATIC_BAR;
      if ( etype == CUBIC_BAR ) return CUBIC_BAR;										   
@@ -1090,8 +1076,6 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int32 etype )
 CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
   {
      if ( etype == "UNKNOWN" ) return UNKNOWN;
-	 if ( etype == "LINEAR_RECTANGLE") return LINEAR_RECTANGLE;
-	 if ( etype == "LINEAR_CUBOID") return LINEAR_CUBOID;
      if ( etype == "LINEAR_BAR" ) return LINEAR_BAR;
      if ( etype == "QUADRATIC_BAR" ) return QUADRATIC_BAR;
      if ( etype == "CUBIC_BAR" ) return CUBIC_BAR;
@@ -1151,8 +1135,6 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  const char* parseFiniteElementType( int32 etype )
   {
      if ( etype == UNKNOWN ) return "UNKNOWN";
-	 if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
-	 if ( etype == LINEAR_CUBOID) return "LINEAR_CUBOID";
      if ( etype == LINEAR_BAR ) return "LINEAR_BAR";    										                                    // BAR_2     =2,
      if ( etype == QUADRATIC_BAR ) return "QUADRATIC_BAR";
      if ( etype == CUBIC_BAR ) return "CUBIC_BAR";										                                            // BAR_4  

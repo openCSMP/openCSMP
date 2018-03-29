@@ -1,7 +1,7 @@
 #include "LinearElasticityE_VVCase.h"
 #include "Model1D.h"
 #include "VTU_Interface.h"
-#include "SAMG_Solver.h"
+#include "LUdcmp_Solver.h"
 #include "PDE_Integrator.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"
@@ -53,7 +53,7 @@ namespace csmp
 
       // setting up & solving linear elasticity fea problem
 
-      PDE_Integrator<DIM,Region> deformation( new SAMG_Solver() );
+      PDE_Integrator<DIM,Region> deformation( new LUdcmp_Solver() );
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );
       NumIntegral_BT_D_B_dV<DIM,Element<DIM> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       deformation.Add( &stiffness );

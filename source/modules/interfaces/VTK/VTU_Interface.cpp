@@ -3867,11 +3867,9 @@ VTK_TYPE VTU_Interface<dim>::ElementType( SIMPLEX<dim>* elmt ) const
   case ISOPARAMETRIC_LINEAR_PRISM:      return VTK_WEDGE;
                                         break;
   case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
-  case LINEAR_RECTANGLE:
                                         return VTK_QUAD;
                                         break;
   case ISOPARAMETRIC_LINEAR_HEXAHEDRON:
-  case LINEAR_CUBOID:
                                         return VTK_HEXAHEDRON;
                                         break;
   case ISOPARAMETRIC_QUADRATIC_BAR:

@@ -1850,11 +1850,6 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                    tdeque.push_back( tentry );
                 break;
 
-			  case LINEAR_RECTANGLE: // (vectors are just copied over)
-				  geometric_primitives_VTK.push_back(VTK_QUAD);
-				  tdeque.push_back((*it).second);
-				  break;
-
               case ISOPARAMETRIC_LINEAR_QUADRILATERAL: // (vectors are just copied over)
                    geometric_primitives_VTK.push_back(VTK_QUAD);
                    tdeque.push_back( (*it).second );
@@ -1870,11 +1865,6 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                    tdeque.push_back( (*it).second );
                 break;
                 
-			  case LINEAR_CUBOID: // linear cuboid 
-				  geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
-				  tdeque.push_back((*it).second);
-				  break;
-
               case ISOPARAMETRIC_LINEAR_HEXAHEDRON: // linear hexahedron 
                    geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
                    tdeque.push_back( (*it).second );

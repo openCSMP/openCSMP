@@ -30,7 +30,6 @@ namespace csmp {
 		element_->Assign(7, &n7);
 
 		// 8 nodes each includes 3 coordinates :
-		// Standard ordering of reference element of isoparametric linear hexahedron
 		double tXY[8][3] = { -1,-1,1, 1,-1,1,  1,-1,-1, -1,-1,-1, -1,1,1, 1,1,1, 1,1,-1, -1,1,-1 };
 
 		// Set Node coordinates
@@ -76,15 +75,11 @@ namespace csmp {
 
 		cout << "\n Test Interpolation Function Values at Nodes : \n";
 		TestInterpolationFunctionValues(*element_);
-		cout << " End test. \n";
+		cout << " End test. Test is passed if no error reported. \n";
 
 		cout << "\n Sum of Shape functions at barycenter : \n";
 		TestSumShapesAtBaryCenter(*element_);
-		cout << " End test. \n";
-		
-		//cerr << "\n\nCurrently LinearCuboid_Test ( Run ) terminates program. Hit Enter to exit!\n";
-		//getchar();
-		//exit(EXIT_SUCCESS);
+		cout << " End test. Test is passed if no error reported. \n";
 	}
 
 
@@ -97,11 +92,11 @@ namespace csmp {
 			xyz = pt.Coordinates();
 			e.N_AtGlobalPoint(IPOL, xyz);
 			// 1 at point
-			_equal(IPOL[i], 1., tolerance_factor_);
+			_equalTest(IPOL[i], 1., tolerance_factor_);
 			// zero everywhere else
 			for (size_t j = 0; j < IPOL.size(); j++)
 				if (j != i)
-					_equal(IPOL[j], 0., tolerance_factor_);
+					_equalTest(IPOL[j], 0., tolerance_factor_);
 			// sum = 1 (is given)
 		}
 	} // end
@@ -112,6 +107,14 @@ namespace csmp {
 		element_->N_AtBaryCenter(M);
 		double sum = 0.;
 		for (size_t i = 0; i < M.size(); ++i) sum += M[i];
-		_equal(sum, 1., tolerance_factor_);
+		_equalTest(sum, 1., tolerance_factor_);
 	}
+
+	bool LinearCuboid_Test::_equalTest(double a, double b, double tol) const
+	{
+		if (fabs(a - b) <= tol) return true;
+		cerr << " Test did NOT pass \n";
+		return false;
+	}
+
 }

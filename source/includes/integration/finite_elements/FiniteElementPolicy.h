@@ -44,10 +44,9 @@ class FiniteElementPolicy {
     void       N_AtIntegrationPoint( size_t ipoint, std::vector<double64>& N ) const;
 
 // ADD METHODS FOR AXISYMMETRIC CASES ?
-    /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
-    void	   Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
 
-	void       dN( DenseMatrix<DM_MIN>& ) const;
+    /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
+    void       dN( DenseMatrix<DM_MIN>& ) const;
   
     /// first derivatives of interpolation functions at the given node (returned is determinant of Jacobian matrix at i,j)
     double64   dN_AtNode( DenseMatrix<DM_MIN>&, size_t nd, size_t dof=1 ) const;

@@ -1659,10 +1659,9 @@ template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICIAL_COMPLEX<dim>& domain, bool debug )
  {
     // 1. configure algorithm
-	clock_t loc_t = clock();
-	EstablishMatrixSetup( domain );
-	
-    // 2. Accumulation: Note that the conditions that pertain to the group must be input ! 
+    EstablishMatrixSetup( domain );
+ 
+    // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
     Accumulate( domain );
 
     // 3. If the computation is transient initial conditions must be input into the righthand vector
@@ -1673,18 +1672,16 @@ void PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::IntegrateOver( SIMPLICIAL_COMPLEX<d
 
     // 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
     AssignEssentialConditions( domain );
-	loc_t = clock() - loc_t;
-	cout << "\n\n Accumulation CLOCK \t" << loc_t << "\n\n";
+    
     // 6. diagnostics
     if ( debug ) {
          OutputGlobals();
          // OutputInput();
       }
-	loc_t = clock();
+ 
     // 7. invert global matrix
     Solve();
-	loc_t = clock() - loc_t;
-	cout << "\n\n Solving CLOCK \t" << loc_t << "\n\n";
+
     // 8. write results back into Model
     OutputResults( domain );
                            

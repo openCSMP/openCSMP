@@ -213,7 +213,7 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                     "Region and element type information not read correctly");
    
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
+    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, dim, isoparametric_ );
     ifs_asc.close(); // '*.asc' geometry file
 
     // 2.0 Reading the '*.dat' file with the mesh data
@@ -363,7 +363,7 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
-    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_ , dim );
+    Convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, dim, isoparametric_ );
     ifs_asc.close(); // '*.asc' geometry file
 
 

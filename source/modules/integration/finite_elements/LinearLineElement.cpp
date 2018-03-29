@@ -116,7 +116,7 @@ void LinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
           // y-derivatives
           DN(1,0) = -(dest3[1]-org3[1]) / len, DN(1,1) = (dest3[1]-org3[1]) / len;
           // z-derivatives
-          DN(2,0) = -(dest3[2]-org3[2]) / len, DN(2,1) = (dest3[2]-org3[2]) / len;
+          DN(1,0) = -(dest3[2]-org3[2]) / len, DN(1,1) = (dest3[2]-org3[2]) / len;
        }
 
   } // end dN
@@ -348,14 +348,6 @@ double64 LinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN )
 
     return 0.0;
  }
-
-void LinearLineElement::N_AtBaryCenter(std::vector<double64>& N)
-{
-	vector<double64> p;
-	p.resize(dim);
-	for (size_t i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
-	LinearLineElement::N(N, p);
-}
 
 
 

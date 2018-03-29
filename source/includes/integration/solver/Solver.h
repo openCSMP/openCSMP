@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <vector>
 #include "SolverSettings.h"
-#include "CompressedRowMatrix.h"
 
 namespace csmp {
 
@@ -81,11 +80,6 @@ class Solver {
     void  Verbose(bool verb);
     bool  Verbose() const;
 
-	void  Solve(CompressedRowMatrix& G,
-		std::vector<double64>& rh,
-		std::vector<double64>& x,
-		size_t no_unknowns = 1U);
-
     void  Solve( SparseMatrix& G,
                  std::vector<double64>& rh,
                  std::vector<double64>& x,
@@ -108,11 +102,6 @@ class Solver {
                                        std::vector<double64>& b,
                                        std::vector<double64>& x,
                                        size_t no_unknowns ) = 0;
-	
-	virtual void  SolveMatrixEquation( CompressedRowMatrix& A,
-										std::vector<double64>& b,
-										std::vector<double64>& x,
-										size_t no_unknowns) = 0;
 
     SolverSettings* solver_settings_;
   

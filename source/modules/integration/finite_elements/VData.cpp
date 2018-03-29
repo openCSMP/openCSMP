@@ -1842,8 +1842,6 @@ size_t  VData::OrderOfFiniteElementInterpolationFunctions() const
  {
      for ( vector<int32>::const_iterator 
            it=PelmtBegin(); it!=PelmtEnd(); it++ ) {
-		  if ( (*it) == LINEAR_CUBOID ) return 1;
-		  if ( (*it) == LINEAR_RECTANGLE ) return 1;
           if ( (*it) == LINEAR_BAR ) return 1;
           if ( (*it) == QUADRATIC_BAR ) return 2; 
           if ( (*it) == CUBIC_BAR ) return 3;  

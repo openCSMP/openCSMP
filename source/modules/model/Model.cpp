@@ -2207,12 +2207,7 @@ void Model<dim>::Apply( PDE_Integrator<dim,csmp::Region>& problem, bool debug )
  {
     problem.IntegrateOver( this->Region("Model"), debug );
 
- }
-template<size_t dim>
-void Model<dim>::Apply(PDE_Integrator_CRM<dim, csmp::Region>& problem, bool debug)
-{
-	problem.IntegrateOver(this->Region("Model"), debug);
-}
+ } 
 
 
 /// application to all boundaries
