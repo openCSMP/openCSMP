@@ -1,4 +1,4 @@
-#include "EclipseModel.h"
+  #include "EclipseModel.h"
 #include "ModelTime.h"
 
 namespace csmp {
@@ -63,7 +63,7 @@ void EclipseModel<dim>::BuildModel()
          csmp::VSet<dim>  vset;
          bool isoparametric_elements( true );
 
-         csmp::ModelTopology   mesh_topology ( isoparametric_elements );
+         csmp::ModelTopology   mesh_topology( isoparametric_elements );
          EclipseInterface<dim> mesh_interface;
 
          // =====================================================================
@@ -78,14 +78,14 @@ void EclipseModel<dim>::BuildModel()
                                   eclipse_model_settings_.exclude_inactive_cells_,
                                   eclipse_model_settings_.tetra_mesh_ );
 
-         if( eclipse_model_settings_.regions_.empty() )
-           {
+         // if there is no REGIONS section, i.e. no FIPNUM, SATNUM, EQLNUM or PVTNUM cell specifiers in the Eclipse input deck
+         if ( eclipse_model_settings_.regions_.empty() ) {
+               // the sets of strings will be empty if no regions, faults or wells were detected by the mesh interface
                mesh_interface.GetRegions( regions_ );
                mesh_interface.GetFaults( faults_ );
                mesh_interface.GetWells( wells_ );
            }
-         else
-           {
+         else {
                std::set<std::string>& desired_regions( eclipse_model_settings_.regions_ );
                std::set<std::string>  regions;
 
@@ -168,11 +168,13 @@ void EclipseModel<dim>::BuildModel()
                                             ( ( dim != 1U ) ? eclipse_model_settings_.create_boundaries_ : false ),
                                            non_box_shaped_model );
          // no regions
-         else
-             csmp::Model<dim>::Initialize( mesh_topology,
-                                           vset,
+         else {
+             // all cells are lumped into the region "Eclipse Model" that is stored in the model topology
+             const bool isoparametric(true);
+             csmp::Model<dim>::Initialize( isoparametric, vset,
                                            ( ( dim != 1U ) ? eclipse_model_settings_.create_boundaries_ : false ),
                                            non_box_shaped_model );
+           }
       }
 
     // -------------------------------------------------

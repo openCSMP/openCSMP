@@ -490,7 +490,7 @@ void CornerPointGrid<dim>
     
     @todo this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the EclipseModel
     
-    @todo the regions are not recognised properly.
+    @todo regions are not recognised properly.
 */
 template<size_t dim>
 void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
@@ -1822,7 +1822,7 @@ void CornerPointGrid<dim>
             //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
             const size_t array_length = (var.Size() > dim*dim ) ? var.Size() : 0U;
             assert( array_length == 1 );
-            PropertyData property_values( prop_place, SCALAR, dim, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( nodal_data.size() );
             for ( const auto it : nodal_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );
@@ -1830,7 +1830,7 @@ void CornerPointGrid<dim>
         else {
             // Add cell data to vset
             // csmp::FEM_Data<VarType> property_values( prop_place, cell_data );
-            PropertyData property_values( prop_place, SCALAR, dim, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( cell_data.size() );
             for ( const auto it : cell_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );

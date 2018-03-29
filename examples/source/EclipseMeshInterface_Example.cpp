@@ -31,7 +31,7 @@ void EclipseMeshInterface_Example::Run()
     cin  >> model_name;
 
     // Load Model
-    std::string variables_file( "CSMP-variables.txt" );
+    std::string variables_file( "CSMP_Eclipse_example-variables.txt" );
     EclipseModel<3U> modelOut( model_name, variables_file );
 
     // Setup mesh

@@ -277,7 +277,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       InstantiateFiniteVolumes();
 
     // 4. forming default computational domain called "Model"
-    const bool withNeighborConnectivity(true);
+    const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
 // will not apply if a region is disconnected from rest of model
@@ -376,7 +376,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
       InstantiateFiniteVolumes();
 
     // 2. forming root Region called "Model"
-    const bool withNeighborConnectivity(true);
+    const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
     const bool place_in_unique_regions(true);
     const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
     assert(valid_model_region);
@@ -544,10 +544,7 @@ template<size_t dim>
 template<class Var>
 void  Model<dim>::OutputVariableTo( const char* out_var, FEM_Data<Var>& data ) const
  {
-   throw csmp::Exception(ERROR, "Model::OutputVariableTo", out_var, "NYI");
-#if 0
-    this->Region(this->MasterRegion().c_str()).OutputVariableTo( out_var, data );
-#endif
+    this->Region("Model").OutputVariableTo( out_var, data );
 
  } // end OutputVariableTo
 

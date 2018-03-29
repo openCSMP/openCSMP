@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-IsoparametricLinearHexahedron::IsoparametricLinearHexahedron(size_t integrationPoints)
+IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_HEXAHEDRON, true, true, 1U ),
     NXYZ(8,3),
