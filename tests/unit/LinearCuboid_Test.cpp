@@ -49,7 +49,6 @@ namespace csmp {
 
 	void LinearCuboid_Test::run()
 	{
-#if 0
 		DenseMatrix<DM_MIN>  XY(element_->Nodes(), 3U);
 		element_->NodeCoordinateMatrix(XY);
 
@@ -86,7 +85,6 @@ namespace csmp {
 		//cerr << "\n\nCurrently LinearCuboid_Test ( Run ) terminates program. Hit Enter to exit!\n";
 		//getchar();
 		//exit(EXIT_SUCCESS);
-#endif
 	}
 
 
