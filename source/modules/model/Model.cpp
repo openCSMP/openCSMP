@@ -542,13 +542,8 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 */
 template<size_t dim>
 template<class Var>
-void  Model<dim>::OutputVariableTo( const char* out_var, FEM_Data<Var>& data ) const
- {
-   throw csmp::Exception(ERROR, "Model::OutputVariableTo", out_var, "NYI");
-#if 0
-    this->Region(this->MasterRegion().c_str()).OutputVariableTo( out_var, data );
-#endif
-
+  void  Model<dim>::OutputVariableTo( const char* out_var, FEM_Data<Var>& data ) const {
+    this->Region("Model").OutputVariableTo( out_var, data );
  } // end OutputVariableTo
 
 template void Model<1U>::OutputVariableTo( const char*, FEM_Data<ScalarVariable>& ) const;

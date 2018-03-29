@@ -10,6 +10,8 @@ namespace csmp {
 template<>
 class TensorVariable<1U> {
   public:
+    static constexpr VARIABLE_TYPE VariableType = TENSOR;
+
     TensorVariable();
     TensorVariable( const TensorVariable& );
     TensorVariable( VARIABLE_FLAG, double64 );
