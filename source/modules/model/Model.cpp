@@ -362,6 +362,8 @@ void Model<dim>::Initialize( bool isoparametric_elements,
                              bool create_boundaries,
                              bool non_box_shaped_model )
 {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     // 0. initializing the finite-element manager true=isoparametric
     fem_manager_.InitializeElements( dim,
                                      vset.OrderOfFiniteElementInterpolationFunctions(),
@@ -369,23 +371,28 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
     // 1. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+  
+    // 2. Testing with a flood-fill whether the model is contiguous
+    //    if not Accumulate all will not have reached all the elements
+    if ( Mesh().Elements() < vset.Elements() )
+        csmp_error.notice( ERROR, "Model<dim>::Initialize:",
+                                  "Model appears to be fragmented. Are all regions connected?" );
+
+    // 3. forming root Region called "Model"
+    const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
+    const bool place_in_unique_regions(true); // if there is no neighbor connectivity, it has to be re-established (!)
+    this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
+  
+    if ( this->Region("Model").Elements() < mesh_manager_.Elements() )
+        csmp_error.notice( ERROR, "Model<dim>::Initialize:",
+                                  "Newly created Region 'Model' contains less elements than the model." );
+
+    // 4. creating the finite volume mesh if necessary
     if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
          Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
          Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
-
-    // 2. forming root Region called "Model"
-    const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
-    const bool place_in_unique_regions(true);
-    const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
-    assert(valid_model_region);
-
-    // 3. Testing with a flood-fill whether the model is contiguous
-    //    if not Accumulate all will not have reached all the elements
-    if ( Mesh().Elements() < vset.Elements() )
-        throw csmp::Exception( FATAL_ERROR, "Model<dim>::Initialize",
-                                            "Model appears to be fragmented. Are all regions connected?" );
 
     cout <<"\nModel<dim>::Initialize(VSet): ";
     cout <<"Mesh has been built successfully..." << endl;

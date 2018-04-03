@@ -382,7 +382,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBo
          splitboundaryComplex->UpdateIndices();
      }
    splitboundaryComplex->CountAndLabelRegions( "region number", region_names );
-   
+
    // subdividing the interface element pairs into ones that juxtapose different regions against one another
    typedef set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > > INTERFACE_ELEMENT_PAIRS;
    map<pair<string,string>,INTERFACE_ELEMENT_PAIRS>  split_boundaries_nbor_elmts;
@@ -399,17 +399,38 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBo
 
 // echoing the map to the screen
 cerr <<"\nSplitBoundaryInterface::DetectAndCreateSplitBoundaries: interface region pairs found:\n";
-for ( auto it : split_boundaries_nbor_elmts )
-  cerr << it.first.first <<","<< it.first.second <<" ";
+for ( auto i : split_boundaries_nbor_elmts )
+  cerr << i.first.first <<","<< i.first.second <<" ";
 cerr << endl;
    
    // 3. Creating splitboundaries for each of the discovered juxtapositions of regions
    // --------------------------------------------------------------------------------
+   string bname;
    for ( auto it : split_boundaries_nbor_elmts ) {
          // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
-         const string bname = CreateSplitBoundaryName( it.first );
-     }
-   
+         bname = CreateSplitBoundaryName( it.first );
+     
+         // creating the struct of the set of interface element pairs
+         InterFaceElementSet<dim>  ifset( it.second );
+     
+         // create the SplitBoundary
+/*
+         std::pair<typename std::map<std::string,csmp::SplitBoundary<dim> >::iterator,bool>
+             bit = splitBoundaryMap_.insert( std::make_pair( bname,
+                                                             SplitBoundary( bname, splitboundaryComplex->Database(),
+                                                             splitboundaryComplex->Mesh(), ifset ) ) );
+         if ( bit.second ) {
+             std::cout << "\nSplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries: ";
+             std::cout <<" boundary created successfully.\n";
+             splitboundaryComplex->UpdateIndices();
+           }
+         else
+             throw csmp::Exception( INFO,
+                                    "SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries:",
+                                    bname.c_str(),
+                                    "boundary already exists. Nothing was done.");
+*/
+      }
    return true;
    
 } // end DetectAndCreateSplitBoundaries

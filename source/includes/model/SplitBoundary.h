@@ -19,7 +19,11 @@ template<typename> class FEM_Data;
 
 template<size_t dim>
 struct InterFaceElementSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>,
-                                             std::pair<Element<dim>*,size_t> > > {};
+                                             std::pair<Element<dim>*,size_t> > > {
+  // constructor
+  explicit InterFaceElementSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >& set )
+    : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
+};
 
 /** 
 
@@ -71,7 +75,7 @@ template<size_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
     SplitBoundary() = delete;
-    /// constructs split boundary with given name from the set of juxtaposed elements
+    /// constructs split boundary with given name from the set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, MeshManager<dim>&, const InterFaceElementSet<dim>& );
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     SplitBoundary( const SplitBoundary& );

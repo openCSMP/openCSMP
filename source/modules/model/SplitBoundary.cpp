@@ -136,18 +136,84 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
  
  
 /**
-   Constructor for split boundaries within the mesh with given name from the set of juxtaposed elements
+   Constructor of a split boundary from the set of juxtaposed elements
+   Asks mesh manager to construct corresponding faces
+ 
 */
-/*
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    MeshManager<dim>& mgr,
-                                   const InterFaceElementSet<dim>& )
-: ModelSubDomain<dim,InterFace>(ed)
+                                   const InterFaceElementSet<dim>& ifset )
+: ModelSubDomain<dim,InterFace>(splitboundaryname,pref)
  {
- } // end constructor
+    // requesting the mesh manager to build the interfaces
+    // ---------------------------------------------------
+/*
+    // building the interface vector
+    // -----------------------------
+    this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+    // assigning pointers to the interior interfaces
+    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it ) {
+      // XXX This operation may be expensive.
+      auto ifit = mesh.InterFacesBegin();
+      std::advance(ifit, *it);
+      this->elmt_vec_.push_back( &*ifit );
+    }
+   
+    // assigning pointers to the perimeter interfaces
+    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it ) {
+      // XXX This operation may be expensive.
+      auto ifit = mesh.InterFacesBegin();
+      std::advance(ifit, *it);
+      this->elmt_vec_.push_back( &*ifit );
+     }
+
+    // sorting the subvectors for future searching
+    const auto perimeterInterFacesBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
+    sort( this->elmt_vec_.begin(), perimeterInterFacesBegin );
+    sort( perimeterInterFacesBegin, this->elmt_vec_.end() );
+
+    // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
+    // ---------------------------------------------------------------------------------------------------
+    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
+    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
+          const size_t perimeter_faces((*it).size());
+          std::vector<ONE_BYTE_NUMBER> face_vec;
+          face_vec.reserve(perimeter_faces);
+          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
+            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+          this->bd_face_vec_.emplace_back( face_vec );
+      }
+
+    // building the node vector
+    // ------------------------
+    this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
+    // assigning pointers to the interior nodes
+    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it ) {
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
+   
+    // assigning pointers to the perimeter nodes
+    this->first_bd_node_ = info.interior_nodes.size();
+    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it ) {
+      auto nit = mesh.NodesBegin();
+      std::advance(nit, *it);
+      this->node_vec_.push_back( &*nit );
+    }
+
+    // sorting the subvectors for future searching
+    const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
+    sort( this->node_vec_.begin(), perimeterNodesBegin );
+    sort( perimeterNodesBegin, this->node_vec_.end() );
+   
+    // allocating the storage for subdomain properties
+    // -----------------------------------------------
+    this->ResizePropertyStorage( pref.LocalVariablesAt(SPLIT_BOUNDARY) );
 */
+ } // end constructor
  
 
 
