@@ -116,5 +116,5 @@ fracture permeability,kf,m2,SCALAR,1.00e-25,1.00e+00,ELEMENT,calculated,property
 permeability,k,m2,TENSOR,1.00e-25,1.00e+02,ELEMENT,input,property modelling,,
 permeability calibration factor,k_cal,none,SCALAR,0.00e+00,1.00e+00,ELEMENT,computed,property modelling,,
 porosity,phi,none,SCALAR,1.00e-06,1.00e+00,ELEMENT,input,property modelling,,
-rocktype,RRT,int,SCALAR,0.00e+00,1.00e+02,REGION,calculated,property modelling,,
+rocktype,RRT,int,SCALAR,0.00e+00,1.00e+02,ELEMENT,calculated,property modelling,,
 slip patch area,AS,m2,SCALAR,1.00e-01,1.00e+10,REGION,computed,property modelling,,
