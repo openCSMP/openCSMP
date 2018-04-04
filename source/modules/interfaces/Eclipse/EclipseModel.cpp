@@ -79,6 +79,7 @@ void EclipseModel<dim>::BuildModel()
                                   eclipse_model_settings_.tetra_mesh_ );
 
          // if there is no REGIONS section, i.e. no FIPNUM, SATNUM, EQLNUM or PVTNUM cell specifiers in the Eclipse input deck
+         // NB: a regions file must be present for the region to be preserved
          if ( eclipse_model_settings_.regions_.empty() ) {
                // the sets of strings will be empty if no regions, faults or wells were detected by the mesh interface
                mesh_interface.GetRegions( regions_ );

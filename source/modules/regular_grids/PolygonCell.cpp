@@ -1,4 +1,4 @@
-﻿#include "PolygonCell.h"
+#include "PolygonCell.h"
 
 #include "MeshingTools.h"
 #include "PolygonGrid.h"
@@ -156,6 +156,7 @@ void PolygonCell<dim>::AddExtraNode( const csmp::Point<dim>& pt )
 {
     extra_nodes_.reserve( extra_nodes_.size() + 1 );
     extra_nodes_.push_back( grid_->AddNode( pt ) );
+std::cerr <<"\ncalled PolygonCell<dim>::AddExtraNode:";
 }
 
 /// cell centroid ( if exist: by convention it's a first node of extra nodes arrays )

@@ -1,4 +1,4 @@
-﻿#include "CornerPointCell.h"
+#include "CornerPointCell.h"
 
 #include "ErrorHandler.h"
 
@@ -2267,10 +2267,10 @@ void CornerPointCell<dim>::Out() const
     std::cout <<"\n\tquadrilateral faces: "<< num_quad_faces_ <<", triangular faces: "<< num_tri_faces_;
     std::cout <<", meshing cycle: "<< meshing_cycle_;
     std::cout <<"\n\n\t pillar nodes (pillar_nodes_.size()):\n";
-    for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=pillar_nodes_.begin(); it!=pillar_nodes_.end(); ++it )
+    for ( auto it=pillar_nodes_.begin(); it!=pillar_nodes_.end(); ++it )
       std::cout << *(*it) <<" ";
     std::cout <<"\n\n\tpillar node order:\n";
-    for ( typename std::vector<size_t>::const_iterator it=pillar_nodes_order_.begin(); it!=pillar_nodes_order_.end(); ++it )
+    for ( auto it=pillar_nodes_order_.begin(); it!=pillar_nodes_order_.end(); ++it )
       std::cout << (*it) <<" ";
     std::cout <<"\n\n\torigin well face: "<< well_face_org_ <<", destination well face: "<< well_face_dst_;
 

@@ -108,7 +108,7 @@ protected:
 
 protected:
 
-    /// grid manager
+    /// grid manager TODO: this class is only used by AddExtraNode(), not clear why a pointer to it is needed
     PolygonGridManager<dim>* grid_;
 
     /// cell nodes data
