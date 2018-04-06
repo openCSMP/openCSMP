@@ -348,16 +348,16 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
                                                                      bool nonlinear_scheme )
  : NodeCenteredFiniteVolumeTransport<dim>( group_name, sg,
                                           "porosity",
-                                          "saturation oil", transp_velocity,
+                                          "saturation carbonic phase", transp_velocity,
                                           "nodal fluid volume source",
                                            second_order_in_space, second_order_in_time,
                                            thickness_low_dim_elmt ),
    // general flow-related variables
-   rhn_key(this->pref_.StorageKey("density oil")),         
-   rhw_key(this->pref_.StorageKey("density water")),
-   mun_key(this->pref_.StorageKey("viscosity oil")),
-   muw_key(this->pref_.StorageKey("viscosity water")),
-   ph1_key(this->pref_.StorageKey("saturation water")),  // the first phase that is not advected but updated
+   rhn_key(this->pref_.StorageKey("density carbonic phase")),         
+   rhw_key(this->pref_.StorageKey("density aqueous phase")),
+   mun_key(this->pref_.StorageKey("viscosity carbonic phase")),
+   muw_key(this->pref_.StorageKey("viscosity aqueous phase")),
+   ph1_key(this->pref_.StorageKey("saturation aqueous phase")),  // the first phase that is not advected but updated
    reference_variable_to_no_flow_bc_key_(this->pref_.StorageKey("fluid pressure")),
    with_capillary_spreading_(with_capillary_forces),
    with_gravitational_forces_(true),

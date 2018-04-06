@@ -255,7 +255,7 @@ size_t PolygonCell<dim>::GetNumFaceNodes( size_t fid, size_t sfid ) const
 {
   assert( fid < faces_.size() );
   assert( !faces_[fid].empty() );
-  assert( sfid < faces_[fid][sfid].second.size() );
+  assert( sfid < faces_[fid].size() );
     return faces_[fid][sfid].second.size();
 }
 

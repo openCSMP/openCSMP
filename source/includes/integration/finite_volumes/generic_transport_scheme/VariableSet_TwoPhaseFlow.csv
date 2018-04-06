@@ -113,7 +113,7 @@ acceleration gravity,g,m/s2,SCALAR,9.76e+00,9.83e+00,MODEL,input,physical consta
 fault breccia permeability,kFbr,m2,SCALAR,1.00e-25,1.00e+00,ELEMENT,calculated,property modelling,,
 fault size,Fs,m,SCALAR,1.00e+00,1.00e+05,REGION,calculated,property modelling,,
 fracture permeability,kf,m2,SCALAR,1.00e-25,1.00e+00,ELEMENT,calculated,property modelling,,
-permeability,k,m2,TENSOR,1.00e-25,1.00e+02,ELEMENT,input,property modelling,,
+permeability,k,m2,SCALAR,1.00e-25,1.00e+02,ELEMENT,input,property modelling,,
 permeability calibration factor,k_cal,none,SCALAR,0.00e+00,1.00e+00,ELEMENT,computed,property modelling,,
 porosity,phi,none,SCALAR,1.00e-06,1.00e+00,ELEMENT,input,property modelling,,
 rocktype,RRT,int,SCALAR,0.00e+00,1.00e+02,ELEMENT,calculated,property modelling,,

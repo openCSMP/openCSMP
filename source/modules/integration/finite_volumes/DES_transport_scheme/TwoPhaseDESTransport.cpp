@@ -154,8 +154,10 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         if(with_capillary_spreading_){                
             Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);
             double64 dsdn = dotProduct(snw_gradient, facetNrml);
-            vn_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier(fip)*flowfunctions_.TotalMobility(fip)/flowfunctions_.Mobility(fip, 1U);
-            vw_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier(fip)*flowfunctions_.TotalMobility(fip)/flowfunctions_.Mobility(fip, 0U);              
+            if(!isnan(dsdn)){
+                vn_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,0U);
+                vw_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,1U);
+            }   
         }  
             
         double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
@@ -194,7 +196,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
             capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
         
         //update non-wetting flux accumulation                                           
-        accumulation += sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                                  
+        accumulation += sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                              
     } 
     
     //compute CFL time increment 
@@ -352,26 +354,28 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
     for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
         if( neighbor_node->Status(  this->key_sCO2 ) != DIRICH){
-            int index = neighbor_node->Read(key_EventIndex);
-            Event<dim>* neighbor_event = FullList[index];  
-            assert( neighbor_event  != NULL ); 
-            if (neighbor_event->inPEPStack() == false) {
-                PEPList.push_back(neighbor_event);
-                neighbor_event->inPEPStack(true);
-                Update_DES(neighbor_event,t_clock);
-                ArrayVariable neighbor_array;
-                neighbor_node->Read(key_time, neighbor_array); 
-                double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
-                double64 dC_target = neighbor_array[5];//target change of solution
-                if (fabs(dC_cumulative) >= fabs(dC_target)) {
-                    clock_t t_begin = clock();
-                    if (neighbor_event->inQueue()){
-                        Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
-                        EventHeap.remove(neighbor_heap_node);
-                        neighbor_event->inQueue(false);
-                    }
-                    t_remove += clock() - t_begin; 
-                    Synchronize (neighbor_event, t_clock,t_remove); 
+            size_t index = neighbor_node->Read(key_EventIndex);
+            if(index >= 0 && index < FullList.size()){
+                Event<dim>* neighbor_event = FullList[index];  
+                assert( neighbor_event  != NULL ); 
+                if (neighbor_event->inPEPStack() == false) {
+                    PEPList.push_back(neighbor_event);
+                    neighbor_event->inPEPStack(true);
+                    Update_DES(neighbor_event,t_clock);
+                    ArrayVariable neighbor_array;
+                    neighbor_node->Read(key_time, neighbor_array); 
+                    double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
+                    double64 dC_target = neighbor_array[5];//target change of solution
+                    if (fabs(dC_cumulative) >= fabs(dC_target)) {
+                        clock_t t_begin = clock();
+                        if (neighbor_event->inQueue()){
+                            Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
+                            EventHeap.remove(neighbor_heap_node);
+                            neighbor_event->inQueue(false);
+                        }
+                        t_remove += clock() - t_begin; 
+                        Synchronize (neighbor_event, t_clock,t_remove); 
+                    };
                 };
             };
         };
@@ -407,7 +411,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, doub
                 dirich_count++;
             }
         }
-        cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
+        cout<<PEPList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
         first_step_=false;
     } 
 
@@ -546,7 +550,8 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
             T_RateOfChange_ += clock() - T_begin;         
             if ((*it)->valid() == false) {
                 T_begin= clock();
-                bool isactive = Schedule(event, model_time, cfl_multiplication_factor);                
+                bool isactive = Schedule(event, model_time, cfl_multiplication_factor);   
+                T_Schedule_ += clock() - T_begin;              
                 if (isactive) {
                     T_begin= clock();
                     double64 scheduled_time = event->t_schedule();

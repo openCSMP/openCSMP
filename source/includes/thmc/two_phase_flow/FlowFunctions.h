@@ -136,6 +136,9 @@ class FlowFunctions : public variables::Variables_TwoPhaseFlow,              ///
     template<class TARGET_PLACEMENT>
     double64 CapillaryDiffusionMultiplier( TARGET_PLACEMENT& ) const;
     
+    template<class TARGET_PLACEMENT>
+    double64 CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMENT&, size_t phase ) const;    
+    
   private:
     template<class TARGET_PLACEMENT>
     double64 dfds_Numerical( TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
