@@ -2740,7 +2740,7 @@ double64  Region<dim>::SurfaceArea() const
                                       this->elmt_vec_[i]->N( fnids[1U] )->Coordinate(),
                                       this->elmt_vec_[i]->N( fnids[2U] )->Coordinate() );
               // quadrilateral face
-              if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL or
+              if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL or etype == LINEAR_RECTANGLE or
                    etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL )
                 area += facetArea4( this->elmt_vec_[i]->N( fnids[0U] )->Coordinate(),
                                     this->elmt_vec_[i]->N( fnids[1U] )->Coordinate(),

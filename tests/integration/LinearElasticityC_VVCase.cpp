@@ -7,7 +7,7 @@
 #include "NumIntegral_BT_D_B_dV.h"
 #include "StressesAndStrains2.h"
 #include "ExtractTensorVariableComponent.h"
-#include "LUdcmp_Solver.h"
+#include "SAMG_Solver.h"
 
 using namespace std;
 
@@ -58,7 +58,7 @@ namespace csmp
       model.InputBoundaryValue( RIGHT, "force", forceRight );
 
       // setting up & solving linear elasticity fea problem;
-      PDE_Integrator<DIM,Region> deformation( new LUdcmp_Solver() );
+      PDE_Integrator<DIM,Region> deformation( new SAMG_Solver() );
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );
       NumIntegral_BT_D_B_dV<DIM,Element<DIM> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       deformation.Add( &stiffness );

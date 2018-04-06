@@ -10,6 +10,62 @@ using namespace std;
 
 namespace csmp {
 
+	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
+	SteadyStateDiffusor<dim, SIMPLICIAL_COMPLEX>::SteadyStateDiffusor(Model<dim>& sg,
+		const char* diffusivity,
+		const char* diffusing_variable,
+		const char* spatial_source_variable,
+		bool LumpedRHS)
+		:
+#ifdef CSMP_WITH_SAMG_SOLVER
+		settings_(),
+		PDE_Integrator<dim, SIMPLICIAL_COMPLEX>(new SAMG_Solver(&settings_)),
+#else
+		/// add extra functionality for alternative solver if needed
+		PDE_Integrator<dim, SIMPLICIAL_COMPLEX>(new CSMP_DEFAULT_LINEAR_SOLVER()),
+#endif
+		conductance_(sg.Database(), diffusivity, diffusing_variable, diffusing_variable),
+		source_(new NumIntegral_NT_op_N_dV<dim, Simplex>(sg.Database(), spatial_source_variable, diffusing_variable)),
+		nodal_source_(0),
+		gravity_(0),
+		grad_multiplier_(1.),
+		dep_var_name_(diffusing_variable),
+		firstCall_(true)
+	{
+		if (!isoparametricElementMesh(sg))
+			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+				"elements are not isoparametric; use other Algorithm");
+
+		const PropertyDatabase<dim>&  p_ref = sg.Database();
+
+		csmp::Index  conductivity_key = p_ref.StorageKey(diffusivity);
+		if (conductivity_key.place != ELEMENT and conductivity_key.place != ELEMENT_INTEGRATION_POINT
+			and conductivity_key.place != FACE)
+			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+				diffusivity, "variable must be placed on element, face or element integration point");
+
+		csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
+		if (diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR)
+			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+				diffusing_variable, "variable must be a scalar placed on the node");
+
+		csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
+		if (source_variable_key.type != SCALAR)
+			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+				spatial_source_variable, "variable must be a scalar");
+
+		if (source_variable_key.place != ELEMENT and source_variable_key.place != ELEMENT_INTEGRATION_POINT
+			and source_variable_key.place != FACE)
+			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
+				spatial_source_variable, "variable must be placed on element, face or their integration points");
+
+		// initializing the algorithm  
+		this->Add(&conductance_);
+		if (LumpedRHS) source_->LumpedFormulation();
+		this->Add(source_);
+
+	} // end constructor
+
 template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
 SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg,
                                                                   const char* diffusivity,

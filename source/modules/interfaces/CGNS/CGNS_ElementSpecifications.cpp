@@ -190,11 +190,11 @@ csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_Type( int et
     if ( etype ==  CGNS_ENUMV( BAR_2 ) ) return csmp::LINEAR_BAR;
     if ( etype ==  CGNS_ENUMV( BAR_4 ) ) return csmp::QUADRATIC_BAR;
     // trapezoidal elements (quads)
-//    if ( etype == CGNS_ENUMV( QUAD_4 ) ) return csmp::LINEAR_QUADRILATERAL;
+    if ( etype == CGNS_ENUMV( QUAD_4 ) ) return csmp::LINEAR_RECTANGLE;
 //    if ( etype == CGNS_ENUMV( QUAD_8 ) ) return csmp::QUADRATIC_QUADRILATERAL;
 //    if ( etype == CGNS_ENUMV( QUAD_9 ) ) return csmp::QUADRATIC_QUADRILATERAL9;
     // hexahedral elements
-//    if ( etype ==  CGNS_ENUMV( HEXA_8 ) )  return csmp::LINEAR_HEXAHEDRON;
+    if ( etype ==  CGNS_ENUMV( HEXA_8 ) )  return csmp::LINEAR_CUBOID;
 //    if ( etype ==  CGNS_ENUMV( HEXA_20 ) ) return csmp::QUADRATIC_HEXAHEDRON20;
 //    if ( etype ==  CGNS_ENUMV( HEXA_27 ) ) return csmp::QUADRATIC_HEXAHEDRON27;
     // triangles
@@ -247,7 +247,7 @@ int  CGNS_ElementSpecifications::CGNS_TypeFrom_CSMP_Type( int etype  ) const
     if ( etype == csmp::QUADRATIC_BAR ) return CGNS_ENUMV( BAR_4 );
 
     // trapezoidal elements (quads)
-    if ( etype == csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return CGNS_ENUMV( QUAD_4 );
+    if ( etype == csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL || etype == csmp::LINEAR_RECTANGLE ) return CGNS_ENUMV( QUAD_4 );
     if ( etype == csmp::ISOPARAMETRIC_QUADRATIC_QUADRILATERAL ) return CGNS_ENUMV( QUAD_8 );
     if ( etype == csmp::ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return CGNS_ENUMV( QUAD_9 );
 //    if ( etype == csmp::LINEAR_QUADRILATERAL ) return CGNS_ENUMV( QUAD_4 );
@@ -255,7 +255,7 @@ int  CGNS_ElementSpecifications::CGNS_TypeFrom_CSMP_Type( int etype  ) const
 //    if ( etype == csmp::QUADRATIC_QUADRILATERAL9 ) return CGNS_ENUMV( QUAD_9 );
 
     // hexahedral elements
-    if ( etype == csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON ) return CGNS_ENUMV( HEXA_8 );
+    if ( etype == csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == csmp::LINEAR_CUBOID ) return CGNS_ENUMV( HEXA_8 );
     if ( etype == csmp::ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return CGNS_ENUMV( HEXA_20 );
     if ( etype == csmp::ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return CGNS_ENUMV( HEXA_27 );
 //    if ( etype == csmp::LINEAR_HEXAHEDRON ) return CGNS_ENUMV( HEXA_8 );

@@ -33,6 +33,102 @@ namespace csmp {
     @attention per default isoparametric is true and the connectivity information
     between the elements from ANSYS is not used, but this data is recreated
 */
+
+	void ANSYS_Model3D::Initialize(bool isoparametric,
+		const char* mesh_file_set,
+		const char* regions_file_prefix,
+		bool irregular_mesh,
+		bool binary_input_file,
+		bool use_regions_file,
+		bool create_boundaries)
+	{
+		double64& model_time(ModelTime::Instance().modelTime);
+		model_time = 0.;
+
+		// -------------------------------------------------
+		// initializing the empty Model from the ANSYS
+		// data imported into a vset.
+		// -------------------------------------------------
+		try {
+			VSet<3U>  vset;
+			bool isoparametric_elements(isoparametric);
+
+			ModelTopology   mesh_topology(isoparametric_elements);
+			ANSYS_Interface mesh_interface(isoparametric_elements);
+
+			// 0. reading the mesh from ANSYS-CSMP-input files
+			mesh_interface.Read_ANSYS_Mesh(std::string(mesh_file_set), vset, mesh_topology, binary_input_file, irregular_mesh);
+
+			// 1. preserving numbered node coordinates in a vector
+			const size_t vertices(vset.Vertices());
+			node_coords_.reserve(vertices);
+			for (size_t i = 0U; i<vertices; ++i)
+				node_coords_.emplace_back(Point<3U>(vset.Px(i), vset.Py(i), vset.Pz(i)));
+
+			// 2. construct model based on obtained model topology and vset
+			if (use_regions_file)
+				Model<3U>::Initialize(regions_file_prefix,
+					mesh_topology,
+					vset,
+					create_boundaries,
+					irregular_mesh);
+			else
+				Model<3U>::Initialize(mesh_topology,
+					vset,
+					create_boundaries,
+					irregular_mesh);
+
+		}
+
+		// -------------------------------------------------
+		// catching all possible standard and csmp::Exceptions
+		// -------------------------------------------------
+		catch (bad_alloc& ba) {
+			cout << "\nbad_alloc: Memory allocation error caused by: " << ba.what() << endl;
+		}
+		catch (bad_cast& ba) {
+			cout << "\nbad_cast: Type casting error caused by: " << ba.what() << endl;
+		}
+		catch (bad_exception& ba) {
+			cout << "\nbad_exception: Exception error caused by: " << ba.what() << endl;
+		}
+		catch (bad_typeid& ba) {
+			cout << "\nbad_typeid: Type ID error caused by: " << ba.what() << endl;
+		}
+		catch (ios_base::failure& ba) {
+			cout << "\nios_base::failure: Probable I/O error caused by: " << ba.what() << endl;
+		}
+		// standard logic errors
+		catch (domain_error& ba) {
+			cout << "\ndomain_error: Logic error caused by: " << ba.what() << endl;
+		}
+		catch (invalid_argument& ba) {
+			cout << "\ninvalid_argument: Logic error caused by: " << ba.what() << endl;
+		}
+		catch (length_error& ba) {
+			cout << "\nlength_error: Logic error caused by: " << ba.what() << endl;
+		}
+		catch (out_of_range& ba) {
+			cout << "\nout_of_range: Logic error caused by: " << ba.what() << endl;
+		}
+		// runtime errors
+		catch (overflow_error& ba) {
+			cout << "\noverflow_error: Runtime error caused by: " << ba.what() << endl;
+		}
+		catch (range_error& ba) {
+			cout << "\nrange_error: Runtime error caused by: " << ba.what() << endl;
+		}
+		catch (underflow_error& ba) {
+			cout << "\nunderflow_error: Runtime error caused by: " << ba.what() << endl;
+		}
+		catch (Exception& ba) {
+			cout << "\nException: Exception raised by: " << ba.What() << endl;
+			cout << "\nDiagnostics:" << endl;
+			ba.Out();
+		}
+
+	} // end Initialize
+
 void ANSYS_Model3D::Initialize( const char* mesh_file_set,
                                 const char* regions_file_prefix,
                                 bool irregular_mesh,
@@ -228,7 +324,35 @@ ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
                 create_boundaries);
  }
 
+/**
 
+ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+const char* variable_file )
+\par Description:
+Choose isoparametric or non-isoparametric!
+Default constructor of Model is called. Then the model is build
+from the 'icem_file_set' '*.asc' and '*.dat' files using the method
+Initialize.
+*/
+
+ANSYS_Model3D::ANSYS_Model3D(bool isoparametric,
+	const char* icem_file_set,
+	const char* variable_file,
+	bool irregular_mesh,
+	bool binary_file,
+	bool use_regions_file,
+	bool create_boundaries)
+	: Model<3U>(variable_file, false)
+{
+	this->Name(icem_file_set);
+	Initialize(isoparametric,
+		icem_file_set,
+		icem_file_set,
+		irregular_mesh,
+		binary_file,
+		use_regions_file,
+		create_boundaries);
+}
 /**
 
   ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,

@@ -12,7 +12,7 @@ namespace csmp {
 IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_HEXAHEDRON, true, true, 1U ),
-    NXYZ(8,3),
+    NXYZ(8,3), V_(28), Vx_(28), Vy_(28), Vz_(28),
     IP(integrationPoints,3)
  {
     assert( integrationPoints == 1 or
@@ -1897,6 +1897,46 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
      cout <<"\nIsoparametricLinearHexahedron::OutputNodeDataToVTK: file '"<< outfile <<"' written successfully."<< endl;
 
  } // end OutputNodeDataToVTK
+
+// The analytical integration is correct for aligned or rotated cuboids
+void IsoparametricLinearHexahedron::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+{
+	double vol36 = 36.*Volume(), 
+		     dxy = K(2, 2) * (XY(6, 0) - XY(0, 0))*(XY(6, 0) - XY(0, 0)) * (XY(6, 1) - XY(0, 1))*(XY(6, 1) - XY(0, 1)) / (vol36),
+		     dxz = K(1, 1) * (XY(6, 0) - XY(0, 0))*(XY(6, 0) - XY(0, 0)) * (XY(6, 2) - XY(0, 2))*(XY(6, 2) - XY(0, 2)) / (vol36),
+		     dyz = K(0, 0) * (XY(6, 1) - XY(0, 1))*(XY(6, 1) - XY(0, 1)) * (XY(6, 2) - XY(0, 2))*(XY(6, 2) - XY(0, 2)) / (vol36), 
+		    dxyz = 4.*(dyz + dxz + dxy),
+             xpy = dxy + dyz,   
+		     xpz = dxy + dxz, 
+		     ypz = dyz + dxz, 
+		   xpypz = dxy + dyz + dxz;
+
+	V_.resize(36);
+	V_ = {dxyz, 2*xpz - 4*dyz, -2*ypz + dxy, 2*xpy - 4*dxz, -4*dxy + 2*ypz, -2*xpy + dxz, -xpypz, -2*xpz + dyz,
+		  dxyz, 2*xpy - 4*dxz,  dxy - 2*ypz,  -2*xpz + dxz, -4*dxy + 2*ypz,  dyz - 2*xpz, -xpypz,
+		  dxyz, 2*xpz - 4*dyz,       -xpypz,   dyz - 2*xpz, -4*dxy + 2*ypz, -2*xpy + dxz,
+		  dxyz,   dyz - 2*xpz,       -xpypz,  -2*xpy + dxz, -4*dxy + 2*ypz,
+		  dxyz, 2*xpz - 4*dyz, -2*ypz + dxy, 2*xpy - 4*dxz,
+		  dxyz, 2*xpy - 4*dxz, -2*ypz + dxy,
+		  dxyz, 2*xpz - 4*dyz,
+	      dxyz};
+
+	size_t k(0), j;
+	for (size_t i = 0; i < 8; ++i) { // 8 = npe
+		for (j = 0; j < i; ++j) M(i, j) = M(j, i);
+		for (j = i; j < 8; ++j) M(i, j) = V_[k++];
+	}
+	/*
+	V_ = {         dxyz, 2*xpz - 4*dyz,  -2*ypz + dxy, 2*xpy - 4*dxz, -4*dxy + 2*ypz, -2*xpy + dxz, -xpypz, -2*xpz + dyz,
+          2*xpz - 4*dyz,          dxyz, 2*xpy - 4*dxz,  dxy - 2*ypz,  -2*xpz + dxz, -4*dxy + 2*ypz,  dyz - 2*xpz, -xpypz,
+		   -2*ypz + dxy, 2*xpy - 4*dxz,          dxyz, 2*xpz - 4*dyz,        -xpypz,   dyz - 2*xpz, -4*dxy + 2*ypz, -2*xpy + dxz,
+		2 * xpy - 4 * dxz,  dxy - 2 * ypz, 2 * xpz - 4 * dyz, dxyz,   dyz - 2*xpz,       -xpypz,  -2*xpy + dxz, -4*dxy + 2*ypz,
+		-4 * dxy + 2 * ypz,   -2 * xpz + dxz,        -xpypz,   dyz - 2 * xpz, dxyz, 2*xpz - 4*dyz, -2*ypz + dxy, 2*xpy - 4*dxz,
+		-2 * xpy + dxz,  -4 * dxy + 2 * ypz,   dyz - 2 * xpz,       -xpypz, 2 * xpz - 4 * dyz,  dxyz, 2*xpy - 4*dxz, -2*ypz + dxy,
+		-xpypz,   dyz - 2 * xpz,-4 * dxy + 2 * ypz,   -2 * xpy + dxz,  -2 * ypz + dxy, 2 * xpy - 4 * dxz, dxyz, 2*xpz - 4*dyz,
+		-2 * xpz + dyz,  -xpypz, -2 * xpy + dxz, -4 * dxy + 2 * ypz,  2 * xpy - 4 * dxz,  -2 * ypz + dxy, 2 * xpz - 4 * dyz, dxyz};
+	*/
+}
 
 
 

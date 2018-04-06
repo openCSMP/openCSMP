@@ -3,10 +3,16 @@
 #include "CSMP_mathUtilities.h"
 #include "ModelTime.h"
 #include "SparseMatrix.h"
+#include "SAMG_Solver.h"
 
 using namespace std;
 
 namespace csmp {
+
+	void Solver::Solve(CompressedRowMatrix& G, std::vector<double64>& rh, std::vector<double64>& x, size_t no_unknowns)
+	{
+		SolveMatrixEquation(G, rh, x, no_unknowns);
+	}
 
 /**
  
@@ -129,7 +135,9 @@ void  Solver::Solve( SparseMatrix& A,
     // x = b;
     
     // Delegate solution process (this is a purely virtual function)
-    SolveMatrixEquation( A, b, x, no_unknowns );
+	
+	// cout << "\nSolving Ax=b with GuessSidel\n\n"; 
+	SolveMatrixEquation(A, b, x, no_unknowns);
                                      
     if ( Verbose() ) {
          cout <<"\nSolver::SolveMatrixEquation: Global matrix after solution:"<< endl;
@@ -141,10 +149,6 @@ void  Solver::Solve( SparseMatrix& A,
       }
                                     
  } // end SolveMatrixEquation
-
-
-
-
 
 /**
  

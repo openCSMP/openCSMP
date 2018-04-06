@@ -18,8 +18,8 @@ public:
 	virtual double64   Volume();
 	virtual double64   AspectRatio();
 	virtual double64   InnerRadius();
-	virtual size_t     CornerNodes() { return 8U; }
-	virtual void	   EdgeLengths(std::vector<double64> v);
+	virtual size_t     CornerNodes() const { return 8U; }
+	virtual void	   EdgeLengths(std::vector<double64>& v);
 	virtual void       CornerNodes(std::vector<size_t>& ids) const;
 	virtual void       NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const;
 	virtual void       NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const;
@@ -28,8 +28,11 @@ public:
 	virtual void       N(std::vector<double64>& M, const std::vector<double64>& xyz);
 	virtual void       N_AtGlobalPoint(std::vector<double64>& M, const std::vector<double64>& xyz);
 	virtual void       N_AtBaryCenter(std::vector<double64>& M);
+	virtual void	   Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
 	virtual void       IntegralNN(DenseMatrix<DM_MIN>& N);
 	virtual void       IntegraldNdN(DenseMatrix<DM_MIN>& DN);
+	// virtual void     IntegrationPoints
+	virtual   void     dN(DenseMatrix<DM_MIN>&);
 	virtual double64   dN_At(DenseMatrix<DM_MIN>& B, const std::vector<double64>& xyz);
 	virtual void       CounterClockwiseNodes(std::vector<size_t>& ids) const;
 	virtual CSMP_FEM_TYPE  ElementTypeOfSegment(size_t) const { return LINEAR_BAR; };
@@ -41,7 +44,9 @@ private:
 	void CenterOfFacePoints(DenseMatrix<DM12>& XF);
 	void MidSegmentPoints(DenseMatrix<DM12>& XS);
 	DenseMatrix<DM12> M1_, M2_, M3_; // Auxiliary Dense Matrix
-	std::vector<double64> V_; // Auxiliary vector
+	//DenseMatrix<DM_MIN> IntdNdN_;
+	//double ddx_, ddy_, ddz_, Kx_, Ky_, Kz_;
+	std::vector<double64> V_, Vx_, Vy_, Vz_; // Auxiliary vector
 };
 }
 #endif // !Linear Hexahedron
