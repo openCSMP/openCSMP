@@ -74,10 +74,12 @@ public:
     virtual void        OutputNodeDataToVTK( const char* file_name, const char* var_name,
                                              DenseMatrix<DM_MIN>& DATA ) const;
 
+	virtual void	   Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
+
   private:
 
-    std::vector<double64>   W;
-    DenseMatrix<DM_MIN>     DN, NXYZ, IP;
+    std::vector<double64>   W, Vx_, Vy_, Vz_, V_;
+    DenseMatrix<DM_MIN>     DN, NXYZ, IP, B, BT;
 
     double64 VolumeOfTetra (
                         size_t verticeIndex1,

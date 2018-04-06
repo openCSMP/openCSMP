@@ -788,6 +788,7 @@ void  ANSYS_ElementSpecifications::SurfaceElements( list<string>& surf_elements 
     surf_elements.push_back("QUAD_8_X");
     surf_elements.push_back("QUAD_9");
     // CSMP Types
+	surf_elements.push_back("LINEAR_RECTANGLE");
     surf_elements.push_back("LINEAR_TRIANGLE");
     surf_elements.push_back("LINEAR_TRIANGLE3D");
     surf_elements.push_back("ISOPARAMETRIC_LINEAR_TRIANGLE");
@@ -976,7 +977,7 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int32 etyp
     if ( etype ==  2 ) return LINEAR_BAR;                                         // BAR_2;
     if ( etype ==  3 ) return QUADRATIC_BAR;                        // BAR_3;
     // trapezoidal elements (quads)
-//    if ( etype == 14 ) return LINEAR_QUADRILATERAL;                 // QUAD_4;
+    if ( etype == 14 ) return LINEAR_RECTANGLE;                 // QUAD_4;
 //    if ( etype == 15 ) return BARYCENTRIC_LINEAR_QUADRILATERAL;     // QUAD_4_X;
 //    if ( etype == 16 ) return QUADRATIC_QUADRILATERAL;              // QUAD_8;
 //    if ( etype == 17 ) return BARYCENTRIC_QUADRATIC_QUADRILATERAL;  // QUAD_8_X;
@@ -991,7 +992,7 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( int32 etyp
     if ( etype ==  4 ) return LINEAR_TETRAHEDRON;                   // TETRA_4;
     if ( etype ==  5 ) return QUADRATIC_TETRAHEDRON;                // TETRA_10;
     // hexahedral elements
-//    if ( etype ==  6 ) return LINEAR_HEXAHEDRON;       // HEXA_8;
+    if ( etype ==  6 ) return LINEAR_CUBOID;       // HEXA_8;
 //    if ( etype ==  7 ) return QUADRATIC_HEXAHEDRON20;  // HEXA_20;
 //    if ( etype == 20 ) return QUADRATIC_HEXAHEDRON27;  // HEXA_27;
     // pyramids
@@ -1066,7 +1067,7 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const 
     if ( etype == "BAR_2" )    return LINEAR_BAR;
     if ( etype == "BAR_3" )    return QUADRATIC_BAR;
     // trapezoidal elements (quads)
-//    if ( etype == "QUAD_4" )   return LINEAR_QUADRILATERAL;
+    if ( etype == "QUAD_4" )   return LINEAR_RECTANGLE;
 //    if ( etype == "QUAD_4_X" ) return BARYCENTRIC_LINEAR_QUADRILATERAL;
 //    if ( etype == "QUAD_8" )   return QUADRATIC_QUADRILATERAL;
 //    if ( etype == "QUAD_8_X" ) return BARYCENTRIC_QUADRATIC_QUADRILATERAL;
@@ -1081,7 +1082,7 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const 
     if ( etype == "TETRA_4" )  return LINEAR_TETRAHEDRON;
     if ( etype == "TETRA_10" ) return QUADRATIC_TETRAHEDRON;
     // hexahedral elements
-//    if ( etype == "HEXA_8" )   return LINEAR_HEXAHEDRON;
+    if ( etype == "HEXA_8" )   return LINEAR_CUBOID;
 //    if ( etype == "HEXA_20" )  return QUADRATIC_HEXAHEDRON20;
 //    if ( etype == "HEXA_27" )  return QUADRATIC_HEXAHEDRON27;
     // pyramids

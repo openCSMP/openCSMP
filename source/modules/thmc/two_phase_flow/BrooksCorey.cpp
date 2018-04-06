@@ -28,9 +28,9 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const bool sw_ro_mu_placement )
 
  : TwoPhaseModel<dim>(database, viscosity_nw, viscosity_w, density_nw, density_w,
-                      permeability, "saturation water", 
-                     "residual saturation non-wetting phase",
-                     "residual saturation wetting phase",
+                      permeability, "saturation aqueous phase", 
+                     "residual saturation carbonic phase",
+                     "residual saturation aqueous phase",
                       sw_ro_mu_placement),
 
    pd_key_(database.StorageKey(pc_entry)),
@@ -48,10 +48,10 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const bool sw_ro_mu_placement )
                                
  : TwoPhaseModel<dim>(database, "permeability",  
-                     "viscosity oil", "viscosity water",
-                     "density oil", "density water", "saturation water",
-                     "residual saturation non-wetting phase",
-                     "residual saturation wetting phase",
+                     "viscosity carbonic phase", "viscosity aqueous phase",
+                     "density carbonic phase", "density aqueous phase", "saturation aqueous phase",
+                     "residual saturation carbonic phase",
+                     "residual saturation aqueous phase",
                       sw_ro_mu_placement ),
 
    pd_key_(database.StorageKey(pc_entry)),

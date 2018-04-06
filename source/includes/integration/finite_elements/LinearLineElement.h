@@ -24,6 +24,7 @@ class LinearLineElement : public FiniteElement {
     virtual double64 dN_At( DenseMatrix<DM_MIN>& DN2, const std::vector<double64>& xyz  );
     virtual double64 dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
     virtual double64 dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
+	virtual void     N_AtBaryCenter(std::vector<double64>& N);
 
     virtual void     IntegralN( DenseMatrix<DM_MIN>& M );
     virtual void     IntegralNN( DenseMatrix<DM_MIN>& M );

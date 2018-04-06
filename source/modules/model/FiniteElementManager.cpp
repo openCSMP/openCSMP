@@ -7,6 +7,8 @@
 #include "LinearTriangle.h"
 #include "LinearTriangle3D.h"
 #include "LinearTetrahedron.h"
+#include "LinearCuboid.h"
+#include "LinearRectangle.h"
 #include "IsoparametricQuadraticTriangle.h"
 #include "IsoparametricQuadraticTetrahedron.h"
 
@@ -255,6 +257,8 @@ void FiniteElementManager::InitializeElements( size_t dim, size_t interpolation_
                    tetr_ptr = new LinearTetrahedron(); 
                    tria_ptr = new LinearTriangle3D();
                    line_ptr = new LinearLineElement(3);
+                   hexa_ptr = new LinearCuboid();
+                   quad_ptr = new LinearRectangle(3);
                 }
            }
          else if ( interpolation_order == 2U ) {

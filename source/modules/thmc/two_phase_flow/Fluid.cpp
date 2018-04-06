@@ -28,8 +28,13 @@ template<class TARGET_PLACEMENT>
 double64 Fluid<dim,USER>::Viscosity( TARGET_PLACEMENT& p, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
-    if ( phase == 0U ) return eos.mu_brine( Pressure(p), Temperature(p), Salinity(p) );
-    return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );      
+    /*uncomment to compute from PTX properties*/
+    //if ( phase == 0U ) return eos.mu_brine( Pressure(p), Temperature(p), Salinity(p) );
+    //return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) ); 
+    
+    /*direct interpolation*/
+    if ( phase == 0U ) return p.Interpolate( User()->key_muH2O );
+    return p.Interpolate( User()->key_muCO2 );      
  }
 
 template double64 Fluid<1U,FlowFunctions>::Viscosity( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
@@ -56,8 +61,13 @@ template<class TARGET_PLACEMENT>
 double64 Fluid<dim,USER>::Density( TARGET_PLACEMENT& p, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-    if ( phase == 0U ) return eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) );
-    return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    /*uncomment to compute from PTX properties*/
+    //if ( phase == 0U ) return eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) );
+    //return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    
+    /*direct interpolation*/
+    if ( phase == 0U ) return p.Interpolate( User()->key_rhoH2O );
+    return p.Interpolate( User()->key_rhoCO2 );
  }
 
 template double64 Fluid<1U,FlowFunctions>::Density( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;

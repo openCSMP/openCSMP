@@ -150,6 +150,13 @@ void FiniteElementPolicy<dim,SIMPLEX>::N_AtBaryCenter( std::vector<double64>& Nn
 
 
 // DERIVATIVES OF SHAPE FUNCTIONS AT DIFFERENT POINTS
+template<size_t dim, template<size_t> class SIMPLEX>
+void FiniteElementPolicy<dim, SIMPLEX>::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const
+{
+	assert(fptr_ != nullptr);
+	CoordinateMatrix();
+	fptr_->Integral_dNT_K_dN(M, K);
+}
 
 template<size_t dim, template<size_t> class SIMPLEX>
 void FiniteElementPolicy<dim,SIMPLEX>::dN( DenseMatrix<DM_MIN>& M ) const

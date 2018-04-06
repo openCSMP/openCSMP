@@ -23,7 +23,16 @@ class ANSYS_Model3D : public Model<3U> {
                    bool use_regions_file  = true,   /* true = reduce regions according to regions file, false = does not redure regions */
                    bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
 
-    /// input from ANSYS *.asc, *.dat and *-variable.txt files
+	/// (non-)isoparametric input from ANSYS *.asc, *.dat and *-variable.txt files
+	ANSYS_Model3D(bool isoparametric,
+		const char* icem_file_set,
+		const char* variable_file,
+		bool irregular_mesh = false,  /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
+		bool binary_file = true,   /* true = binary, false = ascii */
+		bool use_regions_file = true,   /* true = reduce regions according to regions file, false = does not redure regions */
+		bool create_boundaries = true);  /* true = creates boundaries around model, false = does not create boundaries */
+    
+	/// input from ANSYS *.asc, *.dat and *-variable.txt files
     ANSYS_Model3D( const char* icem_file_set, 
                    const char* variable_file,
                    bool irregular_mesh    = false,  /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
@@ -58,6 +67,14 @@ class ANSYS_Model3D : public Model<3U> {
                      bool binary_file,
                      bool use_regions_file,
                      bool create_boundaries );
+
+	void Initialize(bool isoparametric,
+		const char* icem_file_set,
+		const char* regions_file_prefix,
+		bool irregular_mesh,
+		bool binary_file,
+		bool use_regions_file,
+		bool create_boundaries);
   
     std::vector<Point<3U> > node_coords_; ///< node coordinates in VSet order to re-establish original node numbering if necessary
 };

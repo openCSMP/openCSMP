@@ -103,7 +103,10 @@ void ComputationalSettings::EstablishMultipliers( double64& pf_multiplier,
         pf_multiplier  = 1.;
         adv_multiplier = 0.7;
         break;
-
+    case ASYNCHRONOUS:  // this will invoke the explicit DES scheme
+        pf_multiplier  = 1.;
+        adv_multiplier = 0.5;
+        break; 
     default:
         cout <<"\nComputationalSettings::EstablishMultipliers: Directive not recognized."<< endl;
     }
@@ -561,6 +564,8 @@ TIME_STRATEGY parseTimeStrategy( const char* time_strategy )
     else if ( strategy == "PRESCRIBED" )   return PRESCRIBED;
     else if ( strategy == "careful" )   return CAREFUL;
     else if ( strategy == "CAREFUL" )   return CAREFUL;
+    else if ( strategy == "asynchronous" )   return ASYNCHRONOUS;
+    else if ( strategy == "ASYNCHRONOUS" )   return ASYNCHRONOUS;    
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

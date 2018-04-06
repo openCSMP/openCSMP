@@ -11,6 +11,7 @@
 #include "BoundaryInterface.h"
 #include "SplitBoundaryInterface18.h"
 #include "LocalVariableStorage.h"
+#include "PDE_Integrator_CRM.h"
 #include <string>
 
 namespace csmp {
@@ -355,6 +356,7 @@ public:
 
     /// application of integration scheme to model, subregions thereof or boundary or split-boundary objects
     void Apply( PDE_Integrator<dim,csmp::Region>&, bool debug=false );
+	void Apply( PDE_Integrator_CRM<dim, csmp::Region>&, bool debug = false);
     void Apply( PDE_Integrator<dim,csmp::Boundary>&, bool debug=false );
     void Apply( PDE_Integrator<dim,csmp::SplitBoundary>&, bool debug=false );
 
