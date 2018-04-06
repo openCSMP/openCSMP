@@ -10,8 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-	// CSMP_FEM_TYPE, isoparametric, uses_local_coordinates, order_of_shape_functions
-	LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
+LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
 	{
 		dim = dims;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */

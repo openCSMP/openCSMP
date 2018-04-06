@@ -10,8 +10,8 @@ namespace csmp {
 		virtual ~LinearRectangle();
 		virtual void IntegralNN(DenseMatrix<DM_MIN>& M);
 		virtual double64 Volume();
-		virtual void   EdgeLengths(std::vector<double64>& vec);
-		virtual size_t CornerNodes() { return 4U; }
+		virtual void   EdgeLengths(std::vector<double64>& );
+		virtual size_t CornerNodes() const { return 4U; }
 		virtual size_t MidSideNodes() const { return 0; }
 		virtual void CornerNodes(std::vector<size_t>& ids) const;
 		virtual void NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const;
