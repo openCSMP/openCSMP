@@ -408,8 +408,8 @@ double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
   
    // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
    // TODO: use the specific acceleration of gravity that is stored on the actual model.
-   const double64 k_g_drho = p.Interpolate(key_kV) * -ACC_GRAVITY * delta_rho;
-   //const double64 k_g_drho = p.Interpolate(key_k) * -ACC_GRAVITY * delta_rho;
+   //const double64 k_g_drho = p.Interpolate(key_kV) * -ACC_GRAVITY * delta_rho;
+   const double64 k_g_drho = p.Interpolate(key_k) * -ACC_GRAVITY * delta_rho;
 
    // else compute result using G saturation derivative
    return k_g_drho;
@@ -516,8 +516,8 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMEN
     
    // TODO: Make sure that this is the permeability in the direction of the facet normal
    
-   return p.Interpolate(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
-   //return p.Interpolate(this->key_k) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
+   //return p.Interpolate(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
+   return p.Interpolate(this->key_k) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
