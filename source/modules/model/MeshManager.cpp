@@ -2873,7 +2873,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       {
          if ( (*pit).second.Placement() != ELEMENT ) continue;
          // some checks
-         assert( database.IsDefined( (*pit).first.c_str() ) );
+          assert( database.IsDefined( (*pit).first.c_str() ) );
          const csmp::Index key(database.StorageKey( (*pit).first.c_str() ));
          assert( key.place == ELEMENT );
          assert( (*pit).second.Size() / key.dataDepth == elmt_collection_.size() );

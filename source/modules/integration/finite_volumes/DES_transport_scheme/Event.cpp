@@ -8,6 +8,7 @@ Event<dim>::Event(Node<dim>* nd)
   : node_(nd),
     valid_(false),
     inPEPStack_(false),
+    inQueue_(false),
     t_schedule_(0.)
 {
 }

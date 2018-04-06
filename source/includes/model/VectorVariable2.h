@@ -10,6 +10,8 @@ namespace csmp {
 template<>
 class VectorVariable<2U> {
   public:
+    static constexpr VARIABLE_TYPE VariableType = VECTOR;
+
     VectorVariable();
     VectorVariable( const VectorVariable& );
     VectorVariable( VectorVariable&& ) = default;

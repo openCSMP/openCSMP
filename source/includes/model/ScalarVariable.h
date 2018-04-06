@@ -70,6 +70,8 @@ my_value /= 15.;
 */
 class ScalarVariable {
   public:
+    static constexpr VARIABLE_TYPE VariableType = SCALAR;
+
     ScalarVariable();
     ScalarVariable( VARIABLE_FLAG f, double64 val );
     ScalarVariable( const ScalarVariable& );

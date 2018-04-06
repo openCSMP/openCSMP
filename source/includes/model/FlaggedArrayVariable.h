@@ -60,6 +60,8 @@ class ArrayVariable;
 class FlaggedArrayVariable
     {
     public:
+      static constexpr VARIABLE_TYPE VariableType = FLAGGEDARRAY;
+
       typedef std::vector<double64> FlaggedArrayContainer;
 
       FlaggedArrayVariable();

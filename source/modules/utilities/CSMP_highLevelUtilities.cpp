@@ -929,10 +929,10 @@ The function will report an error and return the average value of the
 four cornerpoints if their coordinates are identical. 
 */
 double64 bilinearInterpolate( size_t idx_x, size_t idx_y, 
-                          const Point<2U>& xy1, 
-                          const Point<2U>& xy2,
-                          const Point<2U>& coord, 
-                          double64 p1, double64 p2, double64 p3, double64 p4 )
+                              const Point<2U>& xy1,
+                              const Point<2U>& xy2,
+                              const Point<2U>& coord, 
+                              double64 p1, double64 p2, double64 p3, double64 p4 )
 {
       // If min-coords. are equivalent to max-coords. the boundary-value average 
       // is assigned.
@@ -995,10 +995,10 @@ The function will report an error and return the average value of the
 four cornerpoints if their coordinates are identical. 
 */
 double64 bilinearInterpolate( size_t idx_x, size_t idx_y, 
-                  const Point<3U>& xy1, 
-                  const Point<3U>& xy2,
-                  const Point<3U>& coord, 
-                  double64 p1, double64 p2, double64 p3, double64 p4 )
+                              const Point<3U>& xy1,
+                              const Point<3U>& xy2,
+                              const Point<3U>& coord, 
+                              double64 p1, double64 p2, double64 p3, double64 p4 )
 {
       // If min-coords. are equivalent to max-coords. the boundary-value average 
       // is assigned.

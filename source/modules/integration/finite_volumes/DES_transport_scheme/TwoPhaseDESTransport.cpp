@@ -550,7 +550,6 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
             T_RateOfChange_ += clock() - T_begin;         
             if ((*it)->valid() == false) {
                 T_begin= clock();
-                T_begin= clock();
                 bool isactive = Schedule(event, model_time, cfl_multiplication_factor);   
                 T_Schedule_ += clock() - T_begin;              
                 if (isactive) {

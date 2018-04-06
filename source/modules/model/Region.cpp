@@ -1141,7 +1141,6 @@ size_t Region<dim>::AccumulateAll( const csmp::Node<dim>* root_node,
        csmp_error.notice( WARNING, "Region<dim>::AccumulateAll:",
                                    "Region is not empty; deleting all content." );
      this->elmt_vec_.clear();
-     this->elmt_vec_.reserve( 100U );
 
      // 1. traversal of the existing mesh nodes to find all its elements
      set<csmp::Element<dim>*>       explored_elements;

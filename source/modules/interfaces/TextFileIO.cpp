@@ -565,39 +565,54 @@ void readPropertyValue( TensorVariable<dim>& ts )
 {
     char*  token(0);
     const char*  delims =" ,:,\t,\n,\r";
-
-    size_t i( 0 );
-    size_t j( 0 );
-    ts = 0.0;
-    for ( i = 0; i < dim; ++i )
-    {
-        for ( j = 0; j < dim; ++j )
-        {
-            token = strtok( NULL, delims );
-            if ( token != NULL )
-                ts(i,j) = atof(token);
-            else if( !( i==0 && j==0 ) )
-            {
-                double val = ( j==0 ? ts(i-1,dim-1) : ts(i,j-1) );
-                for ( ; j < dim; ++j )
-                    ts(i,j) = val;
-                for ( ; i < dim; ++i )
-                    for ( j = 0; j < dim; ++j )
-                        ts(i,j) = val;
-                break;
-            }
-            else
-                break;
-        }
+  
+    double64 values[dim*dim];
+    std::memset((void*)values, 0, sizeof(values));
+  
+  size_t value_count = 0;
+  for (value_count = 0; value_count < dim*dim; ++value_count) {
+    token = strtok( NULL, delims );
+    if ( token == NULL ) {
+      break;
     }
+    values[value_count] = atof(token);
+  }
+  
+  ts = 0.0;
 
-    if ( i==0 && j==0 )
+  if (value_count == dim*dim) {
+    // Interpret dim*dim numbers as the full tensor
+    const double64* val = &values[0];
+    for ( size_t i = 0; i < dim; ++i )
     {
-        ts = std::numeric_limits<double64>::quiet_NaN();
-        throw csmp::Exception( ERROR,
-                               "readPropertyValue(tensor)",
-                               "Property value could not be read properly");
+      for ( size_t j = 0; j < dim; ++j )
+      {
+        ts(i,j) = *val++;
+      }
     }
+  }
+  else if (value_count == dim) {
+    // Interpret dim numbers as the tensor diagonal
+    const double64* val = &values[0];
+    for ( size_t i = 0; i < dim; ++i )
+    {
+      ts(i,i) = *val++;
+    }
+  }
+  else if (value_count == 1) {
+    // Interpret 1 number as the tensor diagonal
+    for ( size_t i = 0; i < dim; ++i )
+    {
+      ts(i,i) = values[0];
+    }
+  }
+  else {
+    ts = std::numeric_limits<double64>::quiet_NaN();
+    throw csmp::Exception( ERROR,
+                          "readPropertyValue(tensor)",
+                          "Property value could not be read properly");
+  }
+
 }
 
 void readPropertyValue( ArrayVariable& av )
@@ -2684,6 +2699,8 @@ template<size_t dim>
 bool readRegionPropertyValues( Model<dim>& model,
                                std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     char*        token(0);
     const char*  delims =":,\t,\n,\r";
     string   assignment_spec("not defined"), prop_name("not specified");
@@ -2785,33 +2802,42 @@ bool readRegionPropertyValues( Model<dim>& model,
                 }
             }
             else if ( prop_type == TENSOR ) {
-                TensorVariable<dim> ts;
-                readPropertyValue( ts );
-                double64  val = ts.MinElement();
+              TensorVariable<dim> ts;
+              readPropertyValue( ts );
+
+              VectorVariable<dim> eigVals;
+              TensorVariable<dim> eigVecs;
+
+              // Check that minimum and maximum eigenvalues are in range
+              if (!ts.EigenNonSymmetric( eigVals, eigVecs )) {
+                csmp_error.notice(FATAL_ERROR,"readRegionPropertyValues",
+                        "Cannot eigendecompose the tensor for property", prop_name.c_str());
+              }
+              for ( size_t i = 0; i < dim; ++i ) {
+                double64  val = eigVals(i);
                 model.Database().CheckRange( prop_name.c_str(), val );
-                val = ts.MaxElement();
-                model.Database().CheckRange( prop_name.c_str(), val );
-                if      ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
-                    model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, INTERIOR );
-                else if ( strcmp( "BOUNDARY", assignment_spec.c_str() ) == 0 )
-                    model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, PERIMETER );
-                else if ( strcmp( "COMPLETE", assignment_spec.c_str() ) == 0 ) {
-                    model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, COMPLETE );
-                }
-                else
-                {
-                    throw csmp::Exception( ERROR,
-                                           "readRegionPropertyValues",
-                                           "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
-                    return false;
-                }
-                if( verbose )
-                {
-                    string group(" '"); group += group_name; group +="' ";
-                    cout <<"\tinitialized"<< setw(35) << property << setw(15) << left << unit <<"in ";
-                    cout << setw(20) << right << group <<"to  ";
-                    printPropertyValue( ts ); cout << endl;
-                }
+              }
+              if      ( strcmp( "INTERIOR", assignment_spec.c_str() ) == 0 )
+                  model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, INTERIOR );
+              else if ( strcmp( "BOUNDARY", assignment_spec.c_str() ) == 0 )
+                  model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, PERIMETER );
+              else if ( strcmp( "COMPLETE", assignment_spec.c_str() ) == 0 ) {
+                  model.Region(group_name.c_str()).InputPropertyValue( prop_name.c_str(), ts, COMPLETE );
+              }
+              else
+              {
+                  throw csmp::Exception( ERROR,
+                                         "readRegionPropertyValues",
+                                         "Missing specifier (interior, boundary or complete) for", prop_name.c_str() );
+                  return false;
+              }
+              if( verbose )
+              {
+                  string group(" '"); group += group_name; group +="' ";
+                  cout <<"\tinitialized"<< setw(35) << property << setw(15) << left << unit <<"in ";
+                  cout << setw(20) << right << group <<"to  ";
+                  printPropertyValue( ts ); cout << endl;
+              }
             }
             else if ( prop_type == ARRAY ) {
                 ArrayVariable av;
@@ -2927,6 +2953,8 @@ template<size_t dim>
 bool readDefaultPropertyValues( Model<dim>& model,
                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
+    ErrorHandler& error_handler ( ErrorHandler::Instance() );
+
     const char* delims =":,\t,\n,\r";
 
     if( verbose )
@@ -2965,18 +2993,27 @@ bool readDefaultPropertyValues( Model<dim>& model,
                 }
             }
             else if ( prop_type == TENSOR ) {
-                TensorVariable<dim> ts;
-                readPropertyValue( ts );
-                double64  val = ts.MinElement();
+              TensorVariable<dim> ts;
+              readPropertyValue( ts );
+              
+              VectorVariable<dim> eigVals;
+              TensorVariable<dim> eigVecs;
+
+              // Check that minimum and maximum eigenvalues are in range
+              if (!ts.EigenNonSymmetric( eigVals, eigVecs )) {
+                error_handler.notice(FATAL_ERROR,"readDefaultPropertyValues",
+                        "Cannot eigendecompose the tensor for property", prop_name.c_str());
+              }
+              for ( size_t i = 0; i < dim; ++i ) {
+                double64  val = eigVals(i);
                 model.Database().CheckRange( prop_name.c_str(), val );
-                val = ts.MaxElement();
-                model.Database().CheckRange( prop_name.c_str(), val );
-                model.InputPropertyValue( prop_name.c_str(), ts );
-                if( verbose )
-                {
-                    cout <<"\tinitialized"<< setw(35) << property << setw(15) << left << unit <<"to  "<< right << endl;
-                    printPropertyValue( ts );
-                }
+              }
+              model.InputPropertyValue( prop_name.c_str(), ts );
+              if( verbose )
+              {
+                cout <<"\tinitialized"<< setw(35) << property << setw(15) << left << unit <<"to  "<< right << endl;
+                printPropertyValue( ts );
+              }
             }
             else if ( prop_type == ARRAY ) {
                 ArrayVariable av;

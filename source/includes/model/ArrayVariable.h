@@ -67,6 +67,8 @@ class ScalarVariable;
   class ArrayVariable
     {
     public:
+      static constexpr VARIABLE_TYPE VariableType = ARRAY;
+
       typedef std::vector<double64> ArrayContainer;
 
       ArrayVariable();

@@ -77,6 +77,15 @@ enum CORNER_POINT_CELL_FACE_INDEX {
 std::string toString( CORNER_POINT_CELL_FACE_INDEX );
 
 
+/**
+
+@brief CornerPointCell  provides the necessary functionality
+to construct valid Finite Elements out of distorted hexahedrons.
+
+@author R. Manasipov
+@date 2015
+
+*/
 template<size_t dim>
 class CornerPointCell: public PolygonCell<dim>
 {
@@ -240,18 +249,6 @@ private:
     std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >    wells_;
 
 };
-
-
-/**
-
-@class CornerPointCell  CornerPointCell "CornerPointCell.h"
-@author R. Manasipov
-@date 2015
-
-Corner points cell functionality provides the necessary building steps 
-to construct valid Finite Elements out of distorted hexahedrons.
-
-*/
 
 }// end namespace csmp
 

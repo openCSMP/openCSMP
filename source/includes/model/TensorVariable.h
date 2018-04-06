@@ -91,6 +91,8 @@ vc.Out();
 template<>
 class TensorVariable<3U> {
   public:
+   static constexpr VARIABLE_TYPE VariableType = TENSOR;
+
     TensorVariable();
     TensorVariable( const TensorVariable& );
     TensorVariable( TensorVariable&& ) = default;
@@ -219,7 +221,7 @@ class TensorVariable<3U> {
   
     /// assuming that the tensor is symmetric and positive definite, method returns its sorted Eigen values (largest to smallest)
 		bool              EigenValuesPositiveDefiniteSymmetricMatrix( double64& eigenValue0, double64& eigenValue1, double64& eigenValue2 ) const;
-  
+
     /// alternative Eigen decomposition that should also work for non-symmetric matrices
     bool              EigenNonSymmetric( VectorVariable<3U>& eigenVals, TensorVariable<3U>& eigenVecs ) const;
 

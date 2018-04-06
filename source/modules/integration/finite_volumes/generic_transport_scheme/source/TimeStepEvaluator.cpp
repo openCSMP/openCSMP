@@ -75,6 +75,9 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
  {
      double64 flux_balance(0.), outflow(0.), flux_concentration_products(0.);
 
+   if (n.Idx() == 186) {
+     std::cerr << "This is the interesting case\n";
+   }
    size_t i = 0;
      for (auto fip : n.AllFacetIntegrationPoints()) {
        const double64 ffc = fip.Read(User()->key_ffC);

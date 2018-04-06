@@ -71,8 +71,8 @@ class Pillar {
     csmp::Point<3U> b_;  /// direction of line
 
     /// cells data
-    std::map<std::pair<size_t,size_t>,size_t> attached_cells_; /// attached cells indices (i,j)
-    std::vector<csmp::Point<3U> >  points_;                    /// points
+    std::map<std::pair<size_t,size_t>,size_t> attached_cells_; ///< indices of attached cells (i,j)
+    std::vector<csmp::Point<3U> >  points_;                    ///< points
 };
 
 

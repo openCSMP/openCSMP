@@ -1,4 +1,4 @@
-﻿#include "CornerPointGrid.h"
+#include "CornerPointGrid.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearTetrahedron.h"
@@ -490,7 +490,7 @@ void CornerPointGrid<dim>
     
     @todo this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the EclipseModel
     
-    @todo the regions are not recognised properly.
+    @todo regions are not recognised properly.
 */
 template<size_t dim>
 void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
@@ -498,8 +498,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                                         csmp::ModelTopology&   model_topology,
                                         std::set<std::string>& regions,
                                         std::set<std::string>& faults,
-                                        std::set<std::string>& wells
-                                      )
+                                        std::set<std::string>& wells )
  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -756,9 +755,10 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                   {
                      /// hexa cell global id
                      hexa_cell_id = CellIndex(i,j,k);
-
-                     if( cell_activity_[ hexa_cell_id ] == 1 || !exclude_inactive_cells_ )
+//std::cerr <<"\nCell ID: "<< hexa_cell_id;
+                     if ( cell_activity_[ hexa_cell_id ] == 1 || !exclude_inactive_cells_ )
                      {
+//poly[ hexa_cell_id ].Out();
                          num_cell_nodes = poly[ hexa_cell_id ].GetNumNodes();
 
                          /// assign subcells
@@ -766,6 +766,8 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
                          embedded_cells_vector.clear();
                          for( size_t eid = 0; eid < num_subcells; ++eid )
                          {
+//std::cerr <<" element type "<< poly[ hexa_cell_id ].GetElementType( eid ); // 42=hex, 36=quad, 28=line
+
                              const size_t num_cell_nodes( poly[ hexa_cell_id ].GetNumElementNodes( eid ) );
                              if( num_cell_nodes > 1 )
                              {
@@ -870,6 +872,13 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
     degenerate_overlap_cells.clear();
     degenerate_lowdim_cells.clear();
 
+// DEBUGGING OUTPUT
+//std::cerr <<"\nPolygonGridManager: printing the generated grid prior to output to VSet:\n";
+//pgm.Out();
+//    std::cerr <<"\nCornerPointGrid::CreateModel: printing the generated cells prior to output to VSet:\n";
+//    for ( auto it=poly.begin(); it!=poly.end(); ++it ) {
+//         (*it).Out();
+//      }
 
     // 3. Assign node coordinates
     // ===============================================================================
@@ -925,7 +934,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
     pgm.Clear();
 
     // assign mesh type (multi-element or single-element type)
-    if( ( cell_fem_types.size() > 1 ) || ( !faults_data_.empty() ))
+    if ( ( cell_fem_types.size() > 1 ) || ( !faults_data_.empty() ))
         vset.HybridElementTypeMesh( true );
     else
         vset.HybridElementTypeMesh( false );
@@ -996,7 +1005,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
 
 
 /**
-    Eliminating in-active cells in VSet.
+    Eliminating inactive cells in VSet.
     
     @todo SKM question: are inactive cells included in the VSet? - they should be eliminated before because they 
     often dominate the entire cell count.
@@ -1115,7 +1124,6 @@ void CornerPointGrid<dim>
     if( csmp_error.Verbose() )
         std::cout <<"CornerPointGrid<dim>::EstablishActiveDomain: inactive cells were successfully removed.\n";
 
-    return;
  } // EstablishActiveDomain
 
 
@@ -1651,7 +1659,7 @@ void CornerPointGrid<dim>
                 hexa_face_id  = (*fit).second;
                 assert( hexa_face_id <= 5 );
 // DEBUGGING: NODE ORDER OF FACES IS DIFFERENT FROM DEFINITION FOR CORNER-POINT CELL
-poly[ hexa_cell_id ].Out();
+//poly[ hexa_cell_id ].Out();
 
                 // used to always evaluate to zero; now replaced by subclass method
                 num_sub_faces = poly[ hexa_cell_id ].GetNumSubFaces( hexa_face_id );
@@ -1822,17 +1830,17 @@ void CornerPointGrid<dim>
             //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
             const size_t array_length = (var.Size() > dim*dim ) ? var.Size() : 0U;
             assert( array_length == 1 );
-            PropertyData property_values( prop_place, SCALAR, dim, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( nodal_data.size() );
-            for ( const auto it : nodal_data ) pushBack( property_values, it );
+            for ( const auto& it : nodal_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );
         }
         else {
             // Add cell data to vset
             // csmp::FEM_Data<VarType> property_values( prop_place, cell_data );
-            PropertyData property_values( prop_place, SCALAR, dim, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( cell_data.size() );
-            for ( const auto it : cell_data ) pushBack( property_values, it );
+            for ( const auto& it : cell_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );
         }
     }
