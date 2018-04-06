@@ -18,13 +18,13 @@ public:
 	virtual double64   Volume();
 	virtual double64   AspectRatio();
 	virtual double64   InnerRadius();
-	virtual size_t     CornerNodes() { return 8U; }
-	virtual void	   EdgeLengths(std::vector<double64> v);
+	virtual size_t     CornerNodes() const { return 8U; }
+	virtual void	     EdgeLengths( std::vector<double64>& );
 	virtual void       CornerNodes(std::vector<size_t>& ids) const;
 	virtual void       NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const;
 	virtual void       NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const;
 	virtual void       UnitNormalToFace(size_t face, std::vector<double64>& unrml) const;
-	virtual void	   OutputNodeDataToVTK(const char * file_name, const char * var_name, DenseMatrix<DM_MIN>& DATA) const;
+	virtual void	     OutputNodeDataToVTK(const char * file_name, const char * var_name, DenseMatrix<DM_MIN>& DATA) const;
 	virtual void       N(std::vector<double64>& M, const std::vector<double64>& xyz);
 	virtual void       N_AtGlobalPoint(std::vector<double64>& M, const std::vector<double64>& xyz);
 	virtual void       N_AtBaryCenter(std::vector<double64>& M);

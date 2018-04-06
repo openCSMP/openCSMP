@@ -342,14 +342,18 @@ template<size_t dim>
 const csmp::Point<3U>& CornerPointGrid<dim>
 ::GetCellNode( size_t i, size_t j, size_t k, size_t nid ) const
 {
-    return pillars_[ j + NodeIndexIncrementJ( nid ) ][ i + NodeIndexIncrementI( nid ) ].GetPoint( i, j, k, nid );
+    const size_t node_incrementJ(NodeIndexIncrementJ( nid ));
+    const size_t node_incrementI(NodeIndexIncrementI( nid ));
+    return pillars_[ j + node_incrementJ ][ i + node_incrementI ].GetPoint( i, j, k, nid );
 }
 
 template<size_t dim>
 void CornerPointGrid<dim>
 ::AssignCellNodeToPillar( size_t i, size_t j, size_t k, size_t nid, const csmp::Point<3U>& pt )
 {
-    return pillars_[ j + NodeIndexIncrementJ( nid ) ][ i + NodeIndexIncrementI( nid ) ].AssignPoint( i, j, k, nid, pt );
+    const size_t node_incrementJ(NodeIndexIncrementJ( nid ));
+    const size_t node_incrementI(NodeIndexIncrementI( nid ));
+    return pillars_[ j + node_incrementJ ][ i + node_incrementI ].AssignPoint( i, j, k, nid, pt );
 }
 
 template<size_t dim>
@@ -377,24 +381,28 @@ void CornerPointGrid<dim>
         }
     /// lateral pillars
     for( size_t j=1; j<NY_; ++j )
-    {
-        pillars_[j][0].AssignAttachedCellId(   0,     j-1, 0 );
-        pillars_[j][0].AssignAttachedCellId(   0,     j,   1 );
-        pillars_[j][NX_].AssignAttachedCellId( NX_-1, j-1, 0 );
-        pillars_[j][NX_].AssignAttachedCellId( NX_-1, j,   1 );
-    }
+      {
+          pillars_[j][0].AssignAttachedCellId(   0,     j-1, 0 );
+          pillars_[j][0].AssignAttachedCellId(   0,     j,   1 );
+          pillars_[j][NX_].AssignAttachedCellId( NX_-1, j-1, 0 );
+          pillars_[j][NX_].AssignAttachedCellId( NX_-1, j,   1 );
+      }
     for( size_t i=1; i<NX_; ++i )
-    {
-        pillars_[0][i].AssignAttachedCellId(   i-1,   0,     0 );
-        pillars_[0][i].AssignAttachedCellId(   i,     0,     1 );
-        pillars_[NY_][i].AssignAttachedCellId( i-1,   NY_-1, 0 );
-        pillars_[NY_][i].AssignAttachedCellId( i,     NY_-1, 1 );
-    }
+      {
+          pillars_[0][i].AssignAttachedCellId(   i-1,   0,     0 );
+          pillars_[0][i].AssignAttachedCellId(   i,     0,     1 );
+          pillars_[NY_][i].AssignAttachedCellId( i-1,   NY_-1, 0 );
+          pillars_[NY_][i].AssignAttachedCellId( i,     NY_-1, 1 );
+      }
     /// corner pillars
     pillars_[0][0].AssignAttachedCellId(       0,     0,     0 );
     pillars_[0][NX_].AssignAttachedCellId(     NX_-1, 0,     0 );
     pillars_[NY_][0].AssignAttachedCellId(     0,     NY_-1, 0 );
     pillars_[NY_][NX_].AssignAttachedCellId(   NX_-1, NY_-1, 0 );
+
+// TESTING - in some models, no points are stored on the pillars
+for( size_t i=1; i<NX_; ++i )
+  for( size_t j=1; j<NY_; ++j ) pillars_[i][j].Out();
 
 
     /// repair pillar nodes in the following cases:
@@ -407,18 +415,19 @@ void CornerPointGrid<dim>
         for( size_t j = 0; j < NY_; ++j )
             for( size_t i = 0; i < NX_; ++i )
             {
+                if ( pillars_[i][j].GetNumPoints() == 0 ) {
+                     std::cerr <<"\nCornerPointGrid::ProcessPillarspillar: pillar("<< i <<","<< j <<") contains no beads.";
+                     continue;
+                  }
                 /// hexa cell global id
                 hexa_cell_id = CellIndex(i,j,k);
 
                 /// indexing cell nodes
-                for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
-                {
+                for( size_t nid = 0; nid < quad_fem_nodes; ++nid ) {
                     /// read top node on current pillar
-                    csmp::Point<3U>  pt_top;
-                    pt_top = GetCellNode(i,j,k,nid);
+                    csmp::Point<3U>  pt_top = GetCellNode(i,j,k,nid);
                     /// read bottom node on current pillar
-                    csmp::Point<3U>  pt_btm;
-                    pt_btm = GetCellNode(i,j,k,nid+4);
+                    csmp::Point<3U>  pt_btm = GetCellNode(i,j,k,nid+4);
                     if( pt_top[3] > pt_btm[3] )
                     {
                         pt_top = pt_btm;
@@ -439,11 +448,9 @@ void CornerPointGrid<dim>
                 for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
                 {
                     /// read bottom node on current cell
-                    csmp::Point<3U>  pt_btm;
-                    pt_btm = GetCellNode(i,j,k,nid+4);
+                    csmp::Point<3U>  pt_btm = GetCellNode(i,j,k,nid+4);
                     /// read top node on neighbouring cell
-                    csmp::Point<3U>  pt_top;
-                    pt_top = GetCellNode(i,j,k+1,nid);
+                    csmp::Point<3U>  pt_top = GetCellNode(i,j,k+1,nid);
                     if( pt_btm[3] > pt_top[3] )
                     {
                         pt_top = pt_btm;

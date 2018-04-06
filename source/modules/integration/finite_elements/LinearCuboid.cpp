@@ -15,8 +15,7 @@ using namespace std;
 
 namespace csmp {
 
-	// CSMP_FEM_TYPE, isoparametric, uses_local_coordinates, order_of_shape_functions
-	LinearCuboid::LinearCuboid():FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8)
+LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8)
 	{
 		dim = 3;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */
@@ -193,7 +192,7 @@ namespace csmp {
 	{
 		// 0->6 1->(-7) 2->4 3->(-5) for N0 use node6 ....
 		DN.Resize(3, 8); //DN_size = dim x npe
-		double64 vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
+		const double64 vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
 		size_t ind[] = {6,7,4,5,2,3,0,1};
 		for (auto k = 0; k < 8; ++k) {
 			DN(0, k) = sgn[k]*(xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
@@ -213,8 +212,8 @@ namespace csmp {
 
 	void LinearCuboid::dN_Partial_At(vector<double64>& DN, const vector<double64>& xyz, size_t partial) 
 	{
-		double64 vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
-		size_t ind[] = { 6,7,4,5,2,3,0,1 };
+		const double64 vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
+		const size_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
 			case 0:	for (auto k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
@@ -227,7 +226,7 @@ namespace csmp {
 
 	void LinearCuboid::MidSideNodes(std::vector<size_t>& ids) const
 	{
-		cout << " IsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
+		cerr << "\nIsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
 		ids[0] = 0;
 	}
 
@@ -266,11 +265,11 @@ namespace csmp {
 	}
 
 	/** for cuboid and with standard ordering */
-	void LinearCuboid::EdgeLengths(std::vector<double64> v)
+	void LinearCuboid::EdgeLengths(std::vector<double64>& v )
 	{
-		double64 dx = XY(5, 0) - XY(3, 0);
-		double64 dy = XY(5, 1) - XY(3, 1);
-		double64 dz = XY(5, 2) - XY(3, 2);
+		const double64 dx = XY(5, 0) - XY(3, 0);
+		const double64 dy = XY(5, 1) - XY(3, 1);
+		const double64 dz = XY(5, 2) - XY(3, 2);
 		v = {dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz};
 	}
 

@@ -1,4 +1,4 @@
-﻿#include "Pillar.h"
+#include "Pillar.h"
 #include "ErrorHandler.h"
 
 namespace csmp {
@@ -78,6 +78,7 @@ void Pillar::AddPoint( csmp::Point<3U> zpt )
 
 const csmp::Point<3U>& Pillar::GetPoint( size_t zid ) const
 {
+    assert( !points_.empty() );
     return points_[ zid ];
 }
 
