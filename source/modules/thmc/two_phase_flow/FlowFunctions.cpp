@@ -197,6 +197,30 @@ template double64 FlowFunctions<3U>::MobilityProductDerivative( FiniteElementPla
 template double64 FlowFunctions<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
 
+/*
+   Permeability helper
+*/
+namespace {
+
+template<class VARIABLE_TYPE>
+double64
+scalarPermeability(VARIABLE_TYPE& var);
+
+inline double64
+scalarPermeability(ScalarVariable& var)
+{
+    return var();
+}
+
+template<size_t dim>
+inline double64
+scalarPermeability(TensorVariable<dim>& var)
+{
+    return var.Trace() / (double64)dim;
+}
+
+}
+
 
 /**
     permeability
@@ -206,13 +230,11 @@ template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::Permeability( TARGET_PLACEMENT& p ) const
 {
     assert( this->key_k.type == TENSOR or this->key_k.type == SCALAR );
-    if( this->key_k.type == TENSOR) {
-        TensorVariable<dim> K;
-        p.Interpolate(this->key_k, K);
-        double64 k = K.Trace()/static_cast<double64>(dim); 
-        return k;
-    }
-    double64 k = p.Interpolate(this->key_kfn);
+
+    typename VariableTypeTraits<dim, decltype(this->key_k)::VariableType>::VariableType K;
+
+    p.Interpolate(this->key_k, K);
+    double64 k = scalarPermeability(K);
     return k;
 }
 

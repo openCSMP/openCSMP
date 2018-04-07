@@ -132,6 +132,9 @@ struct Index {
   /// Templatized version with allows for compile-time type selection
 template<VARIABLE_TYPE ty,PLACEMENT pl>
 struct INDEX : public Index {
+   static constexpr VARIABLE_TYPE VariableType = ty;
+   static constexpr PLACEMENT VariablePlacement = pl;
+
    explicit INDEX( ) : Index() {}
    explicit INDEX( size_t i ) : Index(ty,pl,i) {}
    explicit INDEX( csmp::Index&& idx ) : Index(idx) {}
