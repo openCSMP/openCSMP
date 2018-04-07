@@ -2350,13 +2350,45 @@ void Model<dim>::OutputVariableToScreen( const char* prop ) const
 
 
 
+
+
+
+
+
+bool isDiagonalTensor( const TensorVariable<1U>& ts ) { return true; }
+
+/// 2D version
+bool isDiagonalTensor( const TensorVariable<2U>& ts )
+ {
+    // if the off-diagonal elements are numerically zero
+    if ( ts(0,1) <= numeric_limits<double64>::epsilon() &&
+         ts(1,0) <= numeric_limits<double64>::epsilon()  ) return true;
+    return false;
+ }
+
+/// 3D version
+bool isDiagonalTensor( const TensorVariable<3U>& ts )
+ {
+    // if the off-diagonal elements are numerically zero
+    if ( ts(0,1) <= numeric_limits<double64>::epsilon() &&
+         ts(0,2) <= numeric_limits<double64>::epsilon() &&
+         ts(1,2) <= numeric_limits<double64>::epsilon() &&
+         ts(1,0) <= numeric_limits<double64>::epsilon() &&
+         ts(2,0) <= numeric_limits<double64>::epsilon() &&
+         ts(2,1) <= numeric_limits<double64>::epsilon() ) return true;
+    return false;
+ }
+
 // this wants to be a lambda function in the next method
 /// recovering and sorting to find minimum and maximum Eigen values
 template<size_t dim>
 void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64& tmax )
  {
     VectorVariable<dim>  evals;
-    ts.EigenValues( evals );
+   
+    // doing simple case first
+    if ( isDiagonalTensor(ts) ) for ( size_t i=0U; i<dim; ++i ) evals(i) = ts(i,i);
+    else ts.EigenValues( evals );
     std::set<double64> min_max;
     for ( size_t i=0U; i<dim; i++ ) min_max.insert( evals[i] );
     tmin = (*min_max.begin());
