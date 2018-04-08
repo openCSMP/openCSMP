@@ -879,7 +879,7 @@ double64  FiniteElement::JacobianInverse()
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
               for ( size_t i=0; i<Nodes(); i++ )
                 {
-                  cerr<<" Node( "<<i<<" ): "<<endl;
+                  cerr<<" Node( "<<i<<" ): ";
                   for ( size_t j=0; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
                   cerr<<endl;
@@ -904,7 +904,7 @@ double64  FiniteElement::JacobianInverse()
           cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
           for ( size_t i=0; i<Nodes(); i++ )
             {
-              cerr <<" Node( "<<i<<" ): "<<endl;
+              cerr <<" Node( "<<i<<" ): ";
               for ( size_t j=0; j<XY.Cols(); j++ )
                   cerr << XY(i,j) <<" ";
               cerr <<endl;

@@ -1,13 +1,4 @@
 #include "CornerPointGrid.h"
-
-#include "IsoparametricLinearHexahedron.h"
-#include "IsoparametricLinearTetrahedron.h"
-#include "IsoparametricLinearPyramid.h"
-#include "IsoparametricLinearPrism.h"
-#include "IsoparametricLinearQuadrilateral.h"
-#include "IsoparametricLinearTriangle.h"
-#include "IsoparametricLinearLineElement.h"
-
 #include "Point.h"
 #include "PropertyData.h"
 
@@ -1028,8 +1019,7 @@ void CornerPointGrid<dim>
                          csmp::ModelTopology& model_topology,
                          std::set<std::string>& regions,
                          const std::vector<size_t>& cell_elmts,
-                         const std::set<std::string>& cell_fem_types
-                       )
+                         const std::set<std::string>& cell_fem_types )
  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -1111,25 +1101,25 @@ void CornerPointGrid<dim>
       {
           /// all elements
           if ( !cell_elmts.empty() ) {
-              model_topology.AddRegion( "MATRIX", cell_fem_types, cell_elmts );
-              regions.insert("MATRIX");
+              model_topology.AddRegion( "ALL_CELLS", cell_fem_types, cell_elmts );
+              regions.insert("ALL_CELLS");
           }
 
           /// adding active and inctive cell regions
           if ( !active_cells.empty() ) {
-                model_topology.AddRegion("MATRIX_ACTIVE", active_cell_fem_types, active_cells );
-                regions.insert("MATRIX_ACTIVE");
+                model_topology.AddRegion("ALL_ACTIVE_CELLS", active_cell_fem_types, active_cells );
+                regions.insert("ALL_ACTIVE_CELLS");
             }
           if ( !inactive_cells.empty() ) {
-                model_topology.AddRegion("MATRIX_INACTIVE",  inactive_cell_fem_types, inactive_cells );
-                regions.insert("MATRIX_INACTIVE");
+                model_topology.AddRegion("ALL_INACTIVE_CELLS",  inactive_cell_fem_types, inactive_cells );
+                regions.insert("ALL_INACTIVE_CELLS");
             }
       }
     else
       {
           if ( !active_cells.empty() ) {
-                model_topology.AddRegion("MATRIX", active_cell_fem_types, active_cells );
-                regions.insert("MATRIX");
+                model_topology.AddRegion("ALL_CELLS", active_cell_fem_types, active_cells );
+                regions.insert("ALL_CELLS");
             }
       }
 

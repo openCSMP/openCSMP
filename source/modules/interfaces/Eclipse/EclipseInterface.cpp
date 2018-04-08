@@ -1,4 +1,4 @@
-﻿#include "EclipseInterface.h"
+#include "EclipseInterface.h"
 
 #include "Region.h"
 #include "Boundary.h"
@@ -1584,14 +1584,11 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
       Format:
       1 0 1 0 0 0 0 0 1 1 1 1 1 ...\
  */
-int readEclipseActiveCells( std::vector<size_t>& cell_activity,
-                            std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
-                          )
+int readEclipseActiveCells( std::vector<size_t>& cell_activity, std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
-    if( verbose )
-        std::cout <<"\nreadEclipseActiveCells: reading ACTNUM...";
+    if ( verbose ) std::cout <<"\nreadEclipseActiveCells: reading ACTNUM...";
 
     char*       token(0);
     const char* delims =" ,:,\t,\n,\r";
@@ -1605,7 +1602,9 @@ int readEclipseActiveCells( std::vector<size_t>& cell_activity,
         return firstLine;
 
     cell_activity.clear();
-    do{
+    size_t active_cells(0U);
+  
+    do {
         if ( !isEclipseCommentLine( text_line ) )
         {
             token = strtok( text_line, delims );
@@ -1622,6 +1621,7 @@ int readEclipseActiveCells( std::vector<size_t>& cell_activity,
                 {
                     if( active_num == 0 || active_num == 1 )
                     {
+                        if ( active_num == 1 ) active_cells++;
                         for( size_t i = 0; i < num; i++ )
                             cell_activity.push_back( active_num );
                     }
@@ -1651,9 +1651,9 @@ int readEclipseActiveCells( std::vector<size_t>& cell_activity,
         }
     }
     while ( !endOfblock && !csmp::isBlankLine(text_line) && !ifs.eof() );
-
-    if( verbose )
-        std::cout <<"\nreadEclipseActiveCells: ACTNUM block has been read successfully.\n";
+  
+    if ( verbose )
+      std::cout <<"\nreadEclipseActiveCells: ACTNUM block with "<< cell_activity.size() <<" cells ("<< active_cells <<"=active) has been read successfully.\n";
 
     return 1;
 }
