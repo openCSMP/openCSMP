@@ -36,10 +36,6 @@ class EclipseModel : public csmp::Model<dim>
       /// MOST IMPORTANT METHOD!- but should be private (TODO: move EclipseModelSettings out of class)
       void BuildModel();
 
-      /// name of the model that will be used when creating output files
-      void        Name( const char* );
-      const char* Name() const;
- 
       /// access to the settings of the Eclipse interface
       EclipseModelSettings&  EclipseModelSetup();
 
@@ -58,7 +54,6 @@ class EclipseModel : public csmp::Model<dim>
 
       // PROPS and other specs from RUNSPECS file
       EclipseModelSettings      eclipse_model_settings_;
-      std::string               model_name_;
       std::set<std::string>     regions_;
       std::set<std::string>     faults_;
       std::set<std::string>     wells_;

@@ -23,23 +23,12 @@ EclipseModel<dim>::EclipseModel( const std::string& model_name )
    this->Name( model_name.c_str() );
 }
 
+
 template<size_t dim>
 EclipseModel<dim>::~EclipseModel()
 {
 }
 
-// MODEL NAME
-template<size_t dim>
-const char* EclipseModel<dim>::Name() const
-{
-    return model_name_.c_str();
-}
-
-template<size_t dim>
-void EclipseModel<dim>::Name( const char* new_name )
-{
-    model_name_ = new_name;
-}
 
 // ACCESS TO MESH INTERFACE
 template<size_t dim>
@@ -159,7 +148,7 @@ void EclipseModel<dim>::BuildModel()
          // =====================================================================
          //    we won't use eclipse neighbor info since it includes neighbor information
          //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbors )
-         const bool non_box_shaped_model( true );
+         const bool non_box_shaped_model( !mesh_topology.BoxShapedModel() );
 
          // with regions
          if ( !eclipse_model_settings_.regions_.empty() ) {
@@ -167,10 +156,8 @@ void EclipseModel<dim>::BuildModel()
              // and user is given the possibility to call the subsequent method or not.
              const bool require_unique_names_for_vol_surf_lines(true);
              const bool correct_orientation_of_surface_elements(false);
-             const bool non_box_boundary(true);
              if ( !mesh_topology.CheckTopology( vset, require_unique_names_for_vol_surf_lines,
-                                                correct_orientation_of_surface_elements, non_box_boundary ) );
-             else
+                                                correct_orientation_of_surface_elements, non_box_shaped_model ) )
                error_handler.notice( csmp::INFO, "EclipseModel<dim>::BuildModel", "ModelTopology=subdivision into regions is broken.");
            
              csmp::Model<dim>::Initialize( eclipse_model_settings_.regions_file_prefix_.c_str(),

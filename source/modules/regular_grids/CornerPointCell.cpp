@@ -1788,6 +1788,7 @@ void CornerPointCell<dim>
         for(std::set<size_t>::const_iterator fit = faces.begin(); fit != faces.end(); ++fit )
             this->AssignFaceOrder( ++fid, *fit );
     }
+    // TODO: numbering seems to be broken
     /// 2nd case: pyramid
     else if( ( num_quad_faces_ == 1 ) && ( num_tri_faces_ == 4 ) )
     {
