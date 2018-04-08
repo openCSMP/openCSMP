@@ -150,7 +150,7 @@ void EclipseModel<dim>::BuildModel()
                      message += *prop_it;
                  }
                  message += " !!!";
-                 error_handler.notice( csmp::INFO, "EclipseModel<dim>::", message.c_str() );
+                 error_handler.notice( csmp::INFO, "EclipseModel<dim>::BuildModel", message.c_str() );
              }
          }
 
@@ -162,12 +162,23 @@ void EclipseModel<dim>::BuildModel()
          const bool non_box_shaped_model( true );
 
          // with regions
-         if( !eclipse_model_settings_.regions_.empty() )
+         if ( !eclipse_model_settings_.regions_.empty() ) {
+             // performing a ckeck whether element numbers in the VSet and the model topology match; else something went wrong
+             // and user is given the possibility to call the subsequent method or not.
+             const bool require_unique_names_for_vol_surf_lines(true);
+             const bool correct_orientation_of_surface_elements(false);
+             const bool non_box_boundary(true);
+             if ( !mesh_topology.CheckTopology( vset, require_unique_names_for_vol_surf_lines,
+                                                correct_orientation_of_surface_elements, non_box_boundary ) );
+             else
+               error_handler.notice( csmp::INFO, "EclipseModel<dim>::BuildModel", "ModelTopology=subdivision into regions is broken.");
+           
              csmp::Model<dim>::Initialize( eclipse_model_settings_.regions_file_prefix_.c_str(),
                                            mesh_topology,
                                            vset,
                                             ( ( dim != 1U ) ? eclipse_model_settings_.create_boundaries_ : false ),
                                            non_box_shaped_model );
+           }
          // no regions
          else {
              // all cells are lumped into the region "Eclipse Model" that is stored in the model topology

@@ -852,7 +852,7 @@ void  ANSYS_ElementSpecifications::VolumeElements( list<string>& vol_elements )
     vol_elements.push_back("PYRA_5");
     vol_elements.push_back("PYRA_14");
     vol_elements.push_back("PYRA_13");
-    // CSP_TYPES
+    // CSMP_TYPES
     vol_elements.push_back("LINEAR_TETRAHEDRON");
     vol_elements.push_back("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
     vol_elements.push_back("ISOPARAMETRIC_LINEAR_HEXAHEDRON");
@@ -929,7 +929,7 @@ std::string  parse_ANSYS_BoundaryFlag( int i )
 
 /**
  
-Returns the CSP finite element type enum identifier that corresponds to the
+Returns the CSMP finite element type enum identifier that corresponds to the
 ANSYS type as identified by an integer identifier. The user needs to specify 
 whether an isoparametric or globally interpolated element shall be 
 returned because ANSYS elements can be converted into both.  
@@ -1100,10 +1100,10 @@ CSMP_FEM_TYPE  ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_TypeName( const 
     
     return UNKNOWN;
     
- } // end CSP_TypeFromANSYSType (char* s, bool)
+ } // end CSMP_TypeFromANSYSType (char* s, bool)
 
     
 
 
 
-} // end namespace csp
+} // end namespace csmp

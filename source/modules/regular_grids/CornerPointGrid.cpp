@@ -401,8 +401,8 @@ void CornerPointGrid<dim>
     pillars_[NY_][NX_].AssignAttachedCellId(   NX_-1, NY_-1, 0 );
 
 // TESTING - in some models, no points are stored on the pillars
-for( size_t i=1; i<NX_; ++i )
-  for( size_t j=1; j<NY_; ++j ) pillars_[i][j].Out();
+// for( size_t i=1; i<NX_; ++i )
+//  for( size_t j=1; j<NY_; ++j ) pillars_[i][j].Out();
 
 
     /// repair pillar nodes in the following cases:
@@ -411,12 +411,17 @@ for( size_t i=1; i<NX_; ++i )
     const size_t quad_fem_nodes( 4U );
     size_t hexa_cell_id( 0 );
     /// process top nodes below bottom nodes
+    bool first_print(true);
     for( size_t k = 0; k < NZ_; ++k )
         for( size_t j = 0; j < NY_; ++j )
             for( size_t i = 0; i < NX_; ++i )
             {
                 if ( pillars_[i][j].GetNumPoints() == 0 ) {
-                     std::cerr <<"\nCornerPointGrid::ProcessPillarspillar: pillar("<< i <<","<< j <<") contains no beads.";
+                     if ( first_print ) {
+                          std::cerr <<"\nCornerPointGrid::ProcessPillars: pillars without beads: ";
+                          first_print = false;
+                       }
+                     std::cerr <<"pillar("<< i <<","<< j <<") ";
                      continue;
                   }
                 /// hexa cell global id

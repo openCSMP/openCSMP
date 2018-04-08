@@ -1822,7 +1822,7 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
     // ------------
     if ( plist.size() < old_nelements ) {
         if ( csmp_error.Verbose() ) {
-             cout <<"\nVData::ReduceTo: Successfully reduced number of simplices by "<< n_elements_eliminated <<" simplex from ";
+             cout <<"\nVData::ReduceTo: Successfully reduced number of elements by "<< n_elements_eliminated <<" elements from ";
              cout << old_nelements <<" to "<< plist.size() << endl;
           }
     }

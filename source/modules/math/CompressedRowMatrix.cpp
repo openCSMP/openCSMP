@@ -73,9 +73,12 @@ namespace csmp {
 				// Global Matrix: To modify RHS: 
 				// Multipy current row by dirich at dirich indices (already sorted)
 				if (x.ind >= dirich[0].ind && x.ind <= dirich[dirichSize - 1].ind)
-					for (auto y : dirich)
-						if (x.ind < y.ind) break;
-						else if (x.ind == y.ind) { sumi += (x.val*y.val); break; }
+					for (auto y : dirich) {
+						  if (x.ind < y.ind) {
+                  break;
+                }
+						  else if (x.ind == y.ind) { sumi += (x.val*y.val); break; }
+           }
 
 				// If it's in Local Matrix:
 				if (mapDirich[x.ind] != -1) {

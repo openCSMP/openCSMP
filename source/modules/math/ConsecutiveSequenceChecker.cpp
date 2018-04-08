@@ -96,7 +96,7 @@ bool ConsecutiveSequenceChecker::IsRangeOfUnsignedIntConsecutive( const std::vec
 */
 template<typename K, typename V>
 bool ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive( const std::map<K,V>& imap,
-                                                                    bool check_whether_max_value_is_size_minus1 )
+                                                                     bool check_whether_max_value_is_size_minus1 )
  {
     static_assert(is_integral<K>::value, "ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive: template argument on parameter must be an integer.");
 
@@ -106,7 +106,7 @@ bool ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive( const std::
     if( imap.size() != (*imap.rbegin()).first - (*imap.begin()).first + 1U ) return false;
 
     if ( check_whether_max_value_is_size_minus1 )
-      if( (*imap.rbegin()).first + 1U != imap.size() ) return false;
+      if ( (*imap.rbegin()).first + 1U != imap.size() ) return false;
    
     return true;
    
@@ -126,34 +126,47 @@ bool ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( const std
     //static_assert(is_integral<V>::value, "ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive: template argument on parameter must be an integer.");
 
     if ( imap.empty() ) throw logic_error(" ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive: map is empty.");
-    // checking uniqueness first
-    set<size_t> iset;
+   
+    bool correct_sequence(true);
+   
+    // 1. checking the uniqueness of values
+    set<size_t> iset, duplicates;
     for ( auto i=imap.begin(); i!=imap.end(); ++i ) {
         pair<set<size_t>::iterator,bool> it=iset.insert( (*i).second );
         // fail on duplicates
-        if ( !it.second ) return false;
+        if ( !it.second ) {
+             cerr <<"\nConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive: sequence contains duplicate element numbers.\n";
+             duplicates.insert( (*i).second );
+           }
+      }
+    if ( !duplicates.empty() ) {
+         std::cerr <<"\n\tdetected duplicate element numbers: ";
+         for ( auto sit : duplicates ) std::cerr << sit <<" ";
+         std::cerr <<"\n\n";
+         correct_sequence = false;
       }
    
-    // checking whether range is consecutive
-    if ( (*iset.rbegin()) - (*iset.begin()) + 1U != iset.size() ) return false;
+    // 2. checking whether index range is consecutive
+    if ( (*iset.rbegin()) - (*iset.begin()) + 1U != iset.size() ) {
+         cerr <<"\nConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive: sequence element numbers are  not consecutive.\n";
+          std::cerr <<"\n\tnon-consecutive element numbers in the range:";
+          size_t last_value(0U);
+          for ( auto sit : iset ) {
+               if ( sit > 0U and sit != last_value+1U )
+                 std::cerr <<"\n\t\t"<< last_value <<"sequence break "<< sit <<" ";
+               last_value = sit;
+            }
+         correct_sequence = false;
+      }
    
-    // checking whether largest element = number-of-elements - 1
+    // 3. checking whether largest element = number-of-elements - 1
     if ( check_whether_max_value_is_size_minus1 )
-      if ( (*iset.rbegin()) + 1U != iset.size() ) return false;
+      if ( (*iset.rbegin()) + 1U != iset.size() ) {
+           cerr <<"\n\tlargest element number = "<< (*iset.rbegin()) <<" vs. total number of elements in sequence = "<< iset.size() <<"\n";
+           correct_sequence = false;
+        }
    
-    // checking whether value range is consecutive upon iteration over range
-    map<size_t,size_t>::const_iterator it1(imap.begin()), it2(imap.begin()); it2++;
-    while ( it2 != imap.end() ) {
-         if ( (*it1).second + 1U != (*it2).second ) {
-              cerr <<"\nConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive: detected problem (n vs. n+1): ";
-              cerr << (*it1).second <<" vs "<< (*it2).second <<"\n";
-              return false;
-           }
-         it2++;
-         it1++;
-      }   
-   
-    return true;
+    return correct_sequence;
  
  } // end IsValueRangeOfUnsignedIntConsecutive
 

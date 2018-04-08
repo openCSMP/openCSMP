@@ -1841,6 +1841,8 @@ void  ModelTopology::RenumberElements( const std::map<size_t,size_t>& eid_mappin
 template<size_t dim>
 void  ModelTopology::RenumberElements(csmp::VSet<dim>& vset, bool check_range )
 {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
    std::map<size_t,size_t>  old_and_new_elmtids;
    CreateNewElementNumbers( old_and_new_elmtids, false );
    vset.ReduceTo( old_and_new_elmtids );
@@ -1849,7 +1851,7 @@ void  ModelTopology::RenumberElements(csmp::VSet<dim>& vset, bool check_range )
   if ( check_range ) {
         const bool check_whether_max_value_is_size_minus1(true);
         if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) )
-          throw csmp::Exception( ERROR, "ModelTopology::RenumberElements:", "failed to calculate consecutive new element idx range.");
+          csmp_error.notice( ERROR, "ModelTopology::RenumberElements:", "failed to calculate consecutive new element idx range.");
     }
 }
 
@@ -1914,33 +1916,61 @@ template bool ModelTopology::CheckTopology( VSet<3U>&,const std::multimap<std::s
 
 
 template<size_t dim>
-bool ModelTopology::CheckTopology(VSet<dim>& vset,
-                                  bool require_unique_names_for_vol_surf_lines,
-                                  bool correct_orientation_of_surface_elements,
-                                  bool non_box_boundary )
+bool ModelTopology::CheckTopology( VSet<dim>& vset,
+                                   bool require_unique_names_for_vol_surf_lines,
+                                   bool correct_orientation_of_surface_elements,
+                                   bool non_box_boundary )
 {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    bool checks_passed(true);
+  
     // 1. merge region
     // -------------------------------------------------------
-    if( require_unique_names_for_vol_surf_lines )
+    if ( require_unique_names_for_vol_surf_lines )
         RemoveLowDimElementsFromRegions( vset );
 
-    // 2. check numbering
+    // 2. check numbering of keys and values in map
     // -------------------------------------------------------
-    const bool check_whether_already_correct( true );
-    RenumberElements( vset, check_whether_already_correct );
+    std::map<size_t,size_t>  old_and_new_elmtids;
+    CreateNewElementNumbers( old_and_new_elmtids, false );
+    bool check_whether_max_value_is_size_minus1( true );
+    if ( !ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
+         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:", "input element number range is not consecutive.");
+         // looking at the input  range
+         std::cerr <<"\n\tfirst element-Idx stored in model topology: "<< (*old_and_new_elmtids.begin()).first;
+         std::cerr <<"\n\tlast element-Idx stored in model topology: "<< (*old_and_new_elmtids.rbegin()).first <<"\n";
+         // printing the new element range
+         std::set<size_t>  range;
+         for ( auto it=old_and_new_elmtids.begin(); it!=old_and_new_elmtids.end(); ++it ) range.insert( (*it).first );
+         std::cerr <<"\n\telement Idx range (only printing the non-consective element numbers in the sequence):";
+         size_t last_value(0U);
+         for ( auto sit : range ) {
+              if ( sit > 0U and sit != last_value+1U ) {
+                   std::cerr <<"\n\t\t"<< last_value <<" sequence break "<< sit;
+                }
+              last_value = sit;
+           }
+         std::cerr <<"\n\n";
+         checks_passed = false;
+      }
 
+    if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
+         csmp_error.notice( WARNING, "ModelTopology::CheckTopology:", "output (new) element number range is not consecutive.");
+         RenumberElements( vset, check_whether_max_value_is_size_minus1=false ); // false=done already
+         checks_passed = false;
+      }
+ 
     // 3. assign boundary flags for box-shaped model
     // -----------------------------------------------
-    if( !non_box_boundary )
-        AssignBoxShapedModelFlags( vset );
+    if ( !non_box_boundary ) AssignBoxShapedModelFlags( vset );
 
     // 4. correct surface mesh orientation
     // ---------------------------------------
-    if( dim == 2U && correct_orientation_of_surface_elements )
-        if( InterpolationOrder() == 1 )
-            CorrectSurfaceElementOrientations( vset );
+    if ( dim == 2U && correct_orientation_of_surface_elements )
+      if ( InterpolationOrder() == 1 )
+        CorrectSurfaceElementOrientations( vset );
 
-    return true;
+    return checks_passed;
 }
 
 template bool ModelTopology::CheckTopology( VSet<1U>&,bool,bool,bool);

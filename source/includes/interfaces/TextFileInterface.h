@@ -378,6 +378,9 @@ bool TextFileInterface<STREAM>
 
 } // end ReadInputFile
 
+
+
+
 template<class STREAM>
 bool TextFileInterface<STREAM>
 ::ReadFile( std::ifstream& ifs,
