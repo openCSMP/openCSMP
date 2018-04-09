@@ -887,7 +887,7 @@ double64  FiniteElement::JacobianInverse()
               csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                                 "the value of the Jacobian is negative; check node-numbering.");
 
-              return fabs(detJ);
+//              return fabs(detJ);
            }
       
          return detJ;
@@ -912,7 +912,7 @@ double64  FiniteElement::JacobianInverse()
           csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                             "the value of the Jacobian is negative; check node-numbering.");
        
-          detJ = fabs(detJ);
+//          detJ = fabs(detJ);
        }
 
      double64 det1(1.0 / detJ);
