@@ -954,7 +954,7 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
                // create the new face using the variables prepared above ( FV Stencil = NULL)
                Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *region.E(i),
                                                                      finiteElementManager.E(
-                                                                     region.E(i)->FE()->ElementTypeOfFace(i) ),
+                                                                     region.E(i)->FE()->ElementTypeOfFace( region.PerimeterFace(i,j) ) ),
                                                                      region.PerimeterFace(i,j),
                                                                      lvsFaces, lvsIntegrationPoints ) );
                faceObj->Idx( face_idx++ );

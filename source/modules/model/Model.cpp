@@ -256,6 +256,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                              bool create_boundaries,
                              bool non_box_shaped_model )
 {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     // 1. Reducing the mesh data to the desired element types as specified
     //    by the topology object
     map<size_t,size_t>  old_and_new_elmtids;
@@ -281,7 +283,10 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
 // will not apply if a region is disconnected from rest of model
-//    assert( valid_model_region );
+    if ( !valid_model_region ) {
+         csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                           "model appears to contain domains that are not connected to one another?" );
+      }
 
     // 5. Testing with a flood-fill whether the model is contiguous
     //    if not Accumulate all will not have reached all the elements
