@@ -60,7 +60,7 @@ void ModelSubDomain_Test::run()
         
          cerr <<"\nModelSubDomain_Test::run: original model.";
          // TODO: numbering of boundary nodes does not seem to be correct
-         vset.Out();
+         //vset.Out();
          //if ( verbose ) model1.Out();
         
          model1.OutputToBinaryFile("ModelSubDomain_Test");
