@@ -1245,7 +1245,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
   /// Forms group from the supplied vector of global Element IDs (0..n-1)
   template<size_t dim, template<size_t> class REGION_COMPLEX>
-  bool RegionInterface<dim,REGION_COMPLEX>::FormRegionFrom( const char* groupname, std::vector<size_t>& element_ids ) 
+  bool RegionInterface<dim,REGION_COMPLEX>::FormRegionFrom( const char* groupname, std::vector<size_t>& element_ids, bool unique_region ) 
    {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1262,7 +1262,9 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
         }
     
       std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-        it = groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
+        it = (unique_region == true ) ?
+           uniqueGroupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) ) :
+           groupMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
 
       if ( it.second ) {
           REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
@@ -1271,7 +1273,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
-               groupMap_.erase( it.first );
+               if ( unique_region ) uniqueGroupMap_.erase( it.first );
+               else groupMap_.erase( it.first );
                csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom (element numbers)", 
                                      "Region could not be formed", output_region.c_str() );
                return false;
@@ -1285,7 +1288,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       
       return true;
 
-   } 
+   } // FormRegionFrom
 
 
 

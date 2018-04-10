@@ -157,7 +157,7 @@ class RegionInterface
     bool FormRegionFrom( const char* regionname, PropertyConstraints&, bool unique=false );
 
     /// forms region from element id numbers that must be in the range 0..n-1
-    bool FormRegionFrom( const char* regionname, std::vector<size_t>& element_numbers );
+    bool FormRegionFrom( const char* regionname, std::vector<size_t>& element_numbers, bool unique=false );
 
     /// forms region that represents union of preexisting regions. @todo SKM remove method as it duplicates MergeRegions()
     void FormRegionFrom( const char* regionname, const std::set<std::string>& region_names );

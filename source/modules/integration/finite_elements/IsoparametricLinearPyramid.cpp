@@ -1164,13 +1164,12 @@ IsoparametricLinearPyramid::EdgeLengths( std::vector<double64>& len )
 double64
 IsoparametricLinearPyramid::Volume()
  {
-    double64   area; // determinant
-    size_t  i;
+    double64  area(0.); // determinant
 
     // numerical integration:
     // looping over the 8 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( size_t i=0U; i<gpe; ++i )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
