@@ -3158,7 +3158,6 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 
       return 0;
     }
-  }
 
 
 } // end namespace csmp
