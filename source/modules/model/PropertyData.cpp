@@ -127,6 +127,19 @@ void PropertyData::PushBack( VARIABLE_FLAG flag ) { flags_.push_back( flag ); }
 void PropertyData::PushBack( double64 val ) { data_.push_back( val ); }
 
 
+void PropertyData::PushBackFrom( const PropertyData& prop, size_t nth_value ) {
+  assert( place_ == prop.place_ && type_ == prop.type_ && dim_ == prop.dim_
+         && flag_stride_ == prop.flag_stride_ && data_stride_ == prop.data_stride_ );
+
+  for (size_t i = 0; i < flag_stride_; ++i) {
+    flags_.push_back(prop.flags_[nth_value * flag_stride_ + i]);
+  }
+  for (size_t i = 0; i < data_stride_; ++i) {
+    data_.push_back(prop.data_[nth_value * data_stride_ + i]);
+  }
+}
+
+
 /// scalars
 VARIABLE_FLAG& PropertyData::Flag( size_t nth_value ) {
      assert( Type() == SCALAR );

@@ -663,7 +663,27 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
          std::map<size_t,size_t> o_n_node_ids;
          VData::ReduceTo( o_n_elmt_ids, o_n_node_ids );
       }
-       
+   
+   if (property_map_.empty()) {
+     return;
+   }
+   std::vector<size_t> n_o_elmt_ids;
+   n_o_elmt_ids.resize(o_n_elmt_ids.size());
+   for ( auto& o_n : o_n_elmt_ids ) {
+     n_o_elmt_ids[o_n.second] = o_n.first;
+   }
+   for ( auto& property : property_map_ ) {
+       auto& oldprop = property.second;
+       PropertyData new_data(oldprop.Placement(), oldprop.Type(), dim);
+       new_data.Reserve( n_o_elmt_ids.size() );
+       const size_t components = oldprop.Components();
+     
+       for ( auto id : n_o_elmt_ids ) {
+        new_data.PushBackFrom( oldprop, id );
+       }
+     
+       property.second = std::move(new_data);
+   }
  } // end ReduceTo
 
 

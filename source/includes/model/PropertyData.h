@@ -110,6 +110,9 @@ class PropertyData {
     /// 'raw' inserter for values (user must ascertain that stride is correct); use pushBack() for objects
     void PushBack( double64 );
   
+    /// inserter from another PropertyData
+    void PushBackFrom( const PropertyData& data, size_t nth_value );
+  
     /// accessors / mutators for flags
     /// scalars
     VARIABLE_FLAG& Flag( size_t nth_value );
