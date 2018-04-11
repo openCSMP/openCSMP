@@ -4,6 +4,24 @@ using namespace std;
 
 namespace csmp {
 
+template<size_t dim>
+double64 dotProduct( const vector<double64>& v1, const vector<double64>& v2 )
+  {
+      assert( !v1.empty() );
+      assert( !v2.empty() );
+      assert( v1.size() == v2.size() );
+      double64 value(0.);
+      for ( auto i=0U; i<dim; ++i ) value += v1[i] * v2[i];
+      return value;
+  }
+
+template double64 dotProduct<1U>( const vector<double64>&, const vector<double64>& );
+template double64 dotProduct<2U>( const vector<double64>&, const vector<double64>& );
+template double64 dotProduct<3U>( const vector<double64>&, const vector<double64>& );
+
+
+
+
 // addition
 template<>
 Point<1U> operator+(const Point<1U>& p, const VectorVariable<1U>& v ) {

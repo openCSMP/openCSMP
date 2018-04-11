@@ -237,7 +237,8 @@ bool EclipseInterface<dim>::ReadFile( csmp::VSet<dim>& vset,
           // KEY METHOD
           grid_.CreateModel( model_name_,*vset_, *model_topology_, regions_, faults_, wells_ );
 
-    /// 4. Write properties to VSet
+
+   /// 4. Write properties to VSet
 
     WritePropertiesToVSet();
 

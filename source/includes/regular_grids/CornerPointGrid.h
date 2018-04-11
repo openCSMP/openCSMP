@@ -98,6 +98,11 @@ class  CornerPointGrid
     void AssignDimensionX( size_t NX );
     void AssignDimensionY( size_t NY );
     void AssignDimensionZ( size_t NZ );
+  
+    /// return the number of blocks the grid has in the given direction
+    size_t DimensionI() const { return NX_; }
+    size_t DimensionJ() const { return NY_; }
+    size_t DimensionK() const { return NZ_; }
 
 protected:
 

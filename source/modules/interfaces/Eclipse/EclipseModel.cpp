@@ -1,5 +1,8 @@
-  #include "EclipseModel.h"
+#include "EclipseModel.h"
 #include "ModelTime.h"
+#include "variableOperations.h"
+
+using namespace std;
 
 namespace csmp {
 
@@ -174,6 +177,17 @@ void EclipseModel<dim>::BuildModel()
                                            ( ( dim != 1U ) ? eclipse_model_settings_.create_boundaries_ : false ),
                                            non_box_shaped_model );
            }
+      
+      
+         // SKM FIX - retain critical information in the EclipseModel object
+         // TODO: deal with other critical data as well
+         // ----------------------------------------------------------------
+         const CornerPointGrid<dim>& cnr_grid_ref = mesh_interface.GetCornerPointGrid();
+      
+         // store grid dimensions int the EclipseModel
+         grid_dim_I_ = cnr_grid_ref.DimensionI();
+         grid_dim_J_ = cnr_grid_ref.DimensionJ();
+         grid_dim_K_ = cnr_grid_ref.DimensionK();
       }
 
     // -------------------------------------------------
@@ -295,6 +309,9 @@ template void EclipseModel<3U>::GetWells( std::vector<std::string>& );
 template void EclipseModel<3U>::GetWells( std::list<std::string>& );
 template void EclipseModel<3U>::GetWells( std::set<std::string>& );
 
+
+
+
 /// processing special regions
 template<size_t dim>
 void EclipseModel<dim>
@@ -309,6 +326,9 @@ void EclipseModel<dim>
     //     rit = faults_.begin(); rit != faults_.end(); ++rit )
     //    this->InsertBoundary( (*rit).c_str(), csmp::IRREGULAR, keep_fault_regions );
 }
+
+
+
 
 template<size_t dim>
 void EclipseModel<dim>
@@ -325,6 +345,144 @@ void EclipseModel<dim>
     //faults_.insert("FAULTS");
 
 }
+
+
+
+// trial versions
+
+BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )
+ {
+    if ( side1 == LEFT and side2 == BOTTOM ) return EDGE1;
+    if ( side1 == LEFT and side2 == RIGHT )  return EDGE2;
+    if ( side1 == LEFT and side2 == TOP )    return EDGE3;
+    if ( side1 == LEFT and side2 == FRONT )  return EDGE4;
+   
+    if ( side1 == BOTTOM and side2 == FRONT ) return EDGE5;
+    if ( side1 == BOTTOM and side2 == LEFT ) return EDGE1;
+    if ( side1 == BOTTOM and side2 == BACK ) return EDGE6;
+    if ( side1 == BOTTOM and side2 == TOP ) return EDGE7;
+   
+    if ( side1 == TOP and side2 == FRONT ) return EDGE8;
+    if ( side1 == TOP and side2 == LEFT ) return EDGE3;
+    if ( side1 == TOP and side2 == BACK ) return EDGE7;
+    if ( side1 == TOP and side2 == RIGHT ) return EDGE12;
+
+    if ( side1 == FRONT and side2 == BOTTOM ) return EDGE5;
+    if ( side1 == FRONT and side2 == LEFT ) return EDGE4;
+    if ( side1 == FRONT and side2 == TOP ) return EDGE8;
+    if ( side1 == FRONT and side2 == RIGHT ) return EDGE12;
+
+    if ( side1 == RIGHT and side2 == BOTTOM ) return EDGE9;
+    if ( side1 == RIGHT and side2 == BACK ) return EDGE10;
+    if ( side1 == RIGHT and side2 == TOP ) return EDGE11;
+    if ( side1 == RIGHT and side2 == FRONT ) return EDGE12;
+    return NOT;
+ }
+
+BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3 )
+ {
+    set<BOX_BOUNDARY> sides({side1,side2,side3});
+    auto s3 = (*sides.begin());
+    auto s2 = (*(next(sides.begin(),1)));
+    auto s1 = (*sides.rbegin());
+   
+    // obeying increasing value constraint: BACK, FRONT, TOP, BOTTOM, RIGHT, LEFT
+    if ( s1 == FRONT and s2 == BOTTOM and s3 == LEFT ) return CNR1;
+    if ( s1 == BACK and s2 == BOTTOM and s3 == LEFT ) return CNR2;
+    if ( s1 == BACK and s2 == TOP and s3 == BOTTOM ) return CNR3;
+    if ( s1 == FRONT and s2 == TOP and s3 == LEFT ) return CNR4;
+
+    if ( s1 == FRONT and s2 == BOTTOM and s3 == RIGHT ) return CNR5;
+    if ( s1 == BACK and s2 == BOTTOM and s3 == RIGHT ) return CNR6;
+    if ( s1 == BACK and s2 == TOP and s3 == RIGHT ) return CNR7;
+    if ( s1 == FRONT and s2 == TOP and s3 == RIGHT ) return CNR5;
+   
+    return NOT;
+ }
+
+
+/**
+    BOX flag nodes and elements of volumetric target region
+*/
+template<size_t dim>
+void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_region )
+ {
+    Region<dim>&          domain( this->Region(target_region));
+    vector<size_t>        fnids;
+    multimap<size_t,pair<BOX_BOUNDARY,Node<dim>*> >  boundary_nodes;
+    vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
+    Box                   box;
+    double64              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
+    BOX_BOUNDARY          bflag(NOT);
+   
+    box.UnitNormalTo( BOTTOM, dim, nrml_bottom );
+    box.UnitNormalTo( TOP,    dim, nrml_top );
+    box.UnitNormalTo( LEFT,   dim, nrml_left );
+    box.UnitNormalTo( RIGHT,  dim, nrml_right );
+    box.UnitNormalTo( FRONT,  dim, nrml_front );
+    box.UnitNormalTo( BACK,   dim, nrml_back );
+   
+    cout <<"\nAssignBoxBoundaryFlagsWherePossible: scanning hexahedral elements for boundary adffiliation...";
+    for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+      {
+         // ignore elements that are not hexahedra
+         if ( (*it)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
+              cout <<"\n\tignored: "<< parseFiniteElementType( (*it)->FE_Type() );
+              continue;
+           }
+         // diagnostics
+         (*it)->Out();
+         // idea: loop over the faces of the cell and where there is no neighbor
+         // check where the face is facing, assign boundary flags accordingly
+         // if the element has more than one face idenfify edges and corners
+         for ( size_t i=0U; i<(*it)->Faces(); ++i )
+           if ( (*it)->Neighbor(i) == nullptr ) {
+                // determining in which direction the face normal points
+                (*it)->UnitNormalToFace( i, nrml );
+                // projecting: perfect alignment would give dot-product equal 1, inclinations up to 37 degrees cos(37)~0.8 are tolerated
+                if      ( dotProduct<dim>(nrml,nrml_bottom) >= minLength ) bflag = BOTTOM;
+                else if ( dotProduct<dim>(nrml,nrml_top)    >= minLength ) bflag = TOP;
+                else if ( dotProduct<dim>(nrml,nrml_left)   >= minLength ) bflag = LEFT;
+                else if ( dotProduct<dim>(nrml,nrml_right)  >= minLength ) bflag = RIGHT;
+                else if ( dotProduct<dim>(nrml,nrml_front)  >= minLength ) bflag = FRONT;
+                else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) bflag = BACK;
+                // getting the nodes for flagging the faces
+                (*it)->FE()->NodesOfFace( i, fnids );
+                for ( auto j=0U; i<fnids.size(); ++j ) {
+                    (*it)->N(fnids[j])->AtBoundary( bflag );
+                    // storing the nodes to determine which ones lie on EDGES (duplicates) or even corners (triplicates)
+                    boundary_nodes.insert( make_pair( fnids[j], make_pair( bflag, (*it)->N(fnids[j]) ) ) );
+                 }
+             }
+         // flagging duplicate and triplicate nodes accordingly
+         for ( size_t n=0U; n<(*it)->Nodes(); ++n ) {
+              // dealing with any cases where there are multiple boundary flags
+              // duplicates = edges
+              if ( boundary_nodes.count(n) == 2U ) {
+                   // figuring out which edge we are on
+                   auto range = boundary_nodes.equal_range(n);
+                   bflag = whichEdge( (*range.first).second.first, (*range.second).second.first );
+                   (*it)->N(n)->AtBoundary( bflag );
+                }
+              // triplicates = corners
+              else if ( boundary_nodes.count(n) == 3U ) {
+                   // figuring out which corner we have found
+                   auto range = boundary_nodes.equal_range(n);
+                   auto it_2nd(range.first); it_2nd++;
+                   bflag = whichCorner( (*range.first).second.first, (*it_2nd).second.first, (*range.second).second.first );
+                   (*it)->N(n)->AtBoundary( bflag );
+               }
+           }
+        
+         // resetting
+         boundary_nodes.clear();
+         bflag = NOT;
+      }
+ 
+ } // end AssignBoxBoundaryFlagsWherePossible
+ 
+
+
 
 
 template class EclipseModel<1U>;

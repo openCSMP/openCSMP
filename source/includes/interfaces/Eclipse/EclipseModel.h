@@ -49,6 +49,13 @@ class EclipseModel : public csmp::Model<dim>
       /// processing special regions
       void CreateBoundariesAroundFaults( bool keep_fault_regions = false );
       void CreateSplitBoundariesAroundFaults( bool delete_fault_regions = false );
+  
+      /// BOX flag nodes and elements of volumetric target region
+      void AssignBoxBoundaryFlagsWherePossible( const char* target_region );
+  
+  public: // SKM accessors
+      /// the dimensions of the original corner-point grid
+      void GridDimensions( size_t& max_I, size_t& max_J, size_t& max_K ) const { max_I=grid_dim_I_; max_J=grid_dim_J_; max_K=grid_dim_K_; }
 
   private:
 
@@ -57,6 +64,9 @@ class EclipseModel : public csmp::Model<dim>
       std::set<std::string>     regions_;
       std::set<std::string>     faults_;
       std::set<std::string>     wells_;
+  
+      // Eclipse grid dimensions
+      size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
 };
 
 } // csmp

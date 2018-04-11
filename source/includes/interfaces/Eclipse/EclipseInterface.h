@@ -100,6 +100,9 @@ struct EclipseWell
 };
 
 
+/**
+    Contains the CornerPointGrid.
+*/
 template<size_t dim>
 class  EclipseInterface {
   public:
@@ -146,6 +149,9 @@ class  EclipseInterface {
   
     /// ReadCornerDepths -> Read_ZCORN
     bool Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length );
+  
+    // a handle to the underlying EclipseGrid (gets invalidated once ReadFile function exits
+    const CornerPointGrid<dim>& GetCornerPointGrid() const { return grid_; }
   
   
   private:

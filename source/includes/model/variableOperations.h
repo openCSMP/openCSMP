@@ -8,6 +8,10 @@
 
 namespace csmp {
 
+/// generic dot product for vectors
+template<size_t dim>
+double64 dotProduct( const std::vector<double64>& v1, const std::vector<double64>& v2 );
+
 /// Point class related operators
 template<size_t dim>
 Point<dim> operator+(const Point<dim>&, const VectorVariable<dim>& );
