@@ -126,7 +126,7 @@ FiniteVolumeTransportBasics_Test::run()
         test_constant_velocity_field(model);
     }
 #endif
-#if 1
+#if 0
     test_b25();
 #endif
 }

@@ -28,7 +28,9 @@ class Element_Test : public Test
   
   /// for all element types tests wether the face normals are outward pointing
   void UnitNormalTest();
-	
+  
+  /// for all element types does pointInVolumeElement work
+  void PointInVolumeElementTest();
   
   private:
     double64 fTolerance;

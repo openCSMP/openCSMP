@@ -2,6 +2,7 @@
 #include "IsoparametricLinearQuadrilateral.h"
 #include "ANSYS_Model3D.h"
 #include "Region.h"
+#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ void Element_Test::run()
   ElementLengthTest3D();
   
   UnitNormalTest();
+  
+  PointInVolumeElementTest();
 }
 	
   
@@ -203,6 +206,33 @@ void Element_Test::UnitNormalTest()
    
  } // end UnitNormalTest
   
+  /**
+   Tests pointInVolumeElement:
+   
+   Tests prism_test model because it contains elements of all
+   types.
+   */
+  void Element_Test::PointInVolumeElementTest()
+  {
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true, true, true );
+    
+    Point<3u> query(2434.0f, -1510.0f, 5400.0f);
+    
+    auto& gref = model.Region("Model");
+    
+    auto eend = gref.ElementsEnd();
+    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
+      if (!(*eit)->IsVolumeElement()) {
+        continue;
+      }
+      const Point<3u> bctr = (*eit)->BaryCenter();
+      
+      Element<3u>* e = pointInVolumeElement(gref, bctr);
+      _test(e == *eit);
+    }
+  }
+  
+
   
   
   

@@ -370,6 +370,26 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
 char * strptime(const char *s, const char *format, struct tm *tm);
 #endif
 
+
+/**
+ @brief Find element which contains a given point.
+
+ Note that this only searches volumetric elements. It is not recommended
+ that you use this function if you need to search for many points. It also
+ may not work if any elements are concave (possible in the case of hexahedra).
+
+ @author  A.J. Bromage
+ @date    11/04/2018
+
+ @param [in] region  region to search
+ @param [in] query   query point
+
+ @return  the element which contains the point, or NULL if no element does
+ */
+
+Element<3u>* pointInVolumeElement(Region<3u>& region, const Point<3u>& query);
+
+
 /**
 @}
 */
