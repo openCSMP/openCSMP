@@ -385,9 +385,9 @@ char * strptime(const char *s, const char *format, struct tm *tm);
  @param [in] query   query point
 
  @return  the element which contains the point, or NULL if no element does
- */
 
-Element<3u>* pointInVolumeElement(Region<3u>& region, const Point<3u>& query);
+*/
+Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& query );
 
 
 /**
