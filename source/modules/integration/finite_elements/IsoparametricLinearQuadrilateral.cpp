@@ -797,9 +797,6 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
             if( (rstHatK[0]<-1.) || (rstHatK[0]>1.) ||
                 (rstHatK[1]<-1.) || (rstHatK[1]>1.)  )
             {
-                rstHatK[2] = 0.0;
-                rstHatK[2] = 2.0;
-
                 break;
             }
 
@@ -820,7 +817,6 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
             {
                 rstHatK_PlusOne[0] = rstHatK[0] - constantMu*(JINV(0,0)*(outxyz[0]-xyz[0]) + JINV(1,0)*(outxyz[1]-xyz[1]) +JINV(2,0)*(outxyz[2]-xyz[2]));
                 rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
-                rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
                 for(size_t i=0; i<2; i++)
                     rstHatK[i] = rstHatK_PlusOne[i];

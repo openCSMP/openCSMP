@@ -407,7 +407,7 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
 template<size_t dim>
 void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_region )
  {
-    Region<dim>&          domain( this->Region(target_region));
+    Region<dim>&          domain =  this->Region(target_region);
     vector<size_t>        fnids;
     multimap<size_t,pair<BOX_BOUNDARY,Node<dim>*> >  boundary_nodes;
     vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
