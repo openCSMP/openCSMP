@@ -188,6 +188,15 @@ void EclipseModel<dim>::BuildModel()
          grid_dim_I_ = cnr_grid_ref.DimensionI();
          grid_dim_J_ = cnr_grid_ref.DimensionJ();
          grid_dim_K_ = cnr_grid_ref.DimensionK();
+         // store corner point cells in Eclipse model
+         for ( size_t k = 0; k < grid_dim_K_; ++k )
+           for ( size_t j = 0; j < grid_dim_J_; ++j )
+             for ( size_t i = 0; i < grid_dim_I_; ++i )
+               // checking whether the cell is active (only then it will be stored)
+               if ( cnr_grid_ref.IsActiveCell(i,j,k) ) {
+                    size_t index = cnr_grid_ref.CellIndex(i,j,k);
+                    IJK_map_.insert( make_pair( ijk(i,j,k), index ) );
+                 }
       }
 
     // -------------------------------------------------
@@ -448,7 +457,7 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
                 else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) bflag = BACK;
                 // getting the nodes for flagging the faces
                 (*it)->FE()->NodesOfFace( i, fnids );
-                for ( auto j=0U; i<fnids.size(); ++j ) {
+                for ( auto j=0U; j<fnids.size(); ++j ) {
                     (*it)->N(fnids[j])->AtBoundary( bflag );
                     // storing the nodes to determine which ones lie on EDGES (duplicates) or even corners (triplicates)
                     boundary_nodes.insert( make_pair( fnids[j], make_pair( bflag, (*it)->N(fnids[j]) ) ) );
@@ -481,6 +490,47 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
  
  } // end AssignBoxBoundaryFlagsWherePossible
  
+
+/**
+    Access elements=grid cells generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
+ 
+    @attention Eclipse grid indices run 1..n
+ 
+    @return method returns a NULL pointer if the element does not exist
+*/
+template<size_t dim>
+const Element<dim>*  EclipseModel<dim>::operator()( size_t i, size_t j, size_t k ) const
+ {
+    assert( i > 0U );
+    assert( i <= grid_dim_I_ );
+    assert( j > 0U );
+    assert( j <= grid_dim_J_ );
+    assert( k > 0U );
+    assert( k <= grid_dim_K_ );
+   
+    // if the index does not exist return null
+    auto it = IJK_map_.find( ijk(i,j,k) );
+   
+    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
+ 
+ } // access operator
+  
+  
+template<size_t dim>
+Element<dim>* EclipseModel<dim>::operator()( size_t i, size_t j, size_t k )
+ {
+    assert( i > 0U );
+    assert( i <= grid_dim_I_ );
+    assert( j > 0U );
+    assert( j <= grid_dim_J_ );
+    assert( k > 0U );
+    assert( k <= grid_dim_K_ );
+   
+    // if the index does not exist return null
+    auto it = IJK_map_.find( ijk(i,j,k) );
+   
+    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
+ }
 
 
 

@@ -104,6 +104,13 @@ class  CornerPointGrid
     size_t DimensionJ() const { return NY_; }
     size_t DimensionK() const { return NZ_; }
 
+    /// find the cell number from its index
+    size_t CellIndex( size_t i, size_t j, size_t k ) const;
+  
+    /// checking whether a cell is active
+    bool IsActiveCell( size_t i, size_t j, size_t k ) const
+      { return (cell_activity_[ CellIndex(i,j,k) ] == 1) ? true : false; }
+
 protected:
 
     void InitializeGridSpecs();
@@ -136,7 +143,6 @@ protected:
     void DefineAxes( PolygonGridManager<3U>& pgm );
 
     /// @todo should be an operator to access the cells of the structured grid
-    size_t CellIndex( size_t i, size_t j, size_t k ) const;
     size_t CellIndexI( size_t cell_id ) const;
     size_t CellIndexJ( size_t cell_id ) const;
     size_t CellIndexK( size_t cell_id ) const;
