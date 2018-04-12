@@ -51,12 +51,11 @@ void PermeabilityTensor_Example::Run()
   // now we establish the permeability tensor, filled with (PLAIN, 0.) values
   TensorVariable<DIM> kTensor( PLAIN, 0. );
 
-  // we set the Kxx and Kyy permeability
+  // we set the Kxx and Kzz permeability
   kTensor( 0,0 ) = kHorizontal;
-  //     ^^^^^^^ access to manipulate value of variable
-  kTensor( 1,1 ) = kHorizontal;
+  kTensor( 2,2 ) = kHorizontal;
   // the vertical permeability is set to a third of the horizontal
-  kTensor( 2,2 ) = kHorizontal / 3.;
+  kTensor( 1,1 ) = kHorizontal / 3.;
 
   // next we create the potential gradient vector of our conceptual flow
   VectorVariable<DIM> grad( PLAIN, 0. );
