@@ -9,7 +9,7 @@ namespace csmp {
 /// Model constructor with provided "variables_file.txt" file is used
 template<size_t dim>
 EclipseModel<dim>::EclipseModel( const std::string& model_name,
-                            const std::string& variables_file )
+                                 const std::string& variables_file )
 : csmp::Model<dim>( variables_file.c_str(), false ),
   eclipse_model_settings_( model_name )
 {
@@ -352,6 +352,9 @@ void EclipseModel<dim>
 
 BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )
  {
+    // dealing with the case where the 2 flags are the same so that this is not an EDGE
+    if ( side1 == side2 ) return side1;
+ 
     if ( side1 == LEFT and side2 == BOTTOM ) return EDGE1;
     if ( side1 == LEFT and side2 == RIGHT )  return EDGE2;
     if ( side1 == LEFT and side2 == TOP )    return EDGE3;
@@ -386,16 +389,71 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
     auto s2 = (*(next(sides.begin(),1)));
     auto s1 = (*sides.rbegin());
    
+    if ( sides.empty() ) return NOT;
+   
+    if ( sides.size() == 1U ) return (*sides.begin());
+   
+    // dealing with duplicates (there will only be 1 or 2 entries so this can only be a corner if the entries are edges)
+    if ( sides.size() == 2U ) {
+          // 2 edges EDGE12, EDGE11... EDGE1
+          if ( side1 == EDGE12 and side2 == EDGE11 ) return CNR8;
+          if ( side1 == EDGE12 and side2 == EDGE9 ) return CNR5;
+ 
+          if ( side1 == EDGE11 and side2 == EDGE10 ) return CNR7;
+ 
+          if ( side1 == EDGE10 and side2 == EDGE9 ) return CNR6;
+          if ( side1 == EDGE10 and side2 == EDGE6 ) return CNR6;
+ 
+          if ( side1 == EDGE9 and side2 == EDGE6 ) return CNR6;
+          if ( side1 == EDGE9 and side2 == EDGE5 ) return CNR5;
+
+          if ( side1 == EDGE8 and side2 == EDGE4 ) return CNR4;
+          if ( side1 == EDGE8 and side2 == EDGE3 ) return CNR4;
+     
+          if ( side1 == EDGE7 and side2 == EDGE3 ) return CNR3;
+          if ( side1 == EDGE7 and side2 == EDGE2 ) return CNR3;
+
+          if ( side1 == EDGE6 and side2 == EDGE2 ) return CNR2;
+          if ( side1 == EDGE6 and side2 == EDGE1 ) return CNR2;
+
+          if ( side1 == EDGE5 and side2 == EDGE4 ) return CNR1;
+          if ( side1 == EDGE5 and side2 == EDGE1 ) return CNR1;
+
+          if ( side1 == EDGE4 and side2 == EDGE3 ) return CNR4;
+          if ( side1 == EDGE4 and side2 == EDGE1 ) return CNR1;
+
+          if ( side1 == EDGE3 and side2 == EDGE2 ) return CNR3;
+      
+          if ( side1 == EDGE2 and side2 == EDGE1 ) return CNR2;
+
+          // not a corner
+          if ( side1 == BACK and side2 == TOP ) return EDGE7;
+          if ( side1 == BACK and side2 == BOTTOM ) return EDGE6;
+          if ( side1 == BACK and side2 == RIGHT ) return EDGE10;
+          if ( side1 == BACK and side2 == LEFT ) return EDGE2;
+
+          if ( side1 == FRONT and side2 == TOP ) return EDGE8;
+          if ( side1 == FRONT and side2 == BOTTOM ) return EDGE5;
+          if ( side1 == FRONT and side2 == RIGHT ) return EDGE12;
+          if ( side1 == FRONT and side2 == LEFT ) return EDGE4;
+
+          if ( side1 == TOP and side2 == RIGHT ) return EDGE11;
+          if ( side1 == TOP and side2 == LEFT ) return EDGE3;
+
+          if ( side1 == BOTTOM and side2 == LEFT ) return EDGE1;
+          if ( side1 == BOTTOM and side2 == RIGHT ) return EDGE9;
+      }
+   
     // obeying increasing value constraint: BACK, FRONT, TOP, BOTTOM, RIGHT, LEFT
     if ( s1 == FRONT and s2 == BOTTOM and s3 == LEFT ) return CNR1;
-    if ( s1 == BACK and s2 == BOTTOM and s3 == LEFT ) return CNR2;
-    if ( s1 == BACK and s2 == TOP and s3 == BOTTOM ) return CNR3;
-    if ( s1 == FRONT and s2 == TOP and s3 == LEFT ) return CNR4;
+    if ( s1 == BACK  and s2 == BOTTOM and s3 == LEFT ) return CNR2;
+    if ( s1 == BACK  and s2 == TOP    and s3 == BOTTOM ) return CNR3;
+    if ( s1 == FRONT and s2 == TOP    and s3 == LEFT ) return CNR4;
 
     if ( s1 == FRONT and s2 == BOTTOM and s3 == RIGHT ) return CNR5;
-    if ( s1 == BACK and s2 == BOTTOM and s3 == RIGHT ) return CNR6;
-    if ( s1 == BACK and s2 == TOP and s3 == RIGHT ) return CNR7;
-    if ( s1 == FRONT and s2 == TOP and s3 == RIGHT ) return CNR5;
+    if ( s1 == BACK  and s2 == BOTTOM and s3 == RIGHT ) return CNR6;
+    if ( s1 == BACK  and s2 == TOP    and s3 == RIGHT ) return CNR7;
+    if ( s1 == FRONT and s2 == TOP    and s3 == RIGHT ) return CNR5;
    
     return NOT;
  }
@@ -407,6 +465,8 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
 template<size_t dim>
 void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_region )
  {
+    csmp::ErrorHandler& error_handler(csmp::ErrorHandler::Instance());
+
     Region<dim>&          domain( this->Region(target_region));
     vector<size_t>        fnids;
     multimap<size_t,pair<BOX_BOUNDARY,Node<dim>*> >  boundary_nodes;
@@ -430,8 +490,6 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
               cout <<"\n\tignored: "<< parseFiniteElementType( (*it)->FE_Type() );
               continue;
            }
-         // diagnostics
-         (*it)->Out();
          // idea: loop over the faces of the cell and where there is no neighbor
          // check where the face is facing, assign boundary flags accordingly
          // if the element has more than one face idenfify edges and corners
@@ -448,9 +506,10 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
                 else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) bflag = BACK;
                 // getting the nodes for flagging the faces
                 (*it)->FE()->NodesOfFace( i, fnids );
-                for ( auto j=0U; i<fnids.size(); ++j ) {
+                for ( auto j=0U; j<fnids.size(); ++j ) {
                     (*it)->N(fnids[j])->AtBoundary( bflag );
                     // storing the nodes to determine which ones lie on EDGES (duplicates) or even corners (triplicates)
+                    //                           local node #              flag   local node #
                     boundary_nodes.insert( make_pair( fnids[j], make_pair( bflag, (*it)->N(fnids[j]) ) ) );
                  }
              }
@@ -472,7 +531,18 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
                    bflag = whichCorner( (*range.first).second.first, (*it_2nd).second.first, (*range.second).second.first );
                    (*it)->N(n)->AtBoundary( bflag );
                }
+              else {
+                  (*it)->Out();
+                  cerr <<"\n\tdetected "<< boundary_nodes.count(n) <<" boundary flags for element "<< (*it)->Idx();
+                  error_handler.notice( WARNING, "EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible:",
+                                        "this may be a completely disconnected element.");
+               }
            }
+ 
+ // testing
+ cerr <<"\n("<< (*it)->Idx() <<"): ";
+ for ( size_t n=0U; n<(*it)->Nodes(); ++n )
+   cerr << parseBoundary( (*it)->N(n)->AtBoundary() ) <<" ";
         
          // resetting
          boundary_nodes.clear();

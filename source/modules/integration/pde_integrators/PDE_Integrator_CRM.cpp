@@ -6,7 +6,7 @@ namespace csmp {
 
 	/*
 	******************************************************************************
-	PAERT 1: The following functions need modification
+	PART 1: The following functions need modification
 	******************************************************************************
 	*/
 	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
