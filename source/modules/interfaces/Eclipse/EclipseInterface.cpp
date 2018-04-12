@@ -106,9 +106,8 @@ template<class Container>
 void EclipseInterface<dim>
 ::GetRegions( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( regions_.begin(), regions_.end(), std::inserter( data, dit ) );
+  Container newdata( regions_.begin(), regions_.end() );
+  std::swap(data, newdata);
 }
 
 template void EclipseInterface<1U>::GetRegions( std::vector<std::string>& );
@@ -128,9 +127,8 @@ template<class Container>
 void EclipseInterface<dim>
 ::GetFaults( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( faults_.begin(), faults_.end(), std::inserter( data, dit ) );
+  Container newdata( faults_.begin(), faults_.end() );
+  std::swap(data, newdata);
 }
 
 template void EclipseInterface<1U>::GetFaults( std::vector<std::string>& );
@@ -150,9 +148,8 @@ template<class Container>
 void EclipseInterface<dim>
 ::GetWells( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( wells_.begin(), wells_.end(), std::inserter( data, dit ) );
+  Container newdata( wells_.begin(), wells_.end() );
+  std::swap(data, newdata);
 }
 
 template void EclipseInterface<1U>::GetWells( std::vector<std::string>& );

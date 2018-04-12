@@ -1,11 +1,14 @@
 #ifndef ECLIPSE_MODEL_H
 #define ECLIPSE_MODEL_H
 
+#include <unordered_map>
+
+#include "CSMP_highLevelUtilities.h"
 #include "EclipseInterface.h"
 #include "Model.h"
 
-namespace csmp {
 
+namespace csmp {
 
 /**
 
@@ -17,13 +20,12 @@ element types like prisms and tetrahedra.
 @author R. Manasipov
 @author Stephan Matthai (refactoring in progress)
 @date 2014, 2016
+@revised SKM 12/04/2018
 
 */
 template<size_t dim>
-class EclipseModel : public csmp::Model<dim>
-{
+class EclipseModel : public csmp::Model<dim> {
   public:
-
       /// CSMP model construction from Eclipse files; property database is created from "variables_file.txt"
       EclipseModel( const std::string& model_name,
                     const std::string& variables_file );
@@ -33,8 +35,12 @@ class EclipseModel : public csmp::Model<dim>
 
       virtual ~EclipseModel();
 
-      /// MOST IMPORTANT METHOD!- but should be private (TODO: move EclipseModelSettings out of class)
+      /// MOST IMPORTANT METHOD!- but should be private and part of constructor (TODO: move EclipseModelSettings out of class)
       void BuildModel();
+  
+      /// access of elements generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
+      const Element<dim>* operator()( size_t i, size_t j, size_t k ) const;
+      Element<dim>*       operator()( size_t i, size_t j, size_t k );
 
       /// access to the settings of the Eclipse interface
       EclipseModelSettings&  EclipseModelSetup();
@@ -67,8 +73,12 @@ class EclipseModel : public csmp::Model<dim>
   
       // Eclipse grid dimensions
       size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
+  
+      std::unordered_map<ijk,size_t>  IJK_map_; ///< stores mapping from i,j,k to elements
 };
 
 } // csmp
+
+
 
 #endif

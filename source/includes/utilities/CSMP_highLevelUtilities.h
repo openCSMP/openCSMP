@@ -389,11 +389,57 @@ char * strptime(const char *s, const char *format, struct tm *tm);
 */
 Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& query );
 
+/**
+  Utility class for storing (i,j,k) coordinates
+ */
+
+  struct ijk {
+    size_t i, j, k;
+    
+    bool operator<(const ijk& rhs) const {
+      if (i != rhs.i)
+        return i < rhs.i;
+      if (j != rhs.j)
+        return j < rhs.j;
+      return j < rhs.j;
+    }
+    
+    bool operator==(const ijk& rhs) const {
+      return i == rhs.i && j == rhs.j && k == rhs.k;
+    }
+    
+    ijk(size_t i, size_t j, size_t k)
+    : i(i), j(j), k(k)
+    {
+    }
+  };
+  
+  
 
 /**
 @}
 */
 
 } // end namespace csmp
+
+namespace std {
+
+  /** Hashtable support for ijk */
+  template<> struct hash<csmp::ijk> {
+    size_t operator()(const csmp::ijk& key) const {
+      hash<size_t> h;
+      
+      // (1 + sqrt 5) * 2^30
+      size_t s = 0xcf1bbcdd;
+      
+      // Boost hash_combine function
+      s ^= h(key.i) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      s ^= h(key.j) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      s ^= h(key.k) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      return s;
+    }
+  };
+}
+
 
 #endif

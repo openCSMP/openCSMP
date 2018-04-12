@@ -188,6 +188,15 @@ void EclipseModel<dim>::BuildModel()
          grid_dim_I_ = cnr_grid_ref.DimensionI();
          grid_dim_J_ = cnr_grid_ref.DimensionJ();
          grid_dim_K_ = cnr_grid_ref.DimensionK();
+         // store corner point cells in Eclipse model
+         for ( size_t k = 0; k < grid_dim_K_; ++k )
+           for ( size_t j = 0; j < grid_dim_J_; ++j )
+             for ( size_t i = 0; i < grid_dim_I_; ++i )
+               // checking whether the cell is active (only then it will be stored)
+               if ( cnr_grid_ref.IsActiveCell(i,j,k) ) {
+                    size_t index = cnr_grid_ref.CellIndex(i,j,k);
+                    IJK_map_.insert( make_pair( ijk(i,j,k), index ) );
+                 }
       }
 
     // -------------------------------------------------
@@ -247,9 +256,8 @@ template<class Container>
 void EclipseModel<dim>
 ::GetRegions( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( regions_.begin(), regions_.end(), std::inserter( data, dit ) );
+  Container newdata(regions_.begin(), regions_.end());
+  std::swap(data, newdata);
 }
 
 template void EclipseModel<1U>::GetRegions( std::vector<std::string>& );
@@ -269,9 +277,8 @@ template<class Container>
 void EclipseModel<dim>
 ::GetFaults( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( faults_.begin(), faults_.end(), std::inserter( data, dit ) );
+  Container newdata(faults_.begin(), faults_.end());
+  std::swap(data, newdata);
 }
 
 template void EclipseModel<1U>::GetFaults( std::vector<std::string>& );
@@ -292,9 +299,8 @@ template<class Container>
 void EclipseModel<dim>
 ::GetWells( Container& data )
 {
-    data.clear();
-    typename Container::iterator dit = data.begin();
-    std::copy( wells_.begin(), wells_.end(), std::inserter( data, dit ) );
+  Container newdata(wells_.begin(), wells_.end());
+  std::swap(data, newdata);
 }
 
 template void EclipseModel<1U>::GetWells( std::vector<std::string>& );
@@ -467,7 +473,7 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
  {
     csmp::ErrorHandler& error_handler(csmp::ErrorHandler::Instance());
 
-    Region<dim>&          domain( this->Region(target_region));
+    auto& domain = this->Region(target_region);
     vector<size_t>        fnids;
     multimap<size_t,pair<BOX_BOUNDARY,Node<dim>*> >  boundary_nodes;
     vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
@@ -551,6 +557,47 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
  
  } // end AssignBoxBoundaryFlagsWherePossible
  
+
+/**
+    Access elements=grid cells generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
+ 
+    @attention Eclipse grid indices run 1..n
+ 
+    @return method returns a NULL pointer if the element does not exist
+*/
+template<size_t dim>
+const Element<dim>*  EclipseModel<dim>::operator()( size_t i, size_t j, size_t k ) const
+ {
+    assert( i > 0U );
+    assert( i <= grid_dim_I_ );
+    assert( j > 0U );
+    assert( j <= grid_dim_J_ );
+    assert( k > 0U );
+    assert( k <= grid_dim_K_ );
+   
+    // if the index does not exist return null
+    auto it = IJK_map_.find( ijk(i,j,k) );
+   
+    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
+ 
+ } // access operator
+  
+  
+template<size_t dim>
+Element<dim>* EclipseModel<dim>::operator()( size_t i, size_t j, size_t k )
+ {
+    assert( i > 0U );
+    assert( i <= grid_dim_I_ );
+    assert( j > 0U );
+    assert( j <= grid_dim_J_ );
+    assert( k > 0U );
+    assert( k <= grid_dim_K_ );
+   
+    // if the index does not exist return null
+    auto it = IJK_map_.find( ijk(i,j,k) );
+   
+    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
+ }
 
 
 
