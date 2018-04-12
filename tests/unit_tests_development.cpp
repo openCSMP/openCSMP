@@ -87,6 +87,7 @@
 
 #include "GenericFiniteVolumeTransport_Test.h"
 #include "FiniteVolumeTransportBasics_Test.h"
+#include "PropertyAtPointVisitor_Test.h"
 
 // new tests from SKM
 #include "ANSYS_SplitBoundaryMatch_Test.h"
@@ -97,12 +98,11 @@ using namespace std;
 using namespace csmp;
 
 TEST_CASE("Development tests", "[Dev]") {
-
+  PropertyAtPointVisitor_Test test(true);
     // ModelSubDomain_Test test;
-
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
-    FiniteVolumeTransportBasics_Test test;
+    // FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
     test.run();
