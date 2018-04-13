@@ -551,6 +551,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
     // Cell index (i,j,k) = i +j*nx + k*nx*ny
     // convert from reservoir coordinate system (x,y,z) to csmp coordinate system (x,-z,y)
     // renumber nodes and eliminate duplicates )
+   
     for( size_t k = 0; k < NZ_; ++k )
         for( size_t j = 0; j < NY_; ++j )
             for( size_t i = 0; i < NX_; ++i )
@@ -616,7 +617,6 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
         }
 
     DefineAxes( pgm );
-
 
     // ================================
     // 2. Assign cell data to VSet
@@ -877,7 +877,7 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
 
 // DEBUGGING OUTPUT
 //std::cerr <<"\nPolygonGridManager: printing the generated grid prior to output to VSet:\n";
-//pgm.Out();
+//   pgm.Out();
 //    std::cerr <<"\nCornerPointGrid::CreateModel: printing the generated cells prior to output to VSet:\n";
 //    for ( auto it=poly.begin(); it!=poly.end(); ++it ) {
 //         (*it).Out();
@@ -924,6 +924,9 @@ void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
 
     // Process ACTIVE and INACTIVE regions
     EstablishActiveDomain( vset,model_topology,regions,cell_elmts,cell_fem_types );
+
+    // Process node boundary flags
+    EstablishBoundaries( vset,model_topology,poly );
 
     cell_elmts.clear();
     face_elmts.clear();
@@ -1128,6 +1131,129 @@ void CornerPointGrid<dim>
 
  } // EstablishActiveDomain
 
+
+  /**
+   Identifies the faces of the cells that make up the boundary.
+   The cells are then grouped into boundary regions that are stored in the ModelTopology class.
+   */
+  template<size_t dim>
+  void CornerPointGrid<dim>
+  ::EstablishBoundaries( csmp::VSet<dim>& vset,
+                         csmp::ModelTopology& model_topology,
+                         const std::vector<CornerPointCell<3U> >& poly )
+  {
+    if ( !exclude_inactive_cells_ ) {
+      throw csmp::Exception( ERROR, "CornerPointGrid<dim>::EstablishBoundaryRegions",
+                  "Cannot create boundary regions if we are excluding inactive cells" );
+    }
+
+    for( size_t j = 0; j < NY_; ++j ) {
+      for( size_t i = 0; i < NX_; ++i ) {
+        size_t kmin = NZ_;
+        size_t kmax = 0;
+        for( size_t k = 0; k < NZ_; ++k ) {
+          size_t hexa_cell_id = CellIndex(i,j,k);
+          
+          if( cell_activity_[ hexa_cell_id ] == 1 ) {
+            kmin = std::min(kmin, k);
+            kmax = std::max(kmax, k);
+          }
+        }
+
+        for( size_t k = 0; k < NZ_; ++k ) {
+          /// hexa cell global id
+          size_t hexa_cell_id = CellIndex(i,j,k);
+          
+          if( cell_activity_[ hexa_cell_id ] == 1 ) {
+            const uint8_t TOP_FLAG = 1;
+            const uint8_t BOTTOM_FLAG = 2;
+            const uint8_t IRREGULAR_FLAG = 4;
+
+            uint8_t node_flags[8];
+
+            std::memset(node_flags, 0, sizeof(node_flags));
+
+            if (i + 1 == NX_ || !cell_activity_[ CellIndex(i+1,j,k) ]) {
+              node_flags[1] |= IRREGULAR_FLAG;
+              node_flags[3] |= IRREGULAR_FLAG;
+              node_flags[5] |= IRREGULAR_FLAG;
+              node_flags[7] |= IRREGULAR_FLAG;
+            }
+            if (i == 0 || !cell_activity_[ CellIndex(i-1,j,k) ]) {
+              node_flags[0] |= IRREGULAR_FLAG;
+              node_flags[2] |= IRREGULAR_FLAG;
+              node_flags[4] |= IRREGULAR_FLAG;
+              node_flags[6] |= IRREGULAR_FLAG;
+            }
+            if (j + 1 == NY_ || !cell_activity_[ CellIndex(i,j+1,k) ]) {
+              node_flags[2] |= IRREGULAR_FLAG;
+              node_flags[3] |= IRREGULAR_FLAG;
+              node_flags[6] |= IRREGULAR_FLAG;
+              node_flags[7] |= IRREGULAR_FLAG;
+            }
+            if (j == 0 || !cell_activity_[ CellIndex(i,j-1,k) ]) {
+              node_flags[0] |= IRREGULAR_FLAG;
+              node_flags[2] |= IRREGULAR_FLAG;
+              node_flags[4] |= IRREGULAR_FLAG;
+              node_flags[6] |= IRREGULAR_FLAG;
+            }
+            if ( k == kmax ) {
+              node_flags[4] |= TOP_FLAG;
+              node_flags[5] |= TOP_FLAG;
+              node_flags[6] |= TOP_FLAG;
+              node_flags[7] |= TOP_FLAG;
+            }
+            if ( k == kmin ) {
+              node_flags[0] |= BOTTOM_FLAG;
+              node_flags[1] |= BOTTOM_FLAG;
+              node_flags[2] |= BOTTOM_FLAG;
+              node_flags[3] |= BOTTOM_FLAG;
+            }
+
+          auto& polygon = poly[ hexa_cell_id ];
+          for ( size_t n = 0; n < 8; ++n ) {
+            auto nid = polygon.GetPillarNodeGlobalIdOriginalOrder(n);
+              switch (node_flags[n]) {
+                  case 0:
+                  {
+                      break;
+                  }
+
+                  case 1: // TOP_FLAG
+                  case 5: // IRREGULAR_FLAG | TOP_FLAG
+                  {
+                      vset.AddBFlag( nid, TOP_OUTSIDE );
+                      break;
+                  }
+
+                  case 2: // BOTTOM_FLAG
+                  case 6: // BOTTOM_FLAG | IRREGULAR_FLAG
+                  {
+                      vset.AddBFlag( nid, BOTTOM_OUTSIDE );
+                      break;
+                  }
+
+                  case 4: // IRREGULAR_FLAG
+                  {
+                      vset.AddBFlag( nid, IRREGULAR_OUTSIDE );
+                      break;
+                  }
+                  
+                  case 3: // TOP_FLAG | BOTTOM_FLAG
+                  case 7: // TOP_FLAG | BOTTOM_FLAG | IRREGULAR_FLAG
+                  {
+                    std::cerr << "CornerPointGrid::EstablishBoundaries: "
+                      << "Possibly erroneous node " << nid << " at "
+                      << vset.Px(nid) << ',' << vset.Py(nid) << ',' << vset.Pz(nid) << '\n';
+                    break;
+                  }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
 
 /**

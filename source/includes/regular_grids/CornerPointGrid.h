@@ -137,6 +137,13 @@ protected:
                                 const std::vector<CornerPointCell<3U> >& poly
                                 );
 
+   /// adds boundary flags to VSet nodes
+   void EstablishBoundaries( csmp::VSet<dim>& vset,
+                                  csmp::ModelTopology& model_topology,
+                                  const std::vector<CornerPointCell<3U> >& poly
+                                );
+  
+
     void AssignCellNodeToPillar( size_t i, size_t j, size_t k, size_t nid, const csmp::Point<3U>& pt );
     void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt );
     void MinMaxCoordinates( PolygonGridManager<3U>& pgm, Point<3U>& xyz_min, Point<3U>& xyz_max ) const;
