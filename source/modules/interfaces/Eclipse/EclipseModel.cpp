@@ -546,9 +546,9 @@ void EclipseModel<dim>::AssignBoxBoundaryFlagsWherePossible( const char* target_
            }
  
  // testing
- cerr <<"\n("<< (*it)->Idx() <<"): ";
- for ( size_t n=0U; n<(*it)->Nodes(); ++n )
-   cerr << parseBoundary( (*it)->N(n)->AtBoundary() ) <<" ";
+ //cerr <<"\n("<< (*it)->Idx() <<"): ";
+ //for ( size_t n=0U; n<(*it)->Nodes(); ++n )
+ //  cerr << parseBoundary( (*it)->N(n)->AtBoundary() ) <<" ";
         
          // resetting
          boundary_nodes.clear();
