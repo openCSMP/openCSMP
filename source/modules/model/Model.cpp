@@ -3003,34 +3003,48 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
     // 2. Search for detached elements
     // --------------------------------------------------------------------
 
-    Node<dim>* root_node = &Mesh().RootNode();
     {
-      // Find the largest component via union-find.
+      Node<dim>* root_node = &Mesh().RootNode();
 
-      UnionFind<Node<dim>*> union_find;
-      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
-        auto fe = eit->FE();
-        const size_t iNrNodes = fe->Nodes();
-        auto n1 = eit->N(0u);
+      // Find the largest component.
+      //
+      // This uses a fast almost-linear algorithm for finding connected
+      // components. The algorithm itself is in UnionFind.h, but the
+      // way we use it is straightforward: loop over each element, assign
+      // all nodes for the element to the same component, then extract
+      // the components.
+      //
+      // - AJB
 
-        for ( size_t iNode = 1; iNode < iNrNodes; ++iNode ) {
-          auto n2 = eit->N(iNode);
-          union_find.SameComponent(n1, n2);
+      {
+        UnionFind<Node<dim>*> union_find;
+        for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
+          auto fe = eit->FE();
+          const size_t iNrNodes = fe->Nodes();
+          auto n1 = eit->N(0u);
+          
+          for ( size_t iNode = 1; iNode < iNrNodes; ++iNode ) {
+            auto n2 = eit->N(iNode);
+            union_find.SameComponent(n1, n2);
+          }
+        }
+        
+        std::deque<std::pair<size_t,Node<dim>*>> components;
+        union_find.Components(components);
+        size_t component_size = 0;
+        for (auto c : components) {
+          if (c.first > component_size) {
+            root_node = c.second;
+            component_size = c.first;
+          }
         }
       }
-      
-      std::deque<std::pair<size_t,Node<dim>*>> components;
-      union_find.Components(components);
-      size_t component_size = 0;
-      for (auto c : components) {
-        if (c.first > component_size) {
-          root_node = c.second;
-          component_size = c.first;
-        }
-      }
-    }
 
-    {
+      // AJB TODO: We shouldn't need to do this traversal, since the
+      // union-find algorithm has essentially found the information already.
+      // We should just be able to loop over all nodes and elements and see
+      // if they are in the correct component.
+
       unordered_set<csmp::Element<dim>*>       explored_elements;
       unordered_set<csmp::Node<dim>*>    discovered_nodes;
       deque<csmp::Node<dim>*>  current_nodes;

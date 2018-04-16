@@ -7,13 +7,14 @@ namespace csmp {
 
 
 /**
-  Union-find algorithm. This data structure takes connections between two elements,
-  and finds all of the connected components and their sizes.
+  Union-find algorithm. This data structure takes connections between two
+  elements, and finds all of the connected components and their sizes. A
+  "component" is represented by a single representative item.
 
   See:
 
-    Tarjan, Robert Endre (1975). "Efficiency of a Good But Not Linear Set Union
-      Algorithm". JACM. 22 (2): 215–225.
+    Tarjan, Robert Endre (1975). "Efficiency of a Good But Not Linear
+      Set Union Algorithm". JACM. 22 (2): 215–225.
  */
 template<typename Item>
 class UnionFind {
@@ -24,7 +25,7 @@ public:
 
     /// Extract the components and their sizes.
     template<typename Container>
-    void Components(Container& container)
+    void Components(Container& container) const
     {
         for (auto component : components_) {
             auto& rec = records_[component];
@@ -48,8 +49,9 @@ private:
   std::deque<Record> records_;
   std::set<size_t> components_;
 
+  // Find the representative node of an item's component by traversing
+  // the tree to the root, compressing the path by halves as we traverse.
   size_t find_root(size_t i) {
-    // the path-halving algorithm
     while (records_[i].parent_ != i) {
         size_t& parent = records_[i].parent_;
         parent = records_[parent].parent_;
@@ -58,6 +60,7 @@ private:
     return i;
   }
 
+  // Ensure that an item is in the set.
   size_t ensure(Item item) {
     size_t id = records_.size();
     auto result = item_map_.insert(std::make_pair(item, records_.size()));
@@ -82,9 +85,11 @@ UnionFind<Item>::SameComponent(Item x, Item y)
    size_t yr = find_root(ensure(y));
 
    if (xr == yr) {
+     // The two iterms are already in the same component.
      return;
    }
 
+   // Add the smaller component to the larger component.
    if (records_[xr].size_ < records_[yr].size_) {
        records_[xr].parent_ = yr;
        records_[yr].size_ += records_[xr].size_;
