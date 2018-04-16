@@ -17,6 +17,7 @@
 #include "binaryReadWrite.h"
 #include "ModelTime.h"
 #include "FiniteVolumeStencilManager.h"
+#include "UnionFind.h"
 
 #include <cstring>
 #include <unordered_set>
@@ -3002,8 +3003,34 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
     // 2. Search for detached elements
     // --------------------------------------------------------------------
 
+    Node<dim>* root_node = &Mesh().RootNode();
     {
-      Node<dim>* root_node = &Mesh().RootNode();
+      // Find the largest component via union-find.
+
+      UnionFind<Node<dim>*> union_find;
+      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
+        auto fe = eit->FE();
+        const size_t iNrNodes = fe->Nodes();
+        auto n1 = eit->N(0u);
+
+        for ( size_t iNode = 1; iNode < iNrNodes; ++iNode ) {
+          auto n2 = eit->N(iNode);
+          union_find.SameComponent(n1, n2);
+        }
+      }
+      
+      std::deque<std::pair<size_t,Node<dim>*>> components;
+      union_find.Components(components);
+      size_t component_size = 0;
+      for (auto c : components) {
+        if (c.first > component_size) {
+          root_node = c.second;
+          component_size = c.first;
+        }
+      }
+    }
+
+    {
       unordered_set<csmp::Element<dim>*>       explored_elements;
       unordered_set<csmp::Node<dim>*>    discovered_nodes;
       deque<csmp::Node<dim>*>  current_nodes;

@@ -224,11 +224,12 @@ bool EclipseInterface<dim>::ReadFile( csmp::VSet<dim>& vset,
       }
 
 // DEBUGGING
-//std::cerr <<"\nEclipseInterface:: printing current pillars\n";
-//for ( auto it=grid_.GetPillars().begin(); it!=grid_.GetPillars().end(); ++it )
-//  for ( auto rit=(*it).begin(); rit!=(*it).end(); ++rit )
-//    (*rit).Out();
-
+#ifndef NDEBUG
+std::cerr <<"\nEclipseInterface:: printing current pillars\n";
+for ( auto it=grid_.GetPillars().begin(); it!=grid_.GetPillars().end(); ++it )
+  for ( auto rit=(*it).begin(); rit!=(*it).end(); ++rit )
+    (*rit).Out();
+#endif
   
     if ( !grid_.GetPillars().empty() )
           // KEY METHOD
