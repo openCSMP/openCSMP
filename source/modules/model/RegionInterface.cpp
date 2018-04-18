@@ -496,10 +496,14 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
        BinaryFileSectionWrite hdr(fp, "ONE_REGN");
 
-            (*git).second.WriteDomainIndexesToBinaryFile( fp );
-            domainVariablesOut( fp, (*git).second, database );
-            std::cout << (*git).first <<" ";
-         }
+       auto& region = (*git).second;
+
+       region.WriteDomainIndexesToBinaryFile( fp );
+       if (region.InteriorElementsBegin() != region.InteriorElementsEnd()) {
+           domainVariablesOut( fp, (*git).second, database );
+       }
+       std::cout << (*git).first <<" ";
+     }
      std::cout << std::endl;
    }
    
