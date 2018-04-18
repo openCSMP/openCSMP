@@ -1479,7 +1479,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxCoordinates( Point<dim>& xyz_min, Point<
 
     // only nodes at the group boundary have to be checked
     for ( typename vector<csmp::Node<dim>*>::const_iterator
-          bit=PerimeterNodesBegin(); bit!=NodesEnd(); bit++ )
+          bit=PerimeterNodesBegin(); bit!=PerimeterNodesEnd(); bit++ )
       {
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );

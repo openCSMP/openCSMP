@@ -16,6 +16,8 @@
 #include "PropertyConstraints.h"
 #include "CopyReplaceVisitor.h"
 
+#include "UnionFind.h"
+
 #include "ErrorHandler.h"
 #include "CSMP_highLevelUtilities.h"
 
@@ -1097,6 +1099,87 @@ size_t  Region<dim>::IdentifyLowerDimensionalBoundaryElements( const std::pair<i
 
 
 
+
+template<size_t dim>
+size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
+                                   bool reestablishNeighborConnectivity )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     if ( !this->elmt_vec_.empty() )
+       csmp_error.notice( WARNING, "Region<dim>::FromLargestComponent:",
+                                   "Region is not empty; deleting all content." );
+     this->elmt_vec_.clear();
+
+     UnionFind<Node<dim>*> union_find;
+
+     Node<dim>* component_node;
+
+     // 1. Loop over all elements, unioning node sets
+     for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
+       auto fe = eit->FE();
+       const size_t iNrNodes = fe->Nodes();
+       auto n1 = eit->N(0u);
+       
+       for ( size_t iNode = 1; iNode < iNrNodes; ++iNode ) {
+         auto n2 = eit->N(iNode);
+         union_find.SameComponent(n1, n2);
+       }
+     }
+
+     // 2. Loop over all components, and find the largest
+     std::deque<std::pair<size_t,Node<dim>*>> components;
+     union_find.Components(components);
+     size_t component_size = 0;
+     for (auto c : components) {
+       if (c.first > component_size) {
+         component_node = c.second;
+         component_size = c.first;
+       }
+     }
+
+     if ( !component_node ) {
+       csmp_error.notice( ERROR, "Region<dim>::FromLargestComponent:",
+                                 "Cannot find representative of largest component" );
+     }
+
+     // 3. Find the nodes in the component
+     {
+       std::vector<csmp::Node<dim>*> discovered_nodes;
+       discovered_nodes.reserve(component_size);
+
+       for ( auto nit = mesh.NodesBegin(); nit != mesh.NodesEnd(); ++nit ) {
+         auto component = union_find.resolve(&*nit);
+         if (component == component_node) {
+             discovered_nodes.push_back(&*nit);
+         }
+       }
+       this->node_vec_.swap(discovered_nodes);
+     }
+
+     // 4. Find the elements in the component
+     {
+       std::deque<csmp::Element<dim>*> discovered_elements;
+       for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
+         auto component = union_find.resolve(eit->N(0u));
+         if (component == component_node) {
+           discovered_elements.push_back(&*eit);
+         }
+       }
+       std::vector<csmp::Element<dim>*> elmts(discovered_elements.begin(), discovered_elements.end());
+       this->elmt_vec_.swap(elmts);
+     }
+
+    // 5. (re)connecting elements up to their neighbors
+    //    TODO: this is a very time-consuming step; is there a speed-up?
+    if ( reestablishNeighborConnectivity )
+      this->EstablishNeighborConnectivity();
+
+    // 6. identifying the boundaries
+    this->IdentifyPerimeter();
+
+    return this->elmt_vec_.size();
+ } // end FromLargestComponent
 
 
 

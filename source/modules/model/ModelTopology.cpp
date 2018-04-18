@@ -1031,7 +1031,6 @@ void  ModelTopology::RemoveRegion( const char* region )
 
     // removing the actual region
     model_regions.erase(region);
-    model_regions.erase(region);
  }
 
 

@@ -40,6 +40,8 @@ EclipseModelSettings& EclipseModel<dim>::EclipseModelSetup( )
     return eclipse_model_settings_;
 }
 
+
+
 /**  
     Master function that BUILDS CSMP MODEL FROM ECLIPSE DATA
 */
@@ -245,7 +247,7 @@ void EclipseModel<dim>::BuildModel()
          std::cout <<"\nDiagnostics:"<< std::endl;
          ba.Out();
       }
-
+  std::cerr << "Size of " << typeid(Node<3u>).name() << " is " << sizeof(Node<3u>) << '\n';
 } // end BuildModel
 
 /// existing special regions

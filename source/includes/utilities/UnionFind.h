@@ -33,6 +33,11 @@ public:
         }
     }
 
+    /// Resolve an item to its representative
+    Item resolve(Item item) {
+        return records_[find_root(ensure(item))].item_;
+    }
+
 private:
   struct Record {
     Item item_;

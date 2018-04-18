@@ -211,6 +211,9 @@ class Region : public ModelSubDomain<dim,Element> {
                                         const Point<dim>& xyz_min, const Point<dim>& xyz_max );
   
 
+    /// Accumulate from the largest component in a mesh
+    size_t FromLargestComponent( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity );
+
     /// merges supplied region with the current one
     void   Add( const Region& );
 

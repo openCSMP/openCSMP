@@ -144,6 +144,10 @@ class RegionInterface
     /// forms non-unique region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
     bool CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity=true );
 
+    /// forms non-unique region from the largest component in the mesh. Does not expect element-no-neighbour connections
+    bool CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity );
+    
+
     /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object
     bool FormRegionsFrom( const ModelTopology& );
 

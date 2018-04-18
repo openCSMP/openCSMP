@@ -253,6 +253,46 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
 
 
 
+  
+  template<size_t dim, template<size_t> class REGION_COMPLEX>
+  bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity )
+  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    // does this region already exist
+    if ( ContainsRegion(regionname) ) {
+      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
+                        regionname, "region already exists; nothing was done." );
+      return false;
+    }
+    
+    std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
+    newRegion = ( is_unique ) ?
+    uniqueGroupMap_.insert( std::make_pair( regionname, csmp::Region<dim>( regionname,
+                                                                          static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
+    :
+    groupMap_.insert( std::make_pair( regionname, csmp::Region<dim>( regionname,
+                                                                    static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
+    
+    // if region was inserted successfully
+    if ( newRegion.second ) {
+      (*newRegion.first).second.FromLargestComponent( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh(), reestablishNeighborConnectivity );
+    }
+    else {
+      csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode:",
+                        regionname, "region could not be formed.");
+      return false;
+    }
+    
+    // checking that all elements and nodes were discovered
+    if ( (*newRegion.first).second.Elements() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Elements() or
+        (*newRegion.first).second.Nodes() != static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().Nodes() )
+      return false;
+    
+    return true;
+  }
+  
+  
+
 
 /**
      Inserts region 'Model' into either the unique or non-unique region list and runs Region<>::Accumulate() to simply

@@ -3981,35 +3981,35 @@ csmp::InterFace<dim>&  MeshManager<dim>::RootInterFace()
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Node<dim> >::iterator  MeshManager<dim>::NodesBegin()
- { assert( !node_collection_.empty() ); return node_collection_.begin(); }
+ { return node_collection_.begin(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Node<dim> >::iterator  MeshManager<dim>::NodesEnd()
- { assert( !node_collection_.empty() ); return node_collection_.end(); }
+ { return node_collection_.end(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Element<dim> >::iterator  MeshManager<dim>::ElementsBegin()
- { assert( !elmt_collection_.empty() ); return elmt_collection_.begin(); }
+ { return elmt_collection_.begin(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Element<dim> >::iterator  MeshManager<dim>::ElementsEnd()
- { assert( !elmt_collection_.empty() ); return elmt_collection_.end(); }
+ { return elmt_collection_.end(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Face<dim> >::iterator  MeshManager<dim>::FacesBegin()
- { assert( !face_collection_.empty() ); return face_collection_.begin(); }
+ { return face_collection_.begin(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::Face<dim> >::iterator  MeshManager<dim>::FacesEnd()
- { assert( !face_collection_.empty() ); return face_collection_.end(); }
+ { return face_collection_.end(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::InterFace<dim> >::iterator  MeshManager<dim>::InterFacesBegin()
- { assert( !interface_collection_.empty() ); return interface_collection_.begin(); }
+ { return interface_collection_.begin(); }
 
 template<size_t dim>
 typename PrimitiveContainer<csmp::InterFace<dim> >::iterator  MeshManager<dim>::InterFacesEnd()
- { assert( !interface_collection_.empty() ); return interface_collection_.end(); }
+ { return interface_collection_.end(); }
 
 // const accessors
 

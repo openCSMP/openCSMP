@@ -245,9 +245,6 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 } // end Initialize (with regions from file)
 
 
-
-
-
 /**
     custom constructor
 */
@@ -273,27 +270,56 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 3. building the finite element mesh (finite volume mesh) and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+
     if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
          Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
          Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
+  // 3(a). assigning properties to mesh; this does not depend on regions,
+  // so this is safe to do before we have computed them.
+  InputVariablesFrom( vset );
+
     // 4. forming default computational domain called "Model"
     const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
-    const bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, withNeighborConnectivity );
-// will not apply if a region is disconnected from rest of model
+    const bool valid_model_region = this->CreateRegionFromLargestComponent( "Model", place_in_unique_regions, !withNeighborConnectivity );
+
     if ( !valid_model_region ) {
-         csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                           "model appears to contain domains that are not connected to one another?" );
+      csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                        "model appears to contain domains that are not connected to one another?" );
+
+      auto& gref = this->Region("Model");
+      auto& mesh = Mesh();
+      size_t nodes_removed = 0, elmts_removed = 0;
+
+      {
+        std::unordered_set<Node<dim>*> nodes_in_model_region(gref.NodesBegin(), gref.NodesEnd());
+        for (auto nit = mesh.NodesBegin(); nit != mesh.NodesEnd(); ++nit) {
+          if (!nodes_in_model_region.count(&*nit)) {
+            mesh.Erase(*nit);
+            ++nodes_removed;
+          }
+        }
+      }
+      
+      {
+        std::unordered_set<Element<dim>*> elmts_in_model_region(gref.ElementsBegin(), gref.ElementsEnd());
+        for (auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit) {
+          if (!elmts_in_model_region.count(&*eit)) {
+            mesh.Erase(*eit);
+            ++elmts_removed;
+          }
+        }
       }
 
-    // 5. Testing with a flood-fill whether the model is contiguous
-    //    if not Accumulate all will not have reached all the elements
-    if ( Mesh().Elements() < vset.Elements() )
-        throw csmp::Exception( FATAL_ERROR, "Model<dim>::Initialize",
-                                            "Model appears to be fragmented. Are all regions connected?" );
+      cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
+         << nodes_removed << " disconnected nodes removed\n";
+      cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
+         << elmts_removed << " disconnected elements removed\n";
+    }
+
     cout <<"\nModel<dim>::Initialize: ";
     cout <<"Mesh has been built successfully..." << endl;
 
@@ -330,9 +356,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-    // 9. assigning properties to mesh
-    InputVariablesFrom( vset );
-  
     // 10. final sanity check
     CheckElementsAfterBuilding();
 
