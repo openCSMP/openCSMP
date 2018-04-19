@@ -3,6 +3,8 @@
 
 namespace csmp {
 
+namespace eclipse {
+
 // PILLARS
 
 Pillar::Pillar()
@@ -179,9 +181,7 @@ void Pillar::Out() const
     std::cout <<"\n";
  }
 
-
-
-
+} // eclipse
 
 } // end namespace csmp
 

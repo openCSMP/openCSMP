@@ -1,17 +1,15 @@
 #ifndef CORNER_POINT_GRID_H
 #define CORNER_POINT_GRID_H
 
-#include "CSMP_definitions.h"
-#include "CSMP_highLevelUtilities.h"
-#include "CSMP_ElementSpecifications.h"
 #include "VSet.h"
 #include "ModelTopology.h"
 #include "CornerPointCell.h"
 
 namespace csmp {
 
+namespace eclipse {
+
 /// cell-centered grid container
-template<size_t dim>
 class  BlockCenteredGrid // TODO: call this cell-centered
 {
 public:
@@ -45,8 +43,24 @@ private:
 };
 
 
-/// corner-point based grid container
-template<size_t dim>
+
+
+
+
+// TODO: documentation seems at odds with what one would expect for such a class
+/**
+
+@class CornerPointGrid  CornerPointGrid
+@author R. Manasipov
+@date 2015
+
+For the processing of degenerate cells ( deformed hexahedron cells or cells with less than 8 nodes ).
+Each degenerate cell's subdivision is based on division of quadrilateral face.
+'Tetra mesh' option will lead to tetrahedral + triangular mesh, otherwise,
+depending on the complexity of the model, the resulting mixed mesh will contain
+hexahedra, pyramids, prims, tetrahedrons, quadrilaterals and triangles.
+
+*/
 class  CornerPointGrid
 {
   public:
@@ -59,22 +73,23 @@ class  CornerPointGrid
     ~CornerPointGrid();
     void Clear();
 
-    /// initialise the pillar structure
-    void Resize( size_t i_pillar_max, size_t j_pillar_max );
-  
-    /// accessing the contained pillars
-    Pillar& operator()( size_t, size_t t );
-
+    // MONSTER - MOST IMPORTANT METHOD - break up: part of it should be in EclipseInterFace
     void CreateModel( const std::string&     model_name,
-                      csmp::VSet<dim>&       vset,
+                      csmp::VSet<3U>&       vset,
                       csmp::ModelTopology&   model_topology,
                       std::set<std::string>& regions,
                       std::set<std::string>& faults,
                       std::set<std::string>& wells
                     );
 
+    /// initialise the pillar structure
+    void Resize( size_t i_pillar_max, size_t j_pillar_max );
+  
+    /// accessing the contained pillars
+    Pillar& operator()( size_t, size_t t );
+
     template<class VarType>
-    void WritePropertyToVSet( csmp::VSet<dim>&            vset,
+    void WritePropertyToVSet( csmp::VSet<3U>&            vset,
                               const std::vector<VarType>& prop_data,
                               const std::string&          prop_name,
                               const csmp::PLACEMENT&      prop_place ) const;
@@ -117,7 +132,7 @@ protected:
 
     void ProcessPillars();
 
-    void EstablishActiveDomain( csmp::VSet<dim>& vset,
+    void EstablishActiveDomain( csmp::VSet<3U>& vset,
                                 csmp::ModelTopology& mesh_topology,
                                 std::set<std::string>& regions,
                                 const std::vector<size_t>& cell_elmts,
@@ -125,29 +140,31 @@ protected:
                               );
 
     /// adds surface elements to VSet and fault regions to ModelTopology
-    void EstablishFaultRegions( csmp::VSet<dim>& vset,
+    void EstablishFaultRegions( csmp::VSet<3U>& vset,
                                 csmp::ModelTopology& model_topology,
                                 std::set<std::string>& faults,
-                                const std::vector<CornerPointCell<3U> >& poly
+                                const std::vector<CornerPointCell>& poly
                                 );
 
-    void EstablishWellRegions(  csmp::VSet<dim>& vset,
+    void EstablishWellRegions(  csmp::VSet<3U>& vset,
                                 csmp::ModelTopology& model_topology,
                                 std::set<std::string>& wells,
-                                const std::vector<CornerPointCell<3U> >& poly
+                                const std::vector<CornerPointCell>& poly
                                 );
 
    /// adds boundary flags to VSet nodes
-   void EstablishBoundaries( csmp::VSet<dim>& vset,
+   void EstablishBoundaries( csmp::VSet<3U>& vset,
                                   csmp::ModelTopology& model_topology,
-                                  const std::vector<CornerPointCell<3U> >& poly
+                                  const std::vector<CornerPointCell>& poly
                                 );
   
 
     void AssignCellNodeToPillar( size_t i, size_t j, size_t k, size_t nid, const csmp::Point<3U>& pt );
     void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt );
-    void MinMaxCoordinates( PolygonGridManager<3U>& pgm, Point<3U>& xyz_min, Point<3U>& xyz_max ) const;
-    void DefineAxes( PolygonGridManager<3U>& pgm );
+    void MinMaxCoordinates( PolygonGridManager& pgm, Point<3U>& xyz_min, Point<3U>& xyz_max ) const;
+  
+    /// sets unit vectors for i, j, k
+    void DefineAxes();
 
     /// @todo should be an operator to access the cells of the structured grid
     size_t CellIndexI( size_t cell_id ) const;
@@ -162,6 +179,7 @@ protected:
 
 private:
 
+    // TODO: one would expect this grid to store corner-point cells, but it does not!
     size_t NX_; ///< max index of cell in x direction
     size_t NY_; ///< max index of cell in y direction
     size_t NZ_; ///< max index of cell in z direction
@@ -200,20 +218,7 @@ void addWellPath( const std::string& well_name,
                   std::pair<size_t,size_t> face_id,
                   std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path );
 
-
-/**
-
-@class CornerPointGrid  CornerPointGrid "CornerPointGrid.h"
-@author R. Manasipov
-@date 2015
-
-Treating degenerate cells ( deformed hexahedron cells or cells with less than 8 nodes ).
-Each degenerate cell's subdivision is based on division of quadrilateral face.
-'Tetra mesh' option will lead to tetrahedral + triangular mesh, otherwise
-depending on the complexity of model resulting mixed mesh can contain
-hexahedrons, pyramids, prims, tetrahedrons, quadrilaterals and triangles.
-
-*/
+} // eclipse
 
 }// end namespace csmp
 

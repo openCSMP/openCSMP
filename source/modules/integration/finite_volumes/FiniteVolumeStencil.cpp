@@ -660,12 +660,12 @@ const csmp::Point<dim>&  FiniteVolumeStencil<dim>::SectorPoint( size_t iSector, 
 }
   
 template<size_t dim>
-const std::pair<csmp::Point<dim>,csmp::Point<dim> >&  FiniteVolumeStencil<dim>::SectorEdgePoints( size_t iSector, size_t iEdge ) const
+std::pair<csmp::Point<dim>,csmp::Point<dim> >  FiniteVolumeStencil<dim>::SectorEdgePoints( size_t iSector, size_t iEdge ) const
 {
    const size_t pt1(sector_edges_[iSector][iEdge].first);
    const size_t pt2(sector_edges_[iSector][iEdge].second);
    
-	 return std::move(std::make_pair( sector_points_[iSector][pt1], sector_points_[iSector][pt2] ));
+	 return make_pair( sector_points_[iSector][pt1], sector_points_[iSector][pt2] );
 }       
 
 template<size_t dim>
