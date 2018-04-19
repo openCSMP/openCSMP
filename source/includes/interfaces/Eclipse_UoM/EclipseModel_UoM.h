@@ -1,10 +1,10 @@
-#ifndef ECLIPSE_MODEL_H
-#define ECLIPSE_MODEL_H
+#ifndef ECLIPSE_MODEL_UOM_H
+#define ECLIPSE_MODEL_UOM_H
 
 #include <unordered_map>
 
 #include "CSMP_highLevelUtilities.h"
-#include "EclipseInterface.h"
+#include "EclipseInterface_UoM.h"
 #include "Model.h"
 
 

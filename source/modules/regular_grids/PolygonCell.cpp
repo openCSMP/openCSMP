@@ -1,6 +1,6 @@
-#include "PolygonCell_UoM.h"
+#include "PolygonCell.h"
 
-#include "meshingTools.h"
+#include "MeshingTools.h"
 #include "PolygonGrid.h"
 #include "CSMP_ElementSpecifications.h"
 
@@ -8,27 +8,22 @@
 
 namespace csmp {
 
-namespace eclipse {
-
-
 // POLYGON
 
-PolygonCell::PolygonCell()
-:grid_(nullptr)
+template<size_t dim>
+PolygonCell<dim>::PolygonCell()
+:grid_(NULL)
 {
 }
 
-/// custom constructor
-PolygonCell::PolygonCell( PolygonGridManager& pgm )
-: grid_( &pgm )
+template<size_t dim>
+PolygonCell<dim>::PolygonCell( PolygonGridManager<dim>* pgm )
+: grid_( pgm )
 {
-   assert( grid_ != nullptr );
 }
 
-
-
-// TODO: what happens to pgm pointer
-PolygonCell::PolygonCell( const PolygonCell&  poly )
+template<size_t dim>
+PolygonCell<dim>::PolygonCell( const PolygonCell<dim>&  poly )
 : elements_   ( poly.elements_ ),
   faces_      ( poly.faces_ ),
   custom_face_order_( poly.custom_face_order_ ),
@@ -40,18 +35,16 @@ PolygonCell::PolygonCell( const PolygonCell&  poly )
   nodes_      ( poly.nodes_ ),
   nodes_in_custom_order_( poly.nodes_in_custom_order_ ),
   custom_node_order_( poly.custom_node_order_ ),
-  // do we want this to be the same pointer?
   grid_       ( poly.grid_ )
 {
-   assert( grid_ != nullptr );
 }
 
-
-PolygonCell& PolygonCell::operator=( const PolygonCell&  cell )
+template<size_t dim>
+PolygonCell<dim>& PolygonCell<dim>::operator=( const PolygonCell<dim>&  cell )
 {
     if ( &cell != this )
     {
-        grid_  = ( cell.grid_ == nullptr )  ? nullptr : cell.grid_;
+        grid_               = cell.grid_;
 
         elements_           = cell.elements_;
         num_faces_          = cell.num_faces_;
@@ -69,29 +62,29 @@ PolygonCell& PolygonCell::operator=( const PolygonCell&  cell )
     return *this;
 }
 
-
-PolygonCell::~PolygonCell()
+template<size_t dim>
+PolygonCell<dim>::~PolygonCell()
 {
 }
 
 // NODES
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNumNodes() const
 {
     return num_nodes_;
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNumExtraNodes() const
 {
     return extra_nodes_.size();
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNodeGlobalIdOriginalOrder( size_t nid ) const
 {
     if( nid < num_nodes_ )
@@ -99,8 +92,8 @@ size_t PolygonCell
     return extra_nodes_[ nid - num_nodes_ ]->GetIdx();
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNodeGlobalIdCustomOrder( size_t nid ) const
 {
     if( nid < num_nodes_ )
@@ -108,8 +101,8 @@ size_t PolygonCell
     return extra_nodes_[ nid - num_nodes_ ]->GetIdx();
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetPointOriginalOrder( size_t nid ) const
 {
     if( nid < num_nodes_ )
@@ -117,8 +110,8 @@ const csmp::Point<3U>& PolygonCell
     return extra_nodes_[ nid - num_nodes_ ]->GetPoint();
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetPointCustomOrder( size_t nid ) const
 {
     if( nid < num_nodes_ )
@@ -126,15 +119,15 @@ const csmp::Point<3U>& PolygonCell
     return extra_nodes_[ nid - num_nodes_ ]->GetPoint();
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetExtraPoint( size_t nid ) const
 {
     return extra_nodes_[nid]->GetPoint();
 }
 
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetNodeOriginalOrder( size_t nid )
 {
     if( nid < num_nodes_ )
@@ -142,9 +135,8 @@ GridNode* PolygonCell
     return extra_nodes_[ nid - num_nodes_ ];
 }
 
-
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetNodeCustomOrder( size_t nid )
 {
     if( nid < num_nodes_ )
@@ -152,26 +144,25 @@ GridNode* PolygonCell
     return extra_nodes_[ nid - num_nodes_ ];
 }
 
-
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetExtraNode( size_t nid )
 {
     return extra_nodes_[nid];
 }
 
-
-
-void PolygonCell::AddExtraNode( const csmp::Point<3U>& pt )
+template<size_t dim>
+void PolygonCell<dim>::AddExtraNode( const csmp::Point<dim>& pt )
 {
     extra_nodes_.reserve( extra_nodes_.size() + 1 );
     extra_nodes_.push_back( grid_->AddNode( pt ) );
-std::cerr <<"\ncalled PolygonCell::AddExtraNode:";
+std::cerr <<"\ncalled PolygonCell<dim>::AddExtraNode:";
 }
 
-
 /// cell centroid ( if exist: by convention it's a first node of extra nodes arrays )
-size_t PolygonCell
+
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetCellCentroidGlobalId() const
 {
     if( !extra_nodes_.empty() )
@@ -180,11 +171,11 @@ size_t PolygonCell
     return UINT_MAX;
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetCellCentroidPoint() const
 {
-    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
     if( !extra_nodes_.empty() )
         return extra_nodes_[0]->GetPoint();
     csmp_error.notice( csmp::ERROR,
@@ -193,9 +184,8 @@ const csmp::Point<3U>& PolygonCell
     return nodes_[0]->GetPoint();
 }
 
-
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetCellCentroidNode()
 {
     if( !extra_nodes_.empty() )
@@ -203,9 +193,8 @@ GridNode* PolygonCell
     return NULL;
 }
 
-
-
-void PolygonCell
+template<size_t dim>
+void PolygonCell<dim>
 ::InitializeNodeOrder( size_t num_nodes )
 {
     num_nodes_ = num_nodes;
@@ -219,9 +208,8 @@ void PolygonCell
     }
 }
 
-
-
-void PolygonCell
+template<size_t dim>
+void PolygonCell<dim>
 ::AssignNodeOrder( size_t cnid, size_t onid )
 {
     custom_node_order_.resize( num_nodes_ );
@@ -233,7 +221,8 @@ void PolygonCell
 // FACES
 
 /// returns how many faces make up the polygon cell
-size_t PolygonCell::GetNumFaces() const
+template<size_t dim>
+size_t PolygonCell<dim>::GetNumFaces() const
 {
     return num_faces_;
 }
@@ -241,7 +230,8 @@ size_t PolygonCell::GetNumFaces() const
 
 
 /// returns 2 values for each spatial dimension (x-1, x+1, y-1, y+1, z-1, z+1) ?
-size_t PolygonCell::GetNumSubFaces( size_t fid ) const
+template<size_t dim>
+size_t PolygonCell<dim>::GetNumSubFaces( size_t fid ) const
 {
     assert( faces_[fid].size() <= 6 );
     return faces_[fid].size();
@@ -257,10 +247,11 @@ size_t PolygonCell::GetNumSubFaces( size_t fid ) const
     returns the number of nodes that make up the specific face
 
     /// faces[i][j] is a 6 x 5 matrix of faces defined by face-type and corresponding node pointers as entries (type, value pairs)
-    std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode<dim>*> > > > faces_;
+    std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > > faces_;
 
 */
-size_t PolygonCell::GetNumFaceNodes( size_t fid, size_t sfid ) const
+template<size_t dim>
+size_t PolygonCell<dim>::GetNumFaceNodes( size_t fid, size_t sfid ) const
 {
   assert( fid < faces_.size() );
   assert( !faces_[fid].empty() );
@@ -268,36 +259,36 @@ size_t PolygonCell::GetNumFaceNodes( size_t fid, size_t sfid ) const
     return faces_[fid][sfid].second.size();
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetFaceNodeGlobalId( size_t fid, size_t sfid, size_t nid ) const
 {
     return faces_[fid][sfid].second[nid]->GetIdx();
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetFacePoint( size_t fid, size_t sfid, size_t nid ) const
 {
     return faces_[fid][sfid].second[nid]->GetPoint();
 }
 
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetFaceNode( size_t fid, size_t sfid, size_t nid )
 {
     return faces_[fid][sfid].second[nid];
 }
 
-
-const csmp::CSMP_FEM_TYPE& PolygonCell
+template<size_t dim>
+const csmp::CSMP_FEM_TYPE& PolygonCell<dim>
 ::GetFaceType( size_t fid, size_t sfid ) const
 {
     return faces_[fid][sfid].first;
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetFaceDim( size_t fid, size_t sfid ) const
 {
     if( CSMP_ElementSpecifications::SurfaceElement( GetFaceType( fid, sfid ) ) )
@@ -307,64 +298,64 @@ size_t PolygonCell
     return 0U;
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNumPolygonFaceNodes( size_t fid ) const
 {
     return face_nodes_[fid].size();
 }
 
-
-size_t PolygonCell::GetPolygonFaceNodeLocalId( size_t fid, size_t nid ) const
+template<size_t dim>
+size_t PolygonCell<dim>::GetPolygonFaceNodeLocalId( size_t fid, size_t nid ) const
 {
     return face_nodes_[fid][nid];
 }
 
-
-size_t PolygonCell::GetPolygonFaceNodeGlobalId( size_t fid, size_t nid ) const
+template<size_t dim>
+size_t PolygonCell<dim>::GetPolygonFaceNodeGlobalId( size_t fid, size_t nid ) const
 {
     return nodes_[face_nodes_[fid][nid]]->GetIdx();
 }
 
-
-const csmp::Point<3U>& PolygonCell::GetPolygonFacePoint( size_t fid, size_t nid ) const
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>::GetPolygonFacePoint( size_t fid, size_t nid ) const
 {
     return nodes_[face_nodes_[fid][nid]]->GetPoint();
 }
 
-
-GridNode* const PolygonCell::GetPolygonFaceNode( size_t fid, size_t nid ) const
+template<size_t dim>
+csmp::GridNode<dim>* const PolygonCell<dim>::GetPolygonFaceNode( size_t fid, size_t nid ) const
 {
     return nodes_[face_nodes_[fid][nid]];
 }
 
-
-void PolygonCell::AssignPolygonFaceNode( size_t fid, size_t nid, size_t cell_nid )
+template<size_t dim>
+void PolygonCell<dim>::AssignPolygonFaceNode( size_t fid, size_t nid, size_t cell_nid )
 {
     face_nodes_[fid][nid] = cell_nid;
 }
 
-
-void PolygonCell::AddPolygonFaceNode( size_t fid, size_t cell_nid )
+template<size_t dim>
+void PolygonCell<dim>::AddPolygonFaceNode( size_t fid, size_t cell_nid )
 {
    face_nodes_[fid].reserve( face_nodes_[fid].size() + 1 );
    face_nodes_[fid].push_back( cell_nid );
 }
 
-
-void PolygonCell::ClearPolygonFaceNodes( size_t fid )
+template<size_t dim>
+void PolygonCell<dim>::ClearPolygonFaceNodes( size_t fid )
 {
     face_nodes_[fid].clear();
 }
 
-
-void PolygonCell::ResizePolygonFaceNodes( size_t fid, size_t size )
+template<size_t dim>
+void PolygonCell<dim>::ResizePolygonFaceNodes( size_t fid, size_t size )
 {
     face_nodes_[fid].resize( size );
 }
 
-
-void PolygonCell::InitializeFaceOrder( size_t num_faces )
+template<size_t dim>
+void PolygonCell<dim>::InitializeFaceOrder( size_t num_faces )
 {
     num_faces_ = num_faces;
     custom_face_order_.clear();
@@ -385,8 +376,8 @@ void PolygonCell::InitializeFaceOrder( size_t num_faces )
 }
 
 
-
-void PolygonCell::AssignFaceOrder( size_t cfid , size_t ofid )
+template<size_t dim>
+void PolygonCell<dim>::AssignFaceOrder( size_t cfid , size_t ofid )
 {
     custom_face_order_.resize( num_faces_ );
     custom_face_order_[cfid] = ofid;
@@ -402,90 +393,83 @@ void PolygonCell::AssignFaceOrder( size_t cfid , size_t ofid )
 }
 
 
-
-void PolygonCell::AddFace( size_t fid, const std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> >& face )
+template<size_t dim>
+void PolygonCell<dim>::AddFace( size_t fid, const std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> >& face )
 {
     faces_[fid].reserve( faces_[fid].size() + 1 );
     faces_[fid].push_back( face );
 }
 
-
-void PolygonCell::EraseFace( size_t fid )
+template<size_t dim>
+void PolygonCell<dim>::EraseFace( size_t fid )
 {
     faces_.erase( faces_.begin() + fid );
 }
 
-
-void PolygonCell::EraseFace( size_t fid, size_t position )
+template<size_t dim>
+void PolygonCell<dim>::EraseFace( size_t fid, size_t position )
 {
     faces_[fid].erase( faces_[fid].begin() + position );
 }
 
-
-
-void PolygonCell::ClearFaces( size_t fid )
+template<size_t dim>
+void PolygonCell<dim>::ClearFaces( size_t fid )
 {
     faces_[fid].clear();
 }
 
-
-
-void PolygonCell::ClearFaces( )
+template<size_t dim>
+void PolygonCell<dim>::ClearFaces( )
 {
     faces_.clear();
 }
 
-
-
-
-
 // ELEMENTS
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNumElements() const
 {
     return elements_.size();
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetNumElementNodes( size_t eid ) const
 {
     return elements_[eid].second.size();
 }
 
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetElementNodeGlobalId( size_t eid, size_t nid ) const
 {
     return elements_[eid].second[nid]->GetIdx();
 }
 
-
-const csmp::Point<3U>& PolygonCell
+template<size_t dim>
+const csmp::Point<dim>& PolygonCell<dim>
 ::GetElementPoint( size_t eid, size_t nid ) const
 {
     return elements_[eid].second[nid]->GetPoint();
 }
 
-
-GridNode* PolygonCell
+template<size_t dim>
+csmp::GridNode<dim>* PolygonCell<dim>
 ::GetElementNode( size_t eid, size_t nid )
 {
     return elements_[eid].second[nid];
 }
 
-
-const csmp::CSMP_FEM_TYPE& PolygonCell
+template<size_t dim>
+const csmp::CSMP_FEM_TYPE& PolygonCell<dim>
 ::GetElementType( size_t eid ) const
 {
     return elements_[eid].first;
 }
 
-
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetElementDim( size_t eid ) const
 {
     if( CSMP_ElementSpecifications::VolumeElement( elements_[eid].first ) )
@@ -497,9 +481,8 @@ size_t PolygonCell
     return 0U;
 }
 
-
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetElementDim( ) const
 {
     size_t cell_dim(0);
@@ -509,24 +492,21 @@ size_t PolygonCell
     return cell_dim;
 }
 
-
-
-void PolygonCell::AddCell( const std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> >& cell  )
+template<size_t dim>
+void PolygonCell<dim>::AddCell( const std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> >& cell  )
 {
     elements_.reserve( elements_.size() + 1 );
     elements_.push_back( cell );
 }
 
-
-
-void PolygonCell::EraseCell( size_t position )
+template<size_t dim>
+void PolygonCell<dim>::EraseCell( size_t position )
 {
     elements_.erase( elements_.begin() + position );
 }
 
-
-
-void PolygonCell::ClearCells( )
+template<size_t dim>
+void PolygonCell<dim>::ClearCells( )
 {
     elements_.clear();
 }
@@ -534,38 +514,37 @@ void PolygonCell::ClearCells( )
 
 // INDEXING
 
-size_t PolygonCell
+
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetOriginalNodeId( size_t custom_nid ) const
 {
     return custom_node_order_[ custom_nid ];
 }
 
-
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetCustomNodeId( size_t original_nid ) const
 {
-    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     for( size_t nid = 0; nid<num_nodes_; ++nid )
         if( custom_node_order_[nid] == original_nid )
             return nid;
-    csmp_error.notice( ERROR,
+    csmp_error.notice(csmp::ERROR,
                       "CustomNodeId()",
                       "Original node id is out of range!!!");
     return -1;
 }
 
-
-
-size_t PolygonCell::GetOriginalFaceId( size_t custom_fid ) const
+template<size_t dim>
+size_t PolygonCell<dim>::GetOriginalFaceId( size_t custom_fid ) const
 {
     return custom_face_order_[ custom_fid ];
 }
 
-
-
-size_t PolygonCell
+template<size_t dim>
+size_t PolygonCell<dim>
 ::GetCustomFaceId( size_t original_fid ) const
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -583,36 +562,37 @@ size_t PolygonCell
 
 
 
-void PolygonCell::Out() const
+template<size_t dim>
+void PolygonCell<dim>::Out() const
  {
-    std::cout<<"\nPolygonCell::Out: ";
+    std::cout<<"\nPolygonCell<"<< dim <<">::Out: ";
     /// grid manager
     //PolygonGridManager<dim>* grid_;
     std::cout<<"\n\tparent grid manager 'PolygonGridManager' is not output...\n";
 
-    std::cout <<"\nPolygonCell::Out:\n";
+    std::cout <<"\nPolygonCell<"<< dim <<">Out:\n";
     std::cout <<"\tnodes: "<< num_nodes_ <<", extra nodes: "<< extra_nodes_.size();
     std::cout <<", custom node order:\n\t";
     for ( size_t i=0U; i<custom_node_order_.size(); i++ ) std::cout << custom_node_order_[i] <<" ";
 
     std::cout <<"\n\tnodes:\n";
-    for ( typename std::vector<GridNode*>::const_iterator it=nodes_.begin(); it!=nodes_.end(); ++it )
+    for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=nodes_.begin(); it!=nodes_.end(); ++it )
       std::cout << *(*it) <<" ";
 
     std::cout <<"\n\tnodes in custom order:\n";
-    for ( typename std::vector<GridNode*>::const_iterator it=nodes_in_custom_order_.begin(); it!=nodes_in_custom_order_.end(); ++it )
+    for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=nodes_in_custom_order_.begin(); it!=nodes_in_custom_order_.end(); ++it )
       std::cout << *(*it) <<" ";
 
     std::cout <<"\n\textra nodes:\n";
-    for ( typename std::vector<GridNode*>::const_iterator it=extra_nodes_.begin(); it!=extra_nodes_.end(); ++it )
+    for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator it=extra_nodes_.begin(); it!=extra_nodes_.end(); ++it )
       std::cout << *(*it) <<" ";
    
     /// cells
     std::cout <<"\n\telements:\n";
-    //std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode<dim>*> > > elements_;
+    //std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > elements_;
     for ( auto it=elements_.begin(); it!=elements_.end(); it++ ) {
          std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
-         for ( typename std::vector<GridNode*>::const_iterator nit=(*it).second.begin();
+         for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
               nit!=(*it).second.end(); nit++ )
            std::cout << *(*nit) <<" ";
       }
@@ -640,12 +620,12 @@ void PolygonCell::Out() const
     std::cout <<"\n";
 
     /// faces
-    // std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode<dim>*> > > > faces_;
+    // std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > > faces_;
     std::cout <<"\n\tfaces:\n";
     for ( auto fit=faces_.begin(); fit!=faces_.end(); fit++ )
       for ( auto it=(*fit).begin(); it!=(*fit).end(); it++ ) {
            std::cout <<"\n"<< parseFiniteElementType((*it).first) <<": ";
-           for ( typename std::vector<GridNode*>::const_iterator nit=(*it).second.begin();
+           for ( typename std::vector<csmp::GridNode<dim>*>::const_iterator nit=(*it).second.begin();
                 nit!=(*it).second.end(); nit++ )
              std::cout << *(*nit) <<" ";
         }
@@ -654,7 +634,12 @@ void PolygonCell::Out() const
 
  } // end Out
 
-} // end eclipse
+
+
+
+template class PolygonCell<1U>;
+template class PolygonCell<2U>;
+template class PolygonCell<3U>;
 
 } // end namespace csmp
 

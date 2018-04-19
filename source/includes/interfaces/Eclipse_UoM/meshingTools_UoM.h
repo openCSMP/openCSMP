@@ -1,11 +1,11 @@
-#ifndef MESHING_TOOLS_H
-#define MESHING_TOOLS_H
+#ifndef MESHING_TOOLS_UOM_H
+#define MESHING_TOOLS_UOM_H
 
 #include "CSMP_definitions.h"
 #include "CSMP_ElementSpecifications.h"
 #include "Point.h"
-#include "PolygonGrid.h"
-#include "geometricCalculations.h"
+#include "PolygonGrid_UoM.h"
+#include "geometricCalculations_UoM.h"
 
 
 /**

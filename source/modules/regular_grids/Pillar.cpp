@@ -1,9 +1,7 @@
-#include "Pillar_UoM.h"
+#include "Pillar.h"
 #include "ErrorHandler.h"
 
 namespace csmp {
-
-namespace eclipse {
 
 // PILLARS
 
@@ -181,7 +179,9 @@ void Pillar::Out() const
     std::cout <<"\n";
  }
 
-} // eclipse
+
+
+
 
 } // end namespace csmp
 

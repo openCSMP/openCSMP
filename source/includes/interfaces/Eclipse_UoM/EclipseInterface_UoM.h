@@ -1,7 +1,7 @@
-#ifndef ECLIPSE_INTERFACE_H
-#define ECLIPSE_INTERFACE_H
+#ifndef ECLIPSE_INTERFACE_UOM_H
+#define ECLIPSE_INTERFACE_UOM_H
 
-#include "CornerPointGrid.h"
+#include "CornerPointGrid_UoM.h"
 
 namespace csmp {
 

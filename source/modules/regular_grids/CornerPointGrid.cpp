@@ -1,16 +1,15 @@
-#include "CornerPointGrid_UoM.h"
+#include "CornerPointGrid.h"
+#include "Point.h"
 #include "PropertyData.h"
-#include "CSMP_highLevelUtilities.h"
 
 #include "ErrorHandler.h"
 
 namespace csmp {
 
-namespace eclipse {
-
 // CORNER POINT GRID
 
-CornerPointGrid::CornerPointGrid()
+template<size_t dim>
+CornerPointGrid<dim>::CornerPointGrid()
 :NX_(0),
  NY_(0),
  NZ_(0),
@@ -21,7 +20,8 @@ CornerPointGrid::CornerPointGrid()
 {
 }
 
-CornerPointGrid::CornerPointGrid( const CornerPointGrid& grid )
+template<size_t dim>
+CornerPointGrid<dim>::CornerPointGrid( const CornerPointGrid<dim>& grid )
 :NX_             ( grid.NX_ ),
  NY_             ( grid.NY_ ),
  NZ_             ( grid.NZ_ ),
@@ -35,7 +35,8 @@ CornerPointGrid::CornerPointGrid( const CornerPointGrid& grid )
 {
 }
 
-CornerPointGrid& CornerPointGrid::operator=( const CornerPointGrid& grid )
+template<size_t dim>
+CornerPointGrid<dim>& CornerPointGrid<dim>::operator=( const CornerPointGrid<dim>& grid )
 {
     if( this != &grid )
     {
@@ -53,12 +54,14 @@ CornerPointGrid& CornerPointGrid::operator=( const CornerPointGrid& grid )
     return *this;
 }
 
-CornerPointGrid::~CornerPointGrid()
+template<size_t dim>
+CornerPointGrid<dim>::~CornerPointGrid()
 {
 
 }
 
-void CornerPointGrid::Clear()
+template<size_t dim>
+void CornerPointGrid<dim>::Clear()
 {
     /// grid
     embedded_cells_.clear();
@@ -82,132 +85,156 @@ void CornerPointGrid::Clear()
     well_edge_path_.clear();
 }
 
-void CornerPointGrid::TetraMesh( bool flag )
+template<size_t dim>
+void CornerPointGrid<dim>::TetraMesh( bool flag )
 {
     tetra_mesh_ = flag;
 }
 
-void CornerPointGrid::ExcludeInactiveCells( bool flag )
+template<size_t dim>
+void CornerPointGrid<dim>::ExcludeInactiveCells( bool flag )
 {
     exclude_inactive_cells_ = flag;
 }
 
-size_t CornerPointGrid::GetNumCells( ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::GetNumCells( ) const
 {
     return NX_*NY_*NZ_;
 }
 
-size_t CornerPointGrid::CellIndex( size_t i, size_t j, size_t k ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::CellIndex( size_t i, size_t j, size_t k ) const
 {
     return i+j*NX_+k*NX_x_NY_;
 }
 
-size_t CornerPointGrid::CellIndexI( size_t cell_id ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::CellIndexI( size_t cell_id ) const
 {
     return (cell_id%NX_);
 }
 
-size_t CornerPointGrid::CellIndexJ( size_t cell_id ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::CellIndexJ( size_t cell_id ) const
 {
     return ((cell_id/NX_)%NY_);
 }
 
-size_t CornerPointGrid::CellIndexK( size_t cell_id ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::CellIndexK( size_t cell_id ) const
 {
     return (cell_id/NX_x_NY_);
 }
 
-size_t CornerPointGrid::NodeIndexI( size_t cell_id, size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexI( size_t cell_id, size_t nid ) const
 {
     return 2*CellIndexI( cell_id ) + NodeIndexIncrementI( nid );
 }
 
-size_t CornerPointGrid::NodeIndexJ( size_t cell_id, size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexJ( size_t cell_id, size_t nid ) const
 {
     return 2*CellIndexI( cell_id ) + NodeIndexIncrementJ( nid );
 }
 
-size_t CornerPointGrid::NodeIndexK( size_t cell_id, size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexK( size_t cell_id, size_t nid ) const
 {
     return 2*CellIndexI( cell_id ) + NodeIndexIncrementK( nid );
 }
 
-size_t CornerPointGrid::NodeIndexIncrementI( size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexIncrementI( size_t nid ) const
 {
     return ( nid%2 );
 }
 
-size_t CornerPointGrid::NodeIndexIncrementJ( size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexIncrementJ( size_t nid ) const
 {
     return ( (nid/2)%2 );
 }
 
-size_t CornerPointGrid::NodeIndexIncrementK( size_t nid ) const
+template<size_t dim>
+size_t CornerPointGrid<dim>::NodeIndexIncrementK( size_t nid ) const
 {
     return ( nid/4 );
 }
 
-void CornerPointGrid::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids )
+template<size_t dim>
+void CornerPointGrid<dim>::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids )
 {
     addWellPath( NX_, NY_, NZ_, well_name, cell_ids, well_face_path_ );
 }
 
-void CornerPointGrid::AddWellFacePath( const std::string& well_name,
+template<size_t dim>
+void CornerPointGrid<dim>::AddWellFacePath( const std::string& well_name,
                                             const std::vector<size_t>& cell_ids,
                                             const std::vector<std::pair<size_t,size_t> >& face_ids )
 {
     addWellPath( well_name, cell_ids, face_ids, well_face_path_ );
 }
 
-void CornerPointGrid::AddWellEdgePath( const std::string& well_name,
+template<size_t dim>
+void CornerPointGrid<dim>::AddWellEdgePath( const std::string& well_name,
                                             const std::vector<size_t>& cell_ids,
                                             const std::vector<std::pair<size_t,size_t> >& edge_ids )
 {
     addWellPath( well_name, cell_ids, edge_ids, well_edge_path_ );
 }
 
-std::vector<std::vector<Pillar> >& CornerPointGrid::GetPillars()
+template<size_t dim>
+std::vector<std::vector<Pillar> >& CornerPointGrid<dim>::GetPillars()
 {
     return pillars_;
 }
 
-std::vector<size_t>& CornerPointGrid::GetCellActivity()
+template<size_t dim>
+std::vector<size_t>& CornerPointGrid<dim>::GetCellActivity()
 {
     return cell_activity_;
 }
 
-std::map<std::string,std::vector<std::pair<size_t,size_t> > >& CornerPointGrid::GetFaultData()
+template<size_t dim>
+std::map<std::string,std::vector<std::pair<size_t,size_t> > >& CornerPointGrid<dim>::GetFaultData()
 {
     return faults_data_;
 }
 
-std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& CornerPointGrid::GetWellFacePath()
+template<size_t dim>
+std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& CornerPointGrid<dim>::GetWellFacePath()
 {
     return well_face_path_;
 }
 
-std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& CornerPointGrid::GetWellEdgePath()
+template<size_t dim>
+std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& CornerPointGrid<dim>::GetWellEdgePath()
 {
     return well_edge_path_;
 }
 
-void CornerPointGrid::AssignDimensionX( size_t NX )
+template<size_t dim>
+void CornerPointGrid<dim>::AssignDimensionX( size_t NX )
 {
     NX_ = NX;
 }
 
-void CornerPointGrid::AssignDimensionY( size_t NY )
+template<size_t dim>
+void CornerPointGrid<dim>::AssignDimensionY( size_t NY )
 {
     NY_ = NY;
 }
 
-void CornerPointGrid::AssignDimensionZ( size_t NZ )
+template<size_t dim>
+void CornerPointGrid<dim>::AssignDimensionZ( size_t NZ )
 {
     NZ_ = NZ;
 }
 
-
-void CornerPointGrid::MinMaxCoordinates( PolygonGridManager& pgm, Point<3U>& xyz_min, Point<3U>& xyz_max ) const
+template<size_t dim>
+void CornerPointGrid<dim>::MinMaxCoordinates( PolygonGridManager<3U>& pgm, Point<3U>& xyz_min, Point<3U>& xyz_max ) const
  {
     xyz_min = pgm.GetPoint(0);
     xyz_max = pgm.GetPoint(0);
@@ -215,38 +242,85 @@ void CornerPointGrid::MinMaxCoordinates( PolygonGridManager& pgm, Point<3U>& xyz
     for ( size_t nid = 1U; nid < num_nodes; ++nid )
     {
         const csmp::Point<3U>& p = pgm.GetPoint( nid );
-        for( size_t i = 0; i < 3U; i++ )
+        for( size_t i = 0; i < dim; i++ )
         {
             xyz_min[i] = std::min( xyz_min[i], p[i] );
             xyz_max[i] = std::min( xyz_max[i], p[i] );
         }
     }
 }
-
-
-
-
-void CornerPointGrid::DefineAxes()
+template<size_t dim>
+void CornerPointGrid<dim>::DefineAxes(PolygonGridManager<3U> &pgm )
 {
-    csmp::Point<3U> i(0.0);
-    i[0] = 1.0;
-    csmp::Point<3U> j(0.0);
-    j[1] = 1.0;
-    csmp::Point<3U> k(0.0);
-    k[2] = 1.0;
-    axes_.clear();
-    axes_.push_back( csmp::Point<3U>(0.0) ); // origin point
-    axes_.push_back( i );
-    axes_.push_back( j );
-    axes_.push_back( k );
-}
+    if( dim == 3U )
+    {
+        csmp::Point<3U> i(0.0);
+        i[0] = 1.0;
+        csmp::Point<3U> j(0.0);
+        j[1] = 1.0;
+        csmp::Point<3U> k(0.0);
+        k[2] = 1.0;
+        axes_.clear();
+        axes_.push_back( csmp::Point<3U>(0.0) );
+        axes_.push_back( i );
+        axes_.push_back( j );
+        axes_.push_back( k );
+    }
+    else
+    {
+        csmp::Point<3U> xyz_min, xyz_max;
+        MinMaxCoordinates( pgm, xyz_min, xyz_max );
 
+        size_t extr_code = 0;
+        std::vector<bool> minp( 3U );
+        std::vector<bool> maxp( 3U );
+        std::map<size_t,csmp::Point<3U>,std::greater<size_t> > crns;
+        const size_t num_nodes( pgm.GetNumNodes() );
+        for ( size_t nid = 0U; nid < num_nodes; ++nid )
+        {
+            const csmp::Point<3U>& p = pgm.GetPoint( nid );
+            for( size_t i = 0; i <3U; i++ )
+            {
+                minp[i] = ( p[i] == xyz_min[i] );
+                maxp[i] = ( p[i] == xyz_max[i] );
+                extr_code += ( ( ( minp[i] == true ) || ( maxp[i] == true ) ) ? 1 : 0 );
+            }
+            if( extr_code > 1 )
+                crns.insert( std::make_pair( extr_code, p ) );
+        }
+        /// create axes
+        std::vector<csmp::Point<3U> > pts;
+        for( typename std::map<size_t,csmp::Point<3U> >::const_iterator
+             it = crns.begin(); it != crns.end(); ++it )
+        {
+            pts.push_back( (*it).second );
+            if( pts.size() == dim )
+                break;
+        }
+        crns.clear();
+        if( dim == 2U )
+        {
+            axes_.clear();
+            axes_.resize(3U);
+            axes_[0] = pts[0];
+            getCartesianAxes( pts[0], pts[1], pts[2], axes_[1], axes_[2] );
+        }
+        else if( dim == 1U )
+        {
+            axes_.clear();
+            axes_.resize(2U);
+            axes_[0] = pts[0];
+            getCartesianAxes( pts[0], pts[1], axes_[1] );
+        }
+    }
+}
 
 
 /**
   x stays, y = -z and z=y.
 */
-void CornerPointGrid
+template<size_t dim>
+void CornerPointGrid<dim>
 ::ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt )
 {
     const double y( pt[1U] );
@@ -255,8 +329,8 @@ void CornerPointGrid
     pt[2U] = y;
 }
 
-
-const csmp::Point<3U>& CornerPointGrid
+template<size_t dim>
+const csmp::Point<3U>& CornerPointGrid<dim>
 ::GetCellNode( size_t i, size_t j, size_t k, size_t nid ) const
 {
     const size_t node_incrementJ(NodeIndexIncrementJ( nid ));
@@ -264,9 +338,8 @@ const csmp::Point<3U>& CornerPointGrid
     return pillars_[ j + node_incrementJ ][ i + node_incrementI ].GetPoint( i, j, k, nid );
 }
 
-
-
-void CornerPointGrid
+template<size_t dim>
+void CornerPointGrid<dim>
 ::AssignCellNodeToPillar( size_t i, size_t j, size_t k, size_t nid, const csmp::Point<3U>& pt )
 {
     const size_t node_incrementJ(NodeIndexIncrementJ( nid ));
@@ -274,30 +347,21 @@ void CornerPointGrid
     return pillars_[ j + node_incrementJ ][ i + node_incrementI ].AssignPoint( i, j, k, nid, pt );
 }
 
-
-void CornerPointGrid
+template<size_t dim>
+void CornerPointGrid<dim>
 ::InitializeGridSpecs( )
 {
     NX_x_NY_  = NX_*NY_;
     elements_ = NX_x_NY_*NZ_;
 }
 
-
-
-
-
-/**
-    Attaches the cells to the pillars.
-    Repairs cells where degenerate cells arise because beads are missing; situations considered:
- 
-    1) top nodes of cell are lower that bottom nodes of same cell ( top point = btm point )
-    2) bottom nodes of cell are lower than top nodes of neighbouring cell ( top point = btm point )
-*/
-void CornerPointGrid::ProcessPillars()
+template<size_t dim>
+void CornerPointGrid<dim>
+::ProcessPillars()
 {
-    // Assign attached cells to pillars
+    /// Assign attached cells to pillars
 
-    // internal pillars
+    /// internal pillars
     for( size_t i=1; i<NX_; ++i )
         for( size_t j=1; j<NY_; ++j )
         {
@@ -331,10 +395,12 @@ void CornerPointGrid::ProcessPillars()
 // for( size_t i=1; i<NX_; ++i )
 //  for( size_t j=1; j<NY_; ++j ) pillars_[i][j].Out();
 
+
     /// repair pillar nodes in the following cases:
     /// 1) top nodes of cell are lower that bottom nodes of same cell ( top point = btm point )
     /// 2) bottom nodes of cell are lower than top nodes of neighbouring cell ( top point = btm point )
     const size_t quad_fem_nodes( 4U );
+    size_t hexa_cell_id( 0 );
     /// process top nodes below bottom nodes
     bool first_print(true);
     for( size_t k = 0; k < NZ_; ++k )
@@ -343,15 +409,14 @@ void CornerPointGrid::ProcessPillars()
             {
                 if ( pillars_[i][j].GetNumPoints() == 0 ) {
                      if ( first_print ) {
-// SKM testing
-std::cerr <<"\nCornerPointGrid::ProcessPillars: pillars without beads: ";
+                          std::cerr <<"\nCornerPointGrid::ProcessPillars: pillars without beads: ";
                           first_print = false;
                        }
-// SKM testing
-std::cerr <<"pillar("<< i <<","<< j <<") ";
+                     std::cerr <<"pillar("<< i <<","<< j <<") ";
                      continue;
                   }
                 /// hexa cell global id
+                hexa_cell_id = CellIndex(i,j,k);
 
                 /// indexing cell nodes
                 for( size_t nid = 0; nid < quad_fem_nodes; ++nid ) {
@@ -373,6 +438,7 @@ std::cerr <<"pillar("<< i <<","<< j <<") ";
             for( size_t i = 0; i < NX_; ++i )
             {
                 /// hexa cell global id
+                hexa_cell_id = CellIndex(i,j,k);
 
                 /// indexing cell nodes
                 for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
@@ -397,6 +463,7 @@ std::cerr <<"pillar("<< i <<","<< j <<") ";
                 for( size_t i = 0; i < NX_; ++i )
                 {
                     /// hexa cell global id
+                    hexa_cell_id = CellIndex(i,j,k);
 
                     /// indexing cell nodes
                     for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
@@ -415,12 +482,7 @@ std::cerr <<"pillar("<< i <<","<< j <<") ";
                     }
                 }
     }
-  
-} // end ProcessPillars
-
-
-
-
+}
 
 
 /**
@@ -433,16 +495,17 @@ std::cerr <<"pillar("<< i <<","<< j <<") ";
     
     @todo regions are not recognised properly.
 */
-void CornerPointGrid::CreateModel( const std::string&     model_name,
-                                   csmp::VSet<3U>&       vset,
-                                   csmp::ModelTopology&   model_topology,
-                                   std::set<std::string>& regions,
-                                   std::set<std::string>& faults,
-                                   std::set<std::string>& wells )
+template<size_t dim>
+void CornerPointGrid<dim>::CreateModel( const std::string&     model_name,
+                                        csmp::VSet<dim>&       vset,
+                                        csmp::ModelTopology&   model_topology,
+                                        std::set<std::string>& regions,
+                                        std::set<std::string>& faults,
+                                        std::set<std::string>& wells )
  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
-    PolygonGridManager pgm;
+    PolygonGridManager<3U> pgm;
 
     // ==============================================================
     // 0. Initialise grid specs and map between pillar and cell nodes
@@ -466,7 +529,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     size_t hexa_cell_id( 0 );
     size_t cell_id ( 0 );
     size_t num_cell_nodes;
-    std::vector<CornerPointCell> poly( elements_, CornerPointCell(pgm) );
+    std::vector<CornerPointCell<3U> > poly( elements_, CornerPointCell<3U>( &pgm ) );
     std::set<size_t> regular_cells;
     std::set<size_t> regular_well_cells;
     std::set<size_t> degenerate_well_cells;
@@ -474,7 +537,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     std::set<size_t> degenerate_overlap_cells;
     std::set<size_t> degenerate_lowdim_cells;
     std::set<std::set<size_t> > additional_edges;
-    std::map<std::set<size_t>,GridNode*> additional_points;
+    std::map<std::set<size_t>,csmp::GridNode<3U>*> additional_points;
     std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> > embedded_cells_vector;
 
     // if there is no cell activity information assume that all cells are active
@@ -553,7 +616,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
             }
         }
 
-    DefineAxes();
+    DefineAxes( pgm );
 
     // ================================
     // 2. Assign cell data to VSet
@@ -602,11 +665,11 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
 
     // 2.2: processing degenerate cells
     // ===============================================================================
-    // which appear due to collapse of point pairs along pillars.
-    // main reason: fault alignment meshing
-    // geological reasons:
-    // erosion, pinch-out of geological layers,
-    // truncated artificial layers ( zero thickness cells )
+    /// which appear due to collapse of point pairs along pillars.
+    /// main reason: fault alignment meshing
+    /// geological reasons:
+    /// erosion, pinch-out of geological layers,
+    /// truncated artificial layers ( zero thickness cells )
     else
     {
         // 2.2.1 process well elements
@@ -699,6 +762,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
                      if ( cell_activity_[ hexa_cell_id ] == 1 || !exclude_inactive_cells_ )
                      {
 //poly[ hexa_cell_id ].Out();
+                         num_cell_nodes = poly[ hexa_cell_id ].GetNumNodes();
 
                          /// assign subcells
                          const size_t num_subcells( poly[ hexa_cell_id ].GetNumElements() );
@@ -716,21 +780,21 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
                                      vset.Plist( cell_id, nid, poly[ hexa_cell_id ].GetElementNodeGlobalId( eid, nid ) );
                                  vset.ElementType( cell_id, poly[ hexa_cell_id ].GetElementType( eid ) );
                                  const size_t cell_dim ( poly[ hexa_cell_id ].GetElementDim( eid ) );
-                                 if( cell_dim == 3U )
+                                 if( cell_dim == dim )
                                  {
                                      cell_elmts.push_back( cell_id );
                                      cell_fem_types.insert( csmp::parseFiniteElementType( poly[ hexa_cell_id ].GetElementType( eid ) ) );
                                      embedded_cells_vector.push_back( std::make_pair( cell_id, poly[ hexa_cell_id ].GetElementType( eid ) ) );
                                      ++cell_id;
                                  }
-                                 else if( cell_dim == ( 2U ) )
+                                 else if( cell_dim == ( dim-1 ) )
                                  {
                                      face_elmts.push_back( cell_id );
                                      face_fem_types.insert( csmp::parseFiniteElementType( poly[ hexa_cell_id ].GetElementType( eid ) ) );
                                      embedded_cells_vector.push_back( std::make_pair( cell_id, poly[ hexa_cell_id ].GetElementType( eid ) ) );
                                      ++cell_id;
                                  }
-                                 else if( cell_dim == ( 1U ) )
+                                 else if( cell_dim == ( dim-2 ) )
                                  {
                                      edge_elmts.push_back( cell_id );
                                      edge_fem_types.insert( csmp::parseFiniteElementType( poly[ hexa_cell_id ].GetElementType( eid ) ) );
@@ -823,15 +887,14 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     // ===============================================================================
     const size_t num_nodes( pgm.GetNumNodes() );
     vset.ResizeNodes( num_nodes );
-
-    for ( size_t nid=0; nid<num_nodes; ++nid ){
-        const csmp::Point<3U>& pt( pgm.GetPoint( nid ) );
-        vset.Px( nid, pt[0U] );
-        vset.Py( nid, pt[1U] );
-        vset.Pz( nid, pt[2U] );
-    }
-   
-/* NA
+    if( dim == 3U ) {
+          for ( size_t nid=0; nid<num_nodes; ++nid ){
+              const csmp::Point<3U>& pt( pgm.GetPoint( nid ) );
+              vset.Px( nid, pt[0U] );
+              vset.Py( nid, pt[1U] );
+              vset.Pz( nid, pt[2U] );
+          }
+      }
     else if ( dim == 2U ) {
           for ( size_t nid=0; nid<num_nodes; ++nid ){
               const csmp::Point<3U>& pt1( pgm.GetPoint( nid ) );
@@ -852,7 +915,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
               vset.Pz( nid, 0.0 );
           }
       }
-*/
+   
     // 4. Establishing Model Topology
     // ================================
 
@@ -886,7 +949,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     // 5. Reporting
     // ================================
 
-    std::cout << "\nCornerPointGrid::CreateModel: VSet resulting from '"<< model_name << "' grid contains: ";
+    std::cout << "\nCornerPointGrid<dim>::CreateModel: VSet resulting from '"<< model_name << "' grid contains: ";
     if( !embedded_cells_.empty() )
       {
           std::map<csmp::CSMP_FEM_TYPE,size_t> mesh_specs;
@@ -940,7 +1003,7 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     std::cout<< std::endl;
 
     if( csmp_error.Verbose() )
-        std::cout <<"\nCornerPointGrid::CreateModel: mesh was successfully output to VSet." << std::endl;
+        std::cout <<"\nCornerPointGrid<dim>::CreateModel: mesh was successfully output to VSet." << std::endl;
 
 } // CreateModel (MASTER - MONSTER METHOD)
 
@@ -953,11 +1016,13 @@ void CornerPointGrid::CreateModel( const std::string&     model_name,
     @todo SKM question: are inactive cells included in the VSet? - they should be eliminated before because they 
     often dominate the entire cell count.
 */
-void CornerPointGrid::EstablishActiveDomain( csmp::VSet<3U>& vset,
-                                             csmp::ModelTopology& model_topology,
-                                             std::set<std::string>& regions,
-                                             const std::vector<size_t>& cell_elmts,
-                                             const std::set<std::string>& cell_fem_types )
+template<size_t dim>
+void CornerPointGrid<dim>
+::EstablishActiveDomain( csmp::VSet<dim>& vset,
+                         csmp::ModelTopology& model_topology,
+                         std::set<std::string>& regions,
+                         const std::vector<size_t>& cell_elmts,
+                         const std::set<std::string>& cell_fem_types )
  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -1062,25 +1127,23 @@ void CornerPointGrid::EstablishActiveDomain( csmp::VSet<3U>& vset,
       }
 
     if( csmp_error.Verbose() )
-        std::cout <<"CornerPointGrid::EstablishActiveDomain: inactive cells were successfully removed.\n";
+        std::cout <<"CornerPointGrid<dim>::EstablishActiveDomain: inactive cells were successfully removed.\n";
 
  } // EstablishActiveDomain
 
 
-
-
-
-
-/**
-    Identifies the faces of the cells that make up the boundary.
-    The cells are then grouped into boundary regions that are stored in the ModelTopology class.
-*/
-void CornerPointGrid::EstablishBoundaries( csmp::VSet<3U>& vset,
-                                           csmp::ModelTopology& model_topology,
-                                           const std::vector<CornerPointCell>& poly )
+  /**
+   Identifies the faces of the cells that make up the boundary.
+   The cells are then grouped into boundary regions that are stored in the ModelTopology class.
+   */
+  template<size_t dim>
+  void CornerPointGrid<dim>
+  ::EstablishBoundaries( csmp::VSet<dim>& vset,
+                         csmp::ModelTopology& model_topology,
+                         const std::vector<CornerPointCell<3U> >& poly )
   {
     if ( !exclude_inactive_cells_ ) {
-      throw csmp::Exception( ERROR, "CornerPointGrid::EstablishBoundaryRegions",
+      throw csmp::Exception( ERROR, "CornerPointGrid<dim>::EstablishBoundaryRegions",
                   "Cannot create boundary regions if we are excluding inactive cells" );
     }
 
@@ -1203,10 +1266,12 @@ void CornerPointGrid::EstablishBoundaries( csmp::VSet<3U>& vset,
      
      TODO: this function never modifies the VSet although we tried several cases with faults present; why?
 */
-void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
-                                             csmp::ModelTopology& model_topology,
-                                             std::set<std::string>& faults,
-                                             const std::vector<CornerPointCell>& poly )
+template<size_t dim>
+void CornerPointGrid<dim>
+::EstablishFaultRegions( csmp::VSet<dim>& vset,
+                         csmp::ModelTopology& model_topology,
+                         std::set<std::string>& faults,
+                         const std::vector<CornerPointCell<3U> >& poly )
 {
     /// cell data
     const size_t quad_fem_nodes( 4U );
@@ -1218,58 +1283,58 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
 
     /// opposite faces
     std::vector<size_t> opposite_face( 6U, 0 );
-    opposite_face[CORNER_POINT_CELL_FACE_Xminus]  = CORNER_POINT_CELL_FACE_Xplus;
-    opposite_face[CORNER_POINT_CELL_FACE_Xplus ]  = CORNER_POINT_CELL_FACE_Xminus;
-    opposite_face[CORNER_POINT_CELL_FACE_Yminus]  = CORNER_POINT_CELL_FACE_Yplus;
-    opposite_face[CORNER_POINT_CELL_FACE_Yplus ]  = CORNER_POINT_CELL_FACE_Yminus;
-    opposite_face[CORNER_POINT_CELL_FACE_Zminus]  = CORNER_POINT_CELL_FACE_Zplus;
-    opposite_face[CORNER_POINT_CELL_FACE_Zplus ]  = CORNER_POINT_CELL_FACE_Zminus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Xminus]  = csmp::CORNER_POINT_CELL_FACE_Xplus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Xplus ]  = csmp::CORNER_POINT_CELL_FACE_Xminus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Yminus]  = csmp::CORNER_POINT_CELL_FACE_Yplus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Yplus ]  = csmp::CORNER_POINT_CELL_FACE_Yminus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Zminus]  = csmp::CORNER_POINT_CELL_FACE_Zplus;
+    opposite_face[csmp::CORNER_POINT_CELL_FACE_Zplus ]  = csmp::CORNER_POINT_CELL_FACE_Zminus;
 
     /// neighbors from each side
     std::vector<long> opposite_cell_offset( 6U, 0 );
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Xminus]  = -1;
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Xplus ]  = +1;
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Yminus]  = -NX_;
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Yplus ]  = +NX_;
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Zminus]  = -NX_x_NY_;
-    opposite_cell_offset[CORNER_POINT_CELL_FACE_Zplus ]  = +NX_x_NY_;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Xminus]  = -1;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Xplus ]  = +1;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Yminus]  = -NX_;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Yplus ]  = +NX_;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Zminus]  = -NX_x_NY_;
+    opposite_cell_offset[csmp::CORNER_POINT_CELL_FACE_Zplus ]  = +NX_x_NY_;
 
     std::vector<std::vector<size_t> > face_nodes( 6U, std::vector<size_t>( 5, 0 ) );
-    face_nodes[ CORNER_POINT_CELL_FACE_Xminus ][0] = 0;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xminus ][1] = 2;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xminus ][2] = 6;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xminus ][3] = 4;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xminus ][4] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xminus ][0] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xminus ][1] = 2;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xminus ][2] = 6;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xminus ][3] = 4;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xminus ][4] = 0;
 
-    face_nodes[ CORNER_POINT_CELL_FACE_Xplus  ][0] = 1;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xplus  ][1] = 3;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xplus  ][2] = 7;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xplus  ][3] = 5;
-    face_nodes[ CORNER_POINT_CELL_FACE_Xplus  ][4] = 1;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xplus  ][0] = 1;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xplus  ][1] = 3;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xplus  ][2] = 7;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xplus  ][3] = 5;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Xplus  ][4] = 1;
 
-    face_nodes[ CORNER_POINT_CELL_FACE_Yminus ][0] = 0;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yminus ][1] = 1;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yminus ][2] = 5;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yminus ][3] = 4;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yminus ][4] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yminus ][0] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yminus ][1] = 1;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yminus ][2] = 5;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yminus ][3] = 4;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yminus ][4] = 0;
 
-    face_nodes[ CORNER_POINT_CELL_FACE_Yplus  ][0] = 2;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yplus  ][1] = 3;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yplus  ][2] = 7;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yplus  ][3] = 6;
-    face_nodes[ CORNER_POINT_CELL_FACE_Yplus  ][4] = 2;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yplus  ][0] = 2;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yplus  ][1] = 3;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yplus  ][2] = 7;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yplus  ][3] = 6;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Yplus  ][4] = 2;
 
-    face_nodes[ CORNER_POINT_CELL_FACE_Zminus ][0] = 0;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zminus ][1] = 1;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zminus ][2] = 3;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zminus ][3] = 2;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zminus ][4] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zminus ][0] = 0;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zminus ][1] = 1;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zminus ][2] = 3;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zminus ][3] = 2;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zminus ][4] = 0;
 
-    face_nodes[ CORNER_POINT_CELL_FACE_Zplus  ][0] = 4;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zplus  ][1] = 5;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zplus  ][2] = 7;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zplus  ][3] = 6;
-    face_nodes[ CORNER_POINT_CELL_FACE_Zplus  ][4] = 4;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zplus  ][0] = 4;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zplus  ][1] = 5;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zplus  ][2] = 7;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zplus  ][3] = 6;
+    face_nodes[ csmp::CORNER_POINT_CELL_FACE_Zplus  ][4] = 4;
 
     std::string fault_name,fault_name_a,fault_name_b;
     std::pair<std::map<std::string,std::vector<std::pair<size_t,size_t> > >::iterator,bool> faults_data_it;
@@ -1326,7 +1391,7 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
                     if( cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_ )
                     {
                         hexa_face_id = (*vit).second;
-                        if( poly[ hexa_cell_id ].GetNumPolygonFaceNodes( hexa_face_id ) > 2U )
+                        if( poly[ hexa_cell_id ].GetNumPolygonFaceNodes( hexa_face_id ) > (dim-1) )
                             fault_elmts_a.push_back( *vit );
                     }
 
@@ -1335,7 +1400,7 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
                     if( cell_activity_[hexa_cell_neighbor_id] == 1 || !exclude_inactive_cells_ )
                     {
                         hexa_face_neighbor_id = opposite_face[ hexa_face_id ];
-                        if( poly[ hexa_cell_neighbor_id ].GetNumPolygonFaceNodes( hexa_face_neighbor_id ) > 2U )
+                        if( poly[ hexa_cell_neighbor_id ].GetNumPolygonFaceNodes( hexa_face_neighbor_id ) > (dim-1) )
                             fault_elmts_b.push_back( std::make_pair( hexa_cell_neighbor_id, hexa_face_neighbor_id ) );
                     }
                 }
@@ -1371,12 +1436,12 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
 
         /// face for each direction
         std::vector<std::vector<size_t> > direction_faces(3, std::vector<size_t>( 2,0 ) );
-        direction_faces[ 0 ][ 0 ] = CORNER_POINT_CELL_FACE_Xplus;
-        direction_faces[ 0 ][ 1 ] = CORNER_POINT_CELL_FACE_Xminus;
-        direction_faces[ 1 ][ 0 ] = CORNER_POINT_CELL_FACE_Yplus;
-        direction_faces[ 1 ][ 1 ] = CORNER_POINT_CELL_FACE_Yminus;
-        direction_faces[ 2 ][ 0 ] = CORNER_POINT_CELL_FACE_Zplus;
-        direction_faces[ 2 ][ 1 ] = CORNER_POINT_CELL_FACE_Zminus;
+        direction_faces[ 0 ][ 0 ] = csmp::CORNER_POINT_CELL_FACE_Xplus;
+        direction_faces[ 0 ][ 1 ] = csmp::CORNER_POINT_CELL_FACE_Xminus;
+        direction_faces[ 1 ][ 0 ] = csmp::CORNER_POINT_CELL_FACE_Yplus;
+        direction_faces[ 1 ][ 1 ] = csmp::CORNER_POINT_CELL_FACE_Yminus;
+        direction_faces[ 2 ][ 0 ] = csmp::CORNER_POINT_CELL_FACE_Zplus;
+        direction_faces[ 2 ][ 1 ] = csmp::CORNER_POINT_CELL_FACE_Zminus;
 
         ///                  edge nodes         cell id , face id
         std::multimap<std::set<size_t>, std::pair<size_t,size_t> > nc;
@@ -1415,7 +1480,7 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
 
                             if( face_nidsA != face_nidsB )
                             {
-                                if( face_nidsA.size() > 2U )
+                                if( face_nidsA.size() > (dim-1) )
                                 {
                                     fault_faces.insert( face );
                                     for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
@@ -1427,7 +1492,7 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
                                             nc.insert( std::make_pair( edge, face ) );
                                     }
                                 }
-                                if( face_nidsB.size() > 2U )
+                                if( face_nidsB.size() > (dim-1) )
                                 {
                                     fault_faces.insert( nface );
                                     for( size_t nid = 0; nid < quad_fem_nodes; ++nid )
@@ -1730,7 +1795,7 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
                 for( size_t fid = 0; fid<num_sub_faces; ++fid )
                 {
                     const size_t num_face_nodes( poly[ hexa_cell_id ].GetNumFaceNodes( hexa_face_id, fid ) );
-                    if( num_face_nodes > 2U )
+                    if( num_face_nodes > (dim-1) )
                     {
                         /// fill VSet
                         vset.ResizePlist( cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType(
@@ -1761,14 +1826,13 @@ void CornerPointGrid::EstablishFaultRegions( csmp::VSet<3U>& vset,
 
 
 
-
-
-
-
-void CornerPointGrid::EstablishWellRegions(  csmp::VSet<3U>& vset,
-                                             csmp::ModelTopology& model_topology,
-                                             std::set<std::string>& wells,
-                                             const std::vector<CornerPointCell>& poly )
+template<size_t dim>
+void CornerPointGrid<dim>
+::EstablishWellRegions(  csmp::VSet<dim>& vset,
+                         csmp::ModelTopology& model_topology,
+                         std::set<std::string>& wells,
+                         const std::vector<CornerPointCell<3U> >& poly
+                      )
 {
     size_t                hexa_cell_id;
     size_t                nid1,nid2;
@@ -1860,11 +1924,13 @@ void CornerPointGrid::EstablishWellRegions(  csmp::VSet<3U>& vset,
 }
 
 
+template<size_t dim>
 template<class VarType>
-void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
-                                           const std::vector<VarType>& prop_data,
-                                           const std::string&          prop_name,
-                                           const csmp::PLACEMENT&      prop_place ) const
+void CornerPointGrid<dim>
+::WritePropertyToVSet( csmp::VSet<dim>&            vset,
+                       const std::vector<VarType>& prop_data,
+                       const std::string&          prop_name,
+                       const csmp::PLACEMENT&      prop_place ) const
  {
     /// correcting data cell id's due to existance of embedded cells
     VarType var;
@@ -1888,11 +1954,11 @@ void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
             // Add nodal data to vset
             std::vector<VarType> nodal_data;
             // TODO: why node property?
-            extrapolateElementToNodeProperty<3U,VarType>( vset, cell_data, nodal_data );
+            csmp::extrapolateElementToNodeProperty<dim,VarType>( vset, cell_data, nodal_data );
             //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
-            const size_t array_length = (var.Size() > 9U ) ? var.Size() : 0U;
+            const size_t array_length = (var.Size() > dim*dim ) ? var.Size() : 0U;
             assert( array_length == 1 );
-            PropertyData property_values( prop_place, VarType::VariableType, 3U, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( nodal_data.size() );
             for ( const auto& it : nodal_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );
@@ -1900,7 +1966,7 @@ void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
         else {
             // Add cell data to vset
             // csmp::FEM_Data<VarType> property_values( prop_place, cell_data );
-            PropertyData property_values( prop_place, VarType::VariableType, 3U, 0U );
+            PropertyData property_values( prop_place, VarType::VariableType, dim, 0U );
             property_values.Reserve( cell_data.size() );
             for ( const auto& it : cell_data ) pushBack( property_values, it );
             vset.AddData( prop_name.c_str(), property_values );
@@ -1909,21 +1975,13 @@ void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
     return;
  }
  
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-
-
-
-
 
 /**
      j = rows
      i = colums
 */
-void CornerPointGrid::Resize( size_t i_pillar_max, size_t j_pillar_max )
+template<size_t dim>
+void CornerPointGrid<dim>::Resize( size_t i_pillar_max, size_t j_pillar_max )
  {
     // vector<std::vector<Pillar> > pillars_;   ///< (subvertical) coordinate lines defining the pillars
     pillars_.resize( i_pillar_max );
@@ -1934,7 +1992,8 @@ void CornerPointGrid::Resize( size_t i_pillar_max, size_t j_pillar_max )
  
 /** accessing the contained pillars
 */
-Pillar& CornerPointGrid::operator()( size_t i, size_t j )
+template<size_t dim>
+Pillar& CornerPointGrid<dim>::operator()( size_t i, size_t j )
  {
     assert( i < pillars_.size() );
     assert( j < pillars_[i].size() );
@@ -1943,22 +2002,44 @@ Pillar& CornerPointGrid::operator()( size_t i, size_t j )
  }
  
  
+ 
 
+template void CornerPointGrid<1U>::WritePropertyToVSet(csmp::VSet<1U>&,const std::vector<csmp::ScalarVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<1U>::WritePropertyToVSet(csmp::VSet<1U>&,const std::vector<csmp::VectorVariable<1U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<1U>::WritePropertyToVSet(csmp::VSet<1U>&,const std::vector<csmp::TensorVariable<1U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<1U>::WritePropertyToVSet(csmp::VSet<1U>&,const std::vector<csmp::ArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<1U>::WritePropertyToVSet(csmp::VSet<1U>&,const std::vector<csmp::FlaggedArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
 
+template void CornerPointGrid<2U>::WritePropertyToVSet(csmp::VSet<2U>&,const std::vector<csmp::ScalarVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<2U>::WritePropertyToVSet(csmp::VSet<2U>&,const std::vector<csmp::VectorVariable<2U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<2U>::WritePropertyToVSet(csmp::VSet<2U>&,const std::vector<csmp::TensorVariable<2U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<2U>::WritePropertyToVSet(csmp::VSet<2U>&,const std::vector<csmp::ArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<2U>::WritePropertyToVSet(csmp::VSet<2U>&,const std::vector<csmp::FlaggedArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
 
+template void CornerPointGrid<3U>::WritePropertyToVSet(csmp::VSet<3U>&,const std::vector<csmp::ScalarVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<3U>::WritePropertyToVSet(csmp::VSet<3U>&,const std::vector<csmp::VectorVariable<3U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<3U>::WritePropertyToVSet(csmp::VSet<3U>&,const std::vector<csmp::TensorVariable<3U> >&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<3U>::WritePropertyToVSet(csmp::VSet<3U>&,const std::vector<csmp::ArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
+template void CornerPointGrid<3U>::WritePropertyToVSet(csmp::VSet<3U>&,const std::vector<csmp::FlaggedArrayVariable>&,const std::string&,const csmp::PLACEMENT&) const;
 
-
+template class CornerPointGrid<1U>;
+template class CornerPointGrid<2U>;
+template class CornerPointGrid<3U>;
 
 
 // BLOCK CENTERED GRID
 
-BlockCenteredGrid::BlockCenteredGrid()
+template<size_t dim>
+BlockCenteredGrid<dim>
+::BlockCenteredGrid()
 :dx_(3U)
 {
 
 }
 
-BlockCenteredGrid::BlockCenteredGrid( const BlockCenteredGrid& grid )
+template<size_t dim>
+BlockCenteredGrid<dim>
+::BlockCenteredGrid( const BlockCenteredGrid<dim>& grid )
 : NX_( grid.NX_ ),
   NY_( grid.NY_ ),
   NZ_( grid.NZ_ ),
@@ -1969,7 +2050,9 @@ BlockCenteredGrid::BlockCenteredGrid( const BlockCenteredGrid& grid )
 {
 }
 
-BlockCenteredGrid& BlockCenteredGrid::operator=( const BlockCenteredGrid& grid )
+template<size_t dim>
+BlockCenteredGrid<dim>& BlockCenteredGrid<dim>
+::operator=( const BlockCenteredGrid<dim>& grid )
 {
     if( this != &grid )
     {
@@ -1984,15 +2067,16 @@ BlockCenteredGrid& BlockCenteredGrid::operator=( const BlockCenteredGrid& grid )
     return *this;
 }
 
-
-
-BlockCenteredGrid::~BlockCenteredGrid()
+template<size_t dim>
+BlockCenteredGrid<dim>
+::~BlockCenteredGrid()
 {
+
 }
 
-
-
-void BlockCenteredGrid::Clear()
+template<size_t dim>
+void BlockCenteredGrid<dim>
+::Clear( )
 {
     /// grid
     tops_.clear();
@@ -2001,23 +2085,23 @@ void BlockCenteredGrid::Clear()
     dz_.clear();
 }
 
-
-
-size_t BlockCenteredGrid::GetNumCells() const
+template<size_t dim>
+size_t BlockCenteredGrid<dim>
+::GetNumCells() const
 {
     return NX_*NY_*NZ_;
 }
 
-
-
-std::vector<csmp::ScalarVariable>& BlockCenteredGrid::GetCellDepths()
+template<size_t dim>
+std::vector<csmp::ScalarVariable>& BlockCenteredGrid<dim>
+::GetCellDepths()
 {
     return tops_;
 }
 
-
-
-std::vector<ScalarVariable>& BlockCenteredGrid::GetCellSizes( size_t i )
+template<size_t dim>
+std::vector<ScalarVariable>& BlockCenteredGrid<dim>
+::GetCellSizes( size_t i )
 {
     if( i == 0 )
         return dx_;
@@ -2026,39 +2110,39 @@ std::vector<ScalarVariable>& BlockCenteredGrid::GetCellSizes( size_t i )
     return dz_;
 }
 
-
-
-void BlockCenteredGrid::AssignDimensionX( size_t NX )
+template<size_t dim>
+void BlockCenteredGrid<dim>
+::AssignDimensionX( size_t NX )
 {
     NX_ = NX;
 }
 
-
-
-void BlockCenteredGrid::AssignDimensionY( size_t NY )
+template<size_t dim>
+void BlockCenteredGrid<dim>
+::AssignDimensionY( size_t NY )
 {
     NY_ = NY;
 }
 
-
-
-void BlockCenteredGrid::AssignDimensionZ( size_t NZ )
+template<size_t dim>
+void BlockCenteredGrid<dim>
+::AssignDimensionZ( size_t NZ )
 {
     NZ_ = NZ;
 }
 
-
-
-
-void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
+template<size_t dim>
+void BlockCenteredGrid<dim>
+::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
 {
     const size_t NXY( NX_*NY_ );
     size_t cell_id(0);
-    double64 x_offset(0.0);
-    double64 y_offset(0.0);
-    double64 z_offset(0.0);
-    double64 dx(0.0);
-    double64 dy(0.0);
+    double x_offset(0.0);
+    double y_offset(0.0);
+    double z_offset(0.0);
+    double dx(0.0);
+    double dy(0.0);
+    double dz(0.0);
 
     csmp::Point<3U> pt;
     pillars.resize( (NY_ + 1), std::vector<Pillar>( NX_ + 1 ) );
@@ -2076,6 +2160,7 @@ void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<
 
                 dx = dx_[cell_id]();
                 dy = dy_[cell_id]();
+                dz = dz_[cell_id]();
 
                 z_offset = tops_[ cell_id ]();
 
@@ -2118,7 +2203,7 @@ void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<
 
                 dx = dx_[cell_id]();
                 dy = dy_[cell_id]();
-                double64 dz = dz_[cell_id]();
+                dz = dz_[cell_id]();
 
                 z_offset = ( ( k != NZ_-1 ) ? tops_[ cell_id + NXY ]() : tops_[ cell_id ]() + dz );
 
@@ -2157,9 +2242,9 @@ void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<
             pillars[ j ][ i ].AssignEnds( );
 }
 
-
-
-
+template class BlockCenteredGrid<1U>;
+template class BlockCenteredGrid<2U>;
+template class BlockCenteredGrid<3U>;
 
 
 // WELLS
@@ -2189,8 +2274,8 @@ void addWellPath( size_t NX, size_t NY, size_t NZ,
     for( size_t cid=0; cid<num_cells; ++cid )
     {
         size_t cell_id = cell_ids[ cid ];
-        direction.first  = CORNER_POINT_CELL_FACE_Zminus;
-        direction.second = CORNER_POINT_CELL_FACE_Zplus;
+        direction.first  = csmp::CORNER_POINT_CELL_FACE_Zminus;
+        direction.second = csmp::CORNER_POINT_CELL_FACE_Zplus;
         path.first  = cell_id;
         path.second = direction;
         wpath.push_back( path );
@@ -2239,9 +2324,6 @@ void addWellPath( const std::string& well_name,
     }
 }
 
-
-
-
 /// add well path with explicitly specified faces ( same for all cells )
 void addWellPath( const std::string& well_name,
                   const std::vector<size_t>& cell_ids,
@@ -2267,9 +2349,6 @@ void addWellPath( const std::string& well_name,
     }
 }
 
-
-
-
 /// add well path with explicitly specified faces ( for single cell )
 void addWellPath( const std::string& well_name,
                   size_t cell_id,
@@ -2287,8 +2366,6 @@ void addWellPath( const std::string& well_name,
     well_path.insert( std::make_pair( well_name, empty_path ) );
     well_path[ well_name ].push_back( path );
 }
-
-} // eclipse
 
 } // end namespace csmp
 

@@ -1,5 +1,5 @@
-#ifndef GEOMETRIC_CALCULATIONS_H
-#define GEOMETRIC_CALCULATIONS_H
+#ifndef GEOMETRIC_CALCULATIONS_UOM_H
+#define GEOMETRIC_CALCULATIONS_UOM_H
 
 #include <map>
 #include "Point.h"

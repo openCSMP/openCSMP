@@ -6,36 +6,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
-/**
-
-@class Pillar  Pillar "Pillar.h"
-@author R. Manasipov
-@date 2015
-
-Pillar objects are the main building blocks of corner point geometry.
-They store the x,y,z coordinates of the corner points for each layer
-of the grid. There is an origin point at the top far corner and 
-the direction which marks the (downward) path.
-
-Pillars are described by:
-
-    Pillar parametric equation in 3D: r=a+t*b, where
-    'a' - origin,
-    'b' - direction,
-     t  - scalar parameter
-
-Pillars stack up polygonal cells.
-Pillars are managed independently of the shape of the cell.
-They are essentially lines that connect sub-vertical cell edges imposing the 
-semi-structured (unstructured in plane, but structured in cross-section)
-shape of the pillar grid.
-
-Pillar objects are defined via COORD keyword
-Pillar objects are subdivided by ZCORN
-
-*/
 class Pillar {
   public:
 
@@ -102,10 +72,40 @@ class Pillar {
 
     /// cells data
     std::map<std::pair<size_t,size_t>,size_t> attached_cells_; ///< indices of attached cells (i,j)
-    std::vector<csmp::Point<3U> >  points_;                    ///< points, called beads
+    std::vector<csmp::Point<3U> >  points_;                    ///< points
 };
 
-} // eclipse
+
+/**
+
+@class Pillar  Pillar "Pillar.h"
+@author R. Manasipov
+@date 2015
+
+Pillar objects are the main building blocks of corner point geometry.
+They store the x,y,z coordinates of the corner points for each layer
+of the grid. There is an origin point at the top far corner and 
+the direction which marks the (downward) path.
+
+Pillars are described by:
+
+    Pillar parametric equation in 3D: r=a+t*b, where
+    'a' - origin,
+    'b' - direction,
+     t  - scalar parameter
+
+Pillars stack up polygonal cells.
+Pillars are managed independently of the shape of the cell.
+They are essentially lines that connect sub-vertical cell edges imposing the 
+semi-structured (unstructured in plane, but structured in cross-section)
+shape of the pillar grid.
+
+Pillar objects are defined via COORD keyword
+Pillar objects are subdivided by ZCORN
+
+@todo does this treat segmented lines as wells (stair steps?)
+
+*/
 
 }// end namespace csmp
 

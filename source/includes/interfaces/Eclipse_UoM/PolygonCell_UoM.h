@@ -1,8 +1,8 @@
-#ifndef POLYGON_CELL_H
-#define POLYGON_CELL_H
+#ifndef POLYGON_CELL_UOM_H
+#define POLYGON_CELL_UOM_H
 
 #include "Point.h"
-#include "PolygonGrid.h"
+#include "PolygonGrid_UoM.h"
 
 namespace csmp {
 

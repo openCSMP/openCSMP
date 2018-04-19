@@ -1,9 +1,9 @@
-#ifndef CORNER_POINT_GRID_H
-#define CORNER_POINT_GRID_H
+#ifndef CORNER_POINT_GRID_UOM_H
+#define CORNER_POINT_GRID_UOM_H
 
 #include "VSet.h"
 #include "ModelTopology.h"
-#include "CornerPointCell.h"
+#include "CornerPointCell_UoM.h"
 
 namespace csmp {
 

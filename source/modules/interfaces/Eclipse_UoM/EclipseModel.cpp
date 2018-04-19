@@ -1,4 +1,4 @@
-#include "EclipseModel.h"
+#include "EclipseModel_UoM.h"
 #include "ModelTime.h"
 #include "variableOperations.h"
 
@@ -10,7 +10,7 @@ namespace eclipse {
 
 /// Model constructor with provided "variables_file.txt" file is used
 EclipseModel::EclipseModel( const std::string& model_name,
-                                 const std::string& variables_file )
+                            const std::string& variables_file )
 : csmp::Model<3U>( variables_file.c_str(), false ),
   eclipse_model_settings_( model_name )
 {

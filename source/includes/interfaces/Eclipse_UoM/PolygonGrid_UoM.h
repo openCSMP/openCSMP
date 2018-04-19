@@ -1,5 +1,5 @@
-#ifndef POLYGON_GRID_H
-#define POLYGON_GRID_H
+#ifndef POLYGON_GRID_UOM_H
+#define POLYGON_GRID_UOM_H
 
 #include "Point.h"
 #include "FiniteElement.h"

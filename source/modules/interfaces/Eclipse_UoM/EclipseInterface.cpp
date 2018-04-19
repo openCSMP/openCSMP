@@ -1,4 +1,4 @@
-#include "EclipseInterface.h"
+#include "EclipseInterface_UoM.h"
 
 #include "Region.h"
 #include "Boundary.h"
