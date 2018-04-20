@@ -200,9 +200,9 @@ bool EclipseInterface<dim>::ReadFile( csmp::VSet<dim>& vset,
     grid_.TetraMesh( tetra_mesh );
     grid_.ExcludeInactiveCells( exclude_inactive_cells );
 
-    // 2. Read file
     ClearBefore();
 
+    // 2. Read file
     if( !ReadFile( ifs, line_length ) ) {
         csmp_error.notice( csmp::FATAL_ERROR, "EclipseInterface<dim>::","File could not be properly read!!!");
         return false;
@@ -3274,10 +3274,18 @@ char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
 
 
 /**
-     ReadPillarCoordinates -> Read_COORD
+    ReadPillarCoordinates -> Read_COORD
      
+    COORD = coordinate lines, x,y,z... x pointing east, y south, and z down.
+
+   “book order”, line after line until a page has been read,
+    then the next page until all data has been read. i.e.
+    first the top layer (K=1) is read, line by line 
+    (begin with J=1, read I=1,...,NX, then J=2, etc.) 
+    Then repeat for K=2,...,NZ.
+ 
      NX number of cells in x-direction (E)
-     Ny number of cells in y-direction (S)
+     NY number of cells in y-direction (S)
      
      pillar grid is y-first (rows), then x (columns) then z (3rd dim= downwards)
      
