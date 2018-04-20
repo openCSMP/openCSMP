@@ -98,13 +98,15 @@ using namespace std;
 using namespace csmp;
 
 TEST_CASE("Development tests", "[Dev]") {
-  PropertyAtPointVisitor_Test test(true);
+  Operand_Test test;
+  // PropertyAtPointVisitor_Test test(true);
     // ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
     // FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
+  std::cerr << "Size of Node<3u> is " << sizeof(Node<3u>) << '\n';
     test.run();
 
  //   ANSYS_Model2D_Test test;

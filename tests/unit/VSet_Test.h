@@ -188,11 +188,11 @@ void VSet_Test::run()
 
 
   // BOUNDARY FLAGS
-  std::map<size_t,long64> bfmap;
+  std::unordered_map<size_t,long64> bfmap;
   for( size_t i = 0; i < 13; ++i )
     bfmap.insert( std::make_pair( i, 99 ) );
   vset4.AddBFlags( bfmap.begin(), bfmap.end() );
-  for( std::map<size_t,long64>::const_iterator it = vset4.BFlagsBegin(); it != vset4.BFlagsEnd(); ++it )
+  for( auto it = vset4.BFlagsBegin(); it != vset4.BFlagsEnd(); ++it )
     _test( it->second == 99 );
 
   // .)ITERATORS

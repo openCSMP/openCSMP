@@ -187,10 +187,10 @@ class VData {
     std::vector<long64>::iterator                 PfvertsBegin( size_t eidx );
     std::vector<long64>::iterator                 PfvertsEnd( size_t eidx );
 
-    std::map<size_t,long64>::iterator             BFlagsBegin();
-    std::map<size_t,long64>::iterator             BFlagsEnd();
-    std::map<size_t,long64>::const_iterator       BFlagsBegin() const;
-    std::map<size_t,long64>::const_iterator       BFlagsEnd() const;
+    std::unordered_map<size_t,long64>::iterator       BFlagsBegin();
+    std::unordered_map<size_t,long64>::iterator       BFlagsEnd();
+    std::unordered_map<size_t,long64>::const_iterator BFlagsBegin() const;
+    std::unordered_map<size_t,long64>::const_iterator BFlagsEnd() const;
 
     // const iterators
     std::vector<int32>::const_iterator                 PelmtBegin() const;
@@ -199,6 +199,8 @@ class VData {
     std::deque<std::vector<size_t> >::const_iterator   PlistEnd() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsEnd() const;
+  
+    bool WithNeighbourConnectivity() const { return !pfverts.empty(); }
 
     std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
     std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
@@ -264,7 +266,7 @@ class VData {
     std::vector<double64>             px, py, pz;        ///< node coordinates
     std::deque<std::vector<size_t> >  plist;             ///< nodes of each element
     std::deque<std::vector<long64> >  pfverts;           ///< element neighbors; same range as eidx, but also negative values possible
-    std::map<size_t,long64>           bflags;            ///< flags for those nodes that lie on model boundary
+    std::unordered_map<size_t,long64> bflags;            ///< flags for those nodes that lie on model boundary
     size_t                            first_interface_;  ///< faces come after elements; if none this is equal to elements
     size_t                            first_face_;       ///< interfaces come after faces; if none this is equal to elements 
 

@@ -13,8 +13,9 @@ namespace csmp {
 /// default constructor: not hybrid, no nodes, nor elements
 VData::VData()
  : hybrid_mesh_(false),
-   first_face_(0U),
-   first_interface_(0U)
+   bflags(),
+   first_interface_(0U),
+   first_face_(0U)
  {
  }
 
@@ -302,10 +303,10 @@ std::deque<std::vector<long64> >::iterator VData::PfvertsBegin()
 std::deque<std::vector<long64> >::iterator VData::PfvertsEnd()
  { return pfverts.end(); }
 
-std::map<size_t,long64>::iterator VData::BFlagsBegin()
+std::unordered_map<size_t,long64>::iterator VData::BFlagsBegin()
  { return bflags.begin(); }
 
-std::map<size_t,long64>::iterator VData::BFlagsEnd()
+std::unordered_map<size_t,long64>::iterator VData::BFlagsEnd()
  { return bflags.end(); }
 
 
@@ -336,10 +337,10 @@ std::deque<std::vector<long64> >::const_iterator VData::PfvertsBegin() const
 std::deque<std::vector<long64> >::const_iterator VData::PfvertsEnd() const
  { return pfverts.end(); }
 
-std::map<size_t,long64>::const_iterator VData::BFlagsBegin() const
+std::unordered_map<size_t,long64>::const_iterator VData::BFlagsBegin() const
  { return bflags.begin(); }
 
-std::map<size_t,long64>::const_iterator VData::BFlagsEnd() const
+std::unordered_map<size_t,long64>::const_iterator VData::BFlagsEnd() const
  { return bflags.end(); }
 
 void VData::AddBFlag( size_t node_id, long64 bflag )
@@ -913,8 +914,7 @@ bool VData::CheckFix()
      cout <<"\nVData::Check: No boundary nodes could be identified..."<< endl;
    else {
 	    size_t  counter(0U);
-	    for ( map<size_t,long64>::iterator
-	          bf=bflags.begin(); bf!=bflags.end(); bf++ )
+	    for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
 	      if ( (*bf).second < REGION_BOUNDARY ) {
 	            (*bf).second = REGION_BOUNDARY;
 	            counter++;
@@ -965,14 +965,13 @@ void VData::EstablishZeroBasedNumbering()
         if ( *n > 0 ) *n -= 1;
 
     // bconds
-    map<size_t,long64>  temp;
-    const map<size_t,long64>::const_iterator bflagsEnd(bflags.end());
-    for ( map<size_t,long64>::const_iterator
-          it=bflags.begin(); it!=bflagsEnd; it++ )
+    unordered_map<size_t,long64>  temp;
+    const auto bflagsEnd(bflags.end());
+    for ( auto it=bflags.begin(); it!=bflagsEnd; it++ )
       // TODO: check whether the -1 is still correct
       temp.insert( make_pair( (*it).first-1U, (*it).second ) );
     
-    bflags = temp;
+   std::swap(bflags, temp);
     
  } // end EstablishZeroBasedNumbering
 
@@ -1038,7 +1037,7 @@ void VData::OutBinary( FILE* fp ) const
    }
    {
      BinaryFileSectionWrite sect(fp, "VSETBFLG");
-    skm_C_fwrite( fp, bflags );
+     skm_C_fwrite( fp, bflags );
    }
    
     // 4. offsets for faces and interfaces
@@ -1197,8 +1196,7 @@ void VData::OutASCII( const char* file ) const
      // bflags
      // ------
      if ( !bflags.empty() ) ofs <<"\nBoundary flags 'bflags':"<< endl;
-     for ( map<size_t,long64>::const_iterator
-           bf=bflags.begin(); bf!=bflags.end(); bf++ )
+     for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
        ofs << (*bf).first <<": \t"<< (*bf).second << endl;
        
      cout <<"\nVData::OutASCII: ascii file '"<< file_name <<"' written successfully."<< endl;
@@ -1272,8 +1270,7 @@ void VData::Out() const
      // bflags
      // ------
      if ( !bflags.empty() ) cout <<"\nBoundary flags 'bflags':"<< endl;
-     for ( map<size_t,long64>::const_iterator
-           bf=bflags.begin(); bf!=bflags.end(); bf++ )
+     for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
        cout << (*bf).first <<": \t"<< (*bf).second << endl;
 
   } // end Out()
@@ -1787,15 +1784,14 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, map<size_t,size_t>
 
          // 5. updating boundary flags
          // --------------------------
-         map<size_t,long64>  new_bflags;
-         for ( map<size_t,long64>::const_iterator bit=bflags.begin(); bit!=bflags.end(); bit++ ) {
-              map<size_t,size_t>::const_iterator nit=o_n_node_ids.find( (*bit).first );
+         unordered_map<size_t,long64>  new_bflags;
+         for ( auto bit=bflags.begin(); bit!=bflags.end(); bit++ ) {
+              auto nit=o_n_node_ids.find( (*bit).first );
               if ( nit!=o_n_node_ids.end() )
                 //                             new node idx  old bflag
                 new_bflags.insert( make_pair( (*nit).second, (*bit).second ) );
            }
-         bflags = new_bflags;
-         new_bflags.clear();
+        std::swap(bflags, new_bflags);
       }
 
     // 6. updating the 'mixed_mesh' boolean variable

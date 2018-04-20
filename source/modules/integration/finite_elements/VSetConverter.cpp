@@ -85,10 +85,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      // -----------------------------------------------------
      FlagCornerNodes( vset );
      
-     map<size_t,long64>  bflags;
+     unordered_map<size_t,long64>  bflags;
       
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )  
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        bflags[ (*bit).first ] = (*bit).second;
 
      // 3. looping through plist:
@@ -265,10 +264,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
          
      // 2. copying already existing boundary flags and values
      // -----------------------------------------------------
-     map<size_t,long64>  bflags;
+     unordered_map<size_t,long64>  bflags;
       
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )  
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        bflags[ (*bit).first ] = (*bit).second;
     
      // 3. looping through plist:
@@ -482,10 +480,9 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
      // -----------------------------------------------------
      FlagCornerNodes( vset );
      
-     map<size_t,long64>  bflags;
+     unordered_map<size_t,long64>  bflags;
       
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )  
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        bflags[ (*bit).first ] = (*bit).second;
 
      // 3. looping through plist:
@@ -652,12 +649,12 @@ At this stage the corner nodes have not been identified yet !.
  
 tested: O.K. */
 template<size_t dim>
-int  VSetConverter<dim>::TestForBoundaryFlags( const map<size_t,long64>& bflags,
+int  VSetConverter<dim>::TestForBoundaryFlags( const unordered_map<size_t,long64>& bflags,
                                                size_t nID1, size_t nID2 ) const
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-      typename map<size_t,long64>::const_iterator  bit;
+      typename unordered_map<size_t,long64>::const_iterator  bit;
       long64                                       flag1, flag2;
       
       if ( (bit=bflags.find(nID1)) != bflags.end() ) flag1 = (*bit).second;
@@ -719,11 +716,11 @@ int  VSetConverter<dim>::TestForBoundaryFlags( const map<size_t,long64>& bflags,
 
 // tested: O.K. SKM 4/3/02
 template<size_t dim>
-long64  VSetConverter<dim>::BoundaryFlags3D( const map<size_t,long64>& bflags,
+long64  VSetConverter<dim>::BoundaryFlags3D( const unordered_map<size_t,long64>& bflags,
                                              size_t nID1, size_t nID2 ) const
   {
       assert( dim == 3U );
-      typename map<size_t,long64>::const_iterator  bit;
+      typename unordered_map<size_t,long64>::const_iterator  bit;
       long64  flag1, flag2;
       
       // finding the boundary flags of the supplied nodes
@@ -1225,8 +1222,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
      // and flagging them accordingly
      if ( !three_dimensional ) 
        {
-         for ( typename map<size_t,long64>::iterator
-               bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+         for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
            {
               if ( (*bit).first == 0U  or  (*bit).second == IRREGULAR ) {
                    csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
@@ -1261,8 +1257,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
      // and flagging them accordingly
      const double64 tol(5.0e-3); // 5 mm to deal with potential imprecision of ANSYS Tetra
 
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        {
           if ( (*bit).first == 0U  or  (*bit).second == IRREGULAR ) {
                csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
@@ -1422,7 +1417,7 @@ void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double64 tol ) const
      // are splitting up triangles that belong to two boundaries so that
      // they belong to only one side
      
-     for ( typename map<size_t,long64>::iterator bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        {
           // no flagging at all
           if ( (*bit).first == 0 || (*bit).second == IRREGULAR )
@@ -1707,10 +1702,9 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
      FlagCornerNodes( vset, true );
      FlagEdges( vset );
      
-     map<size_t,long64>  bflags;
+     unordered_map<size_t,long64>  bflags;
 
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )  
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        bflags[ (*bit).first ] = (*bit).second;
 
      // 3. looping through plist:
@@ -2058,10 +2052,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
      // 2. copying already existing boundary flags and values
      //    after flagging the corner nodes and the edges
      // -----------------------------------------------------
-     map<size_t,long64>  bflags;
+     unordered_map<size_t,long64>  bflags;
       
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )  
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        bflags[ (*bit).first ] = (*bit).second;
 
      // 3. looping through plist:
@@ -2322,7 +2315,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
        }
 
      // making new boundary conditions
-     map<size_t,long64>  new_bflags;
+     unordered_map<size_t,long64>  new_bflags;
 
      for ( size_t i=0U; i<vset.Vertices(); i++ )  
        if ( approximatelyEqual(vset.Px(i),xmin,tol) ||
@@ -2341,8 +2334,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
      // 2. flagging the sides of the model using the user-defined
      //    tolerances (the edges are dealt with later)
      // ---------------------------------------------------------
-     for ( typename map<size_t,long64>::iterator
-           bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+     for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
        {
           // bottom (y=ymin)
           if      ( approximatelyEqual(vset.Py( (*bit).first ),ymin,tol) ) (*bit).second = BOTTOM_OUTSIDE;

@@ -25,7 +25,7 @@ class TRIANGLE_Interface {
     
     void ReadNodeDataFile( const char* file, 
                            std::deque<double64>& x, std::deque<double64>& y, std::deque<double64>& z,
-                           std::map<size_t,long64>&  bflags, std::map<size_t,double64>& bvalues );
+                           std::unordered_map<size_t,long64>&  bflags, std::map<size_t,double64>& bvalues );
 
     void ReadElementDataFile( const char* file, 
                               std::map<size_t,std::vector<size_t> >& plist,
@@ -45,7 +45,7 @@ class TRIANGLE_Interface {
 
     void FlagBoundaryNodes( std::map<size_t,std::vector<long64> >& pfverts,
                             std::map<size_t,std::vector<size_t> >& plist, 
-                            std::map<size_t,long64>& bflags );
+                            std::unordered_map<size_t,long64>& bflags );
                      
     void SplitSingleCornerElements( std::map<size_t,std::vector<size_t> >& plist, 
                                     std::map<size_t,std::vector<long64> >& pfverts, 
@@ -65,9 +65,9 @@ class TRIANGLE_Interface {
 
     void FlagBoundaryNodesAccordingTo( size_t fvert, long64 bflag,
                                        const std::vector<size_t>& nds, 
-                                       std::map<size_t,long64>& bflags );
+                                       std::unordered_map<size_t,long64>& bflags );
     
-    void FlagCornerNodes( std::map<size_t,long64>& bflags,
+    void FlagCornerNodes( std::unordered_map<size_t,long64>& bflags,
                           std::deque<double64>& x, std::deque<double64>& y, std::deque<double64>& z );  
  };
 

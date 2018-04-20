@@ -1076,7 +1076,7 @@ void recreateBoxBoundaryFlags( Model<3>& model )
          (*corner6.begin())->AtBoundary(CNR6);
          cout <<"\nrecreateBoxBoundaryFlags: found CNR6 (max_x,min_y,max_z)";
       }
-  
+
     // CNR7
     vector<Node<3>*> corner7;
     set_intersection( front_right.begin(), front_right.end(),
@@ -1117,8 +1117,7 @@ void recreateBoxBoundaryFlags( Model<3>& model )
          cout <<"\nrecreateBoxBoundaryFlags: found CNR8 (min_x,max_y,max_z)";
       }
     cout << endl;
-   
-   
+
     // Flagging the elements on the perimeter of model (assuming that the interior ones are already flagged correctly as NOT)
     // Elements are flagged according to the flagging of the nodes on their boundary faces
     Region<3>&  model_domain(model.Region("Model"));

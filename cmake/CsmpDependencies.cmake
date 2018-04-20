@@ -30,6 +30,6 @@ endforeach()
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SAMG DEFAULT_MSG SAMG_INCLUDE_DIR SAMG_LIBRARIES)
 mark_as_advanced(SAMG_INCLUDE_DIR SAMG_LIBRARIES)
-include_directories(SAMG_INCLUDE_DIR)
+include_directories(${SAMG_INCLUDE_DIR})
 
 

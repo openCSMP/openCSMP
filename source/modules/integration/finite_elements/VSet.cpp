@@ -230,8 +230,8 @@ void VSet<dim>::AddPfverts( typename deque<vector<long64> >::const_iterator firs
     BOX_BOUNDARY flags as values.
 */
 template<size_t dim>
-void VSet<dim>::AddBFlags( typename map<size_t,long64>::const_iterator first,
-                           typename map<size_t,long64>::const_iterator last )
+void VSet<dim>::AddBFlags( typename unordered_map<size_t,long64>::const_iterator first,
+                           typename unordered_map<size_t,long64>::const_iterator last )
  {
    while( first != last )
       {
