@@ -301,8 +301,7 @@ Reports if the solution matrix contains zero diagonal entries.
                cout << endl;
                cout.unsetf( ios::scientific );
                cout.precision(prec);
-               A.Out();
-               throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
+                throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
             }
         
           // setting matrix such that diagonal element is at the beginning of next row 

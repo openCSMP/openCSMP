@@ -116,7 +116,7 @@ class FiniteVolumeStencil {
     const Point<dim>&  SectorPoint( size_t iSector, size_t iPoint ) const;
   
     /// pairs of sector edge points definining the intersection lines of the sector with the finite element faces
-    const std::pair<Point<dim>,Point<dim> >&  SectorEdgePoints( size_t iSector, size_t iEdge ) const;
+    std::pair<Point<dim>,Point<dim> >  SectorEdgePoints( size_t iSector, size_t iEdge ) const;
   
     /// pairs of the ids (0..n-1) of the sector edge point definining the intersection lines of the sector with the finite element faces
     const std::pair<size_t,size_t>&  SectorEdge( size_t iSector, size_t iEdge ) const;

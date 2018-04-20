@@ -27,10 +27,10 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     CUBIC_BAR, 										                      // BAR_4  
                     LINEAR_TRIANGLE,   
                     LINEAR_TRIANGLE3D, 									                // TRI_3            = 8,
-					LINEAR_QUADRILATERAL,
-					LINEAR_CUBOID,
-					LINEAR_RECTANGLE,
-					BARYCENTRIC_LINEAR_TRIANGLE, 			    	           	// TRI_3_X          = 9,
+					          LINEAR_QUADRILATERAL,
+					          LINEAR_CUBOID,
+					          LINEAR_RECTANGLE,
+					          BARYCENTRIC_LINEAR_TRIANGLE, 			    	           	// TRI_3_X          = 9,
                     QUADRATIC_TRIANGLE, 								                // 2D & 3D TRI_6    = 10,
                     BARYCENTRIC_QUADRATIC_TRIANGLE, 					          // TRI_6_X          = 11,
                     CUBIC_TRIANGLE,
@@ -73,7 +73,6 @@ enum CSMP_FEM_TYPE{ UNKNOWN,
                     POLYGONAL_ELEMENT,
                     POLYHEDRAL_ELEMENT,
                     EXPERIMENTAL_ELEMENT,
-					
 };
 
 enum ELEMENT_DIMENSION { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
