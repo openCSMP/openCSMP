@@ -564,7 +564,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
    // --------------------------------------------------------------------------------------
    deque<vector<long64> > pfverts( triangles.size() );
    vector<long64>         pfvert(  triangle.Neighbors() );
-   map<size_t,long64>     pbflags;
+   unordered_map<size_t,long64> pbflags;
    vector<double64>       nd1(3), nd2(3), nd3(3);
    char                   face_key[30];
 
@@ -691,7 +691,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
        pfverts[ (*plit).first ] = pfvert;
     }
 
-  typename map<size_t,long64>::const_iterator  bflit;
+  typename unordered_map<size_t,long64>::const_iterator  bflit;
   if ( debug ) 
     {
        cout <<"\nDetermined boundary flags:"<< endl; 
@@ -1510,7 +1510,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
    // --------------------------------------------------------------------------------------
    deque<vector<long64> > pfverts( tetrahedra.size() );
    vector<long64>         pfvert(  tetrahedron.Neighbors() );
-   map<size_t,long64>     pbflags;
+   unordered_map<size_t,long64> pbflags;
    vector<double64>       nd1(3), nd2(3), nd3(3), nd4(3);
    char                   face_key[30];
 
@@ -1681,8 +1681,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
   if ( verbose )
     {
        cout <<"\nDetermined boundary flags:"<< endl; 
-       for ( typename map<size_t,long64>::const_iterator
-             bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
+       for ( auto bflit=pbflags.begin(); bflit!=pbflags.end(); bflit++ )
          cout <<"\nNode: "<< (*bflit).first <<" flagged: "<< (*bflit).second;
        cout << endl; 
     }
@@ -1742,8 +1741,7 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
     ymin = ymax = vset.Py( (*vset.BFlagsBegin()).first );
     zmin = zmax = vset.Pz( (*vset.BFlagsBegin()).first );
     
-    for ( typename map<size_t,long64>::iterator
-          bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
       { 
          if ( xmin > vset.Px( (*bit).first ) ) xmin = vset.Px( (*bit).first );
          if ( xmax < vset.Px( (*bit).first ) ) xmax = vset.Px( (*bit).first );
@@ -1763,8 +1761,7 @@ void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
       }
       
     // 3. Flagging the edge nodes according to their coordinates 
-    for ( typename map<size_t,long64>::iterator
-          bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
+    for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++ )
       // ignoring nodes which were already identified as model corners 
       if ( (*bit).second != CNR_MIN      && (*bit).second != CNR_MAX &&
            (*bit).second != CNR_MIN_MAXX && (*bit).second != CNR_MIN_MAXXZ &&

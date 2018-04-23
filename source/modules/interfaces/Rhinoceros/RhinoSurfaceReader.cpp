@@ -254,7 +254,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
 
 void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >& plist,
                                                   map<size_t,vector<long64> >& pfverts,
-                                                  map<size_t,long64>& pbflags ) const
+                                                  unordered_map<size_t,long64>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
      map<pair<size_t,size_t>,long64>              edge_map;
@@ -495,7 +495,7 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
     PopObject( object.c_str(), points, plist );
     
     // create 'pfverts' data
-    map<size_t,long64>  pbflags;
+    unordered_map<size_t,long64>  pbflags;
     map<size_t,vector<long64> >  pfverts;
 
     CreateNeighborPData( plist, pfverts, pbflags );
@@ -512,8 +512,7 @@ void SKM_RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) c
     vset.SingleElementType( LINEAR_TRIANGLE3D );
 
     // px, py, pz
-    for ( map<size_t,mjl::Point3D>::const_iterator
-          ptit=points.begin(); ptit!=points.end(); ptit++ )
+    for ( auto ptit=points.begin(); ptit!=points.end(); ptit++ )
       {
          vset.Px( (*ptit).first, (*ptit).second.x_ );
          vset.Py( (*ptit).first, (*ptit).second.y_ );

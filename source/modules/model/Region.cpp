@@ -359,7 +359,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
       }
 
     // 4. writing nodal boundary flags
-    map<size_t,long64>  bflags;
+    unordered_map<size_t,long64>  bflags;
 
     for ( size_t i=this->first_bd_node_; i<this->node_vec_.size(); i++ )
       bflags.insert( make_pair( i, this->node_vec_[i]->AtBoundary() ) );

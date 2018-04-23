@@ -87,8 +87,8 @@ class VSet : public VData {
 
     void RemoveData( const char* s );
 
-    void AddBFlags( typename std::map<size_t,long64>::const_iterator first,
-                    typename std::map<size_t,long64>::const_iterator last );
+    void AddBFlags( typename std::unordered_map<size_t,long64>::const_iterator first,
+                    typename std::unordered_map<size_t,long64>::const_iterator last );
 
     /// writes complete VSet to binary file with the given time stamp
     bool  OutputTo( const char* bin_file, double64 time ) const;

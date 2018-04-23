@@ -31,23 +31,24 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     message(STATUS "The compiler is Clang")
-    if (CMAKE_HOST_APPLE)
+    set(COMMON_CXX_FLAGS "-fno-common -fshort-enums -funroll-loops -fvisibility-inlines-hidden -std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal")
+     if (CMAKE_HOST_APPLE)
 	# MacBooks are a little behind other platforms
 	set(PLATFORM_ARCH "-march=core2")
     else()
-	set(PLATFORM_ARCH "-march=corei7")
+	set(PLATFORM_ARCH "-march=corei7 -msse4.2")
     endif()
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal ${PLATFORM_ARCH} -O3 -DNDEBUG"
+	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O3 -DNDEBUG"
 	)
-    elsif (CMAKE_BUILD_TYPE STREQUAL "Profile")
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal ${PLATFORM_ARCH} -O3 -DNDEBUG"
+	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O3 -DNDEBUG"
 	)
     else()
         set(PLATFORM_CXX_FLAGS
-	    "-std=c++14 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal ${PLATFORM_ARCH} -O0 -DDEBUG"
+	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O0 -DDEBUG"
 	)
     endif()
     set(COMPILER_LDFLAGS)
@@ -55,7 +56,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "The compiler is GNU")
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -fomit-frame-pointer -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DNDEBUG")
-    elsif (CMAKE_BUILD_TYPE STREQUAL "Profile")
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
         set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -fomit-frame-pointer -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DNDEBUG -pg")
     else()
 	set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DDEBUG")

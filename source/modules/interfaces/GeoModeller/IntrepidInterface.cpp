@@ -167,7 +167,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	// for each element contains for each face the neighbour element
 	vset.AddPfverts(pfverts.begin(), pfverts.end());
 
-	map< size_t, long64> pbflags; // boundary type
+	unordered_map< size_t, long64> pbflags; // boundary type
 	for (int i = 0; i<n_vertices; i++)
 		pbflags.insert(make_pair(i, IRREGULAR_OUTSIDE));
 	vset.AddBFlags(pbflags.begin(), pbflags.end());

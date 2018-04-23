@@ -70,6 +70,9 @@ bool skm_C_fread( std::FILE* fp, std::deque<std::vector<T> >& stl_ctner );
 
 template<class M, class T>
 bool skm_C_fwrite( std::FILE* fp, const std::map<M,T>& stl_ctner );
+  
+template<class M, class T>
+bool skm_C_fwrite( std::FILE* fp, const std::unordered_map<M,T>& stl_ctner );
 
 template<class M, class T>
 bool skm_C_fread( std::FILE* fp, std::map<M,T>& stl_ctner );
@@ -468,6 +471,7 @@ bool skm_C_fwrite( std::FILE* fp, const std::map<M,T>& stl_ctner )
  }
  
  
+  
 
 /**
 
@@ -549,7 +553,150 @@ bool skm_C_fread( std::FILE* fp, std::map<M,T>& stl_ctner )
  }
   
  
-
+  /**
+   
+   Uses the C-style fwrite() function for binary file IO to write the contents
+   of an STL unordered_map to a binary file. The data segment is preceded
+   by an 'unsigned long' number which determines the number of objects
+   which are written to file. Each record is preceded by the
+   corresponding map key.
+   
+   @section arguments Input Arguments
+   
+   A file pointer of a binary file opened in write mode (e.g., "wb") and a
+   constant reference to the STL map which will be written to
+   file.
+   
+   @return a boolean indicating whether all data have
+   been written correctly to the file.
+   
+   @section implementation Implementation
+   
+   Uses the ANSI standard C function fwrite(). NOTE that the map key must
+   not contain any dynamically allocated data. Otherwise these data are
+   sliced of the binary record.
+   
+   @section application Application
+   
+   To efficiently write map data to a binary file.
+   
+   @section messages Messages
+   
+   If the file pointer is invalid, method will quit, reporting an error.
+   */
+  template<class M, class T>
+  bool skm_C_fwrite( std::FILE* fp, const std::unordered_map<M,T>& stl_ctner )
+  {
+    if ( fp == NULL )
+    {
+      std::cerr <<"\nbool skm_C_fwrite(const map<M,T,less<M> >&): ";
+      std::cerr <<"ERROR: invalid file pointer."<< std::endl;
+      return false;
+    }
+    typename std::unordered_map<M,T>::const_iterator  it;
+    size_t      elements = stl_ctner.size();
+    size_t         bytesM    = sizeof(M);
+    size_t         bytesT    = sizeof(T);
+    M              key;
+    T              val;
+    
+    // writing the number of vector objects
+    std::fwrite( (void*) &elements, sizeof(size_t), 1, fp );
+    
+    // writing all key-value pairs
+    for ( it=stl_ctner.begin(); it!=stl_ctner.end(); it++ )
+    {
+      key = (*it).first;
+      val = (*it).second;
+      std::fwrite( (void*) &key, bytesM, 1, fp );
+      std::fwrite( (void*) &val, bytesT, 1, fp );
+    }
+    return true;
+  }
+  
+  
+  
+  
+  /**
+   
+   Reads an STL unordered_map from a binary file. The map
+   is erased before adding the data if it already contains data. How many
+   records are read is specified by an 'unsigned long' number which precedes
+   the dataset.
+   
+   @section arguments Input Arguments
+   
+   A pointer to a binary file opened in read binary mode ("rb"), and a
+   reference to an STL map.
+   
+   @return skm_C_fread() returns the boolean 'true' if the number of data records
+   which precedes the dataset in the file has been read correctly. If the
+   file pointer is invalid or less data are read, the function returns false.
+   
+   @section implementation Implementation
+   
+   Uses the ANSI C function fread(). The map which will hold the
+   data is erased if it is not empty. Storage is reserved for the new number
+   of elements which is read from file. Then the elements are read and the
+   container is returned.
+   
+   @section application Application
+   
+   Efficiently read data into an STL map.
+   
+   @section messages Messages
+   
+   The function will return false if (1) the file pointer is invalid, (2)
+   the number of data records cannot be read correctly, and (3) if this
+   number does not match the number of records which were actually read.
+   */
+  template<class M, class T>
+  bool skm_C_fread( std::FILE* fp, std::unordered_map<M,T>& stl_ctner )
+  {
+    if ( !stl_ctner.empty() )
+      stl_ctner.erase( stl_ctner.begin(), stl_ctner.end() );
+    
+    if ( fp == NULL )
+    {
+      std::cerr <<"\nbool skm_C_fread(map<M,T>&): ";
+      std::cerr <<"ERROR: invalid file pointer."<< std::endl;
+      return false;
+    }
+    size_t         bytesM = sizeof(M),
+    bytesT = sizeof(T),
+    counterM(0), counterT(0);
+    size_t      elements(0), i;
+    M              key;
+    T              val;
+    
+    // 1. read number of record in the map and assert reading
+    if ( !fread( (void*) &elements, sizeof(size_t), 1, fp ) ) {
+      std::cout <<"\nbool skm_C_fread(map<M,T>&): ";
+      std::cout <<"ERROR: could not read record length."<< std::endl;
+      return false;
+    }
+    if ( elements > 0 ) {
+      // 2. reading all map records
+      for ( i=0; i<elements; i++ )
+      {
+        // reading key
+        if ( std::fread( (void*) &key, bytesM, 1, fp ) ) counterM++;
+        // reading value
+        if ( std::fread( (void*) &val, bytesT, 1, fp ) ) counterT++;
+        // storing value in map after key
+        stl_ctner[ key ] = val;
+      }
+    }
+    if ( counterM != elements || counterT != elements ) {
+      std::cerr <<"\nbool skm_C_fread(vector<map<M,T>&): ";
+      std::cerr <<"ERROR: incorrect number of map records were read: ";
+      std::cerr <<"\nIndicated number: "<< elements <<", actual number read: "<< counterM << std::endl;
+      return false;
+    }
+    return true;
+  }
+  
+  
 
 
 /**
