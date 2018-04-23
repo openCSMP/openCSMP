@@ -1198,16 +1198,16 @@ void CornerPointGrid<dim>
               node_flags[6] |= IRREGULAR_FLAG;
             }
             if ( k == kmax ) {
-              node_flags[0] |= BOTTOM_FLAG;
-              node_flags[1] |= BOTTOM_FLAG;
-              node_flags[2] |= BOTTOM_FLAG;
-              node_flags[3] |= BOTTOM_FLAG;
+              node_flags[4] |= BOTTOM_FLAG;
+              node_flags[5] |= BOTTOM_FLAG;
+              node_flags[6] |= BOTTOM_FLAG;
+              node_flags[7] |= BOTTOM_FLAG;
             }
             if ( k == kmin ) {
-              node_flags[4] |= TOP_FLAG;
-              node_flags[5] |= TOP_FLAG;
-              node_flags[6] |= TOP_FLAG;
-              node_flags[7] |= TOP_FLAG;
+              node_flags[0] |= TOP_FLAG;
+              node_flags[1] |= TOP_FLAG;
+              node_flags[2] |= TOP_FLAG;
+              node_flags[3] |= TOP_FLAG;
             }
 
           auto& polygon = poly[ hexa_cell_id ];
