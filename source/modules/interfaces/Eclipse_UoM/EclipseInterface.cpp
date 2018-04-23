@@ -3251,22 +3251,34 @@ char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
     first_call = false;
     return token;
  }
+ 
+ 
+ 
 
 
 /**
-     ReadPillarCoordinates -> Read_COORD
+    ReadPillarCoordinates -> Read_COORD
      
+    COORD = vertical grid top->bottom coordinate lines, where x,y,z... x pointing east, y south, and z down.
+    These lines become the grid pillars, extending all the way from the top to the bottom of the grid.
+    Subsequently, the pillars are subdivided by cell corners stored in ZCORN, for which x,y is found by
+    interpolation.
+
+    The ordering of the pillars and z-cordinates is in “book order”, line after line until a page has been read,
+    then the next page until all data has been read. i.e.
+    first the top layer (K=1) is read, line by line 
+    (begin with J=1, read I=1,...,NX, then J=2, etc.) 
+    Then repeat for K=2,...,NZ.
+ 
      NX number of cells in x-direction (E)
-     Ny number of cells in y-direction (S)
+     NY number of cells in y-direction (S)
      
      pillar grid is y-first (rows), then x (columns) then z (3rd dim= downwards)
      
      called by ReadBlock(s) after ReadGridSpecs()  so dimensions of grid are already known
      
      @todo SKM write Out() const function for CornerPointGrid testing
- 
 */
-
 bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t line_length )
  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3324,7 +3336,9 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
   
   
   
-/** ReadCornerDepths -> Read_ZCORN
+/** ReadCornerDepths -> Read_ZCORN, i.e. puts the beads on the pillars, dividing them by the cell corners.
+
+    The cell coorners are stored in grid, an i,j-array of beads. However, here the CornerPointGrid class is used for this purpose.
 
     Each row contains NX + 1 coordinate entries, but for adjacent cells the values are duplicated.
     Inside the Pillar grids the rows are duplicated as well to create a 1:1 mapping of cell corners
@@ -3333,6 +3347,33 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     For each pillar point only the Z coordinate is read the others are deduced from the 
     the direction of the Pillar. This assumes that the pillar is a straight line.
 
+    Corner depths are defined by the keyword ZCORN. The intersection between a (non-horizontal) coordinate line 
+    and a depth value is unique, such that from coordinate lines and corner depths, 
+    all coordinates can be calculated.
+    It would perhaps seem natural to define corners cell by cell, 
+    but Eclipse sticks strictly to the book page format, so (with x pointing east,
+    y south) first the top northern edge of all cells are read from west to east, 
+    then the southern edge, then advancing to next row of cells. 
+    When the top of a layer has been read, the bottom is read in a similar fashion, and then we are ready for the next layer. 
+    Recall that corners associated with the same coordinate line may have different depths, but are equal in continuous areas, 
+    such that all corners must be defined – nothing is “implicitly assumed”. When explaining the syntax we will use indices 
+    NW, NE, SW, SE to denote the corners (assuming a standard orientation of the grid), and T, B for Top, Bottom.
+ 
+    ZCORN
+    z(1,1,1)T,NW z(1,1,1)T,NE z(2,1,1)T,NW z(2,1,1)T,NE ... z(NX,1,1)T,NE z(1,1,1)T,SW z(1,1,1)T,SE z(2,1,1)T,SW z(2,1,1)T,SE ... 
+    z(NX,1,1)T,SE z(1,2,1)T,NW z(1,2,1)T,NE z(2,2,1)T,NW z(2,2,1)T,NE ... 
+    z(NX,2,1)T,NE z(1,2,1)T,SW z(1,2,1)T,SE z(2,2,1)T,SW z(2,1,1)T,SE ... z(NX,2,1)T,SE .
+    .
+    .
+    z(1,NY,1)T,SW z(1,NY,1)T,SE z(2,NY,1)T,SW z(2,NY,1)T,SE ... z(NX,NY,1)T,SE z(1,1,1)B,NW z(1,1,1)B,NE z(2,1,1)B,NW z(2,1,1)B,NE ... z(NX,1,1)B,NE
+    .
+    .
+    .
+    z(1,NY,1)B,SW z(1,NY,1)B,SE z(2,NY,1)B,SW z(2,NY,1)B,SE ... z(NX,NY,1)B,SE z(1,1,2)T,NW z(1,1,2)T,NE z(2,1,2)T,NW z(2,1,2)T,NE ... z(NX,1,2)T,NE
+    .
+    .
+    .
+    z(1,NY,NZ)T,SW z(1,NY,NZ)T,SE z(2,NY,NZ)T,SW z(2,NY,NZ)T,SE ... z(NX,NY,NZ)T,SE
 */
 
 bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length )

@@ -409,10 +409,10 @@ void CornerPointGrid<dim>
             {
                 if ( pillars_[i][j].GetNumPoints() == 0 ) {
                      if ( first_print ) {
-                          std::cerr <<"\nCornerPointGrid::ProcessPillars: pillars without beads: ";
+//std::cerr <<"\nCornerPointGrid::ProcessPillars: pillars without beads: ";
                           first_print = false;
                        }
-                     std::cerr <<"pillar("<< i <<","<< j <<") ";
+//std::cerr <<"pillar("<< i <<","<< j <<") ";
                      continue;
                   }
                 /// hexa cell global id
@@ -483,6 +483,13 @@ void CornerPointGrid<dim>
                 }
     }
 }
+
+
+
+
+
+
+
 
 
 /**

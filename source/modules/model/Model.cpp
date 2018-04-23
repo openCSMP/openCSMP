@@ -277,9 +277,9 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
-  // 3(a). assigning properties to mesh; this does not depend on regions,
-  // so this is safe to do before we have computed them.
-  InputVariablesFrom( vset );
+    // 3(a). assigning properties to mesh; this does not depend on regions,
+    // so this is safe to do before we have computed them.
+    InputVariablesFrom( vset );
 
     // 4. forming default computational domain called "Model"
     const bool withNeighborConnectivity( vset.WithNeighbourConnectivity() );
