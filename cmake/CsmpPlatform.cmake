@@ -42,13 +42,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         set(PLATFORM_CXX_FLAGS
 	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O3 -DNDEBUG"
 	)
-    elsif (CMAKE_BUILD_TYPE STREQUAL "Profile")
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
         set(PLATFORM_CXX_FLAGS
 	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O3 -DNDEBUG"
 	)
     else()
         set(PLATFORM_CXX_FLAGS
-	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O0 -DDEBUG -fsanitize=address"
+	    "${COMMON_CXX_FLAGS} ${PLATFORM_ARCH} -O0 -DDEBUG"
 	)
     endif()
     set(COMPILER_LDFLAGS)
@@ -56,7 +56,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     message(STATUS "The compiler is GNU")
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -fomit-frame-pointer -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DNDEBUG")
-    elsif (CMAKE_BUILD_TYPE STREQUAL "Profile")
+    elseif (CMAKE_BUILD_TYPE STREQUAL "Profile")
         set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -fomit-frame-pointer -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DNDEBUG -pg")
     else()
 	set(PLATFORM_CXX_FLAGS "-fshort-enums -Winline -Wall -march=nehalem -std=c++14 ${PLATFORM_GLIBCXX_ABI_FLAG} -DDEBUG")
