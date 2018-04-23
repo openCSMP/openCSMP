@@ -3336,7 +3336,9 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
   
   
   
-/** ReadCornerDepths -> Read_ZCORN
+/** ReadCornerDepths -> Read_ZCORN, i.e. puts the beads on the pillars, dividing them by the cell corners.
+
+    The cell coorners are stored in grid, an i,j-array of beads. However, here the CornerPointGrid class is used for this purpose.
 
     Each row contains NX + 1 coordinate entries, but for adjacent cells the values are duplicated.
     Inside the Pillar grids the rows are duplicated as well to create a 1:1 mapping of cell corners

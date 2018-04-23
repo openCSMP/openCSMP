@@ -202,7 +202,7 @@ bool EclipseInterface<dim>::ReadFile( csmp::VSet<dim>& vset,
 
     ClearBefore();
 
-    // 2. Read file
+    // 2. Read file - data goes straight into the private container CornerPointGrid
     if( !ReadFile( ifs, line_length ) ) {
         csmp_error.notice( csmp::FATAL_ERROR, "EclipseInterface<dim>::","File could not be properly read!!!");
         return false;
