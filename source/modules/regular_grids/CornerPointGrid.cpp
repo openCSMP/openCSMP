@@ -1174,28 +1174,28 @@ void CornerPointGrid<dim>
             std::memset(node_flags, 0, sizeof(node_flags));
 
             if (i + 1 == NX_ || !cell_activity_[ CellIndex(i+1,j,k) ]) {
+              node_flags[0] |= IRREGULAR_FLAG;
+              node_flags[2] |= IRREGULAR_FLAG;
+              node_flags[4] |= IRREGULAR_FLAG;
+              node_flags[6] |= IRREGULAR_FLAG;
+            }
+            if (i == 0 || !cell_activity_[ CellIndex(i-1,j,k) ]) {
               node_flags[1] |= IRREGULAR_FLAG;
               node_flags[3] |= IRREGULAR_FLAG;
               node_flags[5] |= IRREGULAR_FLAG;
               node_flags[7] |= IRREGULAR_FLAG;
             }
-            if (i == 0 || !cell_activity_[ CellIndex(i-1,j,k) ]) {
+            if (j + 1 == NY_ || !cell_activity_[ CellIndex(i,j+1,k) ]) {
               node_flags[0] |= IRREGULAR_FLAG;
               node_flags[2] |= IRREGULAR_FLAG;
               node_flags[4] |= IRREGULAR_FLAG;
               node_flags[6] |= IRREGULAR_FLAG;
             }
-            if (j + 1 == NY_ || !cell_activity_[ CellIndex(i,j+1,k) ]) {
+            if (j == 0 || !cell_activity_[ CellIndex(i,j-1,k) ]) {
               node_flags[2] |= IRREGULAR_FLAG;
               node_flags[3] |= IRREGULAR_FLAG;
               node_flags[6] |= IRREGULAR_FLAG;
               node_flags[7] |= IRREGULAR_FLAG;
-            }
-            if (j == 0 || !cell_activity_[ CellIndex(i,j-1,k) ]) {
-              node_flags[0] |= IRREGULAR_FLAG;
-              node_flags[2] |= IRREGULAR_FLAG;
-              node_flags[4] |= IRREGULAR_FLAG;
-              node_flags[6] |= IRREGULAR_FLAG;
             }
             if ( k == kmax ) {
               node_flags[4] |= BOTTOM_FLAG;
