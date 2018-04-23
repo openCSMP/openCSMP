@@ -7,7 +7,7 @@
 //
 
 #include "geometricCalculations_Test.h"
-#include "geometricCalculations.h"
+#include "geometricCalculations_UoM.h"
 
 using namespace std;
 
