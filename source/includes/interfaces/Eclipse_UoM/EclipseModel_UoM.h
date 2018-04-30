@@ -28,23 +28,18 @@ element types like prisms and tetrahedra.
 class EclipseModel : public csmp::Model<3U> {
   public:
       /// CSMP model construction from Eclipse files; property database is created from "variables_file.txt"
-      EclipseModel( const std::string& model_name,
+      EclipseModel( EclipseModelSettings& settings,
+                    const std::string& model_name,
                     const std::string& variables_file );
 
       /// CSMP model construction from mesh files; empty property database
-      EclipseModel( const std::string& model_name );
+      EclipseModel( EclipseModelSettings& settings, const std::string& model_name );
 
       virtual ~EclipseModel();
 
-      /// MOST IMPORTANT METHOD!- but should be private and part of constructor (TODO: move EclipseModelSettings out of class)
-      void Initialize();
-  
       /// access of elements generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
       const Element<3U>* operator()( size_t i, size_t j, size_t k ) const;
       Element<3U>*       operator()( size_t i, size_t j, size_t k );
-
-      /// access to the settings of the Eclipse interface
-      EclipseModelSettings&  EclipseModelSetup();
 
       /// existing special regions
       template<class Container>  void GetRegions( Container& data );
@@ -66,7 +61,9 @@ class EclipseModel : public csmp::Model<3U> {
         { max_I=grid_dim_I_; max_J=grid_dim_J_; max_K=grid_dim_K_; }
 
   private:
-
+      /// Master method to build the model
+      void Initialize();
+  
       // PROPS and other specs from RUNSPECS file
       EclipseModelSettings      eclipse_model_settings_;
       std::set<std::string>     regions_;

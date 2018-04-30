@@ -65,8 +65,6 @@ enum ECLIPSE_PHASE
 struct EclipseWellCompletion
 {
     EclipseWellCompletion();
-    EclipseWellCompletion( const EclipseWellCompletion& compdata );
-    EclipseWellCompletion& operator=( const EclipseWellCompletion& compdata );
     ~EclipseWellCompletion();
 
     /// COMPDAT connection specification?
@@ -84,8 +82,6 @@ struct EclipseWellCompletion
 struct EclipseWell
 {
     EclipseWell();
-    EclipseWell( const EclipseWell& well );
-    EclipseWell& operator=( const EclipseWell& well );
     ~EclipseWell();
 
     std::string well_name_;
@@ -110,10 +106,6 @@ struct EclipseWell
 class  EclipseInterface
 {
   public:
-
-    typedef std::vector<std::vector<std::vector<std::vector<csmp::Point<3U> > > > >::iterator        cellIterator;
-    typedef std::vector<std::vector<std::vector<std::vector<csmp::Point<3U> > > > >::const_iterator  cellConstIterator;
-
     EclipseInterface();
     ~EclipseInterface();
 
@@ -130,6 +122,7 @@ class  EclipseInterface
     /// assigns CSMP parameter specifications to the interface so that corresponding variables can be read
     void SetProperties( const std::map<int,csmp::Parameter>& );
   
+#if 0
     /// inserts a well path that penetrates the centers of the faces of the supplied cells
     void AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids );
   
@@ -139,24 +132,21 @@ class  EclipseInterface
     /// inserts a well path that penetrates the edges following the sides of the supplied cells
     void AddWellEdgePath( const std::string& well_name, const std::vector<size_t>& cell_ids,
                           const std::vector<std::pair<size_t,size_t> >& edge_ids );
+#endif
 
     template<class Container>  void GetRegions( Container& data );
   
     template<class Container>  void GetFaults( Container& data );
   
     template<class Container>  void GetWells( Container& wells );
-  
+
   // SKM's replacement functions created in the debugging process
-  public:
+public:
     /// ReadPillarCoordinates -> Read_COORD
     bool Read_COORD( std::ifstream& ifs, char* text_line, size_t line_length );
   
     /// ReadCornerDepths -> Read_ZCORN
     bool Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length );
-  
-    // a handle to the underlying EclipseGrid (gets invalidated once ReadFile function exits
-    const CornerPointGrid& GetCornerPointGrid() const { return grid_; }
-  
   
   private:
 
@@ -187,31 +177,31 @@ class  EclipseInterface
     void WritePropertiesToVSet();
 
     void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                    const CornerPointGrid& grid,
+                                    const CornerPointGrid_UoM& grid,
                                     const std::vector<csmp::ScalarVariable>& scalar_data,
                                     const std::string& property_name,
                                     const csmp::PLACEMENT& place );
 
     void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                    const CornerPointGrid& grid,
+                                    const CornerPointGrid_UoM& grid,
                                     const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                     const std::string& property_name,
                                     const csmp::PLACEMENT& place );
 
     void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                    const CornerPointGrid& grid,
+                                    const CornerPointGrid_UoM& grid,
                                     const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                     const std::string& property_name,
                                     const csmp::PLACEMENT& place );
 
     void WriteVectorPropertyToVSet( csmp::VSet<3U>& vset,
-                                    const CornerPointGrid& grid,
+                                    const CornerPointGrid_UoM& grid,
                                     const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                     const std::string& property_name,
                                     const csmp::PLACEMENT& place );
 
     void WriteTensorPropertyToVSet( csmp::VSet<3U>& vset,
-                                    const CornerPointGrid& grid,
+                                    const CornerPointGrid_UoM& grid,
                                     const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                     const std::string& property_name,
                                     const csmp::PLACEMENT& place );
@@ -223,9 +213,11 @@ class  EclipseInterface
     void SaveTensorProperty( size_t component,
                              const std::vector<csmp::ScalarVariable>& scalar_data ,
                              std::vector<csmp::TensorVariable<3U> >&  vector_data );
+#if 0
 
     void ClearBefore();
     void ClearAfter();
+#endif
 
     void AssignGridDimensions();
 
@@ -239,7 +231,7 @@ class  EclipseInterface
     // csmp model
     std::string                 model_name_;
     csmp::ModelTopology*        model_topology_;
-    csmp::VSet<3U>*            vset_;
+    csmp::VSet<3U>*             vset_;
 
     // specific regions
     std::set<std::string>       regions_;
@@ -250,11 +242,13 @@ class  EclipseInterface
     size_t                      NX_;
     size_t                      NY_;
     size_t                      NZ_;
-    CornerPointGrid             grid_;
-    BlockCenteredGrid           block_grid_;
+    std::vector<double64>       zcorn_;
+    CornerPointGrid_UoM         grid_;
 
+#if 0
     // local mesh block
     std::vector<size_t>         box_;
+#endif
 
     // properties data
     std::map<int,csmp::Parameter>           properties_;
@@ -348,9 +342,6 @@ class EclipseModelSettings {
 
     explicit EclipseModelSettings( const std::string& mesh_file_prefix );
     ~EclipseModelSettings();
-
-    EclipseModelSettings( const EclipseModelSettings& );
-    EclipseModelSettings& operator=( const EclipseModelSettings& );
 
     void MeshSetup( bool exclude_inactive_cells,
                     bool tetra_mesh,
@@ -462,16 +453,16 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose);
 
 int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
-                                  std::vector<std::vector<Pillar> >& pillars,
+                                  CornerPointGrid_UoM& grid,
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                 );
 
 int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
-                             std::vector<std::vector<Pillar> >& pillars,
+                             CornerPointGrid_UoM& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                            );
 
-int readEclipseActiveCells( std::vector<size_t>& cell_activity,
+int readEclipseActiveCells( std::vector<uint8_t>& cell_activity,
                             std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                           );
 

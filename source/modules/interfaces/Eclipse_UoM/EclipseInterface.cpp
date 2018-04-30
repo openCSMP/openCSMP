@@ -29,7 +29,7 @@ EclipseInterface::~EclipseInterface()
 {
 }
 
-
+#if 0
 void EclipseInterface::ClearBefore()
 {
     /// grid specs
@@ -76,12 +76,6 @@ void EclipseInterface::ClearAfter()
 }
 
 
-void EclipseInterface::SetProperties(const std::map<int,csmp::Parameter>& p )
-{
-    properties_ = p;
-}
-
-
 void EclipseInterface
 ::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids )
 {
@@ -103,51 +97,7 @@ void EclipseInterface
 }
 
 
-template<class Container>
-void EclipseInterface
-::GetRegions( Container& data )
-{
-  Container newdata( regions_.begin(), regions_.end() );
-  std::swap(data, newdata);
-}
-
-template void EclipseInterface::GetRegions( std::vector<std::string>& );
-template void EclipseInterface::GetRegions( std::list<std::string>& );
-template void EclipseInterface::GetRegions( std::set<std::string>& );
-
-
-
-
-
-template<class Container>
-void EclipseInterface
-::GetFaults( Container& data )
-{
-  Container newdata( faults_.begin(), faults_.end() );
-  std::swap(data, newdata);
-}
-
-template void EclipseInterface::GetFaults( std::vector<std::string>& );
-template void EclipseInterface::GetFaults( std::list<std::string>& );
-template void EclipseInterface::GetFaults( std::set<std::string>& );
-
-
-
-
-
-template<class Container>
-void EclipseInterface
-::GetWells( Container& data )
-{
-  Container newdata( wells_.begin(), wells_.end() );
-  std::swap(data, newdata);
-}
-
-template void EclipseInterface::GetWells( std::vector<std::string>& );
-template void EclipseInterface::GetWells( std::list<std::string>& );
-template void EclipseInterface::GetWells( std::set<std::string>& );
-
-
+#endif
 
 
 
@@ -183,11 +133,11 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
     vset_           = &vset;
     model_topology_ = &model_topology;
     model_topology_->ModelName( fname.c_str() );
-    grid_.TetraMesh( tetra_mesh );
-    grid_.ExcludeInactiveCells( exclude_inactive_cells );
 
     // 2. Read file
+#if 0
     ClearBefore();
+#endif
 
     if( !ReadFile( ifs, line_length ) ) {
         csmp_error.notice( csmp::FATAL_ERROR, "EclipseInterface::","File could not be properly read!!!");
@@ -199,6 +149,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
 
     // 3. convert grid from cell-centered to corner point format
     //    by creating new pillars in the center of the cells
+#if 0
     if ( grid_.GetPillars().empty() &&
         !block_grid_.GetCellDepths().empty() &&
         !block_grid_.GetCellSizes(0).empty() &&
@@ -208,6 +159,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
           block_grid_.AssignCellCoordinatesToPillars( grid_.GetPillars() );
           block_grid_.Clear();
       }
+#endif
 
 // DEBUGGING
 #if 0
@@ -217,20 +169,18 @@ for ( auto it=grid_.GetPillars().begin(); it!=grid_.GetPillars().end(); ++it )
     (*rit).Out();
 #endif
   
-    if ( !grid_.GetPillars().empty() )
-          // KEY METHOD
-          grid_.CreateModel( model_name_,*vset_, *model_topology_, regions_, faults_, wells_ );
-
+    // KEY METHOD
+    grid_.CreateModel( model_name_,*vset_, *model_topology_, zcorn_, regions_, faults_, wells_,
+                       tetra_mesh, exclude_inactive_cells );
 
    /// 4. Write properties to VSet
-
     WritePropertiesToVSet();
-
+#if 0
     ClearAfter();
+#endif
 
     return true;
 }
-
 
 
 /**
@@ -337,7 +287,7 @@ void EclipseInterface::WritePropertiesToVSet()
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                   const CornerPointGrid& grid,
+                                                   const CornerPointGrid_UoM& grid,
                                                    const std::vector<csmp::ScalarVariable>& scalar_data,
                                                    const std::string& property_name,
                                                    const csmp::PLACEMENT& place )
@@ -350,7 +300,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                   const CornerPointGrid& grid,
+                                                   const CornerPointGrid_UoM& grid,
                                                    const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                                    const std::string& property_name,
                                                    const csmp::PLACEMENT& place )
@@ -368,7 +318,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                   const CornerPointGrid& grid,
+                                                   const CornerPointGrid_UoM& grid,
                                                    const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                                    const std::string& property_name,
                                                    const csmp::PLACEMENT& place )
@@ -387,7 +337,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteVectorPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                 const CornerPointGrid& grid,
+                                                 const CornerPointGrid_UoM& grid,
                                                  const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                                  const std::string& property_name,
                                                  const csmp::PLACEMENT& place )
@@ -401,7 +351,7 @@ void EclipseInterface::WriteVectorPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteTensorPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                 const CornerPointGrid& grid,
+                                                 const CornerPointGrid_UoM& grid,
                                                  const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                                  const std::string& property_name,
                                                  const csmp::PLACEMENT& place )
@@ -410,7 +360,6 @@ void EclipseInterface::WriteTensorPropertyToVSet( csmp::VSet<3U>&  vset,
     grid.template WritePropertyToVSet<csmp::TensorVariable<3U> >(vset,tensor_data,property_name,place);
     return;
  }
-
 
 // READING PROCESS
 
@@ -729,25 +678,25 @@ bool EclipseInterface::ReadGridSpecs( std::ifstream& ifs, char* text_line, size_
 }
 
 
-
 bool EclipseInterface::ReadCellSizes( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     const size_t direction( ( keyword_ == "DX") ? 0U : ( keyword_ == "DY") ? 1U : 2U );
-    if( readEclipseCellData( block_grid_.GetCellSizes( direction ),
+  std::vector<csmp::ScalarVariable> values;
+    if( readEclipseCellData( /* block_grid_.GetCellSizes( direction ) XXX */ values,
                              ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
         return false;
     return true;
 }
 
 
-
 bool EclipseInterface::ReadCellDepths( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+  std::vector<csmp::ScalarVariable> values;
 
-    if( readEclipseCellData( block_grid_.GetCellDepths(),
+    if( readEclipseCellData( /* block_grid_.GetCellDepths() XXX */ values,
                              ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
         return false;
     return true;
@@ -759,7 +708,7 @@ bool EclipseInterface::ReadPillarCoordinates( std::ifstream& ifs, char* text_lin
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     if ( readEclipsePillarCoordinates( NX_,NY_,
-                                       grid_.GetPillars(),
+                                       grid_,
                                        ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
         return false;
     AssignGridDimensions();
@@ -773,7 +722,7 @@ bool EclipseInterface::ReadCornerDepths( std::ifstream& ifs, char* text_line, si
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     if ( readEclipseCornerDepths( NX_,NY_,NZ_,
-                                  grid_.GetPillars(),
+                                  grid_,
                                   ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     AssignGridDimensions();
@@ -786,7 +735,6 @@ bool EclipseInterface::ReadCornerDepths( std::ifstream& ifs, char* text_line, si
 bool EclipseInterface::ReadActiveCells( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
     if ( readEclipseActiveCells( grid_.GetCellActivity(),
                                  ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
@@ -811,9 +759,10 @@ bool EclipseInterface::ReadWellSpecs( std::ifstream& ifs, char* text_line, size_
 bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                         grid_.GetWellFacePath(),
+                                         /* grid_.GetWellFacePath() XXX */ well_path,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -824,9 +773,10 @@ bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_l
 bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                         grid_.GetWellFacePath(),
+                                        /* grid_.GetWellFacePath() XXX */ well_path,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -837,9 +787,10 @@ bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, 
 bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                         grid_.GetWellEdgePath(),
+                                        /* grid_.GetWellFacePath() XXX */ well_path,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -850,9 +801,9 @@ bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, 
 bool EclipseInterface::ReadFaultsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
+  std::map<std::string,std::vector<std::pair<size_t,size_t> > > faults_data;
     if ( readEclipseFaultData( NX_,NY_,NZ_,
-                               grid_.GetFaultData(),
+                               /* grid_.GetFaultData() XXX */ faults_data,
                                ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -876,8 +827,8 @@ bool EclipseInterface
 ::ReadBoxData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
-    if ( readEclipseBoxData( box_,
+  std::vector<size_t> box_data;
+    if ( readEclipseBoxData( box_data,
                              ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -941,26 +892,15 @@ void EclipseInterface::SaveTensorProperty( size_t component,
             tensor_data[ i ]( j, j ) = scalar_data[ i ]();
  }
 
-
 void EclipseInterface::AssignGridDimensions()
 {
-    grid_.AssignDimensionX( NX_ );
-    grid_.AssignDimensionY( NY_ );
-    grid_.AssignDimensionZ( NZ_ );
+    grid_.AssignDimensions( NX_, NY_, NZ_ );
+#if 0
     block_grid_.AssignDimensionX( NX_ );
     block_grid_.AssignDimensionY( NY_ );
     block_grid_.AssignDimensionZ( NZ_ );
+#endif
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1138,7 +1078,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
     x(NX+1,NY+1)btm   y(NX+1,NY+1)btm   z(NX+1,NY+1)btm\
 */
 int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
-                                  std::vector<std::vector<Pillar> >& pillars, /* matrix of Pillars=cells? */
+                                  CornerPointGrid_UoM& grid, /* matrix of Pillars=cells? */
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                 )
 {
@@ -1153,8 +1093,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
     size_t cycle(0);
     size_t position(0);
     size_t direction(0);
-    Pillar pillar;
-    std::vector<csmp::Point<3U> > pillar_coord(2U);
+  csmp::Point<3u> pillar_coord[2];
 
     std::string message;
     bool same_line( false );
@@ -1163,7 +1102,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
     if( firstLine == 0 || firstLine == 2 )
         return firstLine;
 
-    pillars.clear();
+    grid.Resize(NX, NY);
   
     do {
         same_line = false;
@@ -1208,7 +1147,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
                 }
                 else
                 {
-                    assert( position < pillar_coord.size() );
+                    assert( position < 2 );
                     assert( direction < 3 ); // spatial dimensions
                     pillar_coord[position][direction] = atof(token);
                 }
@@ -1216,11 +1155,9 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
                 /// add new pillar
                 if( position == 1 && direction == 2 )
                 {
-                    pillar.AssignEnds( pillar_coord[0], pillar_coord[1] );
-                    if( idx == 0 )
-                        pillars.push_back( std::vector<Pillar>() );
-                    assert(idy < pillars.size());
-                    pillars[idy].push_back( pillar );
+                  Pillar pillar(pillar_coord[0], pillar_coord[1]);
+                  grid(idx, idy) = std::move(pillar);
+                    assert(idy < NY);
                     ++idx;
                     cycle = 0;
                 }
@@ -1261,12 +1198,14 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
     while ( !endOfblock && !ifs.eof() );
 
     /// set grid specs
+#if 0
     NY = pillars.size() - 1;
     NX = 0;
     for( size_t i = 0; i < NY; i++ )
         if( pillars[i].size() > NX )
             NX = pillars[i].size();
     NX -= 1;
+#endif
     if( verbose ) std::cout <<"\nreadEclipsePillarCoordinates: COORD block has been read successfully.\n";
 
     return 1;
@@ -1309,7 +1248,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
     z(1,NY,NZ)btm,SW  z(1,NY,NZ)btm,SE  z(2,NY,NZ)btm,SW  z(2,NY,NZ)btm,SE ... z(NX,NY,NZ)btm,SW  z(NX,NY,NZ)btm,SE
 */
 int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
-                             std::vector<std::vector<Pillar> >& pillars,
+                             CornerPointGrid_UoM& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1388,10 +1327,10 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
                 }
                 else
                 {
-                    pt[2U] = atof(token);
-                    assert( pidy < pillars.size() );
-                    assert( pidx < pillars[pidy].size() );
-                    pillars[pidy][pidx].AddPoint( pt );
+                    double64 z = atof(token);
+                    assert( pidy < NY );
+                    assert( pidx < NX );
+                    grid(pidx,pidy).AddZCoord( z );
                 }
 
                 /// renew east-west position
@@ -1490,11 +1429,11 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
     {
         for( size_t j=1; j<NY; ++j )
         {
-            if( pillars[j][i].GetNumPoints() != num_points_in_z_direction_internal_pillars )
+            if( grid(i,j).GetNumPoints() != num_points_in_z_direction_internal_pillars )
             {
                 std::stringstream msg;
                 msg << "ZCONR were not read correctly for internal pillars!!! ";
-                msg << pillars[j][i].GetNumPoints();
+                msg << grid(i,j).GetNumPoints();
                 msg << " point instead of expected ";
                 msg << num_points_in_z_direction_internal_pillars;
                 msg << " points!!!";
@@ -1507,12 +1446,12 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
     }
     for( size_t i=1; i<NX; ++i )
     {
-        if( pillars[0][i].GetNumPoints()  != num_points_in_z_direction_boundary_pillars ||
-            pillars[NY][i].GetNumPoints() != num_points_in_z_direction_boundary_pillars    )
+        if( grid(i,0).GetNumPoints()  != num_points_in_z_direction_boundary_pillars ||
+            grid(i,NY).GetNumPoints() != num_points_in_z_direction_boundary_pillars    )
         {
             std::stringstream msg;
             msg << "ZCONR were not readed correctly for boundary pillars!!! ";
-            msg << pillars[0][i].GetNumPoints() << " , " << pillars[NY][i].GetNumPoints();
+            msg << grid(i,0).GetNumPoints() << " , " << grid(i,NY).GetNumPoints();
             msg << " point instead of expected ";
             msg << num_points_in_z_direction_boundary_pillars;
             msg << " points!!!";
@@ -1524,12 +1463,12 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
     }
     for( size_t j=1; j<NY; ++j )
     {
-        if( pillars[j][0].GetNumPoints()  != num_points_in_z_direction_boundary_pillars ||
-            pillars[j][NX].GetNumPoints() != num_points_in_z_direction_boundary_pillars    )
+        if( grid(0,j).GetNumPoints()  != num_points_in_z_direction_boundary_pillars ||
+            grid(NX,j).GetNumPoints() != num_points_in_z_direction_boundary_pillars    )
         {
             std::stringstream msg;
             msg << "ZCONR were not readed correctly for boundary pillars!!! ";
-            msg << pillars[j][0].GetNumPoints() << " , " << pillars[j][NY].GetNumPoints();
+            msg << grid(0,j).GetNumPoints() << " , " << grid(NX,j).GetNumPoints();
             msg << " point instead of expected ";
             msg << num_points_in_z_direction_boundary_pillars;
             msg << " points!!!";
@@ -1539,14 +1478,14 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
             return 0;
         }
     }
-    if( pillars[0][0].GetNumPoints()   != num_points_in_z_direction_corner_pillars ||
-        pillars[0][NX].GetNumPoints()  != num_points_in_z_direction_corner_pillars ||
-        pillars[NY][0].GetNumPoints()  != num_points_in_z_direction_corner_pillars ||
-        pillars[NY][NX].GetNumPoints() != num_points_in_z_direction_corner_pillars    )
+    if( grid(0,0).GetNumPoints()   != num_points_in_z_direction_corner_pillars ||
+        grid(NX,0).GetNumPoints()  != num_points_in_z_direction_corner_pillars ||
+        grid(0,NY).GetNumPoints()  != num_points_in_z_direction_corner_pillars ||
+        grid(NX,NY).GetNumPoints() != num_points_in_z_direction_corner_pillars    )
     {
         std::stringstream msg;
         msg << "ZCONR were not readed correctly for corner pillars!!! ";
-        msg << pillars[0][0].GetNumPoints() << " , " << pillars[0][NX].GetNumPoints() << pillars[NY][0].GetNumPoints() << " , " << pillars[NY][NX].GetNumPoints();
+        msg << grid(0,0).GetNumPoints() << " , " << grid(NX,0).GetNumPoints() << grid(0,NY).GetNumPoints() << " , " << grid(NX,NY).GetNumPoints();
         msg << " point instead of expected ";
         msg << num_points_in_z_direction_corner_pillars;
         msg << " points!!!";
@@ -1569,7 +1508,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
       Format:
       1 0 1 0 0 0 0 0 1 1 1 1 1 ...\
  */
-int readEclipseActiveCells( std::vector<size_t>& cell_activity, std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
+int readEclipseActiveCells( std::vector<uint8_t>& cell_activity, std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -2520,7 +2459,6 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
 }
 
 
-
 /**
     To retrieve boundaries of the model?
 */
@@ -2804,7 +2742,6 @@ bool readEclipseValue(const std::string&,bool&,size_t&,size_t&);
 bool readEclipseValue(const std::string&,bool&,size_t&,int&);
 bool readEclipseValue(const std::string&,bool&,size_t&,double&);
 
-
 int skipEclipseBlock( std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     bool endOfblock(false);
@@ -2830,7 +2767,6 @@ void removeSymbolsFromString( std::string &str, const char* symbolsToRemove )
 
 
 
-
 // ECLIPSE WELLS
 
 EclipseWellCompletion::EclipseWellCompletion()
@@ -2842,34 +2778,6 @@ EclipseWellCompletion::EclipseWellCompletion()
  w_end_(0),
  is_open_(false)
 {
-}
-
-EclipseWellCompletion
-::EclipseWellCompletion( const EclipseWellCompletion& compdata )
-:ic_     (compdata.ic_),
- jc_     (compdata.jc_),
- k_top_  (compdata.k_top_),
- k_bot_  (compdata.k_bot_),
- w_start_(compdata.w_start_),
- w_end_  (compdata.w_end_),
- is_open_(compdata.is_open_ )
-{
-}
-
-EclipseWellCompletion& EclipseWellCompletion
-::operator=( const EclipseWellCompletion& compdata )
-{
-    if( &compdata != this )
-    {
-        ic_      = compdata.ic_;
-        jc_      = compdata.jc_;
-        k_top_   = compdata.k_top_;
-        k_bot_   = compdata.k_bot_;
-        w_start_ = compdata.w_start_;
-        w_end_   = compdata.w_end_;
-        is_open_ = compdata.is_open_;
-    }
-    return *this;
 }
 
 EclipseWellCompletion
@@ -2893,42 +2801,6 @@ EclipseWell
 }
 
 EclipseWell
-::EclipseWell( const EclipseWell& well ):
-    well_name_      (well.well_name_),
-    group_name_     (well.group_name_),
-    i_start_        (well.i_start_),
-    j_start_        (well.j_start_),
-    z_bhp_          (well.z_bhp_),
-    phase_          (well.phase_),
-    drainage_radius_(well.drainage_radius_),
-    inflow_type_    (well.inflow_type_),
-    stop_or_shut_in_(well.stop_or_shut_in_),
-    cross_flow_     (well.cross_flow_),
-    well_data_      (well.well_data_)
-{
-}
-
-EclipseWell& EclipseWell
-::operator=( const EclipseWell& well )
-{
-    if( &well != this )
-    {
-        well_name_       = well.well_name_;
-        group_name_      = well.group_name_;
-        i_start_         = well.i_start_;
-        j_start_         = well.j_start_;
-        z_bhp_           = well.z_bhp_;
-        phase_           = well.phase_;
-        drainage_radius_ = well.drainage_radius_;
-        inflow_type_     = well.inflow_type_;
-        stop_or_shut_in_ = well.stop_or_shut_in_;
-        cross_flow_      = well.cross_flow_;
-        well_data_       = well.well_data_;
-    }
-    return *this;
-}
-
-EclipseWell
 ::~EclipseWell()
 {
 }
@@ -2948,31 +2820,6 @@ EclipseModelSettings::EclipseModelSettings( const std::string& mesh_file_prefix 
         csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
     }
 }
-
-EclipseModelSettings::EclipseModelSettings( const EclipseModelSettings& s )
-    : mesh_file_prefix_   ( s.mesh_file_prefix_  ),
-      regions_file_prefix_( s.regions_file_prefix_ ),
-      tetra_mesh_         ( s.tetra_mesh_ ),
-      create_boundaries_  ( s.create_boundaries_ ),
-      properties_         ( s.properties_ ),
-      regions_            ( s.regions_    )
-{
-}
-
-EclipseModelSettings& EclipseModelSettings::operator=( const EclipseModelSettings& s )
-{
-    if( &s != this )
-    {
-        mesh_file_prefix_    = s.mesh_file_prefix_;
-        regions_file_prefix_ = s.regions_file_prefix_;
-        tetra_mesh_          = s.tetra_mesh_;
-        create_boundaries_   = s.create_boundaries_;
-        properties_          = s.properties_;
-        regions_             = s.regions_;
-    }
-    return *this;
-}
-
 
 EclipseModelSettings::~EclipseModelSettings()
 {
@@ -3214,7 +3061,6 @@ void EclipseModelSettings
     prop.max   = 1.0;
 }
 
-
 // ************************************************************************************************
 
 // STEPHAN & CARO's REPLACEMENT CODE
@@ -3253,7 +3099,6 @@ char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
  }
  
  
- 
 
 
 /**
@@ -3288,8 +3133,6 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     assert( NZ_ > 0 );
     assert( NY_ > 0 );
 
-    Pillar pillar;
-    std::pair<csmp::Point<3U>,csmp::Point<3U> > pillar_coord;
 
     bool endOfblock(false);
     int firstLine( readEclipseFirstLineInBlock( ifs, text_line, line_length, endOfblock) );
@@ -3299,7 +3142,7 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     const size_t i_stride(NX_ + 1);
     const size_t j_stride(NY_ + 1);
  
-    grid_.Resize( j_stride, i_stride );
+    grid_.Resize( i_stride, j_stride );
   
     // keeping j constant i go over the i's
     for ( size_t j=0U; j<j_stride; j++ )
@@ -3307,18 +3150,18 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
          // reading the pillar coordinates
          for ( size_t i=0U; i<i_stride; i++ )
            {
-              // read pillar top
-              pillar_coord.first[0] = atof( popToken( ifs, text_line, line_length ) );
-              pillar_coord.first[1] = atof( popToken( ifs, text_line, line_length ) );
-              pillar_coord.first[2] = atof( popToken( ifs, text_line, line_length ) );
-              // read bottom
-              pillar_coord.second[0] = atof( popToken( ifs, text_line, line_length ) );
-              pillar_coord.second[1] = atof( popToken( ifs, text_line, line_length ) );
-              pillar_coord.second[2] = atof( popToken( ifs, text_line, line_length ) );
+             // read pillar top
+             double64 pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
+             double64 pillar_top_y = atof( popToken( ifs, text_line, line_length ) );
+             double64 pillar_top_z = atof( popToken( ifs, text_line, line_length ) );
+             double64 pillar_bot_x = atof( popToken( ifs, text_line, line_length ) );
+             double64 pillar_bot_y = atof( popToken( ifs, text_line, line_length ) );
+             double64 pillar_bot_z = atof( popToken( ifs, text_line, line_length ) );
              
-              // creating pillar
-              pillar.AssignEnds( pillar_coord.first, pillar_coord.second );
-              grid_(j,i) = pillar;
+             // creating pillar
+             Pillar pillar(Point<3u>(pillar_top_x, pillar_top_y, pillar_top_z),
+                           Point<3u>(pillar_bot_x, pillar_bot_y, pillar_bot_z));
+             grid_(i,j) = std::move(pillar);
            }
       }
    
@@ -3329,7 +3172,6 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     return true;
    
  }  // end Read_COORD
-  
   
   
   
@@ -3376,117 +3218,120 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     z(1,NY,NZ)T,SW z(1,NY,NZ)T,SE z(2,NY,NZ)T,SW z(2,NY,NZ)T,SE ... z(NX,NY,NZ)T,SE
 */
 
-bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length )
- {
+  bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length )
+  {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
+    
     if ( csmp_error.Verbose() ) std::cout <<"\nEclipseInterface::Read_ZCORN: reading ZCORN...\n";
     assert( NX_ > 0 );
     assert( NZ_ > 0 );
     assert( NY_ > 0 );
+    
+    zcorn_.clear();
+    zcorn_.resize(NX_ * NY_ * NZ_ * 8, std::numeric_limits<double64>::quiet_NaN());
+    
+    // 1. Read z coordinates
+    struct ZCoords {
+      double64 z[8];
+    };
+    std::vector<ZCoords> zcoord;
+    zcoord.resize(NX_*NY_*NZ_);
+    size_t NXxNY = NX_ * NY_;
 
-    const size_t k_stride(NZ_ + 1); // vertical direction from top to bottom
-    const size_t j_stride(NY_ + 1);
-    const size_t i_stride(NX_ + 1);
-  
-    // keeping j constant i go over the i's
-    Point<3>  bead(0.,0.,0.);
-    for ( size_t k=0U; k<k_stride; k++ )
+    for ( size_t k=0U; k<NZ_; k++ )
+    {
+      for ( size_t j=0U; j<NY_; j++ )
       {
-        for ( size_t j=0U; j<j_stride; j++ )
-          {
-             // reading the pillar coordinates for the first time
-             for ( size_t i=0U; i<i_stride; i++ )
-               {
-                  // reading the first Z coordinates of the 'beads' on the pillar
-                  double64 Z_coordinate_on_pillar1 = atof( popToken( ifs, text_line, line_length ) );
-//                  if ( k == 0 ) assert( Z_coordinate_on_pillar1 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                  bead[2] = Z_coordinate_on_pillar1;
-                  // point 1: assigning the bead to the pillar
-                  grid_(j,i).AddPoint( bead );
-                 
-                  // reading the second Z coordinate (if any) to initialse adjacent cells with the second value
-                  double64 Z_coordinate_on_pillar2(0.);
-                  if ( i != 0 and i != (i_stride-1) ) {
-                       Z_coordinate_on_pillar2 = atof( popToken( ifs, text_line, line_length ) );
-//                       if ( k == 0 ) assert( Z_coordinate_on_pillar2 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                       // point 2: assigning the bead to the pillar
-                       bead[2] = Z_coordinate_on_pillar2;
-                       grid_(j,i).AddPoint( bead );
-                    }
-               }
-             // duplicate reading of rows
-             if ( j != 0 and j != (j_stride-1) )
-               for ( size_t i=0U; i<i_stride; i++ )
-                 {
-                    // reading the Z coordinates of the 'beads' on the pillar
-                    double64 Z_coordinate_on_pillar1 = atof( popToken( ifs, text_line, line_length ) );
-//                    if ( k == 0 ) assert( Z_coordinate_on_pillar1 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                    bead[2] = Z_coordinate_on_pillar1;
-                    grid_(j,i).AddPoint( bead );
-                    // for adjacent cells we read the second value
-                    double64 Z_coordinate_on_pillar2(0.);
-                    if ( i != 0 and i != (i_stride-1) ) {
-                         Z_coordinate_on_pillar2 = atof( popToken( ifs, text_line, line_length ) );
-//                         if ( k == 0 ) assert( Z_coordinate_on_pillar2 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                         bead[2] = Z_coordinate_on_pillar2;
-                         grid_(j,i).AddPoint( bead );
-                      }
-                 }
-          }
-        // duplications galore!
-        if ( k != 0 and k != (k_stride-1) )
-          for ( size_t j=0U; j<j_stride; j++ )
-            {
-               // reading the pillar coordinates for the first time
-               for ( size_t i=0U; i<i_stride; i++ )
-                 {
-                    // reading the first Z coordinates of the 'beads' on the pillar
-                    double64 Z_coordinate_on_pillar1 = atof( popToken( ifs, text_line, line_length ) );
-//                    if ( k == 0 ) assert( Z_coordinate_on_pillar1 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                    bead[2] = Z_coordinate_on_pillar1;
-                    // point 1: assigning the bead to the pillar
-                    grid_(j,i).AddPoint( bead );
-                   
-                    // reading the second Z coordinate (if any) to initialse adjacent cells with the second value
-                    double64 Z_coordinate_on_pillar2(0.);
-                    if ( i != 0 and i != (i_stride-1) ) {
-                         Z_coordinate_on_pillar2 = atof( popToken( ifs, text_line, line_length ) );
-//                         if ( k == 0 ) assert( Z_coordinate_on_pillar2 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                         // testing that the adjacent points have the same Z value
-                         bead[2] = Z_coordinate_on_pillar2;
-                         grid_(j,i).AddPoint( bead );
-                      }
-                 }
-               // duplicate reading of rows
-               if ( j != 0 and j != (j_stride-1) )
-                 for ( size_t i=0U; i<i_stride; i++ )
-                   {
-                      // reading the Z coordinates of the 'beads' on the pillar
-                      double64 Z_coordinate_on_pillar1 = atof( popToken( ifs, text_line, line_length ) );
-//                      if ( k == 0 ) assert( Z_coordinate_on_pillar1 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                      bead[2] = Z_coordinate_on_pillar1;
-                      grid_(j,i).AddPoint( bead );
-                      // for adjacent cells we read the second value
-                      double64 Z_coordinate_on_pillar2(0.);
-                      if ( i != 0 and i != (i_stride-1) ) {
-                           Z_coordinate_on_pillar2 = atof( popToken( ifs, text_line, line_length ) );
-//                           if ( k == 0 ) assert( Z_coordinate_on_pillar2 == grid_(j,i).OriginZ() ); only valid if the layer is not offset by fault
-                           bead[2] = Z_coordinate_on_pillar2;
-                           grid_(j,i).AddPoint( bead );
-                        }
-                   }
-            }
+        for ( size_t i=0U; i<NX_; i++ )
+        {
+          double64 t_nw = atof( popToken( ifs, text_line, line_length ) );
+          double64 t_ne = atof( popToken( ifs, text_line, line_length ) );
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 0] = t_nw;
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 1] = t_ne;
+        }
+        for ( size_t i=0U; i<NX_; i++ )
+        {
+          double64 t_sw = atof( popToken( ifs, text_line, line_length ) );
+          double64 t_se = atof( popToken( ifs, text_line, line_length ) );
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 2] = t_sw;
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 3] = t_se;
+        }
       }
-   
-// TODO: grid_.Out();
-
+      for ( size_t j=0U; j<NY_; j++ )
+      {
+        for ( size_t i=0U; i<NX_; i++ )
+        {
+          double64 b_nw = atof( popToken( ifs, text_line, line_length ) );
+          double64 b_ne = atof( popToken( ifs, text_line, line_length ) );
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 4] = b_nw;
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 5] = b_ne;
+        }
+        for ( size_t i=0U; i<NX_; i++ )
+        {
+          double64 b_sw = atof( popToken( ifs, text_line, line_length ) );
+          double64 b_se = atof( popToken( ifs, text_line, line_length ) );
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 6] = b_sw;
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 7] = b_se;
+        }
+      }
+    }
+    
     if ( csmp_error.Verbose() ) std::cout <<"\nRead_ZCORN: ZCORN block has been read successfully.\n";
-   
+    
     return true;
+    
+  } // Read_ZCORN
+  
 
- } // Read_ZCORN
- 
+void EclipseInterface::SetProperties(const std::map<int,csmp::Parameter>& p )
+{
+    properties_ = p;
+}
+
+template<class Container>
+void EclipseInterface
+::GetRegions( Container& data )
+{
+  Container newdata( regions_.begin(), regions_.end() );
+  std::swap(data, newdata);
+}
+
+template void EclipseInterface::GetRegions( std::vector<std::string>& );
+template void EclipseInterface::GetRegions( std::list<std::string>& );
+template void EclipseInterface::GetRegions( std::set<std::string>& );
+
+
+
+
+
+template<class Container>
+void EclipseInterface
+::GetFaults( Container& data )
+{
+  Container newdata( faults_.begin(), faults_.end() );
+  std::swap(data, newdata);
+}
+
+template void EclipseInterface::GetFaults( std::vector<std::string>& );
+template void EclipseInterface::GetFaults( std::list<std::string>& );
+template void EclipseInterface::GetFaults( std::set<std::string>& );
+
+
+
+
+
+template<class Container>
+void EclipseInterface
+::GetWells( Container& data )
+{
+  Container newdata( wells_.begin(), wells_.end() );
+  std::swap(data, newdata);
+}
+
+template void EclipseInterface::GetWells( std::vector<std::string>& );
+template void EclipseInterface::GetWells( std::list<std::string>& );
+template void EclipseInterface::GetWells( std::set<std::string>& );
+
  } // eclipse
 
 } // end namespace csmp

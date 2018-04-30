@@ -8,176 +8,84 @@ namespace eclipse {
 // PILLARS
 
 Pillar::Pillar()
-:a_(0.0),
- b_(0.0)
 {
 }
 
 Pillar::Pillar( const csmp::Point<3U>& pStart, const csmp::Point<3U>& pEnd )
+  : start_(pStart), end_(pEnd)
 {
-    AssignEnds( pStart, pEnd );
-}
-
-Pillar::Pillar( const Pillar& pr )
-: a_(pr.a_),
-  b_(pr.b_),
-  points_(pr.points_),
-  attached_cells_(pr.attached_cells_)
-{
-}
-
-Pillar& Pillar::operator=( const Pillar& pr )
-{
-    if( this != &pr )
-    {
-        a_              = pr.a_;
-        b_              = pr.b_;
-        points_         = pr.points_;
-        attached_cells_ = pr.attached_cells_;
-    }
-    return *this;
 }
 
 Pillar::~Pillar()
 {
-    points_.clear();
-    attached_cells_.clear();
 }
-
-// ASSIGNMENTS & ACCESS
-
-void Pillar::AssignEnds( const csmp::Point<3U>& pStart, const csmp::Point<3U>& pEnd )
-{
-    a_ = pStart;
-    b_ = ( pEnd - pStart );
-}
-
-void Pillar::AssignEnds()
-{
-    const size_t num_points( points_.size() );
-    a_ = points_[0];
-    b_ = points_[num_points-1];
-}
-
-void Pillar::AssignAttachedCellId( size_t i, size_t j, size_t offset )
-{
-    attached_cells_.insert( std::make_pair( std::make_pair(i,j), offset ) );
-}
+  
+  void Pillar::Reserve(size_t zpoints)
+  {
+    points_.reserve(zpoints);
+  }
 
 size_t Pillar::GetNumPoints() const
 {
     return points_.size();
 }
 
-/**
-    Copy of point is needed because it is going to be modified.
-*/
-void Pillar::AddPoint( csmp::Point<3U> zpt )
+void Pillar::AddZCoord( double64 z )
 {
-   ResolveXYcoords( zpt );
-   points_.push_back( zpt );
+   points_.push_back( z );
 }
-
-const csmp::Point<3U>& Pillar::GetPoint( size_t zid ) const
+  
+void Pillar::SetZCoords(const std::vector<double64> &zcoords)
 {
-    assert( !points_.empty() );
-    return points_[ zid ];
+  std::vector<double64> newzcoords(zcoords.begin(), zcoords.end());
+  points_ = std::move(newzcoords);
 }
-
-// CELL IDS
-
-size_t Pillar
-::NodeIndexIncrementI( size_t nid ) const
+  
+double64 Pillar::GetZCoord( size_t zid ) const
 {
-    return ( nid%2 );
+  return points_[zid];
 }
+  
+  size_t Pillar::FindPoint(double64 z) const
+  {
+    auto it = std::lower_bound(points_.begin(), points_.end(), z);
+    if (it != points_.end() && *it == z) {
+      return std::distance(points_.begin(), it);
+    }
+    else {
+      throw csmp::Exception(ERROR, "Pillar::FindPoint", "Could not find zcoord in pillar");
+    }
+  }
 
-size_t Pillar
-::NodeIndexIncrementJ( size_t nid ) const
+  void Pillar::SetFirstNodeNum(size_t node_num)
+  {
+    firstNodeNum_ = node_num;
+  }
+  
+  size_t Pillar::FirstNodeNum() const
+  {
+    return firstNodeNum_;
+  }
+
+csmp::Point<3U> Pillar::GetPoint( size_t zid ) const
 {
-    return ( (nid/2)%2 );
+  Point<3U> p;
+  assert( zid < points_.size() );
+  double64 z = points_[zid];
+  double64 t = (z - start_[2]) / (end_[2] - start_[2]);
+  p[0] = start_[0] * (1.0 - t) + end_[0] * t;
+  p[1] = start_[1] * (1.0 - t) + end_[1] * t;
+  p[2] = z;
+  return p;
 }
-
-size_t Pillar
-::NodeIndexIncrementK( size_t nid ) const
-{
-    return ( nid/4 );
-}
-
-size_t Pillar::GetNumAttachedCells() const
-{
-    return attached_cells_.size();
-}
-
-const csmp::Point<3U>& Pillar::GetPoint( size_t xid, size_t yid, size_t zid, size_t nid ) const
-{
-    const size_t pzid( zid*2 + NodeIndexIncrementK( nid ) );
-    const size_t offset( attached_cells_.at( std::make_pair(xid,yid) ) );
-    return points_[ pzid*attached_cells_.size() + offset ];
-}
-
-void Pillar::AssignPoint( size_t xid, size_t yid, size_t zid, size_t nid, const csmp::Point<3U>& pt )
-{
-    const size_t pzid( zid*2 + NodeIndexIncrementK( nid ) );
-    const size_t offset( attached_cells_.at( std::make_pair(xid,yid) ) );
-    points_[ pzid*attached_cells_.size() + offset ] = pt;
-}
-
-// RESOLVE MISSING COORDINATES
-
-/**
-    Calculates the XY coordinates of the supplied point that is supposed to lie on the subvertical Pillar
-    from its original ones. Then these new coordinates are assigned.
-
-    r = a + t*b;
-    x: r[0] = a[0] + t*b[0]
-    y: r[1] = a[1] + t*b[1]
-    z: r[2] = a[2] + t*b[2]
-*/
-void Pillar::ResolveXYcoords( csmp::Point<3U>& r )
-{
-    // not safe: if( b_ != 0.0 ) return;
-    if ( std::fabs(b_[0]) <= std::numeric_limits<double>::epsilon() and
-         std::fabs(b_[1]) <= std::numeric_limits<double>::epsilon() and
-         std::fabs(b_[2]) <= std::numeric_limits<double>::epsilon() )
-      return;
-
-    const double t = (r[2U] - a_[2U]) / b_[2U];
-    r[0U] = a_[0U] + t*b_[0U];
-    r[1U] = a_[1U] + t*b_[1U];
-}
-
-/// simultaneously resolves the XY coordinates for all pillar beads for which a Z value has already been assigned
-void Pillar::ResolveXYcoords()
-{
-    const size_t num_points( points_.size() );
-    for( size_t pid = 0; pid<num_points; ++pid )
-        ResolveXYcoords( points_[pid] );
-}
-
-csmp::Point<3U> Pillar::ResolveXYcoords( double z )
-{
-    /// calculate x and y coordinates based on z
-    csmp::Point<3U> pt(0.,0.,z);
-    ResolveXYcoords( pt );
-    return pt;
-}
-
-
-
 
 void Pillar::Out() const
  {
     std::cout <<"\nPillar::Out:\n";
-    std::cout <<"\torigin: "<< a_ <<", direction: "<< b_;
+    std::cout <<"\tstart: "<< start_ <<", end: "<< end_;
     std::cout <<"\n\tstored points ("<< points_.size() <<"):\n\t";
-    for ( auto it = points_.begin(); it!=points_.end(); ++it )
-      std::cout << (*it) <<" ";
-
-    std::cout <<"\n\n\tindices of attached cells ("<< attached_cells_.size() <<"):\n\t";
-    for ( auto it = attached_cells_.begin(); it!=attached_cells_.end(); ++it )
-      std::cout <<"\t"<< (*it).first.first <<","<< (*it).first.second <<": "<< (*it).second <<"\n";
-   
+   for ( auto z : points_ )
+      std::cout << z <<" ";
     std::cout <<"\n";
  }
 

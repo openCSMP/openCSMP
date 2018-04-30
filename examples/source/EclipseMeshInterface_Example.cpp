@@ -5,12 +5,14 @@
 #include "VTU_Interface.h"
 #include "InputDataManager.h"
 
-#include "EclipseModel.h"
+#include "EclipseModel_UoM.h"
 
 using namespace std;
 
 namespace csmp {
 
+  using namespace eclipse;
+  
 void EclipseMeshInterface_Example::Specifications()
 {
    SetTitle( "EclipseMeshInterface_Example" );
@@ -32,44 +34,45 @@ void EclipseMeshInterface_Example::Run()
 
     // Load Model
     std::string variables_file( "CSMP_Eclipse_example-variables.txt" );
-    EclipseModel<3U> modelOut( model_name, variables_file );
 
     // Setup mesh
     std::string regions_file( model_name );
-    bool eclude_inactive_cells( true );
+    bool exclude_inactive_cells( true );
     bool tetra_mesh( false );
     const bool create_boundaries( false );
-    modelOut.EclipseModelSetup().MeshSetup( regions_file,
-                                            eclude_inactive_cells,
-                                            tetra_mesh,
-                                            create_boundaries );
+    EclipseModelSettings settings( model_name );
+    settings.MeshSetup( regions_file,
+                        exclude_inactive_cells,
+                        tetra_mesh,
+                        create_boundaries );
     // Setup properties
     // porosity
     std::string   porosity_name("porosity");
     VARIABLE_TYPE porosity_type( SCALAR );
     PLACEMENT     porosity_place( ELEMENT );
-    modelOut.EclipseModelSetup().PoroPropertySetup( porosity_name,
-                                                    porosity_type,
-                                                    porosity_place );
+    settings.PoroPropertySetup( porosity_name,
+                                porosity_type,
+                                porosity_place );
     // permeability
     std::string   permeability_name("tensor permeability");
     VARIABLE_TYPE permeability_type( TENSOR );
     PLACEMENT     permeability_place( ELEMENT );
     std::string   permeability_unit("mD"); // other options m2,D
-    modelOut.EclipseModelSetup().PermPropertySetup( permeability_name,
-                                                    permeability_type,
-                                                    permeability_place,
-                                                    permeability_unit );
+    settings.PermPropertySetup( permeability_name,
+                                permeability_type,
+                                permeability_place,
+                                permeability_unit );
     // rock type
     std::string   rocktype_name("rock type");
     VARIABLE_TYPE rocktype_type( SCALAR );
     PLACEMENT     rocktype_place( ELEMENT );
-    modelOut.EclipseModelSetup().RockNumPropertySetup( rocktype_name,
-                                                       rocktype_type,
-                                                       rocktype_place );
-    // Build model
-    modelOut.BuildModel();
+    settings.RockNumPropertySetup( rocktype_name,
+                                   rocktype_type,
+                                   rocktype_place );
+  
+    EclipseModel modelOut( settings, model_name, variables_file );
 
+#if 0
     // Get Fault Regions
     std::vector<std::string> faults;
     modelOut.GetFaults( faults );
@@ -135,6 +138,7 @@ void EclipseMeshInterface_Example::Run()
     //Model<3U> modelIn( model_name.c_str() );
     //VTU_Interface<3U>  vtu_output2( modelIn, problem_title.c_str() );
     //vtu_output2.OutputDataToVTU( output_file_name.c_str(), properties, model_subdomain_part.c_str(), time_step );
+#endif
 
     cout <<"\nEclipseMeshInterface_Example: That's it!\n";
 }

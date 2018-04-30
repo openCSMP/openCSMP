@@ -1583,7 +1583,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
       Format:
       1 0 1 0 0 0 0 0 1 1 1 1 1 ...\
  */
-int readEclipseActiveCells( std::vector<size_t>& cell_activity, std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
+int readEclipseActiveCells( std::vector<uint8_t>& cell_activity, std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 

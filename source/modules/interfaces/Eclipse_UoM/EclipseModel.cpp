@@ -9,35 +9,31 @@ namespace csmp {
 namespace eclipse {
 
 /// Model constructor with provided "variables_file.txt" file is used
-EclipseModel::EclipseModel( const std::string& model_name,
+EclipseModel::EclipseModel( EclipseModelSettings& settings,
+                            const std::string& model_name,
                             const std::string& variables_file )
 : csmp::Model<3U>( variables_file.c_str(), false ),
-  eclipse_model_settings_( model_name )
+  eclipse_model_settings_( settings )
 {
-   this->Name( model_name.c_str() );
+  this->Name( model_name.c_str() );
+  Initialize();
 }
 
 
 /// Default Model constructor with empty property data base is called
-EclipseModel::EclipseModel( const std::string& model_name )
+EclipseModel::EclipseModel( EclipseModelSettings& settings,
+                            const std::string& model_name )
 : csmp::Model<3U>(),
-  eclipse_model_settings_( model_name )
+  eclipse_model_settings_( settings )
 {
-   this->Name( model_name.c_str() );
+  this->Name( model_name.c_str() );
+  Initialize();
 }
 
 
 EclipseModel::~EclipseModel()
 {
 }
-
-
-// ACCESS TO MESH INTERFACE
-EclipseModelSettings& EclipseModel::EclipseModelSetup( )
-{
-    return eclipse_model_settings_;
-}
-
 
 
 /**  
@@ -179,6 +175,7 @@ void EclipseModel::Initialize()
          // SKM FIX - retain critical information in the EclipseModel object
          // TODO: deal with other critical data as well
          // ----------------------------------------------------------------
+#if 0
          const CornerPointGrid& cnr_grid_ref = mesh_interface.GetCornerPointGrid();
       
          // store grid dimensions int the EclipseModel
@@ -194,6 +191,7 @@ void EclipseModel::Initialize()
                     size_t index = cnr_grid_ref.CellIndex(i,j,k);
                     IJK_map_.insert( make_pair( ijk(i,j,k), index ) );
                  }
+#endif
       }
 
     // -------------------------------------------------
