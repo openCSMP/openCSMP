@@ -683,8 +683,7 @@ bool EclipseInterface::ReadCellSizes( std::ifstream& ifs, char* text_line, size_
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     const size_t direction( ( keyword_ == "DX") ? 0U : ( keyword_ == "DY") ? 1U : 2U );
-  std::vector<csmp::ScalarVariable> values;
-    if( readEclipseCellData( /* block_grid_.GetCellSizes( direction ) XXX */ values,
+    if( readEclipseCellData( block_grid_.GetCellSizes( direction ),
                              ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
         return false;
     return true;
@@ -694,9 +693,8 @@ bool EclipseInterface::ReadCellSizes( std::ifstream& ifs, char* text_line, size_
 bool EclipseInterface::ReadCellDepths( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::vector<csmp::ScalarVariable> values;
 
-    if( readEclipseCellData( /* block_grid_.GetCellDepths() XXX */ values,
+    if( readEclipseCellData( block_grid_.GetCellDepths(),
                              ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
         return false;
     return true;
@@ -759,10 +757,9 @@ bool EclipseInterface::ReadWellSpecs( std::ifstream& ifs, char* text_line, size_
 bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                         /* grid_.GetWellFacePath() XXX */ well_path,
+                                         well_face_path_,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -773,10 +770,9 @@ bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_l
 bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                        /* grid_.GetWellFacePath() XXX */ well_path,
+                                         well_face_path_,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -787,10 +783,9 @@ bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, 
 bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > > well_path;
     if ( readEclipseWellCompletionsData( NX_,NY_,NZ_,
                                          well_data_,
-                                        /* grid_.GetWellFacePath() XXX */ well_path,
+                                         well_face_path_,
                                          ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -801,9 +796,8 @@ bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, 
 bool EclipseInterface::ReadFaultsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::map<std::string,std::vector<std::pair<size_t,size_t> > > faults_data;
     if ( readEclipseFaultData( NX_,NY_,NZ_,
-                               /* grid_.GetFaultData() XXX */ faults_data,
+                               faults_data_,
                                ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
        return false;
     return true;
@@ -1830,8 +1824,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
 */
 int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                                     std::map<std::string,EclipseWell>& well_data,
-                                    // @todo at a typedef would be good here to increase readability
-                                    std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
+                                    std::map<std::string,EclipseWellPath>& well_path,
                                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1847,15 +1840,14 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
     /// temp data
     const size_t NX_x_NY( NX * NY );
     std::vector<size_t> indices( 4, 0 );
-    std::map<int,size_t> face_map;
-    face_map.insert( std::make_pair( -1,       CORNER_POINT_CELL_FACE_Xminus ) );
-    face_map.insert( std::make_pair( +1,       CORNER_POINT_CELL_FACE_Xplus  ) );
-    face_map.insert( std::make_pair( -NX,      CORNER_POINT_CELL_FACE_Yminus ) );
-    face_map.insert( std::make_pair( +NX,      CORNER_POINT_CELL_FACE_Yplus  ) );
-    face_map.insert( std::make_pair( -NX_x_NY, CORNER_POINT_CELL_FACE_Zminus ) );
-    face_map.insert( std::make_pair( +NX_x_NY, CORNER_POINT_CELL_FACE_Zplus  ) );
+    std::map<int,CORNER_POINT_CELL_FACE_INDEX> face_map;
+    face_map.emplace( -1,       CORNER_POINT_CELL_FACE_Xminus );
+    face_map.emplace( +1,       CORNER_POINT_CELL_FACE_Xplus  );
+    face_map.emplace( -NX,      CORNER_POINT_CELL_FACE_Yminus );
+    face_map.emplace( +NX,      CORNER_POINT_CELL_FACE_Yplus  );
+    face_map.emplace( -NX_x_NY, CORNER_POINT_CELL_FACE_Zminus );
+    face_map.emplace( +NX_x_NY, CORNER_POINT_CELL_FACE_Zplus  );
 
-    size_t cell_id;
     std::string well_name;
 
     /// read first line
@@ -1917,25 +1909,25 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
             wellcomp.k_bot_ = indices[3];
 
             /// 3. assign well path
-            std::vector<size_t> cell_ids;
+            std::vector<ijk> cell_ids;
+            EclipseWellPath wpath;
             for( size_t k = wellcomp.k_top_; k <= wellcomp.k_bot_; ++k )
             {
-                cell_id = wellcomp.ic_ + wellcomp.jc_*NX + k*NX_x_NY;
-                cell_ids.push_back( cell_id );
+                cell_ids.emplace_back( wellcomp.ic_, wellcomp.jc_, k );
                 well.well_data_.push_back( wellcomp );
             }
             addWellPath( NX, NY, NZ, well_name, cell_ids, well_path );
 
             /// 4. correct well path
-            std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
             size_t num_cells( wellcomp.k_bot_ - wellcomp.k_top_ + 1 );
-            size_t num_wells( wpath.size() );
-            size_t wid( wpath.size() - num_cells );
+            size_t num_wells( wpath.path.size() );
+            size_t wid( num_wells - num_cells );
             for( ; wid < num_wells; ++wid )
             {
-                well.well_data_[wid].w_start_ = wpath[wid].second.first;
-                well.well_data_[wid].w_end_   = wpath[wid].second.second;
+                well.well_data_[wid].w_start_ = wpath.path[wid].from;
+                well.well_data_[wid].w_end_   = wpath.path[wid].to;
             }
+            well_path.emplace( well_name, wpath );
         }
         ifs.getline( text_line, line_length );
         endOfblock = isEclipseEndOfBlock(text_line);
@@ -1952,293 +1944,12 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
 
     return 1;
 }
-
-int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
-                                        std::map<std::string,EclipseWell>& well_data,
-                                        std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
-                                        std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
-                                      )
-{
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
-    if( verbose )
-        std::cout <<"\nreadEclipseWellCompletionsData: reading well completions data...";
-
-    char*       token(0);
-    const char* delims =" ,:,\t,\n,\r";
-    const char* symbolsToremove ="'";
-    bool        endOfblock(false);
-
-    /// temp data
-    const size_t NX_x_NY( NX * NY );
-    std::vector<size_t> indices( 6, 0 );
-    /// face map
-    std::map<std::string,size_t> facemap;
-    facemap.insert( std::make_pair( "X-",CORNER_POINT_CELL_FACE_Xminus ) );
-    facemap.insert( std::make_pair( "Y-",CORNER_POINT_CELL_FACE_Yminus ) );
-    facemap.insert( std::make_pair( "Z-",CORNER_POINT_CELL_FACE_Zminus ) );
-    facemap.insert( std::make_pair( "X+",CORNER_POINT_CELL_FACE_Xplus ) );
-    facemap.insert( std::make_pair( "Y+",CORNER_POINT_CELL_FACE_Yplus ) );
-    facemap.insert( std::make_pair( "Z+",CORNER_POINT_CELL_FACE_Zplus ) );
-    facemap.insert( std::make_pair( "X", CORNER_POINT_CELL_FACE_Xplus ) );
-    facemap.insert( std::make_pair( "Y", CORNER_POINT_CELL_FACE_Yplus ) );
-    facemap.insert( std::make_pair( "Z", CORNER_POINT_CELL_FACE_Zplus ) );
-
-    std::string well_name;
-    size_t cell_id;
-    std::pair<size_t,size_t> path;
-    std::string face;
-
-    /// read first line
-    well_data.clear();
-    int firstLine( readEclipseFirstLineInBlock( ifs, text_line, line_length, endOfblock) );
-    if( firstLine == 0 || firstLine == 2 )
-        return firstLine;
-
-    do{
-        if ( !isEclipseCommentLine( text_line ) )
-        {
-            /// 1. read well name
-            token = strtok( text_line, delims );
-            if ( token == NULL )
-            {
-                csmp_error.notice(csmp::ERROR,
-                                  "readEclipseWellCompletionsData:",
-                                  "cannot read well name!");
-                return 0;
-            }
-            else
-            {
-                well_name = token;
-                removeSymbolsFromString( well_name, symbolsToremove );
-            }
-
-            EclipseWell& well( well_data[ well_name ] );
-            EclipseWellCompletion wellcomp;
-
-            /// 2. read i,j,k indices
-            for( size_t i = 0; i<4; ++i )
-            {
-                token = strtok( NULL, delims );
-                if ( token == NULL )
-                {
-                    csmp_error.notice(csmp::ERROR,
-                                      "readEclipseWellCompletionsData:",
-                                      "cannot read index!");
-                    return 0;
-                }
-                else if( !isIntegerNumber(token) )
-                {
-                    std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
-                                      "readEclipseWellCompletionsData:",
-                                      "index is not a digit!");
-                    return 0;
-                }
-                else
-                {
-                    indices[ i ] = atoi(token);
-                    /// start indexing form 0
-                    indices[ i ] -= 1;
-                }
-            }
-
-            /// 3. read face(in)
-            token = strtok( NULL, delims );
-            if ( token == NULL )
-            {
-                std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
-                                  "readEclipseWellCompletionsData:",
-                                  "cannot read face(in) value!");
-                return 0;
-            }
-            else
-            {
-                face = token;
-                removeSymbolsFromString( face, symbolsToremove );
-                indices[4] = facemap[ face ];
-            }
-
-            /// 4. read face(out)
-            token = strtok( NULL, delims );
-            if ( token == NULL )
-            {
-                std::cout <<"\n"<< token << std::endl;
-                csmp_error.notice(csmp::ERROR,
-                                  "readEclipseWellCompletionsData:",
-                                  "cannot read face(out) value!");
-                return 0;
-            }
-            else
-            {
-                face = token;
-                removeSymbolsFromString( face, symbolsToremove );
-                indices[5] = facemap[ face ];
-            }
-
-            wellcomp.ic_      = indices[0];
-            wellcomp.jc_      = indices[1];
-            wellcomp.k_top_   = indices[2];
-            wellcomp.k_bot_   = indices[3];
-            wellcomp.w_start_ = indices[4];
-            wellcomp.w_end_   = indices[5];
-            path.first        = wellcomp.w_start_;
-            path.second       = wellcomp.w_end_;
-
-            /// 5. assign well path
-            std::vector<size_t> cell_ids;
-            for( size_t k = wellcomp.k_top_; k <= wellcomp.k_bot_; ++k )
-            {
-                cell_id = wellcomp.ic_ + wellcomp.jc_*NX + k*NX_x_NY;
-                cell_ids.push_back( cell_id );
-                well.well_data_.push_back( wellcomp );
-            }
-            addWellPath( well_name, cell_ids, path, well_path );
-        }
-        ifs.getline( text_line, line_length );
-        endOfblock = isEclipseEndOfBlock(text_line);
-        if( !endOfblock && csmp::isBlankLine(text_line) )
-        {
-            ifs.getline( text_line, line_length );
-            endOfblock = isEclipseEndOfBlock(text_line);
-        }
-    }
-    while ( !endOfblock && !csmp::isBlankLine(text_line) && !ifs.eof() );
-
-    if( verbose )
-        std::cout <<"\nreadEclipseWellCompletionsData: well completions data has been read successfully.\n";
-
-    return 1;
-}
-
-
-
-
-/**
-    As 'readEclipseWellCompletionsData()' but for wells that go through the nodes.
-*/
-int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
-                                        std::map<std::string,EclipseWell>& well_data,
-                                        std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
-                                        std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
-                                      )
-{
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
-    if( verbose )
-        std::cout <<"\nreadEclipseExplicitNodeWellCompletionsData: reading well completions data...";
-
-    char*       token(0);
-    const char* delims =" ,:,\t,\n,\r";
-    const char* symbolsToremove ="'";
-    bool        endOfblock(false);
-
-    /// temp data
-    const size_t NX_x_NY( NX * NY );
-    std::vector<size_t> indices( 6, 0 );
-
-    std::string well_name;
-    size_t cell_id;
-    std::pair<size_t,size_t> path;
-
-    /// read first line
-    well_data.clear();
-    int firstLine( readEclipseFirstLineInBlock( ifs, text_line, line_length, endOfblock) );
-    if( firstLine == 0 || firstLine == 2 )
-        return firstLine;
-
-    do{
-        if ( !isEclipseCommentLine( text_line ) )
-        {
-            /// 1. read well name
-            token = strtok( text_line, delims );
-            if ( token == NULL )
-            {
-                csmp_error.notice(csmp::ERROR,
-                                  "readEclipseExplicitNodeWellCompletionsData:",
-                                  "cannot read well name!");
-                return 0;
-            }
-            else
-            {
-                well_name = token;
-                removeSymbolsFromString( well_name, symbolsToremove );
-            }
-
-            EclipseWell& well( well_data[ well_name ] );
-            EclipseWellCompletion wellcomp;
-
-            /// 2. read i,j,k,w_start,w_end indices
-            for( size_t i = 0; i<6; ++i )
-            {
-                token = strtok( NULL, delims );
-                if ( token == NULL )
-                {
-                    csmp_error.notice(csmp::ERROR,
-                                      "readEclipseExplicitNodeWellCompletionsData:",
-                                      "cannot read index!");
-                    return 0;
-                }
-                else if( !isIntegerNumber(token) )
-                {
-                    std::cout <<"\n"<< token << std::endl;
-                    csmp_error.notice(csmp::ERROR,
-                                      "readEclipseExplicitNodeWellCompletionsData:",
-                                      "index is not a digit!");
-                    return 0;
-                }
-                else
-                {
-                    indices[ i ] = atoi(token);
-                    /// start indexing form 0
-                    indices[ i ] -= 1;
-                }
-            }
-            wellcomp.ic_      = indices[0];
-            wellcomp.jc_      = indices[1];
-            wellcomp.k_top_   = indices[2];
-            wellcomp.k_bot_   = indices[3];
-            wellcomp.w_start_ = indices[4];
-            wellcomp.w_end_   = indices[5];
-            path.first        = wellcomp.w_start_;
-            path.second       = wellcomp.w_end_;
-
-            /// 3. assign well path
-            std::vector<size_t> cell_ids;
-            for( size_t k = wellcomp.k_top_; k <= wellcomp.k_bot_; ++k )
-            {
-                cell_id = wellcomp.ic_ + wellcomp.jc_*NX + k*NX_x_NY;
-                cell_ids.push_back( cell_id );
-                well.well_data_.push_back( wellcomp );
-            }
-            addWellPath( well_name, cell_ids, path, well_path );
-        }
-        ifs.getline( text_line, line_length );
-        endOfblock = isEclipseEndOfBlock(text_line);
-        if( !endOfblock && csmp::isBlankLine(text_line) )
-        {
-            ifs.getline( text_line, line_length );
-            endOfblock = isEclipseEndOfBlock(text_line);
-        }
-    }
-    while ( !endOfblock && !csmp::isBlankLine(text_line) && !ifs.eof() );
-
-    if( verbose )
-        std::cout <<"\nreadEclipseExplicitNodeWellCompletionsData: well completions data has been read successfully.\n";
-
-    return 1;
-  
-    // @todo there is code bloat through duplication of functions that differ only in slight details
-}
-
-
 
 
 /**
 */
 int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
-                          std::map<std::string,std::vector<std::pair<size_t,size_t> > >& fault_data,
+                          std::map<std::string,EclipseFault>& fault_data,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -2252,25 +1963,22 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
     bool        endOfblock(false);
 
     /// fault data
-    const size_t NX_x_NY( NX * NY );
     std::vector<std::pair<size_t,size_t> > data;
     std::vector<size_t> index_range( 6, 0 );
     std::string fault_name;
     std::string face;
-    size_t face_id;
-    size_t cell_id;
 
     /// face map
-    std::map<std::string,size_t> facemap;
-    facemap.insert( std::make_pair( "X-",CORNER_POINT_CELL_FACE_Xminus ) );
-    facemap.insert( std::make_pair( "Y-",CORNER_POINT_CELL_FACE_Yminus ) );
-    facemap.insert( std::make_pair( "Z-",CORNER_POINT_CELL_FACE_Zminus ) );
-    facemap.insert( std::make_pair( "X+",CORNER_POINT_CELL_FACE_Xplus ) );
-    facemap.insert( std::make_pair( "Y+",CORNER_POINT_CELL_FACE_Yplus ) );
-    facemap.insert( std::make_pair( "Z+",CORNER_POINT_CELL_FACE_Zplus ) );
-    facemap.insert( std::make_pair( "X", CORNER_POINT_CELL_FACE_Xplus ) );
-    facemap.insert( std::make_pair( "Y", CORNER_POINT_CELL_FACE_Yplus ) );
-    facemap.insert( std::make_pair( "Z", CORNER_POINT_CELL_FACE_Zplus ) );
+    std::unordered_map<std::string,CORNER_POINT_CELL_FACE_INDEX> facemap;
+    facemap.emplace( "X-", CORNER_POINT_CELL_FACE_Xminus );
+    facemap.emplace( "Y-", CORNER_POINT_CELL_FACE_Yminus );
+    facemap.emplace( "Z-", CORNER_POINT_CELL_FACE_Zminus );
+    facemap.emplace( "X+", CORNER_POINT_CELL_FACE_Xplus );
+    facemap.emplace( "Y+", CORNER_POINT_CELL_FACE_Yplus );
+    facemap.emplace( "Z+", CORNER_POINT_CELL_FACE_Zplus );
+    facemap.emplace( "X", CORNER_POINT_CELL_FACE_Xplus );
+    facemap.emplace( "Y", CORNER_POINT_CELL_FACE_Yplus );
+    facemap.emplace( "Z", CORNER_POINT_CELL_FACE_Zplus );
 
     /// read first line
     fault_data.clear();
@@ -2341,18 +2049,17 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
             }
 
             /// 4. assign fault data
-            data.clear();
-            fault_data.insert( std::make_pair( fault_name, data ) );
+            EclipseFault fault;
+            fault.fault.reserve((index_range[1] - index_range[0] + 1)
+                                * (index_range[3] - index_range[2] + 1)
+                                * (index_range[5] - index_range[4] + 1));
             for( size_t i = index_range[0]; i <= index_range[1]; ++i )
                 for( size_t j = index_range[2]; j <= index_range[3]; ++j )
                     for( size_t k = index_range[4]; k <= index_range[5]; ++k )
                     {
-                        cell_id = i + j*NX + k*NX_x_NY;
-                        face_id = facemap[ face ];
-                        data.push_back( std::make_pair( cell_id, face_id ) );
+                      fault.Add( i, j, k, facemap[face] );
                     }
-            std::vector<std::pair<size_t,size_t> >& existing_data = fault_data[ fault_name ];
-            std::copy( data.begin(), data.end(), std::back_inserter( existing_data ) );
+            fault_data.emplace(fault_name, fault);
         }
         ifs.getline( text_line, line_length );
         endOfblock = isEclipseEndOfBlock(text_line);
@@ -2812,8 +2519,8 @@ EclipseWell
 EclipseModelSettings::EclipseModelSettings( const std::string& mesh_file_prefix )
     : mesh_file_prefix_   ( mesh_file_prefix ),
       regions_file_prefix_( mesh_file_prefix ),
-      tetra_mesh_         ( false ),
-      create_boundaries_  ( false )
+      create_boundaries_  ( false ),
+      tetra_mesh_         ( false )
 {
     if( csmp::isRegionsFileExist( mesh_file_prefix.c_str() ) ){
         regions_.clear();

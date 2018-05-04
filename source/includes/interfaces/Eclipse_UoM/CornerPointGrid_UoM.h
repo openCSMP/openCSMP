@@ -9,6 +9,36 @@ namespace csmp {
 
 namespace eclipse {
 
+class  CellCenteredGrid
+{
+public:
+
+    CellCenteredGrid();
+    ~CellCenteredGrid();
+
+    void Clear();
+
+    void AssignDimensionX( size_t NX );
+    void AssignDimensionY( size_t NY );
+    void AssignDimensionZ( size_t NZ );
+    void AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars );
+
+    size_t GetNumCells() const;
+    std::vector<csmp::ScalarVariable>& GetCellDepths();
+    std::vector<csmp::ScalarVariable>& GetCellSizes( size_t direction );
+
+private:
+
+    size_t NX_; // max index of cell in x direction
+    size_t NY_; // max index of cell in y direction
+    size_t NZ_; // max index of cell in z direction
+    std::vector<csmp::ScalarVariable> dx_;   // cell sizes  ( dx )
+    std::vector<csmp::ScalarVariable> dy_;   // cell sizes  ( dy )
+    std::vector<csmp::ScalarVariable> dz_;   // cell sizes  ( dz )
+    std::vector<csmp::ScalarVariable> tops_; // cell depths ( ztop )
+};
+	
+
 /**
 
 @class CornerPointGrid_UoM  CornerPointGrid_UoM
@@ -81,26 +111,6 @@ private:
   size_t elements_;
   std::vector<csmp::Point<3U> >  axes_; ///< reservoir coordinate system
 };
-
-void addWellPath( size_t NX, size_t NY, size_t NZ,
-                  const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path );
-
-void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  const std::vector<std::pair<size_t,size_t> >& face_ids,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path );
-
-void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  std::pair<size_t,size_t> face_ids,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path );
-
-void addWellPath( const std::string& well_name,
-                  size_t cell_ids,
-                  std::pair<size_t,size_t> face_id,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path );
 
 } // eclipse
 

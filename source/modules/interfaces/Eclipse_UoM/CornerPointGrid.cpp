@@ -3,6 +3,7 @@
 #include "CSMP_highLevelUtilities.h"
 
 #include "ErrorHandler.h"
+#include "EclipseInterface_UoM.h"
 
 namespace csmp {
 
@@ -1932,55 +1933,21 @@ Pillar& CornerPointGrid_UoM::operator()( size_t i, size_t j )
  
  
 
-#if 0
+// CELL CENTERED GRID
 
-
-
-
-
-// BLOCK CENTERED GRID
-
-BlockCenteredGrid::BlockCenteredGrid()
+CellCenteredGrid::CellCenteredGrid()
 :dx_(3U)
 {
 
 }
 
-BlockCenteredGrid::BlockCenteredGrid( const BlockCenteredGrid& grid )
-: NX_( grid.NX_ ),
-  NY_( grid.NY_ ),
-  NZ_( grid.NZ_ ),
-  dx_( grid.dx_ ),
-  dy_( grid.dy_ ),
-  dz_( grid.dz_ ),
-  tops_( grid.tops_ )
-{
-}
-
-BlockCenteredGrid& BlockCenteredGrid::operator=( const BlockCenteredGrid& grid )
-{
-    if( this != &grid )
-    {
-        NX_   = grid.NX_;
-        NY_   = grid.NY_;
-        NZ_   = grid.NZ_;
-        dx_   = grid.dx_;
-        dy_   = grid.dy_;
-        dz_   = grid.dz_;
-        tops_ = grid.tops_;
-    }
-    return *this;
-}
-
-
-
-BlockCenteredGrid::~BlockCenteredGrid()
+CellCenteredGrid::~CellCenteredGrid()
 {
 }
 
 
 
-void BlockCenteredGrid::Clear()
+void CellCenteredGrid::Clear()
 {
     /// grid
     tops_.clear();
@@ -1991,21 +1958,21 @@ void BlockCenteredGrid::Clear()
 
 
 
-size_t BlockCenteredGrid::GetNumCells() const
+size_t CellCenteredGrid::GetNumCells() const
 {
     return NX_*NY_*NZ_;
 }
 
 
 
-std::vector<csmp::ScalarVariable>& BlockCenteredGrid::GetCellDepths()
+std::vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
 {
     return tops_;
 }
 
 
 
-std::vector<ScalarVariable>& BlockCenteredGrid::GetCellSizes( size_t i )
+std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
 {
     if( i == 0 )
         return dx_;
@@ -2016,29 +1983,29 @@ std::vector<ScalarVariable>& BlockCenteredGrid::GetCellSizes( size_t i )
 
 
 
-void BlockCenteredGrid::AssignDimensionX( size_t NX )
+void CellCenteredGrid::AssignDimensionX( size_t NX )
 {
     NX_ = NX;
 }
 
 
 
-void BlockCenteredGrid::AssignDimensionY( size_t NY )
+void CellCenteredGrid::AssignDimensionY( size_t NY )
 {
     NY_ = NY;
 }
 
 
 
-void BlockCenteredGrid::AssignDimensionZ( size_t NZ )
+void CellCenteredGrid::AssignDimensionZ( size_t NZ )
 {
     NZ_ = NZ;
 }
 
 
 
-
-void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
+#if 0
+void CellCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
 {
     const size_t NXY( NX_*NY_ );
     size_t cell_id(0);
@@ -2156,11 +2123,11 @@ void BlockCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<
 /// by default well is assumed to be vertical
 void addWellPath( size_t NX, size_t NY, size_t NZ,
                   const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
+                  const std::vector<ijk>& cell_ids,
+                  std::map<std::string,EclipseWellPath>& well_path )
 {
     const size_t NX_x_NY( NX*NY );
-    std::map<long,size_t> face_map;
+    std::map<int64_t,CORNER_POINT_CELL_FACE_INDEX> face_map;
     face_map.insert( std::make_pair( -1,       CORNER_POINT_CELL_FACE_Xminus ) );
     face_map.insert( std::make_pair( +1,       CORNER_POINT_CELL_FACE_Xplus  ) );
     face_map.insert( std::make_pair( -NX,      CORNER_POINT_CELL_FACE_Yminus ) );
@@ -2168,34 +2135,28 @@ void addWellPath( size_t NX, size_t NY, size_t NZ,
     face_map.insert( std::make_pair( -NX_x_NY, CORNER_POINT_CELL_FACE_Zminus ) );
     face_map.insert( std::make_pair( +NX_x_NY, CORNER_POINT_CELL_FACE_Zplus  ) );
 
-    std::pair<size_t,size_t> direction;
-    std::pair<size_t,std::pair<size_t,size_t> > path;
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
-    well_path.insert( std::make_pair( well_name, empty_path ) );
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
+    EclipseWellPath  wpath;
     size_t num_cells( cell_ids.size() );
     for( size_t cid=0; cid<num_cells; ++cid )
     {
-        size_t cell_id = cell_ids[ cid ];
-        direction.first  = CORNER_POINT_CELL_FACE_Zminus;
-        direction.second = CORNER_POINT_CELL_FACE_Zplus;
-        path.first  = cell_id;
-        path.second = direction;
-        wpath.push_back( path );
+      wpath.path.emplace_back( cell_ids[cid], CORNER_POINT_CELL_FACE_Zminus, CORNER_POINT_CELL_FACE_Zplus);
     }
-    if( wpath.size() > 1 )
+    if( wpath.path.size() > 1 )
     {
-        size_t nid( wpath.size() - num_cells + 1 ); /// neighbour is a next cell
+        size_t nid( wpath.path.size() - num_cells + 1 ); /// neighbour is a next cell
         for( size_t cid = 0; cid <(num_cells-1); ++cid, ++nid )
         {
             //              neighbor id          cell id
-            long face_id  = wpath[ nid ].first - cell_ids[ cid ];
-            if( nid-1 == 0 ) wpath[ nid-1 ].second.first = face_map[ -1 * face_id ];
-            wpath[ nid-1 ].second.second = face_map[ face_id ];
-            wpath[ nid ].second.first    = face_map[ -1*face_id ];
-            wpath[ nid ].second.second   = face_map[ face_id ];
+            int64_t face_id  = ((int64_t)wpath.path[ nid ].cell.i - (int)cell_ids[ cid ].i)
+                  + ((int64_t)wpath.path[ nid ].cell.j - (int64_t)cell_ids[ cid ].j) * (int64_t)NX
+                  + ((int64_t)wpath.path[ nid ].cell.k - (int64_t)cell_ids[ cid ].k) * (int64_t)NX_x_NY;
+            if( nid-1 == 0 ) wpath.path[ nid-1 ].from = face_map[ -face_id ];
+            wpath.path[ nid-1 ].to = face_map[ face_id ];
+            wpath.path[ nid ].from = face_map[ -face_id ];
+            wpath.path[ nid ].to   = face_map[ face_id ];
         }
     }
+    well_path.emplace(well_name, wpath);
 }
 
 

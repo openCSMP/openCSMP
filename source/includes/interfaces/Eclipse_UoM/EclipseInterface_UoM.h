@@ -3,6 +3,8 @@
 
 #include "CornerPointGrid_UoM.h"
 
+#include "CSMP_highLevelUtilities.h"
+
 namespace csmp {
 
 namespace eclipse {
@@ -97,6 +99,38 @@ struct EclipseWell
     std::vector<EclipseWellCompletion> well_data_;
 };
 
+
+ struct EclipseWellPathEntry
+ {
+   ijk cell;
+   CORNER_POINT_CELL_FACE_INDEX from, to;
+
+   EclipseWellPathEntry(const ijk& cell, CORNER_POINT_CELL_FACE_INDEX from, CORNER_POINT_CELL_FACE_INDEX to)
+    : cell(cell), from(from), to(to)
+   {
+   }
+ };
+
+
+  struct EclipseWellPath
+  {
+    std::vector<EclipseWellPathEntry> path;
+  };
+
+  struct EclipseFault
+  {
+    std::vector< std::pair<ijk,CORNER_POINT_CELL_FACE_INDEX> > fault;
+    
+    void Reserve( size_t count )
+    {
+      fault.reserve(count);
+    }
+    
+    void Add(size_t i, size_t j, size_t k, CORNER_POINT_CELL_FACE_INDEX face)
+    {
+      fault.emplace_back(ijk(i, j, j), face);
+    }
+  };
 
 
 
@@ -244,6 +278,7 @@ public:
     size_t                      NZ_;
     std::vector<double64>       zcorn_;
     CornerPointGrid_UoM         grid_;
+    CellCenteredGrid            block_grid_;
 
 #if 0
     // local mesh block
@@ -268,8 +303,11 @@ public:
     std::vector<csmp::ScalarVariable>       eqlnum_;
     std::vector<csmp::ScalarVariable>       fipnum_;
 
+    std::map<std::string,EclipseFault>      faults_data_;
+
     // well specific data
     std::map<std::string,EclipseWell>       well_data_;
+    std::map<std::string,EclipseWellPath>   well_face_path_;
 };
 
 
@@ -476,24 +514,24 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell> &well_data,
 
 int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                                         std::map<std::string,EclipseWell>& well_data,
-                                        std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
+                                        std::map<std::string,EclipseWellPath>& well_path,
                                         std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                       );
 
 int readEclipseExplicitFaceWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                                                 std::map<std::string,EclipseWell>& well_data,
-                                                std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
+                                                std::map<std::string,EclipseWellPath>& well_path,
                                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                               );
 
 int readEclipseExplicitNodeWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                                                 std::map<std::string,EclipseWell>& well_data,
-                                                std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path,
+                                                std::map<std::string,EclipseWellPath>& well_path,
                                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                               );
 
 int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
-                          std::map<std::string,std::vector<std::pair<size_t,size_t> > >& faults_data,
+                          std::map<std::string,EclipseFault>& faults_data,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                         );
 
@@ -509,6 +547,34 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
 int skipEclipseBlock( std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 void removeSymbolsFromString( std::string &str, const char* symbolsToRemove );
+  
+  
+  void addWellPath( size_t NX, size_t NY, size_t NZ,
+                   const std::string& well_name,
+                   const std::vector<ijk>& cell_ids,
+                   std::map<std::string,EclipseWellPath>& well_path );
+  
+  void addWellPath( const std::string& well_name,
+                   const std::vector<ijk>& cell_ids,
+                   const std::vector<std::pair<ijk,CORNER_POINT_CELL_FACE_INDEX> >& face_ids,
+                   std::map<std::string,EclipseWellPath>& well_path );
+
+  void addWellPath( const std::string& well_name,
+                   const std::vector<ijk>& cell_ids,
+                   std::pair<ijk,CORNER_POINT_CELL_FACE_INDEX> face_ids,
+                   std::map<std::string,EclipseWellPath>& well_path );
+
+  void addWellPath( const std::string& well_name,
+                   const std::vector<ijk>& cell_ids,
+                   std::pair<CORNER_POINT_CELL_FACE_INDEX,CORNER_POINT_CELL_FACE_INDEX> face_ids,
+                   std::map<std::string,EclipseWellPath>& well_path );
+
+  void addWellPath( const std::string& well_name,
+                   const ijk& cell_ids,
+                   std::pair<ijk,CORNER_POINT_CELL_FACE_INDEX> face_id,
+                   std::map<std::string,EclipseWellPath>& well_path );
+  
+
 
 } // eclipse
 

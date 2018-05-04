@@ -148,6 +148,8 @@ void EclipseModel::Initialize()
          //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbors )
          const bool non_box_shaped_model( !mesh_topology.BoxShapedModel() );
 
+#if 0
+
          // with regions
          if ( !eclipse_model_settings_.regions_.empty() ) {
              // performing a ckeck whether element numbers in the VSet and the model topology match; else something went wrong
@@ -175,7 +177,6 @@ void EclipseModel::Initialize()
          // SKM FIX - retain critical information in the EclipseModel object
          // TODO: deal with other critical data as well
          // ----------------------------------------------------------------
-#if 0
          const CornerPointGrid& cnr_grid_ref = mesh_interface.GetCornerPointGrid();
       
          // store grid dimensions int the EclipseModel

@@ -67,7 +67,7 @@ std::string toString( CORNER_POINT_CELL_CATEGORY );
 ///         6              7
 ///
 
-enum CORNER_POINT_CELL_FACE_INDEX {
+  enum CORNER_POINT_CELL_FACE_INDEX {
     CORNER_POINT_CELL_FACE_Xplus  = 4,
     CORNER_POINT_CELL_FACE_Xminus = 2,
     CORNER_POINT_CELL_FACE_Yplus  = 3,
