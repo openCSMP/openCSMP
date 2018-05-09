@@ -61,6 +61,10 @@ class VData {
     void AddElementTypes( std::vector<int32>::const_iterator first,
                           std::vector<int32>::const_iterator last );
 
+  void AddElementTypes( std::vector<int32>::iterator first,
+                       std::vector<int32>::iterator last );
+  
+
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
    
     void Resize( const std::deque<int32>& etypes,

@@ -148,9 +148,10 @@ void EclipseModel::Initialize()
          //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbors )
          const bool non_box_shaped_model( !mesh_topology.BoxShapedModel() );
 
-#if 0
 
          // with regions
+#if 0
+
          if ( !eclipse_model_settings_.regions_.empty() ) {
              // performing a ckeck whether element numbers in the VSet and the model topology match; else something went wrong
              // and user is given the possibility to call the subsequent method or not.
@@ -159,14 +160,16 @@ void EclipseModel::Initialize()
              if ( !mesh_topology.CheckTopology( vset, require_unique_names_for_vol_surf_lines,
                                                 correct_orientation_of_surface_elements, non_box_shaped_model ) )
                error_handler.notice( csmp::INFO, "EclipseModel<3U>::BuildModel", "ModelTopology=subdivision into regions is broken.");
-           
              csmp::Model<3U>::Initialize( eclipse_model_settings_.regions_file_prefix_.c_str(),
                                            mesh_topology,
                                            vset, eclipse_model_settings_.create_boundaries_,
                                            non_box_shaped_model );
            }
          // no regions
-         else {
+         else
+#endif
+
+         {
              // all cells are lumped into the region "Eclipse Model" that is stored in the model topology
              const bool isoparametric(true);
              csmp::Model<3U>::Initialize( isoparametric, vset, eclipse_model_settings_.create_boundaries_,
@@ -174,6 +177,7 @@ void EclipseModel::Initialize()
            }
       
       
+#if 0
          // SKM FIX - retain critical information in the EclipseModel object
          // TODO: deal with other critical data as well
          // ----------------------------------------------------------------

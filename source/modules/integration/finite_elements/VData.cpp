@@ -198,8 +198,13 @@ bool VData::HybridElementTypeMesh() const { return hybrid_mesh_; }
 void VData::HybridElementTypeMesh( bool hybrid_mesh ) { hybrid_mesh_ = hybrid_mesh; }
 
 void VData::AddElementTypes( std::vector<int32>::const_iterator first,
-                                    std::vector<int32>::const_iterator last )
+                             std::vector<int32>::const_iterator last )
  { pelmt.assign( first, last ); }
+
+  void VData::AddElementTypes( std::vector<int32>::iterator first,
+                              std::vector<int32>::iterator last )
+  { pelmt.assign( first, last ); }
+  
 
 
 //  aelement ID's 0...n-1              
@@ -404,7 +409,10 @@ void VData::Plist( size_t eidx, size_t nidx, size_t val )
 
 size_t VData::Plist( size_t eidx, size_t nidx ) const 
   { 
-     assert( eidx < plist.size() ); 
+     assert( eidx < plist.size() );
+    if (nidx >= plist[eidx].size()) {
+      std::cerr << "plist[" << eidx << ".size() = " <<plist[eidx].size() << '\n';
+    }
      assert( nidx < plist[eidx].size() ); 
      return plist[eidx][nidx]; 
   }

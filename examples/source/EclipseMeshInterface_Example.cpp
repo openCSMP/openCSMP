@@ -6,6 +6,7 @@
 #include "InputDataManager.h"
 
 #include "EclipseModel_UoM.h"
+#include "VTK_Interface.h"
 
 using namespace std;
 
@@ -71,6 +72,8 @@ void EclipseMeshInterface_Example::Run()
                                    rocktype_place );
   
     EclipseModel modelOut( settings, model_name, variables_file );
+  VTK_Interface<3U>  vtk_output;
+  vtk_output.OutputNodeDataToVTK( modelOut, "EclipseInterfaceExample", 0 );
 
 #if 0
     // Get Fault Regions

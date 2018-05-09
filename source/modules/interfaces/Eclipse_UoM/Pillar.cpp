@@ -46,26 +46,27 @@ double64 Pillar::GetZCoord( size_t zid ) const
   return points_[zid];
 }
   
-  size_t Pillar::FindPoint(double64 z) const
-  {
-    auto it = std::lower_bound(points_.begin(), points_.end(), z);
-    if (it != points_.end() && *it == z) {
-      return std::distance(points_.begin(), it);
-    }
-    else {
-      throw csmp::Exception(ERROR, "Pillar::FindPoint", "Could not find zcoord in pillar");
-    }
-  }
+size_t Pillar::FindPoint(double64 z) const
+{
+auto it = std::lower_bound(points_.begin(), points_.end(), z);
+if (it != points_.end() && *it == z) {
+    return std::distance(points_.begin(), it);
+}
+else {
+    throw csmp::Exception(ERROR, "Pillar::FindPoint", "Could not find zcoord in pillar");
+}
+}
 
-  void Pillar::SetFirstNodeNum(size_t node_num)
-  {
-    firstNodeNum_ = node_num;
-  }
+void Pillar::SetFirstNodeNum(size_t node_num)
+{
+firstNodeNum_ = node_num;
+}
   
-  size_t Pillar::FirstNodeNum() const
-  {
-    return firstNodeNum_;
-  }
+size_t Pillar::FirstNodeNum() const
+{
+return firstNodeNum_;
+}
+
 
 csmp::Point<3U> Pillar::GetPoint( size_t zid ) const
 {
@@ -92,12 +93,4 @@ void Pillar::Out() const
 } // eclipse
 
 } // end namespace csmp
-
-
-
-
-
-
-
-
 

@@ -88,6 +88,7 @@ class  CornerPointGrid_UoM
 
 protected:
     void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt );
+	
   
 private:
   size_t NX_; ///< max index of cell in x direction
@@ -96,11 +97,19 @@ private:
   
   std::vector<Pillar> pillars_;
   std::map<std::pair<size_t,size_t>,Column> columns_;
+  std::multimap<std::tuple<size_t, size_t, size_t>, size_t> elementMap; // (<i, j, k> elementID)
 
   // These are the model-building steps in order
   void InitializeGridSpecs();
   void ConstructPillarsAndColumns(const std::vector<double64>& zcorn);
-  void ConstructFiniteElementsFromColumns();
+  void ConstructFiniteElementsFromColumns(VSet<3U>& vset);
+
+  // To treat the triangular element above and beneath 
+  void splitElementToPyramids();		// TODO: split irregular element to pyramids or tetrahedrons
+  void splitElementToTetrahedrons();	// TODO: split irregular element to pyramids or tetrahedrons
+  void addElementToMap(size_t i, size_t j, size_t k, size_t elementID);
+  //void addNodeListToPList(std::map<size_t, std::vector<size_t>>& plist, std::vector<std::vector<size_t>> nodeLists, size_t& elementID);
+  //void addNodeListToPList(std::map<size_t, std::vector<size_t>>& plist, std::vector<size_t> nodeList, size_t& elementID);
 
   size_t active_elements_;
   std::vector<uint8_t> cell_activity_;           ///< active/inactive cells

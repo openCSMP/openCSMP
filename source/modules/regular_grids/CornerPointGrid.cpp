@@ -6,6 +6,7 @@
 
 namespace csmp {
 
+
 // CORNER POINT GRID
 
 template<size_t dim>
@@ -2373,7 +2374,6 @@ void addWellPath( const std::string& well_name,
     well_path.insert( std::make_pair( well_name, empty_path ) );
     well_path[ well_name ].push_back( path );
 }
-
 } // end namespace csmp
 
 
