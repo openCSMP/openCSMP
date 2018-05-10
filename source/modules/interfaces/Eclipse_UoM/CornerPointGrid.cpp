@@ -1275,7 +1275,7 @@ namespace csmp {
       }
 
       void CornerPointGrid_UoM::addElementToMap(size_t i, size_t j, size_t k, size_t elementID) {
-        this->elementMap.insert(pair<tuple<size_t, size_t, size_t>, size_t>(tuple<size_t, size_t, size_t>(i, j, k), elementID));
+        this->elementMap.emplace(ijk(i,j,k), elementID);
       };
 
 #if 0    
@@ -2715,20 +2715,10 @@ namespace csmp {
       var = 0.;
       size_t current_id = 0;
       std::vector<VarType> cell_data(vset.Elements(), var);
-#if 0
-      // XXX
-      if (!embedded_cells_.empty())
-      {
-        ;
-        for (typename std::vector<VarType>::const_iterator
-          it = prop_data.begin(); it != prop_data.end(); ++it, ++current_id)
-        {
-          std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> > >::const_iterator
-            cit = embedded_cells_.find(current_id);
-          if (cit != embedded_cells_.end())
-            for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-              eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-              cell_data[(*eit).first] = *it;
+        for (auto& entry : elementMap) {
+          auto coord = entry.first;
+          size_t idx = coord.i + coord.j * NX_ + coord.k * NX_x_NY_;
+          cell_data[entry.second] = prop_data[idx];
         }
         if (prop_place == csmp::NODE) {
           // Add nodal data to vset
@@ -2751,9 +2741,6 @@ namespace csmp {
           for (const auto& it : cell_data) pushBack(property_values, it);
           vset.AddData(prop_name.c_str(), property_values);
         }
-      }
-#endif
-      return;
     }
 
     template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT&) const;

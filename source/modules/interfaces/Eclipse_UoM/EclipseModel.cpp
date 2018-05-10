@@ -176,29 +176,7 @@ void EclipseModel::Initialize()
                                            non_box_shaped_model );
            }
       
-      
-#if 0
-         // SKM FIX - retain critical information in the EclipseModel object
-         // TODO: deal with other critical data as well
-         // ----------------------------------------------------------------
-         const CornerPointGrid& cnr_grid_ref = mesh_interface.GetCornerPointGrid();
-      
-         // store grid dimensions int the EclipseModel
-         grid_dim_I_ = cnr_grid_ref.DimensionI();
-         grid_dim_J_ = cnr_grid_ref.DimensionJ();
-         grid_dim_K_ = cnr_grid_ref.DimensionK();
-         // store corner point cells in Eclipse model
-         for ( size_t k = 0; k < grid_dim_K_; ++k )
-           for ( size_t j = 0; j < grid_dim_J_; ++j )
-             for ( size_t i = 0; i < grid_dim_I_; ++i )
-               // checking whether the cell is active (only then it will be stored)
-               if ( cnr_grid_ref.IsActiveCell(i,j,k) ) {
-                    size_t index = cnr_grid_ref.CellIndex(i,j,k);
-                    IJK_map_.insert( make_pair( ijk(i,j,k), index ) );
-                 }
-#endif
-      }
-
+    }
     // -------------------------------------------------
     // catching all possible standard and csmp::Exceptions
     // -------------------------------------------------

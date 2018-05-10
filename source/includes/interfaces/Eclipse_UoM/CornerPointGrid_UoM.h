@@ -4,6 +4,7 @@
 #include "VSet.h"
 #include "ModelTopology.h"
 #include "CornerPointCell_UoM.h"
+#include "CSMP_highLevelUtilities.h"
 
 namespace csmp {
 
@@ -97,7 +98,7 @@ private:
   
   std::vector<Pillar> pillars_;
   std::map<std::pair<size_t,size_t>,Column> columns_;
-  std::multimap<std::tuple<size_t, size_t, size_t>, size_t> elementMap; // (<i, j, k> elementID)
+  std::multimap<ijk, size_t> elementMap;
 
   // These are the model-building steps in order
   void InitializeGridSpecs();
