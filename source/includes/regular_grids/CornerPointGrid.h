@@ -88,7 +88,7 @@ class  CornerPointGrid
 
 
     const csmp::Point<3U>& GetCellNode( size_t i, size_t j, size_t k, size_t nid ) const;
-    std::vector<size_t>&   GetCellActivity();
+    std::vector<uint8_t>&  GetCellActivity();
     std::vector<std::vector<Pillar> >& GetPillars();
     std::map<std::string,std::vector<std::pair<size_t,size_t> > >& GetFaultData();
     std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& GetWellFacePath();
@@ -165,7 +165,7 @@ private:
     size_t NX_; ///< max index of cell in x direction
     size_t NY_; ///< max index of cell in y direction
     size_t NZ_; ///< max index of cell in z direction
-    std::vector<size_t> cell_activity_;           ///< active/inactive cells
+    std::vector<uint8_t> cell_activity_;           ///< active/inactive cells
     std::vector<std::vector<Pillar> > pillars_;   ///< (subvertical) coordinate lines defining the pillars
     std::map<size_t,std::vector<std::pair<size_t,csmp::CSMP_FEM_TYPE> > >     embedded_cells_;          ///< subcells
     std::map<std::string,std::vector<std::pair<size_t,size_t> > >             faults_data_;             ///< fault representations

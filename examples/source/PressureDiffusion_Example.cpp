@@ -151,10 +151,10 @@ void PressureDiffusion_Example::Run()
     PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> > conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >   source( model.Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>   source( model.Database(),  "fluid volume source", "fluid pressure" );
   /// @todo influx surface integral: NumIntegral_NT_op_N_dS<2U>   influx( model.Database(), "influx", "fluid pressure" );
-    VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<2U>    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 
     // add PDE_Operators and post-processor to the FE Algorithm
     fluid_pressure.Add( &conductance );
