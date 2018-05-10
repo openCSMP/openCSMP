@@ -433,11 +433,11 @@ namespace csmp {
           nodeList_1.push_back(getNodeID1(cell));      // Pyramid 13047
           nodeList_1.push_back(getNodeID3(cell));
           nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID0(cell));
+          nodeList_1.push_back(getNodeID4(cell));
           nodeList_1.push_back(getNodeID7(cell));
           
           std::vector<size_t> nodeList_2;
-          nodeList_2.push_back(getNodeID1(cell));      // Pyramics 13267
+          nodeList_2.push_back(getNodeID1(cell));      // Pyramid 13267
           nodeList_2.push_back(getNodeID3(cell));
           nodeList_2.push_back(getNodeID2(cell));
           nodeList_2.push_back(getNodeID6(cell));
@@ -454,7 +454,7 @@ namespace csmp {
           nodeList_1.push_back(getNodeID7(cell));
           nodeList_1.push_back(getNodeID4(cell));
           
-          std::vector<size_t> nodeList_2;                    // Pyramics 20154
+          std::vector<size_t> nodeList_2;                    // Pyramid 20154
           nodeList_2.push_back(getNodeID2(cell));
           nodeList_2.push_back(getNodeID0(cell));
           nodeList_2.push_back(getNodeID1(cell));
@@ -472,7 +472,7 @@ namespace csmp {
           nodeList_1.push_back(getNodeID4(cell));
           nodeList_1.push_back(getNodeID5(cell));
 
-          std::vector<size_t> nodeList_2;        // Pyramics 31256
+          std::vector<size_t> nodeList_2;        // Pyramid 31256
           nodeList_2.push_back(getNodeID3(cell));
           nodeList_2.push_back(getNodeID1(cell));
           nodeList_2.push_back(getNodeID2(cell));
@@ -1110,7 +1110,7 @@ namespace csmp {
           case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23: {          // 0011
             plist.emplace(elementID, generator.degenerateToOnePrismAtEdge23(cell));
             addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
             ++elementID;
             break;
           }

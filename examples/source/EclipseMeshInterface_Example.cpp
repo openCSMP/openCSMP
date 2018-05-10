@@ -72,10 +72,7 @@ void EclipseMeshInterface_Example::Run()
                                    rocktype_place );
   
     EclipseModel modelOut( settings, model_name, variables_file );
-  VTK_Interface<3U>  vtk_output;
-  vtk_output.OutputNodeDataToVTK( modelOut, "EclipseInterfaceExample", 0 );
 
-#if 0
     // Get Fault Regions
     std::vector<std::string> faults;
     modelOut.GetFaults( faults );
@@ -84,6 +81,13 @@ void EclipseMeshInterface_Example::Run()
     std::vector<std::string> wells;
     modelOut.GetWells( wells );
 
+  // We are in the process of rewriting the Eclipse interface, and the
+  // following part is not yet fully ported.  - AJB
+  
+  VTK_Interface<3U>  vtk_output;
+  vtk_output.OutputNodeDataToVTK( modelOut, "EclipseInterfaceExample", 0 );
+
+  #if 0
     // 2. Assign Fault and Matrix properties
     std::string          vol_source_name ( "fluid volume source" );
     csmp::ScalarVariable vol_source_val  ( csmp::PLAIN, 0.0 );
