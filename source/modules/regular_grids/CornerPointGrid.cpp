@@ -193,7 +193,7 @@ std::vector<std::vector<Pillar> >& CornerPointGrid<dim>::GetPillars()
 }
 
 template<size_t dim>
-std::vector<size_t>& CornerPointGrid<dim>::GetCellActivity()
+std::vector<uint8_t>& CornerPointGrid<dim>::GetCellActivity()
 {
     return cell_activity_;
 }
