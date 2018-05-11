@@ -37,10 +37,6 @@ class EclipseModel : public csmp::Model<3U> {
 
       virtual ~EclipseModel();
 
-      /// access of elements generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
-      const Element<3U>* operator()( size_t i, size_t j, size_t k ) const;
-      Element<3U>*       operator()( size_t i, size_t j, size_t k );
-
       /// existing special regions
       template<class Container>  void GetRegions( Container& data );
   
@@ -54,6 +50,12 @@ class EclipseModel : public csmp::Model<3U> {
   
       /// BOX flag nodes and elements of volumetric target region
       void AssignBoxBoundaryFlagsWherePossible( const char* target_region );
+  
+      /// Get ijk coordinates for Element
+      ijk EclipseCoordinates( Element<3u>* e ) const
+      {
+        return elmt_to_ijk_.find(e)->second;
+      }
   
   public: // SKM accessors
       /// the dimensions of the original corner-point grid
@@ -73,7 +75,8 @@ class EclipseModel : public csmp::Model<3U> {
       // Eclipse grid dimensions
       size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
   
-      std::unordered_map<ijk,size_t>  IJK_map_; ///< stores mapping from i,j,k to elements
+      std::unordered_multimap<ijk,Element<3u>*>  ijk_to_elmt_; ///< stores mapping from i,j,k to elements
+      std::unordered_map<Element<3u>*,ijk>  elmt_to_ijk_; ///< stores mapping from elements to i,j,k
 };
 
 } // eclipse

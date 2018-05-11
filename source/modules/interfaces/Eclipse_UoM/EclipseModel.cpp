@@ -176,6 +176,13 @@ void EclipseModel::Initialize()
                                            non_box_shaped_model );
            }
       
+      auto& meshmgr = Mesh();
+      for (auto& entry : mesh_interface.IJKMap()) {
+        auto coord = entry.first;
+        Element<3u>* e = &meshmgr.ElementAtIndex(entry.second);
+        ijk_to_elmt_.emplace(coord, e);
+        elmt_to_ijk_.emplace(e, coord);
+      }
     }
     // -------------------------------------------------
     // catching all possible standard and csmp::Exceptions
@@ -505,45 +512,6 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible( const char* target_regio
  
  } // end AssignBoxBoundaryFlagsWherePossible
  
-
-/**
-    Access elements=grid cells generated from corner-point cells by their i(W->E),j(S->N),k(top->bottom) grid indices
- 
-    @attention Eclipse grid indices run 1..n
- 
-    @return method returns a NULL pointer if the element does not exist
-*/
-const Element<3U>*  EclipseModel::operator()( size_t i, size_t j, size_t k ) const
- {
-    assert( i > 0U );
-    assert( i <= grid_dim_I_ );
-    assert( j > 0U );
-    assert( j <= grid_dim_J_ );
-    assert( k > 0U );
-    assert( k <= grid_dim_K_ );
-   
-    // if the index does not exist return null
-    auto it = IJK_map_.find( ijk(i,j,k) );
-   
-    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
- 
- } // access operator
-  
-  
-Element<3U>* EclipseModel::operator()( size_t i, size_t j, size_t k )
- {
-    assert( i > 0U );
-    assert( i <= grid_dim_I_ );
-    assert( j > 0U );
-    assert( j <= grid_dim_J_ );
-    assert( k > 0U );
-    assert( k <= grid_dim_K_ );
-   
-    // if the index does not exist return null
-    auto it = IJK_map_.find( ijk(i,j,k) );
-   
-    return (it == IJK_map_.end()) ? nullptr : &this->Mesh().ElementAtIndex( (*it).second );
- }
 
 } // eclipse
 

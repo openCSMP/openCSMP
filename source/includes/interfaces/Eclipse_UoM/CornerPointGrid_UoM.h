@@ -86,6 +86,12 @@ class  CornerPointGrid_UoM
   Pillar& operator()( size_t i, size_t j );
   
   std::vector<uint8_t>& GetCellActivity();
+  
+  std::multimap<ijk,size_t>& IJKMap()
+  {
+    return elementMap;
+  }
+
 
 protected:
     void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt );

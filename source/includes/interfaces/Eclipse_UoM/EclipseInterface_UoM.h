@@ -181,7 +181,10 @@ public:
   
     /// ReadCornerDepths -> Read_ZCORN
     bool Read_ZCORN( std::ifstream& ifs, char* text_line, size_t line_length );
+
+    std::multimap<ijk, size_t>& IJKMap();
   
+
   private:
 
     // Read different blocks of data from file
@@ -254,7 +257,7 @@ public:
 #endif
 
     void AssignGridDimensions();
-
+  
   private:
 
     // reading process related

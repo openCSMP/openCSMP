@@ -3038,6 +3038,14 @@ void EclipseInterface
 template void EclipseInterface::GetWells( std::vector<std::string>& );
 template void EclipseInterface::GetWells( std::list<std::string>& );
 template void EclipseInterface::GetWells( std::set<std::string>& );
+  
+  
+  
+  std::multimap<ijk,size_t>&
+  EclipseInterface::IJKMap()
+  {
+    return grid_.IJKMap();
+  }
 
  } // eclipse
 
