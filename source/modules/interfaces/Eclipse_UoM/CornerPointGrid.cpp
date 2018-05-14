@@ -216,7 +216,7 @@ namespace csmp {
           uint8_t classification = 0;
           for (size_t v = 0; v < 4; ++v) {
             if (cell.z[v][0] == cell.z[v][1]) {
-              classification |= (1 << v);
+              classification |= (1 << (3-v));
             }
           }
           cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
@@ -332,7 +332,7 @@ namespace csmp {
 
         /// degenerates to one prism
         vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
-          static const size_t vertexIDs[6] = { 0, 7, 3, 1, 6, 2 };						  // 073162
+          static const size_t vertexIDs[6] = { 0, 3, 7, 1, 2, 6 };						  // 037126
           return getGlobalIDList(cell, 6, vertexIDs);
         }
 
@@ -352,70 +352,70 @@ namespace csmp {
         }
 
         /// degenerates to one pyramid
-        vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) { // Pyramid 12340
-          static const size_t vertexIDs[5] = { 1, 2, 3, 4, 0 };
+        vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) { // Pyramid 76540
+          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 0 };
           return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) { // Pyramid 23451
-          static const size_t vertexIDs[5] = { 2, 3, 4, 5, 1 };
+        vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) { // Pyramid 76541
+          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 1 };
           return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) { // Pyramid 01632
-          static const size_t vertexIDs[5] = { 0, 1, 6, 3, 2 };
+        vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) { // Pyramid 76542
+          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 2 };
           return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) { // Pyramid 01273
-          static const size_t vertexIDs[5] = { 0, 1, 2, 7, 3 };
+        vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) { // Pyramid 76543
+          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 3 };
           return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) { // Pyramid 12650 & 62370
+        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) { // Pyramid 56210 & 73260
           std::vector<std::vector<size_t>> nodeLists;
           nodeLists.reserve(2);
 
-          static const size_t vertexIDs1[5] = { 1, 2, 6, 5, 0 };
+          static const size_t vertexIDs1[5] = { 5, 6, 2, 1, 0 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 6, 2, 3, 7, 0 };
+          static const size_t vertexIDs2[5] = { 7, 3, 2, 6, 0 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
           return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) { // Pyramid 37401 & 23761
+        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) { // Pyramid 37401 & 26731
           std::vector<std::vector<size_t>> nodeLists;
           nodeLists.reserve(2);
 
           static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 2, 3, 7, 6, 1 };
+          static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
           return nodeLists;
         }
 
         vector<vector<size_t>> degenerateToTwoPyramidsAt2(ColumnCell& cell) {      // 0010
-          vector<vector<size_t>> nodeLists;          // Pyramid 01342 04732
+          vector<vector<size_t>> nodeLists;          // Pyramid 45102 37402
           nodeLists.reserve(2);
 
-          static const size_t vertexIDs1[5] = { 0, 1, 3, 4, 2 };
+          static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 2 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 0, 4, 6, 3, 2 };
+          static const size_t vertexIDs2[5] = { 3, 7, 4, 0, 2 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
           return nodeLists;
         }
 
         vector<vector<size_t>> degenerateToTwoPyramidsAt3(ColumnCell& cell) {      // 0001
-          vector<vector<size_t>> nodeLists;          // Pyramid 01543 15623
+          vector<vector<size_t>> nodeLists;          // Pyramid 45103 15623
           nodeLists.reserve(2);
 
-          static const size_t vertexIDs1[5] = { 0, 1, 5, 4, 3 };
+          static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 3 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
           static const size_t vertexIDs2[5] = { 1, 5, 6, 2, 3 };
@@ -477,26 +477,26 @@ namespace csmp {
         }
 
         vector<vector<size_t>> splitToThreePyramidsAt0(ColumnCell& cell) {          // forward slash, 0- 
-          vector<vector<size_t>> nodeLists;  // 37620 12650 47650
+          vector<vector<size_t>> nodeLists;  // 73260 56210 76540
           nodeLists.reserve(3);
 
-          static const size_t vertexIDs1[5] = { 3, 7, 6, 2, 0 };
+          static const size_t vertexIDs1[5] = { 7, 3, 2, 6, 0 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 1, 2, 6, 5, 0 };
+          static const size_t vertexIDs2[5] = { 5, 6, 2, 1, 0 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
-          static const size_t vertexIDs3[5] = { 4, 7, 6, 5, 0 };
+          static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 0 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
 
           return nodeLists;
         }
 
         vector<vector<size_t>> splitToThreePyramidsAt6(ColumnCell& cell) {          // forward slash, 4-6/
-          vector<vector<size_t>> nodeLists; // 30476 01236 04516
+          vector<vector<size_t>> nodeLists; // 74036 01236 04516
           nodeLists.reserve(3);
 
-          static const size_t vertexIDs1[5] = { 3, 0, 4, 7, 6 };
+          static const size_t vertexIDs1[5] = { 7, 4, 0, 3, 6 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
           static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 6 };
@@ -509,34 +509,33 @@ namespace csmp {
         }
 
         vector<vector<size_t>> splitToThreePyramidsAt1(ColumnCell& cell) {          // backslash, 1-3/
-          vector<vector<size_t>> nodeLists;  //  04731 37621 45671
+          vector<vector<size_t>> nodeLists;  //  37401 26731 76541
           nodeLists.reserve(3);
 
-          static const size_t vertexIDs1[5] = { 0, 4, 7, 3, 1 };
+          static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 3, 7, 6, 2, 1 };
+          static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
-          static const size_t vertexIDs3[5] = { 4, 5, 6, 7, 1 };
+          static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 1 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
 
           return nodeLists;
         }
 
         vector<vector<size_t>> splitToThreePyramidsAt7(ColumnCell& cell) {          // backslash, 5-7/
-          vector<vector<size_t>> nodeLists; //  54017 10327 12657
+          vector<vector<size_t>> nodeLists; //  045171 01237 12657
           nodeLists.reserve(3);
 
-          static const size_t vertexIDs1[5] = { 5, 4, 0, 1, 7 };
+          static const size_t vertexIDs1[5] = { 0, 4, 5, 1, 7 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          static const size_t vertexIDs2[5] = { 1, 0, 3, 2, 7 };
+          static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 7 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
-          static const size_t vertexIDs3[5] = { 1, 2, 6, 5, 7 };
+          static const size_t vertexIDs3[5] = { 5, 6, 2, 1, 7 };
           nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
-
           return nodeLists;
         }
 
@@ -721,7 +720,7 @@ namespace csmp {
           
           assert(elementID == plist.size());
           assert(elementID == fem_types.size());
-if (i == 4 && j == 10 && k == 100) {
+if (i == 4 && j == 49 && 97 <= k && k <= 101) {
     std::cerr << "Broken element case\n";
 }
           switch (cellType) {
@@ -874,7 +873,7 @@ if (i == 4 && j == 10 && k == 100) {
                 ++elementID;
               } // '\' - hex - '\'
               else {
-                auto elementList = generator.splitToThreePyramidsAt7(cell);
+                auto elementList = generator.splitToThreePyramidsAt1(cell);
                 plist.emplace(elementID, elementList[0]);
                 addElementToMap(i, j, k, elementID);
                 fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
@@ -888,7 +887,7 @@ if (i == 4 && j == 10 && k == 100) {
                 plist.emplace(elementID, elementList[2]);
                 addElementToMap(i, j, k, elementID);
                 fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;                
+                ++elementID;
               }// '\' - hex - hex
 
             }
@@ -900,7 +899,8 @@ if (i == 4 && j == 10 && k == 100) {
                 ++elementID;          
               }//hex - hex - null
               else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_02) {
-                auto elementList = generator.splitToThreePyramidsAt0(cell);
+                auto elementList = generator.splitToThreePyramidsAt6(cell);
+
                 plist.emplace(elementID, elementList[0]);
                 addElementToMap(i, j, k, elementID);
                 fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
@@ -917,7 +917,7 @@ if (i == 4 && j == 10 && k == 100) {
                 ++elementID;
               }// hex - hex - '/'
               else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_13) {
-                auto elementList = generator.splitToThreePyramidsAt1(cell);
+                auto elementList = generator.splitToThreePyramidsAt7(cell);
                 plist.emplace(elementID, elementList[0]);
                 addElementToMap(i, j, k, elementID);
                 fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
