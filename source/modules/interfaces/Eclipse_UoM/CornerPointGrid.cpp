@@ -858,7 +858,9 @@ namespace csmp {
           
           assert(elementID == plist.size());
           assert(elementID == fem_types.size());
-
+if (i == 4 && j == 10 && k == 100) {
+    std::cerr << "Broken element case\n";
+}
           switch (cellType) {
           case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON: {        // 0000
             if (cellAbove == nullptr) {
