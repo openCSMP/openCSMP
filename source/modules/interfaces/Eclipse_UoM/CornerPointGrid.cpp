@@ -264,54 +264,56 @@ namespace csmp {
         Pillar& p3;
       public:
         CellGenerator(Pillar& p0, Pillar& p1, Pillar& p2, Pillar& p3)
-          : p0(p0), p1(p1), p2(p2), p3(p3)
+        : p0(p0), p1(p1), p2(p2), p3(p3)
         {
         }
-
+        
         size_t getNodeID(ColumnCell& cell, size_t vertex) {
           switch (vertex)
           {
-          case 0:
-          {
-          return cell.z[0][0] + p0.FirstNodeNum();
+            case 0:
+            {
+              return cell.z[0][0] + p0.FirstNodeNum();
+            }
+              
+            case 1:
+            {
+              return cell.z[1][0] + p1.FirstNodeNum();
+            }
+              
+            case 2:
+            {
+              return cell.z[2][0] + p2.FirstNodeNum();
+            }
+              
+            case 3:
+            {
+              return cell.z[3][0] + p3.FirstNodeNum();
+            }
+              
+            case 4:
+            {
+              return cell.z[0][1] + p0.FirstNodeNum();
+            }
+              
+            case 5:
+            {
+              return cell.z[1][1] + p1.FirstNodeNum();
+            }
+              
+            case 6:
+            {
+              return cell.z[2][1] + p2.FirstNodeNum();
+            }
+              
+            case 7:
+            {
+              return cell.z[3][1] + p3.FirstNodeNum();
+            }
+          }
+          throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
+                                "Node id out of range");
         }
-
-          case 1:
-          {
-          return cell.z[1][0] + p1.FirstNodeNum();
-        }
-
-          case 2:
-          {
-          return cell.z[2][0] + p2.FirstNodeNum();
-        }
-
-          case 3:
-          {
-          return cell.z[3][0] + p3.FirstNodeNum();
-        }
-
-          case 4:
-          {
-          return cell.z[0][1] + p0.FirstNodeNum();
-        }
-
-          case 5:
-          {
-          return cell.z[1][1] + p1.FirstNodeNum();
-        }
-
-          case 6:
-          {
-          return cell.z[2][1] + p2.FirstNodeNum();
-        }
-
-          case 7:
-          {
-          return cell.z[3][1] + p3.FirstNodeNum();
-        }
-	  }
-	}
 
         // return a list of globalNodeID from local vertex index
         std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
