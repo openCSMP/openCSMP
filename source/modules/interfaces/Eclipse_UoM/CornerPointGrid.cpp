@@ -195,7 +195,6 @@ namespace csmp {
 
 
 
-
     void
       CornerPointGrid_UoM::ConstructFiniteElementsFromColumns(VSet<3U>& vset)
     {
@@ -225,7 +224,7 @@ namespace csmp {
       }
 
       // 2. store node coordinate
-      for (size_t i = 0; i <= NX_; ++i){
+      for (size_t i = 0; i <= NX_; ++i) {
         for (size_t j = 0; j <= NY_; ++j) {
           Pillar& pillar = (*this)(i, j);
           for (size_t k = 0; k < pillar.GetNumPoints(); ++k) {
@@ -269,463 +268,328 @@ namespace csmp {
         {
         }
 
-        size_t getNodeID0(ColumnCell& cell) {
+        size_t getNodeID(ColumnCell& cell, size_t vertex) {
+          switch (vertex)
+          {
+          case 0:
+          {
           return cell.z[0][0] + p0.FirstNodeNum();
         }
 
-        size_t getNodeID1(ColumnCell& cell) {
+          case 1:
+          {
           return cell.z[1][0] + p1.FirstNodeNum();
         }
 
-        size_t getNodeID2(ColumnCell& cell) {
+          case 2:
+          {
           return cell.z[2][0] + p2.FirstNodeNum();
         }
 
-        size_t getNodeID3(ColumnCell& cell) {
+          case 3:
+          {
           return cell.z[3][0] + p3.FirstNodeNum();
         }
 
-        size_t getNodeID4(ColumnCell& cell) {
+          case 4:
+          {
           return cell.z[0][1] + p0.FirstNodeNum();
         }
 
-        size_t getNodeID5(ColumnCell& cell) {
+          case 5:
+          {
           return cell.z[1][1] + p1.FirstNodeNum();
         }
 
-        size_t getNodeID6(ColumnCell& cell) {
+          case 6:
+          {
           return cell.z[2][1] + p2.FirstNodeNum();
         }
 
-        size_t getNodeID7(ColumnCell& cell) {
+          case 7:
+          {
           return cell.z[3][1] + p3.FirstNodeNum();
         }
-        
-        std::vector<size_t> nonDegenerate(ColumnCell& cell) {          // 0000
-          vector<size_t> nodeIDs;
+	  }
+	}
 
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID4(cell));
-          nodeIDs.push_back(getNodeID5(cell));
-          nodeIDs.push_back(getNodeID6(cell));
-          nodeIDs.push_back(getNodeID7(cell));
-          
+        // return a list of globalNodeID from local vertex index
+        std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
+          std::vector<size_t> nodeIDs;
+          nodeIDs.reserve(size);
+          for (int i = 0; i < size; ++i) {
+            nodeIDs.push_back(getNodeID(cell, vertexIDs[i]));
+          }
           return nodeIDs;
+        }
+
+        vector<size_t> nonDegenerate(ColumnCell& cell) {          //0123 4567
+          static const size_t vertexIDs[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+          return getGlobalIDList(cell, 8, vertexIDs);
         }
 
         /// degenerates to one prism
-        std::vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID6(cell));
-          nodeIDs.push_back(getNodeID7(cell));
-          
-          return nodeIDs;
+        vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
+          static const size_t vertexIDs[6] = { 0, 7, 3, 1, 6, 2 };						  // 073162
+          return getGlobalIDList(cell, 6, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePrismAtEdge12(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID4(cell));
-          nodeIDs.push_back(getNodeID7(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePrismAtEdge12(ColumnCell& cell) {     // 041 372
+          static const size_t vertexIDs[6] = { 0, 4, 1, 3, 7, 2 };
+          return getGlobalIDList(cell, 6, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID4(cell));
-          nodeIDs.push_back(getNodeID5(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
+          static const size_t vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
+          return getGlobalIDList(cell, 6, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID5(cell));
-          nodeIDs.push_back(getNodeID6(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
+          static const size_t vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
+          return getGlobalIDList(cell, 6, vertexIDs);
         }
 
         /// degenerates to one pyramid
-        std::vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID0(cell));        // Pyramid 01234
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-          nodeIDs.push_back(getNodeID4(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) { // Pyramid 12340
+          static const size_t vertexIDs[5] = { 1, 2, 3, 4, 0 };
+          return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID1(cell));        // Pyramid 10523
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID5(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) { // Pyramid 23451
+          static const size_t vertexIDs[5] = { 2, 3, 4, 5, 1 };
+          return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID2(cell));         // Pyramid 20163
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID6(cell));
-          nodeIDs.push_back(getNodeID3(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) { // Pyramid 01632
+          static const size_t vertexIDs[5] = { 0, 1, 6, 3, 2 };
+          return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        std::vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) {
-          vector<size_t> nodeIDs;
-          nodeIDs.push_back(getNodeID3(cell));         // Pyramid 30127
-          nodeIDs.push_back(getNodeID0(cell));
-          nodeIDs.push_back(getNodeID1(cell));
-          nodeIDs.push_back(getNodeID2(cell));
-          nodeIDs.push_back(getNodeID7(cell));
-
-          return nodeIDs;
+        vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) { // Pyramid 01273
+          static const size_t vertexIDs[5] = { 0, 1, 2, 7, 3 };
+          return getGlobalIDList(cell, 5, vertexIDs);
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) {      // 1000
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID0(cell));      // Pyramid 02156
-          nodeList_1.push_back(getNodeID2(cell));
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID6(cell));
+        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) { // Pyramid 12650 & 62370
+          std::vector<std::vector<size_t>> nodeLists;
+          nodeLists.reserve(2);
 
-          std::vector<size_t> nodeList_2;
-          nodeList_2.push_back(getNodeID0(cell));      // Pyramid 02376
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID7(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs1[5] = { 1, 2, 6, 5, 0 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+          static const size_t vertexIDs2[5] = { 6, 2, 3, 7, 0 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) {      // 0100
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID1(cell));      // Pyramid 13047
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-          
-          std::vector<size_t> nodeList_2;
-          nodeList_2.push_back(getNodeID1(cell));      // Pyramid 13267
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID7(cell));
+        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) { // Pyramid 37401 & 23761
+          std::vector<std::vector<size_t>> nodeLists;
+          nodeLists.reserve(2);
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+          static const size_t vertexIDs2[5] = { 2, 3, 7, 6, 1 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt2(ColumnCell& cell) {      // 0010
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID2(cell));                  // Pyramid 20374
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          
-          std::vector<size_t> nodeList_2;                    // Pyramid 20154
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID0(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID5(cell));
-          nodeList_2.push_back(getNodeID4(cell));
+        vector<vector<size_t>> degenerateToTwoPyramidsAt2(ColumnCell& cell) {      // 0010
+          vector<vector<size_t>> nodeLists;          // Pyramid 01342 04732
+          nodeLists.reserve(2);
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs1[5] = { 0, 1, 3, 4, 2 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+          static const size_t vertexIDs2[5] = { 0, 4, 6, 3, 2 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt3(ColumnCell& cell) {      // 0001
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID0(cell));      // Pyramid 31045
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID5(cell));
+        vector<vector<size_t>> degenerateToTwoPyramidsAt3(ColumnCell& cell) {      // 0001
+          vector<vector<size_t>> nodeLists;          // Pyramid 01543 15623
+          nodeLists.reserve(2);
 
-          std::vector<size_t> nodeList_2;        // Pyramid 31256
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID5(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs1[5] = { 0, 1, 5, 4, 3 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+          static const size_t vertexIDs2[5] = { 1, 5, 6, 2, 3 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID0(cell));        // tetra 0215
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID2(cell));
+        vector<vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
+          vector<vector<size_t>> nodeLists;          // tetra 0125 0237
+          nodeLists.reserve(2);
 
-          std::vector<size_t> nodeList_2;
-          nodeList_2.push_back(getNodeID0(cell));        // tetra 0237
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID7(cell));
+          static const size_t vertexIDs1[4] = { 0, 1, 2, 5 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs2[4] = { 0, 2, 3, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
-          std::vector<size_t> nodeList_1;
-          nodeList_1.push_back(getNodeID1(cell));        // tetra 1304
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID4(cell));
+        vector<vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
+          vector<vector<size_t>> nodeLists;          // tetra 1304 1326
+          nodeLists.reserve(2);
 
+          static const size_t vertexIDs1[4] = { 1, 3, 0, 4 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-          std::vector<size_t> nodeList_2;
-          nodeList_2.push_back(getNodeID1(cell));        // tetra 1326
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID6(cell));
+          static const size_t vertexIDs2[4] = { 1, 3, 2, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToTwoPrismsAtEdge02(ColumnCell& cell) {
-          std::vector<size_t> nodeList_1;          // 012456
-          nodeList_1.push_back(getNodeID0(cell));          
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID2(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID6(cell));
+        vector<vector<size_t>> splitToTwoPrismsAtEdge02(ColumnCell& cell) {
+          vector<vector<size_t>> nodeLists;  // 456012 & 467023
+          nodeLists.reserve(2);
 
-          std::vector<size_t> nodeList_2;          // 023467
-          nodeList_2.push_back(getNodeID0(cell));          
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID4(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID7(cell));
+          static const size_t vertexIDs1[6] = { 4,5,6,0,1,2 };
+          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs2[6] = { 4,6,7,0,2,3 };
+          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToTwoPrismsAtEdge13(ColumnCell& cell) {
-          std::vector<size_t> nodeList_1;                      // 013457
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-              
-          std::vector<size_t> nodeList_2;                      // 123567
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID5(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID7(cell));
+        vector<vector<size_t>> splitToTwoPrismsAtEdge13(ColumnCell& cell) {
+          vector<vector<size_t>> nodeLists;  // 457013 & 567123
+          nodeLists.reserve(2);
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2};
+          static const size_t vertexIDs1[6] = { 4,5,6,0,1,3 };
+          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
+
+          static const size_t vertexIDs2[6] = { 5,6,7,1,2,3 };
+          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToThreePyramidsAt0(ColumnCell& cell) {          // forward slash, 0-2/
-          std::vector<size_t> nodeList_1;                      // 03762
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-          nodeList_1.push_back(getNodeID6(cell));
-          nodeList_1.push_back(getNodeID2(cell));
+        vector<vector<size_t>> splitToThreePyramidsAt0(ColumnCell& cell) {          // forward slash, 0- 
+          vector<vector<size_t>> nodeLists;  // 37620 12650 47650
+          nodeLists.reserve(3);
 
-          std::vector<size_t> nodeList_2;                      // 01265
-          nodeList_2.push_back(getNodeID0(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID5(cell));
+          static const size_t vertexIDs1[5] = { 3, 7, 6, 2, 0 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
+          static const size_t vertexIDs2[5] = { 1, 2, 6, 5, 0 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
 
-          std::vector<size_t> nodeList_3;                      // 04567
-          nodeList_3.push_back(getNodeID0(cell));
-          nodeList_3.push_back(getNodeID4(cell));
-          nodeList_3.push_back(getNodeID5(cell));
-          nodeList_3.push_back(getNodeID6(cell));
-          nodeList_3.push_back(getNodeID7(cell));
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3};
+          static const size_t vertexIDs3[5] = { 4, 7, 6, 5, 0 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToThreePyramidsAt6(ColumnCell& cell) {          // forward slash, 4-6/
-          std::vector<size_t> nodeList_1;                      // 63047
-          nodeList_1.push_back(getNodeID6(cell));
-          nodeList_1.push_back(getNodeID3(cell));
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID7(cell));
+        vector<vector<size_t>> splitToThreePyramidsAt6(ColumnCell& cell) {          // forward slash, 4-6/
+          vector<vector<size_t>> nodeLists; // 30476 01236 04516
+          nodeLists.reserve(3);
 
-          std::vector<size_t> nodeList_2;                      // 60123
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID0(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID3(cell));
+          static const size_t vertexIDs1[5] = { 3, 0, 4, 7, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          std::vector<size_t> nodeList_3;                      // 60451
-          nodeList_3.push_back(getNodeID6(cell));
-          nodeList_3.push_back(getNodeID0(cell));
-          nodeList_3.push_back(getNodeID4(cell));
-          nodeList_3.push_back(getNodeID5(cell));
-          nodeList_3.push_back(getNodeID1(cell));
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3};
+          static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          static const size_t vertexIDs3[5] = { 0, 4, 5, 1, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToThreePyramidsAt1(ColumnCell& cell) {          // backslash, 1-3/
-          std::vector<size_t> nodeList_1;                      // 10473
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-          nodeList_1.push_back(getNodeID3(cell));
+        vector<vector<size_t>> splitToThreePyramidsAt1(ColumnCell& cell) {          // backslash, 1-3/
+          vector<vector<size_t>> nodeLists;  //  04731 37621 45671
+          nodeLists.reserve(3);
 
-          std::vector<size_t> nodeList_2;                      // 13762
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID7(cell));
-          nodeList_2.push_back(getNodeID6(cell));
-          nodeList_2.push_back(getNodeID2(cell));
+          static const size_t vertexIDs1[5] = { 0, 4, 7, 3, 1 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          std::vector<size_t> nodeList_3;                      // 14567
-          nodeList_3.push_back(getNodeID1(cell));
-          nodeList_3.push_back(getNodeID4(cell));
-          nodeList_3.push_back(getNodeID5(cell));
-          nodeList_3.push_back(getNodeID6(cell));
-          nodeList_3.push_back(getNodeID3(cell));
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3};
+          static const size_t vertexIDs2[5] = { 3, 7, 6, 2, 1 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          static const size_t vertexIDs3[5] = { 4, 5, 6, 7, 1 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToThreePyramidsAt7(ColumnCell& cell) {          // backslash, 5-7/
-          std::vector<size_t> nodeList_1;                      // 75401
-          nodeList_1.push_back(getNodeID7(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID1(cell));
+        vector<vector<size_t>> splitToThreePyramidsAt7(ColumnCell& cell) {          // backslash, 5-7/
+          vector<vector<size_t>> nodeLists; //  54017 10327 12657
+          nodeLists.reserve(3);
 
-          std::vector<size_t> nodeList_2;                      // 71032
-          nodeList_2.push_back(getNodeID7(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID0(cell));
-          nodeList_2.push_back(getNodeID3(cell));
-          nodeList_2.push_back(getNodeID2(cell));
+          static const size_t vertexIDs1[5] = { 5, 4, 0, 1, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
 
-          std::vector<size_t> nodeList_3;                      // 71265
-          nodeList_3.push_back(getNodeID7(cell));
-          nodeList_3.push_back(getNodeID1(cell));
-          nodeList_3.push_back(getNodeID2(cell));
-          nodeList_3.push_back(getNodeID6(cell));
-          nodeList_3.push_back(getNodeID5(cell));
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3};
+          static const size_t vertexIDs2[5] = { 1, 0, 3, 2, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+          static const size_t vertexIDs3[5] = { 1, 2, 6, 5, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+          return nodeLists;
         }
 
-        std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
-          std::vector<size_t> nodeList_1;                // 0457
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID4(cell));
-          nodeList_1.push_back(getNodeID5(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-  
-          std::vector<size_t> nodeList_2;                // 0125
-          nodeList_2.push_back(getNodeID0(cell));
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID2(cell));
-          nodeList_2.push_back(getNodeID5(cell));
+        vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
+          vector<vector<size_t>> nodeLists;                // 0457 0125 0237 0257 2756
+          nodeLists.reserve(5);
 
-          std::vector<size_t> nodeList_3;                // 0237
-          nodeList_3.push_back(getNodeID0(cell));
-          nodeList_3.push_back(getNodeID2(cell));
-          nodeList_3.push_back(getNodeID3(cell));
-          nodeList_3.push_back(getNodeID7(cell));
+          static const size_t vertexIDs1[4] = { 0, 4, 5, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-          std::vector<size_t> nodeList_4;                // 0257
-          nodeList_4.push_back(getNodeID0(cell));
-          nodeList_4.push_back(getNodeID2(cell));
-          nodeList_4.push_back(getNodeID5(cell));
-          nodeList_4.push_back(getNodeID7(cell));
+          static const size_t vertexIDs2[4] = { 0, 1, 2, 5 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-          std::vector<size_t> nodeList_5;                // 2756
-          nodeList_5.push_back(getNodeID2(cell));
-          nodeList_5.push_back(getNodeID7(cell));
-          nodeList_5.push_back(getNodeID5(cell));
-          nodeList_5.push_back(getNodeID6(cell));
+          static const size_t vertexIDs3[4] = { 0, 2, 3, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3, nodeList_4, nodeList_5};
+          static const size_t vertexIDs4[4] = { 0, 2, 5, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
+
+          static const size_t vertexIDs5[4] = { 2, 7, 5, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
+
+          return nodeLists;
         }
 
 
-        std::vector<std::vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
-          std::vector<size_t> nodeList_1;                // 0134
-          nodeList_1.push_back(getNodeID0(cell));
-          nodeList_1.push_back(getNodeID1(cell));
-          nodeList_1.push_back(getNodeID7(cell));
-          nodeList_1.push_back(getNodeID4(cell));
+        vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
+          vector<vector<size_t>> nodeLists;                // 0134 1456 1236 1346 3467
+          nodeLists.reserve(5);
 
-          std::vector<size_t> nodeList_2;                // 1456
-          nodeList_2.push_back(getNodeID1(cell));
-          nodeList_2.push_back(getNodeID4(cell));
-          nodeList_2.push_back(getNodeID5(cell));
-          nodeList_2.push_back(getNodeID6(cell));
+          static const size_t vertexIDs1[4] = { 0, 1, 3, 4 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
 
-          std::vector<size_t> nodeList_3;                // 1236
-          nodeList_3.push_back(getNodeID1(cell));
-          nodeList_3.push_back(getNodeID2(cell));
-          nodeList_3.push_back(getNodeID3(cell));
-          nodeList_3.push_back(getNodeID6(cell));
+          static const size_t vertexIDs2[4] = { 1, 4, 5, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
 
-          std::vector<size_t> nodeList_4;                // 1346
-          nodeList_4.push_back(getNodeID1(cell));
-          nodeList_4.push_back(getNodeID3(cell));
-          nodeList_4.push_back(getNodeID4(cell));
-          nodeList_4.push_back(getNodeID6(cell));
+          static const size_t vertexIDs3[4] = { 1, 2, 3, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
 
-          std::vector<size_t> nodeList_5;                // 3467
-          nodeList_5.push_back(getNodeID3(cell));
-          nodeList_5.push_back(getNodeID4(cell));
-          nodeList_5.push_back(getNodeID6(cell));
-          nodeList_5.push_back(getNodeID7(cell));
+          static const size_t vertexIDs4[4] = { 1, 3, 4, 6 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
 
-          return std::vector<std::vector<size_t>>{nodeList_1, nodeList_2, nodeList_3, nodeList_4, nodeList_5};
+          static const size_t vertexIDs5[4] = { 3, 4, 6, 7 };
+          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
+
+          return nodeLists;
         }
+
+
 
         FACE_TYPE getShapeOfTopFace(ColumnCell& cell) {
-          // using bead coord, smaller z -> higher
+          // using reservor coord, smaller z -> higher
 
           switch (cell.classification) {
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023:{
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {
             return FACE_TYPE::SPLITTED_BY_02;
           }
           case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {
@@ -818,16 +682,13 @@ namespace csmp {
           default:
             return FACE_TYPE::QUAD;
           }
-        
         }
-
       };
 
 
       // 3. Constructing Element
       size_t elementID = 0;
       
-
       for (auto column = columns_.begin(); column != columns_.end(); column++)  {
         Column& Col = column->second;
         for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -1228,7 +1089,7 @@ if (i == 4 && j == 10 && k == 100) {
           }
         }
       }
-      // adding data into Vset
+
       vset.ResizePfverts(fem_types.size());
       vset.ResizePlist(plist.size());
       vset.AddXYZ(x, y, z);
@@ -1280,643 +1141,11 @@ if (i == 4 && j == 10 && k == 100) {
         this->elementMap.emplace(ijk(i,j,k), elementID);
       };
 
-#if 0    
-      //
-      void CornerPointGrid_UoM::addNodeListToPList(map<size_t, vector<size_t>>& plist, vector<vector<size_t>> nodeLists, size_t& elementID) {
-        for (const auto& nodelist_ : nodeLists) {
-          plist.emplace(elementID, nodelist_);
-          ++elementID;
-        }
-      }
-
-      void CornerPointGrid_UoM::addNodeListToPList(map<size_t, vector<size_t>>& plist, vector<size_t> nodeLists, size_t& elementID) {  
-          plist.emplace(elementID, nodeLists);
-          ++elementID;
-      }
-
-#endif
-
-
-#if 0
-
-      // fe types and cell ids
-      csmp::CSMP_FEM_TYPE   hexa_fem_type(csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-      std::string           hexa_fem_typename(csmp::parseFiniteElementType(hexa_fem_type));
-      std::set<std::string> cell_fem_types;
-      std::set<std::string> face_fem_types;
-      std::set<std::string> edge_fem_types;
-
-      // cell ids
-      std::vector<size_t>   cell_elmts;
-      std::vector<size_t>   face_elmts;
-      std::vector<size_t>   edge_elmts;
-
-      const size_t hexa_fem_nodes(8U);
-      size_t hexa_cell_id(0);
-      size_t cell_id(0);
-      size_t num_cell_nodes;
-      std::vector<CornerPointCell> poly(elements_, CornerPointCell(pgm));
-      std::set<size_t> regular_cells;
-      std::set<size_t> regular_well_cells;
-      std::set<size_t> degenerate_well_cells;
-      std::set<size_t> degenerate_nonoverlap_cells;
-      std::set<size_t> degenerate_overlap_cells;
-      std::set<size_t> degenerate_lowdim_cells;
-      std::set<std::set<size_t> > additional_edges;
-      std::map<std::set<size_t>, GridNode*> additional_points;
-      std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> > embedded_cells_vector;
-
-      // if there is no cell activity information assume that all cells are active
-
-
-      // ================================
-      // 1. Initialize polyhedral cells
-      // ================================
-      // Cell index (i,j,k) = i +j*nx + k*nx*ny
-      // convert from reservoir coordinate system (x,y,z) to csmp coordinate system (x,-z,y)
-      // renumber nodes and eliminate duplicates )
-
-      for (size_t k = 0; k < NZ_; ++k)
-        for (size_t j = 0; j < NY_; ++j)
-          for (size_t i = 0; i < NX_; ++i)
-          {
-            /// hexa cell global id
-            hexa_cell_id = CellIndex(i, j, k);
-
-            if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-            {
-              /// indexing cell nodes
-              for (size_t nid = 0; nid < hexa_fem_nodes; ++nid)
-              {
-                /// convert from reservoir to csmp coordinate system
-                csmp::Point<3U>  pt = GetCellNode(i, j, k, nid);
-                ConvertFromReservoirToCSMPcoordinateSystem(pt);
-                AssignCellNodeToPillar(i, j, k, nid, pt);
-                poly[hexa_cell_id].AssignNode(nid, pt);
-              }
-
-              /// initialize corner point cell
-              poly[hexa_cell_id].InitializeCornerPointCell();
-              num_cell_nodes = poly[hexa_cell_id].GetNumNodes();
-
-              /// add cell to the list of degenerates if it the case
-              if (num_cell_nodes < hexa_fem_nodes)
-              {
-                if (poly[hexa_cell_id].IsVolumetricNonOverlapingElement())
-                  degenerate_nonoverlap_cells.insert(hexa_cell_id);
-                else if (poly[hexa_cell_id].IsVolumetricOverlapingElement())
-                  degenerate_overlap_cells.insert(hexa_cell_id);
-                else if (poly[hexa_cell_id].IsLowDimensionalElement())
-                  degenerate_lowdim_cells.insert(hexa_cell_id);
-                /// resolve mesh conflicts
-                poly[hexa_cell_id].ResolveCornerPointCellConflicts(additional_points, additional_edges);
-              }
-              else
-                regular_cells.insert(hexa_cell_id);
-            }
-          }
-
-      // processing cells with wells
-      size_t face_id_org, face_id_dst;
-      for (std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >::const_iterator
-        it = well_face_path_.begin(); it != well_face_path_.end(); ++it)
-        for (std::vector<std::pair<size_t, std::pair<size_t, size_t> > >::const_iterator
-          wit = (*it).second.begin(); wit != (*it).second.end(); ++wit)
-        {
-          /// hexa cell global id
-          hexa_cell_id = (*wit).first;
-          face_id_org = (*wit).second.first;
-          face_id_dst = (*wit).second.second;
-          if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-          {
-            num_cell_nodes = poly[hexa_cell_id].GetNumNodes();
-
-            poly[hexa_cell_id].AddCornerPointWellCell(face_id_org, face_id_dst);
-            /// add cell to the list of degenerates if it the case
-            if (num_cell_nodes < hexa_fem_nodes)
-              degenerate_well_cells.insert(hexa_cell_id);
-            else
-              regular_well_cells.insert(hexa_cell_id);
-          }
-        }
-
-      DefineAxes();
-
-      // ================================
-      // 2. Assign cell data to VSet
-      // ================================
-
-      // 2.1: processing non degenerate cells only meaning that there will be no tetrahedra
-      // ==================================================================================
-
-      if (degenerate_nonoverlap_cells.empty() &&
-        degenerate_overlap_cells.empty() &&
-        degenerate_lowdim_cells.empty() &&
-        regular_well_cells.empty() &&
-        degenerate_well_cells.empty() &&
-        !tetra_mesh_)
-      {
-        /// cell types
-        cell_fem_types.insert(hexa_fem_typename);
-
-        /// assign element data to VSet
-        cell_id = 0;
-        for (size_t k = 0; k < NZ_; ++k)
-          for (size_t j = 0; j < NY_; ++j)
-            for (size_t i = 0; i < NX_; ++i)
-            {
-              /// hexa cell global id
-              hexa_cell_id = CellIndex(i, j, k);
-
-              if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-              {
-                /// fill VSet
-                vset.ResizePlist(cell_id + 1, hexa_fem_nodes);
-                vset.ResizeElementTypes(cell_id + 1);
-                for (size_t nid = 0U; nid < hexa_fem_nodes; ++nid)
-                  vset.Plist(cell_id, nid, poly[hexa_cell_id].GetNodeGlobalIdCustomOrder(nid));
-                vset.ElementType(cell_id, hexa_fem_type);
-                cell_elmts.push_back(cell_id);
-
-                embedded_cells_vector.clear();
-                embedded_cells_vector.push_back(std::make_pair(cell_id, hexa_fem_type));
-                ++cell_id;
-
-                embedded_cells_.insert(std::make_pair(hexa_cell_id, embedded_cells_vector));
-              }
-            }
-      }
-
-      // 2.2: processing degenerate cells
-      // ===============================================================================
-      // which appear due to collapse of point pairs along pillars.
-      // main reason: fault alignment meshing
-      // geological reasons:
-      // erosion, pinch-out of geological layers,
-      // truncated artificial layers ( zero thickness cells )
-      else
-      {
-        // 2.2.1 process well elements
-        bool well_element(true);
-
-        // process degenerate cells which contains wells
-        for (std::set<size_t>::const_iterator
-          it = degenerate_well_cells.begin(); it != degenerate_well_cells.end(); ++it)
-        {
-          /// hexa cell global id
-          hexa_cell_id = *it;
-          poly[hexa_cell_id].ProcessCornerPointDegenerateCell(additional_points, additional_edges, well_element, tetra_mesh_);
-        }
-
-        // process regular cells which contains wells
-        for (std::set<size_t>::const_iterator
-          it = regular_well_cells.begin(); it != regular_well_cells.end(); ++it)
-        {
-          /// hexa cell global id
-          hexa_cell_id = *it;
-          poly[hexa_cell_id].ProcessCornerPointRegularCell(additional_points, additional_edges, well_element, tetra_mesh_);
-        }
-
-        // 2.2.2 process degenerate volumetric elements
-        bool well_free_element(false);
-
-        // process degenerate volumetric overlapping elements
-        const size_t num_deg_op_cycles(3U);
-        for (size_t meshing_cycle = 0; meshing_cycle < num_deg_op_cycles; ++meshing_cycle)
-          for (std::set<size_t>::const_iterator
-            it = degenerate_overlap_cells.begin(); it != degenerate_overlap_cells.end(); ++it)
-          {
-            /// hexa cell global id
-            hexa_cell_id = *it;
-            if ((degenerate_well_cells.find(hexa_cell_id) == degenerate_well_cells.end()) && (poly[hexa_cell_id].GetNumNodes() > 4))
-              poly[hexa_cell_id].ProcessCornerPointDegenerateVolumetricOverlappingCell(additional_points, additional_edges, well_free_element, tetra_mesh_);
-          }
-
-        // process degenerate volumetric non-overlapping elements
-        const size_t num_deg_nop_cycles(3U);
-        for (size_t meshing_cycle = 0; meshing_cycle < num_deg_nop_cycles; ++meshing_cycle)
-          for (std::set<size_t>::const_iterator
-            it = degenerate_nonoverlap_cells.begin(); it != degenerate_nonoverlap_cells.end(); ++it)
-          {
-            /// hexa cell global id
-            hexa_cell_id = *it;
-            if ((degenerate_well_cells.find(hexa_cell_id) == degenerate_well_cells.end()) && (poly[hexa_cell_id].GetNumNodes() > 4))
-              poly[hexa_cell_id].ProcessCornerPointDegenerateVolumetricNonOverlappingCell(additional_points, additional_edges, well_free_element, tetra_mesh_);
-          }
-
-        // 2.2.3 process regular ( hexahedron ) volumetric elements
-
-        // process regular cells
-        const size_t num_reg_cycles(3U);
-        for (size_t meshing_cycle = 0; meshing_cycle < num_reg_cycles; ++meshing_cycle)
-          for (std::set<size_t>::const_iterator
-            it = regular_cells.begin(); it != regular_cells.end(); ++it)
-          {
-            /// hexa cell global id
-            hexa_cell_id = *it;
-            if (regular_well_cells.find(hexa_cell_id) == regular_well_cells.end())
-              poly[hexa_cell_id].ProcessCornerPointRegularCell(additional_points, additional_edges, well_free_element, tetra_mesh_);
-          }
-
-        // 2.2.4 process degenerate low dimensional elements
-
-        // process degenerate low dimensional elements
-        const size_t num_deg_ld_cycles(3U);
-        for (size_t meshing_cycle = 0; meshing_cycle < num_deg_ld_cycles; ++meshing_cycle)
-          for (std::set<size_t>::const_iterator
-            it = degenerate_lowdim_cells.begin(); it != degenerate_lowdim_cells.end(); ++it)
-          {
-            /// hexa cell global id
-            hexa_cell_id = *it;
-            if ((degenerate_well_cells.find(hexa_cell_id) == degenerate_well_cells.end()) && (poly[hexa_cell_id].GetNumNodes() < 5))
-              poly[hexa_cell_id].ProcessCornerPointDegenerateLowDimensionalCell(additional_points, additional_edges, well_free_element, tetra_mesh_);
-          }
-
-        // 2.2.5 write mesh to VSet
-
-        // assign element data to VSet
-        cell_id = 0;
-        for (size_t k = 0; k < NZ_; ++k)
-          for (size_t j = 0; j < NY_; ++j)
-            for (size_t i = 0; i < NX_; ++i)
-            {
-              /// hexa cell global id
-              hexa_cell_id = CellIndex(i, j, k);
-              //std::cerr <<"\nCell ID: "<< hexa_cell_id;
-              if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-              {
-                //poly[ hexa_cell_id ].Out();
-
-                             /// assign subcells
-                const size_t num_subcells(poly[hexa_cell_id].GetNumElements());
-                embedded_cells_vector.clear();
-                for (size_t eid = 0; eid < num_subcells; ++eid)
-                {
-                  //std::cerr <<" element type "<< poly[ hexa_cell_id ].GetElementType( eid ); // 42=hex, 36=quad, 28=line
-
-                  const size_t num_cell_nodes(poly[hexa_cell_id].GetNumElementNodes(eid));
-                  if (num_cell_nodes > 1)
-                  {
-                    vset.ResizePlist(cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType(poly[hexa_cell_id].GetElementType(eid)));
-                    vset.ResizeElementTypes(cell_id + 1);
-                    for (size_t nid = 0U; nid < num_cell_nodes; ++nid)
-                      vset.Plist(cell_id, nid, poly[hexa_cell_id].GetElementNodeGlobalId(eid, nid));
-                    vset.ElementType(cell_id, poly[hexa_cell_id].GetElementType(eid));
-                    const size_t cell_dim(poly[hexa_cell_id].GetElementDim(eid));
-                    if (cell_dim == 3U)
-                    {
-                      cell_elmts.push_back(cell_id);
-                      cell_fem_types.insert(csmp::parseFiniteElementType(poly[hexa_cell_id].GetElementType(eid)));
-                      embedded_cells_vector.push_back(std::make_pair(cell_id, poly[hexa_cell_id].GetElementType(eid)));
-                      ++cell_id;
-                    }
-                    else if (cell_dim == (2U))
-                    {
-                      face_elmts.push_back(cell_id);
-                      face_fem_types.insert(csmp::parseFiniteElementType(poly[hexa_cell_id].GetElementType(eid)));
-                      embedded_cells_vector.push_back(std::make_pair(cell_id, poly[hexa_cell_id].GetElementType(eid)));
-                      ++cell_id;
-                    }
-                    else if (cell_dim == (1U))
-                    {
-                      edge_elmts.push_back(cell_id);
-                      edge_fem_types.insert(csmp::parseFiniteElementType(poly[hexa_cell_id].GetElementType(eid)));
-                      embedded_cells_vector.push_back(std::make_pair(cell_id, poly[hexa_cell_id].GetElementType(eid)));
-                      ++cell_id;
-                    }
-                  }
-                }
-                embedded_cells_.insert(std::make_pair(hexa_cell_id, embedded_cells_vector));
-              }
-            }
-      }
-
-      // DEBUGGING CODE ONLY
-#ifndef NDEBUG
-      {
-        std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> > >::const_iterator cit;
-
-        std::vector<size_t> deg_nonoverlap_cells;
-        std::set<std::string> deg_nonoverlap_cells_fem_types;
-        for (std::set<size_t>::const_iterator
-          it = degenerate_nonoverlap_cells.begin(); it != degenerate_nonoverlap_cells.end(); ++it)
-        {
-          /// hexa cell global id
-          hexa_cell_id = *it;
-          cit = embedded_cells_.find(hexa_cell_id);
-          if (cit != embedded_cells_.end())
-          {
-            for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-              eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-            {
-              if (CSMP_ElementSpecifications::VolumeElement((*eit).second))
-              {
-                deg_nonoverlap_cells.push_back((*eit).first);
-                deg_nonoverlap_cells_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-              }
-            }
-          }
-        }
-        if (!deg_nonoverlap_cells.empty())
-        {
-          model_topology.AddRegion("DEGENERATE_NONOVERLAP", deg_nonoverlap_cells_fem_types, deg_nonoverlap_cells);
-          regions.insert("DEGENERATE_NONOVERLAP");
-        }
-        std::vector<size_t> deg_overlap_cells;
-        std::set<std::string> deg_overlap_cells_fem_types;
-        for (std::set<size_t>::const_iterator
-          it = degenerate_overlap_cells.begin(); it != degenerate_overlap_cells.end(); ++it)
-        {
-          /// hexa cell global id
-          hexa_cell_id = *it;
-          cit = embedded_cells_.find(hexa_cell_id);
-          if (cit != embedded_cells_.end())
-          {
-            for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-              eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-            {
-              if (CSMP_ElementSpecifications::VolumeElement((*eit).second))
-              {
-                deg_overlap_cells.push_back((*eit).first);
-                deg_overlap_cells_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-              }
-            }
-          }
-        }
-        if (!deg_overlap_cells.empty())
-        {
-          model_topology.AddRegion("DEGENERATE_OVERLAP", deg_overlap_cells_fem_types, deg_overlap_cells);
-          regions.insert("DEGENERATE_OVERLAP");
-        }
-      }
-#endif
-
-      regular_cells.clear();
-      regular_well_cells.clear();
-      degenerate_well_cells.clear();
-      degenerate_nonoverlap_cells.clear();
-      degenerate_overlap_cells.clear();
-      degenerate_lowdim_cells.clear();
-
-      // DEBUGGING OUTPUT
-      //std::cerr <<"\nPolygonGridManager: printing the generated grid prior to output to VSet:\n";
-      //   pgm.Out();
-      //    std::cerr <<"\nCornerPointGrid::CreateModel: printing the generated cells prior to output to VSet:\n";
-      //    for ( auto it=poly.begin(); it!=poly.end(); ++it ) {
-      //         (*it).Out();
-      //      }
-
-        // 3. Assign node coordinates
-        // ===============================================================================
-      const size_t num_nodes(pgm.GetNumNodes());
-      vset.ResizeNodes(num_nodes);
-
-      for (size_t nid = 0; nid < num_nodes; ++nid) {
-        const csmp::Point<3U>& pt(pgm.GetPoint(nid));
-        vset.Px(nid, pt[0U]);
-        vset.Py(nid, pt[1U]);
-        vset.Pz(nid, pt[2U]);
-      }
-
-      /* NA
-        else if ( dim == 2U ) {
-            for ( size_t nid=0; nid<num_nodes; ++nid ){
-              const csmp::Point<3U>& pt1( pgm.GetPoint( nid ) );
-              csmp::Point<3U> pt2;
-              getCoordinate( axes_[0], axes_[1], axes_[2], pt1, pt2 );
-              vset.Px( nid, pt2[0U] );
-              vset.Py( nid, pt2[1U] );
-              vset.Pz( nid, 0.0 );
-            }
-          }
-        else if ( dim == 1U ) {
-            for ( size_t nid=0; nid<num_nodes; ++nid ){
-              const csmp::Point<3U>& pt1( pgm.GetPoint( nid ) );
-              csmp::Point<3U> pt2;
-              getCoordinate( axes_[0], axes_[1], pt1, pt2 );
-              vset.Px( nid, pt2[0U] );
-              vset.Py( nid, 0.0 );
-              vset.Pz( nid, 0.0 );
-            }
-          }
-      */
-      // 4. Establishing Model Topology
-      // ================================
-
-      // Assign Model name to model topology
-      model_topology.ModelName(model_name.c_str());
-
-      // Process ACTIVE and INACTIVE regions
-      EstablishActiveDomain(vset, model_topology, regions, cell_elmts, cell_fem_types);
-
-      // Process node boundary flags
-      EstablishBoundaries(vset, model_topology, poly);
-
-      cell_elmts.clear();
-      face_elmts.clear();
-      edge_elmts.clear();
-
-      EstablishFaultRegions(vset, model_topology, faults, poly);
-
-      EstablishWellRegions(vset, model_topology, wells, poly);
-
-      poly.clear();
-      pgm.Clear();
-
-      // assign mesh type (multi-element or single-element type)
-      if ((cell_fem_types.size() > 1) || (!faults_data_.empty()))
-        vset.HybridElementTypeMesh(true);
-      else
-        vset.HybridElementTypeMesh(false);
-
-
-      // 5. Reporting
-      // ================================
-
-      std::cout << "\nCornerPointGrid::CreateModel: VSet resulting from '" << model_name << "' grid contains: ";
-      if (!embedded_cells_.empty())
-      {
-        std::map<csmp::CSMP_FEM_TYPE, size_t> mesh_specs;
-        std::pair<std::map<csmp::CSMP_FEM_TYPE, size_t>::iterator, bool> nmit;
-        std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> > >::const_iterator cit;
-        for (size_t eid = 0; eid < elements_; ++eid)
-        {
-          cit = embedded_cells_.find(eid);
-          if (cit != embedded_cells_.end())
-            for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-              eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-            {
-              nmit = mesh_specs.insert(std::make_pair((*eit).second, 0));
-              if (!nmit.second)
-                ++((*nmit.first).second);
-            }
-          else
-          {
-            nmit = mesh_specs.insert(std::make_pair(hexa_fem_type, 0));
-            if (!nmit.second)
-              ++((*nmit.first).second);
-          }
-        }
-        for (std::map<csmp::CSMP_FEM_TYPE, size_t>::const_iterator
-          mit = mesh_specs.begin(); mit != mesh_specs.end(); ++mit)
-          std::cout << "\n" << csmp::parseFiniteElementType((*mit).first) << " elements: " << (*mit).second;
-      }
-      else std::cout << "\n" << hexa_fem_typename << " elements: " << elements_;
-
-      std::cout << "\n\tTotal number of nodes: " << vset.Vertices();
-      std::cout << "\n\tTotal number of elements: " << vset.Elements();
-
-      // topology info
-      const size_t num_regions(model_topology.ModelRegions());
-      std::cout << "\n\tTotal number of regions: " << num_regions;
-      std::cout << "\n\tList of regions: ";
-      const size_t max_per_line(5);
-      std::list<std::string> regions_list;
-      model_topology.Out(regions_list);
-      size_t rid(0);
-      for (std::list<std::string>::const_iterator
-        rit = regions_list.begin(); rit != regions_list.end(); ++rit)
-      {
-        std::cout << "'" << (*rit) << "'";
-        ++rid;
-        if ((rid%max_per_line == 0) && (rid != num_regions))
-          std::cout << "," << std::endl;
-        else if (rid != num_regions)
-          std::cout << ", ";
-      }
-      std::cout << std::endl;
-
-      if (csmp_error.Verbose())
-        std::cout << "\nCornerPointGrid::CreateModel: mesh was successfully output to VSet." << std::endl;
-#endif
      // CreateModel (MASTER - MONSTER METHOD)
 
 
 
 #if 0
-/**
-  Eliminating inactive cells in VSet.
-
-  @todo SKM question: are inactive cells included in the VSet? - they should be eliminated before because they
-  often dominate the entire cell count.
-*/
-    void CornerPointGrid::EstablishActiveDomain(csmp::VSet<3U>& vset,
-      csmp::ModelTopology& model_topology,
-      std::set<std::string>& regions,
-      const std::vector<size_t>& cell_elmts,
-      const std::set<std::string>& cell_fem_types)
-    {
-      csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
-
-      /// active set of cells
-      std::set<std::string> active_cell_fem_types;
-      std::set<std::string> active_face_fem_types;
-      std::set<std::string> active_edge_fem_types;
-      std::vector<size_t>   active_cells;
-      std::vector<size_t>   active_faces;
-      std::vector<size_t>   active_edges;
-      /// inactive set of cells
-      std::set<std::string> inactive_cell_fem_types;
-      std::set<std::string> inactive_face_fem_types;
-      std::set<std::string> inactive_edge_fem_types;
-      std::vector<size_t>   inactive_cells;
-      std::vector<size_t>   inactive_faces;
-      std::vector<size_t>   inactive_edge;
-
-
-      /// correcting active cell id's due to existance of embedded cells
-      if (!embedded_cells_.empty())
-      {
-        std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> > >::const_iterator cit;
-        const size_t num_elements(cell_activity_.size());
-        for (size_t cid = 0; cid < num_elements; ++cid)
-        {
-          cit = embedded_cells_.find(cid);
-          if (cit != embedded_cells_.end())
-          {
-            if (cell_activity_[cid] == 1)
-            {
-              for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-                eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-              {
-                if (CSMP_ElementSpecifications::VolumeElement((*eit).second))
-                {
-                  active_cells.push_back((*eit).first);
-                  active_cell_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-                else if (CSMP_ElementSpecifications::SurfaceElement((*eit).second))
-                {
-                  active_faces.push_back((*eit).first);
-                  active_face_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-                else if (CSMP_ElementSpecifications::LineElement((*eit).second))
-                {
-                  active_edges.push_back((*eit).first);
-                  active_edge_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-              }
-            }
-            else
-            {
-              for (std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE> >::const_iterator
-                eit = (*cit).second.begin(); eit != (*cit).second.end(); ++eit)
-              {
-                if (CSMP_ElementSpecifications::VolumeElement((*eit).second))
-                {
-                  inactive_cells.push_back((*eit).first);
-                  inactive_cell_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-                else if (CSMP_ElementSpecifications::SurfaceElement((*eit).second))
-                {
-                  inactive_faces.push_back((*eit).first);
-                  inactive_face_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-                else if (CSMP_ElementSpecifications::LineElement((*eit).second))
-                {
-                  inactive_edge.push_back((*eit).first);
-                  inactive_edge_fem_types.insert(csmp::parseFiniteElementType((*eit).second));
-                }
-              }
-            }
-          }
-        }
-      }
-
-      if (!exclude_inactive_cells_)
-      {
-        /// all elements
-        if (!cell_elmts.empty()) {
-          model_topology.AddRegion("ALL_CELLS", cell_fem_types, cell_elmts);
-          regions.insert("ALL_CELLS");
-        }
-
-        /// adding active and inctive cell regions
-        if (!active_cells.empty()) {
-          model_topology.AddRegion("ALL_ACTIVE_CELLS", active_cell_fem_types, active_cells);
-          regions.insert("ALL_ACTIVE_CELLS");
-        }
-        if (!inactive_cells.empty()) {
-          model_topology.AddRegion("ALL_INACTIVE_CELLS", inactive_cell_fem_types, inactive_cells);
-          regions.insert("ALL_INACTIVE_CELLS");
-        }
-      }
-      else
-      {
-        if (!active_cells.empty()) {
-          model_topology.AddRegion("ALL_CELLS", active_cell_fem_types, active_cells);
-          regions.insert("ALL_CELLS");
-        }
-      }
-
-      if (csmp_error.Verbose())
-        std::cout << "CornerPointGrid::EstablishActiveDomain: inactive cells were successfully removed.\n";
-
-    } // EstablishActiveDomain
-
-
-
-
-
      /**
        Identifies the faces of the cells that make up the boundary.
        The cells are then grouped into boundary regions that are stored in the ModelTopology class.
@@ -2156,7 +1385,6 @@ if (i == 4 && j == 10 && k == 100) {
             fault_name_a += "_sideA";
             faults_data_it = temp_faults_data.insert(std::make_pair(fault_name_a, std::vector<std::pair<size_t, size_t> >()));
             std::vector<std::pair<size_t, size_t> >& fault_elmts_a((*faults_data_it.first).second);
-
             /// add new fault region ( side B )
             fault_name_b = fault_name;
             fault_name_b += "_sideB";
@@ -2455,9 +1683,15 @@ if (i == 4 && j == 10 && k == 100) {
       if (!faults_data_.empty())
       {
         std::string fault_name_prefix;
+#ifndef NEW
         std::map<std::string, std::vector<std::pair<size_t, size_t> > >::iterator fit;
         std::map<std::string, std::vector<std::pair<size_t, size_t> > > temp_faults_data;
         for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::iterator
+#else /* NEW */
+      std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator fit;
+      std::map<std::string, vector<std::pair<size_t, size_t> > > temp_faults_data;
+      for (std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator
+#endif /* NEW */
           it = faults_data_.begin(); it != faults_data_.end(); ++it)
         {
           fault_name = (*it).first;
