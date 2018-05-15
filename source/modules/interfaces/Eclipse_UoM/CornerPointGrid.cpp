@@ -131,6 +131,7 @@ namespace csmp {
           }
         }
       }
+      ordinaryNodes_ = node_count;
       std::cerr << " " << node_count << " unique nodes detected\n";
 
       // 2. Build columns
@@ -198,10 +199,6 @@ namespace csmp {
     void
       CornerPointGrid_UoM::ConstructFiniteElementsFromColumns(VSet<3U>& vset)
     {
-
-      deque<double64> x, y, z;
-      map<size_t, vector<size_t>>  plist;
-      std::vector<int32> fem_types;
       vset.HybridElementTypeMesh( true );
 
       //map<size_t, vector<long64>>  pfverts;
@@ -220,21 +217,6 @@ namespace csmp {
             }
           }
           cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
-        }
-      }
-
-      // 2. store node coordinate
-      for (size_t i = 0; i <= NX_; ++i) {
-        for (size_t j = 0; j <= NY_; ++j) {
-          Pillar& pillar = (*this)(i, j);
-          for (size_t k = 0; k < pillar.GetNumPoints(); ++k) {
-            csmp::Point<3u> point = pillar.GetPoint(k);
-            // convert to CSMP coordinate
-            ConvertFromReservoirToCSMPcoordinateSystem(point);
-            x.push_back(point[0]);
-            y.push_back(point[1]);
-            z.push_back(point[2]);
-          }
         }
       }
 
@@ -687,9 +669,12 @@ namespace csmp {
       };
 
 
-      // 3. Constructing Element
-      size_t elementID = 0;
-      
+      // 2. Constructing Elements
+      size_t elementID = 0, extraNodeID = ordinaryNodes_;
+      std::map<size_t, vector<size_t>>  plist;
+      std::vector<int32> fem_types;
+      std::deque<Point<3>> extraNodes;
+
       for (auto column = columns_.begin(); column != columns_.end(); column++)  {
         Column& Col = column->second;
         for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -1092,9 +1077,33 @@ if (i == 4 && j == 49 && 97 <= k && k <= 101) {
         }
       }
 
+      // 3. store node coordinates
+      {
+        deque<double64> x, y, z;
+        for (size_t i = 0; i <= NX_; ++i) {
+          for (size_t j = 0; j <= NY_; ++j) {
+            Pillar& pillar = (*this)(i, j);
+            for (size_t k = 0; k < pillar.GetNumPoints(); ++k) {
+              csmp::Point<3u> point = pillar.GetPoint(k);
+              // convert to CSMP coordinate
+              ConvertFromReservoirToCSMPcoordinateSystem(point);
+              x.push_back(point[0]);
+              y.push_back(point[1]);
+              z.push_back(point[2]);
+            }
+          }
+        }
+        for (auto& p : extraNodes) {
+          x.push_back(p[0]);
+          y.push_back(p[1]);
+          z.push_back(p[2]);
+        }
+        vset.AddXYZ(x, y, z);
+      }
+
+      // 4. Set up the rest of the vset
       vset.ResizePfverts(fem_types.size());
       vset.ResizePlist(plist.size());
-      vset.AddXYZ(x, y, z);
       vset.AddPlist(plist.begin(), plist.end());
       vset.AddElementTypes(fem_types.begin(), fem_types.end());
     }

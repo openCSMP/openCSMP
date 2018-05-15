@@ -124,7 +124,7 @@ private:
   uint8_t& CellActivity(size_t i, size_t j, size_t k);
 
   size_t NX_x_NY_; ///< specifications of mesh derived from grid
-  size_t elements_;
+  size_t elements_, ordinaryNodes_;
   std::vector<csmp::Point<3U> >  axes_; ///< reservoir coordinate system
 };
 
