@@ -234,8 +234,7 @@ namespace csmp {
         SPLITTED_BY_02,    // 
         SPLITTED_BY_13,
         SPLITTED_BY_46,    // 
-        SPLITTED_BY_57,
-
+        SPLITTED_BY_57
       };
 
       class CellGenerator {
@@ -248,6 +247,19 @@ namespace csmp {
         CellGenerator(Pillar& p0, Pillar& p1, Pillar& p2, Pillar& p3)
         : p0(p0), p1(p1), p2(p2), p3(p3)
         {
+        }
+        
+        Point<3> getCellCentoid(ColumnCell& cell) {
+          Point<3> p(0,0,0);
+          p += p0.GetPoint(cell.z[0][0]);
+          p += p0.GetPoint(cell.z[0][1]);
+          p += p1.GetPoint(cell.z[1][0]);
+          p += p1.GetPoint(cell.z[1][1]);
+          p += p2.GetPoint(cell.z[2][0]);
+          p += p2.GetPoint(cell.z[2][1]);
+          p += p3.GetPoint(cell.z[3][0]);
+          p += p3.GetPoint(cell.z[3][1]);
+          return p * 0.125;
         }
         
         size_t getNodeID(ColumnCell& cell, size_t vertex) {
@@ -666,6 +678,167 @@ namespace csmp {
             return FACE_TYPE::QUAD;
           }
         }
+        
+        void addPyramidTopFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addPyramidBottomFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addPyramidLeftFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addPyramidRightFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addPyramidFrontFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addPyramidBackFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(5);
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+
+        void addTetraBottomFace456(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+
+        void addTetraBottomFace467(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+
+        void addTetraBottomFace567(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(getNodeID(cell, 6));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addTetraBottomFace457(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 7));
+          nodeList.push_back(getNodeID(cell, 5));
+          nodeList.push_back(getNodeID(cell, 4));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+
+        void addTetraTopFace012(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addTetraTopFace023(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addTetraTopFace123(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(getNodeID(cell, 2));
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+        
+        void addTetraTopFace013(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+        {
+          std::vector<size_t> nodeList;
+          nodeList.reserve(4);
+          nodeList.push_back(getNodeID(cell, 1));
+          nodeList.push_back(getNodeID(cell, 3));
+          nodeList.push_back(getNodeID(cell, 0));
+          nodeList.push_back(centroid);
+          plist.emplace(element, std::move(nodeList));
+        }
+
       };
 
 
@@ -705,229 +878,403 @@ namespace csmp {
           
           assert(elementID == plist.size());
           assert(elementID == fem_types.size());
-if (i == 4 && j == 49 && 97 <= k && k <= 101) {
+          assert(extraNodeID == ordinaryNodes_ + extraNodes.size());
+if (i == 58 && j == 68 && 70 <= k && k <= 71) {
     std::cerr << "Broken element case\n";
 }
           switch (cellType) {
           case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON: {        // 0000
-            if (cellAbove == nullptr) {
-              if (!cellBeneath) {
+            bool faceAboveIsQuad = !cellAbove || generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::QUAD;
+            bool faceBeneathIsQuad = !cellBeneath || generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::QUAD;
+
+            if (faceAboveIsQuad) {
+              if (faceBeneathIsQuad) {
                 plist.emplace(elementID, generator.nonDegenerate(cell));
                 addElementToMap(i, j, k, elementID);
                 fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
                 ++elementID;
               }  // null - hex - null
-              else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_02) {
-                auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // null - hex - '/'
-              else if(generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_13){
-                auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // null - hex - '\'
               else {
-                plist.emplace(elementID, generator.nonDegenerate(cell));
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-                ++elementID;              
-              } // null - hex - hex
-            }  
-            else if (generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::SPLITTED_BY_46) {
-              if (cellBeneath == nullptr) {                
-                auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // '/' - hex - null
-              else if (generator.getShapeOfTopFace(cell) == FACE_TYPE::SPLITTED_BY_02) {
-                auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // '/' - hex - '/'
-              else if (generator.getShapeOfTopFace(cell) == FACE_TYPE::SPLITTED_BY_13) {
-                auto elementList = generator.splitToFiveTetrahedrasAtTwoEdges0257(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[3]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[4]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-              } // '/' - hex - '\'
-              else {
-                auto elementList = generator.splitToThreePyramidsAt6(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                switch (generator.getShapeOfTopFace(*cellBeneath)) {
+                  case FACE_TYPE::SPLITTED_BY_02:
+                  {
+                    size_t centroid = extraNodeID;
+                    extraNodes.push_back(generator.getCellCentoid(cell));
+                    ++extraNodeID;
+  
+                    // Top face
+                    generator.addPyramidTopFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    // Left face
+                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Right face
+                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Front face
+                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Back face
+                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Bottom faces
+                    generator.addTetraBottomFace456(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
+                    
+                    generator.addTetraBottomFace467(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
-              }// '/' - hex - hex
-            
-            }
-            else if (generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::SPLITTED_BY_57){
-              if (cellBeneath == nullptr) {
-                auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // '\' - hex - null
-              else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_02) {
-                auto elementList = generator.splitToFiveTetrahedrasAtTwoEdges1347(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[3]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;
-                plist.emplace(elementID, elementList[4]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                ++elementID;                        
-              } // '\' - hex - '/'
-              else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_13) {
-                auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                ++elementID;
-              } // '\' - hex - '\'
-              else {
-                auto elementList = generator.splitToThreePyramidsAt1(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    break;
+                  }
+                    
+                  case FACE_TYPE::SPLITTED_BY_13:
+                  {
+                    size_t centroid = extraNodeID;
+                    extraNodes.push_back(generator.getCellCentoid(cell));
+                    ++extraNodeID;
+                    
+                    // Top face
+                    generator.addPyramidTopFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Left face
+                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Right face
+                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Front face
+                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Back face
+                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Bottom faces
+                    generator.addTetraBottomFace567(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
+                    
+                    generator.addTetraBottomFace457(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    break;
+                  }
 
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
-              }// '\' - hex - hex
-
+                  default:
+                  {
+                    throw csmp::Exception(FATAL_ERROR,
+                                          "CornerPointGrid::ConstructFiniteElementsFromColumns",
+                                          "Hexahedron with unknown bottom face");
+                  }
+                }
+              }
             }
             else {
-              if (cellBeneath == nullptr) {
-                plist.emplace(elementID, generator.nonDegenerate(cell));
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-                ++elementID;          
-              }//hex - hex - null
-              else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_02) {
-                auto elementList = generator.splitToThreePyramidsAt6(cell);
+              if (faceBeneathIsQuad) {
+                switch (generator.getShapeOfBottomFace(*cellAbove)) {
+                  case FACE_TYPE::SPLITTED_BY_46:
+                  {
+                    size_t centroid = extraNodeID;
+                    extraNodes.push_back(generator.getCellCentoid(cell));
+                    ++extraNodeID;
 
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    // Left face
+                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Right face
+                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Front face
+                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+                    
+                    // Back face
+                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    // Bottom face
+                    generator.addPyramidBottomFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
-              }// hex - hex - '/'
-              else if (generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::SPLITTED_BY_13) {
-                auto elementList = generator.splitToThreePyramidsAt7(cell);
-                plist.emplace(elementID, elementList[0]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    // Top faces
+                    generator.addTetraTopFace012(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
+                    
+                    generator.addTetraTopFace023(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
 
-                plist.emplace(elementID, elementList[1]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
+                    break;
+                  }
 
-                plist.emplace(elementID, elementList[2]);
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                ++elementID;
-              } // hex - hex - '\'
+                  case FACE_TYPE::SPLITTED_BY_57:
+                  {
+                    size_t centroid = extraNodeID;
+                    extraNodes.push_back(generator.getCellCentoid(cell));
+                    ++extraNodeID;
+
+                    // Left face
+                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+   
+                    // Right face
+                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+
+                    // Front face
+                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+
+                    // Back face
+                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+
+                    // Bottom face
+                    generator.addPyramidBottomFace(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                    ++elementID;
+
+                    // Top faces
+                    generator.addTetraTopFace123(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
+
+                    generator.addTetraTopFace013(cell, elementID, plist, centroid);
+                    addElementToMap(i, j, k, elementID);
+                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                    ++elementID;
+
+                    break;
+                  }
+                    
+                  default: ;
+                }
+              }
               else {
-                plist.emplace(elementID, generator.nonDegenerate(cell));
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-                ++elementID;
-              } // hex - hex - hex
-            }
+                  auto topShape = generator.getShapeOfBottomFace(*cellAbove);
+                  auto bottomShape = generator.getShapeOfTopFace(*cellBeneath);
+                  switch (topShape) {
+                    case FACE_TYPE::SPLITTED_BY_46:
+                    {
+                        switch (bottomShape) {
+                          case FACE_TYPE::SPLITTED_BY_02:
+                          {
+                              auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
+                              plist.emplace(elementID, elementList[0]);
+                              addElementToMap(i, j, k, elementID);
+                              fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                              ++elementID;
+                              plist.emplace(elementID, elementList[1]);
+                              addElementToMap(i, j, k, elementID);
+                              fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                              ++elementID;
+                            break;
+                          }
+                            
+                            case FACE_TYPE::SPLITTED_BY_13:
+                          {
+                            size_t centroid = extraNodeID;
+                            extraNodes.push_back(generator.getCellCentoid(cell));
+                            ++extraNodeID;
 
+                            // Left face
+                            generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Right face
+                            generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Front face
+                            generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Back face
+                            generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+
+                            // Top faces
+                            generator.addTetraTopFace012(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+                            
+                            generator.addTetraTopFace023(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+
+                            // Bottom faces
+                            generator.addTetraBottomFace567(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+                            
+                            generator.addTetraBottomFace457(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+
+                            break;
+                          }
+                            
+                          default: ;
+                        }
+                        break;
+                    }
+
+                    case FACE_TYPE::SPLITTED_BY_57:
+                    {
+                        switch (bottomShape) {
+                            case FACE_TYPE::SPLITTED_BY_02:
+                          {
+                            size_t centroid = extraNodeID;
+                            extraNodes.push_back(generator.getCellCentoid(cell));
+                            ++extraNodeID;
+
+                            // Left face
+                            generator.addPyramidLeftFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Right face
+                            generator.addPyramidRightFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Front face
+                            generator.addPyramidFrontFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+                            
+                            // Back face
+                            generator.addPyramidBackFace(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                            ++elementID;
+
+                            // Top faces
+                            generator.addTetraTopFace123(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+                            
+                            generator.addTetraTopFace013(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+
+                            // Bottom faces
+                            generator.addTetraBottomFace456(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+                            
+                            generator.addTetraBottomFace467(cell, elementID, plist, centroid);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                            ++elementID;
+
+                            break;
+                          }
+                            
+                            case FACE_TYPE::SPLITTED_BY_13:
+                          {
+                            auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
+                            plist.emplace(elementID, elementList[0]);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                            ++elementID;
+                            plist.emplace(elementID, elementList[1]);
+                            addElementToMap(i, j, k, elementID);
+                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                            ++elementID;
+                            break;
+                          }
+                            
+                          default: ;
+                        }
+                        break;
+                    }
+                    default: ;
+                  }
+              }
+            }
             break;
           }
+
 
           case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {      // 0001
             auto elementList =  generator.degenerateToTwoPyramidsAt3(cell);

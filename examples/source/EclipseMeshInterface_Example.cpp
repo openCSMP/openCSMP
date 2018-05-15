@@ -84,6 +84,43 @@ void EclipseMeshInterface_Example::Run()
   // We are in the process of rewriting the Eclipse interface, and the
   // following part is not yet fully ported.  - AJB
   
+  Region<3U>&  model_domain(modelOut.Region("Model"));
+  model_domain.UpdateMemberIndexes();
+  
+  
+  // 3. eliminating any potentially disfunctional elements / cells from the model
+  // ----------------------------------------------------------------------------
+  // elements that have a negative Jacobian determinant are assumed to be degenerate and flagged for deletion
+  vector<size_t> degenerate_elements;
+  int volume_e_removed(0U), surface_e_removed(0U), line_e_removed(0U);
+  for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    // find broken elements
+    // (an element is regarded as broken if the determinant of its Jacobian inverse is negative at least
+    //  at one of the integration points
+    bool broken_elmt(false);
+    for ( size_t ipoint=0U; ipoint<(*it)->IntegrationPoints(); ++ipoint )
+      if ( (*it)->det_JINV_AtIntegrationPoint( ipoint ) <= 0. ) {
+        broken_elmt = true;
+        break;
+      }
+    if ( broken_elmt ) {
+      if      ( (*it)->IsVolumeElement() ) volume_e_removed++;
+      else if ( (*it)->IsSurfaceElement() ) surface_e_removed++;
+      else if ( (*it)->IsLineElement() ) line_e_removed++;
+      degenerate_elements.push_back( (*it)->Idx() );
+      auto eclipseCoord = modelOut.EclipseCoordinates(*it);
+      std::cerr << "Broken element at " << eclipseCoord.i << ' ' << eclipseCoord.j << ' ' << eclipseCoord.k << ' '
+      << parseFiniteElementType((*it)->FE()->ElementType())
+      << '\n';
+    }
+  }
+  if ( volume_e_removed > 0 || surface_e_removed > 0 || line_e_removed > 0 ) {
+    cout <<"\nread_and_configure_ECLIPSE_model: removing degenerate elements:\n";
+    cout <<"\n\tvolume elements removed:  "<< volume_e_removed;
+    cout <<"\n\tsurface elements removed: "<< surface_e_removed;
+    cout <<"\n\tline elements removed:    "<< line_e_removed;
+  }
+
   VTK_Interface<3U>  vtk_output;
   vtk_output.OutputNodeDataToVTK( modelOut, "EclipseInterfaceExample", 0 );
 

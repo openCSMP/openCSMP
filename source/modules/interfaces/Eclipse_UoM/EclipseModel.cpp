@@ -230,7 +230,6 @@ void EclipseModel::Initialize()
          std::cout <<"\nDiagnostics:"<< std::endl;
          ba.Out();
       }
-  std::cerr << "Size of " << typeid(Node<3u>).name() << " is " << sizeof(Node<3u>) << '\n';
 } // end BuildModel
 
 /// existing special regions
