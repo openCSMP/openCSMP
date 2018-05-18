@@ -6,19 +6,695 @@
 #include "ErrorHandler.h"
 #include "EclipseInterface_UoM.h"
 
+#include "IsoparametricLinearHexahedron.h"
+#include "IsoparametricLinearPyramid.h"
+#include "IsoparametricLinearTetrahedron.h"
+#include "IsoparametricLinearPrism.h"
+
+#define CSMP_SIZE_OF_ARRAY(a)  (sizeof(a) / sizeof(a[0]))
+
 using namespace std;
 
 namespace csmp {
 
   namespace eclipse {
 
+    enum class FACE_TYPE {
+
+      //       3_________2
+      //    /|        /|
+      //     0_|_______1 |
+      //     | 7-------|-6
+      //     |/        |/
+      //     4_________5
+
+
+      FULL_QUAD,
+      SPLIT_02_OR_46,
+      SPLIT_13_OR_57,
+      SPLIT_X
+    };
+
+    struct CellGenerator {
+      CornerPointGrid_UoM& grid;
+
+      size_t elementID = 0;
+      size_t extraNodeID = 0;
+      std::deque<Point<3u>> extraNodes;
+      
+      std::map<size_t, vector<size_t>>  plist;
+      std::vector<int32> fem_types;
+
+      Pillar* p0;
+      Pillar* p1;
+      Pillar* p2;
+      Pillar* p3;
+      
+      CellGenerator(CornerPointGrid_UoM& grid)
+      : grid(grid)
+      {
+      }
+
+      Point<3u> getNodeCoord(ColumnCell& cell, size_t vertex) const {
+        switch (vertex)
+        {
+          case 0:
+            return p0->GetPoint(cell.z[0][0]);
+          case 1:
+            return p1->GetPoint(cell.z[1][0]);
+          case 2:
+            return p2->GetPoint(cell.z[2][0]);
+          case 3:
+            return p3->GetPoint(cell.z[3][0]);
+          case 4:
+            return p0->GetPoint(cell.z[0][1]);
+          case 5:
+            return p1->GetPoint(cell.z[1][1]);
+          case 6:
+            return p2->GetPoint(cell.z[2][1]);
+          case 7:
+            return p3->GetPoint(cell.z[3][1]);
+        }
+        throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeCoord",
+                              "Node id out of range");
+      }
+
+      size_t getNodeID(ColumnCell& cell, size_t vertex) const {
+        switch (vertex)
+        {
+          case 0:
+            return cell.z[0][0] + p0->FirstNodeNum();
+          case 1:
+            return cell.z[1][0] + p1->FirstNodeNum();
+          case 2:
+            return cell.z[2][0] + p2->FirstNodeNum();
+          case 3:
+            return cell.z[3][0] + p3->FirstNodeNum();
+          case 4:
+            return cell.z[0][1] + p0->FirstNodeNum();
+          case 5:
+            return cell.z[1][1] + p1->FirstNodeNum();
+          case 6:
+            return cell.z[2][1] + p2->FirstNodeNum();
+          case 7:
+            return cell.z[3][1] + p3->FirstNodeNum();
+        }
+        throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
+                              "Node id out of range");
+      }
+
+      
+      void setIJ(size_t i, size_t j) {
+          p0 = &grid(i + 0, j + 0);
+          p1 = &grid(i + 0, j + 1);
+          p2 = &grid(i + 1, j + 1);
+          p3 = &grid(i + 1, j + 0);
+      }
+
+      size_t generateCellCentroid(ColumnCell& cell) {
+        Point<3> p(0,0,0);
+        p += p0->GetPoint(cell.z[0][0]);
+        p += p0->GetPoint(cell.z[0][1]);
+        p += p1->GetPoint(cell.z[1][0]);
+        p += p1->GetPoint(cell.z[1][1]);
+        p += p2->GetPoint(cell.z[2][0]);
+        p += p2->GetPoint(cell.z[2][1]);
+        p += p3->GetPoint(cell.z[3][0]);
+        p += p3->GetPoint(cell.z[3][1]);
+        extraNodes.push_back(p * 0.125);
+        return extraNodeID++;
+      }
+      
+      size_t vertexIDs[8];
+      IsoparametricLinearHexahedron hexa;
+      IsoparametricLinearPyramid pyra;
+      IsoparametricLinearTetrahedron tetra;
+      IsoparametricLinearPrism prism;
+
+      bool ConstructHexahedron(ColumnCell& cell) {
+        for (size_t i = 0; i < 8; ++i) {
+          vertexIDs[i] = i;
+          auto p = getNodeCoord(cell, vertexIDs[i]);
+          grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
+          hexa.XYZ(i, 0, p[0]);
+          hexa.XYZ(i, 1, p[1]);
+          hexa.XYZ(i, 2, p[2]);
+          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+        }
+
+        size_t iNrIps = hexa.IntegrationPoints();
+        for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+          hexa.JacobianAtIntegrationPoint(iIp);
+          double64 jacdet = hexa.JacobianDeterminant();
+          if (jacdet <= 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      size_t EmitHexahedron(ColumnCell& cell) {
+        auto ids = getGlobalIDList(cell, 8, vertexIDs);
+        size_t elid = elementID++;
+        plist.emplace(elid, ids);
+        fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
+        return elid;
+      }
+
+      // return a list of globalNodeID from local vertex index
+      std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
+        std::vector<size_t> nodeIDs;
+        nodeIDs.reserve(size);
+        for (int i = 0; i < size; ++i) {
+          nodeIDs.push_back(getNodeID(cell, vertexIDs[i]));
+        }
+        return nodeIDs;
+      }
+
+      /// degenerates to one prism
+      vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
+        static const size_t vertexIDs[6] = { 0, 3, 7, 1, 2, 6 };						  // 037126
+        return getGlobalIDList(cell, 6, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePrismAtEdge12(ColumnCell& cell) {     // 041 372
+        static const size_t vertexIDs[6] = { 0, 4, 1, 3, 7, 2 };
+        return getGlobalIDList(cell, 6, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
+        static const size_t vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
+        return getGlobalIDList(cell, 6, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
+        static const size_t vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
+        return getGlobalIDList(cell, 6, vertexIDs);
+      }
+
+      /// degenerates to one pyramid
+      vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) { // Pyramid 76540
+        static const size_t vertexIDs[5] = { 7, 6, 5, 4, 0 };
+        return getGlobalIDList(cell, 5, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) { // Pyramid 76541
+        static const size_t vertexIDs[5] = { 7, 6, 5, 4, 1 };
+        return getGlobalIDList(cell, 5, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) { // Pyramid 76542
+        static const size_t vertexIDs[5] = { 7, 6, 5, 4, 2 };
+        return getGlobalIDList(cell, 5, vertexIDs);
+      }
+
+      vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) { // Pyramid 76543
+        static const size_t vertexIDs[5] = { 7, 6, 5, 4, 3 };
+        return getGlobalIDList(cell, 5, vertexIDs);
+      }
+
+      std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) { // Pyramid 56210 & 73260
+        std::vector<std::vector<size_t>> nodeLists;
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[5] = { 5, 6, 2, 1, 0 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 7, 3, 2, 6, 0 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) { // Pyramid 37401 & 26731
+        std::vector<std::vector<size_t>> nodeLists;
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> degenerateToTwoPyramidsAt2(ColumnCell& cell) {      // 0010
+        vector<vector<size_t>> nodeLists;          // Pyramid 45102 37402
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 2 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 3, 7, 4, 0, 2 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> degenerateToTwoPyramidsAt3(ColumnCell& cell) {      // 0001
+        vector<vector<size_t>> nodeLists;          // Pyramid 45103 15623
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 3 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 1, 5, 6, 2, 3 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
+        vector<vector<size_t>> nodeLists;          // tetra 0125 0237
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[4] = { 0, 1, 2, 5 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
+
+        static const size_t vertexIDs2[4] = { 0, 2, 3, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
+        vector<vector<size_t>> nodeLists;          // tetra 1304 1326
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[4] = { 1, 3, 0, 4 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
+
+        static const size_t vertexIDs2[4] = { 1, 3, 2, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToTwoPrismsAtEdge02(ColumnCell& cell) {
+        vector<vector<size_t>> nodeLists;  // 456012 & 467023
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[6] = { 4,5,6,0,1,2 };
+        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
+
+        static const size_t vertexIDs2[6] = { 4,6,7,0,2,3 };
+        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToTwoPrismsAtEdge13(ColumnCell& cell) {
+        vector<vector<size_t>> nodeLists;  // 457013 & 567123
+        nodeLists.reserve(2);
+
+        static const size_t vertexIDs1[6] = { 4,5,6,0,1,3 };
+        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
+
+        static const size_t vertexIDs2[6] = { 5,6,7,1,2,3 };
+        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToThreePyramidsAt0(ColumnCell& cell) {          // forward slash, 0- 
+        vector<vector<size_t>> nodeLists;  // 73260 56210 76540
+        nodeLists.reserve(3);
+
+        static const size_t vertexIDs1[5] = { 7, 3, 2, 6, 0 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 5, 6, 2, 1, 0 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 0 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToThreePyramidsAt6(ColumnCell& cell) {          // forward slash, 4-6/
+        vector<vector<size_t>> nodeLists; // 74036 01236 04516
+        nodeLists.reserve(3);
+
+        static const size_t vertexIDs1[5] = { 7, 4, 0, 3, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        static const size_t vertexIDs3[5] = { 0, 4, 5, 1, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToThreePyramidsAt1(ColumnCell& cell) {          // backslash, 1-3/
+        vector<vector<size_t>> nodeLists;  //  37401 26731 76541
+        nodeLists.reserve(3);
+
+        static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 1 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToThreePyramidsAt7(ColumnCell& cell) {          // backslash, 5-7/
+        vector<vector<size_t>> nodeLists; //  045171 01237 12657
+        nodeLists.reserve(3);
+
+        static const size_t vertexIDs1[5] = { 0, 4, 5, 1, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
+
+        static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
+
+        static const size_t vertexIDs3[5] = { 5, 6, 2, 1, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
+        return nodeLists;
+      }
+
+      vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
+        vector<vector<size_t>> nodeLists;                // 0457 0125 0237 0257 2756
+        nodeLists.reserve(5);
+
+        static const size_t vertexIDs1[4] = { 0, 4, 5, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
+
+        static const size_t vertexIDs2[4] = { 0, 1, 2, 5 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
+
+        static const size_t vertexIDs3[4] = { 0, 2, 3, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
+
+        static const size_t vertexIDs4[4] = { 0, 2, 5, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
+
+        static const size_t vertexIDs5[4] = { 2, 7, 5, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
+
+        return nodeLists;
+      }
+
+
+      vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
+        vector<vector<size_t>> nodeLists;                // 0134 1456 1236 1346 3467
+        nodeLists.reserve(5);
+
+        static const size_t vertexIDs1[4] = { 0, 1, 3, 4 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
+
+        static const size_t vertexIDs2[4] = { 1, 4, 5, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
+
+        static const size_t vertexIDs3[4] = { 1, 2, 3, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
+
+        static const size_t vertexIDs4[4] = { 1, 3, 4, 6 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
+
+        static const size_t vertexIDs5[4] = { 3, 4, 6, 7 };
+        nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
+
+        return nodeLists;
+      }
+
+
+
+      FACE_TYPE getShapeOfTopFace(ColumnCell& cell) {
+        // using reservor coord, smaller z -> higher
+
+        switch (cell.classification) {
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
+            if (cell.z[0][0] < cell.z[0][1]) {
+            }
+            else return FACE_TYPE::FULL_QUAD; 
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
+            if (cell.z[1][0] < cell.z[1][1]) {
+              return FACE_TYPE::SPLIT_13_OR_57;
+            }
+            else return FACE_TYPE::FULL_QUAD; 
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
+            if (cell.z[2][0] < cell.z[2][1]) { 
+              return FACE_TYPE::SPLIT_02_OR_46;
+            }
+            else return FACE_TYPE::FULL_QUAD; 
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
+            if (cell.z[3][0] < cell.z[3][1]) {
+              return FACE_TYPE::SPLIT_13_OR_57;
+            }
+            else return FACE_TYPE::FULL_QUAD; 
+          }
+          default: 
+            return FACE_TYPE::FULL_QUAD;
+        }        
+      }
+
+      FACE_TYPE getShapeOfBottomFace(ColumnCell& cell) {
+        switch (cell.classification) {
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {
+            return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {
+            return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
+            if (cell.z[0][0] < cell.z[0][1]) { 
+              return FACE_TYPE::FULL_QUAD;
+            }
+            else return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
+            if (cell.z[1][0] < cell.z[1][1]) {
+              return FACE_TYPE::FULL_QUAD;
+            }
+            else return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
+            if (cell.z[2][0] < cell.z[2][1]) { 
+              return FACE_TYPE::FULL_QUAD;
+            }
+            else return FACE_TYPE::SPLIT_02_OR_46;
+          }
+          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
+            if (cell.z[3][0] < cell.z[3][1]) {
+              return FACE_TYPE::FULL_QUAD;
+            }
+            else return FACE_TYPE::SPLIT_13_OR_57;
+          }
+          default:
+            return FACE_TYPE::FULL_QUAD;
+        }
+      }
+
+      void addPyramidTopFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addPyramidBottomFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addPyramidLeftFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addPyramidRightFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addPyramidFrontFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addPyramidBackFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(5);
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraBottomFace456(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraBottomFace467(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraBottomFace567(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(getNodeID(cell, 6));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraBottomFace457(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 7));
+        nodeList.push_back(getNodeID(cell, 5));
+        nodeList.push_back(getNodeID(cell, 4));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraTopFace012(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraTopFace023(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraTopFace123(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(getNodeID(cell, 2));
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+      void addTetraTopFace013(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
+      {
+        std::vector<size_t> nodeList;
+        nodeList.reserve(4);
+        nodeList.push_back(getNodeID(cell, 1));
+        nodeList.push_back(getNodeID(cell, 3));
+        nodeList.push_back(getNodeID(cell, 0));
+        nodeList.push_back(centroid);
+        plist.emplace(element, std::move(nodeList));
+      }
+
+    };
+
     // CORNER POINT GRID
 
     CornerPointGrid_UoM::CornerPointGrid_UoM()
-      : NX_(0),
-      NY_(0),
-      NZ_(0),
-      NX_x_NY_(0)
+    : NX_(0),
+    NY_(0),
+    NZ_(0),
+    NX_x_NY_(0)
     {
     }
 
@@ -36,7 +712,7 @@ namespace csmp {
 
 
     void CornerPointGrid_UoM
-      ::InitializeGridSpecs()
+    ::InitializeGridSpecs()
     {
       std::cout << "InitializeGridSpecs\n";
       NX_x_NY_ = NX_ * NY_;
@@ -54,10 +730,10 @@ namespace csmp {
     }
 
     /**
-    x stays, y = -z and z=y.
-    */
+     x stays, y = -z and z=y.
+     */
     void CornerPointGrid_UoM
-      ::ConvertFromReservoirToCSMPcoordinateSystem(csmp::Point<3U>& pt)
+    ::ConvertFromReservoirToCSMPcoordinateSystem(csmp::Point<3U>& pt) const
     {
       const double y(pt[1U]);
       pt[0U] = pt[0U];
@@ -67,7 +743,7 @@ namespace csmp {
 
 
     uint8_t&
-      CornerPointGrid_UoM::CellActivity(size_t i, size_t j, size_t k)
+    CornerPointGrid_UoM::CellActivity(size_t i, size_t j, size_t k)
     {
       assert(i < NX_ && j < NY_ && k < NZ_);
       return cell_activity_[i + j * NX_ + k * NX_x_NY_];
@@ -75,12 +751,12 @@ namespace csmp {
 
 
     std::vector<uint8_t>&
-      CornerPointGrid_UoM::GetCellActivity()
+    CornerPointGrid_UoM::GetCellActivity()
     {
       return cell_activity_;
     }
 
-    
+
 
     /**
      Builds the pillars and columns.
@@ -169,9 +845,9 @@ namespace csmp {
               // If all four corners are degenerate, the cell is fully degenerate.
 
               if (cell.z[0][0] == cell.z[0][1]
-                && cell.z[1][0] == cell.z[1][1]
-                && cell.z[2][0] == cell.z[2][1]
-                && cell.z[3][0] == cell.z[3][1]) {
+                  && cell.z[1][0] == cell.z[1][1]
+                  && cell.z[2][0] == cell.z[2][1]
+                  && cell.z[3][0] == cell.z[3][1]) {
                 ++fully_degenerate_cells;
                 continue;
               }
@@ -197,7 +873,7 @@ namespace csmp {
 
 
     void
-      CornerPointGrid_UoM::ConstructFiniteElementsFromColumns(VSet<3U>& vset)
+    CornerPointGrid_UoM::ConstructFiniteElementsFromColumns(VSet<3U>& vset)
     {
       vset.HybridElementTypeMesh( true );
 
@@ -205,11 +881,32 @@ namespace csmp {
 
       // 1. Classify the cells
 
+      size_t skewCells = 0;
       for (auto& index_column : columns_) {
         auto& column = index_column.second;
+        size_t i = index_column.first.first;
+        size_t j = index_column.first.second;
+
         const size_t iNrCells = column.cells_.size();
         for (size_t iCell = 0; iCell < iNrCells; ++iCell) {
           auto& cell = column.cells_[iCell];
+
+          Pillar& p0 = (*this)(i + 0, j + 0);
+          Pillar& p1 = (*this)(i + 0, j + 1);
+          Pillar& p2 = (*this)(i + 1, j + 1);
+          Pillar& p3 = (*this)(i + 1, j + 0);
+
+          double64 z[4][2];
+          z[0][0] = p0.GetZCoord(cell.z[0][0]);
+          z[0][1] = p0.GetZCoord(cell.z[0][1]);
+          z[1][0] = p1.GetZCoord(cell.z[1][0]);
+          z[1][1] = p1.GetZCoord(cell.z[1][1]);
+          z[2][0] = p2.GetZCoord(cell.z[2][0]);
+          z[2][1] = p2.GetZCoord(cell.z[2][1]);
+          z[3][0] = p3.GetZCoord(cell.z[3][0]);
+          z[3][1] = p3.GetZCoord(cell.z[3][1]);
+
+          // Classify the degeneracy
           uint8_t classification = 0;
           for (size_t v = 0; v < 4; ++v) {
             if (cell.z[v][0] == cell.z[v][1]) {
@@ -217,637 +914,86 @@ namespace csmp {
             }
           }
           cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
+#if 0
+          // Determine whether the cell is skew or not
+          switch (cell.classification) {
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON:          // 0000
+            {
+              double64 z0avg = 0.25 * (z[0][0] + z[1][0] + z[2][0] + z[3][0]);
+              double64 z1avg = 0.25 * (z[0][1] + z[1][1] + z[2][1] + z[3][1]);
+              if (z0avg >= z[0][1] || z0avg >= z[1][1] || z0avg >= z[2][1] || z0avg >= z[3][1]) {
+                std::cerr << "Skew hexahedron case 1: z0avg is deeper than bottom face\n";
+                std::cerr << "p00 = " << p0.GetPoint(cell.z[0][0]) << '\n';
+                std::cerr << "p10 = " << p1.GetPoint(cell.z[1][0]) << '\n';
+                std::cerr << "p20 = " << p2.GetPoint(cell.z[2][0]) << '\n';
+                std::cerr << "p30 = " << p3.GetPoint(cell.z[3][0]) << '\n';
+                std::cerr << "p01 = " << p0.GetPoint(cell.z[0][1]) << '\n';
+                std::cerr << "p11 = " << p1.GetPoint(cell.z[1][1]) << '\n';
+                std::cerr << "p21 = " << p2.GetPoint(cell.z[2][1]) << '\n';
+                std::cerr << "p31 = " << p3.GetPoint(cell.z[3][1]) << '\n';
+                ++skewCells;
+                cell.skew = true;
+              }
+              else if (z1avg <= z[0][0] || z1avg <= z[1][0] || z1avg <= z[2][0] || z1avg <= z[3][0]) {
+                std::cerr << "Skew hexahedron case 1: z1avg is shallower than top face\n";
+                ++skewCells;
+                cell.skew = true;
+              }
+              break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312:      // 0001
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203:      // 0010
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132:      // 0100
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023:      // 1000
+            {
+                break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23:          // 0011
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12:          // 0110
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_03:          // 1001
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01:          // 1100
+            {
+                break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132:    // 0101
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023:    // 1010
+            {
+              // The two tetrahedron case can't be skew
+              break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0:          // 0111
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1:          // 1011
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2:          // 1101
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3:          // 1110
+            {
+              // The one pyramid case can't be skew
+              break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_DEGENERATE:          // 1111
+            {
+              // This case can't happen.
+              break;
+            }
+
+          }
+#endif
         }
       }
 
-      enum class FACE_TYPE {
-
-        //       3_________2
-        //    /|        /|
-        //     0_|_______1 |
-        //     | 7-------|-6
-        //     |/        |/
-        //     4_________5
-
-
-        QUAD,
-        SPLITTED_BY_02,    // 
-        SPLITTED_BY_13,
-        SPLITTED_BY_46,    // 
-        SPLITTED_BY_57
-      };
-
-      class CellGenerator {
-      private:
-        Pillar& p0;
-        Pillar& p1;
-        Pillar& p2;
-        Pillar& p3;
-      public:
-        CellGenerator(Pillar& p0, Pillar& p1, Pillar& p2, Pillar& p3)
-        : p0(p0), p1(p1), p2(p2), p3(p3)
-        {
-        }
-        
-        Point<3> getCellCentoid(ColumnCell& cell) {
-          Point<3> p(0,0,0);
-          p += p0.GetPoint(cell.z[0][0]);
-          p += p0.GetPoint(cell.z[0][1]);
-          p += p1.GetPoint(cell.z[1][0]);
-          p += p1.GetPoint(cell.z[1][1]);
-          p += p2.GetPoint(cell.z[2][0]);
-          p += p2.GetPoint(cell.z[2][1]);
-          p += p3.GetPoint(cell.z[3][0]);
-          p += p3.GetPoint(cell.z[3][1]);
-          return p * 0.125;
-        }
-        
-        size_t getNodeID(ColumnCell& cell, size_t vertex) {
-          switch (vertex)
-          {
-            case 0:
-            {
-              return cell.z[0][0] + p0.FirstNodeNum();
-            }
-              
-            case 1:
-            {
-              return cell.z[1][0] + p1.FirstNodeNum();
-            }
-              
-            case 2:
-            {
-              return cell.z[2][0] + p2.FirstNodeNum();
-            }
-              
-            case 3:
-            {
-              return cell.z[3][0] + p3.FirstNodeNum();
-            }
-              
-            case 4:
-            {
-              return cell.z[0][1] + p0.FirstNodeNum();
-            }
-              
-            case 5:
-            {
-              return cell.z[1][1] + p1.FirstNodeNum();
-            }
-              
-            case 6:
-            {
-              return cell.z[2][1] + p2.FirstNodeNum();
-            }
-              
-            case 7:
-            {
-              return cell.z[3][1] + p3.FirstNodeNum();
-            }
-          }
-          throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
-                                "Node id out of range");
-        }
-
-        // return a list of globalNodeID from local vertex index
-        std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
-          std::vector<size_t> nodeIDs;
-          nodeIDs.reserve(size);
-          for (int i = 0; i < size; ++i) {
-            nodeIDs.push_back(getNodeID(cell, vertexIDs[i]));
-          }
-          return nodeIDs;
-        }
-
-        vector<size_t> nonDegenerate(ColumnCell& cell) {          //0123 4567
-          static const size_t vertexIDs[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-          return getGlobalIDList(cell, 8, vertexIDs);
-        }
-
-        /// degenerates to one prism
-        vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
-          static const size_t vertexIDs[6] = { 0, 3, 7, 1, 2, 6 };						  // 037126
-          return getGlobalIDList(cell, 6, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePrismAtEdge12(ColumnCell& cell) {     // 041 372
-          static const size_t vertexIDs[6] = { 0, 4, 1, 3, 7, 2 };
-          return getGlobalIDList(cell, 6, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
-          static const size_t vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
-          return getGlobalIDList(cell, 6, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePrismAtEdge30(ColumnCell& cell) { //051 362
-          static const size_t vertexIDs[6] = { 0, 5, 1, 3, 6, 2 };
-          return getGlobalIDList(cell, 6, vertexIDs);
-        }
-
-        /// degenerates to one pyramid
-        vector<size_t> degenerateToOnePyramidAt0(ColumnCell& cell) { // Pyramid 76540
-          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 0 };
-          return getGlobalIDList(cell, 5, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePyramidAt1(ColumnCell& cell) { // Pyramid 76541
-          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 1 };
-          return getGlobalIDList(cell, 5, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePyramidAt2(ColumnCell& cell) { // Pyramid 76542
-          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 2 };
-          return getGlobalIDList(cell, 5, vertexIDs);
-        }
-
-        vector<size_t> degenerateToOnePyramidAt3(ColumnCell& cell) { // Pyramid 76543
-          static const size_t vertexIDs[5] = { 7, 6, 5, 4, 3 };
-          return getGlobalIDList(cell, 5, vertexIDs);
-        }
-
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt0(ColumnCell& cell) { // Pyramid 56210 & 73260
-          std::vector<std::vector<size_t>> nodeLists;
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[5] = { 5, 6, 2, 1, 0 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 7, 3, 2, 6, 0 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        std::vector<std::vector<size_t>> degenerateToTwoPyramidsAt1(ColumnCell& cell) { // Pyramid 37401 & 26731
-          std::vector<std::vector<size_t>> nodeLists;
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> degenerateToTwoPyramidsAt2(ColumnCell& cell) {      // 0010
-          vector<vector<size_t>> nodeLists;          // Pyramid 45102 37402
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 2 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 3, 7, 4, 0, 2 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> degenerateToTwoPyramidsAt3(ColumnCell& cell) {      // 0001
-          vector<vector<size_t>> nodeLists;          // Pyramid 45103 15623
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[5] = { 4, 5, 1, 0, 3 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 1, 5, 6, 2, 3 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> degenerateToTwoTetrahedrasAtEdge02(ColumnCell& cell) {    // 1010
-          vector<vector<size_t>> nodeLists;          // tetra 0125 0237
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[4] = { 0, 1, 2, 5 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
-
-          static const size_t vertexIDs2[4] = { 0, 2, 3, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> degenerateToTwoTetrahedraAtEdge13(ColumnCell& cell) {    // 0101
-          vector<vector<size_t>> nodeLists;          // tetra 1304 1326
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[4] = { 1, 3, 0, 4 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
-
-          static const size_t vertexIDs2[4] = { 1, 3, 2, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToTwoPrismsAtEdge02(ColumnCell& cell) {
-          vector<vector<size_t>> nodeLists;  // 456012 & 467023
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[6] = { 4,5,6,0,1,2 };
-          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
-
-          static const size_t vertexIDs2[6] = { 4,6,7,0,2,3 };
-          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToTwoPrismsAtEdge13(ColumnCell& cell) {
-          vector<vector<size_t>> nodeLists;  // 457013 & 567123
-          nodeLists.reserve(2);
-
-          static const size_t vertexIDs1[6] = { 4,5,6,0,1,3 };
-          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
-
-          static const size_t vertexIDs2[6] = { 5,6,7,1,2,3 };
-          nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToThreePyramidsAt0(ColumnCell& cell) {          // forward slash, 0- 
-          vector<vector<size_t>> nodeLists;  // 73260 56210 76540
-          nodeLists.reserve(3);
-
-          static const size_t vertexIDs1[5] = { 7, 3, 2, 6, 0 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 5, 6, 2, 1, 0 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 0 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToThreePyramidsAt6(ColumnCell& cell) {          // forward slash, 4-6/
-          vector<vector<size_t>> nodeLists; // 74036 01236 04516
-          nodeLists.reserve(3);
-
-          static const size_t vertexIDs1[5] = { 7, 4, 0, 3, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          static const size_t vertexIDs3[5] = { 0, 4, 5, 1, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToThreePyramidsAt1(ColumnCell& cell) {          // backslash, 1-3/
-          vector<vector<size_t>> nodeLists;  //  37401 26731 76541
-          nodeLists.reserve(3);
-
-          static const size_t vertexIDs1[5] = { 3, 7, 4, 0, 1 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 2, 6, 7, 3, 1 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          static const size_t vertexIDs3[5] = { 7, 6, 5, 4, 1 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
-
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToThreePyramidsAt7(ColumnCell& cell) {          // backslash, 5-7/
-          vector<vector<size_t>> nodeLists; //  045171 01237 12657
-          nodeLists.reserve(3);
-
-          static const size_t vertexIDs1[5] = { 0, 4, 5, 1, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs1));
-
-          static const size_t vertexIDs2[5] = { 0, 1, 2, 3, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs2));
-
-          static const size_t vertexIDs3[5] = { 5, 6, 2, 1, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 5, vertexIDs3));
-          return nodeLists;
-        }
-
-        vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges0257(ColumnCell& cell) {
-          vector<vector<size_t>> nodeLists;                // 0457 0125 0237 0257 2756
-          nodeLists.reserve(5);
-
-          static const size_t vertexIDs1[4] = { 0, 4, 5, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
-
-          static const size_t vertexIDs2[4] = { 0, 1, 2, 5 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
-
-          static const size_t vertexIDs3[4] = { 0, 2, 3, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
-
-          static const size_t vertexIDs4[4] = { 0, 2, 5, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
-
-          static const size_t vertexIDs5[4] = { 2, 7, 5, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
-
-          return nodeLists;
-        }
-
-
-        vector<vector<size_t>> splitToFiveTetrahedrasAtTwoEdges1347(ColumnCell& cell) {
-          vector<vector<size_t>> nodeLists;                // 0134 1456 1236 1346 3467
-          nodeLists.reserve(5);
-
-          static const size_t vertexIDs1[4] = { 0, 1, 3, 4 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs1));
-
-          static const size_t vertexIDs2[4] = { 1, 4, 5, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
-
-          static const size_t vertexIDs3[4] = { 1, 2, 3, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs3));
-
-          static const size_t vertexIDs4[4] = { 1, 3, 4, 6 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs4));
-
-          static const size_t vertexIDs5[4] = { 3, 4, 6, 7 };
-          nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs5));
-
-          return nodeLists;
-        }
-
-
-
-        FACE_TYPE getShapeOfTopFace(ColumnCell& cell) {
-          // using reservor coord, smaller z -> higher
-
-          switch (cell.classification) {
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {
-            return FACE_TYPE::SPLITTED_BY_02;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {
-            return FACE_TYPE::SPLITTED_BY_02;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {
-            return FACE_TYPE::SPLITTED_BY_13;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {
-            return FACE_TYPE::SPLITTED_BY_13;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {
-            return FACE_TYPE::SPLITTED_BY_02;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {
-            return FACE_TYPE::SPLITTED_BY_13;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
-            if (cell.z[0][0] < cell.z[0][1]) {
-            }
-            else return FACE_TYPE::QUAD; 
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
-            if (cell.z[1][0] < cell.z[1][1]) {
-              return FACE_TYPE::SPLITTED_BY_13;
-            }
-            else return FACE_TYPE::QUAD; 
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
-            if (cell.z[2][0] < cell.z[2][1]) { 
-              return FACE_TYPE::SPLITTED_BY_02;
-            }
-            else return FACE_TYPE::QUAD; 
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
-            if (cell.z[3][0] < cell.z[3][1]) {
-              return FACE_TYPE::SPLITTED_BY_13;
-            }
-            else return FACE_TYPE::QUAD; 
-          }
-          default: 
-            return FACE_TYPE::QUAD;
-          }        
-        }
-
-        FACE_TYPE getShapeOfBottomFace(ColumnCell& cell) {
-          switch (cell.classification) {
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {
-            return FACE_TYPE::SPLITTED_BY_46;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {
-            return FACE_TYPE::SPLITTED_BY_46;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {
-            return FACE_TYPE::SPLITTED_BY_57;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {
-            return FACE_TYPE::SPLITTED_BY_57;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {
-            return FACE_TYPE::SPLITTED_BY_46;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {
-            return FACE_TYPE::SPLITTED_BY_57;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
-            if (cell.z[0][0] < cell.z[0][1]) { 
-              return FACE_TYPE::QUAD;
-            }
-            else return FACE_TYPE::SPLITTED_BY_46;
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
-            if (cell.z[1][0] < cell.z[1][1]) {
-              return FACE_TYPE::QUAD;
-            }
-            else return FACE_TYPE::SPLITTED_BY_57; 
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
-            if (cell.z[2][0] < cell.z[2][1]) { 
-              return FACE_TYPE::QUAD;
-            }
-            else return FACE_TYPE::SPLITTED_BY_46; 
-          }
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
-            if (cell.z[3][0] < cell.z[3][1]) {
-              return FACE_TYPE::QUAD;
-            }
-            else return FACE_TYPE::SPLITTED_BY_57;
-          }
-          default:
-            return FACE_TYPE::QUAD;
-          }
-        }
-        
-        void addPyramidTopFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addPyramidBottomFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addPyramidLeftFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addPyramidRightFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addPyramidFrontFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addPyramidBackFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(5);
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-
-        void addTetraBottomFace456(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-
-        void addTetraBottomFace467(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-
-        void addTetraBottomFace567(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(getNodeID(cell, 6));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addTetraBottomFace457(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 7));
-          nodeList.push_back(getNodeID(cell, 5));
-          nodeList.push_back(getNodeID(cell, 4));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-
-        void addTetraTopFace012(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addTetraTopFace023(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addTetraTopFace123(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(getNodeID(cell, 2));
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-        
-        void addTetraTopFace013(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-        {
-          std::vector<size_t> nodeList;
-          nodeList.reserve(4);
-          nodeList.push_back(getNodeID(cell, 1));
-          nodeList.push_back(getNodeID(cell, 3));
-          nodeList.push_back(getNodeID(cell, 0));
-          nodeList.push_back(centroid);
-          plist.emplace(element, std::move(nodeList));
-        }
-
-      };
-
 
       // 2. Constructing Elements
-      size_t elementID = 0, extraNodeID = ordinaryNodes_;
-      std::map<size_t, vector<size_t>>  plist;
-      std::vector<int32> fem_types;
-      std::deque<Point<3>> extraNodes;
 
+      size_t badHexahedra = 0;
+      size_t badPyramids = 0;
+      size_t badTetrahedra = 0;
+      size_t badPrisms = 0;
+
+      CellGenerator generator(*this);
       for (auto column = columns_.begin(); column != columns_.end(); column++)  {
         Column& Col = column->second;
         for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -856,14 +1002,10 @@ namespace csmp {
           size_t i = index.first;
           size_t j = index.second;
 
-          Pillar& p0 = (*this)(i + 0, j + 0);
-          Pillar& p1 = (*this)(i + 0, j + 1);
-          Pillar& p2 = (*this)(i + 1, j + 1);
-          Pillar& p3 = (*this)(i + 1, j + 0);
+          generator.setIJ(i, j);
 
-          CellGenerator generator(p0, p1, p2, p3);
           ECLIPSE_CELL_CLASSIFICATION cellType = cell.classification;
-          
+
           /// referred to the classifications of the cell above and the cell beneath  
           ColumnCell* cellAbove = nullptr;
           ColumnCell* cellBeneath = nullptr;
@@ -875,554 +1017,543 @@ namespace csmp {
           if (k < Col.cells_.size() - 1) {
             cellBeneath = &Col.cells_[k+1];
           }
-          
-          assert(elementID == plist.size());
-          assert(elementID == fem_types.size());
-          assert(extraNodeID == ordinaryNodes_ + extraNodes.size());
-if (i == 58 && j == 68 && 70 <= k && k <= 71) {
-    std::cerr << "Broken element case\n";
-}
+
+          assert(generator.elementID == generator.plist.size());
+          assert(generator.elementID == generator.fem_types.size());
+
           switch (cellType) {
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON: {        // 0000
-            bool faceAboveIsQuad = !cellAbove || generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::QUAD;
-            bool faceBeneathIsQuad = !cellBeneath || generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::QUAD;
-
-            if (faceAboveIsQuad) {
-              if (faceBeneathIsQuad) {
-                plist.emplace(elementID, generator.nonDegenerate(cell));
-                addElementToMap(i, j, k, elementID);
-                fem_types.push_back(ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-                ++elementID;
-              }  // null - hex - null
-              else {
-                switch (generator.getShapeOfTopFace(*cellBeneath)) {
-                  case FACE_TYPE::SPLITTED_BY_02:
-                  {
-                    size_t centroid = extraNodeID;
-                    extraNodes.push_back(generator.getCellCentoid(cell));
-                    ++extraNodeID;
-  
-                    // Top face
-                    generator.addPyramidTopFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Left face
-                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Right face
-                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Front face
-                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Back face
-                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Bottom faces
-                    generator.addTetraBottomFace456(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-                    
-                    generator.addTetraBottomFace467(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-
-                    break;
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON: {        // 0000
+              bool faceAboveIsQuad = !cellAbove || generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::FULL_QUAD;
+              bool faceBeneathIsQuad = !cellBeneath || generator.getShapeOfTopFace(*cellBeneath) == FACE_TYPE::FULL_QUAD;
+              
+              if (faceAboveIsQuad) {
+                if (faceBeneathIsQuad) {
+                  if (generator.ConstructHexahedron(cell)) {
+                    addElementToMap(i, j, k, generator.EmitHexahedron(cell));
                   }
-                    
-                  case FACE_TYPE::SPLITTED_BY_13:
-                  {
-                    size_t centroid = extraNodeID;
-                    extraNodes.push_back(generator.getCellCentoid(cell));
-                    ++extraNodeID;
-                    
-                    // Top face
-                    generator.addPyramidTopFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Left face
-                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Right face
-                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Front face
-                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Back face
-                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Bottom faces
-                    generator.addTetraBottomFace567(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-                    
-                    generator.addTetraBottomFace457(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-
-                    break;
+                  else {
+                    ++badHexahedra;
+                    continue;
                   }
+                }  // null - hex - null
+                else {
+                  switch (generator.getShapeOfTopFace(*cellBeneath)) {
+                    case FACE_TYPE::SPLIT_02_OR_46:
+                    {
+                      size_t centroid = generator.generateCellCentroid(cell);
 
-                  default:
-                  {
-                    throw csmp::Exception(FATAL_ERROR,
-                                          "CornerPointGrid::ConstructFiniteElementsFromColumns",
-                                          "Hexahedron with unknown bottom face");
+                      // Top face
+                      generator.addPyramidTopFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Left face
+                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Right face
+                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Front face
+                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Back face
+                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Bottom faces
+                      generator.addTetraBottomFace456(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      generator.addTetraBottomFace467(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      break;
+                    }
+
+                    case FACE_TYPE::SPLIT_13_OR_57:
+                    {
+                      size_t centroid = generator.generateCellCentroid(cell);
+
+                      // Top face
+                      generator.addPyramidTopFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Left face
+                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Right face
+                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Front face
+                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Back face
+                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Bottom faces
+                      generator.addTetraBottomFace567(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      generator.addTetraBottomFace457(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      break;
+                    }
+
+                    default:
+                    {
+                      throw csmp::Exception(FATAL_ERROR,
+                                            "CornerPointGrid::ConstructFiniteElementsFromColumns",
+                                            "Hexahedron with unknown bottom face");
+                    }
                   }
                 }
               }
-            }
-            else {
-              if (faceBeneathIsQuad) {
-                switch (generator.getShapeOfBottomFace(*cellAbove)) {
-                  case FACE_TYPE::SPLITTED_BY_46:
-                  {
-                    size_t centroid = extraNodeID;
-                    extraNodes.push_back(generator.getCellCentoid(cell));
-                    ++extraNodeID;
-
-                    // Left face
-                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Right face
-                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Front face
-                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-                    
-                    // Back face
-                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Bottom face
-                    generator.addPyramidBottomFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Top faces
-                    generator.addTetraTopFace012(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-                    
-                    generator.addTetraTopFace023(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-
-                    break;
-                  }
-
-                  case FACE_TYPE::SPLITTED_BY_57:
-                  {
-                    size_t centroid = extraNodeID;
-                    extraNodes.push_back(generator.getCellCentoid(cell));
-                    ++extraNodeID;
-
-                    // Left face
-                    generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-   
-                    // Right face
-                    generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Front face
-                    generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Back face
-                    generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Bottom face
-                    generator.addPyramidBottomFace(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                    ++elementID;
-
-                    // Top faces
-                    generator.addTetraTopFace123(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-
-                    generator.addTetraTopFace013(cell, elementID, plist, centroid);
-                    addElementToMap(i, j, k, elementID);
-                    fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                    ++elementID;
-
-                    break;
-                  }
-                    
-                  default: ;
-                }
-              }
               else {
+                if (faceBeneathIsQuad) {
+                  switch (generator.getShapeOfBottomFace(*cellAbove)) {
+                    case FACE_TYPE::SPLIT_02_OR_46:
+                    {
+                      size_t centroid = generator.generateCellCentroid(cell);
+
+                      // Left face
+                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Right face
+                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Front face
+                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Back face
+                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Bottom face
+                      generator.addPyramidBottomFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Top faces
+                      generator.addTetraTopFace012(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      generator.addTetraTopFace023(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      break;
+                    }
+
+                    case FACE_TYPE::SPLIT_13_OR_57:
+                    {
+                      size_t centroid = generator.generateCellCentroid(cell);
+
+                      // Left face
+                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Right face
+                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Front face
+                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Back face
+                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Bottom face
+                      generator.addPyramidBottomFace(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                      ++generator.elementID;
+
+                      // Top faces
+                      generator.addTetraTopFace123(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      generator.addTetraTopFace013(cell, generator.elementID, generator.plist, centroid);
+                      addElementToMap(i, j, k, generator.elementID);
+                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                      ++generator.elementID;
+
+                      break;
+                    }
+
+                    default: ;
+                  }
+                }
+                else {
                   auto topShape = generator.getShapeOfBottomFace(*cellAbove);
                   auto bottomShape = generator.getShapeOfTopFace(*cellBeneath);
                   switch (topShape) {
-                    case FACE_TYPE::SPLITTED_BY_46:
+                    case FACE_TYPE::SPLIT_02_OR_46:
                     {
-                        switch (bottomShape) {
-                          case FACE_TYPE::SPLITTED_BY_02:
-                          {
-                              auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
-                              plist.emplace(elementID, elementList[0]);
-                              addElementToMap(i, j, k, elementID);
-                              fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                              ++elementID;
-                              plist.emplace(elementID, elementList[1]);
-                              addElementToMap(i, j, k, elementID);
-                              fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                              ++elementID;
-                            break;
-                          }
-                            
-                            case FACE_TYPE::SPLITTED_BY_13:
-                          {
-                            size_t centroid = extraNodeID;
-                            extraNodes.push_back(generator.getCellCentoid(cell));
-                            ++extraNodeID;
-
-                            // Left face
-                            generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Right face
-                            generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Front face
-                            generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Back face
-                            generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-
-                            // Top faces
-                            generator.addTetraTopFace012(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-                            
-                            generator.addTetraTopFace023(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-
-                            // Bottom faces
-                            generator.addTetraBottomFace567(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-                            
-                            generator.addTetraBottomFace457(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-
-                            break;
-                          }
-                            
-                          default: ;
+                      switch (bottomShape) {
+                        case FACE_TYPE::SPLIT_02_OR_46:
+                        {
+                          auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
+                          generator.plist.emplace(generator.elementID, elementList[0]);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                          ++generator.elementID;
+                          generator.plist.emplace(generator.elementID, elementList[1]);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                          ++generator.elementID;
+                          break;
                         }
-                        break;
+
+                        case FACE_TYPE::SPLIT_13_OR_57:
+                        {
+                          size_t centroid = generator.generateCellCentroid(cell);
+
+                          // Left face
+                          generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
+
+                          // Right face
+                          generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
+
+                          // Front face
+                          generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
+
+                          // Back face
+                          generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
+
+                          // Top faces
+                          generator.addTetraTopFace012(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          generator.addTetraTopFace023(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          // Bottom faces
+                          generator.addTetraBottomFace567(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          generator.addTetraBottomFace457(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          break;
+                        }
+
+                        default: ;
+                      }
+                      break;
                     }
 
-                    case FACE_TYPE::SPLITTED_BY_57:
+                    case FACE_TYPE::SPLIT_13_OR_57:
                     {
-                        switch (bottomShape) {
-                            case FACE_TYPE::SPLITTED_BY_02:
-                          {
-                            size_t centroid = extraNodeID;
-                            extraNodes.push_back(generator.getCellCentoid(cell));
-                            ++extraNodeID;
+                      switch (bottomShape) {
+                        case FACE_TYPE::SPLIT_02_OR_46:
+                        {
+                          size_t centroid = generator.generateCellCentroid(cell);
 
-                            // Left face
-                            generator.addPyramidLeftFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Right face
-                            generator.addPyramidRightFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Front face
-                            generator.addPyramidFrontFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
-                            
-                            // Back face
-                            generator.addPyramidBackFace(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                            ++elementID;
+                          // Left face
+                          generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
 
-                            // Top faces
-                            generator.addTetraTopFace123(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-                            
-                            generator.addTetraTopFace013(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
+                          // Right face
+                          generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
 
-                            // Bottom faces
-                            generator.addTetraBottomFace456(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
-                            
-                            generator.addTetraBottomFace467(cell, elementID, plist, centroid);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                            ++elementID;
+                          // Front face
+                          generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
 
-                            break;
-                          }
-                            
-                            case FACE_TYPE::SPLITTED_BY_13:
-                          {
-                            auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
-                            plist.emplace(elementID, elementList[0]);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                            ++elementID;
-                            plist.emplace(elementID, elementList[1]);
-                            addElementToMap(i, j, k, elementID);
-                            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                            ++elementID;
-                            break;
-                          }
-                            
-                          default: ;
+                          // Back face
+                          generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+                          ++generator.elementID;
+
+                          // Top faces
+                          generator.addTetraTopFace123(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          generator.addTetraTopFace013(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          // Bottom faces
+                          generator.addTetraBottomFace456(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          generator.addTetraBottomFace467(cell, generator.elementID, generator.plist, centroid);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+                          ++generator.elementID;
+
+                          break;
                         }
-                        break;
+
+                        case FACE_TYPE::SPLIT_13_OR_57:
+                        {
+                          auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
+                          generator.plist.emplace(generator.elementID, elementList[0]);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                          ++generator.elementID;
+                          generator.plist.emplace(generator.elementID, elementList[1]);
+                          addElementToMap(i, j, k, generator.elementID);
+                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+                          ++generator.elementID;
+                          break;
+                        }
+
+                        default: ;
+                      }
+                      break;
                     }
                     default: ;
                   }
+                }
               }
+              break;
             }
-            break;
-          }
 
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {      // 0001
-            auto elementList =  generator.degenerateToTwoPyramidsAt3(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312: {      // 0001
+              auto elementList =  generator.degenerateToTwoPyramidsAt3(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
 
-            break;
-          }
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {      // 0010
-            auto elementList = generator.degenerateToTwoPyramidsAt2(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {      // 0010
+              auto elementList = generator.degenerateToTwoPyramidsAt2(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23: {          // 0011
-            plist.emplace(elementID, generator.degenerateToOnePrismAtEdge23(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-            ++elementID;
-            break;
-          }
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {      // 0100
-            auto elementList = generator.degenerateToTwoPyramidsAt1(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23: {          // 0011
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge23(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+              ++generator.elementID;
+              break;
+            }
 
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132: {      // 0100
+              auto elementList = generator.degenerateToTwoPyramidsAt1(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {    // 0101
-            auto elementList = generator.degenerateToTwoTetrahedraAtEdge13(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-            ++elementID;
-            break;
-          }
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12: {          // 0111
-            plist.emplace(elementID, generator.degenerateToOnePrismAtEdge12(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {    // 0101
+              auto elementList = generator.degenerateToTwoTetrahedraAtEdge13(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {          // 0111
-            plist.emplace(elementID, generator.degenerateToOnePyramidAt0(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12: {          // 0111
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge12(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {      // 1000
-            auto elementList = generator.degenerateToTwoPyramidsAt0(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            break;
-          }
-                                           
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_03: {                    // 1001
-            plist.emplace(elementID, generator.degenerateToOnePrismAtEdge30(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {          // 0111
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePyramidAt0(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {              // 1010
-            auto elementList = generator.degenerateToTwoTetrahedrasAtEdge02(cell);
-            plist.emplace(elementID, elementList[0]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-            ++elementID;
-            plist.emplace(elementID, elementList[1]);
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023: {      // 1000
+              auto elementList = generator.degenerateToTwoPyramidsAt0(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {                    // 1011
-            plist.emplace(elementID, generator.degenerateToOnePyramidAt1(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_03: {                    // 1001
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge30(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01: {                    // 1100
-            plist.emplace(elementID, generator.degenerateToOnePrismAtEdge01(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023: {              // 1010
+              auto elementList = generator.degenerateToTwoTetrahedrasAtEdge02(cell);
+              generator.plist.emplace(generator.elementID, elementList[0]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+              ++generator.elementID;
+              generator.plist.emplace(generator.elementID, elementList[1]);
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {                    // 1101
-            plist.emplace(elementID, generator.degenerateToOnePyramidAt2(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {                    // 1011
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePyramidAt1(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              break;
+            }
 
-          case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {                    // 1110
-            plist.emplace(elementID, generator.degenerateToOnePyramidAt3(cell));
-            addElementToMap(i, j, k, elementID);
-            fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-            ++elementID;
-            break;
-          }
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01: {                    // 1100
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge01(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+              ++generator.elementID;
+              break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {                    // 1101
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePyramidAt2(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              break;
+            }
+
+            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {                    // 1110
+              generator.plist.emplace(generator.elementID, generator.degenerateToOnePyramidAt3(cell));
+              addElementToMap(i, j, k, generator.elementID);
+              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+              ++generator.elementID;
+              break;
+            }
           }
         }
       }
+      std::cerr << "Bad hexahedra: " << badHexahedra << '\n';
 
       // 3. store node coordinates
       {
@@ -1440,7 +1571,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
             }
           }
         }
-        for (auto& p : extraNodes) {
+        for (auto& p : generator.extraNodes) {
           x.push_back(p[0]);
           y.push_back(p[1]);
           z.push_back(p[2]);
@@ -1449,72 +1580,72 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
       }
 
       // 4. Set up the rest of the vset
-      vset.ResizePfverts(fem_types.size());
-      vset.ResizePlist(plist.size());
-      vset.AddPlist(plist.begin(), plist.end());
-      vset.AddElementTypes(fem_types.begin(), fem_types.end());
+      vset.ResizePfverts(generator.fem_types.size());
+      vset.ResizePlist(generator.plist.size());
+      vset.AddPlist(generator.plist.begin(), generator.plist.end());
+      vset.AddElementTypes(generator.fem_types.begin(), generator.fem_types.end());
     }
 
     /**
-      MASTER METHOD for the creation of corner point grids
-      from the original cell-centered grids read by the EclipseInterface.
+     MASTER METHOD for the creation of corner point grids
+     from the original cell-centered grids read by the EclipseInterface.
 
-      The PolygonGridManager is used to construct the pillars.
+     The PolygonGridManager is used to construct the pillars.
 
-      @todo this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the EclipseModel
+     @todo this is confused! - why should the corner point grid be responsible for building the CSMP model? - code should be in the EclipseModel
 
-      @todo regions are not recognised properly.
-    */
-      void CornerPointGrid_UoM::CreateModel(const std::string&     model_name,
-        csmp::VSet<3U>&       vset,
-        csmp::ModelTopology&   model_topology,
-        const std::vector<double64>& zcorn,
-        std::set<std::string>& regions,
-        std::set<std::string>& faults,
-        std::set<std::string>& wells,
-        bool tetra_mesh, bool exclude_inactive_cells)
-      {
+     @todo regions are not recognised properly.
+     */
+    void CornerPointGrid_UoM::CreateModel(const std::string&     model_name,
+                                          csmp::VSet<3U>&       vset,
+                                          csmp::ModelTopology&   model_topology,
+                                          const std::vector<double64>& zcorn,
+                                          std::set<std::string>& regions,
+                                          std::set<std::string>& faults,
+                                          std::set<std::string>& wells,
+                                          bool tetra_mesh, bool exclude_inactive_cells)
+    {
 
-        csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
-
-
-        // temporary data
-        deque<double64>              x, y, z;        // node x, y, z coordinates
-        map<size_t, vector<size_t> >  plist;        // element list
-        map<size_t, vector<long64> >  pfverts;        // neighbor list
+      csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
 
 
-        // 1. Initialise grid specs
-        InitializeGridSpecs();
+      // temporary data
+      deque<double64>              x, y, z;        // node x, y, z coordinates
+      map<size_t, vector<size_t> >  plist;        // element list
+      map<size_t, vector<long64> >  pfverts;        // neighbor list
 
-        // 2. Construct pillars and columns
-        ConstructPillarsAndColumns(zcorn);
 
-        // 3. Construct FEs from columns and add to Vset
-        ConstructFiniteElementsFromColumns(vset);
+      // 1. Initialise grid specs
+      InitializeGridSpecs();
 
-      }
+      // 2. Construct pillars and columns
+      ConstructPillarsAndColumns(zcorn);
 
-      void CornerPointGrid_UoM::addElementToMap(size_t i, size_t j, size_t k, size_t elementID) {
-        this->elementMap.emplace(ijk(i,j,k), elementID);
-      };
+      // 3. Construct FEs from columns and add to Vset
+      ConstructFiniteElementsFromColumns(vset);
 
-     // CreateModel (MASTER - MONSTER METHOD)
+    }
+
+    void CornerPointGrid_UoM::addElementToMap(size_t i, size_t j, size_t k, size_t elementID) {
+      this->elementMap.emplace(ijk(i,j,k), elementID);
+    };
+
+    // CreateModel (MASTER - MONSTER METHOD)
 
 
 
 #if 0
-     /**
-       Identifies the faces of the cells that make up the boundary.
-       The cells are then grouped into boundary regions that are stored in the ModelTopology class.
+    /**
+     Identifies the faces of the cells that make up the boundary.
+     The cells are then grouped into boundary regions that are stored in the ModelTopology class.
      */
     void CornerPointGrid::EstablishBoundaries(csmp::VSet<3U>& vset,
-      csmp::ModelTopology& model_topology,
-      const std::vector<CornerPointCell>& poly)
+                                              csmp::ModelTopology& model_topology,
+                                              const std::vector<CornerPointCell>& poly)
     {
       if (!exclude_inactive_cells_) {
         throw csmp::Exception(ERROR, "CornerPointGrid::EstablishBoundaryRegions",
-          "Cannot create boundary regions if we are excluding inactive cells");
+                              "Cannot create boundary regions if we are excluding inactive cells");
       }
 
       for (size_t j = 0; j < NY_; ++j) {
@@ -1584,39 +1715,39 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
               for (size_t n = 0; n < 8; ++n) {
                 auto nid = polygon.GetPillarNodeGlobalIdOriginalOrder(n);
                 switch (node_flags[n]) {
-                case 0:
-                {
-                  break;
-                }
+                  case 0:
+                  {
+                    break;
+                  }
 
-                case 1: // TOP_FLAG
-                case 5: // IRREGULAR_FLAG | TOP_FLAG
-                {
-                  vset.AddBFlag(nid, TOP_OUTSIDE);
-                  break;
-                }
+                  case 1: // TOP_FLAG
+                  case 5: // IRREGULAR_FLAG | TOP_FLAG
+                  {
+                    vset.AddBFlag(nid, TOP_OUTSIDE);
+                    break;
+                  }
 
-                case 2: // BOTTOM_FLAG
-                case 6: // BOTTOM_FLAG | IRREGULAR_FLAG
-                {
-                  vset.AddBFlag(nid, BOTTOM_OUTSIDE);
-                  break;
-                }
+                  case 2: // BOTTOM_FLAG
+                  case 6: // BOTTOM_FLAG | IRREGULAR_FLAG
+                  {
+                    vset.AddBFlag(nid, BOTTOM_OUTSIDE);
+                    break;
+                  }
 
-                case 4: // IRREGULAR_FLAG
-                {
-                  vset.AddBFlag(nid, IRREGULAR_OUTSIDE);
-                  break;
-                }
+                  case 4: // IRREGULAR_FLAG
+                  {
+                    vset.AddBFlag(nid, IRREGULAR_OUTSIDE);
+                    break;
+                  }
 
-                case 3: // TOP_FLAG | BOTTOM_FLAG
-                case 7: // TOP_FLAG | BOTTOM_FLAG | IRREGULAR_FLAG
-                {
-                  std::cerr << "CornerPointGrid::EstablishBoundaries: "
+                  case 3: // TOP_FLAG | BOTTOM_FLAG
+                  case 7: // TOP_FLAG | BOTTOM_FLAG | IRREGULAR_FLAG
+                  {
+                    std::cerr << "CornerPointGrid::EstablishBoundaries: "
                     << "Possibly erroneous node " << nid << " at "
                     << vset.Px(nid) << ',' << vset.Py(nid) << ',' << vset.Pz(nid) << '\n';
-                  break;
-                }
+                    break;
+                  }
                 }
               }
             }
@@ -1627,19 +1758,19 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
 
 
     /**
-       Identifies the faces of the cells that make up a fault.
-       The cells are then grouped into separate fault regions that are stored in the ModelTopology class.
+     Identifies the faces of the cells that make up a fault.
+     The cells are then grouped into separate fault regions that are stored in the ModelTopology class.
 
-       The faces=side walls of the fault are added to the supplied VSet.
+     The faces=side walls of the fault are added to the supplied VSet.
 
-       this breaks the record in terms of Method size and nested loops ! (@@)
+     this breaks the record in terms of Method size and nested loops ! (@@)
 
-       TODO: this function never modifies the VSet although we tried several cases with faults present; why?
-    */
+     TODO: this function never modifies the VSet although we tried several cases with faults present; why?
+     */
     void CornerPointGrid::EstablishFaultRegions(csmp::VSet<3U>& vset,
-      csmp::ModelTopology& model_topology,
-      std::set<std::string>& faults,
-      const std::vector<CornerPointCell>& poly)
+                                                csmp::ModelTopology& model_topology,
+                                                std::set<std::string>& faults,
+                                                const std::vector<CornerPointCell>& poly)
     {
       /// cell data
       const size_t quad_fem_nodes(4U);
@@ -1724,10 +1855,10 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
         // }
         //std::cerr <<"\n";
 
-            // map of fault-name keys to vectors of cell-ID/face-ID pairs
+        // map of fault-name keys to vectors of cell-ID/face-ID pairs
         std::map<std::string, std::vector<std::pair<size_t, size_t> > > temp_faults_data;
         for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::const_iterator
-          it = faults_data_.begin(); it != faults_data_.end(); ++it)
+             it = faults_data_.begin(); it != faults_data_.end(); ++it)
         {
           fault_name = (*it).first;
 
@@ -1751,7 +1882,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
 
             // filling the cell-ID/face-ID vectors for the identified fault faces
             for (std::vector<std::pair<size_t, size_t> >::const_iterator
-              vit = (*it).second.begin(); vit != (*it).second.end(); ++vit)
+                 vit = (*it).second.begin(); vit != (*it).second.end(); ++vit)
             {
               /// assign data from provided face
               hexa_cell_id = (*vit).first;
@@ -1834,7 +1965,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
 
                 /// only faces between active cells
                 if ((exclude_inactive_cells_ && cell_activity_[hexa_cell_id] == 1 && cell_activity_[hexa_cell_neighbor_id] == 1)
-                  || !exclude_inactive_cells_)
+                    || !exclude_inactive_cells_)
                 {
                   /// comparing potentially neighboring faces
                   face_nidsA.clear();
@@ -1928,7 +2059,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
                     found_face = false;
                     /// first priority: faces of current cell
                     for (std::multimap<std::set<size_t>, std::pair<size_t, size_t> >::iterator
-                      fit = neighbor_faces.first; fit != neighbor_faces.second; ++fit)
+                         fit = neighbor_faces.first; fit != neighbor_faces.second; ++fit)
                     {
                       nface = (*fit).second;
                       if (nface.first == face.first && nface.second != face.second)
@@ -1948,7 +2079,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
                     if (!found_face)
                     {
                       for (std::multimap<std::set<size_t>, std::pair<size_t, size_t> >::iterator
-                        fit = neighbor_faces.first; fit != neighbor_faces.second; ++fit)
+                           fit = neighbor_faces.first; fit != neighbor_faces.second; ++fit)
                       {
                         nface = (*fit).second;
                         if ((nface.first != face.first) && (nface.first != (face.first + opposite_cell_offset[face.second])))
@@ -1971,7 +2102,7 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
 
             /// add elements from opposite side
             for (std::vector<std::pair<size_t, size_t> >::const_iterator
-              fit = fault_elmts_a.begin(); fit != fault_elmts_a.end(); ++fit)
+                 fit = fault_elmts_a.begin(); fit != fault_elmts_a.end(); ++fit)
             {
               face = *fit;
               nface.first = face.first + opposite_cell_offset[face.second];
@@ -2007,12 +2138,12 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
           fout << "FAULTS" << std::endl;
           fout << "-- Matrix Faults" << std::endl;
           for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::const_iterator
-            fit = faults_data_.begin(); fit != faults_data_.end(); ++fit)
+               fit = faults_data_.begin(); fit != faults_data_.end(); ++fit)
           {
             fout << "\n\n-- NAME\tIX1\tIX2\tIY1\tIY2\tIZ1\tIZ2\tFACE" << std::endl;
             fault_name = (*fit).first;
             for (std::vector<std::pair<size_t, size_t> >::const_iterator
-              ffit = (*fit).second.begin(); ffit != (*fit).second.end(); ++ffit)
+                 ffit = (*fit).second.begin(); ffit != (*fit).second.end(); ++ffit)
             {
               hexa_cell_id = (*ffit).first;
               hexa_face_id = (*ffit).second;
@@ -2020,8 +2151,8 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
               const size_t j = ((hexa_cell_id / NX_) % NY_);
               const size_t k = (hexa_cell_id / NX_x_NY_);
               fout << "'" << fault_name << "'"
-                << "\t" << i << "\t" << i << "\t" << j << "\t" << j << "\t" << k << "\t" << k
-                << "\t" << "'" << facemap[hexa_face_id] << "'" << std::endl;
+              << "\t" << i << "\t" << i << "\t" << j << "\t" << j << "\t" << k << "\t" << k
+              << "\t" << "'" << facemap[hexa_face_id] << "'" << std::endl;
             }
           }
           fout << '/' << std::endl;
@@ -2030,14 +2161,14 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
       }
 
       /* process matching fault regions
-         normally these shoud not match because the faults displace the grid.
+       normally these shoud not match because the faults displace the grid.
 
-         checks whether there is an offset in the faults.
+       checks whether there is an offset in the faults.
 
-         TODO: has this code been tested? - in all our examples it was not reached
+       TODO: has this code been tested? - in all our examples it was not reached
 
-         TODO: the algorithm can be extended to find out groups of mathing elements
-      */
+       TODO: the algorithm can be extended to find out groups of mathing elements
+       */
       if (!faults_data_.empty())
       {
         std::string fault_name_prefix;
@@ -2046,411 +2177,411 @@ if (i == 58 && j == 68 && 70 <= k && k <= 71) {
         std::map<std::string, std::vector<std::pair<size_t, size_t> > > temp_faults_data;
         for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::iterator
 #else /* NEW */
-      std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator fit;
-      std::map<std::string, vector<std::pair<size_t, size_t> > > temp_faults_data;
-      for (std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator
+             std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator fit;
+             std::map<std::string, vector<std::pair<size_t, size_t> > > temp_faults_data;
+             for (std::map<std::string, vector<std::pair<size_t, size_t> > >::iterator
 #endif /* NEW */
-          it = faults_data_.begin(); it != faults_data_.end(); ++it)
-        {
-          fault_name = (*it).first;
+                  it = faults_data_.begin(); it != faults_data_.end(); ++it)
+             {
+               fault_name = (*it).first;
 
-          if (fault_name.find("sideA") != std::string::npos)
-          {
-            // recovering the original name of the fault
-            fault_name_prefix = fault_name;
-            fault_name_prefix.erase(fault_name_prefix.find("_sideA"), 6);
-            fault_name_a = fault_name;
+               if (fault_name.find("sideA") != std::string::npos)
+               {
+                 // recovering the original name of the fault
+                 fault_name_prefix = fault_name;
+                 fault_name_prefix.erase(fault_name_prefix.find("_sideA"), 6);
+                 fault_name_a = fault_name;
 
-            // creates a backup copy of the contents of fault sideA
-            std::set<std::set<size_t> > elmts_a;
-            std::vector<std::pair<size_t, size_t> >& fault_elmts_a((*it).second);
-            for (std::vector<std::pair<size_t, size_t> >::const_iterator
-              vit = fault_elmts_a.begin(); vit != fault_elmts_a.end(); ++vit)
-            {
-              /// assign data from provided face
-              hexa_cell_id = (*vit).first;
-              hexa_face_id = (*vit).second;
+                 // creates a backup copy of the contents of fault sideA
+                 std::set<std::set<size_t> > elmts_a;
+                 std::vector<std::pair<size_t, size_t> >& fault_elmts_a((*it).second);
+                 for (std::vector<std::pair<size_t, size_t> >::const_iterator
+                      vit = fault_elmts_a.begin(); vit != fault_elmts_a.end(); ++vit)
+                 {
+                   /// assign data from provided face
+                   hexa_cell_id = (*vit).first;
+                   hexa_face_id = (*vit).second;
 
-              std::set<size_t> elmnt;
-              for (size_t nid = 0; nid < quad_fem_nodes; ++nid)
-                elmnt.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(face_nodes[hexa_face_id][nid]));
-              elmts_a.insert(elmnt);
-            }
+                   std::set<size_t> elmnt;
+                   for (size_t nid = 0; nid < quad_fem_nodes; ++nid)
+                     elmnt.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(face_nodes[hexa_face_id][nid]));
+                   elmts_a.insert(elmnt);
+                 }
 
-            // finds the other side of the fault
-            fault_name_b = fault_name_prefix;
-            fault_name_b += "_sideB";
-            fit = faults_data_.find(fault_name_b);
-            std::set<std::set<size_t> > elmts_b;
-            if (fit != faults_data_.end())
-            {
-              std::vector<std::pair<size_t, size_t> >& fault_elmts_b((*fit).second);
-              for (std::vector<std::pair<size_t, size_t> >::const_iterator
-                vit = fault_elmts_b.begin(); vit != fault_elmts_b.end(); ++vit)
-              {
-                /// assign data from provided face
-                hexa_cell_id = (*vit).first;
-                hexa_face_id = (*vit).second;
+                 // finds the other side of the fault
+                 fault_name_b = fault_name_prefix;
+                 fault_name_b += "_sideB";
+                 fit = faults_data_.find(fault_name_b);
+                 std::set<std::set<size_t> > elmts_b;
+                 if (fit != faults_data_.end())
+                 {
+                   std::vector<std::pair<size_t, size_t> >& fault_elmts_b((*fit).second);
+                   for (std::vector<std::pair<size_t, size_t> >::const_iterator
+                        vit = fault_elmts_b.begin(); vit != fault_elmts_b.end(); ++vit)
+                   {
+                     /// assign data from provided face
+                     hexa_cell_id = (*vit).first;
+                     hexa_face_id = (*vit).second;
 
-                std::set<size_t> elmnt;
-                for (size_t nid = 0; nid < quad_fem_nodes; ++nid)
-                  elmnt.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(face_nodes[hexa_face_id][nid]));
-                elmts_b.insert(elmnt);
-              }
-            }
+                     std::set<size_t> elmnt;
+                     for (size_t nid = 0; nid < quad_fem_nodes; ++nid)
+                       elmnt.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(face_nodes[hexa_face_id][nid]));
+                     elmts_b.insert(elmnt);
+                   }
+                 }
 
-            // if the 2 fault sides are the same, the separation in sides a and b is removed?
-            if (elmts_a == elmts_b)
-            {
-              temp_faults_data.insert(std::make_pair(fault_name_prefix, (*it).second));
-            }
-            else
-            {
-              temp_faults_data.insert(std::make_pair(fault_name_a, (*it).second));
-              temp_faults_data.insert(std::make_pair(fault_name_b, (*fit).second));
-            }
-          }
-        }
+                 // if the 2 fault sides are the same, the separation in sides a and b is removed?
+                 if (elmts_a == elmts_b)
+                 {
+                   temp_faults_data.insert(std::make_pair(fault_name_prefix, (*it).second));
+                 }
+                 else
+                 {
+                   temp_faults_data.insert(std::make_pair(fault_name_a, (*it).second));
+                   temp_faults_data.insert(std::make_pair(fault_name_b, (*fit).second));
+                 }
+               }
+             }
 
-        //  ???? here we go again?
-        /// reassign faults data
-        faults_data_.clear();
-        faults_data_ = temp_faults_data;
-        temp_faults_data.clear();
-      }
-
-
-      // DEBUGGING - appears to recreate faults data exactly = duplicating it
-      //std::cerr <<"\n\n twice recreated fault data:\n";
-      //for( std::map<std::string,std::vector<std::pair<size_t,size_t> > >::const_iterator
-      //     it = faults_data_.begin(); it != faults_data_.end(); ++it ) {
-      //    std::cerr <<"\n\n"<< (*it).first <<" (cell-ID/face-ID pairs): ";
-      //    for ( std::vector<std::pair<size_t,size_t> >::const_iterator
-      //          fit=(*it).second.begin(); fit!=(*it).second.end(); fit++ )
-      //      std::cerr << (*fit).first <<","<< (*fit).second <<" ";
-      // }
-      //std::cerr <<"\n";
+             //  ???? here we go again?
+             /// reassign faults data
+             faults_data_.clear();
+             faults_data_ = temp_faults_data;
+             temp_faults_data.clear();
+             }
 
 
-
-        /* writing results to ModelTopology and VSet
-
-           - for each fault two regions of surface elements will be created, being called _sideA and _sideB of the
-           the given fault name
-
-           - the lower-dimensional fault-side elements are being pushed back into the VSet
-        */
-      size_t                cell_id(vset.Elements());
-      std::vector<size_t>   fault_elmts;
-      std::set<std::string> fault_fem_types;
-      size_t                num_sub_faces;
-
-      for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::const_iterator
-        it = faults_data_.begin(); it != faults_data_.end(); ++it)
-      {
-        fault_name = (*it).first;
-        fault_elmts.clear();
-        fault_fem_types.clear();
-        for (std::vector<std::pair<size_t, size_t> >::const_iterator
-          fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
-        {
-          hexa_cell_id = (*fit).first;
-          if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-          {
-            hexa_face_id = (*fit).second;
-            assert(hexa_face_id <= 5);
-            // DEBUGGING: NODE ORDER OF FACES IS DIFFERENT FROM DEFINITION FOR CORNER-POINT CELL
-            //poly[ hexa_cell_id ].Out();
-
-                    // used to always evaluate to zero; now replaced by subclass method
-            num_sub_faces = poly[hexa_cell_id].GetNumSubFaces(hexa_face_id);
-
-            for (size_t fid = 0; fid < num_sub_faces; ++fid)
-            {
-              const size_t num_face_nodes(poly[hexa_cell_id].GetNumFaceNodes(hexa_face_id, fid));
-              if (num_face_nodes > 2U)
-              {
-                /// fill VSet
-                vset.ResizePlist(cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType(
-                  poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
-                vset.ResizeElementTypes(cell_id + 1);
-                for (size_t nid = 0U; nid < num_face_nodes; ++nid)
-                  vset.Plist(cell_id, nid, poly[hexa_cell_id].GetFaceNodeGlobalId(hexa_face_id, fid, nid));
-                vset.ElementType(cell_id, poly[hexa_cell_id].GetFaceType(hexa_face_id, fid));
-                /// add fault elements
-                fault_elmts.push_back(cell_id);
-                fault_fem_types.insert(csmp::parseFiniteElementType(poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
-                embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
-                ++cell_id;
-              }
-            }
-          }
-        }
-
-        // if a fault has been identified, its member elements are added as a region to the model topology
-        if (!fault_elmts.empty())
-        {
-          model_topology.AddRegion(fault_name.c_str(), fault_fem_types, fault_elmts);
-          faults.insert(fault_name.c_str());
-        }
-      }
-
-    } // end
+             // DEBUGGING - appears to recreate faults data exactly = duplicating it
+             //std::cerr <<"\n\n twice recreated fault data:\n";
+             //for( std::map<std::string,std::vector<std::pair<size_t,size_t> > >::const_iterator
+             //     it = faults_data_.begin(); it != faults_data_.end(); ++it ) {
+             //    std::cerr <<"\n\n"<< (*it).first <<" (cell-ID/face-ID pairs): ";
+             //    for ( std::vector<std::pair<size_t,size_t> >::const_iterator
+             //          fit=(*it).second.begin(); fit!=(*it).second.end(); fit++ )
+             //      std::cerr << (*fit).first <<","<< (*fit).second <<" ";
+             // }
+             //std::cerr <<"\n";
 
 
+
+             /* writing results to ModelTopology and VSet
+
+              - for each fault two regions of surface elements will be created, being called _sideA and _sideB of the
+              the given fault name
+
+              - the lower-dimensional fault-side elements are being pushed back into the VSet
+              */
+             size_t                cell_id(vset.Elements());
+             std::vector<size_t>   fault_elmts;
+             std::set<std::string> fault_fem_types;
+             size_t                num_sub_faces;
+
+             for (std::map<std::string, std::vector<std::pair<size_t, size_t> > >::const_iterator
+                  it = faults_data_.begin(); it != faults_data_.end(); ++it)
+             {
+               fault_name = (*it).first;
+               fault_elmts.clear();
+               fault_fem_types.clear();
+               for (std::vector<std::pair<size_t, size_t> >::const_iterator
+                    fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
+               {
+                 hexa_cell_id = (*fit).first;
+                 if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
+                 {
+                   hexa_face_id = (*fit).second;
+                   assert(hexa_face_id <= 5);
+                   // DEBUGGING: NODE ORDER OF FACES IS DIFFERENT FROM DEFINITION FOR CORNER-POINT CELL
+                   //poly[ hexa_cell_id ].Out();
+
+                   // used to always evaluate to zero; now replaced by subclass method
+                   num_sub_faces = poly[hexa_cell_id].GetNumSubFaces(hexa_face_id);
+
+                   for (size_t fid = 0; fid < num_sub_faces; ++fid)
+                   {
+                     const size_t num_face_nodes(poly[hexa_cell_id].GetNumFaceNodes(hexa_face_id, fid));
+                     if (num_face_nodes > 2U)
+                     {
+                       /// fill VSet
+                       vset.ResizePlist(cell_id + 1, CSMP_ElementSpecifications::NodesPerElementOfType(
+                                                                                                       poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
+                       vset.ResizeElementTypes(cell_id + 1);
+                       for (size_t nid = 0U; nid < num_face_nodes; ++nid)
+                         vset.Plist(cell_id, nid, poly[hexa_cell_id].GetFaceNodeGlobalId(hexa_face_id, fid, nid));
+                       vset.ElementType(cell_id, poly[hexa_cell_id].GetFaceType(hexa_face_id, fid));
+                       /// add fault elements
+                       fault_elmts.push_back(cell_id);
+                       fault_fem_types.insert(csmp::parseFiniteElementType(poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
+                       embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, poly[hexa_cell_id].GetFaceType(hexa_face_id, fid)));
+                       ++cell_id;
+                     }
+                   }
+                 }
+               }
+
+               // if a fault has been identified, its member elements are added as a region to the model topology
+               if (!fault_elmts.empty())
+               {
+                 model_topology.AddRegion(fault_name.c_str(), fault_fem_types, fault_elmts);
+                 faults.insert(fault_name.c_str());
+               }
+             }
+
+             } // end
 
 
 
 
 
-    void CornerPointGrid::EstablishWellRegions(csmp::VSet<3U>& vset,
-      csmp::ModelTopology& model_topology,
-      std::set<std::string>& wells,
-      const std::vector<CornerPointCell>& poly)
-    {
-      size_t                hexa_cell_id;
-      size_t                nid1, nid2;
-      size_t                cell_id(vset.Elements());
-      std::string           well_name;
-      std::vector<size_t>   well_elmts;
-      std::set<std::string> well_fem_types;
-      std::set<size_t>      edge_nodes;
-      const csmp::CSMP_FEM_TYPE edge_fem_type(csmp::ISOPARAMETRIC_LINEAR_BAR);
-      std::string           edge_fem_type_name(csmp::parseFiniteElementType(edge_fem_type));
-      size_t                num_edge_nodes(2U);
 
-      for (std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >::const_iterator
-        it = well_face_path_.begin(); it != well_face_path_.end(); ++it)
-      {
-        well_name = (*it).first;
-        well_elmts.clear();
-        well_fem_types.clear();
-        for (std::vector<std::pair<size_t, std::pair<size_t, size_t> > >::const_iterator
-          fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
-        {
-          hexa_cell_id = (*fit).first;
-          if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-          {
-            /// fill VSet
-            const size_t num_well_sections(poly[hexa_cell_id].GetNumWellSections());
-            for (size_t eid = 0; eid < num_well_sections; ++eid)
-            {
-              vset.ResizePlist(cell_id + 1, num_edge_nodes);
-              vset.ResizeElementTypes(cell_id + 1);
-              for (size_t nid = 0U; nid < num_edge_nodes; ++nid)
-                vset.Plist(cell_id, nid, poly[hexa_cell_id].GetWellSectionNodeGlobalId(eid, nid));
-              vset.ElementType(cell_id, edge_fem_type);
-              /// add well elements
-              well_elmts.push_back(cell_id);
-              well_fem_types.insert(edge_fem_type_name);
-              embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, edge_fem_type));
-              ++cell_id;
-            }
-          }
-        }
-        if (!well_elmts.empty())
-        {
-          model_topology.AddRegion(well_name.c_str(), well_fem_types, well_elmts);
-          wells.insert(well_name.c_str());
-        }
-      }
 
-      for (std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >::const_iterator
-        it = well_edge_path_.begin(); it != well_edge_path_.end(); ++it)
-      {
-        well_name = (*it).first;
-        well_elmts.clear();
-        well_fem_types.clear();
-        for (std::vector<std::pair<size_t, std::pair<size_t, size_t> > >::const_iterator
-          fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
-        {
-          hexa_cell_id = (*fit).first;
-          if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
-          {
-            nid1 = (*fit).second.first;
-            nid2 = (*fit).second.second;
-            edge_nodes.clear();
-            edge_nodes.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid1));
-            edge_nodes.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid2));
-            num_edge_nodes = edge_nodes.size();
-            if (num_edge_nodes == 2)
-            {
-              /// fill VSet
-              vset.ResizePlist(cell_id + 1, num_edge_nodes);
-              vset.ResizeElementTypes(cell_id + 1);
-              vset.Plist(cell_id, 0, poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid1));
-              vset.Plist(cell_id, 1, poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid2));
-              vset.ElementType(cell_id, edge_fem_type);
-              /// add well elements
-              well_elmts.push_back(cell_id);
-              well_fem_types.insert(edge_fem_type_name);
-              embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, edge_fem_type));
-              ++cell_id;
-            }
-          }
-        }
-        if (!well_elmts.empty())
-        {
-          model_topology.AddRegion(well_name.c_str(), well_fem_types, well_elmts);
-          wells.insert(well_name.c_str());
-        }
-      }
-    }
+             void CornerPointGrid::EstablishWellRegions(csmp::VSet<3U>& vset,
+                                                        csmp::ModelTopology& model_topology,
+                                                        std::set<std::string>& wells,
+                                                        const std::vector<CornerPointCell>& poly)
+             {
+               size_t                hexa_cell_id;
+               size_t                nid1, nid2;
+               size_t                cell_id(vset.Elements());
+               std::string           well_name;
+               std::vector<size_t>   well_elmts;
+               std::set<std::string> well_fem_types;
+               std::set<size_t>      edge_nodes;
+               const csmp::CSMP_FEM_TYPE edge_fem_type(csmp::ISOPARAMETRIC_LINEAR_BAR);
+               std::string           edge_fem_type_name(csmp::parseFiniteElementType(edge_fem_type));
+               size_t                num_edge_nodes(2U);
+
+               for (std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >::const_iterator
+                    it = well_face_path_.begin(); it != well_face_path_.end(); ++it)
+               {
+                 well_name = (*it).first;
+                 well_elmts.clear();
+                 well_fem_types.clear();
+                 for (std::vector<std::pair<size_t, std::pair<size_t, size_t> > >::const_iterator
+                      fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
+                 {
+                   hexa_cell_id = (*fit).first;
+                   if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
+                   {
+                     /// fill VSet
+                     const size_t num_well_sections(poly[hexa_cell_id].GetNumWellSections());
+                     for (size_t eid = 0; eid < num_well_sections; ++eid)
+                     {
+                       vset.ResizePlist(cell_id + 1, num_edge_nodes);
+                       vset.ResizeElementTypes(cell_id + 1);
+                       for (size_t nid = 0U; nid < num_edge_nodes; ++nid)
+                         vset.Plist(cell_id, nid, poly[hexa_cell_id].GetWellSectionNodeGlobalId(eid, nid));
+                       vset.ElementType(cell_id, edge_fem_type);
+                       /// add well elements
+                       well_elmts.push_back(cell_id);
+                       well_fem_types.insert(edge_fem_type_name);
+                       embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, edge_fem_type));
+                       ++cell_id;
+                     }
+                   }
+                 }
+                 if (!well_elmts.empty())
+                 {
+                   model_topology.AddRegion(well_name.c_str(), well_fem_types, well_elmts);
+                   wells.insert(well_name.c_str());
+                 }
+               }
+
+               for (std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >::const_iterator
+                    it = well_edge_path_.begin(); it != well_edge_path_.end(); ++it)
+               {
+                 well_name = (*it).first;
+                 well_elmts.clear();
+                 well_fem_types.clear();
+                 for (std::vector<std::pair<size_t, std::pair<size_t, size_t> > >::const_iterator
+                      fit = (*it).second.begin(); fit != (*it).second.end(); ++fit)
+                 {
+                   hexa_cell_id = (*fit).first;
+                   if (cell_activity_[hexa_cell_id] == 1 || !exclude_inactive_cells_)
+                   {
+                     nid1 = (*fit).second.first;
+                     nid2 = (*fit).second.second;
+                     edge_nodes.clear();
+                     edge_nodes.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid1));
+                     edge_nodes.insert(poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid2));
+                     num_edge_nodes = edge_nodes.size();
+                     if (num_edge_nodes == 2)
+                     {
+                       /// fill VSet
+                       vset.ResizePlist(cell_id + 1, num_edge_nodes);
+                       vset.ResizeElementTypes(cell_id + 1);
+                       vset.Plist(cell_id, 0, poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid1));
+                       vset.Plist(cell_id, 1, poly[hexa_cell_id].GetPillarNodeGlobalIdOriginalOrder(nid2));
+                       vset.ElementType(cell_id, edge_fem_type);
+                       /// add well elements
+                       well_elmts.push_back(cell_id);
+                       well_fem_types.insert(edge_fem_type_name);
+                       embedded_cells_[hexa_cell_id].push_back(std::make_pair(cell_id, edge_fem_type));
+                       ++cell_id;
+                     }
+                   }
+                 }
+                 if (!well_elmts.empty())
+                 {
+                   model_topology.AddRegion(well_name.c_str(), well_fem_types, well_elmts);
+                   wells.insert(well_name.c_str());
+                 }
+               }
+             }
 #endif
 
-    template<class VarType>
-    void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&             vset,
-      const std::vector<VarType>& prop_data,
-      const std::string&          prop_name,
-      const csmp::PLACEMENT&      prop_place) const
-    {
-      /// correcting data cell id's due to existance of embedded cells
-      VarType var;
-      var = 0.;
-      size_t current_id = 0;
-      std::vector<VarType> cell_data(vset.Elements(), var);
-        for (auto& entry : elementMap) {
-          auto coord = entry.first;
-          size_t idx = coord.i + coord.j * NX_ + coord.k * NX_x_NY_;
-          cell_data[entry.second] = prop_data[idx];
+             template<class VarType>
+             void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&             vset,
+                                                           const std::vector<VarType>& prop_data,
+                                                           const std::string&          prop_name,
+                                                           const csmp::PLACEMENT&      prop_place) const
+             {
+               /// correcting data cell id's due to existance of embedded cells
+               VarType var;
+               var = 0.;
+               size_t current_id = 0;
+               std::vector<VarType> cell_data(vset.Elements(), var);
+               for (auto& entry : elementMap) {
+                 auto coord = entry.first;
+                 size_t idx = coord.i + coord.j * NX_ + coord.k * NX_x_NY_;
+                 cell_data[entry.second] = prop_data[idx];
+               }
+               if (prop_place == csmp::NODE) {
+                 // Add nodal data to vset
+                 std::vector<VarType> nodal_data;
+                 // TODO: why node property?
+                 extrapolateElementToNodeProperty<3U, VarType>(vset, cell_data, nodal_data);
+                 //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
+                 const size_t array_length = (var.Size() > 9U) ? var.Size() : 0U;
+                 assert(array_length == 1);
+                 PropertyData property_values(prop_place, VarType::VariableType, 3U, 0U);
+                 property_values.Reserve(nodal_data.size());
+                 for (const auto& it : nodal_data) pushBack(property_values, it);
+                 vset.AddData(prop_name.c_str(), property_values);
+               }
+               else {
+                 // Add cell data to vset
+                 // csmp::FEM_Data<VarType> property_values( prop_place, cell_data );
+                 PropertyData property_values(prop_place, VarType::VariableType, 3U, 0U);
+                 property_values.Reserve(cell_data.size());
+                 for (const auto& it : cell_data) pushBack(property_values, it);
+                 vset.AddData(prop_name.c_str(), property_values);
+               }
+             }
+
+             template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+             template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
+             template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
+             template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+             template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+
+
+             void CornerPointGrid_UoM::Resize(size_t i_pillar_max, size_t j_pillar_max)
+             {
+               pillars_.resize(i_pillar_max * j_pillar_max);
+             }
+
+
+             /** accessing the contained pillars
+              */
+             Pillar & CornerPointGrid_UoM::operator()(size_t i, size_t j)
+             {
+               assert(i <= NX_);
+               assert(j <= NY_);
+
+               return pillars_[j * (NX_ + 1) + i];
+             }
+
+             // CELL CENTERED GRID
+
+             CellCenteredGrid::CellCenteredGrid()
+             :dx_(3U)
+             {
+             }
+
+             CellCenteredGrid::~CellCenteredGrid()
+        {
         }
-        if (prop_place == csmp::NODE) {
-          // Add nodal data to vset
-          std::vector<VarType> nodal_data;
-          // TODO: why node property?
-          extrapolateElementToNodeProperty<3U, VarType>(vset, cell_data, nodal_data);
-          //csmp::FEM_Data<VarType> property_values( prop_place, nodal_data );
-          const size_t array_length = (var.Size() > 9U) ? var.Size() : 0U;
-          assert(array_length == 1);
-          PropertyData property_values(prop_place, VarType::VariableType, 3U, 0U);
-          property_values.Reserve(nodal_data.size());
-          for (const auto& it : nodal_data) pushBack(property_values, it);
-          vset.AddData(prop_name.c_str(), property_values);
+
+             void CellCenteredGrid::Clear()
+        {
+          /// grid
+          tops_.clear();
+          dx_.clear();
+          dy_.clear();
+          dz_.clear();
         }
-        else {
-          // Add cell data to vset
-          // csmp::FEM_Data<VarType> property_values( prop_place, cell_data );
-          PropertyData property_values(prop_place, VarType::VariableType, 3U, 0U);
-          property_values.Reserve(cell_data.size());
-          for (const auto& it : cell_data) pushBack(property_values, it);
-          vset.AddData(prop_name.c_str(), property_values);
+
+
+
+             size_t CellCenteredGrid::GetNumCells() const
+        {
+          return NX_*NY_*NZ_;
         }
-    }
-
-    template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT&) const;
-    template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
-    template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
-    template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
-    template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
-
-
-    void CornerPointGrid_UoM::Resize(size_t i_pillar_max, size_t j_pillar_max)
-    {
-      pillars_.resize(i_pillar_max * j_pillar_max);
-    }
-
-
-    /** accessing the contained pillars
-    */
-    Pillar & CornerPointGrid_UoM::operator()(size_t i, size_t j)
-    {
-      assert(i <= NX_);
-      assert(j <= NY_);
-
-      return pillars_[j * (NX_ + 1) + i];
-    }
-
-// CELL CENTERED GRID
-
-    CellCenteredGrid::CellCenteredGrid()
-      :dx_(3U)
-    {
-    }
-
-CellCenteredGrid::~CellCenteredGrid()
-{
-}
-
-void CellCenteredGrid::Clear()
-{
-    /// grid
-    tops_.clear();
-    dx_.clear();
-    dy_.clear();
-    dz_.clear();
-}
 
 
 
-size_t CellCenteredGrid::GetNumCells() const
-{
-    return NX_*NY_*NZ_;
-}
+             std::vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
+        {
+          return tops_;
+        }
 
 
 
-std::vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
-{
-    return tops_;
-}
+             std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
+        {
+          if( i == 0 )
+            return dx_;
+          if( i == 1 )
+            return dy_;
+          return dz_;
+        }
 
 
 
-std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
-{
-    if( i == 0 )
-        return dx_;
-    if( i == 1 )
-        return dy_;
-    return dz_;
-}
+             void CellCenteredGrid::AssignDimensionX( size_t NX )
+        {
+          NX_ = NX;
+        }
 
 
 
-void CellCenteredGrid::AssignDimensionX( size_t NX )
-{
-    NX_ = NX;
-}
+             void CellCenteredGrid::AssignDimensionY( size_t NY )
+        {
+          NY_ = NY;
+        }
 
 
 
-void CellCenteredGrid::AssignDimensionY( size_t NY )
-{
-    NY_ = NY;
-}
-
-
-
-void CellCenteredGrid::AssignDimensionZ( size_t NZ )
-{
-    NZ_ = NZ;
-}
+             void CellCenteredGrid::AssignDimensionZ( size_t NZ )
+        {
+          NZ_ = NZ;
+        }
 
 
 
 #if 0
-void CellCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
-{
-    const size_t NXY( NX_*NY_ );
-    size_t cell_id(0);
-    double64 x_offset(0.0);
-    double64 y_offset(0.0);
-    double64 z_offset(0.0);
-    double64 dx(0.0);
-    double64 dy(0.0);
-
-    csmp::Point<3U> pt;
-    pillars.resize( (NY_ + 1), std::vector<Pillar>( NX_ + 1 ) );
-
-    for( size_t k = 0; k < NZ_; k++ )
-    {
-        /// top level
-        y_offset = 0.0;
-        for( size_t j = 0; j < NY_; j++ )
+             void CellCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<Pillar> >& pillars )
         {
-            x_offset = 0.0;
-            for( size_t i = 0; i < NX_; i++ )
+          const size_t NXY( NX_*NY_ );
+          size_t cell_id(0);
+          double64 x_offset(0.0);
+          double64 y_offset(0.0);
+          double64 z_offset(0.0);
+          double64 dx(0.0);
+          double64 dy(0.0);
+
+          csmp::Point<3U> pt;
+          pillars.resize( (NY_ + 1), std::vector<Pillar>( NX_ + 1 ) );
+
+          for( size_t k = 0; k < NZ_; k++ )
+          {
+            /// top level
+            y_offset = 0.0;
+            for( size_t j = 0; j < NY_; j++ )
             {
+              x_offset = 0.0;
+              for( size_t i = 0; i < NX_; i++ )
+              {
                 cell_id = i + j*NX_ + k*NXY;
 
                 dx = dx_[cell_id]();
@@ -2482,17 +2613,17 @@ void CellCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<P
 
                 // assign new x offset
                 x_offset += dx;
+              }
+              // assign new y offset ( take dy value from the last cell in x row )
+              y_offset += dy;
             }
-            // assign new y offset ( take dy value from the last cell in x row )
-            y_offset += dy;
-        }
-        /// bottom level
-        y_offset = 0.0;
-        for( size_t j = 0; j < NY_; j++ )
-        {
-            x_offset = 0.0;
-            for( size_t i = 0; i < NX_; i++ )
+            /// bottom level
+            y_offset = 0.0;
+            for( size_t j = 0; j < NY_; j++ )
             {
+              x_offset = 0.0;
+              for( size_t i = 0; i < NX_; i++ )
+              {
                 cell_id = i + j*NX_ + k*NXY;
 
                 dx = dx_[cell_id]();
@@ -2525,139 +2656,139 @@ void CellCenteredGrid::AssignCellCoordinatesToPillars( std::vector<std::vector<P
 
                 // assign new x offset
                 x_offset += dx;
+              }
+              // assign new y offset ( take dy value from the last cell in x row )
+              y_offset += dy;
             }
-            // assign new y offset ( take dy value from the last cell in x row )
-            y_offset += dy;
-        }
-    }
+          }
 
-    for( size_t j = 0; j <= NY_; j++ )
-        for( size_t i = 0; i <= NX_; i++ )
-            pillars[ j ][ i ].AssignEnds( );
-}
+          for( size_t j = 0; j <= NY_; j++ )
+            for( size_t i = 0; i <= NX_; i++ )
+              pillars[ j ][ i ].AssignEnds( );
+        }
 #endif
 
 
-// WELLS
+             // WELLS
 
-/// add well path based on symmetry assumption ( neighbouring cell defines the direction )
-/// by default well is assumed to be vertical
-void addWellPath( size_t NX, size_t NY, size_t NZ,
-                  const std::string& well_name,
-                  const std::vector<ijk>& cell_ids,
-                  std::map<std::string,EclipseWellPath>& well_path )
-{
-    const size_t NX_x_NY( NX*NY );
-    std::map<int64_t,CORNER_POINT_CELL_FACE_INDEX> face_map;
-    face_map.insert( std::make_pair( -1,       CORNER_POINT_CELL_FACE_Xminus ) );
-    face_map.insert( std::make_pair( +1,       CORNER_POINT_CELL_FACE_Xplus  ) );
-    face_map.insert( std::make_pair( -NX,      CORNER_POINT_CELL_FACE_Yminus ) );
-    face_map.insert( std::make_pair( +NX,      CORNER_POINT_CELL_FACE_Yplus  ) );
-    face_map.insert( std::make_pair( -NX_x_NY, CORNER_POINT_CELL_FACE_Zminus ) );
-    face_map.insert( std::make_pair( +NX_x_NY, CORNER_POINT_CELL_FACE_Zplus  ) );
-
-    EclipseWellPath  wpath;
-    size_t num_cells( cell_ids.size() );
-    for( size_t cid=0; cid<num_cells; ++cid )
-    {
-      wpath.path.emplace_back( cell_ids[cid], CORNER_POINT_CELL_FACE_Zminus, CORNER_POINT_CELL_FACE_Zplus);
-    }
-    if( wpath.path.size() > 1 )
-    {
-        size_t nid( wpath.path.size() - num_cells + 1 ); /// neighbour is a next cell
-        for( size_t cid = 0; cid <(num_cells-1); ++cid, ++nid )
+             /// add well path based on symmetry assumption ( neighbouring cell defines the direction )
+             /// by default well is assumed to be vertical
+             void addWellPath( size_t NX, size_t NY, size_t NZ,
+                              const std::string& well_name,
+                              const std::vector<ijk>& cell_ids,
+                              std::map<std::string,EclipseWellPath>& well_path )
         {
-            //              neighbor id          cell id
-            int64_t face_id  = ((int64_t)wpath.path[ nid ].cell.i - (int)cell_ids[ cid ].i)
-                  + ((int64_t)wpath.path[ nid ].cell.j - (int64_t)cell_ids[ cid ].j) * (int64_t)NX
-                  + ((int64_t)wpath.path[ nid ].cell.k - (int64_t)cell_ids[ cid ].k) * (int64_t)NX_x_NY;
-            if( nid-1 == 0 ) wpath.path[ nid-1 ].from = face_map[ -face_id ];
-            wpath.path[ nid-1 ].to = face_map[ face_id ];
-            wpath.path[ nid ].from = face_map[ -face_id ];
-            wpath.path[ nid ].to   = face_map[ face_id ];
+          const size_t NX_x_NY( NX*NY );
+          std::map<int64_t,CORNER_POINT_CELL_FACE_INDEX> face_map;
+          face_map.insert( std::make_pair( -1,       CORNER_POINT_CELL_FACE_Xminus ) );
+          face_map.insert( std::make_pair( +1,       CORNER_POINT_CELL_FACE_Xplus  ) );
+          face_map.insert( std::make_pair( -NX,      CORNER_POINT_CELL_FACE_Yminus ) );
+          face_map.insert( std::make_pair( +NX,      CORNER_POINT_CELL_FACE_Yplus  ) );
+          face_map.insert( std::make_pair( -NX_x_NY, CORNER_POINT_CELL_FACE_Zminus ) );
+          face_map.insert( std::make_pair( +NX_x_NY, CORNER_POINT_CELL_FACE_Zplus  ) );
+
+          EclipseWellPath  wpath;
+          size_t num_cells( cell_ids.size() );
+          for( size_t cid=0; cid<num_cells; ++cid )
+          {
+            wpath.path.emplace_back( cell_ids[cid], CORNER_POINT_CELL_FACE_Zminus, CORNER_POINT_CELL_FACE_Zplus);
+          }
+          if( wpath.path.size() > 1 )
+          {
+            size_t nid( wpath.path.size() - num_cells + 1 ); /// neighbour is a next cell
+            for( size_t cid = 0; cid <(num_cells-1); ++cid, ++nid )
+            {
+              //              neighbor id          cell id
+              int64_t face_id  = ((int64_t)wpath.path[ nid ].cell.i - (int)cell_ids[ cid ].i)
+              + ((int64_t)wpath.path[ nid ].cell.j - (int64_t)cell_ids[ cid ].j) * (int64_t)NX
+              + ((int64_t)wpath.path[ nid ].cell.k - (int64_t)cell_ids[ cid ].k) * (int64_t)NX_x_NY;
+              if( nid-1 == 0 ) wpath.path[ nid-1 ].from = face_map[ -face_id ];
+              wpath.path[ nid-1 ].to = face_map[ face_id ];
+              wpath.path[ nid ].from = face_map[ -face_id ];
+              wpath.path[ nid ].to   = face_map[ face_id ];
+            }
+          }
+          well_path.emplace(well_name, wpath);
         }
-    }
-    well_path.emplace(well_name, wpath);
-}
 
 
 
 
 
-/// add well path with explicitly specified faces
-void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  const std::vector<std::pair<size_t,size_t> >& face_ids,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
-{
-    /// temp data
-    std::pair<size_t,size_t> direction;
-    std::pair<size_t,std::pair<size_t,size_t> > path;
-    size_t cell_id;
-    size_t num_cells( cell_ids.size() );
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
-    well_path.insert( std::make_pair( well_name, empty_path ) );
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
-    for( size_t cid=0; cid<num_cells; ++cid )
-    {
-        cell_id = cell_ids[ cid ];
-        direction.first  = face_ids[ cid ].first;
-        direction.second = face_ids[ cid ].second;
-        path.first  = cell_id;
-        path.second = direction;
-        wpath.push_back( path );
-    }
-}
+             /// add well path with explicitly specified faces
+             void addWellPath( const std::string& well_name,
+                              const std::vector<size_t>& cell_ids,
+                              const std::vector<std::pair<size_t,size_t> >& face_ids,
+                              std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
+        {
+          /// temp data
+          std::pair<size_t,size_t> direction;
+          std::pair<size_t,std::pair<size_t,size_t> > path;
+          size_t cell_id;
+          size_t num_cells( cell_ids.size() );
+          std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
+          well_path.insert( std::make_pair( well_name, empty_path ) );
+          std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
+          for( size_t cid=0; cid<num_cells; ++cid )
+          {
+            cell_id = cell_ids[ cid ];
+            direction.first  = face_ids[ cid ].first;
+            direction.second = face_ids[ cid ].second;
+            path.first  = cell_id;
+            path.second = direction;
+            wpath.push_back( path );
+          }
+        }
 
 
 
 
-/// add well path with explicitly specified faces ( same for all cells )
-void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
-                  std::pair<size_t,size_t> face_id,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
-{
-    /// temp data
-    std::pair<size_t,size_t> direction;
-    std::pair<size_t,std::pair<size_t,size_t> > path;
-    size_t cell_id;
-    size_t num_cells( cell_ids.size() );
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
-    well_path.insert( std::make_pair( well_name, empty_path ) );
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
-    for( size_t i=0; i<num_cells; ++i )
-    {
-        cell_id = cell_ids[ i ];
-        direction.first  = face_id.first;
-        direction.second = face_id.second;
-        path.first  = cell_id;
-        path.second = direction;
-        wpath.push_back( path );
-    }
-}
+             /// add well path with explicitly specified faces ( same for all cells )
+             void addWellPath( const std::string& well_name,
+                              const std::vector<size_t>& cell_ids,
+                              std::pair<size_t,size_t> face_id,
+                              std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
+        {
+          /// temp data
+          std::pair<size_t,size_t> direction;
+          std::pair<size_t,std::pair<size_t,size_t> > path;
+          size_t cell_id;
+          size_t num_cells( cell_ids.size() );
+          std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
+          well_path.insert( std::make_pair( well_name, empty_path ) );
+          std::vector<std::pair<size_t,std::pair<size_t,size_t> > >& wpath( well_path[ well_name ] );
+          for( size_t i=0; i<num_cells; ++i )
+          {
+            cell_id = cell_ids[ i ];
+            direction.first  = face_id.first;
+            direction.second = face_id.second;
+            path.first  = cell_id;
+            path.second = direction;
+            wpath.push_back( path );
+          }
+        }
 
 
 
 
-/// add well path with explicitly specified faces ( for single cell )
-void addWellPath( const std::string& well_name,
-                  size_t cell_id,
-                  std::pair<size_t,size_t> face_id,
-                  std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
-{
-    /// temp data
-    std::pair<size_t,size_t> direction;
-    std::pair<size_t,std::pair<size_t,size_t> > path;
-    direction.first  = face_id.first;
-    direction.second = face_id.second;
-    path.first  = cell_id;
-    path.second = direction;
-    std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
-    well_path.insert( std::make_pair( well_name, empty_path ) );
-    well_path[ well_name ].push_back( path );
-}
+             /// add well path with explicitly specified faces ( for single cell )
+             void addWellPath( const std::string& well_name,
+                              size_t cell_id,
+                              std::pair<size_t,size_t> face_id,
+                              std::map<std::string,std::vector<std::pair<size_t,std::pair<size_t,size_t> > > >& well_path )
+        {
+          /// temp data
+          std::pair<size_t,size_t> direction;
+          std::pair<size_t,std::pair<size_t,size_t> > path;
+          direction.first  = face_id.first;
+          direction.second = face_id.second;
+          path.first  = cell_id;
+          path.second = direction;
+          std::vector<std::pair<size_t,std::pair<size_t,size_t> > >   empty_path;
+          well_path.insert( std::make_pair( well_name, empty_path ) );
+          well_path[ well_name ].push_back( path );
+        }
 
-} // eclipse
+  } // eclipse
 
 } // end namespace csmp

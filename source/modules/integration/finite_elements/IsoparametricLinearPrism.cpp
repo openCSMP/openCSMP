@@ -95,8 +95,8 @@ IsoparametricLinearPrism::IsoparametricLinearPrism( size_t integrationPoints )
          GenerateIntegrationPoints(IP,W);
      else
      {
-         cout<<"IsoparametricLinearPrism::IsoparametricLinearHexahedron: Number of integration points should be 1 or 6"<<endl;
-         throw std::range_error("***ERROR: IsoparametricLinearPrism::IsoparametricLinearHexahedron: N of integration points should be 1 or 6");
+         cout<<"IsoparametricLinearPrism::IsoparametricLinearPrism: Number of integration points should be 1 or 6"<<endl;
+         throw std::range_error("***ERROR: IsoparametricLinearPrism::IsoparametricLinearPrism: N of integration points should be 1 or 6");
      }
  }
 
@@ -637,7 +637,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN2,
  }
 
 /** Outputs the shape functions at the point 'xyz' which must lie
-within the Hexahedron.
+within the Prism.
 */
 void
 IsoparametricLinearPrism::N(

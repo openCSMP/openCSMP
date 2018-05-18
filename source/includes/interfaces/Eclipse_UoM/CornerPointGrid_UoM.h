@@ -87,14 +87,16 @@ class  CornerPointGrid_UoM
   
   std::vector<uint8_t>& GetCellActivity();
   
+  size_t OrdinaryNodes() const {
+    return ordinaryNodes_;
+  }
+  
   std::multimap<ijk,size_t>& IJKMap()
   {
     return elementMap;
   }
 
-
-protected:
-    void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt );
+  void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt ) const;
 	
   
 private:

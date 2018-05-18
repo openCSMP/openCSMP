@@ -86,9 +86,10 @@ enum class ECLIPSE_CELL_CLASSIFICATION : uint8_t {
 
 /// A column cell, in Eclipse convention ordering
 struct ColumnCell {
-    size_t k;
-    ECLIPSE_CELL_CLASSIFICATION classification;
-    size_t z[4][2];
+  size_t k;
+  bool skew = false;
+  ECLIPSE_CELL_CLASSIFICATION classification;
+  size_t z[4][2];
 };
 
 /// A column

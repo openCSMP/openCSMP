@@ -112,6 +112,12 @@ void EclipseMeshInterface_Example::Run()
       std::cerr << "Broken element at " << eclipseCoord.i << ' ' << eclipseCoord.j << ' ' << eclipseCoord.k << ' '
       << parseFiniteElementType((*it)->FE()->ElementType())
       << '\n';
+#if 0
+      for (auto nit = (*it)->NodesBegin(); nit != (*it)->NodesEnd(); ++nit) {
+        std::cerr << (*nit)->Coordinate() << '\n';
+      }
+      std::cerr << "Done\n";
+#endif
     }
   }
   if ( volume_e_removed > 0 || surface_e_removed > 0 || line_e_removed > 0 ) {
