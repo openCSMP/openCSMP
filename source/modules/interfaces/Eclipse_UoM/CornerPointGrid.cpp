@@ -40,6 +40,7 @@ namespace csmp {
 
       size_t elementID = 0;
       size_t extraNodeID = 0;
+      std::vector<Point<3u>> ordinaryNodes;
       std::deque<Point<3u>> extraNodes;
       
       std::map<size_t, vector<size_t>>  plist;
@@ -53,6 +54,15 @@ namespace csmp {
       CellGenerator(CornerPointGrid_UoM& grid)
       : grid(grid)
       {
+      }
+
+      Point<3u> getGlobalNodeCoord(size_t node) const {
+        if (node < ordinaryNodes.size()) {
+          return ordinaryNodes[node];
+        }
+        else {
+          return extraNodes[node - ordinaryNodes.size()];
+        }
       }
 
       Point<3u> getNodeCoord(ColumnCell& cell, size_t vertex) const {
@@ -161,6 +171,114 @@ namespace csmp {
         return elid;
       }
 
+      bool ConstructPyramidOnFace(ColumnCell& cell, size_t face0, size_t face1, size_t face2, size_t face3, size_t apex) {
+        vertexIDs[0] = getNodeID(cell, face0);
+        vertexIDs[1] = getNodeID(cell, face1);
+        vertexIDs[2] = getNodeID(cell, face2);
+        vertexIDs[3] = getNodeID(cell, face3);
+        vertexIDs[4] = apex;
+
+        for (size_t i = 0; i < 5; ++i) {
+          auto p = getGlobalNodeCoord(vertexIDs[i]);
+          grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
+          pyra.XYZ(i, 0, p[0]);
+          pyra.XYZ(i, 1, p[1]);
+          pyra.XYZ(i, 2, p[2]);
+          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+        }
+        
+        size_t iNrIps = pyra.IntegrationPoints();
+        for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+          pyra.JacobianAtIntegrationPoint(iIp);
+          double64 jacdet = pyra.JacobianDeterminant();
+          if (jacdet <= 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      size_t EmitPyramid(ColumnCell& cell) {
+        std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[5]);
+        size_t elid = elementID++;
+        plist.emplace(elid, ids);
+        fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
+        return elid;
+      }
+
+
+      bool ConstructTetrahedronOnFace(ColumnCell& cell, size_t face0, size_t face1, size_t face2, size_t apex) {
+        vertexIDs[0] = getNodeID(cell, face0);
+        vertexIDs[1] = getNodeID(cell, face1);
+        vertexIDs[2] = getNodeID(cell, face2);
+        vertexIDs[3] = apex;
+
+        for (size_t i = 0; i < 4; ++i) {
+          auto p = getGlobalNodeCoord(vertexIDs[i]);
+          grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
+          tetra.XYZ(i, 0, p[0]);
+          tetra.XYZ(i, 1, p[1]);
+          tetra.XYZ(i, 2, p[2]);
+          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+        }
+        
+        size_t iNrIps = tetra.IntegrationPoints();
+        for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+          tetra.JacobianAtIntegrationPoint(iIp);
+          double64 jacdet = tetra.JacobianDeterminant();
+          if (jacdet <= 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      size_t EmitTetrahedron(ColumnCell& cell) {
+        std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[4]);
+        size_t elid = elementID++;
+        plist.emplace(elid, ids);
+        fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
+        return elid;
+      }
+      
+
+      bool ConstructPrism(ColumnCell& cell, size_t face0, size_t face1, size_t face2, size_t face3, size_t face4, size_t face5) {
+        vertexIDs[0] = getNodeID(cell, face0);
+        vertexIDs[1] = getNodeID(cell, face1);
+        vertexIDs[2] = getNodeID(cell, face2);
+        vertexIDs[3] = getNodeID(cell, face3);
+        vertexIDs[4] = getNodeID(cell, face4);
+        vertexIDs[5] = getNodeID(cell, face5);
+
+        for (size_t i = 0; i < 6; ++i) {
+          auto p = getGlobalNodeCoord(vertexIDs[i]);
+          grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
+          prism.XYZ(i, 0, p[0]);
+          prism.XYZ(i, 1, p[1]);
+          prism.XYZ(i, 2, p[2]);
+          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+        }
+        
+        size_t iNrIps = prism.IntegrationPoints();
+        for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+          prism.JacobianAtIntegrationPoint(iIp);
+          double64 jacdet = prism.JacobianDeterminant();
+          if (jacdet <= 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      size_t EmitPrism(ColumnCell& cell) {
+        std::vector<size_t> ids(&vertexIDs[0], &vertexIDs[6]);
+        size_t elid = elementID++;
+        plist.emplace(elid, ids);
+        fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
+        return elid;
+      }
+      
+
       // return a list of globalNodeID from local vertex index
       std::vector<size_t> getGlobalIDList(ColumnCell& cell, size_t size, const size_t* vertexIDs) {
         std::vector<size_t> nodeIDs;
@@ -172,15 +290,6 @@ namespace csmp {
       }
 
       /// degenerates to one prism
-      vector<size_t> degenerateToOnePrismAtEdge01(ColumnCell& cell) {
-        static const size_t vertexIDs[6] = { 0, 3, 7, 1, 2, 6 };						  // 037126
-        return getGlobalIDList(cell, 6, vertexIDs);
-      }
-
-      vector<size_t> degenerateToOnePrismAtEdge12(ColumnCell& cell) {     // 041 372
-        static const size_t vertexIDs[6] = { 0, 4, 1, 3, 7, 2 };
-        return getGlobalIDList(cell, 6, vertexIDs);
-      }
 
       vector<size_t> degenerateToOnePrismAtEdge23(ColumnCell& cell) {    // 034 125
         static const size_t vertexIDs[6] = { 0, 3, 4, 1, 2, 5 };
@@ -287,32 +396,6 @@ namespace csmp {
 
         static const size_t vertexIDs2[4] = { 1, 3, 2, 6 };
         nodeLists.push_back(getGlobalIDList(cell, 4, vertexIDs2));
-
-        return nodeLists;
-      }
-
-      vector<vector<size_t>> splitToTwoPrismsAtEdge02(ColumnCell& cell) {
-        vector<vector<size_t>> nodeLists;  // 456012 & 467023
-        nodeLists.reserve(2);
-
-        static const size_t vertexIDs1[6] = { 4,5,6,0,1,2 };
-        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
-
-        static const size_t vertexIDs2[6] = { 4,6,7,0,2,3 };
-        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
-
-        return nodeLists;
-      }
-
-      vector<vector<size_t>> splitToTwoPrismsAtEdge13(ColumnCell& cell) {
-        vector<vector<size_t>> nodeLists;  // 457013 & 567123
-        nodeLists.reserve(2);
-
-        static const size_t vertexIDs1[6] = { 4,5,6,0,1,3 };
-        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs1));
-
-        static const size_t vertexIDs2[6] = { 5,6,7,1,2,3 };
-        nodeLists.push_back(getGlobalIDList(cell, 6, vertexIDs2));
 
         return nodeLists;
       }
@@ -525,167 +608,6 @@ namespace csmp {
             return FACE_TYPE::FULL_QUAD;
         }
       }
-
-      void addPyramidTopFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addPyramidBottomFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addPyramidLeftFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addPyramidRightFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addPyramidFrontFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addPyramidBackFace(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(5);
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraBottomFace456(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraBottomFace467(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraBottomFace567(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(getNodeID(cell, 6));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraBottomFace457(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 7));
-        nodeList.push_back(getNodeID(cell, 5));
-        nodeList.push_back(getNodeID(cell, 4));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraTopFace012(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraTopFace023(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraTopFace123(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(getNodeID(cell, 2));
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
-      void addTetraTopFace013(ColumnCell& cell, size_t element, std::map<size_t, vector<size_t>>& plist, size_t centroid)
-      {
-        std::vector<size_t> nodeList;
-        nodeList.reserve(4);
-        nodeList.push_back(getNodeID(cell, 1));
-        nodeList.push_back(getNodeID(cell, 3));
-        nodeList.push_back(getNodeID(cell, 0));
-        nodeList.push_back(centroid);
-        plist.emplace(element, std::move(nodeList));
-      }
-
     };
 
     // CORNER POINT GRID
@@ -914,86 +836,30 @@ namespace csmp {
             }
           }
           cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
-#if 0
-          // Determine whether the cell is skew or not
-          switch (cell.classification) {
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON:          // 0000
-            {
-              double64 z0avg = 0.25 * (z[0][0] + z[1][0] + z[2][0] + z[3][0]);
-              double64 z1avg = 0.25 * (z[0][1] + z[1][1] + z[2][1] + z[3][1]);
-              if (z0avg >= z[0][1] || z0avg >= z[1][1] || z0avg >= z[2][1] || z0avg >= z[3][1]) {
-                std::cerr << "Skew hexahedron case 1: z0avg is deeper than bottom face\n";
-                std::cerr << "p00 = " << p0.GetPoint(cell.z[0][0]) << '\n';
-                std::cerr << "p10 = " << p1.GetPoint(cell.z[1][0]) << '\n';
-                std::cerr << "p20 = " << p2.GetPoint(cell.z[2][0]) << '\n';
-                std::cerr << "p30 = " << p3.GetPoint(cell.z[3][0]) << '\n';
-                std::cerr << "p01 = " << p0.GetPoint(cell.z[0][1]) << '\n';
-                std::cerr << "p11 = " << p1.GetPoint(cell.z[1][1]) << '\n';
-                std::cerr << "p21 = " << p2.GetPoint(cell.z[2][1]) << '\n';
-                std::cerr << "p31 = " << p3.GetPoint(cell.z[3][1]) << '\n';
-                ++skewCells;
-                cell.skew = true;
-              }
-              else if (z1avg <= z[0][0] || z1avg <= z[1][0] || z1avg <= z[2][0] || z1avg <= z[3][0]) {
-                std::cerr << "Skew hexahedron case 1: z1avg is shallower than top face\n";
-                ++skewCells;
-                cell.skew = true;
-              }
-              break;
-            }
-
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312:      // 0001
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203:      // 0010
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132:      // 0100
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023:      // 1000
-            {
-                break;
-            }
-
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23:          // 0011
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12:          // 0110
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_03:          // 1001
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01:          // 1100
-            {
-                break;
-            }
-
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132:    // 0101
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023:    // 1010
-            {
-              // The two tetrahedron case can't be skew
-              break;
-            }
-
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0:          // 0111
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1:          // 1011
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2:          // 1101
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3:          // 1110
-            {
-              // The one pyramid case can't be skew
-              break;
-            }
-
-            case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_DEGENERATE:          // 1111
-            {
-              // This case can't happen.
-              break;
-            }
-
-          }
-#endif
         }
       }
 
 
       // 2. Constructing Elements
+      CellGenerator generator(*this);
+
+      {
+        generator.ordinaryNodes.reserve(ordinaryNodes_);
+        for (size_t i = 0; i <= NX_; ++i) {
+          for (size_t j = 0; j <= NY_; ++j) {
+            Pillar& pillar = (*this)(i, j);
+            for (size_t k = 0; k < pillar.GetNumPoints(); ++k) {
+              generator.ordinaryNodes.push_back(pillar.GetPoint(k));
+            }
+          }
+        }
+      }
 
       size_t badHexahedra = 0;
       size_t badPyramids = 0;
       size_t badTetrahedra = 0;
       size_t badPrisms = 0;
 
-      CellGenerator generator(*this);
       for (auto column = columns_.begin(); column != columns_.end(); column++)  {
         Column& Col = column->second;
         for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -1043,45 +909,59 @@ namespace csmp {
                       size_t centroid = generator.generateCellCentroid(cell);
 
                       // Top face
-                      generator.addPyramidTopFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 1, 2, 3, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                      }
 
                       // Left face
-                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                      }
 
                       // Right face
-                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                      }
 
                       // Front face
-                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                      }
 
                       // Back face
-                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                      }
 
                       // Bottom faces
-                      generator.addTetraBottomFace456(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 6, 5, 4, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
-                      generator.addTetraBottomFace467(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 6, 4, 7, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
                       break;
                     }
@@ -1091,45 +971,64 @@ namespace csmp {
                       size_t centroid = generator.generateCellCentroid(cell);
 
                       // Top face
-                      generator.addPyramidTopFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 1, 2, 3, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Left face
-                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Right face
-                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Front face
-                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Back face
-                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Bottom faces
-                      generator.addTetraBottomFace567(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 7, 6, 5, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
-                      generator.addTetraBottomFace457(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 7, 5, 4, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
                       break;
                     }
@@ -1151,45 +1050,64 @@ namespace csmp {
                       size_t centroid = generator.generateCellCentroid(cell);
 
                       // Left face
-                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Right face
-                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Front face
-                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Back face
-                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Bottom face
-                      generator.addPyramidBottomFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Top faces
-                      generator.addTetraTopFace012(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 0, 1, 2, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
-                      generator.addTetraTopFace023(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 0, 2, 3, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
                       break;
                     }
@@ -1199,45 +1117,64 @@ namespace csmp {
                       size_t centroid = generator.generateCellCentroid(cell);
 
                       // Left face
-                      generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Right face
-                      generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Front face
-                      generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Back face
-                      generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Bottom face
-                      generator.addPyramidBottomFace(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                      ++generator.elementID;
+                      if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, centroid)) {
+                        generator.EmitPyramid(cell);
+                      }
+                      else {
+                        ++badPyramids;
+                        continue;
+                      }
 
                       // Top faces
-                      generator.addTetraTopFace123(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 1, 2, 3, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
-                      generator.addTetraTopFace013(cell, generator.elementID, generator.plist, centroid);
-                      addElementToMap(i, j, k, generator.elementID);
-                      generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                      ++generator.elementID;
+                      if (generator.ConstructTetrahedronOnFace(cell, 1, 3, 0, centroid)) {
+                          generator.EmitTetrahedron(cell);
+                      }
+                      else {
+                          ++badTetrahedra;
+                      }
 
                       break;
                     }
@@ -1254,15 +1191,20 @@ namespace csmp {
                       switch (bottomShape) {
                         case FACE_TYPE::SPLIT_02_OR_46:
                         {
-                          auto elementList = generator.splitToTwoPrismsAtEdge02(cell);
-                          generator.plist.emplace(generator.elementID, elementList[0]);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                          ++generator.elementID;
-                          generator.plist.emplace(generator.elementID, elementList[1]);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                          ++generator.elementID;
+                          if (generator.ConstructPrism(cell, 6, 5, 4, 2, 1, 0)) {
+                              generator.EmitPrism(cell);
+                          }
+                          else {
+                              ++badPrisms;
+                          }
+
+                          if (generator.ConstructPrism(cell, 0, 2, 3, 4, 6, 7)) {
+                              generator.EmitPrism(cell);
+                          }
+                          else {
+                              ++badPrisms;
+                          }
+
                           break;
                         }
 
@@ -1270,51 +1212,70 @@ namespace csmp {
                         {
                           size_t centroid = generator.generateCellCentroid(cell);
 
-                          // Left face
-                          generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                            continue;
+                          }
 
                           // Right face
-                          generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                            continue;
+                          }
 
                           // Front face
-                          generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                            continue;
+                          }
 
                           // Back face
-                          generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                            continue;
+                          }
 
                           // Top faces
-                          generator.addTetraTopFace012(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 0, 1, 2, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
-                          generator.addTetraTopFace023(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 0, 2, 3, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
                           // Bottom faces
-                          generator.addTetraBottomFace567(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 7, 6, 5, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
-                          generator.addTetraBottomFace457(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 7, 5, 4, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
                           break;
                         }
@@ -1332,65 +1293,85 @@ namespace csmp {
                           size_t centroid = generator.generateCellCentroid(cell);
 
                           // Left face
-                          generator.addPyramidLeftFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 0, 4, 5, 1, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                          }
 
                           // Right face
-                          generator.addPyramidRightFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 3, 2, 6, 7, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                          }
 
                           // Front face
-                          generator.addPyramidFrontFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 0, 3, 7, 4, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                          }
 
                           // Back face
-                          generator.addPyramidBackFace(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PYRAMID);
-                          ++generator.elementID;
+                          if (generator.ConstructPyramidOnFace(cell, 1, 5, 6, 2, centroid)) {
+                            generator.EmitPyramid(cell);
+                          }
+                          else {
+                            ++badPyramids;
+                          }
 
                           // Top faces
-                          generator.addTetraTopFace123(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 1, 2, 3, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
-                          generator.addTetraTopFace013(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 1, 3, 0, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
                           // Bottom faces
-                          generator.addTetraBottomFace456(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 6, 5, 4, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
-                          generator.addTetraBottomFace467(cell, generator.elementID, generator.plist, centroid);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_TETRAHEDRON);
-                          ++generator.elementID;
+                          if (generator.ConstructTetrahedronOnFace(cell, 6, 4, 7, centroid)) {
+                            generator.EmitTetrahedron(cell);
+                          }
+                          else {
+                            ++badTetrahedra;
+                          }
 
                           break;
                         }
 
                         case FACE_TYPE::SPLIT_13_OR_57:
                         {
-                          auto elementList = generator.splitToTwoPrismsAtEdge13(cell);
-                          generator.plist.emplace(generator.elementID, elementList[0]);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                          ++generator.elementID;
-                          generator.plist.emplace(generator.elementID, elementList[1]);
-                          addElementToMap(i, j, k, generator.elementID);
-                          generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-                          ++generator.elementID;
+                          if (generator.ConstructPrism(cell, 5, 4, 7, 1, 0, 3)) {
+                              generator.EmitPrism(cell);
+                          }
+                          else {
+                              ++badPrisms;
+                          }
+
+                          if (generator.ConstructPrism(cell, 7, 6, 5, 3, 2, 1)) {
+                              generator.EmitPrism(cell);
+                          }
+                          else {
+                              ++badPrisms;
+                          }
                           break;
                         }
 
@@ -1470,10 +1451,12 @@ namespace csmp {
             }
 
             case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12: {          // 0111
-              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge12(cell));
-              addElementToMap(i, j, k, generator.elementID);
-              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-              ++generator.elementID;
+              if (generator.ConstructPrism(cell, 0, 4, 1, 3, 7, 2)) {
+                  generator.EmitPrism(cell);
+              }
+              else {
+                  ++badPrisms;
+              }
               break;
             }
 
@@ -1528,10 +1511,12 @@ namespace csmp {
             }
 
             case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01: {                    // 1100
-              generator.plist.emplace(generator.elementID, generator.degenerateToOnePrismAtEdge01(cell));
-              addElementToMap(i, j, k, generator.elementID);
-              generator.fem_types.push_back(ISOPARAMETRIC_LINEAR_PRISM);
-              ++generator.elementID;
+              if (generator.ConstructPrism(cell, 0, 3, 7, 1, 2, 6)) {
+                  generator.EmitPrism(cell);
+              }
+              else {
+                  ++badPrisms;
+              }
               break;
             }
 
