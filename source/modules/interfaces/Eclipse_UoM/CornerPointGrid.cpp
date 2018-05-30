@@ -750,10 +750,6 @@ namespace csmp {
           assert(generator.elementID == generator.plist.size());
           assert(generator.elementID == generator.fem_types.size());
 
-          if (i == 34 && j == 31 && 99 <= k && k <= 103) {
-              std::cerr << "Broken case\n";
-          }
-
           switch (cellType) {
             case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON: {        // 0000
               bool faceAboveIsQuad = !cellAbove || generator.getShapeOfBottomFace(*cellAbove) == FACE_TYPE::FULL_QUAD;
@@ -1273,7 +1269,6 @@ namespace csmp {
             }
 
             case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {      // 0010
-#if 0
               if (generator.ConstructPyramidOnFace(cell, 4, 5, 1, 0, generator.getNodeID(cell, 2))) {
                 addElementToMap(i, j, k, generator.EmitPyramid(cell));
               }
@@ -1287,7 +1282,6 @@ namespace csmp {
               else {
                 ++badPyramids;
               }
-#endif
 
               break;
             }
@@ -1453,7 +1447,8 @@ namespace csmp {
             }
           }
         }
-        for (auto& p : generator.extraNodes) {
+        for (auto p : generator.extraNodes) {
+          ConvertFromReservoirToCSMPcoordinateSystem(p);
           x.push_back(p[0]);
           y.push_back(p[1]);
           z.push_back(p[2]);
