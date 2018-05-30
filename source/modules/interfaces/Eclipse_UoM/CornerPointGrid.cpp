@@ -1274,7 +1274,6 @@ namespace csmp {
 
             case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203: {      // 0010
 #if 0
-              // XXX BROKEN
               if (generator.ConstructPyramidOnFace(cell, 4, 5, 1, 0, generator.getNodeID(cell, 2))) {
                 addElementToMap(i, j, k, generator.EmitPyramid(cell));
               }

@@ -1,5 +1,5 @@
-#ifndef CSMP_BROOKSCOREYCAPILLARYPRESSUREANDPERMEABILITY_H
-#define CSMP_BROOKSCOREYCAPILLARYPRESSUREANDPERMEABILITY_H
+#ifndef CSMP_BROOKSCOREYCAPILLARYPRESSURE_H
+#define CSMP_BROOKSCOREYCAPILLARYPRESSURE_H
 
 #include "CSMP_definitions.h"
 
@@ -58,7 +58,9 @@ class BrooksCoreyCapillaryPressure {
     
   
   private:
-    
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+
     double64 aw_;
     double64 ao_;
     double64 cw_;
