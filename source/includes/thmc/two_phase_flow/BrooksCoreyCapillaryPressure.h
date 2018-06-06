@@ -58,6 +58,9 @@ class BrooksCoreyCapillaryPressure {
     
   
   private:
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+
     
     double64 aw_;
     double64 ao_;
