@@ -1147,6 +1147,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
            git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
        {
+         BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
+
           // 1.1 writing the entire connectivity structure to the binary file
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
           // 1.2 writing the boundary flags
@@ -1225,11 +1227,11 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
         // reading the regions sequentially
         for ( size_t i=0U; i<records; ++i )
           {
+            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
+
              // 1.1 reading name and face indices for each boundaries
              readDomainIndexesFromBinaryFile( dim, fp, info );
             
-             // if the boundary info record is not empty the boundary is reconstructed
-             if ( !info.interior_elmts.empty() ) {
                   // 1.2 reading BOX boundary flag of the boundary
                   size_t record;
                   fread( (void*) &record, sizeof(size_t), 1, fp );
@@ -1249,7 +1251,6 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                
                   // 1.4 reporting out
                   cout <<"\n\t\t"<< (*it.first).first <<" ("<< parseBoundary(bflag) <<", "<< (*it.first).second.Elements() <<" faces).";
-               }
          }
      else csmp_error.notice( WARNING, "BoundaryInterface::InputAllBoundariesFromBinary:",
                             bin_file, "does not contain any boundary descriptions; no boundaries were initialised." );

@@ -69,7 +69,9 @@ bool skm_C_fread( FILE* fp, char str[] )
     memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
     fread(readhdr, sizeof(char), CSMP_BINARY_FILE_HDR_SIZE, fp);
     fread(&offset_, sizeof(offset_), 1, fp);
-    assert(!memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE));
+    if (memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE)) {
+      throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
+    }
     sectoffset_ = ftell(fp);
   }
 

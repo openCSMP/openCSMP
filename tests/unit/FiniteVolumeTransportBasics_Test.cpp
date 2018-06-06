@@ -56,6 +56,15 @@ FiniteVolumeTransportBasics_Test::~FiniteVolumeTransportBasics_Test()
 void
 FiniteVolumeTransportBasics_Test::run()
 {
+#if 1
+  {
+    ANSYS_Model3D model( "BoxHalfs3D", "BoxHalfs3D",  "CSMP-2phase-variables.txt", true, true, true, true );
+    model.OutputToBinaryFile("TestThisModel");
+    Model<3> m1("TestThisModel");
+  }
+  
+#endif
+
 #if 0
   {
     ANSYS_Model3D model( "HeuristicModel1coarse", "HeuristicModel1coarse",  "CSMP-brine-CO2-phase-variables.txt", true, true, true, true );

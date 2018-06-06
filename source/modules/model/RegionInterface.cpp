@@ -625,10 +625,9 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              // reading name and element indices for each unique region
              readDomainIndexesFromBinaryFile( dim, fp, info );
              // if the region info record is not empty the region is reconstructed
+             std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
+                 it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
              if ( !info.interior_elmts.empty() ) {
-                 std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                   it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
-                 //   ^^^^^^^^^
                  if ( !it.second )
                     throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                                            info.name, "Region could not be formed; issue with binary file." );
