@@ -45,22 +45,20 @@ class BrooksCoreyCapillaryPressure {
   
     // The relative Permeability and first derivatives are evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
     template<class TARGET_PLACEMENT>
-    double64 WaterRelativePermebility( TARGET_PLACEMENT& ) ;
+    double64 krw( TARGET_PLACEMENT& ) ;
     
     template<class TARGET_PLACEMENT>
-    double64 OilRelativePermebility( TARGET_PLACEMENT& ) ;
+    double64 krn( TARGET_PLACEMENT& ) ;
     
     template<class TARGET_PLACEMENT>
-    double64 FirstDerivativeWaterRelativePermebility( TARGET_PLACEMENT& ) ;
+    double64 dkrwds( TARGET_PLACEMENT& ) ;
     
     template<class TARGET_PLACEMENT>
-    double64 FirstDerivativeOilRelativePermebility( TARGET_PLACEMENT& ) ;
+    double64 dkrnds( TARGET_PLACEMENT& ) ;
     
   
   private:
-    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
-    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-
+    
     double64 aw_;
     double64 ao_;
     double64 cw_;
@@ -72,4 +70,4 @@ class BrooksCoreyCapillaryPressure {
 
 }  // end namespace csmp
 
-#endif /* BrooksCoreyCapillaryPressureandPermeability_h */
+#endif /* BrooksCoreyCapillaryPressure_h */
