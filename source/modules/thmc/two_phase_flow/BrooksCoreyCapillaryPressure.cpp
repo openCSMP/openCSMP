@@ -83,7 +83,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 //
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64   BrooksCoreyCapillaryPressure<dim,USER>::WaterRelativePermebility( TARGET_PLACEMENT& p ) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::krw( TARGET_PLACEMENT& p ) {
   
   auto sH2O = p.Interpolate(User()->key_sH2O);
   auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -100,7 +100,7 @@ template<class TARGET_PLACEMENT> double64   BrooksCoreyCapillaryPressure<dim,USE
 }
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::OilRelativePermebility( TARGET_PLACEMENT& p) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::krn( TARGET_PLACEMENT& p) {
   
   auto sH2O = p.Interpolate(User()->key_sH2O);
   auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -119,7 +119,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 // 9) For calculating the 1st derivative of relative permeability
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::FirstDerivativeWaterRelativePermebility( TARGET_PLACEMENT& p ) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::dkrwds( TARGET_PLACEMENT& p ) {
     
     auto sH2O  = p.Interpolate(User()->key_sH2O);
     auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -142,7 +142,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 }
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::FirstDerivativeOilRelativePermebility( TARGET_PLACEMENT& p) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::dkrnds( TARGET_PLACEMENT& p) {
 
     auto sH2O  = p.Interpolate(User()->key_sH2O);
     auto srH2O = p.Interpolate(User()->key_srH2O);
