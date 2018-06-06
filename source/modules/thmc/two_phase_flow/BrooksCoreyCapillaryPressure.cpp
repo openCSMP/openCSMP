@@ -5,28 +5,25 @@
 #include "FlowFunctions.h"
 #include "FiniteElementPlacement.h"
 #include "FiniteVolumePlacement.h"
-#include "CSMP_mathUtilities.h"
 
 using namespace std;
 
 namespace csmp {
 
 // 1) destructor of Brooks Corey Pressure feilds
-template<size_t dim, template<size_t> class USER>
-BrooksCoreyCapillaryPressure<dim,USER>::~BrooksCoreyCapillaryPressure()
+BrooksCoreyCapillaryPressure::~BrooksCoreyCapillaryPressure()
 {
 }
 
 // 3) a  constructor of Brooks Corey Pressure feilds
-template<size_t dim, template<size_t> class USER>
-BrooksCoreyCapillaryPressure<dim,USER>::BrooksCoreyCapillaryPressure(double64 aw, double64 ao,  double64 cw, double64 co) :
+BrooksCoreyCapillaryPressure::BrooksCoreyCapillaryPressure(double64 aw, double64 ao,  double64 cw, double64 co) :
 aw_(aw),ao_(ao),cw_(cw),co_(co)
 {
 }
 
 // 4) Brooks & Corey capillary pressure formula
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::Pc ( TARGET_PLACEMENT& p ) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::Pc ( TARGET_PLACEMENT& p ) {
    
     auto sH2O = p.Interpolate(User()->key_sH2O);
     auto sCO2 = p.Interpolate(User()->key_sCO2);
@@ -48,7 +45,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 //  by assuming the dSCO2 = -dSH2O
 //
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::dPcdS( TARGET_PLACEMENT& p) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::dPcdS( TARGET_PLACEMENT& p) {
    
    auto sH2O = p.Interpolate(User()->key_sH2O);
    auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -62,8 +59,8 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 // 7) Oil residual saturation has been estimated from Land's formula based on the initial oil saturations.
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::OilResidualSaturation( TARGET_PLACEMENT& p) {
-  return 1./(C_land_+1./p.Interpolate(User()->key_sCO2)) ;
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::OilResidualSaturation( TARGET_PLACEMENT& p) {
+  return 1./(C_land_+1./p.Interpolate(User()->key_sCO2) ;
 }
 
 //
@@ -83,7 +80,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 //
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64   BrooksCoreyCapillaryPressure<dim,USER>::WaterRelativePermebility( TARGET_PLACEMENT& p ) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::krw( TARGET_PLACEMENT& p ) {
   
   auto sH2O = p.Interpolate(User()->key_sH2O);
   auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -100,7 +97,7 @@ template<class TARGET_PLACEMENT> double64   BrooksCoreyCapillaryPressure<dim,USE
 }
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::OilRelativePermebility( TARGET_PLACEMENT& p) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::krn( TARGET_PLACEMENT& p) {
   
   auto sH2O = p.Interpolate(User()->key_sH2O);
   auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -119,7 +116,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 // 9) For calculating the 1st derivative of relative permeability
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::FirstDerivativeWaterRelativePermebility( TARGET_PLACEMENT& p ) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::dkrwds( TARGET_PLACEMENT& p ) {
     
     auto sH2O  = p.Interpolate(User()->key_sH2O);
     auto srH2O = p.Interpolate(User()->key_srH2O);
@@ -142,7 +139,7 @@ template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>
 }
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure<dim,USER>::FirstDerivativeOilRelativePermebility( TARGET_PLACEMENT& p) {
+template<class TARGET_PLACEMENT> double64 BrooksCoreyCapillaryPressure::dkrnds( TARGET_PLACEMENT& p) {
 
     auto sH2O  = p.Interpolate(User()->key_sH2O);
     auto srH2O = p.Interpolate(User()->key_srH2O);
