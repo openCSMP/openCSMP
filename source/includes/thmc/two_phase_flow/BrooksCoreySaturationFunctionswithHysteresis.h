@@ -23,7 +23,7 @@ template<size_t dim, template<size_t> class USER>
 class BrooksCoreySaturationFunctionswithHysteresis {
   public:
   
-    virtual BrooksCoreySaturationFunctionswithHysteresis();
+    BrooksCoreySaturationFunctionswithHysteresis();
   
     BrooksCoreySaturationFunctionswithHysteresis( double64 aw,  double64 ao,
                                   double64 cw,  double64 co) ;
@@ -38,7 +38,7 @@ class BrooksCoreySaturationFunctionswithHysteresis {
                                                 // point of saturation axis with capillary pressure function.
   
     template<class TARGET_PLACEMENT>
-    double64 dpds( TARGET_PLACEMENT& );             // The first derivative of Capillary pressure.
+    double64 dpcds( TARGET_PLACEMENT& );             // The first derivative of Capillary pressure.
   
                                                        // Hysteresis Loop Logic
     template<class TARGET_PLACEMENT>
