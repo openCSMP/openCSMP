@@ -994,9 +994,6 @@ size_t  ModelSubDomain<dim,SIMPLEX>::PartitionCellVector()
           {
               // elements of the highest spatial dimension are used to define the boundary
               assert( parseFiniteElementDimension( (*eit)->FE_Type() ) != 0 );
-            if ((*eit)->Idx() == 11066) {
-              std::cerr << "Here we are.\n";
-            }
               if ( parseFiniteElementDimension( (*eit)->FE_Type() ) == elmt_dim.second )
                 {
                    // creating a subset with their nodes
