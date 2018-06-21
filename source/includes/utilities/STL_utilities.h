@@ -25,6 +25,15 @@ inline void printMap( const std::map<T1,T2>& m )
 
  } // end printMap
 
+
+template<typename Container>
+inline void sortAndUnique(Container& container)
+{
+  std::sort(container.begin(), container.end());
+  auto newend = std::unique(container.begin(), container.end());
+  container.erase(newend, container.end());
+}
+
 } // end namespace csmp
 
 

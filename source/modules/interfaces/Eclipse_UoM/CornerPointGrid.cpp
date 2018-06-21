@@ -1,6 +1,7 @@
 #include "CornerPointGrid_UoM.h"
 #include "PropertyData.h"
 #include "CSMP_highLevelUtilities.h"
+#include "STL_utilities.h"
 #include "Pillar_UoM.h"
 
 #include "ErrorHandler.h"
@@ -581,9 +582,7 @@ namespace csmp {
               }
             }
 
-            // Sort and unique
-            std::sort(zcoord.begin(), zcoord.end());
-            zcoord.erase(std::unique(zcoord.begin(), zcoord.end()), zcoord.end());
+            sortAndUnique(zcoord);
             auto& p = (*this)(i, j);
             p.SetZCoords(zcoord);
             p.SetFirstNodeNum(node_count);
