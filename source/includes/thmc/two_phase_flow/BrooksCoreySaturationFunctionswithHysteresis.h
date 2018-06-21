@@ -1,5 +1,6 @@
-#ifndef CSMP_BROOKSCOREYCAPILLARYPRESSURE_H
-#define CSMP_BROOKSCOREYCAPILLARYPRESSURE_H
+#ifndef CSMP_BROOKSCOREYSATURATIONFUNCTIONSWITHHYSTERESIS_H
+#define CSMP_BROOKSCOREYSATURATIONFUNCTIONSWITHHYSTERESIS_H
+
 
 #include "CSMP_definitions.h"
 
@@ -19,12 +20,12 @@ namespace csmp {
 */
 
 template<size_t dim, template<size_t> class USER>
-class BrooksCoreyCapillaryPressure {
+class BrooksCoreySaturationFunctionswithHysteresis {
   public:
   
-    virtual ~BrooksCoreyCapillaryPressure();
+    BrooksCoreySaturationFunctionswithHysteresis();
   
-    BrooksCoreyCapillaryPressure( double64 aw,  double64 ao,
+    BrooksCoreySaturationFunctionswithHysteresis( double64 aw,  double64 ao,
                                   double64 cw,  double64 co) ;
   
     template<class TARGET_PLACEMENT>
@@ -37,7 +38,7 @@ class BrooksCoreyCapillaryPressure {
                                                 // point of saturation axis with capillary pressure function.
   
     template<class TARGET_PLACEMENT>
-    double64 dPcdS( TARGET_PLACEMENT& );             // The first derivative of Capillary pressure.
+    double64 dpcds( TARGET_PLACEMENT& );             // The first derivative of Capillary pressure.
   
                                                        // Hysteresis Loop Logic
     template<class TARGET_PLACEMENT>
@@ -55,7 +56,31 @@ class BrooksCoreyCapillaryPressure {
     
     template<class TARGET_PLACEMENT>
     double64 dkrnds( TARGET_PLACEMENT& ) ;
-    
+  
+    template<class TARGET_PLACEMENT>
+    double64 WaterFractionalFlow( TARGET_PLACEMENT& , double64 S) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 FirstDerivativeWaterFractionalFlow( TARGET_PLACEMENT& , double64 S) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 OilFractionalFlow( TARGET_PLACEMENT& , double64 S) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 InflectionPointSaturation( TARGET_PLACEMENT& ) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 TangentPointSaturation( TARGET_PLACEMENT& ) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 ShockFrontVelocity( TARGET_PLACEMENT& ) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 BuckleyLeverettFunction( TARGET_PLACEMENT& , double64 S) ;
+  
+    template<class TARGET_PLACEMENT>
+    double64 TheSecantMethod( TARGET_PLACEMENT& , double64 S1, double64 S2) ;
+  
   
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
@@ -73,4 +98,4 @@ class BrooksCoreyCapillaryPressure {
 
 }  // end namespace csmp
 
-#endif /* BrooksCoreyCapillaryPressure_h */
+#endif /* BrooksCoreySaturationFunctionswithHysteresis_h */
