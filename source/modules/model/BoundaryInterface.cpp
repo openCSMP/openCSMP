@@ -329,7 +329,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoxShaped() const
     size_t boundaries( 6 );
     if( dim == 2 )
       boundaries = 4;
-    std::set<BOX_BOUNDARY> boundariesFound;
+    std::unordered_set<BOX_BOUNDARY> boundariesFound;
     BOX_BOUNDARY currentBoundary(NOT);
     const Region<dim>& region( boundaryComplex.Region( "Model" ) );
     const typename std::vector<Node<dim>*>::const_iterator nodesEnd( region.NodesEnd() );
