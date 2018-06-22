@@ -38,6 +38,7 @@ struct CompressedRowMatrix {
     CompressedRowMatrix();
     ~CompressedRowMatrix();
     CompressedRowMatrix( const CompressedRowMatrix& );
+	CompressedRowMatrix(std::string& CRMfname);
     CompressedRowMatrix& operator=( const CompressedRowMatrix& );
 
     double64  operator()( uint32, uint32 ) const;
@@ -55,11 +56,17 @@ struct CompressedRowMatrix {
 	void Set_Dirichelet_RHS_CRM(std::vector<double64>& rhs, std::vector<Entry>& dirich);
 	void mapToGlobal(std::vector<double64>& sol, std::vector<Entry>& dirich);
 	void Add(std::vector<size_t>& rows, std::vector<size_t>& cols, DenseMatrix<DM_MIN>& vals, double64 factor);
+	void set_indicator_PBA(int32 nsys, std::vector<int32>& iu);
+	void set_indicator_UBA(int32 nsys, std::vector<int32>& iu);
+	void Set_PBA(int32 nsys, std::vector<double64>& u_, std::vector<double64>& f_, std::vector<double64>& x, std::vector<double64>& b);
+	void AddToCRM(Entry& entry);
 	std::vector<std::vector<Entry>> JV;
+	std::map<size_t, double64>  Dirich_;
 	std::vector<int32>    mapDirich;
     std::vector<int32>     ia, ///< ia(ilo) and the last row ends at position ia(ihi+1)-1 (see next).
                            ja; ///< ja - pointer array pointing to the column indices. that is, for each matrix element a(j) with ia(ilo)<=j<=ia(ihi+1)-1, ja(j) contains the column index of that element. since, within each row, the diagonal element is stored first (see above), we always have ja(ia(i))=i.
-    std::vector<double64>  a;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
+    std::vector<double64>  a, trh_, tx_;  ///< array containing the rows of the matrix, one after the other, each row starting with its diagonal element. the first row starts at position
+	int32 nnzi, dof_;
 };
 
 /// to print the vector of diagonal elements in the matrix
