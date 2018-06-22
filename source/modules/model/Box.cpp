@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Exception.h"
 
+#include "SmallSet.h"
+
 using namespace std;
 
 namespace csmp {
@@ -690,7 +692,7 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
     Region<2U>&  model_domain(model.Region("Model"));
     for ( auto it=model_domain.PerimeterElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          // the bflags of each element are stored in a set
-         set<BOX_BOUNDARY>  eflags;
+         SmallSet<BOX_BOUNDARY>  eflags;
          for ( size_t i=0U; i<(*it)->Nodes(); ++i )              // NB: negative numbers !
            if ( (*it)->N(i)->AtBoundary() != NOT and (*it)->N(i)->AtBoundary() >= INTERNAL )
             eflags.insert( (*it)->N(i)->AtBoundary() );
@@ -703,13 +705,13 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
          else if ( eflags.size() == 2U )
            {
               // if one of the 2 flags is IRREGULAR, it is removed
-              if ( eflags.find(IRREGULAR) != eflags.end() ) {
+              if ( eflags.count(IRREGULAR) ) {
                   eflags.erase(IRREGULAR);
                   (*it)->AtBoundary( (*eflags.begin()) );
                 }
               else {
                   // possibilities relating to edge elements
-                  set<BOX_BOUNDARY>::iterator sit(eflags.begin());
+                  auto sit(eflags.begin());
                   const BOX_BOUNDARY flag1 = (*sit); sit++;
                   const BOX_BOUNDARY flag2 = (*sit);
                 
@@ -752,8 +754,8 @@ void recreateBoxBoundaryFlags( Model<2U>& model )
                // WARNING
                else {
                     cerr <<"\n\n\nrecreateBoxBoundaryFlags(2D): unable to determine box boundary flag for element:\n";
-                    for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
-                      cout << parseBoundary( (*sit) ) <<" ";
+                    for ( auto b : eflags )
+                      cout << parseBoundary( b ) <<" ";
                     cout << endl;
                     (*it)->Out();
                  }
@@ -798,16 +800,27 @@ void recreateBoxBoundaryFlags( Model<3>& model )
     // if all (6) sides exist, the (8) edges can potentially be found by intersecting respective boundaries
     Boundary<3>&  back(model.Boundary("BACK"));
     vector<Node<3>*>  back_pnodes( back.PerimeterNodesBegin(), back.NodesEnd() ); // these are already sorted ranges
+    assert( std::is_sorted(back_pnodes.begin(), back_pnodes.end()) );
+
     Boundary<3>&  front(model.Boundary("FRONT"));
     vector<Node<3>*>  front_pnodes( front.PerimeterNodesBegin(), front.NodesEnd() );
+    assert( std::is_sorted(front_pnodes.begin(), front_pnodes.end()) );
+
     Boundary<3>&  left(model.Boundary("LEFT"));
     vector<Node<3>*>  left_pnodes( left.PerimeterNodesBegin(), left.NodesEnd() );
+    assert( std::is_sorted(left_pnodes.begin(), left_pnodes.end()) );
+
     Boundary<3>&  right(model.Boundary("RIGHT"));
     vector<Node<3>*>  right_pnodes( right.PerimeterNodesBegin(), right.NodesEnd() );
+    assert( std::is_sorted(right_pnodes.begin(), right_pnodes.end()) );
+
     Boundary<3>&  top(model.Boundary("TOP"));
     vector<Node<3>*>  top_pnodes( top.PerimeterNodesBegin(), top.NodesEnd() );
+    assert( std::is_sorted(top_pnodes.begin(), top_pnodes.end()) );
+
     Boundary<3>&  bottom(model.Boundary("BOTTOM"));
     vector<Node<3>*>  bottom_pnodes( bottom.PerimeterNodesBegin(), bottom.NodesEnd() );
+    assert( std::is_sorted(bottom_pnodes.begin(), bottom_pnodes.end()) );
    
     // BACK_BOTTOM  = -16, ///< model edges: BACK and BOTTOM
     vector<Node<3>*> back_bottom;
@@ -1121,28 +1134,28 @@ void recreateBoxBoundaryFlags( Model<3>& model )
     // Flagging the elements on the perimeter of model (assuming that the interior ones are already flagged correctly as NOT)
     // Elements are flagged according to the flagging of the nodes on their boundary faces
     Region<3>&  model_domain(model.Region("Model"));
-    for ( auto it=model_domain.PerimeterElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-         // the bflags of each element are stored in a set
-         set<BOX_BOUNDARY>  eflags;
+    for ( auto it=model_domain.PerimeterElementsBegin(); it!=model_domain.PerimeterElementsEnd(); ++it ) {
+         // the bflags of each node are stored in a set
+         SmallSet<BOX_BOUNDARY>  nflags;
          for ( size_t i=0U; i<(*it)->Nodes(); ++i )              // NB: negative numbers !
            if ( (*it)->N(i)->AtBoundary() != NOT and (*it)->N(i)->AtBoundary() >= INTERNAL )
-            eflags.insert( (*it)->N(i)->AtBoundary() );
+            nflags.insert( (*it)->N(i)->AtBoundary() );
       
          // if only a non-descript identifier could be found the boundary is set to irregular
-         if ( eflags.empty() ) (*it)->AtBoundary( IRREGULAR );
+         if ( nflags.empty() ) (*it)->AtBoundary( IRREGULAR );
          // if only a single flag is contained the decision is easy
-         else if ( eflags.size() == 1U ) (*it)->AtBoundary( (*eflags.begin()) );
+         else if ( nflags.size() == 1U ) (*it)->AtBoundary( (*nflags.begin()) );
          // if there are 2 flags and one of them is IRREGULAR, it is removed
-         else if ( eflags.size() == 2U )
+         else if ( nflags.size() == 2U )
            {
               // if one of the 2 flags is IRREGULAR, it is removed
-              if ( eflags.find(IRREGULAR) != eflags.end() ) {
-                  eflags.erase(IRREGULAR);
-                  (*it)->AtBoundary( (*eflags.begin()) );
+              if ( nflags.find(IRREGULAR) != nflags.end() ) {
+                  nflags.erase(IRREGULAR);
+                  (*it)->AtBoundary( (*nflags.begin()) );
                }
               else {
                   // 12 possibilities relating to edge elements
-                  set<BOX_BOUNDARY>::iterator sit(eflags.begin());
+                  auto sit = nflags.begin();
                   const BOX_BOUNDARY flag1 = (*sit); sit++;
                   const BOX_BOUNDARY flag2 = (*sit);
                   // BACK_BOTTOM
@@ -1180,17 +1193,20 @@ void recreateBoxBoundaryFlags( Model<3>& model )
                     }
                 }
            }
-         else if ( eflags.size() > 2U ) {
+         else if ( nflags.size() > 2U ) {
               // erase the basic boundary options
-              eflags.erase(LEFT);
-              eflags.erase(RIGHT);
-              eflags.erase(TOP);
-              eflags.erase(BOTTOM);
-              eflags.erase(FRONT);
-              eflags.erase(BACK);
-              assert( !eflags.empty() );
-              const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
-              const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
+              nflags.erase(LEFT);
+              nflags.erase(RIGHT);
+              nflags.erase(TOP);
+              nflags.erase(BOTTOM);
+              nflags.erase(FRONT);
+              nflags.erase(BACK);
+           if (nflags.empty()) {
+              (*it)->AtBoundary( NOT );
+           }
+           else {
+              const BOX_BOUNDARY flag_min = (*min_element( nflags.begin(), nflags.end() ));
+              const BOX_BOUNDARY flag_max = (*max_element( nflags.begin(), nflags.end() ));
 
               // if a corner is contained that corner flag is choosen
               if      ( flag_max <= CNR1 and flag_max >= CNR8 ) (*it)->AtBoundary( flag_max );
@@ -1199,20 +1215,21 @@ void recreateBoxBoundaryFlags( Model<3>& model )
               else if ( flag_max <= EDGE1 and flag_max > INTERNAL ) (*it)->AtBoundary( flag_max );
               else if ( flag_min <= EDGE1 and flag_min > INTERNAL ) (*it)->AtBoundary( flag_min );
               // if a corner is contained that corner flag is choosen
-              else if ( (*eflags.begin()) <= CNR1 and
-                        (*eflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*eflags.begin()) );
+              else if ( (*nflags.begin()) <= CNR1 and
+                        (*nflags.begin()) >= CNR8 ) (*it)->AtBoundary( (*nflags.begin()) );
               // if the first integer entry in the set is an edge, that flag is chosen
-              else if ( (*eflags.begin()) >= EDGE1 and
-                        (*eflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*eflags.begin()) );
-              else if ( (*eflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
+              else if ( (*nflags.begin()) >= EDGE1 and
+                        (*nflags.begin()) <  INTERNAL ) (*it)->AtBoundary( (*nflags.begin()) );
+              else if ( (*nflags.begin()) == IRREGULAR ) (*it)->AtBoundary( IRREGULAR );
               else {
                    cerr <<"\n\n\nrecreateAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-                   for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
-                     cout << parseBoundary( (*sit) ) <<" ";
+                   for ( auto b : nflags )
+                     cout << parseBoundary( b ) <<" ";
                    cout << endl;
                    (*it)->Out();
                 }
            }
+         }
       }
   
  } // end recreateAtBoundaryFlags
@@ -1236,8 +1253,8 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp:
     assert( it != last_elmt );
     while ( it != last_elmt ) {
          // the bflags of each element are stored in a set
-         set<BOX_BOUNDARY>  eflags;
-         for ( size_t i=0U; i<(*it).Nodes(); ++i )              // NB: negative numbers !
+         SmallSet<BOX_BOUNDARY>  eflags;
+         for ( size_t i=0U; i<it->Nodes(); ++i )              // NB: negative numbers !
            if ( (*it).N(i)->AtBoundary() != NOT and (*it).N(i)->AtBoundary() >= INTERNAL )
             eflags.insert( (*it).N(i)->AtBoundary() );
       
@@ -1249,13 +1266,13 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp:
          else if ( eflags.size() == 2U )
            {
               // if one of the 2 flags is IRREGULAR, it is removed
-              if ( eflags.find(IRREGULAR) != eflags.end() ) {
+              if ( eflags.count(IRREGULAR) ) {
                   eflags.erase(IRREGULAR);
                   (*it).AtBoundary( (*eflags.begin()) );
                }
               else {
                   // 12 possibilities relating to edge elements
-                  set<BOX_BOUNDARY>::iterator sit(eflags.begin());
+                  auto sit = eflags.begin();
                   const BOX_BOUNDARY flag1 = (*sit); sit++;
                   const BOX_BOUNDARY flag2 = (*sit);
                   // BACK_BOTTOM
@@ -1294,13 +1311,14 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp:
                 }
            }
          else if ( eflags.size() > 2U ) {
-              // erase the basic boundary options
-              eflags.erase(LEFT);
-              eflags.erase(RIGHT);
-              eflags.erase(TOP);
-              eflags.erase(BOTTOM);
-              eflags.erase(FRONT);
-              eflags.erase(BACK);
+           // erase the basic boundary options
+           eflags.erase(LEFT);
+           eflags.erase(RIGHT);
+           eflags.erase(TOP);
+           eflags.erase(BOTTOM);
+           eflags.erase(BACK);
+           eflags.erase(FRONT);
+
               if ( !eflags.empty() ) {
                   const BOX_BOUNDARY flag_min = (*min_element( eflags.begin(), eflags.end() ));
                   const BOX_BOUNDARY flag_max = (*max_element( eflags.begin(), eflags.end() ));
@@ -1320,8 +1338,8 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename PrimitiveContainer<csmp:
                   else if ( (*eflags.begin()) == IRREGULAR ) (*it).AtBoundary( IRREGULAR );
                   else {
                        cerr <<"\n\n\nflagElementUsingNodalAtBoundaryFlags: unable to determine box boundary flag for element:\n";
-                       for ( set<BOX_BOUNDARY>::const_iterator sit=eflags.begin(); sit!=eflags.end(); ++sit )
-                         cout << parseBoundary( (*sit) ) <<" ";
+                       for ( auto boundary : eflags )
+                         cout << parseBoundary( boundary ) <<" ";
                        cout << endl;
                        (*it).Out();
                     }
@@ -1349,7 +1367,7 @@ template void flagElementUsingNodal_BOX_BOUNDARY_Flags<3U>( typename PrimitiveCo
 */
 bool isStrictlyBoxShaped( const Model<2U>& model )
  {
-    set<BOX_BOUNDARY> flags2d, flags_of_model;
+    SmallSet<BOX_BOUNDARY> flags2d, flags_of_model;
     flags2d.insert(LEFT);
     flags2d.insert(RIGHT);
     flags2d.insert(TOP);
@@ -1385,7 +1403,7 @@ bool isStrictlyBoxShaped( const Model<2U>& model )
 */
 bool isStrictlyBoxShaped( const Model<3U>& model )
  {
-    set<BOX_BOUNDARY> flags3d, flags_of_model;
+    SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
     flags3d.insert(LEFT);
     flags3d.insert(RIGHT);
     flags3d.insert(TOP);
@@ -1440,7 +1458,7 @@ bool isStrictlyBoxShaped( const Model<3U>& model )
 */
 bool hasAllSideBoundaries( const Model<3U>& model )
  {
-    set<BOX_BOUNDARY> flags3d, flags_of_model;
+    SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
     flags3d.insert(LEFT);
     flags3d.insert(RIGHT);
     flags3d.insert(TOP);
@@ -1470,7 +1488,7 @@ bool hasAllSideBoundaries( const Model<3U>& model )
 /// 2D side boudaries only
 bool hasAllSideBoundaries( const Model<2U>& model )
  {
-    set<BOX_BOUNDARY> flags3d, flags_of_model;
+    SmallSet<BOX_BOUNDARY> flags3d, flags_of_model;
     flags3d.insert(LEFT);
     flags3d.insert(RIGHT);
     flags3d.insert(TOP);

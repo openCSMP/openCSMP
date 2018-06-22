@@ -15,86 +15,67 @@ namespace csmp {
 
 	void CompressedRowMatrix::Resize(size_t rows) {
 		JV.clear();
+		ia.clear();
+		ja.clear();
+		 a.clear();
+		 Dirich_.clear();
+		 mapDirich.clear();
 		JV.resize(rows);
+		nnzi = 0;
 		for (size_t i = 0; i < rows; ++i)
 		{
-			JV[i].reserve(50);
+			JV[i].reserve(100);
 			// For CRM we always need diagonal in the begining!
 			JV[i].push_back(Entry(i, 0.0));
 		}
-
 	}
 
+	void CompressedRowMatrix::AddToCRM(Entry& JVelem) {
+		ja.push_back(mapDirich[JVelem.ind] + 1); // Plus one is for SAMG (index starts from 1 not 0)
+		a.push_back(JVelem.val);
+		++nnzi;
+	}
 	/*
-	JV is a matrix! each row contaions a vector of Entry that contaions col index (ind)
-	and val(row,col). For compressed row storage we need diagonal element in the begining
-	and we did it in Resize()!
+	JVmap is a matrix! each row contaions a map that makes pair of col index (ind)
+	and val(row,col). For compressed row storage we do a need diagonal element in the begining
 	Already RHS and LHS are multipled by scale_factore_.
 	*/
 	void CompressedRowMatrix::Set_Dirichelet_RHS_CRM(vector<double64>& rhs, vector<Entry>& dirich)
 	{
-		size_t ii(0), kk(0), Entries(0), Rows(JV.size()), dirichSize(dirich.size());
+		size_t ii(0), kk(0), Entries(0), Rows(JV.size());
 
-		// Sort index of Dirichelet nodes
-		vector<size_t> indSort(dirichSize);
-		for (ii = 0; ii < dirichSize; ++ii)  indSort[ii] = ii;
-		sort(indSort.begin(), indSort.end(), [&](size_t i1, size_t i2) {return (dirich[i1].ind < dirich[i2].ind); });
-		vector<Entry> sortedDirich(dirichSize);
-		for (ii = 0; ii < dirichSize; ++ii) sortedDirich[ii] = dirich[indSort[ii]];
-		dirich = sortedDirich;
-		sortedDirich.clear(); indSort.clear();
-
-		// Global and Local Indices!
 		mapDirich.resize(Rows, 1);
-		for (auto x : dirich) mapDirich[x.ind] = -1;
-		kk = 0;
-		for (ii = 0; ii < Rows; ++ii)
-		{
-			if (mapDirich[ii] == 1)
-				mapDirich[ii] = kk++;
+		for (auto x : dirich) {
+			mapDirich[x.ind] = -1; 
+			Dirich_.insert(make_pair(x.ind, x.val));
 		}
 
-		for (ii = 0; ii < Rows; ++ii) Entries += JV[ii].size();
+		kk = 0;
+		for (ii = 0; ii < Rows; ++ii) {
+			if (mapDirich[ii] == 1)	mapDirich[ii] = kk++;
+			Entries += JV[ii].size();
+		}
+
 		ia.reserve(Rows + 1);
 		ja.reserve(Entries);
-		a.reserve(Entries);
+		 a.reserve(Entries);
 		ia.push_back(1);
-		int32 nnzi(1);
+		nnzi = 1;
+
 		vector<double64> rh(Rows);
-
-		for (ii = 0; ii < Rows; ++ii)
-		{
-			if (mapDirich[ii] == -1) continue; // This row must be removed
-			vector<Entry>& JVi(JV[ii]);
-			double64 sumi(0);
-
-			for (auto x : JVi)
-			{
-				// Global Matrix: To modify RHS: 
-				// Multipy current row by dirich at dirich indices (already sorted)
-				if (x.ind >= dirich[0].ind && x.ind <= dirich[dirichSize - 1].ind)
-					for (auto y : dirich) {
-						  if (x.ind < y.ind) {
-                  break;
-                }
-						  else if (x.ind == y.ind) { sumi += (x.val*y.val); break; }
-           }
-
-				// If it's in Local Matrix:
-				if (mapDirich[x.ind] != -1) {
-					ja.push_back(mapDirich[x.ind] + 1); // Plus one is for SAMG (index starts from 1 not 0)
-					a.push_back(x.val);
-					++nnzi;
-				}
-			}
-			rh[mapDirich[ii]] = rhs[ii] - sumi;
+		map<size_t, double64>::iterator itD;
+		for (ii = 0; ii < Rows; ++ii) {
+			if (mapDirich[ii] == -1) continue; // Dirchlet row
+			double64 sumi(0.);
+			vector<Entry>& JVrow(JV[ii]);
+			for (auto itJV : JVrow)
+  			  if (mapDirich[itJV.ind] != -1) AddToCRM(itJV);  // If it's in Local Matrix:
+			  else if (( itD = Dirich_.find(itJV.ind)) != Dirich_.end()) sumi += itD->second * itJV.val;
 			ia.push_back(nnzi);
+			rh[mapDirich[ii]] = rhs[ii] - sumi;
 		}
-		// Now Rows == number of interior nodes 
-		Rows = ia.size() - 1;
-		rhs.resize(Rows);
-		for (ii = 0; ii < Rows; ++ii) rhs[ii] = rh[ii];
-		JV.clear();
+
+		rhs.swap(rh);
 	}
 
 	void CompressedRowMatrix::mapToGlobal(vector<double64>& sol, vector<Entry>& dirich)
@@ -106,37 +87,61 @@ namespace csmp {
 				xg[ii] = dirich[idirich++].val;
 			else
 				xg[ii] = sol[isol++];
-		sol.resize(Rows);
-		sol = xg;
-
+		sol.swap(xg);
 	}
 
 	void CompressedRowMatrix::Add(std::vector<size_t>& rows, std::vector<size_t>& cols, DenseMatrix<DM_MIN>& vals, double64 factor)
 	{
+		double64 Zero_(0.),valij;
 		bool isNew(false);
 		size_t colj(0), sizeJVi;
 		for (size_t i = 0; i < vals.Rows(); ++i) {
 			vector<Entry>& JVi(JV[rows[i]]); // Just for renaming
 			sizeJVi = JVi.size();
 			for (size_t j = 0; j < vals.Cols(); ++j) {
-				isNew = true;
-				colj = cols[j];
-				for (size_t ii = 0; ii < sizeJVi; ++ii)
-					if (JVi[ii].ind == colj) {
-						JVi[ii].val += vals(i, j)*factor;
-						isNew = false;
-						break;
-					}
-				if (isNew)
-					JVi.push_back(Entry(colj, vals(i, j)*factor));
+				if ((valij = vals(i, j)*factor) != Zero_) {
+					isNew = true;
+					colj = cols[j];
+					for (size_t ii = 0; ii < sizeJVi; ++ii)
+						if (JVi[ii].ind == colj) {
+							JVi[ii].val += valij;
+							isNew = false;
+							break;
+						}
+					if (isNew) JVi.push_back(Entry(colj, valij));
+				}
 			}
 		}
 	}
 
+	void CompressedRowMatrix::set_indicator_UBA(int32 nsys, vector<int32>& iu)
+	{
+		uint32 k(0),g(0),rows(mapDirich.size());
+		for (int32 j = 0; j<nsys; j++)
+			for (int32 i = 0; i<(rows / nsys); i++)
+				 if(mapDirich[g++] != -1) iu[k++] = j + 1;
+	}
 
-	
-	
-	
+	void CompressedRowMatrix::Set_PBA(int32 nsys, std::vector<double64>& u_, std::vector<double64>& f_, std::vector<double64>& x, std::vector<double64>& b) 
+	{
+		uint32 k(0), rows(mapDirich.size());
+		for (int32 i = 0U; i < rows; i++) 
+			if(mapDirich[i] != -1){
+				u_[k] = x[i%nsys*(rows / nsys) + i / nsys]; // initial guess for the solution vector
+				f_[k] = b[i%nsys*(rows / nsys) + i / nsys]; // right-hand side
+				k++;
+			}
+	}
+
+	void CompressedRowMatrix::set_indicator_PBA(int32 nsys, vector<int32>& iu)
+	{
+		uint32 k(0), g(0), rows(mapDirich.size());
+		for (int32 i = 0; i<(rows / nsys); i++)
+			for (int32 j = 0; j<nsys; j++)
+				if (mapDirich[g++] != -1) iu[k++] = j + 1;
+	}
+
+
 	void print(  vector<pair<pair<uint32,uint32>,vector<bool> > >&  v )
  {
        cout <<"\nvector of off-diagonal elements:\n";
@@ -157,6 +162,7 @@ namespace csmp {
 
 	CompressedRowMatrix::CompressedRowMatrix()
  {
+
  }
 
 
@@ -175,6 +181,28 @@ namespace csmp {
  {
       *this = crm;
  }
+
+	CompressedRowMatrix::CompressedRowMatrix(std::string & CRMfname)
+	{
+		ifstream ifs(CRMfname);
+		assert(ifs.is_open());
+		int32 ias, jas;
+		ifs >> dof_ >> ias >> jas;
+		ia.resize(ias);
+		ja.resize(jas);
+		a.resize(jas);
+		mapDirich.resize(ias-1);
+		trh_.resize(ias-1);
+		tx_.resize(ias - 1);
+
+		cout << "To construct a CRM object: Reading from " << CRMfname << endl;
+		for (size_t i = 0; i < ias; ++i) ifs >> ia[i];
+		for (size_t i = 0; i < jas; ++i) ifs >> ja[i];
+		for (size_t i = 0; i < jas; ++i) ifs >> a[i];
+		for (size_t i = 0; i < ias - 1; ++i) ifs >> trh_[i];
+		for (size_t i = 0; i < ias - 1; ++i) ifs >> mapDirich[i];
+		cout << "Reading from " << CRMfname << " finished completely." << endl;
+	}
 
 
 	CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix& crm )
@@ -301,7 +329,8 @@ Reports if the solution matrix contains zero diagonal entries.
                cout << endl;
                cout.unsetf( ios::scientific );
                cout.precision(prec);
-                throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
+               A.Out();
+               throw underflow_error("CompressedRowMatrix::Initialize: Error: Zero value(s) in matrix diagonal.");
             }
         
           // setting matrix such that diagonal element is at the beginning of next row 

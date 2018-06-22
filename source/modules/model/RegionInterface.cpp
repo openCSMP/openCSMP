@@ -2596,19 +2596,16 @@ bool RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion( const char* region, 
     csmp::Region<dim>&        r1_ref(Region(region));
     const csmp::Region<dim>&  r2_ref(Region(region_to_subtract));
    
-    std::vector<csmp::Element<dim>*>  region1(r1_ref.ElementsBegin(),r1_ref.ElementsEnd()),
-                                      region2(r2_ref.ElementsBegin(),r2_ref.ElementsEnd()),  overlap;
+   // region1 = region1 - region2
+   std::vector<csmp::Element<dim>*>  region1;
+   region1.reserve(r1_ref.Elements());
+    std::unordered_set<csmp::Element<dim>*> region2(r2_ref.ElementsBegin(),r2_ref.ElementsEnd());
    
-    std::sort( region1.begin(), region1.end() );
-    std::sort( region2.begin(), region2.end() );
-    // intersection
-    std::set_intersection( region1.begin(), region1.end(),
-                           region2.begin(), region2.end(), std::inserter( overlap, overlap.begin() ) );
-    // region1 -= region2
-    // TODO: is there a more efficient way to remove these elements?
-   // TODO: Yes there is. In-place merge. (AJB)
-    for ( auto it=overlap.begin(); it!=overlap.end(); ++it )
-      region1.erase( remove( region1.begin(), region1.end(), (*it) ), region1.end() );
+   for (auto it = r1_ref.ElementsBegin(); it != r1_ref.ElementsEnd(); ++it) {
+     if (!region2.count(*it)) {
+       region1.push_back(*it);
+     }
+   }
 
     /* does not work, why?
     const auto obeg( overlap.begin() );
