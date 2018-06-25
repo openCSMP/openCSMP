@@ -1,7 +1,7 @@
 #include "Operand.h"
 #include "PropertyDatabase.h"
 #include "CSMP_highLevelUtilities.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 using namespace std;
 

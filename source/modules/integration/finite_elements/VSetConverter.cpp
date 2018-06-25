@@ -5,7 +5,7 @@
 #include "MJL_Triangle3D.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "Box.h"
 
 using namespace std; 

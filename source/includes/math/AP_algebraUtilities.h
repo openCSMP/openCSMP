@@ -180,7 +180,7 @@ namespace csmp {
   
   
   /**
-   
+                  
    Calculates the center of equal masses at the vertices of a planar, closed,
    convex surface defined by three points.
    

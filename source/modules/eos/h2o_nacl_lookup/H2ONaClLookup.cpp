@@ -3,7 +3,7 @@
 #include <string>
 
 #include "H2ONaClLookup.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "binaryReadWrite.h"
 #include "LookupPropertyIndex.h"
 #include "ConvertConcentrationUnitsNaCl.h"

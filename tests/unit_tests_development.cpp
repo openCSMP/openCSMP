@@ -103,10 +103,24 @@ TEST_CASE("Development tests", "[Dev]") {
     // ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
-    FiniteVolumeTransportBasics_Test test;
+    // FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
-    test.run();
+  bool verbose = true;
+  FiniteElement_Test test1( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose );
+  test1.run();
+  // 3D case 3 integration points
+  FiniteElement_Test test2( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt", verbose );
+  test2.run();
+
+  // 2D case 3 integration points
+  FiniteElement_Test test3( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt", verbose );
+  test3.run();
+  // 2D case 4 integration points
+  FiniteElement_Test test4( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt", verbose );
+  test4.run();
+  // 3D case 3 integration point
+//    test.run();
 
  //   ANSYS_Model2D_Test test;
  //   test.run();

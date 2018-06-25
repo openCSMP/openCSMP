@@ -3,7 +3,7 @@
 #include "ConvertConcentrationUnitsNaCl.h"
 #include "CriticalCurveLookup.h"
 #include "CriticalCurve.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "binaryReadWrite.h"
 #include "Brine.h"
 #include "LookupPropertyIndex.h"
