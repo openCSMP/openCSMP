@@ -3,7 +3,7 @@
 
 #include "NaClH2OPropertiesVisitorPHX.h"
 #include "ConvertConcentrationUnitsNaCl.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 
 using namespace std;

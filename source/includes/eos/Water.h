@@ -250,7 +250,7 @@ namespace csmp
 
      @section issues Known Issues
      - In the internal computations, pressure still in bars, a legacy from the SoWat development. This should, however, not affect API users or anybody not modifying the source code.
-     @todo Implement float comparisons etc. from CompareFloats.h
+     @todo Implement float comparisons etc. from compareFloats.h
   */
 }//csmp
 #endif

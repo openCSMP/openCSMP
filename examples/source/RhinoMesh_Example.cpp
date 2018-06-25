@@ -24,7 +24,7 @@
 #include "PropertyData.h"
 #include "VTK_Interface.h"
 #include "RhinoSurfaceReader.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include "GenericNodePropertyGradientLimiter.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 using namespace std;
 

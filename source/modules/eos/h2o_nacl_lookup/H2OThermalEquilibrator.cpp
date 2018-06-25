@@ -1,5 +1,5 @@
 #include "H2OThermalEquilibrator.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include <limits>
 
 namespace csmp{
