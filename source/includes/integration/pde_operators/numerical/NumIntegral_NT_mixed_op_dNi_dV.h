@@ -11,7 +11,7 @@ namespace csmp {
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<size_t dim,class SIMPLEX>
+template<size_t dim,class CELL>
 class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_mixed_op_dNi_dV( const PropertyDatabase<dim>& p, 
@@ -20,8 +20,8 @@ class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
                               const char* mtrl,                  // e.g., permeability
                               const char* test );                // e.g., fluid pressure
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
     
     void SpatialDerivative( size_t xyz=2 );
     

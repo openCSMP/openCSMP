@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' dop x op multiplier
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -28,8 +28,8 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                                            const char* basic,           // e.g., temperature
                                            const char* test );          // e.g., temperature
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
     
     void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 

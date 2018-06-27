@@ -7,8 +7,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_BT_op_dV<dim,SIMPLEX>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_BT_op_dV<dim,CELL>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
                                                          const char*  oper, // pore pressure
                                                          const char*  test )
   : MathOperatorRHS<dim>(pref,oper,test), 
@@ -57,8 +57,8 @@ member Vec {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

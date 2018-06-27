@@ -14,8 +14,8 @@ namespace csmp {
 The operand defines the fluid density, and the mtrl variable would for
 instance be the hydraulic conductivity.  
 */
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                           const char* oper, 
                                                                           const char* mtrl1, 
                                                                           const char* mtrl2, 
@@ -53,7 +53,7 @@ NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op1_op2_dNi_dV( const
 
 
 // true is the default
-//template<size_t dim,class SIMPLEX>
+//template<size_t dim,class CELL>
 //void NumIntegral_NT_op1_op2_dNi_dV<dim>::MultiplyMaterialPropertyWithTime( int mtrl_prop )
 //  {
 //     multiply_mtrl1_with_time_increment = (mtrl_prop==1) ? true : false;
@@ -67,8 +67,8 @@ Reads the Operand from either the element or the nodes. Reads the material
 property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -107,8 +107,8 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
@@ -156,8 +156,8 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
 
 // now everything is assembled (using the  hydraulic diffusivity kappa = k / (S mu)
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,SIMPLEX>::MultiplyWithTimeFactor( double64 dt )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double64 dt )
  {
     for ( typename vector<double64>::iterator 
           it=MathOperatorRHS<dim>::RHS.begin(); it!=MathOperatorRHS<dim>::RHS.end(); it++ ) {

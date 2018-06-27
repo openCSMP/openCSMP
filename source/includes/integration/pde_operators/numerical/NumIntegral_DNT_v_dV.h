@@ -11,7 +11,7 @@ namespace csmp {
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_DNT_v_dV( const PropertyDatabase<dim>& p, 
@@ -20,9 +20,9 @@ class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
                           const char* dens,                  // e.g., fluid density
                           const char* test );                // e.g., streaming potential
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
   
   private:
     std::vector<double64>         IPOL;

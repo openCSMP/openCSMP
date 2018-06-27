@@ -16,7 +16,7 @@ enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
  
     @remarks refactored by SKM 19/1/2015
 */
-template<size_t dim, class SIMPLEX=Element<dim> >
+template<size_t dim, class CELL=Element<dim> >
 class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>&,
@@ -27,10 +27,10 @@ class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
     virtual ~NumIntegral_NT_dNi_dV();
   
     /// does nothing since there are no operands to read
-    virtual void GetOperands( SIMPLEX& ) {}
+    virtual void GetOperands( CELL& ) {}
   
     /// calculates the required finite element integral
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( CELL& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );
@@ -38,7 +38,7 @@ class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
     /// to transpose the element matrix that will get accumulated; default is false
     void Transposed();
   
-    virtual NumIntegral_NT_dNi_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_dNi_dV<dim,SIMPLEX> (*this); }
+    virtual NumIntegral_NT_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_dNi_dV<dim,CELL> (*this); }
   
   private:
     NumIntegral_NT_dNi_dV();

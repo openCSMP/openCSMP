@@ -14,8 +14,8 @@ The Operand which is used here can be both, an element or a nodal variable
 which is then interpolated to the integration points to obtain the 
 integral properties.  
  */
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             const char*           oper, 
                                                             const char*           nodal_oper_multiplier,
                                                             const char*           basic, 
@@ -55,8 +55,8 @@ NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN_dV( con
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -108,8 +108,8 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     double64 detJ;
 

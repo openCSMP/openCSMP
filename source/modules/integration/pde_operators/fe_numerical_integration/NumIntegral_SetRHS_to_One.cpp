@@ -8,12 +8,12 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_SetRHS_to_One<dim,SIMPLEX>::~NumIntegral_SetRHS_to_One() {}
+template<size_t dim,class CELL>
+NumIntegral_SetRHS_to_One<dim,CELL>::~NumIntegral_SetRHS_to_One() {}
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_SetRHS_to_One<dim,SIMPLEX>::NumIntegral_SetRHS_to_One( const PropertyDatabase<dim>& pref, const char* test )
+template<size_t dim,class CELL>
+NumIntegral_SetRHS_to_One<dim,CELL>::NumIntegral_SetRHS_to_One( const PropertyDatabase<dim>& pref, const char* test )
   : MathOperatorRHS<dim>(pref,test)
  {
     MathOperatorRHS<dim>::Name("NumIntegral_SetRHS_to_One", test );
@@ -38,8 +38,8 @@ The result is returned into the MathOperatorRHS vector<fT> 'rhs'.
 @attention this 'rhs' contribution is not equivalent to an integral over an operand with a value of 1.
 
 tested: O.K.  */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_SetRHS_to_One<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( CELL& e )
 {
    // this integral is only for numerically integrated isoparametric finite elements
    assert( e.FE()->Isoparametric() == true );

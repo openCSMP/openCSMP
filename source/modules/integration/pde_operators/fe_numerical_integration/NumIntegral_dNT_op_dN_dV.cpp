@@ -13,13 +13,13 @@ The Operand which is used here can be both, an element or a nodal variable
 which is then interpolated to the integration points to obtain the 
 integral properties.  
 */
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
-                                                                 const char*           oper,
-                                                                 const char*           basic,
-                                                                 const char*           test )
+template<size_t dim,class CELL>
+NumIntegral_dNT_op_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+                                                              const char*           oper,
+                                                              const char*           basic,
+                                                              const char*           test )
   : MathOperatorLHS<dim>(pref,oper,basic,test),
-    B(dim,3), BT(3,dim)
+    B_(dim,3), BT_(3,dim)
 {
     MathOperatorLHS<dim>::Name("NumIntegral_dNT_op_dN_dV", oper, basic, test );
     
@@ -44,9 +44,12 @@ NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV( const PropertyD
 
 
 /** Laplacian operator of shape function derivatives squared.
+
+    @attention since the interpolation functions derivatives are constant across simplices (linear line, triangle and tetrahedral elements),
+    the computation of DN for these elements simplifies greatly.
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -55,44 +58,58 @@ void NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
 
+    // if the agregated finite element is a simplex, the Jacobian and element-interpolation derivative matrix is constant throughout it
+    const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
+    const bool piecewise_constant_material(this->MaterialOperandPlacement() == ELEMENT or
+                                           this->MaterialOperandPlacement() == REGION or
+                                           this->MaterialOperandPlacement() == FACE);
+   
+    if ( is_simplex_element_type && piecewise_constant_material ) {
+         const double64 detJ = e.dN_AtBaryCenter( B_ );
+         // transposing B -> BT  O.K.
+         B_.Transposed( BT_ );
+         // multiply  BT . MTRL
+         BT_ *= MathOperatorLHS<dim>::MTRL[0];
+         // multiplying BT . B 
+         BT_ *= B_;
+         // multiplying with determinant and weights (ASSUMING that these weights are all the same for simplices)
+         BT_ *= e.WeightAtIntegrationPoint(0) * e.IntegrationPoints() * detJ;
+         MathOperatorLHS<dim>::LHS += BT_;
+         return;
+      }
+
     // 1. Two cases exist: The first is when the material property is an
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    if ( this->MaterialOperandPlacement() == ELEMENT or
-         this->MaterialOperandPlacement() == REGION or
-         this->MaterialOperandPlacement() == FACE)
+    if ( piecewise_constant_material )
       {
-        for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
+        for ( size_t i=0U; i<e.IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
-             double64 detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
-
-             // transposing B -> BT  O.K.
-             B.Transposed( BT );
-
+             const double64 detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
+             // transposing B -> BT
+             B_.Transposed( BT_ );
              // multiply  BT . MTRL
-             BT *= MathOperatorLHS<dim>::MTRL[0];
-
-             // multiplying BT . B 
-             BT *= B;
-                 
+             BT_ *= MathOperatorLHS<dim>::MTRL[0];
+             // multiplying BT . B
+             BT_ *= B_;
              // multiplying with determinant and weights
-             BT *= e.WeightAtIntegrationPoint(i) * detJ;
-
-             // accumulating ME Gauss point integral contributions into element 
+             BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
+             // accumulating ME Gauss point integral contributions into element
              // contribution to global conductance matrix
-             MathOperatorLHS<dim>::LHS += BT;
+             MathOperatorLHS<dim>::LHS += BT_;
           }
       }
-    else { // NODE or ELEMENT_INTEGRATION_POINT
+    else { // NODE or ELEMENT_INTEGRATION_POINT material placements
+        double64 detJ = ( is_simplex_element_type ) ? e.dN_AtBaryCenter( B_ ) : 0.;
         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
-             double64 detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
-             B.Transposed( BT );
-             BT *= MathOperatorLHS<dim>::MTRL[i];
-             BT *= B;
-             BT *= e.WeightAtIntegrationPoint(i) * detJ; 
-             MathOperatorLHS<dim>::LHS += BT;
+             if ( !is_simplex_element_type ) detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
+             B_.Transposed( BT_ );
+             BT_ *= MathOperatorLHS<dim>::MTRL[i];
+             BT_ *= B_;
+             BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
+             MathOperatorLHS<dim>::LHS += BT_;
           }
      }
 
