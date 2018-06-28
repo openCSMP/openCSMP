@@ -5,6 +5,11 @@
 
 namespace csmp {
 
+/**
+    Used by FemToGridVisitor for the mapping of data from 2D unstructured to structured grids.
+ 
+    @author SKM 1998.
+*/
 class GridPoint {
   public:
     GridPoint() : i(0), j(0), data(1) { data[0]=std::numeric_limits<double64>::quiet_NaN(); };

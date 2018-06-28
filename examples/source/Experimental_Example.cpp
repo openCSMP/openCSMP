@@ -219,7 +219,7 @@ void Experimental_Example::Run()
   // ----------------------------------------------------------
    string input_file("cylinder");
    // ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
-  ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
+   ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
    Region<DIM>& model_domain(model.Region("Model"));
 
    printModelDimensions( model, true );
