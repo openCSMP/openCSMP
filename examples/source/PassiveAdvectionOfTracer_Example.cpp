@@ -49,8 +49,11 @@ void PassiveAdvectionOfTracer_Example::Specifications()
 
 
 /** 
-    3D passive tracer advection via CSMP's generic transport method 
-    combining finite elements (for pressure) with finite volumes (for advection of concentration profile)
+    Illustration of the  NodeCenteredFiniteVolumeTransport  scheme based family of transport schemes.
+    Explicit vs implicit, first- vs. second-order accurate in space and time.
+    With and without fluid volume sources.
+    
+    3D passive tracer advection combining finite elements (for pressure) with finite volumes (for advection of concentration profile)
 
     User can test degree of CFL overstepping that the model can cope with
     and what the consequences are for the shape of the advection front.

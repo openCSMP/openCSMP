@@ -61,8 +61,6 @@ template<size_t dim>
 
 
 /**
-@class ExplicitTransport ExplicitTransport "reservoir_simulator/TransportEquationSolver.h"
-
 \brief     For implicit transport calculations
 \details   Part of the Colleoli transport scheme.
 \author    Stephan K. Matthai
