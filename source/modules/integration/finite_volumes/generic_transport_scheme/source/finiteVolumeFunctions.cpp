@@ -1,3 +1,4 @@
+
 //
 //  finiteVolumeFunctions.cpp
 //  CSMP_API_library2014
@@ -36,32 +37,44 @@ namespace csmp {
   void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
   {
     const bool initialize_flux(true);
+    const bool initialize_facet_area_perm(true);
     
     variables::Variables_TracerTransfer vars(model.Database());
     
     Point<dim> vD;
-    
+
     // 0. zeroing sector pore volumes for accumulation in element loop
     // ---------------------------------------------------------------
     gref.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
     gref.InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );
-    
+
     // For the interior elements of the region compute relevant variable values
     const auto it_end(gref.ElementsEnd());
     for ( auto it=gref.ElementsBegin(); it!=it_end; ++it )
     {
-      auto e = **it;
+      auto& e = **it;
       auto bctr = e.AtBarycenter();
+
+      TensorVariable<dim> k;
+
+      if ( initialize_facet_area_perm || initialize_flux ) {
+        bctr.Obtain(vars.key_k, k);
+      }
       
+      if (initialize_facet_area_perm) {
+        for ( auto fip : e.AllFacetIntegrationPoints() ) {
+          VectorVariable<dim> fAk( fip.DirectedArea() * k );
+          fip.Store( vars.key_fAk, fAk );
+        }
+      }
+
       // element-based total velocity
       if ( initialize_flux ) {
-        TensorVariable<dim> k;
-        bctr.Interpolate(vars.key_k, k);
         const auto mu = model.Read(vars.key_MU); // XXX Should be able to interpolate
         const auto grad_p = bctr.Gradient(vars.key_PF);
         vD = -1.0/mu * (k * grad_p);
       }
-      
+
       // 1. computing sector pore volumes
       // --------------------------------
       // (scaled by the cell thickness attribute=1 for volumetric elements)
@@ -137,7 +150,7 @@ namespace csmp {
       }
       cout <<"\ninitializeFiniteVolumeProperties: initial flux balance: "<< std::max(fabs(bmin), fabs(bmax)) << endl;
     }
-    
+
   } // end initializeFiniteVolumeProperties
   
   // explicit instantiation of function template in 2 and 3D

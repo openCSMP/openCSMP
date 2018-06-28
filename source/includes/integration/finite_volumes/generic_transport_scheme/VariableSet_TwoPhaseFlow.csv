@@ -92,6 +92,7 @@ gravity force,Fg,kg/(m.s2),VECTOR,-1.00e+15,1.00e+15,ELEMENT,calculated,multipha
 dip vector,dip,none,VECTOR,-1.00e+00,1.00e+00,ELEMENT,computed,numeric modelling,,
 sector pore volume,sPV,m3,SCALAR,1.00e-08,1.00e+06,SECTOR_INTEGRATION_POINT,computed,numeric modelling,,
 facet normal permeability,kfn,m2,SCALAR,1.00e-21,1.00e-07,FACET_INTEGRATION_POINT,computed,numeric modelling,,
+facet area permeability,fAk,m4,VECTOR,-1e+10,1e+10,FACET_INTEGRATION_POINT,computed,numeric modelling,,
 facet area,fA,m2,SCALAR,1.00e-08,1.00e+06,FACET_INTEGRATION_POINT,computed,numeric modelling,,
 facet normal,fn,none,VECTOR,1.00e+00,1,FACET_INTEGRATION_POINT,computed,numeric modelling,,
 facet total flux,qft,m3/s,SCALAR,0.00e+00,1.00e+05,FACET_INTEGRATION_POINT,computed,numeric modelling,,

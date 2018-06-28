@@ -929,13 +929,21 @@ bool  TensorVariable<3U>::IsWithinRange( double64 vmin, double64 vmax ) const
 /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
 VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariable<3U>& ts )
  {
-    VectorVariable<3U> temp( vc.Flag(0), vc.Flag(1), vc.Flag(2),
+    return VectorVariable<3U>( vc.Flag(0), vc.Flag(1), vc.Flag(2),
                              ts(0,0) * vc[0] + ts(1,0) * vc[1] + ts(2,0) * vc[2],
                              ts(0,1) * vc[0] + ts(1,1) * vc[1] + ts(2,1) * vc[2],
                              ts(0,2) * vc[0] + ts(1,2) * vc[1] + ts(2,2) * vc[2] );
-    return std::move(temp);
  }
 
+  /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
+  Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts )
+  {
+    return Point<3u>(
+            ts(0,0) * vc[0] + ts(1,0) * vc[1] + ts(2,0) * vc[2],
+            ts(0,1) * vc[0] + ts(1,1) * vc[1] + ts(2,1) * vc[2],
+            ts(0,2) * vc[0] + ts(1,2) * vc[1] + ts(2,2) * vc[2] );
+  }
+  
 
 
 template<size_t dim>

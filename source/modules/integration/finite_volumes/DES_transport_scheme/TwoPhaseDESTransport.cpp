@@ -92,8 +92,8 @@ void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
     double64 pore_volume  = 0.;
     for (auto sip : nd->AllSectorIntegrationPoints()) {
         const double64 sector_volume = sip.SectorVolume();
-        double64 phi = sip.Interpolate( this->key_phi );
-        double64 thickness = sip.Interpolate( this->key_thi );
+        double64 phi = sip.Obtain( this->key_phi );
+        double64 thickness = sip.Obtain( this->key_thi );
         if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
         pore_volume += sector_volume * phi;
     }
@@ -122,7 +122,7 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     for (auto fip : nd->AllFacetIntegrationPoints()) {
         const double64 sign = fip.FromInside() ? 1. : -1.;
         //compute facet flux
-        fip.Interpolate( this->key_vt, vD );
+        fip.Obtain( this->key_vt, vD );
         double64 vD_n = fip.ProjectOntoFacetNormal(vD);  
         double64 facetArea = fip.FacetArea();  
         Point<dim> facetNrml = fip.FacetNormal();                       

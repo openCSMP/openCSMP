@@ -85,31 +85,21 @@ namespace csmp {
 
    */
   
-  bool approxeq(double64 x, double64 y) {
-    return std::abs(x-y) < 1e-3;
-  }
   template<size_t dim, template<size_t> class USER>
   void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>& e ) const
   {
-    Point<dim> vDvec;
+    auto user = User();
+    auto bctr = e.AtBarycenter();
+    const auto grad_p = bctr.Gradient(user->key_PF);
+
     if (!reuse_previous_velocity) {
       // Compute Darcy velocity
-      auto bctr = e.AtBarycenter();
-      auto user = User();
       TensorVariable<dim> k;
-      bctr.Interpolate(user->key_k, k);
+      bctr.Obtain(user->key_k, k);
       const auto mu = User()->GetModel().Read(user->key_MU); // XXX Should be able to Interpolate
-      const auto grad_p = bctr.Gradient(user->key_PF);
-
       VectorVariable<dim> vD(bctr.Read(user->key_V));
       vD = -(1/mu) * (k * grad_p);
-      vDvec = vD.P();
       bctr.Store( user->key_V, vD );
-    }
-    else {
-      auto bctr = e.AtBarycenter();
-      VectorVariable<dim> vD(bctr.Read(User()->key_V));
-      vDvec = vD.P();
     }
 
     // computing total facet fluxes by projecting vt onto facet normals
@@ -120,8 +110,8 @@ namespace csmp {
         facet_flux = fip.Read( User()->key_ff );
       }
       else {
-        // Projection of vD onto the directed area of the facet.
-        facet_flux = fip.ProjectOntoDirectedArea(User()->key_V);
+        const auto mu = user->GetModel().Read(user->key_MU); // XXX Should be able to Interpolate
+        facet_flux = -(1/mu) * dotProduct(fip.Read(user->key_fAk), grad_p);
 
         // storing the volumetric facet flux without altering the variables flag
         const auto ff_flag = fip.Status( User()->key_ff );
@@ -129,7 +119,7 @@ namespace csmp {
       }
 
       // Get concentration from upwind node
-      auto upstream_node = fip.UpstreamNode( User()->key_V );
+      auto upstream_node = fip.UpstreamNode( facet_flux );
       auto c = upstream_node.Read( User()->key_C );
       auto ffc = facet_flux * c;
 
@@ -160,7 +150,7 @@ namespace csmp {
       auto bctr = e.AtBarycenter();
       
       TensorVariable<dim> k;
-      bctr.Interpolate(User()->key_k, k);
+      bctr.Obtain(User()->key_k, k);
       const auto mu = User()->GetModel().Read(User()->key_MU); // XXX Should be able to interpolate
       const auto grad_p = bctr.Gradient(User()->key_PF);
 
@@ -174,7 +164,7 @@ namespace csmp {
     for (auto fip : e.AllFacetIntegrationPoints()) {
       double64 facet_flux = 0;
       if (reuse_previous_velocity) {
-        facet_flux = fip.Interpolate( User()->key_ff );
+        facet_flux = fip.Obtain( User()->key_ff );
       }
       else {
         // Projection of vD onto the directed area of the facet.
@@ -190,7 +180,7 @@ namespace csmp {
       auto inside_node = fip.InsideNode();
       const double64 c_inside = inside_node.Read( key_C );
       ScalarVariable cvar_fip;
-      const double64 c_fip = fip.Interpolate( key_C );
+      const double64 c_fip = fip.Obtain( key_C );
       const auto ffc_flag = fip.Status(User()->key_ffC);
 
       if (fabs(facet_flux) > numeric_limits<double64>::epsilon()) {
@@ -420,7 +410,7 @@ namespace csmp {
         const double64 c_inside = inside_node.Read( key_C );
         auto outside_node = fip.OutsideNode();
         const double64 c_outside = outside_node.Read( key_C );
-        const double64 c_fip = fip.Interpolate( key_C );
+        const double64 c_fip = fip.Obtain( key_C );
         const double64 facet_flux = fip.Read( User()->key_ff );
 
         if (fabs(facet_flux) > std::numeric_limits<double64>::epsilon()) {
@@ -484,7 +474,7 @@ namespace csmp {
       const double64 c_inside = inside_node.Read( key_C );
       auto outside_node = fip.OutsideNode();
       const double64 c_outside = outside_node.Read( key_C );
-      const double64 c_fip = fip.Interpolate(key_C);
+      const double64 c_fip = fip.Obtain(key_C);
 
       const double64 facet_flux = fip.Read( User()->key_ff );
       double64 c(0.0);

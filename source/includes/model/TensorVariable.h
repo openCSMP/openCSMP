@@ -282,6 +282,10 @@ class TensorVariable<3U> {
 /// (x^T A)^T = A^T x  (vector - matrix multiplication -> vector(A.cols))
 VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariable<3U>& ts );
 
+/// (x^T A)^T = A^T x  (vector - matrix multiplication -> vector(A.cols))
+Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts );
+  
+
 /// ostream operator for exporting the tensor to cout or file streams
 template<size_t dim>
 std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
