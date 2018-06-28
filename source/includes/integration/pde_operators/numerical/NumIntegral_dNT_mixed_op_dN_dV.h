@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// PDE operator:  K div^2 T
-template<size_t dim,class SIMPLEX>
+template<size_t dim,class CELL>
 class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -17,8 +17,8 @@ class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim> {
                         const char* basic, 
                         const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
 
   private:
     DenseMatrix<DM_MIN>     B, BT, NVAL;

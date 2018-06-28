@@ -9,8 +9,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_BT_D_B_dV<dim,SIMPLEX>::NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_BT_D_B_dV<dim,CELL>::NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref,
                                                            const char*             oper,  // Young's modulus
                                                            const char*             oper2, // Poisson's ratio 
                                                            const char*             basic, 
@@ -68,8 +68,8 @@ used shall be initialized for plane strain or plane stress.
 If the method is called in a 3D calculation, the user is warned that
 it will have no effect.  
  */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::PlaneStress( bool yes_no )
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_B_dV<dim,CELL>::PlaneStress( bool yes_no )
  { 
      plane_strain_ = yes_no; 
  }
@@ -88,8 +88,8 @@ While Poisson's ratio must be an element variable, this method allows for
 Young's modulus to be a node variable. Thus, a continuous loss of strength
 can be modeled.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -121,7 +121,7 @@ void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
              nu_[i] = sc();
           }
       }
-     else throw csmp::Exception( WARNING, "umIntegral_BT_D_B_dV<dim,SIMPLEX>::GetOperands",
+     else throw csmp::Exception( WARNING, "umIntegral_BT_D_B_dV<dim,CELL>::GetOperands",
                                  MathOperatorLHS<dim>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
       
 } // end GetOperands
@@ -152,8 +152,8 @@ member matrix [C].
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_B_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( dim*e.Nodes(), dim*e.Nodes() );

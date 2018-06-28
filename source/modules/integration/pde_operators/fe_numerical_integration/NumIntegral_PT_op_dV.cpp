@@ -7,8 +7,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_PT_op_dV<dim,SIMPLEX>::NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_PT_op_dV<dim,CELL>::NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref,
                                                     const char* oper, const char* test ) 
   : MathOperatorRHS<dim>(pref,oper,test),
     BFORCE(6) 
@@ -40,8 +40,8 @@ be the best procedure available (see Cook et al.).
 A reference to the variable storage inside of the Model<dim>  and a 
 reference to the Element from which the Operand shall be read.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_PT_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -111,8 +111,8 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_PT_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     MathOperatorRHS<dim>::RHS.resize( BFORCE.size() );
     // if a quadratic triangle element is used, the body forces are assigned only 

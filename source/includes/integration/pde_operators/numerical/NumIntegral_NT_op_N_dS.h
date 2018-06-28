@@ -18,14 +18,14 @@ namespace csmp {
 @attention to be used to assign boundary integrals to higher-dimensional domains
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( SIMPLEX<dim>& e );
-    virtual NumIntegral_NT_op_N_dS<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_op_N_dS<dim,SIMPLEX> (*this); }
+    virtual void ComputeContribution( CELL<dim>& e );
+    virtual NumIntegral_NT_op_N_dS<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dS<dim,CELL> (*this); }
 
   private:
     size_t  nodal_degrees_of_freedom;

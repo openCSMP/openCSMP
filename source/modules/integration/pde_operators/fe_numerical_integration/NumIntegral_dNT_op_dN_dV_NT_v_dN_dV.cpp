@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
+template<size_t dim,class CELL>
+NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
                                                           const char*  nmultiplier, 
@@ -68,8 +68,8 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV_NT_v_
 
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
+template<size_t dim,class CELL>
+NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
                                                           const char*  nmultiplier, 
@@ -141,8 +141,8 @@ The gradients of the dependent variable are computed at the integration
 points and multiplied with the n- and e-multipliers. These must be 
 nodal and element variables, respectively.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -238,8 +238,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -311,8 +311,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMP
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::ReadElementMultiplier( SIMPLEX& e,
+template<size_t dim,class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( CELL& e,
                                                                          DenseMatrix<DM_MIN>& MULT )
  {
     MULT.Resize(dim,dim);
@@ -342,8 +342,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::ReadElementMultiplier( SI
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
     xyz = num_xyz;

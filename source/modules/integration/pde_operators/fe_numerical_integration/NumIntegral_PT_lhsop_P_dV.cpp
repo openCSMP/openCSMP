@@ -9,8 +9,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& pref,
                                                       const char* oper,  // density
                                                       const char* oper2, // porosity
                                                       const char* basic, // interstitial velocity
@@ -53,8 +53,8 @@ NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::NumIntegral_PT_lhsop_P_dV( const Propert
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -84,8 +84,8 @@ void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 
-template<size_t dim,class SIMPLEX>
-void  NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P )
+template<size_t dim,class CELL>
+void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double64>& N, DenseMatrix<DM_MIN>& P )
  {
     P.Resize(1,nodal_degrees_of_freedom*N.size());
     size_t k(0);
@@ -103,8 +103,8 @@ Computes the volume integral over the element interpolation functions
 times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_PT_lhsop_P_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes()*dim,e.Nodes()*dim);
     MathOperatorLHS<dim>::LHS.Zero();

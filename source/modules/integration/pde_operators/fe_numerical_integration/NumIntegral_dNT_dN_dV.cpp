@@ -8,8 +8,8 @@ namespace csmp {
 
 /** Laplacian build with the interpolation function derivatives.
 */
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_dNT_dN_dV<dim,CELL>::NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
                                                       const char*           basic, 
                                                       const char*           test ) 
   : MathOperatorLHS<dim>(pref,basic,test),
@@ -39,8 +39,8 @@ NumIntegral_dNT_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_dN_dV( const PropertyDatabas
 
 /** Laplacian operator of shape function derivatives squared.
  */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

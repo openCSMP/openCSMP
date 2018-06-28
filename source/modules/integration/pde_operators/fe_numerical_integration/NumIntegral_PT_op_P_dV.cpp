@@ -7,8 +7,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_PT_op_P_dV<dim,SIMPLEX>::NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_PT_op_P_dV<dim,CELL>::NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& pref,
                                                      const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
     nodal_degrees_of_freedom(1)
@@ -53,8 +53,8 @@ in the special case, the integral of the testfunction products must be used
 
 Use this operator to compute capacitance, storage capacity etc. matrices.
  */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_PT_op_P_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

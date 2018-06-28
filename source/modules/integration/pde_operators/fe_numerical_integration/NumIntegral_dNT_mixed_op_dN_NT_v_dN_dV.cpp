@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV(
+template<size_t dim,class CELL>
+NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
                                                           const char*  nmultiplier, 
@@ -69,8 +69,8 @@ NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN
 
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV(
+template<size_t dim,class CELL>
+NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
                                                           const char*  nmultiplier, 
@@ -144,8 +144,8 @@ nodal and element variables, respectively.
 
 The operand is read
  */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -241,8 +241,8 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& 
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -310,8 +310,8 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( S
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ReadElementMultiplier( SIMPLEX& e,
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( CELL& e,
                                                                                  DenseMatrix<DM_MIN>& MULT )
  {
     MULT.Resize(dim,dim);
@@ -341,8 +341,8 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ReadElementMultiplier(
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
     xyz = num_xyz;

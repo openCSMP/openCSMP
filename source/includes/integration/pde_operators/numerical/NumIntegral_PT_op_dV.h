@@ -6,15 +6,15 @@
 namespace csmp {
 
 /// vector solution variable: integration of 'body forces', e.g., action of gravity
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref, const char* oper, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
  
-    virtual void ComputeContribution( SIMPLEX& e );
-    virtual NumIntegral_PT_op_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_PT_op_dV<dim,SIMPLEX> (*this); }
+    virtual void ComputeContribution( CELL& e );
+    virtual NumIntegral_PT_op_dV<dim,CELL>* clone() const { return new NumIntegral_PT_op_dV<dim,CELL> (*this); }
   private:
     std::vector<double64>  BFORCE;
 };

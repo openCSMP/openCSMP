@@ -13,8 +13,8 @@ namespace csmp {
 use the local value
 */
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                  const char* oper, 
                                                                  const char* test,
                                                                  double64 acc_gravity )
@@ -47,8 +47,8 @@ instance be the hydraulic conductivity.
 use the local value
 
 */
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                          const char* oper, 
                                                          const char* mtrl, 
                                                          const char* test,
@@ -77,8 +77,8 @@ NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_op_dNi_dV( const PropertyD
  }
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
  {
     assert( num_xyz >= 0 && num_xyz <3U );
     xyz = num_xyz;
@@ -91,8 +91,8 @@ void NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
 property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( CELL& e )
 {
    // 1. reading Operand (fluid density or something like that)
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
@@ -129,8 +129,8 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

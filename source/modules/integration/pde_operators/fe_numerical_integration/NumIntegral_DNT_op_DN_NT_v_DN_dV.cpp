@@ -9,8 +9,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref,
                                                                          const char* diffusion_oper,   // element prop, for instance thermal conductivity
                                                                          const char* advection_oper,   // element prop, for instance heat transport velocity
                                                                          const char* basic,            // e.g., fluid pressure
@@ -60,8 +60,8 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_op_DN_NT_v_DN_dV(
 The diffusion (op) and advection (adv) coefficients are read from the storage in the model. 
 
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -113,8 +113,8 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );

@@ -9,7 +9,7 @@ namespace csmp {
 template<size_t> class PropertyDatabase;
 
 /// advection-dispersion integral, see Istok (1989), use to obtain steady-state solutions for small Peclet number flows
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref, 
@@ -18,8 +18,8 @@ class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim> {
                                       const char* basic,            ///< e.g., fluid pressure
                                       const char* test );           ///< e.g., fluid pressure
                             
-    virtual void GetOperands( SIMPLEX& );
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void GetOperands( CELL& );
+    virtual void ComputeContribution( CELL& );
 
   private:
     DenseMatrix<DM_MIN>    DN, DNT, VIP, NT3; 

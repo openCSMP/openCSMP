@@ -18,14 +18,14 @@ namespace csmp {
 @note use only for scalar-type dependent variables (1 DOF per node)
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( SIMPLEX& e );
-    virtual NumIntegral_NT_op_N_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_op_N_dV<dim,SIMPLEX> (*this); }
+    virtual void ComputeContribution( CELL& e );
+    virtual NumIntegral_NT_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dV<dim,CELL> (*this); }
   private:
     size_t  nodal_degrees_of_freedom;
 
