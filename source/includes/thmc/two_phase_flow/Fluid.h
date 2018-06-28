@@ -48,35 +48,35 @@ class Fluid {
   public:
     /// temperature oC at current initialisation point in Element
     template<class TARGET_PLACEMENT>
-    double64 Temperature( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_T); }
+    double64 Temperature( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_T); }
   
     /// fluid pressure (Pa) at current initialisation point in Element
     template<class TARGET_PLACEMENT>
-    double64 Pressure( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_pf); }
+    double64 Pressure( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_pf); }
   
     /// salinity, mSalt (molality = moles/kg)
     template<class TARGET_PLACEMENT>
-    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_msalt); }
+    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_msalt); }
   
     /// salinity, mass fraction
     template<class TARGET_PLACEMENT>
-    double64 MassFractionNaCl( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xSalt); }
+    double64 MassFractionNaCl( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xSalt); }
 
     /// composition: mass fraction (0..1) of CO2 in the aqueous phase
     template<class TARGET_PLACEMENT>
-    double64 XCO2_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xCO2); }
+    double64 XCO2_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xCO2); }
 
     /// composition: mass fraction (0..1) of water in the aqueous phase
     template<class TARGET_PLACEMENT>
-    double64 XH2O_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_xH2O); }
+    double64 XH2O_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xH2O); }
 
     /// composition: mass fraction (0..1) of CO2 in the carbonic phase
     template<class TARGET_PLACEMENT>
-    double64 YCO2_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_YCO2); }
+    double64 YCO2_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YCO2); }
 
     /// composition: mass fraction (0..1) of water in the carbonic phase
     template<class TARGET_PLACEMENT>
-    double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Interpolate(User()->key_YH2O); }
+    double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YH2O); }
   
     // with or without dissolved CO2
     template<class TARGET_PLACEMENT>

@@ -18,8 +18,8 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( TARGET_PLACEMENT& p ) const
  {
     // seff = (sw - swr) / (1 - swr - snr)
-    double64 seff =  (p.Interpolate(User()->key_sH2O) - p.Interpolate(User()->key_srH2O)) /
-           (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2));
+    double64 seff =  (p.Obtain(User()->key_sH2O) - p.Obtain(User()->key_srH2O)) /
+           (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2));
     
     return std::min( std::max( seff, 0. ), 1. );
  }
@@ -48,8 +48,8 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( TARGET_PLACEMENT& p, double64 sw ) const
  {
     // seff = (sw - swr) / (1 - swr - snr)
-    double64 seff = (sw - p.Interpolate(User()->key_srH2O)) /
-           (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2));
+    double64 seff = (sw - p.Obtain(User()->key_srH2O)) /
+           (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2));
     
     return std::min( std::max( seff, 0. ), 1. );
  }
@@ -64,7 +64,7 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::SeffToSw( TARGET_PLACEMENT& p, double64 seff ) const
  {
-    return seff * (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) + p.Interpolate(User()->key_srCO2);
+    return seff * (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) + p.Obtain(User()->key_srCO2);
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
@@ -80,11 +80,11 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krw( TARGET_PLACEMENT& p ) const
  { 
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == static_cast<double64>(0.) )
+    if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
       return EffectiveSaturation(p);
 
     // pm2 = lambda, the Brooks-Corey parameter
-    return std::pow( EffectiveSaturation(p), 2. / p.Interpolate(User()->key_bcp) + 3. );
+    return std::pow( EffectiveSaturation(p), 2. / p.Obtain(User()->key_bcp) + 3. );
  }
 
 template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krw( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
@@ -110,11 +110,11 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krw( TARGET_PLACEMENT& p, double64 sw ) const
  { 
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == static_cast<double64>(0.) )
+    if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
       return EffectiveSaturation(p,sw);
 
     // pm2 = lambda, the Brooks-Corey parameter
-    return std::pow( EffectiveSaturation(p,sw), 2. / p.Interpolate(User()->key_bcp) + 3. );
+    return std::pow( EffectiveSaturation(p,sw), 2. / p.Obtain(User()->key_bcp) + 3. );
  }
 
 template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krw( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
@@ -129,11 +129,11 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krn( TARGET_PLACEMENT& p ) const
  { 
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == static_cast<double64>(0.) )
+    if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
       return 1. - EffectiveSaturation(p);
 
     const double64  seffn(1. - EffectiveSaturation(p));
-    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(p), 2./ p.Interpolate(User()->key_bcp) + 1.) );
+    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(p), 2./ p.Obtain(User()->key_bcp) + 1.) );
  }
 
 template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krn( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
@@ -159,11 +159,11 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krn( TARGET_PLACEMENT& p, double64 sw ) const
  { 
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == static_cast<double64>(0.) )
+    if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
       return 1. - EffectiveSaturation(p,sw);
 
     const double64  seffn(1. - EffectiveSaturation(p,sw));
-    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(p,sw), 2./ p.Interpolate(User()->key_bcp) + 1.) );
+    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(p,sw), 2./ p.Obtain(User()->key_bcp) + 1.) );
  }
 
 template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krn( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
@@ -176,12 +176,12 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( TARGET_PLACEMENT& p ) const
  {
-    const double64 seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+    const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == 0. ) return seff_mult;
+    if ( p.Obtain(User()->key_bcp) == 0. ) return seff_mult;
 
-    return ( 2./ p.Interpolate(User()->key_bcp) + 3. ) *
-           std::pow( EffectiveSaturation(p), 2./ p.Interpolate(User()->key_bcp) + 2. ) * seff_mult;
+    return ( 2./ p.Obtain(User()->key_bcp) + 3. ) *
+           std::pow( EffectiveSaturation(p), 2./ p.Obtain(User()->key_bcp) + 2. ) * seff_mult;
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds( FiniteElementPlacement<3U,ELEMENT>& ) const;
@@ -195,13 +195,13 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( TARGET_PLACEMENT& p ) const
  {
-    const double64 seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+    const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
 
     //  switch to linear relperm model if lambda = 0
-    if ( p.Interpolate(User()->key_bcp) == 0. ) return -seff_mult;
+    if ( p.Obtain(User()->key_bcp) == 0. ) return -seff_mult;
 
     const double64  seff(EffectiveSaturation(p));
-    const double64  bcp(p.Interpolate(User()->key_bcp));
+    const double64  bcp(p.Obtain(User()->key_bcp));
     return 2.*(seff - 1.) * (1. + pow(seff, 2./bcp) * ( 1./bcp + 1./2. - seff * (1./bcp + 3./2.))) * seff_mult;
 
  }
@@ -223,8 +223,8 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::pc( TARGET_PLACEMENT& p ) const
 {
     const double64  seff(EffectiveSaturation(p));
-    const double64  bcp(p.Interpolate(User()->key_bcp));
-    const double64  entry_pressure(p.Interpolate(User()->key_pd));
+    const double64  bcp(p.Obtain(User()->key_bcp));
+    const double64  entry_pressure(p.Obtain(User()->key_pd));
 
     // linear relperm model
     if ( bcp == 0. ) {
@@ -237,7 +237,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc( TARGET_PLACEMENT& p ) con
    // for zero entry pressure capillary pressure always is zero
    if ( entry_pressure == 0. ) return 0.;
 
-   const double64 seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+   const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
 
    // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
    // applying the limit on capillary pressure
@@ -299,9 +299,9 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( TARGET_PLACEMENT& p ) const
 {
     const double64  seff(EffectiveSaturation(p));
-    const double64  bcp(p.Interpolate(User()->key_bcp));
-    const double64  entry_pressure(p.Interpolate(User()->key_pd));
-    const double64 seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+    const double64  bcp(p.Obtain(User()->key_bcp));
+    const double64  entry_pressure(p.Obtain(User()->key_pd));
+    const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
 
     // linear relperm model
      if ( bcp == 0. ) {
@@ -340,16 +340,16 @@ template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::Sw( TARGET_PLACEMENT& p, double64 pc ) const
 {
     const double64  seff(EffectiveSaturation(p));
-    const double64  bcp(p.Interpolate(User()->key_bcp));
-    const double64  entry_pressure(p.Interpolate(User()->key_pd));
-    const double64  seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+    const double64  bcp(p.Obtain(User()->key_bcp));
+    const double64  entry_pressure(p.Obtain(User()->key_pd));
+    const double64  seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
 
     // for linear relperm model
     if ( bcp == 0. )
       {
          // not a unique solution
          if ( MaxCapillaryPressure() == entry_pressure )
-           return std::min( std::max( p.Interpolate(User()->key_sH2O), p.Interpolate(User()->key_srH2O) ), 1. - p.Interpolate(User()->key_srCO2) );
+           return std::min( std::max( p.Obtain(User()->key_sH2O), p.Obtain(User()->key_srH2O) ), 1. - p.Obtain(User()->key_srCO2) );
 
          if ( pc >= MaxCapillaryPressure() ) return SeffToSw(p,0.);
          if ( pc <= entry_pressure ) return SeffToSw(p,1.);
@@ -358,7 +358,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::Sw( TARGET_PLACEMENT& p, doub
       }
 
    // for zero entry pressure capillary pressure always is zero, so the saturation is not unique
-   if ( entry_pressure == 0. ) return p.Interpolate(User()->key_sH2O);
+   if ( entry_pressure == 0. ) return p.Obtain(User()->key_sH2O);
 
    // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
    // applying the limit on capillary pressure
@@ -391,9 +391,9 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dsdpc( TARGET_PLACEMENT& p, double64 pc ) const
 {
-    const double64  bcp(p.Interpolate(User()->key_bcp));
-    const double64  entry_pressure(p.Interpolate(User()->key_pd));
-    const double64  seff_mult( 1./ (1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)) );
+    const double64  bcp(p.Obtain(User()->key_bcp));
+    const double64  entry_pressure(p.Obtain(User()->key_pd));
+    const double64  seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
 
     // linear relperm model
     if ( bcp == 0. )
@@ -407,7 +407,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dsdpc( TARGET_PLACEMENT& p, d
     const double64 Se_min =  pow( ( entry_pressure / ( bcp * MaxCapillaryPressureDerivative() / seff_mult ) ),
                                 ( bcp / ( 1. + bcp ) ) );
 
-    const double64 Seff = (Sw( p, pc ) - p.Interpolate(User()->key_srH2O)) * seff_mult;
+    const double64 Seff = (Sw( p, pc ) - p.Obtain(User()->key_srH2O)) * seff_mult;
 
     if( Seff<= Se_min ) return -1. / MaxCapillaryPressureDerivative();
 
@@ -429,9 +429,9 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
 {
-   const double64 dSedSw(1./(1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)));
+   const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
    const double64 seff(EffectiveSaturation(p));
-   const double64 bcp(p.Interpolate(User()->key_bcp));
+   const double64 bcp(p.Obtain(User()->key_bcp));
 
   if ( seff < 0.+h )
     return ( kr_w(seff + h, bcp) - kr_w(seff, bcp) ) / h * dSedSw;
@@ -457,9 +457,9 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
 {
-   const double64 dSedSw(1./(1. - p.Interpolate(User()->key_srH2O) - p.Interpolate(User()->key_srCO2)));
+   const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
    const double64 seff(EffectiveSaturation(p));
-   const double64 bcp(p.Interpolate(User()->key_bcp));
+   const double64 bcp(p.Obtain(User()->key_bcp));
 
   if ( seff < 0.+h )
     return ( kr_n( seff + h, bcp ) - kr_n( seff, bcp ) ) / h * dSedSw;
@@ -481,10 +481,10 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( TARGET_PLACEMENT& p, double64 h ) const
 {
-   const double64 sw(p.Interpolate(User()->key_sH2O));
-   const double64 swr(p.Interpolate(User()->key_srH2O)), snr(p.Interpolate(User()->key_srCO2));
-   const double64 bcp(p.Interpolate(User()->key_bcp));
-   const double64 pd(p.Interpolate(User()->key_pd));
+   const double64 sw(p.Obtain(User()->key_sH2O));
+   const double64 swr(p.Obtain(User()->key_srH2O)), snr(p.Obtain(User()->key_srCO2));
+   const double64 bcp(p.Obtain(User()->key_bcp));
+   const double64 pd(p.Obtain(User()->key_pd));
 
   // pcBC( double64 sw, double64 swr, double64 snr, double64 bcp, double64 pd )
   if ( sw < 0.+h )
@@ -511,8 +511,8 @@ void BrooksCoreySaturationFunctions<dim,USER>::Out( TARGET_PLACEMENT& p ) const
  {
     cout <<"\nBrooksCoreySaturationFunctions<"<< dim << ">::Out: Additional properties: "<< endl;
     cout <<"\nelement properties:";
-    cout <<"\n       capillary entry pressure, pd: "<< p.Interpolate(User()->key_pd);
-    cout <<"\n      Brooks-Corey lambda parameter: "<< p.Interpolate(User()->key_bcp);
+    cout <<"\n       capillary entry pressure, pd: "<< p.Obtain(User()->key_pd);
+    cout <<"\n      Brooks-Corey lambda parameter: "<< p.Obtain(User()->key_bcp);
     cout <<"\n             MAX_CAPILLARY_PRESSURE: "<< MaxCapillaryPressure() << endl << endl;
     cout <<"\n  MAX_CAPILLARY_PRESSURE_DERIVATIVE: "<< MaxCapillaryPressureDerivative() << endl << endl;
 

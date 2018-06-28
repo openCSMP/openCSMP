@@ -110,6 +110,7 @@ class TensorVariable<2U> {
 
 
 VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariable<2U>& ts );
+Point<2U>  operator*( const Point<2U>& vc, const TensorVariable<2U>& ts );
 
 // copyright (c) 2001 by S.K. Matthaei, S. Geiger & Stephen G. Roberts
 

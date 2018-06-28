@@ -1703,14 +1703,13 @@ void createLineFaceConnectivity( std::vector<Face<3U>*>& line_faces )
    
     // 1. making a map of the parent faces that each node is connected to
     //  key       faces that are connected to the node (should be 2 at most)
-    map<Node<3U>*,set<Face<3U>*> > parent_faces;
+    unordered_map<Node<3U>*,set<Face<3U>*> > parent_faces;
    
     for ( const auto it : line_faces ) {
          set<Face<3U>*> parents({it});
          for ( size_t i=0U; i<it->Nodes(); ++i ) {
               // inserting a new set or inserting a face pointer into the set if the node key already exists
-              pair<map<Node<3U>*,set<Face<3U>*> >::iterator,bool>
-                nit = parent_faces.insert( make_pair( it->N(i), parents ) );
+              auto nit = parent_faces.insert( make_pair( it->N(i), parents ) );
               if ( !nit.second )
                 (*nit.first).second.insert(it);
            }
