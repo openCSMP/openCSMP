@@ -551,17 +551,21 @@ Resize() allows a VSet to be re-used in a computation.
 to be included into the supplied deques.
  
 */
-void VData::Resize( const deque<int32>& etypes,
-                    const deque<size_t>& npes, 
-                    const deque<size_t>& epes,
-                    size_t nodes,
-                    size_t faces,
-                    size_t interfaces )
- {
+  void VData::Resize( const deque<int32>& etypes,
+                     const deque<size_t>& npes,
+                     const deque<size_t>& epes,
+                     size_t nodes,
+                     size_t faces,
+                     size_t interfaces )
+  {
+    assert(npes.size() == epes.size());
+    const size_t nrCells = npes.size();
+    assert( faces + interfaces < nrCells );
+    
     px.resize(nodes);  vector<double64>( px ).swap( px );
     py.resize(nodes);  vector<double64>( py ).swap( py );
     pz.resize(nodes);  vector<double64>( pz ).swap( pz );
-
+    
     plist.clear();
     pfverts.clear();
     bflags.clear();
@@ -569,23 +573,21 @@ void VData::Resize( const deque<int32>& etypes,
     
     pelmt.assign( etypes.begin(), etypes.end() );
     
-    for ( size_t i=0U; i<epes.size(); i++ )
+    for ( size_t i=0U; i<nrCells; i++ )
       plist.push_back( vector<size_t>(npes[i]) );
-
-    for ( size_t i=0U; i<epes.size(); i++ )
+    
+    for ( size_t i=0U; i<nrCells; i++ )
       pfverts.push_back( vector<long64>(epes[i]) );
-      
+    
     if ( etypes.size() > 1U ) hybrid_mesh_ = true;
     else hybrid_mesh_ = false;
-   
+    
     // faces
-    assert( faces < npes.size() - interfaces );
-    first_face_ = plist.size() - faces - interfaces;
-
+    first_face_ = nrCells - faces - interfaces;
+    
     // interfaces
-    assert( interfaces < npes.size() - faces );
-    first_interface_ = plist.size() - interfaces;
- }
+    first_interface_ = nrCells - interfaces;
+  }
 
 
 
