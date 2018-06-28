@@ -233,7 +233,7 @@ double64 FlowFunctions<dim>::Permeability( TARGET_PLACEMENT& p ) const
 
     typename VariableTypeTraits<dim, decltype(this->key_k)::VariableType>::VariableType K;
 
-    p.Interpolate(this->key_k, K);
+    p.Obtain(this->key_k, K);
     double64 k = scalarPermeability(K);
     return k;
 }
@@ -429,7 +429,7 @@ double64 FlowFunctions<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
    // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
    // TODO: use the specific acceleration of gravity that is stored on the actual model.
    //const double64 k_g_drho = p.Interpolate(key_kV) * -ACC_GRAVITY * delta_rho;
-   const double64 k_g_drho = p.Interpolate(key_kV) * -ACC_GRAVITY * delta_rho;
+   const double64 k_g_drho = p.Obtain(key_kV) * -ACC_GRAVITY * delta_rho;
 
    // else compute result using G saturation derivative
    return k_g_drho;
@@ -499,7 +499,7 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
      assert( phase == 1U or phase == 2U );
   
     // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Interpolate(key_kfn) / ( (phase==1u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
+    return p.Obtain(key_kfn) / ( (phase==1u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
 } 
 
 template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
@@ -516,7 +516,7 @@ template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p ) const
 {
    // TODO: Make sure that this is the permeability in the direction of the facet normal
-   return p.Interpolate(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
+   return p.Obtain(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
@@ -535,9 +535,7 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMEN
     assert( phase == 0U or phase == 1U );
     
    // TODO: Make sure that this is the permeability in the direction of the facet normal
-   
-   //return p.Interpolate(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
-   return p.Interpolate(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
+    return p.Obtain(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;

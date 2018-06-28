@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' test operand x multiplier)
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_op_dN_dV_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -28,13 +28,13 @@ class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV : public MathOperatorLHS<dim> {
                                           const char* basic,            // e.g., fluid pressure
                                           const char* test );           // e.g., fluid pressure
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
     
     void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
-    void ReadElementMultiplier( SIMPLEX& e, 
+    void ReadElementMultiplier( CELL& e, 
                                 DenseMatrix<DM_MIN>& MULT );
     
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions

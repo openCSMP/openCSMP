@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class SIMPLEX>
-NumIntegral_NT_op_N_dS<dim,SIMPLEX>::NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& pref,
+template<size_t dim, template<size_t> class CELL>
+NumIntegral_NT_op_N_dS<dim,CELL>::NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& pref,
                                                              const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
     nodal_degrees_of_freedom(1)
@@ -47,8 +47,8 @@ integral is naturally 1 as well.
 @attention accumulation takes place only for faces where the Material Operand is flagged Neumann.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void NumIntegral_NT_op_N_dS<dim,SIMPLEX>::ComputeContribution( SIMPLEX<dim>& e )
+template<size_t dim, template<size_t> class CELL>
+void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

@@ -179,41 +179,42 @@ bool ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( const std
 */
 template<>
 bool ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( const std::map<size_t,size_t>& imap,
-                                                               bool check_whether_max_value_is_size_minus1 )
- {
-    //static_assert(is_integral<V>::value, "ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: template argument on parameter must be an integer.");
+                                                              bool check_whether_max_value_is_size_minus1 )
+{
+  //static_assert(is_integral<V>::value, "ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: template argument on parameter must be an integer.");
+  
+  if ( imap.empty() ) throw logic_error(" ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: map is empty.");
+  vector<size_t> iset;
+  iset.reserve(imap.size());
+  for ( auto& item : imap ) {
+    iset.push_back( item.second );
+  }
+  std::sort(iset.begin(), iset.end());
+  size_t minval = *iset.begin();
+  size_t maxval = *iset.rbegin();
 
-    if ( imap.empty() ) throw logic_error(" ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: map is empty.");
-    // checking uniqueness first
-    set<size_t> iset;
-    for ( auto i=imap.begin(); i!=imap.end(); ++i ) {
-        pair<set<size_t>::iterator,bool> it=iset.insert( (*i).second );
-        // fail on duplicates
-        if ( !it.second ) return false;
-      }
-   
-    // checking whether range is consecutive
-    if ( (*iset.rbegin()) - (*iset.begin()) + 1U != iset.size() ) return false;
-   
-    // checking whether largest element = number-of-elements - 1
-    if ( check_whether_max_value_is_size_minus1 )
-      if ( (*iset.rbegin()) + 1U != iset.size() ) return false;
-   
-    // checking whether value range is consecutive upon iteration over range
-    set<size_t>::const_iterator it1(iset.begin()), it2(iset.begin()); it2++;
-    while ( it2 != iset.end() ) {
-         if ( (*it1) + 1U != (*it2) ) {
-              cerr <<"\nConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: detected problem (n vs. n+1): ";
-              cerr << (*it1) <<" vs "<< (*it2) <<"\n";
-              return false;
-           }
-         it2++;
-         it1++;
-      }
-   
-    return true;
- 
- } // end IsValueRangeUniqueAndBounded
+  // checking whether range is consecutive
+  if ( maxval + 1 != minval + iset.size() ) return false;
+  
+  // checking whether largest element = number-of-elements - 1
+  if ( check_whether_max_value_is_size_minus1 && maxval + 1U != iset.size() ) return false;
+  
+  // checking whether value range is consecutive upon iteration over range
+  for (size_t i = 0; i + 1 < iset.size(); ++i) {
+    if (iset[i] == iset[i+1]) {
+      // fail uniqueness check
+      return false;
+    }
+    if (iset[i] + 1 != iset[i+1]) {
+      cerr <<"\nConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded: detected problem (n vs. n+1): ";
+      cerr << iset[i] <<" vs "<< iset[i+1] <<"\n";
+      return false;
+    }
+  }
+  
+  return true;
+  
+} // end IsValueRangeUniqueAndBounded
 
 
 

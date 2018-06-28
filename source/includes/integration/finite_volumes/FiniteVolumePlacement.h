@@ -13,7 +13,7 @@ namespace csmp {
   template<size_t dim, PLACEMENT pl> struct FiniteVolumePlacementCollection;
   template<size_t dim> struct NeighbourNodeCollection;
 
-  enum FiniteVolumeInterpolatorType {
+  enum FiniteVolumeObtainerType {
     FV_READ_MODEL,
     FV_READ_REGION,
     FV_READ_ELMT,
@@ -24,50 +24,50 @@ namespace csmp {
     FV_NODE_TO_FIP,
     FV_NODE_TO_SIP,
 
-    FV_INTERPOLATOR_COUNT
+    FV_OBTAINER_COUNT
   };
 
-  template<FiniteVolumeInterpolatorType interp>
-  struct FiniteVolumePropertyInterpolator
+  template<FiniteVolumeObtainerType interp>
+  struct FiniteVolumePropertyObtainer
   {
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const Index& prop, const Node<dim>* eptr, size_t idx1, size_t idx2, size_t idx3,
+    Obtain( const Index& prop, const Node<dim>* eptr, size_t idx1, size_t idx2, size_t idx3,
                   typename VariableTypeTraits<dim,ty>::VariableType& var );
 
-    FiniteVolumePropertyInterpolator();
+    FiniteVolumePropertyObtainer();
   };
 
   template<PLACEMENT from,PLACEMENT to>
-  struct FiniteVolumeInterpolatorDispatch
+  struct FiniteVolumeObtainerDispatch
   {
   };
 
-#define CSMP_FV_INTERPOLATOR_DISPATCH(from,to,interp) \
-template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr FiniteVolumeInterpolatorType TYPE = interp; };
+#define CSMP_FV_OBTAINER_DISPATCH(from,to,interp) \
+template<> struct FiniteVolumeObtainerDispatch<from,to> { static constexpr FiniteVolumeObtainerType TYPE = interp; };
 
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,MODEL,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,REGION,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,NODE,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FV_READ_MODEL)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,REGION,FV_READ_REGION)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,ELEMENT,FV_READ_REGION)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,NODE,FV_READ_REGION)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FV_READ_REGION)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FV_READ_REGION)
-  // CSMP_FV_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FV_READ_REGION)
-  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FV_READ_ELMT)
-  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FV_READ_ELMT)
-  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FV_READ_ELMT)
-  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FV_READ_ELMT)
-  CSMP_FV_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FV_READ_ELMT)
-  CSMP_FV_INTERPOLATOR_DISPATCH(NODE,NODE,FV_READ_NODE)
-  CSMP_FV_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FV_READ_FIP)
-  CSMP_FV_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FV_NODE_TO_FIP)
-  CSMP_FV_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FV_NODE_TO_SIP)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,MODEL,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,REGION,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,ELEMENT,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,NODE,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(MODEL,ELEMENT,FV_READ_MODEL)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,REGION,FV_READ_REGION)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,ELEMENT,FV_READ_REGION)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,NODE,FV_READ_REGION)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FV_READ_REGION)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,FACET_INTEGRATION_POINT,FV_READ_REGION)
+  // CSMP_FV_OBTAINER_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FV_READ_REGION)
+  CSMP_FV_OBTAINER_DISPATCH(ELEMENT,ELEMENT,FV_READ_ELMT)
+  CSMP_FV_OBTAINER_DISPATCH(ELEMENT,NODE,FV_READ_ELMT)
+  CSMP_FV_OBTAINER_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FV_READ_ELMT)
+  CSMP_FV_OBTAINER_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FV_READ_ELMT)
+  CSMP_FV_OBTAINER_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FV_READ_ELMT)
+  CSMP_FV_OBTAINER_DISPATCH(NODE,NODE,FV_READ_NODE)
+  CSMP_FV_OBTAINER_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FV_READ_FIP)
+  CSMP_FV_OBTAINER_DISPATCH(NODE,FACET_INTEGRATION_POINT,FV_NODE_TO_FIP)
+  CSMP_FV_OBTAINER_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FV_NODE_TO_SIP)
 
   template<size_t dim, PLACEMENT pl>
   struct FiniteVolumePlacementWorker
@@ -391,7 +391,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     double64 ProjectOntoDirectedArea(const csmp::INDEX<VECTOR,from>& prop) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(prop, v);
+      User()->Obtain(prop, v);
       return ProjectOntoDirectedArea(v);
     }
 
@@ -409,7 +409,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     double64 ProjectOntoFacetNormal(const csmp::INDEX<VECTOR,from>& prop) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(prop, v);
+      User()->Obtain(prop, v);
       return ProjectOntoFacetNormal(v);
     }
 
@@ -444,13 +444,13 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
     FiniteVolumePlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(vel, v);
+      User()->Obtain(vel, v);
       return UpstreamNode(ProjectOntoDirectedArea(v));
     }
 
     FiniteVolumePlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT>& ff) const
     {
-      return UpstreamNode(this->Interpolate(ff));
+      return UpstreamNode(this->Obtain(ff));
     }
 
     FiniteVolumePlacement<dim,NODE> DownstreamNode(double64 ff) const
@@ -466,7 +466,7 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
     FiniteVolumePlacement<dim,NODE> DownstreamNode(const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT>& ff) const
     {
-      return DownstreamNode(this->Interpolate(ff));
+      return DownstreamNode(this->Obtain(ff));
     }
   };
 
@@ -588,27 +588,27 @@ template<> struct FiniteVolumeInterpolatorDispatch<from,to> { static constexpr F
 
 
     template<VARIABLE_TYPE ty, PLACEMENT from>
-    void Interpolate( const csmp::INDEX<ty,from>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
+    void Obtain( const csmp::INDEX<ty,from>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
     {
-        FiniteVolumePropertyInterpolator<FiniteVolumeInterpolatorDispatch<from,pl>::TYPE> interp;
-        interp.template Interpolate<dim,ty>( prop, &n_, idx1_, idx2_, idx3_, var );
+        FiniteVolumePropertyObtainer<FiniteVolumeObtainerDispatch<from,pl>::TYPE> interp;
+        interp.template Obtain<dim,ty>( prop, &n_, idx1_, idx2_, idx3_, var );
     }
 
     template<PLACEMENT from>
-    double64 Interpolate( const csmp::INDEX<SCALAR,from>& prop ) const
+    double64 Obtain( const csmp::INDEX<SCALAR,from>& prop ) const
     {
-        FiniteVolumePropertyInterpolator<FiniteVolumeInterpolatorDispatch<from,pl>::TYPE> interp;
+        FiniteVolumePropertyObtainer<FiniteVolumeObtainerDispatch<from,pl>::TYPE> interp;
         ScalarVariable var;
-        interp.template Interpolate<dim,SCALAR>( prop, &n_, idx1_, idx2_, idx3_, var );
+        interp.template Obtain<dim,SCALAR>( prop, &n_, idx1_, idx2_, idx3_, var );
         return var();
     }
 
     template<PLACEMENT from>
-    Point<dim> Interpolate( const csmp::INDEX<VECTOR,from>& prop ) const
+    Point<dim> Obtain( const csmp::INDEX<VECTOR,from>& prop ) const
     {
-        FiniteVolumePropertyInterpolator<FiniteVolumeInterpolatorDispatch<from,pl>::TYPE> interp;
+        FiniteVolumePropertyObtainer<FiniteVolumeObtainerDispatch<from,pl>::TYPE> interp;
         VectorVariable<dim> var;
-        interp.template Interpolate<dim,VECTOR>( prop, &n_, idx1_, idx2_, idx3_, var );
+        interp.template Obtain<dim,VECTOR>( prop, &n_, idx1_, idx2_, idx3_, var );
         return var.P();
     }
   };

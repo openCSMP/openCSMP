@@ -12,7 +12,7 @@ namespace csmp {
   template<size_t dim, PLACEMENT pl> class FiniteVolumePlacement;
   template<size_t dim, PLACEMENT pl> struct FiniteVolumePlacementCollection;
 
-  enum FiniteElementInterpolatorType {
+  enum FiniteElementObtainerType {
     FE_READ_MODEL,
     FE_READ_REGION,
     FE_READ_ELMT,
@@ -33,64 +33,64 @@ namespace csmp {
     FE_SIP_TO_EIP,
     FE_FIP_TO_EIP,
     FE_FIP_TO_SIP,
-    FE_INTERPOLATOR_COUNT
+    FE_OBTAINER_COUNT
   };
 
-  template<FiniteElementInterpolatorType interp>
-  struct ElementPropertyInterpolator
+  template<FiniteElementObtainerType interp>
+  struct ElementPropertyObtainer
   {
     template<size_t dim,VARIABLE_TYPE ty>
     void
-    Interpolate( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2,
+    Obtain( const Index& prop, const Element<dim>* eptr, size_t idx1, size_t idx2,
                   typename VariableTypeTraits<dim,ty>::VariableType& var );
 
-    ElementPropertyInterpolator();
+    ElementPropertyObtainer();
   };
 
   template<PLACEMENT from,PLACEMENT to>
-  struct ElementInterpolatorDispatch
+  struct ElementObtainerDispatch
   {
   };
 
-#define CSMP_FE_INTERPOLATOR_DISPATCH(from,to,interp) \
-template<> struct ElementInterpolatorDispatch<from,to> { static constexpr FiniteElementInterpolatorType TYPE = interp; };
+#define CSMP_FE_OBTAINER_DISPATCH(from,to,interp) \
+template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElementObtainerType TYPE = interp; };
 
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,MODEL,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,REGION,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,NODE,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(MODEL,SECTOR_INTEGRATION_POINT,FE_READ_MODEL)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,REGION,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,ELEMENT,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,NODE,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,FACET_INTEGRATION_POINT,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FE_READ_REGION)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT,FE_READ_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,NODE,FE_READ_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FE_READ_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,NODE,FE_READ_NODE)
-  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,ELEMENT,FE_NODE_TO_BCTR)
-  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,FACET_INTEGRATION_POINT,FE_NODE_TO_FIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,ELEMENT_INTEGRATION_POINT,FE_NODE_TO_EIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FE_NODE_TO_SIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_READ_EIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_READ_FIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_READ_SIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT,FE_FIP_TO_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT,FE_SIP_TO_ELMT)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT,FE_EIP_TO_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,MODEL,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,REGION,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,ELEMENT,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,NODE,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,ELEMENT_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,FACET_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(MODEL,SECTOR_INTEGRATION_POINT,FE_READ_MODEL)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,REGION,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,ELEMENT,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,NODE,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,ELEMENT_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,FACET_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(REGION,SECTOR_INTEGRATION_POINT,FE_READ_REGION)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT,ELEMENT,FE_READ_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT,NODE,FE_READ_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT,ELEMENT_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT,FACET_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT,SECTOR_INTEGRATION_POINT,FE_READ_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(NODE,NODE,FE_READ_NODE)
+  CSMP_FE_OBTAINER_DISPATCH(NODE,ELEMENT,FE_NODE_TO_BCTR)
+  CSMP_FE_OBTAINER_DISPATCH(NODE,FACET_INTEGRATION_POINT,FE_NODE_TO_FIP)
+  CSMP_FE_OBTAINER_DISPATCH(NODE,ELEMENT_INTEGRATION_POINT,FE_NODE_TO_EIP)
+  CSMP_FE_OBTAINER_DISPATCH(NODE,SECTOR_INTEGRATION_POINT,FE_NODE_TO_SIP)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_READ_EIP)
+  CSMP_FE_OBTAINER_DISPATCH(FACET_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_READ_FIP)
+  CSMP_FE_OBTAINER_DISPATCH(SECTOR_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_READ_SIP)
+  CSMP_FE_OBTAINER_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT,FE_FIP_TO_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT,FE_SIP_TO_ELMT)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT_INTEGRATION_POINT,ELEMENT,FE_EIP_TO_ELMT)
 # if 0
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_EIP_TO_FIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(ELEMENT_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_EIP_TO_SIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_SIP_TO_FIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_SIP_TO_EIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_FIP_TO_EIP)
-  CSMP_FE_INTERPOLATOR_DISPATCH(FACET_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_FIP_TO_SIP)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_EIP_TO_FIP)
+  CSMP_FE_OBTAINER_DISPATCH(ELEMENT_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_EIP_TO_SIP)
+  CSMP_FE_OBTAINER_DISPATCH(SECTOR_INTEGRATION_POINT,FACET_INTEGRATION_POINT,FE_SIP_TO_FIP)
+  CSMP_FE_OBTAINER_DISPATCH(SECTOR_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_SIP_TO_EIP)
+  CSMP_FE_OBTAINER_DISPATCH(FACET_INTEGRATION_POINT,ELEMENT_INTEGRATION_POINT,FE_FIP_TO_EIP)
+  CSMP_FE_OBTAINER_DISPATCH(FACET_INTEGRATION_POINT,SECTOR_INTEGRATION_POINT,FE_FIP_TO_SIP)
 #endif
 
   template<size_t dim, PLACEMENT pl>
@@ -183,7 +183,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
     double64 ProjectOntoDirectedArea(const csmp::INDEX<VECTOR,from>& prop) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(prop, v);
+      User()->Obtain(prop, v);
       return ProjectOntoDirectedArea(v);
     }
 
@@ -208,7 +208,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
     double64 ProjectOntoFacetNormal(const csmp::INDEX<VECTOR,from>& prop) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(prop, v);
+      User()->Obtain(prop, v);
       return ProjectOntoFacetNormal(v);
     }
 
@@ -235,13 +235,13 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
     FiniteElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<VECTOR,from>& vel) const
     {
       VectorVariable<dim> v;
-      User()->Interpolate(vel, v);
+      User()->Obtain(vel, v);
       return UpstreamNode(ProjectOntoDirectedArea(v));
     }
 
     FiniteElementPlacement<dim,NODE> UpstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
-      return UpstreamNode(this->Interpolate(ff));
+      return UpstreamNode(this->Obtain(ff));
     }
 
     FiniteElementPlacement<dim,NODE> DownstreamNode(double64 ff) const
@@ -257,7 +257,7 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
 
     FiniteElementPlacement<dim,NODE> DownstreamNode(const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& ff) const
     {
-      return DownstreamNode(this->Interpolate(ff));
+      return DownstreamNode(this->Obtain(ff));
     }
   };
 
@@ -563,27 +563,27 @@ template<> struct ElementInterpolatorDispatch<from,to> { static constexpr Finite
     }
 
     template<VARIABLE_TYPE ty, PLACEMENT from>
-    void Interpolate( const csmp::INDEX<ty,from>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
+    void Obtain( const csmp::INDEX<ty,from>& prop, typename VariableTypeTraits<dim,ty>::VariableType& var ) const
     {
-        ElementPropertyInterpolator<ElementInterpolatorDispatch<from,pl>::TYPE> interp;
-        interp.template Interpolate<dim,ty>( prop, &e_, idx1_, idx2_, var );
+        ElementPropertyObtainer<ElementObtainerDispatch<from,pl>::TYPE> interp;
+        interp.template Obtain<dim,ty>( prop, &e_, idx1_, idx2_, var );
     }
 
     template<PLACEMENT from>
-    double64 Interpolate( const csmp::INDEX<SCALAR,from>& prop ) const
+    double64 Obtain( const csmp::INDEX<SCALAR,from>& prop ) const
     {
-        ElementPropertyInterpolator<ElementInterpolatorDispatch<from,pl>::TYPE> interp;
+        ElementPropertyObtainer<ElementObtainerDispatch<from,pl>::TYPE> interp;
         ScalarVariable var;
-        interp.template Interpolate<dim,SCALAR>( prop, &e_, idx1_, idx2_, var );
+        interp.template Obtain<dim,SCALAR>( prop, &e_, idx1_, idx2_, var );
         return var();
     }
 
     template<PLACEMENT from>
-    Point<dim> Interpolate( const csmp::INDEX<VECTOR,from>& prop ) const
+    Point<dim> Obtain( const csmp::INDEX<VECTOR,from>& prop ) const
     {
-        ElementPropertyInterpolator<ElementInterpolatorDispatch<from,pl>::TYPE> interp;
+        ElementPropertyObtainer<ElementObtainerDispatch<from,pl>::TYPE> interp;
         VectorVariable<dim> var;
-        interp.template Interpolate<dim,VECTOR>( prop, &e_, idx1_, idx2_, var );
+        interp.template Obtain<dim,VECTOR>( prop, &e_, idx1_, idx2_, var );
         return var.P();
     }
 

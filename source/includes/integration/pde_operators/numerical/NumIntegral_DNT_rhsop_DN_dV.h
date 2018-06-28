@@ -18,7 +18,7 @@ into righthand side vector.
 @copyright 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 
@@ -30,13 +30,13 @@ class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
                                  const char* oper,          
                                  const char* test );       
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
     
     void IgnoreOperand( bool ignore );
-    virtual NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>* clone() const
-      { return new NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX> (*this); }
+    virtual NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const
+      { return new NumIntegral_DNT_rhsop_DN_dV<dim,CELL> (*this); }
   private:
     DenseMatrix<DM_MIN>        DN, DNT, OPMAT;
     std::vector<ScalarVariable >  noperand;

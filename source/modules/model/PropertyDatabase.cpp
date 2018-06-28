@@ -1315,7 +1315,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
             ss<<var<<' '<<mx;
             ss>>msg1>>msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while maximum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the maximum specified.",errmsg.c_str());
+            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value above the maximum specified.",errmsg.c_str());
          }
         
  } // end CheckRange

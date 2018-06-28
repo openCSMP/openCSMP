@@ -713,6 +713,14 @@ VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariabl
     return temp;
  }
 
+  /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
+  Point<2U>  operator*( const Point<2U>& vc, const TensorVariable<2U>& ts )
+  {
+    return Point<2U>(
+              ts(0,0) * vc[0] + ts(1,0) * vc[1],
+              ts(0,1) * vc[0] + ts(1,1) * vc[1] );
+  }
+  
 
  
 // INPUT OUTPUT

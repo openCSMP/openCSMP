@@ -8,7 +8,7 @@
 
 #include "CSMP_definitions.h"
 #include "Experimental_Example.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "ANSYS_Model3D.h"
 #include "ANSYS_Model2D.h"
 #include "NumIntegral_dNT_op_dN_dV.h"

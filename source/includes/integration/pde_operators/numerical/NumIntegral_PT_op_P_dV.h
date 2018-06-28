@@ -13,13 +13,13 @@ namespace csmp {
 @date 2000 */
 
 /// vector solution variable: equivalent of mass matrix
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_PT_op_P_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* test );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
 
   private:
     size_t  nodal_degrees_of_freedom;

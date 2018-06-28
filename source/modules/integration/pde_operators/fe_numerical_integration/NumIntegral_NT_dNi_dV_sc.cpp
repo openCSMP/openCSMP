@@ -7,12 +7,12 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::~NumIntegral_NT_dNi_dV_sc() {}
+template<size_t dim,class CELL>
+NumIntegral_NT_dNi_dV_sc<dim,CELL>::~NumIntegral_NT_dNi_dV_sc() {}
 
 //constructor
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_dNi_dV_sc<dim,CELL>::NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
                                                                  const char*                  oper,
                                                                  const char*                  basic,
                                                                  const char*                  test )
@@ -33,21 +33,21 @@ NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::NumIntegral_NT_dNi_dV_sc( const PropertyD
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV_sc<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
  
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::Transposed()
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV_sc<dim,CELL>::Transposed()
  {
     transp_ = true;
  }
  
 //element contribution
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

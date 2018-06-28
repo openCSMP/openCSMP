@@ -33,8 +33,8 @@ double64 Fluid<dim,USER>::Viscosity( TARGET_PLACEMENT& p, size_t phase ) const
     //return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) ); 
     
     /*direct interpolation*/
-    if ( phase == 0U ) return p.Interpolate( User()->key_muH2O );
-    return p.Interpolate( User()->key_muCO2 );      
+    if ( phase == 0U ) return p.Obtain( User()->key_muH2O );
+    return p.Obtain( User()->key_muCO2 );
  }
 
 template double64 Fluid<1U,FlowFunctions>::Viscosity( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
@@ -66,8 +66,8 @@ double64 Fluid<dim,USER>::Density( TARGET_PLACEMENT& p, size_t phase ) const
     //return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
     
     /*direct interpolation*/
-    if ( phase == 0U ) return p.Interpolate( User()->key_rhoH2O );
-    return p.Interpolate( User()->key_rhoCO2 );
+    if ( phase == 0U ) return p.Obtain( User()->key_rhoH2O );
+    return p.Obtain( User()->key_rhoCO2 );
  }
 
 template double64 Fluid<1U,FlowFunctions>::Density( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
@@ -86,8 +86,8 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 Fluid<dim,USER>::DensityMixture( TARGET_PLACEMENT& p, double64 msalt ) const
  {
-    return p.Interpolate( User()->key_sH2O ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
-          (1. - p.Interpolate(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    return p.Obtain( User()->key_sH2O ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
+          (1. - p.Obtain(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
 
 template double64 Fluid<3U,FlowFunctions>::DensityMixture( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;

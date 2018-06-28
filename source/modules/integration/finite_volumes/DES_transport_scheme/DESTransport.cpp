@@ -78,8 +78,8 @@ void DESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
     double64 pore_volume  = 0.;
     for (auto sip : nd->AllSectorIntegrationPoints()) {
         const double64 sector_volume = sip.SectorVolume();
-        double64 phi = sip.Interpolate( this->key_PHI );
-        double64 thickness = sip.Interpolate( this->key_THI );
+        double64 phi = sip.Obtain( this->key_PHI );
+        double64 thickness = sip.Obtain( this->key_THI );
         if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
         pore_volume += sector_volume * phi;
     }
@@ -103,7 +103,7 @@ void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     VectorVariable<dim> vD;
     for (auto fip : nd->AllFacetIntegrationPoints()) {
         const double64 sign = fip.FromInside() ? 1. : -1.;
-        fip.Interpolate( this->key_V, vD );
+        fip.Obtain( this->key_V, vD );
         const double64 vD_nA = vD.DotProduct(fip.DirectedArea());
         const double64 facet_flux = sign * vD_nA;
         flux_balance += facet_flux;       
@@ -138,7 +138,7 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     double64 accumulation(0.);
     VectorVariable<dim> vD;
     for (auto fip : nd->AllFacetIntegrationPoints()) {
-        fip.Interpolate( this->key_V, vD );
+        fip.Obtain( this->key_V, vD );
         const double64 facet_flux = vD.DotProduct(fip.DirectedArea());        
       
         auto upstream_node = fip.UpstreamNode(facet_flux);

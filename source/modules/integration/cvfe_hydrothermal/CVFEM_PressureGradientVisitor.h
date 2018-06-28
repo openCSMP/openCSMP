@@ -8,7 +8,7 @@
 
 #include "Visitor.h"
 #include "Model.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 namespace csmp {
 

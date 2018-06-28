@@ -16,14 +16,14 @@ for a vector solution variable like displacement which has u, v, w components.
 @date 1999 
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_BT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
                           const char* oper, const char* test );
 
-    virtual void ComputeContribution( SIMPLEX& );
-    virtual NumIntegral_BT_op_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_BT_op_dV<dim,SIMPLEX> (*this); }
+    virtual void ComputeContribution( CELL& );
+    virtual NumIntegral_BT_op_dV<dim,CELL>* clone() const { return new NumIntegral_BT_op_dV<dim,CELL> (*this); }
   private:  
     DenseMatrix<DM_MIN>  B, BT, STR; 
 };

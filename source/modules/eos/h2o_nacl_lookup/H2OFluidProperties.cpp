@@ -2,7 +2,7 @@
 
 #include "H2OFluidProperties.h"
 
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "ConvertConcentrationUnitsNaCl.h"
 
 using namespace std;

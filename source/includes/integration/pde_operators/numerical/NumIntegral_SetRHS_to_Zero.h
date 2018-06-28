@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// invokes accumulation of zero right-hand side = "homogeneous" boundary conditions
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_SetRHS_to_Zero : public MathOperatorRHS<dim> {
   public:
     NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>& p,
@@ -15,12 +15,12 @@ class NumIntegral_SetRHS_to_Zero : public MathOperatorRHS<dim> {
     virtual ~NumIntegral_SetRHS_to_Zero();
     
     /// since there is no material Operand nothing needs to be done
-    virtual void GetOperands( SIMPLEX& ) {}
+    virtual void GetOperands( CELL& ) {}
 
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( CELL& );
 
-    virtual NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>* clone() const
-      { return new NumIntegral_SetRHS_to_Zero<dim,SIMPLEX> (*this); }
+    virtual NumIntegral_SetRHS_to_Zero<dim,CELL>* clone() const
+      { return new NumIntegral_SetRHS_to_Zero<dim,CELL> (*this); }
 };
 
 } // csmp

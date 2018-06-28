@@ -7,11 +7,11 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_dNi_dV<dim,SIMPLEX>::~NumIntegral_NT_dNi_dV() {}
+template<size_t dim,class CELL>
+NumIntegral_NT_dNi_dV<dim,CELL>::~NumIntegral_NT_dNi_dV() {}
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_dNi_dV<dim,CELL>::NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                  const char*            basic,
                                                                  const char*            test )
   : MathOperatorLHS<dim>(pref,basic,test),
@@ -33,8 +33,8 @@ NumIntegral_NT_dNi_dV<dim,SIMPLEX>::NumIntegral_NT_dNi_dV( const PropertyDatabas
 /** 
      specify the Cartesian direction in which the derivative shall be taken.
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
@@ -42,8 +42,8 @@ void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIVE n
 /**
     Will cause the element matrix to be transposed; default is false.
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::Transposed()
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV<dim,CELL>::Transposed()
  {
     transp_ = true;
  }
@@ -53,8 +53,8 @@ void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::Transposed()
 /** 
     Computes IPOL * DN_i product weighted by the determinant of Jacobian matrix.
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_dNi_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

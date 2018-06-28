@@ -5,7 +5,7 @@
 #include "ThreephaseHLV.h"
 #include "HaliteLiquidus.h"
 #include "LookupPropertyIndex.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 #include "binaryReadWrite.h"
 

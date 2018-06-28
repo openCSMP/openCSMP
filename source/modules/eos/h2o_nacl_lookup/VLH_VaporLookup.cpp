@@ -5,7 +5,7 @@
 #include "NaClSaturatedVapor.h"
 #include "H2OLookup.h"
 #include "LookupPropertyIndex.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "binaryReadWrite.h"
 
 #include <cmath>

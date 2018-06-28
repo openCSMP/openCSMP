@@ -8,7 +8,7 @@ namespace csmp {
 
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
-template<size_t dim, class SIMPLEX=Element<dim> >
+template<size_t dim, class CELL=Element<dim> >
 class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
   public:
     NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
@@ -18,7 +18,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
     
     virtual ~NumIntegral_NT_dNi_dV_sc();
     
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );
@@ -26,7 +26,7 @@ class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
     /// to transposed the element matrix that will get accumulated; default is false
     void Transposed();
   
-    virtual NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_dNi_dV_sc<dim,SIMPLEX> (*this); }
+    virtual NumIntegral_NT_dNi_dV_sc<dim,CELL>* clone() const { return new NumIntegral_NT_dNi_dV_sc<dim,CELL> (*this); }
   
   private:
     NumIntegral_NT_dNi_dV_sc();
