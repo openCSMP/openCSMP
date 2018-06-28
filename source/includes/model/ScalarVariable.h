@@ -175,12 +175,3 @@ class ScalarVariable {
 } // csmp
 
 #endif
-
-
-
-
-
-
-
-
-

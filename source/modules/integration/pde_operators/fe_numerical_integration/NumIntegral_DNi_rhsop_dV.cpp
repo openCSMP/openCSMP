@@ -7,12 +7,12 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::~NumIntegral_DNi_rhsop_dV() {}
+template<size_t dim,class CELL>
+NumIntegral_DNi_rhsop_dV<dim,CELL>::~NumIntegral_DNi_rhsop_dV() {}
 
 /// custom constructor that should be used
-template<size_t dim,class SIMPLEX>
-NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_DNi_rhsop_dV<dim,CELL>::NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
                                                                  const char*                  oper,
                                                                  const char*                  test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -46,8 +46,8 @@ string parse( SPATIAL_DERIVATIVE deriv ) {
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
+template<size_t dim,class CELL>
+void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
@@ -56,8 +56,8 @@ void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::SpatialDerivative( SPATIAL_DERIVATIV
  
  
  
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( CELL& e )
 {
    e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), op_vec_ );
 
@@ -66,17 +66,21 @@ void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
  
  
 //element contribution
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNi_rhsop_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 
+    // if the agregated finite element is a simplex, the Jacobian and element-interpolation derivative matrix is constant throughout it
+    const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
+    double64 det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim>::DERIV ) : 0.;
+
     for ( size_t i=0; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
-         double64 det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
+         if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
          double64 grad_op(0.);
          const size_t nodes(e.Nodes());
          for ( size_t j=0; j<nodes; ++j )

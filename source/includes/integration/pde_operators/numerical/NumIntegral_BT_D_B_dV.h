@@ -17,7 +17,7 @@ namespace csmp {
     @attention special case: if nu=0.5 a purely viscous (incompressible) fluid is modeled
     this requires a special material property matrix, see Zienkiewicz Vol II
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref, 
@@ -25,12 +25,12 @@ class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
                            const char* basic, const char* test,
                            bool plane_strain=true );
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
     
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
     
     void PlaneStress( bool yes_no=true ); ///< default is plane strain
-    virtual NumIntegral_BT_D_B_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_BT_D_B_dV<dim,SIMPLEX> (*this); }
+    virtual NumIntegral_BT_D_B_dV<dim,CELL>* clone() const { return new NumIntegral_BT_D_B_dV<dim,CELL> (*this); }
   private:
     csmp::Index            nu_key_;   ///< Poisson's ratio
     std::vector<double64>  E_, nu_;   ///< variable in which Poisson's ratio will be stored

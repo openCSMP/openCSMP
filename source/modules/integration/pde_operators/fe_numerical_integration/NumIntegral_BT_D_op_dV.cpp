@@ -11,8 +11,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_BT_D_op_dV<dim,SIMPLEX>::NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref,
                                                         const char*             oper,      // strain
                                                         const char*             youngs, 
                                                         const char*             poissons, 
@@ -54,8 +54,8 @@ NumIntegral_BT_D_op_dV<dim,SIMPLEX>::NumIntegral_BT_D_op_dV( const PropertyDatab
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::PlaneStress() { plane_strain_ = false; }
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_op_dV<dim,CELL>::PlaneStress() { plane_strain_ = false; }
 
 
 
@@ -82,8 +82,8 @@ E_OP vector of dimension  nodes-per-element x dim.
 A reference to element, the contribution of which is to be aquired and
 the time-increment over which the deformation shall occur. 
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -161,8 +161,8 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_BT_D_op_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // compute the material property matrix
     // compute the material property matrix based on element properties

@@ -7,12 +7,12 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::~NumIntegral_SetRHS_to_Zero() {}
+template<size_t dim,class CELL>
+NumIntegral_SetRHS_to_Zero<dim,CELL>::~NumIntegral_SetRHS_to_Zero() {}
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>& pref, const char* test )
+template<size_t dim,class CELL>
+NumIntegral_SetRHS_to_Zero<dim,CELL>::NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>& pref, const char* test )
   : MathOperatorRHS<dim>(pref,test)
  {
     MathOperatorRHS<dim>::Name("NumIntegral_SetRHS_to_Zero", test );
@@ -33,8 +33,8 @@ The result is returned into the MathOperatorRHS vector<fT> V.
 
 @test O.K.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_SetRHS_to_Zero<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_SetRHS_to_Zero<dim,CELL>::ComputeContribution( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

@@ -394,11 +394,18 @@ bool  TensorVariable<1U>::IsWithinRange( double64 vmin, double64 vmax ) const
  
 // vector-matrix multiplication: v^T = (v^T * A)^T = A^T v  
 
-VectorVariable<1U>  operator*( const VectorVariable<1U>& vc, const TensorVariable<1U>& ts )
- {
+  VectorVariable<1U>  operator*( const VectorVariable<1U>& vc, const TensorVariable<1U>& ts )
+  {
     return VectorVariable<1U>( vc.Flag(), ts(0,0) * vc[0] );
- }
+  }
+  
+  // vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
 
+  Point<1U>  operator*( const Point<1U>& vc, const TensorVariable<1U>& ts )
+  {
+    return Point<1U>( ts(0,0) * vc[0] );
+  }
+  
 
 
 void TensorVariable<1U>::AssignToRow( size_t, VectorVariable<1U>& vc )

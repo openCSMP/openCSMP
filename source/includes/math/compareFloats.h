@@ -53,7 +53,7 @@ namespace csmp
   }
 
   /**
-     @file CompareFloats.h "math/CompareFloats.h"                                              
+     @file compareFloats.h "math/compareFloats.h"                                              
                                                                                                                       
      @author Thomas Driesner, ETH Zuerich                                                                             
      @section contact Contact                                                                                         

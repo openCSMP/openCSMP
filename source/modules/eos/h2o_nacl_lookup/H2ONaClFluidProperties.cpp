@@ -1,5 +1,5 @@
 #include "H2ONaClFluidProperties.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "ConvertConcentrationUnitsNaCl.h"
 
 #include <limits>

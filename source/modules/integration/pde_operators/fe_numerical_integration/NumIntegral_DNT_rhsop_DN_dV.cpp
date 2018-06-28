@@ -8,13 +8,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::IgnoreOperand( bool ignore )
+template<size_t dim,class CELL>
+void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::IgnoreOperand( bool ignore )
   { ignore_operand = ignore; }
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
                                                                   const char* integral_multiplier,
                                                                   const char* test )
                           
@@ -40,8 +40,8 @@ NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const Pro
 
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
                                                               const char* integral_multiplier,
                                                               const char* oper,     
                                                               const char* test )
@@ -74,8 +74,8 @@ NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::NumIntegral_DNT_rhsop_DN_dV( const Pro
 
 
 
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -102,8 +102,8 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_DNT_rhsop_DN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );

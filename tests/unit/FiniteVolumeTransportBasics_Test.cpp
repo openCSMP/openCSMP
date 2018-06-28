@@ -56,7 +56,7 @@ FiniteVolumeTransportBasics_Test::~FiniteVolumeTransportBasics_Test()
 void
 FiniteVolumeTransportBasics_Test::run()
 {
-#if 1
+#if 0
   {
     ANSYS_Model3D model( "HeuristicModel1", "HeuristicModel1",  "CSMP-brine-CO2-phase-variables.txt" );
     model.OutputToBinaryFile("TestThisModel");
@@ -135,7 +135,7 @@ FiniteVolumeTransportBasics_Test::run()
         test_constant_velocity_field(model);
     }
 #endif
-#if 0
+#if 1
     test_b25();
 #endif
 }
@@ -522,7 +522,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 
         Standard_IO_Handler  stdio;
         printRangeOfVariable( model, stdio, "permeability" );
-    
+
         const double64  fluid_viscosity(1.0e-03);
         variables::Variables_TracerTransfer	 vars(model.Database());
         auto& gref = model.Region("Model");
@@ -544,6 +544,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         steady_state_pressure.AddPostProcess( &postpro0 );
         steady_state_pressure.ComputeSteadyState( model );
 
+
         
         VTK_Interface<3U>  vtk_output;
         vtk_output.OutputDataToVTK( model, "permeability", "permeability", 0 );
@@ -560,6 +561,9 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
         advector.Divergence( "velocity", "nodal flux mismatch" );
 #endif
       
+      initializeFiniteVolumeProperties( model, gref );
+      printRangeOfVariable( model, stdio, "facet area permeability" );
+
 #if 1
         ExplicitTransport<3U> advector(model, "Model", false);
         advector.StepSizeReductionFactor(0.1);
@@ -585,6 +589,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
             // advector.AdvectVariable(1000.0);
 #if 1
             vtk_output.OutputDataToVTK( model, "velocity", "velocity", i );
+            vtk_output.OutputDataToVTK( model, "fAk", "facet area permeability", i );
             vtk_output.OutputDataToVTK( model, "impl_concentration", "concentration", i );
             vtk_output.OutputDataToVTK( model, "pressure", "fluid pressure", i );
             vtk_output.OutputDataToVTK( model, "fluxbalance", "flux balance", i );

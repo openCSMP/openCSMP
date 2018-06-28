@@ -1,5 +1,5 @@
 #include "CSMP_highLevelUtilities.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "Box.h"
 #include "VSet.h"
 #include "Node.h"

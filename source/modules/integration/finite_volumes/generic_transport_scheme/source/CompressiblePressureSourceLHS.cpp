@@ -40,8 +40,8 @@ namespace csmp {
     for (auto sip: fe.AllSectorIntegrationPoints()) {
       const double64 sector_volume = sip.SectorVolume();
       const double64 pore_volume = phi * sector_volume;
-      const double64 pf0 = sip.Interpolate(key_PF0);
-      const double64 pf1 = sip.Interpolate(key_PF1);
+      const double64 pf0 = sip.Obtain(key_PF0);
+      const double64 pf1 = sip.Obtain(key_PF1);
       
       auto node_idx = sip.NodeIdx();
       mat.Add(node_idx,node_idx,pore_volume*ct*(pf1-pf0)*dt);
@@ -55,10 +55,10 @@ namespace csmp {
     const double64 dt = this->MultiplyWithTimeIncrement() ? this->dt_ : 1.0;
     for (auto sip: fv.AllSectorIntegrationPoints()) {
       const double64 sector_volume = sip.SectorVolume();
-      const double64 pf0 = sip.Interpolate(key_PF0);
-      const double64 pf1 = sip.Interpolate(key_PF1);
-      const double64 phi = sip.Interpolate( key_PHI );
-      const double64 ct = sip.Interpolate( key_CT );
+      const double64 pf0 = sip.Obtain(key_PF0);
+      const double64 pf1 = sip.Obtain(key_PF1);
+      const double64 phi = sip.Obtain( key_PHI );
+      const double64 ct = sip.Obtain( key_CT );
       const double64 pore_volume = phi * sector_volume;
 
       auto node_idx = sip.NodeIdx();

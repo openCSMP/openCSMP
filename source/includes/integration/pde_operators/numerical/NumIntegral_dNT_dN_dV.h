@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// PDE operator:  div^2 N = interpolation function derivate matrix squared.
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -16,11 +16,11 @@ class NumIntegral_dNT_dN_dV : public MathOperatorLHS<dim> {
                            const char* test );
   
     /// no operands need to be fetched from computational domain
-    virtual void GetOperands( SIMPLEX& ) {}
+    virtual void GetOperands( CELL& ) {}
   
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( CELL& );
   
-    virtual NumIntegral_dNT_dN_dV<dim,SIMPLEX >* clone() const { return new NumIntegral_dNT_dN_dV<dim,SIMPLEX >(*this); }
+    virtual NumIntegral_dNT_dN_dV<dim,CELL >* clone() const { return new NumIntegral_dNT_dN_dV<dim,CELL >(*this); }
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 };

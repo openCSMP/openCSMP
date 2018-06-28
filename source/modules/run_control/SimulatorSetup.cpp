@@ -292,8 +292,8 @@ bool SimulatorSetup<dim>::CheckVariables()
     //================================================================================
     // CHECK MODEL PARAMETER LIST AND LOCAL SETUP CLASS PARAMETER LIST FOR DUPLICATE VARIABLE NAMES
     const PropertyDatabase<dim>& pdb=model_->Database();
-    std::map<std::string,csmp::Parameter>::const_iterator modelplistBegin ( pdb.Begin());
-    std::map<std::string,csmp::Parameter>::const_iterator modelplistEnd ( pdb.End());
+    auto modelplistBegin ( pdb.Begin());
+    auto modelplistEnd ( pdb.End());
 
     // ---------------------------------------------------------------------
     // extract the names and notations from the Property Database for comparison.
@@ -302,8 +302,7 @@ bool SimulatorSetup<dim>::CheckVariables()
     set<std::string> list_of_names;
     multimap<std::string,std::string> duplicates;
 
-    for(std::map<std::string,csmp::Parameter>::const_iterator pit = modelplistBegin;
-        pit!=modelplistEnd;pit++){
+    for(auto pit = modelplistBegin; pit!=modelplistEnd;pit++){
         if (list_of_names.find(pit->second.name)==list_of_names.end())
             list_of_names.insert(pit->second.name);
         else{

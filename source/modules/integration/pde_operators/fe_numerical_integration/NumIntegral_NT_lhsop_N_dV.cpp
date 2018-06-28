@@ -9,8 +9,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_NT_lhsop_N_dV<dim,SIMPLEX>::NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
+template<size_t dim,class CELL>
+NumIntegral_NT_lhsop_N_dV<dim,CELL>::NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
                                                            const char* oper,
                                                            const char* basic,
                                                            const char* test )
@@ -50,8 +50,8 @@ C[n x n] = w(i) * { N[n x 1] * S[1 x 1] * N[1 x n] * |J[dim x dim]| }
 
 see, for instance, J.Istock p. 132.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );

@@ -15,7 +15,7 @@ gravity term in transient flow: -S / dt  +  K     g   delta_rho grad Z
 
 @note only use in BE scheme where storage term is divided by time-increment
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& p, 
@@ -24,9 +24,9 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
                                    const char* mtrl2,         // e.g., conductivity
                                    const char* test );        // e.g., fluid pressure
     
-    virtual void GetOperands( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
 
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void ComputeContribution( CELL& e );
     
     virtual void MultiplyWithTimeFactor( double64 dt );
   

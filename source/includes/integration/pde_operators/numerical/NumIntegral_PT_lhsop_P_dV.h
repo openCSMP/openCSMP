@@ -13,15 +13,15 @@ namespace csmp {
 @date 2000 */
 
 /// vector solution variable: "mass matrix" for vector dependent variables
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<size_t dim,class CELL=Element<dim> >
 class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& p, 
                                const char* oper, const char* oper2, 
                                const char* basic, const char* test );
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
 
   private:
     int                 nodal_degrees_of_freedom;

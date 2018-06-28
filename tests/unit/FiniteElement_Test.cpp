@@ -2,6 +2,7 @@
 #include "CSMP_highLevelUtilities.h"
 #include "PL_Utilities.h"
 #include "GlobalVerbose.h"
+#include "compareFloats.h"
 
 #include <fstream>
 
@@ -428,6 +429,23 @@ void FiniteElement_Test::run()
     }
   }
 
+  // .) TEST INTERPOLATION DERIVATIVES OVER A LINEAR SIMPLEX
+  if ( femPtr_->IsSimplex() && femPtr_->Interpolation() == 1 ) {
+    const size_t iNrIps = femPtr_->IntegrationPoints();
+    std::cerr << "Shape matrices for FE " << fileName_ << '\n';
+    femPtr_->dN_AtBarycenter( denseMatrix );
+    DenseMatrix<DM_MIN> denseMatrixIP;
+    for (size_t ip = 0; ip < iNrIps; ++ip) {
+      femPtr_->dN_AtIntegrationPoint( denseMatrixIP, ip );
+      _test( denseMatrix.Rows() == denseMatrixIP.Rows() );
+      _test( denseMatrix.Cols() == denseMatrixIP.Cols() );
+      for (size_t i = 0; i < denseMatrix.Cols(); ++i) {
+        for (size_t j = 0; j < denseMatrix.Rows(); ++j) {
+          _test( approximatelyEqual( denseMatrix(j,i), denseMatrixIP(j,i) ));
+        }
+      }
+    }
+  }
 
 } // run
 

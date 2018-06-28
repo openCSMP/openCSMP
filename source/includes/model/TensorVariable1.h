@@ -98,6 +98,7 @@ class TensorVariable<1U> {
 
 
 VectorVariable<1U>  operator*( const VectorVariable<1U>& vc, const TensorVariable<1U>& ts );
+Point<1U>  operator*( const Point<1U>& vc, const TensorVariable<1U>& ts );
 
 // copyright (c) 2001 by S.K. Matthaei, S. Geiger & Stephen G. Roberts
  

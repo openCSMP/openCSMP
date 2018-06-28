@@ -103,10 +103,10 @@ TEST_CASE("Development tests", "[Dev]") {
     // ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
-    FiniteVolumeTransportBasics_Test test;
+  FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
-    test.run();
+  test.run();
 
  //   ANSYS_Model2D_Test test;
  //   test.run();

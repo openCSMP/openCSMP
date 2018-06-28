@@ -140,14 +140,14 @@ PropertyDatabase<dim>::~PropertyDatabase()
 
 // property iterators
 template<size_t dim>
-std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
+std::unordered_map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
  {
     return propList_.begin();
  } 
  
  
 template<size_t dim>
-std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
+std::unordered_map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
  {
     return propList_.end();
  } 
@@ -199,7 +199,7 @@ If the variable is not defined, an error will be reported.
 template<size_t dim>
 PLACEMENT PropertyDatabase<dim>::Placement( const char* s ) const 
   {
-     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     auto iter(propList_.find(std::string(s)));
      
      if ( iter != propList_.end() ) 
        return (*iter).second.key.place;
@@ -228,7 +228,7 @@ If the variable is not defined, an error will be reported.
 template<size_t dim>
 size_t PropertyDatabase<dim>::Index( const char* s ) const 
   {
-     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     auto iter(propList_.find(std::string(s)));
      
      if ( iter != propList_.end() ) 
        return (*iter).second.key.index;
@@ -257,7 +257,7 @@ If the variable is not defined, an error will be reported.
 template<size_t dim>
 VARIABLE_TYPE  PropertyDatabase<dim>::Type( const char* s ) const 
   {
-     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     auto iter(propList_.find(std::string(s)));
      
      if ( iter != propList_.end() ) 
        return (*iter).second.key.type;
@@ -290,7 +290,7 @@ If the variable is not defined, an error will be reported.
 template<size_t dim>
 size_t  PropertyDatabase<dim>::Components( const char* s ) const 
   {
-     std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+     auto iter(propList_.find(std::string(s)));
      
      if ( iter != propList_.end() ) 
        return (*iter).second.key.dataDepth;
@@ -332,7 +332,7 @@ reported.
 template<size_t dim>
 csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
  {
-    std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+    auto iter(propList_.find(std::string(s)));
     if ( iter == propList_.end() ) {
          std::string message("Variable '");
          message += s;
@@ -348,7 +348,7 @@ csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
 template<size_t dim>
 csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
 {
-  std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+  auto iter(propList_.find(std::string(s)));
   if ( iter == propList_.end() ) {
     std::string message("Variable '");
     message += s;
@@ -367,7 +367,7 @@ csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
 template<size_t dim>
 const char*  PropertyDatabase<dim>::Usage( const char* s ) const
  {
-    std::map<std::string,csmp::Parameter>::const_iterator  iter(propList_.find(std::string(s)));
+    auto iter(propList_.find(std::string(s)));
     if ( iter == propList_.end() ) {
          std::string message("Variable '");
          message += s;
@@ -407,10 +407,10 @@ bool PropertyDatabase<dim>::BinaryOut( FILE* fp ) const
   size_t parameterCount( propList_.size() );
   fwrite( (void*) &parameterCount, sizeof(size_t), 1, fp );
 
-  for( map<string,csmp::Parameter>::const_iterator it( propList_.begin() ); it != propList_.end(); ++it )
+  for( auto& prop : propList_ )
     {
-      skm_C_fwrite( fp, it->first.c_str() );
-      it->second.Out(fp);
+      skm_C_fwrite( fp, prop.first.c_str() );
+      prop.second.Out(fp);
     }
 
     return true; /// @todo (1-C) Meaningless return statement
@@ -509,9 +509,8 @@ const char*  PropertyDatabase<dim>::VariablesFile() const
 template<size_t dim>
 bool PropertyDatabase<dim>::IsDefined( const csmp::Index& idx ) const
  {
-     for ( map<string,csmp::Parameter>::const_iterator
-           iter=propList_.begin(); iter!=propList_.end(); iter++ )
-       if ( (*iter).second.key == idx ) 
+     for ( auto& prop : propList_ )
+       if ( prop.second.key == idx ) 
             return true;
 
      return false;
@@ -526,8 +525,8 @@ void PropertyDatabase<dim>::FlushToScreen() const
      map<string,csmp::Parameter>::const_iterator  iter;
 
      cout <<"\nPropertyDatabase::FlushToScreen: Current properties in alphabetical order: "<< endl;
-     for ( iter=propList_.begin(); iter!=propList_.end(); iter++ ) 
-       cout << (*iter).second;
+     for ( auto& prop : propList_ )
+       cout << prop.second;
    
      cout <<"\n\n";
      cout.flush();
@@ -548,7 +547,7 @@ to print the variable record(s).
 template<size_t dim>
 void PropertyDatabase<dim>::FlushToScreen( const char* propname ) const
  {
-     map<string,csmp::Parameter>::const_iterator  iter=propList_.find(string(propname));
+     auto iter=propList_.find(string(propname));
 
      if ( iter == propList_.end() ) {
           cout <<"\nPropertyDatabase::FlushToScreen: Property '"<< propname <<"' is undefined."<< endl;
@@ -587,9 +586,8 @@ void PropertyDatabase<dim>::CountVariables()
 
      InitializeCount();
      
-     for ( map<string,csmp::Parameter>::const_iterator
-           iter=propList_.begin(); iter!=propList_.end(); iter++ )
-         ++( variableCount_[ (*iter).second.key.place ] [ (*iter).second.key.type ] );
+     for ( auto& prop : propList_ )
+         ++( variableCount_[ prop.second.key.place ] [ prop.second.key.type ] );
   } // end CountVariables
 
 
@@ -629,8 +627,8 @@ void PropertyDatabase<dim>::AssignVariableIndices()
           return;
        }
           
-     for ( map<string,csmp::Parameter>::iterator iter=propList_.begin(); iter!=propList_.end(); iter++ )
-       (*iter).second.key.index = (variableCount_[(*iter).second.key.place][(*iter).second.key.type])++;
+     for ( auto& prop : propList_ )
+       prop.second.key.index = (variableCount_[prop.second.key.place][prop.second.key.type])++;
  } // AssignVariableIndices
 
 
@@ -645,9 +643,8 @@ To get full descriptions of the characteristics of all model variables.
 template<size_t dim>
 void PropertyDatabase<dim>::ListVariables() const 
   {
-     for ( map<string,csmp::Parameter>::const_iterator
-           iter=propList_.begin(); iter!=propList_.end(); iter++ )
-       (*iter).second.Out();
+     for ( auto& prop : propList_ )
+       prop.second.Out();
 
   } // ListVariables
 
@@ -661,11 +658,10 @@ template<size_t dim>
 void PropertyDatabase<dim>::ListVariableNames() const
   {
      cout <<"\nPropertyDatabase::ListVariableNames: Variables in current database: "<< endl;
-     for ( map<string,csmp::Parameter>::const_iterator
-           iter=propList_.begin(); iter!=propList_.end(); iter++ )
+     for ( auto& prop : propList_ )
        // if there is a variable that has not been initialized
-       if ( !(*iter).first.empty() )
-         cout << (*iter).first << endl;
+       if ( !prop.first.empty() )
+         cout << prop.first << endl;
 
   } // CountVariables
 
@@ -766,7 +762,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
           if ( reference_specified )   new_param.reference = *propertyIter++;
 	      
             // storing new parameter
-            propList_.insert( make_pair( new_param.name, new_param ) );
+            propList_.emplace( new_param.name, new_param );
 
 	        // testing
   	      if ( echo_to_screen ) new_param.Out();
@@ -827,7 +823,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty()
     cout<<"\nEnter property you would like to add: ";
     cin >> new_prop;
     
-    map<string,csmp::Parameter>::iterator  iter(propList_.find( new_prop ));
+    auto iter(propList_.find( new_prop ));
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty property '"<< new_prop <<"' already exists" << endl;
@@ -949,7 +945,7 @@ csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit
                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
                                                  double64 vmin, double64 vmax , string usage )
  {
-    map<string,csmp::Parameter>::iterator  iter(propList_.find(string(s)));
+    auto iter(propList_.find(string(s)));
 
     if ( iter != propList_.end() ) {
          cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty: '"<< s <<"' already exists. Nothing was done."<< endl;
@@ -1013,7 +1009,7 @@ template<size_t dim>
 void PropertyDatabase<dim>::DeleteProperty( const char* s ) 
  {
     string pName(s);
-    map<string,csmp::Parameter>::iterator      iter(propList_.find(pName));
+    auto iter(propList_.find(pName));
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1051,11 +1047,9 @@ new indices are entered.
 template<size_t dim>
 void PropertyDatabase<dim>::ListKeys( list<csmp::Index>& keys ) const
  {
-    keys.erase( keys.begin(), keys.end() );
-
-    map<string,csmp::Parameter>::const_iterator  it;
-    for ( it=propList_.begin(); it!=propList_.end(); it++ )
-      keys.push_back( StorageKey( (*it).second.name.c_str() ) );
+    keys.clear();
+    for ( auto& prop : propList_ )
+      keys.push_back( StorageKey( prop.second.name.c_str() ) );
  }
 
 
@@ -1072,23 +1066,21 @@ void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) con
  {
     props.erase( props.begin(), props.end() );
 
-    map<string,csmp::Parameter>::const_iterator  it;
-    for ( it=propList_.begin(); it!=propList_.end(); it++ )
-      props[ (*it).second.name ] = StorageKey( (*it).second.name.c_str() );
+    for ( auto& prop : propList_ )
+      props[ prop.second.name ] = StorageKey( prop.second.name.c_str() );
  }
 
 /// enlists properties with a specific placement
 template<size_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Index>& props ) const
  {
-    props.erase( props.begin(), props.end() );
+    props.clear();
 
-    map<string,csmp::Parameter>::const_iterator  it;
-    for ( it=propList_.begin(); it!=propList_.end(); it++ )
+    for ( auto& prop : propList_ )
       {
-      csmp::Index key = StorageKey( (*it).second.name.c_str() );
+      csmp::Index key = StorageKey( prop.second.name.c_str() );
       if( key.place == pl )
-        props[ (*it).second.name ] = key;
+        props[ prop.second.name ] = key;
       }
     return props.size();
  }
@@ -1097,12 +1089,11 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Ind
 template<size_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& props ) const
  {
-    props.erase( props.begin(), props.end() );
+    props.clear();
 
-    map<string,csmp::Parameter>::const_iterator  it;
-    for ( it=propList_.begin(); it!=propList_.end(); it++ )
-      if ( (*it).second.key.place == place )
-        props.insert( (*it).second.name );
+    for ( auto& prop : propList_ )
+      if ( prop.second.key.place == place )
+        props.insert( prop.second.name );
 
     return props.size();
  }
@@ -1111,12 +1102,11 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& prop
 template<size_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
   {
-  props.erase( props.begin(), props.end() );
+  props.clear();
 
-  map<string,csmp::Parameter>::const_iterator  it;
-  for ( it=propList_.begin(); it!=propList_.end(); it++ )
-    if ( (*it).second.key.place == place && (*it).second.key.type == vtype )
-      props.insert( (*it).second.name );
+  for ( auto& prop : propList_ )
+    if ( prop.second.key.place == place && prop.second.key.type == vtype )
+      props.insert( prop.second.name );
  
       return props.size();
  }
@@ -1141,7 +1131,7 @@ database.
 template<size_t dim>
 const char*  PropertyDatabase<dim>::Unit( const char* s ) const
   {
-     map<string,csmp::Parameter>::const_iterator  iter = propList_.find(string(s));
+     auto iter = propList_.find(string(s));
      
      if ( iter != propList_.end() ) return (*iter).second.unit.c_str();
      else
@@ -1267,7 +1257,7 @@ an error will be reported.
 template<size_t dim>
 void PropertyDatabase<dim>::RangeOf( const char* s, double64& mn, double64& mx ) const
  {
-     map<string,csmp::Parameter>::const_iterator  iter = propList_.find(string(s));
+     auto iter = propList_.find(string(s));
      
      if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
      else cout <<"\nPropertyDatabase::RangeOf: Unable to identify range of: " << s << endl;
@@ -1301,7 +1291,7 @@ template<size_t dim>
 void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
  {
     double64 mn, mx;
-    map<string,csmp::Parameter>::const_iterator  iter = propList_.find(string(s));
+    auto iter = propList_.find(string(s));
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange", "property could not be identified");
@@ -1325,7 +1315,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
             ss<<var<<' '<<mx;
             ss>>msg1>>msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while maximum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value below the maximum specified.",errmsg.c_str());
+            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value above the maximum specified.",errmsg.c_str());
          }
         
  } // end CheckRange
@@ -1343,9 +1333,8 @@ output string will be 'undefined'.
 template<size_t dim>
 const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
  {
-    for ( map<string,csmp::Parameter>::const_iterator
-          iter=propList_.begin(); iter!=propList_.end(); iter++ )
-      if ( (*iter).second.key == idx ) return (*iter).second.name.c_str();
+    for ( auto& prop : propList_ )
+      if ( prop.second.key == idx ) return prop.second.name.c_str();
 
     return "undefined";
    
@@ -1367,9 +1356,8 @@ void PropertyDatabase<dim>::Out() const
              cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
           cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
-          for ( map<string,csmp::Parameter>::const_iterator
-                iter=propList_.begin(); iter!=propList_.end(); iter++ )
-            cout << iter->first << ": \n" << (*iter).second;
+          for ( auto& prop : propList_ )
+            cout << prop.first << ": \n" << prop.second;
           cout << endl;
           cout.flush();
        }
@@ -1387,19 +1375,18 @@ bool PropertyDatabase<dim>::WriteVariablesFile( const char* fileName ) const
         // header
         variablesFile << "name\tMParameter\tunit\tindex\tmin.\tmax.\tplace\n";
         // properties
-        const map<string,csmp::Parameter>::const_iterator propertiesEnd( propList_.end() );
-        for( map<string,csmp::Parameter>::const_iterator it = propList_.begin(); it != propertiesEnd; ++it )
+        for( auto& prop : propList_ )
           {
-            const csmp::Index id( StorageKey( it->second.name.data() ) );
-            assert( it->second.name == it->first );
+            const csmp::Index id( StorageKey( prop.second.name.data() ) );
+            assert( prop.second.name == prop.first );
             string placementString( parsePlacement( id.place ) ); 
             
-            variablesFile << it->second.name << "\t" << it->second.notation << "\t" << it->second.unit << "\t"; 
+            variablesFile << prop.second.name << "\t" << prop.second.notation << "\t" << prop.second.unit << "\t"; 
               if( id.type != ARRAY && id.type != FLAGGEDARRAY )
                 variablesFile << id.type;
               else
                 variablesFile << id.dataDepth;
-              variablesFile << "\t" << it->second.min << "\t" << it->second.max << "\t" << placementString;
+              variablesFile << "\t" << prop.second.min << "\t" << prop.second.max << "\t" << placementString;
             variablesFile << endl;
           } // all parameters
       } // if file
@@ -1415,11 +1402,11 @@ void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<size_t>& 
   {
     arrayLengths.clear();
     map<size_t,size_t> offsetIndexMap;
-    for ( map<string,csmp::Parameter>::const_iterator iter=propList_.begin(); iter!=propList_.end(); iter++ )
-      if ( (*iter).second.key.type  == ARRAY && (*iter).second.key.place == place  )
-        offsetIndexMap[(*iter).second.key.index] = (*iter).second.key.dataDepth;
-    for( map<size_t,size_t>::const_iterator it( offsetIndexMap.begin() ); it != offsetIndexMap.end(); ++it )
-      arrayLengths.push_back( it->second );  
+    for ( auto& prop : propList_ )
+      if ( prop.second.key.type  == ARRAY && prop.second.key.place == place  )
+        offsetIndexMap[prop.second.key.index] = prop.second.key.dataDepth;
+    for( auto& offs : offsetIndexMap )
+      arrayLengths.push_back( offs.second );  
   }
 
 
@@ -1440,11 +1427,11 @@ void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<si
   {
     arrayLengths.clear();
     map<size_t,size_t> offsetIndexMap;
-    for ( map<string,csmp::Parameter>::const_iterator iter=propList_.begin(); iter!=propList_.end(); iter++ )
-      if ( (*iter).second.key.type  == FLAGGEDARRAY && (*iter).second.key.place == place  )
-        offsetIndexMap[(*iter).second.key.index] = (*iter).second.key.dataDepth;
-    for( map<size_t,size_t>::const_iterator it( offsetIndexMap.begin() ); it != offsetIndexMap.end(); ++it )
-      arrayLengths.push_back( it->second );
+    for ( auto& prop : propList_ )
+      if ( prop.second.key.type  == FLAGGEDARRAY && prop.second.key.place == place  )
+        offsetIndexMap[prop.second.key.index] = prop.second.key.dataDepth;
+    for( auto& offs : offsetIndexMap )
+      arrayLengths.push_back( offs.second );
   }
 
 
@@ -1485,10 +1472,10 @@ template<size_t dim>
 void PropertyDatabase<dim>::AttachIndices()
   {
     // attach
-    for( map<string,csmp::Parameter>::iterator iter=propList_.begin(); iter!=propList_.end(); iter++ )
+    for( auto& prop : propList_ )
       {
-        indexTracker_.Attach( &((*iter).second.key), iter->second.name );
-        (*iter).second.key.Attach(&indexTracker_);
+        indexTracker_.Attach( &(prop.second.key), prop.second.name );
+        prop.second.key.Attach(&indexTracker_);
       }
   }
 
@@ -1499,7 +1486,7 @@ void PropertyDatabase<dim>::UpdateIndexReferences()
   {
     size_t i(0);
     // update
-    for ( map<csmp::Index*,string>::const_iterator it(indexTracker_.IndicesBegin()); it != indexTracker_.IndicesEnd(); ++it, ++i )
+    for ( auto it(indexTracker_.IndicesBegin()); it != indexTracker_.IndicesEnd(); ++it, ++i )
       if ( IsDefined( it->second.c_str() ) ) {
            // (it->first)->UpdateData( propList_[it->second].key ); /// @todo (2-F) Buggy, only safe by design
            //            string,Parameter pairs
@@ -1530,10 +1517,10 @@ void PropertyDatabase<dim>::DetachIndices( string parameterName )
 template<size_t dim>
 void PropertyDatabase<dim>::EstablishIndexLocalAndIntegrationPointVariables()
   {
-    for( map<string,csmp::Parameter>::iterator iter=propList_.begin(); iter!=propList_.end(); iter++ )
+    for( auto& prop : propList_ )
       {
-        (*iter).second.key.localVariables = LocalVariablesAt( (*iter).second.key.place );
-        (*iter).second.key.integrationPointVariables = IntegrationPointVariablesAt( (*iter).second.key.place );
+        prop.second.key.localVariables = LocalVariablesAt( prop.second.key.place );
+        prop.second.key.integrationPointVariables = IntegrationPointVariablesAt( prop.second.key.place );
       }
   }
 
@@ -1542,9 +1529,9 @@ template<size_t dim>
 void PropertyDatabase<dim>::EstablishScalarOffsets( PLACEMENT whithin )
   {
     ///  Scalars: data offset = flag offset = index (as many flags as components)
-    for( map<string,csmp::Parameter>::iterator it( propList_.begin() ); it != propList_.end(); ++it )
-      if( it->second.key.place == whithin && it->second.key.type == SCALAR )
-        it->second.key.dataOffset = it->second.key.flagOffset = it->second.key.index;
+    for( auto& prop : propList_ )
+      if( prop.second.key.place == whithin && prop.second.key.type == SCALAR )
+        prop.second.key.dataOffset = prop.second.key.flagOffset = prop.second.key.index;
   }
 
 
@@ -1554,9 +1541,9 @@ void PropertyDatabase<dim>::EstablishVectorOffsets( PLACEMENT whithin )
     const size_t scalars( VariableCount( whithin, SCALAR ) );
 
     ///  Vectors: data offset = flag offset = scalars at this placement plus index times dim (as many flags as components)
-    for( map<string,csmp::Parameter>::iterator it( propList_.begin() ); it != propList_.end(); ++it )
-      if( it->second.key.place == whithin && it->second.key.type == VECTOR )
-        it->second.key.dataOffset = it->second.key.flagOffset = (scalars + it->second.key.index*dim);
+    for( auto& prop : propList_ )
+      if( prop.second.key.place == whithin && prop.second.key.type == VECTOR )
+        prop.second.key.dataOffset = prop.second.key.flagOffset = (scalars + prop.second.key.index*dim);
   }
 
 
@@ -1568,11 +1555,11 @@ void PropertyDatabase<dim>::EstablishTensorOffsets( PLACEMENT whithin )
     const size_t offsetToTensors( scalars + vectors*dim );
 
     ///  Tensors: data offset != flag offset (as many flags as dim)
-    for( map<string,csmp::Parameter>::iterator it( propList_.begin() ); it != propList_.end(); ++it )
-      if( it->second.key.place == whithin && it->second.key.type == TENSOR )
+    for( auto& prop : propList_ )
+      if( prop.second.key.place == whithin && prop.second.key.type == TENSOR )
         {
-          it->second.key.dataOffset = offsetToTensors + it->second.key.index*dim*dim;
-          it->second.key.flagOffset = offsetToTensors + it->second.key.index*dim;
+          prop.second.key.dataOffset = offsetToTensors + prop.second.key.index*dim*dim;
+          prop.second.key.flagOffset = offsetToTensors + prop.second.key.index*dim;
         }
   }
 
@@ -1588,24 +1575,24 @@ void PropertyDatabase<dim>::EstablishArrayOffsets( PLACEMENT whithin )
 
     // we need to sort first acc to indexes
     map<size_t,csmp::Parameter*> sortedArrays;
-    for( map<string,csmp::Parameter>::iterator it( propList_.begin() ); it != propList_.end(); ++it )
-      if( it->second.key.place == whithin && it->second.key.type == ARRAY )
-        sortedArrays[it->second.key.index] = &(it->second);
+    for( auto& prop : propList_ )
+      if( prop.second.key.place == whithin && prop.second.key.type == ARRAY )
+        sortedArrays[prop.second.key.index] = &(prop.second);
 
     // then we calculate the relative offset depending on the order and size of all arrays
     size_t currentDataOffset(0);
-    for( map<size_t,csmp::Parameter*>::iterator it( sortedArrays.begin() ); it != sortedArrays.end(); ++it )
+    for( auto& sarr : sortedArrays )
       {
-        it->second->key.dataOffset = currentDataOffset;
-        currentDataOffset += it->second->key.dataDepth;
-        it->second->key.flagOffset = it->second->key.index;
+        sarr.second->key.dataOffset = currentDataOffset;
+        currentDataOffset += sarr.second->key.dataDepth;
+        sarr.second->key.flagOffset = sarr.second->key.index;
       }
 
     // we adjust for the total offset resulting from scalars, vectors and tensors ahead
-    for( map<size_t,csmp::Parameter*>::iterator it( sortedArrays.begin() ); it != sortedArrays.end(); ++it )
+    for( auto& sarr : sortedArrays )
       {
-        it->second->key.dataOffset += offsetToArrayData;
-        it->second->key.flagOffset += offsetToArrayFlag;
+        sarr.second->key.dataOffset += offsetToArrayData;
+        sarr.second->key.flagOffset += offsetToArrayFlag;
       }
   }
 
@@ -1623,31 +1610,31 @@ void PropertyDatabase<dim>::EstablishFlaggedArrayOffsets( PLACEMENT whithin )
 
     // we need to sort first acc to indexes
     map<size_t,csmp::Parameter*> sortedArrays;
-    for( map<string,csmp::Parameter>::iterator it( propList_.begin() ); it != propList_.end(); ++it )
-      if( it->second.key.place == whithin && it->second.key.type == FLAGGEDARRAY )
-        sortedArrays[it->second.key.index] = &(it->second);
+    for( auto& prop : propList_ )
+      if( prop.second.key.place == whithin && prop.second.key.type == FLAGGEDARRAY )
+        sortedArrays[prop.second.key.index] = &(prop.second);
 
     // then we calculate the relative offset depending on the order and size of all arrays
     size_t currentOffset(0);
-    for( map<size_t,csmp::Parameter*>::iterator it( sortedArrays.begin() ); it != sortedArrays.end(); ++it )
+    for( auto& sarr : sortedArrays )
       {
-        it->second->key.dataOffset = currentOffset;
-        it->second->key.flagOffset = currentOffset;
-        currentOffset += it->second->key.dataDepth;
+        sarr.second->key.dataOffset = currentOffset;
+        sarr.second->key.flagOffset = currentOffset;
+        currentOffset += sarr.second->key.dataDepth;
       }
 
     // we adjust for the total offset resulting from scalars, vectors and tensors ahead
-    for( map<size_t,csmp::Parameter*>::iterator it( sortedArrays.begin() ); it != sortedArrays.end(); ++it )
+    for( auto& sarr : sortedArrays )
       {
-        it->second->key.dataOffset += offsetToFlaggedArrayData;
-        it->second->key.flagOffset += offsetToFlaggedArrayFlag;
+        sarr.second->key.dataOffset += offsetToFlaggedArrayData;
+        sarr.second->key.flagOffset += offsetToFlaggedArrayFlag;
       }
   }
 
 template<size_t dim>
 void PropertyDatabase<dim>::EstablishIndexOffsets()
   {
-    for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
+    for( auto it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
       {
         EstablishScalarOffsets(it->first);   
         EstablishVectorOffsets(it->first);   

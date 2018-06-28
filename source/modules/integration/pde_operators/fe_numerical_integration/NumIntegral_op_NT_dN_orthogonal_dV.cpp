@@ -8,8 +8,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::NumIntegral_op_NT_dN_orthogonal_dV(
+template<size_t dim,class CELL>
+NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::NumIntegral_op_NT_dN_orthogonal_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  oper,  // fluid pressure
                                                           const char*  test ) // stream-function
@@ -54,8 +54,8 @@ nodal and element variables, respectively.
 
 The operand is read
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -79,8 +79,8 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<size_t dim,class CELL>
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     double64  detJ;
 
