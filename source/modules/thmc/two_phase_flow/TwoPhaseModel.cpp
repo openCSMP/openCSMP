@@ -352,7 +352,37 @@ void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
         rhw_ = e.Read( rhw_key_ );
     }
     
- } 
+ }
+ 
+/**
+    non const version which allows to set parameters on element 
+*/
+template<size_t dim>
+void TwoPhaseModel<dim>::Initialize( Element<dim>& e )
+ {
+    swr_ = e.Read( swr_key_ );
+    snr_ = e.Read( snr_key_ );
+
+    if( tensor_permeability_){
+        e.Read( perm_key_, K_);
+        // TODO: Skm: fix these unwanted averages of the tensor k
+        k_ = K_.Trace()/static_cast<double64>(dim);
+    }else{
+        k_ = e.Read( perm_key_ );
+        K_.operator=( VectorVariable<dim>(PLAIN, k_ ) );
+    }
+   
+    // if properties are discretized on element
+    if (!sw_ro_mu_placement_) {
+        sat_ = e.Read( sat_key_ );
+        mun_ = e.Read( mun_key_ );
+        muw_ = e.Read( muw_key_ );
+        rhn_ = e.Read( rhn_key_ );
+        rhw_ = e.Read( rhw_key_ );
+    }
+   
+ }
+
  
  
  

@@ -49,7 +49,10 @@ class TwoPhaseModel {
    
     /// reads element properties snr, swr, k, mtrl_param, fluid_param and interpolates to target placement
     virtual void Initialize( const Element<dim>& e );
-    
+ 
+    /// read and modify element properties when the saturation functions are history dependent
+    virtual void Initialize( Element<dim>& e );
+
     /// interpolates node properties to element barycenter
     virtual void InitializeForBaryCenter( const Element<dim>& e );
 

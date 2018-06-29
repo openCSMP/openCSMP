@@ -1,5 +1,5 @@
-#ifndef BROOKS_COREY_WITH_HYSTERESIS_H
-#define BROOKS_COREY_WITH_HYSTERESIS_H
+#ifndef BROOKS_COREY_WITH_HYSTERESIS_CO2_H
+#define BROOKS_COREY_WITH_HYSTERESIS_CO2_H
 
 #include "TwoPhaseModel.h"
 #include "LinearTwoPhaseModel.h"
@@ -9,21 +9,21 @@ namespace csmp {
 // for lambda=0, this implementation of Brooks-Corey model switches to linear
 // base class pm1 and pm2 are used for pd and lambda, respectively
 template<size_t dim>
-class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
+class BrooksCoreyWithHysteresisCO2 : public TwoPhaseModel<dim> {
   public:
-    BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
+    BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
                                const char* permeability, 
                                double64 viscosity_nw, double64 viscosity_w,
                                double64 density_nw, double64 density_w,
                                const char* lamda, const char* pc_entry );
 
-    BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
-                               const char* lamda, const char* pc_entry );
+    BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
+                 const char* lamda, const char* pc_entry );
                            
-    virtual ~BrooksCoreyWithHysteresis();
+    virtual ~BrooksCoreyWithHysteresisCO2();
   
     /// not constant as it sets the saturation inflection point
-    virtual void Initialize( Element<dim>& );
+    virtual void Initialize( Element<dim>& e );
     
     // relative permeabilities
     virtual double64 krn_Phase() const;
@@ -51,7 +51,7 @@ class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
     virtual void Out( size_t phase ) const;
 
   private:
-    BrooksCoreyWithHysteresis();
+    BrooksCoreyWithHysteresisCO2();
     csmp::Index          pd_key, lamda_key, sormax_key, 
                          sat_previous_key, sat_inflection_key;
     const double64       acc_gravity_; 
