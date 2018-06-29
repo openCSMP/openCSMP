@@ -77,7 +77,7 @@ int flux_mismatch( bool bPrescribedVelocity )
     VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( sg, "conductivity", "porosity", "fluid pressure" );
     
     steady_state_pressure.AddPostProcess( &postpro0 );
-    sg.Apply( steady_state_pressure );
+    steady_state_pressure.ComputeSteadyState( sg.Region("Model") );
 
    // -----------------------------------------------------------------------
    // 3. Measure speed of the NodeCenteredFiniteVolumeTransport constructor

@@ -109,8 +109,10 @@ template void FiniteVolumePropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index
     calculateN(*eptr, fv->FacetIntegrationPoint( facet, idx3 ), &coeff[0]);
     
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 
@@ -135,8 +137,10 @@ template void FiniteVolumePropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index
     calculateN(*eptr, fv->SectorIntegrationPoint( pnid, idx3 ), &coeff[0]);
     
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 

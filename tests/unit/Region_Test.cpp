@@ -82,7 +82,7 @@ void Region_Test::run()
     VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
     steady_state_pressure.AddPostProcess( &postpro );
 
-    model.Apply( steady_state_pressure );
+    steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
     // output result
     if ( verbose_ ) {
@@ -310,7 +310,7 @@ void Region_Test::run()
     // breaking a region into contiguous sub-regions
     // ---------------------------------------------
     if ( verbose_ ) cout << "\n\n\nRegion_Test::run: number of contiguous sub regions: ";
-    _test(model.PartitionRegionIntoContiguousSubRegions( "FRAC_VOLUMES" ) == false );
+    _test(model.PartitionRegionIntoContiguousSubRegions( "FRAC_VOLUMES" ) == 0 );
     // removal of new partitions
     _test(model.RemoveRegionPartitionsFor("FRAC_VOLUMES") == 0 );
 

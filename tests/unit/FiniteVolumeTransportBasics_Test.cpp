@@ -542,7 +542,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
                                                              "fluid volume source" );
         VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
         steady_state_pressure.AddPostProcess( &postpro0 );
-        steady_state_pressure.ComputeSteadyState( model );
+        steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
 
         

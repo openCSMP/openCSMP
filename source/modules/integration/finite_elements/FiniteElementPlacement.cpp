@@ -117,8 +117,10 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
     calculateN(*eptr, eptr->FV()->Barycenter(), &coeff[0]);
 
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 
@@ -139,8 +141,10 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
     calculateN(*eptr, eptr->IntegrationPoint(idx1), &coeff[0]);
 
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 
@@ -161,8 +165,10 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
     calculateN(*eptr, eptr->FV()->FacetIntegrationPoint(idx1, idx2), &coeff[0]);
 
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 
@@ -183,8 +189,10 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
     calculateN(*eptr, eptr->FV()->SectorIntegrationPoint(idx1, idx2), &coeff[0]);
 
     var = 0.;
+    typename VariableTypeTraits<dim,ty>::VariableType v;
     for ( size_t i=0; i<iNrNodes; i++ ) {
-      var += eptr->N(i)->Read( prop ) * coeff[i];
+      eptr->N(i)->Read( prop, v );
+      var += v * coeff[i];
     }
   }
 

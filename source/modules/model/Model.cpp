@@ -7,6 +7,7 @@
 #include "Interrelation.h"
 #include "Visitor.h"
 #include "PDE_Integrator.h"
+#include "PDE_Integrator_CRM.h"
 #include "PropertyConstraints.h"
 #include "FEM_Data.h"
 #include "Box.h"
@@ -2290,6 +2291,44 @@ void Model<dim>::Apply( PDE_Integrator<dim,csmp::SplitBoundary>& problem, const 
  {
     problem.IntegrateOver( this->SplitBoundary(splitboundary_name), debug );
  } // Apply (PDE_Integrator)
+
+
+
+
+// TODO: fix this code bloat added to support PDE_Integrator_CRM
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::Region>& problem, bool debug )
+ { problem.IntegrateOver( this->Region("Model"), debug ); }
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::Boundary>& problem, bool debug )
+ { for ( typename map<std::string,csmp::Boundary<dim> >::iterator it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+      problem.IntegrateOver( (*it).second, debug );
+ } 
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>& problem, bool debug )
+ { for ( typename map<std::string,csmp::SplitBoundary<dim> >::iterator it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+      problem.IntegrateOver( (*it).second, debug );
+ }
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::Region>& problem, const char* region_name, bool debug )
+ { problem.IntegrateOver( this->Region(region_name), debug );  }
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::Boundary>& problem, const std::string& boundary_name, bool debug )
+ { problem.IntegrateOver( this->Boundary(boundary_name), debug ); }
+
+template<size_t dim>
+void Model<dim>::Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>& problem, const std::string& splitboundary_name, bool debug )
+ { problem.IntegrateOver( this->SplitBoundary(splitboundary_name), debug ); }
+
+
+
+
+
 
 
 

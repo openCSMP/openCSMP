@@ -34,8 +34,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const string& subdomain_name,
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
                                              const PropertyDatabase<dim>& pref )
  :  pref_(pref),
     subdomain_name_(subdomain_name),
@@ -44,8 +44,8 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const string& subdomain_name,
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const ModelSubDomain& ed )
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
  : pref_(ed.pref_),
    elmt_vec_(ed.elmt_vec_),
    node_vec_(ed.node_vec_),
@@ -59,8 +59,8 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const ModelSubDomain& ed )
 
 
 /// move constructor; @attention remove verbose output after testing
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( ModelSubDomain&& ed )
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
  : pref_{ed.pref_},
    elmt_vec_{ed.elmt_vec_},
    node_vec_{ed.node_vec_},
@@ -70,7 +70,7 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( ModelSubDomain&& ed )
    verbose_{true}
  {
    this->LVS( move(ed.LVS()) );
-   cout <<"\nModelSubDomain<dim,SIMPLEX>::ModelSubDomain: called MOVE constructor.\n";
+   cout <<"\nModelSubDomain<dim,CELL>::ModelSubDomain: called MOVE constructor.\n";
  }
 
 
@@ -79,9 +79,9 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( ModelSubDomain&& ed )
 
 /* DOES NOT WORK BECAUSE "All Elements" region gets sorted before
 
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                             const ModelSubDomain<dim,SIMPLEX>& mesh, "All Elements"
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
+                                             const ModelSubDomain<dim,CELL>& mesh, "All Elements"
                                              const SubDomainInfo& info )
  : pref_(pref),
    first_bd_node_(info.interior_nodes.size()),
@@ -134,21 +134,21 @@ ModelSubDomain<dim,SIMPLEX>::ModelSubDomain( const PropertyDatabase<dim>& pref,
 
     // allocating the storage for subdomain properties
     // -----------------------------------------------
-    this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,SIMPLEX>() ) );
+    this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,CELL>() ) );
  
  } // end constructor
 */
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>::~ModelSubDomain()
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>::~ModelSubDomain()
  {
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-ModelSubDomain<dim,SIMPLEX>&  ModelSubDomain<dim,SIMPLEX>::operator=( const ModelSubDomain& ed )
+template<size_t dim, template<size_t> class CELL>
+ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDomain& ed )
  {
      if ( &ed != this ) {
           elmt_vec_       = ed.elmt_vec_;
@@ -162,28 +162,28 @@ ModelSubDomain<dim,SIMPLEX>&  ModelSubDomain<dim,SIMPLEX>::operator=( const Mode
      return *this;
  }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-string  ModelSubDomain<dim,SIMPLEX>::Name() const
+template<size_t dim, template<size_t> class CELL>
+string  ModelSubDomain<dim,CELL>::Name() const
  {
     return subdomain_name_;
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::Name( const string& name )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::Name( const string& name )
  {
     subdomain_name_ = name;
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Verbose( bool verbose )
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::Verbose( bool verbose )
 {
     this->verbose_ = verbose;
 }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool ModelSubDomain<dim,SIMPLEX>::Verbose()
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::Verbose()
 {
     return this->verbose_;
 }
@@ -199,15 +199,15 @@ bool ModelSubDomain<dim,SIMPLEX>::Verbose()
     
     @author SKM 10/9/2014
 */
-template<size_t dim, template<size_t> class SIMPLEX, class Var>
-void writeVariableIf( SIMPLEX<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
+template<size_t dim, template<size_t> class CELL, class Var>
+void writeVariableIf( CELL<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
  } // end generic specification
 
 
 /// write guard for scalar variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              const csmp::Index& idx,
                              const ScalarVariable& var,
                              VARIABLE_FLAG dont_overwrite )
@@ -218,8 +218,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
  
 
 /// write guard for vector variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              const csmp::Index& idx,
                              const VectorVariable<dim>& var,
                              VARIABLE_FLAG dont_overwrite )
@@ -242,8 +242,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
      so that only those rows get written where the 
      flag permits this)
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              const csmp::Index& idx,
                              const TensorVariable<dim>& var,
                              VARIABLE_FLAG dont_overwrite )
@@ -267,14 +267,14 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
     
     Generic version for variables that are placed on Element/Face/Interface integration points.
 */
-template<size_t dim, template<size_t> class SIMPLEX, class Var>
-void writeVariableIf( SIMPLEX<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
+template<size_t dim, template<size_t> class CELL, class Var>
+void writeVariableIf( CELL<dim>*, size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
  } // end generic specification
 
 /// write guard for scalar variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t ip,
                              const csmp::Index& idx,
                              const ScalarVariable& var,
@@ -286,8 +286,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
  
 
 /// write guard for vector variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t ip,
                              const csmp::Index& idx,
                              const VectorVariable<dim>& var,
@@ -311,8 +311,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
      so that only those rows get written where the 
      flag permits this)
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t ip,
                              const csmp::Index& idx,
                              const TensorVariable<dim>& var,
@@ -337,15 +337,15 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
     
     Generic version for finite volume-related integration points.
 */
-template<size_t dim, template<size_t> class SIMPLEX, class Var>
-void writeVariableIf( SIMPLEX<dim>*, size_t sector_or_facet,
+template<size_t dim, template<size_t> class CELL, class Var>
+void writeVariableIf( CELL<dim>*, size_t sector_or_facet,
                       size_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
  } // end generic specification
 
 /// write guard for scalar variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t sector_or_facet,
                              size_t ip,
                              const csmp::Index& idx,
@@ -358,8 +358,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
  
 
 /// write guard for vector variables
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t sector_or_facet,
                              size_t ip,
                              const csmp::Index& idx,
@@ -384,8 +384,8 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
      so that only those rows get written where the 
      flag permits this)
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void writeVariableIf( SIMPLEX<dim>* ptr,
+template<size_t dim, template<size_t> class CELL>
+void writeVariableIf( CELL<dim>* ptr,
                              size_t sector_or_facet,
                              size_t ip,
                              const csmp::Index& idx,
@@ -407,52 +407,52 @@ void writeVariableIf( SIMPLEX<dim>* ptr,
 
 // inlined methods
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::Nodes() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::Nodes() const
   {
      return node_vec_.size();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::InteriorNodes() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::InteriorNodes() const
   {
      return first_bd_node_;
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::PerimeterNodes() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::PerimeterNodes() const
   {
      return node_vec_.size() - InteriorNodes();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::Elements() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::Elements() const
   {
      return elmt_vec_.size();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::InteriorElements() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::InteriorElements() const
   {
      return elmt_vec_.size() - bd_face_vec_.size();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::PerimeterElements() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::PerimeterElements() const
   {
      return bd_face_vec_.size();
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool ModelSubDomain<dim,SIMPLEX>::Empty() const
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::Empty() const
   {
      return elmt_vec_.empty();
   }
 
 
 /// returns how many faces of the target element lie on the subdomain boundary
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFaces( size_t e ) const
+template<size_t dim, template<size_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
  {
     assert( e >= InteriorElements() );
     assert( e < elmt_vec_.size() );
@@ -460,8 +460,8 @@ size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFaces( size_t e ) const
  }
 
 /// returns the elements local face number of the n'th face that is on the subdomain boundary
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFace( size_t e, size_t face ) const
+template<size_t dim, template<size_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, size_t face ) const
  {
     assert( e >= InteriorElements() );
     assert( e < elmt_vec_.size() );
@@ -470,118 +470,118 @@ size_t  ModelSubDomain<dim,SIMPLEX>::PerimeterFace( size_t e, size_t face ) cons
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-csmp::Node<dim>*  ModelSubDomain<dim,SIMPLEX>::N( size_t nd ) const
+template<size_t dim, template<size_t> class CELL>
+csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const
  { assert( nd < node_vec_.size() ); return node_vec_[nd]; }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-SIMPLEX<dim>*  ModelSubDomain<dim,SIMPLEX>::E( size_t e ) const
+template<size_t dim, template<size_t> class CELL>
+CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const
  { assert( e < elmt_vec_.size() ); return elmt_vec_[e]; }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::SimplexVector()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::SimplexVector()
  { return elmt_vec_; }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::ElementVector()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::ElementVector()
  { return elmt_vec_; }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::FaceVector()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::FaceVector()
  { return elmt_vec_; }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>&  ModelSubDomain<dim,SIMPLEX>::InterFaceVector()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::InterFaceVector()
  { return elmt_vec_; }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<Node<dim>*>&  ModelSubDomain<dim,SIMPLEX>::NodeVector()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
   { return node_vec_; }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const
  { return node_vec_.begin(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const
  { return node_vec_.end(); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorNodesBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesBegin() const
  { return node_vec_.begin(); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorNodesEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorNodesEnd() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd() const
  { return node_vec_.end(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::ElementsBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsBegin() const
  { return elmt_vec_.begin(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::ElementsEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::ElementsEnd() const
  { return elmt_vec_.end(); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorElementsBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsBegin() const
   { return elmt_vec_.begin(); }
    
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::InteriorElementsEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::InteriorElementsEnd() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin() const
   { return std::next( elmt_vec_.begin(), InteriorElements() ); }
    
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::const_iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsEnd() const
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterElementsEnd() const
   { return elmt_vec_.end(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesBegin()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesBegin()
  { return node_vec_.begin(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::NodesEnd()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::NodesEnd()
  { return node_vec_.end(); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesBegin()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin()
  { return std::next( node_vec_.begin(), InteriorNodes() ); }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterNodesEnd()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<csmp::Node<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterNodesEnd()
  { return node_vec_.end(); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::ElementsBegin()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsBegin()
  { return elmt_vec_.begin(); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::PerimeterElementsBegin()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::PerimeterElementsBegin()
  { return std::next( elmt_vec_.begin(), InteriorElements() ); }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::ElementsEnd()
+template<size_t dim, template<size_t> class CELL>
+typename std::vector<CELL<dim>*>::iterator  ModelSubDomain<dim,CELL>::ElementsEnd()
  { return elmt_vec_.end(); }
 
 
@@ -595,14 +595,14 @@ typename std::vector<SIMPLEX<dim>*>::iterator  ModelSubDomain<dim,SIMPLEX>::Elem
     @author SKM 1/11/2013
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-pair<int32,int32>  ModelSubDomain<dim,SIMPLEX>::SpatialDimensions() const
+template<size_t dim, template<size_t> class CELL>
+pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
  {
     bool with_volume_elements(false);
     bool with_surface_elements(false);
     bool with_line_elements(false);
 
-    for( typename vector<SIMPLEX<dim>*>::const_iterator
+    for( typename vector<CELL<dim>*>::const_iterator
          it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
          if      ( (*it)->IsLineElement() )    with_line_elements = true;
          else if ( (*it)->IsSurfaceElement() ) with_surface_elements = true;
@@ -631,32 +631,32 @@ pair<int32,int32>  ModelSubDomain<dim,SIMPLEX>::SpatialDimensions() const
 /**
     Connects the simplices with their equidimensional neighbors
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( elmt_vec_.empty() ) {
-         csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
+         csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
-    cout << "\nModelSubDomain<"<< dim <<",SIMPLEX>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
+    cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
     cout << "  Building a list of the faces of the cells...\n";
     //       key             face number,neighbor
-    multimap<set<Node<dim>*>,pair<size_t,SIMPLEX<dim>*> >  volume_neighbor_keys,
+    multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
                                                            surface_neighbor_keys, 
                                                            line_neighbor_keys;
     vector<size_t>                 fnids;
     typename std::set<Node<dim>*>  key; // region, boundary and split boundary all use nodes
 
-    for ( typename vector<SIMPLEX<dim>*>::const_iterator it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
+    for ( typename vector<CELL<dim>*>::const_iterator it=elmt_vec_.begin(); it!=elmt_vec_.end(); ++it ) {
           const size_t faces((*it)->Faces());
           for ( size_t face=0U; face<faces; ++face )
             {
                if ( (*it) == nullptr ) {
-                    csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
+                    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
                                       "supplied element contains NULL pointer to elements; nothing was done." );
                     return;
                  }
@@ -687,12 +687,12 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
     // -----------------
     if ( !line_neighbor_keys.empty() )
       {
-        SIMPLEX<dim>* e1Ptr(nullptr);
-        SIMPLEX<dim>* e2Ptr(nullptr);
+        CELL<dim>* e1Ptr(nullptr);
+        CELL<dim>* e2Ptr(nullptr);
 
         cout << "\n\t\tline elements...";
         //                key                  n-face, neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,SIMPLEX<dim>*> >::iterator it1(line_neighbor_keys.begin()),
+        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
                                                                                  it2(line_neighbor_keys.begin());
         it2++;
 
@@ -730,7 +730,7 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
       {
         cout << "\n\t\tsurface elements...";
         //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,SIMPLEX<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
+        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
                                                                                  it2(surface_neighbor_keys.begin());
         it2++;
 
@@ -741,13 +741,13 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
                 {
                     assert( (*it1).second.second != nullptr );
                     assert( (*it2).second.second != nullptr );
-                    SIMPLEX<dim>* e1Ptr((*it1).second.second);
-                    SIMPLEX<dim>* e2Ptr((*it2).second.second);
+                    CELL<dim>* e1Ptr((*it1).second.second);
+                    CELL<dim>* e2Ptr((*it2).second.second);
                     if ( e1Ptr != e2Ptr ) {
                          ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
                          ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
                       }
-                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity:",
+                    else csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:",
                                             "discovered potentially duplicate surface simplex.");
                     ++it1;
                     ++it2;
@@ -762,12 +762,12 @@ void  ModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity()
     // -------------------
     if ( dim == 3U and !volume_neighbor_keys.empty() ) {
 
-        SIMPLEX<dim>* e1Ptr(nullptr);
-        SIMPLEX<dim>* e2Ptr(nullptr);
+        CELL<dim>* e1Ptr(nullptr);
+        CELL<dim>* e2Ptr(nullptr);
 
         cout << "\n\t\tvolume elements...\n";
         //                key             n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,SIMPLEX<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
+        typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
                                                                                  it2(volume_neighbor_keys.begin());
         it2++;
 
@@ -883,8 +883,8 @@ cerr << endl;
    dimensional region has elements and nodes flagged as PERIMETER.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::IdentifyPerimeter()
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
  {
     // 1. putting the perimeter elements at the end of the elmt_vec and sorting
     //    interior and perimeter cell ranges subsequently
@@ -917,8 +917,8 @@ void  ModelSubDomain<dim,SIMPLEX>::IdentifyPerimeter()
     @attention any lower-dimensional elements and their nodes that stick outside of a higher
     dimensional region will be flagged as boundary.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  ModelSubDomain<dim,SIMPLEX>::PartitionCellVector()
+template<size_t dim, template<size_t> class CELL>
+size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
@@ -937,16 +937,16 @@ size_t  ModelSubDomain<dim,SIMPLEX>::PartitionCellVector()
     // 1. distinguishing boundary from interior elements, same for nodes
     //   (at this point the elements and nodes are already known)
     // -----------------------------------------------------------------
-    set<SIMPLEX<dim>*> interior_elmts, boundary_elmts;
+    set<CELL<dim>*> interior_elmts, boundary_elmts;
     set<Node<dim>*>                   boundary_nodes;
-    set<pair<SIMPLEX<dim>*,size_t> >  boundary_faces;
+    set<pair<CELL<dim>*,size_t> >  boundary_faces;
     vector<size_t>  fnids;
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
     if ( elmt_dim.first == 1 )
       {
-        for ( typename vector<SIMPLEX<dim>*>::const_iterator
+        for ( typename vector<CELL<dim>*>::const_iterator
               eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
            {
              // identifying the boundary faces and their nodes
@@ -986,10 +986,10 @@ size_t  ModelSubDomain<dim,SIMPLEX>::PartitionCellVector()
       {
         // a. identify the boundary elements among the highest dimensional elements,
         //    also collecting all their node pointers into a set.
-        set<SIMPLEX<dim>*> lesser_dim_elmts;
+        set<CELL<dim>*> lesser_dim_elmts;
         set<Node<dim>*>    highest_dim_elmt_nodes;
 
-        for ( typename vector<SIMPLEX<dim>*>::const_iterator
+        for ( typename vector<CELL<dim>*>::const_iterator
               eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
           {
               // elements of the highest spatial dimension are used to define the boundary
@@ -1035,15 +1035,15 @@ cout.flush();
          // 1.3  processing lower dimensional elements and their nodes in the subdomain
          // ---------------------------------------------------------------------------
          // 1.3.1 nodes that are not contained in the higher-dimensional element subset are identified as extra boundary node
-         for ( typename set<SIMPLEX<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
+         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
            for ( size_t i=0U; i<(*it)->Nodes(); ++i )
              if ( highest_dim_elmt_nodes.find( (*it)->N(i) ) == highest_dim_elmt_nodes.end() )
                boundary_nodes.insert( (*it)->N(i) );
 
          // 1.3.2 finding the lesser dimensional elements on the region boundary
-         set<SIMPLEX<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
+         set<CELL<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
-         for ( typename set<SIMPLEX<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
+         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
            {
               // a) lower-dim elements sticking out
               // ----------------------------------
@@ -1059,7 +1059,7 @@ cout.flush();
                    // adding boundary elements and boundary faces
                    for ( size_t i=0U; i<(*it)->Faces(); ++i )
                      if ( (*it)->Neighbor(i) == nullptr  or
-                          lesser_dim_elmts.find( static_cast<SIMPLEX<dim>*>((*it)->Neighbor(i)) ) == lesser_dim_elmts.end() ) {
+                          lesser_dim_elmts.find( static_cast<CELL<dim>*>((*it)->Neighbor(i)) ) == lesser_dim_elmts.end() ) {
                           // the element is a boundary element that sticks out of the region
                           boundary_elmts.insert( (*it) );
                           boundary_faces.insert( make_pair( (*it), i ) );
@@ -1105,17 +1105,17 @@ cout.flush();
            }
 
          // adding lesser-dimensional elements that are not at the boundary to the interior domain
-         for ( typename set<SIMPLEX<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
+         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
            if ( boundary_elmts.find( (*it) ) == boundary_elmts.end() )
              interior_elmts.insert( (*it) );
 
          if ( !lesser_dim_elmts_detached.empty() ) {             
-              csmp_error.notice( WARNING, "ModelSubdomain<dim,SIMPLEX>::PartitionCellVector:", Name().c_str(),
+              csmp_error.notice( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
                                 "subdomain contains lower-dimensional elements detached from higher dimensional domain; these will be treated as boundary.");
               // do some additional diagnostics on these elements
               // ------------------------------------------------
               cerr <<"\n\tdetached elements: "<< lesser_dim_elmts_detached.size() <<":";
-              for ( typename set<SIMPLEX<dim>*>::const_iterator
+              for ( typename set<CELL<dim>*>::const_iterator
                     it=lesser_dim_elmts_detached.begin(); it!=lesser_dim_elmts_detached.end(); ++it ) cerr <<" "<< (*it)->Idx();
               cerr << endl;
            }
@@ -1138,18 +1138,18 @@ cout.flush();
     // appending the boundary element vector<double64> to the interior element vector
     this->elmt_vec_.clear();
     this->elmt_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
-    back_insert_iterator<vector<SIMPLEX<dim>*> >  back_it(this->elmt_vec_);
+    back_insert_iterator<vector<CELL<dim>*> >  back_it(this->elmt_vec_);
     copy( boundary_elmts.begin(), boundary_elmts.end(), back_it );
 
     // swap trick to trim excess memory from end of vector
-    vector<SIMPLEX<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+    vector<CELL<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
 // TESTING - is there an element with a boundary face that is not in the boundary element vector and vice versa
 bool no_error_yet(true);
-set<SIMPLEX<dim>*> elmts_with_bfaces;
-for ( typename set<pair<SIMPLEX<dim>*,size_t> >::const_iterator it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
+set<CELL<dim>*> elmts_with_bfaces;
+for ( typename set<pair<CELL<dim>*,size_t> >::const_iterator it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
       if ( boundary_elmts.find( (*it).first ) == boundary_elmts.end() ) {
            if ( no_error_yet ) {
                 cerr <<"\nboundary face parent elements vx. boundary elements:\n";
@@ -1170,8 +1170,8 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
     this->bd_face_vec_.reserve( this->elmt_vec_.size() - boundary_elmts.size() );
     //       parent element of face, face
-    typename set<pair<SIMPLEX<dim>*,size_t> >::const_iterator  bfit( boundary_faces.begin() );
-    typename set<pair<SIMPLEX<dim>*,size_t> >::const_iterator  ffit( boundary_faces.begin() );
+    typename set<pair<CELL<dim>*,size_t> >::const_iterator  bfit( boundary_faces.begin() );
+    typename set<pair<CELL<dim>*,size_t> >::const_iterator  ffit( boundary_faces.begin() );
     vector<ONE_BYTE_NUMBER>  bface_data;
     bface_data.reserve(3);
     size_t counter(0U);
@@ -1216,7 +1216,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     this->node_vec_ = temp;
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\nModelSubDomain<dim,SIMPLEX>::EstablishNeighborConnectivity: '"<< this->Name() <<"': of the ";
+cout <<"\nModelSubDomain<dim,CELL>::EstablishNeighborConnectivity: '"<< this->Name() <<"': of the ";
 cout << this->elmt_vec_.size() <<" elements, "<< boundary_elmts.size() <<" lie at the model boundary."<< endl;
 cout.flush();
 #endif
@@ -1262,8 +1262,8 @@ std::string parseSubdomainPart( SUBDOMAIN_PART ssubdomain )
 
 /** applies Interrelation to ModelSubDomain
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Apply( Interrelation<dim>& relation )
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::Apply( Interrelation<dim>& relation )
  {
     relation.Apply( *this );
 
@@ -1274,11 +1274,11 @@ void ModelSubDomain<dim,SIMPLEX>::Apply( Interrelation<dim>& relation )
 
 
 /// virtual function stub that will be overwritten by base classes
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Accept( csmp::Visitor<dim>& )
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::Accept( csmp::Visitor<dim>& )
  {
     throw csmp::Exception( ERROR,
-                           "ModelSubDomain<dim,SIMPLEX>::Accept",
+                           "ModelSubDomain<dim,CELL>::Accept",
                            "Subclass method should be called; nothing was done");
 
  } // end Accept
@@ -1286,13 +1286,13 @@ void ModelSubDomain<dim,SIMPLEX>::Accept( csmp::Visitor<dim>& )
 
 // INTEGRATION POINTS
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::IntegrationPoints() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::IntegrationPoints() const
  {
     if ( !(*elmt_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
     size_t  cpoints(0U);
-    for( typename vector<SIMPLEX<dim>*>::const_iterator
+    for( typename vector<CELL<dim>*>::const_iterator
          it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
       cpoints += (*it)->IntegrationPoints();
 
@@ -1300,26 +1300,26 @@ size_t ModelSubDomain<dim,SIMPLEX>::IntegrationPoints() const
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::SectorIntegrationPoints() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::SectorIntegrationPoints() const
   {
   if ( !(*elmt_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
   size_t  cpoints(0U);
-  for( typename vector<SIMPLEX<dim>*>::const_iterator
+  for( typename vector<CELL<dim>*>::const_iterator
     it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
     cpoints += (*it)->Sectors()*(*it)->IntegrationPointsPerSector();
 
   return cpoints;
   }
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::FacetIntegrationPoints() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const
   {
   if ( !(*elmt_vec_.begin())->FE()->UsesLocalCoordinates() ) return 0U;
 
   size_t  cpoints(0U);
-  for( typename vector<SIMPLEX<dim>*>::const_iterator
+  for( typename vector<CELL<dim>*>::const_iterator
     it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
     cpoints += (*it)->Facets()*(*it)->IntegrationPointsPerFacet();
 
@@ -1338,21 +1338,21 @@ size_t ModelSubDomain<dim,SIMPLEX>::FacetIntegrationPoints() const
 Returns a vector<double64> with the ID numbers of the Elements which belong
 to the Region.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::MemberElementIndexes( vector<size_t>& ids ) const
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::MemberElementIndexes( vector<size_t>& ids ) const
  {
     ids.clear();
     ids.reserve( elmt_vec_.size() );
 
-    for ( typename vector<SIMPLEX<dim>*>::const_iterator
+    for ( typename vector<CELL<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) ids.push_back( (*it)->Idx() );
  }
 
 /** Renumbers nodes from 0 to n-1.
 */
 
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::RenumberNodes() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
  {
     size_t  counter(0U);
 
@@ -1363,8 +1363,8 @@ size_t ModelSubDomain<dim,SIMPLEX>::RenumberNodes() const
 
 /** Renumbers elements from 0 to n-1.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::RenumberElements() const
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::RenumberElements() const
  {
     size_t counter(0U);
 
@@ -1376,8 +1376,8 @@ size_t ModelSubDomain<dim,SIMPLEX>::RenumberElements() const
 
 /** Renumbers elements and nodes from 0 to n-1.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::UpdateMemberIndexes() const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
  {
     RenumberNodes();
     RenumberElements();
@@ -1393,18 +1393,18 @@ void ModelSubDomain<dim,SIMPLEX>::UpdateMemberIndexes() const
 // ACCESSORY
 
 ///// looks for simplex with provided index
-//template<size_t dim, template<size_t> class SIMPLEX>
-//bool ModelSubDomain<dim,SIMPLEX>::Contains( size_t eidx ) const
+//template<size_t dim, template<size_t> class CELL>
+//bool ModelSubDomain<dim,CELL>::Contains( size_t eidx ) const
 //  {
-//    const typename vector<SIMPLEX<dim>*>::const_iterator simplexEnd( this->elmt_vec_.end() );
-//    for( typename vector<SIMPLEX<dim>*>::const_iterator simplex( this->elmt_vec_.begin() ); simplex != simplexEnd; ++simplex )
+//    const typename vector<CELL<dim>*>::const_iterator simplexEnd( this->elmt_vec_.end() );
+//    for( typename vector<CELL<dim>*>::const_iterator simplex( this->elmt_vec_.begin() ); simplex != simplexEnd; ++simplex )
 //      if( (*simplex)->Idx() == eidx )
 //        return true;
 //    return false;
 //  } // end
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool ModelSubDomain<dim,SIMPLEX>::Contains( const SIMPLEX<dim>* e ) const
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
  {
     if ( binary_search( elmt_vec_.begin(), elmt_vec_.begin() + static_cast<long>(InteriorElements()), e ) )
        return true;
@@ -1417,8 +1417,8 @@ bool ModelSubDomain<dim,SIMPLEX>::Contains( const SIMPLEX<dim>* e ) const
  } // end
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool ModelSubDomain<dim,SIMPLEX>::Contains( const Node<dim>* nptr ) const
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  {
     assert( nptr != NULL );
 
@@ -1432,24 +1432,24 @@ bool ModelSubDomain<dim,SIMPLEX>::Contains( const Node<dim>* nptr ) const
 
  } // end
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool ModelSubDomain<dim,SIMPLEX>::IsPerimeterNode( const csmp::Node<dim>* nd_ptr ) const
+template<size_t dim, template<size_t> class CELL>
+bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* nd_ptr ) const
  {
     assert( nd_ptr != NULL );
     return std::binary_search( PerimeterNodesBegin(), NodesEnd(), nd_ptr );
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool  ModelSubDomain<dim,SIMPLEX>::IsPerimeterElement( const SIMPLEX<dim>* e_ptr ) const
+template<size_t dim, template<size_t> class CELL>
+bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( const CELL<dim>* e_ptr ) const
  {
     assert( e_ptr != NULL );
     return std::binary_search( PerimeterElementsBegin(), ElementsEnd(), e_ptr );
  }
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool  ModelSubDomain<dim,SIMPLEX>::IsPerimeterNode( size_t i ) const
+template<size_t dim, template<size_t> class CELL>
+bool  ModelSubDomain<dim,CELL>::IsPerimeterNode( size_t i ) const
  {
     if ( i >= Nodes() ) return false;
     return ( i >=  first_bd_node_ );
@@ -1460,8 +1460,8 @@ bool  ModelSubDomain<dim,SIMPLEX>::IsPerimeterNode( size_t i ) const
     is among those of the elements located on the boundary of the region;
     else false.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-bool  ModelSubDomain<dim,SIMPLEX>::IsPerimeterElement( size_t e ) const
+template<size_t dim, template<size_t> class CELL>
+bool  ModelSubDomain<dim,CELL>::IsPerimeterElement( size_t e ) const
  {
     if ( e >= elmt_vec_.size() ) return false;
     return (e < InteriorElements()) ? false : true;
@@ -1472,8 +1472,8 @@ bool  ModelSubDomain<dim,SIMPLEX>::IsPerimeterElement( size_t e ) const
 // GEOMETRY
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const
  {
     xyz_min = xyz_max = (*node_vec_.begin())->Coordinate();
 
@@ -1539,8 +1539,8 @@ Further errors may be reported if the user tries to use the characteristic
 area in a 3D computation, or volume in a 2D computation. Also, element
 height and width are thus far only available in 2D.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* characteristic,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo( const char* characteristic,
                                                                   const char* var )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1548,26 +1548,26 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
      ScalarVariable  sc;
 
      if ( prop_key.place != ELEMENT and prop_key.type != SCALAR ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
                                     "method assigns only to scalar element properties");
           return;
        }
      if ( dim != 1U and !strcmp( characteristic, "length" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
                                    "'length' will only be assigned to line elements, nothing done to others");
 
      if ( dim != 2U and !strcmp( characteristic, "area" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
                                    "'area' will only be assigned to surface elements, nothing done to others");
 
      if ( dim != 3U and !strcmp( characteristic, "volume" ) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
                                     "'volume' can only be assigned to volume elements. Nothing was done");
           return;
        }
 
      if ( !strcmp( characteristic, "length" ) )
-       for ( typename vector<SIMPLEX<dim>*>::iterator
+       for ( typename vector<CELL<dim>*>::iterator
              eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsLineElement() ) {
@@ -1576,7 +1576,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
                }
          }
      else if ( !strcmp( characteristic, "area" ) )
-       for ( typename vector<SIMPLEX<dim>*>::iterator
+       for ( typename vector<CELL<dim>*>::iterator
              eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsSurfaceElement() ) {
@@ -1585,7 +1585,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
                }
          }
      else if ( !strcmp( characteristic, "volume" ) )
-       for ( typename vector<SIMPLEX<dim>*>::iterator
+       for ( typename vector<CELL<dim>*>::iterator
              eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
          {
              if ( (*eit)->FE()->IsVolumeElement() ) {
@@ -1595,7 +1595,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
          }
      else if ( !strcmp( characteristic, "aspect ratio" ) )
        {
-          for ( typename vector<SIMPLEX<dim>*>::iterator
+          for ( typename vector<CELL<dim>*>::iterator
                 eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
             {
                sc = (*eit)->AspectRatio();
@@ -1604,7 +1604,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
       }
      else if ( !strcmp( characteristic, "inner radius" ) )
        {
-          for ( typename vector<SIMPLEX<dim>*>::iterator
+          for ( typename vector<CELL<dim>*>::iterator
                 eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
             {
                sc = (*eit)->InnerRadius();
@@ -1612,7 +1612,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
             }
       }
      else {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
                              characteristic,  " entered as characteristic was not identified; nothing done");
           cout <<"\nYour options are: "<< endl;
           cout <<"\n\t inner radius"   << endl;
@@ -1620,7 +1620,7 @@ void ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo( const char* ch
           cout <<"\t length" << endl;
           cout <<"\t area (>=2D models)" << endl;
           cout <<"\t volume (3D models only)" << endl;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignElementCharacteristicsTo", "Now exciting");
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo", "Now exciting");
       }
 
  } // end
@@ -1659,18 +1659,18 @@ The method will report a fatal error and terminate the computation, if
 the target variable is not placed on the node or if it is not of the
 correct type.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo(  const char* vector_variable )
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo(  const char* vector_variable )
  {
      csmp::Index          prop_key = pref_.StorageKey(vector_variable);
      VectorVariable<dim>  vc;
 
       if ( prop_key.type != VECTOR )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a vector<double64> variable");
 
      if ( prop_key.place != NODE )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a node variable");
 
      for ( typename vector<csmp::Node<dim>*>::iterator
@@ -1683,32 +1683,32 @@ void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo(  const char* vector_v
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo( const char* scalar_variable, char c )
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo( const char* scalar_variable, char c )
  {
      csmp::Index     prop_key = pref_.StorageKey(scalar_variable);
      ScalarVariable  sc;
 
      if ( c != 'x' && c != 'y' && c != 'z' &&
           c != 'X' && c != 'Y' && c != 'Z')
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "coordinate index letter is not valid",
                                     "should be either of 'x,y,z,X,Y,Z'");
 
      if ( prop_key.type != SCALAR )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "Individual node coordinates can only be assigned to a scalars");
 
      if ( prop_key.place != NODE )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "Node coordinates can only be assigned to a node variable");
 
      if ( dim == 2U and c == 'z' )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "2D models have no z coordinates");
 
      if ( dim == 1U and c != 'x' )
-       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo",
+       throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::AssignNodeCoordinatesTo",
                                     "1D models only have x coordinates");
 
      for ( typename vector<csmp::Node<dim>*>::iterator
@@ -1736,13 +1736,13 @@ void ModelSubDomain<dim,SIMPLEX>::AssignNodeCoordinatesTo( const char* scalar_va
 
 /** Returns min/max of property values inside a region into its arguments.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const char* property, double64& gmin, double64& gmax ) const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double64& gmin, double64& gmax ) const
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
     if ( !pref_.IsDefined(property) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf", property, "is undefined; nothing could be done" );
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
           return;
       }
     csmp::Index  gprop_key(pref_.StorageKey(property));
@@ -1778,8 +1778,8 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double64& tmin, double64&
     @attention for vector variables the length range is returned.
     @attention for tensor variables the maximum Eigenvalue is recovered.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double64& vmin, double64& vmax ) const
  {
     // properties / variables placed on the model
     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY ) {
@@ -1881,7 +1881,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
 
    // element-based properties of any kind
    if ( prop_key.place == ELEMENT || prop_key.place == FACE || prop_key.place == INTER_FACE ) {
-       typename vector<SIMPLEX<dim>*>::const_iterator  eit(elmt_vec_.begin());
+       typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
        assert( (*eit) != NULL );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(prop_key); eit++;
@@ -1952,7 +1952,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
 
    // element-based integration-point properties of any kind
    if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-       typename vector<SIMPLEX<dim>*>::const_iterator  eit(elmt_vec_.begin());
+       typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
        assert( (*eit) != NULL );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,prop_key); eit++;
@@ -2036,7 +2036,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
         prop_key.place == FACE_FACET_INTEGRATION_POINT ||
         prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT )
      {
-       typename vector<SIMPLEX<dim>*>::const_iterator  eit(elmt_vec_.begin());
+       typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
        assert( (*eit) != NULL );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
@@ -2125,7 +2125,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
         prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
         prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT  )
      {
-       typename vector<SIMPLEX<dim>*>::const_iterator  eit(elmt_vec_.begin());
+       typename vector<CELL<dim>*>::const_iterator  eit(elmt_vec_.begin());
        assert( (*eit) != NULL );
        if ( prop_key.type == SCALAR ) {
             vmin = vmax = (*eit)->Read(0U,0U,prop_key); eit++;
@@ -2211,7 +2211,7 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
     vmin = vmax = std::numeric_limits<double64>::quiet_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
-    csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::MinMaxOf(index)",
+    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
                       "placement of property coould not be indentified");
 
  } // end MinMaxOf(index)
@@ -2234,16 +2234,16 @@ void ModelSubDomain<dim,SIMPLEX>::MinMaxOf( const csmp::Index& prop_key, double6
 
 
 /// @todo (3-D) Refactor!! This is a potential bug if wrong integration properties are used!
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<typename Var>
-void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
+void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                                                       const Var& var,
                                                       SUBDOMAIN_PART sdp )
  {
      csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
           return;
        }
@@ -2256,25 +2256,25 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                   (*it)->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     (*it)->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                   (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2285,30 +2285,30 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   (*it)->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     (*it)->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2319,30 +2319,30 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else { // property is assigned only to interior of subdomain
            if ( prop_key.place == ELEMENT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                      (*it)->Store( prop_key, var );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     (*it)->Store( i, prop_key, var );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
                    (*it)->Store( i, j, prop_key, var );
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2353,7 +2353,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   (*nit)->Store( prop_key, var );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                     "Property placement not supported");
        }
 
@@ -2437,9 +2437,9 @@ template void ModelSubDomain<3U,InterFace>::InputPropertyValue( const char*, con
     @attention This special treatment is not applied to FV integration points.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
+template<size_t dim, template<size_t> class CELL>
 template<typename Var>
-void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
+void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
                                                       const Var& var,
                                                       VARIABLE_FLAG do_not_overwrite,
                                                       SUBDOMAIN_PART sdp )
@@ -2447,7 +2447,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
      csmp::Index prop_key = pref_.StorageKey(input_prop);
 
      if ( sdp == PERIMETER  and (prop_key.place == REGION  or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY) ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
           return;
        }
@@ -2460,20 +2460,20 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                   writeVariableIf( (*it), prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     writeVariableIf( (*it), i, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
@@ -2481,7 +2481,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2492,25 +2492,25 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, DIRICH );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                     "Property placement not recognized");
        }
      else if ( sdp == PERIMETER ) { // property is assigned only to perimeter of boundary
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   writeVariableIf( (*it), prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     writeVariableIf( (*it), i, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
@@ -2518,7 +2518,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=PerimeterElementsBegin(); it!=elmt_vec_.end(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2529,25 +2529,25 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=PerimeterNodesBegin(); nit!=node_vec_.end(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                 "Property placement not recognized");
        }
      else { // property is assigned only to interior of subdomain
            if ( prop_key.place == ELEMENT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   writeVariableIf( (*it), prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == FACE_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                   for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
                     writeVariableIf( (*it), i, prop_key, var, do_not_overwrite );
              }
            else if ( prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Facets(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerFacet(); j++ )
@@ -2555,7 +2555,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
              }
            else if ( prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ||
                      prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                it=ElementsBegin(); it!=PerimeterElementsBegin(); it++ )
                for ( size_t i=0U; i<(*it)->Sectors(); i++ )
                  for ( size_t j=0U; j<(*it)->IntegrationPointsPerSector(); j++ )
@@ -2566,7 +2566,7 @@ void ModelSubDomain<dim,SIMPLEX>::InputPropertyValue( const char* input_prop,
                       nit=NodesBegin(); nit!=PerimeterNodesBegin(); nit++ )
                   writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
-           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,SIMPLEX>::InputPropertyValue",
+           else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                     "Property placement not supported");
        }
 
@@ -2641,12 +2641,12 @@ template void ModelSubDomain<3U,InterFace>::InputPropertyValue( const char*, con
     Note: no matter which component is asked for in a vector or tensor, if any component has flag ANY,
     then the ANY flag is returned by default. (this is checked for in loops from 0 < dim for vectors and 0 <dim*dim for tensors)
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property, SUBDOMAIN_PART group_flag , size_t component) const
+template<size_t dim, template<size_t> class CELL>
+VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, SUBDOMAIN_PART group_flag , size_t component) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !pref_.IsDefined(property) ) {
-        csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::PropertyStatus", property, "is undefined; nothing could be done" );
+        csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
     csmp::Index  prop_key = pref_.StorageKey(property);
@@ -2654,7 +2654,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
     string cache(to_string(dim));
     src += cache;
     src += ",";
-    src += typeid(SIMPLEX<dim>).name();
+    src += typeid(CELL<dim>).name();
     src +=">::PropertyStatus";
 
     if ( prop_key.place == FACET_INTEGRATION_POINT ||
@@ -2685,14 +2685,14 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
@@ -2715,14 +2715,14 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(0,prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
@@ -2744,14 +2744,14 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     if ( status0 != (*eit)->Status(prop_key) ) return ANY;
                 return status0;
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         if ( status0 != (*eit)->Status(i,prop_key) ) return ANY;
@@ -2785,7 +2785,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
@@ -2793,7 +2793,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
@@ -2821,7 +2821,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
@@ -2829,7 +2829,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(InteriorElements())->Status(0,prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
@@ -2856,7 +2856,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
                  prop_key.place == FACE or
                  prop_key.place == INTER_FACE ) {
                 VARIABLE_FLAG  status0(E(0)->Status(prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t n=0U; n<length; n++ )
                         if ( status0 != (*eit)->Status(prop_key,n) ) return ANY;
@@ -2864,7 +2864,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
             }
             if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
                 VARIABLE_FLAG  status0(E(0)->Status(0,prop_key,component));
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                     for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<length; n++ )
@@ -2890,8 +2890,8 @@ VARIABLE_FLAG  ModelSubDomain<dim,SIMPLEX>::PropertyStatus( const char* property
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                         VARIABLE_FLAG new_status_of_scalar,
                                                         SUBDOMAIN_PART sdpart )
  {
@@ -2901,8 +2901,8 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              VARIABLE_FLAG new_status_of_scalar,
                                                              double64 min_value_to_change,
                                                              double64 max_value_to_change )
@@ -2914,8 +2914,8 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
 
 
 /// changes the variable flag to status for those group members which carry the group_flag.
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                         const std::vector<VARIABLE_FLAG>& status,
                                                         SUBDOMAIN_PART group_flag )
  {
@@ -2951,13 +2951,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
@@ -2978,13 +2978,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
@@ -3005,13 +3005,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       (*eit)->Status( prop_key, status[0U] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); ++eit )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status[0U] );
@@ -3039,14 +3039,14 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*eit)->Status( prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
@@ -3069,14 +3069,14 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*eit)->Status( prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
@@ -3098,14 +3098,14 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t n=0U; n<status.size(); n++ )
                         (*eit)->Status( prop_key, n, status[n] );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         for ( size_t n=0U; n<status.size(); n++ )
@@ -3134,8 +3134,8 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
 
 
 /// changes the variable flag to status for those group members which carry the group_flag.
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                         size_t position,
                                                         VARIABLE_FLAG status,
                                                         SUBDOMAIN_PART group_flag )
@@ -3146,7 +3146,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
     string cache(to_string(dim));
     src += cache;
     src += ",";
-    src += typeid(SIMPLEX<dim>).name();
+    src += typeid(CELL<dim>).name();
     src +=">::ChangePropertyStatus";
 
     if ( prop_key.type == TENSOR )
@@ -3170,13 +3170,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       (*eit)->Status( prop_key, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status );
@@ -3197,13 +3197,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       (*eit)->Status( prop_key, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status );
@@ -3223,13 +3223,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       (*eit)->Status( prop_key, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                         (*eit)->Status( i, prop_key, status );
@@ -3256,13 +3256,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                         (*eit)->Status( prop_key, position, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                           (*eit)->Status( prop_key, position, status );
@@ -3283,13 +3283,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                         (*eit)->Status( prop_key, position, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=PerimeterElementsBegin(); eit!=ElementsEnd(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                           (*eit)->Status( prop_key, position, status );
@@ -3309,13 +3309,13 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
                if ( prop_key.place == ELEMENT or
                     prop_key.place == FACE or
                     prop_key.place == INTER_FACE ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                         (*eit)->Status( prop_key, position, status );
                     return;
                  }
                if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-                    for ( typename vector<SIMPLEX<dim>*>::iterator
+                    for ( typename vector<CELL<dim>*>::iterator
                           eit=ElementsBegin(); eit!=PerimeterElementsBegin(); eit++ )
                       for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                           (*eit)->Status( prop_key, position, status );
@@ -3338,8 +3338,8 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatus( const char* property,
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              const std::vector<VARIABLE_FLAG>& status,
                                                              double64 pmin, double64 pmax )
  {
@@ -3361,7 +3361,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, sc );
                    if ( sc.IsWithinRange( pmin, pmax ) )
@@ -3369,7 +3369,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, sc );
@@ -3394,7 +3394,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, av );
                    if ( av.IsWithinRange( pmin, pmax ) )
@@ -3402,7 +3402,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, av );
@@ -3427,7 +3427,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, vc );
                    if ( vc.IsWithinRange( pmin, pmax ) )
@@ -3436,7 +3436,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, vc );
@@ -3463,7 +3463,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, ts );
                    if ( ts.IsWithinRange( pmin, pmax ) )
@@ -3472,7 +3472,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, ts );
@@ -3499,7 +3499,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, fv );
                    if ( fv.IsWithinRange( pmin, pmax ) )
@@ -3508,7 +3508,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, fv );
@@ -3538,8 +3538,8 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* property,
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                              size_t position,
                                                              VARIABLE_FLAG status,
                                                              double64 pmin, double64 pmax )
@@ -3560,7 +3560,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, sc );
                    if ( sc.IsWithinRange( pmin, pmax ) )
@@ -3568,7 +3568,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, sc );
@@ -3593,7 +3593,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, av );
                    if ( av.IsWithinRange( pmin, pmax ) )
@@ -3601,7 +3601,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, av );
@@ -3626,7 +3626,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, vc );
                    if ( vc.IsWithinRange( pmin, pmax ) )
@@ -3634,7 +3634,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, vc );
@@ -3659,7 +3659,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, ts );
                    if ( ts.IsWithinRange( pmin, pmax ) )
@@ -3667,7 +3667,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, ts );
@@ -3692,7 +3692,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
          if ( prop_key.place == ELEMENT or
               prop_key.place == FACE or
               prop_key.place == INTER_FACE ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ ) {
                    (*eit)->Read( prop_key, fv );
                    if ( fv.IsWithinRange( pmin, pmax ) )
@@ -3700,7 +3700,7 @@ void ModelSubDomain<dim,SIMPLEX>::ChangePropertyStatusWhere( const char* propert
                 }
            }
          else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-              for ( typename vector<SIMPLEX<dim>*>::iterator
+              for ( typename vector<CELL<dim>*>::iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                      (*eit)->Read( i, prop_key, fv );
@@ -3769,25 +3769,25 @@ match the specifications outlined above,
 InterpolateNodePropertyToElementProperty() will report an error and
 return without completing its task.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char* nprop, const char* eprop )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty( const char* nprop, const char* eprop )
  {
      csmp::Index  e_key = pref_.StorageKey(eprop),
                   n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty",
                                  "Property arg2 is not an element property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty",
                                  "Property arg1 is not a node property, nothing was done...");
           return;
        }
      if ( e_key.type != n_key.type ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3796,7 +3796,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
        {
            case SCALAR: {
                 ScalarVariable  sce;
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      (*eit)->PropertyValueAtBaryCenter( n_key, sce );
@@ -3806,7 +3806,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
              break;
            case VECTOR: {
                 VectorVariable<dim>  vce;
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      (*eit)->PropertyValueAtBaryCenter( n_key, vce );
@@ -3816,7 +3816,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
             break;
           case TENSOR: {
                TensorVariable<dim>  tse;
-               for ( typename vector<SIMPLEX<dim>*>::iterator
+               for ( typename vector<CELL<dim>*>::iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                      (*eit)->PropertyValueAtBaryCenter( n_key, tse );
@@ -3825,7 +3825,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
               }
             break;
           default:
-            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty",
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToElementProperty",
                                    "Property type could not be identified, nothing was done...");
 
      } // end switch
@@ -3836,25 +3836,25 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToElementProperty( const char*
 
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* cprop )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* cprop )
  {
      csmp::Index  c_key = pref_.StorageKey(cprop),
                   n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty",
                                  "Property arg2 is not an constraint point property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty",
                                  "Property arg1 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.type != n_key.type ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3865,7 +3865,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
        {
            case SCALAR: {
                 ScalarVariable  sce;
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     {
@@ -3879,7 +3879,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
              break;
            case VECTOR: {
                 VectorVariable<dim>  vce, vce2;
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     {
@@ -3897,7 +3897,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
             break;
           case TENSOR: {
                TensorVariable<dim>  tse, tse2;
-                for ( typename vector<SIMPLEX<dim>*>::iterator
+                for ( typename vector<CELL<dim>*>::iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
                     {
@@ -3914,7 +3914,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty( co
                 }
             break;
           default:
-            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateNodeToIntegrationPointProperty",
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty",
                                    "Property type could not be identified, nothing was done...");
 
      } // end switch
@@ -3954,24 +3954,24 @@ only for scalar properties.
 Consistency checks are performed on the placement and type of the
 input variables.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty( const char* cprop, const char* eprop )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty( const char* cprop, const char* eprop )
  {
      csmp::Index  e_key = pref_.StorageKey(eprop);
      csmp::Index  c_key = pref_.StorageKey(cprop);
 
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty",
                                  "Property arg2 is not an element property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( e_key.type != c_key.type ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToElementProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -3979,7 +3979,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty(
     if ( e_key.type == SCALAR ) {
         ScalarVariable           sc;
           vector<ScalarVariable >  sc_vec;
-          for ( typename vector<SIMPLEX<dim>*>::iterator
+          for ( typename vector<CELL<dim>*>::iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               (*it)->IntegrationPointPropertyVector( c_key, sc_vec );
               average( sc_vec, sc );
@@ -3989,7 +3989,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty(
     else if ( e_key.type == VECTOR ) {
         VectorVariable<dim>           vc;
         vector<VectorVariable<dim> >  vc_vec;
-          for ( typename vector<SIMPLEX<dim>*>::iterator
+          for ( typename vector<CELL<dim>*>::iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               (*it)->IntegrationPointPropertyVector( c_key, vc_vec );
               average( vc_vec, vc );
@@ -3999,7 +3999,7 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty(
     if ( e_key.type == TENSOR ) {
         TensorVariable<dim>           ts;
         vector<TensorVariable<dim> >  ts_vec;
-          for ( typename vector<SIMPLEX<dim>*>::iterator
+          for ( typename vector<CELL<dim>*>::iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               (*it)->IntegrationPointPropertyVector( c_key, ts_vec );
               average( ts_vec, ts );
@@ -4009,8 +4009,8 @@ void  ModelSubDomain<dim,SIMPLEX>::InterpolateIntegrationPointToElementProperty(
 
  } // end InterpolateIntegrationPointToElementProperty
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty( const char* eprop,
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::ExtrapolateElementToIntegrationPointProperty( const char* eprop,
                                                                                 const char* cprop )
 {
     assert( !elmt_vec_.empty() );
@@ -4020,17 +4020,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToIntegrationPointProperty",
                                 "Property arg1 is not an element property, nothing was done...");
          return;
       }
     if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
       }
     if ( e_key.type != c_key.type ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToIntegrationPointProperty",
                                 "Properties are not of the same type, nothing was done...");
          return;
       }
@@ -4042,7 +4042,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
     if ( e_key.type == SCALAR )
     {
          ScalarVariable sc;
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  // reading element property
@@ -4059,7 +4059,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
     {
          VectorVariable<dim>  vc;
 
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  // reading element property
@@ -4076,7 +4076,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
     {
          TensorVariable<dim>  ts;
 
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  (*eit)->Read( e_key, ts );
@@ -4089,8 +4089,8 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToIntegrationPointProperty(
 } // end ExtrapolateElementToIntegrationPointProperty
 
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty( const char* eprop,
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::ExtrapolateElementToFacetIntegrationPointProperty( const char* eprop,
                                                                                       const char* fipprop )
 {
     assert( !elmt_vec_.empty() );
@@ -4100,17 +4100,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
 
     // 1. check whether conditions for operation are O.K.
     if ( e_key.place != ELEMENT ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Property arg1 is not an element property, nothing was done...");
          return;
       }
     if ( fip_key.place != FACET_INTEGRATION_POINT ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
       }
     if ( e_key.type != fip_key.type ) {
-         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProperty",
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToFacetIntegrationPointProperty",
                                 "Properties are not of the same type, nothing was done...");
          return;
       }
@@ -4122,7 +4122,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
     if ( e_key.type == SCALAR )
     {
          ScalarVariable sc;
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  // reading element property
@@ -4140,7 +4140,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
     {
          VectorVariable<dim>  vc;
 
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  // reading element property
@@ -4158,7 +4158,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
     {
          TensorVariable<dim>  ts;
 
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                         eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
              {
                  (*eit)->Read( e_key, ts );
@@ -4187,8 +4187,8 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToFacetIntegrationPointProp
     more than small ones. In many cases this is not what one wants, but it is still offered for
     some specific applications.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char* eprop,
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty( const char* eprop,
                                                                      const char* nprop,
                                                                      bool  by_distance )
  {
@@ -4200,17 +4200,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
 
      // 1. check whether conditions for operation are O.K.
      if ( e_key.place != ELEMENT ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty",
                                  "Property arg1 is not an element property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( e_key.type != n_key.type ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateElementToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4228,7 +4228,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
           vector<double64>  sc_data( Nodes(), 0. );
           if ( !by_distance )
             {
-               for ( typename vector<SIMPLEX<dim>*>::const_iterator
+               for ( typename vector<CELL<dim>*>::const_iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     // getting the properties
@@ -4246,7 +4246,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
             }
           else
             {
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      // reading element property
@@ -4282,7 +4282,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
           vector<VectorVariable<dim> >  vc_data(Nodes(), vc );
           if ( !by_distance )
             {
-               for ( typename vector<SIMPLEX<dim>*>::const_iterator
+               for ( typename vector<CELL<dim>*>::const_iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, vc );
@@ -4298,7 +4298,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
             }
           else
             {
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      // reading element property
@@ -4332,7 +4332,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
           vector<TensorVariable<dim> >  ts_data(Nodes(), ts );
           if ( !by_distance )
             {
-               for ( typename vector<SIMPLEX<dim>*>::const_iterator
+               for ( typename vector<CELL<dim>*>::const_iterator
                      eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                  {
                     (*eit)->Read( e_key, ts );
@@ -4348,7 +4348,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateElementToNodeProperty( const char*
             }
           else
             {
-                for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                for ( typename vector<CELL<dim>*>::const_iterator
                       eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                   {
                      // reading element property
@@ -4414,8 +4414,8 @@ an interpolation order greater than 1.
 
 A consistency check on variable type and placement is performed.
  */
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop )
  {
      csmp::Index  n_key = pref_.StorageKey(nprop);
      csmp::Index c_key = pref_.StorageKey(cprop);
@@ -4423,17 +4423,17 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
      if ( n_key.place != NODE ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( n_key.type != c_key.type ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4447,7 +4447,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
     if ( n_key.type == SCALAR ) {
          vector<double64> temp( Nodes(), 0. ), sum( Nodes(), 0. );
          const size_t  variable_components(1U);
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               // getting the integration-point property
               cp_var.resize( (*it)->IntegrationPoints() );
@@ -4476,7 +4476,7 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
          VectorVariable<dim>  zero_vec; zero_vec=0.;
          vector<VectorVariable<dim> > cpvec, temp( Nodes(), zero_vec ), sum( Nodes(), zero_vec );
          const size_t  vcomponents(dim);
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               // getting the constraint point property
               cpvec.resize( (*it)->IntegrationPoints() );
@@ -4518,13 +4518,13 @@ void  ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty( co
 
     // TENSOR PROPERTIES
     if ( n_key.type == TENSOR ) {
-          csmp_error.notice( WARNING, "ModelSubDomain<dim,SIMPLEX>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
          // creating a zero-initialized temporary vector<double64>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
          vector<TensorVariable<dim> > cpts, temp( Nodes(), zero_ts );
          const size_t  tcomponents(dim * dim);
-         for ( typename vector<SIMPLEX<dim>*>::const_iterator
+         for ( typename vector<CELL<dim>*>::const_iterator
                 it=ElementsBegin(); it!=ElementsEnd(); it++ ) {
               // getting the constraint point property
               cpts.resize( (*it)->IntegrationPoints() );
@@ -4575,14 +4575,14 @@ or elements that belong to the region, depending on where the target property is
 
 @param prop The name of the property which shall be averaged.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
+template<size_t dim, template<size_t> class CELL>
+double64  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
  {
     csmp::Index  idx = pref_.StorageKey(prop);
     size_t       counter(0U);
 
      if ( (elmt_vec_.empty()) ) {
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionPropertyAverage",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionPropertyAverage",
                                         "Region is empty");
        }
 
@@ -4614,7 +4614,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, sc );
                       avg += sc();
@@ -4624,7 +4624,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, vc );
                       avg += vc.Length();
@@ -4635,7 +4635,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ ) {
                       (*eit)->Read( idx, ts );
                       ts.EigenValues( evals );
@@ -4652,7 +4652,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
             if ( idx.type == SCALAR ) {
                  ScalarVariable  sc;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, sc );
@@ -4664,7 +4664,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, vc );
@@ -4677,7 +4677,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
                  VectorVariable<dim>  evals;
                  TensorVariable<dim>  ts;
                  double64  avg(0.);
-                 for ( typename vector<SIMPLEX<dim>*>::const_iterator
+                 for ( typename vector<CELL<dim>*>::const_iterator
                        eit=elmt_vec_.begin(); eit!=elmt_vec_.end(); eit++ )
                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
                         (*eit)->Read( i, idx, ts );
@@ -4727,7 +4727,7 @@ double64  ModelSubDomain<dim,SIMPLEX>::Average( const char* prop ) const
               }
          break;
          default:
-            throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::RegionAverage:", "property placement not handled yet.");
+            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RegionAverage:", "property placement not handled yet.");
        }
 
     return std::numeric_limits<double64>::quiet_NaN();
@@ -4766,8 +4766,8 @@ calculations, if the input variables do not comply with the specifications
 outlined above.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
+template<size_t dim, template<size_t> class CELL>
+bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
  {
     csmp::Index  a_key = pref_.StorageKey(a),
                  b_key = pref_.StorageKey(b);
@@ -4820,7 +4820,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
  
         if ( b_key.place == ELEMENT )
           {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                   eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                {
                   if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
@@ -4839,7 +4839,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
            }
         if ( b_key.place == ELEMENT_INTEGRATION_POINT )
           {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                   eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                {
                   (*eit)->NodePropertyVector( a_key, SC );
@@ -4877,7 +4877,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
 
          if ( b_key.place == ELEMENT )
            {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                    eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                {
                   if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
@@ -4900,7 +4900,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
            }
          if ( b_key.place == ELEMENT_INTEGRATION_POINT )
            {
-             for ( typename vector<SIMPLEX<dim>*>::iterator
+             for ( typename vector<CELL<dim>*>::iterator
                    eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                {
                   (*eit)->NodePropertyVector( a_key, VC );
@@ -4932,8 +4932,8 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
  
 /* ORIGINAL
 
-template<size_t dim, template<size_t> class SIMPLEX>
-bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
+template<size_t dim, template<size_t> class CELL>
+bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, const char* b )
  {
     csmp::Index  a_key = pref_.StorageKey(a),
                  b_key = pref_.StorageKey(b);
@@ -4987,7 +4987,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
       vector<ScalarVariable >  SC;
       VectorVariable<dim>      vc;
 
-        for ( typename vector<SIMPLEX<dim>*>::iterator
+        for ( typename vector<CELL<dim>*>::iterator
               eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
           {
              if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
@@ -5014,7 +5014,7 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
       vector<VectorVariable<dim> > VC;
       TensorVariable<dim>          ts;
 
-        for ( typename vector<SIMPLEX<dim>*>::iterator
+        for ( typename vector<CELL<dim>*>::iterator
               eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
           {
              if ( (*eit)->FE()->UsesLocalCoordinates() ) (*eit)->dN_AtBaryCenter( DN );
@@ -5043,8 +5043,8 @@ bool  ModelSubDomain<dim,SIMPLEX>::CopyGradientOfProperty_A_To_B( const char* a,
  
  
 
-template<size_t dim, template<size_t> class SIMPLEX>
-void  ModelSubDomain<dim,SIMPLEX>::CopyReplace( const char* from, const char* to )
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::CopyReplace( const char* from, const char* to )
  {
      if ( pref_.Type(from) == SCALAR ) {
           CopyReplaceVisitor<ScalarVariable,dim>
@@ -5072,7 +5072,7 @@ void  ModelSubDomain<dim,SIMPLEX>::CopyReplace( const char* from, const char* to
           Accept( cpvisitor );
        }
      else throw csmp::Exception( ERROR,
-                                 "ModelSubDomain<dim,SIMPLEX>::CopyReplace",
+                                 "ModelSubDomain<dim,CELL>::CopyReplace",
                                  "Property type not supported yet");
 
  } // end CopyReplace
@@ -5118,8 +5118,8 @@ and property index. Then it will print the host object IDs followed
 by the variable flags and values.
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::OutputVariableToScreen( const char* prop ) const
  {
      csmp::Index          prop_key = pref_.StorageKey(prop);
      ScalarVariable       sc;
@@ -5182,13 +5182,13 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of Node variable not recognized." );
                     }
                 }
               break;
           case ELEMENT_INTEGRATION_POINT:
-              for ( typename vector<SIMPLEX<dim>*>::const_iterator
+              for ( typename vector<CELL<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
                   cout <<"\nParent element Idx: " << (*eit)->Idx() <<"\t\t";
@@ -5217,13 +5217,13 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of Element integration point variable not recognized." );
                       }
                 }
               break;
            case ELEMENT:
-              for ( typename vector<SIMPLEX<dim>*>::const_iterator
+              for ( typename vector<CELL<dim>*>::const_iterator
                     eit=ElementsBegin(); eit!=ElementsEnd(); eit++ )
                 {
                   cout <<"\nIdx: " << (*eit)->Idx() <<"\t\t";
@@ -5250,7 +5250,7 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of Element variable not recognized." );
                     }
                 }
@@ -5278,7 +5278,7 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of split boundary variable not recognized." );
                     }
                   break;
@@ -5306,7 +5306,7 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of boundary variable not recognized." );
                     }
                 }
@@ -5335,7 +5335,7 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
                          }
                          break;
                        default:
-                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen:",
+                         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::OutputVariableToScreen:",
                                                "type of region variable not recognized." );
                     }
                 }
@@ -5372,17 +5372,17 @@ void ModelSubDomain<dim,SIMPLEX>::OutputVariableToScreen( const char* prop ) con
     verbose_ - or not
 
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::Out() const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::Out() const
  {
-    cout <<"\nModelSubDomain<dim,SIMPLEX>::Out(): name: '"<< subdomain_name_ <<"'";
+    cout <<"\nModelSubDomain<dim,CELL>::Out(): name: '"<< subdomain_name_ <<"'";
     cout <<" member elements: interior="<< InteriorElements();
     cout <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
 
-    for ( typename vector<SIMPLEX<dim>*>::const_iterator
+    for ( typename vector<CELL<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
          if ( (*it) == NULL )
-           throw csmp::Exception( ERROR, "ModelSubDomain<dim,SIMPLEX>::Out",
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::Out",
                                  "member element pointer not initialised");
 //         else (*it)->Out();
       }
@@ -5413,8 +5413,8 @@ void ModelSubDomain<dim,SIMPLEX>::Out() const
     
     @note template template parameters for functions are not allowed
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
  {
     assert( fp != nullptr );
    
@@ -5424,13 +5424,13 @@ void ModelSubDomain<dim,SIMPLEX>::WriteDomainIndexesToBinaryFile( FILE* fp ) con
     // 2. writing the interior element records of the region
     std::vector<size_t> IDs( distance(InteriorElementsBegin(), InteriorElementsEnd() ) );
     transform( InteriorElementsBegin(), InteriorElementsEnd(),
-               IDs.begin(), []( const SIMPLEX<dim>* const ptr ){ return ptr->Idx(); } );
+               IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region
     IDs.resize( distance(PerimeterElementsBegin(), PerimeterElementsEnd()) );
     transform( PerimeterElementsBegin(), PerimeterElementsEnd(),
-               IDs.begin(), []( const SIMPLEX<dim>* const ptr ){ return ptr->Idx(); } );
+               IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
     // 4. writing the boundary faces
@@ -5557,8 +5557,8 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
 /**
     @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t ModelSubDomain<dim,SIMPLEX>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
+template<size_t dim, template<size_t> class CELL>
+size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
                                                           typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
@@ -5591,8 +5591,8 @@ size_t ModelSubDomain<dim,SIMPLEX>::SharedPerimeterNodes( typename std::vector<c
      
      @attention function assumes that both subdomains are valid, containing multiple nodes.
  */
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  sharedNodes( const ModelSubDomain<dim,SIMPLEX>& g1, const ModelSubDomain<dim,SIMPLEX>& g2 )
+template<size_t dim, template<size_t> class CELL>
+size_t  sharedNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2 )
  {
     typename vector<Node<dim>*>::const_iterator  first1(g1.NodesBegin());
     typename vector<Node<dim>*>::const_iterator  first2(g2.NodesBegin());
@@ -5638,8 +5638,8 @@ template size_t sharedNodes( const ModelSubDomain<3U,Element>& g1, const ModelSu
     As for sharedNodes() - but application is restricted to nodes that sit
     on the perimeter / surface of the region.
 */
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  sharedPerimeterNodes( const ModelSubDomain<dim,SIMPLEX>& g1, const ModelSubDomain<dim,SIMPLEX>& g2 )
+template<size_t dim, template<size_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2 )
  {
     typename vector<Node<dim>*>::const_iterator  first1(g1.PerimeterNodesBegin());
     typename vector<Node<dim>*>::const_iterator  first2(g2.PerimeterNodesBegin());

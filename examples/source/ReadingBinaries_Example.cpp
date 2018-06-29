@@ -48,6 +48,10 @@ void ReadingBinaries_Example::Specifications()
    @note Do use PropertyData to store data in VSet and write it to disk in a memory
    efficient fashion because the approach presented in this example leads to padding
    of the integral types, increasing file size by up to 1/3.    
+   
+   @note Storing variables as FEM_Data inside a VSet has been superseded by the more efficient 
+   storage method of PropertyData. There is a unit test PropertyData_Test  that shows 
+   how this can be done.
 
    NB: YOU MUST KNOW THE DIMENSIONS OF THE MODEL YOU WANT TO READ BEFOREHAND, SINCE
       the dimensions of VSET and Model must be known at compile time!

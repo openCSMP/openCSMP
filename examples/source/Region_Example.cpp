@@ -93,7 +93,7 @@ void Region_Example::Run()
    SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
    VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
    steady_state_pressure.AddPostProcess( &postpro );
-   model.Apply( steady_state_pressure );
+   steady_state_pressure.IntegrateOver( model.Region("Model") );
 
    printRangeOfVariable( model, "fluid pressure" );
    printRangeOfVariable( model, "velocity" );

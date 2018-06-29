@@ -20,8 +20,8 @@ Models, Visitors and Interrelations. Calculations on single Region
 objects is not supported.  
 
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-class NewtonIntegrator : public IterativeIntegrator<dim,SIMPLICIAL_COMPLEX> {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class NewtonIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
 public:
   NewtonIntegrator();
   

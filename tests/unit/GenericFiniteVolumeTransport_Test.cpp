@@ -186,7 +186,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
       steady_state_pressure.AddPostProcess( &postpro0 );
 
       // the calculation of fluid pressure
-      steady_state_pressure.ComputeSteadyState( model );
+      steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
       // results: the pore velocity is the Darcy velocity divided by the porosity
       printRangeOfVariable( model, stdio, "fluid pressure" );
@@ -386,7 +386,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
       steady_state_pressure.AddPostProcess( &postpro0 );
 
       // the calculation of fluid pressure
-      steady_state_pressure.ComputeSteadyState( model );
+      steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
       // results: the pore velocity is the Darcy velocity divided by the porosity
       printRangeOfVariable( model, stdio, "fluid pressure" );
@@ -1295,7 +1295,7 @@ void testSchemeAsComponent()
       steady_state_pressure.AddPostProcess( &postpro0 );
 
       // the calculation of fluid pressure
-      steady_state_pressure.ComputeSteadyState( model3D );
+      steady_state_pressure.ComputeSteadyState( model3D.Region("Model") );
 
       // results: the pore velocity is the Darcy velocity divided by the porosity
       printRangeOfVariable( model3D, stdio, "fluid pressure" );

@@ -72,6 +72,7 @@ int main()
             examplesSuite.RegisterExample( new DESAdvectionOfTracer2D_Example() );
             examplesSuite.RegisterExample( new DESAdvectionOfTracer3D_Example() );
             examplesSuite.RegisterExample( new DESTwoPhaseFlow2D_Example() );
+            examplesSuite.RegisterExample( new MelbourneTransportScheme_Example() );
 
 
             // calling the suite either as stdIO or GUI

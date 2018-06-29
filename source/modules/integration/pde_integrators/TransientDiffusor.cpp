@@ -168,13 +168,12 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
-                                                                            const char* diffusivity,
-                                                                            const char* diffusing_variable,
-                                                                            const char* storage_variable,
-                                                                            const char* spatial_source_variable,
-                                                                            const char* gradient_variable, 
-                                                                            double64 gradient_multiplier )
-                                     
+                                                              const char* diffusivity,
+                                                              const char* diffusing_variable,
+                                                              const char* storage_variable,
+                                                              const char* spatial_source_variable,
+                                                              const char* gradient_variable,
+                                                              double64 gradient_multiplier )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
@@ -367,7 +366,7 @@ void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplic
     cout <<"Computing transient '"<< dep_var_name_ <<"' at t="<< model_time;
     cout <<", after time increment: "<< time_increment <<" s."<< endl;
     this->TimeIncrement( 1. / time_increment );
-    this->IntegrateOver( model.Region("Model"), verbose );
+    model.Apply ( *this );
 
  } // ComputeTransientStateFullyImplicit
 

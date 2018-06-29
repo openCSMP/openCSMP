@@ -21,8 +21,8 @@ namespace csmp {
 
     After construction this visitor should be passed to the region of interest
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::RegionBoundaryFluxVisitor( Model<dim>& model,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::RegionBoundaryFluxVisitor( Model<dim>& model,
                                                                               const char*  target_region,
                                                                               const char*  Darcy_velocity )
  : Visitor<dim>(MODEL,NODE),
@@ -58,8 +58,8 @@ RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::RegionBoundaryFluxVisitor( Mo
     form part of this region and calculate the incoming fluxes
     into the region using the user-supplied flux variable.
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::Visit( Node<dim>* nd )
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::Visit( Node<dim>* nd )
 {
   // only if the node lies at the boundary of the region, a flux needs to be computed
   if ( !domain_ptr_->IsPerimeterNode(nd) ) return;
@@ -92,24 +92,24 @@ void RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::Visit( Node<dim>* nd )
 
 
 /// returns the flux through the region boundary
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-double64 RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::InFlux() const
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+double64 RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::InFlux() const
 {
     return FVinflux_;
 } // end
 
 
 /// resets the internal flux counter to zero
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::ResetFlux()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::ResetFlux()
 {
    FVinflux_ = 0.;
 } // end
 
 
 /// use this to set the time interval over which the flux shall be integrated
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void RegionBoundaryFluxVisitor<dim,SIMPLICIAL_COMPLEX>::TimeIncrement( double64 dt )
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::TimeIncrement( double64 dt )
 {
    delta_t_ = dt;
 } // end

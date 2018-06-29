@@ -82,7 +82,7 @@ void ErrorMetric_Example::Run()
     VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
 
     steady_state_pressure.AddPostProcess( &postpro0 );
-    steady_state_pressure.ComputeSteadyState( model );
+    steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
     printRangeOfVariable( model, "fluid pressure" );
     printRangeOfVariable( model, "velocity" );

@@ -49,8 +49,11 @@ void PassiveAdvectionOfTracer_Example::Specifications()
 
 
 /** 
-    3D passive tracer advection via CSMP's generic transport method 
-    combining finite elements (for pressure) with finite volumes (for advection of concentration profile)
+    Illustration of the  NodeCenteredFiniteVolumeTransport  scheme based family of transport schemes.
+    Explicit vs implicit, first- vs. second-order accurate in space and time.
+    With and without fluid volume sources.
+    
+    3D passive tracer advection combining finite elements (for pressure) with finite volumes (for advection of concentration profile)
 
     User can test degree of CFL overstepping that the model can cope with
     and what the consequences are for the shape of the advection front.
@@ -133,7 +136,7 @@ void PassiveAdvectionOfTracer_Example::Run()
   steady_state_pressure.AddPostProcess( &postpro0 );
 
   // the calculation of fluid pressure
-  steady_state_pressure.ComputeSteadyState( model3D );
+  steady_state_pressure.ComputeSteadyState( model3D.Region("Model") );
 
   // results: the pore velocity is the Darcy velocity divided by the porosity
   printRangeOfVariable( model3D, stdio, "fluid pressure" );
