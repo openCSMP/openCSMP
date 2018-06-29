@@ -8,7 +8,7 @@ namespace csmp {
 
 
 RegionMonitor_Test::RegionMonitor_Test()
-: fTolerance(1e-16)
+: fTolerance(numeric_limits<double64>::epsilon() * 1000.) // scaled with the larges number that will be encountered
 {
 }
 

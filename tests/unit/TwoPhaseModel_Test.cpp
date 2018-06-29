@@ -37,14 +37,11 @@ TwoPhaseModel_Test::TwoPhaseModel_Test( Model<1U>* model,
    krn_key_(model->Database().StorageKey(krn)),
    pc_key_(model->Database().StorageKey(pc))
 {
-
     setName( testName );
 
     vtuOutputProps_.push_back( krn );
     vtuOutputProps_.push_back( krw );
     vtuOutputProps_.push_back( pc );
-
-
 }
 
 

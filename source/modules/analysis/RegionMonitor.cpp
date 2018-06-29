@@ -452,7 +452,7 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
     // outputting geometric properties of groups
     // -----------------------------------------
-    ofs <<"\ngroupname \t volume \t surface area "<< endl;
+    ofs <<"\nregion_name \t volume \t surface area "<< endl;
     for ( typename map<string,pair<double64,double64> >::const_iterator
           gr_it=group_specs_.begin(); gr_it!=group_specs_.end(); gr_it++ ) {
         ofs << (*gr_it).first <<"\t"<< (*gr_it).second.first <<"\t"<< (*gr_it).second.second;

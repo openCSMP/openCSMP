@@ -65,10 +65,10 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
 
     // Saturation values
     Region<1>&  sg(model->Region("Model"));
-    static csmp::Index   satw_key = model->Database().StorageKey("saturation water");
-    static csmp::Index   satn_key = model->Database().StorageKey("saturation oil");
-    const double64       sat_incr(1./model->Mesh().Nodes());
-    ScalarVariable       saturation;
+    csmp::Index     satw_key = model->Database().StorageKey("saturation water");
+    csmp::Index     satn_key = model->Database().StorageKey("saturation oil");
+    const double64  sat_incr(1./model->Mesh().Nodes());
+    ScalarVariable  saturation;
     // generating a range of saturation values for water and oil
     for ( vector<Node<1U>*>::iterator
           it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )

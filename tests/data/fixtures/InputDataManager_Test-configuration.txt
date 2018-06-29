@@ -26,10 +26,11 @@ FRAC_VOLUMES	complete	facies		2.
 LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6	2.0e6	2.0e6
 RIGHT	Dirichlet	fluid pressure		1.5e6	1.5e6	1.5e6	1.5e6
 
-# essential flags
-FRONT	interior	fluid pressure		Dirichlet
+# essential flags (however, this region does not exist anymore at this stage)
+# FRONT	interior	fluid pressure		Dirichlet
 
 # csmp Boundary object conditions
+FRONT	complete	Dirichlet	fluid pressure		1.0e-6
 BOTTOM	complete	Dirichlet	fluid pressure		2.0e7
 BACK	complete	Neumann		heat flux		2.
 BACK	complete	Neumann		boundary heat flux	2.
