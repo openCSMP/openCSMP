@@ -1064,8 +1064,8 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, VectorVaria
  assert( (idx.dataOffset+dim-1) < data_.data.size() );
 #endif
     for ( size_t i(0); i<dim; ++i ) {
-         vc.Flag(i) = data_.flags[ idx.dataOffset+i ];
-         vc(i)      = data_.data[ idx.flagOffset+i ];
+         vc.Flag(i) = data_.flags[ idx.flagOffset+i ];
+         vc(i)      = data_.data[ idx.dataOffset+i ];
       }
  }
  
