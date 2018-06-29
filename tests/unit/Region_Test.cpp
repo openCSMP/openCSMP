@@ -82,7 +82,7 @@ void Region_Test::run()
     VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
     steady_state_pressure.AddPostProcess( &postpro );
 
-    model.Apply( steady_state_pressure );
+    steady_state_pressure.ComputeSteadyState( model.Region("Model") );
 
     // output result
     if ( verbose_ ) {

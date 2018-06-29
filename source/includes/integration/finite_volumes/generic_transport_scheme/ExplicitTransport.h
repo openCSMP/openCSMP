@@ -17,8 +17,8 @@ template<size_t> class ExplicitTransport;
 // TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
 template<size_t dim>
   class ExplicitTransport : public variables::Variables_TracerTransfer,
-                          public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,
-                          public TimeStepEvaluator<dim,ExplicitTransport> {
+                            public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,
+                            public TimeStepEvaluator<dim,ExplicitTransport> {
   public:
     // TODO: add choice of transport scheme: 1st versus 2nd order in space
     /// constructor for target region; by default all driving forces are considered

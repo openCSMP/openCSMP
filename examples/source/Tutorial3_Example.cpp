@@ -144,7 +144,7 @@ void Tutorial3_Example::Run()
     fluid_pressure.AddPostProcess( &velo );
 
     // calculate initial pressure distribution
-    fluid_pressure.ComputeSteadyState( model );
+    fluid_pressure.ComputeSteadyState( model.Region("Model") );
 
     // show results
     printRangeOfVariable( model, "fluid pressure" );
@@ -252,7 +252,7 @@ void Tutorial3_Example::Run()
          computeTotalMobility( model, relperm_model );
 
          // compute pressure
-         fluid_pressure.ComputeSteadyState( model );
+         fluid_pressure.ComputeSteadyState( model.Region("Model") );
 
          // echo variables to screen
          printRangeOfVariable( model, "fluid pressure" );

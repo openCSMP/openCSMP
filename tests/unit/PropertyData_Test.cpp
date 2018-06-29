@@ -36,8 +36,8 @@ void PropertyData_Test::run()
     // comparison
     dataset1.Out();
     dataset2.Out();
-    // are they the same? (operator==) - should be fd
-    _test( (dataset1 == dataset2) == false );
+    // are they the same? (operator==) - should be false because the dataset contains NAN values
+    _test( !(dataset1 == dataset2) );
     // and a third one (asignment operator)
     dataset3 = dataset2;
     _test( dataset3.Size() == 3 );

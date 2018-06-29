@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                               const char* diffusivity,
                                                               const char* diffusing_variable,
                                                               const char* storage_variable,
@@ -18,10 +18,10 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    settings_(),
-   PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), element_source_variable, diffusing_variable) ),
@@ -84,8 +84,8 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* diffusivity,
                                                                             const char* diffusing_variable,
                                                                             const char* storage_variable,
@@ -95,10 +95,10 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), element_source_variable, diffusing_variable) ),
@@ -166,8 +166,8 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg, 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg, 
                                                                             const char* diffusivity,
                                                                             const char* diffusing_variable,
                                                                             const char* storage_variable,
@@ -178,10 +178,10 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), spatial_source_variable, diffusing_variable) ),
@@ -250,8 +250,8 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg, 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg, 
                                                                             const char* lhs_diffusivity,
                                                                             const char* rhs_diffusivity,
                                                                             const char* diffusing_variable,
@@ -263,10 +263,10 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), spatial_source_variable, diffusing_variable) ),
@@ -340,8 +340,8 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::~TransientDiffusor()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
  {
     delete source_;
     delete nodal_source_;
@@ -354,8 +354,8 @@ TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::~TransientDiffusor()
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeTransientStateFullyImplicit( 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplicit( 
                                                                           Model<dim>& sg, 
                                                                           double64 time_increment,
                                                                           bool verbose )
@@ -375,8 +375,8 @@ void TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeTransientStateFullyImplic
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void TransientDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     // basic solver settings for hybrid element meshes
@@ -391,8 +391,8 @@ void TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
 
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-    SAMG_Settings& TransientDiffusor<dim,SIMPLICIAL_COMPLEX>::GetSolverSettings()
+    template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+    SAMG_Settings& TransientDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
      { return settings_; }
 #else
     /// add extra functionality for alternative solver if needed

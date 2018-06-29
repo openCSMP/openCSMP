@@ -247,7 +247,7 @@ void Experimental_Example::Run()
       // TODO: consider potential stress changes due to insolation of slope etc.
       model.InputBoundaryValue( TOP, "temperature", makeScalar(DIRICH,15.));
       //model.InputBoundaryValue( BOTTOM, "temperature", makeScalar(DIRICH,80.));
-      temperature.ComputeSteadyState( model );
+      temperature.ComputeSteadyState( model.Region("Model") );
       printRangeOfVariable( model, "temperature");
     }
    VTK_Interface<DIM>  vtk_output;

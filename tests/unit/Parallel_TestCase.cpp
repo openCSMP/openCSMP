@@ -87,7 +87,7 @@ namespace csmp
 
       // initial state and steady state pressure
       UpdateFlowProps( model, saturationFunctions );
-      model.Apply( SSPS );
+      SSPS.ComputeSteadyState( model.Region("Model") );
       ComputeTotalVelocity( model );
       if ( verbose_ ) {
           vtu.OutputDataToVTU( "InitialPressureDistribution", "fluid pressure", "Model", static_cast<int>(0) );

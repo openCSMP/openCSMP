@@ -101,7 +101,7 @@ void InflowOutflowCalculation_VVCase<dim>::run()
     ssds.AddPostProcess(&veloandvflux);
     Timer timer;
     timer.Start();
-    ssds.ComputeSteadyState( *model );
+    ssds.ComputeSteadyState( model->Region("Model") );
     cout << "\n\nSAMG took " << timer.Stop() << " sec\n";
 
     singlePhaseVelocity( *model, "Model" );

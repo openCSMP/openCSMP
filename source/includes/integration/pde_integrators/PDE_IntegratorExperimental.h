@@ -269,7 +269,7 @@ done in the following example:
       (design approved: Garmisch and Colleoli)
 
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 class PDE_IntegratorExperimental {
 
   public:
@@ -312,13 +312,13 @@ class PDE_IntegratorExperimental {
     bool          Transient() const;
   
     /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file
-    void          IntegrateOver( SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
+    void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
   
     /// performs an elimination of the Dirichlet degrees-of-freedom prior to solving the problem
-    void          IntegrateOver1( SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
+    void          IntegrateOver1( COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
     /// simultaneously considers potential Boundary objects sharing nodes with the simplicial complex on which the solution is obtained
-    void          IntegrateOver( Model<dim>&, SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
+    void          IntegrateOver( Model<dim>&, COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
     /// switch to another solver deleting any dynamically allocated solver that was associated with integrator
     void          SetSolver( Solver& );
@@ -360,43 +360,43 @@ class PDE_IntegratorExperimental {
   protected:
 
     /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
-    bool IdentifySharedBoundaries( const Model<dim>&, const SIMPLICIAL_COMPLEX<dim>&, std::list<std::string>& shared_boundaries );
+    bool IdentifySharedBoundaries( const Model<dim>&, const COMPUTATION_DOMAIN<dim>&, std::list<std::string>& shared_boundaries );
   
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
-    virtual void  EstablishMatrixSetup( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
     /// if this is a time-dependent calculation, this method assigns initial conditions to the RHS
-    virtual void  AssignInitialConditions( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
-    virtual void  AssignEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// eliminates essential (Dirichlet) conditions, condensing the the solution matrix, rhs etc. to that of the remaining DOF
-    virtual void  EliminateEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  EliminateEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// accumulates the finite element integrals into the solution matrix and right-hand side
-    virtual void  Accumulate( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
 
     /// accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
-    virtual void  AccumulateBoundaryIntegrals( const SIMPLICIAL_COMPLEX<dim>&, const Boundary<dim>& );
+    virtual void  AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
 
     /// permits to add finite-element integrals to matrix and vector after terms were multiplied into them
-    virtual void  LateAccumulate( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
 
     /// late accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
-    virtual void  LateAccumulateBoundaryIntegrals( const SIMPLICIAL_COMPLEX<dim>&, const Boundary<dim>& );
+    virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
 
     /// calls connected solver object to find x in A x = b problem
     virtual void  Solve();
 
     /// allows to apply pde operators to post-process the solution
-    virtual void  PostProcess( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
 
     /// transfers the results stored in solution vector onto the nodes of the computational domain
-    virtual void  OutputResults( SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
   
     // SKM FIX output method that takes into account the Dirichlet_index_mapping_ from the reduced solution matrix to the model
-    virtual void  OutputResults1( SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  OutputResults1( COMPUTATION_DOMAIN<dim>& );
 
   protected:
 

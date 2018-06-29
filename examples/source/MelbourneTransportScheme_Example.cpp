@@ -1,4 +1,5 @@
 #include "MelbourneTransportScheme_Example.h"
+#include "Variables_TracerTransfer.h"
 
 #include "Model.h"
 #include "Region.h"
@@ -129,7 +130,7 @@ void MelbourneTransportScheme_Example::Run()
   steady_state_pressure.AddPostProcess( &postpro0 );
 
   // the calculation of fluid pressure
-  steady_state_pressure.ComputeSteadyState( model3D );
+  steady_state_pressure.ComputeSteadyState( model3D.Region("Model") );
 
   // results: the pore velocity is the Darcy velocity divided by the porosity
   printRangeOfVariable( model3D, stdio, "fluid pressure" );
@@ -161,6 +162,29 @@ void MelbourneTransportScheme_Example::Run()
   // EXPLICIT TRANSPORT SCHEME
   // -------------------------
   bool second_order_in_space(false);
+  
+  
+  // Variable placement
+  // ------------------
+  INDEX<SCALAR,NODE>    pf_key(model3D.Database().StorageKey("fluid pressure"));
+  INDEX<SCALAR,ELEMENT> K_key(model3D.Database().StorageKey("conductivity"));
+  Region<3U>&           model_domain(model3D.Region("Model"));
+  
+  for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+  
+       // the old way
+       double64 K = (*it)->Read(K_key);
+       ScalarVariable pf;
+       (*it)->PropertyValueAtBaryCenter( pf_key, pf );
+    
+       // using the finite element placement
+       auto e = (*it)->AtBarycenter();
+       double64 pf_val = e.Obtain(pf_key);
+    
+       // comparisons
+       cerr <<"\n\tconductivity:   "<< K <<" vs. "<< e.Read(K_key);
+       cerr <<"\n\tfluid pressure: "<< pf <<" vs. "<< pf_val <<"\n";
+    }
   
   // 6.1 Most basic case: explicit, first-order, no fluid sources and sinks, prescribed velocity field
   // -------------------------------------------------------------------------------------------------

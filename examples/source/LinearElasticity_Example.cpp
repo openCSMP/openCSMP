@@ -275,7 +275,7 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
 #ifdef SAMG_MULTIPLE_INSTANCES
    pressure.GetSolverSettings().SetSolverInstance(2);
 #endif
-   pressure.ComputeSteadyState( model );
+   pressure.ComputeSteadyState( model.Region("Model") );
 
    double64  fmin, fmax;
    model.MinMaxOf( "velocity", fmin, fmax );

@@ -26,6 +26,7 @@ template<size_t> class Visitor;
 template<size_t> class FiniteVolumeStencilManager;
 
 template<size_t,template<size_t> class> class PDE_Integrator;
+template<size_t,template<size_t> class> class PDE_Integrator_CRM;
 
 
 /** @brief Model the playground for the physics of interest
@@ -362,6 +363,16 @@ public:
     void Apply( PDE_Integrator<dim,csmp::Region>&, const char* region_name, bool debug=false );
     void Apply( PDE_Integrator<dim,csmp::Boundary>&, const std::string& boundary_name, bool debug=false );
     void Apply( PDE_Integrator<dim,csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug=false );
+  
+    /// TODO: fix - for ongoing developments for any of region, boundary or splitboundary
+    void Apply( PDE_Integrator_CRM<dim,csmp::Region>&, bool debug=false );
+    void Apply( PDE_Integrator_CRM<dim,csmp::Boundary>&, bool debug=false );
+    void Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>&, bool debug=false );
+
+    /// TODO: fix - application of integration scheme to a particular region, boundary of split-boundary identified by name
+    void Apply( PDE_Integrator_CRM<dim,csmp::Region>&, const char* region_name, bool debug=false );
+    void Apply( PDE_Integrator_CRM<dim,csmp::Boundary>&, const std::string& boundary_name, bool debug=false );
+    void Apply( PDE_Integrator_CRM<dim,csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug=false );
 
     // ----------------------------------------
     // Screen output
@@ -428,7 +439,6 @@ public:
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double64& dim_x, double64& dim_y, double64& dim_z );
-
 
 } // end namespace csmp
 

@@ -27,12 +27,12 @@ template<size_t> class Model;
    @attention gradient_multiplier currently is not used.
    
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-class TransientDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
 
   public:
 
-    typedef typename SIMPLICIAL_COMPLEX<dim>::Simplex Simplex;
+    typedef typename COMPUTATION_DOMAIN<dim>::Simplex Simplex;
 
     TransientDiffusor( Model<dim>&,
                               const char* diffusivity,
