@@ -1,5 +1,6 @@
 #include "RegionInterface.h"
 #include "Model.h"
+#include "UnionFind.h"
 
 namespace csmp {
 
@@ -1533,8 +1534,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       @section implementation Implementation
 
-      The method uses the element neighbor information to perform floodfills
-      as required until all member elements are partitioned.   
+      The method uses the union-find algorithm, using neighbours to determine
+      components.
 
       @section application Application
 
@@ -1549,90 +1550,98 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       
       @attention this method cannot be applied to the region model or the master region
   */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
- {
-     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-      if ( std::string("Model") == group ) {
-         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
-                           "this operation is not allowed for region 'Model' or the master region." );
-            return 0U;
-        }
-     
-      // renumbering elements and nodes of model
-      csmp::Region<dim>&  gref(Region(group));
-      const bool          unique_group(IsUnique(group));
-
-      // getting a set of the element numbers of the target group
-      std::set<Element<dim>*>  elements;
-      for ( typename std::vector<csmp::Element<dim>*>::const_iterator
-            eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
-        elements.insert( (*eit) );
-
-      // detecting via a flood-fill whether the group can be partitioned, else nothing is done
-      std::set<Element<dim>*>  elements_contiguous_subset;
-      floodFill( (*elements.begin()), elements_contiguous_subset );
-      // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
-      if ( elements.size() <= elements_contiguous_subset.size() ) {
-           std::cout <<"\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions: ";
-           std::cout <<"region '"<< group <<"' is already contiguous, nothing was done."<< std::endl;
-           return 0U;
-        }
-
-      // else partitions can be created 
-      std::string  group_name(group);
+  template<size_t dim, template<size_t> class REGION_COMPLEX>
+  size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
+  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    const std::string  group_name(group);
+    
+    if ( group_name == "Model" ) {
+      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
+                        "this operation is not allowed for region 'Model' or the master region." );
+      return 0U;
+    }
+    
+    // renumbering elements and nodes of model
+    csmp::Region<dim>&  gref(Region(group));
+    const bool          unique_group(IsUnique(group));
+    
+    // Perform union-find
+    UnionFind<Element<dim>*> unionFind;
+    auto eend = gref.ElementsEnd();
+    for ( auto eit=gref.ElementsBegin(); eit != eend; eit++ ) {
+      auto e = *eit;
+      const size_t  neighbors(e->Neighbors());
+      for ( size_t i=0U; i<neighbors; i++ )
+        if ( e->Neighbor(i) != NULL )
+          unionFind.SameComponent(e, e->Neighbor(i) );
+    }
+    
+    std::deque<std::pair<size_t,Element<dim>*>> components;
+    unionFind.Components(components);
+    if (components.size() <= 1) {
+      std::cout <<"\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions: ";
+      std::cout <<"region '"<< group <<"' is already contiguous, nothing was done."<< std::endl;
+      return 0U;
+    }
+    
+    // Sort all elements by component
+    std::vector<std::pair<Element<dim>*,Element<dim>*>> componentMemberships;
+    componentMemberships.reserve(gref.Elements());
+    for ( auto eit=gref.ElementsBegin(); eit != eend; eit++ ) {
+      componentMemberships.emplace_back(unionFind.resolve(*eit), *eit);
+    }
+    std::sort(componentMemberships.begin(), componentMemberships.end());
+    
+    // Turn components into regions
+    std::cout <<"\nModel<"<< dim <<">::PartitionRegionIntoContiguousSubRegions: ";
+    std::cout <<"region '"<< group <<"' is divided into the subregion(s):\n";
+    
+    size_t subgroupNum(0);
+    auto cmCBegin = componentMemberships.begin(), cmEnd = componentMemberships.end();
+    while (cmCBegin != cmEnd) {
+      auto cmCEnd = cmCBegin;
+      size_t subgroupSize = 0;
+      while (cmCEnd != cmEnd && cmCBegin->first == cmCEnd->first) {
+        ++cmCEnd;
+        ++subgroupSize;
+      }
+      
+      ++subgroupNum;
       std::string  subgroup_name;
       char         num[128];
-      size_t       n_subgroups(1);
-    
-      // creating new contiguous group from the element subset
-      while ( !elements.empty() )
-        {
-           // creating name of contiguous subgroup
-           sprintf( num, "%lu", n_subgroups );
-           subgroup_name = group_name + num;
-           if ( n_subgroups == 1U ) {
-                 std::cout <<"\nModel<"<< dim <<">::PartitionRegionIntoContiguousSubRegions: ";
-                 std::cout <<"region '"<< group <<"' is divided into the subregion(s):\n";
-             }
-           std::cout <<"\t\t\t'"<< subgroup_name <<"'";
-           std::cout <<" ("<< elements_contiguous_subset.size() <<" elmts)"<< std::endl;
-         
-           // creating either a unique or non-unique group depending on uniqueness of original region
-           std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-             it = ( unique_group ) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
-                                   : groupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
-           if ( !it.second )
-             throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions", 
-                                    subgroup_name.c_str(), "region could not be formed (name is probably not unique)" );
-           else {
-                // accumulating the subregion
-                (*it.first).second.Accumulate( elements_contiguous_subset.begin(),
-                                               elements_contiguous_subset.end() );
-                                               
-                // copy all values of region properties from parent to child region
-                (*it.first).second.LVS( gref.LVS() );
-             }
-         
-           // subtracting the elements that constitute the new group from the remaining element list
-           for ( typename std::set<Element<dim>*>::const_iterator
-                 sit=elements_contiguous_subset.begin(); sit!=elements_contiguous_subset.end(); ++sit )
-             elements.erase( (*sit) );
-
-           // computing the next subset
-           if ( elements.empty() ) break;
-           else floodFill( (*elements.begin()), elements_contiguous_subset );
+      sprintf( num, "%lu", subgroupNum );
+      subgroup_name = group_name + num;
+      std::cout <<"\t\t\t'"<< subgroup_name <<"'";
+      std::cout <<" ("<< subgroupSize <<" elmts)"<< std::endl;
       
-           n_subgroups++;
+      std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
+      it = ( unique_group ) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
+      : groupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
+      if ( !it.second )
+        throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions",
+                              subgroup_name.c_str(), "region could not be formed (name is probably not unique)" );
+      else {
+        // accumulating the subregion
+        std::vector<Element<dim>*> subgroup;
+        subgroup.reserve(subgroupSize);
+        for (auto it = cmCBegin; it != cmCEnd; ++it) {
+          subgroup.push_back(it->second);
         }
-
-      // if the region has been partitioned succesfully and its name is not model, it will be removed
-      if ( IsUnique(group) )
-        RemoveRegion( group, false );
-
-      return n_subgroups;
+        (*it.first).second.Accumulate( subgroup.begin(), subgroup.end() );
+        
+        // copy all values of region properties from parent to child region
+        (*it.first).second.LVS( gref.LVS() );
+      }
+    }
     
-   } // end partitionRegionIntoContiguousSubRegions
+    // if the region has been partitioned succesfully and its name is not model, it will be removed
+    if ( IsUnique(group) )
+      RemoveRegion( group, false );
+    
+    return subgroupNum;
+    
+  } // end partitionRegionIntoContiguousSubRegions
 
 
 
