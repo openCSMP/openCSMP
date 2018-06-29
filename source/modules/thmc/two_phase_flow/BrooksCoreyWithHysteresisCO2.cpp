@@ -1,4 +1,4 @@
-#include "BrooksCoreyWithHysteresis.h"
+#include "BrooksCoreyWithHysteresisCO2.h"
 #include "BrooksCoreyFrontVelocity.h"
 #include "PropertyDatabase.h"
 
@@ -8,7 +8,7 @@ namespace csmp {
 
 
 template<size_t dim>
-BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
+BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2()
  : acc_gravity_(9.8066)
  {
  }
@@ -20,7 +20,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
    of the Brooks-Corey model
 */
 template<size_t dim>
-BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
+BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
                                                            const char* permeability,
                                                            double64 viscosity_nw, double64 viscosity_w,
                                                            double64 density_nw, double64 density_w, 
@@ -42,17 +42,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
                         "residual saturation wetting phase")
  {
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }
@@ -60,7 +60,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 
 
 template<size_t dim>
-BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
+BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
                                                            const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
@@ -81,17 +81,17 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
  {
  
   if ( sat_previous_key.place != ELEMENT || sat_previous_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "previous water saturation barycenter", 
                            " variable must be scalar element property" );
                            
   if ( sormax_key.place != NODE || sormax_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "maximum residual oil saturation", 
                            " variable must be scalar node property" ); 
 
   if ( sat_inflection_key.place != ELEMENT || sat_inflection_key.type != SCALAR )
-     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresis(constructor)", 
+     throw csmp::Exception( FATAL_ERROR, "BrooksCoreyWithHysteresisCO2(constructor)",
                            "inflection water saturation barycenter", 
                            " variable must be scalar element property" ); 
  }
@@ -99,7 +99,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 
 
 template<size_t dim>
-BrooksCoreyWithHysteresis<dim>::~BrooksCoreyWithHysteresis()
+BrooksCoreyWithHysteresisCO2<dim>::~BrooksCoreyWithHysteresisCO2()
  {
  }
  
@@ -111,7 +111,7 @@ BrooksCoreyWithHysteresis<dim>::~BrooksCoreyWithHysteresis()
 
 /// not constant as it sets the saturation inflection point
 template<size_t dim>
-void BrooksCoreyWithHysteresis<dim>::Initialize( Element<dim>& e )
+void BrooksCoreyWithHysteresisCO2<dim>::Initialize( Element<dim>& e )
  {
     TwoPhaseModel<dim>::k_   = e.Read( TwoPhaseModel<dim>::perm_key_ );
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -163,7 +163,7 @@ void BrooksCoreyWithHysteresis<dim>::Initialize( Element<dim>& e )
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::krw_Phase() const
+double64 BrooksCoreyWithHysteresisCO2<dim>::krw_Phase() const
  { 
     if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double64>(0.);
     if ( TwoPhaseModel<dim>::seff_ >= 1. ) return static_cast<double64>(1.);
@@ -175,7 +175,7 @@ double64 BrooksCoreyWithHysteresis<dim>::krw_Phase() const
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::krn_Phase() const
+double64 BrooksCoreyWithHysteresisCO2<dim>::krn_Phase() const
  { 
     if ( imbibing )
     {
@@ -223,7 +223,7 @@ double64 BrooksCoreyWithHysteresis<dim>::krn_Phase() const
 
 // for the wetting phase
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
+double64 BrooksCoreyWithHysteresisCO2<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double64>(5.6); // as computed with dfds method
  } 
@@ -232,7 +232,7 @@ double64 BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
 // pc covers the full saturation range, pc is capped if sw<swr     
 // tested: O.K.     
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
+double64 BrooksCoreyWithHysteresisCO2<dim>::pc_Phase( size_t ) const
 {
    // compute sw_eff for which pc = 40MPa, seff_min = (pc/pd)^-lamda
    // applying the limit on capillary pressure 
@@ -247,7 +247,7 @@ double64 BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 // dpcdS covers the full saturation range, dpcdS is capped if sw<swr
 // tested: O.K.    
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
+double64 BrooksCoreyWithHysteresisCO2<dim>::dpcds_Phase( size_t phase ) const
 {
    // the wetting phase has no capilllary pressure
    if ( phase == 1U ) return static_cast<double64>(0.);
@@ -268,7 +268,7 @@ double64 BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
  
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dfds() const 
+double64 BrooksCoreyWithHysteresisCO2<dim>::dfds() const
 {
    const double64 seff = TwoPhaseModel<dim>::seff_;
 
@@ -294,7 +294,7 @@ double64 BrooksCoreyWithHysteresis<dim>::dfds() const
 
 // tested: O.K.
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::dGds() const 
+double64 BrooksCoreyWithHysteresisCO2<dim>::dGds() const
 {
    // 2. compute dGdS for the Brooks-Corey model
    double64 seffw(TwoPhaseModel<dim>::sat_ / (1.-TwoPhaseModel<dim>::swr_-TwoPhaseModel<dim>::snr_));
@@ -332,7 +332,7 @@ double64 BrooksCoreyWithHysteresis<dim>::dGds() const
 
 
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
+double64 BrooksCoreyWithHysteresisCO2<dim>::ShockSpeed() const
  {
     return BrooksCoreyFrontVelocity().ShockVelocityMultiplier( pm2, 
                                                  TwoPhaseModel<dim>::mun_/TwoPhaseModel<dim>::muw_ );
@@ -341,7 +341,7 @@ double64 BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
 
 // look this one up in the book by Randy LeVeque
 template<size_t dim>
-double64 BrooksCoreyWithHysteresis<dim>::ShockHeight() const
+double64 BrooksCoreyWithHysteresisCO2<dim>::ShockHeight() const
  {
     cerr <<"\nBrooksCorey<dim>::ShockHeight: not implemented yet."<< endl;
     return -1.; 
@@ -351,7 +351,7 @@ double64 BrooksCoreyWithHysteresis<dim>::ShockHeight() const
 
 
 template<size_t dim>
-void BrooksCoreyWithHysteresis<dim>::Out( size_t phase ) const
+void BrooksCoreyWithHysteresisCO2<dim>::Out( size_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;
@@ -364,9 +364,9 @@ void BrooksCoreyWithHysteresis<dim>::Out( size_t phase ) const
  
  
 
-template class BrooksCoreyWithHysteresis<1U>;
-template class BrooksCoreyWithHysteresis<2U>;
-template class BrooksCoreyWithHysteresis<3U>;
+template class BrooksCoreyWithHysteresisCO2<1U>;
+template class BrooksCoreyWithHysteresisCO2<2U>;
+template class BrooksCoreyWithHysteresisCO2<3U>;
 
 } // end namespace csmp
 

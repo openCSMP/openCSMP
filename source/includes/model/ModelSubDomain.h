@@ -57,11 +57,11 @@ struct SubDomainInfo {
       @todo (2-C) Declare members as virtual if they are
 
 */
-template<size_t dim,template<size_t> class SIMPLEX>
-class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLEX> > {
+template<size_t dim,template<size_t> class CELL>
+class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> > {
   public:
-    // simplices
-    typedef SIMPLEX<dim>            Simplex;
+    // any kind of finite elements; simplex or other types
+    typedef CELL<dim>               Simplex;
     typedef std::vector<Simplex*>   SimplexContainer;
 
     // vertices
@@ -83,7 +83,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
     virtual ~ModelSubDomain();
-    ModelSubDomain<dim,SIMPLEX>&  operator=( const ModelSubDomain& );
+    ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
 
     std::string Name() const;
     void Name( const std::string& );
@@ -118,24 +118,24 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     // ----------------------------------------
 
     /// reference to container of simplices that may be either of pointer to Element, Face or InterFace objects
-    typename std::vector<SIMPLEX<dim>*>&  SimplexVector();
+    typename std::vector<CELL<dim>*>&  SimplexVector();
   
     /// reference to Node pointer vector
     typename std::vector<Node<dim>*>&     NodeVector();
   
     // TODO: remove this proliferation of names! - if needed put into subclasses
-    typename std::vector<SIMPLEX<dim>*>&  ElementVector();
-    typename std::vector<SIMPLEX<dim>*>&  FaceVector();
-    typename std::vector<SIMPLEX<dim>*>&  InterFaceVector();
+    typename std::vector<CELL<dim>*>&  ElementVector();
+    typename std::vector<CELL<dim>*>&  FaceVector();
+    typename std::vector<CELL<dim>*>&  InterFaceVector();
 
     // iterators
     typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
     typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesEnd();
-    typename std::vector<SIMPLEX<dim>*>::iterator           ElementsBegin();
-    typename std::vector<SIMPLEX<dim>*>::iterator           PerimeterElementsBegin();
-    typename std::vector<SIMPLEX<dim>*>::iterator           ElementsEnd();
+    typename std::vector<CELL<dim>*>::iterator           ElementsBegin();
+    typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
+    typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
 
     // const iterators
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
@@ -144,12 +144,12 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     typename std::vector<csmp::Node<dim>*>::const_iterator  InteriorNodesEnd() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesEnd() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsBegin() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     ElementsEnd() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsBegin() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     PerimeterElementsEnd() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     InteriorElementsBegin() const;
-    typename std::vector<SIMPLEX<dim>*>::const_iterator     InteriorElementsEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator     ElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator     ElementsEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator     PerimeterElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator     PerimeterElementsEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator     InteriorElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator     InteriorElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
@@ -169,10 +169,10 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     size_t            PerimeterElements() const;
 
     // access via objects and local order in containers
-    bool              Contains( const SIMPLEX<dim>* ) const;
+    bool              Contains( const CELL<dim>* ) const;
     bool              Contains( const Node<dim>* ) const;
     bool              IsPerimeterNode( const csmp::Node<dim>* ) const;
-    bool              IsPerimeterElement( const SIMPLEX<dim>* ) const;
+    bool              IsPerimeterElement( const CELL<dim>* ) const;
     /// number of faces of perimeter element #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
     size_t            PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
@@ -180,7 +180,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
     csmp::Node<dim>*  N( size_t n ) const;
     /// pointer to element #n of model subdomain
-    SIMPLEX<dim>*     E( size_t n ) const;
+    CELL<dim>*     E( size_t n ) const;
 
     // access via object indexes( note: use with caution )
     /// is the node located on the surface of the model subdomain?
@@ -305,7 +305,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
 
     const PropertyDatabase<dim>&                pref_;
     std::string                                 subdomain_name_; ///< passed down when region is created so that it can be referred to
-    std::vector<SIMPLEX<dim>*>                  elmt_vec_;       ///< doubly sorted, interior elements first
+    std::vector<CELL<dim>*>                  elmt_vec_;       ///< doubly sorted, interior elements first
     std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;    ///< as in second segment of elmt_vec_
     std::vector<csmp::Node<dim>*>               node_vec_;       ///< doubly sorted, interior nodes first
     size_t                                      first_bd_node_;
@@ -317,12 +317,12 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,SIMPLE
 
 
 /// returns number of nodes that are shared by the two subdomains (matches by pointers)
-template<size_t dim,template<size_t> class SIMPLEX>
-size_t  sharedNodes( const ModelSubDomain<dim,SIMPLEX>&, const ModelSubDomain<dim,SIMPLEX>& );
+template<size_t dim,template<size_t> class CELL>
+size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// returns number of nodes on the subdomain perimeters that are shared by the two subdomains (matches by pointers)
-template<size_t dim,template<size_t> class SIMPLEX>
-size_t  sharedPerimeterNodes( const ModelSubDomain<dim,SIMPLEX>&, const ModelSubDomain<dim,SIMPLEX>& );
+template<size_t dim,template<size_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
 void readDomainIndexesFromBinaryFile( size_t dim, FILE*, SubDomainInfo& );

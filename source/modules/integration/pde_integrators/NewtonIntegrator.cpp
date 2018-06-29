@@ -7,12 +7,12 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-NewtonIntegrator<dim,SIMPLICIAL_COMPLEX>::NewtonIntegrator() :
-  IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>() {}
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+NewtonIntegrator<dim,COMPUTATION_DOMAIN>::NewtonIntegrator() :
+  IterativeIntegrator<dim,COMPUTATION_DOMAIN>() {}
   
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-double64 NewtonIntegrator<dim,SIMPLICIAL_COMPLEX>::Residual() {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+double64 NewtonIntegrator<dim,COMPUTATION_DOMAIN>::Residual() {
   return std::sqrt(std::inner_product( this->rh_.begin(), 
                                        this->rh_.end(),
                                        this->rh_.begin(), 0.) );

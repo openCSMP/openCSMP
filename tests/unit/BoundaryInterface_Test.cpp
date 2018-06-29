@@ -105,7 +105,7 @@ void BoundaryInterface_Test::run()
       // testing whether boundary segments can be found by combined search criteria
       const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
       string patch_name = findBoundary( model, intersected_regions );
-      _test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
+      _test( patch_name == "NORMAL_FAULT_BOUNDARY4_LAYER_BOTTOM_LAYER_TOP" );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
       const size_t patches_found = model.FindBoundaryNames( search_strings, region_patches_found );

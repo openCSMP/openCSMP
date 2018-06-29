@@ -219,7 +219,7 @@ void Experimental_Example::Run()
   // ----------------------------------------------------------
    string input_file("cylinder");
    // ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
-  ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
+   ANSYS_Model3D  model( input_file.c_str(), "cylinder-configuration.txt");
    Region<DIM>& model_domain(model.Region("Model"));
 
    printModelDimensions( model, true );
@@ -247,7 +247,7 @@ void Experimental_Example::Run()
       // TODO: consider potential stress changes due to insolation of slope etc.
       model.InputBoundaryValue( TOP, "temperature", makeScalar(DIRICH,15.));
       //model.InputBoundaryValue( BOTTOM, "temperature", makeScalar(DIRICH,80.));
-      temperature.ComputeSteadyState( model );
+      temperature.ComputeSteadyState( model.Region("Model") );
       printRangeOfVariable( model, "temperature");
     }
    VTK_Interface<DIM>  vtk_output;

@@ -406,6 +406,7 @@ cerr << endl;
    // 3. Creating splitboundaries for each of the discovered juxtapositions of regions
    // --------------------------------------------------------------------------------
    string bname;
+/*
    for ( auto it : split_boundaries_nbor_elmts ) {
          // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
          bname = CreateSplitBoundaryName( it.first );
@@ -429,8 +430,8 @@ cerr << endl;
                                     "SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries:",
                                     bname.c_str(),
                                     "boundary already exists. Nothing was done.");
-*/
       }
+*/
    return true;
    
 } // end DetectAndCreateSplitBoundaries

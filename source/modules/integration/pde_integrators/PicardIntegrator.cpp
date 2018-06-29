@@ -7,16 +7,16 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-PicardIntegrator<dim,SIMPLICIAL_COMPLEX>::PicardIntegrator() 
- : IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+PicardIntegrator<dim,COMPUTATION_DOMAIN>::PicardIntegrator() 
+ : IterativeIntegrator<dim,COMPUTATION_DOMAIN>()
   {}
   
   
   
   
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-double64 PicardIntegrator<dim,SIMPLICIAL_COMPLEX>::Residual() 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+double64 PicardIntegrator<dim,COMPUTATION_DOMAIN>::Residual() 
 {
   resid_.resize(this->G_.Rows());
   std::vector<double64>(resid_).swap(resid_);

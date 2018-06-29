@@ -6,7 +6,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "PointSource_rhsop.h"
-#include "PDE_Integrator.h"
+#include "PDE_Integrator_CRM.h"
 
 namespace csmp {
 
@@ -18,12 +18,12 @@ template<size_t> class Model;
     @attention Gradient multiplier is currently not used and has no influence on results.
     @todo (3) Make generic so that it can take both numerically and analytically integrated FEs
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-class SteadyStateDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class SteadyStateDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
 
   public:
 
-    typedef typename SIMPLICIAL_COMPLEX<dim>::Simplex Simplex;
+    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
 
 	SteadyStateDiffusor(Model<dim>& sg,
 		const char* diffusivity,
@@ -65,9 +65,7 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
     virtual ~SteadyStateDiffusor();
 
     /// K div^2 = q
-    void ComputeSteadyState( Model<dim>& sg, bool verbose=false );
-
-    void ComputeSteadyState( SIMPLICIAL_COMPLEX<dim>& subDomain, bool verbose=false );
+    void ComputeSteadyState( COMPUTATION_DOMAIN<dim>& subDomain, bool verbose=false );
 
     virtual void AdjustSolverSettings();
 
@@ -81,10 +79,10 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
     
   protected:
 
-    NumIntegral_dNT_op_dN_dV<dim,Simplex>   conductance_;
-    NumIntegral_NT_op_N_dV<dim,Simplex>*    source_;
-    PointSource_rhsop<dim,Simplex>*         nodal_source_;
-    NumIntegral_dNT_op_dV<dim,Simplex>*     gravity_;
+    NumIntegral_dNT_op_dN_dV<dim,ComputationCell>   conductance_;
+    NumIntegral_NT_op_N_dV<dim,ComputationCell>*    source_;
+    PointSource_rhsop<dim,ComputationCell>*         nodal_source_;
+    NumIntegral_dNT_op_dV<dim,ComputationCell>*     gravity_;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings                   settings_; // only this derived class knows about SAMG

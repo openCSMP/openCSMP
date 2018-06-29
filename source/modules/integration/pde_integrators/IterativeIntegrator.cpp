@@ -8,16 +8,16 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::IterativeIntegrator()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+IterativeIntegrator<dim,COMPUTATION_DOMAIN>::IterativeIntegrator()
  : verbose_(false),
    max_iter_(100),
    target_residual_(1.0e-06) 
  {}
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-double64 IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::Residual()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+double64 IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
  {
     cout << "\nIterativeIntegrator< dim>::Residual: this method has not been defined yet."<< endl;
     cout <<" returning 1."<< endl;
@@ -27,35 +27,35 @@ double64 IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::Residual()
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::MaximalIterationNumber(size_t max_iter) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::MaximalIterationNumber(size_t max_iter) {
   max_iter_ = max_iter;
 }
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::TargetResidual(double64 target_residual) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::TargetResidual(double64 target_residual) {
   target_residual_ = target_residual;
 }
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::Verbose(bool yesno) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Verbose(bool yesno) {
   verbose_ = yesno;
 }
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::AddPostProcess( Interrelation<dim>* relation ) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( Interrelation<dim>* relation ) {
   assert(relation != 0);
   processes_.push_back(std::pair<Interrelation<dim>*, Visitor<dim>*>(relation, 0));
 }
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::AddPostProcess( Visitor<dim>* visitor ) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( Visitor<dim>* visitor ) {
   assert(visitor != 0);
   processes_.push_back(std::pair<Interrelation< dim>*, Visitor< dim>*>(0, visitor));
 }
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SetupEquations( SIMPLICIAL_COMPLEX<dim>& gref ) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SetupEquations( COMPUTATION_DOMAIN<dim>& gref ) {
   this->EstablishMatrixSetup(gref);
   this->Accumulate(gref);
   if (this->Transient()) {
@@ -66,15 +66,15 @@ void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SetupEquations( SIMPLICIAL_COM
 }
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SolveEquations( SIMPLICIAL_COMPLEX<dim>& gref ) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SolveEquations( COMPUTATION_DOMAIN<dim>& gref ) {
   this->Solve();
   this->OutputResults(gref);
 }
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::ApplyPostProcesses( SIMPLICIAL_COMPLEX<dim>& gref ) {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::ApplyPostProcesses( COMPUTATION_DOMAIN<dim>& gref ) {
   for ( typename list<std::pair<Interrelation<dim>*, Visitor<dim>*> >::iterator 
         it = processes_.begin(); it != processes_.end(); ++it ) {
       if (it->first != 0) gref.Apply(*(it->first));
@@ -84,15 +84,15 @@ void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::ApplyPostProcesses( SIMPLICIAL
 }
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-size_t IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::MaximalIterationNumber() const {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::MaximalIterationNumber() const {
   return max_iter_;
 }
 
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-size_t IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::Iterations( SIMPLICIAL_COMPLEX<dim>& sg )
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMAIN<dim>& sg )
  {
    SAMG_KeepMemory();
    double64 res; 
@@ -131,8 +131,8 @@ size_t IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::Iterations( SIMPLICIAL_COMPL
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SAMG_KeepMemory() {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepMemory() {
   SAMG_Settings* settings = GetSAMG_Settings();
   if (settings) {
     settings->Set_iswit(4);
@@ -141,8 +141,8 @@ void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SAMG_KeepMemory() {
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SAMG_KeepSettings() {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepSettings() {
   SAMG_Settings* settings = GetSAMG_Settings();
   if (settings) {
     settings->Set_iswit(3);
@@ -151,8 +151,8 @@ void IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::SAMG_KeepSettings() {
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SAMG_Settings* IterativeIntegrator<dim,SIMPLICIAL_COMPLEX>::GetSAMG_Settings() {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SAMG_Settings* IterativeIntegrator<dim,COMPUTATION_DOMAIN>::GetSAMG_Settings() {
   SAMG_Settings* result(0);
   if (SAMG_Solver* samg_solver = dynamic_cast<SAMG_Solver*>(this->GetSolver())) {
     result = dynamic_cast<SAMG_Settings*>(samg_solver->GetSolverSettings());

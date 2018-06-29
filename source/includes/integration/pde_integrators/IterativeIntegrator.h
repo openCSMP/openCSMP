@@ -41,8 +41,8 @@ Models, Visitors and Interrelations. Calculations on single Region
 objects is not supported.  
 
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-class IterativeIntegrator : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
     IterativeIntegrator();
     
@@ -54,13 +54,13 @@ class IterativeIntegrator : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
     void AddPostProcess( Interrelation<dim>* );
     void AddPostProcess( Visitor<dim>* );
     
-    virtual void SetupEquations( SIMPLICIAL_COMPLEX<dim>& );
+    virtual void SetupEquations( COMPUTATION_DOMAIN<dim>& );
     virtual double64  Residual();
-    virtual void SolveEquations( SIMPLICIAL_COMPLEX<dim>& );
-    void ApplyPostProcesses( SIMPLICIAL_COMPLEX<dim>& );
+    virtual void SolveEquations( COMPUTATION_DOMAIN<dim>& );
+    void ApplyPostProcesses( COMPUTATION_DOMAIN<dim>& );
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    virtual size_t Iterations( SIMPLICIAL_COMPLEX<dim>& );
+    virtual size_t Iterations( COMPUTATION_DOMAIN<dim>& );
 #else
     /// add extra functionality for alternative solver if needed
 #endif

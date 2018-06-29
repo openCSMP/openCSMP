@@ -165,7 +165,7 @@ bool SteadyStateDiffusionProfile<dim>::Solve( double64 modelTime )
 
     /// Solve
     std::cout <<"\n\n*** SteadyStateDiffusionProfile::Solve ***\n\n";
-    ssds_.ComputeSteadyState( model_ );
+    ssds_.ComputeSteadyState( model_.Region("Model") );
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     #ifdef SAMG_MULTIPLE_INSTANCES

@@ -12,23 +12,28 @@ using namespace std;
 
 namespace csmp {
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::outputCRMfile(string& fname) {
-		ofstream ofs(fname);
-		assert(ofs.is_open());
-		cout << "Writing to " << fname << endl;
-		ofs.setf(ios::scientific);
-		size_t ias(G_.ia.size()), jas(G_.ja.size());
-		ofs << dof_per_node_ << endl << ias << endl << jas << endl;
-		for (size_t i = 0; i < ias; ++i) ofs << G_.ia[i] << endl;
-		for (size_t i = 0; i < jas; ++i) ofs << G_.ja[i] << endl;
-		for (size_t i = 0; i < jas; ++i) ofs << G_.a[i] << endl;
-		assert(RH_.size() == ias-1);
-		for (size_t i = 0; i < ias-1; ++i) ofs << RH_[i] << endl;
-		for (size_t i = 0; i < ias - 1; ++i) ofs << G_.mapDirich[i] << endl;
-		cout << "Writing to " << fname << " finished completely." << endl;
-	}
-	/** Default Constructor
+template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname ) {
+  ofstream ofs(fname);
+  assert(ofs.is_open());
+  cout << "Writing to " << fname << endl;
+  ofs.setf(ios::scientific);
+  size_t ias(G_.ia.size()), jas(G_.ja.size());
+  ofs << dof_per_node_ << endl << ias << endl << jas << endl;
+  for (size_t i = 0; i < ias; ++i) ofs << G_.ia[i] << endl;
+  for (size_t i = 0; i < jas; ++i) ofs << G_.ja[i] << endl;
+  for (size_t i = 0; i < jas; ++i) ofs << G_.a[i] << endl;
+  assert(RH_.size() == ias-1);
+  for (size_t i = 0; i < ias-1; ++i) ofs << RH_[i] << endl;
+  for (size_t i = 0; i < ias - 1; ++i) ofs << G_.mapDirich[i] << endl;
+  cout << "Writing to " << fname << " finished completely." << endl;
+}
+  
+  
+  
+  
+  
+/** Default Constructor
 
 	The default constructor sets the computational domain equivalent to the
 	Model.
@@ -38,11 +43,11 @@ namespace csmp {
 	want to carry out a transient calculation you have to use the method
 	Transient().
 
-	@attention SIMPLICIAL_COMPLEX is used here because DOMAIN caused a clash
+	@attention INTEGRATION_DOMAIN is used here because DOMAIN caused a clash
 	with DOMAIN defined in <cmath>
-	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::PDE_Integrator_CRM()
+*/
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::PDE_Integrator_CRM()
 		:
 #ifdef CSMP_WITH_SAMG_SOLVER
 		solver_(new SAMG_Solver()),
@@ -79,8 +84,8 @@ namespace csmp {
 	/**
 	Use this constructor wherever possible.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::PDE_Integrator_CRM(Solver& solver)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::PDE_Integrator_CRM(Solver& solver)
 		: solver_(&solver),
 		dim2_(dim*dim),
 		dof_per_node_(0),
@@ -116,8 +121,8 @@ namespace csmp {
 	The constructor will not manage the supplied pointer, i.e. delete the supplied object instance.
 
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::PDE_Integrator_CRM(Solver* solver)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::PDE_Integrator_CRM(Solver* solver)
 		: solver_(solver),
 		dim2_(dim*dim),
 		dof_per_node_(0),
@@ -151,8 +156,8 @@ namespace csmp {
 
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::~PDE_Integrator_CRM()
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::~PDE_Integrator_CRM()
 	{
 		if (newed_Solver_object)
 		{
@@ -179,8 +184,8 @@ namespace csmp {
 	/**
 	@attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::PDE_Integrator_CRM(const PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>& a)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::PDE_Integrator_CRM(const PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>& a)
 		:
 #ifdef CSMP_WITH_SAMG_SOLVER
 		solver_(new SAMG_Solver()),
@@ -230,8 +235,8 @@ namespace csmp {
 
 	@todo SKM: fix so that the copy construction also involves the Solver
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>& PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::operator=(const PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>& a)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>& PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::operator=(const PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>& a)
 	{
 		if (&a != this) {
 			G_ = a.G_;
@@ -279,8 +284,8 @@ namespace csmp {
 
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::RetainGlobalSolutionMatrix(bool retain)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::RetainGlobalSolutionMatrix(bool retain)
 	{
 		retain_matrix_ = retain;
 	}
@@ -293,8 +298,8 @@ namespace csmp {
 	Does not assume responsibility for the supplield solver
 	which must be deleted elsewhere if created on the heap.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::SetSolver(Solver* new_solver) {
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::SetSolver(Solver* new_solver) {
 		assert(new_solver != NULL);
 		if (solver_ != new_solver) {
 			delete solver_;
@@ -305,18 +310,18 @@ namespace csmp {
 
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	Solver* PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::GetSolver() const {
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	Solver* PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::GetSolver() const {
 		return solver_;
 	}
 
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AdjustSolverSettings()
 	{
 		ErrorHandler&  csmp_error(ErrorHandler::Instance());
-		csmp_error.notice(WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings",
+		csmp_error.notice(WARNING, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AdjustSolverSettings",
 			"this call to the method did nothing, the method is defined only in the subclasses.");
 
 	} // end AdjustSolverSettings
@@ -338,8 +343,8 @@ namespace csmp {
 	  Use this method if you want to re-use a previously defined steady-state
 	  PDE_Integrator.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	bool  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Transient() const
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	bool  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Transient() const
 	{
 		return !(time_increment_ < numeric_limits<double64>::epsilon());
 	}
@@ -357,8 +362,8 @@ namespace csmp {
 	Set the time-increment of an PDE_Integrator before you Apply() it to the
 	Model or target Region objects.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void   PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::TimeIncrement(double64 dt)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void   PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::TimeIncrement(double64 dt)
 	{
 		time_increment_ = dt;
 	}
@@ -377,8 +382,8 @@ namespace csmp {
 	To test the accumulation process by visual examination of the matrices,
 	you must call it directly after executing Accumulate(), see below.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::OutputGlobals(int32 precision)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputGlobals(int32 precision)
 	{
 		/*
 		cout << "\nGlobal solution matrix: " << G_.Rows() << " x " << G_.Cols() << endl;
@@ -452,8 +457,8 @@ namespace csmp {
 	  Define these before you pass the PDE_Integrator to the Model.
 
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Add(MathOperatorLHS<dim>* op)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Add(MathOperatorLHS<dim>* op)
 	{
 		// The name for the algorithm is combined out of its operands
 		lhs_operators_[op->Name()] = op;
@@ -465,8 +470,8 @@ namespace csmp {
 #endif
 	}
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Add(MathOperatorRHS<dim>* op)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Add(MathOperatorRHS<dim>* op)
 	{
 		rhs_operators_[op->Name()] = op;
 		// force update during next application
@@ -478,8 +483,8 @@ namespace csmp {
 	}
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AddPostProcess(MathOperatorLHS<dim>* op)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AddPostProcess(MathOperatorLHS<dim>* op)
 	{
 		postpro_operators_[op->Name()] = op;
 		// force update during next application
@@ -490,8 +495,8 @@ namespace csmp {
 #endif
 	}
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AddBoundaryIntegrals(MathOperatorRHS<dim>* op)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AddBoundaryIntegrals(MathOperatorRHS<dim>* op)
 	{
 		rhs_boundary_operators_[op->Name()] = op;
 		// force update during next application
@@ -509,8 +514,8 @@ namespace csmp {
 	information that is output when you define your own PDE operator
 	subclasses.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::ListMathOperatorsLHS() const
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::ListMathOperatorsLHS() const
 	{
 		typename map<string, MathOperatorLHS<dim>*>::const_iterator it;
 
@@ -522,8 +527,8 @@ namespace csmp {
 	}
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::ListMathOperatorsRHS() const
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::ListMathOperatorsRHS() const
 	{
 		typename map<string, MathOperatorRHS<dim>*>::const_iterator it;
 
@@ -547,8 +552,8 @@ namespace csmp {
 	instance to use it as initial guess in another time step. (Use method
 	FirstGuess)
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::SolutionVector(vector<double64>& sol) const {
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::SolutionVector(vector<double64>& sol) const {
 		sol.resize(x_.size());
 		vector<double64>(sol).swap(sol);
 		copy(x_.begin(), x_.end(), sol.begin());
@@ -570,8 +575,8 @@ namespace csmp {
 	NOTE: Make sure that you actually use an algebraic multigrid solver object and that the
 	parameter ifirst in its SAMG_Settings object is set to 0.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::FirstGuess(const vector<double64>& guess) {
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::FirstGuess(const vector<double64>& guess) {
 		assert(guess.size() == x_.size());
 		copy(guess.begin(), guess.end(), x_.begin());
 	}
@@ -600,8 +605,8 @@ namespace csmp {
 	(owing to the Meschach implementation) is not
 	de-allocated before the programme terminates.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Reset(bool delete_math_operators)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Reset(bool delete_math_operators)
 	{
 		if (delete_math_operators) {
 			lhs_operators_.erase(lhs_operators_.begin(), lhs_operators_.end());
@@ -640,8 +645,8 @@ namespace csmp {
 	  signal-to-noise ratio) is several orders of magnitude lower than the
 	  initial residue. Otherwise the obtained solution is useless.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Solve()
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Solve()
 	{
 		solver_->Solve(G_, rh_, x_, dof_per_node_);
 	} // end Solve
@@ -748,8 +753,8 @@ namespace csmp {
 	  of the finite-element method. If you are doing a finite-volume or
 	  other computation, just ignore this warning.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::EstablishMatrixSetup(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::EstablishMatrixSetup(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 
 		// -------------------------------------------------------------------
@@ -809,7 +814,7 @@ namespace csmp {
 				basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
 			else
 				throw csmp::Exception(WARNING,
-					"PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+					"PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"lefthand basic operand not found");
 			// test function operands are picked up when the righthandside is accumulated
 			// since they must also be present in there
@@ -828,7 +833,7 @@ namespace csmp {
 			if (unspecified != pkey)
 				test_operands_[(*rhs_it).second->TestOperand()] = 0U;
 			else
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"righthand test operand not found");
 		}
 
@@ -841,7 +846,7 @@ namespace csmp {
 				if (verbose_) cout << "\nFor: '" << (*rhs_it).first << "' PDE boundary operator is added to righthand term list." << endl;
 				if (unspecified != pkey) test_operands_[(*rhs_it).second->TestOperand()] = 0;
 				else
-					throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup:",
+					throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup:",
 						"righthand test operand not found.");
 			}
 		}
@@ -859,7 +864,7 @@ namespace csmp {
 				cout << "\nThe system of equations is undefined. ";
 				cout << "\nCreate corresponding LHS basic or test Operand for: ";
 				cout << (*lhs_it).first << endl;
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"lefthand basic or test operand missing");
 			}
 
@@ -918,7 +923,7 @@ namespace csmp {
 				}
 				break;
 			default:
-				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"Test operand placement unresolved");
 			}
 		}
@@ -939,13 +944,13 @@ namespace csmp {
 					(*iter).second = (*lhs_it).second->BasicOperandOffset();
 			}
 			else
-				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"LHS basic operand matrix placement i unresolved");
 
 			if ((iter = test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end())
 				(*lhs_it).second->TestOperandOffset((*iter).second);
 			else
-				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(FATAL_ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 					"LHS test function operand matrix placement j unresolved");
 		}
 		for (typename map<string, MathOperatorRHS<dim>*>::iterator
@@ -954,7 +959,7 @@ namespace csmp {
 			if ((iter = test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end())
 				(*rhs_it).second->TestOperandOffset((*iter).second);
 			else
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 				(*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
 		}
 
@@ -965,7 +970,7 @@ namespace csmp {
 			if ((iter = test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end())
 				(*rhs_it).second->TestOperandOffset((*iter).second);
 			else
-				throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,SIMPLICIAL_COMPLEX>::EstablishMatrixSetup",
+				throw csmp::Exception(ERROR, "PDE_IntegratorExperimental<dim,INTEGRATION_DOMAIN>::EstablishMatrixSetup",
 				(*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
 		}
 		// ----------------------------------------------------------------------
@@ -1040,8 +1045,8 @@ namespace csmp {
 
 	  The dependent variable must be placed on the nodes:
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AssignInitialConditions(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AssignInitialConditions(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 		size_t                  i, j;
 		size_t                  position, offset;
@@ -1051,11 +1056,11 @@ namespace csmp {
 		Index                   prop_key;
 
 		if (!setup_established_)
-			throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+			throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignInitialConditions",
 				"please call EstablishMatrixSetup() prior to this method.");
 
 		if (basic_operands_.empty()) {
-			throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+			throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignInitialConditions",
 				"No basic operands have been specified...");
 			return;
 		}
@@ -1068,7 +1073,7 @@ namespace csmp {
 			typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
 			if (prop_key.place != NODE) {
-				throw csmp::Exception(WARNING, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignInitialConditions",
+				throw csmp::Exception(WARNING, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignInitialConditions",
 					"So far no conditions are assigned to elements, faces, segments");
 				return;
 			}
@@ -1147,8 +1152,8 @@ namespace csmp {
 
 	  @author SKM 1/10/2014
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::ScaleEssentialConditions(double64 scale_factor)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::ScaleEssentialConditions(double64 scale_factor)
 	{
 		scale_factor_ = scale_factor;
 
@@ -1243,8 +1248,8 @@ namespace csmp {
 	  Accumulate() is executed internally when the PDE_Integrator is passed to the
 	  Model.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::Accumulate(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::Accumulate(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 		// setting up the index mapping from global to local node ID numbers
 		gref.RenumberNodes();
@@ -1254,7 +1259,7 @@ namespace csmp {
 		for (typename map<string, MathOperatorLHS<dim>*>::iterator
 			it_lhs = lhs_operators_.begin(); it_lhs != lhs_operators_.end(); it_lhs++)
 			if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater())
-				for (typename vector<typename SIMPLICIAL_COMPLEX<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_lhs).second->GetOperands(*(*git));
@@ -1271,7 +1276,7 @@ namespace csmp {
 		for (typename map<string, MathOperatorRHS<dim>*>::iterator
 			it_rhs = rhs_operators_.begin(); it_rhs != rhs_operators_.end(); it_rhs++)
 			if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater())
-				for (typename vector<typename SIMPLICIAL_COMPLEX<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_rhs).second->GetOperands(*(*git));
@@ -1296,7 +1301,7 @@ namespace csmp {
 					for (int32 e = 0; e < gref.Elements(); e++)
 					{
 						//                    cout<<"element: "<<e<<endl;
-						typename SIMPLICIAL_COMPLEX<dim>::Simplex* eit = gref.E(e);
+						typename INTEGRATION_DOMAIN<dim>::Simplex* eit = gref.E(e);
 						fe_tmp = eit->FE(); //save old pointer.
 											// change pointer here
 						eit->Assign(femgrs_[tid].E(eit->FE_Type()));
@@ -1330,7 +1335,7 @@ namespace csmp {
 #pragma omp for
 					for (int32 e = 0; e < gref.Elements(); e++)
 					{
-						typename SIMPLICIAL_COMPLEX<dim>::Simplex* eit = gref.E(e);
+						typename INTEGRATION_DOMAIN<dim>::Simplex* eit = gref.E(e);
 						fe_tmp = eit->FE(); //save old pointer.
 											// change pointer here
 						eit->Assign(femgrs_[tid].E(eit->FE_Type()));
@@ -1400,15 +1405,15 @@ namespace csmp {
 	  execution is invoked internally, when the PDE_Integrator is passed to the
 	  Model.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::LateAccumulate(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::LateAccumulate(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 		// accumulating as late addition into the righhand vector 'rhs'
 		// ------------------------------------------------------------
 		for (typename map<string, MathOperatorRHS<dim>*>::const_iterator
 			it_rhs = rhs_operators_.begin(); it_rhs != rhs_operators_.end(); it_rhs++)
 			if ((*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater())
-				for (typename vector<typename SIMPLICIAL_COMPLEX<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_rhs).second->GetOperands(*(*git));
@@ -1457,8 +1462,8 @@ namespace csmp {
 
 	  "no post-processing operations for REGION were defined in derived PDE_Integrator"
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::PostProcess(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::PostProcess(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 		if (postpro_operators_.empty()) return;
 
@@ -1472,7 +1477,7 @@ namespace csmp {
 				if (verbose_) cout << "\nPDE_Integrator<" << dim;
 				//              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
 				if (verbose_) cout << ">::PostProcess: Computing: " << (*it).first << "\n";
-				for (typename vector<typename SIMPLICIAL_COMPLEX<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it).second->GetOperands(*(*git));
@@ -1504,8 +1509,8 @@ namespace csmp {
 	  to the Model.
 
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::OutputResults(SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputResults(INTEGRATION_DOMAIN<dim>& gref)
 	{
 		Index   prop_key;
 		size_t  offset;
@@ -1518,7 +1523,7 @@ namespace csmp {
 			offset = (*it).second;
 
 			if (prop_key.place != NODE)
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::OutputResults(Model)",
 					"only nodal properties can be output by this method.");
 			switch (prop_key.type)
 			{
@@ -1572,7 +1577,7 @@ namespace csmp {
 			}
 							   break;
 			default:
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::OutputResults(Model)",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::OutputResults(Model)",
 					"Output to ARRAY type variables is not supported by this method yet.");
 
 			} // end switch(type)
@@ -1582,8 +1587,8 @@ namespace csmp {
 	} // end OutputResults
 
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText(const char* file)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::WriteGlobalMatrixBitMapToText(const char* file)
 	{
 		cout << "PDE_Integrator_CRM::WriteGlobalMatrixBitMapToText should be write. Press a key!\n" << endl; getchar();
 		/*
@@ -1595,7 +1600,7 @@ namespace csmp {
 		ofstream ofs;
 		ofs.open(outfile, ios::out | ios::trunc);
 		if (!ofs)
-			throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::WriteGlobalMatrixBitMapToText",
+			throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::WriteGlobalMatrixBitMapToText",
 				"Output file could not be opened");
 
 		// 2. writing G matrix to file
@@ -1617,15 +1622,15 @@ namespace csmp {
 	//---------------------------------------//
 	//               Hani
 	//--------------------------------------//
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AssignEssentialConditions(const SIMPLICIAL_COMPLEX<dim>& gref)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AssignEssentialConditions(const INTEGRATION_DOMAIN<dim>& gref)
 	{
 		if (!setup_established_)
-			throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+			throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignEssentialConditions",
 				"please call EstablishMatrixSetup() prior to this method.");
 
 		if (basic_operands_.empty())
-			throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+			throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignEssentialConditions",
 				"No (basic) operands have been specified...");
 
 		for (operandsConstIterator it = test_operands_.begin(); it != test_operands_.end(); it++)
@@ -1635,7 +1640,7 @@ namespace csmp {
 			size_t      offset = (*it).second;
 
 			if (prop_key.place != NODE)
-				throw csmp::Exception(ERROR, "PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions: CRM:",
+				throw csmp::Exception(ERROR, "PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignEssentialConditions: CRM:",
 					"So far no conditions are assigned to elements, faces, segments");
 
 			switch (prop_key.type)
@@ -1699,7 +1704,7 @@ namespace csmp {
 
 			default:
 				throw csmp::Exception(FATAL_ERROR,
-					"PDE_Integrator<dim,SIMPLICIAL_COMPLEX>::AssignEssentialConditions",
+					"PDE_Integrator<dim,INTEGRATION_DOMAIN>::AssignEssentialConditions",
 					"Variable type not recognised by this method");
 			}
 		} // end for
@@ -1707,87 +1712,11 @@ namespace csmp {
 	} // end AssignEssentialConditions
 
 
-	  /**
-	  Accumulates element integrals,
-	  simultaneously considering potential Boundary objects associated with the simplicial complex.
-	  The domain is the computational domain to which the PDE_Integrator is applied.
-
-	  @author SKM 7/7/2015
-	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::IntegrateOver(Model<dim>& model, SIMPLICIAL_COMPLEX<dim>& domain, bool debug)
-	{
-		// 1. configure algorithm
-		EstablishMatrixSetup(domain);
-
-		// 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
-		Accumulate(domain);
-
-		// 3. Accumulation: potential boundary integrals from Boundary objects that share nodes with the simplicial
-		//    complex of interest
-		list<string> shared_boundaries;
-		IdentifySharedBoundaries(model, domain, shared_boundaries);
-
-		if (!shared_boundaries.empty()) {
-			for (list<string>::const_iterator
-				it = shared_boundaries.begin(); it != shared_boundaries.end(); it++) {
-				const Boundary<dim>& domain_boundary = model.Boundary((*it).c_str());
-				cout << "\nPDE_Integrate_CRM<dim,SIMPLICIAL_COMPLEX>::IntegrateOver: ";
-				cout << " accumulating boundary: " << (*it) << "\n";
-				AccumulateBoundaryIntegrals(domain, domain_boundary);
-			}
-		}
-
-		// 4. If the computation is transient initial conditions must be input into the righthand vector
-		if (Transient() == true) AssignInitialConditions(domain);
-
-		// 5. If the computation is transient initial conditions must be input into the righthand vector
-		if (Transient() == true) {
-			LateAccumulate(domain);
-			if (!shared_boundaries.empty()) {
-				for (list<string>::const_iterator
-					it = shared_boundaries.begin(); it != shared_boundaries.end(); it++) {
-					const Boundary<dim>& domain_boundary = model.Boundary((*it).c_str());
-					LateAccumulateBoundaryIntegrals(domain, domain_boundary);
-				}
-			}
-		}
-
-		AssignEssentialConditions(domain);
-
-		// 5.1 Remove Dirichelet Condition from Matrix, Modify RHS and Convert data structure JV (in CRM G_) to ia, ja, a
-		// We need rh_ send a copy.
-		RH_ = rh_;
-		//cout << *max(rh_.begin(), rh_.end()) << endl << min(rh_.begin(), rh_.end()).operator[]; getchar();
-		G_.Set_Dirichelet_RHS_CRM(rh_, dirich_);
-		//cout << max(rh_.begin(), rh_.end()).operator[] << endl << rh_[min(rh_.begin(), rh_.end())]; getchar();
-		// 6. diagnostics
-		if (debug) {
-			OutputGlobals();
-			// OutputInput();
-		}
-
-		// 7. invert global matrix
-		x_.resize(rh_.size());
-		Solve();
-
-		//7.5 insert Dirichelet value in solution (map To Global)
-		G_.mapToGlobal(x_, dirich_);
-
-		rh_.swap(RH_);
-		// 8. write results back into Model
-		OutputResults(domain);
-
-		// 9. Calculation of result-dependent properties                                 
-		PostProcess(domain);
-
-	} // end IntegrateOver
 
 
 
-
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::IntegrateOver(SIMPLICIAL_COMPLEX<dim>& domain, bool debug)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::IntegrateOver(INTEGRATION_DOMAIN<dim>& domain, bool debug)
 	{
 		// 1. configure algorithm
 		EstablishMatrixSetup(domain);
@@ -1837,8 +1766,8 @@ namespace csmp {
 	  // Copied from PDE_IntegratorExperimental
 
 	  // determining whether the nodes of the supplied element are contained in the computational domain
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	bool isContainedIn(const SIMPLICIAL_COMPLEX<dim>& comp_domain, const Face<dim>& face)
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	bool isContainedIn(const INTEGRATION_DOMAIN<dim>& comp_domain, const Face<dim>& face)
 	{
 		const size_t nodes(face.Nodes());
 		for (size_t i = 0U; i<nodes; ++i)
@@ -1856,9 +1785,9 @@ namespace csmp {
 	for instance,  BOUNDARY_MATRIX_LANDSURFACE. The only exception that is handled is that
 	of a box-shaped model and the domain 'Model' for the computations.
 	*/
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	bool PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::IdentifySharedBoundaries(const Model<dim>& model,
-		const SIMPLICIAL_COMPLEX<dim>& subdomain,
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	bool PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::IdentifySharedBoundaries(const Model<dim>& model,
+		const INTEGRATION_DOMAIN<dim>& subdomain,
 		list<string>& shared_boundaries)
 	{
 		shared_boundaries.clear();
@@ -1923,8 +1852,8 @@ namespace csmp {
 	  TODO: deal with Robin and similar more complicated boundary conditions
 	  TODO: adopt method to handle InterFace objects (in split boundaries) as well
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::AccumulateBoundaryIntegrals(const SIMPLICIAL_COMPLEX<dim>& comp_domain,
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::AccumulateBoundaryIntegrals(const INTEGRATION_DOMAIN<dim>& comp_domain,
 		const Boundary<dim>& boundary)
 	{
 		// accumulating into the righhand vector 'rhs'
@@ -1953,8 +1882,8 @@ namespace csmp {
 	  For source terms on the surface that need to be added to the righthand side after time or other
 	  conditions were multiplied in the righthand vector.
 	  */
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	void  PDE_Integrator_CRM<dim, SIMPLICIAL_COMPLEX>::LateAccumulateBoundaryIntegrals(const SIMPLICIAL_COMPLEX<dim>& comp_domain,
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void  PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::LateAccumulateBoundaryIntegrals(const INTEGRATION_DOMAIN<dim>& comp_domain,
 		const Boundary<dim>& boundary)
 	{
 		// accumulating as late addition into the righhand vector 'rhs'

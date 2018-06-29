@@ -8,7 +8,7 @@
 #include "PointSource_rhsop.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
-#include "PDE_Integrator.h"
+#include "PDE_Integrator_CRM.h"
 
 namespace csmp {
 
@@ -27,12 +27,12 @@ template<size_t> class Model;
    @attention gradient_multiplier currently is not used.
    
 */
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-class TransientDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
 
   public:
 
-    typedef typename SIMPLICIAL_COMPLEX<dim>::Simplex Simplex;
+    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
 
     TransientDiffusor( Model<dim>&,
                               const char* diffusivity,
@@ -78,12 +78,12 @@ class TransientDiffusor : public PDE_Integrator<dim,SIMPLICIAL_COMPLEX> {
 
   protected:
 
-    NumIntegral_dNT_op_dN_dV<dim,Simplex>   conductance_;
-    NumIntegral_NT_op_N_dV<dim,Simplex>*    source_;
-    NumIntegral_NT_lhsop_N_dV<dim,Simplex>  capacitance_lhs_;
-    NumIntegral_NT_op_N_dV<dim,Simplex>     capacitance_rhs_;
-    PointSource_rhsop<dim,Simplex>*         nodal_source_;
-    NumIntegral_dNT_op_dV<dim,Simplex>*     gravity_;
+    NumIntegral_dNT_op_dN_dV<dim,ComputationCell>   conductance_;
+    NumIntegral_NT_op_N_dV<dim,ComputationCell>*    source_;
+    NumIntegral_NT_lhsop_N_dV<dim,ComputationCell>  capacitance_lhs_;
+    NumIntegral_NT_op_N_dV<dim,ComputationCell>     capacitance_rhs_;
+    PointSource_rhsop<dim,ComputationCell>*         nodal_source_;
+    NumIntegral_dNT_op_dV<dim,ComputationCell>*     gravity_;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings                   settings_;

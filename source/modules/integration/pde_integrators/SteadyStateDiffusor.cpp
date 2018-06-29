@@ -10,22 +10,22 @@ using namespace std;
 
 namespace csmp {
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	SteadyStateDiffusor<dim, SIMPLICIAL_COMPLEX>::SteadyStateDiffusor(Model<dim>& sg,
-		const char* diffusivity,
-		const char* diffusing_variable,
-		const char* spatial_source_variable,
-		bool LumpedRHS)
+	template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+	SteadyStateDiffusor<dim, COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
+                                                                     const char* diffusivity,
+                                                                     const char* diffusing_variable,
+                                                                     const char* spatial_source_variable,
+                                                                     bool LumpedRHS )
 		:
 #ifdef CSMP_WITH_SAMG_SOLVER
 		settings_(),
-		PDE_Integrator<dim, SIMPLICIAL_COMPLEX>(new SAMG_Solver(&settings_)),
+		PDE_Integrator_CRM<dim, COMPUTATION_DOMAIN>(new SAMG_Solver(&settings_)),
 #else
 		/// add extra functionality for alternative solver if needed
-		PDE_Integrator<dim, SIMPLICIAL_COMPLEX>(new CSMP_DEFAULT_LINEAR_SOLVER()),
+		PDE_Integrator_CRM<dim, COMPUTATION_DOMAIN>(new CSMP_DEFAULT_LINEAR_SOLVER()),
 #endif
 		conductance_(sg.Database(), diffusivity, diffusing_variable, diffusing_variable),
-		source_(new NumIntegral_NT_op_N_dV<dim, Simplex>(sg.Database(), spatial_source_variable, diffusing_variable)),
+		source_(new NumIntegral_NT_op_N_dV<dim, ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable)),
 		nodal_source_(0),
 		gravity_(0),
 		grad_multiplier_(1.),
@@ -66,21 +66,21 @@ namespace csmp {
 
 	} // end constructor
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                   const char* diffusivity,
                                                                   const char* diffusing_variable,
                                                                   const char* spatial_source_variable )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+  settings_(),
+  PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_( new NumIntegral_NT_op_N_dV<dim,Simplex>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
+   source_( new NumIntegral_NT_op_N_dV<dim,ComputationCell>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
    nodal_source_(0),
    gravity_(0),
    grad_multiplier_(1.),
@@ -125,8 +125,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg, 
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg, 
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* spatial_source_variable,  
@@ -134,14 +134,14 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-     PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+     PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), spatial_source_variable, diffusing_variable) ),
-   nodal_source_(new PointSource_rhsop<dim,Simplex>(sg.Database(), point_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
    gravity_(0),
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable),
@@ -190,8 +190,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* gradient_variable, 
@@ -199,15 +199,15 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(0),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,Simplex>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
@@ -245,8 +245,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* spatial_source_variable,                    
@@ -255,15 +255,15 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,Simplex>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
@@ -315,8 +315,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
 
 
 // discerning lhs and rhs diffusivity terms
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg,
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* lhs_diffusivity,
                                                                                 const char* rhs_diffusivity,
                                                                                 const char* diffusing_variable,
@@ -326,15 +326,15 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
       settings_(),
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new SAMG_Solver(&settings_) ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
    #else
       /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,SIMPLICIAL_COMPLEX>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+      PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
    #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,Simplex>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,Simplex>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
@@ -391,8 +391,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::~SteadyStateDiffusor()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::~SteadyStateDiffusor()
  {
     delete source_;
     delete nodal_source_;
@@ -411,8 +411,8 @@ SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::~SteadyStateDiffusor()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// From the SAMG solver profile brought here because many users have no clue that profile exists
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolves()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves()
  {
     assert ( firstCall_ );
 
@@ -451,14 +451,14 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolve
 
               /// Use solution of previous timestep as an initial guess - for IMPES without SAMG Multiple Instances only
               settings_.Set_itypu(0);
-              cout << "\n\n*** SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolves: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: ";
               cout <<" first call, setting SAMG input parameter itypu = 0' ***\n";
               cout.flush();
 
               /// Reuse SAMG solver setup - for IMPES without SAMG Multiple Instances only - this step is only necessary if initial setting was iswit(4)
               #ifdef NO_PRIMARY_SOLVER_CONTROL
                   settings_.Set_iswit(3); // re-use solver setup from previous timestep
-                  cout << "\n\n*** SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolves: first call: ";
+                  cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: first call: ";
                   cout <<" setting SAMG input parameter iswit = 3' ***\n";
                   cout.flush();
               #endif
@@ -468,13 +468,13 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolve
           #ifdef RELATIVE_CONVERGENCE
               /// Relative convergence is used as stopping criterion "res <= eps.res0" (res0 = starting residual) - for IMPES without SAMG Multiple Instances only
               settings_.Set_eps( this->Solver().GetSolverSettings().Get_rel_eps() );
-              cout << "\n\n*** SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolves: first call: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: first call: ";
               cout <<" setting SAMG relative solution criterion eps = " << settings_.Get_eps() << "' ***\n\n";
               cout.flush();
           #else
               /// Absolute convergence is used as stopping criterion "res <= eps" (res0 = starting residual)
               settings_.Set_eps( 1.E-14 );
-              cout << "\n\n*** SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolves first call: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves first call: ";
               cout <<" setting SAMG absolute solution criterion eps = " << -settings_.Get_eps() << "' ***\n\n";
               cout.flush();
           #endif
@@ -488,8 +488,9 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::Adjust_SAMG_ForSubsequentSolve
 
 
 /// Apply PDE integrator to entire model
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeSteadyState( Model<dim>& sg, bool verbose )
+/* does not work with the explicit template instantiations
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( Model<dim>& sg, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     if ( verbose ) {
@@ -500,7 +501,7 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeSteadyState( Model<dim>
       }
    
     if ( firstCall_ ) settings_.Set_itypu(1); // initial guess is produced by SAMG
-    sg.Apply( *this, verbose );
+    this->IntegrateOver( sg.Region("Model"), verbose );
 
     if ( firstCall_ ) {
          Adjust_SAMG_ForSubsequentSolves();
@@ -512,15 +513,15 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeSteadyState( Model<dim>
 #endif
 
  } // ComputeSteadyState
-
+*/
 
 
 
 
 
 /// Apply PDE integrator to Region / Boundary / SplitBoundary
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeSteadyState( SIMPLICIAL_COMPLEX<dim>& sd, bool verbose )
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( COMPUTATION_DOMAIN<dim>& sd, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     if ( verbose ) {
@@ -551,8 +552,8 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::ComputeSteadyState( SIMPLICIAL
 
 
 /// empirically established best settings for fluid pressure diffusion
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     cout <<"\n\n*** SteadyStateDiffusor::AdjustSolverSettings() to best settings for 'fluid pressure diffusion' ***\n\n";
@@ -580,8 +581,8 @@ void SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::AdjustSolverSettings()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// returns a reference to the current settings of the SAMG Solver used by the SteadyStateDiffusor
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
-SAMG_Settings& SteadyStateDiffusor<dim,SIMPLICIAL_COMPLEX>::GetSolverSettings()
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+SAMG_Settings& SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
  { return settings_; }
 #else
    /// add extra functionality for alternative solver if needed

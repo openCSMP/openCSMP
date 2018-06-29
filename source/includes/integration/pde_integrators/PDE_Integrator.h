@@ -37,7 +37,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class SIMPLICIAL_COMPLEX>
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 class PDE_Integrator {
 
   public:
@@ -65,7 +65,7 @@ class PDE_Integrator {
     void          TimeIncrement( double64 dt );
     bool          Transient() const;
     
-    void          IntegrateOver( SIMPLICIAL_COMPLEX<dim>&, bool debug=false );
+    void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
     void          SetSolver( Solver* new_solver );
     Solver*       GetSolver() const;
@@ -89,22 +89,22 @@ class PDE_Integrator {
 
   protected:
 
-    virtual void  EstablishMatrixSetup( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
-    virtual void  AssignInitialConditions( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
-    virtual void  AssignEssentialConditions( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
-    virtual void  Accumulate( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
 
-    virtual void  LateAccumulate( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
 
     virtual void  Solve();
 
-    virtual void  PostProcess( const SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
 
-    virtual void  OutputResults( SIMPLICIAL_COMPLEX<dim>& );
+    virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
 
   protected:
 
@@ -369,7 +369,7 @@ done in the following example:
 
 @section outlook Future Implementations
 
-@todo (1) Implement AssignNonEssentialConditions( const SIMPLICIAL_COMPLEX<SIMPLEX<dim> >& );
+@todo (1) Implement AssignNonEssentialConditions( const COMPUTATION_DOMAIN<SIMPLEX<dim> >& );
 
 @todo !!! SKM: Implement the automatic integration over boundaries in the case where surface integrals are present
       (design approved: Garmisch and Colleoli)

@@ -38,124 +38,13 @@
 
 namespace csmp {
 
-	template<size_t dim, template<size_t> class SIMPLICIAL_COMPLEX>
-	class PDE_Integrator_CRM {
-	public:
+// TODO: update this documentation
+/**
+	@brief PDE_Integrator_CRM
 
-		typedef typename std::map<Parameter, size_t>::const_iterator operandsConstIterator;
-		typedef typename std::map<Parameter, size_t>::iterator       operandsIterator;
-
-		PDE_Integrator_CRM();
-		explicit PDE_Integrator_CRM(Solver&);
-
-		/// accepts a pointer to a Solver object that is managed somewhere else
-		explicit PDE_Integrator_CRM(Solver*);
-		virtual ~PDE_Integrator_CRM();
-
-	protected:
-
-		PDE_Integrator_CRM(const PDE_Integrator_CRM&);
-		PDE_Integrator_CRM& operator=(const PDE_Integrator_CRM&);
-
-	public:
-
-		void          Add(MathOperatorLHS<dim>*);
-		void          Add(MathOperatorRHS<dim>*);
-		void          AddPostProcess(MathOperatorLHS<dim>*);
-		void		  AddBoundaryIntegrals(MathOperatorRHS<dim>*);
-
-		void          TimeIncrement(double64 dt);
-		bool          Transient() const;
-
-		void		  IntegrateOver(Model<dim>& model, SIMPLICIAL_COMPLEX<dim>& domain, bool debug = false);
-
-		void          IntegrateOver(SIMPLICIAL_COMPLEX<dim>&, bool debug = false);
-
-		bool	      IdentifySharedBoundaries(const Model<dim>& model, const SIMPLICIAL_COMPLEX<dim>& subdomain, std::list<std::string>& shared_boundaries);
-
-		void		  AccumulateBoundaryIntegrals(const SIMPLICIAL_COMPLEX<dim>& comp_domain, const Boundary<dim>& boundary);
-
-		void		  LateAccumulateBoundaryIntegrals(const SIMPLICIAL_COMPLEX<dim>& comp_domain, const Boundary<dim>& boundary);
-
-		void          SetSolver(Solver* new_solver);
-		Solver*       GetSolver() const;
-		virtual void  AdjustSolverSettings();
-		void		  outputCRMfile(std::string& );
-		/// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
-		void          ScaleEssentialConditions(double64 scale_factor);
-
-		virtual void  Reset(bool delete_math_operators = true);
-
-		void          ListMathOperatorsLHS() const;
-		void          ListMathOperatorsRHS() const;
-		void          SolutionVector(std::vector<double64>&) const;
-		void          FirstGuess(const std::vector<double64>&);
-		void          RetainGlobalSolutionMatrix(bool yes_or_no);
-		void          WriteGlobalMatrixBitMapToText(const char* file_name);
-		void          OutputGlobals(int precision = 1);
-		void          Out() const { std::cout << "PDE_Integrator_CRM 2 \n"; std::getchar(); };
-		void          Verbose(bool verbose) { verbose_ = verbose; }
-		bool          GetVerbose() { return verbose_; }
-
-	protected:
-
-		virtual void  EstablishMatrixSetup(const SIMPLICIAL_COMPLEX<dim>&);
-
-		virtual void  AssignInitialConditions(const SIMPLICIAL_COMPLEX<dim>&);
-
-		/// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
-		virtual void  AssignEssentialConditions(const SIMPLICIAL_COMPLEX<dim>&);
-
-		virtual void  Accumulate(const SIMPLICIAL_COMPLEX<dim>&);
-
-		virtual void  LateAccumulate(const SIMPLICIAL_COMPLEX<dim>&);
-
-		virtual void  Solve();
-
-		virtual void  PostProcess(const SIMPLICIAL_COMPLEX<dim>&);
-
-		virtual void  OutputResults(SIMPLICIAL_COMPLEX<dim>&);
-
-	protected:
-
-		std::map<std::string, MathOperatorLHS<dim>*>  lhs_operators_;
-		std::map<std::string, MathOperatorRHS<dim>*>  rhs_operators_;
-		std::map<std::string, MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< potential surface integrals for accumulation over boundary
-		std::map<std::string, MathOperatorLHS<dim>*>  postpro_operators_;
-		std::map<Parameter, size_t>                   basic_operands_;
-		std::map<Parameter, size_t>                   test_operands_;
-
-		CompressedRowMatrix     G_;
-		std::vector<double64>   rh_;
-		std::vector<double64>   RH_;
-		std::vector<double64>   x_;
-		Solver*                 solver_;
-		std::vector<Entry>      dirich_;
-
-		const size_t            dim2_;
-		size_t                  dof_per_node_;
-		bool                    setup_established_, retain_matrix_;
-		bool                    newed_Solver_object;
-		double64                time_increment_;
-
-		struct SIZES {
-			size_t nodes;
-			size_t elements;
-		} target_;
-
-	private:
-
-		double64                scale_factor_; ///< for essential conditions
-		bool                    verbose_;
-	};
-
-
-	/**
-	@class PDE_Integrator PDE_Integrator "main_library/PDE_Integrator.h"
-
-	@author S.K. Matthaei
-	@author Stephen G. Roberts
-	@date 1997
+	@author Hani Akbari
+	@author S.K. Matthai
+	@date 2018
 
 	@attention By default(if not explicitly specified otherwise), this uses the LUdcmp_Solver as default to circumvent 3rd party dependence
 
@@ -199,7 +88,6 @@ namespace csmp {
 	PDE_Integrators contain a Solver object which inverts the sparse solution matrix.
 
 
-
 	@section collaborations Collaborations
 
 	PDE_Integrators interact with SuperGrous and Regions. They query these objects
@@ -221,8 +109,7 @@ namespace csmp {
 	single addition inherited class. None of the existing code has to be
 	modified. You do this by inheriting from MathOperatorLHS or
 	MathOperatorRHS.
-
-
+ 
 
 	@section implementation Implementation
 
@@ -375,12 +262,123 @@ namespace csmp {
 
 	@section outlook Future Implementations
 
-	@todo (1) Implement AssignNonEssentialConditions( const SIMPLICIAL_COMPLEX<SIMPLEX<dim> >& );
+	@todo (1) Implement AssignNonEssentialConditions( const INTEGRATION_DOMAIN<SIMPLEX<dim> >& );
 
 	@todo !!! SKM: Implement the automatic integration over boundaries in the case where surface integrals are present
 	(design approved: Garmisch and Colleoli)
 
-	*/
+*/
+template<size_t dim, template<size_t> class INTEGRATION_DOMAIN> class PDE_Integrator_CRM {
+	public:
+
+		typedef typename std::map<Parameter, size_t>::const_iterator operandsConstIterator;
+		typedef typename std::map<Parameter, size_t>::iterator       operandsIterator;
+
+		PDE_Integrator_CRM();
+		explicit PDE_Integrator_CRM(Solver&);
+
+		/// accepts a pointer to a Solver object that is managed somewhere else
+		explicit PDE_Integrator_CRM(Solver*);
+		virtual ~PDE_Integrator_CRM();
+
+	protected:
+
+		PDE_Integrator_CRM(const PDE_Integrator_CRM&);
+		PDE_Integrator_CRM& operator=(const PDE_Integrator_CRM&);
+
+	public:
+
+		void          Add(MathOperatorLHS<dim>*);
+		void          Add(MathOperatorRHS<dim>*);
+		void          AddPostProcess(MathOperatorLHS<dim>*);
+		void		      AddBoundaryIntegrals(MathOperatorRHS<dim>*);
+
+		void          TimeIncrement(double64 dt);
+		bool          Transient() const;
+
+    /// for a particular subregion of the model
+		void          IntegrateOver(INTEGRATION_DOMAIN<dim>&, bool debug = false);
+
+		bool	        IdentifySharedBoundaries(const Model<dim>& model, const INTEGRATION_DOMAIN<dim>& subdomain, std::list<std::string>& shared_boundaries);
+
+		void		      AccumulateBoundaryIntegrals(const INTEGRATION_DOMAIN<dim>& comp_domain, const Boundary<dim>& boundary);
+
+		void		      LateAccumulateBoundaryIntegrals(const INTEGRATION_DOMAIN<dim>& comp_domain, const Boundary<dim>& boundary);
+
+		void          SetSolver(Solver* new_solver);
+		Solver*       GetSolver() const;
+		virtual void  AdjustSolverSettings();
+    
+    /// outputs solution matrix in compressed row storage format to file
+		void		      OutputCRM_ToFile( std::string );
+    
+		/// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
+		void          ScaleEssentialConditions(double64 scale_factor);
+
+		virtual void  Reset(bool delete_math_operators = true);
+
+		void          ListMathOperatorsLHS() const;
+		void          ListMathOperatorsRHS() const;
+		void          SolutionVector(std::vector<double64>&) const;
+		void          FirstGuess(const std::vector<double64>&);
+		void          RetainGlobalSolutionMatrix(bool yes_or_no);
+		void          WriteGlobalMatrixBitMapToText(const char* file_name);
+		void          OutputGlobals(int precision = 1);
+		void          Out() const { std::cout << "PDE_Integrator_CRM 2 \n"; std::getchar(); };
+		void          Verbose(bool verbose) { verbose_ = verbose; }
+		bool          GetVerbose() { return verbose_; }
+
+	protected:
+
+		virtual void  EstablishMatrixSetup(const INTEGRATION_DOMAIN<dim>&);
+
+		virtual void  AssignInitialConditions(const INTEGRATION_DOMAIN<dim>&);
+
+		/// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
+		virtual void  AssignEssentialConditions(const INTEGRATION_DOMAIN<dim>&);
+
+		virtual void  Accumulate(const INTEGRATION_DOMAIN<dim>&);
+
+		virtual void  LateAccumulate(const INTEGRATION_DOMAIN<dim>&);
+
+		virtual void  Solve();
+
+		virtual void  PostProcess(const INTEGRATION_DOMAIN<dim>&);
+
+		virtual void  OutputResults(INTEGRATION_DOMAIN<dim>&);
+
+	protected:
+
+		std::map<std::string, MathOperatorLHS<dim>*>  lhs_operators_;
+		std::map<std::string, MathOperatorRHS<dim>*>  rhs_operators_;
+		std::map<std::string, MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< potential surface integrals for accumulation over boundary
+		std::map<std::string, MathOperatorLHS<dim>*>  postpro_operators_;
+		std::map<Parameter, size_t>                   basic_operands_;
+		std::map<Parameter, size_t>                   test_operands_;
+
+		CompressedRowMatrix     G_;
+		std::vector<double64>   rh_;
+		std::vector<double64>   RH_;
+		std::vector<double64>   x_;
+		Solver*                 solver_;
+		std::vector<Entry>      dirich_;
+
+		const size_t            dim2_;
+		size_t                  dof_per_node_;
+		bool                    setup_established_, retain_matrix_;
+		bool                    newed_Solver_object;
+		double64                time_increment_;
+
+		struct SIZES {
+			size_t nodes;
+			size_t elements;
+		} target_;
+
+	private:
+
+		double64                scale_factor_; ///< for essential conditions
+		bool                    verbose_;
+	};
 
 } // csmp
 
