@@ -310,7 +310,7 @@ void Region_Test::run()
     // breaking a region into contiguous sub-regions
     // ---------------------------------------------
     if ( verbose_ ) cout << "\n\n\nRegion_Test::run: number of contiguous sub regions: ";
-    _test(model.PartitionRegionIntoContiguousSubRegions( "FRAC_VOLUMES" ) == false );
+    _test(model.PartitionRegionIntoContiguousSubRegions( "FRAC_VOLUMES" ) == 0 );
     // removal of new partitions
     _test(model.RemoveRegionPartitionsFor("FRAC_VOLUMES") == 0 );
 
