@@ -12,7 +12,7 @@
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "ModelTime.h"
-#include "PDE_Integrator.h"
+#include "PDE_Integrator_CRM.h"
 #include "TransientDiffusor.h"
 #include "ConstantFactor.h"
 
@@ -356,7 +356,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 
 
     // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
-    PDE_Integrator<2U,SplitBoundary>  transient_pressure;
+    PDE_Integrator_CRM<2U,SplitBoundary>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
