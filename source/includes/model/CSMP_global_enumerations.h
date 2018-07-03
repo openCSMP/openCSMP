@@ -86,7 +86,7 @@ enum PLACEMENT { UNDEFINED, // default
                  INTER_FACE_SECTOR_INTEGRATION_POINT,
                  INTER_FACE_FACET_INTEGRATION_POINT,
                  NODE,
-                 SPLIT_NODE
+                 SPLIT_NODE // TODO: check: is this still required in the Melbourne build
               };
 
 

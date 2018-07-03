@@ -7,7 +7,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void Variables_Example::Specifications()
   {

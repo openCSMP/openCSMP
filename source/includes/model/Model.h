@@ -11,7 +11,6 @@
 #include "BoundaryInterface.h"
 #include "SplitBoundaryInterface18.h"
 #include "LocalVariableStorage.h"
-#include <string>
 
 namespace csmp {
 

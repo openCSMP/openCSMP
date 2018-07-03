@@ -34,6 +34,7 @@ int main()
             examplesSuite.RegisterExample( new SteadyStatePressure_Example() );
             examplesSuite.RegisterExample( new PassiveAdvectionOfTracer_Example() );
             examplesSuite.RegisterExample( new VariablesBasic_Example() );
+            examplesSuite.RegisterExample( new Variables_Example() );
             examplesSuite.RegisterExample( new Region_Example() );
             examplesSuite.RegisterExample( new PermeabilityTensor_Example() );
             examplesSuite.RegisterExample( new TransientPressure_Example() );

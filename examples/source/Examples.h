@@ -49,5 +49,6 @@
 #include "DESAdvectionOfTracer3D_Example.h"
 #include "DESTwoPhaseFlow2D_Example.h"
 #include "MelbourneTransportScheme_Example.h"
+#include "Variables_Example.h"
 
 #endif

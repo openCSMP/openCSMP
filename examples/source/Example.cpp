@@ -2,6 +2,10 @@
 #include <cstdlib>
 #include <typeinfo>
 
+#ifdef __GNUC__
+#include "cxxabi.h"
+#endif
+
 #include "Example.h"
 
 using namespace std;
@@ -53,7 +57,16 @@ string Example::GetTitle() const
 {
   string text(title_);
   text +=" (";
+  
+#ifdef __GNUC__
+  //This is a fix for gcc name demangling.
+   int   status;
+   const std::type_info& ti = typeid(*this);
+   char* realname = abi::__cxa_demangle(ti.name(), 0, 0, &status);
+   text += realname;
+#else
   text += typeid(*this).name();
+#endif
   text +=")";
 
   return text;

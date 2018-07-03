@@ -281,7 +281,7 @@ int ExampleSuite::ChoiceWithinRange( double min, double max ) const
       else
       {
           choice = atoi(input.c_str());
-          if ( (!choice) || (atof(input.c_str()) - choice) || choice < min || choice > max)
+          if ( (!choice) || (atoi(input.c_str()) - choice) || choice < min || choice > max)
           {
             *ostream_ << "\n\nInvalid. Please reenter: ";
             valid = false;
