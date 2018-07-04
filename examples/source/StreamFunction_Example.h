@@ -1,0 +1,36 @@
+#ifndef STREAMFUNCTION_EXAMPLE_H
+#define STREAMFUNCTION_EXAMPLE_H
+
+#include "Example.h"
+
+#include "Box.h"
+#include "PDE_Integrator.h"
+#include "Region.h"
+
+namespace csmp {
+
+  template<size_t> class Model;
+  template<size_t> class Interrelation;
+  class Standard_IO_Handler;
+
+
+class  StreamFunction_Example : public Example{
+public:
+  virtual void Run();
+  virtual void Specifications();
+private:
+  void computeStreamFunction( Model<2U>& sg,
+                              BOX_BOUNDARY boundary0, BOX_BOUNDARY boundary1,
+                              double64 total_flux, const char* stream_func_var );
+
+  void analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
+                            Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo );
+
+  template<size_t dim> double64 integrateDomainBoundaryFlux( Model<dim>& sg );
+
+
+};
+
+} // csmp
+
+#endif // STREAMFUNCTION_EXAMPLE_H

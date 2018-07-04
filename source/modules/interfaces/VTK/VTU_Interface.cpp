@@ -1,0 +1,3972 @@
+#include "VTU_Interface.h"
+#include "VTK_Interface.h"
+
+#include "Boundary.h"
+#include "Region.h"
+#include "Model.h"
+#include "OS_Utilities.h"
+
+
+using namespace csmp;
+
+namespace csmp{
+
+/**
+    constructor taking a reference to the model to be handled(and an optional title to the output)
+     
+    @todo introduce option to choose XML type:
+    
+    currently:  "<VTKFile type="UnstructuredGrid" version="0.9" byte_order="LittleEndian">"
+    
+    but one should be able to switch to 1.0 etc., however this is currently not possible because the XML
+    version is not a state variable of the VTU interface.
+*/
+template<size_t dim>
+VTU_Interface<dim>::VTU_Interface( const Model<dim>& model,
+                                   const std::string& problemTitle,
+                                   bool use_problem_title_as_output_folder_name )
+    : model_        ( model ),
+      problemTitle_ ( problemTitle ),
+      toFolder_     ( use_problem_title_as_output_folder_name ),
+      toSubFolder_  ( false ),
+      variableNameAliases_(),
+      omitZeroInFileName_ ( true ),
+      elementVecAndTensDataAtCellCenters_(false),
+      regionVecAndTensDataAtCellCenters_ (false),
+      suffix_text_("")
+{
+}
+
+/// constructor taking a reference to the model to be handled(and an optional title to the output)
+template<size_t dim>
+VTU_Interface<dim>::VTU_Interface( const Model<dim>& model,
+                                   const std::string& problemTitle,
+                                   const std::string& subFolderName,
+                                   bool use_problem_title_as_output_folder_name )
+ : model_           ( model ),
+   problemTitle_    ( problemTitle ),
+   subFolderName_   ( subFolderName ),
+   toFolder_        ( use_problem_title_as_output_folder_name ),
+   toSubFolder_     ( true ),
+   omitZeroInFileName_( true ),
+   elementVecAndTensDataAtCellCenters_(false),
+   regionVecAndTensDataAtCellCenters_ (false),
+   variableNameAliases_(),
+   suffix_text_("")
+{
+}
+
+/// destructor removing connectivity files from the heap
+template<size_t dim>
+VTU_Interface<dim>::~VTU_Interface()
+{
+  // loops over xml document entries and calls delete
+  DeleteConnectivity();
+}
+
+// CONNECTIVITY FILES
+// -------------------
+
+/// allows to force recreation of connectivity map (FOR THE UPCOMING OUTPUT ONLY!!!)
+/**
+    @todo SKM verify this deletion process; looks like that there may be a memory leak.
+*/
+template<size_t dim>
+void VTU_Interface<dim>::DeleteConnectivity()
+  {
+    /// delete connectivity files for Field, Node and Element data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_.begin(); it != regionConnectivityFiles_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_.begin(); it != boundaryConnectivityFiles_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_.begin(); it != splitBoundaryConnectivityFiles_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_.clear();
+
+    /// delete connectivity files for Element BaryCenters data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_bcd_.begin(); it != regionConnectivityFiles_bcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_bcd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_bcd_.begin(); it != boundaryConnectivityFiles_bcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_bcd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_bcd_.begin(); it != splitBoundaryConnectivityFiles_bcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_bcd_.clear();
+
+    /// delete connectivity files for Regions data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_rcd_.begin(); it != regionConnectivityFiles_rcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_rcd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_rcd_.begin(); it != boundaryConnectivityFiles_rcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_rcd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_rcd_.begin(); it != splitBoundaryConnectivityFiles_rcd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_rcd_.clear();
+
+    /// delete connectivity files for Finite Element Integration Points data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_feipsd_.begin(); it != regionConnectivityFiles_feipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_feipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_feipsd_.begin(); it != boundaryConnectivityFiles_feipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_feipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_feipsd_.begin(); it != splitBoundaryConnectivityFiles_feipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_feipsd_.clear();
+
+    /// delete connectivity files for Finite Volume Sector Integration Points data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_fvsipsd_.begin(); it != regionConnectivityFiles_fvsipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_fvsipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_fvsipsd_.begin(); it != boundaryConnectivityFiles_fvsipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_fvsipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_fvsipsd_.begin(); it != splitBoundaryConnectivityFiles_fvsipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_fvsipsd_.clear();
+
+    /// delete connectivity files for Finite Volume Facet Integration Points data
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_fvfipsd_.begin(); it != regionConnectivityFiles_fvfipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_fvfipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_fvfipsd_.begin(); it != boundaryConnectivityFiles_fvfipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_fvfipsd_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_fvfipsd_.begin(); it != splitBoundaryConnectivityFiles_fvfipsd_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_fvfipsd_.clear();
+
+    /// delete connectivity files of multiblock dataset
+    for( typename std::map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_multiblock_.begin(); it != regionConnectivityFiles_multiblock_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    regionConnectivityFiles_multiblock_.clear();
+    for( typename std::map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_multiblock_.begin(); it != boundaryConnectivityFiles_multiblock_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    boundaryConnectivityFiles_multiblock_.clear();
+    for( typename std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_multiblock_.begin(); it != splitBoundaryConnectivityFiles_multiblock_.end(); ++it )
+      if( it->second )
+        delete it->second;
+    splitBoundaryConnectivityFiles_multiblock_.clear();
+  }
+
+
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,Element>&   )
+{
+    return regionConnectivityFiles_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,Face>&   )
+{
+    return boundaryConnectivityFiles_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,InterFace>&   )
+{
+    return splitBoundaryConnectivityFiles_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,Element>&   )
+{
+    return regionConnectivityFiles_bcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_bcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_bcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,Element>&  )
+{
+    return regionConnectivityFiles_rcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_rcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_rcd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,Element>&  )
+{
+    return regionConnectivityFiles_feipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_feipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_feipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,Element>&  )
+{
+    return regionConnectivityFiles_fvsipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_fvsipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_fvsipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,Element>&  )
+{
+    return regionConnectivityFiles_fvfipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_fvfipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_fvfipsd_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,Element>&  )
+{
+    return regionConnectivityFiles_multiblock_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,Face>&  )
+{
+    return boundaryConnectivityFiles_multiblock_;
+}
+template<size_t dim>
+std::map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,InterFace>&  )
+{
+    return splitBoundaryConnectivityFiles_multiblock_;
+}
+
+// INTERFACES
+// ----------------
+
+/// provide aliases for csmp variables that will be shown in vtu instead
+/// returns if existing was empty
+template<size_t dim>
+bool VTU_Interface<dim>::VariableNameAliases( const std::map<std::string,std::string>& variableNameAliases )
+{
+  bool variableNameAliasesWasEmpty( variableNameAliases_.empty() );
+  variableNameAliases_ = variableNameAliases;
+  return variableNameAliasesWasEmpty;
+}
+
+/// for a given csmp variable, returns output alias if existing. returns variable name otherwise
+template<size_t dim>
+std::string VTU_Interface<dim>::FindVariableOutputAlias( const std::string& csmpVariableName ) const
+{
+  // default is equal to variable name
+  std::string outputAliasName( csmpVariableName );
+  // if alias exists in map we overwrite
+  if( !variableNameAliases_.empty() )
+    mapFind( csmpVariableName, outputAliasName, variableNameAliases_ );
+  // returned in any case
+  return outputAliasName;
+}
+
+/// allows the creation of an index-to-name correspondance.  If the resulting container is
+/// empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
+/// If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
+/// Julian, July 2014
+template<size_t dim>
+void VTU_Interface<dim>::CreateArrayComponentPrefixNames(std::string array_var_name, std::vector<std::string>& index_to_name )
+{
+    this->array_index_to_name_.insert(make_pair(array_var_name,index_to_name));
+}
+
+/// Allows adding text after the timestep number to the vtu filename. By default, this string is empty.
+template<size_t dim>
+void VTU_Interface<dim>::SetSuffixText(std::string text)
+{
+    this->suffix_text_=text;
+}
+
+template<size_t dim>
+const std::string& VTU_Interface<dim>::GetProblemTitle( ) const
+{
+    return this->problemTitle_;
+}
+
+/// control whether '0' is appended
+template<size_t dim>
+void VTU_Interface<dim>::OmitZeroInFileName( bool omitZeroInFileName )
+{
+    omitZeroInFileName_ = omitZeroInFileName;
+}
+template<size_t dim>
+bool VTU_Interface<dim>::OmitZeroInFileName() const
+{
+    return omitZeroInFileName_;
+}
+template<size_t dim>
+void VTU_Interface<dim>::OutputElementVectorAndTensorDataAtCellCenters( bool flag )
+{
+   elementVecAndTensDataAtCellCenters_ = flag;
+}
+
+template<size_t dim>
+void VTU_Interface<dim>::OutputRegionVectorAndTensorDataAtRegionCenters( bool flag )
+{
+   regionVecAndTensDataAtCellCenters_ = flag;
+}
+
+template<size_t dim>
+std::string VTU_Interface<dim>::OutputFileNamePrefix( const std::string& fileName )
+{
+    if( toSubFolder_ || toFolder_ ){
+        std::string output_file_name;
+        output_file_name  = currentDirectorySymbol();
+        if( toFolder_ ){
+            output_file_name += problemTitle_;
+            createDirectoryIfDoesntExist( output_file_name );
+            output_file_name += directorySymbol();
+            if( toSubFolder_ ){
+                output_file_name += subFolderName_;
+                createDirectoryIfDoesntExist( output_file_name );
+                output_file_name += directorySymbol();
+            }
+        }else{
+            output_file_name += subFolderName_;
+            createDirectoryIfDoesntExist( output_file_name );
+            output_file_name += directorySymbol();
+        }
+        if( fileName.find( output_file_name ) == std::string::npos ){
+           output_file_name += fileName;
+           return output_file_name;
+        }
+    }
+    return fileName;
+}
+
+template<size_t dim>
+std::string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const std::string& fileName, const std::string& domainName )
+{
+    // write to file
+    std::string outputName( fileName );
+    // SKM_FIX: if Model is not contained in the file name
+    if ( domainName.find("Model") == std::string::npos )
+    //  if( regionNameString != "Model" )
+    {
+        outputName += "_";
+        outputName += domainName;
+    }
+
+    if( this->suffix_text_ != std::string("") )
+    {
+        outputName += "_";
+        outputName += this->suffix_text_;
+    }
+
+    replaceWhiteSpaceBy( outputName, '_' );
+
+    return outputName;
+}
+
+template<size_t dim>
+template<class T>
+std::string VTU_Interface<dim>::FullOutputFileName( const std::string& fileName, T timestep )
+{
+    // write to file
+    std::string outputName(fileName);
+    std::string numberString;
+    if( !omitZeroInFileName_ || timestep != 0 )
+    {
+        outputName += "_";
+        numberString = number_to_string( timestep );
+        outputName += numberString;
+    }
+    return outputName;
+}
+
+template std::string VTU_Interface<1U>::FullOutputFileName(const std::string&,int);
+template std::string VTU_Interface<2U>::FullOutputFileName(const std::string&,int);
+template std::string VTU_Interface<3U>::FullOutputFileName(const std::string&,int);
+
+template std::string VTU_Interface<1U>::FullOutputFileName(const std::string&,long);
+template std::string VTU_Interface<2U>::FullOutputFileName(const std::string&,long);
+template std::string VTU_Interface<3U>::FullOutputFileName(const std::string&,long);
+
+template std::string VTU_Interface<1U>::FullOutputFileName(const std::string&,size_t);
+template std::string VTU_Interface<2U>::FullOutputFileName(const std::string&,size_t);
+template std::string VTU_Interface<3U>::FullOutputFileName(const std::string&,size_t);
+
+template std::string VTU_Interface<1U>::FullOutputFileName(const std::string&,double);
+template std::string VTU_Interface<2U>::FullOutputFileName(const std::string&,double);
+template std::string VTU_Interface<3U>::FullOutputFileName(const std::string&,double);
+
+
+
+
+// CSMP DATA OUTPUT
+// ----------------
+
+namespace vtuInterfaceDispatch
+{
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<3U,int>( const csmp::Model<3U>& model, const std::string& propertyName, const std::string& subDomainName,  int timeStep )
+    {
+        VTK_Interface<3>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<2U,int>( const csmp::Model<2U>& model, const std::string& subDomainName, const std::string& propertyName,  int timeStep )
+    {
+        VTK_Interface<2>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<1U,int>( const csmp::Model<1U>&, const std::string&, const std::string&,  int )
+    {
+        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<3U,long>( const csmp::Model<3U>& model, const std::string& propertyName, const std::string& subDomainName,  long timeStep )
+    {
+        VTK_Interface<3>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<2U,long>( const csmp::Model<2U>& model, const std::string& subDomainName, const std::string& propertyName,  long timeStep )
+    {
+        VTK_Interface<2>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<1U,long>( const csmp::Model<1U>&, const std::string&, const std::string&,  long )
+    {
+        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<3U,size_t>( const csmp::Model<3U>& model, const std::string& propertyName, const std::string& subDomainName,  size_t timeStep )
+    {
+        VTK_Interface<3>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<2U,size_t>( const csmp::Model<2U>& model, const std::string& subDomainName, const std::string& propertyName,  size_t timeStep )
+    {
+        VTK_Interface<2>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<1U,size_t>( const csmp::Model<1U>&, const std::string&, const std::string&,  size_t )
+    {
+        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<3U,double>( const csmp::Model<3U>& model, const std::string& propertyName, const std::string& subDomainName,  double timeStep )
+    {
+        VTK_Interface<3>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<2U,double>( const csmp::Model<2U>& model, const std::string& subDomainName, const std::string& propertyName,  double timeStep )
+    {
+        VTK_Interface<2>().OutputDataToVTK( model, subDomainName, propertyName, propertyName, timeStep );
+    }
+
+    template<>
+    void dispatchCompileTimeToRuntimeVTK_Output<1U,double>( const csmp::Model<1U>&, const std::string&, const std::string&,  double )
+    {
+        throw csmp::Exception( ERROR, "VTU_Interface<dim>::DispatchIntegrationPointPropertyOutputToVTK_Interface", "1D not supported" );
+    }
+
+} // vtuInterfaceDispatch
+
+/// user interface to output single property to vtu for a csmp::Region
+template<size_t dim>
+template<class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& fileName,
+                                          const std::string& propertyName,
+                                          const std::string& regionName,
+                                          T timestep )
+{
+  std::list<std::string> singlePropertyList;
+  singlePropertyList.push_back( propertyName );
+  return OutputDataToVTU( fileName, singlePropertyList, regionName, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const std::string&,double);
+
+
+
+/// user interface to output list of properties to vtu for a csmp::Region
+template<size_t dim>
+template<class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& fileName,
+                                          const std::list<std::string>& propertyNames,
+                                          const std::string& regionName,
+                                          T timestep )
+{
+  const Region<dim>& rref( model_.Region( regionName ) );
+  return OutputDataToVTU( fileName, propertyNames, rref, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const std::string&,double);
+
+/// user interface to output vector of properties to vtu for a csmp::Region
+template<size_t dim>
+template<class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& fileName,
+                                          const std::vector<std::string>& propertyNames,
+                                          const std::string& regionName,
+                                          T timestep )
+{
+  const Region<dim>& rref( model_.Region( regionName ) );
+  return OutputDataToVTU( fileName, propertyNames, rref, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const std::string&,double);
+
+/// user interface to output set of properties to vtu for a csmp::Region
+template<size_t dim>
+template<class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& fileName,
+                                          const std::set<std::string>& propertyNames,
+                                          const std::string& regionName,
+                                          T timestep )
+{
+  const Region<dim>& rref( model_.Region( regionName ) );
+  return OutputDataToVTU( fileName, propertyNames, rref, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const std::string&,double);
+
+/// user interface to output property to vtu for a csmp::ModelSubDomain
+template<size_t dim>
+template<template <size_t> class SIMPLEX,class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& fileName,
+                                          const std::string& propertyName,
+                                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                          T timestep )
+{
+  std::list<std::string> singlePropertyList;
+  singlePropertyList.push_back( propertyName );
+  return OutputDataToVTU( fileName, singlePropertyList, subDomain, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Element>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Element>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Element>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Face>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Face>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Face>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,InterFace>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,InterFace>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,InterFace>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Element>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Element>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Element>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Face>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Face>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Face>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,InterFace>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,InterFace>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,InterFace>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Element>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Element>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Element>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Face>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Face>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Face>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,InterFace>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,InterFace>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,InterFace>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Element>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Element>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Element>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,Face>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,Face>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,Face>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<1U,InterFace>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<2U,InterFace>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::string&,const ModelSubDomain<3U,InterFace>&,double);
+
+/// user interface to output list of properties to vtu for a csmp::ModelSubDomain
+template<size_t dim>
+template<template <size_t> class SIMPLEX,class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
+                                          const std::list<std::string>& propertyNamesList,
+                                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                          T timestep )
+{
+    // avoid using duplicated properties
+    std::set<std::string> propertyNames;
+    for( typename std::list<std::string>::const_iterator it = propertyNamesList.begin(); it != propertyNamesList.end(); ++it)
+        propertyNames.insert(*it);
+    return OutputDataToVTU( initial_file_name, propertyNames, subDomain, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Element>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Element>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Element>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Face>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Face>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Face>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,InterFace>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,InterFace>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,InterFace>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Element>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Element>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Element>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Face>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Face>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Face>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,InterFace>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,InterFace>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,InterFace>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Element>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Element>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Element>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Face>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Face>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Face>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,InterFace>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,InterFace>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,InterFace>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Element>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Element>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Element>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,Face>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,Face>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,Face>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<1U,InterFace>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<2U,InterFace>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::list<std::string>&,const ModelSubDomain<3U,InterFace>&,double);
+
+
+/// user interface to output vector of properties to vtu for a csmp::ModelSubDomain
+template<size_t dim>
+template<template <size_t> class SIMPLEX,class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
+                                          const std::vector<std::string>& propertyNamesList,
+                                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                          T timestep )
+{
+    // avoid using duplicated properties
+    std::set<std::string> propertyNames;
+    for( typename std::vector<std::string>::const_iterator it = propertyNamesList.begin(); it != propertyNamesList.end(); ++it)
+        propertyNames.insert(*it);
+    return OutputDataToVTU( initial_file_name, propertyNames, subDomain, timestep );
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Element>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Element>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Element>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Face>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Face>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Face>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,InterFace>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,InterFace>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,InterFace>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Element>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Element>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Element>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Face>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Face>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Face>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,InterFace>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,InterFace>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,InterFace>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Element>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Element>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Element>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Face>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Face>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Face>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,InterFace>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,InterFace>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,InterFace>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Element>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Element>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Element>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Face>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Face>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Face>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,InterFace>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,InterFace>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,InterFace>&,double);
+
+
+/// user interface to output set of properties to vtu for a csmp::ModelSubDomain
+template<size_t dim>
+template<template <size_t> class SIMPLEX,class T>
+bool VTU_Interface<dim>::OutputDataToVTU( const std::string& initial_file_name,
+                                          const std::set<std::string>& propertyNames,
+                                          const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                          T timestep )
+{
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+    std::string fileNamePrefix( this->OutputFileNamePrefix( initial_file_name ) );
+    fileNamePrefix = DomainSpecificOutputFileNamePrefix( fileNamePrefix, DomainName(subDomain) );
+    std::string relativeFileNamePrefix( DomainSpecificOutputFileNamePrefix( initial_file_name, DomainName(subDomain) ) );
+
+    // split list into seperate ones for node and element placed indices
+    std::list<Index> nodeIndices;
+    std::list<Index> elementIndices;
+    std::list<Index> fieldDataIndices;
+    std::list<Index> elementMatrixIndices;
+    std::list<Index> regionIndices;
+    std::list<Index> feipIndices;
+    std::list<Index> fvsipIndices;
+    std::list<Index> fvfipIndices;
+    for( std::set<std::string>::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )
+    {
+        // the right part of this if statement was added to be able to output variables placed on the MODEL
+        if( !subDomain.ValidVariable( it->c_str() ) && model_.Database().Placement(it->c_str()) != MODEL)
+        {
+            if ( csmp_error.Verbose() )
+                std::cerr << "\n VTU_Interface<dim>::OutputDataToVTU: Output property '" << *it << "' not accessible (placement?) in domain " << DomainName( subDomain ) << std::endl;
+            continue;
+        }
+        const PLACEMENT variablePlacement( model_.Database().Placement( it->c_str() ) );
+        const VARIABLE_TYPE variableType( model_.Database().Type( it->c_str() ) );
+        //if( variableType != SCALAR && variableType != VECTOR && variableType != TENSOR && variableType != ARRAY && variableType != FLAGGEDARRAY)
+        //    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Output for scalar, vector, tensor, array and flagged array variables only" );
+        if ( variablePlacement == MODEL )
+            fieldDataIndices.push_back( model_.Database().StorageKey( it->c_str() ));
+        else if ( variablePlacement == REGION || variablePlacement == BOUNDARY || variablePlacement == SPLIT_BOUNDARY )
+        {
+            if( !regionVecAndTensDataAtCellCenters_ )
+                fieldDataIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+            else
+            {
+                switch( variableType )
+                {
+                case ARRAY:
+                case FLAGGEDARRAY:
+                case SCALAR:
+                    fieldDataIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+                    break;
+                case VECTOR:
+                case TENSOR:
+                    regionIndices.push_back( model_.Database().StorageKey( it->c_str() ) ) ;
+                    break;
+                default: throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Region output for scalar, vector, tensor and array variables only" );
+                }
+            }
+        }
+        else if( variablePlacement == NODE )
+            nodeIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+        else if( variablePlacement == ELEMENT || variablePlacement == FACE || variablePlacement == INTER_FACE )
+        {
+            if( !elementVecAndTensDataAtCellCenters_ )
+                elementIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+            else
+            {
+                switch( variableType )
+                {
+                case ARRAY:
+                case FLAGGEDARRAY:
+                case SCALAR:
+                    elementIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+                    break;
+                case VECTOR:
+                case TENSOR: elementMatrixIndices.push_back( model_.Database().StorageKey( it->c_str() ) );
+                    break;
+                default: throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Element output for scalar, vector, tensor and array variables only" );
+                }
+            }
+        }
+        else if( variablePlacement == ELEMENT_INTEGRATION_POINT || variablePlacement == FACE_INTEGRATION_POINT        || variablePlacement == INTER_FACE_INTEGRATION_POINT )
+            feipIndices.push_back(model_.Database().StorageKey( it->c_str() ));
+        else if( variablePlacement == SECTOR_INTEGRATION_POINT  || variablePlacement == FACE_SECTOR_INTEGRATION_POINT || variablePlacement == INTER_FACE_SECTOR_INTEGRATION_POINT )
+            fvsipIndices.push_back(model_.Database().StorageKey( it->c_str() ));
+        else if( variablePlacement == FACET_INTEGRATION_POINT   || variablePlacement == FACE_FACET_INTEGRATION_POINT  || variablePlacement == INTER_FACE_FACET_INTEGRATION_POINT )
+            fvfipIndices.push_back(model_.Database().StorageKey( it->c_str() ));
+        else{
+            //vtuInterfaceDispatch::dispatchCompileTimeToRuntimeVTK_Output( model_, domainName( subDomain ).c_str(), it->c_str(), timestep );
+            std::string errormsg="Placement not supported: "+*it;
+            throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", errormsg );
+        }
+    }
+
+    std::vector<std::string> files;
+    std::string outputFileName;
+    bool output;
+
+    /// scalars,arrays,vectors,tensors on model, elements and nodes
+    output = ( !fieldDataIndices.empty() || !elementIndices.empty() || !nodeIndices.empty() );
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputFieldNodesAndElementDataToVTU( outputFileName, fieldDataIndices, nodeIndices, elementIndices, subDomain );
+    }
+
+    /// scalars,arrays,vectors,tensors on element barycenters
+    output = !elementMatrixIndices.empty();
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName += "_bcs";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName += "_bcs";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputElementBarycentricDataToVTU( outputFileName, elementMatrixIndices, subDomain );
+    }
+
+    /// scalars,arrays,vectors,tensors on regions
+    output = !regionIndices.empty();
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName += "_rcs";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName += "_rcs";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputRegionDataToVTU( outputFileName, regionIndices, subDomain );
+    }
+
+    /// scalars,arrays,vectors,tensors on finite element integration points
+    output = !feipIndices.empty();
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName += "_feips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName += "_feips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputFiniteElementIntegrationPointsDataToVTU( outputFileName, feipIndices, subDomain );
+    }
+
+    /// scalars,arrays,vectors,tensors on finite volume sector integration points
+    output = !fvsipIndices.empty();
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName += "_fvsips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName += "_fvsips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputFiniteVolumeSectorIntegrationPointsDataToVTU( outputFileName, fvsipIndices, subDomain );
+    }
+
+    /// scalars,arrays,vectors,tensors on  finite volume facet integration points
+    output = !fvfipIndices.empty();
+    if( output )
+    {
+        outputFileName  = relativeFileNamePrefix;
+        outputFileName += "_fvfips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        files.push_back( outputFileName );
+        outputFileName  = fileNamePrefix;
+        outputFileName += "_fvfips";
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputFiniteVolumeFacetIntegrationPointsDataToVTU( outputFileName, fvfipIndices, subDomain );
+    }
+
+    /// write multiblock file *.vtm
+    output = ( files.size() > 1 );
+    if ( output )
+    {
+        outputFileName  = fileNamePrefix;
+        outputFileName  = FullOutputFileName( outputFileName, timestep );
+        OutputMultiBlockVTU( outputFileName, files, subDomain );
+    }
+
+    return true;
+}
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Element>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Element>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Element>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Face>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Face>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Face>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,InterFace>&,int);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,InterFace>&,int);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,InterFace>&,int);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Element>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Element>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Element>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Face>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Face>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Face>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,InterFace>&,long);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,InterFace>&,long);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,InterFace>&,long);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Element>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Element>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Element>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Face>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Face>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Face>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,InterFace>&,size_t);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,InterFace>&,size_t);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,InterFace>&,size_t);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Element>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Element>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Element>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,Face>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,Face>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,Face>&,double);
+
+template bool VTU_Interface<1U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<1U,InterFace>&,double);
+template bool VTU_Interface<2U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<2U,InterFace>&,double);
+template bool VTU_Interface<3U>::OutputDataToVTU(const std::string&,const std::set<std::string>&,const ModelSubDomain<3U,InterFace>&,double);
+
+
+/// write multiblock file
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>
+::OutputMultiBlockVTU( const std::string& fileName,
+                       const std::vector<std::string>& fileNames,
+                       const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+    /// initialize file
+    XML_Document outputFile;
+    std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+               = GetConnectivityMapMultiBlock( subDomain );
+    outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+    /// Open multiblock section
+    outputFile.OpenNode( "vtkMultiBlockDataSet");
+    outputFile.OpenNode( "Block index=\"0\" name=\"Blocks\"" );
+
+    size_t files( fileNames.size() );
+    std::string stringNumber;
+    std::string stringCache;
+    std::string vtuFileName;
+    for( size_t index=0; index<files; ++index )
+    {
+        stringNumber = number_to_string( index );
+        vtuFileName  = fileNames[index];
+        vtuFileName += ".vtu";
+        // write DataSet section
+        stringCache = "DataSet index=\""; stringCache += stringNumber;
+        stringCache += "\" file=\""; stringCache += vtuFileName; stringCache += "\"";
+        outputFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+        outputFile.CloseNode( "DataSet");
+    }
+
+    /// Close multiblock section
+    outputFile.CloseNode( "Block");
+    outputFile.CloseNode( "vtkMultiBlockDataSet");
+    outputFile.CloseNode( "VTKFile" );
+
+    /// Close file
+    CloseFile( fileName, ".vtm", outputFile );
+}
+
+template void VTU_Interface<1U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Element>&);
+template void VTU_Interface<2U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Element>&);
+template void VTU_Interface<3U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Element>&);
+
+template void VTU_Interface<1U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,Face>&);
+template void VTU_Interface<2U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,Face>&);
+template void VTU_Interface<3U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,Face>&);
+
+template void VTU_Interface<1U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<1U,InterFace>&);
+template void VTU_Interface<2U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<2U,InterFace>&);
+template void VTU_Interface<3U>::OutputMultiBlockVTU( const std::string&,const std::vector<std::string>&,const ModelSubDomain<3U,InterFace>&);
+
+
+/// we dispatch the output to node and element scalar/vector/tensor/array/flagged array
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputFieldNodesAndElementDataToVTU( const std::string& fileName,
+                   const std::list<Index>& fieldDataIndices,
+                   const std::list<Index>& nodeIndices,
+                   const std::list<Index>& elementIndices,
+                   const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMap( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Regions data
+  if( !fieldDataIndices.empty() )
+      OutputFieldDataToVTU<SIMPLEX>(outputFile, subDomain, fieldDataIndices );
+
+  /// 2. Nodes and Element's data
+
+  if( !nodeIndices.empty() || !elementIndices.empty() )
+  {
+      /// 2.1 create connectivity, open Piece section
+      EstablishConnectivityFile<SIMPLEX>( outputFile, subDomain );
+
+      /// 2.2 point data arrays
+      if( !nodeIndices.empty() )
+          OutputPointDataToVTU(outputFile,subDomain,nodeIndices);
+
+      /// 2.3 cell data arrays
+      if( !elementIndices.empty() )
+          OutputCellDataToVTU(outputFile,subDomain,elementIndices);
+
+      /// 2.4 close Piece section
+      outputFile.CloseNode( "Piece" );
+  }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputFieldNodesAndElementDataToVTU(const std::string&,const std::list<Index>&,const std::list<Index>&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputElementBarycentricDataToVTU( const std::string& fileName,
+                   const std::list<Index>& elementMatrixIndices,
+                   const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMapBCS( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Cell centers data
+  if( !elementMatrixIndices.empty() )
+  {
+      /// 1.1 create connectivity, open Piece section
+      EstablishConnectivityFileBCPC<SIMPLEX>( outputFile, subDomain );
+
+      /// 1.2 point data arrays
+      OutputPointDataToVTU(outputFile,subDomain,elementMatrixIndices);
+
+      /// 1.3 close Piece section
+      outputFile.CloseNode( "Piece" );
+  }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputElementBarycentricDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputRegionDataToVTU( const std::string& fileName,
+                         const std::list<Index>& regionIndices,
+                         const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMapRCS( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Region's data
+  if( !regionIndices.empty() )
+    {
+      /// 1.1 create connectivity, open Piece section
+      EstablishConnectivityFileRPC<SIMPLEX>( outputFile, subDomain );
+
+      /// 1.2 point data arrays
+      if( !regionIndices.empty() )
+          OutputPointDataToVTU(outputFile,subDomain,regionIndices);
+
+      /// 1.1. close Piece section
+      outputFile.CloseNode( "Piece" );
+    }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputRegionDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputFiniteElementIntegrationPointsDataToVTU( const std::string& fileName,
+                   const std::list<Index>& feipIndices,
+                   const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMapFEIPS( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Finite Element Integration Points
+  if( !feipIndices.empty() )
+  {
+      /// 1.1 create connectivity, open Piece section
+      EstablishConnectivityFileFEIP<SIMPLEX>( outputFile, subDomain );
+
+      /// 1.2 point data arrays
+      OutputPointDataToVTU(outputFile,subDomain,feipIndices);
+
+      /// 1.3 close Piece section
+      outputFile.CloseNode( "Piece" );
+  }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputFiniteElementIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputFiniteVolumeSectorIntegrationPointsDataToVTU( const std::string& fileName,
+                   const std::list<Index>& fvsipIndices,
+                   const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMapFVSIPS( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Finite Volume Sector Integration Points
+  if( !fvsipIndices.empty() )
+  {
+      /// 1.1 create connectivity, open Piece section
+      EstablishConnectivityFileFVSIP<SIMPLEX>( outputFile, subDomain );
+
+      /// 1.2 point data arrays
+      OutputPointDataToVTU(outputFile,subDomain,fvsipIndices);
+
+      /// 1.3 close Piece section
+      outputFile.CloseNode( "Piece" );
+  }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>
+::OutputFiniteVolumeFacetIntegrationPointsDataToVTU( const std::string& fileName,
+                   const std::list<Index>& fvfipIndices,
+                   const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  /// initialize file
+  XML_Document outputFile;
+  std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap
+             = GetConnectivityMapFVFIPS( subDomain );
+  outputFile = *ConnectivityFile<SIMPLEX>( connectivityMap, subDomain );
+
+  /// Open VTKFile section
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+
+  /// Open UnstructuredGrid section
+  outputFile.OpenNode( "UnstructuredGrid" );
+
+  /// 1. Finite Volume Facet Integration Points
+  if( !fvfipIndices.empty() )
+  {
+      /// 1.1 create connectivity, open Piece section
+      EstablishConnectivityFileFVFIP<SIMPLEX>( outputFile, subDomain );
+
+      /// 1.2 point data arrays
+      OutputPointDataToVTU(outputFile,subDomain,fvfipIndices);
+
+      /// 1.3 close Piece section
+      outputFile.CloseNode( "Piece" );
+  }
+
+  /// Close UnstructuredGrid section
+  outputFile.CloseNode( "UnstructuredGrid" );
+  outputFile.CloseNode( "VTKFile" );
+
+  /// Close file
+  CloseFile( fileName, ".vtu", outputFile );
+
+  return true;
+}
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const std::string&,const std::list<Index>&,const ModelSubDomain<3U,InterFace>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::OutputFieldDataToVTU( XML_Document& outputFile,
+                                               const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                               const std::list<Index>& indices )
+{
+    outputFile.OpenNode( "FieldData");
+    // looping over properties to output
+    for( std::list<Index>::const_iterator
+         it = indices.begin(); it != indices.end(); ++it )
+    {
+        if( it->type == SCALAR )
+          WriteFieldDataArray<ScalarVariable>( *it, outputFile );
+        else if( it->type == ARRAY )
+          WriteFieldDataArray<ArrayVariable>( *it, outputFile );
+        else if( it->type == FLAGGEDARRAY )
+          WriteFieldDataArray<FlaggedArrayVariable>( *it, outputFile );
+        else if( it->type == VECTOR )
+          WriteFieldDataArray<VectorVariable<dim> >( *it, outputFile );
+        else if( it->type == TENSOR )
+          WriteFieldDataArray<TensorVariable<dim> >( *it, outputFile );
+    }
+    outputFile.CloseNode( "FieldData" );
+}
+
+template void VTU_Interface<1U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<1U,Element>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<2U,Element>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<3U,Element>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<1U,Face>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<2U,Face>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<3U,Face>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<1U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<2U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<3U,InterFace>&,const std::list<Index>&);
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::OutputPointDataToVTU( XML_Document& outputFile,
+                                               const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                               const std::list<Index>& indices )
+{
+  // active property
+  std::string activeProperty;
+  std::string variableName;
+
+  // setting the first property as active in vtu visualizer
+  activeProperty = "PointData ";
+  if( indices.front().type == SCALAR  || indices.front().type == ARRAY || indices.front().type == FLAGGEDARRAY)
+      activeProperty += "Scalars=";
+  else if( indices.front().type == VECTOR )
+      activeProperty += "Vectors=";
+  else if( indices.front().type == TENSOR )
+      activeProperty += "Tensors=";
+  activeProperty += "\"";
+  variableName = model_.Database().Name( indices.front() );
+  variableName = FindVariableOutputAlias( variableName );
+  // if array or flagged array, set first component as active
+  if( indices.front().type == ARRAY || indices.front().type == FLAGGEDARRAY)
+      variableName += "[ 0 ]";
+  activeProperty += variableName; activeProperty += "\"";
+  outputFile.OpenNode( activeProperty.c_str() ); activeProperty.clear();
+  // looping over properties to output
+  for( std::list<Index>::const_iterator
+       it = indices.begin(); it != indices.end(); ++it )
+  {
+      if( it->type == SCALAR )
+          WritePointDataArrayScalar<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == ARRAY )
+          WritePointDataArrayScalarArray<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == FLAGGEDARRAY )
+          WritePointDataArrayScalarFlaggedArray<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == VECTOR )
+          WritePointDataArrayVector<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == TENSOR )
+          WritePointDataArrayTensor<SIMPLEX>( *it, outputFile, subDomain );
+  }
+  outputFile.CloseNode( "PointData" );
+  return;
+}
+
+template void VTU_Interface<1U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<1U,Element>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<2U,Element>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<3U,Element>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<1U,Face>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<2U,Face>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<3U,Face>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<1U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<2U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<3U,InterFace>&,const std::list<Index>&);
+
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::OutputCellDataToVTU( XML_Document& outputFile,
+                                              const ModelSubDomain<dim,SIMPLEX>& subDomain,
+                                              const std::list<Index>& indices )
+{
+    // active property
+    std::string activeProperty;
+    std::string variableName;
+
+    // setting the first property as active in vtu visualizer
+    activeProperty = "CellData ";
+    if( indices.front().type == SCALAR || indices.front().type == ARRAY || indices.front().type == FLAGGEDARRAY )
+        activeProperty += "Scalars=";
+    else if( indices.front().type == VECTOR )
+        activeProperty += "Vectors=";
+    else if( indices.front().type == TENSOR )
+        activeProperty += "Tensors=";
+    activeProperty += "\"";
+    variableName = model_.Database().Name( indices.front() );
+    variableName = FindVariableOutputAlias( variableName );
+    // if array or flagged array, set first component as active
+    if( indices.front().type == ARRAY || indices.front().type == FLAGGEDARRAY)
+        variableName += "[ 0 ]";
+    activeProperty += variableName;  activeProperty += "\"";
+    outputFile.OpenNode( activeProperty.c_str() ); activeProperty.clear();
+    // looping over properties to output
+    for( std::list<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
+      {
+      if( it->type == SCALAR )
+        WriteElementDataArrayScalar<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == ARRAY )
+        WriteElementDataArrayScalarArray<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == FLAGGEDARRAY )
+        WriteElementDataArrayScalarFlaggedArray<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == VECTOR )
+        WriteElementDataArrayVector<SIMPLEX>( *it, outputFile, subDomain );
+      else if( it->type == TENSOR )
+        WriteElementDataArrayTensor<SIMPLEX>( *it, outputFile, subDomain );
+    }
+    outputFile.CloseNode( "CellData" );
+    return;
+}
+
+template void VTU_Interface<1U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<1U,Element>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<2U,Element>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<3U,Element>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<1U,Face>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<2U,Face>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<3U,Face>&,const std::list<Index>&);
+
+template void VTU_Interface<1U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<1U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<2U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<2U,InterFace>&,const std::list<Index>&);
+template void VTU_Interface<3U>::OutputCellDataToVTU(XML_Document&,const ModelSubDomain<3U,InterFace>&,const std::list<Index>&);
+
+
+// SINGLE VERTEX OUTPUT
+// --------------------
+
+/// user interface to output vectors
+template<size_t dim>
+bool VTU_Interface<dim>::OutputVectorsToVTU( const std::string& fileName,
+                                             const std::string& propertyCaption,
+                                             const std::vector<std::vector<double> >& vectors )
+{
+  for( size_t i = 0; i < vectors.size(); ++i )
+    if( vectors.at( i ).size() != 3U )
+      throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
+
+  std::string fullFileName( fileName );
+  fullFileName.append( ".vtu" );
+  std::ofstream file( fullFileName.data(), std::ios::out );
+
+  // header
+  file << "<?xml version=\"0.9\"?>" << std::endl << std::endl;
+  file << "<!--\n" << fileName << "\n-->" << std::endl << std::endl;
+
+  // body - connectivity
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
+  file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
+  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
+  file << "\t\t\t<Cells>" << std::endl << "\t\t\t\t<DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t0" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t1" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t" << VTK_VERTEX << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Cells>" << std::endl;
+
+  // SKM FIX
+  file.setf(std::ios::scientific);
+
+  // body - values
+  file << "\t\t\t<PointData Vectors=\"" << propertyCaption << " 0\">" << std::endl;
+  for( size_t i = 0; i < vectors.size(); ++i )
+  {
+    file << "\t\t\t\t<DataArray type=\"Float64\" Name=\"" << propertyCaption << " " << i << "\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+    file << "\t\t\t\t\t";
+    for( size_t ii = 0; ii < 3; ++ii )
+      file << vectors.at( i ).at( ii ) << " ";
+    file << std::endl;
+    file << "\t\t\t\t</DataArray>" << std::endl;
+  } // vectors
+
+  file << "\t\t\t</PointData>" << std::endl;
+  // body - close
+  file << "\t\t</Piece>" << std::endl << "\t</UnstructuredGrid>" << std::endl << "</VTKFile>" << std::endl;
+  file.close();
+  return true;
+}
+
+
+template<size_t dim>
+bool VTU_Interface<dim>::OutputPrincipalVectorsToVTU( const std::string& fileName, const std::string& propertyCaption,
+                                                      const std::vector<double>& xyzLengths )
+{
+  if( xyzLengths.size() != 3U )
+    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Vector required to have 3 components." );
+  std::vector<double> xVector( 3, 0. ); xVector.at( 0 ) = xyzLengths.at( 0 );
+  std::vector<double> yVector( 3, 0. ); yVector.at( 1 ) = xyzLengths.at( 1 );
+  std::vector<double> zVector( 3, 0. ); zVector.at( 2 ) = xyzLengths.at( 2 );
+  std::vector<std::vector<double> > xyzVectors;
+  xyzVectors.push_back( xVector );
+  xyzVectors.push_back( yVector );
+  xyzVectors.push_back( zVector );
+  return OutputVectorsToVTU( fileName, propertyCaption, xyzVectors );
+}
+
+
+/// user interface to output a tensor @todo (3) Check inner std::vector sizes
+template<size_t dim>
+bool VTU_Interface<dim>::OutputTensorToVTU( const std::string& fileName, const std::string& propertyCaption,
+                                            const std::vector<std::vector<double> >& tensor )
+{
+  if( tensor.size() != 3U )
+    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Tensor required to have 3 components." );
+
+  std::string fullFileName( fileName );
+  fullFileName.append( ".vtu" );
+  std::ofstream file( fullFileName.data(), std::ios::out );
+
+  // header
+  file << "<?xml version=\"0.9\"?>" << std::endl << std::endl;
+  file << "<!--\n" << fileName << "\n-->" << std::endl << std::endl;
+
+  // body - connectivity
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << std::endl;
+  file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << std::endl;
+  file << "\t\t\t<Points>" << std::endl << "\t\t\t\t<DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t0.0 0.0 0.0" << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Points>" << std::endl;
+  file << "\t\t\t<Cells>" << std::endl << "\t\t\t\t<DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t0" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t1" << std::endl << "\t\t\t\t</DataArray>" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t" << VTK_VERTEX << std::endl << "\t\t\t\t</DataArray>" << std::endl << "\t\t\t</Cells>" << std::endl;
+
+  // SKM FIX
+  file.setf(std::ios::scientific);
+
+  // body - values
+  file << "\t\t\t<PointData Tensors=\"" << propertyCaption << "\">" << std::endl;
+  file << "\t\t\t\t<DataArray type=\"Float64\" Name=\"" << propertyCaption << "\" NumberOfComponents=\"9\" format=\"ascii\">" << std::endl;
+  file << "\t\t\t\t\t";
+  for( size_t i = 0; i < 3; ++i )
+    for( size_t ii = 0; ii < 3; ++ii )
+      file << tensor.at( i ).at( ii ) << " ";
+
+  file << std::endl;
+  file << "\t\t\t\t</DataArray>" << std::endl;
+  file << "\t\t\t</PointData>" << std::endl;
+  // body - close
+  file << "\t\t</Piece>" << std::endl << "\t</UnstructuredGrid>" << std::endl << "</VTKFile>" << std::endl;
+  file.close();
+  return true;
+}
+
+
+// WRITE VARIABLES
+// --------------------
+
+template<size_t dim>
+void VTU_Interface<dim>::WriteScalar( XML_Document& vtu, const size_t& MAX_ENTRIES_PER_LINE,
+                                      double scalarVariable, size_t& entriesOfLine, bool& newLine ) const
+{
+    std::string stringNumber;
+    stringNumber = number_to_string( scalarVariable );
+    vtu.InsertData( stringNumber.c_str() );
+    // break or tab
+    if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
+    {
+        entriesOfLine = 1;
+        vtu.LineBreak();
+        vtu.BringToLevel();
+        newLine = true;
+    }
+    else
+    {
+        vtu.Tab();
+        newLine = false;
+    }
+}
+
+template<size_t dim>
+void VTU_Interface<dim>::WriteVector( XML_Document& vtu, const size_t& MAX_ENTRIES_PER_LINE,
+                                      const VectorVariable<dim>& vectorVariable, size_t& entriesOfLine, bool& newLine ) const
+{
+    std::string stringNumber;
+    // inserting std::vector data
+    for( size_t i = 0; i < dim; ++i )
+    {
+      stringNumber = number_to_string( vectorVariable.Component( i ) );
+      vtu.InsertData( stringNumber.c_str() );
+      vtu.Tab();
+    }
+    if( dim != 3 )
+    {
+        for( size_t i = dim; i < 3U; ++i )
+        {
+          stringNumber = number_to_string( 0. );
+          vtu.InsertData( stringNumber.c_str() );
+          vtu.Tab();
+        }
+    }
+    // break or tab
+    if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
+    {
+      entriesOfLine = 1;
+      vtu.LineBreak();
+      vtu.BringToLevel();
+      newLine = true;
+    }
+    else
+    {
+      vtu.Tab();
+      newLine = false;
+    }
+}
+
+template<size_t dim>
+void VTU_Interface<dim>::WriteTensor( XML_Document& vtu, const size_t& MAX_ENTRIES_PER_LINE,
+                                      const TensorVariable<dim>& tensorVariable, size_t& entriesOfLine, bool& newLine ) const
+{
+    std::string stringNumber;
+    double val;
+    size_t rows( 3U );
+    size_t cols( 3U );
+    // inserting vector data
+    for( size_t column = 0; column < cols; ++column )
+    {
+      for( size_t row = 0; row < rows; ++row )
+      {
+        val = ( ( row < dim ) && ( column < dim ) ? tensorVariable( row, column ) : 0.0 );
+        stringNumber = number_to_string( val );
+        vtu.InsertData( stringNumber.c_str() );
+        vtu.Tab();
+      }
+    }
+    // break or tab
+    if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
+    {
+      entriesOfLine = 1;
+      vtu.LineBreak();
+      vtu.BringToLevel();
+      newLine = true;
+    }
+    else
+    {
+      vtu.Tab();
+      newLine = false;
+    }
+}
+
+// WRITE FIELD DATA
+// --------------------
+
+
+/// writes scalar field data to xml document
+template<size_t dim>
+template<class Var>
+void VTU_Interface<dim>::WriteFieldDataArray( const Index& key, XML_Document& vtu ) const
+{
+    size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+    std::string stringNumber;
+    // variable info
+    Var var;
+    model_.Read( key, var );
+    size_t varSize( key.dataDepth );
+    std::string variableName = model_.Database().Name( key );
+    variableName = FindVariableOutputAlias( variableName );
+    stringNumber = number_to_string( varSize );
+
+    std::string arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+    arrayTitle += variableName;
+    arrayTitle += "\" NumberOfTuples=\"";
+    arrayTitle += stringNumber;
+    arrayTitle += "\" format=\"ascii\"";
+    vtu.OpenNode( arrayTitle.c_str() );
+    vtu.BringToLevel();
+    bool newLine( false );
+
+    for( size_t i=0 ; i<varSize; ++i )
+    {
+        // inserting data
+        stringNumber = number_to_string( var.Component( i ) );
+        vtu.InsertData( stringNumber.c_str() );
+        // break or tab
+        if( ++entriesOfLine == MAX_ENTRIES_PER_LINE )
+        {
+            entriesOfLine = 1;
+            vtu.LineBreak();
+            vtu.BringToLevel();
+            newLine = true;
+        }
+        else
+        {
+            vtu.Tab();
+            newLine = false;
+        }
+    }
+
+    if( !newLine )
+        vtu.LineBreak();
+    vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WriteFieldDataArray<ScalarVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<2U>::WriteFieldDataArray<ScalarVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<3U>::WriteFieldDataArray<ScalarVariable>(const Index&,XML_Document&) const;
+
+template void VTU_Interface<1U>::WriteFieldDataArray<VectorVariable<1U> >(const Index&,XML_Document&) const;
+template void VTU_Interface<2U>::WriteFieldDataArray<VectorVariable<2U> >(const Index&,XML_Document&) const;
+template void VTU_Interface<3U>::WriteFieldDataArray<VectorVariable<3U> >(const Index&,XML_Document&) const;
+
+template void VTU_Interface<1U>::WriteFieldDataArray<TensorVariable<1U> >(const Index&,XML_Document&) const;
+template void VTU_Interface<2U>::WriteFieldDataArray<TensorVariable<2U> >(const Index&,XML_Document&) const;
+template void VTU_Interface<3U>::WriteFieldDataArray<TensorVariable<3U> >(const Index&,XML_Document&) const;
+
+template void VTU_Interface<1U>::WriteFieldDataArray<ArrayVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<2U>::WriteFieldDataArray<ArrayVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<3U>::WriteFieldDataArray<ArrayVariable>(const Index&,XML_Document&) const;
+
+template void VTU_Interface<1U>::WriteFieldDataArray<FlaggedArrayVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<2U>::WriteFieldDataArray<FlaggedArrayVariable>(const Index&,XML_Document&) const;
+template void VTU_Interface<3U>::WriteFieldDataArray<FlaggedArrayVariable>(const Index&,XML_Document&) const;
+
+
+// WRITE POINT DATA
+// --------------------
+
+
+/// writes scalar point data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+  std::string arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName;
+  arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  ScalarVariable scalarVariable;
+  bool newLine( false );
+  if( key.place == NODE )
+  {
+      // looping over regions nodes
+      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
+      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      {
+          // inserting scalar data
+          (*it)->Read( key, scalarVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+      }
+  }
+  else if( key.place == MODEL )
+  {
+      model_.Read( key, scalarVariable );
+      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+  }
+  else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
+  {
+      subDomain.Read( key, scalarVariable );
+      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+  }
+  else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
+  {
+      size_t ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          ips = (*it)->IntegrationPoints();
+          for( size_t ip = 0; ip < ips; ++ip )
+          {
+              // inserting scalar data
+              (*it)->Read( ip, key, scalarVariable );
+              WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+          }
+      }
+  }
+  else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+  {
+      size_t sectors,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          sectors = (*it)->Sectors();
+          for( size_t sid = 0; sid < sectors; ++sid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( sid, ip, key, scalarVariable );
+                  WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+  else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
+  {
+      size_t facets,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          facets = (*it)->Facets();
+          for( size_t fid = 0; fid < facets; ++fid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( fid, ip, key, scalarVariable );
+                  WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+
+  if( !newLine )
+      vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// writes vector point data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 4 );
+  std::string arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"3\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  VectorVariable<dim> vectorVariable;
+  bool newLine( false );
+  if( key.place == NODE )
+  {
+      // looping over regions nodes
+      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
+      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      {
+        // acquiring std::vector data
+        (*it)->Read( key, vectorVariable );
+        WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+      }
+  }
+  else if( key.place == MODEL )
+  {
+      model_.Read( key, vectorVariable );
+      WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+  }
+  else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
+  {
+      subDomain.Read( key, vectorVariable );
+      WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+  }
+  else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
+  {
+      size_t ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          ips = (*it)->IntegrationPoints();
+          for( size_t ip = 0; ip < ips; ++ip )
+          {
+              // inserting scalar data
+              (*it)->Read( ip, key, vectorVariable );
+              WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+          }
+      }
+  }
+  else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+  {
+      size_t sectors,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          sectors = (*it)->Sectors();
+          for( size_t sid = 0; sid < sectors; ++sid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( sid, ip, key, vectorVariable );
+                  WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+  else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
+  {
+      size_t facets,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          facets = (*it)->Facets();
+          for( size_t fid = 0; fid < facets; ++fid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( fid, ip, key, vectorVariable );
+                  WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+
+  if( !newLine )
+    vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// writes tensor point data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 3 );
+  std::string stringNumber, arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
+  const size_t tensor_components( 9U ); // only 3D representation
+  stringNumber = number_to_string( tensor_components );
+  arrayTitle += stringNumber; arrayTitle += "\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  bool newLine( false );
+  TensorVariable<dim> tensorVariable;
+  if( key.place == NODE )
+  {
+      // looping over regions nodes
+      const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
+      for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+      {
+        // acquiring vector data
+        (*it)->Read( key, tensorVariable );
+        WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+    }
+  }
+  else if( key.place == MODEL )
+  {
+      model_.Read( key, tensorVariable );
+      WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+  }
+  else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
+  {
+      subDomain.Read( key, tensorVariable );
+      WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+  }
+  else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
+  {
+      size_t ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          ips = (*it)->IntegrationPoints();
+          for( size_t ip = 0; ip < ips; ++ip )
+          {
+              // inserting scalar data
+              (*it)->Read( ip, key, tensorVariable );
+              WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+          }
+      }
+  }
+  else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+  {
+      size_t sectors,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          sectors = (*it)->Sectors();
+          for( size_t sid = 0; sid < sectors; ++sid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( sid, ip, key, tensorVariable );
+                  WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+  else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
+  {
+      size_t facets,ips;
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+           it = subDomain.ElementsBegin();
+           it != domainElementsEnd; ++it )
+      {
+          facets = (*it)->Facets();
+          for( size_t fid = 0; fid < facets; ++fid )
+          {
+              ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( fid, ip, key, tensorVariable );
+                  WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+              }
+          }
+      }
+  }
+
+  if( !newLine )
+    vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// writes point data array ( array of scalars ) to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+    std::string stringNumber;
+    std::string arrayTitle;
+    std::string variableName;
+    std::string prefix;
+    ArrayVariable arrayVariable;
+    for( size_t component=0; component<key.dataDepth; component++)
+    {
+        arrayTitle = "DataArray type=\"Float64\" Name=\"";
+        variableName = model_.Database().Name( key );
+        variableName = FindVariableOutputAlias( variableName );
+        stringNumber = number_to_string( component );
+        prefix = "";
+      if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
+          std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
+          if (component < component_names.size())
+              prefix = component_names[component];
+      }
+      variableName = prefix + variableName + "[ " + stringNumber + " ]";
+      arrayTitle += variableName;
+      arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+      vtu.OpenNode( arrayTitle.c_str() );
+      vtu.BringToLevel();
+      bool newLine( false );
+      if( key.place == NODE )
+      {
+          // looping over regions nodes
+          const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
+          for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+          {
+              // inserting scalar array data
+              (*it)->Read( key, arrayVariable );
+              WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+          }
+      }
+      else if( key.place == MODEL )
+      {
+          model_.Read( key, arrayVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+      }
+      else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
+      {
+          subDomain.Read( key, arrayVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+      }
+      else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
+      {
+          size_t ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              ips = (*it)->IntegrationPoints();
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( ip, key, arrayVariable );
+                  WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+              }
+          }
+      }
+      else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+      {
+          size_t sectors,ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              sectors = (*it)->Sectors();
+              for( size_t sid = 0; sid < sectors; ++sid )
+              {
+                  ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+                  for( size_t ip = 0; ip < ips; ++ip )
+                  {
+                      // inserting scalar data
+                      (*it)->Read( sid, ip, key, arrayVariable );
+                      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+                  }
+              }
+          }
+      }
+      else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
+      {
+          size_t facets,ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              facets = (*it)->Facets();
+              for( size_t fid = 0; fid < facets; ++fid )
+              {
+                  ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+                  for( size_t ip = 0; ip < ips; ++ip )
+                  {
+                      // inserting scalar data
+                      (*it)->Read( fid, ip, key, arrayVariable );
+                      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+                  }
+              }
+          }
+      }
+
+      if( !newLine )
+        vtu.LineBreak();
+      vtu.CloseNode( "DataArray" );
+    }
+}
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+/// writes point data array ( flagged array of scalars ) to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+    std::string stringNumber;
+    std::string arrayTitle;
+    std::string variableName;
+    std::string prefix;
+    FlaggedArrayVariable flaggedArrayVariable;
+    for( size_t component=0; component<key.dataDepth; component++)
+    {
+        arrayTitle = "DataArray type=\"Float64\" Name=\"";
+        variableName = model_.Database().Name( key );
+        variableName = FindVariableOutputAlias( variableName );
+        stringNumber = number_to_string( component );
+        prefix = "";
+      if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
+          std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
+          if (component < component_names.size())
+              prefix = component_names[component];
+      }
+      variableName = prefix + variableName + "[ " + stringNumber + " ]";
+      arrayTitle += variableName;
+      arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+      vtu.OpenNode( arrayTitle.c_str() );
+      vtu.BringToLevel();
+      bool newLine( false );
+      if( key.place == NODE )
+      {
+          // looping over regions nodes
+          const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainNodesEnd( subDomain.NodesEnd() );
+          for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+          {
+            // inserting scalar flagged array data
+            (*it)->Read( key, flaggedArrayVariable );
+            WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+          }
+      }
+      else if( key.place == MODEL )
+      {
+          model_.Read( key, flaggedArrayVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+      }
+      else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
+      {
+          subDomain.Read( key, flaggedArrayVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+      }
+      else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
+      {
+          size_t ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              ips = (*it)->IntegrationPoints();
+              for( size_t ip = 0; ip < ips; ++ip )
+              {
+                  // inserting scalar data
+                  (*it)->Read( ip, key, flaggedArrayVariable );
+                  WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+              }
+          }
+      }
+      else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
+      {
+          size_t sectors,ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              sectors = (*it)->Sectors();
+              for( size_t sid = 0; sid < sectors; ++sid )
+              {
+                  ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+                  for( size_t ip = 0; ip < ips; ++ip )
+                  {
+                      // inserting scalar data
+                      (*it)->Read( sid, ip, key, flaggedArrayVariable );
+                      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+                  }
+              }
+          }
+      }
+      else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
+      {
+          size_t facets,ips;
+          const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+          for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+               it = subDomain.ElementsBegin();
+               it != domainElementsEnd; ++it )
+          {
+              facets = (*it)->Facets();
+              for( size_t fid = 0; fid < facets; ++fid )
+              {
+                  ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+                  for( size_t ip = 0; ip < ips; ++ip )
+                  {
+                      // inserting scalar data
+                      (*it)->Read( fid, ip, key, flaggedArrayVariable );
+                      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+                  }
+              }
+          }
+      }
+
+      if( !newLine )
+        vtu.LineBreak();
+      vtu.CloseNode( "DataArray" );
+    }
+}
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+// WRITE ELEMENT DATA
+// --------------------
+
+
+/// writes cell data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WriteElementDataArrayScalar( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+  std::string arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  ScalarVariable scalarVariable;
+  bool newLine( false );
+  // looping over domains elements
+  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  {
+    // inserting scalar data
+    (*it)->Read( key, scalarVariable );
+    WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+  }
+  if( !newLine )
+    vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalar(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+/// writes vector cell data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WriteElementDataArrayVector( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 4 );
+  std::string arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"3\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  bool newLine( false );
+  VectorVariable<dim> vectorVariable;
+  // looping over regions elements
+  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  {
+    // acquiring vector data
+    (*it)->Read( key, vectorVariable );
+    WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+  }
+  if( !newLine )
+    vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// writes tensor cell data array to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WriteElementDataArrayTensor( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 3 );
+  std::string stringNumber, arrayTitle( "DataArray type=\"Float64\" Name=\"" );
+  std::string variableName = model_.Database().Name( key );
+  variableName = FindVariableOutputAlias( variableName );
+  arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"";
+  const size_t tensor_components( 9U ); // only 3D representation
+  stringNumber = number_to_string( tensor_components );
+  arrayTitle += stringNumber; arrayTitle += "\" format=\"ascii\"";
+  vtu.OpenNode( arrayTitle.c_str() );
+  vtu.BringToLevel();
+  bool newLine( false );
+  TensorVariable<dim> tensorVariable;
+  // looping over regions nodes
+  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  {
+    // acquiring vector data
+    (*it)->Read( key, tensorVariable );
+    WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+  }
+  if( !newLine )
+    vtu.LineBreak();
+  vtu.CloseNode( "DataArray" );
+}
+
+template void VTU_Interface<1U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// writes cell data array ( array of scalars ) to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+  std::string stringNumber;
+  std::string arrayTitle;
+  std::string variableName;
+  std::string prefix;
+  ArrayVariable arrayVariable;
+  for( size_t component=0; component<key.dataDepth; component++)
+  {
+      arrayTitle = "DataArray type=\"Float64\" Name=\"";
+      variableName = model_.Database().Name( key );
+      variableName = FindVariableOutputAlias( variableName );
+      stringNumber = number_to_string( component );
+      prefix = "";
+      if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
+          std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
+          if (component < component_names.size())
+              prefix = component_names[component];
+      }
+      variableName = prefix + variableName + "[ " + stringNumber + " ]";
+      arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+      vtu.OpenNode( arrayTitle.c_str() );
+      vtu.BringToLevel();
+      bool newLine( false );
+      // looping over domains elements
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      {
+          // inserting scalar array data
+          (*it)->Read( key, arrayVariable );
+          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+      }
+      if( !newLine )
+          vtu.LineBreak();
+      vtu.CloseNode( "DataArray" );
+  }
+}
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+/// writes cell data array ( array of scalars ) to xml document
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::WriteElementDataArrayScalarFlaggedArray( const Index& key, XML_Document& vtu, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  size_t entriesOfLine( 2 ); const size_t MAX_ENTRIES_PER_LINE( 10 );
+  std::string stringNumber;
+  std::string arrayTitle;
+  std::string variableName;
+  std::string prefix;
+  FlaggedArrayVariable flaggedArrayVariable;
+  for( size_t component=0; component<key.dataDepth; component++)
+  {
+      arrayTitle = "DataArray type=\"Float64\" Name=\"";
+      variableName = model_.Database().Name( key );
+      variableName = FindVariableOutputAlias( variableName );
+      stringNumber = number_to_string( component );
+      prefix = "";
+      if (this->array_index_to_name_.find(variableName) != this->array_index_to_name_.end()){
+          std::vector<std::string> component_names (this->array_index_to_name_.at(variableName));
+          if (component < component_names.size())
+              prefix = component_names[component];
+      }
+      variableName = prefix + variableName + "[ " + stringNumber + " ]";
+      arrayTitle += variableName; arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
+      vtu.OpenNode( arrayTitle.c_str() );
+      vtu.BringToLevel();
+      bool newLine( false );
+      // looping over domains elements
+      const typename std::vector<SIMPLEX<dim>*>::const_iterator domainElementsEnd( subDomain.ElementsEnd() );
+      for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      {
+        // inserting scalar flagged array data
+        (*it)->Read( key, flaggedArrayVariable );
+        WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+      }
+      if( !newLine )
+        vtu.LineBreak();
+      vtu.CloseNode( "DataArray" );
+  }
+}
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::WriteElementDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+
+
+
+
+
+
+
+// CONNECTIVITY
+// ----------------
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+XML_Document* VTU_Interface<dim>::findConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  typename std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>::const_iterator connectivityEntry( connectivityMap.find( &subDomain ) );
+  if( connectivityEntry != connectivityMap.end() )
+    return connectivityEntry->second;
+  return NULL;
+}
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<Element>(std::map<const ModelSubDomain<1U,Element>*,XML_Document*>&,const ModelSubDomain<1U,Element>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<Element>(std::map<const ModelSubDomain<2U,Element>*,XML_Document*>&,const ModelSubDomain<2U,Element>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<Element>(std::map<const ModelSubDomain<3U,Element>*,XML_Document*>&,const ModelSubDomain<3U,Element>&);
+
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<Face>(std::map<const ModelSubDomain<1U,Face>*,XML_Document*>&,const ModelSubDomain<1U,Face>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<Face>(std::map<const ModelSubDomain<2U,Face>*,XML_Document*>&,const ModelSubDomain<2U,Face>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<Face>(std::map<const ModelSubDomain<3U,Face>*,XML_Document*>&,const ModelSubDomain<3U,Face>&);
+
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<InterFace>(std::map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,const ModelSubDomain<1U,InterFace>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<InterFace>(std::map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,const ModelSubDomain<2U,InterFace>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<InterFace>(std::map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,const ModelSubDomain<3U,InterFace>&);
+
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+bool VTU_Interface<dim>::insertConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, XML_Document* newConnectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  connectivityMap.insert( std::make_pair( &subDomain, newConnectivityFile ) );
+  return true;
+}
+
+template bool VTU_Interface<1U>::insertConnectivityFile(std::map<const ModelSubDomain<1U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::insertConnectivityFile(std::map<const ModelSubDomain<2U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::insertConnectivityFile(std::map<const ModelSubDomain<3U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,Element>&);
+
+template bool VTU_Interface<1U>::insertConnectivityFile(std::map<const ModelSubDomain<1U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::insertConnectivityFile(std::map<const ModelSubDomain<2U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::insertConnectivityFile(std::map<const ModelSubDomain<3U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,Face>&);
+
+template bool VTU_Interface<1U>::insertConnectivityFile(std::map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::insertConnectivityFile(std::map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::insertConnectivityFile(std::map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,InterFace>&);
+
+
+/// returns a pointer to the regions connectivity file. creates one if not existing yet
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+XML_Document* VTU_Interface<dim>::ConnectivityFile( std::map<const ModelSubDomain<dim,SIMPLEX>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,SIMPLEX>& subDomain )
+{
+  // looks for corresponding entry for region parameter
+  XML_Document* connectivityFile( findConnectivityFile( connectivityMap, subDomain ) );
+
+  // if there's already an entry, return the connectivity file ptr
+  if( connectivityFile )
+    return connectivityFile;
+
+  // if not, we go on and create one
+  XML_Document* newConnectivityFile( new XML_Document );
+
+  EstablishConnectivityFileHeader( *newConnectivityFile );
+
+  // create an entry for region with connectivity file ptr
+  insertConnectivityFile( connectivityMap, newConnectivityFile, subDomain );
+
+  // and return ptr
+  return newConnectivityFile;
+}
+
+template XML_Document* VTU_Interface<1U>::ConnectivityFile(std::map<const ModelSubDomain<1U,Element>*,XML_Document*>&,const ModelSubDomain<1U,Element>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile(std::map<const ModelSubDomain<2U,Element>*,XML_Document*>&,const ModelSubDomain<2U,Element>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile(std::map<const ModelSubDomain<3U,Element>*,XML_Document*>&,const ModelSubDomain<3U,Element>&);
+
+template XML_Document* VTU_Interface<1U>::ConnectivityFile(std::map<const ModelSubDomain<1U,Face>*,XML_Document*>&,const ModelSubDomain<1U,Face>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile(std::map<const ModelSubDomain<2U,Face>*,XML_Document*>&,const ModelSubDomain<2U,Face>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile(std::map<const ModelSubDomain<3U,Face>*,XML_Document*>&,const ModelSubDomain<3U,Face>&);
+
+template XML_Document* VTU_Interface<1U>::ConnectivityFile(std::map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,const ModelSubDomain<1U,InterFace>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile(std::map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,const ModelSubDomain<2U,InterFace>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile(std::map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,const ModelSubDomain<3U,InterFace>&);
+
+
+/// @todo (2-F) This should return filename up to user call
+template<size_t dim>
+bool VTU_Interface<dim>::CloseFile( const std::string& fileName, const std::string& extension, XML_Document& outputFile )
+{
+  ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+  // write to file
+  std::string outputName = fileName + extension;
+  outputFile.WriteToFile( outputName.c_str() );
+
+  // io feedback
+  if ( csmp_error.Verbose() )
+      std::cout << "\nVTU_Interface<dim>::OutputDataToVTU: 'Done writing " << outputName << "'\n";
+  return true;
+}
+
+/// writes common header unstructured grids
+template<size_t dim>
+void VTU_Interface<dim>::EstablishConnectivityFileHeader( XML_Document& connectivityFile ) const
+  {
+    // writing problem header
+    connectivityFile.AddInfo( "xml version=\"0.9\"" );
+    connectivityFile.AddComment( problemTitle_.c_str() );
+  }
+
+/// establishes the connectivity file for given region
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+  // io feedback
+  if ( csmp_error.Verbose() )
+      std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+  // reference to the domain of concern and renumbering its node indices
+  subDomain.RenumberNodes();
+
+  // getting node and element count, creating working strings
+  std::string stringNumber, stringCache;
+
+  // opening piece node
+  const size_t DOMAIN_NODES( subDomain.Nodes() ), DOMAIN_ELEMENTS( subDomain.Elements() );
+  stringNumber = number_to_string( DOMAIN_NODES );
+  stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
+  stringCache += "\" NumberOfCells=\""; stringCache += stringNumber; stringCache += "\"";
+  connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+  // points node
+  connectivityFile.OpenNode( "Points" );
+  connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+  // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+  size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+  bool newLine( false );
+  connectivityFile.BringToLevel();
+  // looping over all the region's nodes
+  const typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator domainVerticesEnd( subDomain.NodesEnd() );
+  for( typename ModelSubDomain<dim,SIMPLEX>::vertexConstIterator
+       it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
+  {
+    // writing x,y and z coordinates(tab seperated)
+    stringNumber = number_to_string( (*it)->x() );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( yCoordinate( (*it)->Coordinate() ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( zCoordinate( (*it)->Coordinate() ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // if maximum of entris per line is reached, start new one, else tab
+    if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+    {
+      entriesOfLine = 1;
+      connectivityFile.LineBreak();
+      connectivityFile.BringToLevel();
+      newLine = true;
+    }
+    else
+    {
+      connectivityFile.Tab();
+      newLine = false;
+    }
+  } // looping regions nodes
+  // closing points node
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  connectivityFile.CloseNode( "Points" );
+
+  // cells node
+  connectivityFile.OpenNode( "Cells" );
+  // cell connectivity
+  connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  // establish a std::vector with vtk element types
+  std::vector<VTK_TYPE> elementTypesVTK;
+  VTK_TYPE elementTypeVTK;
+  std::vector<long> vtkNodeNumbering;
+  // looping region's elements
+  const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
+  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+       it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+  {
+    // storing elements VTK type
+    elementTypeVTK = ElementType( *it );
+    elementTypesVTK.push_back( elementTypeVTK );
+    // Quadratic Hexahedron and Quadratic Wedge differ in node numbering(CSMP vs VTK)
+    if( elementTypeVTK == VTK_QUADRATIC_HEXAHEDRON )
+    {
+      vtkNodeNumbering.clear();
+      QuadraticHexahedronConnectivity( *it, vtkNodeNumbering );
+      assert( vtkNodeNumbering.size() == (*it)->Nodes() );
+      for( size_t i = 0; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
+      {
+         // writing node id to vtu document
+        stringNumber = number_to_string( vtkNodeNumbering[i] );
+        connectivityFile.InsertData( stringNumber.c_str() );
+        // line break if limeit entries reached, else tab
+        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+        {
+          entriesOfLine = 1;
+          connectivityFile.LineBreak();
+          connectivityFile.BringToLevel();
+          newLine = true;
+        }
+        else
+        {
+          connectivityFile.Tab();
+          newLine = false;
+        }
+      }
+      // proceed to next elementactiveProperty += "\"";
+      continue;
+    }
+    if( elementTypeVTK == VTK_QUADRATIC_WEDGE )
+    {
+      vtkNodeNumbering.clear();
+      QuadraticWedgeConnectivity( *it, vtkNodeNumbering );
+      assert( vtkNodeNumbering.size() == (*it)->Nodes() );
+      for( size_t i = 0; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
+      {
+         // writing node id to vtu document
+        stringNumber = number_to_string( vtkNodeNumbering[i] );
+        connectivityFile.InsertData( stringNumber.c_str() );
+        // line break if limeit entries reached, else tab
+        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+        {
+          entriesOfLine = 1;
+          connectivityFile.LineBreak();
+          connectivityFile.BringToLevel();
+          newLine = true;
+        }
+        else
+        {
+          connectivityFile.Tab();
+          newLine = false;
+        }
+      }
+      // proceed to next element
+      continue;
+    }
+    // for all another element types: looping element's nodes
+    for( size_t iit = 0; iit < (*it)->Nodes(); ++iit, ++entriesOfLine )
+    {
+      // writing node id to vtu document
+      stringNumber = number_to_string( (*it)->N(iit)->Idx() );
+      connectivityFile.InsertData( stringNumber.c_str() );
+      // line break if limeit entries reached, else tab
+      if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+      {
+        entriesOfLine = 1;
+        connectivityFile.LineBreak();
+        connectivityFile.BringToLevel();
+        newLine = true;
+      }
+      else
+      {
+        connectivityFile.Tab();
+        newLine = false;
+      }
+    } // element's nodes
+  } // region's elements
+  // close cell connectivity
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // cell offsets
+  connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  // looping region's elements
+  size_t offset( 0 ); entriesOfLine = 2;
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+       it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
+  {
+    // imcrementing offset by node count and writing to data
+    offset += (*it)->Nodes();
+    stringNumber = number_to_string( offset );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // line break if limeit entries reached, else tab
+    if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+    {
+      entriesOfLine = 1;
+      connectivityFile.LineBreak();
+      connectivityFile.BringToLevel();
+      newLine = true;
+    }
+    else
+    {
+      connectivityFile.Tab();
+      newLine = false;
+    }
+  } // region's elements
+  // close offsets
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // cell types
+  assert( elementTypesVTK.size() == subDomain.Elements() );
+  connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  // looping region's elements
+  entriesOfLine = 2; size_t elementCount( 0 );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
+  {
+    // imcrementing offset by node count and writing to data
+    stringNumber = number_to_string( elementTypesVTK[elementCount] );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // line break if limeit entries reached, else tab
+    if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+    {
+      entriesOfLine = 1;
+      connectivityFile.LineBreak();
+      connectivityFile.BringToLevel();
+      newLine = true;
+    }
+    else
+    {
+      connectivityFile.Tab();
+      newLine = false;
+    }
+  } // region's elements
+  // close offsets
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // closing cells node
+  connectivityFile.CloseNode( "Cells" );
+
+  // io feedback
+  if ( csmp_error.Verbose() )
+      std::cout << " done!\n";
+}
+
+template void VTU_Interface<1U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFile(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// establishes the connectivity file for given region using a finite element barycenter point cloud
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+  ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+  // io feedback
+  if( csmp_error.Verbose() )
+      std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing bary center point cloud connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+  // getting node and element count, creating working strings
+  std::string stringNumber, stringCache;
+
+  // opening piece node, number of nodes == number of elements (since berycenters)
+  const size_t DOMAIN_ELEMENTS( subDomain.Elements() );
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
+  stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+
+  // no elements
+  stringCache += "\" NumberOfCells=\"0\"";
+  connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+  // points node
+  connectivityFile.OpenNode( "Points" );
+  connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+  // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+  size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+  bool newLine( false );
+  connectivityFile.BringToLevel();
+  // looping over all the region's nodes
+  const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimpicesEnd( subDomain.ElementsEnd() );
+  for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+       it = subDomain.ElementsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
+    {
+    // writing x,y and z coordinates(tab seperated)
+    stringNumber = number_to_string( (*it)->BaryCenter()[0] );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( yCoordinate( (*it)->BaryCenter() ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( zCoordinate( (*it)->BaryCenter() ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // if maximum of entris per line is reached, start new one, else tab
+    if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+      {
+      entriesOfLine = 1;
+      connectivityFile.LineBreak();
+      connectivityFile.BringToLevel();
+      newLine = true;
+      }
+    else
+      {
+      connectivityFile.Tab();
+      newLine = false;
+      }
+    } // looping regions nodes
+  // closing points node
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  connectivityFile.CloseNode( "Points" );
+
+  // cells node
+  connectivityFile.OpenNode( "Cells" );
+  // cell connectivity
+  connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  // looping region's elements
+  const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
+  for( size_t pid = 0; pid < DOMAIN_ELEMENTS; ++pid  )
+  {
+    // writing node id to vtu document
+    stringNumber = number_to_string( pid );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // line break if limeit entries reached, else tab
+    if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+    {
+        entriesOfLine = 1;
+        connectivityFile.LineBreak();
+        connectivityFile.BringToLevel();
+        newLine = true;
+    }
+    else
+    {
+        connectivityFile.Tab();
+        newLine = false;
+    }
+  } // integration points
+  // close cell connectivity
+  if( !newLine )
+    connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // cell offsets
+  stringNumber = number_to_string( DOMAIN_ELEMENTS );
+  connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  connectivityFile.InsertData( stringNumber.c_str() );
+  connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // cell types
+  size_t cell_type( VTK_POLY_VERTEX );
+  stringNumber = number_to_string( cell_type );
+  connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+  connectivityFile.BringToLevel();
+  connectivityFile.InsertData( stringNumber.c_str() );
+  connectivityFile.LineBreak();
+  connectivityFile.CloseNode( "DataArray" );
+  // closing cells node
+  connectivityFile.CloseNode( "Cells" );
+
+  // io feedback
+  if( csmp_error.Verbose() )
+    std::cout << " done!\n";
+}
+
+template void VTU_Interface<1U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileBCPC(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// establishes the connectivity file for given region using a region barycenter point cloud
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+        std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing bary center point cloud connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+    // getting node and element count, creating working strings
+    std::string stringNumber, stringCache;
+
+    // opening piece node, number of nodes == 1U (single point per Region)
+    const size_t REGION_POINTS( 1U );
+    stringNumber = number_to_string( REGION_POINTS );
+    stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+
+    // no elements
+    stringCache += "\" NumberOfCells=\"1\"";
+    connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+    // points node
+    connectivityFile.OpenNode( "Points" );
+    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+    size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+    bool newLine( false );
+    connectivityFile.BringToLevel();
+    Point<dim> pbc,pt;
+    Point<dim> pt_max,pt_min;
+    Point<dim> dist_to_min,dist_to_max;
+    double dist = std::numeric_limits<double>::max();
+    double dist_bc;
+    subDomain.MinMaxCoordinates(pt_min,pt_max);
+    // looping over all the region's nodes
+    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+       it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    {
+        pbc = (*it)->BaryCenter();
+        dist_to_min = pbc - pt_min;
+        dist_to_max = pbc - pt_max;
+        dist_bc = std::abs( dist_to_max.Length() - dist_to_min.Length() );
+        if( dist_bc < dist )
+        {
+            pt = pbc;
+            dist = dist_bc;
+        }
+    }
+    ++entriesOfLine;
+    // writing x,y and z coordinates(tab seperated)
+    stringNumber = number_to_string( pt[0] );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( yCoordinate( pt ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.Tab();
+    stringNumber = number_to_string( zCoordinate( pt ) );
+    connectivityFile.InsertData( stringNumber.c_str() );
+    // if maximum of entries per line is reached, start new one, else tab
+    if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+    {
+        entriesOfLine = 1;
+        connectivityFile.LineBreak();
+        connectivityFile.BringToLevel();
+        newLine = true;
+    }
+    else
+    {
+        connectivityFile.Tab();
+        newLine = false;
+    }
+    // closing points node
+    if( !newLine )
+    connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    connectivityFile.CloseNode( "Points" );
+
+    // cells node
+    connectivityFile.OpenNode( "Cells" );
+    // cell connectivity
+    size_t pid( 0 );
+    stringNumber = number_to_string( pid );
+    connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+    connectivityFile.BringToLevel();
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    // cell offsets
+    size_t offset(1);
+    stringNumber = number_to_string( offset );
+    connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+    connectivityFile.BringToLevel();
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    // cell types
+    size_t cell_type( VTK_POLY_VERTEX ); // VTK_VERTEX would be also fine, but this way it's more general
+    stringNumber = number_to_string( cell_type );
+    connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+    connectivityFile.BringToLevel();
+    connectivityFile.InsertData( stringNumber.c_str() );
+    connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    // closing cells node
+    connectivityFile.CloseNode( "Cells" );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+    std::cout << " done!\n";
+}
+
+template void VTU_Interface<1U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileRPC(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// establishes the connectivity file for given region using a finite element integration points
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+        std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing bary center point cloud connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+    // getting node and element count, creating working strings
+    std::string stringNumber, stringCache;
+
+    // opening piece node, number of nodes == number of element integration points
+    const size_t INTEGRATION_POINTS( subDomain.IntegrationPoints() );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
+    stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+
+    // no elements
+    stringCache += "\" NumberOfCells=\"1\"";
+    connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+    // points node
+    connectivityFile.OpenNode( "Points" );
+    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+    size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+    bool newLine( false );
+    connectivityFile.BringToLevel();
+    size_t ip,ips;
+    Point<dim> pt;
+    // looping over all element integration points
+    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    {
+        ips = (*it)->FE()->IntegrationPoints();
+        for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
+        {
+          pt = (*it)->IntegrationPoint( ip );
+          // writing x,y and z coordinates(tab seperated)
+          stringNumber = number_to_string( pt[0] );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = number_to_string( yCoordinate( pt ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = number_to_string( zCoordinate( pt ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          // if maximum of entris per line is reached, start new one, else tab
+          if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+          {
+            entriesOfLine = 1;
+            connectivityFile.LineBreak();
+            connectivityFile.BringToLevel();
+            newLine = true;
+          }
+          else
+          {
+            connectivityFile.Tab();
+            newLine = false;
+          }
+        } // looping regions nodes
+    }
+    // closing points node
+    if( !newLine )
+      connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    connectivityFile.CloseNode( "Points" );
+
+      // cells node
+      connectivityFile.OpenNode( "Cells" );
+      // cell connectivity
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      // looping region's elements
+      const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
+      for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
+      {
+        // writing node id to vtu document
+        stringNumber = number_to_string( pid );
+        connectivityFile.InsertData( stringNumber.c_str() );
+        // line break if limeit entries reached, else tab
+        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+        {
+            entriesOfLine = 1;
+            connectivityFile.LineBreak();
+            connectivityFile.BringToLevel();
+            newLine = true;
+        }
+        else
+        {
+            connectivityFile.Tab();
+            newLine = false;
+        }
+      } // integration points
+      // close cell connectivity
+      if( !newLine )
+        connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell offsets
+      stringNumber = number_to_string( INTEGRATION_POINTS );
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell types
+      size_t cell_type( VTK_POLY_VERTEX );
+      stringNumber = number_to_string( cell_type );
+      connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // closing cells node
+      connectivityFile.CloseNode( "Cells" );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+      std::cout << " done!\n";
+}
+template void VTU_Interface<1U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFEIP(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// establishes the connectivity file for given region using a finite volume integration points
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+        std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing bary center point cloud connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+    // getting node and element count, creating working strings
+    std::string stringNumber, stringCache;
+
+    // opening piece node, number of nodes == number of sector integration points
+    const size_t INTEGRATION_POINTS( subDomain.SectorIntegrationPoints() );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
+    stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+
+    // no elements
+    stringCache += "\" NumberOfCells=\"1\"";
+    connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+    // points node
+    connectivityFile.OpenNode( "Points" );
+    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+    size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+    bool newLine( false );
+    connectivityFile.BringToLevel();
+    size_t ip,  ips;
+    size_t sid, sectors;
+    Point<dim> pt;
+    // looping over all the region's nodes
+    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    {
+        sectors = (*it)->Sectors();
+        for( sid = 0; sid < sectors; ++sid )
+        {
+            ips = (*it)->FV()->IntegrationPointsPerSector( sid );
+            for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
+            {
+              pt = (*it)->FV()->SectorIntegrationPoint( sid, ip );
+              pt = (*it)->RstToXYZ( pt );
+              // writing x,y and z coordinates(tab seperated)
+              stringNumber = number_to_string( pt[0] );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              connectivityFile.Tab();
+              stringNumber = number_to_string( yCoordinate( pt ) );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              connectivityFile.Tab();
+              stringNumber = number_to_string( zCoordinate( pt ) );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              // if maximum of entris per line is reached, start new one, else tab
+              if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+              {
+                entriesOfLine = 1;
+                connectivityFile.LineBreak();
+                connectivityFile.BringToLevel();
+                newLine = true;
+              }
+              else
+              {
+                connectivityFile.Tab();
+                newLine = false;
+              }
+            }
+        } // looping regions nodes
+    }
+    // closing points node
+    if( !newLine )
+      connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    connectivityFile.CloseNode( "Points" );
+
+      // cells node
+      connectivityFile.OpenNode( "Cells" );
+      // cell connectivity
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      // looping region's elements
+      const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
+      for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
+      {
+        // writing node id to vtu document
+        stringNumber = number_to_string( pid );
+        connectivityFile.InsertData( stringNumber.c_str() );
+        // line break if limeit entries reached, else tab
+        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+        {
+            entriesOfLine = 1;
+            connectivityFile.LineBreak();
+            connectivityFile.BringToLevel();
+            newLine = true;
+        }
+        else
+        {
+            connectivityFile.Tab();
+            newLine = false;
+        }
+      } // integration points
+      // close cell connectivity
+      if( !newLine )
+        connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell offsets
+      stringNumber = number_to_string( INTEGRATION_POINTS );
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell types
+      size_t cell_type( VTK_POLY_VERTEX );
+      stringNumber = number_to_string( cell_type );
+      connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // closing cells node
+      connectivityFile.CloseNode( "Cells" );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+      std::cout << " done!\n";
+}
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVSIP(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// establishes the connectivity file for given region using a finite volume integration points
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectivityFile, const ModelSubDomain<dim,SIMPLEX>& subDomain ) const
+{
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+        std::cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing bary center point cloud connectivity file for sub domain " << DomainName( subDomain ) << " ...";
+
+    // getting node and element count, creating working strings
+    std::string stringNumber, stringCache;
+
+    // opening piece node, number of nodes == number of facet integration points
+    const size_t INTEGRATION_POINTS( subDomain.FacetIntegrationPoints() );
+    stringNumber = number_to_string( INTEGRATION_POINTS );
+    stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
+
+    // no elements
+    stringCache += "\" NumberOfCells=\"1\"";
+    connectivityFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
+
+    // points node
+    connectivityFile.OpenNode( "Points" );
+    connectivityFile.OpenNode( "DataArray type=\"Float32\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\"");
+    // running count of data entries per line and given maximum(new line beyond that) starting at current indentation
+    size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
+    bool newLine( false );
+    connectivityFile.BringToLevel();
+    size_t ip,  ips;
+    size_t fid, facets;
+    Point<dim> pt;
+    // looping over all the region's nodes
+    const typename std::vector<SIMPLEX<dim>*>::const_iterator domainSimplicesEnd( subDomain.ElementsEnd() );
+    for( typename std::vector<SIMPLEX<dim>*>::const_iterator
+         it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    {
+        facets = (*it)->Facets();
+        for( fid = 0; fid < facets; ++fid )
+        {
+            ips = (*it)->FV()->IntegrationPointsPerFacet( fid );
+            for( ip = 0; ip < ips; ++ip, ++entriesOfLine )
+            {
+              pt = (*it)->FV()->FacetIntegrationPoint( fid, ip );
+              pt = (*it)->RstToXYZ( pt );
+              // writing x,y and z coordinates(tab seperated)
+              stringNumber = number_to_string( pt[0] );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              connectivityFile.Tab();
+              stringNumber = number_to_string( yCoordinate( pt ) );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              connectivityFile.Tab();
+              stringNumber = number_to_string( zCoordinate( pt ) );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              // if maximum of entris per line is reached, start new one, else tab
+              if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
+              {
+                entriesOfLine = 1;
+                connectivityFile.LineBreak();
+                connectivityFile.BringToLevel();
+                newLine = true;
+              }
+              else
+              {
+                connectivityFile.Tab();
+                newLine = false;
+              }
+            }
+        } // looping regions nodes
+    }
+    // closing points node
+    if( !newLine )
+      connectivityFile.LineBreak();
+    connectivityFile.CloseNode( "DataArray" );
+    connectivityFile.CloseNode( "Points" );
+
+      // cells node
+      connectivityFile.OpenNode( "Cells" );
+      // cell connectivity
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      // looping region's elements
+      const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
+      for( size_t pid = 0; pid < INTEGRATION_POINTS; ++pid  )
+      {
+        // writing node id to vtu document
+        stringNumber = number_to_string( pid );
+        connectivityFile.InsertData( stringNumber.c_str() );
+        // line break if limeit entries reached, else tab
+        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+        {
+            entriesOfLine = 1;
+            connectivityFile.LineBreak();
+            connectivityFile.BringToLevel();
+            newLine = true;
+        }
+        else
+        {
+            connectivityFile.Tab();
+            newLine = false;
+        }
+      } // integration points
+      // close cell connectivity
+      if( !newLine )
+        connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell offsets
+      stringNumber = number_to_string( INTEGRATION_POINTS );
+      connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // cell types
+      size_t cell_type( VTK_POLY_VERTEX );
+      stringNumber = number_to_string( cell_type );
+      connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
+      connectivityFile.BringToLevel();
+      connectivityFile.InsertData( stringNumber.c_str() );
+      connectivityFile.LineBreak();
+      connectivityFile.CloseNode( "DataArray" );
+      // closing cells node
+      connectivityFile.CloseNode( "Cells" );
+
+    // io feedback
+    if( csmp_error.Verbose() )
+      std::cout << " done!\n";
+}
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<1U,Element>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<2U,Element>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<3U,Element>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<1U,Face>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<2U,Face>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<3U,Face>&) const;
+
+template void VTU_Interface<1U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<1U,InterFace>&) const;
+template void VTU_Interface<2U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
+template void VTU_Interface<3U>::EstablishConnectivityFileFVFIP(XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
+
+
+/// converts csmp to vtk node numbering
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::QuadraticHexahedronConnectivity( SIMPLEX<dim>* element, std::vector<long>& data ) const
+{
+  // first 12 nodes are the same
+  for( size_t i = 0; i < 12; ++i )
+    data.push_back( element->N( i )->Idx() );
+  // now the node convention differs
+  data.push_back( element->N( static_cast<size_t>(16) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(17) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(18) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(19) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(12) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(13) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(14) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(15) )->Idx() );
+}
+
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(Element<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(Element<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(Element<3U>*,std::vector<long>&) const;
+
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(Face<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(Face<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(Face<3U>*,std::vector<long>&) const;
+
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(InterFace<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(InterFace<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(InterFace<3U>*,std::vector<long>&) const;
+
+/// converts csmp to vtk node numbering
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+void VTU_Interface<dim>::QuadraticWedgeConnectivity( SIMPLEX<dim>* element, std::vector<long>& data ) const
+{
+  // first 8 nodes are the same
+  for( size_t i = 0; i < 9; ++i )
+    data.push_back( element->N( i )->Idx() );
+  // now the node convention differs
+  data.push_back( element->N( static_cast<size_t>(12) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(13) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(14) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(9) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(10) )->Idx() );
+  data.push_back( element->N( static_cast<size_t>(11) )->Idx() );
+}
+
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(Element<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(Element<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(Element<3U>*,std::vector<long>&) const;
+
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(Face<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(Face<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(Face<3U>*,std::vector<long>&) const;
+
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(InterFace<1U>*,std::vector<long>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(InterFace<2U>*,std::vector<long>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(InterFace<3U>*,std::vector<long>&) const;
+
+
+/// finds the corresponding VTK Element type for given csmp::Element
+template<size_t dim>
+template<template <size_t> class SIMPLEX>
+VTK_TYPE VTU_Interface<dim>::ElementType( SIMPLEX<dim>* elmt ) const
+{
+  CSMP_FEM_TYPE csmpType( elmt->FE_Type() );
+
+  switch( csmpType )
+  {
+  case ISOPARAMETRIC_LINEAR_BAR:
+  case LINEAR_BAR:                      return VTK_LINE;
+                                        break;
+  case LINEAR_TRIANGLE3D:
+  case ISOPARAMETRIC_LINEAR_TRIANGLE:
+  case LINEAR_TRIANGLE:                 return VTK_TRIANGLE;
+                                        break;
+  case ISOPARAMETRIC_LINEAR_TETRAHEDRON:
+  case LINEAR_TETRAHEDRON:              return VTK_TETRA;
+                                        break;
+  case ISOPARAMETRIC_LINEAR_PYRAMID:    return VTK_PYRAMID;
+                                        break;
+  case ISOPARAMETRIC_LINEAR_PRISM:      return VTK_WEDGE;
+                                        break;
+  case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+  case LINEAR_RECTANGLE:
+                                        return VTK_QUAD;
+                                        break;
+  case ISOPARAMETRIC_LINEAR_HEXAHEDRON:
+  case LINEAR_CUBOID:
+                                        return VTK_HEXAHEDRON;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_BAR:
+  case QUADRATIC_BAR:                   return VTK_QUADRATIC_EDGE;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+  case QUADRATIC_TRIANGLE:              return VTK_QUADRATIC_TRIANGLE;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+                                        return VTK_QUADRATIC_QUAD;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON:
+  case QUADRATIC_TETRAHEDRON:           return VTK_QUADRATIC_TETRA;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
+                                        return VTK_QUADRATIC_HEXAHEDRON;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_PRISM15:
+                                        return VTK_QUADRATIC_WEDGE;
+                                        break;
+  case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
+                                        return VTK_QUADRATIC_PYRAMID;
+                                        break;
+
+
+  default:                              throw csmp::Exception( ERROR,
+                                                               "VTU_Interface<dim>::ElementType",
+                                                               "Unable to identify element type",
+                                                               "unknown" );
+  }
+}
+
+template VTK_TYPE VTU_Interface<1U>::ElementType(Element<1U>*) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(Element<2U>*) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(Element<3U>*) const;
+
+template VTK_TYPE VTU_Interface<1U>::ElementType(Face<1U>*) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(Face<2U>*) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(Face<3U>*) const;
+
+template VTK_TYPE VTU_Interface<1U>::ElementType(InterFace<1U>*) const;
+template VTK_TYPE VTU_Interface<2U>::ElementType(InterFace<2U>*) const;
+template VTK_TYPE VTU_Interface<3U>::ElementType(InterFace<3U>*) const;
+
+// domain name
+template<size_t dim>
+std::string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,Element>& subDomain ) const
+{
+  for( typename std::map<std::string,csmp::Region<dim> >::const_iterator it = model_.UniqueRegionsBegin(); it != model_.UniqueRegionsEnd(); ++it )
+    if( &it->second == &subDomain )
+      return it->first;
+  for( typename std::map<std::string,csmp::Region<dim> >::const_iterator it = model_.RegionsBegin(); it != model_.RegionsEnd(); ++it )
+    if( &it->second == &subDomain )
+      return it->first;
+
+   return "UndefinedRegion";
+ }
+
+template<size_t dim>
+std::string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,Face>& subDomain ) const
+{
+  for( typename std::map<std::string,Boundary<dim> >::const_iterator it = model_.BoundariesBegin(); it != model_.BoundariesEnd(); ++it )
+    if( &it->second == &subDomain )
+      return static_cast<std::string>( it->first );
+
+   return "UndefinedBoundary";
+ }
+
+template<size_t dim>
+std::string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,InterFace>& subDomain ) const
+{
+  for( typename std::map<std::string,SplitBoundary<dim> >::const_iterator it = model_.SplitBoundariesBegin(); it != model_.SplitBoundariesEnd(); ++it )
+    if( &it->second == &subDomain )
+      return static_cast<std::string>( it->first );
+
+   return "UndefinedSplitBoundary";
+ }
+
+// VTU always uses 3 dimensional output
+double zCoordinate( Point<3> const& p )
+{ return p[2]; }
+double zCoordinate( Point<2> const& )
+{ return 0.; }
+double zCoordinate( Point<1> const& )
+{ return 0.; }
+double yCoordinate( Point<3> const& p )
+{ return p[1]; }
+double yCoordinate( Point<2> const& p )
+{ return p[1]; }
+double yCoordinate( Point<1> const& )
+{ return 0.; }
+
+
+template class VTU_Interface<1U>;
+template class VTU_Interface<2U>;
+template class VTU_Interface<3U>;
+
+} // csmp

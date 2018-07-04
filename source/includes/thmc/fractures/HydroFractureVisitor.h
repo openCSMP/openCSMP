@@ -1,0 +1,65 @@
+#ifndef CSMP_HYDRO_FRACTURE_VISITOR_H
+#define CSMP_HYDRO_FRACTURE_VISITOR_H
+
+#include "Visitor.h"
+#include "Model.h"
+#include "AP_BoolVector.h"
+
+namespace csmp {
+
+/**
+@author S.K. Matthaei
+@author S. Geiger
+@author S. Roberts
+@date 1999
+*/
+
+template<size_t dim>
+class HydroFractureVisitor : public Visitor<dim> {
+  public:
+    explicit HydroFractureVisitor( Model<dim>& sg );
+    virtual ~HydroFractureVisitor();
+
+    virtual void Visit(Element<dim>* );   
+    virtual void Visit(Model<dim>* ); 
+    
+    void    HydroFracturedElements( std::vector<size_t>& ) const;
+
+  private:
+     const PropertyDatabase<dim>&  pref;
+     BoolVector               fractured;
+     csmp::Index              Pe_key, S_key, K_key, V_key; 
+     double64                 q, dp;
+     ScalarVariable           K, Kf, Pe, Pf, S;
+     VectorVariable<dim>      V, dPdxy;
+     bool                     over_pressured;
+     uint32                   i;
+     const double64           GRAD_LIMIT, K_LIMIT;
+     std::vector<double64>    pres;
+};
+
+} // csmp
+
+#endif
+
+/*
+
+copyright (c) 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

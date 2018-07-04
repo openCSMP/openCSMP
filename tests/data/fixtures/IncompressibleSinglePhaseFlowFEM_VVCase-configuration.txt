@@ -1,0 +1,12 @@
+'prism_test1-regions.txt' test model for single-phase flow analysis in 3D
+
+# (1) global material properties
+fluid volume source			0.0
+fluid pressure				0.0
+mobility				1.0
+
+# (2) local material properties (of the fractures)
+
+# essential conditions on model boundaries
+LEFT	Dirichlet	fluid pressure		1.0e6	1.0e6
+RIGHT	Dirichlet	fluid pressure		101325.	101325.

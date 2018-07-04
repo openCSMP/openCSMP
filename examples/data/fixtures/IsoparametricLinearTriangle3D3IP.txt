@@ -1,0 +1,123 @@
+Isoparametric Linear Triangle 3D 3IP
+================================
+
+Verbose							1
+Tolerance						1.E-8
+Dim								3
+Nodes							3
+Segments						3
+Faces							3
+Neighbors						3
+Nodes Face 1					2
+Nodes Face 2					2
+Nodes Face 3					2
+Constraint Point Neighbors		6
+Integration Points				3
+Interpolation Number			1
+Isoparametric					1
+Uses local Coordinates			1
+Order of Shape Functions		1
+Line Element					0
+Surface Element					1
+Volume Element					0
+CSMP FEM Type					ISOPARAMETRIC_LINEAR_TRIANGLE
+
+Node Coordinates				0.	0.	0.
+								3.	0.	1.
+								1.	1.	1.
+
+Volume							1.870828692
+Aspect Ratio					1.825741858
+Inner Radius					0.5247474544
+
+Edges							3
+Edge Lengths					3.162277660
+								2.236067977
+								1.732050808
+
+Nodes per Segment				2
+Nodes of Segment				0	1
+								1	2
+								2	0
+
+Nodes of Face					1	2
+								2	0
+								0	1
+
+Corner Nodes					3
+Nodes at Corners				0	1	2
+
+Midside Nodes					0
+Nodes at Midside
+
+Interior Nodes					0
+Nodes at Interior
+
+Face Element Types				ISOPARAMETRIC_LINEAR_BAR
+								ISOPARAMETRIC_LINEAR_BAR
+								ISOPARAMETRIC_LINEAR_BAR
+
+Unit Normal						-0.2672612419	-0.5345224838	0.8017837257
+
+Integration Points To Node Extrapolation(2 variables)		2
+Integration Point Values(2x integration points)			1. 2. 1. 2. 1. 2.
+Extrapolated Node Values(2x nodes)						1. 2. 1. 2. 1. 2.
+
+Local to Global Integration Point						1.5	0.0	0.5
+														2.0	0.5	1.0
+														0.5	0.5	0.5
+
+Weight of Integration Points							0.1666666667	0.1666666667	0.1666666667
+Counter Clock Wise Nodes								0	1	2
+
+Shape Functions(as many entries as nodes)
+Point(inside element)									0.0		0.0		0.0
+N at Point												1.		0.		0.
+N at IP1												0.5		0.5		0.0
+N at IP2												0.0		0.5		0.5
+N at IP3												0.5		0.0		0.5
+N at Barycenter											0.3333333333	0.3333333333	0.3333333333
+
+Shape Functions Derivatives
+dN at Point												0
+dN at Integration Point									1
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+dN at Node												1
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+dN at BaryCenter										1
+														-.214285714285714	0.357142857142857	-.142857142857143
+														-.428571428571429	-.285714285714286	0.714285714285714
+														-.357142857142857	-0.0714285714285715		0.428571428571429
+Jacobian at Integration Point							1
+														3.0		0.0		1.0
+														1.0		1.0		1.0
+
+														3.0		0.0		1.0
+														1.0		1.0		1.0
+
+														3.0		0.0		1.0
+														1.0		1.0		1.0
+Jacobian at RST											1
+														1.0		0.0		0.0
+														3.0		0.0		1.0
+														1.0		1.0		1.0

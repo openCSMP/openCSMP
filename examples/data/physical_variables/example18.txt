@@ -1,0 +1,36 @@
+name	MParameter	unit	index	min.	max.	place
+									
+fluid pressure		PF	Pa		1	0.00E+00	1.00E+10	node
+temperature			TC	oC		1	0.00E+00	1.00E+03	node
+permeability		k	m2		1	1.00E-25	1.00E+02	element
+porosity			PHI	X		1	1.00E-05	1.00E+01	element
+nodal porosity		PHI	X		1	1.00E-05	1.00E+01	node
+volume			V	m3		1	1.00E-10	1.00E+10	element
+conductivity		K	m s-1		1	1.00E-25	1.00E+02	element
+storativity			BC	m3 Pa-1	1	1.00E-12	1.00E-06	element
+inner radius		RC	m		1	1.00E-12	1.00E-06	element
+fluid density		RH	kg m-3	1	0.20E+03	1.50E+03	node
+rock density		RR	kg m-3	1	0.20E+03	9.00E+03	node
+velocity			V	m s-1		2	-1.00E+30	1.00E+30	element
+pore velocity		V	m s-1		2	-1.00E+30	1.00E+30	element
+nodal velocity		V	m s-1		2	-1.00E+30	1.00E+30	node
+nodal pore velocity	V	m s-1		2	-1.00E+30	1.00E+30	node
+fluid pressure gradient	DP	Pa m-1	2	-1.00E+30	1.00E+30	element
+mass flux gradient	DQ	m s-1		2	-1.00E+30	1.00E+30	element
+nodal velocity		NV	m s-1		2	-1.00E+30	1.00E+30	node
+fluid volume source	QV	m3		1	-1.00E+08	1.00E+08	element
+nodal fluid source	QN	m3		1	-1.00E+08	1.00E+08	node
+nodal flux			NQ	m s-1		1	-1.00E+30	1.00E+30	node
+mass flux			QM	m3 s-1	1	0.00E+00	1.00E+30	element
+volume flux			QVF	m3 s-1	1	0.00E+00	1.00E+30	element
+nodal volume flux		QVF	m3 s-1	1	0.00E+00	1.00E+30	node
+previous calcite		OCC	mol		1	0.00E+00	1.00E+30	node
+CC				CC	X		1	0.00E+00	1.00E+01	node
+OH_1m				OH	mol		1	0.00E+00	1.00E+30	node
+CO2_aq			CO2	mol		1	0.00E+00	1.00E+30	node
+H_1p				H1P	mol		1	0.00E+00	1.00E+30	node
+H2O_aq			H20	mol		1	0.00E+00	1.00E+30	node
+HCO3_1m			HCO	mol		1	0.00E+00	1.00E+30	node
+Ca_2p				CA	mol		1	0.00E+00	1.00E+30	node
+HCl_aq			HCL	mol		1	0.00E+00	1.00E+30	node
+Cl_1m				CL	mol		1	0.00E+00	1.00E+30	node
