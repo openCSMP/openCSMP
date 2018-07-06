@@ -397,7 +397,7 @@ double64 FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
     assert( iFacet < fvptr_->Facets());
     assert( ip < fvptr_->IntegrationPointsPerFacet() );
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     // if this is just a property that is constant on the element
     if ( prop_key.place == ELEMENT ) return e->Read( prop_key );
@@ -420,7 +420,6 @@ double64 FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
 
 
 
-// only for scalars
 /**
 
 Returns double64 value of property at given volume integration point, inside the
@@ -435,17 +434,16 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 volume sector integration point only.
 */
 template<template<size_t> class SIMPLEX>
-double64  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
-                                                            size_t iSector,
-                                                            size_t ip,
-                                                            const csmp::Index& prop_key ) const
+double64  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint( size_t iSector,
+                                                                                 size_t ip,
+                                                                                 const csmp::Index& prop_key ) const
 {
     const SIMPLEX<3U>* e( static_cast<const SIMPLEX<3U>*>(this) );
 
     assert( iSector < fvptr_->Sectors());
     assert( ip<fvptr_->IntegrationPointsPerSector());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE and prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     // if this is just a property that is constant on the element
     if ( prop_key.place == ELEMENT ) return e->Read( prop_key );
@@ -465,20 +463,27 @@ double64  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
 
 
 
+
+
+/**
+    @attention Does not work for array variables at the moment.
+*/
 template<template<size_t> class SIMPLEX>
 template<class Var>
-void FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
-                                                 const csmp::Index& prop_key,
-                                                 size_t iFacet,
-                                                 size_t ip,
-                                                 Var& var ) const
+void FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint( const csmp::Index& prop_key,
+                                                                           size_t iFacet,
+                                                                           size_t ip,
+                                                                           Var& var ) const
 {
     const SIMPLEX<3U>* e( static_cast<const SIMPLEX<3U>*>(this) );
 
     assert( iFacet < fvptr_->Facets());
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
-    if ( prop_key.place == ELEMENT ) return e->Read( prop_key, var );
+    if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
+         e->Read( prop_key, var );
+         return;
+      }
 
     // get integration point location and corresponding shape function values
     N_AtFacetIntegrationPoint( iFacet, ip );
@@ -486,8 +491,8 @@ void FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
     // interpolating property to integration point
     Var temp;
     var = 0;
-    temp.Size( prop_key.dataDepth );
-    var.Size( prop_key.dataDepth );
+    temp.Resize( prop_key.dataDepth );
+    var.Resize( prop_key.dataDepth, 0. );
   
     assert( e != nullptr );
     const size_t nodes(e->Nodes());
@@ -498,30 +503,52 @@ void FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtFacetIntegrationPoint(
 
 } // end PropertyValueAtFacetIntegrationPoint
 
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
 
 
 
 
 template<template<size_t> class SIMPLEX>
 template<class Var>
-void  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
-                                                            const csmp::Index& prop_key,
-                                                            size_t iSector,
-                                                            size_t ip,
-                                                            Var& var ) const
+void  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint( const csmp::Index& prop_key,
+                                                                             size_t iSector,
+                                                                             size_t ip,
+                                                                             Var& var ) const
 {
     const SIMPLEX<3U>* e( static_cast<const SIMPLEX<3U>*>(this) );
     assert( iSector<fvptr_->Sectors());
     assert( ip<fvptr_->IntegrationPointsPerSector());
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
-    if ( prop_key.place == ELEMENT ) return e->Read( prop_key, var );
+    if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
+         e->Read( prop_key, var );
+         return;
+      }
 
     N_AtSectorIntegrationPoint( iSector, ip );
     Var temp;
     var = 0;
-    temp.Size( prop_key.dataDepth );
-    var.Size( prop_key.dataDepth );
+// for ArrayVariables
+    temp.Resize( prop_key.dataDepth );
+    var.Resize( prop_key.dataDepth, 0. );
 
     assert( e != nullptr );
 
@@ -531,9 +558,27 @@ void  FiniteVolumePolicy<3U,SIMPLEX>::PropertyValueAtSectorIntegrationPoint(
          var += temp * e->FE()->NRST[i];
       }
 
- } // end PropertyValueAtVolumeIntegrationPoint
+ } // end PropertyValueAtSectorIntegrationPoint
 
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
 
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
 
 
 
@@ -560,7 +605,7 @@ double64  FiniteVolumePolicy<3U,SIMPLEX>::FacetIntegral( size_t iSector,
 
     assert( iSector < fvptr_->Sectors());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     assert( e != nullptr );
     e->CoordinateMatrix();
@@ -607,7 +652,7 @@ double64  FiniteVolumePolicy<3U,SIMPLEX>::SectorIntegral( size_t iSector,
 
     assert( iSector < fvptr_->Sectors());
     assert( prop_key.type  == SCALAR );
-    assert( prop_key.place != INTER_FACE && prop_key.place != ELEMENT_INTEGRATION_POINT );
+    assert( prop_key.place == NODE or prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE );
 
     assert( e != nullptr );
     e->CoordinateMatrix();

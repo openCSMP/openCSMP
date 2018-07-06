@@ -421,6 +421,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
     // initialisation for accumulation
     var = 0.;
 
+    // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const size_t n_integration_points(IntegrationPoints());
        for ( size_t i=0U; i < n_integration_points; i++ ) {
