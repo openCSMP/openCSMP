@@ -356,9 +356,8 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
-         eptr->Read( idx, temp );
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         eptr->Read( idx, var );
          return;
     }
     if ( idx.place != NODE ) {
@@ -368,6 +367,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
        throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
     }
 
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
@@ -403,8 +403,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
     assert( fptr_ != nullptr );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
          eptr->Read( idx, var );
          return;
     }
@@ -416,6 +415,7 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
        throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
     }
 
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
@@ -466,20 +466,19 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( const cs
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    Var  temp;
-    if ( idx.place == ELEMENT ) {
-         eptr->Read( idx, temp );
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         eptr->Read( idx, var );
          return;
     }
-    if ( idx.place != NODE )
-    {
-       std::cerr <<"\nFiniteElementPolicy<"<< dim;
-       std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates the ";
-       std::cerr <<"values of NODE properties."<< std::endl;
-       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
-    }
+    if ( idx.place != NODE ) {
+         std::cerr <<"\nFiniteElementPolicy<"<< dim;
+         std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates the ";
+         std::cerr <<"values of NODE properties."<< std::endl;
+         throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint");
+      }
 
     // potential size and value adjustments for array variables
+    Var  temp;
     temp.Resize( idx.dataDepth );
     var.Resize( idx.dataDepth, 0. );
     // initialisation for accumulation
@@ -510,8 +509,8 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( cons
   {
     const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
 
-    double64  var(0.);
-    if ( idx.place == ELEMENT && idx.type == SCALAR ) return eptr->Read( idx );
+    if ( (idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE) && idx.type == SCALAR ) return eptr->Read( idx );
+    
     if ( idx.place != NODE or idx.type != SCALAR ) {
         std::cerr <<"\nFiniteElementPolicy<"<< dim;
         std::cerr <<">::PropertyValueAtIntegrationPoint: This method only interpolates ";
@@ -522,6 +521,7 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtIntegrationPoint( cons
     assert( fptr_ != nullptr );
     fptr_->N_AtIntegrationPoint( ip, fptr_->NRST );
 
+    double64  var(0.);
     const size_t  n_nodes(fptr_->Nodes());
     for ( size_t i=0U; i<n_nodes; i++ )
       var += fptr_->NRST[i] * eptr->N(i)->Read( idx );
