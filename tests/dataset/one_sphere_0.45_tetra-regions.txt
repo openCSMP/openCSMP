@@ -1,0 +1,9 @@
+'one_sphere_0.45_tetra-regions.txt' file, selects regions for Shell model
+no properties
+PORES
+LEFT
+RIGHT
+TOP
+FRONT
+BACK
+BOTTOM

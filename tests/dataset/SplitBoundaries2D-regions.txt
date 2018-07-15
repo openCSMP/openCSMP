@@ -1,0 +1,6 @@
+CSMP test model
+no properties
+MATRIX
+BOUNDARY1
+BOUNDARY2
+BOUNDARY3

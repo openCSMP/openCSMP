@@ -54,14 +54,14 @@ if(BUILD_TESTING)
 		ENABLE_TESTING()
         ADD_TEST(
         NAME csmptest
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
 	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe -r junit		
         )
     else()
         ADD_TEST(
 	    NAME csmptest
 	    COMMAND csmptest -r junit
-	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
     endif()
 

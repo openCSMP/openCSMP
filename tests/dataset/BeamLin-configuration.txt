@@ -1,0 +1,17 @@
+basic linel model config
+
+# assigning general material properties to the model
+Poisson's ratio					0.23
+Young's modulus					1.0e+9
+displacement					0.0	0.0
+force							0.0	0.0
+dilatation						0.0
+Neumann stress					0.0	0.0
+gravity force					0.0	0.0
+density							2.7e+3
+
+# property assignment to model subregions (complete, interior, boundary)
+
+# essential conditions on model boundaries
+LEFT		Dirichlet	displacement	0.	0.	0.	0.	Dirichlet	Dirichlet
+RIGHT		Dirichlet	force	5000.	0.	5000.	0.	Dirichlet	Dirichlet

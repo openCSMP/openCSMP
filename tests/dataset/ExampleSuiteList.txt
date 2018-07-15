@@ -1,0 +1,64 @@
+
+====================================
+
+CSMP Example Suite 'CSMP EXAMPLES'
+
+====================================
+
+===
+C++
+===
+
+  1.) Policy Based Interfaces (2)
+  2.) Curiously recurring template pattern (2)
+  3.) TDD - (1)
+
+=================
+Numerical Methods
+=================
+
+  1.) FVM passive advection of concentration in FEM velocity field (3)
+  2.) Dense Matrix Operations (1)
+  3.) Finite-difference time-stepping approaches (2)
+  4.) Error Metric (3)
+  5.) Linear System solution (1)
+
+================================
+Simulation of Physical Processes
+================================
+
+  1.) Steady-state fluid pressure computation (3)
+  2.) Transient pressure diffusion around a well (3)
+  3.) Parallel-plate-fracture permeability and fluid pressure distribution (3)
+  4.) Transient pressure diffusion in a rectangular domain (3)
+  5.) Linear Elasticity (3)
+  6.) Topography-driven flow (2)
+  7.) 1D vertical hydrostatic fluid-pressure profile taking into acount p,T-dependent H2O density (2)
+  8.) Streamfunction from velocity field. Function can be contoured to get streamlines (3)
+  9.) Stokes discrepancy measure (2)
+  10.) Stokes discrepancy measure quadratic (2)
+  11.) parallelPlatePermeabilityFromChannelWidth: fracture permeability, pressure and flow computed with quadratic FEM in 2D (2)
+  12.) Pressure diffusion through fracture network in low permeability brittle shale. (3)
+  13.) Tutorial 1: Transient fluid-pressure diffusion (3)
+  14.) Tutorial 2: Diffusion - advection (3)
+  15.) Tutorial 3: Incompressible 2-phase flow (3)
+  16.) Tutorial 4: Stokes lubrication equation (3)
+  17.) Geothermal circulation in box-shaped model (2)
+
+======================
+Software Functionality
+======================
+
+  1.) Basic Variable Operations (1)
+  2.) Operations involving csmp::Region objects (3)
+  3.) Permeability tensor calculations (1)
+  4.) StatisticalAnalyzer: creation of flow velocity histograms (2)
+  5.) Visitor (2)
+  6.) RhinoSurfaceReader: Input of triangulated surfaces from Rhinoceros (2)
+  7.) Properties associated with csmp::Region objects (2)
+  8.) BinaryFileInterface: CSMP's native file format. (2)
+  9.) How to templatize Index class to permit static polymorphic handling of variables (1)
+  10.) ANSYS_Model3D: loading mesh created by ANSY (1)
+  11.) Experimental_Example (1)
+  12.) Extrapolation & Averaging (2)
+  13.) EclipseMeshInterface_Example (1)

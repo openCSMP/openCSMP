@@ -1,0 +1,8 @@
+'pores-regions'
+no properties
+PORES
+GRAINS
+LEFT
+RIGHT
+TOP
+BOTTOM
