@@ -190,7 +190,7 @@ main()
   const bool verbose(false);
 
   const bool test_fundamentals(true),
-             test_interdependent1(false),
+             test_interdependent1(true),
              test_interdependent2(false),
              test_composite(false),
              test_refactoring(false),
