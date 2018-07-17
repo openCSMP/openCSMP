@@ -182,15 +182,14 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(StatisticalAnalyzer)
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
-
-
+ 
 int
 main()
 {
   const bool verbose(false);
 
   const bool test_fundamentals(true),
-             test_interdependent1(true),
+             test_interdependent1(false),
              test_interdependent2(false),
              test_composite(false),
              test_refactoring(false),

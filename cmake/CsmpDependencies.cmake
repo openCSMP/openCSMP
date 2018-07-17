@@ -5,7 +5,7 @@ if (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
     set(SAMG_FIND_QUIETLY TRUE)
 endif (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
 
-#find_package(PkgConfig)
+find_package(PkgConfig)
 
 set(SAMG_DEFINITIONS ${PC_SAMG_CFLAGS_OTHER})
 
@@ -24,6 +24,7 @@ foreach(I ${PLATFORM_EXTERNAL_LIBRARIES})
         PATHS ${PLATFORM_LIBS}
     )
     message(STATUS "Found library ${L}")
+	message(STATUS "libraries: ${SAMG_LIBRARIES}")
     list(APPEND SAMG_LIBRARIES "${L}")
 endforeach()
 
