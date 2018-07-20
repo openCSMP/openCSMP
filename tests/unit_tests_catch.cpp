@@ -184,7 +184,7 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
  }
  
 int
-main()
+main(int argc, char* argv[])
 {
   const bool verbose(false);
 
@@ -207,6 +207,12 @@ main()
     // Run Catch tests.
     {
         Catch::Session session;
+
+		//making the binary compatible with command line options
+		int returnCode = session.applyCommandLine(argc, argv);
+		if (returnCode != 0) // Indicates a command line error
+			return returnCode;
+
         session.run();
     }
 
