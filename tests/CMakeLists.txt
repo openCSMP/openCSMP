@@ -104,47 +104,47 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
     else()
 		ADD_TEST(
         NAME Auxiliaries		
-	    COMMAND cmptest [Auxiliaries] -r junit
+	    COMMAND csmptest [Auxiliaries] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME Variables		
-	    COMMAND cmptest [Variables] -r junit
+	    COMMAND csmptest [Variables] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME Variable		
-	    COMMAND cmptest [Variable] -r junit
+	    COMMAND csmptest [Variable] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME MathUtils		
-	    COMMAND cmptest [MathUtils] -r junit
+	    COMMAND csmptest [MathUtils] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME DataContainers		
-	    COMMAND cmptest [DataContainers] -r junit
+	    COMMAND csmptest [DataContainers] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME Model		
-	    COMMAND cmptest [Model] -r junit
+	    COMMAND csmptest [Model] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME IntegralMethods		
-	    COMMAND cmptest [IntegralMethods] -r junit
+	    COMMAND csmptest [IntegralMethods] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME Interfaces		
-	    COMMAND cmptest [Interfaces] -r junit
+	    COMMAND csmptest [Interfaces] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
 		ADD_TEST(
         NAME Analysis		
-	    COMMAND cmptest [[Analysis]] -r junit
+	    COMMAND csmptest [[Analysis]] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
     endif()
