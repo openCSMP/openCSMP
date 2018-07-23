@@ -98,7 +98,7 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
         )
 		ADD_TEST(
         NAME Analysis		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [[Analysis]] -r junit
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Analysis] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
     else()
@@ -144,7 +144,7 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
         )
 		ADD_TEST(
         NAME Analysis		
-	    COMMAND csmptest [[Analysis]] -r junit
+	    COMMAND csmptest [Analysis] -r junit
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
     endif()
