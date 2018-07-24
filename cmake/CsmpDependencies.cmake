@@ -5,7 +5,7 @@ if (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
     set(SAMG_FIND_QUIETLY TRUE)
 endif (SAMG_INCLUDE_DIR AND SAMG_LIBRARIES)
 
-find_package(PkgConfig)
+#find_package(PkgConfig)
 
 set(SAMG_DEFINITIONS ${PC_SAMG_CFLAGS_OTHER})
 
