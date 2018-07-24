@@ -7,7 +7,7 @@ set(CTEST_BINARY_DIRECTORY "${CMAKE_BINARY_DIR}")
 set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1000000)
 set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 1000000)
 
-set(to_xunit_xsl "${CMAKE_SOURCE_DIR}/tests/ctest2xunit.xsl")
+set(to_xunit_xsl "${CMAKE_SOURCE_DIR}/tests/ctest2junit.xsl")
 set(xunit_xml "${CMAKE_BINARY_DIR}/xunit.xml")
 
 include("${CMAKE_SOURCE_DIR}/cmake/CsmpTestResultTransform.cmake")
