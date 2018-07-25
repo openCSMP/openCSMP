@@ -188,7 +188,7 @@ main(int argc, char* argv[])
 {
   const bool verbose(false);
 
-  const bool test_fundamentals(true),
+  const bool test_fundamentals(false),
              test_interdependent1(false),
              test_interdependent2(false),
              test_composite(false),
