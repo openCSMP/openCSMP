@@ -16,7 +16,9 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
                                                  const char* target_region, 
                                                  FlowFunctions<dim>& flowfunctions, 
                                                  bool with_capillary_spreading, 
-                                                 bool with_gravity_forces)
+                                                 bool with_gravity_forces,
+                                                 double64 PEP_multiplier,
+                                                 double64 cfl_multiplier)
     : variables::Variables_TwoPhaseFlow(m.Database()),
       gref_(m.Region(target_region)),
       flowfunctions_(flowfunctions),
@@ -24,10 +26,14 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
       with_gravity_forces_(with_gravity_forces),
       upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
       T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
-      first_step_(true)
+      first_step_(true),
+      PEP_multiplier_(PEP_multiplier),
+      CFL_multiplier_(cfl_multiplier),
+      relaxing_factor_(10.)
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
+    calculatePermeabilityProjections(m.Region(target_region));
          
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
@@ -35,6 +41,71 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 } // end constructor  
 
 
+template<size_t dim>
+TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m, 
+                                                 const char* target_region, 
+                                                 FlowFunctions<dim>& flowfunctions, 
+                                                 bool with_capillary_spreading, 
+                                                 bool with_gravity_forces,
+                                                 double64 PEP_multiplier,
+                                                 double64 cfl_multiplier,
+                                                 double64 relaxing_factor)
+    : variables::Variables_TwoPhaseFlow(m.Database()),
+      gref_(m.Region(target_region)),
+      flowfunctions_(flowfunctions),
+      with_capillary_spreading_(with_capillary_spreading),
+      with_gravity_forces_(with_gravity_forces),
+      upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
+      T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
+      first_step_(true),
+      PEP_multiplier_(PEP_multiplier),
+      CFL_multiplier_(cfl_multiplier),
+      relaxing_factor_(relaxing_factor)
+{
+    m.InstantiateFiniteVolumes();
+    initializeVariablsAndKeys(m);
+    calculatePermeabilityProjections(m.Region(target_region));
+         
+    // retrieving the physically meaningful upper and lower solution limit from database
+    m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
+    cout<<"TwoPhaseDESTransport constructed"<<endl;
+} // end constructor 
+
+
+//Precalculates facet normal permeability and vertical permeability
+template<size_t dim>
+void TwoPhaseDESTransport<dim>::calculatePermeabilityProjections( Region<dim>& gref )
+{    
+    // Vertical vector points up in the y direction.
+    Point<dim> verticalVector(0.f);
+    if (dim > 1) {
+      verticalVector[1] = 1.f;
+    }
+
+    auto eend = gref.ElementsEnd();
+    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
+      auto e = (*eit)->AtBarycenter();
+      
+      TensorVariable<dim> K;
+      e.Read( this->key_k, K );
+      
+      if (dim > 1) {
+        double64 kV = (K * verticalVector).Length();
+        e.Store(this->key_kV, makeScalar(K.Flag(), kV));
+      }
+      else {
+        e.Store(this->key_kV, makeScalar(K.Flag(), K(0,0)));
+      }
+      
+      for (auto fip : (*eit)->AllFacetIntegrationPoints()) {
+        Point<dim> n = fip.FacetNormal();
+        double64 kfn = (K * n).Length();
+        fip.Store(this->key_kfn, makeScalar(K.Flag(), kfn));
+      }
+    }
+}
+
+  
 
 template<size_t dim>
 void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
@@ -46,7 +117,11 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
     if(!m.Database().IsDefined("rate count")) m.CreateProperty( "rate count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!m.Database().IsDefined("schedule count")) m.CreateProperty( "schedule count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!m.Database().IsDefined("synchronize count")) m.CreateProperty( "synchronize count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);  
-    if(!m.Database().IsDefined("nonwetting phase timing array")) m.CreateProperty( "nonwetting phase timing array", "none", ARRAY, NODE, 6, -1.00E+10 ,1.00E+10); 
+    if(!m.Database().IsDefined("nonwetting phase timing array")) m.CreateProperty( "nonwetting phase timing array", "none", ARRAY, NODE, 7, -1.00E+10 ,1.00E+10);
+    if(!m.Database().IsDefined("cfl multiplier")) m.CreateProperty( "cfl multiplier", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
+    if(!m.Database().IsDefined("shock saturation carbonic phase")) m.CreateProperty( "shock saturation carbonic phase", "none", SCALAR, NODE, 1, -5.00E-02 ,1.05E+00); 
+    if(!m.Database().IsDefined("shock saturation aqueous phase")) m.CreateProperty( "shock saturation aqueous phase", "none", SCALAR, NODE, 1, -5.00E-02 ,1.05E+00);     
+    if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, FACET_INTEGRATION_POINT, -1.00E+08 ,1.00E+08);     
     
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
@@ -60,6 +135,10 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
     key_schedule = INDEX<SCALAR,NODE>( m.Database().StorageKey("schedule count") );
     key_synchronize = INDEX<SCALAR,NODE>( m.Database().StorageKey("synchronize count") );
     key_time = INDEX<ARRAY,NODE>( m.Database().StorageKey("nonwetting phase timing array") );
+    key_CFL = INDEX<SCALAR,NODE>( m.Database().StorageKey("cfl multiplier") );
+    key_ssn = INDEX<SCALAR,NODE>( m.Database().StorageKey("shock saturation carbonic phase") );
+    key_ssw = INDEX<SCALAR,NODE>( m.Database().StorageKey("shock saturation aqueous phase") );
+    key_grad = INDEX<VECTOR,FACET_INTEGRATION_POINT>( m.Database().StorageKey("saturation gradient") );
     
     //checking keys 
     if ( key_dsnw.place != NODE || key_dsnw.type != SCALAR )
@@ -82,13 +161,30 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
         "The 'synchronize count' variable must be SCALAR and placed on NODE"  ); 
     if ( key_time.place != NODE || key_time.type != ARRAY )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'nonwetting phase timing array' variable must be ARRAY and placed on NODE"  );                
+        "The 'nonwetting phase timing array' variable must be ARRAY and placed on NODE"  );    
+    if ( key_CFL.place != NODE || key_CFL.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'cfl multiplier' variable must be SCALAR and placed on NODE"  );
+    if ( key_ssn.place != NODE || key_ssn.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'shock saturation carbonic phase' variable must be SCALAR and placed on NODE"  );
+    if ( key_ssw.place != NODE || key_ssw.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'shock saturation aqueous phase' variable must be SCALAR and placed on NODE"  );
+    if ( key_grad.place != FACET_INTEGRATION_POINT || key_grad.type != VECTOR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'saturation gradient' variable must be VECTOR and placed on FACET_INTEGRATION_POINT"  );                                               
 }
 
 
 template<size_t dim>
-void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
+void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Event<dim>* event)
 {
+
+    Node<dim>* nd = event->getNode();
+    assert( nd  != NULL );
+    assert( nd->Status(  this->key_sCO2 ) != DIRICH);
+
     double64 pore_volume  = 0.;
     for (auto sip : nd->AllSectorIntegrationPoints()) {
         const double64 sector_volume = sip.SectorVolume();
@@ -98,8 +194,56 @@ void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
         pore_volume += sector_volume * phi;
     }
     nd->Store( this->key_fvPV, makeScalar(PLAIN, pore_volume) );
+    
+    for (auto fip : nd->AllFacetIntegrationPoints()) {
+        double64 facetArea = fip.FacetArea();  
+        event->facetAreaCollection.push_back(facetArea);
+        Point<dim> facetNrml = fip.FacetNormal();
+        event->facetNormalCollection.push_back(facetNrml);
+    }     
           
 } // end initializeFiniteVolumeProperties
+
+
+
+
+//resest cfl multipliers to default value = CFL_multiplier_*relaxing_factor_ for all nodes
+template<size_t dim>
+void TwoPhaseDESTransport<dim>::ResetCFLMultiplier()
+{
+    const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+    for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+    { 
+        (*nit)->Store( key_CFL, makeScalar( (*nit)->Status( key_CFL), CFL_multiplier_*relaxing_factor_ ) ); //CFL multiplier 
+        ArrayVariable array;
+        (*nit)->Read(key_time, array);
+        array.Component(6, CFL_multiplier_*relaxing_factor_);
+        (*nit)->Store( key_time, array);
+    }
+} 
+
+
+
+//Compute non-wetting phase saturaiton gradient
+template<size_t dim>
+void TwoPhaseDESTransport<dim>::ComputeSaturationGradient (Event<dim>* event )
+{
+    Node<dim>* nd = event->getNode();
+    assert( nd  != NULL );
+    assert( nd->Status(  this->key_sCO2 ) != DIRICH);
+    
+    for (auto fip : nd->AllFacetIntegrationPoints()) {
+    
+        Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);     
+        
+        VectorVariable<dim> grad;
+        grad(0) = snw_gradient[0];
+        if ( dim != 1U ) grad(1) = snw_gradient[1];
+        if ( dim == 3U ) grad(2) = snw_gradient[2];        
+        
+        fip.Store(this->key_grad, grad);      
+    }
+}
 
 
 
@@ -115,32 +259,38 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
     nd->Store(  key_rate, makeScalar( nd->Status( key_rate), nd->Read( key_rate) + 1 ) );
 
     double64 accumulation(0.), flux_balance(0.), outflow(0.);
-    
+        
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> vD;
     
+    double64 cfl_multiplier = CFL_multiplier_*relaxing_factor_; //default value
+    size_t index = 0;
     for (auto fip : nd->AllFacetIntegrationPoints()) {
         const double64 sign = fip.FromInside() ? 1. : -1.;
         //compute facet flux
         fip.Obtain( this->key_vt, vD );
         double64 vD_n = fip.ProjectOntoFacetNormal(vD);  
-        double64 facetArea = fip.FacetArea();  
-        Point<dim> facetNrml = fip.FacetNormal();                       
+        double64 facetArea = event->facetAreaCollection[index];
+        Point<dim> facetNrml = event->facetNormalCollection[index];
+        index++;
+              
         const double64 facet_flux = sign * vD_n * facetArea;
         flux_balance += facet_flux;       
-        if ( facet_flux > 0. ) outflow += facet_flux ;    
-                          
+        if ( facet_flux > 0. ) outflow += facet_flux ; 
+        
         //compute mobilities on inside and outside nodes          
         auto inside_node = fip.InsideNode();
         auto outside_node = fip.OutsideNode(); 
        
         const double64 sn_inside_node = inside_node.Read( this->key_sCO2 );
-        const double64 ln_inside_node = flowfunctions_.Mobility(fip,1U,1.0-sn_inside_node); 
-        const double64 lw_inside_node = flowfunctions_.Mobility(fip,0U,1.0-sn_inside_node); 
+        const double64 sw_inside_node = 1.-sn_inside_node;
+        const double64 ln_inside_node = flowfunctions_.Mobility_at(fip,1U,1.0-sn_inside_node); 
+        const double64 lw_inside_node = flowfunctions_.Mobility_at(fip,0U,1.0-sn_inside_node); 
         
         const double64 sn_outside_node = outside_node.Read( this->key_sCO2 );
-        const double64 ln_outside_node = flowfunctions_.Mobility(fip,1U,1.0-sn_outside_node); 
-        const double64 lw_outside_node = flowfunctions_.Mobility(fip,0U,1.0-sn_outside_node);          
+        const double64 sw_outside_node = 1.-sn_outside_node;
+        const double64 ln_outside_node = flowfunctions_.Mobility_at(fip,1U,1.0-sn_outside_node); 
+        const double64 lw_outside_node = flowfunctions_.Mobility_at(fip,0U,1.0-sn_outside_node);          
          
         //compute velocities at facet integration point                      
         double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
@@ -151,9 +301,13 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
             vw_gravity_component_of_velocity = flowfunctions_.Mobility(fip, 1U) * flowfunctions_.GravityTerm(fip) * facetNrml[v];
         }         
             
-        if(with_capillary_spreading_){                
-            Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);
+        if(with_capillary_spreading_){  
+            VectorVariable<dim> grad;
+            fip.Read(this->key_grad, grad);
+            Point<dim> snw_gradient=grad.P();       
+            
             double64 dsdn = dotProduct(snw_gradient, facetNrml);
+            
             if(!isnan(dsdn)){
                 vn_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,0U);
                 vw_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,1U);
@@ -196,16 +350,48 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
             capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
         
         //update non-wetting flux accumulation                                           
-        accumulation += sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                              
+        accumulation += sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;   
+        
+        //determine cfl_multiplier based on non-wetting phase shock saturation
+        if (cfl_multiplier != CFL_multiplier_){
+            if(vn_at_facet_int_point < 0.0) { //flowing in from outside node (upstream node)
+                double64 sn_outside_shock = outside_node.Read(key_ssn); //sn at shock for outside node
+                if (sn_outside_node >= sn_outside_shock) { //upstream node passed shock saturation
+                    double64 sn_inside_shock = inside_node.Read(key_ssn); //sn at shock for inside node (current node)
+                    if (sn_inside_node < sn_inside_shock) {//current node not yet reach shock saturation   
+                        cfl_multiplier = CFL_multiplier_;
+                    }
+                }
+            }
+        }
+        
+        //determine cfl_multiplier based on wetting phase shock saturation
+        if (cfl_multiplier != CFL_multiplier_){
+            if(vw_at_facet_int_point < 0.0) { //flowing from outside node (upstream node)
+            //if(vD_n < 0.0) { //flowing from outside node (upstream node)
+                double64 sw_outside_shock = outside_node.Read(key_ssw); //sw at shock for outside node
+                if (sw_outside_node >= sw_outside_shock) { //upstream node passed shock saturation
+                    double64 sw_inside_shock = inside_node.Read(key_ssw); //sn at shock for inside node (current node)
+                    if (sw_inside_node < sw_inside_shock) {//current node not yet reach shock saturation   
+                        cfl_multiplier = CFL_multiplier_;
+                    }
+                }
+            }        
+        }
     } 
     
-    //compute CFL time increment 
     ArrayVariable array2;
     nd->Read(key_time, array2);
+   
+    //compute CFL time increment 
     if (outflow < numeric_limits<double64>::epsilon())
         array2.Component(2, numeric_limits<double64>::max());
     else 
         array2.Component(2, nd->Read(  this->key_fvPV ) / outflow);
+    
+    nd->Store( key_CFL, makeScalar( nd->Status( key_CFL ),cfl_multiplier ) );
+    array2.Component(6, cfl_multiplier);    
+        
     nd->Store(key_time, array2);
     
      
@@ -219,19 +405,21 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         fn_avg /= nd->Parents();  
         accumulation -= fn_avg*flux_balance;     
     }     
-
+    
     //compute and store variation rate    
     double64 PV = nd->Read(  this->key_fvPV );
-    nd->Store( key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );         
-        
+    nd->Store( key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );    
+    
 }  
 
 
 
 //schedule an event associated with a node/FV
 template<size_t dim>
-bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl_multiplier)
+bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end)
 {
+    //ComputeCFLMultipiler(event);
+
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
@@ -241,17 +429,17 @@ bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, doub
     nd->Store( key_schedule, makeScalar( nd->Status( key_schedule), nd->Read( key_schedule) + 1 ) );
     event->valid(true);
     //compute target change
-    double64 CFL = array[2];//CFL number
+    double64 dt_CFL = array[2];//CFL time increment
     double64 ChangeRate = nd->Read( key_dsnw);//rate of change
-  
-    double64 dC_CFL = -CFL*cfl_multiplier*ChangeRate;//targe change
+    double64 source = nd->Read(this->key_nQV);
+    double64 dC_CFL = dt_CFL*CFL_multiplier_*(-ChangeRate+source);//targe change
 
     if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
         array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
         array.Component(3, numeric_limits<double64>::max());//target time increment          
     } else {
         array.Component(5, dC_CFL);//target change of solution
-        array.Component(3, cfl_multiplier*CFL);//target time increment          
+        array.Component(3, dt_CFL*array[6]);//target time increment  
     };
 
     double64 t_current = array[0];//current time stamp
@@ -301,6 +489,7 @@ void TwoPhaseDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     array.Component(4, dsn_cumulative + (new_solution-solution));//update cumulative change
         
     array.Component(0, t_clock); //current time stamp
+    
     nd->Store(key_time, array);
 
     nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
@@ -367,13 +556,21 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
                     double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
                     double64 dC_target = neighbor_array[5];//target change of solution
                     if (fabs(dC_cumulative) >= fabs(dC_target)) {
+                        #if defined(_OPENMP )
+                        double64 t_begin = omp_get_wtime();
+                        #else
                         clock_t t_begin = clock();
+                        #endif
                         if (neighbor_event->inQueue()){
                             Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
                             EventHeap.remove(neighbor_heap_node);
                             neighbor_event->inQueue(false);
                         }
+                        #if defined(_OPENMP )
+                        t_remove += omp_get_wtime() - t_begin;
+                        #else
                         t_remove += clock() - t_begin; 
+                        #endif
                         Synchronize (neighbor_event, t_clock,t_remove); 
                     };
                 };
@@ -385,7 +582,7 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
 
 //advect variable with TDS (time-driven simulation)
 template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl_multiplication_factor, double64 PEP_parameter )
+void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval)
 {
     if(first_step_){
         //create events for all nodes and add them to PEPList
@@ -398,13 +595,14 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, doub
             (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
             (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
         
-            ArrayVariable arrayVariable( 6, 0., PLAIN );         
+            ArrayVariable arrayVariable( 7, 0., PLAIN );         
             (*nit)->Store( key_time, arrayVariable );  
                    
-            initializeFiniteVolumeProperties(*nit);
+            //initializeFiniteVolumeProperties(*nit);
             if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
                 Event<dim>* event = new Event<dim>(*nit);
                 event->valid(false);
+                initializeFiniteVolumeProperties(event);
                 PEPList.push_back(event);
                 event->inPEPStack(true);
             } else {
@@ -421,12 +619,13 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, doub
     clock_t T_begin= clock();
     const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
     for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )     
-    {    
+    {   
+        if (with_capillary_spreading_) ComputeSaturationGradient ((*it)); 
         ComputeRateofChange((*it));  
         ArrayVariable array;
         (*it)->getNode()->Read(key_time, array);
         double64 dt_CFL = array[2];//CFL time increment
-        time_increment=min(time_increment, dt_CFL*cfl_multiplication_factor);
+        time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
     }
     T_RateOfChange_ += clock() - T_begin; 
 
@@ -453,11 +652,12 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, doub
         double64 new_time_increment(time_interval); 
         for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
+            if (with_capillary_spreading_) ComputeSaturationGradient ((*it)); 
             ComputeRateofChange((*it));
             ArrayVariable array2;
             (*it)->getNode()->Read(key_time, array2);
             double64 dt_CFL = array2[2];//CFL time increment
-            new_time_increment=min(new_time_increment, dt_CFL*cfl_multiplication_factor);
+            new_time_increment=min(new_time_increment, dt_CFL*CFL_multiplier_);
         };
         T_RateOfChange_ += clock() - T_begin; 
 
@@ -480,10 +680,40 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval, doub
 }
 
 
-
 //advect variable with DES (discrete event simulation)
 template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64 cfl_multiplication_factor, double64 PEP_parameter )
+void TwoPhaseDESTransport<dim>::AdvectVariable_DES( double64 model_time, size_t num_threads )
+{
+#if defined(_OPENMP )
+    if (num_threads <= 0) {
+        cerr <<"WARNING: input number of threads is less than 1, reset to 1"<<endl;
+        num_threads = 1;
+        //AdvectVariable_DES_serial( model_time );
+        AdvectVariable_DES_openmp( model_time, num_threads); 
+    } 
+    else if (num_threads > omp_get_max_threads()) {
+        cerr <<"WARNING: input number of threads is larger than maximum available threads (" << omp_get_max_threads() << "), reset to "<< omp_get_max_threads() <<endl;
+        num_threads = omp_get_max_threads();
+        AdvectVariable_DES_openmp( model_time, num_threads); 
+    }  
+    else if (num_threads == 1) {
+        AdvectVariable_DES_serial( model_time );
+    } 
+    else {
+    AdvectVariable_DES_openmp( model_time, num_threads); 
+    }            
+#else
+    if (num_threads > 1)
+        cerr <<"WARNING: OpenMP is not available, using serial mode"<<endl;
+    AdvectVariable_DES_serial( model_time );
+#endif
+}
+
+
+
+//advect variable with DES (discrete event simulation), serial version
+template<size_t dim>
+void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
 {
     double64 begin=clock();
     cout<<"Start DESTransport<dim>::AdvectVariable_DES_serial "<<endl;
@@ -498,6 +728,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
     }
     */
 
+    ResetCFLMultiplier();
     if(first_step_){
         //create events for all nodes and add them to event lists
         size_t index = 0;
@@ -510,18 +741,27 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
             (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
             (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
         
-            ArrayVariable arrayVariable( 6, 0., PLAIN );         
+            ArrayVariable arrayVariable( 7, 0., PLAIN );         
             (*nit)->Store( key_time, arrayVariable );  
+            
+            auto np=(*nit)->AtNode();
+            //compute non-wetting phase saturation at shock
+            double64 sn_shock = flowfunctions_.ShockSaturation(np,1U,false);
+            (*nit)->Store( key_ssn, makeScalar( (*nit)->Status( key_ssn), sn_shock ) );
+            //compute wetting phase saturation at shock
+            double64 sw_shock = flowfunctions_.ShockSaturation(np,0U,false);
+            (*nit)->Store( key_ssw, makeScalar( (*nit)->Status( key_ssw), sw_shock ) );
                    
-            initializeFiniteVolumeProperties(*nit);
             if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
                 (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
                 Event<dim>* event = new Event<dim>(*nit);
                 event->valid(false);
                 PEPList.push_back(event);
                 event->inPEPStack(true);
+                initializeFiniteVolumeProperties(event);
+                if (with_capillary_spreading_) ComputeSaturationGradient (event );
                 ComputeRateofChange(event);
-                Schedule(event, model_time, cfl_multiplication_factor);
+                Schedule(event, model_time);
                 Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
                 HeapNodeFullList.push_back(heap_node);
                 FullList.push_back(event);
@@ -537,20 +777,20 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
         first_step_=false;
     }  
 
-    
     while (!Finished)
-    {    
+    {   
         clock_t T_begin;
         const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
         for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )       
         {   
             Event<dim>* event = *it;
             T_begin= clock();
+            if (with_capillary_spreading_) ComputeSaturationGradient (event );
             ComputeRateofChange((*it));    
             T_RateOfChange_ += clock() - T_begin;         
             if ((*it)->valid() == false) {
                 T_begin= clock();
-                bool isactive = Schedule(event, model_time, cfl_multiplication_factor);   
+                bool isactive = Schedule(event, model_time);   
                 T_Schedule_ += clock() - T_begin;              
                 if (isactive) {
                     T_begin= clock();
@@ -603,7 +843,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
             ArrayVariable array;
             top_event->getNode()->Read(key_time, array);
             double64 dt_target = array[3];//target time stamp
-            dt_PEP = min(dt_PEP, PEP_parameter*dt_target);
+            dt_PEP = min(dt_PEP, PEP_multiplier_*dt_target);
             double64 t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
             if (top_event->inPEPStack() == false) {
@@ -641,6 +881,209 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, 
     cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double64(CLOCKS_PER_SEC) << endl; 
     cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double64(CLOCKS_PER_SEC) << endl;
 }   
+
+
+
+#if defined(_OPENMP )
+//advect variable with DES (discrete event simulation), parallel version
+template<size_t dim>
+void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, size_t num_threads)
+{
+    double64 begin=omp_get_wtime();
+    cout<<"Start DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout << "Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
+    double64 time(0.);
+    bool Finished = false;
+    //uncomment for recording events at each time interval
+    /*
+    const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+    for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+    {     
+        (*nit)->Store(  this->count_key, makeScalar( (*nit)->Status( this->count_key), 0 ) );
+    }
+    */
+    
+    ResetCFLMultiplier();
+    if(first_step_){
+        //create events for all nodes and add them to event lists
+        size_t index = 0;
+        size_t dirich_count = 0;
+        const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+        for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+        { 
+            (*nit)->Store( key_update, makeScalar( (*nit)->Status( key_update), 0 ) ); //update count
+            (*nit)->Store( key_rate, makeScalar( (*nit)->Status( key_rate), 0 ) ); //changerate count
+            (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
+            (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
+        
+            ArrayVariable arrayVariable( 7, 0., PLAIN );         
+            (*nit)->Store( key_time, arrayVariable );  
+            
+            auto np=(*nit)->AtNode();
+            //compute non-wetting phase saturation at shock
+            double64 sn_shock = flowfunctions_.ShockSaturation(np,1U,false);
+            (*nit)->Store( key_ssn, makeScalar( (*nit)->Status( key_ssn), sn_shock ) );
+            //compute wetting phase saturation at shock
+            double64 sw_shock = flowfunctions_.ShockSaturation(np,0U,false);
+            (*nit)->Store( key_ssw, makeScalar( (*nit)->Status( key_ssw), sw_shock ) );
+                   
+            if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
+                (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
+                Event<dim>* event = new Event<dim>(*nit);
+                event->valid(false);
+                PEPList.push_back(event);
+                event->inPEPStack(true);
+                initializeFiniteVolumeProperties(event);
+                if (with_capillary_spreading_) ComputeSaturationGradient (event );
+                ComputeRateofChange(event);
+                Schedule(event, model_time);
+                Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
+                HeapNodeFullList.push_back(heap_node);
+                FullList.push_back(event);
+                event->inQueue(false);
+
+                index++;
+        
+            } else {
+                dirich_count++;
+            }
+        }
+        cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
+        first_step_=false;
+    }  
+
+    while (!Finished)
+    {   
+        double64 T_begin;
+        
+        T_begin = omp_get_wtime();
+                
+        size_t PEPList_size = PEPList.size();
+        
+        if (with_capillary_spreading_) {
+            for(size_t i = 0U; i < PEPList_size; ++i)
+            {
+                auto it = PEPList.begin()+i;
+                Event<dim>* event = *it;   
+                ComputeSaturationGradient (event );
+            }
+        }     
+        
+        std::vector<Event<dim>*> tempList;
+        #pragma omp parallel num_threads(num_threads)
+        {
+            std::vector<Event<dim>*> privateList;
+            
+            #pragma omp for schedule(dynamic)
+            for(size_t i = 0U; i < PEPList_size; ++i)
+            {
+                
+                auto it = PEPList.begin()+i;
+                Event<dim>* event = *it;                                
+                ComputeRateofChange((*it)); 
+                
+                if (event->valid() == false) 
+                    if (Schedule(event, model_time)) privateList.push_back(event);
+                event->inPEPStack(false); 
+            };
+            
+            #pragma omp critical
+            tempList.insert(tempList.end(), privateList.begin(), privateList.end());            
+        } 
+        
+        size_t tempList_size = tempList.size();
+        for(size_t i = 0U; i < tempList_size; ++i)
+        {
+            auto it = tempList.begin()+i;
+            Event<dim>* event = *it;                 
+            double64 scheduled_time = event->t_schedule();
+            size_t index = event->getNode()->Read(key_EventIndex);
+            Heap_Node* heap_node = new Heap_Node(scheduled_time,index);                    
+            EventHeap.insert(heap_node);
+            HeapNodeFullList[index] = heap_node;
+            event->inQueue(true);
+        }
+        tempList.clear();
+        
+        
+        T_RateOfChange_ += omp_get_wtime() - T_begin; 
+        cout <<"  PEPList size = " << PEPList.size() << "  Queue size = "<< EventHeap.size()<<endl;          
+
+            
+        if (EventHeap.empty()) time=model_time;
+        else time = EventHeap.minimum()->getK();
+        cout<<"  time = "<<time<<" model_time = "<<model_time<<endl;
+
+        if (time == model_time) {
+            Finished = true;
+            const typename vector<Event<dim>*>::iterator End(PEPList.end());
+            for ( typename vector<Event<dim>*>::iterator e=PEPList.begin(); e!=End; ++e )
+                (*e)->valid(false);
+            break;
+        };
+
+        PEPList.clear();
+    
+        double64 dt_PEP=numeric_limits<double64>::max();
+        size_t count = 0U;
+        while (!EventHeap.empty())
+        {           
+            Heap_Node* root_node = EventHeap.minimum();
+            size_t top_index = root_node->getV();
+            Event<dim>* top_event = FullList[top_index];
+            
+            if(top_event->valid() == false) {
+                T_begin= omp_get_wtime();
+                EventHeap.remove(root_node);
+                top_event->inQueue(false);
+                T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
+                continue;
+            }
+            
+            count++;            
+            ArrayVariable array;
+            top_event->getNode()->Read(key_time, array);
+            double64 dt_target = array[3];//target time stamp
+            dt_PEP = min(dt_PEP, PEP_multiplier_*dt_target);
+            double64 t_schedule = array[1];//scheduled time stamp
+            if (t_schedule > (time+dt_PEP)) break;            
+            if (top_event->inPEPStack() == false) {
+                PEPList.push_back(top_event);
+                top_event->inPEPStack(true);
+                T_begin= omp_get_wtime();
+                Update_DES(top_event,time);
+                T_Update_ += omp_get_wtime() - T_begin;                
+            };  
+            
+            T_begin= omp_get_wtime();
+            EventHeap.remove(root_node); 
+            top_event->inQueue(false);
+            T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
+            
+            T_begin= omp_get_wtime();
+            double64 t_remove(0.);    
+            Synchronize(top_event,time,t_remove);
+            T_RemoveFromHeap_ += t_remove;
+            T_Synchronize_ += omp_get_wtime() - T_begin - t_remove;
+        };
+            
+        cout<<"  iteration count = "<<count<<endl;
+    };
+    T_AdvectVariable_+= omp_get_wtime() - begin;
+
+    cout<<"Finish DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout <<"rate_count_ = "<<rate_count_<<endl;
+    cout <<"update_count_ = "<<update_count_<<endl; 
+    cout <<"T_Schedule_ = "<< T_Schedule_  << endl;
+    cout <<"T_Update_  = "<< T_Update_  << endl;
+    cout <<"T_Synchronize_ = "<< T_Synchronize_<< endl;
+    cout <<"T_RateOfChange_(including_T_Schedule_) = "<< T_RateOfChange_ << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ << endl; 
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;
+} 
+#endif
+
 
 
 template class TwoPhaseDESTransport<1U>;
