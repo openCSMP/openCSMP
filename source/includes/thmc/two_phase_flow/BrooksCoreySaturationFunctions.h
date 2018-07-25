@@ -25,7 +25,7 @@ class BrooksCoreySaturationFunctions {
     
     /// always of the wetting phase by convention (using prescribed sw)
     template<class TARGET_PLACEMENT>
-    double64  EffectiveSaturation( TARGET_PLACEMENT&, double64 ) const;    
+    double64  EffectiveSaturation_at( TARGET_PLACEMENT&, double64 ) const;    
 
     template<class TARGET_PLACEMENT>
     double64  SeffToSw( TARGET_PLACEMENT&, double64 seff ) const;
@@ -39,10 +39,10 @@ class BrooksCoreySaturationFunctions {
     
     /// relative permeabilities as a function of water saturation - parameters come from subclass FlowFunctions (using prescribed sw)
     template<class TARGET_PLACEMENT>
-    double64 krw( TARGET_PLACEMENT&, double64 ) const; 
+    double64 krw_at( TARGET_PLACEMENT&, double64 ) const; 
         
     template<class TARGET_PLACEMENT>
-    double64 krn( TARGET_PLACEMENT&, double64 ) const;    
+    double64 krn_at( TARGET_PLACEMENT&, double64 ) const;    
 
     /// derivatives of relative permeabilities
     template<class TARGET_PLACEMENT>
@@ -50,6 +50,12 @@ class BrooksCoreySaturationFunctions {
 
     template<class TARGET_PLACEMENT>
     double64 dkrwds( TARGET_PLACEMENT& ) const;
+    
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds_at( TARGET_PLACEMENT&, double64 ) const;    
+    
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds_at( TARGET_PLACEMENT&, double64 ) const;        
 
     /// capillary pressure
     template<class TARGET_PLACEMENT>
@@ -79,6 +85,12 @@ class BrooksCoreySaturationFunctions {
 
     template<class TARGET_PLACEMENT>
     double64 dkrnds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+    
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds_at_Numerical( TARGET_PLACEMENT&, double64 sw, double64 h = 0.001 ) const;
+
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds_at_Numerical( TARGET_PLACEMENT&, double64 sw, double64 h = 0.001 ) const;    
 
     template<class TARGET_PLACEMENT>
     double64 dpcds_Numerical(  TARGET_PLACEMENT&, double64 h = 0.00001 ) const;

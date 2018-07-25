@@ -45,7 +45,7 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSat
 
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( TARGET_PLACEMENT& p, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( TARGET_PLACEMENT& p, double64 sw ) const
  {
     // seff = (sw - swr) / (1 - swr - snr)
     double64 seff = (sw - p.Obtain(User()->key_srH2O)) /
@@ -54,9 +54,12 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( TARGET_P
     return std::min( std::max( seff, 0. ), 1. );
  }
 
-template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::EffectiveSaturation( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
-template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::EffectiveSaturation( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
-template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<1U,NODE>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<2U,NODE>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::EffectiveSaturation_at( FiniteVolumePlacement<3U,NODE>&, double64 sw ) const;
 
 
 
@@ -64,7 +67,7 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::SeffToSw( TARGET_PLACEMENT& p, double64 seff ) const
  {
-    return seff * (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) + p.Obtain(User()->key_srCO2);
+    return seff * (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) + p.Obtain(User()->key_srH2O);
  }
 
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::SeffToSw( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
@@ -107,19 +110,22 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw( FiniteE
 //Using prescribed sw value, instead of intepolated value.
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krw( TARGET_PLACEMENT& p, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( TARGET_PLACEMENT& p, double64 sw ) const
  { 
     //  switch to linear relperm model if lambda = 0
     if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
-      return EffectiveSaturation(p,sw);
+      return EffectiveSaturation_at(p,sw);
 
     // pm2 = lambda, the Brooks-Corey parameter
-    return std::pow( EffectiveSaturation(p,sw), 2. / p.Obtain(User()->key_bcp) + 3. );
+    return std::pow( EffectiveSaturation_at(p,sw), 2. / p.Obtain(User()->key_bcp) + 3. );
  }
 
-template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krw( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krw( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krw_at( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krw_at( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw_at( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krw_at( FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krw_at( FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krw_at( FiniteVolumePlacement<3U,NODE>&, double64 ) const;
 
 
 
@@ -156,19 +162,22 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn( FiniteE
 //Using prescribed sw value, instead of intepolated value.
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krn( TARGET_PLACEMENT& p, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( TARGET_PLACEMENT& p, double64 sw ) const
  { 
     //  switch to linear relperm model if lambda = 0
     if ( p.Obtain(User()->key_bcp) == static_cast<double64>(0.) )
-      return 1. - EffectiveSaturation(p,sw);
+      return 1. - EffectiveSaturation_at(p,sw);
 
-    const double64  seffn(1. - EffectiveSaturation(p,sw));
-    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(p,sw), 2./ p.Obtain(User()->key_bcp) + 1.) );
+    const double64  seffn(1. - EffectiveSaturation_at(p,sw));
+    return (seffn * seffn) * (1. - pow(  EffectiveSaturation_at(p,sw), 2./ p.Obtain(User()->key_bcp) + 1.) );
  }
 
-template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krn( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
-template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krn( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
-template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krn_at( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krn_at( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn_at( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::krn_at( FiniteVolumePlacement<1U,NODE>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::krn_at( FiniteVolumePlacement<2U,NODE>&, double64 sw ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::krn_at( FiniteVolumePlacement<3U,NODE>&, double64 sw ) const;
 
 
 
@@ -191,6 +200,29 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds( Fini
 
 
 
+//dkrwds at specific sw
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( TARGET_PLACEMENT& p, double64 sw ) const
+ {
+    const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
+    //  switch to linear relperm model if lambda = 0
+    if ( p.Obtain(User()->key_bcp) == 0. ) return seff_mult;
+
+    return ( 2./ p.Obtain(User()->key_bcp) + 3. ) *
+           std::pow( EffectiveSaturation_at(p,sw), 2./ p.Obtain(User()->key_bcp) + 2. ) * seff_mult;
+ }
+
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::dkrwds_at( FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::dkrwds_at( FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at( FiniteVolumePlacement<3U,NODE>&, double64 ) const;
+
+
+
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( TARGET_PLACEMENT& p ) const
@@ -210,6 +242,31 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( Fini
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+
+
+//dkrnds at specific sw
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( TARGET_PLACEMENT& p, double64 sw ) const
+ {
+    const double64 seff_mult( 1./ (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)) );
+
+    //  switch to linear relperm model if lambda = 0
+    if ( p.Obtain(User()->key_bcp) == 0. ) return -seff_mult;
+
+    const double64  seff(EffectiveSaturation_at(p,sw));
+    const double64  bcp(p.Obtain(User()->key_bcp));
+    return 2.*(seff - 1.) * (1. + pow(seff, 2./bcp) * ( 1./bcp + 1./2. - seff * (1./bcp + 3./2.))) * seff_mult;
+
+ }
+
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::dkrnds_at( FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::dkrnds_at( FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at( FiniteVolumePlacement<3U,NODE>&, double64 ) const;
 
 
 
@@ -448,6 +505,32 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_Numer
 
 
 
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at_Numerical( TARGET_PLACEMENT& p, double64 sw, double64 h ) const
+{
+   const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
+   const double64 seff(EffectiveSaturation_at(p,sw));
+   const double64 bcp(p.Obtain(User()->key_bcp));
+
+  if ( seff < 0.+h )
+    return ( kr_w(seff + h, bcp) - kr_w(seff, bcp) ) / h * dSedSw;
+  if ( seff > 1.-h )
+    return ( kr_w(seff,bcp) - kr_w(seff - h, bcp) ) / h * dSedSw;
+
+  return ( kr_w(seff+h,bcp) - kr_w( seff - h, bcp ) ) / (2. * h) * dSedSw;
+}
+
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at_Numerical( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at_Numerical( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::dkrwds_at_Numerical( FiniteVolumePlacement<1U,NODE>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::dkrwds_at_Numerical( FiniteVolumePlacement<2U,NODE>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrwds_at_Numerical( FiniteVolumePlacement<3U,NODE>&, double64, double64 ) const;
+
+
+
 double64 kr_n( double64 seff, double64 bcp ) {
      const double64  seffn(1. - seff);
      return (seffn * seffn) * (1. - pow(  seff, 2./ bcp + 1.) );
@@ -474,6 +557,31 @@ template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numer
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numerical( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
+
+
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at_Numerical( TARGET_PLACEMENT& p, double64 sw, double64 h ) const
+{
+   const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
+   const double64 seff(EffectiveSaturation_at(p,sw));
+   const double64 bcp(p.Obtain(User()->key_bcp));
+
+  if ( seff < 0.+h )
+    return ( kr_n( seff + h, bcp ) - kr_n( seff, bcp ) ) / h * dSedSw;
+  if ( seff > 1.-h )
+    return ( kr_n( seff, bcp ) - kr_n( seff - h, bcp ) ) / h * dSedSw;
+
+  return ( kr_n( seff+h, bcp ) - kr_n( seff-h, bcp ) )/ (2. * h) * dSedSw;
+}
+
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at_Numerical( FiniteElementPlacement<3U,ELEMENT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at_Numerical( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at_Numerical( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at_Numerical( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<1U,FlowFunctions>::dkrnds_at_Numerical( FiniteVolumePlacement<1U,NODE>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<2U,FlowFunctions>::dkrnds_at_Numerical( FiniteVolumePlacement<2U,NODE>&, double64, double64 ) const;
+template double64 BrooksCoreySaturationFunctions<3U,FlowFunctions>::dkrnds_at_Numerical( FiniteVolumePlacement<3U,NODE>&, double64, double64 ) const;
 
 
 
