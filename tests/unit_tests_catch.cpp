@@ -1,7 +1,7 @@
 // Disable wingdi.h because it steps on our toes
 #define NOGDI
 
-#define CATCH_CONFIG_RUNNER
+#define CATCH_CONFIG_MAIN 
 #include "catch.hpp"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -182,8 +182,22 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(StatisticalAnalyzer)
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
- 
-int
+
+#define SIMPLE_TEST_SECTION_NONSTANDARD(n)  SECTION(#n) { n##_Test test(false); test.run(); }
+#define SIMPLE_TEST_SECTION_FE(n,p,d) SECTION(#n) {n##_Test test(p, d, false); test.run(); }
+
+TEST_CASE("Finite-element functionality", "[FiniteElement]"){
+	SIMPLE_TEST_SECTION(FEM_Data)
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(1),"IsoparametricLinearTetrahedron1P.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(4),"IsoparametricLinearTetrahedron4P.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(3,3),"IsoparametricLinearTriangle3D3IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,3),"IsoparametricLinearTriangle3IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,4),"IsoparametricLinearTriangle4IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricQuadraticTriangle(2),"IsoparametricQuadraticTriangle.txt")
+	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricQuadraticTetrahedron)
+	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricLinearHexahedron)
+}
+/* int
 main(int argc, char* argv[])
 {
   const bool verbose(false);
@@ -375,3 +389,4 @@ main(int argc, char* argv[])
   return total_failures;
 }
 
+ */

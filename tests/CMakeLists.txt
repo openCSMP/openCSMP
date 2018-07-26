@@ -56,97 +56,27 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
     TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
 		ENABLE_TESTING()
-        ADD_TEST(
-        NAME Auxiliaries		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Auxiliaries] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
+		# execute_process(COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe --list-test-names-only > ${CMAKE_BINARY_DIR}/testList.txt)
+		file(STRINGS ${CMAKE_SOURCE_DIR}/tests/testList.txt TestList)
+		FOREACH(Test ${TestList})
+		message("Current Test: ${Test}")
 		ADD_TEST(
-        NAME Variables		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Variables] -r junit
+        NAME ${Test}
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [${Test}]
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
-		ADD_TEST(
-        NAME Variable		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Variable] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME MathUtils		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [MathUtils] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME DataContainers		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [DataContainers] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Model		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Model] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME IntegralMethods		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [IntegralMethods] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Interfaces		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Interfaces] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Analysis		
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [Analysis] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
+		ENDFOREACH()
     else()
+		# execute_process(COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe --list-test-names-only > ${CMAKE_BINARY_DIR}/testList.txt)
+		file(STRINGS ${CMAKE_SOURCE_DIR}/tests/testList.txt TestList)
+		FOREACH(Test ${TestList})
+		message("Current Test: ${Test}")
 		ADD_TEST(
-        NAME Auxiliaries		
-	    COMMAND csmptest [Auxiliaries] -r junit
+        NAME ${Test}
+	    COMMAND csmptest [${Test}]
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
-		ADD_TEST(
-        NAME Variables		
-	    COMMAND csmptest [Variables] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Variable		
-	    COMMAND csmptest [Variable] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME MathUtils		
-	    COMMAND csmptest [MathUtils] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME DataContainers		
-	    COMMAND csmptest [DataContainers] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Model		
-	    COMMAND csmptest [Model] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME IntegralMethods		
-	    COMMAND csmptest [IntegralMethods] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Interfaces		
-	    COMMAND csmptest [Interfaces] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
-		ADD_TEST(
-        NAME Analysis		
-	    COMMAND csmptest [Analysis] -r junit
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-        )
+		ENDFOREACH()
     endif()
 
   # ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
