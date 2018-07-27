@@ -1,5 +1,5 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-<xsl:output method="xml" indent="yes"/>
+<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
     <xsl:template match="/Site">
 	<xsl:variable name="Name"><xsl:value-of select="@Name"/></xsl:variable>
 	<xsl:variable name="Hostname"><xsl:value-of select="@Hostname"/></xsl:variable>
