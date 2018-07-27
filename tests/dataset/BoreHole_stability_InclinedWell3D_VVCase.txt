@@ -1,0 +1,32 @@
+name	MParameter	unit	index	min.	max.	place	usage	explanation	reference
+									
+gravity force		GF	N		2	-1.00E+15	1.00E+15	node	CSP variable	see documentation	CSP User's Guide
+Young's modulus		E	Pa-1		1	 0.00E+00	1.00E+15	element	CSP variable	see documentation	CSP User's Guide
+Poisson's ratio		NU	Pa-1		1	 0.00E+00	1.00E+06	element	CSP variable	see documentation	CSP User's Guide
+displacement		UV	m		2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+force				F	N		2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+strain			EPS	Pa m-2	3	-1.00E+03	1.00E+03	element integration point	CSP variable	see documentation	CSP User's Guide
+strain1			E1	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+strain2			E2	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+strain3			E3	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+dilatation			DI	X		1	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+stress			SI	Pa m-2	3	-1.00E+12	1.00E+12	element integration point	CSP variable	see documentation	CSP User's Guide
+sigma1			SI1	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+sigma2			SI2	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+sigma3			SI3	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-y			SY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-xy			SXY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-z			SY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-xz			SXY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-yz			SXY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+mean stress			SM	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+principal stress		SP	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+principal strain		EP	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+Neumann stress		SN	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-x	SX		Pa m-2		1	-1.00E+12	1.00E+12		node	CSP variable	see documentation	CSP User's Guide
+failure		F	Pa	1	-1.00E015	1.00E015	element integration point	CSP variable	see documentation	CSP User's Guide
+cohesion	C	Pa	1	0.	1.00E015	element integration point	CSP variable	see documentation	CSP User's Guide
+fluid pressure		PF	Pa		1	 0.00E+00	1.00E+10	node	CSP variable	see documentation	CSP User's Guide
+failure01		FF	Pa	1	0	1	element integration point	CSP variable	see documentation	CSP User's Guide
+stress node			SI	Pa m-2	3	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+strain node			EPS	Pa m-2	3	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide

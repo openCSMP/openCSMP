@@ -36,9 +36,12 @@ INCLUDE_DIRECTORIES(
 )
 
 if(CMAKE_HOST_WIN32)
-	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/bin/windows)
-	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/build/windows)
+	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/samg/windows)
 endif()
+
+FOREACH(SAMGLIB ${SAMG_LIBRARIES})
+	FILE(COPY "${SAMGLIB}" DESTINATION ${CMAKE_SOURCE_DIR}/tests/dataset)
+ENDFOREACH()
 
 FILE(GLOB TEST_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/unit/*.cpp
@@ -47,43 +50,54 @@ FILE(GLOB TEST_SOURCES
 
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
-if(BUILD_TESTING)
+
+ if(BUILD_TESTING)
     ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
     TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
 		ENABLE_TESTING()
-        ADD_TEST(
-        NAME csmptest
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe -r junit		
+		# execute_process(COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe --list-test-names-only > ${CMAKE_BINARY_DIR}/testList.txt)
+		file(STRINGS ${CMAKE_SOURCE_DIR}/tests/testList.txt TestList)
+		FOREACH(Test ${TestList})
+		message("Current Test: ${Test}")
+		ADD_TEST(
+        NAME ${Test}
+	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [${Test}]
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
+		ENDFOREACH()
     else()
-        ADD_TEST(
-	    NAME csmptest
-	    COMMAND csmptest -r junit
-	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
+		# execute_process(COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe --list-test-names-only > ${CMAKE_BINARY_DIR}/testList.txt)
+		file(STRINGS ${CMAKE_SOURCE_DIR}/tests/testList.txt TestList)
+		FOREACH(Test ${TestList})
+		message("Current Test: ${Test}")
+		ADD_TEST(
+        NAME ${Test}
+	    COMMAND csmptest [${Test}]
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
+		ENDFOREACH()
     endif()
 
-    ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
-    TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
-    if(CMAKE_HOST_WIN32)
-	ENABLE_TESTING()
-        ADD_TEST(
-        NAME csmptest_main
-		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
-	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
-        )
-    else()
-        ADD_TEST(
-	    NAME csmptest_main
-	    COMMAND csmptest_main
-	    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/data/fixtures
-        )
-    endif()
+  # ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
+  # TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+  # if(CMAKE_HOST_WIN32)
+	# ENABLE_TESTING()
+      # ADD_TEST(
+      # NAME csmptest_main		
+	    # COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
+		# WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+      # )
+  # else()
+      # ADD_TEST(
+	    # NAME csmptest_main
+	    # COMMAND csmptest_main
+	    # WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+      # )
+  # endif()
 
 endif(BUILD_TESTING)
 
-ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
-TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+#ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
+#TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
 

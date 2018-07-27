@@ -67,14 +67,16 @@ int main()
             examplesSuite.RegisterExample( new Tutorial2_Example() );
             examplesSuite.RegisterExample( new Tutorial3_Example() );
             examplesSuite.RegisterExample( new Tutorial4_Example() );
+            examplesSuite.RegisterExample( new Tutorial4_Example_Revisited() );
             examplesSuite.RegisterExample( new Geothermal_Example() );
             examplesSuite.RegisterExample( new LinearSolver_Example() );
             examplesSuite.RegisterExample( new EclipseMeshInterface_Example() );
             examplesSuite.RegisterExample( new DESAdvectionOfTracer2D_Example() );
             examplesSuite.RegisterExample( new DESAdvectionOfTracer3D_Example() );
             examplesSuite.RegisterExample( new DESTwoPhaseFlow2D_Example() );
+            examplesSuite.RegisterExample( new DESTwoPhaseFlow3D_Example() );
             examplesSuite.RegisterExample( new MelbourneTransportScheme_Example() );
-
+            examplesSuite.RegisterExample( new FiniteElementVariablePlacement_Example() );
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI

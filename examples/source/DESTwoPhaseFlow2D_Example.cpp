@@ -93,6 +93,7 @@ void DESTwoPhaseFlow2D_Example::Run()
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
     FlowFunctions<2U> flowfunctions(model.Database());
+    TwoPhaseDESTransport<2U> DEStransport(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -141,7 +142,7 @@ void DESTwoPhaseFlow2D_Example::Run()
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
     // -------------------------------------------------------------
-    TwoPhaseDESTransport<2U> DEStransport(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces);
+    //TwoPhaseDESTransport<2U> DEStransport(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces);
 
     model.InputPropertyValue( "nodal fluid volume source", makeScalar( PLAIN,0.0) ); // no FV sources/sinks
     model.InputPropertyValue( "diffusivity coefficient carbonic phase", makeScalar(PLAIN,1.0e-25) ); // very small value
@@ -167,8 +168,8 @@ void DESTwoPhaseFlow2D_Example::Run()
       {
          // compute advection of phases
          T_begin = clock();
-         if (DES) DEStransport.AdvectVariable_DES_serial( model_time+time_increment, Courant_multiplier, PEP_parameter); 
-         else DEStransport.AdvectVariable_TDS( time_increment, Courant_multiplier, PEP_parameter);
+         if (DES) DEStransport.AdvectVariable_DES( model_time+time_increment, 1 );
+         else DEStransport.AdvectVariable_TDS( time_increment );
          solving_time += clock() - T_begin;
          
          // increment time
@@ -195,6 +196,9 @@ void DESTwoPhaseFlow2D_Example::Run()
                   vtu.OutputDataToVTU( "DES_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "DES_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "DES_Update_count", "update count", "Model",  time );
+                  vtu.OutputDataToVTU( "DES_CFL_multiplier", "cfl multiplier", "Model",  time );
+                  vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
+                  vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation carbonic phase",    "Model", time );
@@ -228,7 +232,9 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
     // keys to properties
     static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
-    static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));    
+    static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));
+    csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
+    assert( k_key.type == TENSOR );  
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
@@ -248,7 +254,11 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
         //total mobility
         auto e = (*eit) -> AtBarycenter();
         double64 mob_t = flowfunctions.TotalMobility(e);
-        double64 k = flowfunctions.Permeability(e); 
+        
+        TensorVariable<2U> K;
+        e.Read( k_key, K );
+        double k = K.Trace() / 2.;
+
         mob_t *= k;  
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 

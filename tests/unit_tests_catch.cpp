@@ -1,7 +1,7 @@
 // Disable wingdi.h because it steps on our toes
 #define NOGDI
 
-#define CATCH_CONFIG_RUNNER
+#define CATCH_CONFIG_MAIN 
 #include "catch.hpp"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -101,6 +101,8 @@ using namespace csmp;
 
 #define SIMPLE_TEST_SECTION(n)  SECTION(#n) { n##_Test test; test.run(); }
 #define SIMPLE_TEST_SECTION_N(n,num)  SECTION(#n) { n##_Test##num test; test.run(); }
+#define SIMPLE_TEST_SECTION_NONSTANDARD(n)  SECTION(#n) { n##_Test test(false); test.run(); }
+#define SIMPLE_TEST_SECTION_FE(n,p,d) SECTION(#n) {n##_Test test(p, d, false); test.run(); }
 
 TEST_CASE("Auxiliary tests", "[Auxiliaries]") {
     SIMPLE_TEST_SECTION(GenericSingleton)
@@ -152,8 +154,8 @@ TEST_CASE("Model and model functionality tests", "[Model]") {
     SIMPLE_TEST_SECTION(Face)
     SIMPLE_TEST_SECTION(ModelSubDomain)
     SIMPLE_TEST_SECTION(Region)
-//    SIMPLE_TEST_SECTION(Boundary)
-//    SIMPLE_TEST_SECTION(SplitBoundary)
+    SIMPLE_TEST_SECTION(Boundary)
+    SIMPLE_TEST_SECTION(SplitBoundary)
     SIMPLE_TEST_SECTION(ANSYS_Model2D)
     SIMPLE_TEST_SECTION(ANSYS_Model3D)
     SIMPLE_TEST_SECTION(Box)
@@ -183,16 +185,26 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
 
-
-int
-main()
+TEST_CASE("Finite-element functionality", "[FiniteElement]"){
+	SIMPLE_TEST_SECTION(FEM_Data)
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(1),"IsoparametricLinearTetrahedron1P.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(4),"IsoparametricLinearTetrahedron4P.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(3,3),"IsoparametricLinearTriangle3D3IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,3),"IsoparametricLinearTriangle3IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,4),"IsoparametricLinearTriangle4IP.txt")
+	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricQuadraticTriangle(2),"IsoparametricQuadraticTriangle.txt")
+	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricQuadraticTetrahedron)
+	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricLinearHexahedron)
+}
+/* int
+main(int argc, char* argv[])
 {
   const bool verbose(false);
 
-  const bool test_fundamentals(true),
-             test_interdependent1(true),
-             test_interdependent2(true),
-             test_composite(true),
+  const bool test_fundamentals(false),
+             test_interdependent1(false),
+             test_interdependent2(false),
+             test_composite(false),
              test_refactoring(false),
              test_new_developments(false);
   
@@ -208,6 +220,12 @@ main()
     // Run Catch tests.
     {
         Catch::Session session;
+
+		//making the binary compatible with command line options
+		int returnCode = session.applyCommandLine(argc, argv);
+		if (returnCode != 0) // Indicates a command line error
+			return returnCode;
+
         session.run();
     }
 
@@ -370,3 +388,4 @@ main()
   return total_failures;
 }
 
+ */
