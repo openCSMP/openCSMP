@@ -1,0 +1,3 @@
+'mockModel-regions.txt' domain selection file
+porosity	concentration
+BASE		1.0e-13		0.2

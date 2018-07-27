@@ -82,9 +82,7 @@ void MelbourneTransportScheme_Example::Run()
  // 3. configuring the model
  // ------------------------------------------------------------
   InputDataManager<3U>  model_configuration;
-//  model_configuration.ConfigureFromFile( model3D, model_name.c_str(),
-//                                         false, true, true, true, false );
-
+  
   // the boolean variables determine which blocks in the input file shall be read
     ComputationalSettings  run_settings;
     model_configuration.ConfigureFromFile( model3D,

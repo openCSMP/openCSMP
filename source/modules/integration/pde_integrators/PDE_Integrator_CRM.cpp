@@ -12,6 +12,82 @@ using namespace std;
 
 namespace csmp {
 
+	/**
+	Accumulates element integrals,
+	simultaneously considering potential Boundary objects associated with the simplicial complex.
+	The domain is the computational domain to which the PDE_Integrator is applied.
+
+	@author SKM 7/7/2015
+	*/
+	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
+	void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::IntegrateOver(Model<dim>& model, INTEGRATION_DOMAIN<dim>& domain, bool debug)
+	{
+		// 1. configure algorithm
+		EstablishMatrixSetup(domain);
+
+		// 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
+		Accumulate(domain);
+
+		// 3. Accumulation: potential boundary integrals from Boundary objects that share nodes with the simplicial
+		//    complex of interest
+		list<string> shared_boundaries;
+		IdentifySharedBoundaries(model, domain, shared_boundaries);
+
+		if (!shared_boundaries.empty()) {
+			for (list<string>::const_iterator
+				it = shared_boundaries.begin(); it != shared_boundaries.end(); it++) {
+				const Boundary<dim>& domain_boundary = model.Boundary((*it).c_str());
+				cout << "\nPDE_Integrate_CRM<dim,SIMPLICIAL_COMPLEX>::IntegrateOver: ";
+				cout << " accumulating boundary: " << (*it) << "\n";
+				AccumulateBoundaryIntegrals(domain, domain_boundary);
+			}
+		}
+
+		// 4. If the computation is transient initial conditions must be input into the righthand vector
+		if (Transient() == true) AssignInitialConditions(domain);
+
+		// 5. If the computation is transient initial conditions must be input into the righthand vector
+		if (Transient() == true) {
+			LateAccumulate(domain);
+			if (!shared_boundaries.empty()) {
+				for (list<string>::const_iterator
+					it = shared_boundaries.begin(); it != shared_boundaries.end(); it++) {
+					const Boundary<dim>& domain_boundary = model.Boundary((*it).c_str());
+					LateAccumulateBoundaryIntegrals(domain, domain_boundary);
+				}
+			}
+		}
+
+		AssignEssentialConditions(domain);
+
+		// 5.1 Remove Dirichelet Condition from Matrix, Modify RHS and Convert data structure JV (in CRM G_) to ia, ja, a
+		// We need rh_ send a copy.
+		RH_ = rh_;
+		//cout << *max(rh_.begin(), rh_.end()) << endl << min(rh_.begin(), rh_.end()).operator[]; getchar();
+		G_.Set_Dirichelet_RHS_CRM(rh_, dirich_);
+		//cout << max(rh_.begin(), rh_.end()).operator[] << endl << rh_[min(rh_.begin(), rh_.end())]; getchar();
+		// 6. diagnostics
+		if (debug) {
+			OutputGlobals();
+			// OutputInput();
+		}
+
+		// 7. invert global matrix
+		x_.resize(rh_.size());
+		Solve();
+
+		//7.5 insert Dirichelet value in solution (map To Global)
+		G_.mapToGlobal(x_, dirich_);
+
+		rh_.swap(RH_);
+		// 8. write results back into Model
+		OutputResults(domain);
+
+		// 9. Calculation of result-dependent properties                                 
+		PostProcess(domain);
+	} // end IntegrateOver
+
+
 template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
 void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname ) {
   ofstream ofs(fname);
