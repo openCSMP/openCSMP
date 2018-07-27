@@ -38,8 +38,8 @@ aw_(aw),ao_(ao),cw_(cw),co_(co)
     
   }
   
-  template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>& ) ;
-  template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>& ) ;
+  //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>& ) ;
+  //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>& ) ;
 
   template<size_t dim, template<size_t> class USER>
   template<class TARGET_PLACEMENT>
@@ -57,8 +57,8 @@ aw_(aw),ao_(ao),cw_(cw),co_(co)
     
   }
     
-  template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>&, double64, double64,  double64, double64 ) ;
-  template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>&, double64, double64,  double64, double64 ) ;
+  //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>&, double64, double64,  double64, double64 ) ;
+  //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>&, double64, double64,  double64, double64 ) ;
     
     
     
@@ -78,8 +78,8 @@ aw_(aw),ao_(ao),cw_(cw),co_(co)
         
     }
     
-    template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>&, double64 a[2][2] , double64 c[2][2], process ProcessPath) ;
-    template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>&, double64 a[2][2], double64 c[2][2], process ProcessPath) ;
+    //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteElementPlacement<1U,ELEMENT>&, double64 a[2][2] , double64 c[2][2], process ProcessPath) ;
+    //template void FlowFunctionsDraft2<1U>::InitialiseBrooksCoreyParameters( FiniteVolumePlacement<1U,NODE>&, double64 a[2][2], double64 c[2][2], process ProcessPath) ;
     
     
     template<size_t dim, template<size_t> class USER>
@@ -93,8 +93,8 @@ aw_(aw),ao_(ao),cw_(cw),co_(co)
         return std::min( std::max( seff, 0. ), 1. );
     }
     
-    template double64 FlowFunctionsDraft2<1U>::EffectiveSaturation( FiniteElementPlacement<1U,ELEMENT>& ) const ;
-    template double64 FlowFunctionsDraft2<1U>::EffectiveSaturation( FiniteVolumePlacement<1U,NODE>& ) const ;
+    //template double64 FlowFunctionsDraft2<1U>::EffectiveSaturation( FiniteElementPlacement<1U,ELEMENT>& ) const ;
+    //template double64 FlowFunctionsDraft2<1U>::EffectiveSaturation( FiniteVolumePlacement<1U,NODE>& ) const ;
 
 
 // 4) Brooks & Corey capillary pressure formula

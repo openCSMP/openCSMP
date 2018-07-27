@@ -98,6 +98,9 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
 endif(BUILD_TESTING)
 
-#ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
-#TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
+TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+
+ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
+TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
 
