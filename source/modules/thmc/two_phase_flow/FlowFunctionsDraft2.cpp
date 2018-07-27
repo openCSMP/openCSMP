@@ -1,4 +1,5 @@
 #include "FlowFunctionsDraft2.h"
+#include "Fluid.h"
 #include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
 #include "FiniteElementPlacement.h"
@@ -15,7 +16,6 @@ FlowFunctionsDraft2<dim>::FlowFunctionsDraft2( const PropertyDatabase<dim>& db)
 {
 }
 
-
 /**
     Mobility of phase i, kri(sw) / mu_i.
 */
@@ -30,23 +30,38 @@ double64 FlowFunctionsDraft2<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase )
    
     return this->krn(p) / this->Viscosity( p, 1U );
  }
+  
+template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
 
+/*
 template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+  
 template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
 template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,NODE>&, size_t ) const;
 template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,NODE>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,NODE>&, size_t ) const;
 
+template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-
+*/
 /**
     Mobility of phase i, kri(sw) / mu_i.
     Using prescribed sw value, instead of intepolated value.
@@ -62,11 +77,38 @@ double64 FlowFunctionsDraft2<dim>::Mobility( TARGET_PLACEMENT& p, size_t phase, 
    
     return this->krn(p,sw) / this->Viscosity( p, 1U );
  }
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
 
-template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
-template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
-template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
-
+/*
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteVolumePlacement<1U,NODE>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteVolumePlacement<2U,NODE>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteVolumePlacement<3U,NODE>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::Mobility( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::Mobility( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::Mobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  */
 /**
   Mobility saturation derivative for phase i.
 */
@@ -81,12 +123,25 @@ double64 FlowFunctionsDraft2<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size
     
     return this->dkrnds(p) / this->Viscosity( p, 1U );
   }
-    
+  
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+
+  /*
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-    
+  */
 
 /**
     Mobility saturation derivative for phase i.
@@ -102,12 +157,25 @@ double64 FlowFunctionsDraft2<dim>::MobilityDerivative( TARGET_PLACEMENT& p, size
    
      return this->dkrnds(p,sw) / this->Viscosity( p, 1U );
  }
- 
+  
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+
+ /*
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64) const;
+template double64 FlowFunctionsDraft2<1U>::MobilityDerivative( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64) const;
+
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64) const;
+template double64 FlowFunctionsDraft2<2U>::MobilityDerivative( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64) const;
+  
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64) const;
 template double64 FlowFunctionsDraft2<3U>::MobilityDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64) const;
-
+*/
 
 
 
@@ -122,19 +190,36 @@ double64 FlowFunctionsDraft2<dim>::TotalMobility( TARGET_PLACEMENT& p ) const
          + this->krw(p) / this->Viscosity( p, 0U );
  }
 
+
+template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,ELEMENT>& ) const;
+  
+/*
 template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+  
 template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
+template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT>& ) const;
+  
+  
+template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
+  
+template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+*/
 
 
 /**
@@ -148,12 +233,33 @@ double64 FlowFunctionsDraft2<dim>::TotalMobility( TARGET_PLACEMENT& p, double64 
     return this->krn(p,sw) / this->Viscosity( p, 1U )
          + this->krw(p,sw) / this->Viscosity( p, 0U );
  }
- 
-template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
-template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
-template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
-
-
+ /*
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,ELEMENT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,ELEMENT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT>& , double64 ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& , double64 ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& , double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::TotalMobility( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::TotalMobility( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::TotalMobility( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& , double64 ) const;
+*/
 
 /**
     G - parameter known as mobility product, lambda overbar.
@@ -168,16 +274,36 @@ double64 FlowFunctionsDraft2<dim>::MobilityProduct( TARGET_PLACEMENT& p ) const
     //assert( key_k.type == SCALAR );
     return Mobility(p,0U) * Mobility(p,1U) / TotalMobility(p);
  }
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteElementPlacement<1U,ELEMENT>& ) const;
 
-template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-
-template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
-
+/*
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteElementPlacement<1U,ELEMENT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteElementPlacement<2U,ELEMENT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT>& ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProduct( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProduct( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProduct( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+*/
 
 
 /** 
@@ -203,12 +329,36 @@ double64 FlowFunctionsDraft2<dim>::MobilityProductDerivative( TARGET_PLACEMENT& 
 
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
  }
+  
+template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT>& ) const;
 
-template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
-
+/*
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,ELEMENT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT>& ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+*/
   /**
    Saturation derivative of mobility product.
    */
@@ -233,12 +383,35 @@ template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElem
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
   }
   
-  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
-  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
-  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
-  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
 
+  /*
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+  
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::MobilityProductDerivative( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::MobilityProductDerivative( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::MobilityProductDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+*/
 /*
    Permeability helper
 */
@@ -280,10 +453,11 @@ double64 FlowFunctionsDraft2<dim>::Permeability( TARGET_PLACEMENT& p ) const
     return k;
 }
 
+  /*
 template double64 FlowFunctionsDraft2<1U>::Permeability( FiniteElementPlacement<1U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::Permeability( FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::Permeability( FiniteElementPlacement<3U,ELEMENT>& ) const;
-
+*/
 
 
 /**
@@ -300,17 +474,32 @@ double64 FlowFunctionsDraft2<dim>::f( TARGET_PLACEMENT& p, size_t phase ) const
    
     return Mobility( p, phase ) / TotalMobility(p);
  }
+  
+template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
+
+  /*
 template double64 FlowFunctionsDraft2<1U>::f( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<2U>::f( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::f( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
 template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
- 
+*/
 
 /**
  
@@ -326,12 +515,33 @@ double64 FlowFunctionsDraft2<dim>::f( TARGET_PLACEMENT& p, size_t phase, double6
    
     return Mobility( p, phase, sw) / TotalMobility(p, sw);
  }
+  
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 
-template double64 FlowFunctionsDraft2<1U>::f( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
-template double64 FlowFunctionsDraft2<2U>::f( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
-template double64 FlowFunctionsDraft2<3U>::f( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
 
-
+  /*
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64  ) const;
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<1U>::f( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<2U>::f( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+  template double64 FlowFunctionsDraft2<3U>::f( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+*/
 
 /**
     Derivative of fractional flow function (advection multipliers).
@@ -354,11 +564,28 @@ double64 FlowFunctionsDraft2<dim>::dfds( TARGET_PLACEMENT& p, size_t phase ) con
 
     return ( dlwds*ln - dlnds*lw ) / lt2;
  }
+  
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+
+/*
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+ 
+ */
 
 template<size_t dim>
 template<class TARGET_PLACEMENT>
@@ -377,11 +604,28 @@ double64 FlowFunctionsDraft2<dim>::dfds( TARGET_PLACEMENT& p, size_t phase, doub
     return ( dlwds*ln - dlnds*lw ) / lt2;
 }
   
+  
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+
+  
+  /*
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<1U>::dfds( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsDraft2<2U>::dfds( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
 template double64 FlowFunctionsDraft2<3U>::dfds( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
-  
+  */
 
 /*
  @attension: Generally "MaxFractionalFlowDerivative" is not speed. It is after Buckley-Leverett problem
@@ -393,13 +637,31 @@ double64 FlowFunctionsDraft2<dim>::MaxFractionalFlowDerivative( TARGET_PLACEMENT
  {
    double64 S ;
    S = this->InflectionPointSaturation(p) ;   // This is correct maximum fractional flow derivative of water phase.
+   
+   
    return dfds(p, 0U, S);
  }
+  
+template double64 FlowFunctionsDraft2<1U>::MaxFractionalFlowDerivative( FiniteElementPlacement<1U,ELEMENT>& ) const;
+  
+/*
+template double64 FlowFunctionsDraft2<1U>::MaxFractionalFlowDerivative( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::MaxFractionalFlowDerivative( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::MaxFractionalFlowDerivative( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::MaxFractionalFlowDerivative( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+
+
+template double64 FlowFunctionsDraft2<2U>::MaxFractionalFlowDerivative( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::MaxFractionalFlowDerivative( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::MaxFractionalFlowDerivative( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::MaxFractionalFlowDerivative( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 
 template double64 FlowFunctionsDraft2<3U>::MaxFractionalFlowDerivative( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::MaxFractionalFlowDerivative( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::MaxFractionalFlowDerivative( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::MaxFractionalFlowDerivative( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  */
 
 // shock speed base on Buckley Leverett theory
 template<size_t dim>
@@ -409,7 +671,7 @@ double64 FlowFunctionsDraft2<dim>::ShockSpeed( TARGET_PLACEMENT& p ) const
   return this->ShockFrontVelocity(p) ;
  }
 
-template double64 FlowFunctionsDraft2<3U>::ShockSpeed( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::ShockSpeed( FiniteElementPlacement<1U,ELEMENT>& ) const;
 
 
 
@@ -420,7 +682,7 @@ double64 FlowFunctionsDraft2<dim>::ShockHeight( TARGET_PLACEMENT& p ) const
     return this->TangentPointSaturation(p);
  }
 
-template double64 FlowFunctionsDraft2<3U>::ShockHeight( FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::ShockHeight( FiniteElementPlacement<1U,ELEMENT>& ) const;
 
 
 /**
@@ -436,12 +698,24 @@ double64 FlowFunctionsDraft2<dim>::AdvectionMultiplier( TARGET_PLACEMENT& p ) co
  {
     return dfds(p,0U);
  }
+  
+/*
+template double64 FlowFunctionsDraft2<1U>::AdvectionMultiplier( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::AdvectionMultiplier( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::AdvectionMultiplier( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::AdvectionMultiplier( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
 
+template double64 FlowFunctionsDraft2<2U>::AdvectionMultiplier( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::AdvectionMultiplier( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::AdvectionMultiplier( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::AdvectionMultiplier( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::AdvectionMultiplier( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::AdvectionMultiplier( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::AdvectionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::AdvectionMultiplier( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
-
+  */
+  
 
 
 /** 
@@ -463,16 +737,27 @@ double64 FlowFunctionsDraft2<dim>::GravityTerm( TARGET_PLACEMENT& p ) const
    return k_g_drho;
 }
 
+  /*
 template double64 FlowFunctionsDraft2<1U>::GravityTerm( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::GravityTerm( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityTerm( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<1U>::GravityTerm( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityTerm( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityTerm( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityTerm( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<2U>::GravityTerm( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityTerm( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityTerm( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityTerm( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
 
 template double64 FlowFunctionsDraft2<3U>::GravityTerm( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityTerm( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityTerm( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityTerm( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
-
+*/
 
 /**
     See Sebastian Geiger's thesis (2004), closed form, i.e.
@@ -486,16 +771,27 @@ double64 FlowFunctionsDraft2<dim>::GravityMultiplier_G( TARGET_PLACEMENT& p ) co
    return GravityTerm(p) * MobilityProduct(p);
 }
 
+  /*
 template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_G( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_G( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_G( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_G( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_G( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_G( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_G( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_G( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_G( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_G( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_G( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_G( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
-
-
+  */
+  
  
 /**
     Computes multiplier for advection gravity coefficient. The divergence
@@ -509,12 +805,23 @@ double64 FlowFunctionsDraft2<dim>::GravityMultiplier_dGds( TARGET_PLACEMENT& p )
    return GravityTerm(p) * MobilityProductDerivative(p);
 }
 
+  /*
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_dGds( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_dGds( FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_dGds( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::GravityMultiplier_dGds( FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_dGds( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_dGds( FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_dGds( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::GravityMultiplier_dGds( FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_dGds( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_dGds( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_dGds( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::GravityMultiplier_dGds( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
-
-
+  
+*/
 
 /**
     Returns the diffusion coefficient for the phase of interest. If not
@@ -530,9 +837,14 @@ double64 FlowFunctionsDraft2<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, siz
     return p.Obtain(key_kfn) / ( (phase==1U) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
 } 
 
+  /*
+template double64 FlowFunctionsDraft2<1U>::DiffusionMultiplier( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::DiffusionMultiplier( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::DiffusionMultiplier( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::DiffusionMultiplier( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-
+*/
 
 
 /**
@@ -547,14 +859,20 @@ double64 FlowFunctionsDraft2<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMEN
    return p.Obtain(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
 } 
 
+  /*
 template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
+template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+
+template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>& ) const;
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
-
-
+*/
 
 template<size_t dim>
 template<class TARGET_PLACEMENT>
@@ -566,13 +884,21 @@ double64 FlowFunctionsDraft2<dim>::CapillaryDiffusionMultiplier_Phase( TARGET_PL
     return p.Obtain(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
 } 
 
+  /*
 template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ,size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 
+template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<1U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsDraft2<2U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+  
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 template double64 FlowFunctionsDraft2<3U>::CapillaryDiffusionMultiplier_Phase( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-
+  */
+  
 
 
 // linearized diffusion multiplier for large-timestep calculations
