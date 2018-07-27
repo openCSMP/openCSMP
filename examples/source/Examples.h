@@ -42,14 +42,16 @@
 #include "Tutorial2_Example.h"
 #include "Tutorial3_Example.h"
 #include "Tutorial4_Example.h"
+#include "Tutorial4_Example_Revisited.h"
 #include "Geothermal_Example.h"
 #include "LinearSolver_Example.h"
 #include "EclipseMeshInterface_Example.h"
 #include "DESAdvectionOfTracer2D_Example.h"
 #include "DESAdvectionOfTracer3D_Example.h"
 #include "DESTwoPhaseFlow2D_Example.h"
+#include "MelbourneTransportScheme_Example.h" // Andrew's first implementation of the new transport scheme
 #include "DESTwoPhaseFlow3D_Example.h"
-#include "MelbourneTransportScheme_Example.h"
 #include "Variables_Example.h"
+#include "FiniteElementVariablePlacement_Example.h"
 
 #endif

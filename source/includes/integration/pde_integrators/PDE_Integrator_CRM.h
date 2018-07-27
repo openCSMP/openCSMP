@@ -297,7 +297,8 @@ template<size_t dim, template<size_t> class INTEGRATION_DOMAIN> class PDE_Integr
 		bool          Transient() const;
 
     /// for a particular subregion of the model
-		void          IntegrateOver(INTEGRATION_DOMAIN<dim>&, bool debug = false);
+		void    IntegrateOver(INTEGRATION_DOMAIN<dim>&, bool debug = false);
+		void	IntegrateOver(Model<dim>& model, INTEGRATION_DOMAIN<dim>& domain, bool debug = false);
 
 		bool	        IdentifySharedBoundaries(const Model<dim>& model, const INTEGRATION_DOMAIN<dim>& subdomain, std::list<std::string>& shared_boundaries);
 
