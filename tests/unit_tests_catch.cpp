@@ -101,6 +101,8 @@ using namespace csmp;
 
 #define SIMPLE_TEST_SECTION(n)  SECTION(#n) { n##_Test test; test.run(); }
 #define SIMPLE_TEST_SECTION_N(n,num)  SECTION(#n) { n##_Test##num test; test.run(); }
+#define SIMPLE_TEST_SECTION_NONSTANDARD(n)  SECTION(#n) { n##_Test test(false); test.run(); }
+#define SIMPLE_TEST_SECTION_FE(n,p,d) SECTION(#n) {n##_Test test(p, d, false); test.run(); }
 
 TEST_CASE("Auxiliary tests", "[Auxiliaries]") {
     SIMPLE_TEST_SECTION(GenericSingleton)
@@ -152,8 +154,8 @@ TEST_CASE("Model and model functionality tests", "[Model]") {
     SIMPLE_TEST_SECTION(Face)
     SIMPLE_TEST_SECTION(ModelSubDomain)
     SIMPLE_TEST_SECTION(Region)
-//    SIMPLE_TEST_SECTION(Boundary)
-//    SIMPLE_TEST_SECTION(SplitBoundary)
+    SIMPLE_TEST_SECTION(Boundary)
+    SIMPLE_TEST_SECTION(SplitBoundary)
     SIMPLE_TEST_SECTION(ANSYS_Model2D)
     SIMPLE_TEST_SECTION(ANSYS_Model3D)
     SIMPLE_TEST_SECTION(Box)
@@ -182,9 +184,6 @@ TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
     SIMPLE_TEST_SECTION(StatisticalAnalyzer)
     SIMPLE_TEST_SECTION(RegionMonitor)
  }
-
-#define SIMPLE_TEST_SECTION_NONSTANDARD(n)  SECTION(#n) { n##_Test test(false); test.run(); }
-#define SIMPLE_TEST_SECTION_FE(n,p,d) SECTION(#n) {n##_Test test(p, d, false); test.run(); }
 
 TEST_CASE("Finite-element functionality", "[FiniteElement]"){
 	SIMPLE_TEST_SECTION(FEM_Data)
