@@ -71,6 +71,29 @@ void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model
 
 
 
+/**
+    Integrating current values of the target variables over the entire model domain.
+    Using TwoPhaseDESTransport.
+*/
+template<size_t dim>
+void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model<dim>& sg, 
+                                                                     const TwoPhaseDESTransport<dim>& fvt,
+                                                                     bool consider_porosity,
+                                                                     bool normalize_by_initial_integral,
+                                                                     bool write_output )
+ {
+    double64& model_time( ModelTime::Instance().modelTime );
+    
+    // 0. integrating the property
+    double64 integratedPropertyValue = fvt.VolumeIntegrateScalarFiniteVolumeVariable( sg, output_variable.c_str(), consider_porosity );
+    assert( !isnan( integratedPropertyValue) );
+    integrals.push_back( make_pair( model_time, integratedPropertyValue ) );
+
+    // 1. simple case: property is integrated and output for the entire model
+    if ( write_output ) SaveToFile( sg, normalize_by_initial_integral );
+
+ } // end MonitorNodePropertyIntegrals
+
 
 
 /// updates the values one more time and then writes output to file specified in constructor

@@ -39,6 +39,7 @@ class TwoPhaseDESTransport : public variables::Variables_TwoPhaseFlow {
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);    
                            
+    double64 VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>& sg, const char* property, bool take_porosity_into_account ) const;  
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );
     void AdvectVariable_DES_openmp ( double64 model_time, size_t num_threads );
@@ -49,7 +50,7 @@ class TwoPhaseDESTransport : public variables::Variables_TwoPhaseFlow {
 
   private:
     void initializeVariablsAndKeys(Model<dim>& m);
-    void calculatePermeabilityProjections( Region<dim>& gref );    
+    void calculatePermeabilityProjections( Region<dim>& gref );       
     void initializeFiniteVolumeProperties(Event<dim>* event);
     void ResetCFLMultiplier();
     void ComputeSaturationGradient (Event<dim>* event );

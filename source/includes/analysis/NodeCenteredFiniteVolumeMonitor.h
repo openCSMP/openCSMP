@@ -2,6 +2,7 @@
 #define NODE_CENTERED_FINITE_VOLUME_MONITOR_H
 
 #include "NodeCenteredFiniteVolumeTransport.h"
+#include "TwoPhaseDESTransport.h"
 
 namespace csmp {
 
@@ -22,6 +23,12 @@ class NodeCenteredFiniteVolumeMonitor {
                                    bool consider_porosity,
                                    bool normalize_by_initial_integral, 
                                    bool write_output );
+                                   
+    void MonitorPropertyIntegrals( const Model<dim>&, 
+                                   const TwoPhaseDESTransport<dim>&,
+                                   bool consider_porosity,
+                                   bool normalize_by_initial_integral, 
+                                   bool write_output );                                   
   
     /// file output of variable values monitored up to current point of time and without normalization
     void Out( const Model<dim>&, bool normalize_values=false ) const;

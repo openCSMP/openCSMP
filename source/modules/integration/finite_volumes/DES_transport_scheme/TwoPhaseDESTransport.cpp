@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
-#if defined(_OPENMP )
+#if defined(_OPENMP)
 #include "omp.h"
 #endif
 
@@ -175,6 +175,76 @@ void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
         "The 'saturation gradient' variable must be VECTOR and placed on FACET_INTEGRATION_POINT"  );                                               
 }
+
+
+
+/**  VolumeIntegrateScalarFiniteVolumeVariable
+
+To integrate node variables over the entire simulation model using the finite volume framework.
+
+@section arguments Input Arguments
+
+The current model (Region), and the name of the variable of interest
+as specified in the property database.
+
+@return The method returns the volume integral of the variable in the model.
+
+@section application Application
+
+This method will not integrate element variables. The obvious choice
+for their volume integration is the finite element method.
+*/
+template<size_t dim>
+double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>& sg,
+                                                                                const char* property,
+                                                                                bool take_porosity_into_account ) const
+{
+    //csmp::Index  prop_key = sg.Database().StorageKey(property);
+    csmp::INDEX<SCALAR,NODE> prop_key = INDEX<SCALAR,NODE> (sg.Database().StorageKey(property));
+    double64     result(0.);
+
+    if ( prop_key.type != SCALAR || prop_key.place == ELEMENT ) {
+        throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrateScalarFiniteVolumeVariable",
+                               "This method only handles scalar node properties / node-centered finite volume variables" );
+        return result;
+    }
+
+    if ( take_porosity_into_account ) {
+        const auto it_end(gref_.ElementsEnd());
+        for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
+        {
+            auto& e = **it;
+            auto bctr = e.AtBarycenter(); 
+      
+            auto phi = bctr.Read( this->key_phi );
+            auto thickness = bctr.Read( this->key_thi );
+            if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
+      
+            for (auto n : e.AllNodes()) {
+            //for (auto s : e.AllSectorIntegrationPoints()) {
+                result += n.Obtain( prop_key ) * phi * n.SectorVolume();
+            }
+        }
+    }
+    else {
+        const auto it_end(gref_.ElementsEnd());
+        for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
+        {
+            auto& e = **it;
+            auto bctr = e.AtBarycenter(); 
+      
+            for (auto n : e.AllNodes()) {
+            //for (auto s : e.AllSectorIntegrationPoints()) {
+                result += n.Obtain( prop_key ) *  n.SectorVolume();
+            }
+        }    
+    }
+
+    return result;
+
+} // end VolumeIntegrateScalarFiniteVolumeVariable
+
+
 
 
 template<size_t dim>
@@ -556,7 +626,7 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
                     double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
                     double64 dC_target = neighbor_array[5];//target change of solution
                     if (fabs(dC_cumulative) >= fabs(dC_target)) {
-                        #if defined(_OPENMP )
+                        #if defined(_OPENMP)
                         double64 t_begin = omp_get_wtime();
                         #else
                         clock_t t_begin = clock();
@@ -566,7 +636,7 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
                             EventHeap.remove(neighbor_heap_node);
                             neighbor_event->inQueue(false);
                         }
-                        #if defined(_OPENMP )
+                        #if defined(_OPENMP)
                         t_remove += omp_get_wtime() - t_begin;
                         #else
                         t_remove += clock() - t_begin; 
@@ -684,7 +754,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval)
 template<size_t dim>
 void TwoPhaseDESTransport<dim>::AdvectVariable_DES( double64 model_time, size_t num_threads )
 {
-#if defined(_OPENMP )
+#if defined(_OPENMP)
     if (num_threads <= 0) {
         cerr <<"WARNING: input number of threads is less than 1, reset to 1"<<endl;
         num_threads = 1;
@@ -884,7 +954,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
 
 
 
-#if defined(_OPENMP )
+#if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel version
 template<size_t dim>
 void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, size_t num_threads)
