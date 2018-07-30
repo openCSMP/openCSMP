@@ -1,12 +1,9 @@
 Auxiliaries
+Storages
+Models
 Variables
-Variable
-MathUtils
-DataContainers
-Model
-IntegralMethods
+Utilities
 Interfaces
-Analysis
-FiniteElement
+FiniteElements
 ModelFunctionality
 CompositeFunctionality

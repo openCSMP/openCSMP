@@ -8,7 +8,6 @@
 #include "SAMG_Exception.h"
 #endif
 
-
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"
 #include "VectorVar_Test1.h"
@@ -67,7 +66,6 @@
 #include "BoundaryInterface_Test.h"
 #include "Boundary_Test.h"            // sm: needs work
 #include "Region_Test.h"
-#include "Box_Test.h"
 #include "SplitBoundary_Test.h"       // sm: needs work
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
@@ -93,125 +91,102 @@
 using namespace std;
 using namespace csmp;
 
-/**  
-    SKM revised to include all passing tests 8/3/2017
+#define TEST_SECTION(n)				SECTION(#n) { Test* test = new n##_Test(); test->run(); }
+#define TEST_SECTION_V(n,v)			SECTION(#n) { Test* test = new n##_Test(v); test->run(); }
+#define TEST_SECTION_N(n,num)		SECTION(#n) { Test* test = new n##_Test##num(); test->run(); }
+#define TEST_SECTION_AV(n,a,d,v)	SECTION(#n) { Test* test = new n##_Test(a,d,v); test->run(); }
 
-    @note for code coverage etc., see status report in unit_tests_main.cpp
-*/
-
-#define SIMPLE_TEST_SECTION(n)  SECTION(#n) { n##_Test test; test.run(); }
-#define SIMPLE_TEST_SECTION_N(n,num)  SECTION(#n) { n##_Test##num test; test.run(); }
-#define SIMPLE_TEST_SECTION_NONSTANDARD(n)  SECTION(#n) { n##_Test test(false); test.run(); }
-#define SIMPLE_TEST_SECTION_FE(n,p,d) SECTION(#n) {n##_Test test(p, d, false); test.run(); }
-
-TEST_CASE("Auxiliary tests", "[Auxiliaries]") {
-    SIMPLE_TEST_SECTION(GenericSingleton)
-    SIMPLE_TEST_SECTION(CommandLineParser)
-    SIMPLE_TEST_SECTION(IsnanIsinf)
-    SIMPLE_TEST_SECTION(ColorPalette)
-    SIMPLE_TEST_SECTION(FibonacciHeap)
+TEST_CASE("Auxiliary tests", "[Auxiliaries]") {	
+	TEST_SECTION(IsnanIsinf)
+	TEST_SECTION(GenericSingleton)
+	TEST_SECTION(CommandLineParser)
 }
 
-TEST_CASE("Variable database tests", "[Variables]") {
-    SIMPLE_TEST_SECTION(LocalVariableStorage)
-    SIMPLE_TEST_SECTION(PropertyDatabase)
-    SIMPLE_TEST_SECTION(Index)
-    SIMPLE_TEST_SECTION(Parameter)
+TEST_CASE("Data storage tests", "[Storages]") {
+	TEST_SECTION(LocalVariableStorage)
+	TEST_SECTION(PropertyDatabase)
+	TEST_SECTION(Index)
+	TEST_SECTION(Parameter)
+	TEST_SECTION(PropertyData)
 }
 
-TEST_CASE("Variable tests", "[Variable]") {
-    SIMPLE_TEST_SECTION(Point);
-    SIMPLE_TEST_SECTION(ScalarVariable);
-    SIMPLE_TEST_SECTION(VectorVariable);
-    SIMPLE_TEST_SECTION_N(VectorVariable,1);
-    SIMPLE_TEST_SECTION_N(VectorVariable,2);
-    SIMPLE_TEST_SECTION(TensorVariable);
-    SIMPLE_TEST_SECTION_N(TensorVariable,1);
-    SIMPLE_TEST_SECTION_N(TensorVariable,2);
-    SIMPLE_TEST_SECTION(ArrayVariable);
+TEST_CASE("Model tests", "[Models]") {
+	TEST_SECTION(Node)
+	TEST_SECTION(Element)
+	TEST_SECTION(Face)
 }
 
-TEST_CASE("Math utilities tests", "[MathUtils]") {
-    SIMPLE_TEST_SECTION(Matrix)
-    SIMPLE_TEST_SECTION(DenseMatrix)
-    SIMPLE_TEST_SECTION_NONSTANDARD(SparseMatrix)
-    SIMPLE_TEST_SECTION(CompressedRowMatrix)
-    SIMPLE_TEST_SECTION(CubicSpline)
+TEST_CASE("Variable tests", "[Variables]") {
+	TEST_SECTION(Point);
+	TEST_SECTION(ScalarVariable);
+	TEST_SECTION(VectorVariable);
+	TEST_SECTION_N(VectorVariable, 1);
+	TEST_SECTION_N(VectorVariable, 2);
+	TEST_SECTION(TensorVariable);
+	TEST_SECTION_N(TensorVariable, 1);
+	TEST_SECTION_N(TensorVariable, 2);
+	TEST_SECTION(ArrayVariable);
+	// basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
 }
 
-TEST_CASE("Data containers tests", "[DataContainers]") {
-    SIMPLE_TEST_SECTION(VData)
-    SIMPLE_TEST_SECTION(VSet)
-    SIMPLE_TEST_SECTION(PropertyData)
-    SIMPLE_TEST_SECTION(FEM_Data)
-    SIMPLE_TEST_SECTION(ModelTopology)
+TEST_CASE("Utilities tests", "[Utilities]") {
+	TEST_SECTION_V(Matrix,false)
+	TEST_SECTION_V(DenseMatrix,false)
+	TEST_SECTION_V(SparseMatrix,false)
+    TEST_SECTION(CompressedRowMatrix)
+    TEST_SECTION(CubicSpline)
+	TEST_SECTION(FibonacciHeap)
+
+	TEST_SECTION_V(FiniteVolumeStencil,false)
+	// also compares speed of mapping facet areas and normals versus computing them
+	TEST_SECTION(FiniteVolumePolicy)
+	TEST_SECTION(FV_Parameter)
 }
 
-TEST_CASE("Model and model functionality tests", "[Model]") {
-    SIMPLE_TEST_SECTION(Node)
-    SIMPLE_TEST_SECTION(Element)
-    SIMPLE_TEST_SECTION_NONSTANDARD(Box) // Unknown exception
-    SIMPLE_TEST_SECTION(Face)
-    SIMPLE_TEST_SECTION(ModelSubDomain)
-    SIMPLE_TEST_SECTION_NONSTANDARD(Region) // Unknown exception
-    SIMPLE_TEST_SECTION(Boundary)
-    SIMPLE_TEST_SECTION(SplitBoundary)
-    SIMPLE_TEST_SECTION(ANSYS_Model2D)
-    SIMPLE_TEST_SECTION(ANSYS_Model3D)
-    SIMPLE_TEST_SECTION_NONSTANDARD(Box) // Unknown exception
-    SIMPLE_TEST_SECTION(InputDataManager) // Unknown exception
-    SIMPLE_TEST_SECTION(PropertyHandle)
- }
-// composite.addTest( new ModelComparator_Test() );   crashes on FEM_Data (needs refactoring)
-
-TEST_CASE("Finite element - finite volume integration tests", "[IntegralMethods]") {
-    SIMPLE_TEST_SECTION(FiniteVolumePolicy)
-    SIMPLE_TEST_SECTION(FiniteVolumeStencil)
-    SIMPLE_TEST_SECTION(Operand)
-    SIMPLE_TEST_SECTION(MathOperatorLHS)
-    SIMPLE_TEST_SECTION(MathOperatorRHS)
-    SIMPLE_TEST_SECTION(PDE_Integrator)
-}
-// composite.addTest( new FluxMismatch_Test() ); // FAILS
-
-
-TEST_CASE("Interfaces with other software tests", "[Interfaces]") {
-    SIMPLE_TEST_SECTION(VTU_Interface)
-    SIMPLE_TEST_SECTION(BinaryFileInterface)
- }
-
-TEST_CASE("Analysis of results and integral properties tests", "[Analysis]") {
-    SIMPLE_TEST_SECTION(StatisticalAnalyzer)
-    SIMPLE_TEST_SECTION(RegionMonitor)
- }
-
-TEST_CASE("Finite-element functionality", "[FiniteElement]"){
-	SIMPLE_TEST_SECTION(FEM_Data)
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(1),"IsoparametricLinearTetrahedron1P.txt")
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTetrahedron(4),"IsoparametricLinearTetrahedron4P.txt")
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(3,3),"IsoparametricLinearTriangle3D3IP.txt")
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,3),"IsoparametricLinearTriangle3IP.txt")
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricLinearTriangle(2,4),"IsoparametricLinearTriangle4IP.txt")
-	SIMPLE_TEST_SECTION_FE(FiniteElement,new IsoparametricQuadraticTriangle(2),"IsoparametricQuadraticTriangle.txt")
-	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricQuadraticTetrahedron)
-	SIMPLE_TEST_SECTION_NONSTANDARD(IsoparametricLinearHexahedron)
+TEST_CASE("Interfaces / containers tests", "[Interfaces]") {
+    TEST_SECTION(VData)
+	TEST_SECTION(FEM_Data)
+	TEST_SECTION(PropertyData)
+    TEST_SECTION(VSet)
+    TEST_SECTION(ColorPalette)
 }
 
-TEST_CASE("Model - related interdependent functionality", "[ModelFunctionality]") {
-	SIMPLE_TEST_SECTION(ModelSubDomain)
-	SIMPLE_TEST_SECTION(Region)
-	SIMPLE_TEST_SECTION(Boundary)
-	SIMPLE_TEST_SECTION(SplitBoundary)
-	SIMPLE_TEST_SECTION(ANSYS_Model2D)
-	SIMPLE_TEST_SECTION(ANSYS_Model3D)
-	SIMPLE_TEST_SECTION_NONSTANDARD(Box)
-	SIMPLE_TEST_SECTION(InputDataManager)
-	SIMPLE_TEST_SECTION(PropertyHandle)
-	SIMPLE_TEST_SECTION(VTU_Interface)
-	SIMPLE_TEST_SECTION(StatisticalAnalyzer)
+TEST_CASE("Finite elements and math operators", "[FiniteElements]"){
+	TEST_SECTION(FEM_Data)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricLinearTetrahedron(1),"IsoparametricLinearTetrahedron1P.txt",false)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricLinearTetrahedron(4),"IsoparametricLinearTetrahedron4P.txt",false)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricLinearTriangle(3,3),"IsoparametricLinearTriangle3D3IP.txt",false)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricLinearTriangle(2,3),"IsoparametricLinearTriangle3IP.txt",false)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricLinearTriangle(2,4),"IsoparametricLinearTriangle4IP.txt",false)
+	TEST_SECTION_AV(FiniteElement,new IsoparametricQuadraticTriangle(2),"IsoparametricQuadraticTriangle.txt",false)
+	TEST_SECTION_V(IsoparametricQuadraticTetrahedron,false)
+	TEST_SECTION_V(IsoparametricLinearHexahedron,false)
+	TEST_SECTION(Operand)
+	TEST_SECTION(MathOperatorLHS)
+	TEST_SECTION(MathOperatorRHS)
+	TEST_SECTION(PDE_Integrator)
+}
+
+TEST_CASE("Model-related interdependent functionality", "[ModelFunctionality]") {
+	TEST_SECTION(ModelTopology)
+	TEST_SECTION(Box)
+	TEST_SECTION(ModelSubDomain)
+	TEST_SECTION_V(Region,false)
+	TEST_SECTION_V(BoundaryInterface,false)
+	TEST_SECTION(ANSYS_Model2D)
+	TEST_SECTION(InputDataManager)
+	TEST_SECTION(ANSYS_Model3D)
+	TEST_SECTION(PropertyHandle)
+	TEST_SECTION(BinaryFileInterface)
+	TEST_SECTION(VTU_Interface)
+	TEST_SECTION(StatisticalAnalyzer)	
 }
 
 TEST_CASE("Composite-dependent functionality", "[CompositeFunctionality]") {
-	SIMPLE_TEST_SECTION_NONSTANDARD(PropertyAtPointVisitor)
-	//SIMPLE_TEST_SECTION_NONSTANDARD(ExponentialTransferFunction)
+	TEST_SECTION(RegionMonitor)
+	TEST_SECTION(ExponentialTransferFunction)
+	TEST_SECTION_V(PropertyAtPointVisitor,false)
+	//TEST_SECTION_V(TwoPhaseModel,composite);
+	//TwoPhaseModel_TestSuite  twoPhaseModelTests(composite);
+	//twoPhaseModelTests.run();
 }
