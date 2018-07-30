@@ -10,7 +10,7 @@ namespace csmp {
 
 template<size_t dim>
 FlowFunctions<dim>::FlowFunctions( const PropertyDatabase<dim>& db)
-    : variables::Variables_TwoPhaseFlow(db) 
+    : variables::Variables_CO2GeoSequenstration(db) 
 {
 }
 
