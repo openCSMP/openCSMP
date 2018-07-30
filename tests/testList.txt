@@ -8,3 +8,5 @@ IntegralMethods
 Interfaces
 Analysis
 FiniteElement
+ModelFunctionality
+CompositeFunctionality
