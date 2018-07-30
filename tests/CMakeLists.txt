@@ -51,7 +51,7 @@ FILE(GLOB TEST_SOURCES
 ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 
 
- if(BUILD_TESTING)
+if(BUILD_TESTING)
     ADD_EXECUTABLE(csmptest unit_tests_catch.cpp ${TEST_SOURCES})
     TARGET_LINK_LIBRARIES(csmptest csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
     if(CMAKE_HOST_WIN32)
@@ -79,27 +79,23 @@ ADD_DEFINITIONS(-DRUNNING_UNDER_CATCH)
 		ENDFOREACH()
     endif()
 
-  # ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
-  # TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
-  # if(CMAKE_HOST_WIN32)
-	# ENABLE_TESTING()
-      # ADD_TEST(
-      # NAME csmptest_main		
-	    # COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
-		# WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-      # )
-  # else()
-      # ADD_TEST(
-	    # NAME csmptest_main
-	    # COMMAND csmptest_main
-	    # WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-      # )
-  # endif()
-
+	ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
+	TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
+	if(CMAKE_HOST_WIN32)
+		ENABLE_TESTING()
+		ADD_TEST(
+		NAME csmptest_main		
+		COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+	)
+	else()
+		ADD_TEST(
+		NAME csmptest_main
+		COMMAND csmptest_main
+		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
+	)
+	endif()
 endif(BUILD_TESTING)
-
-ADD_EXECUTABLE(csmptest_main unit_tests_main.cpp ${TEST_SOURCES})
-TARGET_LINK_LIBRARIES(csmptest_main csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
 
 ADD_EXECUTABLE(csmptest_development unit_tests_development.cpp ${TEST_SOURCES})
 TARGET_LINK_LIBRARIES(csmptest_development csmpmeschach csmpcore csmpiaps ${SAMG_LIBRARIES})
