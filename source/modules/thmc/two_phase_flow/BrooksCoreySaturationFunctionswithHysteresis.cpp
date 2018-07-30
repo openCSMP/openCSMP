@@ -30,11 +30,11 @@ aw_(aw),ao_(ao),cw_(cw),co_(co)
     this->Swmin = p.Obtain(User()->key_srH2O) ;
     this->Swmax = 1.0-p.Obtain(User()->key_srCO2);
     
-    this->aw_ = p.Obtain(User()->key_bcp) ;  // Mahyar: please change key_bcp to key_aw
-    this->ao_ = p.Obtain(User()->key_bcp) ;  // Mahyar: please change key_bcp to key_ao
+    this->aw_ = p.Obtain(User()->key_aw) ;  // Mahyar: please change key_bcp to key_aw
+    this->ao_ = p.Obtain(User()->key_ao) ;  // Mahyar: please change key_bcp to key_ao
     
-    this->cw_ = p.Obtain(User()->key_pd) ;   // Mahyar: please change key_bcp to key_cw
-    this->co_ = p.Obtain(User()->key_pd) ;   // Mahyar: please change key_bcp to key_co
+    this->cw_ = p.Obtain(User()->key_cw) ;   // Mahyar: please change key_bcp to key_cw
+    this->co_ = p.Obtain(User()->key_co) ;   // Mahyar: please change key_bcp to key_co
     
   }
   

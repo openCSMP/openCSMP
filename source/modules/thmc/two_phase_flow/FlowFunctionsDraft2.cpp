@@ -12,7 +12,7 @@ namespace csmp {
   
 template<size_t dim>
 FlowFunctionsDraft2<dim>::FlowFunctionsDraft2( const PropertyDatabase<dim>& db)
-    : variables::Variables_TwoPhaseFlow(db) 
+    : variables::Variables_CO2GeoSequenstration(db) 
 {
 }
 
