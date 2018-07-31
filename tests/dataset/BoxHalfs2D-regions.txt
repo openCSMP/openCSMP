@@ -1,0 +1,9 @@
+2D rhino/icem box model featuring two regions
+no properties
+MATRIX_RIGHT
+MATRIX_LEFT
+STANDARD
+LEFT
+RIGHT
+TOP
+BOTTOM
