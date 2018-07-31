@@ -1,9 +1,0 @@
-cylinder-regions.txt
-no properties
-LAYER1
-LAYER2
-ABOVE_LAYER2
-BOUNDARY_BOTTOM
-BOUNDARY_TOP
-BOUNDARY_RIM
-WELL

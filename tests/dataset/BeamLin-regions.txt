@@ -1,3 +1,0 @@
-Quadratic triangle beam model
-no properties
-MATRIX

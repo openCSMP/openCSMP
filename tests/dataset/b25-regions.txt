@@ -1,5 +1,0 @@
-b25-regions.txt selection
-no properties
-BOXM
-INNER_BOXM
-INNERMOST_BOXM

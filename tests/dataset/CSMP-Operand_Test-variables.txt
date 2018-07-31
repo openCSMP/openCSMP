@@ -1,4 +1,0 @@
-name	MParameter	unit	index	min.	max.	place
-nodal scalar variable	NV	X	1	-1.00E+10	1.00E+10	node
-nodal vector variable	NV	X	2	-1.00E+10	1.00E+10	node
-nodal tensor variable	NV	X	3	-1.00E+10	1.00E+10	node

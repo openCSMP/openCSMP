@@ -1,4 +1,0 @@
-name	MParameter	unit	index	min.	max.	place
-									
-element variable	E	m2 s-1		1	-1.00E+01	1.00E+01	element
-node variable		N	m3		1	-1.00E+01	1.00E+01	node

@@ -1,4 +1,0 @@
-'BoreHole_stability2D_VVCase' domain selection file
-no properties
-MATRIX
-STANDARD

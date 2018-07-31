@@ -1,4 +1,0 @@
-'hex2_3-configuration.txt' shell test case
-no properties
-MATRIX
-IN_FRACTURE

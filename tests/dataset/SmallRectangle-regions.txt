@@ -1,4 +1,0 @@
-CSMP DFN model
-no properties
-MATRIX
-RIGHT

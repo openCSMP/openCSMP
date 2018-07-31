@@ -1,4 +1,0 @@
-'BoreHole_stability3D_VVCase' domain selection file
-no properties
-ROCK
-BOREHOLE

@@ -1,7 +1,0 @@
-'IncompressibleTwoPhaseFlow_Viscous_VVCase' domain selection file
-no properties
-MATRIX
-FRACS
-LEFT
-RIGHT
-

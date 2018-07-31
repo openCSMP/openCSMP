@@ -1,3 +1,0 @@
-'ThreeZones3D-noncontiguous-regions.txt' fracture regions
-
-2 INTERFACE_12 INTERFACE_23

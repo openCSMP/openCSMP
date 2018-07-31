@@ -1,9 +1,0 @@
-UnitCube Test Model
-no properties
-MATRIX
-LEFT
-TOP
-BOTTOM
-RIGHT
-FRONT
-BACK

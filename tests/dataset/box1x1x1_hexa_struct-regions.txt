@@ -1,7 +1,0 @@
-Simple Cube
-no properties
-MATRIX
-LEFT
-RIGHT
-TOP
-BOTTOM

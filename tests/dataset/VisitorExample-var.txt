@@ -1,6 +1,0 @@
-name	MParameter	unit	index	min.	max.	place
-									
-oil pressure				PF	Pa	1	0.		1.00E+09	node
-water pressure				PH	Pa	1	0.		1.00E+09	node
-saturation oil				SO	X	1	-5.00E-02	1.05E+00	node
-saturation water				SW	X	1	-5.00E-02	1.05E+00	node

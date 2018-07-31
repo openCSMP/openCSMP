@@ -1,4 +1,0 @@
-Mixed Mesh
-no properties
-FIRST
-SECOND

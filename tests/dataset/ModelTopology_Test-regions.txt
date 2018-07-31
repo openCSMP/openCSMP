@@ -1,3 +1,0 @@
-Regions file for ModelTopologz Unit Test
-no properties
-Region2

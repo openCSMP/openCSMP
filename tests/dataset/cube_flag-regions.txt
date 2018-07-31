@@ -1,9 +1,0 @@
-tetrahedral box model where all boundary nodes are flagged correctly
-no properties
-PORES
-LEFT
-RIGHT
-TOP
-BOTTOM
-BACK
-FRONT
