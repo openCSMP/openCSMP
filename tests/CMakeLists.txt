@@ -65,6 +65,7 @@ if(BUILD_TESTING)
 	    COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe [${Test}]
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
+		set_tests_properties(${Test} PROPERTIES TIMEOUT 3600) 
 		ENDFOREACH()
     else()
 		# execute_process(COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest.exe --list-test-names-only > ${CMAKE_BINARY_DIR}/testList.txt)
@@ -76,6 +77,7 @@ if(BUILD_TESTING)
 	    COMMAND csmptest [${Test}]
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
         )
+		set_tests_properties(${Test} PROPERTIES TIMEOUT 3600) 
 		ENDFOREACH()
     endif()
 
@@ -87,13 +89,15 @@ if(BUILD_TESTING)
 		NAME csmptest_main		
 		COMMAND ${CMAKE_BINARY_DIR}/tests/Release/csmptest_main.exe
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-	)
+		)
+		set_tests_properties(csmptest_main PROPERTIES TIMEOUT 3600) 
 	else()
 		ADD_TEST(
 		NAME csmptest_main
 		COMMAND csmptest_main
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/tests/dataset
-	)
+		)
+		set_tests_properties(csmptest_main PROPERTIES TIMEOUT 3600) 
 	endif()
 endif(BUILD_TESTING)
 
