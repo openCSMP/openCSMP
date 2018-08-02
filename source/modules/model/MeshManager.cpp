@@ -659,7 +659,8 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
     // --------------------------------------------------------------
     // 3. Assigning neighbor elements to elements (face-verts)
     // --------------------------------------------------------------
-    /* SKM: THIS CODE SEGMENT BREAKS establishNeighborConnectivity() ?
+    /* 
+    SKM: THIS CODE SEGMENT BREAKS establishNeighborConnectivity() ?
     if( csmp_error.Verbose() )
         cout <<"\nMeshManager<"<< dim <<">::InitializeConnectivity: assigning neighbors to elements..."<< endl;
       for ( typename deque<Element<dim> >::iterator
@@ -671,6 +672,20 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
           else
               (*eit).Assign( j, static_cast<Element<dim>*>(NULL) );
     */
+
+    for ( auto& e : elmt_collection_ ) {
+          const size_t neighbors(e.Neighbors());
+          for ( size_t j=0U, nidx=0u; j<neighbors; ++j ) {
+            // if there is a neighbor (as is the case if the stored index is greater than zero)
+            const int32 index(static_cast<int32>(vset.Pfvert( e.Idx(), j )) );
+            if (index >= 0) {
+              e.Assign( nidx++, &elmt_collection_.Index( static_cast<size_t>(index) ) );
+            }
+            else {
+                e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
+            }
+        }
+    }     
 
     // ---------------------------------------------------------------------
     // 4. Flagging nodes located at the model boundary
