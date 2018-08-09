@@ -7,7 +7,7 @@ mole fraction CO2 aqueous phase,xCO2,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,comp
 mole fraction H2O aqueous phase,xH2O,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,computed,chemistry,,
 mole fraction NaCl aqueous phase,xSalt,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,computed/input,chemistry,,
 mole fraction CO2 carbonic phase,yCO2,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,computed,chemistry,,
-mole fraction H2O aqueous phase,yH2O,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,computed/input,chemistry,,
+mole fraction H2O carbonic phase,yH2O,mol/mol,SCALAR,-5.00e-02,1.05e+00,NODE,computed/input,chemistry,,
 dissolved CO2,CO2aq,kg/m3,SCALAR,0.00e+00,1.50e+02,NODE,computed/input,chemistry,,
 evaporated water,H2Og,kg/m3,SCALAR,0.00e+00,5.00e+01,NODE,computed,chemistry,,
 molality salt,msalt,mol/kg,SCALAR,0.00e+00,5.00e+00,NODE,computed/input,chemistry,,
