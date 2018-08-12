@@ -27,7 +27,7 @@
 #define _fail(str) do_fail(str, __FILE__, __LINE__)
 #define _equal(expr,value,tol) do_equal(expr, value, tol, #expr " == " #value, __FILE__, __LINE__)
 #define _succeed() do_succeed()
-#define _warn(str) std::cout << str << '\n'
+#define _warn(str) std::cerr << str << '\n'
 #define _info(str) std::cout << str << '\n'
 
 #endif

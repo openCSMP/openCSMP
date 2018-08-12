@@ -246,8 +246,10 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 } // end Initialize (with regions from file)
 
 
+
 /**
     custom constructor
+    @note should only be used for models created externally.
 */
 template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
@@ -279,7 +281,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       InstantiateFiniteVolumes();
 
     // 3(a). assigning properties to mesh; this does not depend on regions,
-    // so this is safe to do before we have computed them.
+    // so this is safe to do before we have established them.
     InputVariablesFrom( vset );
 
     // 4. forming default computational domain called "Model"
@@ -288,38 +290,42 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromLargestComponent( "Model", place_in_unique_regions, !withNeighborConnectivity );
 
-    if ( !valid_model_region ) {
-      csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                        "model appears to contain domains that are not connected to one another?" );
+// ANDREWS fix for potentially discontiguous model regions (the largest contiguous lump will become the model)
 
-      auto& gref = this->Region("Model");
-      auto& mesh = Mesh();
-      size_t nodes_removed = 0, elmts_removed = 0;
-
+    // if the 'Model' region only contains a subset of all elements and nodes, disconnected ones are removed
+    if ( !valid_model_region )
       {
-        std::unordered_set<Node<dim>*> nodes_in_model_region(gref.NodesBegin(), gref.NodesEnd());
-        for (auto nit = mesh.NodesBegin(); nit != mesh.NodesEnd(); ++nit) {
-          if (!nodes_in_model_region.count(&*nit)) {
-            mesh.Erase(*nit);
-            ++nodes_removed;
-          }
-        }
-      }
-      
-      {
-        std::unordered_set<Element<dim>*> elmts_in_model_region(gref.ElementsBegin(), gref.ElementsEnd());
-        for (auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit) {
-          if (!elmts_in_model_region.count(&*eit)) {
-            mesh.Erase(*eit);
-            ++elmts_removed;
-          }
-        }
-      }
+        csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                          "model appears to contain domains that are not connected to one another?" );
 
-      cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
-         << nodes_removed << " disconnected nodes removed\n";
-      cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
-         << elmts_removed << " disconnected elements removed\n";
+        auto& gref = this->Region("Model");
+        auto& mesh = Mesh();
+        size_t nodes_removed = 0, elmts_removed = 0;
+        // counting how many disconnected nodes were there
+          {
+            std::unordered_set<Node<dim>*> nodes_in_model_region(gref.NodesBegin(), gref.NodesEnd());
+            for (auto nit = mesh.NodesBegin(); nit != mesh.NodesEnd(); ++nit) {
+              if (!nodes_in_model_region.count(&*nit)) {
+                mesh.Erase(*nit);
+                ++nodes_removed;
+              }
+            }
+          }
+        // counting how many disconnected elements were there
+          {
+            std::unordered_set<Element<dim>*> elmts_in_model_region(gref.ElementsBegin(), gref.ElementsEnd());
+            for (auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit) {
+              if (!elmts_in_model_region.count(&*eit)) {
+                mesh.Erase(*eit);
+                ++elmts_removed;
+              }
+            }
+          }
+
+        cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
+           << nodes_removed << " disconnected nodes removed\n";
+        cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
+           << elmts_removed << " disconnected elements removed\n";
     }
 
     cout <<"\nModel<dim>::Initialize: ";
@@ -336,21 +342,16 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // 7. Forming Boundaries
     if ( create_boundaries )
       {
+          const bool remove_original_lower_dimensional_regions(true);
           bool box_shaped(this->BoxShaped());
           if ( box_shaped and box_shaped != !non_box_shaped_model )
             ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
                                             "while model contains all relevant box side boundaries it will be treated as non-box shaped." );
           
           if ( !non_box_shaped_model && box_shaped )
-            {
-                this->EstablishBoxBoundaries();
-                // build boundary edges consisting of faces
-                if ( dim == 3U ) {
-                     const bool created_edges(this->EstablishEdgeBoundariesOfBoxShapedModel());
-                     assert( created_edges );
-                  }
-            }
-          else this->EstablishBoundaries( true );
+            this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
+          else
+            this->EstablishBoundaries( remove_original_lower_dimensional_regions );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 

@@ -180,7 +180,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
     csmp::Node<dim>*  N( size_t n ) const;
     /// pointer to element #n of model subdomain
-    CELL<dim>*     E( size_t n ) const;
+    CELL<dim>*        E( size_t n ) const;
 
     // access via object indexes( note: use with caution )
     /// is the node located on the surface of the model subdomain?
@@ -305,7 +305,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
 
     const PropertyDatabase<dim>&                pref_;
     std::string                                 subdomain_name_; ///< passed down when region is created so that it can be referred to
-    std::vector<CELL<dim>*>                  elmt_vec_;       ///< doubly sorted, interior elements first
+    std::vector<CELL<dim>*>                     elmt_vec_;       ///< doubly sorted, interior elements first
     std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;    ///< as in second segment of elmt_vec_
     std::vector<csmp::Node<dim>*>               node_vec_;       ///< doubly sorted, interior nodes first
     size_t                                      first_bd_node_;

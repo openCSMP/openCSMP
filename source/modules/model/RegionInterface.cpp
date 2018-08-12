@@ -254,9 +254,11 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
 
 
 
-  
-  template<size_t dim, template<size_t> class REGION_COMPLEX>
-  bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity )
+/**
+    SKM trying to make sense of Andrew Bromage's undocumented code:
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     // does this region already exist
@@ -348,14 +350,15 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                                "region did not exist: ",
                                regionName );
 
-      // finding the group in the group list
+      // finding the region in the corresponding map
       typename std::map<std::string,csmp::Region<dim> >::iterator
-               iterRegion      ( groupMap_.find( std::string(regionName) ) ),
+               iterRegion( groupMap_.find( std::string(regionName) ) ),
                iterUniqueRegion( uniqueGroupMap_.find( std::string(regionName) ));
 
+       // avoiding that other regions are accidentially damaged
        if (delete_elements) {
            if (iterRegion != groupMap_.end()) {
-               ErrorHandler::Instance().notice(WARNING,
+               ErrorHandler::Instance().notice(ERROR,
                                      "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
                                      "Attempt to delete elements from a non-unique region: ", regionName );
 
@@ -386,7 +389,7 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                 meshMgr.Erase( *e );
               }
              
-              // 2. Rebuild node connections
+              // 2. Rebuild node connections if necessary
               if (spatialDimensions.second == dim) {
                 // 2.1 This is a region whose dimension is dim, so interior
                 // nodes must be removed.
@@ -394,29 +397,32 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                   meshMgr.Erase( *(*nit) );
                 }
                 
-                // Update node connections on the nodes that were retained.
-                regionComplex->Mesh().RebuildParentRelationships(subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd());
+                // Update node connections on the region's perimeter nodes that were retained.
+                meshMgr.RebuildParentRelationships(subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd());
               }
               else {
                 // 2.2 This is a region whose dimension is less than dim (i.e.
                 // a boundary or split boundary). Just update nodes.
-                regionComplex->Mesh().RebuildParentRelationships(subdomain.NodesBegin(), subdomain.NodesEnd());
+                meshMgr.RebuildParentRelationships(subdomain.NodesBegin(), subdomain.NodesEnd());
               }
            }
        }
      
 
-      // if the group was found in the list, it is erased
+      // if the region was found in the list, it is erased
       if ( iterRegion != groupMap_.end() )
            groupMap_.erase( std::string(regionName) );
       if ( iterUniqueRegion != uniqueGroupMap_.end() )
            uniqueGroupMap_.erase( std::string(regionName) );
+     
    } // end RemoveRegion
 
   
-  // -----------------------------------------------
-  // Binary input/output
-  // -----------------------------------------------
+  
+  
+// -----------------------------------------------
+// Binary input/output
+// -----------------------------------------------
 
 /**
     Writes all the unique and non-unique regions to binary file.
@@ -2597,42 +2603,90 @@ bool RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion( const char* region, 
                              region_to_subtract, "does not exist; nothing was done." );
           return false;
       }
-    if ( IsUnique(region) )
-      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
-                         region, "is a unique region; therefore it should not overlap with another region." );
 
     // finding the elements that are shared among the 2 regions
     csmp::Region<dim>&        r1_ref(Region(region));
     const csmp::Region<dim>&  r2_ref(Region(region_to_subtract));
+    const size_t r1_elements(r1_ref.Elements());
+    const size_t r2_elements(r2_ref.Elements());
    
-   // region1 = region1 - region2
-   std::vector<csmp::Element<dim>*>  region1;
-   region1.reserve(r1_ref.Elements());
-    std::unordered_set<csmp::Element<dim>*> region2(r2_ref.ElementsBegin(),r2_ref.ElementsEnd());
+    // new_region1 = region1 - region2
+    std::vector<csmp::Element<dim>*>  new_region1;
+    new_region1.reserve(r1_ref.Elements());
+    // if the element is not contained in region-to-subtract, it is kept
+    for ( auto it = r1_ref.ElementsBegin(); it != r1_ref.ElementsEnd(); ++it )
+      if ( !r2_ref.Contains(*it) )
+        new_region1.push_back(*it);
    
-   for (auto it = r1_ref.ElementsBegin(); it != r1_ref.ElementsEnd(); ++it) {
-     if (!region2.count(*it)) {
-       region1.push_back(*it);
-     }
-   }
-
-    /* does not work, why?
-    const auto obeg( overlap.begin() );
-    const auto oend( overlap.end() );
-    region1.erase( remove_if( region1.begin(), region1.end(),
-                              // lambda function - if the pointer value is within the sorted range
-                              [obeg,oend]( csmp::Element<dim>* e ) { return e >= (*obeg) and e <= (*oend); } ),
-                   region1.end() );
-    */
+    // trimming excess capacity from new_region1
+    std::vector<csmp::Element<dim>*>(new_region1).swap(new_region1);
    
     // rebuilding the decimated region
-    r1_ref.ElementVector() = std::move(region1);
+    r1_ref.ElementVector() = std::move(new_region1);
+    r1_ref.EstablishNeighborConnectivity(); // TODO: needed, but this connectivity should have been established long ago !
     r1_ref.CreateNodePointerVector();
     r1_ref.IdentifyPerimeter();
-
+   
+    // reporting
+    std::cout <<"\nRegionInterface::RemoveFromRegion: removed region'"<< region_to_subtract <<"' ("<< r2_elements <<")";
+    std::cout <<" from region '"<< region <<"' ("<< r1_elements <<").\n";
+    std::cout <<"\t"<< r1_ref.Elements() <<" elements remaining in '"<< region <<"'.\n";
+    
     return true;
    
  } // RemoveFromRegion
+ 
+ 
+ 
+ 
+/**
+    This version removes the supplied elements (as pointed to) from the target region.
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+bool RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion( const char* region, const std::set<Element<dim>*>& elmt_set )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+    if ( !ContainsRegion(region) ) {
+          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
+                             region, "does not exist; nothing was done." );
+          return false;
+      }
+    if ( elmt_set.empty() ) {
+          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RemoveFromRegion:",
+                             "supplied element set was empty; nothing was done." );
+          return false;
+      }
+
+    // finding the elements that are shared among the 2 regions
+    csmp::Region<dim>&  r1_ref(Region(region));
+    const size_t r1_elements(r1_ref.Elements());
+   
+    // new_region1 = region1 - region2
+    std::vector<csmp::Element<dim>*>  new_region1;
+    new_region1.reserve(r1_ref.Elements());
+    for ( auto it = r1_ref.ElementsBegin(); it != r1_ref.ElementsEnd(); ++it )
+      // if the element is not contained supplied set, it is kept
+      if ( elmt_set.find(*it) == elmt_set.end() )
+        new_region1.push_back(*it);
+   
+    // trimming excess capacity from new_region1
+    std::vector<csmp::Element<dim>*>(new_region1).swap(new_region1);
+   
+    // rebuilding the decimated region
+    r1_ref.ElementVector() = std::move(new_region1);
+    r1_ref.EstablishNeighborConnectivity(); // TODO: needed, but this connectivity should have been established long ago !
+    r1_ref.CreateNodePointerVector();
+    r1_ref.IdentifyPerimeter();
+   
+    // reporting
+    std::cout <<"\nRegionInterface::RemoveFromRegion: removed "<< r1_elements - r1_ref.Elements();
+    std::cout <<" elements from region '"<< region <<"'.\n";
+   
+    return true;
+   
+ } // RemoveFromRegion
+
  
  
  

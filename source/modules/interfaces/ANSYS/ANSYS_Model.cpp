@@ -121,6 +121,11 @@ Uses the method Initialize.
                                              binary_input_file,
                                              irregular_mesh );
 
+             // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+             // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
+             // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
+             vset.RemovePfverts();
+
              // 1. construct model based on obtained model topology and vset
              if ( use_regions_file )
                Model<dim>::Initialize( regions_file_prefix.c_str(),

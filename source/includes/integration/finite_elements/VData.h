@@ -61,9 +61,8 @@ class VData {
     void AddElementTypes( std::vector<int32>::const_iterator first,
                           std::vector<int32>::const_iterator last );
 
-  void AddElementTypes( std::vector<int32>::iterator first,
-                       std::vector<int32>::iterator last );
-  
+    void AddElementTypes( std::vector<int32>::iterator first,
+                          std::vector<int32>::iterator last );
 
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int32 etype, size_t nodes, size_t elmts );
    
@@ -176,6 +175,9 @@ class VData {
   
     /// rescales vertex coordinate values in given spatial direction
     void ScaleCoordinateToRange( char coordinate_axis, double64 cmin, double64 cmax ); 
+  
+    /// empties 'pfverts' container if the contained info is flaky so that later code is prompted to recreate it
+    void RemovePfverts() { pfverts.clear(); }
   
     /// empties map which stores which nodes lie at boundary and what there BOX_BOUNDARY flag is
     void RemoveBflags();

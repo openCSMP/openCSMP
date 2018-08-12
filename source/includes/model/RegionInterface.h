@@ -205,11 +205,12 @@ class RegionInterface
     /// removes region and associated variable storage, and optionally the underlying elements, nodes etc.
     void    RemoveRegion( const char* regionname, bool delete_elements );
 
-    // NEW!
     /// excludes the intersection of elements of the 2 regions from the non-unique region
     bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
     
-    // NEW!
+    /// removes the elements shared with the supplied set from the region
+    bool    RemoveFromRegion( const char* region, const std::set<Element<dim>*>& elmt_set );
+    
     /// moves region to from the unique- to the non-unique regions map
     bool    MoveToNonUniqueRegions( const char* unique_region );
 

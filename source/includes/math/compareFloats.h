@@ -1,5 +1,5 @@
-#ifndef COMPAREFLOATS_H
-#define COMPAREFLOATS_H
+#ifndef COMPARE_FLOATS_H
+#define COMPARE_FLOATS_H
 
 #include <limits>
 #include <cmath>

@@ -1094,15 +1094,13 @@ size_t  Region<dim>::IdentifyLowerDimensionalBoundaryElements( const std::pair<i
 
 
 
-
-
-
-
-
-
+/**
+     SKM trying to make sense of Andrew Bromage's undocumented code:
+     12/08/18
+*/
 template<size_t dim>
 size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
-                                   bool reestablishNeighborConnectivity )
+                                          bool reestablishNeighborConnectivity )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1113,7 +1111,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 
      UnionFind<Node<dim>*> union_find;
 
-     Node<dim>* component_node;
+     Node<dim>* component_node(nullptr);
 
      // 1. Loop over all elements, unioning node sets
      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {

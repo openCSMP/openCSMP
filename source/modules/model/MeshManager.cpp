@@ -657,35 +657,23 @@ bool MeshManager<dim>::InitializeConnectivity( const VSet<dim>& vset )
 
 
     // --------------------------------------------------------------
-    // 3. Assigning neighbor elements to elements (face-verts)
+    // 3. Assigning neighbor elements to elements (face-verts) if any
     // --------------------------------------------------------------
-    /* 
-    SKM: THIS CODE SEGMENT BREAKS establishNeighborConnectivity() ?
-    if( csmp_error.Verbose() )
-        cout <<"\nMeshManager<"<< dim <<">::InitializeConnectivity: assigning neighbors to elements..."<< endl;
-      for ( typename deque<Element<dim> >::iterator
-        eit=elmt_collection_.begin(); eit!=elmt_collection_.end(); eit++ )
-        for ( size_t j=0U; j<(*eit).Neighbors(); ++j )
-          // if there is a neighbor
-          if ( vset.Pfvert((*eit).Idx(),j) >= 0 )
-              (*eit).Assign( j, &elmt_collection_[ static_cast<size_t>(vset.Pfvert((*eit).Idx(),j)) ] );
-          else
-              (*eit).Assign( j, static_cast<Element<dim>*>(NULL) );
-    */
-
-    for ( auto& e : elmt_collection_ ) {
-          const size_t neighbors(e.Neighbors());
-          for ( size_t j=0U, nidx=0u; j<neighbors; ++j ) {
-            // if there is a neighbor (as is the case if the stored index is greater than zero)
-            const int32 index(static_cast<int32>(vset.Pfvert( e.Idx(), j )) );
-            if (index >= 0) {
-              e.Assign( nidx++, &elmt_collection_.Index( static_cast<size_t>(index) ) );
-            }
-            else {
-                e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
-            }
-        }
-    }     
+    if ( vset.WithNeighbourConnectivity() ) {
+         for ( auto& e : elmt_collection_ ) {
+               const size_t neighbors(e.Neighbors());
+               for ( size_t j=0U, nidx=0u; j<neighbors; ++j ) {
+                 // if there is a neighbor (as is the case if the stored index is greater than zero)
+                 const int32 index(static_cast<int32>(vset.Pfvert( e.Idx(), j )) );
+                 if ( index >= 0 )
+                   e.Assign( nidx++, &elmt_collection_.Index( static_cast<size_t>(index) ) );
+                 else
+                   e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
+             }
+         }
+      }
+    else
+      csmp_error.notice( WARNING, "MeshManager::InitializeConnectivity:", "Input VSet does not contain any neighbor connectivity; nothing was done.");
 
     // ---------------------------------------------------------------------
     // 4. Flagging nodes located at the model boundary
