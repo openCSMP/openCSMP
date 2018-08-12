@@ -10,7 +10,7 @@
 #define CSMP_FLOW_FUNCTIONS_DRAFT2_H
 
 #include "BrooksCoreySaturationFunctionsWithHysteresis.h"
-#include "Variables_CO2GeoSequenstration.h"
+#include "VariableSet_CO2GeoSequestration.h"
 #include "VariablePlacement.h"
 #include "Fluid.h"
 
@@ -45,7 +45,7 @@ template<size_t> class Model;
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 template<size_t dim>
-class FlowFunctionsDraft2 : public variables::Variables_CO2GeoSequenstration,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsDraft2>,  ///< placeholder for saturation function model
     public Fluid<dim,FlowFunctionsDraft2>         {                          ///< placeholder for fluids module / EOS interface
       

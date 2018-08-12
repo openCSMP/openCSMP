@@ -152,6 +152,10 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
 
        // 0. reading the mesh from ANSYS-CSMP-input files
        mesh_interface.Read_ANSYS_Mesh( std::string(mesh_file_set), vset, mesh_topology, binary_input_file, irregular_mesh );
+       // ATTENTION (comment from SKM): Since ANSYS does not output the neighbour connectivity correctly,
+       // the 'pfverts' neighbor container is zapped here so that VData does not think anymore that it has neighbor connectivity
+       // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
+       vset.RemovePfverts();
 
        // 1. preserving numbered node coordinates in a vector
        const size_t vertices(vset.Vertices());

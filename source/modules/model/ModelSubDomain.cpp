@@ -1392,17 +1392,10 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
 
 // ACCESSORY
 
-///// looks for simplex with provided index
-//template<size_t dim, template<size_t> class CELL>
-//bool ModelSubDomain<dim,CELL>::Contains( size_t eidx ) const
-//  {
-//    const typename vector<CELL<dim>*>::const_iterator simplexEnd( this->elmt_vec_.end() );
-//    for( typename vector<CELL<dim>*>::const_iterator simplex( this->elmt_vec_.begin() ); simplex != simplexEnd; ++simplex )
-//      if( (*simplex)->Idx() == eidx )
-//        return true;
-//    return false;
-//  } // end
-
+/**
+    Uses binary_search on both ranges of the sorted element vector to find the element in question.
+    returns true or false.
+*/
 template<size_t dim, template<size_t> class CELL>
 bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
  {
@@ -1417,6 +1410,10 @@ bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
  } // end
 
 
+/**
+    Uses binary_search on both ranges of the sorted node vector to find the node in question.
+    returns true or false.
+*/
 template<size_t dim, template<size_t> class CELL>
 bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  {
@@ -5376,8 +5373,14 @@ template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::Out() const
  {
     cout <<"\nModelSubDomain<dim,CELL>::Out(): name: '"<< subdomain_name_ <<"'";
-    cout <<" member elements: interior="<< InteriorElements();
-    cout <<", boundary="<< elmt_vec_.size()-InteriorElements() <<": "<< endl;
+    cout <<"\n\tmember elements("<< elmt_vec_.size() <<"): interior="<< InteriorElements();
+    cout <<", perimeter="<< elmt_vec_.size()-InteriorElements();
+    cout <<"\n\tmember nodes ("<< node_vec_.size() <<"): interior nodes="<< node_vec_.size() - PerimeterNodes();
+    cout <<", perimeter nodes="<< PerimeterNodes();
+    size_t perimeter_faces(0U);
+    for ( size_t i=0U; i<bd_face_vec_.size(); ++i ) perimeter_faces += bd_face_vec_[i].size();
+    cout <<"\n\tperimeter faces="<< perimeter_faces;
+    cout <<"\n\tdetailed listing of elements and nodes:";
 
     for ( typename vector<CELL<dim>*>::const_iterator
           it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
@@ -5387,7 +5390,7 @@ void ModelSubDomain<dim,CELL>::Out() const
 //         else (*it)->Out();
       }
 
-    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    cout <<"\n\n perimeter elements and their perimeter faces (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(bd_face_vec_.begin());
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
          cout <<"\nelement "<< i <<": edge face numbers: ";
@@ -5395,7 +5398,7 @@ void ModelSubDomain<dim,CELL>::Out() const
                ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
-    cout <<"\n\n edge nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
+    cout <<"\n\n perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
          if ( node_vec_[i] == NULL )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
@@ -5403,7 +5406,8 @@ void ModelSubDomain<dim,CELL>::Out() const
       }
 
     cout << endl;
- }
+   
+ } // Out
 
 
 

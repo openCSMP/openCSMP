@@ -2007,8 +2007,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
        their sides are called boundaries.
 
        @attention model corners are not considered.
-       
-       @todo DEPRECATE - no point to form such edge regions
 
   */
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
@@ -2135,12 +2133,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
      corners. This is accomplished subsequently (in this method) by calling recreateBoxBoundaryFlags().
      
      @author refactored by SKM 2016
+     @author refactored by SKM 2018
 */
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
   bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
    {
       BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-      std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishEdgeRegionsOfBoxShapedModel: Establishing Box Boundaries for " << dim << " dimensional box shaped model...";
+      std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Establishing Box-object boundaries for " << dim << " dimensional box shaped model...";
 
       boundaryComplex->InsertBoundary( TOP, "TOP" );
       boundaryComplex->InsertBoundary( BOTTOM, "BOTTOM" );
@@ -2153,21 +2152,36 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
       // potential irregular model outside boundaries, like for instance in a box with topography on top
       if ( boundaryComplex->ContainsRegion("IRREGULAR") )
         boundaryComplex->InsertBoundary( IRREGULAR, "IRREGULAR" );
-
-      std::vector<std::string> regionsToRemove;
-      for( typename std::map<std::string,csmp::Region<dim> >::iterator
-           it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
-        if( it->first == "FRONT" || it->first == "BACK" || it->first == "TOP" || it->first == "BOTTOM" ||
-            it->first == "LEFT" || it->first == "RIGHT" || it->first == "IRREGULAR" )
-          regionsToRemove.push_back(it->first);
-
-      for ( size_t i = 0; i < regionsToRemove.size(); ++i )
-        if ( regionsToRemove[i] != "Model" ) {
-              std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Removing region " << regionsToRemove[i] << " since it was transformed to Boundary...";
-            boundaryComplex->RemoveFromRegion( "Model", regionsToRemove[i].c_str() );
-            boundaryComplex->RemoveRegion( regionsToRemove[i].c_str(), true );
-          }
      
+      // creating the edges needed in a three-dimensional model
+      if( dim == 3 ) EstablishEdgeBoundariesOfBoxShapedModel();
+
+      std::set<std::string> regionsToRemove;
+      for ( typename std::map<std::string,csmp::Region<dim> >::iterator
+          it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
+        if ( isSide( parseBoundary((*it).first) ) || isEdge( parseBoundary((*it).first) ) )
+          regionsToRemove.insert(it->first);
+
+     // doing the removal of all box boundaries in one go
+      set<csmp::Element<dim>*>  elmts_to_remove;
+      if ( !regionsToRemove.empty() )
+        std::cout << "\n\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Removing regions since they were transformed to Boundaries:\n\t";
+      for ( auto rit=regionsToRemove.begin(); rit!=regionsToRemove.end(); ++rit )
+        if ( (*rit) != "Model" ) {
+             std::cout << (*rit) << " ";
+             const Region<dim>& subdomain(boundaryComplex->Region(*rit));
+             for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
+               elmts_to_remove.insert(*eit);
+          }
+      std::cout << std::endl;
+     
+      // the regions that were converted into boundaries are removed from the region 'Model'
+      boundaryComplex->RemoveFromRegion( "Model", elmts_to_remove );
+      // then the regions and their elements are removed
+      const bool remove_elements(true);
+      for ( auto rit=regionsToRemove.begin(); rit!=regionsToRemove.end(); ++rit )
+        boundaryComplex->RemoveRegion( (*rit).c_str(), remove_elements );
+
       // from Box.h
       recreateBoxBoundaryFlags( *boundaryComplex );
       std::cout << "\n\n EstablishBoxBoundaries: done!\n";

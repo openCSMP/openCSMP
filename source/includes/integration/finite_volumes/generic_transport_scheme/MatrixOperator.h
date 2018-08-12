@@ -9,11 +9,9 @@ namespace csmp {
 
 \brief     Matrix operator
 \details   Part of the Colleoli transport scheme.
-\author    
 \version   0a
 \date      6/12/2017
 \pre       base class for matrix operators
-\bug
 \warning
 \copyright The University of Melbourne
 

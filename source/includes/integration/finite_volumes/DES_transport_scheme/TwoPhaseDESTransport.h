@@ -5,7 +5,7 @@
 #include "Node.h"
 #include "Index.h"
 #include "Event.h"
-#include "Variables_CO2GeoSequenstration.h"
+#include "VariableSet_CO2GeoSequestration.h"
 #include "FlowFunctions.h"
 #include "FibonacciHeap.h"
 
@@ -19,7 +19,7 @@ template<size_t> class Model;
 
 
 template<size_t dim>
-class TwoPhaseDESTransport : public variables::Variables_CO2GeoSequenstration {
+class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
   public:
     TwoPhaseDESTransport ( Model<dim>& m, 

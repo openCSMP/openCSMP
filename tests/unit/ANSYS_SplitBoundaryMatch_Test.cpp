@@ -10,7 +10,7 @@
 #include "Model.h"
 #include "VTU_Interface.h"
 
-//#include "catch.hpp"
+#include "catch.hpp"
 
 using namespace std;
 
