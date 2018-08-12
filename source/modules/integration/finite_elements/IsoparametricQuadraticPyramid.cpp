@@ -498,7 +498,7 @@ void IsoparametricQuadraticPyramid::Nrst(
   N[12]= t*(1-r-t)*(1+s-t)/(1-t);
 }
 
-/**
+
 
 /**
 
