@@ -2941,8 +2941,8 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     struct ZCoords {
       double64 z[8];
     };
-    std::vector<ZCoords> zcoord;
-    zcoord.resize(NX_*NY_*NZ_);
+    //std::vector<ZCoords> zcoord;
+    //zcoord.resize(NX_*NY_*NZ_);
     size_t NXxNY = NX_ * NY_;
 
     for ( size_t k=0U; k<NZ_; k++ )

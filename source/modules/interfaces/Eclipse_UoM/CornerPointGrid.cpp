@@ -65,49 +65,57 @@ namespace csmp {
         }
       }
 
+	  //JC: changed the order of points
+	  //      1---2
+	  //     /|  /|
+	  //    4---3 |
+	  //    | 5-|-6
+	  //    |/  |/
+	  //    8---7
       Point<3u> getNodeCoord(ColumnCell& cell, size_t vertex) const {
         switch (vertex)
         {
           case 0:
             return p0->GetPoint(cell.z[0][0]);
           case 1:
-            return p1->GetPoint(cell.z[1][0]);
+            return p3->GetPoint(cell.z[3][0]);
           case 2:
             return p2->GetPoint(cell.z[2][0]);
           case 3:
-            return p3->GetPoint(cell.z[3][0]);
+            return p1->GetPoint(cell.z[1][0]);
           case 4:
             return p0->GetPoint(cell.z[0][1]);
           case 5:
-            return p1->GetPoint(cell.z[1][1]);
+            return p3->GetPoint(cell.z[3][1]);
           case 6:
             return p2->GetPoint(cell.z[2][1]);
           case 7:
-            return p3->GetPoint(cell.z[3][1]);
+            return p1->GetPoint(cell.z[1][1]);
         }
         throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeCoord",
                               "Node id out of range");
       }
 
+	  //JC: changed the order of points
       size_t getNodeID(ColumnCell& cell, size_t vertex) const {
         switch (vertex)
         {
           case 0:
             return cell.z[0][0] + p0->FirstNodeNum();
           case 1:
-            return cell.z[1][0] + p1->FirstNodeNum();
+            return cell.z[3][0] + p3->FirstNodeNum();
           case 2:
             return cell.z[2][0] + p2->FirstNodeNum();
           case 3:
-            return cell.z[3][0] + p3->FirstNodeNum();
+            return cell.z[1][0] + p1->FirstNodeNum();
           case 4:
             return cell.z[0][1] + p0->FirstNodeNum();
           case 5:
-            return cell.z[1][1] + p1->FirstNodeNum();
+            return cell.z[3][1] + p3->FirstNodeNum();
           case 6:
             return cell.z[2][1] + p2->FirstNodeNum();
           case 7:
-            return cell.z[3][1] + p3->FirstNodeNum();
+            return cell.z[1][1] + p1->FirstNodeNum();
         }
         throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
                               "Node id out of range");
@@ -149,13 +157,14 @@ namespace csmp {
           hexa.XYZ(i, 0, p[0]);
           hexa.XYZ(i, 1, p[1]);
           hexa.XYZ(i, 2, p[2]);
-          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+          //std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
         }
 
         size_t iNrIps = hexa.IntegrationPoints();
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           hexa.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = hexa.JacobianDeterminant();
+		  //std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -184,13 +193,14 @@ namespace csmp {
           pyra.XYZ(i, 0, p[0]);
           pyra.XYZ(i, 1, p[1]);
           pyra.XYZ(i, 2, p[2]);
-          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+          //std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
         }
         
         size_t iNrIps = pyra.IntegrationPoints();
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           pyra.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = pyra.JacobianDeterminant();
+		  std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -219,13 +229,14 @@ namespace csmp {
           tetra.XYZ(i, 0, p[0]);
           tetra.XYZ(i, 1, p[1]);
           tetra.XYZ(i, 2, p[2]);
-          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+          //std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
         }
         
         size_t iNrIps = tetra.IntegrationPoints();
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           tetra.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = tetra.JacobianDeterminant();
+		  std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -256,13 +267,14 @@ namespace csmp {
           prism.XYZ(i, 0, p[0]);
           prism.XYZ(i, 1, p[1]);
           prism.XYZ(i, 2, p[2]);
-          // std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
+          //std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
         }
         
         size_t iNrIps = prism.IntegrationPoints();
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           prism.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = prism.JacobianDeterminant();
+		  std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -515,8 +527,8 @@ namespace csmp {
       }
     }
 
-    /**
-     x stays, y = -z and z=y.
+    /** JC: Why is it needed???
+     x stays, y = -z and z=y. 
      */
     void CornerPointGrid_UoM
     ::ConvertFromReservoirToCSMPcoordinateSystem(csmp::Point<3U>& pt) const
@@ -609,6 +621,7 @@ namespace csmp {
             Pillar& p1 = (*this)(i + 0, j + 1);
             Pillar& p2 = (*this)(i + 1, j + 1);
             Pillar& p3 = (*this)(i + 1, j + 0);
+
             for (size_t k = 0; k < NZ_; ++k)
             {
               if (!CellActivity(i, j, k)) {
@@ -625,6 +638,17 @@ namespace csmp {
               cell.z[2][1] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 7]); // b_se
               cell.z[3][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
               cell.z[3][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
+
+			  //cell.z[0][0] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 0]); // t_nw
+			  //cell.z[0][1] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 4]); // b_nw
+			  //cell.z[1][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
+			  //cell.z[1][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
+			  //cell.z[2][0] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 3]); // t_se
+			  //cell.z[2][1] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 7]); // b_se
+			  //cell.z[3][0] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 2]); // t_sw
+			  //cell.z[3][1] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 6]); // b_sw
+			  
+			  
 
               // If all four corners are degenerate, the cell is fully degenerate.
 
@@ -661,6 +685,7 @@ namespace csmp {
     {
       vset.HybridElementTypeMesh( true );
 
+	  //JC: where is the pfverts? they should be generated in this step
       //map<size_t, vector<long64>>  pfverts;
 
       // 1. Classify the cells
@@ -675,20 +700,29 @@ namespace csmp {
         for (size_t iCell = 0; iCell < iNrCells; ++iCell) {
           auto& cell = column.cells_[iCell];
 
-          Pillar& p0 = (*this)(i + 0, j + 0);
-          Pillar& p1 = (*this)(i + 0, j + 1);
-          Pillar& p2 = (*this)(i + 1, j + 1);
-          Pillar& p3 = (*this)(i + 1, j + 0);
+          Pillar& p0 = (*this)(i + 0, j + 0); //nw
+          Pillar& p1 = (*this)(i + 0, j + 1); //sw
+          Pillar& p2 = (*this)(i + 1, j + 1); //se
+          Pillar& p3 = (*this)(i + 1, j + 0); //ne
 
           double64 z[4][2];
-          z[0][0] = p0.GetZCoord(cell.z[0][0]);
+          z[0][0] = p0.GetZCoord(cell.z[0][0]); 
           z[0][1] = p0.GetZCoord(cell.z[0][1]);
-          z[1][0] = p1.GetZCoord(cell.z[1][0]);
+          z[1][0] = p1.GetZCoord(cell.z[1][0]); 
           z[1][1] = p1.GetZCoord(cell.z[1][1]);
-          z[2][0] = p2.GetZCoord(cell.z[2][0]);
+          z[2][0] = p2.GetZCoord(cell.z[2][0]); 
           z[2][1] = p2.GetZCoord(cell.z[2][1]);
-          z[3][0] = p3.GetZCoord(cell.z[3][0]);
+          z[3][0] = p3.GetZCoord(cell.z[3][0]); 
           z[3][1] = p3.GetZCoord(cell.z[3][1]);
+
+		  //z[0][0] = p0.GetZCoord(cell.z[0][0]); //nw
+		  //z[0][1] = p0.GetZCoord(cell.z[0][1]);
+		  //z[1][0] = p3.GetZCoord(cell.z[1][0]); //ne
+		  //z[1][1] = p3.GetZCoord(cell.z[1][1]);
+		  //z[2][0] = p2.GetZCoord(cell.z[2][0]); //se
+		  //z[2][1] = p2.GetZCoord(cell.z[2][1]);
+		  //z[3][0] = p1.GetZCoord(cell.z[3][0]); //sw
+		  //z[3][1] = p1.GetZCoord(cell.z[3][1]);
 
           // Classify the degeneracy
           uint8_t classification = 0;
