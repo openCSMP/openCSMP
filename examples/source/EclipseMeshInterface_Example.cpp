@@ -86,8 +86,10 @@ void EclipseMeshInterface_Example::Run()
   
   Region<3U>&  model_domain(modelOut.Region("Model"));
   model_domain.UpdateMemberIndexes();
+
+  modelOut.OutputToBinaryFile("EclipseInterfaceExample");
   
-  
+#if 0
   // 3. eliminating any potentially disfunctional elements / cells from the model
   // ----------------------------------------------------------------------------
   // elements that have a negative Jacobian determinant are assumed to be degenerate and flagged for deletion
@@ -126,6 +128,7 @@ void EclipseMeshInterface_Example::Run()
     cout <<"\n\tsurface elements removed: "<< surface_e_removed;
     cout <<"\n\tline elements removed:    "<< line_e_removed;
   }
+#endif
 
   VTK_Interface<3U>  vtk_output;
   vtk_output.OutputNodeDataToVTK( modelOut, "EclipseInterfaceExample", 0 );
