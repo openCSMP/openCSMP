@@ -223,8 +223,8 @@ class PropertyDatabase  {
                                    
    void           DeleteProperty( const char* property_name ); 
    
-   std::unordered_map<std::string,csmp::Parameter>::const_iterator  Begin() const;
-   std::unordered_map<std::string,csmp::Parameter>::const_iterator  End() const;
+   std::map<std::string,csmp::Parameter>::const_iterator  Begin() const;
+   std::map<std::string,csmp::Parameter>::const_iterator  End() const;
 
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountBegin() const; 
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator  VariableCountEnd() const; 
@@ -263,7 +263,7 @@ class PropertyDatabase  {
    bool verbose_;
    std::string  physvarsFile;
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> > variableCount_; ///< all placements and variable types in here
-   std::unordered_map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
+   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
    IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
 
    PropertyDatabase( const PropertyDatabase<dim>& );

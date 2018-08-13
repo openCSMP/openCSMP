@@ -140,14 +140,14 @@ PropertyDatabase<dim>::~PropertyDatabase()
 
 // property iterators
 template<size_t dim>
-std::unordered_map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
+std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
  {
     return propList_.begin();
  } 
  
  
 template<size_t dim>
-std::unordered_map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
+std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
  {
     return propList_.end();
  } 

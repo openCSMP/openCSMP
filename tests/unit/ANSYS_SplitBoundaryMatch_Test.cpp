@@ -16,9 +16,6 @@ using namespace std;
 
 namespace csmp {
 
-/// using the boundary faces of a region, the method creates a (triangulated) surface and writes it into a VTK file
-void perimeterSurfaceToVTK( const Model<3U>&,  const char* region );
-
 /**
     tests findSplitInterfaceElements() and the creation of a SplitBoundary from ANSYS
     split model.

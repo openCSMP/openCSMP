@@ -355,14 +355,12 @@ void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManage
                iterRegion( groupMap_.find( std::string(regionName) ) ),
                iterUniqueRegion( uniqueGroupMap_.find( std::string(regionName) ));
 
-       // avoiding that other regions are accidentially damaged
+       // alerting user that other regions may be accidentially damaged by deleting non-unique regions
        if (delete_elements) {
-           if (iterRegion != groupMap_.end()) {
-               ErrorHandler::Instance().notice(ERROR,
-                                     "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
-                                     "Attempt to delete elements from a non-unique region: ", regionName );
-
-           }
+           if ( iterRegion != groupMap_.end() ) {
+                ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion:",
+                                                "Deleting the elements of a non-unique region: ", regionName );
+             }
            else {
               auto& subdomain = iterUniqueRegion->second;
 

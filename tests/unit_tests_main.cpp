@@ -104,7 +104,7 @@
 #include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
-#include "DirichletPressureBoxModel_VVCase.h"
+//#include "DirichletPressureBoxModel_VVCase.h"
 
 
 using namespace std;
@@ -336,7 +336,7 @@ TEST_CASE("Unported tests", "[Unported]") {
       // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers
       
 //      refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
-      refactored.addTest( new DirichletPressureBoxModel_VVCase() );
+//      refactored.addTest( new DirichletPressureBoxModel_VVCase() );
 
       refactored.run();
       long nFail = refactored.report();
