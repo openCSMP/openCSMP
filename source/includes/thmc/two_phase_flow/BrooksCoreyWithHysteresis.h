@@ -2,7 +2,6 @@
 #define BROOKS_COREY_WITH_HYSTERESIS_H
 
 #include "TwoPhaseModel.h"
-#include "LinearTwoPhaseModel.h"
 
 namespace csmp {
 
@@ -20,10 +19,10 @@ class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
     BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
                                const char* lamda, const char* pc_entry );
                            
-    virtual ~BrooksCoreyWithHysteresis();
+    virtual ~BrooksCoreyWithHysteresis() {}
   
     /// not constant as it sets the saturation inflection point
-    virtual void Initialize( Element<dim>& );
+    virtual void InitializeAndStore( Element<dim>& );
     
     // relative permeabilities
     virtual double64 krn_Phase() const;

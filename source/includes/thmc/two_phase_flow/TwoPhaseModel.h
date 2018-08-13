@@ -51,7 +51,7 @@ class TwoPhaseModel {
     virtual void Initialize( const Element<dim>& e );
  
     /// read and modify element properties when the saturation functions are history dependent
-    virtual void Initialize( Element<dim>& e );
+    virtual void InitializeAndStore( Element<dim>& e );
 
     /// interpolates node properties to element barycenter
     virtual void InitializeForBaryCenter( const Element<dim>& e );

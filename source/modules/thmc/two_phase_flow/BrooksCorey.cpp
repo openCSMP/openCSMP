@@ -28,7 +28,7 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const bool sw_ro_mu_placement )
 
  : TwoPhaseModel<dim>(database, viscosity_nw, viscosity_w, density_nw, density_w,
-                      permeability, "saturation aqueous phase", 
+                      permeability, "saturation water",
                      "residual saturation non-wetting phase",
                      "residual saturation wetting phase",
                       sw_ro_mu_placement),
@@ -549,7 +549,7 @@ template class BrooksCorey<1U>;
 template class BrooksCorey<2U>;
 template class BrooksCorey<3U>;
 
-} // end namespace csp
+} // end namespace csmp
 
 
 

@@ -6,18 +6,6 @@
 #include "TwoPhaseModel.h"
 #include "VTU_Interface.h"
 
-#include "TwoPhaseModel.h"
-
-#include "BrooksCorey.h"
-#include "FourarLenormand.h"
-#include "VanGenuchten.h"
-#include "TwoPhaseFileBased.h"
-#include "Experimental2PhaseModel.h"
-#include "ExperimentalRT.h"
-#include "FractureMatrixUpscaled.h"
-#include "BrooksCoreyWithHysteresis.h"
-#include "LinearTwoPhaseModel.h"
-
 using namespace std;
 
 namespace csmp {
@@ -61,21 +49,19 @@ void TwoPhaseModel_Test::run()
   cout << "\nTwoPhaseModel_Test: " << getName() << endl;
 
   Region<1>& model = model_->Region( "Model" );
-  for ( vector<Element<1U>*>::iterator it = model.ElementsBegin();
-        it != model.ElementsEnd(); ++it )
+  for ( vector<Element<1U>*>::iterator it = model.ElementsBegin(); it != model.ElementsEnd(); ++it )
   {
-  if( upToElementNumber_ != 0 && distance( model.ElementsBegin(), it ) > upToElementNumber_  )
+  if ( upToElementNumber_ != 0 && distance( model.ElementsBegin(), it ) > upToElementNumber_  )
     break;
     // setting up the relative permeability model
     // ---------------------------------------------
+    // without CONST cast, only the method of the base class will be called and the tests will fail
     twoPhaseModel_->Initialize( *(*it) );
     twoPhaseModel_->InitializeForNode( *(*it), 1U );
     twoPhaseModel_->EffectiveSaturation();
 
     const double64 sw( twoPhaseModel_->Saturation(1U) );
     const double64 seff( twoPhaseModel_->EffectiveSaturation() );
-    const double64 swr( twoPhaseModel_->Swr() );
-    const double64 snr( twoPhaseModel_->Snr() );
 
     // water saturation & effective water saturation
     // ---------------------------------------------

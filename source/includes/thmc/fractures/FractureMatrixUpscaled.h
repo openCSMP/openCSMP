@@ -95,7 +95,6 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
 
 
   private:
-
     FractureMatrixUpscaled();
 
     double64  Af_sw() const;
