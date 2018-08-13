@@ -358,7 +358,7 @@ void TwoPhaseModel<dim>::Initialize( const Element<dim>& e )
     non const version which allows to set parameters on element 
 */
 template<size_t dim>
-void TwoPhaseModel<dim>::Initialize( Element<dim>& e )
+void TwoPhaseModel<dim>::InitializeAndStore( Element<dim>& e )
  {
     swr_ = e.Read( swr_key_ );
     snr_ = e.Read( snr_key_ );
