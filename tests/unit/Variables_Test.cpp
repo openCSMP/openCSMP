@@ -8,6 +8,9 @@ using namespace std;
 
 namespace csmp {
 
+/**
+     @param prefix is the model name. 
+*/
 Variables_Test::Variables_Test( const char* prefix )
   :  prefix_(prefix)
   {
