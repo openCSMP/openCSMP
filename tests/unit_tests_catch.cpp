@@ -186,7 +186,5 @@ TEST_CASE("Composite-dependent functionality", "[CompositeFunctionality]") {
 	TEST_SECTION(RegionMonitor)
 	TEST_SECTION(ExponentialTransferFunction)
 	TEST_SECTION_V(PropertyAtPointVisitor,false)
-	//TEST_SECTION_V(TwoPhaseModel,composite);
-	//TwoPhaseModel_TestSuite  twoPhaseModelTests(composite);
-	//twoPhaseModelTests.run();
+	TEST_SECTION_V(TwoPhaseModel,composite);
 }

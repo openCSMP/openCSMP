@@ -262,6 +262,8 @@ TEST_CASE("Unported tests", "[Unported]") {
       interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // FAIL - flux balance on constant velocity projected on sides
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      // straight sided analytically integrated elements
+      interdependent1.addTest( new LinearCuboid_Test(false) );  // TODO: add automatic test of interpolation function derivative matrix
       // math operators etc.
       interdependent1.addTest( new Operand_Test() );
       interdependent1.addTest( new MathOperatorLHS_Test());

@@ -51,40 +51,43 @@ namespace csmp {
 		DenseMatrix<DM_MIN>  XY(element_->Nodes(), 3U);
 		element_->NodeCoordinateMatrix(XY);
 
-		cout << "\n LinearCuboid_Test::run: Element coordinate matrix: \n" << endl;
-		XY.Out();
-
+    if ( verbose_ ) {
+        cout << "\n LinearCuboid_Test::run: Element coordinate matrix: \n" << endl;
+        XY.Out();
+      }
+    
 		// IntegralNN over Element
-		cout << "\n\nLinearCuboid_Test::run: Integral NN \n";
+		if ( verbose_ ) cout << "\n\nLinearCuboid_Test::run: Integral NN \n";
 		DenseMatrix<DM_MIN> V;
 		V.Resize(8, 8);
 		element_->IntegralNN(V);
-		cout << " Integral NN \n ";
-		V.Out();
+    if ( verbose_ )  {
+        cout << " Integral NN \n ";
+        V.Out();
 
-		cout << "\n\nLinearCuboid_Test::run: Integral dNdN \n";
-		cout << "Unfortunately FiniteElementPolicy doesn't have IntegraldNdN!!\n";
-		cout << "So we run it by a LinearCuboid object (not an Element object)\n";
-
+        cout << "\n\nLinearCuboid_Test::run: Integral dNdN \n";
+        cout << "Unfortunately FiniteElementPolicy doesn't have IntegraldNdN!!\n";
+        cout << "So we run it by a LinearCuboid object (not an Element object)\n";
+      }
 		// Integral dNdN over Element		
 		DenseMatrix<DM_MIN> W;
 		W.Resize(8, 8);
 		lcuboid_->IntegraldNdN(W);
-		cout << "Integral DNDN \n";
-		W.Out();
-
-		cout << "\n Test Interpolation Function Values at Nodes : \n";
+    if ( verbose_ ) {
+          cout << "Integral DNDN \n";
+          W.Out();
+          // TODO: result should be automatically compared with something 
+       }
+    if ( verbose_ ) cout << "\n Test Interpolation Function Values at Nodes : \n";
 		TestInterpolationFunctionValues(*element_);
-		cout << " End test. Test is passed if no error reported. \n";
 
-		cout << "\n Sum of Shape functions at barycenter : \n";
+		if ( verbose_ ) cout << "\n Sum of Shape functions at barycenter : \n";
 		TestSumShapesAtBaryCenter(*element_);
-		cout << " End test. Test is passed if no error reported. \n";
 	}
 
 
 
-	void LinearCuboid_Test::TestInterpolationFunctionValues(const Element<3U>& e)
+void LinearCuboid_Test::TestInterpolationFunctionValues(const Element<3U>& e)
 	{
 		vector<double64> IPOL(element_->Nodes()), xyz(3U);
 		for (size_t i = 0; i < e.Nodes(); i++) {
@@ -92,22 +95,23 @@ namespace csmp {
 			xyz = pt.Coordinates();
 			e.N_AtGlobalPoint(IPOL, xyz);
 			// 1 at point
-			_equalTest(IPOL[i], 1., tolerance_factor_);
+			_equal(IPOL[i], 1., tolerance_factor_);
 			// zero everywhere else
 			for (size_t j = 0; j < IPOL.size(); j++)
 				if (j != i)
-					_equalTest(IPOL[j], 0., tolerance_factor_);
+					_equal(IPOL[j], 0., tolerance_factor_);
 			// sum = 1 (is given)
 		}
 	} // end
 
-	void LinearCuboid_Test::TestSumShapesAtBaryCenter(const Element<3U>& e)
+
+void LinearCuboid_Test::TestSumShapesAtBaryCenter(const Element<3U>& e)
 	{
 		std::vector<double64> M;
 		element_->N_AtBaryCenter(M);
 		double sum = 0.;
 		for (size_t i = 0; i < M.size(); ++i) sum += M[i];
-		_equalTest(sum, 1., tolerance_factor_);
+		_equal(sum, 1., tolerance_factor_);
 	}
 
 	bool LinearCuboid_Test::_equalTest(double a, double b, double tol) const
