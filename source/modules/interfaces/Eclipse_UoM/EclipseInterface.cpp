@@ -2934,32 +2934,95 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
     assert( NZ_ > 0 );
     assert( NY_ > 0 );
     
-    zcorn_.clear();
+	zcorn_.clear();
     zcorn_.resize(NX_ * NY_ * NZ_ * 8, std::numeric_limits<double64>::quiet_NaN());
     
     // 1. Read z coordinates
     struct ZCoords {
       double64 z[8];
     };
-    //std::vector<ZCoords> zcoord;
-    //zcoord.resize(NX_*NY_*NZ_);
     size_t NXxNY = NX_ * NY_;
 
+	//JC: To handle with Eclipse's shorthand notation
+	//    ex) n*val means that the value val shall be repeated n times.
+	std::vector<double64> values;
+
+	char*       token(0);
+	const char* delims = " ,:,\t,\n,\r";
+	bool        endOfblock(false);
+	size_t      counter(0U);
+	size_t      num;
+	double      value(-999.);
+	bool        default_value;
+
+	int firstLine(readEclipseFirstLineInBlock(ifs, text_line, line_length, endOfblock));
+	if (firstLine == 0 || firstLine == 2)
+		return firstLine;
+
+	do {
+		if (!isEclipseCommentLine(text_line))
+		{
+			token = strtok(text_line, delims);
+			do {
+				if (!readEclipseValue<double64>(std::string(token), default_value, num, value))
+				{
+					std::cout << "\n" << token << std::endl;
+					csmp_error.notice(csmp::ERROR,
+						"readEclipseCellData:",
+						"value cannot be read!");
+					return 0;
+				}
+				else
+				{
+					for (size_t i = 0; i < num; i++)
+					{
+						values.push_back(value);
+						counter++;
+					}
+				}
+				token = strtok(NULL, delims);
+				endOfblock = isEclipseEndOfBlock(token);
+			} while ((token != NULL) && !endOfblock);
+		}
+		if (!endOfblock)
+		{
+			ifs.getline(text_line, line_length);
+			endOfblock = isEclipseEndOfBlock(text_line);
+			if (!endOfblock && csmp::isBlankLine(text_line))
+			{
+				ifs.getline(text_line, line_length);
+				endOfblock = isEclipseEndOfBlock(text_line);
+			}
+		}
+	} while (!endOfblock && !csmp::isBlankLine(text_line) && !ifs.eof());
+
+	//JC: verify # of values in the block ZCORN
+	size_t num_zcorn = (NX_ * 4) * NY_ * 2 * NZ_;
+	if (num_zcorn != values.size())
+	{
+		std::cout << "\n" << token << std::endl;
+		csmp_error.notice(csmp::ERROR,
+			"Read_ZCORN:",
+			"# of data is invalid!");
+		return false;
+	}
+
+	size_t pos = 0;
     for ( size_t k=0U; k<NZ_; k++ )
     {
       for ( size_t j=0U; j<NY_; j++ )
       {
-        for ( size_t i=0U; i<NX_; i++ )
-        {
-          double64 t_nw = atof( popToken( ifs, text_line, line_length ) );
-          double64 t_ne = atof( popToken( ifs, text_line, line_length ) );
-          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 0] = t_nw;
+		for ( size_t i=0U; i<NX_; i++ )
+        {			
+		  double64 t_nw = values.at(pos++);
+		  double64 t_ne = values.at(pos++);
+          zcorn_[(i + j * NX_ + k * NXxNY)*8 + 0] = t_nw;		  
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 1] = t_ne;
         }
         for ( size_t i=0U; i<NX_; i++ )
-        {
-          double64 t_sw = atof( popToken( ifs, text_line, line_length ) );
-          double64 t_se = atof( popToken( ifs, text_line, line_length ) );
+        {			
+		  double64 t_sw = values.at(pos++);
+		  double64 t_se = values.at(pos++);
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 2] = t_sw;
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 3] = t_se;
         }
@@ -2968,15 +3031,15 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
       {
         for ( size_t i=0U; i<NX_; i++ )
         {
-          double64 b_nw = atof( popToken( ifs, text_line, line_length ) );
-          double64 b_ne = atof( popToken( ifs, text_line, line_length ) );
+		  double64 b_nw = values.at(pos++);			
+		  double64 b_ne = values.at(pos++);
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 4] = b_nw;
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 5] = b_ne;
         }
         for ( size_t i=0U; i<NX_; i++ )
         {
-          double64 b_sw = atof( popToken( ifs, text_line, line_length ) );
-          double64 b_se = atof( popToken( ifs, text_line, line_length ) );
+		  double64 b_sw = values.at(pos++);
+		  double64 b_se = values.at(pos++);
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 6] = b_sw;
           zcorn_[(i + j * NX_ + k * NXxNY)*8 + 7] = b_se;
         }
