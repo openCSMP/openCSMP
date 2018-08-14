@@ -150,6 +150,8 @@ namespace csmp {
       IsoparametricLinearPrism prism;
 
       bool ConstructHexahedron(ColumnCell& cell) {
+
+		  //std::cerr << "hexa: \n";
         for (size_t i = 0; i < 8; ++i) {
           vertexIDs[i] = i;
           auto p = getNodeCoord(cell, vertexIDs[i]);
@@ -187,6 +189,7 @@ namespace csmp {
         vertexIDs[3] = getNodeID(cell, face3);
         vertexIDs[4] = apex;
 
+		//std::cerr << "pyramid: \n";
         for (size_t i = 0; i < 5; ++i) {
           auto p = getGlobalNodeCoord(vertexIDs[i]);
           grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -200,7 +203,7 @@ namespace csmp {
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           pyra.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = pyra.JacobianDeterminant();
-		  std::cerr << "jacdet = " << jacdet << '\n';
+		  //std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -223,6 +226,7 @@ namespace csmp {
         vertexIDs[2] = getNodeID(cell, face2);
         vertexIDs[3] = apex;
 
+		//std::cerr << "tetra: \n";
         for (size_t i = 0; i < 4; ++i) {
           auto p = getGlobalNodeCoord(vertexIDs[i]);
           grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -236,7 +240,7 @@ namespace csmp {
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           tetra.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = tetra.JacobianDeterminant();
-		  std::cerr << "jacdet = " << jacdet << '\n';
+		  //std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -261,6 +265,7 @@ namespace csmp {
         vertexIDs[4] = getNodeID(cell, face4);
         vertexIDs[5] = getNodeID(cell, face5);
 
+		//std::cerr << "prism: \n";
         for (size_t i = 0; i < 6; ++i) {
           auto p = getGlobalNodeCoord(vertexIDs[i]);
           grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -274,7 +279,7 @@ namespace csmp {
         for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
           prism.JacobianAtIntegrationPoint(iIp);
           double64 jacdet = prism.JacobianDeterminant();
-		  std::cerr << "jacdet = " << jacdet << '\n';
+		  //std::cerr << "jacdet = " << jacdet << '\n';
           if (jacdet <= 0) {
             return false;
           }
@@ -732,6 +737,7 @@ namespace csmp {
             }
           }
           cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
+		  //std::cout << "cell.classification: " << classification <<"\n";
         }
       }
 
@@ -1489,8 +1495,10 @@ namespace csmp {
         vset.AddXYZ(x, y, z);
       }
 
-      // 4. Set up the rest of the vset
-      vset.ResizePfverts(generator.fem_types.size());
+	  // 4. Set up the rest of the vset
+	  // JC: There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.
+	  vset.RemovePfverts();
+      //vset.ResizePfverts(generator.fem_types.size());
       vset.ResizePlist(generator.plist.size());
       vset.AddPlist(generator.plist.begin(), generator.plist.end());
       vset.AddElementTypes(generator.fem_types.begin(), generator.fem_types.end());
