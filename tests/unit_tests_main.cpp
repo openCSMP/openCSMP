@@ -104,6 +104,8 @@
 #include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
+#include "LinearCuboid_Test.h"
+
 //#include "DirichletPressureBoxModel_VVCase.h"
 
 

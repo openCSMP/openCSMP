@@ -157,7 +157,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::ContainsRegion( const std::string& reg
 
 
 
-#if 0
+
 /**
     Forms non-unique user-defined region by graph traversal, relying only on node-to-parent element connections.
 
@@ -169,6 +169,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::ContainsRegion( const std::string& reg
     @author SKM
     @date 5/4/2016
 */
+/*
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNode( bool reestablishNeighborConnectivity )
  {
@@ -209,7 +210,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
    
     return true;
  }
-#endif
+*/
 
 
 
@@ -295,32 +296,6 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( cons
   }
   
   
-
-
-/**
-     Inserts region 'Model' into either the unique or non-unique region list and runs Region<>::Accumulate() to simply
-     add all the elements stored in the MeshManager object.
- 
-     @author Philipp Lang (2012)
-     @author SKM - included possibility to insert model into non-unique regions
-*/
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim,REGION_COMPLEX>::CreateOverallModelRegionFromMeshManager( bool model_is_unique )
- {
-#if 0
-    REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
-   
-    std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-              newModelRegion = ( model_is_unique ) ?
-                               uniqueGroupMap_.insert( std::make_pair( masterRegion_, csmp::Region<dim>( masterRegion_,
-                                                                       static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
-                                                   :
-                               groupMap_.insert( std::make_pair( masterRegion_, csmp::Region<dim>( masterRegion_,
-                                                 static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) ) ;
-    if( newModelRegion.second )
-        (*newModelRegion.first).second.Accumulate( regionComplex->Mesh().ElementsBegin(), regionComplex->Mesh().ElementsEnd() );
-#endif
-}
 
 
 
@@ -905,10 +880,9 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      skm_C_fread( fp, text );    // name of region
      skm_C_fread( fp, elmtIDs ); // element indices
      // TODO: deal with this redundant step although it does not affect many variable values
-#if 0
+
    // XXX AJB FIXME
-     domainVariablesIn( fp, this->Region(masterRegion_), database );
-#endif
+     domainVariablesIn( fp, this->Region("Model"), database );
 
      auto& meshmgr = regionComplex.Mesh();
 

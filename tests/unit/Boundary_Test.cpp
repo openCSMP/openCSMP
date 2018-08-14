@@ -364,10 +364,11 @@ void Boundary_Test::runLegacy()
     boundary12Name += "_";
     boundary12Name += region2Name;
     bool boundary12Test(  model.ContainsBoundary( boundary12Name ) );
-    if( boundary12Test )
-      if ( verbose_ ) cout << "\nBoundary set up successful." << endl;
-    else
+    if( boundary12Test && verbose_ )
+      cout << "\nBoundary set up successful." << endl;
+    else {
       if ( verbose_ ) cout << "\nBoundary set up MATRIX_LEFT-MATRIX_RIGHT failed." << endl;
+      }
     _test( boundary12Test );
     // testing proper parent assignment
     Boundary<SPACE>& boundaryOne( model.Boundary( boundary12Name ) );

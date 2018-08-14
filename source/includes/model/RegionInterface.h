@@ -141,12 +141,11 @@ class RegionInterface
     // Regions creation
     // -----------------------------------------------
     
-    /// forms non-unique region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
+    /// forms region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
     bool CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity=true );
 
-    /// forms non-unique region from the largest component in the mesh. Does not expect element-no-neighbour connections
+    /// forms region from the largest component in the mesh. Does not expect element-no-neighbour connections
     bool CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity );
-    
 
     /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object
     bool FormRegionsFrom( const ModelTopology& );
@@ -238,9 +237,6 @@ class RegionInterface
                                   std::vector<std::tuple<Element<dim>*,Element<dim>*,size_t,size_t> >& shared ) const;
 
   protected:
-    /// creates a region that contains all elements of the model
-    void CreateOverallModelRegionFromMeshManager( bool model_is_unique );
-
     std::map<std::string,csmp::Region<dim> >  uniqueGroupMap_; ///< map of regions that do not overlap
     std::map<std::string,csmp::Region<dim> >  groupMap_;       ///< map of potentially overlapping regions
 
