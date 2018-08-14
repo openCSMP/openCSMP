@@ -443,8 +443,8 @@ template<size_t dim>
 void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
     assert( nd_ptr != nullptr );
-    assert( i < Nodes() );
-    assert( node_connector_.size() == this->FE()->Nodes() );
+    assert( i < Nodes()*2U );
+    assert( !node_connector_.empty() );
 
     node_connector_[i] = nd_ptr;
  }

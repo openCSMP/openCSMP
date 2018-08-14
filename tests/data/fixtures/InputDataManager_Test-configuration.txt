@@ -27,7 +27,7 @@ LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6	2.0e6	2.0e6
 RIGHT	Dirichlet	fluid pressure		1.5e6	1.5e6	1.5e6	1.5e6
 
 # essential flags (however, this region does not exist anymore at this stage)
-# FRONT	interior	fluid pressure		Dirichlet
+FRAC_VOLUMES	interior	fluid pressure		Plain
 
 # csmp Boundary object conditions
 FRONT	complete	Dirichlet	fluid pressure		1.0e-6
