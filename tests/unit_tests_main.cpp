@@ -308,8 +308,9 @@ TEST_CASE("Unported tests", "[Unported]") {
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
       // misc
       composite.addTest( new RegionMonitor_Test() );
-      // constitutive relationships
-      composite.addTest( new ExponentialTransferFunction_Test() );
+      composite.addTest( new Variables_Test("FracBox") );
+      
+      // constitutive relationships TODO: create a separate test section for this
       
       /// Property data search tests
       Visitor_TestSuite visitorTests( composite );
@@ -319,6 +320,7 @@ TEST_CASE("Unported tests", "[Unported]") {
       /// Two phase flow tests
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
+      composite.addTest( new ExponentialTransferFunction_Test() );
       
       // running unit tests and reporting errors
       composite.run();
