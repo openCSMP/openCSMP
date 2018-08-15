@@ -29,7 +29,7 @@ void geometricCalculations_Test::run()
 
 
 
-/*
+/* TO TEST
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 );
 
 /// axes ( 2D )

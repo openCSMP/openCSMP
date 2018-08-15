@@ -26,7 +26,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     // Functionality used in Face construction process
     // ------------------------------------------------------------------------
 
-    InterFace();
+    InterFace() = delete;
 
     explicit InterFace( FiniteElement* );
 
@@ -60,13 +60,13 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// connect interface to its higher-dimensional neighbors
     void Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes = true );
 
-    /// connect interface to its higher-dimensional neighbors
+    /// connect interface to its higher-dimensional neighbor on the given side
     void Assign( Element<dim>* const parent, size_t faceId, INTERFACE_SIDE side );
 
     void Assign( size_t n_local, size_t parent_node, INTERFACE_SIDE side );
     void Assign( size_t n_local, std::pair<size_t, size_t> parent_nodes );
 
-    // TODO: SKM FIX - assign the actual node
+    /// assign the corresponding node of the higher-dimensional neigbor element
     void Assign( size_t n_local, Node<dim>*, INTERFACE_SIDE side );
   
     // ------------------------------------------------------------------------
@@ -81,7 +81,8 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// relation operators
     bool operator==( const InterFace<dim>& );
   
-    size_t  Nodes() const     { return node_connector_.size() / 2U; }; // since there is a duplicate set
+    /// node_connector_.size() / 2U = FE()->Nodes() once InterFace has been constructed; only 1 nodes in 1D
+    size_t  Nodes() const     { return (dim != 1U) ? this->FE()->Nodes()*2U : 1U; };
     size_t  Neighbors() const { return interface_connector_.size(); };
     
     /// for element face, there can be a neighbor
@@ -132,13 +133,13 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// access to the Element object from which the original face was created if it still is there (use HasBase()
     Element<dim>*  BaseElement() const;
 
-    /// Node numbers correspondance
+    /// Local node numbers in higher-dimensional adjacent elements; costly to compute
     size_t         ParentNodeNumber( size_t n_local, INTERFACE_SIDE side ) const;
-    size_t         ParentNodeNumberOppositeTo( size_t n_from_parent, INTERFACE_SIDE side ) const;
 
 
-    // TODO: check and capitalize
+    /// is there an equi-dimensional co-located element connected to this InterFace
     bool           HasBase() const { return baseElement_!=nullptr; }
+  
     // TODO: review this functionality
     size_t         InnerParentFaceID() const;
     size_t         OuterParentFaceID() const;
@@ -151,9 +152,9 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// returns area of the face; method assumes same role as Volume() for the element
     double64       Area() const;
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
-    void           UnitNormal( VectorVariable<dim>& )         const;
+    void           UnitNormal( VectorVariable<dim>& ) const;
 
-    /// computes spacing between pairs of nodes; @return false if overlap, true if separated
+    /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
     bool           NodeSpacing( size_t n_local, VectorVariable<dim>& ) const;
 
     // ------------------------------------------------------------------------
@@ -180,23 +181,22 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     void Out() const;
 
   private:
-    friend struct PrimitiveTraits<InterFace<dim>>;
-
-    void InitializeNodeCorrespondanceVector();
+    friend struct PrimitiveTraits<InterFace<dim> >;
+  
+    /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
+    std::pair<size_t,size_t>  SharedElementFaces();
+  
+    /// connect the nodes of the higher dimensional neighbor elements to the InterFace; @note can also be done individually with Assign
+    void InitializeNodeVector();
   
     // ------------------------------------------------------------------------
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t                idx_;       ///< unique identifier for indexing operations
-    std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outsie
-    std::vector<InterFace<dim>*>  interface_connector_; ///< nbor interfaces on inside followed by those on outside
-
-    std::vector<std::pair< size_t, size_t > > 
-      parent_elements_node_connector_; ///< parent element local node-ids on inside followed by those on outside
-    
-    Element<dim>* baseElement_; ///< Element object from which interface was constructed
-    
+    mutable size_t                idx_;                 ///< unique identifier for indexing operations
+    std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
+    std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces on inside followed by those on outside
+  
     // used for compatibility with Element and Face methods (Neighbor etc.)
     INTERFACE_SIDE  current_side_;  ///< switch to return information from INNER or OUTER side of interface
 
@@ -207,6 +207,8 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
 
     Element<dim>* outerParent_;           ///< higher-dimensional neighbor element in direction of interface normal
     size_t        outer_parent_face_id_;  ///< face number of outside higher-dimensional parent element
+
+    Element<dim>* baseElement_; ///< Element object from which interface was constructed; may not be there
 };
 
 
@@ -217,7 +219,6 @@ struct PrimitiveTraits<InterFace<dim>>
   {
     decltype(i->node_connector_)().swap(i->node_connector_);
     decltype(i->interface_connector_)().swap(i->interface_connector_);
-    decltype(i->parent_elements_node_connector_)().swap(i->parent_elements_node_connector_);
   }
 };
 

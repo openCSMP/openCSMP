@@ -486,7 +486,7 @@ void FiniteVolumeTransportBasics_Test::test_constant_velocity_field(Model<3U>& m
 }
     
     
-    void FiniteVolumeTransportBasics_Test::test_b25()
+void FiniteVolumeTransportBasics_Test::test_b25()
     {
         using namespace std;
 #if 0

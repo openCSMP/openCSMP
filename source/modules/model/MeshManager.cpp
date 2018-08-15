@@ -2102,70 +2102,72 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     database.ListProperties( FACE, properties );
     const size_t faces(face_collection_.size());
    
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+    if ( !face_collection_.empty() )
       {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto facesEnd(face_collection_.end());
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto facesEnd(face_collection_.end());
 
-         const size_t flag_capacity( faces * (*pit).second.flagDepth );
-         const size_t data_capacity( faces  * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+             const size_t flag_capacity( faces * (*pit).second.flagDepth );
+             const size_t data_capacity( faces  * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of face variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=face_collection_.begin(); it!=facesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of face variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+          }
       }
 
 
     // face integration point properties
     // ---------------------------------
-    if ( database.ListProperties( FACE_INTEGRATION_POINT, properties ) > 0 ) {
-        assert( !face_collection_.empty() );
+    if ( !face_collection_.empty() && database.ListProperties( FACE_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t face_ips(face_collection_.Root().IntegrationPoints());
        
         for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
@@ -2246,8 +2248,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
     // face sector integration point properties
     // ----------------------------------------
-    if ( database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
-        assert( !face_collection_.empty() );
+    if ( !face_collection_.empty() && database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t face_sector_ips(face_collection_.Root().IntegrationPointsPerSector());
         const size_t sectors_per_face(face_collection_.Root().Sectors());
 
@@ -2344,8 +2345,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
    
     // face facet integration point properties
     // ---------------------------------------
-    if ( database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
-        assert( !face_collection_.empty() );
+    if ( !face_collection_.empty() && database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t face_facet_ips(face_collection_.Root().IntegrationPointsPerFacet());
         const size_t facets_per_face(face_collection_.Root().Facets());
 
@@ -2447,68 +2447,71 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     // ---------------------------------------------------
     database.ListProperties( INTER_FACE, properties );
     const size_t interfaces(interface_collection_.size());
-   
-    for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+    // only if there actually are interface in the model
+    if ( !interface_collection_.empty() )
       {
-         PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
-         const auto interfacesEnd(interface_collection_.end());
-         const size_t flag_capacity( interfaces * (*pit).second.flagDepth );
-         const size_t data_capacity( interfaces  * (*pit).second.dataDepth );
-         data.Reserve( flag_capacity, data_capacity );
+        for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
+          {
+             PropertyData  data( (*pit).second.place, (*pit).second.type, dim, (*pit).second.dataDepth );
+             const auto interfacesEnd(interface_collection_.end());
+             const size_t flag_capacity( interfaces * (*pit).second.flagDepth );
+             const size_t data_capacity( interfaces  * (*pit).second.dataDepth );
+             data.Reserve( flag_capacity, data_capacity );
 
-         switch( (*pit).second.type )
-           {
-             case SCALAR: {
-                    ScalarVariable value;
-                    for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case VECTOR: {
-                    VectorVariable<dim> value;
-                    for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case TENSOR: {
-                    TensorVariable<dim> value;
-                    for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case ARRAY: {
-                    ArrayVariable value;
-                    for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             case FLAGGEDARRAY: {
-                    FlaggedArrayVariable value;
-                    for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
-                         (*it).Read( (*pit).second, value );
-                         pushBack( data, value );
-                      }
-                 }
-               break;
-             default:
-               csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
-                                  (*pit).first, "type of interface variable not recognized.");
-           }
-         // storing the data in the VSet
-         vset.AddData( (*pit).first.c_str(), data );
+             switch( (*pit).second.type )
+               {
+                 case SCALAR: {
+                        ScalarVariable value;
+                        for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case VECTOR: {
+                        VectorVariable<dim> value;
+                        for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case TENSOR: {
+                        TensorVariable<dim> value;
+                        for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case ARRAY: {
+                        ArrayVariable value;
+                        for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 case FLAGGEDARRAY: {
+                        FlaggedArrayVariable value;
+                        for ( auto it=interface_collection_.begin(); it!=interfacesEnd; ++it ) {
+                             (*it).Read( (*pit).second, value );
+                             pushBack( data, value );
+                          }
+                     }
+                   break;
+                 default:
+                   csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+                                      (*pit).first, "type of interface variable not recognized.");
+               }
+             // storing the data in the VSet
+             vset.AddData( (*pit).first.c_str(), data );
+          }
       }
 
     // interface integration point properties
     // --------------------------------------
-    if ( database.ListProperties( INTER_FACE_INTEGRATION_POINT, properties ) > 0 ) {
+    if ( !interface_collection_.empty() && database.ListProperties( INTER_FACE_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t interface_ips(interface_collection_.Root().IntegrationPoints());
        
         for ( auto pit=properties.begin(); pit!=properties.end(); ++pit )
@@ -2587,8 +2590,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
    
     // interface sector integration point properties
     // ---------------------------------------------
-    if ( database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
-        assert( !interface_collection_.empty() );
+    if ( !interface_collection_.empty() && database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t interface_sector_ips(interface_collection_.Root().IntegrationPointsPerSector());
         const size_t sectors_per_interface(interface_collection_.Root().Sectors());
 
@@ -2683,8 +2685,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
    
     // interface facet integration point properties
     // --------------------------------------------
-    if ( database.ListProperties( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
-        assert( !interface_collection_.empty() );
+    if ( !interface_collection_.empty() && database.ListProperties( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 ) {
         const size_t interface_facet_ips(face_collection_.Root().IntegrationPointsPerFacet());
         const size_t facets_per_interface(face_collection_.Root().Facets());
 
@@ -2778,6 +2779,9 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       }
  
  } // end OutputStoredVariablesTo
+
+
+
 
 
 

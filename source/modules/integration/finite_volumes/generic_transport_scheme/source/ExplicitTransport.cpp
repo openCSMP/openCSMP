@@ -133,11 +133,6 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
         // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
         //                               new concentration
         accumulation += source * c1 * delta_t;
-#if 1
-        if (accumulation < 0) {
-          std::cerr << "Buggy case\n";
-        }
-#endif
 
          // 5. storing the new concentration
          n.Store( this->key_NC, makeScalar( n.Status(this->key_NC), accumulation ) );

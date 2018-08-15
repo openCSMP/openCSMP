@@ -574,6 +574,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
             //interfacePtr = new InterFace<dim>( femPtr, NULL, lvsInterFaces, lvsIntegrationPoints );
             InterFace<dim>* interfaceObj = meshManager.PushBackIfUnique( InterFace<dim>( femPtr, NULL, lvsInterFaces, lvsIntegrationPoints ) );
 
+/* TODO: rewrite
             // inner parent element
             if( interfaceParents[f][0] != NULL_IDX )
             {
@@ -603,7 +604,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
             const size_t interfaceNodes( interfaceParentNodes[f].size() );
             for( size_t fn(0); fn < interfaceNodes; ++fn )
                 interfaceObj->Assign( fn, interfaceParentNodes[f][fn] );
-
+*/
             // push back into face container
             this->elmt_vec_.emplace_back( interfaceObj );
 
@@ -618,7 +619,7 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
       // done
       return true;
 
-  }
+  } // end CreateFrom
 
 
 
