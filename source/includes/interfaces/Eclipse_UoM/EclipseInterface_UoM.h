@@ -250,11 +250,8 @@ public:
     void SaveTensorProperty( size_t component,
                              const std::vector<csmp::ScalarVariable>& scalar_data ,
                              std::vector<csmp::TensorVariable<3U> >&  vector_data );
-#if 0
-
     void ClearBefore();
     void ClearAfter();
-#endif
 
     void AssignGridDimensions();
   

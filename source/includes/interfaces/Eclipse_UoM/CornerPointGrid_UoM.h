@@ -53,7 +53,7 @@ class  CornerPointGrid_UoM
     CornerPointGrid_UoM();
     ~CornerPointGrid_UoM();
 
-    void Clear();
+    //void Clear();
 
     void CreateModel( const std::string&     model_name,
                       csmp::VSet<3U>&       vset,
