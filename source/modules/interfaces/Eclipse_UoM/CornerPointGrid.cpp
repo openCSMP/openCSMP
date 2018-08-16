@@ -78,19 +78,19 @@ namespace csmp {
 				case 0:
 					return p0->GetPoint(cell.z[0][0]);
 				case 1:
-					return p1->GetPoint(cell.z[3][0]);
+					return p1->GetPoint(cell.z[1][0]);
 				case 2:
 					return p2->GetPoint(cell.z[2][0]);
 				case 3:
-					return p3->GetPoint(cell.z[1][0]);
+					return p3->GetPoint(cell.z[3][0]);
 				case 4:
 					return p0->GetPoint(cell.z[0][1]);
 				case 5:
-					return p1->GetPoint(cell.z[3][1]);
+					return p1->GetPoint(cell.z[1][1]);
 				case 6:
 					return p2->GetPoint(cell.z[2][1]);
 				case 7:
-					return p3->GetPoint(cell.z[1][1]);
+					return p3->GetPoint(cell.z[3][1]);
 				}
 				throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeCoord",
 					"Node id out of range");
@@ -103,19 +103,19 @@ namespace csmp {
 				case 0:
 					return cell.z[0][0] + p0->FirstNodeNum();
 				case 1:
-					return cell.z[3][0] + p1->FirstNodeNum();
+					return cell.z[1][0] + p1->FirstNodeNum();
 				case 2:
 					return cell.z[2][0] + p2->FirstNodeNum();
 				case 3:
-					return cell.z[1][0] + p3->FirstNodeNum();
+					return cell.z[3][0] + p3->FirstNodeNum();
 				case 4:
 					return cell.z[0][1] + p0->FirstNodeNum();
 				case 5:
-					return cell.z[3][1] + p1->FirstNodeNum();
+					return cell.z[1][1] + p1->FirstNodeNum();
 				case 6:
 					return cell.z[2][1] + p2->FirstNodeNum();
 				case 7:
-					return cell.z[1][1] + p3->FirstNodeNum();
+					return cell.z[3][1] + p3->FirstNodeNum();
 				}
 				throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
 					"Node id out of range");
@@ -415,24 +415,25 @@ namespace csmp {
 				}
 				case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
 					if (cell.z[0][0] < cell.z[0][1]) {
+						return FACE_TYPE::SPLIT_13_OR_57;
 					}
 					else return FACE_TYPE::FULL_QUAD;
 				}
 				case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
 					if (cell.z[1][0] < cell.z[1][1]) {
-						return FACE_TYPE::SPLIT_13_OR_57;
+						return FACE_TYPE::SPLIT_02_OR_46;
 					}
 					else return FACE_TYPE::FULL_QUAD;
 				}
 				case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
 					if (cell.z[2][0] < cell.z[2][1]) {
-						return FACE_TYPE::SPLIT_02_OR_46;
+						return FACE_TYPE::SPLIT_13_OR_57;
 					}
 					else return FACE_TYPE::FULL_QUAD;
 				}
 				case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
 					if (cell.z[3][0] < cell.z[3][1]) {
-						return FACE_TYPE::SPLIT_13_OR_57;
+						return FACE_TYPE::SPLIT_02_OR_46;
 					}
 					else return FACE_TYPE::FULL_QUAD;
 				}
@@ -707,24 +708,24 @@ namespace csmp {
 					z[3][1] = p3.GetZCoord(cell.z[3][1]);
 
 					//AB: Classify the degeneracy
-					//uint8_t classification = 0;
-					//for (size_t v = 0; v < 4; ++v) {
-					//	if (cell.z[v][0] == cell.z[v][1]) {
-					//		classification |= (1 << (3 - v));
-					//	}
-					//}
-					//cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
-
-					//Luat: new one
 					uint8_t classification = 0;
-					for (int v(0); v < 4; ++v)
-					{
+					for (size_t v = 0; v < 4; ++v) {
 						if (cell.z[v][0] == cell.z[v][1]) {
-							classification += 1 * pow(2, 3 - v);
+							classification |= (1 << (3 - v));
 						}
 					}
 					cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
-					//std::cout << "cell.classification: " << classification <<"\n";
+
+					//std::cout << "p0 t: "; p0.GetPoint(cell.z[0][0]).Out();
+					//std::cout << "p0 b: "; p0.GetPoint(cell.z[0][1]).Out();
+					//std::cout << "p1 t: "; p1.GetPoint(cell.z[1][0]).Out();
+					//std::cout << "p1 b: "; p1.GetPoint(cell.z[1][1]).Out();
+					//std::cout << "p2 t: "; p2.GetPoint(cell.z[2][0]).Out();
+					//std::cout << "p2 b: "; p2.GetPoint(cell.z[2][1]).Out();
+					//std::cout << "p3 t: "; p3.GetPoint(cell.z[3][0]).Out();
+					//std::cout << "p3 b: "; p3.GetPoint(cell.z[3][1]).Out();
+					//std::cout << "cell.classification: " << int(classification);
+					//std::cout << "\n";					
 				}
 			}
 
@@ -748,6 +749,8 @@ namespace csmp {
 			size_t badTetrahedra = 0;
 			size_t badPrisms = 0;
 
+
+			//Degeneration process starts!
 			for (auto column = columns_.begin(); column != columns_.end(); column++) {
 				Column& Col = column->second;
 				for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -757,6 +760,21 @@ namespace csmp {
 					size_t j = index.second;
 
 					generator.setIJ(i, j);
+
+					Pillar& p0 = (*this)(i + 0, j + 0); //nw
+					Pillar& p1 = (*this)(i + 1, j + 0); //ne
+					Pillar& p2 = (*this)(i + 1, j + 1); //se
+					Pillar& p3 = (*this)(i + 0, j + 1); //sw
+
+					std::cout << "p0 t: "; p0.GetPoint(cell.z[0][0]).Out();
+					std::cout << "p0 b: "; p0.GetPoint(cell.z[0][1]).Out();
+					std::cout << "p1 t: "; p1.GetPoint(cell.z[1][0]).Out();
+					std::cout << "p1 b: "; p1.GetPoint(cell.z[1][1]).Out();
+					std::cout << "p2 t: "; p2.GetPoint(cell.z[2][0]).Out();
+					std::cout << "p2 b: "; p2.GetPoint(cell.z[2][1]).Out();
+					std::cout << "p3 t: "; p3.GetPoint(cell.z[3][0]).Out();
+					std::cout << "p3 b: "; p3.GetPoint(cell.z[3][1]).Out();
+					std::cout << "\n";
 
 					ECLIPSE_CELL_CLASSIFICATION cellType = cell.classification;
 
