@@ -78,19 +78,19 @@ namespace csmp {
 				case 0:
 					return p0->GetPoint(cell.z[0][0]);
 				case 1:
-					return p3->GetPoint(cell.z[3][0]);
+					return p1->GetPoint(cell.z[3][0]);
 				case 2:
 					return p2->GetPoint(cell.z[2][0]);
 				case 3:
-					return p1->GetPoint(cell.z[1][0]);
+					return p3->GetPoint(cell.z[1][0]);
 				case 4:
 					return p0->GetPoint(cell.z[0][1]);
 				case 5:
-					return p3->GetPoint(cell.z[3][1]);
+					return p1->GetPoint(cell.z[3][1]);
 				case 6:
 					return p2->GetPoint(cell.z[2][1]);
 				case 7:
-					return p1->GetPoint(cell.z[1][1]);
+					return p3->GetPoint(cell.z[1][1]);
 				}
 				throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeCoord",
 					"Node id out of range");
@@ -103,19 +103,19 @@ namespace csmp {
 				case 0:
 					return cell.z[0][0] + p0->FirstNodeNum();
 				case 1:
-					return cell.z[3][0] + p3->FirstNodeNum();
+					return cell.z[3][0] + p1->FirstNodeNum();
 				case 2:
 					return cell.z[2][0] + p2->FirstNodeNum();
 				case 3:
-					return cell.z[1][0] + p1->FirstNodeNum();
+					return cell.z[1][0] + p3->FirstNodeNum();
 				case 4:
 					return cell.z[0][1] + p0->FirstNodeNum();
 				case 5:
-					return cell.z[3][1] + p3->FirstNodeNum();
+					return cell.z[3][1] + p1->FirstNodeNum();
 				case 6:
 					return cell.z[2][1] + p2->FirstNodeNum();
 				case 7:
-					return cell.z[1][1] + p1->FirstNodeNum();
+					return cell.z[1][1] + p3->FirstNodeNum();
 				}
 				throw csmp::Exception(ERROR, "CornerPointGrid::CellGenerator::getNodeID",
 					"Node id out of range");
@@ -124,9 +124,9 @@ namespace csmp {
 
 			void setIJ(size_t i, size_t j) {
 				p0 = &grid(i + 0, j + 0);
-				p1 = &grid(i + 0, j + 1);
+				p1 = &grid(i + 1, j + 0);
 				p2 = &grid(i + 1, j + 1);
-				p3 = &grid(i + 1, j + 0);
+				p3 = &grid(i + 0, j + 1);
 			}
 
 			size_t generateCellCentroid(ColumnCell& cell) {
@@ -644,18 +644,7 @@ namespace csmp {
 							cell.z[3][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
 							cell.z[3][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
 
-																								   //cell.z[0][0] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 0]); // t_nw
-																								   //cell.z[0][1] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 4]); // b_nw
-																								   //cell.z[1][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
-																								   //cell.z[1][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
-																								   //cell.z[2][0] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 3]); // t_se
-																								   //cell.z[2][1] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 7]); // b_se
-																								   //cell.z[3][0] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 2]); // t_sw
-																								   //cell.z[3][1] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 6]); // b_sw
-
-
-
-																								   // If all four corners are degenerate, the cell is fully degenerate.
+						    // If all four corners are degenerate, the cell is fully degenerate.
 
 							if (cell.z[0][0] == cell.z[0][1]
 								&& cell.z[1][0] == cell.z[1][1]
@@ -690,9 +679,6 @@ namespace csmp {
 		{
 			vset.HybridElementTypeMesh(true);
 
-			//JC: where is the pfverts? they should be generated in this step
-			//map<size_t, vector<long64>>  pfverts;
-
 			// 1. Classify the cells
 
 			size_t skewCells = 0;
@@ -720,11 +706,21 @@ namespace csmp {
 					z[3][0] = p3.GetZCoord(cell.z[3][0]);
 					z[3][1] = p3.GetZCoord(cell.z[3][1]);
 
-					// Classify the degeneracy
+					//AB: Classify the degeneracy
+					//uint8_t classification = 0;
+					//for (size_t v = 0; v < 4; ++v) {
+					//	if (cell.z[v][0] == cell.z[v][1]) {
+					//		classification |= (1 << (3 - v));
+					//	}
+					//}
+					//cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
+
+					//Luat: new one
 					uint8_t classification = 0;
-					for (size_t v = 0; v < 4; ++v) {
+					for (int v(0); v < 4; ++v)
+					{
 						if (cell.z[v][0] == cell.z[v][1]) {
-							classification |= (1 << (3 - v));
+							classification += 1 * pow(2, 3 - v);
 						}
 					}
 					cell.classification = static_cast<ECLIPSE_CELL_CLASSIFICATION>(classification);
