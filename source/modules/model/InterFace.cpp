@@ -281,6 +281,31 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, Element<dim>* const
   }
 
 
+/**
+    As above, but with the extra knowledge of the indices of the element faces that are juxtaposed
+*/
+template<size_t dim>
+void InterFace<dim>::Assign( Element<dim>* const inner_elmt, size_t inner_local_face_id,
+                             Element<dim>* const outer_elmt, size_t outer_local_face_id,
+                             bool assign_nodes )
+  {
+     assert( inner_elmt != nullptr );
+     assert( outer_elmt != nullptr );
+     innerParent_ = inner_elmt;
+     outerParent_ = outer_elmt;
+     assert( inner_local_face_id < innerParent_->Faces() );
+     assert( outer_local_face_id < outerParent_->Faces() );
+     inner_parent_face_id_ = inner_local_face_id;
+     outer_parent_face_id_ = outer_local_face_id;
+    
+     if ( assign_nodes )
+       // connect the nodes of the higher dimensional neighbors to the interface
+       InitializeNodeVector( inner_parent_face_id_, outer_parent_face_id_ );
+  }
+
+
+
+
 template<size_t dim>
 void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, INTERFACE_SIDE side )
   {
@@ -412,7 +437,7 @@ void InterFace<dim>::InitializeNodeVector()
     // resizing the nodevector
     if ( node_connector_.empty() ) {
          if ( dim == 1U ) node_connector_.resize(2U);
-         else node_connector_.resize(Nodes() * 2U);
+         else node_connector_.resize(this->FE()->Nodes() * 2U);
       }
     node_connector_.shrink_to_fit();
    
@@ -422,8 +447,8 @@ void InterFace<dim>::InitializeNodeVector()
     innerParent_->FE()->NodesOfFace( shared_faces.first, nids );
     // we retain the order in which the nodes are given to
     if ( dim != 1U ) {
-         assert( nids.size() == Nodes() );
-         for ( size_t n=0U; n<Nodes(); ++n )
+         assert( nids.size() == this->FE()->Nodes() );
+         for ( size_t n=0U; n<this->FE()->Nodes(); ++n )
            Assign( n, innerParent_->N( nids[n] ), INSIDE );
       }
     // assuming that the unit normal points from the inside to the outside
@@ -432,8 +457,8 @@ void InterFace<dim>::InitializeNodeVector()
     outerParent_->FE()->NodesOfFace( shared_faces.second, nids );
     // we retain the order in which the nodes are given to
     if ( dim != 1U ) {
-         assert( nids.size() == Nodes() );
-         for ( size_t n=0U; n<Nodes(); ++n )
+         assert( nids.size() == this->FE()->Nodes() );
+         for ( size_t n=0U; n<this->FE()->Nodes(); ++n )
            Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
       }
     else Assign( 0U, outerParent_->N(0), OUTSIDE );
@@ -441,6 +466,56 @@ void InterFace<dim>::InitializeNodeVector()
  } // end
 
 
+
+
+/**
+     Same as initialise node vector, but for the case where the shared faces have
+     already been established.
+ 
+     @note Nodes() cannot not be used here because the node_connector_ vector is
+     just getting initialised
+*/
+template<size_t dim>
+void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
+                                           size_t outer_elmt_face_id )
+ {
+    assert( inner_elmt_face_id < innerParent_->Faces() );
+    assert( outer_elmt_face_id < outerParent_->Faces() );
+   
+    // 1. get shared faces and assign them
+    inner_parent_face_id_ = inner_elmt_face_id;
+    outer_parent_face_id_ = outer_elmt_face_id;
+ 
+    // resizing the nodevector (x2 because there are 2 sides of the interface
+    if ( node_connector_.empty() ) {
+         if ( dim == 1U ) node_connector_.resize(2U);
+         else node_connector_.resize(this->FE()->Nodes() * 2U);
+      }
+    node_connector_.shrink_to_fit();
+   
+    // 2,3. starting with the inside
+    vector<size_t>  nids;
+    // inside
+    innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
+    // we retain the order in which the nodes are given to
+    if ( dim != 1U ) {
+         assert( nids.size() == this->FE()->Nodes() );
+         for ( size_t n=0U; n<this->FE()->Nodes(); ++n )
+           Assign( n, innerParent_->N( nids[n] ), INSIDE );
+      }
+    // assuming that the unit normal points from the inside to the outside
+    else Assign( 0U, innerParent_->N(1), INSIDE );
+    // outside
+    outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
+    // we retain the order in which the nodes are given to
+    if ( dim != 1U ) {
+         assert( nids.size() == this->FE()->Nodes() );
+         for ( size_t n=0U; n<this->FE()->Nodes(); ++n )
+           Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
+      }
+    else Assign( 0U, outerParent_->N(0), OUTSIDE );
+   
+ } // end
 
 
 

@@ -31,12 +31,12 @@ void ANSYS_SplitBoundaryMatch_Test::run()
            cout <<"\nStart simulation of - "<<this->getName()<<endl<<endl;
            cout <<"Building ModelOutput..."<<endl;
         }
-      const string variablesFile("CSMP-variables.txt");
+      const string variablesFile("ANSYS_SplitBoundaryMatch_Test-variables.txt");
       //                          fileset       regions-file
 //      ANSYS_Model3D model( "Model_Split_wall", "Model_Split_wall", variablesFile.c_str(), true );
 //      ANSYS_Model3D model( "NotSplitWall", "NotSplitWall", variablesFile.c_str(), true );
       ANSYS_Model3D model( "Split_Edges", "Split_Edges", variablesFile.c_str(), true );
-      Region<3U> model_domain(model.Region("Model"));
+      Region<3U>    model_domain(model.Region("Model"));
 
     // 0. visualising the model and its regions
     // ----------------------------------------
@@ -67,7 +67,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
       }
   
      // nodes at model perimeter
-     const csmp::Index nvar_key(model.Database().StorageKey("nodal variable"));
+     const csmp::Index    nvar_key(model.Database().StorageKey("nodal variable"));
      multiset<Point<3U> > split_nodes;
      model_domain.InputPropertyValue( "nodal variable", makeScalar(PLAIN,0.) );
      for ( auto nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
@@ -95,16 +95,10 @@ void ANSYS_SplitBoundaryMatch_Test::run()
 
     // 1. create element correspondance set
     // ---------------------------------------------------------------------------------------
-      Catch::Timer timer;
-      timer.start();
-  
       // reports local ids of shared face on either side of the split boundary
       // std::pair<std::pair<Element<3U>*,size_t>,std::pair<Element<3U>*,size_t> >
       set<OppositeElements>  interface_elmt_pairs;
       _test( findSplitInterfaceElements( model.Region("Model"), interface_elmt_pairs ) );
-  
-      const double correspondanceIdentificionTime( timer.getElapsedMilliseconds() );
-      cerr <<"\n::run: time taken to identify boundary elements: "<< correspondanceIdentificionTime <<"\n";
   
       // changing element property values in the discovered elements
       for ( auto eit=interface_elmt_pairs.begin(); eit!=interface_elmt_pairs.end(); ++eit ) {
@@ -117,15 +111,35 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    // 2. build CSMP SplitBoundary
    // ---------------------------------------------------------------------------------------
    model.DetectAndCreateSplitBoundaries();
+   // checking which boundaries were created
+   model.SplitBoundariesOut();
    
 
    // 3. change some property along split boundary to verify that assignments are made correctly
-   // ---------------------------------------------------------------------------------------
+   // ------------------------------------------------------------------------------------------
+   SplitBoundary<3U>& splitdomain = (*model.SplitBoundariesBegin()).second;
+   // node variable "nodal variable"
+   model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
+   // inside of boundary
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,1.), INTERIOR, INSIDE );
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,2.), PERIMETER, INSIDE );
+   // outside of boundary
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-1.), INTERIOR, OUTSIDE );
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-2.), PERIMETER, OUTSIDE );
 
+   // split boundary variable "interface flux"
+   const csmp::Index key = model.Database().StorageKey("interface flux");
+   splitdomain.Store( key, makeScalar(ANY,1.0e-5) );
+   _equal( splitdomain.Read(key), 1.0e-5, numeric_limits<double64>::epsilon() );
 
    // 4. write altered element properties on either side to VTK
    // ---------------------------------------------------------------------------------------
+   vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 2U );
+
   
+   // 5. see whether the split boundary survives being writting to and recovered from file
+   // ------------------------------------------------------------------------------------------
+
 } // end run
 
 

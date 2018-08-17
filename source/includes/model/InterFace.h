@@ -59,6 +59,11 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
 
     /// connect interface to its higher-dimensional neighbors
     void Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes = true );
+  
+    /// as Assign, for the case that the shared faces are already known
+    void Assign( Element<dim>* const inner_elmt, size_t inner_local_face_id,
+                 Element<dim>* const outer_elmt, size_t outer_local_face_id,
+                 bool assign_nodes );
 
     /// connect interface to its higher-dimensional neighbor on the given side
     void Assign( Element<dim>* const parent, size_t faceId, INTERFACE_SIDE side );
@@ -82,7 +87,9 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     bool operator==( const InterFace<dim>& );
   
     /// node_connector_.size() / 2U = FE()->Nodes() once InterFace has been constructed; only 1 nodes in 1D
-    size_t  Nodes() const     { return (dim != 1U) ? this->FE()->Nodes()*2U : 1U; };
+    size_t  Nodes() const     { return (dim != 1U) ? node_connector_.size() : 1U; };
+  
+    /// the InterFace object neighbors of the InterFace (one per face of interface
     size_t  Neighbors() const { return interface_connector_.size(); };
     
     /// for element face, there can be a neighbor
@@ -188,7 +195,10 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
   
     /// connect the nodes of the higher dimensional neighbor elements to the InterFace; @note can also be done individually with Assign
     void InitializeNodeVector();
-  
+
+    /// as above when the local indices of the shared faces of the higher-dimensional elements adjacent to the face are already known
+    void InitializeNodeVector( size_t inner_face_ID, size_t outer_face_ID );
+
     // ------------------------------------------------------------------------
     // Data members
     // ------------------------------------------------------------------------
