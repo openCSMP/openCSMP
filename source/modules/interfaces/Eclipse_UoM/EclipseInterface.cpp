@@ -29,7 +29,6 @@ EclipseInterface::~EclipseInterface()
 {
 }
 
-#if 0
 void EclipseInterface::ClearBefore()
 {
     /// grid specs
@@ -49,9 +48,9 @@ void EclipseInterface::ClearBefore()
 void EclipseInterface::ClearAfter()
 {
     /// grid
-    grid_.Clear();
+//	grid_.Clear();
     block_grid_.Clear();
-    box_.clear();
+//    box_.clear();
 
     /// regions
     satnum_.clear();
@@ -75,7 +74,7 @@ void EclipseInterface::ClearAfter()
 //    tranxyz_.clear();
 }
 
-
+#if 0
 void EclipseInterface
 ::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids )
 {
@@ -95,13 +94,7 @@ void EclipseInterface
 {
     grid_.AddWellEdgePath( well_name, cell_ids, edge_ids );
 }
-
-
 #endif
-
-
-
-
 
 /**
     MASTER METHOD of EclipseInterface which does everything:
@@ -135,9 +128,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
     model_topology_->ModelName( fname.c_str() );
 
     // 2. Read file
-#if 0
     ClearBefore();
-#endif
 
     if( !ReadFile( ifs, line_length ) ) {
         csmp_error.notice( csmp::FATAL_ERROR, "EclipseInterface::","File could not be properly read!!!");
@@ -575,7 +566,8 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
     }
     else if( keyword_ == "PERMX" || keyword_ == "PERMY" || keyword_ == "PERMZ" )
     {
-        return ReadTensorProperty( ifs, text_line,line_length, permxyz_, "PERMX", "PERMY", "PERMZ" );
+		//JC: error here!
+        //return ReadTensorProperty( ifs, text_line,line_length, permxyz_, "PERMX", "PERMY", "PERMZ" );
     }
     else if( keyword_ == "PRESSURE" )
     {
