@@ -564,10 +564,10 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
     {
         return ReadScalarProperty( ifs, text_line,line_length, poro_ );
     }
+	//JC: some bugs here, so need to debug this function later
     else if( keyword_ == "PERMX" || keyword_ == "PERMY" || keyword_ == "PERMZ" )
-    {
-		//JC: error here!
-        //return ReadTensorProperty( ifs, text_line,line_length, permxyz_, "PERMX", "PERMY", "PERMZ" );
+    {		
+        return ReadTensorProperty( ifs, text_line,line_length, permxyz_, "PERMX", "PERMY", "PERMZ" );		
     }
     else if( keyword_ == "PRESSURE" )
     {
