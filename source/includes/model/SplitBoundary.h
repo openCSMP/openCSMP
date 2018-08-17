@@ -17,11 +17,10 @@ template<size_t> class Region;
 template<typename> class FEM_Data;
 
 
-template<size_t dim>
-struct InterFaceElementSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>,
-                                             std::pair<Element<dim>*,size_t> > > {
+template<size_t dim> /// set of (higher-dim) Element - (inter)face idx pairs + Element co-located with InterFace (if present)
+struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > > {
   // constructor
-  explicit InterFaceElementSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >& set )
+  InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >& set )
     : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
 };
 
@@ -76,13 +75,28 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
     SplitBoundary() = delete;
     /// constructs split boundary with given name from the set of juxtaposed elements; prompts MeshManager to create elements
-    SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, MeshManager<dim>&, const InterFaceElementSet<dim>& );
+    SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
     virtual ~SplitBoundary();
     SplitBoundary<dim>&  operator=( const SplitBoundary& );
 
+    // --------------------------------------------------
+    // building of SplitBoundaries and their modification
+    // --------------------------------------------------
+
+    /// creates split boundary from supplied vectors (used in binary IO - supplied ids used from Model region)
+    bool CreateFrom( MeshManager<dim>& ,
+                     const FiniteElementManager& ,
+                     const std::map<size_t,csmp::Element<dim>*>&        elementIdPtr,
+                     const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
+                     const std::vector<std::vector<size_t> >&           interfaceParents,
+                     const std::vector<std::vector<std::pair<size_t,size_t> > >&  interfaceParentNodes );
+
+    /// creates split boundary from boundary
+    bool CreateFrom( Model<dim>&, Boundary<dim>& );
+  
     // ------------------------------------------------
     // reconstruction of boundaries that existed before
     // ------------------------------------------------
@@ -115,9 +129,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     /// integrates the property over the boundary line or surface
     double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
 
-    /// writes all contained data on the screen
-    void Out() const;
-
     // ----------------------------------------
     // building blocks
     // ----------------------------------------
@@ -140,6 +151,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     /// returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain
     std::pair<int32,int32>  InterFaceSpatialDimensions() const;
 
+    /// writes all contained data on the screen
+    void Out() const;
+
     // -----------------------------------------------
     // Binary input/output
     // -----------------------------------------------
@@ -152,21 +166,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
              const FiniteElementManager& ,
              const Region<dim>&, FILE* );
 
-    // ----------------------------------------
-    // building & modification
-    // ----------------------------------------
-
-    /// creates split boundary from supplied vectors (used in binary IO - supplied ids used from Model region)
-    bool CreateFrom( MeshManager<dim>& ,
-                     const FiniteElementManager& ,
-                     const std::map<size_t,csmp::Element<dim>*>&        elementIdPtr,
-                     const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
-                     const std::vector<std::vector<size_t> >&           interfaceParents,
-                     const std::vector<std::vector<std::pair<size_t,size_t> > >&  interfaceParentNodes );
-
-    /// creates split boundary from boundary
-    bool CreateFrom( Model<dim>&, Boundary<dim>& );
-  
   protected:
     /// return physical variable count at given integration points
     IntegrationPointVariables InterFaceIntegrationPointVariables() const;

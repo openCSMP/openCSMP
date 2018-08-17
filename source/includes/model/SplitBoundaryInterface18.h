@@ -54,7 +54,9 @@ class SplitBoundaryInterface18 {
     /// Removes splitboundary
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary, bool deleteElements = false );
 
-
+    /// prints current split boundaries
+    void SplitBoundariesOut() const;
+  
     // -----------------------------------------------
     // Binary input/output
     // -----------------------------------------------

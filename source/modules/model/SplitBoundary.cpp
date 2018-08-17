@@ -137,82 +137,71 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
  
 /**
    Constructor of a split boundary from the set of juxtaposed elements
-   Asks mesh manager to construct corresponding faces
+   Asks mesh manager to construct corresponding faces.
+ 
+   Can be used to create Splitboundaries from node-matched interface meshes
+   which already contain multiplicated yet collocated nodes (can be done in ANSYS).
+ 
+   @author SKM 15/08/2018
  
 */
 template<size_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
-                                   MeshManager<dim>& mgr,
-                                   const InterFaceElementSet<dim>& ifset )
+                                   const FiniteElementManager& femgr,
+                                   MeshManager<dim>& mesh,
+                                   const InterFaceSet<dim>& ifset )
 : ModelSubDomain<dim,InterFace>(splitboundaryname,pref)
  {
-    // requesting the mesh manager to build the interfaces
-    // ---------------------------------------------------
-/*
-    // building the interface vector
-    // -----------------------------
-    this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-    // assigning pointers to the interior interfaces
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it ) {
-      // XXX This operation may be expensive.
-      auto ifit = mesh.InterFacesBegin();
-      std::advance(ifit, *it);
-      this->elmt_vec_.push_back( &*ifit );
-    }
+    const LocalVariables&             ifvars(pref.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables&  if_ip_vars(pref.IntegrationPointVariablesAt(INTER_FACE_INTEGRATION_POINT));
    
-    // assigning pointers to the perimeter interfaces
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it ) {
-      // XXX This operation may be expensive.
-      auto ifit = mesh.InterFacesBegin();
-      std::advance(ifit, *it);
-      this->elmt_vec_.push_back( &*ifit );
-     }
-
-    // sorting the subvectors for future searching
-    const auto perimeterInterFacesBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
-    sort( this->elmt_vec_.begin(), perimeterInterFacesBegin );
-    sort( perimeterInterFacesBegin, this->elmt_vec_.end() );
-
-    // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
-    // ---------------------------------------------------------------------------------------------------
-    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
+    // 1. getting mesh manager to build interfaces according to specifications
+    // -----------------------------------------------------------------------
+    this->elmt_vec_.reserve( ifset.size() );
+    // appending the new interfaces at the end of the existing deque
+    size_t fidx = mesh.InterFaces();
+    // for all the interfaces of the new split boundary
+    for ( auto it=ifset.begin(); it!=ifset.end(); ++it ) {
+        // getting the element type that the interface shall represent
+        // from the first higher dimensional neighbor element
+        // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
+        //                                 first high-dim. nbor                         face at interface
+        const CSMP_FEM_TYPE if_elmt_type = (*it).second.first->FE()->ElementTypeOfFace( (*it).second.second );
+        FiniteElement* FE_ptr = femgr.E(if_elmt_type);
+        // incomplete construction without connectivity
+        csmp::InterFace<dim>* if_ptr = mesh.PushBackIfUnique( csmp::InterFace<dim>( fidx++, FE_ptr, ifvars, if_ip_vars ) );
+        // assigning neighbor and node pointers to higher-dimensional elements sharing the interface
+        const bool connect_nodes(true);
+        if_ptr->Assign( (*it).first.first, (*it).first.second,
+                        (*it).second.first, (*it).second.second,
+                        connect_nodes );
+      
+        // storing pointer to the interface in element collection
+        this->elmt_vec_.push_back( if_ptr );
       }
 
-    // building the node vector
-    // ------------------------
-    this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
-    // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it ) {
-      auto nit = mesh.NodesBegin();
-      std::advance(nit, *it);
-      this->node_vec_.push_back( &*nit );
-    }
-   
-    // assigning pointers to the perimeter nodes
-    this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it ) {
-      auto nit = mesh.NodesBegin();
-      std::advance(nit, *it);
-      this->node_vec_.push_back( &*nit );
-    }
+    // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
+    // ---------------------------------------------------------------------------------------------------
+    this->EstablishNeighborConnectivity();
 
-    // sorting the subvectors for future searching
-    const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
-    sort( this->node_vec_.begin(), perimeterNodesBegin );
-    sort( perimeterNodesBegin, this->node_vec_.end() );
+    // 3. building the interface node vector
+    // ---------------------------------------------------------------------------------------------------
+    set<Node<dim>*>  unique_nodes;
+    for ( auto it : this->elmt_vec_ )
+      for ( size_t i=0U; i<it->Nodes(); ++i )
+        unique_nodes.insert( it->N(i) );
    
-    // allocating the storage for subdomain properties
-    // -----------------------------------------------
+    this->node_vec_.assign( unique_nodes.begin(), unique_nodes.end() );
+   
+    // 4. sorting interfaces and nodes and building the boundary interface vector
+    // ---------------------------------------------------------------------------------------------------
+    this->IdentifyPerimeter();
+   
+    // 5. allocating the storage for subdomain properties
+    // --------------------------------------------------
     this->ResizePropertyStorage( pref.LocalVariablesAt(SPLIT_BOUNDARY) );
-*/
+
  } // end constructor
  
 
@@ -1103,20 +1092,20 @@ template<size_t dim>
 void SplitBoundary<dim>::Out() const
  {
     cout <<"\nSplitBoundary<dim>::Out(): ";
-    cout <<" member elements: interior="<< this->InteriorElements();
-    cout <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
+    cout <<" member interfaces: interior="<< this->InteriorElements();
+    cout <<", perimeter="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
 
     for ( typename vector<InterFace<dim>*>::const_iterator
           it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
          if ( (*it) == NULL )
            throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out",
-                                 "member element pointer not initialised");
+                                 "member interface pointer not initialised");
       }
 
-    cout <<"\n\n edge elements and their edge faces (current local numbering): "<< endl;
+    cout <<"\n\n edge interfaces and their edges (current local numbering): "<< endl;
     vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
     for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-         cout <<"\nelement "<< i <<": edge face numbers: ";
+         cout <<"\ninterface "<< i <<": edge numbers: ";
          for ( vector<ONE_BYTE_NUMBER>::const_iterator
                ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
