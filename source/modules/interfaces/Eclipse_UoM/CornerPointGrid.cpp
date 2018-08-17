@@ -65,13 +65,6 @@ namespace csmp {
 				}
 			}
 
-			//JC: changed the order of points
-			//      1---2
-			//     /|  /|
-			//    4---3 |
-			//    | 5-|-6
-			//    |/  |/
-			//    8---7
 			Point<3u> getNodeCoord(ColumnCell& cell, size_t vertex) const {
 				switch (vertex)
 				{
@@ -96,7 +89,6 @@ namespace csmp {
 					"Node id out of range");
 			}
 
-			//JC: changed the order of points
 			size_t getNodeID(ColumnCell& cell, size_t vertex) const {
 				switch (vertex)
 				{
@@ -151,17 +143,17 @@ namespace csmp {
 
 			bool ConstructHexahedron(ColumnCell& cell) {
 
-				//std::cerr << "hexa: \n";
+				//std::cerr << "hexa: \n";				
 				for (size_t i = 0; i < 8; ++i) {
 					vertexIDs[i] = i;
-					auto p = getNodeCoord(cell, vertexIDs[i]);
-					grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
+					auto p = getNodeCoord(cell, vertexIDs[i]);					
+					grid.ConvertFromReservoirToCSMPcoordinateSystem(p);					
 					hexa.XYZ(i, 0, p[0]);
 					hexa.XYZ(i, 1, p[1]);
 					hexa.XYZ(i, 2, p[2]);
 					//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 				}
-
+				
 				size_t iNrIps = hexa.IntegrationPoints();
 				for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
 					hexa.JacobianAtIntegrationPoint(iIp);
@@ -192,6 +184,7 @@ namespace csmp {
 				//std::cerr << "pyramid: \n";
 				for (size_t i = 0; i < 5; ++i) {
 					auto p = getGlobalNodeCoord(vertexIDs[i]);
+					//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 					grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
 					pyra.XYZ(i, 0, p[0]);
 					pyra.XYZ(i, 1, p[1]);
@@ -229,6 +222,7 @@ namespace csmp {
 				//std::cerr << "tetra: \n";
 				for (size_t i = 0; i < 4; ++i) {
 					auto p = getGlobalNodeCoord(vertexIDs[i]);
+					//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 					grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
 					tetra.XYZ(i, 0, p[0]);
 					tetra.XYZ(i, 1, p[1]);
@@ -624,9 +618,9 @@ namespace csmp {
 					{
 						std::pair<size_t, size_t> index(i, j);
 						Pillar& p0 = (*this)(i + 0, j + 0);
-						Pillar& p1 = (*this)(i + 0, j + 1);
+						Pillar& p1 = (*this)(i + 1, j + 0);
 						Pillar& p2 = (*this)(i + 1, j + 1);
-						Pillar& p3 = (*this)(i + 1, j + 0);
+						Pillar& p3 = (*this)(i + 0, j + 1);
 
 						for (size_t k = 0; k < NZ_; ++k)
 						{
@@ -638,13 +632,13 @@ namespace csmp {
 							cell.k = k;
 							cell.z[0][0] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 0]); // t_nw
 							cell.z[0][1] = p0.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 4]); // b_nw
-							cell.z[1][0] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 2]); // t_sw
-							cell.z[1][1] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 6]); // b_sw
+							cell.z[1][0] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
+							cell.z[1][1] = p1.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
 							cell.z[2][0] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 3]); // t_se
 							cell.z[2][1] = p2.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 7]); // b_se
-							cell.z[3][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 1]); // t_ne
-							cell.z[3][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 5]); // b_ne
-
+							cell.z[3][0] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 2]); // t_sw
+							cell.z[3][1] = p3.FindPoint(zcorn[(i + j * NX_ + k * NXxNY) * 8 + 6]); // b_sw
+							
 						    // If all four corners are degenerate, the cell is fully degenerate.
 
 							if (cell.z[0][0] == cell.z[0][1]
@@ -693,9 +687,9 @@ namespace csmp {
 					auto& cell = column.cells_[iCell];
 
 					Pillar& p0 = (*this)(i + 0, j + 0); //nw
-					Pillar& p1 = (*this)(i + 0, j + 1); //sw
+					Pillar& p1 = (*this)(i + 1, j + 0); //ne
 					Pillar& p2 = (*this)(i + 1, j + 1); //se
-					Pillar& p3 = (*this)(i + 1, j + 0); //ne
+					Pillar& p3 = (*this)(i + 0, j + 1); //sw
 
 					double64 z[4][2];
 					z[0][0] = p0.GetZCoord(cell.z[0][0]);
@@ -725,7 +719,7 @@ namespace csmp {
 					//std::cout << "p3 t: "; p3.GetPoint(cell.z[3][0]).Out();
 					//std::cout << "p3 b: "; p3.GetPoint(cell.z[3][1]).Out();
 					//std::cout << "cell.classification: " << int(classification);
-					//std::cout << "\n";					
+					//std::cout << "\n";
 				}
 			}
 
@@ -751,6 +745,7 @@ namespace csmp {
 
 
 			//Degeneration process starts!
+			//Degeneration process starts!
 			for (auto column = columns_.begin(); column != columns_.end(); column++) {
 				Column& Col = column->second;
 				for (size_t k = 0; k < Col.cells_.size(); k++) {
@@ -760,21 +755,6 @@ namespace csmp {
 					size_t j = index.second;
 
 					generator.setIJ(i, j);
-
-					Pillar& p0 = (*this)(i + 0, j + 0); //nw
-					Pillar& p1 = (*this)(i + 1, j + 0); //ne
-					Pillar& p2 = (*this)(i + 1, j + 1); //se
-					Pillar& p3 = (*this)(i + 0, j + 1); //sw
-
-					std::cout << "p0 t: "; p0.GetPoint(cell.z[0][0]).Out();
-					std::cout << "p0 b: "; p0.GetPoint(cell.z[0][1]).Out();
-					std::cout << "p1 t: "; p1.GetPoint(cell.z[1][0]).Out();
-					std::cout << "p1 b: "; p1.GetPoint(cell.z[1][1]).Out();
-					std::cout << "p2 t: "; p2.GetPoint(cell.z[2][0]).Out();
-					std::cout << "p2 b: "; p2.GetPoint(cell.z[2][1]).Out();
-					std::cout << "p3 t: "; p3.GetPoint(cell.z[3][0]).Out();
-					std::cout << "p3 b: "; p3.GetPoint(cell.z[3][1]).Out();
-					std::cout << "\n";
 
 					ECLIPSE_CELL_CLASSIFICATION cellType = cell.classification;
 
@@ -1379,8 +1359,12 @@ namespace csmp {
 					}
 
 					case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {          // 0111
-						if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 0))) {
-							addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																						 //if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 0))) {
+																						 // addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																						 //}
+
+						if (generator.ConstructTetrahedronOnFace(cell, 7, 5, 4, generator.getNodeID(cell, 0))) {
+							addElementToMap(i, j, k, generator.EmitTetrahedron(cell));
 						}
 						else {
 							++badPyramids;
@@ -1428,8 +1412,11 @@ namespace csmp {
 					}
 
 					case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {                    // 1011
-						if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 1))) {
-							addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   /*if (generator.ConstructHexahedron(cell, 7, 6, 5, 4, generator.getNodeID(cell, 1))) {
+																								   addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   }*/
+						if (generator.ConstructTetrahedronOnFace(cell, 7, 5, 4, generator.getNodeID(cell, 1))) {
+							addElementToMap(i, j, k, generator.EmitTetrahedron(cell));
 						}
 						else {
 							++badPyramids;
@@ -1448,8 +1435,11 @@ namespace csmp {
 					}
 
 					case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {                    // 1101
-						if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 2))) {
-							addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   /*if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 2))) {
+																								   addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   }*/
+						if (generator.ConstructTetrahedronOnFace(cell, 7, 6, 5, generator.getNodeID(cell, 2))) {
+							addElementToMap(i, j, k, generator.EmitTetrahedron(cell));
 						}
 						else {
 							++badPyramids;
@@ -1458,8 +1448,11 @@ namespace csmp {
 					}
 
 					case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {                    // 1110
-						if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 3))) {
-							addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   /*if (generator.ConstructPyramidOnFace(cell, 7, 6, 5, 4, generator.getNodeID(cell, 3))) {
+																								   addElementToMap(i, j, k, generator.EmitPyramid(cell));
+																								   }*/
+						if (generator.ConstructTetrahedronOnFace(cell, 7, 6, 4, generator.getNodeID(cell, 3))) {
+							addElementToMap(i, j, k, generator.EmitTetrahedron(cell));
 						}
 						else {
 							++badPyramids;
@@ -1469,6 +1462,7 @@ namespace csmp {
 					}
 				}
 			}
+
 			std::cerr << "Bad hexahedra: " << badHexahedra << '\n';
 			std::cerr << "Bad pyramids: " << badPyramids << '\n';
 			std::cerr << "Bad tetrahedra: " << badTetrahedra << '\n';
