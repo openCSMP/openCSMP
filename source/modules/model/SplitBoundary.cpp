@@ -1034,7 +1034,9 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
 
 
 /**
-     Property assignment to nodes on either side of the interface.
+     Property assignment to nodes on either side of the interface or elements colocated with the InterFace objects (MIDDLE).
+ 
+     @todo ugly implementation where the nodes get written too many times as their side of the interface is only known to the InterFace.
 */
 template<size_t dim>
 template<class Var>
@@ -1048,19 +1050,19 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const V
     if ( part == COMPLETE ) {
         const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
         for( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-          for( size_t n(0); n < (*ifit)->Nodes(); ++n )
+          for( size_t n(0); n < (*ifit)->FE()->Nodes(); ++n )
             (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
       }
     else if ( part == INTERIOR ) {
       const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterElementsBegin() );
       for( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-        for( size_t n(0); n < (*ifit)->Nodes(); ++n )
+        for( size_t n(0); n < (*ifit)->FE()->Nodes(); ++n )
           (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
       }
     else if ( part == PERIMETER ) {
       const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
       for( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterElementsBegin() ); ifit != ifEnd; ++ifit )
-        for( size_t n(0); n < (*ifit)->Nodes(); ++n )
+        for( size_t n(0); n < (*ifit)->FE()->Nodes(); ++n )
           (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
       }
     else

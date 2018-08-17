@@ -443,6 +443,7 @@ void InterFace<dim>::InitializeNodeVector()
    
     // 2,3. starting with the inside
     vector<size_t>  nids;
+   
     // inside
     innerParent_->FE()->NodesOfFace( shared_faces.first, nids );
     // we retain the order in which the nodes are given to
@@ -453,6 +454,7 @@ void InterFace<dim>::InitializeNodeVector()
       }
     // assuming that the unit normal points from the inside to the outside
     else Assign( 0U, innerParent_->N(1), INSIDE );
+   
     // outside
     outerParent_->FE()->NodesOfFace( shared_faces.second, nids );
     // we retain the order in which the nodes are given to
@@ -495,6 +497,7 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
    
     // 2,3. starting with the inside
     vector<size_t>  nids;
+   
     // inside
     innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
     // we retain the order in which the nodes are given to
@@ -505,6 +508,7 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
       }
     // assuming that the unit normal points from the inside to the outside
     else Assign( 0U, innerParent_->N(1), INSIDE );
+    
     // outside
     outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
     // we retain the order in which the nodes are given to
@@ -578,27 +582,33 @@ A range check is performed.
 template<size_t dim>
 csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
  {
-    assert( n < node_connector_.size() );
+    // the number of nodes on a single side of the interface
+    const size_t if_FE_nodes(this->FE()->Nodes());
+   
+    assert( n < if_FE_nodes );
 
     if ( side == INSIDE )
-        return node_connector_[n];
+      return node_connector_[n];
     else if( side == OUTSIDE )
-        return node_connector_[n+Nodes()];
+      return node_connector_[n+if_FE_nodes];
 
     assert( side == MIDDLE );
-    if( baseElement_ != nullptr )
-        return baseElement_->N( n );
+    if ( baseElement_ != nullptr )
+      return baseElement_->N( n );
 
     throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
     return nullptr;
  }
 
 
-
+/**
+    Access to all nodes of the interface.
+*/
 template<size_t dim>
 csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
  {
-    return N( n, current_side_ );
+    assert( n < node_connector_.size() );
+    return node_connector_[n];
  }
 
 

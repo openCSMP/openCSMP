@@ -86,8 +86,8 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// relation operators
     bool operator==( const InterFace<dim>& );
   
-    /// node_connector_.size() / 2U = FE()->Nodes() once InterFace has been constructed; only 1 nodes in 1D
-    size_t  Nodes() const     { return (dim != 1U) ? node_connector_.size() : 1U; };
+    /// node_connector_.size() = total nodes on both sides of InterFace
+    size_t  Nodes() const { return node_connector_.size(); };
   
     /// the InterFace object neighbors of the InterFace (one per face of interface
     size_t  Neighbors() const { return interface_connector_.size(); };
@@ -108,7 +108,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// helper method for remeshing purposes; @todo move to remeshing policy
     typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
 
-    /// access the nodes that are connected to inside of the Face
+    /// access to all nodes connected to the InterFace
     csmp::Node<dim>* N( size_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
@@ -208,7 +208,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces on inside followed by those on outside
   
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE  current_side_;  ///< switch to return information from INNER or OUTER side of interface
+    INTERFACE_SIDE  current_side_;  ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
 
     // pointers to the higher-dimensional elements this face sits in between
     // the (same dimensional) neighbors are stored by the base class

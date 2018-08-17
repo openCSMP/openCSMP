@@ -35,7 +35,8 @@ void ANSYS_SplitBoundaryMatch_Test::run()
       //                          fileset       regions-file
 //      ANSYS_Model3D model( "Model_Split_wall", "Model_Split_wall", variablesFile.c_str(), true );
 //      ANSYS_Model3D model( "NotSplitWall", "NotSplitWall", variablesFile.c_str(), true );
-      ANSYS_Model3D model( "Split_Edges", "Split_Edges", variablesFile.c_str(), true );
+      const string  model_name("Split_Edges");
+      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true );
       Region<3U>    model_domain(model.Region("Model"));
 
     // 0. visualising the model and its regions
@@ -128,14 +129,22 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-2.), PERIMETER, OUTSIDE );
 
    // split boundary variable "interface flux"
-   const csmp::Index key = model.Database().StorageKey("interface flux");
+   const csmp::Index key = model.Database().StorageKey("split boundary flux");
    splitdomain.Store( key, makeScalar(ANY,1.0e-5) );
    _equal( splitdomain.Read(key), 1.0e-5, numeric_limits<double64>::epsilon() );
 
    // 4. write altered element properties on either side to VTK
    // ---------------------------------------------------------------------------------------
-   vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 2U );
-
+   string filename = model_name + "-nodal-variable";
+   // writing all volumetric regions to files
+   if ( verbose_ ) {
+        for ( auto rit=model.UniqueRegionsBegin(); rit!= model.UniqueRegionsEnd(); ++rit ) {
+          cout <<"\nrun: saving region: "<< (*rit).first <<"\n";
+          pair<int32,int32> region_shape = (*rit).second.SpatialDimensions();
+          if ( region_shape.first == 1 and region_shape.second == 3 )
+            vtk_output.OutputDataToVTK( model, (*rit).first, filename, string("nodal variable"), 2U );
+          }
+     }
   
    // 5. see whether the split boundary survives being writting to and recovered from file
    // ------------------------------------------------------------------------------------------
