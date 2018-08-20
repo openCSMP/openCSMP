@@ -372,9 +372,17 @@ template<> struct FiniteVolumeObtainerDispatch<from,to> { static constexpr Finit
 
     Point<dim> FacetNormal() const
     {
+        /*
         Point<dim> norm = DirectedArea();
         norm.NormalizeLengthTo(1.0);
         return norm;
+        */
+        auto user = User();
+        auto& e = *user->n_.Parent(user->idx1_);
+        size_t pnid = user->n_.ParentNodeNumber(user->idx1_);
+        auto fv = e.FV();
+        size_t iFacet = fv->FacetSurroundingSector(pnid, user->idx2_);
+        return e.FacetNormal(iFacet);         
     }
 
     double64 ProjectOntoDirectedArea(const VectorVariable<dim>& v) const

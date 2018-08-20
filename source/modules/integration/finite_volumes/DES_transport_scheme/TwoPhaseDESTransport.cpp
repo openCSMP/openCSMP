@@ -210,6 +210,7 @@ double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( 
     }
 
     if ( take_porosity_into_account ) {
+        /*
         const auto it_end(gref_.ElementsEnd());
         for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
         {
@@ -225,8 +226,16 @@ double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( 
                 result += n.Obtain( prop_key ) * phi * n.SectorVolume();
             }
         }
+        */
+        const auto it_end(gref_.NodesEnd());
+        for ( auto it=gref_.NodesBegin(); it!=it_end; ++it )
+        {
+            auto nd = (*it)->AtNode(); 
+            result += nd.Read(prop_key)*nd.Read(key_fvPV);
+        }        
     }
     else {
+        /*
         const auto it_end(gref_.ElementsEnd());
         for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
         {
@@ -237,7 +246,16 @@ double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( 
             //for (auto s : e.AllSectorIntegrationPoints()) {
                 result += n.Obtain( prop_key ) *  n.SectorVolume();
             }
-        }    
+        } */   
+        const auto it_end(gref_.NodesEnd());
+        for ( auto it=gref_.NodesBegin(); it!=it_end; ++it )
+        {
+            auto nd = (*it)->AtNode();
+            double64 volume (0.); 
+            for (auto sip : (*it)->AllSectorIntegrationPoints())
+                volume += sip.SectorVolume();
+            result += nd.Read(prop_key)*volume;
+        }         
     }
 
     return result;
@@ -339,10 +357,11 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
         const double64 sign = fip.FromInside() ? 1. : -1.;
         //compute facet flux
         fip.Obtain( this->key_vt, vD );
-        double64 vD_n = fip.ProjectOntoFacetNormal(vD);  
+        //double64 vD_n = fip.ProjectOntoFacetNormal(vD);  
         double64 facetArea = event->facetAreaCollection[index];
         Point<dim> facetNrml = event->facetNormalCollection[index];
         index++;
+        double64 vD_n = dotProduct(vD.P(), facetNrml); 
               
         const double64 facet_flux = sign * vD_n * facetArea;
         flux_balance += facet_flux;       

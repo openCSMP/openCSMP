@@ -138,7 +138,8 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
   {
     const size_t iNrNodes(eptr->Nodes());
     std::vector<double64> coeff(iNrNodes);
-    calculateN(*eptr, eptr->IntegrationPoint(idx1), &coeff[0]);
+    //calculateN(*eptr, eptr->IntegrationPoint(idx1), &coeff[0]);
+    eptr->FE()->N_AtIntegrationPoint( idx1, coeff );
 
     var = 0.;
     typename VariableTypeTraits<dim,ty>::VariableType v;
@@ -284,6 +285,8 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
   Point<dim>
   FiniteElementPlacementOperations<dim,ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop)
   {
+  
+    /*  
     auto user = User();
     auto& e = user->e_;
     auto fv = e.FV();
@@ -310,11 +313,32 @@ template void ElementPropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index cons
     fe->JacobianInverse();
 
     return Point<dim>(fe->JINV * grad.Coordinates());
+    */
+  
+    auto user = User();
+    auto& e = user->e_;
+    
+    const size_t num_nodes = e.Nodes();
+    
+    DenseMatrix<DM_MIN> DN;
+    e.dN_AtBaryCenter( DN );
+    
+    Point<dim> grad (0.);
+    for ( size_t i=0U; i<num_nodes; ++i ) {
+      const double64 value_at_node(e.N(i)->Read(prop));
+      for (size_t j = 0; j < dim; ++j) {
+        grad[j] += DN(j,i) * value_at_node;
+      }
+    }   
+    
+    return grad;
   }
-
+  
   template Point<1ul> csmp::FiniteElementPlacementOperations<1ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
   template Point<2ul> csmp::FiniteElementPlacementOperations<2ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
-  template Point<3ul> csmp::FiniteElementPlacementOperations<3ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);
+  template Point<3ul> csmp::FiniteElementPlacementOperations<3ul, ELEMENT>::Gradient(csmp::INDEX<SCALAR, NODE> const&);  
+
+ 
 
   template<size_t dim>
   Point<dim>

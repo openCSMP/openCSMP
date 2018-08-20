@@ -189,9 +189,13 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
 
     Point<dim> FacetNormal() const
     {
+        /*
         Point<dim> norm = DirectedArea();
         norm.NormalizeLengthTo(1.0);
         return norm;
+        */
+        auto user = User();
+        return user->e_.FacetNormal(user->idx1_); 
     }
 
     double64 ProjectOntoFacetNormal(const VectorVariable<dim>& v) const
@@ -359,34 +363,44 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
   {
     size_t FeaturesPerElement(Element<dim>& e)
     {
-      return 1;
+      //return 1;
+      return e.IntegrationPoints();
     }
 
     size_t PlacementsPerFeature(Element<dim>& e)
     {
-      return e.IntegrationPoints();
+      //return e.IntegrationPoints();
+      return 1;
     }
 
-    VARIABLE_FLAG Status(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop)
+    //VARIABLE_FLAG Status(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop)
+    VARIABLE_FLAG Status(Element<dim>& e, size_t idx1, size_t, const csmp::Index& prop)
     {
-      return e.Status(idx2, prop);
-    }
-
-    template<class VarType>
-    void Store(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop, const VarType& var)
-    {
-      e.Store(idx2, prop, var);
+      //return e.Status(idx2, prop);
+      return e.Status(idx1, prop);
     }
 
     template<class VarType>
-    void Read(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop, VarType& var)
+    //void Store(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop, const VarType& var)
+    void Store(Element<dim>& e, size_t idx1, size_t, const csmp::Index& prop, const VarType& var)
     {
-      e.Read(idx2, prop, var);
+      //e.Store(idx2, prop, var);
+      e.Store(idx1, prop, var);
     }
 
-    double64 Read(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop)
+    template<class VarType>
+    //void Read(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop, VarType& var)
+    void Read(Element<dim>& e, size_t idx1, size_t, const csmp::Index& prop, VarType& var)
     {
-      return e.Read(idx2, prop);
+      //e.Read(idx2, prop, var);
+      e.Read(idx1, prop, var);
+    }
+
+    //double64 Read(Element<dim>& e, size_t, size_t idx2, const csmp::Index& prop)
+    double64 Read(Element<dim>& e, size_t idx1, size_t, const csmp::Index& prop)
+    {
+      //return e.Read(idx2, prop);
+      return e.Read(idx1, prop);
     }
   };
 

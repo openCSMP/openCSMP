@@ -167,6 +167,7 @@ template void FiniteVolumePropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index
   Point<dim>
   FiniteVolumePlacementOperations<dim,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const
   {
+    /*
     auto user = User();
     auto& e = *user->n_.Parent(user->idx1_);
     
@@ -182,8 +183,9 @@ template void FiniteVolumePropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index
     for (size_t i = 0; i < element_dim; ++i) {
       DN[i].resize(num_nodes);
     }
+    
     calculateDN(e, fv->Barycenter(), DN);
-
+    
     Point<dim> grad(0.);
     for ( size_t i=0U; i<num_nodes; ++i ) {
       const double64 value_at_node(e.N(i)->Read(prop));
@@ -194,6 +196,33 @@ template void FiniteVolumePropertyObtainer<interp>::Obtain<3,FLAGGEDARRAY>(Index
     fe->JacobianInverse();
 
     return Point<dim>(fe->JINV * grad.Coordinates());
+    */
+    
+    auto user = User();
+    auto& e = *user->n_.Parent(user->idx1_);
+    auto fv = e.FV();
+    
+    const size_t num_nodes = e.Nodes();
+    DenseMatrix<DM_MIN> DN;
+    if (dim!=1 && e.IsLineElement()) {
+      e.dN_AtBaryCenter(DN); //dN_At() function does not support line element yet
+    } else {
+      size_t pnid = user->n_.ParentNodeNumber(user->idx1_);
+      size_t facet = fv->FacetSurroundingSector(pnid, user->idx2_);   
+      Point<dim> coord = fv->FacetIntegrationPoint(facet, user->idx3_);    
+      e.dN_At( coord, DN );
+    }
+    
+    Point<dim> grad (0.);
+    for ( size_t i=0U; i<num_nodes; ++i ) {
+      const double64 value_at_node(e.N(i)->Read(prop));
+      for (size_t j = 0; j < dim; ++j) {
+        grad[j] += DN(j,i) * value_at_node;
+      }
+    }   
+    
+    return grad; 
+    
   }
   
   template Point<1u> FiniteVolumePlacementOperations<1u,FACET_INTEGRATION_POINT>::Gradient(csmp::INDEX<SCALAR, NODE> const& prop) const;

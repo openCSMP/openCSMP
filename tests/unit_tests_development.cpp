@@ -94,6 +94,11 @@
 
 #include "Vset_TestCase.h"
 
+//variable placement tests
+#include "Placement_Test_2D.h" 
+#include "Placement_Test_3D.h"
+
+
 using namespace std;
 using namespace csmp;
 
@@ -103,9 +108,11 @@ TEST_CASE("Development tests", "[Dev]") {
     // ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
-  FiniteVolumeTransportBasics_Test test;
+  //FiniteVolumeTransportBasics_Test test;
     // FiniteVolumeStencil_Test test;
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
+    //Placement_Test_2D test; 
+    Placement_Test_3D test;    
   test.run();
 
  //   ANSYS_Model2D_Test test;

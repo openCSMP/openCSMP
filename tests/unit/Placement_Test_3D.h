@@ -1,7 +1,7 @@
-#ifndef PLACEMENT_TEST_H
-#define PLACEMENT_TEST_H
+#ifndef PLACEMENT_TEST_3D_H
+#define PLACEMENT_TEST_3D_H
 
-#include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
 
 #include "Test.h"
 #include "VectorVariable.h"
@@ -9,19 +9,19 @@
 
 namespace csmp {
 
-  class  Placement_Test : public Test
+  class  Placement_Test_3D : public Test
   {
 
   public:
-    Placement_Test();
-    ~Placement_Test();
+    Placement_Test_3D();
+    ~Placement_Test_3D();
     virtual void run();
 
   private:
     double64 floatTolerance;
-    ANSYS_Model2D* mockModel = nullptr;
+    ANSYS_Model3D* _model = nullptr;
     double64 nodeScalar, elementScalar, elementIPScalar, sectorIPScalar, facetIPScalar;
-    double64 vx, vy, xx, xy, yx, yy;
+    double64 vx, vy, vz, xx, xy, xz, yx, yy, yz, zx, zy, zz;
     double64 tx, ty, tz;
     double64 arx, ary, arz;
 
@@ -54,10 +54,25 @@ namespace csmp {
 
     // faceFlux
     // normalFacet
-
-      
+    
+    void ElementIPToElementIPTest();
+    void FacetIPToFacetIPTest();
+    void SectorIPToSectorIPTest();
+    void NodeToNodeTest();
+    void GradientTest();
+    void SectorVolumeTest();
+    void FacetNormalTest();
+    
+    //FiniteVolumePlacement tests
+    void FV_ElementToElementTest();
+    void FV_FacetAreaAndNormalTest(); 
+    void FV_ProjectOntoFacetNormalTest();
+    void FV_SectorVolumeTest();
+    void FV_InsideOutsideNodeTest();
+    void FV_GradientTest();
+    
   };
 
 } // csmp
 
-#endif // PLACEMENT_TEST_H
+#endif // PLACEMENT_TEST_3D_H
