@@ -123,7 +123,7 @@ namespace csmp {
         fe->Jacobian( DN[0], DN[1], DN[2] );
         break;
       case SURFACE:
-        fe->dNs(p[0], p[1], DN[0]);
+        fe->dNr(p[0], p[1], DN[0]);
         fe->dNs(p[0], p[1], DN[1]);
         fe->Jacobian( DN[0], DN[1] );
         break;
