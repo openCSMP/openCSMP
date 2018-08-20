@@ -157,7 +157,7 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     /// returns area of the face; method assumes same role as Volume() for the element
-    double64       Area() const;
+    double64       Area( INTERFACE_SIDE=MIDDLE ) const;
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
     void           UnitNormal( VectorVariable<dim>& ) const;
 
@@ -172,8 +172,8 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     template<class Var>
     void           NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
 
-    /// inputs node coordinates into supplied matrix
-    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE=INSIDE ) const;
+    /// inputs node coordinates into supplied matrix; for MIDDLE the midpoints between the nodes on either side are used
+    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE=MIDDLE ) const;
 
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
     Point<dim>     BaryCenter() const;

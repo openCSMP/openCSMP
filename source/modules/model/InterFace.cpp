@@ -5,6 +5,8 @@
 #include "CSMP_mathUtilities.h"
 #include "Visitor.h"
 #include "variableOperations.h"
+#include "TriangularFacet.h"
+#include "QuadrilateralFacet.h"
 
 using namespace std;
 
@@ -589,7 +591,8 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
 
     if ( side == INSIDE )
       return node_connector_[n];
-    else if( side == OUTSIDE )
+   
+    if( side == OUTSIDE )
       return node_connector_[n+if_FE_nodes];
 
     assert( side == MIDDLE );
@@ -597,6 +600,7 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
       return baseElement_->N( n );
 
     throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
+    
     return nullptr;
  }
 
@@ -725,11 +729,51 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 // GEOMETRY
 
 
+/**
+    Computes the interface area from scratch and not using the CoordinateMatrix / InterFace FEM machinery.
+    The area is computed taking the side of the interface into account.
+    Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match.
+*/
 template<size_t dim>
-double64 InterFace<dim>::Area() const
+double64 InterFace<dim>::Area( INTERFACE_SIDE side ) const
  {
-    return this->Volume();
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( side == MIDDLE ) {
+         if ( baseElement_ != nullptr ) return baseElement_->Volume();
+         else { // building a triangle from the node mid-points across the interface and return its area
+              if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
+                   Point<dim> p1 = (N(0)->Coordinate() + N(this->FE()->Nodes())->Coordinate()) / 2.;
+                   Point<dim> p2 = (N(1)->Coordinate() + N(this->FE()->Nodes()+1U)->Coordinate()) / 2.;
+                   Point<dim> p3 = (N(2)->Coordinate() + N(this->FE()->Nodes()+2U)->Coordinate()) / 2.;
+                   return triangleArea( p1, p2, p3 );
+                }
+              if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
+                   Point<dim> p1 = (N(0)->Coordinate() + N(this->FE()->Nodes())->Coordinate()) / 2.;
+                   Point<dim> p2 = (N(1)->Coordinate() + N(this->FE()->Nodes()+1U)->Coordinate()) / 2.;
+                   Point<dim> p3 = (N(2)->Coordinate() + N(this->FE()->Nodes()+2U)->Coordinate()) / 2.;
+                   Point<dim> p4 = (N(3)->Coordinate() + N(this->FE()->Nodes()+3U)->Coordinate()) / 2.;
+                   return facetArea4( p1, p2, p3, p4 );
+                }
+              if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) {
+                   // line length
+                   Point<dim> p1 = (N(0)->Coordinate() + N(this->FE()->Nodes())->Coordinate()) / 2.;
+                   Point<dim> p2 = (N(1)->Coordinate() + N(this->FE()->Nodes()+1U)->Coordinate()) / 2.;
+                   return (p2 -p1).Length();
+                }
+              else
+              csmp_error.notice( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
+           }
+      }
+   
+    if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
+
+    if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
+   
+    // error
+    return std::numeric_limits<double64>::quiet_NaN();
  }
+
 
 
 /** returns unit normal into argument vector variable depending on corresponding parent element side
@@ -806,14 +850,26 @@ coordinates of the element to calculate the element constribution to the
 global solution matrix. If the element uses local coordinates, the global
 node coordinates will still be required to compute Jacobian (coordinate-
 transformation) matrix.
+
+@attention when INTERFACE_SIDE == MIDDLE, the node locations on either side of the interface
+are used to find mid-points.
+
 */
 template<size_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
   {
     const size_t n_nodes(Nodes());
     XY.Resize( n_nodes, dim );
+    
+    if ( side != MIDDLE ) {
+         for ( size_t i=0U; i<n_nodes; ++i )
+           XY.AssignRow( i, N(i,side)->Coordinate() );
+         return;
+      }
+    
+    // using midpoints
     for ( size_t i=0U; i<n_nodes; ++i )
-        XY.AssignRow( i, N(i,side)->Coordinate() );
+      XY.AssignRow( i, (N(i,INSIDE)->Coordinate() + N(i,OUTSIDE)->Coordinate()) / 2. );
 
   } // end CoordinateMatrix
 

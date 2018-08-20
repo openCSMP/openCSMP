@@ -411,7 +411,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBo
 #ifdef SPLIT_BOUNDARY_DEBUG
 cerr <<"\nSplitBoundaryInterface::DetectAndCreateSplitBoundaries: interface region pairs found:\n";
 for ( auto i : split_boundary_map )
-  cerr << i.first.first <<","<< i.first.second <<" ";
+  cerr << i.first.first <<","<< i.first.second <<"\n";
 cerr << endl;
 #endif
 

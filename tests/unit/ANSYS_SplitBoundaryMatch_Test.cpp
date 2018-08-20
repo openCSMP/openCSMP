@@ -80,7 +80,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
             }
        }
   
-     if ( verbose ) {
+     if ( verbose_ ) {
           cerr <<"\nrun: points on ANSYS split boundary:\n";
           size_t counter(0);
           for (auto pt=split_nodes.begin(); pt!=split_nodes.end(); ++pt )
@@ -114,21 +114,23 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    model.DetectAndCreateSplitBoundaries();
    // checking which boundaries were created
    model.SplitBoundariesOut();
+   // TODO: creates 3 SplitBoundary objects although only 1 was expected; 1st one is correct, what about the others (last one has only perimeter faces)
    
 
    // 3. change some property along split boundary to verify that assignments are made correctly
    // ------------------------------------------------------------------------------------------
    SplitBoundary<3U>& splitdomain = (*model.SplitBoundariesBegin()).second;
    // node variable "nodal variable"
+   if ( verbose_ ) cout <<"\nrun: parameterising region: "<< splitdomain.Name() <<"\n";
    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
-   // inside of boundary
-   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,1.), INTERIOR, INSIDE );
-   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,2.), PERIMETER, INSIDE );
-   // outside of boundary
-   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-1.), INTERIOR, OUTSIDE );
-   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-2.), PERIMETER, OUTSIDE );
+   // inside of boundary: OK
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,10.), INTERIOR, INSIDE );
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,11.), PERIMETER, INSIDE );
+   // outside of boundary: OK
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-10.), INTERIOR, OUTSIDE );
+   splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-11.), PERIMETER, OUTSIDE );
 
-   // split boundary variable "interface flux"
+   // split boundary variable "interface flux" OK
    const csmp::Index key = model.Database().StorageKey("split boundary flux");
    splitdomain.Store( key, makeScalar(ANY,1.0e-5) );
    _equal( splitdomain.Read(key), 1.0e-5, numeric_limits<double64>::epsilon() );

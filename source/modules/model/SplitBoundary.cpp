@@ -906,18 +906,25 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
 // CALCULATIONS
 
 
-
+/**
+    Computes length (m) of the SplitBoundary object's perimeter curve.
+    Operation makes sense only in 33 because the perimeter of a line are just its end points.
+*/
 template<size_t dim>
-double64  SplitBoundary<dim>::Perimeter() const
+double64  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-     if ( dim != 3U )
-       csmp_error.notice( ERROR, "SplitBoundary<dim>::Perimeter",
-                                 "result would not be meaningful" );
+
+     if ( dim != 3U ) {
+           csmp_error.notice( WARNING, "SplitBoundary<>::Perimeter:",
+                             "returning 1.0 since perimeter is a point." );
+           return 1.;
+       }
 
      double64        perimeter_length(0.);
      vector<size_t>  fnids;
      size_t          n(0U);
+   
      for ( typename vector<InterFace<dim>*>::const_iterator
            it=this->PerimeterElementsBegin(); it!=this->ElementsEnd(); it++, n++ )
        for ( size_t i=0U; i<this->PerimeterFaces(n); i++ ) {
@@ -931,8 +938,12 @@ double64  SplitBoundary<dim>::Perimeter() const
 
 
 
+/**
+    Is calculated on the basis of the Splitboundary bisector if the split nodes were
+    moved apart in the simulation process; else a particular side is used.
+*/
 template<size_t dim>
-double64  SplitBoundary<dim>::Area() const
+double64  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
  {
      double64  integrated_area(0.);
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -941,13 +952,13 @@ double64  SplitBoundary<dim>::Area() const
          for ( typename vector<InterFace<dim>*>::const_iterator
                it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
            if ( (*it)->FE()->IsSurfaceElement() )
-             integrated_area += (*it)->Volume();
+             integrated_area += (*it)->Area();
        }
      else if ( dim == 2U ) {
          for ( typename vector<InterFace<dim>*>::const_iterator
                it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
            if ( (*it)->FE()->IsLineElement() )
-             integrated_area += (*it)->Volume();
+             integrated_area += (*it)->Area();
        }
      else
      csmp_error.notice( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D");
@@ -956,66 +967,126 @@ double64  SplitBoundary<dim>::Area() const
  }
 
 
+
+/**
+    Integrates a scalar variable of interest over the target side of the SplitBoundary using
+    the current finite element basis functions. Dependent on the placement of the variable it is either
+    read from the InterFace or the target sidfe of the boundary.
+    Potential incompatibilities are checked.
+ 
+    @attention for simplex element node and integration point properties are integrated using their value
+    projected to the element barycentre.
+ 
+    If the variable is vector quantity, it is projected onto the outward pointing normals of the boundary InterFace
+    objects, multiplying the boundary normal componet with their area.
+ 
+    @author SKM 21/8/2018
+*/
 template<size_t dim>
-double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property ) const
+double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property,
+                                              INTERFACE_SIDE side ) const
  {
      csmp::Index prop_key = p.StorageKey(property);
 
-     if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
-          throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                            property, "placed on IntegrationPoint or Region cannot be assigned on boundary");
-          return std::numeric_limits<double64>::quiet_NaN();
-       }
       if ( prop_key.type == TENSOR ) {
           throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                            property, "is a tensor property; this method does not know how to integrate it");
+                            property, "is a tensor property; no implementation for tensor normal projections yet.");
+          return std::numeric_limits<double64>::quiet_NaN();
+       }
+
+     if ( prop_key.place == FACE or prop_key.place == BOUNDARY or prop_key.place == REGION ) {
+          throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                            property, "placed on FACE, BOUNDARY or REGION cannot be assigned on split boundary.");
           return std::numeric_limits<double64>::quiet_NaN();
        }
 
      double64  property_integral(0.);
 
-     // 1. if the property is a scalar
+     // 1. if the property is a scalar various options exist
+     // - scalar placed on SplitBoundary
+     // - scalar placed on Element
+     // - scalar placed on Node
+     // - scalar placed on InterFace
+   
      if ( prop_key.type == SCALAR ) {
+           if ( prop_key.place == SPLIT_BOUNDARY )
+             return this->Area(side) * this->Read(prop_key);
+ 
            if ( prop_key.place == ELEMENT ) {
-                throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                                  property, "is an Element property; this method does not know how to integrate it");
-             }
-           else if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-                for ( typename vector<InterFace<dim>*>::const_iterator
-                      it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
-                  property_integral += (*it)->Volume() * (*it)->Read( prop_key );
-             }
-           else if ( prop_key.place == NODE ) { // for nodes on first side of interface
+                  // the property is read from ther higher dimensional neighbor element on the target side
+                  // and integrated over the area of its face
+                  double64 property_integral(0.), prop_value;
+                  for ( auto ife : this->elmt_vec_ ) {
+                        double64 face_area = ife->Parent(side)->FaceArea( ife->ParentFaceID(side) );
+                        if ( side != MIDDLE ) prop_value = ife->Parent(side)->Read(prop_key);
+                        else {
+                             if ( ife->HasBase() ) prop_value = ife->BaseElement()->Read(prop_key);
+                             else
+                             throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                                                    property, "placed on Element cannot be retrieved as there is no base element at InterFace MIDDLE.");
+                          }
+                        property_integral += prop_value * face_area;
+                    }
+               return property_integral;
+            }
+
+           if ( prop_key.place == INTER_FACE ) {
+                  // the property is read from ther higher dimensional neighbor element on the target side
+                  // and integrated over the area of its face
+                  double64 property_integral(0.);
+                  for ( auto ife : this->elmt_vec_ )
+                       property_integral += ife->Area() * ife->Read(prop_key);
+             
+               return property_integral;
+            }
+
+          if ( prop_key.place == NODE ) {
+                // the property value is interpolated to the interface integration points and then integrated
+                // using their integration weights
+                double64        property_integral(0.);
                 ScalarVariable  sc;
-                for ( typename vector<InterFace<dim>*>::const_iterator
-                      it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
-                     (*it)->PropertyValueAtBaryCenter( prop_key, sc );
-                     property_integral += (*it)->Volume() * sc();
+                for ( auto ife : this->elmt_vec_ ) {
+                     const double64 interface_area = ife->Area(side);
+                     for ( size_t i=0U; i<ife->IntegrationPoints(); ++i ) {
+                          ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
+                          property_integral += interface_area * ife->WeightAtIntegrationPoint(i) * sc();
+                       }
                   }
+                return property_integral;
              }
-           else {
-                throw csmp::Exception( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                                                    "Property placement not recognized");
+
+          if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
+                // the property value is integrated using corresponding integration weights
+                double64 property_integral(0.);
+                for ( auto ife : this->elmt_vec_ ) {
+                     const double64 interface_area = ife->Area(side);
+                     for ( size_t i=0U; i<ife->IntegrationPoints(); ++i )
+                       property_integral += interface_area * ife->WeightAtIntegrationPoint(i) * ife->Read(prop_key);
+                   }
+                return property_integral;
              }
-       }
+
+       } // end scalar
+  
+  
+  
+     // TODO: still needs to be refactored
      // 2. if the property is a vector
      if ( prop_key.type == VECTOR ) {
            // the average of the values projected onto the normal are being used.
            if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
                 VectorVariable<dim>  unrml, vc;
-                for ( typename vector<InterFace<dim>*>::const_iterator
-                      it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
-                     (*it)->UnitNormal( unrml );
-                     (*it)->Read( prop_key, vc );
+                for ( auto it : elmt_vec_ ) {
+                     it->UnitNormal( unrml );
+                     it->Read( prop_key, vc );
                      property_integral += dotProduct( unrml, vc);
                   }
              }
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
                 VectorVariable<dim>  unrml, vc;
-                for ( typename vector<InterFace<dim>*>::const_iterator
-                      it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
-                     (*it)->UnitNormal( unrml );
-                     (*it)->PropertyValueAtBaryCenter( prop_key, vc );
+                for ( auto it : elmt_vec_ ) {
+                     it->UnitNormal( unrml );
+                     it->PropertyValueAtBaryCenter( prop_key, vc );
                      property_integral += dotProduct( unrml, vc);
                   }
              }
@@ -1028,6 +1099,7 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
     return property_integral;
 
  } // end SurfaceIntegral
+
 
 
 

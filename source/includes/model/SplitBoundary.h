@@ -120,14 +120,14 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     template<class Var>
     void InputNodePropertyValue( const char* input_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE=INSIDE );
 
-    /// output length(2D) or area(3d) of split boundary=lower dimensional region
-    double64  Area() const;
+    /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
+    double64  Area( INTERFACE_SIDE=MIDDLE ) const;
   
-    /// outputs length of perimeter curve of a 3D split boundary; do not use in 1D or 2D
-    double64  Perimeter() const;
+    /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
+    double64  Perimeter( INTERFACE_SIDE=MIDDLE ) const;
   
     /// integrates the property over the boundary line or surface
-    double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
+    double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property, INTERFACE_SIDE=INSIDE  ) const;
 
     // ----------------------------------------
     // building blocks

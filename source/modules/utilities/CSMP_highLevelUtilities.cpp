@@ -2785,18 +2785,18 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     if ( !interface_elmt_pairs.empty() ) interface_elmt_pairs.clear();
     // searching
     for ( auto it=element_face_keys.begin(); it!=element_face_keys.end(); ++it ) {
-         // multimap iterator containing the range of shared keys
+         // multimap iterator pair containing the range of shared keys
+         //  face search key (point set), element(Element*), face number (size_t)
          auto result = element_face_keys.equal_range( (*it).first );
          // if more than one value was found
-//cerr << distance( result.first, result.second ) <<" ";
          if ( distance( result.first, result.second ) > 1U ) {
              // there should not be any manyfolds
              assert( distance( result.first, result.second ) == 2U );
              // advancing the result range iterator as necessary to find an Element different from (*it).second.first
-             while ( (*result.first).second.first != (*it).second.first ) {
-                  result.first++;
-               }
+             do result.first++;
+             while ( (*result.first).second.first == (*it).second.first );
            // we store the matching element pair
+           // set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >
            interface_elmt_pairs.insert( make_pair(
                                         make_pair( (*it).second.first, (*it).second.second ),
                                         make_pair( (*result.first).second.first, (*result.first).second.second ) )
