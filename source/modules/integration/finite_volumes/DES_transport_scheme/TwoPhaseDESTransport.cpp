@@ -566,13 +566,16 @@ void TwoPhaseDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     new_solution += source * (t_clock - t_current);//add source to new solution
         
     //check new solution value against range and stored it to key_sCO2
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-    else {
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) {
+        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
+        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
+    } else {
         cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, upper_limit_ ) );
-        else if ( new_solution < lower_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, lower_limit_ ) );
-    }
-        
+        if ( new_solution > upper_limit_ ) new_solution = upper_limit_;
+        else if ( new_solution < lower_limit_ ) new_solution = lower_limit_;
+        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
+        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
+    }  
     new_solution = nd->Read(this->key_sCO2);//stored new solution
     double64 dsn_cumulative = array[4];
     array.Component(4, dsn_cumulative + (new_solution-solution));//update cumulative change
@@ -603,11 +606,15 @@ void TwoPhaseDESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
     new_solution += source * delta_t;//add source to new solution.
                 
     //check new solution value against range and stored it to key_sCO2
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-    else {
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) {
+        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
+        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
+    } else {
         cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, upper_limit_ ) );
-        else if ( new_solution < lower_limit_ ) nd->Store( this->key_sCO2, makeScalar( status, lower_limit_ ) );
+        if ( new_solution > upper_limit_ ) new_solution = upper_limit_;
+        else if ( new_solution < lower_limit_ ) new_solution = lower_limit_;
+        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
+        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
     }
         
     nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );   
