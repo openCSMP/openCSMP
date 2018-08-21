@@ -188,21 +188,42 @@ void EclipseInterface::WritePropertiesToVSet()
         WriteScalarPropertyToVSet( *vset_, grid_,
                                    poro_, properties_[ECLIPSE_PORO].name, properties_[ECLIPSE_PORO].key.place );
 
-    /// 4. write permeability
-    if( !permxyz_.empty() )
-    {
-        /// converting to SI system
-        double conversion_factor( 1.0 );
-        if( properties_[ECLIPSE_PERM].unit == "mD")
-            conversion_factor = 1.0e-15;
-        else if( properties_[ECLIPSE_PERM].unit == "D")
-            conversion_factor = 1.0e-12;
-        if( conversion_factor != 1.0 )
-        {
-            const size_t num_cells( permxyz_.size() );
-            for( size_t i=0; i<num_cells; ++i)
-                permxyz_[i] *= conversion_factor;
-        }
+	/// 4. write permeability
+	if (!permxyz_.empty())
+	{
+		// The ‘Eclipse model’ is exported from Petrel which works only in miliDarcy. 
+		// The unit is mD (milliDarcy = 0.001 Darcy),  1D = 10^-12 m2
+		double64 conversion_factor = 1.0e-15;
+		const size_t num_cells(permxyz_.size());
+
+		//JC: need to get the min and max values from Database()
+		double64 min = properties_[ECLIPSE_PERM].min;
+		double64 max = properties_[ECLIPSE_PERM].max;
+		size_t invalid_value_count = 0U;
+
+		/// check value whether it is in the valid		
+		for (size_t i = 0; i < num_cells; ++i)
+		{
+			permxyz_[i] *= conversion_factor;
+
+			if (!permxyz_[i].IsWithinRange(min, max))
+			{
+				invalid_value_count++;
+
+				for (size_t j = 0; j < 3; j++)
+				{
+					for (size_t k = 0; k < 3; k++)
+					{
+						if (permxyz_[i](j, k) < min) permxyz_[i](j, k) = min;
+						if (permxyz_[i](j, k) > max) permxyz_[i](j, k) = max;
+					}
+				}
+			}
+		}
+
+		if (invalid_value_count > 0)
+			std::cout << "\nEclipseInterface::WritePropertiesToVSet (Invalid Permeability): The number of the pruned values = " << invalid_value_count << "\n";
+
         if( properties_[ECLIPSE_PERM].key.type != csmp::TENSOR )
             WriteScalarPropertyToVSet( *vset_, grid_,
                                        permxyz_, properties_[ECLIPSE_PERM].name, properties_[ECLIPSE_PERM].key.place );
@@ -2668,8 +2689,8 @@ void EclipseModelSettings
     prop.key.type  = prop_type;
     prop.key.place = prop_place;
     prop.unit  = prop_unit;
-    prop.min   = 1.0e-1;
-    prop.max   = 1.0e-20;
+    prop.min   = 1.0e-25;
+    prop.max   = 1.0e+2;
 }
 
 void EclipseModelSettings
