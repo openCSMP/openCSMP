@@ -1,5 +1,5 @@
-#ifndef _EOS_CO2H2ONaCl_Spycher04_SPYCHER_2004_H
-#define _EOS_CO2H2ONaCl_Spycher04_SPYCHER_2004_H
+#ifndef EOS_CO2_H2O_NACL_SPYCHER_2004_H
+#define EOS_CO2_H2O_NACL_SPYCHER_2004_H
 
 #include <valarray>
 #include <complex>

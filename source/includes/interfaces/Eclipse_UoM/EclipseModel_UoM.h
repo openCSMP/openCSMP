@@ -37,25 +37,26 @@ class EclipseModel : public csmp::Model<3U> {
 
       virtual ~EclipseModel();
 
-      /// existing special regions
+      /// volumetric model subdomains if any
       template<class Container>  void GetRegions( Container& data );
   
+      /// lower-dimensional element regions representing geological faults
       template<class Container>  void GetFaults( Container& data );
   
+      /// wells which do not have a discrete representation inside of Eclipse
       template<class Container>  void GetWells( Container& data );
 
       /// processing special regions
       void CreateBoundariesAroundFaults( bool keep_fault_regions = false );
+  
+      // TODO: not implemented yet
       void CreateSplitBoundariesAroundFaults( bool delete_fault_regions = false );
   
       /// BOX flag nodes and elements of volumetric target region
       void AssignBoxBoundaryFlagsWherePossible( const char* target_region );
   
-      /// Get ijk coordinates for Element
-      ijk EclipseCoordinates( Element<3u>* e ) const
-      {
-        return elmt_to_ijk_.find(e)->second;
-      }
+      /// Get ijk coordinates of corner-point grid cell that corresponds to csmp::Element
+      ijk EclipseCoordinates( Element<3u>* e ) const { return elmt_to_ijk_.find(e)->second; }
   
   public: // SKM accessors
       /// the dimensions of the original corner-point grid
@@ -65,6 +66,9 @@ class EclipseModel : public csmp::Model<3U> {
   private:
       /// Master method to build the model
       void Initialize();
+  
+      /// tries to partition boundary "Model" into more telling subregions: TOP, BOTTOM, INTERNAL etc.
+      void CreateBoundariesWherePossible();
   
       // PROPS and other specs from RUNSPECS file
       EclipseModelSettings      eclipse_model_settings_;
@@ -76,7 +80,7 @@ class EclipseModel : public csmp::Model<3U> {
       size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
   
       std::unordered_multimap<ijk,Element<3u>*>  ijk_to_elmt_; ///< stores mapping from i,j,k to elements
-      std::unordered_map<Element<3u>*,ijk>  elmt_to_ijk_; ///< stores mapping from elements to i,j,k
+      std::unordered_map<Element<3u>*,ijk>       elmt_to_ijk_; ///< stores mapping from elements to i,j,k
 };
 
 } // eclipse

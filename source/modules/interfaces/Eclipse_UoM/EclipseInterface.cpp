@@ -140,35 +140,12 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
 
     // 3. convert grid from cell-centered to corner point format
     //    by creating new pillars in the center of the cells
-#if 0
-    if ( grid_.GetPillars().empty() &&
-        !block_grid_.GetCellDepths().empty() &&
-        !block_grid_.GetCellSizes(0).empty() &&
-        !block_grid_.GetCellSizes(1).empty() &&
-        !block_grid_.GetCellSizes(2).empty() )
-      {
-          block_grid_.AssignCellCoordinatesToPillars( grid_.GetPillars() );
-          block_grid_.Clear();
-      }
-#endif
-
-// DEBUGGING
-#if 0
-std::cerr <<"\nEclipseInterface:: printing current pillars\n";
-for ( auto it=grid_.GetPillars().begin(); it!=grid_.GetPillars().end(); ++it )
-  for ( auto rit=(*it).begin(); rit!=(*it).end(); ++rit )
-    (*rit).Out();
-#endif
-  
     // KEY METHOD
     grid_.CreateModel( model_name_,*vset_, *model_topology_, zcorn_, regions_, faults_, wells_,
                        tetra_mesh, exclude_inactive_cells );
 
    /// 4. Write properties to VSet
     WritePropertiesToVSet();
-#if 0
-    ClearAfter();
-#endif
 
     return true;
 }

@@ -115,9 +115,6 @@ class BoundaryInterface {
     /// returns number of created boundary segments = to region juxtapositions encountered
     size_t  CreateInternalBoundaryFrom( const char* dimension_minus1_region, bool remove_dim_minus1_region=true );
 
-// ==============================================================================================
-// PHILLIP'S METHODS- CHECK
-// ==============================================================================================
     /// construct Boundary<Face> from lower dimensional boundary flagged elements of given region
     bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
 
@@ -142,7 +139,10 @@ class BoundaryInterface {
     bool EstablishEdgeRegionsOfBoxShapedModel( const VSet<dim>&  );
 
     /// inserts irregular csmp::Boundary for all eligible regions in the model
-    bool EstablishBoundaries(bool remove_original_lower_dimensional_regions);
+    bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
+  
+    /// partitions encompassing boundary 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
+    bool EstablishRegularities();
 
     // -----------------------------------------------
     // Binary input/output

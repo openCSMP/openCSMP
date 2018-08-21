@@ -1502,6 +1502,9 @@ namespace csmp {
 			vset.AddElementTypes(generator.fem_types.begin(), generator.fem_types.end());
 		}
 
+
+
+
 		/**
 		MASTER METHOD for the creation of corner point grids
 		from the original cell-centered grids read by the EclipseInterface.
@@ -1512,26 +1515,18 @@ namespace csmp {
 
 		@todo regions are not recognised properly.
 		*/
-		void CornerPointGrid_UoM::CreateModel(const std::string&     model_name,
-			csmp::VSet<3U>&       vset,
-			csmp::ModelTopology&   model_topology,
-			const std::vector<double64>& zcorn,
-			std::set<std::string>& regions,
-			std::set<std::string>& faults,
-			std::set<std::string>& wells,
-			bool tetra_mesh, bool exclude_inactive_cells)
-		{
-
+void CornerPointGrid_UoM::CreateModel(  const std::string&     model_name,
+                                            csmp::VSet<3U>&       vset,
+                                            csmp::ModelTopology&   model_topology,
+                                            const std::vector<double64>& zcorn,
+                                            std::set<std::string>& regions,
+                                            std::set<std::string>& faults,
+                                            std::set<std::string>& wells,
+                                            bool tetra_mesh, bool exclude_inactive_cells)
+  {
 			csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
 
-
-			// temporary data
-			deque<double64>              x, y, z;        // node x, y, z coordinates
-			map<size_t, vector<size_t> >  plist;        // element list
-			map<size_t, vector<long64> >  pfverts;        // neighbor list
-
-
-														  // 1. Initialise grid specs
+			// 1. Initialise grid specs
 			InitializeGridSpecs();
 
 			// 2. Construct pillars and columns
@@ -1539,23 +1534,29 @@ namespace csmp {
 
 			// 3. Construct FEs from columns and add to Vset
 			ConstructFiniteElementsFromColumns(vset);
+  }
 
-		}
 
-		void CornerPointGrid_UoM::addElementToMap(size_t i, size_t j, size_t k, size_t elementID) {
-			this->elementMap.emplace(ijk(i, j, k), elementID);
-		};
 
-		template<class VarType>
-		void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&             vset,
-			const std::vector<VarType>& prop_data,
-			const std::string&          prop_name,
-			const csmp::PLACEMENT&      prop_place) const
+
+void CornerPointGrid_UoM::addElementToMap( size_t i, size_t j, size_t k, size_t elementID )
+ {
+    this->elementMap.emplace(ijk(i, j, k), elementID);
+ }
+
+
+
+
+
+template<class VarType>
+void CornerPointGrid_UoM::WritePropertyToVSet(  csmp::VSet<3U>&             vset,
+                                                const std::vector<VarType>& prop_data,
+                                                const std::string&          prop_name,
+                                                const csmp::PLACEMENT&      prop_place ) const
 		{
 			/// correcting data cell id's due to existance of embedded cells
 			VarType var;
 			var = 0.;
-			size_t current_id = 0;
 			std::vector<VarType> cell_data(vset.Elements(), var);
 			for (auto& entry : elementMap) {
 				auto coord = entry.first;
@@ -1583,13 +1584,14 @@ namespace csmp {
 				for (const auto& it : cell_data) pushBack(property_values, it);
 				vset.AddData(prop_name.c_str(), property_values);
 			}
-		}
+      
+		} // end WritePropertyToVSet
 
-		template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT&) const;
-		template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
-		template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
-		template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
-		template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
+template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT&) const;
+template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
+template void CornerPointGrid_UoM::WritePropertyToVSet(csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT&) const;
 
 
 		void CornerPointGrid_UoM::Resize(size_t i_pillar_max, size_t j_pillar_max)

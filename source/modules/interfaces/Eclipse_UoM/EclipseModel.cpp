@@ -125,21 +125,21 @@ void EclipseModel::Initialize()
          for( prop_it = vset_props.begin(); prop_it != vset_props.end(); ++prop_it )
              if( !this->Database().IsDefined( (*prop_it).c_str() ) )
                  undefined_props.insert( *prop_it );
-         if( !undefined_props.empty() )
-         {
-             if( error_handler.Verbose() )
-             {
-                 std::string message = "VSet contains data for undefined properties: ";
-                 for( prop_it = undefined_props.begin(); prop_it != undefined_props.end(); ++prop_it )
+         if ( !undefined_props.empty() )
+           {
+               if ( error_handler.Verbose() )
                  {
-                     if( prop_it != undefined_props.begin() )
-                         message += ", ";
-                     message += *prop_it;
+                     std::string message = "VSet contains data for undefined properties: ";
+                     for( prop_it = undefined_props.begin(); prop_it != undefined_props.end(); ++prop_it )
+                     {
+                         if( prop_it != undefined_props.begin() )
+                             message += ", ";
+                         message += *prop_it;
+                     }
+                     message += " !!!";
+                     error_handler.notice( csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str() );
                  }
-                 message += " !!!";
-                 error_handler.notice( csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str() );
-             }
-         }
+           }
 
          // =====================================================================
          // 2. construct CSMP model from obtained topology and mesh in vset
@@ -148,10 +148,8 @@ void EclipseModel::Initialize()
          //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbors )
          const bool non_box_shaped_model( !mesh_topology.BoxShapedModel() );
 
-
          // with regions
 #if 0
-
          if ( !eclipse_model_settings_.regions_.empty() ) {
              // performing a ckeck whether element numbers in the VSet and the model topology match; else something went wrong
              // and user is given the possibility to call the subsequent method or not.
@@ -160,6 +158,7 @@ void EclipseModel::Initialize()
              if ( !mesh_topology.CheckTopology( vset, require_unique_names_for_vol_surf_lines,
                                                 correct_orientation_of_surface_elements, non_box_shaped_model ) )
                error_handler.notice( csmp::INFO, "EclipseModel<3U>::BuildModel", "ModelTopology=subdivision into regions is broken.");
+           
              csmp::Model<3U>::Initialize( eclipse_model_settings_.regions_file_prefix_.c_str(),
                                            mesh_topology,
                                            vset, eclipse_model_settings_.create_boundaries_,
@@ -168,25 +167,27 @@ void EclipseModel::Initialize()
          // no regions
          else
 #endif
-
          {
              // all cells are lumped into the region "Eclipse Model" that is stored in the model topology
-             const bool isoparametric(true);
-             csmp::Model<3U>::Initialize( isoparametric, vset, eclipse_model_settings_.create_boundaries_,
-                                           non_box_shaped_model );
-           }
+             const bool isoparametric(true), box_shaped_model(true);
+             csmp::Model<3U>::Initialize( isoparametric, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model );
+         }
       
-      auto& meshmgr = Mesh();
-      for (auto& entry : mesh_interface.IJKMap()) {
-        auto coord = entry.first;
-        Element<3u>* e = &meshmgr.ElementAtIndex(entry.second);
-        ijk_to_elmt_.emplace(coord, e);
-        elmt_to_ijk_.emplace(e, coord);
-      }
+        // identifying box boundaries if any
+        EstablishRegularities();
+        
+        // initialising grid to mesh i,j,k cell reference system needed to assign values from grid
+        auto& meshmgr = Mesh();
+        for (auto& entry : mesh_interface.IJKMap()) {
+          auto coord = entry.first;
+          Element<3u>* e = &meshmgr.ElementAtIndex(entry.second);
+          ijk_to_elmt_.emplace(coord, e);
+          elmt_to_ijk_.emplace(e, coord);
+        }
     }
-    // -------------------------------------------------
+    // ---------------------------------------------------
     // catching all possible standard and csmp::Exceptions
-    // -------------------------------------------------
+    // ---------------------------------------------------
     catch( std::bad_alloc& ba ) {
          std::cout <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << std::endl;
       }
@@ -284,9 +285,9 @@ void EclipseModel::CreateBoundariesAroundFaults( bool keep_fault_regions )
     this->InsertBoundary("FAULTS",csmp::IRREGULAR,keep_fault_regions);
 
     // create boundaries
-    //for( std::set<std::string>::const_iterator
-    //     rit = faults_.begin(); rit != faults_.end(); ++rit )
-    //    this->InsertBoundary( (*rit).c_str(), csmp::IRREGULAR, keep_fault_regions );
+    for( std::set<std::string>::const_iterator
+         rit = faults_.begin(); rit != faults_.end(); ++rit )
+        this->InsertBoundary( (*rit).c_str(), csmp::IRREGULAR, keep_fault_regions );
 }
 
 
@@ -309,6 +310,7 @@ void EclipseModel::CreateSplitBoundariesAroundFaults( bool delete_fault_regions 
 
 
 // trial versions
+
 
 BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )
  {
@@ -419,8 +421,12 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
  }
 
 
+
+
+
 /**
     BOX flag nodes and elements of volumetric target region
+    This method assumes that the nodes of the mesh were previously flagged correctly.
 */
 void EclipseModel::AssignBoxBoundaryFlagsWherePossible( const char* target_region )
  {
@@ -451,8 +457,8 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible( const char* target_regio
               continue;
            }
          // idea: loop over the faces of the cell and where there is no neighbor
-         // check where the face is facing, assign boundary flags accordingly
-         // if the element has more than one face idenfify edges and corners
+         // check in which direction the face normal is pointing, assign boundary flags accordingly
+         // if the element has more than one face at the boundary, idenfify it as an edge or a corner
          for ( size_t i=0U; i<(*it)->Faces(); ++i )
            if ( (*it)->Neighbor(i) == nullptr ) {
                 // determining in which direction the face normal points
@@ -473,7 +479,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible( const char* target_regio
                     boundary_nodes.insert( make_pair( fnids[j], make_pair( bflag, (*it)->N(fnids[j]) ) ) );
                  }
              }
-         // flagging duplicate and triplicate nodes accordingly
+         // flagging elements with duplicate and triplicate boundary nodes accordingly
          for ( size_t n=0U; n<(*it)->Nodes(); ++n ) {
               // dealing with any cases where there are multiple boundary flags
               // duplicates = edges
@@ -491,7 +497,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible( const char* target_regio
                    bflag = whichCorner( (*range.first).second.first, (*it_2nd).second.first, (*range.second).second.first );
                    (*it)->N(n)->AtBoundary( bflag );
                }
-              else {
+              else if ( boundary_nodes.count(n) > 3U ) { // potentially a hexahedron which sits at a model edge (7-boundary nodes)
                   (*it)->Out();
                   cerr <<"\n\tdetected "<< boundary_nodes.count(n) <<" boundary flags for element "<< (*it)->Idx();
                   error_handler.notice( WARNING, "EclipseModel<3U>::AssignBoxBoundaryFlagsWherePossible:",

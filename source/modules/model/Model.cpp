@@ -351,7 +351,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
           if ( !non_box_shaped_model && box_shaped )
             this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
           else
-            this->EstablishBoundaries( remove_original_lower_dimensional_regions );
+            this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
@@ -435,7 +435,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
                 this->EstablishBoxBoundaries();
                 if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
             }
-          else this->EstablishBoundaries( true );
+          else this->EstablishBoundariesFromRegions( true );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 

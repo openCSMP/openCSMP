@@ -10,6 +10,7 @@
 #include "Exception.h"
 #include "SmallSet.h"
 #include "ErrorHandler.h"
+#include "variableOperations.h"
 
 using namespace std;
 
@@ -1513,9 +1514,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( BOX_BOUNDARY boxBo
 
 
 /**
-  Method forms a Boundary (ModelSubDomain<Face>) around an existing Region<Element>
+    Method forms a Boundary (ModelSubDomain<Face>) around a named existing model Region of Element objects.
 
-  @author P. Lang Aug 2011
+    @author P. Lang Aug 2011
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
@@ -1548,8 +1549,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
     else csmp_error.notice( INFO, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary",
                             bName.c_str(),
                             "Boundary already exists. Nothing was done.");
-    // shouldn't get here
     return false;
+  
   } // AddFaces
 
 
@@ -2208,7 +2209,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
      @test updated by SKM 2016
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries(bool remove_original_lower_dimensional_regions)
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
   {
 
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
@@ -2235,7 +2236,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries(bool remove_or
         if( modelBoundary.Elements() == 0 )
           {
             boundaryComplex->RemoveBoundary(modelBoundary);
-            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Boundary 'Model' entirely replaced by sub boundaries.\n";
+            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundariesFromRegions: Boundary 'Model' entirely replaced by sub boundaries.\n";
             break;
           }
       }
@@ -2247,7 +2248,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries(bool remove_or
     for ( size_t i = 0; i < eligibleRegions.size(); ++i ) {
       auto& region_name = eligibleRegions[i];
       if ( region_name != "Model" ) {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: Removing region '";
+        std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundariesFromRegions: Removing region '";
         std::cout << region_name << "' from 'Model' since it was transformed into Boundary...";
         boundaryComplex->RemoveFromRegion( "Model", region_name.c_str() );
         if (remove_original_lower_dimensional_regions) {
@@ -2268,10 +2269,158 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundaries(bool remove_or
            (*nit)->AtBoundary( bflag );
       }
 
-    std::cout << "\n\nBoundaryInterface::EstablishBoundaries: done!\n";
+    std::cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     return true;
     
-} // end EstablishBoundaries
+} // end EstablishBoundariesFromRegions
+
+
+
+
+
+
+
+// little utility
+template<size_t dim> void setToVector( const set<Face<dim>*>& input, vector<Face<dim>*>& output )
+  {
+     if ( !output.empty() ) output.clear();
+     output.reserve( input.size() );
+     for ( auto sit : input )
+       output.push_back( sit );
+  }
+
+/**
+    Tries to partition and replace general boundary 'Model' with more computationally useful model patches
+    such as TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc.
+    
+    @attention this method expects that there is already a Boundary 'Model' around the model domain.
+    @attention method assumes that model perimeter correctly captures the outside faces of the model.
+    @attention this method was designed primarily for three-dimensional models.
+    
+    @author SKM
+    @date 21/8/2018
+*/
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
+  {
+
+    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+    std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishRegularities: searching for eligible boundary domains...\n";
+
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( !boundaryComplex->ContainsBoundary("Model") ) {
+         csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary:",
+                            "Model", "Boundary was missing. Creating it now.");
+
+         AddFaces("Model");
+      }
+
+    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model") ) );
+
+    std::vector<std::string> eligibleRegions;
+    eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
+    
+    // 1. Grouping pointers to Face objects of 'Model' boundary according to their facing direction
+    // -------------------------------------------------------------------------------------------------
+    vector<double64>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
+    Box                   box;
+    double64              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
+   
+    box.UnitNormalTo( BOTTOM, dim, nrml_bottom );
+    box.UnitNormalTo( TOP,    dim, nrml_top );
+    box.UnitNormalTo( LEFT,   dim, nrml_left );
+    box.UnitNormalTo( RIGHT,  dim, nrml_right );
+    box.UnitNormalTo( FRONT,  dim, nrml_front );
+    box.UnitNormalTo( BACK,   dim, nrml_back );
+    
+    set<Face<dim>*>  top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces;
+    
+    // for all Face objects on the model boundary
+    for ( auto fit=modelBoundary.ElementsBegin(); fit!=modelBoundary.ElementsEnd(); ++fit )
+      {
+         // getting the (outward) pointing unit normal to face
+         (*fit)->UnitNormal( nrml );
+         // classifying the faces in terms of their facing direction
+         // (projecting: perfect alignment would give dot-product equal 1, inclinations up to 37 degrees cos(37)~0.8 are tolerated)
+         if      ( dotProduct<dim>(nrml,nrml_bottom) >= minLength ) bottom_faces.insert(*fit); // BOTTOM
+         else if ( dotProduct<dim>(nrml,nrml_top)    >= minLength ) top_faces.insert(*fit);    // TOP
+         else if ( dotProduct<dim>(nrml,nrml_left)   >= minLength ) left_faces.insert(*fit);   // LEFT
+         else if ( dotProduct<dim>(nrml,nrml_right)  >= minLength ) right_faces.insert(*fit);  // RIGHT
+         else if ( dotProduct<dim>(nrml,nrml_front)  >= minLength ) front_faces.insert(*fit);  // FRONT
+         else if ( dotProduct<dim>(nrml,nrml_back)   >= minLength ) back_faces.insert(*fit);   // BACK
+         // deal with the remaining cases, distinguishing sides etc.
+         else {
+              irregular_faces.insert(*fit);
+           }
+      } // end perimeter faces
+    
+    // 2. Creating boundaries from the non-empty sets of faces
+    // -------------------------------------------------------------------------------------------------
+    vector<Face<dim>*> boundary_faces;
+    // BOTTOM
+    if ( !bottom_faces.empty() ) {
+         setToVector( bottom_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "BOTTOM" );
+      } // TOP
+    if ( !top_faces.empty() ) {
+         setToVector( top_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "TOP" );
+      } // LEFT
+    if ( !left_faces.empty() ) {
+         setToVector( left_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "LEFT" );
+      } // RIGHT
+    if ( !right_faces.empty() ) {
+         setToVector( right_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "RIGHT" );
+      } // FRONT
+    if ( !front_faces.empty() ) {
+         setToVector( front_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "FRONT" );
+      } // BACK
+    if ( !back_faces.empty() ) {
+         setToVector( back_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "BACK" );
+      } // IRREGULAR
+    if ( !irregular_faces.empty() ) {
+         setToVector( irregular_faces, boundary_faces );
+         boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "IRREGULAR" );
+      }
+
+    
+    // 4. changing BOX_BOUNDARY flags on the outside of the model so that TOP and BOTTOM are recognised; else they were set to irregular
+    // (edges are not considered)
+    // -------------------------------------------------------------------------------------------------
+    for ( auto fit=modelBoundary.NodesBegin(); fit!=modelBoundary.NodesEnd(); ++fit )
+      if ( (*fit)->AtBoundary() == NOT )
+        (*fit)->AtBoundary( IRREGULAR );
+ 
+    // the boundary called 'Model' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
+    faceBoundaryMap_.erase("Model");
+
+    // for remaining (new) TOP and BOTTOM boundaries
+  	for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it )
+      if ( (*it).first == "TOP" or (*it).first == "BOTTOM" )
+        {
+           BOX_BOUNDARY bflag(IRREGULAR);
+           if ( isDiagnosticBoxBoundaryClassifier( (*it).first ) ) bflag = parseBoundary( (*it).first );
+           for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+             (*nit)->AtBoundary( bflag );
+        }
+
+    std::cout << "\n\nBoundaryInterface::EstablishRegularities: done!\n";
+    return true;
+    
+} // end EstablishRegularities
+
+
+
+
+
+
+
+
 
 
   template class BoundaryInterface<1U, Model>;
