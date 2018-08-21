@@ -1070,29 +1070,30 @@ double64 SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, co
   
   
   
-     // TODO: still needs to be refactored
+     // TODO: still needs extra cases" element props. etc.
      // 2. if the property is a vector
      if ( prop_key.type == VECTOR ) {
-           // the average of the values projected onto the normal are being used.
+           // the values projected onto the normal are integrated over the face.
            if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
                 VectorVariable<dim>  unrml, vc;
-                for ( auto it : elmt_vec_ ) {
+                for ( auto it : this->elmt_vec_ ) {
                      it->UnitNormal( unrml );
                      it->Read( prop_key, vc );
-                     property_integral += dotProduct( unrml, vc);
+                     property_integral += dotProduct( unrml, vc) * it->Area(side);
                   }
              }
+           // nodal properties are interpolated to the barycentre because this is where the normal is placed
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
                 VectorVariable<dim>  unrml, vc;
-                for ( auto it : elmt_vec_ ) {
+                for ( auto it : this->elmt_vec_ ) {
                      it->UnitNormal( unrml );
                      it->PropertyValueAtBaryCenter( prop_key, vc );
-                     property_integral += dotProduct( unrml, vc);
+                     property_integral += dotProduct( unrml, vc) * it->Area(side);
                   }
              }
            else {
                 throw csmp::Exception( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                                                    "Property placement not recognized");
+                                       parsePlacement(prop_key.place), "Property placement not handled yet.");
              }
        }
 

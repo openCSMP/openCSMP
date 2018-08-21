@@ -171,17 +171,28 @@ template <size_t dim>
 void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundary )
   {
     VectorVariable<dim> unFace( PLAIN, 9999999. ), faceToInner( PLAIN, 9999999. );
-    Point<dim> bcFace, bcInner;
+    size_t              inward_pointing_normals(0U);
     const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd( boundary.ElementsEnd() );
     for( typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
       {
-        (*it)->UnitNormal( unFace );          
-        bcFace = (*it)->BaryCenter();
-        bcInner = (*it)->Parent(INSIDE)->BaryCenter();
+        // IMPORTANT - this is the method that is tested (CoordinateMatrix() is called inside)
+        (*it)->UnitNormal( unFace );
+        // creating a vector that points from face barycenter to higher-dimensional parent element barycenter
+        Point<dim> bcFace = (*it)->BaryCenter();
+        Point<dim> bcInner = (*it)->Parent(INSIDE)->BaryCenter();
+        // constructing vector that points to inner element
         for( size_t d(0); d < dim; ++d )
             faceToInner(d) = bcInner[d] - bcFace[d];
+        // the dotproduct of the inward pointing vector and the unit normal should be negative
         _test( dotProduct(faceToInner,unFace) < 0. );
+        // debugging diagnostics
+        if ( dotProduct(faceToInner,unFace) > 0. ) {
+             cerr <<"\nBoundary: '"<< boundary.Name() <<"', inward-pointing normal detected: "<< unFace <<"\n";
+             (*it)->Out();
+             inward_pointing_normals++;
+          }
       }
+    _test( inward_pointing_normals == 0 );
   }
 
 
@@ -473,6 +484,7 @@ void Boundary_Test::runLegacy()
     {      
       ANSYS_Model3D m00( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt", true, true, false );
       m00.InsertBoundary("HALF");
+      m00.RemoveRegion("HALF", true /* delete elements */ );
       NoSurfaceElementsAsNodeParents( m00.Region("Model") );
 
       ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true, true, true );
@@ -482,7 +494,12 @@ void Boundary_Test::runLegacy()
       // for both legacy box and irregular models (legacy functionality)    
       ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true, true, false );
         _test( m01.Boundaries() == 0 );
-      ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3Dirregular", "CSMP-variables.txt", true, true, false );
+ 
+      const bool irregular_mesh(true);      /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
+      const bool binary_file(true);         /* true = binary, false = ascii */
+      const bool use_regions_file(false);   /* true = reduce regions according to regions file, false = does not redure regions */
+      const bool create_boundaries(false);  /* true = creates boundaries around model, false = does not create boundaries */
+      ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file, create_boundaries );
         _test( m02.Boundaries() == 0 );  
       const size_t nodeCount( m01.Region("Model").Nodes() );
       _test( nodeCount == m02.Region("Model").Nodes() );

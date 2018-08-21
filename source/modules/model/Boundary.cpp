@@ -808,13 +808,8 @@ When establishing face connectivity(parent elements) the convention is as outlin
 @attention convention 1: If the element is on the model boundary(attached to a single higher dimensional parent element only),
 the created face unit normal points outward. 
 
-@attention convention 2: If the element is sandwiched, its face normal points from the
-higher dimensional parent element with the lower index to that with the higher index.
-This connectivity is established by the corresponding Face<dim> interface.
+@attention This method will not work if face is at a split boundary, due to duplicate nodes.
 
-@attention Assure that model member indices are updated before calling this method
-
-@attention This method will probably not work if face is at a split boundary, due to duplicate nodes.
 */
 template<size_t dim>
 bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
@@ -851,7 +846,7 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
       {
          // in 3D, there still could be line elements in the region which are not eligible as face,
          // unless the Region consist only of line elements
-         if ( dim == 3 && (*it)->FE()->IsLineElement() && regionContainsSurfaceElements )
+         if ( dim == 3 && (*it)->IsLineElement() && regionContainsSurfaceElements )
            continue;
 
          // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
@@ -862,9 +857,9 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
                                                                            local_face_number_of_e, material_ID );
 
          // which is used to create the new face using the variables prepared above (NULL is FV Stencil)
-         // Face<dim>* faceObj = meshManager.PushBackIfUnique( Face<dim>( femPtr, NULL, lvsFaces, lvsIntegrationPoints ) );
-         Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *(*it), const_cast<csmp::Element<dim>*>(eptr), nullptr,
-                                                    lvsFaces, lvsIntegrationPoints ) );
+         Face<dim>* faceObj = meshManager.PushBack( Face<dim>( *(*it),
+                                                               const_cast<csmp::Element<dim>*>(eptr), nullptr,
+                                                               lvsFaces, lvsIntegrationPoints ) );
          faceObj->Idx( face_count++ );
          // push back into face container
          this->elmt_vec_.emplace_back( faceObj );

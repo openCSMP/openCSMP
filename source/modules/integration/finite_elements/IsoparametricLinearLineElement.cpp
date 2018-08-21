@@ -693,7 +693,10 @@ double64 IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& D
 
 
 
-/// here the normal is calculated using the derivative of the shape function at the middle node
+/**
+    here the normal is calculated using the derivative of the shape function at the middle node
+    the normal is the 90o counter-clockwise rotated origin to destination vector.
+*/
 void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
  {
     if ( dim == 1 ) {
@@ -704,15 +707,17 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
     const double64 rAtBaryCenter(0.0);
     // dx = (N1'x1 + N2'x2 + N3'x3) dr
     if ( dim == 2 ) {
-
          // finding tangent at mid-point node
          dNr( rAtBaryCenter, DNR );
          vc[0] = JacobianFor( DNR, 0 ); // dx
          vc[1] = JacobianFor( DNR, 1 ); // dy
-         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc[0],vc[1]) );
+         //                 origin             destination
+ // SKM FIX        mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc[0],vc[1]) );
+         mjl::Edge  normal( mjl::Point(vc[0],vc[1]), mjl::Point(0.,0.) );
          // rotating tangent edge counter-clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
+         // SKM FIX: TODO: for normal to be pointing outside of 2D models, multiplication with -1. is needed
          vc[0] = normal.Destination()[0];
          vc[1] = normal.Destination()[1];
          return;
@@ -729,7 +734,7 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double64>& vc ) const
          vc[0] /= sum;
          vc[1] /= sum;
          vc[2] /= sum;
-         // cout <<"\nIsoparametricLinearLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
+         std::cerr <<"\nIsoparametricLinearLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
          return;
       }
 

@@ -545,6 +545,9 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
      - use this function for finding the higher-dimensional neighbor of a surface element that sits on the
        outside boundary of the model
  
+     @test SKM 22/8/2018 - fixed a bug where element returned had lower spatial dimensional than supplied
+     element.
+ 
 */
 template<size_t dim>
 const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, const csmp::Index& mtrl_key,
@@ -573,7 +576,10 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
           for ( size_t j=0U; j<parents; ++j ) {
                const Element<dim>* const eptr(e.N(i)->Parent(j));
                // only if the element is not the same and also of a different type
-               if ( eptr != &e and eptr->FE_Type() != e.FE_Type() ) {
+               if ( eptr != &e and
+                    eptr->FE_Type() != e.FE_Type() and
+                    eptr->Nodes() >= e.Nodes() )
+                 {
                    const size_t faces(eptr->Faces());
                    for ( size_t k=0U; k<faces; ++k ) {
                          eptr->FE()->NodesOfFace( k, fnids );
@@ -595,26 +601,20 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
        }
     assert( nbor_elmt != nullptr );
 
-#if 0
-#ifndef NDEBUG
-     // TODO: check whether following assert is correct:
-
      if ( dim == 3 ) {
          if (e.IsVolumeElement())
-             assert( nbor_elmt->IsVolumeElement() );
+           assert( nbor_elmt->IsVolumeElement() );
          else if (e.IsSurfaceElement())
-             assert( nbor_elmt->IsSurfaceElement() );
+           assert( nbor_elmt->IsVolumeElement() );
          else if (e.IsLineElement())
-             assert( nbor_elmt->IsLineElement() );
+           assert( nbor_elmt->IsSurfaceElement() or  nbor_elmt->IsVolumeElement() );
      }
      if ( dim == 2 ) {
          if (e.IsSurfaceElement())
-             assert( nbor_elmt->IsSurfaceElement() );
+           assert( nbor_elmt->IsSurfaceElement() );
          else if (e.IsLineElement())
-             assert( nbor_elmt->IsLineElement() );
+           assert( nbor_elmt->IsSurfaceElement() );
      }
-#endif
-#endif
    
     // 2. drawing the results
     // -------------------------------------------------------------------------------------------------------------

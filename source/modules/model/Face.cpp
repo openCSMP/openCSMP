@@ -64,6 +64,21 @@ Face<dim>::Face( const Element<dim>& elmt,
     else if ( dim == 2 ) assert( elmt.IsLineElement() );
     assert( innerParent_ != nullptr );
    
+    // 0. verification that the lower-dimensional element and the element that will be transformed
+    //    into a face have indeed matching nodes
+    const size_t     nodes_to_match(elmt.Nodes());
+    set<Node<dim>*>  elmt_nodes;
+    for ( size_t j=0U; j<nodes_to_match; ++j )
+      elmt_nodes.insert( elmt.N(j) );
+    // checking
+    size_t matching_nodes(0U);
+    for ( size_t j=0U; j<innerParent_->Nodes(); ++j ) {
+          assert( innerParent_->N(j) != nullptr );
+          if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
+            matching_nodes++;
+      }
+    assert( matching_nodes == nodes_to_match );
+
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
@@ -72,25 +87,11 @@ Face<dim>::Face( const Element<dim>& elmt,
 
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
-    const size_t nodes(elmt.Nodes());
-    const size_t inner_elmt_nodes(innerParent_->Nodes());
+    const size_t nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
     for ( size_t i=0U; i<nodes; ++i ) {
          // assignig the node
          assert( elmt.N(i) != nullptr );
          Assign( i, elmt.N(i) );
-    
-#ifndef NDEBUG // the node match with the higher-dimensional parent element is verified
-         bool matching_node_exists(false);
-         for ( size_t j=0U; j<inner_elmt_nodes; ++j ) {
-              assert( innerParent_->N(j) != nullptr );
-              // assigning parent element node numbers when the pointers match
-              if ( elmt.N(i) == innerParent_->N(j) ) {
-                  matching_node_exists = true;
-                  break;
-                }
-           }
-         assert( matching_node_exists );
-#endif
     }
    
  } // end constructor
