@@ -718,7 +718,7 @@ template<size_t dim>
 template<class Var>
 void  Model<dim>::InputVariableFrom( const char* input_prop, const FEM_Data<Var>& vdata )
  {
-    const string master_region("All Elements");
+    const string master_region("Model");
     this->Region( master_region.c_str() ).InputVariableFrom( input_prop, vdata );
    
  } // end InputVariableFrom

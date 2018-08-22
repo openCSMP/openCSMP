@@ -450,7 +450,12 @@ bool ModelSubDomain<dim,CELL>::Empty() const
   }
 
 
-/// returns how many faces of the target element lie on the subdomain boundary
+/**
+    @return returns how many faces of the target element lie on the subdomain boundary
+ 
+    @attention the element index that is supplied as a method argument has to
+    range between e = interior elements and elements-1.
+*/
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
  {
@@ -459,7 +464,14 @@ size_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
     return bd_face_vec_[e-InteriorElements()].size();
  }
 
-/// returns the elements local face number of the n'th face that is on the subdomain boundary
+
+/**
+    @return returns elements local element face number (0..faces-1) for
+    the n'th face that is on the subdomain boundary.
+
+    @attention the element index that is supplied as a method argument has to
+    range between e = interior elements and elements-1.
+*/
 template<size_t dim, template<size_t> class CELL>
 size_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, size_t face ) const
  {
