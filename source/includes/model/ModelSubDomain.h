@@ -50,38 +50,31 @@ struct SubDomainInfo {
     - Internal boundaries are named by regions they interface which each other
     - External boundaries have names corresponding to the sides of box-shaped
       models or other unique names.
-
-      @todo (3) SKM complete switch statements for the new variable types
-      @todo (3) Check for redundant inherited and non-inherited methods in subdomains (i.e. OutputVariableTo)
-      @todo (1) Test whether Region properties are used correctly (A)
-      @todo (2-C) Declare members as virtual if they are
-
 */
 template<size_t dim,template<size_t> class CELL>
 class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> > {
   public:
     // any kind of finite elements; simplex or other types
-    typedef CELL<dim>               Simplex;
-    typedef std::vector<Simplex*>   SimplexContainer;
-
+    typedef CELL<dim>                                  CellType;
     // vertices
-    typedef Node<dim>               Vertex;
-    typedef std::vector<Vertex*>    VertexContainer;
-    typedef std::vector<Node<dim>*> NodeContainer;
-
-    // iterators
-    typedef typename SimplexContainer::iterator        simplexIterator;
+    typedef Node<dim>                                  Vertex;
+    typedef std::vector<Vertex*>                       VertexContainer;
+    typedef std::vector<Node<dim>*>                    NodeContainer;
     typedef typename VertexContainer::iterator         vertexIterator;
-
-    // const iterators
-    typedef typename SimplexContainer::const_iterator  simplexConstIterator;
     typedef typename VertexContainer::const_iterator   vertexConstIterator;
 
   public:
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
+
+    /// reconstructor for valid subdomains that were stored in file before
+    ModelSubDomain( const PropertyDatabase<dim>& pref,
+                    const ModelSubDomain<dim,CELL>& mesh,
+                    const SubDomainInfo& info );
+  
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
+  
     virtual ~ModelSubDomain();
     ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
 

@@ -135,18 +135,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
-    /*
-    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
-      }
-    */
-    // REBUILDING VECTOR from scratch because sorting upset its connectivity
+    // REBUILDING bd_face_vec_ from scratch because sorting upset its connectivity
     this->bd_face_vec_.reserve( info.perimeter_faces.size() );
     const auto elementsEnd(this->elmt_vec_.end());
     for ( auto it=perimeterElementsBegin; it!=elementsEnd; ++it ) {

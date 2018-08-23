@@ -20,16 +20,14 @@ template<size_t> class Model;
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 class SteadyStateDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
-
   public:
+    typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
 
-    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
-
-	SteadyStateDiffusor(Model<dim>& sg,
-		const char* diffusivity,
-		const char* diffusing_variable,
-		const char* spatial_source_variable,
-		bool LumpedRHS);
+	  SteadyStateDiffusor(  Model<dim>&,
+                          const char* diffusivity,
+                          const char* diffusing_variable,
+                          const char* spatial_source_variable,
+                          bool LumpedRHS);
 
     SteadyStateDiffusor( Model<dim>&, 
                                 const char* diffusivity,

@@ -76,13 +76,15 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 
-
-/* DOES NOT WORK BECAUSE region elements get sorted before reastablishing the connectivity
-
+/**
+     Reconstructor for model subregions that are valid and were stored in file before.
+ 
+     TODO: needs to be ported to PrimitiveContainer usage.
+*/
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                             const ModelSubDomain<dim,CELL>& mesh, "All Elements"
-                                             const SubDomainInfo& info )
+                                          const ModelSubDomain<dim,CELL>& mesh,
+                                          const SubDomainInfo& info )
  : pref_(pref),
    first_bd_node_(info.interior_nodes.size()),
    subdomain_name_(info.name),
@@ -104,15 +106,19 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the simplices that lie on the subdomain perimeter
     // --------------------------------------------------------------------------------------------------
-    bd_face_vec_.reserve( info.perimeter_faces.size() );
-    //std::vector<std::vector<int8 > > perimeter_faces
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
+    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
+    const auto elementsEnd(this->elmt_vec_.end());
+    for ( auto it=perimeterElementsBegin; it!=elementsEnd; ++it ) {
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all the faces of the element that are located on the model boundary
+         vector<ONE_BYTE_NUMBER>  boundary_faces;
+         const size_t faces((*it)->Faces());
+         boundary_faces.reserve(faces);
+         for ( size_t face=0U; face<faces; ++face )
+           if ( (*it)->Neighbor(face) == nullptr )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         this->bd_face_vec_.emplace_back( boundary_faces );
       }
 
     // building the node vector
@@ -137,7 +143,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
     this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,CELL>() ) );
  
  } // end constructor
-*/
+
 
 
 
