@@ -109,8 +109,8 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
   : ModelSubDomain<dim,Element>(info.name,pref)
  {
-    // building the face vector
-    // ------------------------
+    // building the element vector
+    // ---------------------------
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior elements
     if (info.interior_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe()) {
@@ -135,13 +135,14 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
+    if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
     this->bd_face_vec_.reserve( info.perimeter_faces.size() );
     for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
           const size_t perimeter_faces((*it).size());
           std::vector<ONE_BYTE_NUMBER> face_vec;
           face_vec.reserve(perimeter_faces);
           for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
+            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( static_cast<int8>(*fit) ) );
           this->bd_face_vec_.emplace_back( face_vec );
       }
 
@@ -2811,8 +2812,9 @@ double64  Region<dim>::SurfaceArea() const
          for ( size_t i=this->InteriorElements(); i<this->Elements(); ++i, ++bit )
            // since each element can have multiple boundary faces
            for ( size_t j=0U; j<(*bit).size(); j++ ) {
-              this->elmt_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
-              const CSMP_FEM_TYPE etype(this->elmt_vec_[i]->FE()->ElementTypeOfFace( static_cast<size_t>((*bit)[j]) ));
+              const size_t face( (*bit)[j] );
+              this->elmt_vec_[i]->FE()->NodesOfFace( face, fnids );
+              const CSMP_FEM_TYPE etype(this->elmt_vec_[i]->FE()->ElementTypeOfFace( face ));
               // triangular face
               if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE or
                    etype == LINEAR_TRIANGLE3D or
@@ -2828,11 +2830,11 @@ double64  Region<dim>::SurfaceArea() const
                                     this->elmt_vec_[i]->N( fnids[2U] )->Coordinate(),
                                     this->elmt_vec_[i]->N( fnids[3U] )->Coordinate() );
               // linear face
-//              if ( etype == ISOPARAMETRIC_LINEAR_BAR or
-//                   etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
-//                     area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
-//                     csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on boundary is assumed to be one." );
-//                 }
+              if ( etype == ISOPARAMETRIC_LINEAR_BAR or
+                   etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
+                     area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
+                     csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
+                 }
               // additional case of point face where a line-element is perpendicular to a boundary node
            }
        }
