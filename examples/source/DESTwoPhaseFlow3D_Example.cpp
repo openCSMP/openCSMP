@@ -11,6 +11,7 @@
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseDESTransport.h"
+#include "TwoPhaseTwoComponentDESTransport.h" 
 #include "ExplicitStencilProcessor.h"
 
 // relative permeability calculations
@@ -69,7 +70,8 @@ void DESTwoPhaseFlow3D_Example::Run()
     cin >> input_file;
 
     Standard_IO_Handler  stdio;
-    bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES (y=DES, n=TDS)"); 
+    bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES? (y=DES, n=TDS)"); 
+    bool  multi_component = stdio.YesNo("Do you want to perform multi-component transport?");
     double64 Courant_multiplier, PEP_parameter;
     cerr <<"\nEnter CFL multiplier (suggested value: 0.2) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
@@ -93,7 +95,11 @@ void DESTwoPhaseFlow3D_Example::Run()
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
     FlowFunctions<3U> flowfunctions(model.Database());
-    TwoPhaseDESTransport<3U> DEStransport(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+    TwoPhaseDESTransport<3U>* DEStransport;
+    if (!multi_component)
+      DEStransport = new TwoPhaseDESTransport<3U>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+    else 
+      DEStransport = new TwoPhaseTwoComponentDESTransport<3U>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -138,6 +144,12 @@ void DESTwoPhaseFlow3D_Example::Run()
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", 0 );
     vtu.OutputDataToVTU( "saturation oil", "saturation carbonic phase",    "Model", 0 );
     vtu.OutputDataToVTU( "fluid_velocity", "total velocity",    "Model", 0 );
+    if (multi_component) { 
+      vtu.OutputDataToVTU( "XCO2", "mass fraction CO2 aqueous phase",    "Model", 0 );
+      vtu.OutputDataToVTU( "XH2O", "mass fraction H2O aqueous phase",    "Model", 0 );
+      vtu.OutputDataToVTU( "YCO2", "mass fraction CO2 carbonic phase",    "Model", 0 );
+      vtu.OutputDataToVTU( "YH2O", "mass fraction H2O carbonic phase",    "Model", 0 );    
+    }
 
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
@@ -167,8 +179,8 @@ void DESTwoPhaseFlow3D_Example::Run()
       {
          // compute advection of phases
          T_begin = clock();
-         if (DES) DEStransport.AdvectVariable_DES( model_time+time_increment, 1);
-         else DEStransport.AdvectVariable_TDS( time_increment );
+         if (DES) DEStransport->AdvectVariable_DES( model_time+time_increment, 1);
+         else DEStransport->AdvectVariable_TDS( time_increment );
          solving_time += clock() - T_begin;
          
          // increment time
@@ -198,12 +210,24 @@ void DESTwoPhaseFlow3D_Example::Run()
                   vtu.OutputDataToVTU( "DES_CFL_multiplier", "cfl multiplier", "Model",  time );
                   vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
                   vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );
+                  if (multi_component) { 
+                    vtu.OutputDataToVTU( "DES_XCO2", "mass fraction CO2 aqueous phase",    "Model", time );
+                    vtu.OutputDataToVTU( "DES_XH2O", "mass fraction H2O aqueous phase",    "Model", time );
+                    vtu.OutputDataToVTU( "DES_YCO2", "mass fraction CO2 carbonic phase",    "Model", time );
+                    vtu.OutputDataToVTU( "DES_YH2O", "mass fraction H2O carbonic phase",    "Model", time ); 
+                  }                   
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "TDS_fluid_velocity", "total velocity",    "Model", time );
-                  vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );           
+                  vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );   
+                  if (multi_component) {   
+                    vtu.OutputDataToVTU( "TDS_XCO2", "mass fraction CO2 aqueous phase",    "Model", time );
+                    vtu.OutputDataToVTU( "TDS_XH2O", "mass fraction H2O aqueous phase",    "Model", time );
+                    vtu.OutputDataToVTU( "TDS_YCO2", "mass fraction CO2 carbonic phase",    "Model", time );
+                    vtu.OutputDataToVTU( "TDS_YH2O", "mass fraction H2O carbonic phase",    "Model", time ); 
+                  }                       
               }   
               save_counter = 0;
          }
