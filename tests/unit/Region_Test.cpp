@@ -11,6 +11,8 @@
 #include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 #include "CSMP_highLevelUtilities.h"
+#include "RegionMonitor.h"
+#include "vsetMakers.h"
 
 // algebraic multigrid solvers
 #include "LinearSolver.h"
@@ -53,14 +55,24 @@ Region_Test::~Region_Test()
 */
 void Region_Test::run()
 {
+    // 1. integrity check on regions written to disk
+    // -----------------------------------------------------
+    TestBoundaryFaceFunctionality(); // pyramid-hexa model generated with vsetMakers
+    TestBoundaryFaceFunctionality("cube_flag");
+    TestBoundaryFaceFunctionality("hex1_3");
+
+
+    // 2. test of the functionality of regions
+    // -----------------------------------------------------
     const char* model_name="prism_test";
     const string varFileName( "CSMP-1phase-variables.txt" );
     ANSYS_Model3D model( model_name, varFileName.data() );
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model ) );
 
     InputDataManager<DIM>  model_configuration;
 
     model_configuration.ConfigureFromFile( model, model_name,
-                                           false, true, true, true, false  );
+                                           false, true, true, true, false );
 
 
     // we will solve a 3D steady state pressure problem (model contain 3 fractures)
@@ -315,5 +327,206 @@ void Region_Test::run()
     _test(model.RemoveRegionPartitionsFor("FRAC_VOLUMES") == 0 );
 
 } // end run
+
+
+
+
+/**
+    vsetMaker version of previous method
+ 
+    uses SurfaceArea() to test whether the face connectivity is preserved
+    when a model is saved to disk and reloaded afterwards.
+ 
+    try input models "cube_flag" and a hexahedral one
+ 
+    @attention the model must be box-shaped else, surface area computation will fail.
+*/
+bool Region_Test::TestBoundaryFaceFunctionality()
+{
+    // 1. building and saving test model to disk
+    // -----------------------------------------
+    bool intact_functionality(true);
+    const string varFileName( "CSMP-1phase-variables.txt" );
+    const string model_name("PyramidHexaPatch");
+    const bool   skewed_elements(false); // otherwise model is not a box anymore
+    VSet<3U>     vset;
+  
+    test_Create_Pyramid_Hexa_VSet( vset, skewed_elements );
+  
+    Model<3U>  model1( vset, varFileName.c_str(), true );
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );
+
+    // corner_points
+    Point<3U> xyz_min, xyz_max;
+    model1.MinMaxCoordinates( xyz_min, xyz_max );
+    const double64 dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
+    const double64 surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
+  
+    const Region<3U>& model1_domain(model1.Region("Model"));
+    const double64 surface_area1 = model1_domain.SurfaceArea();
+    const double64 volume1       = model1_domain.Volume();
+  
+    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area );
+  
+    // extracting perimeter elements to set for comparison
+    size_t perimeter_elements(model1_domain.PerimeterElements());
+    // extracting the perimeter face vector for comparison with re-read model2
+    vector<vector<int8> > perimeter_faces;
+    perimeter_faces.reserve(model1_domain.PerimeterElements());
+    model1_domain.UpdateMemberIndexes();
+    for ( size_t e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
+         vector<int8>  face_vec;
+         for ( size_t i=0U; i<model1_domain.PerimeterFaces(e); ++i )
+           face_vec.push_back( static_cast<int8>(model1_domain.PerimeterFace(e,i)) );
+         perimeter_faces.push_back( move(face_vec) );
+      }
+    // counting the perimeter faces
+    size_t n_perimeter_faces(0U);
+    for ( auto it : perimeter_faces ) n_perimeter_faces += it.size();
+  
+    model1.OutputToBinaryFile("model1");
+  
+  
+    // 2. reading the model back in and testing SurfaceArea again
+    // ----------------------------------------------------------
+    Model<3U>  model2(string("model1"));
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
+
+    const Region<3U>& model2_domain(model2.Region("Model"));
+ 
+    // test 0: same number of perimeter elementds
+    size_t perimeter_elements2(model2_domain.PerimeterElements());
+    _test( perimeter_elements = perimeter_elements2 );
+  
+    // test 1: re-read model2
+    vector<vector<int8> > perimeter_faces2;
+    perimeter_faces2.reserve(model2_domain.PerimeterElements());
+    model2_domain.UpdateMemberIndexes();
+    for ( size_t e=model2_domain.InteriorElements(); e<model2_domain.Elements(); ++e ) {
+         vector<int8>  face_vec;
+         for ( size_t i=0U; i<model2_domain.PerimeterFaces(e); ++i )
+           face_vec.push_back( static_cast<int8>(model2_domain.PerimeterFace(e,i)) );
+         perimeter_faces2.push_back( move(face_vec) );
+      }
+    // counting the perimeter faces
+    size_t n_perimeter_faces2(0U);
+    for ( auto it : perimeter_faces2 ) n_perimeter_faces2 += it.size();
+  
+    // test 3: same number of perimeter faces ?
+    _test( n_perimeter_faces == n_perimeter_faces2 );
+
+    // test 4: same face idx ?
+    _test( perimeter_faces == perimeter_faces2 );
+
+    // test 5: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
+    const double64 surface_area2 = model2_domain.SurfaceArea();
+    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 );
+    const double64 volume2 = model2_domain.Volume();
+    _equal( volume1, volume2, numeric_limits<double64>::epsilon() * volume1 );
+
+    // 3. getting extra diagnostics from the RegionMonitor
+    // ----------------------------------------------------------
+   model1.InputPropertyValue ( "fluid pressure", makeScalar(PLAIN,0.) );
+    model1.InputPropertyValue ( "permeability", makeScalar(PLAIN,1.0e-12) );
+    model1.InputPropertyValue ( "porosity", makeScalar(PLAIN,1.) );
+    model1.InputPropertyValue ( "fluid volume source", makeScalar(PLAIN,0.) );
+    model1.InputPropertyValue ( "nodal fluid volume source", makeScalar(PLAIN,0.) );
+    model1.InputPropertyValue ( "concentration", makeScalar(PLAIN,0.) );
+    // boundary conditions
+    const double64 pressure (10*101325.);
+    model1.InputBoundaryValue( LEFT,  "fluid pressure",   makeScalar(DIRICH, 0.) );
+    model1.InputBoundaryValue( RIGHT, "fluid pressure",   makeScalar(DIRICH,pressure) ); // 1 bar
+
+    const bool integrate_pore_volume_only(true);
+    RegionMonitor<3U>  monitor( model2, "porosity", "fluid pressure",  integrate_pore_volume_only );
+  
+    return intact_functionality;
+
+} // end TestBoundaryFaceFunctionality
+
+
+
+
+
+bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
+{
+    // 1. building and saving test model to disk
+    bool intact_functionality(true);
+    const string varFileName( "CSMP-1phase-variables.txt" );
+  
+    // ansys model
+    ANSYS_Model3D model1( model_name.c_str(), varFileName.data() );
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );
+  
+    // corner_points
+    Point<3U> xyz_min, xyz_max;
+    model1.MinMaxCoordinates( xyz_min, xyz_max );
+    const double64 dx(xyz_max[0]-xyz_min[0]), dy(xyz_max[1]-xyz_min[1]), dz(xyz_max[2]-xyz_min[2]);
+    const double64 surface_area = 2.*dx*dy + 2.*dx*dz + 2.*dy*dz;
+
+    InputDataManager<DIM>  model_configuration;
+    model_configuration.ConfigureFromFile( model1, model_name.c_str(),
+                                           false, true, true, true, false  );
+  
+    const Region<3U>& model1_domain(model1.Region("Model"));
+    double64 surface_area1 = model1_domain.SurfaceArea();
+  
+    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area );
+  
+    model1.OutputToBinaryFile("model1");
+  
+    // 2. reading the model back in and testing SurfaceArea again
+    Model<3U>  model2(string("model1"));
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
+
+    const Region<3U>& model2_domain(model2.Region("Model"));
+    double64 surface_area2 = model2_domain.SurfaceArea();
+  
+    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 );
+  
+    const bool integrate_pore_volume_only(true);
+    RegionMonitor<3U>  monitor( model2, "porosity", "fluid pressure",  integrate_pore_volume_only);
+  
+    return intact_functionality;
+
+} // end TestBoundaryFaceFunctionality
+
+
+
+
+/**
+    Checks whether the neighbor information matches the boundary face info for region "Model"
+    Two potential failures are detected and reported:
+    1. the number of perimeter faces is not correct
+    2. the ids of the perimeter faces are not correct
+*/
+bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
+ {
+    size_t consistency_check_failures(0U);
+   
+    const Region<3U>& model_domain(model.Region("Model"));
+    for ( size_t e=model_domain.InteriorElements(); e<model_domain.Elements(); ++e ) {
+         const size_t expected_perimeter_faces(model_domain.PerimeterFaces(e));
+         size_t perimeter_faces(0U);
+         for ( size_t j=0U; j<model_domain.E(e)->Neighbors(); ++j )
+           // if there is no neighbor, there should be a boundary face corresponding to this
+           if ( model_domain.E(e)->Neighbor(j) == nullptr )
+             {
+                // checking the perimeter face information
+                size_t face = model_domain.PerimeterFace(e,perimeter_faces);
+                if ( j != face )
+                  consistency_check_failures++;
+                perimeter_faces++;
+             }
+           if ( expected_perimeter_faces != perimeter_faces )
+             consistency_check_failures++;
+      }
+  
+    return ( consistency_check_failures == 0U );
+   
+ } // end consistencyCheckNeighborVersusPerimeterFaces
+
+
+
 
 } // end csmp
