@@ -373,8 +373,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // extracting the perimeter face vector for comparison with re-read model2
     vector<vector<int8> > perimeter_faces;
     perimeter_faces.reserve(model1_domain.PerimeterElements());
-    model1_domain.UpdateMemberIndexes();
-    for ( size_t e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
+     for ( size_t e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
          vector<int8>  face_vec;
          for ( size_t i=0U; i<model1_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( static_cast<int8>(model1_domain.PerimeterFace(e,i)) );
@@ -401,7 +400,6 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // test 1: re-read model2
     vector<vector<int8> > perimeter_faces2;
     perimeter_faces2.reserve(model2_domain.PerimeterElements());
-    model2_domain.UpdateMemberIndexes();
     for ( size_t e=model2_domain.InteriorElements(); e<model2_domain.Elements(); ++e ) {
          vector<int8>  face_vec;
          for ( size_t i=0U; i<model2_domain.PerimeterFaces(e); ++i )

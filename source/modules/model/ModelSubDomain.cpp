@@ -36,7 +36,7 @@ namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
-                                             const PropertyDatabase<dim>& pref )
+                                          const PropertyDatabase<dim>& pref )
  :  pref_(pref),
     subdomain_name_(subdomain_name),
     verbose_(true)
@@ -77,7 +77,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 
-/* DOES NOT WORK BECAUSE "All Elements" region gets sorted before
+/* DOES NOT WORK BECAUSE region elements get sorted before reastablishing the connectivity
 
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
@@ -5460,6 +5460,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
     */
+    /*
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     faceIDs.reserve( PerimeterElements() );
     for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
@@ -5471,7 +5472,8 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
            faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
       }
     skm_C_fwrite( fp, faceIDs );
-
+    */
+   
     // 5. writing the interior nodes
     IDs.resize( distance(NodesBegin(), PerimeterNodesBegin()) );
     transform( NodesBegin(), PerimeterNodesBegin(),
@@ -5502,6 +5504,11 @@ out( IDs );
 
 /**
     Reads all the data required to fully reconstruct a ModelSubDomain (without search operations)
+ 
+@note SKM: refactored 23/8/2018: no longer uses boundary face vector because the
+    the sorting of the element vectors during the model reconstruction invalidates
+    this vector. It is therefore cheaper to rebuild the vector from scratch
+    during the reconstruction.
 */
 void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
  {
@@ -5516,13 +5523,10 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-#if 0
-    // XXX AJB  Is this test correct?
     if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.notice( ERROR, "readDomainIndexesFromBinaryFile:",
+        csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
-#endif
    
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
@@ -5538,7 +5542,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
         where there is no negative number, a single entry is assumed
-    */
+    
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
     assert( !faceIDs.empty() );
@@ -5556,7 +5560,8 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
            }
          info.perimeter_faces.push_back( move(face_ids) );
       }
-
+    */
+   
     // 5. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
   

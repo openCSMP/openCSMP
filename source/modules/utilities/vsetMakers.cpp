@@ -936,7 +936,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	for(size_t iElement = 26U; iElement < 32U; iElement++)
   	{
       vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_PYRAMID;
-      etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
+      etypes[iElement] = ISOPARAMETRIC_LINEAR_PYRAMID;
   	}
 
     vset.Resize( etypes, npes, epes, nodes, 0, 0 );
