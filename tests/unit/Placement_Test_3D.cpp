@@ -16,7 +16,7 @@ namespace csmp {
     
     //this->_model = new  ANSYS_Model3D("box1x1x1_tetra_struct", "mockModelVariable.txt"); //passed
     //this->_model = new  ANSYS_Model3D("box1x1x1_hexa_struct", "mockModelVariable.txt"); //passed
-    this->_model = new  ANSYS_Model3D("mixed_mesh", "mockModelVariable.txt"); //passed
+    this->_model = new  ANSYS_Model3D("mixed_mesh", "PlacementTest_3D-variables.txt"); //passed
     //this->_model = new  ANSYS_Model3D("HeuristicModel1", "mockModelVariable.txt");    
     
     const Region<3U>& region = _model->Region("Model");

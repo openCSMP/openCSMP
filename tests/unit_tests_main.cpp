@@ -53,6 +53,7 @@
 #include "IsoparametricQuadraticTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTriangle.h"
+#include "LinearCuboid_Test.h"
 
 #include "FiniteVolumeStencil_Test.h"
 #include "FiniteVolumePolicy_Test.h"
@@ -73,6 +74,8 @@
 #include "StatisticalAnalyzer_Test.h"
 #include "RegionMonitor_Test.h"
 #include "Visitor_TestSuite.h"
+#include "Placement_Test_2D.h"
+#include "Placement_Test_3D.h"
 
 #include "ModelSubDomain_Test.h"
 #include "BoundaryInterface_Test.h"
@@ -217,7 +220,7 @@ TEST_CASE("Unported tests", "[Unported]") {
       basic.addTest( new TensorVariable_Test1());
       basic.addTest( new TensorVariable_Test2());
       basic.addTest( new ArrayVariable_Test());
-      // basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
+      basic.addTest( new Variables_Test("FracBox")); //- requires refactoring of InterFace / SplitBoundary functionality
       
       // utilities tests
       basic.addTest( new Matrix_Test(verbose) );
@@ -272,6 +275,8 @@ TEST_CASE("Unported tests", "[Unported]") {
       interdependent1.addTest( new MathOperatorRHS_Test());
       // TODO: add test of assembly of matrix for systems, elimination of boundary conditions etc.
       interdependent1.addTest( new PDE_Integrator_Test() );
+      interdependent1.addTest( new LinearCuboid_Test(false) );
+      
       // running unit tests and reporting errors
       interdependent1.run();
       fails_interdependent1 = interdependent1.report();
@@ -309,7 +314,9 @@ TEST_CASE("Unported tests", "[Unported]") {
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new Variables_Test("FracBox") );
-      
+      composite.addTest( new Placement_Test_2D() );
+      composite.addTest( new Placement_Test_3D() );
+
       // constitutive relationships TODO: create a separate test section for this
       
       /// Property data search tests

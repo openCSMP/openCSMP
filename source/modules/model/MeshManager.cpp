@@ -21,8 +21,7 @@ namespace csmp {
 // refactored
 template<size_t dim>
 MeshManager<dim>::MeshManager()
- : adaptive_remeshing_(false),  
-   hybrid_element_mesh_(false)
+ : hybrid_element_mesh_(false)
  {
  }
 
@@ -30,8 +29,7 @@ MeshManager<dim>::MeshManager()
 // refactored
 template<size_t dim>
 MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const FiniteElementManager& fem_manager, VSet<dim>& vset )
- : adaptive_remeshing_(false), 
-   hybrid_element_mesh_(vset.HybridElementTypeMesh())
+ : hybrid_element_mesh_(vset.HybridElementTypeMesh())
  {
     BuildElementsAndVariableStorage( pref, fem_manager, vset );
     InitializeConnectivity( vset );
@@ -43,23 +41,6 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const FiniteEl
 template<size_t dim>
 MeshManager<dim>::~MeshManager()
  {
-    if ( adaptive_remeshing_ ) {
-          // doing the nodes first
-//          MeshManagerAdapter<dim>::const_iterator  elmt_iterator(ElementsBegin());
-/*
-          while ( elmt_iterator != ElementsEnd() ) {
-               for ( typename vector<Element<dim>*>::iterator
-                     nit=(*elmt_iterator).NodesBegin(); nit!=(*elmt_iterator).NodesEnd(); nit++ ) {
-                    delete (*nit);
-                    (*nit) = 0;
-                 }
-               elmt_iterator++;
-            }
-*/            
-         // now doing the elements
-         throw csmp::Exception( ERROR, "MeshManager<dim>::~MeshManager:",
-                                "adaptively refined mesh not implemented yet");
-      }
  }
  
 // TO FIX PROPERLY
@@ -96,46 +77,12 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
     throw csmp::Exception( WARNING, "MeshManager<dim>::operator=", 
                                     "operator has not been tested yet");
 
-    adaptive_remeshing_     = mmgr.adaptive_remeshing_;
-    hybrid_element_mesh_    = mmgr.hybrid_element_mesh_;
+    hybrid_element_mesh_ = mmgr.hybrid_element_mesh_;
     node_collection_.Assign(mmgr.node_collection_);
     elmt_collection_.Assign(mmgr.elmt_collection_);
     face_collection_.Assign(mmgr.face_collection_);
     interface_collection_.Assign(mmgr.interface_collection_);
-
-    // now all pointers inside the elements and nodes must be 
-    // correctly assigned to the new locations
-    if ( !adaptive_remeshing_ ) {
-        // element nodes and neighbor pointers
-        auto  ite(elmt_collection_.begin());
-        
-        for ( auto& e : mmgr.elmt_collection_ )
-          {
-             // node pointers
-             for ( size_t i=0U; i<e.Nodes(); i++ )
-               (*ite).Assign( i, &node_collection_.Index( e.N(i)->Idx() ) );
-
-             // neighbor pointers
-             for ( size_t i=0U; i<e.Neighbors(); i++ )
-               if ( e.Neighbor(i) != NULL )
-                (*ite).Assign( i, &elmt_collection_.Index( e.Neighbor(i)->Idx() ) );
-             ++ite;
-          }
-
-        // parent elements to nodes
-        auto itn(node_collection_.begin());
-
-        for ( auto& n : mmgr.node_collection_ ) {
-          for ( size_t i=0U; i<n.Parents(); i++ )
-            (*itn).Assign( n.ParentNodeNumber(i), &elmt_collection_.Index( n.Parent(i)->Idx() ) );
-          ++itn;
-        }
-      }
-    else { // the model has been build as a tree structure (adaptive_remeshing_=true)
-        throw csmp::Exception( FATAL_ERROR, "MeshManager<dim>::operator=", 
-                       "for graph-style MeshManageres, copy construction has not been implemented yet");
-      }   
-       
+   
     return *this;
    
  } // end operator=
@@ -343,9 +290,6 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
          cout <<"\nMeshManager<"<< dim <<">::BuildElementsAndVariableStorage: ";
          cout <<"\nunspecified exception occurred."<< endl;
       }
-
-    // since deques were used to store nodes and elements there is no flexibility
-    adaptive_remeshing_ = false;
 
     cout <<"\nMeshManager<"<< dim;
     cout <<">::BuildElementsAndVariableStorage(VSet): Collection sizes:" << endl;
@@ -559,9 +503,6 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
          cout <<"\nMeshManager<"<< dim <<">::ReconstructMeshAndVariableStorage: ";
          cout <<"\nunspecified exception occurred."<< endl;
       }
-
-    // since deques were used to store nodes and elements there is no flexibility
-    adaptive_remeshing_ = false;
 
     cout <<"\nMeshManager<"<< dim;
     cout <<">::ReconstructMeshAndVariableStorage(VSet): Collection sizes:" << endl;
@@ -780,7 +721,7 @@ void MeshManager<dim>::RebuildParentRelationships(
       auto n = *it;
       for ( size_t i = 0; i < n->Parents(); ++i ) {
           auto e = n->Parent(i);
-          if (VerifyElement(e)) {
+          if (Verify(e)) {
               parents.push_back(std::make_pair(n->ParentNodeNumber(i),e));
           }
       }
@@ -1431,8 +1372,6 @@ plist and pfverts.
 template<size_t dim>
 void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
  {
-    assert( !adaptive_remeshing_ );
-
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
     // 1. resizing the VSet
@@ -3953,19 +3892,19 @@ bool  MeshManager<dim>::HybridElementMesh() const
 
 template<size_t dim>
 size_t  MeshManager<dim>::Nodes() const
- { assert( !adaptive_remeshing_ ); return node_collection_.size(); }
+ { return node_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::Elements() const
- { assert( !adaptive_remeshing_ ); return elmt_collection_.size(); }
+ { return elmt_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::Faces() const
- { assert( !adaptive_remeshing_ ); return face_collection_.size(); }
+ { return face_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::InterFaces() const
- { assert( !adaptive_remeshing_ ); return interface_collection_.size(); }
+ { return interface_collection_.size(); }
 
 
 // accessors
@@ -4069,32 +4008,83 @@ typename PrimitiveContainer<csmp::InterFace<dim> >::const_iterator  MeshManager<
  { assert( !interface_collection_.empty() ); return interface_collection_.end(); }
 
 
+// NODES
+
 template<size_t dim>
 bool MeshManager<dim>::NodeAtIndexIsSafe() const
   { return node_collection_.IndexOperationIsSafe(); }
+  
 template<size_t dim>
 csmp::Node<dim>& MeshManager<dim>::NodeAtIndex(size_t i)
-  { return node_collection_.Index(i); }
+  { assert( i < node_collection_.size() ); return node_collection_.Index(i); }
+  
 template<size_t dim>
 const csmp::Node<dim>& MeshManager<dim>::NodeAtIndex(size_t i) const
-  { return node_collection_.Index(i); }
+  { assert( i < node_collection_.size() ); return node_collection_.Index(i); }
+
+template<size_t dim>
+csmp::Node<dim>* const MeshManager<dim>::PointerToNodeAtIndex( size_t i ) const
+ { return const_cast<csmp::Node<dim>* const>(&NodeAtIndex(i)); }
+
+
+// ELEMENTS
 
 template<size_t dim>
 bool MeshManager<dim>::ElementAtIndexIsSafe() const
   { return elmt_collection_.IndexOperationIsSafe(); }
+  
 template<size_t dim>
 csmp::Element<dim>& MeshManager<dim>::ElementAtIndex(size_t i)
-  { return elmt_collection_.Index(i); }
+  { assert( i < elmt_collection_.size() ); return elmt_collection_.Index(i); }
+  
 template<size_t dim>
 const csmp::Element<dim>& MeshManager<dim>::ElementAtIndex(size_t i) const
-  { return elmt_collection_.Index(i); }
+  { assert( i < elmt_collection_.size() ); return elmt_collection_.Index(i); }
 
 template<size_t dim>
+csmp::Element<dim>* const MeshManager<dim>::PointerToElementAtIndex( size_t i ) const
+  { return const_cast<csmp::Element<dim>* const>(&ElementAtIndex(i)); }
+
+
+// FACE
+
+template<size_t dim>
+bool MeshManager<dim>::FaceAtIndexIsSafe() const
+  { return face_collection_.IndexOperationIsSafe(); }
+  
+template<size_t dim>
 csmp::Face<dim>& MeshManager<dim>::FaceAtIndex(size_t i)
-  { return face_collection_.Index(i); }
+  { assert( i < face_collection_.size() ); return face_collection_.Index(i); }
+  
 template<size_t dim>
 const csmp::Face<dim>& MeshManager<dim>::FaceAtIndex(size_t i) const
-  { return face_collection_.Index(i); }
+  { assert( i < face_collection_.size() ); return face_collection_.Index(i); }
+
+template<size_t dim>
+csmp::Face<dim>* const MeshManager<dim>::PointerToFaceAtIndex( size_t i ) const
+ { return const_cast<csmp::Face<dim>* const>(&FaceAtIndex(i)); }
+
+
+// INTERFACE
+
+template<size_t dim>
+bool MeshManager<dim>::InterFaceAtIndexIsSafe() const
+  { return interface_collection_.IndexOperationIsSafe(); }
+  
+template<size_t dim>
+csmp::InterFace<dim>& MeshManager<dim>::InterFaceAtIndex(size_t i)
+  { assert( i < interface_collection_.size() ); return interface_collection_.Index(i); }
+  
+template<size_t dim>
+const csmp::InterFace<dim>& MeshManager<dim>::InterFaceAtIndex(size_t i) const
+  { assert( i < interface_collection_.size() ); return interface_collection_.Index(i); }
+
+template<size_t dim>
+csmp::InterFace<dim>* const MeshManager<dim>::PointerToInterFaceAtIndex( size_t i ) const
+ { return const_cast<csmp::InterFace<dim>* const>(&InterFaceAtIndex(i)); }
+
+
+
 
 
 template<size_t dim>
@@ -4130,10 +4120,52 @@ void MeshManager<dim>::Out() const
      }
 
    // faces
-   // TODO:
+    cout <<"\nFACES: "<< endl;
+    for ( auto& e : face_collection_ ) {
+         cout <<"\nFace ID: "<< e.Idx() <<" No boundary flags."<< endl;
+         cout <<"Member Nodes: "<< endl;
+         for ( size_t i=0U; i<e.Nodes(); i++ )
+           cout << e.N(i)->Idx() <<"\t";
+          cout <<"\nNeighbor elements: "<< endl;
+         for ( size_t i=0U; i<e.Neighbors(); i++ )
+           if ( e.Neighbor(i) != NULL )
+             cout << e.Neighbor(i)->Idx() <<"\t";
+           else
+           cout <<"NO NEIGHBOR\t";
+         // higher dimensional neighbors
+         cout <<"\nhigher-dimensional neighbor elements:\n";
+         assert( e.InnerParent() != nullptr );
+         cout <<"\tinner: "<< e.InnerParent()->Idx() <<"\t";
+         if ( e.OuterParent() != nullptr )
+            cout <<"\touter: "<< e.OuterParent()->Idx() <<"\t";
+          else
+            cout <<"NO NEIGHBOR\t";
+         cout << endl;
+     }
 
    // inter faces
-   // TODO:
+    cout <<"\nINTERFACES: "<< endl;
+    for ( auto& e : interface_collection_ ) {
+         cout <<"\nInterFace ID: "<< e.Idx() <<" No boundary flags."<< endl;
+         cout <<"Member Nodes: "<< endl;
+         for ( size_t i=0U; i<e.Nodes(); i++ )
+           cout << e.N(i)->Idx() <<"\t";
+          cout <<"\nNeighbor elements: "<< endl;
+         for ( size_t i=0U; i<e.Neighbors(); i++ )
+           if ( e.Neighbor(i) != NULL )
+             cout << e.Neighbor(i)->Idx() <<"\t";
+           else
+           cout <<"NO NEIGHBOR\t";
+         // higher dimensional neighbors
+         cout <<"\nhigher-dimensional neighbor elements:\n";
+         assert( e.InnerParent() != nullptr );
+         cout <<"\tinner: "<< e.InnerParent()->Idx() <<"\t";
+         if ( e.OuterParent() != nullptr )
+            cout <<"\touter: "<< e.OuterParent()->Idx() <<"\t";
+          else
+            cout <<"NO NEIGHBOR\t";
+         cout << endl;
+     }
 
    // parent elements ID's for each node
    cout << endl << endl;   

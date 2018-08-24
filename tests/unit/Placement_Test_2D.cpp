@@ -28,7 +28,7 @@ namespace csmp {
     //this->_model = new  ANSYS_Model2D("mockModel", "mockModelVariable.txt", true, false);
     //this->_model = new  ANSYS_Model2D("WellBore2D", "mockModelVariable.txt");
     //this->_model = new  ANSYS_Model2D("HorFracs2D", "mockModelVariable.txt");
-    this->_model = new  ANSYS_Model2D("square1x1_quad_struct", "mockModelVariable.txt");
+    this->_model = new  ANSYS_Model2D( "square1x1_quad_struct", "PlacementTest_2D-variables.txt");
     
     const Region<2U>& region = _model->Region("Model");
 
