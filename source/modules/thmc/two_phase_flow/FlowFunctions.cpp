@@ -619,7 +619,7 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMEN
     assert( phase == 0U or phase == 1U );
     
    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(this->key_kfn) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) ) * this->dpcds(p);
+    return p.Obtain(this->key_kfn) * ( (phase==0U) ? Mobility( p, 0U ) : Mobility( p, 1U ) ) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;

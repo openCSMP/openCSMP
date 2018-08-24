@@ -133,18 +133,21 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
-// TO DO: fix
-    if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
     this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( static_cast<int8>(*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
-      }
-
+    const auto elementsEnd(this->elmt_vec_.end());
+    for ( auto it=perimeterElementsBegin; it!=elementsEnd; ++it ) {
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all the faces of the element that are located on the model boundary
+         vector<ONE_BYTE_NUMBER>  boundary_faces;
+         const size_t faces((*it)->Faces());
+         boundary_faces.reserve(faces);
+         for ( size_t face=0U; face<faces; ++face )
+           if ( (*it)->Neighbor(face) == nullptr )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         this->bd_face_vec_.push_back( boundary_faces );
+      }   
+   
     // building the node vector
     // ------------------------
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );

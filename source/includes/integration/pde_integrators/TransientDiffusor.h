@@ -29,10 +29,8 @@ template<size_t> class Model;
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
-
   public:
-
-    typedef typename COMPUTATION_DOMAIN<dim>::Simplex ComputationCell;
+    typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
 
     TransientDiffusor( Model<dim>&,
                               const char* diffusivity,

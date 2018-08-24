@@ -1335,7 +1335,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 		for (typename map<string, MathOperatorLHS<dim>*>::iterator
 			it_lhs = lhs_operators_.begin(); it_lhs != lhs_operators_.end(); it_lhs++)
 			if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater())
-				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::CellType*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_lhs).second->GetOperands(*(*git));
@@ -1352,7 +1352,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 		for (typename map<string, MathOperatorRHS<dim>*>::iterator
 			it_rhs = rhs_operators_.begin(); it_rhs != rhs_operators_.end(); it_rhs++)
 			if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater())
-				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::CellType*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_rhs).second->GetOperands(*(*git));
@@ -1377,7 +1377,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 					for (int32 e = 0; e < gref.Elements(); e++)
 					{
 						//                    cout<<"element: "<<e<<endl;
-						typename INTEGRATION_DOMAIN<dim>::Simplex* eit = gref.E(e);
+						typename INTEGRATION_DOMAIN<dim>::CellType* eit = gref.E(e);
 						fe_tmp = eit->FE(); //save old pointer.
 											// change pointer here
 						eit->Assign(femgrs_[tid].E(eit->FE_Type()));
@@ -1411,7 +1411,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 #pragma omp for
 					for (int32 e = 0; e < gref.Elements(); e++)
 					{
-						typename INTEGRATION_DOMAIN<dim>::Simplex* eit = gref.E(e);
+						typename INTEGRATION_DOMAIN<dim>::CellType* eit = gref.E(e);
 						fe_tmp = eit->FE(); //save old pointer.
 											// change pointer here
 						eit->Assign(femgrs_[tid].E(eit->FE_Type()));
@@ -1489,7 +1489,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 		for (typename map<string, MathOperatorRHS<dim>*>::const_iterator
 			it_rhs = rhs_operators_.begin(); it_rhs != rhs_operators_.end(); it_rhs++)
 			if ((*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater())
-				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::CellType*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it_rhs).second->GetOperands(*(*git));
@@ -1543,8 +1543,8 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 	{
 		if (postpro_operators_.empty()) return;
 
-		for (typename map<string, MathOperatorLHS<dim>*>::iterator
-			it = postpro_operators_.begin(); it != postpro_operators_.end(); it++)
+		for ( typename map<string, MathOperatorLHS<dim>*>::iterator
+			    it = postpro_operators_.begin(); it != postpro_operators_.end(); it++ )
 		{
 			for (size_t i = 1; i <= (*it).second->ApplicationCycles(); i++)
 			{
@@ -1553,7 +1553,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 				if (verbose_) cout << "\nPDE_Integrator<" << dim;
 				//              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
 				if (verbose_) cout << ">::PostProcess: Computing: " << (*it).first << "\n";
-				for (typename vector<typename INTEGRATION_DOMAIN<dim>::Simplex*>::const_iterator
+				for (typename vector<typename INTEGRATION_DOMAIN<dim>::CellType*>::const_iterator
 					git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
 				{
 					(*it).second->GetOperands(*(*git));

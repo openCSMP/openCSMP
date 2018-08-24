@@ -78,13 +78,15 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 
-
-/* DOES NOT WORK BECAUSE "All Elements" region gets sorted before
-
+/**
+     Reconstructor for model subregions that are valid and were stored in file before.
+ 
+     TODO: needs to be ported to PrimitiveContainer usage.
+*/
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                             const ModelSubDomain<dim,CELL>& mesh, "All Elements"
-                                             const SubDomainInfo& info )
+                                          const ModelSubDomain<dim,CELL>& mesh,
+                                          const SubDomainInfo& info )
  : pref_(pref),
    first_bd_node_(info.interior_nodes.size()),
    subdomain_name_(info.name),
@@ -106,15 +108,19 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the simplices that lie on the subdomain perimeter
     // --------------------------------------------------------------------------------------------------
-    bd_face_vec_.reserve( info.perimeter_faces.size() );
-    //std::vector<std::vector<int8 > > perimeter_faces
-    for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
-          const size_t perimeter_faces((*it).size());
-          std::vector<ONE_BYTE_NUMBER> face_vec;
-          face_vec.reserve(perimeter_faces);
-          for ( auto fit=(*it).begin(); fit!=(*it).end(); ++fit )
-            face_vec.push_back( static_cast<ONE_BYTE_NUMBER>( (*fit) ) );
-          this->bd_face_vec_.emplace_back( face_vec );
+    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
+    const auto elementsEnd(this->elmt_vec_.end());
+    for ( auto it=perimeterElementsBegin; it!=elementsEnd; ++it ) {
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all the faces of the element that are located on the model boundary
+         vector<ONE_BYTE_NUMBER>  boundary_faces;
+         const size_t faces((*it)->Faces());
+         boundary_faces.reserve(faces);
+         for ( size_t face=0U; face<faces; ++face )
+           if ( (*it)->Neighbor(face) == nullptr )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         this->bd_face_vec_.emplace_back( boundary_faces );
       }
 
     // building the node vector
@@ -139,7 +145,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
     this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,CELL>() ) );
  
  } // end constructor
-*/
+
 
 
 
@@ -5451,7 +5457,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
-    // 4. writing the boundary faces
+    // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
     // -----------------------------
     /* 
         since this is vector of vectors predominated by single value entries,
@@ -5462,22 +5468,6 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
     */
-    std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
-    faceIDs.reserve( PerimeterElements() );
-    for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
-         // storing the number of perimeter faces as their negative number, but only if there are more than 1 perimeter faces
-         const int8 perimeter_faces(static_cast<int8>(PerimeterFaces(eid)));
-         if ( perimeter_faces > 1 ) faceIDs.push_back( -perimeter_faces );
-         // writing the perimeter face numbers (0..faces-1)
-         for ( int8 j=0U; j<perimeter_faces; ++j )
-           faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
-      }
-    skm_C_fwrite( fp, faceIDs );
-
-// TESTING
-cerr <<"\noutput boundary face vector:\n";
-for ( auto it=PerimeterElementsBegin(); it!=PerimeterElementsEnd(); ++it ) printNodes( *(*it) );
-for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
 
     // 5. writing the interior nodes
     IDs.resize( InteriorNodes() );
@@ -5507,6 +5497,11 @@ out( IDs );
 
 /**
     Reads all the data required to fully reconstruct a ModelSubDomain (without search operations)
+ 
+@note SKM: refactored 23/8/2018: no longer uses boundary face vector because the
+    the sorting of the element vectors during the model reconstruction invalidates
+    this vector. It is therefore cheaper to rebuild the vector from scratch
+    during the reconstruction.
 */
 void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
  {
@@ -5521,16 +5516,16 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
    
     // 2. reading the interior element records of the region
     skm_C_fread( fp, info.interior_elmts );
-
     if (dim > 2 && info.interior_elmts.empty() ) {
         csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
+
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
     assert( !info.perimeter_elmts.empty() );
    
-    // 4. reading the boundary faces
+    // 4. reading the boundary faces (not done anymore because pointer locations get scrambled)
     // -----------------------------
     /* 
         expects flat vector in which all entries that refer to
@@ -5540,7 +5535,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
         where there is no negative number, a single entry is assumed
-    */
+    
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
     assert( !faceIDs.empty() );
@@ -5565,7 +5560,8 @@ for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); +
          info.perimeter_faces.push_back( move(face_ids) );
          if ( it == faceIDs.end() ) break;
       }
-
+    */
+   
     // 5. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
   
