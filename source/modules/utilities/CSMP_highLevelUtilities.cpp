@@ -224,6 +224,28 @@ template long findNode( const Model<3U>&, const Point<3U>&, double64, bool );
 
 
 
+/// prints sorted global element node numbers in a compact way
+template<size_t dim, template<size_t> class CELL>
+void printNodes( const CELL<dim>& c )
+ {
+    set<size_t> nodes;
+    for ( size_t i=0U; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    cout <<" "<< c.Idx() <<": ";
+    for ( auto it : nodes ) cout << it <<",";
+    cout <<" ";
+ }
+
+template void printNodes( const Element<1U>& );
+template void printNodes( const Element<2U>& );
+template void printNodes( const Element<3U>& );
+template void printNodes( const Face<1U>& );
+template void printNodes( const Face<2U>& );
+template void printNodes( const Face<3U>& );
+template void printNodes( const InterFace<1U>& );
+template void printNodes( const InterFace<2U>& );
+template void printNodes( const InterFace<3U>& );
+
+
 
 
 size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,

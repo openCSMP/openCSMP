@@ -21,8 +21,7 @@ namespace csmp {
 // refactored
 template<size_t dim>
 MeshManager<dim>::MeshManager()
- : adaptive_remeshing_(false),  
-   hybrid_element_mesh_(false)
+ : hybrid_element_mesh_(false)
  {
  }
 
@@ -30,8 +29,7 @@ MeshManager<dim>::MeshManager()
 // refactored
 template<size_t dim>
 MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const FiniteElementManager& fem_manager, VSet<dim>& vset )
- : adaptive_remeshing_(false), 
-   hybrid_element_mesh_(vset.HybridElementTypeMesh())
+ : hybrid_element_mesh_(vset.HybridElementTypeMesh())
  {
     BuildElementsAndVariableStorage( pref, fem_manager, vset );
     InitializeConnectivity( vset );
@@ -43,26 +41,11 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const FiniteEl
 template<size_t dim>
 MeshManager<dim>::~MeshManager()
  {
-    if ( adaptive_remeshing_ ) {
-          // doing the nodes first
-//          MeshManagerAdapter<dim>::const_iterator  elmt_iterator(ElementsBegin());
-/*
-          while ( elmt_iterator != ElementsEnd() ) {
-               for ( typename vector<Element<dim>*>::iterator
-                     nit=(*elmt_iterator).NodesBegin(); nit!=(*elmt_iterator).NodesEnd(); nit++ ) {
-                    delete (*nit);
-                    (*nit) = 0;
-                 }
-               elmt_iterator++;
-            }
-*/            
-         // now doing the elements
-         throw csmp::Exception( ERROR, "MeshManager<dim>::~MeshManager:",
-                                "adaptively refined mesh not implemented yet");
-      }
  }
  
-// TO FIX PROPERLY
+ 
+ 
+// TODO: FIX PROPERLY
 template<size_t dim>
 MeshManager<dim>::MeshManager( const MeshManager<dim>& mmgr )
  {
@@ -96,8 +79,7 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
     throw csmp::Exception( WARNING, "MeshManager<dim>::operator=", 
                                     "operator has not been tested yet");
 
-    adaptive_remeshing_     = mmgr.adaptive_remeshing_;
-    hybrid_element_mesh_    = mmgr.hybrid_element_mesh_;
+    hybrid_element_mesh_ = mmgr.hybrid_element_mesh_;
     node_collection_.Assign(mmgr.node_collection_);
     elmt_collection_.Assign(mmgr.elmt_collection_);
     face_collection_.Assign(mmgr.face_collection_);
@@ -105,37 +87,31 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
 
     // now all pointers inside the elements and nodes must be 
     // correctly assigned to the new locations
-    if ( !adaptive_remeshing_ ) {
-        // element nodes and neighbor pointers
-        auto  ite(elmt_collection_.begin());
-        
-        for ( auto& e : mmgr.elmt_collection_ )
-          {
-             // node pointers
-             for ( size_t i=0U; i<e.Nodes(); i++ )
-               (*ite).Assign( i, &node_collection_.Index( e.N(i)->Idx() ) );
+    // element nodes and neighbor pointers
+    auto  ite(elmt_collection_.begin());
+    
+    for ( auto& e : mmgr.elmt_collection_ )
+      {
+         // node pointers
+         for ( size_t i=0U; i<e.Nodes(); i++ )
+           (*ite).Assign( i, &node_collection_.Index( e.N(i)->Idx() ) );
 
-             // neighbor pointers
-             for ( size_t i=0U; i<e.Neighbors(); i++ )
-               if ( e.Neighbor(i) != NULL )
-                (*ite).Assign( i, &elmt_collection_.Index( e.Neighbor(i)->Idx() ) );
-             ++ite;
-          }
-
-        // parent elements to nodes
-        auto itn(node_collection_.begin());
-
-        for ( auto& n : mmgr.node_collection_ ) {
-          for ( size_t i=0U; i<n.Parents(); i++ )
-            (*itn).Assign( n.ParentNodeNumber(i), &elmt_collection_.Index( n.Parent(i)->Idx() ) );
-          ++itn;
-        }
+         // neighbor pointers
+         for ( size_t i=0U; i<e.Neighbors(); i++ )
+           if ( e.Neighbor(i) != NULL )
+            (*ite).Assign( i, &elmt_collection_.Index( e.Neighbor(i)->Idx() ) );
+         ++ite;
       }
-    else { // the model has been build as a tree structure (adaptive_remeshing_=true)
-        throw csmp::Exception( FATAL_ERROR, "MeshManager<dim>::operator=", 
-                       "for graph-style MeshManageres, copy construction has not been implemented yet");
-      }   
-       
+
+    // parent elements to nodes
+    auto itn(node_collection_.begin());
+
+    for ( auto& n : mmgr.node_collection_ ) {
+      for ( size_t i=0U; i<n.Parents(); i++ )
+        (*itn).Assign( n.ParentNodeNumber(i), &elmt_collection_.Index( n.Parent(i)->Idx() ) );
+      ++itn;
+    }
+   
     return *this;
    
  } // end operator=
@@ -343,9 +319,6 @@ bool MeshManager<dim>::BuildElementsAndVariableStorage( const PropertyDatabase<d
          cout <<"\nMeshManager<"<< dim <<">::BuildElementsAndVariableStorage: ";
          cout <<"\nunspecified exception occurred."<< endl;
       }
-
-    // since deques were used to store nodes and elements there is no flexibility
-    adaptive_remeshing_ = false;
 
     cout <<"\nMeshManager<"<< dim;
     cout <<">::BuildElementsAndVariableStorage(VSet): Collection sizes:" << endl;
@@ -559,9 +532,6 @@ bool MeshManager<dim>::ReconstructMeshAndVariableStorage( const PropertyDatabase
          cout <<"\nMeshManager<"<< dim <<">::ReconstructMeshAndVariableStorage: ";
          cout <<"\nunspecified exception occurred."<< endl;
       }
-
-    // since deques were used to store nodes and elements there is no flexibility
-    adaptive_remeshing_ = false;
 
     cout <<"\nMeshManager<"<< dim;
     cout <<">::ReconstructMeshAndVariableStorage(VSet): Collection sizes:" << endl;
@@ -1431,8 +1401,6 @@ plist and pfverts.
 template<size_t dim>
 void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
  {
-    assert( !adaptive_remeshing_ );
-
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
     // 1. resizing the VSet
@@ -3953,19 +3921,19 @@ bool  MeshManager<dim>::HybridElementMesh() const
 
 template<size_t dim>
 size_t  MeshManager<dim>::Nodes() const
- { assert( !adaptive_remeshing_ ); return node_collection_.size(); }
+ { return node_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::Elements() const
- { assert( !adaptive_remeshing_ ); return elmt_collection_.size(); }
+ { return elmt_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::Faces() const
- { assert( !adaptive_remeshing_ ); return face_collection_.size(); }
+ { return face_collection_.size(); }
 
 template<size_t dim>
 size_t  MeshManager<dim>::InterFaces() const
- { assert( !adaptive_remeshing_ ); return interface_collection_.size(); }
+ { return interface_collection_.size(); }
 
 
 // accessors

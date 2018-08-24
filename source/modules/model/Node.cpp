@@ -90,10 +90,39 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
     return *this;
  }
 
-/// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular Region, Boundary or most likely SplitBoundary.
-/// Therefore only important infromation for that process is taken into account in order to distinguish two Node's.
-/// That must be coordinate and parent elements
+
+
+
+/**
+    Move assignment, relying on that similar operators exist for the nodes components.
+    
+    @note this assumes that the supplied node is a temporary.
+*/
+template<size_t dim>
+Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
+ {
+    assert( this != &nd );
+    idx_                     = nd.idx_;
+    at_boundary_             = nd.at_boundary_;
+    parent_node_indexes_     = nd.parent_node_indexes_;
+    parent_element_pointers_ = nd.parent_element_pointers_;
+    xyz_                     = nd.xyz_;
+    this->LVS( nd.LVS() );
+ 
+    return *this;
+ }
+
+
+
+
+/**
+    This comparison operator was designed specifically for the creation of particular Region, Boundary and SplitBoundary objects.
+    Hence, only information important for this process is taken into account, distinguishing 2 Nodes from each other.
+    That must be coordinate and parent elements
+
+    @author Roman Manasipov
+    @date   2014
+*/
 template<size_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {

@@ -113,20 +113,18 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ---------------------------
     this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
     // assigning pointers to the interior elements
-    if (info.interior_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe()) {
+    if (info.interior_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe())
       throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::ElementAtIndex is unsafe here" );
-    }
-    for ( auto elmt : info.interior_elmts ) {
+   
+    for ( auto elmt : info.interior_elmts )
       this->elmt_vec_.push_back( &mesh.ElementAtIndex(elmt) );
-    }
    
     // assigning pointers to the perimeter elements
-    if (info.perimeter_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe()) {
+    if (info.perimeter_elmts.size() > 0 && !mesh.ElementAtIndexIsSafe())
       throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::ElementAtIndex is unsafe here" );
-    }
-    for ( auto elmt : info.perimeter_elmts ) {
+   
+    for ( auto elmt : info.perimeter_elmts )
       this->elmt_vec_.push_back( &mesh.ElementAtIndex(elmt) );
-    }
    
     // sorting the subvectors for future searching (upsets original numbering)
     const auto perimeterElementsBegin( next(this->elmt_vec_.begin(), info.interior_elmts.size()) );
@@ -135,6 +133,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
+// TO DO: fix
     if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
     this->bd_face_vec_.reserve( info.perimeter_faces.size() );
     for ( auto it=info.perimeter_faces.begin(); it!=info.perimeter_faces.end(); ++it ) {
@@ -150,24 +149,19 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ------------------------
     this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
     // assigning pointers to the interior nodes
-    if (info.interior_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe()) {
+    if (info.interior_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe())
       throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::NodeAtIndex is unsafe here" );
-    }
 
-   for ( auto node : info.interior_nodes ){
+   for ( auto node : info.interior_nodes )
       this->node_vec_.push_back( &mesh.NodeAtIndex(node) );
-    }
    
     // assigning pointers to the perimeter nodes
     this->first_bd_node_ = info.interior_nodes.size();
-   if (info.perimeter_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe()) {
+   if (info.perimeter_nodes.size() > 0 && !mesh.NodeAtIndexIsSafe())
      throw csmp::Exception( FATAL_ERROR, "Region<dim>::Region", "MeshManager::NodeAtIndex is unsafe here" );
-   }
 
-    for ( auto node : info.perimeter_nodes ){
+    for ( auto node : info.perimeter_nodes )
       this->node_vec_.push_back( &mesh.NodeAtIndex(node) );
-    }
-
    
     // sorting the subvectors for future searching
     const auto perimeterNodesBegin( next(this->node_vec_.begin(), info.interior_nodes.size()) );
@@ -177,6 +171,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // allocating the storage for boundary properties
     // ----------------------------------------------
     this->ResizePropertyStorage( pref.LocalVariablesAt(REGION) );
+
+// TEST
+cerr <<"\nRegion(reconstructor): perimeter elements in reconstructed region:\n";
+for ( typename vector<Element<dim>*>::const_iterator it=this->PerimeterElementsBegin(); it!=this->ElementsEnd(); ++it ) printNodes( *(*it) );
+
    
  } // end region re-constructor (using MeshManager)
 

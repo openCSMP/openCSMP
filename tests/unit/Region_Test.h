@@ -15,8 +15,11 @@ namespace csmp
       void run();
     
   private:
-     bool TestBoundaryFaceFunctionality( const std::string& );
      bool TestBoundaryFaceFunctionality( /* "VSET_MAKER" */ );
+     bool TestBoundaryFaceFunctionality( const std::string& );
+    
+     /// test covers functionality of the base class ModelSubDomain
+     bool TestRegionFileInputOutput(  const Model<3U>& model, const char* region );
 
     const bool verbose_;
 };

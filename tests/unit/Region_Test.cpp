@@ -74,6 +74,7 @@ void Region_Test::run()
     model_configuration.ConfigureFromFile( model, model_name,
                                            false, true, true, true, false );
 
+    TestRegionFileInputOutput( model, "Model" );
 
     // we will solve a 3D steady state pressure problem (model contain 3 fractures)
     // calculate hydraulic conductivity, K = k / mu
@@ -373,7 +374,6 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // extracting the perimeter face vector for comparison with re-read model2
     vector<vector<int8> > perimeter_faces;
     perimeter_faces.reserve(model1_domain.PerimeterElements());
-    model1_domain.UpdateMemberIndexes();
     for ( size_t e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
          vector<int8>  face_vec;
          for ( size_t i=0U; i<model1_domain.PerimeterFaces(e); ++i )
@@ -390,7 +390,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // 2. reading the model back in and testing SurfaceArea again
     // ----------------------------------------------------------
     Model<3U>  model2(string("model1"));
-    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
+//    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
 
     const Region<3U>& model2_domain(model2.Region("Model"));
  
@@ -401,7 +401,6 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // test 1: re-read model2
     vector<vector<int8> > perimeter_faces2;
     perimeter_faces2.reserve(model2_domain.PerimeterElements());
-    model2_domain.UpdateMemberIndexes();
     for ( size_t e=model2_domain.InteriorElements(); e<model2_domain.Elements(); ++e ) {
          vector<int8>  face_vec;
          for ( size_t i=0U; i<model2_domain.PerimeterFaces(e); ++i )
@@ -417,16 +416,21 @@ bool Region_Test::TestBoundaryFaceFunctionality()
 
     // test 4: same face idx ?
     _test( perimeter_faces == perimeter_faces2 );
+  
+    // test 5: is the content of the perimeter face vectors actually the same ?
+    _test( equal( perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
 
-    // test 5: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
+    // test 6: verifying that the outer surface area and volume of in the re-read CSMP native model is the same
+    // region surface area
     const double64 surface_area2 = model2_domain.SurfaceArea();
     _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 );
+    // region volume
     const double64 volume2 = model2_domain.Volume();
     _equal( volume1, volume2, numeric_limits<double64>::epsilon() * volume1 );
 
     // 3. getting extra diagnostics from the RegionMonitor
     // ----------------------------------------------------------
-   model1.InputPropertyValue ( "fluid pressure", makeScalar(PLAIN,0.) );
+    model1.InputPropertyValue ( "fluid pressure", makeScalar(PLAIN,0.) );
     model1.InputPropertyValue ( "permeability", makeScalar(PLAIN,1.0e-12) );
     model1.InputPropertyValue ( "porosity", makeScalar(PLAIN,1.) );
     model1.InputPropertyValue ( "fluid volume source", makeScalar(PLAIN,0.) );
@@ -455,7 +459,7 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     const string varFileName( "CSMP-1phase-variables.txt" );
   
     // ansys model
-    ANSYS_Model3D model1( model_name.c_str(), varFileName.data() );
+    ANSYS_Model3D model1( model_name.c_str(), varFileName.c_str() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );
   
     // corner_points
@@ -494,6 +498,82 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
 
 
 
+
+/**
+    Compares whether the data of the region class are correctly recovered from binary file.
+*/
+bool Region_Test::TestRegionFileInputOutput( const Model<3U>& model, const char* region )
+ {
+     // 1. creating sets for interior and perimeter nodes, elements, boundary faces etc.
+     // --------------------------------------------------------------------------------
+     set<Node<3U>*>    interior_nodes, perimeter_nodes;
+     set<Element<3U>*> interior_elements, perimeter_elements;
+ 
+     const Region<3>&  domain(model.Region(region));
+     for ( auto nit=domain.NodesBegin(); nit!=domain.PerimeterNodesBegin(); nit++ ) interior_nodes.insert( (*nit) );
+     for ( auto nit=domain.PerimeterNodesBegin(); nit!=domain.NodesEnd(); nit++ )   perimeter_nodes.insert( (*nit) );
+     for ( auto eit=domain.ElementsBegin(); eit!=domain.PerimeterElementsEnd(); eit++ ) interior_elements.insert( (*eit) );
+     for ( auto eit=domain.PerimeterElementsBegin(); eit!=domain.ElementsEnd(); eit++ ) perimeter_elements.insert( (*eit) );
+   
+     size_t n_perimeter_nodes(domain.PerimeterNodes());
+     size_t n_perimeter_elements(domain.PerimeterElements());
+     // extracting the perimeter face vector for comparison with re-read model2
+     vector<vector<int8> > perimeter_faces;
+     perimeter_faces.reserve(domain.PerimeterElements());
+     for ( size_t e=domain.InteriorElements(); e<domain.Elements(); ++e ) {
+          vector<int8>  face_vec;
+          for ( size_t i=0U; i<domain.PerimeterFaces(e); ++i )
+            face_vec.push_back( static_cast<int8>(domain.PerimeterFace(e,i)) );
+          perimeter_faces.push_back( move(face_vec) );
+       }
+
+     // saving and retrieving the model from file
+     model.OutputToBinaryFile(model.Name());
+
+  
+     // 2. retrieving the model and getting the same diagnostics
+     // --------------------------------------------------------------------------------
+     Model<3U>  model2(string(model.Name()));
+     const Region<3>&  domain2(model.Region(region));
+
+     set<Node<3U>*>    interior_nodes2, perimeter_nodes2;
+     set<Element<3U>*> interior_elements2, perimeter_elements2;
+
+     for ( auto nit=domain2.NodesBegin(); nit!=domain2.PerimeterNodesBegin(); nit++ ) interior_nodes2.insert( (*nit) );
+     for ( auto nit=domain2.PerimeterNodesBegin(); nit!=domain2.NodesEnd(); nit++ )   perimeter_nodes2.insert( (*nit) );
+     for ( auto eit=domain2.ElementsBegin(); eit!=domain2.PerimeterElementsEnd(); eit++ ) interior_elements2.insert( (*eit) );
+     for ( auto eit=domain2.PerimeterElementsBegin(); eit!=domain2.ElementsEnd(); eit++ ) perimeter_elements2.insert( (*eit) );
+   
+     size_t n_perimeter_nodes2(domain2.PerimeterNodes());
+     size_t n_perimeter_elements2(domain2.PerimeterElements());
+     // extracting the perimeter face vector for comparison with re-read model2
+     vector<vector<int8> > perimeter_faces2;
+     perimeter_faces2.reserve(domain2.PerimeterElements());
+     for ( size_t e=domain2.InteriorElements(); e<domain2.Elements(); ++e ) {
+          vector<int8>  face_vec;
+          for ( size_t i=0U; i<domain2.PerimeterFaces(e); ++i )
+            face_vec.push_back( static_cast<int8>(domain2.PerimeterFace(e,i)) );
+          perimeter_faces2.push_back( move(face_vec) );
+       }
+  
+     // 3. Testing
+     // --------------------------------------------------------------------------------
+     _test( interior_nodes == interior_nodes2 );
+     _test( perimeter_nodes == perimeter_nodes2 );
+     _test( interior_elements == interior_elements2 );
+     _test( perimeter_elements == perimeter_elements2 );
+     _test( n_perimeter_nodes == n_perimeter_nodes2 );
+     _test( n_perimeter_elements == n_perimeter_elements2 );
+     _test( equal( perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
+   
+    return true;
+
+ } // end TestRegionFileInputOutput
+
+
+
+
+
 /**
     Checks whether the neighbor information matches the boundary face info for region "Model"
     Two potential failures are detected and reported:
@@ -505,15 +585,18 @@ bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
     size_t consistency_check_failures(0U);
    
     const Region<3U>& model_domain(model.Region("Model"));
-    for ( size_t e=model_domain.InteriorElements(); e<model_domain.Elements(); ++e ) {
+   
+    for ( size_t e=model_domain.InteriorElements(); e<model_domain.Elements(); ++e )
+     {
          const size_t expected_perimeter_faces(model_domain.PerimeterFaces(e));
-         size_t perimeter_faces(0U);
+         size_t       perimeter_faces(0U);
+         
          for ( size_t j=0U; j<model_domain.E(e)->Neighbors(); ++j )
            // if there is no neighbor, there should be a boundary face corresponding to this
            if ( model_domain.E(e)->Neighbor(j) == nullptr )
              {
                 // checking the perimeter face information
-                size_t face = model_domain.PerimeterFace(e,perimeter_faces);
+                size_t face = model_domain.PerimeterFace( e, perimeter_faces );
                 if ( j != face )
                   consistency_check_failures++;
                 perimeter_faces++;

@@ -11,11 +11,16 @@ template<typename T,class Traits> class PrimitiveContainerConstIterator;
 
 
 /** 
-    @brief A memory-efficient container for storing primitives in a mesh.
+    @brief Traits class for primitives
+ 
+    A memory-efficient container for storing primitives (elements, faces, interfaces, nodes) in a mesh.
 
     Pointers are never invalidated, even when primitives are deleted.
 
     Recycles storage when primitives are erased.
+
+    The main trait required is Clear(), which frees up dynamic storage inside
+    the primitive. This is called when a primitive is erased.
 
     @author A.J. Bromage
     @date 2017
@@ -24,12 +29,6 @@ template<typename T,class Traits> class PrimitiveContainerConstIterator;
     @todo AJB - The iterators should conform to OutputIterator as well as ForwardIterator.
     @todo AJB - Bad things will happen if you erase the Root element. Don't do that.
 */
-
-
-/// Traits class for primitives
-//
-// The main trait required is Clear(), which frees up dynamic storage inside
-// the primitive. This is called when a primitive is erased.
 template<typename T>
 struct PrimitiveTraits {
     /// Clear a primitive so that it releases any dynamic storage
@@ -62,7 +61,7 @@ class PrimitiveContainer
       /// Allocate a primitive
       T* Alloc();
 
-      /// Allocate a primitive
+      /// Delete a primitive
       void Free(T* prim);
 
       /// Copy a container.

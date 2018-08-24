@@ -28,6 +28,8 @@
 #include "CSMP_mathUtilities.h"
 #include "binaryReadWrite.h"
 
+#include "CSMP_highLevelUtilities.h"
+
 //#define MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
@@ -36,7 +38,7 @@ namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
-                                             const PropertyDatabase<dim>& pref )
+                                          const PropertyDatabase<dim>& pref )
  :  pref_(pref),
     subdomain_name_(subdomain_name),
     verbose_(true)
@@ -5473,18 +5475,18 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
     skm_C_fwrite( fp, faceIDs );
 
 // TESTING
-//cerr <<"\noutput boundary face vector: ";
-//for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
-
+cerr <<"\noutput boundary face vector:\n";
+for ( auto it=PerimeterElementsBegin(); it!=PerimeterElementsEnd(); ++it ) printNodes( *(*it) );
+for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
 
     // 5. writing the interior nodes
-    IDs.resize( distance(NodesBegin(), PerimeterNodesBegin()) );
+    IDs.resize( InteriorNodes() );
     transform( NodesBegin(), PerimeterNodesBegin(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
     // 6. writing the perimeter nodes
-    IDs.resize( distance(PerimeterNodesBegin(), NodesEnd()) );
+    IDs.resize( PerimeterNodes() );
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
@@ -5544,8 +5546,8 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
     assert( !faceIDs.empty() );
 
 // TESTING
-//cerr <<"\ninput boundary face vector: ";
-//for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
+cerr <<"\ninput boundary face vector:\n";
+for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
  
     if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
     info.perimeter_faces.reserve( faceIDs.size() );

@@ -45,6 +45,7 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
+#include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test.h"

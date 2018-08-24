@@ -61,6 +61,7 @@
 #include "RegionMonitor_Test.h"
 #include "Visitor_TestSuite.h"
 #include "Box_Test.h"
+#include "MeshManager_Test.h"
 
 #include "ModelSubDomain_Test.h"
 #include "BoundaryInterface_Test.h"

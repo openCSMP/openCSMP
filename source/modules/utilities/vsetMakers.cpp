@@ -888,7 +888,11 @@ void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t
 
 
 
-//adapted ??
+/**
+    Creates:
+    - 32 elements (26 hex + 6 pyramids)
+    - 64 nodes
+*/
 void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
@@ -935,8 +939,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	}
   	for(size_t iElement = 26U; iElement < 32U; iElement++)
   	{
-      vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_PYRAMID;
-      etypes[iElement] = ISOPARAMETRIC_LINEAR_PRISM;
+      vecElementTypes[iElement] = ISOPARAMETRIC_LINEAR_PYRAMID;
+      etypes[iElement]          = ISOPARAMETRIC_LINEAR_PYRAMID;
   	}
 
     vset.Resize( etypes, npes, epes, nodes, 0, 0 );
