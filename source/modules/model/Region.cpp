@@ -175,14 +175,14 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
     // ----------------------------------------------
     this->ResizePropertyStorage( pref.LocalVariablesAt(REGION) );
 
-// TEST
-cerr <<"\nRegion(reconstructor): perimeter elements in reconstructed region:\n";
-for ( typename vector<Element<dim>*>::const_iterator it=this->PerimeterElementsBegin(); it!=this->ElementsEnd(); ++it ) printNodes( *(*it) );
-
-   
  } // end region re-constructor (using MeshManager)
 
 
+// TEST
+//cerr <<"\nRegion(reconstructor): perimeter elements in reconstructed region:\n";
+//for ( typename vector<Element<dim>*>::const_iterator it=this->PerimeterElementsBegin(); it!=this->ElementsEnd(); ++it ) printNodes( *(*it) );
+
+   
 
 
 

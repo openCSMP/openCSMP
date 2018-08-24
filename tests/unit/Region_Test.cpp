@@ -390,7 +390,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // 2. reading the model back in and testing SurfaceArea again
     // ----------------------------------------------------------
     Model<3U>  model2(string("model1"));
-//    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
+    _test( consistencyCheckNeighborVersusPerimeterFaces( model2 ) );
 
     const Region<3U>& model2_domain(model2.Region("Model"));
  
