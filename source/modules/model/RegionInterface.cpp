@@ -403,6 +403,8 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( cons
 
     @attention ONLY METHOD that provides complete information about each region:
     interior vs. perimeter nodes and element; boudary faces etc.
+    
+    @note the element and node Idx indices must have a global unique numbering for this method to work.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* file_name ) const
@@ -454,8 +456,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
       for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
            git=UniqueRegionsBegin(); git!=UniqueRegionsEnd(); ++git )
        {
-         BinaryFileSectionWrite hdr(fp, "ONE_REGN");
-
+          BinaryFileSectionWrite hdr(fp, "ONE_REGN");
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";
@@ -473,14 +474,14 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
 
      fwrite( (void*) &records, sizeof(size_t), 1, fp );
 
-     for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
-       BinaryFileSectionWrite hdr(fp, "ONE_REGN");
-
-       auto& region = (*git).second;
-
-       region.WriteDomainIndexesToBinaryFile( fp );
-       if (region.InteriorElementsBegin() != region.InteriorElementsEnd()) {
-           domainVariablesOut( fp, (*git).second, database );
+     for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ )
+       {
+          BinaryFileSectionWrite hdr(fp, "ONE_REGN");
+          (*git).second.WriteDomainIndexesToBinaryFile( fp );
+          // TODO: check the logic of the following conditional statement
+          assert( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() );
+          if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
+            domainVariablesOut( fp, (*git).second, database );
        }
        std::cout << (*git).first <<" ";
      }
@@ -606,7 +607,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              readDomainIndexesFromBinaryFile( dim, fp, info );
              // if the region info record is not empty the region is reconstructed
              std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                 it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,static_cast<REGION_COMPLEX<dim>& >(*this).Mesh(),info) ) );
+                 it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
              if ( !info.interior_elmts.empty() ) {
                  if ( !it.second )
                     throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",

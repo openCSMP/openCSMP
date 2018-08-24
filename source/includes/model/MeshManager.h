@@ -113,6 +113,7 @@ class MeshManager {
     csmp::Node<dim>& NodeAtIndex( size_t );
     const csmp::Node<dim>& NodeAtIndex( size_t ) const;
 
+    /// checks whether there are any elements are on the freelist, i.e. have been deleted, if so index operations are not safe
     bool ElementAtIndexIsSafe() const;
     csmp::Element<dim>& ElementAtIndex( size_t );
     const csmp::Element<dim>& ElementAtIndex( size_t ) const;
@@ -198,7 +199,6 @@ class MeshManager {
     void Out() const;
     
   private:
-
     /// constructs Elements (no Faces or InterFaces) and initialises their property storage
     bool BuildElementsAndVariableStorage( const PropertyDatabase<dim>&,
                                           const FiniteElementManager&, 
@@ -215,17 +215,57 @@ class MeshManager {
     /// 'native' method that does not do any connectivity testing anymore; use if model is loaded from CSMP binary
     bool InitializeVerifiedConnectivity( const VSet<dim>& );
 
-    /// these collections are used only if adaptive remeshing is turned off, else access is via root node or element only
+    /// these collections store the actual FE primitives: Nodes, Elements etc. and be used to access them, else access is via root node or element
     PrimitiveContainer<csmp::Node<dim> >      node_collection_;
     PrimitiveContainer<csmp::Element<dim> >   elmt_collection_;
     PrimitiveContainer<csmp::Face<dim> >      face_collection_;
     PrimitiveContainer<csmp::InterFace<dim> > interface_collection_;
-    bool                                      hybrid_element_mesh_;
+    bool                                      hybrid_element_mesh_;   ///< true if the mesh consists of different FE types
 };
 
 } // end namespace csmp
 
 
-#endif
 
+
+
+
+
+
+
+/* ANDREW BROMAGE - code created by him but is not used and does not compile
+
+    /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Node<dim>* EmplaceNode(Args&&... args)
+    {
+        node_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
+    /// emplaces (no copying) an element at the end of the deque in which the Element objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Element<dim>* EmplaceElement(Args&&... args)
+    {
+        elmt_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
+    /// emplaces (no copying) a face at the end of the deque in which the Face objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Face<dim>* EmplaceFace(Args&&... args)
+    {
+        face_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
+    /// emplaces (no copying) an interface at the end of the deque in which the InterFace objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::InterFace<dim>* EmplaceInterFace(Args&&... args)
+    {
+        interface_collection_.Emplace(std::forward<Args>(args)...);
+    }
+
+*/
+
+
+
+#endif
 

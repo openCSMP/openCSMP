@@ -43,7 +43,9 @@ MeshManager<dim>::~MeshManager()
  {
  }
  
-// TO FIX PROPERLY
+ 
+ 
+// TODO: FIX PROPERLY
 template<size_t dim>
 MeshManager<dim>::MeshManager( const MeshManager<dim>& mmgr )
  {

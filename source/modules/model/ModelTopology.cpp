@@ -843,9 +843,9 @@ meshes.
 
 The method reports if the input file cannot be opened or if one of the 
 target regions is not contained in the model topology. In the latter case
-a ERROR is raised.  
+a ERROR is raised. 
+ 
 */
-
 bool  isRegionsFileExist( const char* regions_file )
 {
     std::string  file_name(regions_file);
@@ -855,6 +855,8 @@ bool  isRegionsFileExist( const char* regions_file )
         return false;
     return true;
 }
+
+
 void  readDesiredRegions( const char* regions_file,
                           std::set<std::string>& desired_regions )
 {

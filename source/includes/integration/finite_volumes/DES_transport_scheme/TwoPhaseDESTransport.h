@@ -43,23 +43,25 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );
     void AdvectVariable_DES_openmp ( double64 model_time, size_t num_threads );
-    
     void AdvectVariable_TDS( double64 time_interval );
     
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
-  private:
-    void initializeVariablsAndKeys(Model<dim>& m);
+  //private:
+
+    virtual void initializeVariablsAndKeys(Model<dim>& m);
     void calculatePermeabilityProjections( Region<dim>& gref );       
     void initializeFiniteVolumeProperties(Event<dim>* event);
     void ResetCFLMultiplier();
     void ComputeSaturationGradient (Event<dim>* event );
-    void ComputeRateofChange( Event<dim>* event );
+    virtual void ComputeRateofChange( Event<dim>* event );
     bool Schedule(Event<dim>* nd, double64 t_end);
-    void Update_DES(Event<dim>* nd, double64 t_clock);
-    void Update_TDS(Event<dim>* nd, double64 delta_t);
+    virtual void Update_DES(Event<dim>* nd, double64 t_clock);
+    virtual void Update_TDS(Event<dim>* nd, double64 delta_t);
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
+    
 
+  protected:
     Region<dim>& gref_;
     FlowFunctions<dim>& flowfunctions_;
     bool with_capillary_spreading_, with_gravity_forces_;

@@ -1151,8 +1151,8 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
  const char* parseFiniteElementType( int32 etype )
   {
      if ( etype == UNKNOWN ) return "UNKNOWN";
-	 if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
-	 if ( etype == LINEAR_CUBOID) return "LINEAR_CUBOID";
+	   if ( etype == LINEAR_RECTANGLE) return "LINEAR_RECTANGLE";
+	   if ( etype == LINEAR_CUBOID) return "LINEAR_CUBOID";
      if ( etype == LINEAR_BAR ) return "LINEAR_BAR";    										                                    // BAR_2     =2,
      if ( etype == QUADRATIC_BAR ) return "QUADRATIC_BAR";
      if ( etype == CUBIC_BAR ) return "CUBIC_BAR";										                                            // BAR_4  

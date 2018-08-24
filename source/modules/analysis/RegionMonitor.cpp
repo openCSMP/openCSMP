@@ -54,7 +54,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
 {
 
     // P. Lang fix for surface calculation of 1D, 2D and 3D DFN models
-    bool hasVolumeElements( HasVolumeElements( sg ) );
+    const bool hasVolumeElements( HasVolumeElements( sg ) );
 
     // checking whether target properties are suitable for integration
     for ( typename list<string>::const_iterator
@@ -92,10 +92,10 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
     // unique regions
     for ( typename map<string,Region<dim> >::const_iterator
           git=sg.UniqueRegionsBegin(); git!=sg.UniqueRegionsEnd(); git++ ) {
-        // total volume or pore volume of group
+        // total volume or pore volume of region
         if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
         else                              volume = (*git).second.Volume(false);
-        // surface area of group                   = the length of the 1D model
+        // surface area of region                = the length of the 1D model
         const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
         // recording the geometric properties
@@ -106,11 +106,11 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
     // non-unique regions
     for ( typename map<string,Region<dim> >::const_iterator
           git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-      if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
-          // total volume or pore volume of group
+      if ( parseBoundary((*git).first) == NOT and (*git).first !="Model" ) {
+          // total volume or pore volume of region
           if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
           else                              volume = (*git).second.Volume(false);
-          // surface area of group
+          // surface area of region
           const double64  surface_area = ( !hasVolumeElements ) ? (*git).second.Volume(false) : (*git).second.SurfaceArea();
 
           // recording the geometric properties
@@ -175,7 +175,7 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
     }
     for ( typename map<string,Region<dim> >::const_iterator
           git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-      if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
+      if ( parseBoundary((*git).first) == NOT and (*git).first !="Model" ) {
           // total volume or pore volume of group
           if ( integrate_pore_volume_only ) volume = (*git).second.Volume(true);
           else                              volume = (*git).second.Volume(false);
@@ -341,7 +341,7 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double64
         // for all regions in the model (unless they are boundaries)
         for ( typename map<string,Region<dim> >::const_iterator
               git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-          if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" )
+          if ( parseBoundary((*git).first) == NOT and (*git).first !="Model" )
             {
                 // integrate the property over the group
                 if ( include_thickness_attribute_ )
@@ -398,7 +398,7 @@ void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double64 ti
         // other regions
         for ( typename map<string,Region<dim> >::const_iterator
               git=sg.RegionsBegin(); git!=sg.RegionsEnd(); git++ )
-          if ( parseBoundary((*git).first) == NOT and (*git).first !="All Elements" ) {
+          if ( parseBoundary((*git).first) == NOT and (*git).first !="Model" ) {
                (*git).second.MinMaxOf( (*lit).c_str(), rmin, rmax );
                ranges_[time][(*lit)][(*git).first] = make_pair(rmin,rmax);
             }
@@ -576,15 +576,14 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 template<size_t dim>
 bool  RegionMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 {
-    if( dim == 1U || dim == 2U )
-        return false;
+    if( dim == 1U || dim == 2U ) return false;
 
     const Region<dim>&  rref( mref.Region("Model") );
 
     typename vector<Element<dim>*>::const_iterator  elementsEnd = rref.ElementsEnd();
     for ( typename vector<Element<dim>*>::const_iterator eit=rref.ElementsBegin(); eit!=elementsEnd; ++eit )
-        if ( (*(*eit)->FE()).IsVolumeElement() )
-            return true;
+        if ( (*eit)->IsVolumeElement() )
+          return true;
 
     return false;
 }

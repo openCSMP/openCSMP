@@ -128,6 +128,10 @@ size_t  findNode( const Model<2U>&,
 size_t  findNode( const Model<3U>&, 
                   double64 nx, double64 ny, double64 nz, double64 tolerance );
 
+/// prints sorted global element node numbers in a compact way
+template<size_t dim, template<size_t> class CELL>
+void printNodes( const CELL<dim>& );
+
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim> 
 void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );

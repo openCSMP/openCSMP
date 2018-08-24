@@ -53,9 +53,10 @@ class Node : public LocalVariableStorage<dim,Node<dim> >,
     /// custom constructor used when model is reconstructed from binary file
     Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY=NOT );
     ~Node();
-    Node( const Node& nd );
-    Node( Node&& nd );
+    Node( const Node& );
+    Node( Node&& );
     Node& operator=( const Node& );
+    Node& operator=( Node&& );
 
     /// relation operators
     bool operator==( const Node<dim>& );

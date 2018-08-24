@@ -45,6 +45,7 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
+#include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test.h"
@@ -107,7 +108,10 @@
 #include "CSMP_VariableBenchmarking_Test.h"
 #include "GenericFiniteVolumeTransport_Test.h"
 
+// new tests 2017 onwards
 #include "LinearCuboid_Test.h"
+#include "Placement_Test_2D.h"
+#include "Placement_Test_3D.h"
 
 //#include "DirichletPressureBoxModel_VVCase.h"
 

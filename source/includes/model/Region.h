@@ -272,7 +272,6 @@ class Region : public ModelSubDomain<dim,Element> {
     /// no variables in addition to ModelSubDomain
     void Out() const {  std::cout<<"\nRegion:Out:\n"; ModelSubDomain<dim,Element>::Out(); }
 
-  // TODO: deprecate these methods
   public:
   
     /// Local variable storage interface

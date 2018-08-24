@@ -82,8 +82,8 @@ bool  CSMP_ElementSpecifications::LinearElement( int32 etype )
     if ( etype == LINEAR_BAR ||
          etype == LINEAR_TRIANGLE ||
          etype == LINEAR_TRIANGLE3D ||
-		 etype == LINEAR_CUBOID ||
-		 etype == LINEAR_RECTANGLE ||
+		     etype == LINEAR_CUBOID ||
+		     etype == LINEAR_RECTANGLE ||
          etype == BARYCENTRIC_LINEAR_TRIANGLE ||
          etype == LINEAR_TETRAHEDRON ||
          etype == ISOPARAMETRIC_LINEAR_BAR ||
@@ -305,13 +305,14 @@ void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_
  {
     if ( !surf_elements.empty() )
       surf_elements.erase( surf_elements.begin(), surf_elements.end() );
+
     surf_elements.push_back("LINEAR_TRIANGLE");
     surf_elements.push_back("LINEAR_TRIANGLE3D");
     surf_elements.push_back("BARYCENTRIC_LINEAR_TRIANGLE");
     surf_elements.push_back("QUADRATIC_TRIANGLE");
     surf_elements.push_back("BARYCENTRIC_QUADRATIC_TRIANGLE");
     surf_elements.push_back("CUBIC_TRIANGLE");
-	surf_elements.push_back("LINEAR_RECTANGLE");
+	  surf_elements.push_back("LINEAR_RECTANGLE");
     // isoparametric elements
     surf_elements.push_back("ISOPARAMETRIC_LINEAR_TRIANGLE");
     surf_elements.push_back("ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE");
@@ -332,7 +333,7 @@ Returns true is the CSMP input element name is a surface element.
 bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TRIANGLE" ||
-		 etype == "LINEAR_RECTANGLE" ||
+		     etype == "LINEAR_RECTANGLE" ||
          etype == "LINEAR_TRIANGLE3D" ||
          etype == "BARYCENTRIC_LINEAR_TRIANGLE" ||
          etype == "QUADRATIC_TRIANGLE" ||
@@ -358,7 +359,7 @@ bool  CSMP_ElementSpecifications::SurfaceElement( const std::string& etype )
 bool  CSMP_ElementSpecifications::SurfaceElement( int32 etype )
  {
     if ( etype == LINEAR_TRIANGLE ||
-		 etype == LINEAR_RECTANGLE ||
+		     etype == LINEAR_RECTANGLE ||
          etype == LINEAR_TRIANGLE3D ||
          etype == BARYCENTRIC_LINEAR_TRIANGLE ||
          etype == QUADRATIC_TRIANGLE ||
@@ -406,11 +407,12 @@ void  CSMP_ElementSpecifications::VolumeElements( std::list<std::string>& vol_el
  {
     if ( !vol_elements.empty() )
       vol_elements.erase( vol_elements.begin(), vol_elements.end() );
+   
     vol_elements.push_back("LINEAR_TETRAHEDRON");
     vol_elements.push_back("QUADRATIC_TETRAHEDRON");
     vol_elements.push_back("BARYCENTRIC_QUADRATIC_TETRAHEDRON");
     vol_elements.push_back("CUBIC_TETRAHEDRON");
-	vol_elements.push_back("LINEAR_CUBOID");
+    vol_elements.push_back("LINEAR_CUBOID");
     // isoparametric elements
     vol_elements.push_back("ISOPARAMETRIC_LINEAR_TETRAHEDRON");
     vol_elements.push_back("ISOPARAMETRIC_QUADRATIC_TETRAHEDRON");
@@ -437,7 +439,7 @@ Return true if the ANSYS input element name corresponds to a volumetric element.
 bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype )
  {
     if ( etype == "LINEAR_TETRAHEDRON" ||
-		 etype == "LINEAR_CUBOID" ||
+		     etype == "LINEAR_CUBOID" ||
          etype == "QUADRATIC_TETRAHEDRON" ||
          etype == "BARYCENTRIC_QUADRATIC_TETRAHEDRON" ||
          etype == "CUBIC_TETRAHEDRON" ||
@@ -467,7 +469,7 @@ bool  CSMP_ElementSpecifications::VolumeElement( const std::string& etype )
 bool  CSMP_ElementSpecifications::VolumeElement( int32 etype )
  {
     if ( etype == LINEAR_TETRAHEDRON ||
-		 etype == LINEAR_CUBOID ||
+		     etype == LINEAR_CUBOID ||
          etype == QUADRATIC_TETRAHEDRON ||
          etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
          etype == CUBIC_TETRAHEDRON ||
@@ -524,7 +526,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype )
         return 16U;
 
     // hexahedron
-    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID)
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID )
         return 8U;
     if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 )
         return 20U;
@@ -579,8 +581,8 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int32 etype )
     if ( etype == ISOPARAMETRIC_CUBIC_PYRAMID )
         return 21U;
 
-    std::cout <<"\nCSMP_ElementSpecifications::NodesPerElementOfType: ";
-    std::cout <<"unable to parse element type, returning 0"<< std::endl;
+    std::cerr <<"\nCSMP_ElementSpecifications::NodesPerElementOfType: ";
+    std::cerr <<"unable to parse element type, returning 0"<< std::endl;
     return ULONG_MAX; // unknown element type
 
  } // end
@@ -801,8 +803,8 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int32 etype,
           return 8U;
       }
 
-    std::cout <<"\nCSMP_ElementSpecifications::NodesPerFaceForElementOfType: ";
-    std::cout <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
+    std::cerr <<"\nCSMP_ElementSpecifications::NodesPerFaceForElementOfType: ";
+    std::cerr <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
     return ULONG_MAX; // unknown number of faces
 
  } // end NodesPerFaceForElementOfType
@@ -871,7 +873,8 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
             }
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON || etype == QUADRATIC_TETRAHEDRON ||
-         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON || etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON )
+         etype == ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON ||
+         etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON )
       {
           assert( face < 4U );
           assert( face_node < 6U );
@@ -917,7 +920,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
                             "elements with cubic interpolation functions are not handled yet");
 
     // hexahedron
-    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID)
+    if ( etype == ISOPARAMETRIC_LINEAR_HEXAHEDRON || etype == LINEAR_CUBOID )
       {
           assert( face < 6U );
           assert( face_node < 4U );
@@ -1217,12 +1220,13 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int32 etype,
       }
     if ( etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
          etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
-         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID ) {
+      std::cerr <<"\nCSMP_ElementSpecifications::FaceNodeForElementOfType: ";
+      std::cerr <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
       throw csmp::Exception( ERROR, "SMP_ElementSpecifications::FaceNodeForElementOfType:",
                             "pyramid elements with quadratic or cubic interpolation functions are not handled yet");
+      }
 
-    std::cout <<"\nCSMP_ElementSpecifications::FaceNodeForElementOfType: ";
-    std::cout <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
     return ULONG_MAX;
 
  } // end FaceNodeForElementOfType

@@ -28,6 +28,8 @@
 #include "CSMP_mathUtilities.h"
 #include "binaryReadWrite.h"
 
+#include "CSMP_highLevelUtilities.h"
+
 //#define MODEL_SUBDOMAIN_DEBUG
 
 using namespace std;
@@ -5385,7 +5387,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
-    // 4. writing the boundary faces
+    // 4. writing the boundary faces (not done because pointer locations will change in reconstruction)
     // -----------------------------
     /* 
         since this is vector of vectors predominated by single value entries,
@@ -5396,28 +5398,15 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
                     ^^^          marking the 2 local face indices that relate to an element that has
         2 faces on the model boundary.
     */
-    /*
-    std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
-    faceIDs.reserve( PerimeterElements() );
-    for ( size_t eid(InteriorElements()); eid<Elements(); ++eid ) {
-         const size_t perimeter_faces(PerimeterFaces(eid));
-         // writing the number of perimeter faces as negative number, but only if there are more than 1 perimeter faces
-         if ( perimeter_faces > 1 ) faceIDs.push_back( static_cast<int8>(-perimeter_faces) );
-         // writing the perimeter face ids
-         for ( size_t j=0U; j<perimeter_faces; ++j )
-           faceIDs.push_back( static_cast<int8>(PerimeterFace(eid,j)) );
-      }
-    skm_C_fwrite( fp, faceIDs );
-    */
-   
+
     // 5. writing the interior nodes
-    IDs.resize( distance(NodesBegin(), PerimeterNodesBegin()) );
+    IDs.resize( InteriorNodes() );
     transform( NodesBegin(), PerimeterNodesBegin(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
    
     // 6. writing the perimeter nodes
-    IDs.resize( distance(PerimeterNodesBegin(), NodesEnd()) );
+    IDs.resize( PerimeterNodes() );
     transform( PerimeterNodesBegin(), NodesEnd(),
                IDs.begin(), []( const Node<dim>* const ptr ){ return ptr->Idx(); } );
     skm_C_fwrite( fp, IDs );
@@ -5425,9 +5414,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
  } // end WriteDomainIndexesToBinaryFile
 
 
-/*
-
-
+/* TESTING (code snippet)
 cerr <<"\n\n\nregion: "<< Name() <<"\n";
 cerr <<"interior nodes";
 out( IDs );
@@ -5463,12 +5450,12 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
         csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior elements: ", name );
     }
-   
+
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
     assert( !info.perimeter_elmts.empty() );
    
-    // 4. reading the boundary faces
+    // 4. reading the boundary faces (not done anymore because pointer locations get scrambled)
     // -----------------------------
     /* 
         expects flat vector in which all entries that refer to
@@ -5482,19 +5469,26 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
     std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
     skm_C_fread( fp, faceIDs );
     assert( !faceIDs.empty() );
+
+// TESTING
+cerr <<"\ninput boundary face vector:\n";
+for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
  
     if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
     info.perimeter_faces.reserve( faceIDs.size() );
     for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) {
-         const size_t perimeter_faces = ((*it) < 0) ? abs( (*it) ) : 1;
-         std::vector<int8> face_ids;
-         face_ids.reserve(3);
+         // checking whether a negative number indicates that the element has more than 1 perimeter face
+         const size_t perimeter_faces = ((*it) < 0) ? abs(*it) : 1;
+         // incrementing the vector to the first perimeter face if necessary
+         if ( perimeter_faces > 1 ) it++;
+         // reading the face numbers of the perimeter faces
+         std::vector<int8> face_ids(perimeter_faces);
          for ( size_t i=0U; i<perimeter_faces; ++i ) {
-              if ( perimeter_faces > 1 ) it++;
-              assert( it != faceIDs.end() );
-              face_ids.push_back( (*it) );
+              face_ids[i] = *it;
+              it++;
            }
          info.perimeter_faces.push_back( move(face_ids) );
+         if ( it == faceIDs.end() ) break;
       }
     */
    
@@ -5516,7 +5510,7 @@ void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info 
 */
 template<size_t dim, template<size_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                                          typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
+                                                       typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
  {
     if ( start == end ) return 0U;
  
