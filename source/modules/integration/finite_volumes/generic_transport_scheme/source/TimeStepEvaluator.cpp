@@ -193,7 +193,7 @@ TODO: implement streamline CFL
 
 */
 template<size_t dim, template<size_t> class USER>
-double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
+double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& node ) const
  {
     static DenseMatrix<DM_MIN>  DN;
     vector<double64>            gradPc(dim);
@@ -204,8 +204,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
     const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
-/*
-           // 1. limit imposed by advection
+ /*          // 1. limit imposed by advection
            // -----------------------------
            (*eit)->Read( User()->key_V, vc );
            velocity = vc.Length();
@@ -237,9 +236,9 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>& ) const
          cout <<"\nTimeStepEvaluator<dim>::StreamlineCFL (2-phase flow): ";
          cout << fixed << setprecision(0) << courant_increment <<" secs.\n";
       }
- */
+*/
     return courant_increment * step_size_reduction_factor_;
-   
+
  } // end StreamlineCFL (multiphase case)
 
 

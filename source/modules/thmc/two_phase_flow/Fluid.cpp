@@ -8,7 +8,7 @@
 
 #include "Fluid.h"
 #include "FlowFunctions.h"
-#include "FlowFunctionsDraft2.h"
+#include "FlowFunctionsBC_Hysteretic.h"
 // this specific incarnation
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 #include "FiniteElementPlacement.h"
@@ -58,12 +58,16 @@ template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,
 template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Viscosity( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
+  
+  
+  // Mahyar: we need these all.. 24/8/2018
 
-
-template double64 Fluid<1U,FlowFunctionsDraft2>::Viscosity( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctionsDraft2>::Viscosity( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctionsDraft2>::Viscosity( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-
+  
+template double64 Fluid<1U,FlowFunctionsBC_Hysteretic>::Viscosity( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctionsBC_Hysteretic>::Viscosity( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctionsBC_Hysteretic>::Viscosity( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+  
 
  
 template<size_t dim, template<size_t> class USER>
@@ -89,6 +93,17 @@ template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,NO
 template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Density( FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
+  
+  
+  // Mahyar: we need these all.. 24/8/2018
+  
+  
+template double64 Fluid<1U,FlowFunctionsBC_Hysteretic>::Density( FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctionsBC_Hysteretic>::Density( FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctionsBC_Hysteretic>::Density( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+  
+
 
 
  
@@ -159,9 +174,9 @@ template class Fluid<1U,FlowFunctions>;
 template class Fluid<2U,FlowFunctions>;
 template class Fluid<3U,FlowFunctions>;
   
-template class Fluid<1U,FlowFunctionsDraft2>;
-template class Fluid<2U,FlowFunctionsDraft2>;
-template class Fluid<3U,FlowFunctionsDraft2>;
+template class Fluid<1U,FlowFunctionsBC_Hysteretic>;
+template class Fluid<2U,FlowFunctionsBC_Hysteretic>;
+template class Fluid<3U,FlowFunctionsBC_Hysteretic>;
 
 
 // conversions

@@ -14,6 +14,7 @@
 #include "ImplicitTransport.h"
 #include "finiteVolumeFunctions.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
+#include "vectorOperations.h"
 
 using namespace std;
 
@@ -90,43 +91,35 @@ namespace csmp {
   {
     auto user = User();
     auto bctr = e.AtBarycenter();
-    const auto grad_p = bctr.Gradient(user->key_PF);
+    VectorVariable<dim> grad_p(bctr.Gradient(user->key_PF));
 
     if (!reuse_previous_velocity) {
-      // Compute Darcy velocity
-      TensorVariable<dim> k;
-      bctr.Obtain(user->key_k, k);
-      const auto mu = User()->GetModel().Read(user->key_MU); // XXX Should be able to Interpolate
-      VectorVariable<dim> vD(bctr.Read(user->key_V));
-      vD = -(1/mu) * (k * grad_p);
-      bctr.Store( user->key_V, vD );
+      // Compute the interstitial (=transport) velocity
+      bctr.Obtain(user->key_k, k_ );
+      double64 phi = bctr.Read( user->key_PHI );
+      double64 mu  = bctr.Obtain( user->key_MU );
+      vi_  = -1. / (phi * mu);// interstitial velocity in opposite direction to pressure gradient
+      vi_ *= (k_ * grad_p);
+      bctr.Store( user->key_V, vi_ );
     }
 
     // computing total facet fluxes by projecting vt onto facet normals
     for (auto fip : e.AllFacetIntegrationPoints()) {
-      double64 facet_flux = 0;
+         Point<dim> signed_facet_area = fip.Read(user->key_fAk);
+         double64 facet_flux = (reuse_previous_velocity) ? fip.Read( User()->key_ff ) : dotProduct( signed_facet_area, vi_ );
+         // storing the volumetric facet flux without altering the variables flag
+         const auto ff_flag = fip.Status( user->key_ff );
+         fip.Store( User()->key_ff, makeScalar(ff_flag,facet_flux) );
 
-      if (reuse_previous_velocity) {
-        facet_flux = fip.Read( User()->key_ff );
+         // Get concentration from upwind node
+         auto upstream_node = fip.UpstreamNode( facet_flux );
+         auto c = upstream_node.Read( user->key_C );
+         auto ffc = facet_flux * c;
+
+         // Store facet flux concentration
+         const auto ffc_flag = fip.Status(user->key_ffC);
+         fip.Store( user->key_ffC, makeScalar(ffc_flag, ffc) );
       }
-      else {
-        const auto mu = user->GetModel().Read(user->key_MU); // XXX Should be able to Interpolate
-        facet_flux = -(1/mu) * dotProduct(fip.Read(user->key_fAk), grad_p);
-
-        // storing the volumetric facet flux without altering the variables flag
-        const auto ff_flag = fip.Status( User()->key_ff );
-        fip.Store( User()->key_ff, makeScalar(ff_flag,facet_flux) );
-      }
-
-      // Get concentration from upwind node
-      auto upstream_node = fip.UpstreamNode( facet_flux );
-      auto c = upstream_node.Read( User()->key_C );
-      auto ffc = facet_flux * c;
-
-      // Store facet flux concentration
-      const auto ffc_flag = fip.Status(User()->key_ffC);
-      fip.Store( User()->key_ffC, makeScalar(ffc_flag, ffc) );
-    }
 
   } // end Advective_O1_FluxesInterior
 

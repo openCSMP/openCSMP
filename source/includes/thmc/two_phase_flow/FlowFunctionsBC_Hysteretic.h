@@ -1,17 +1,16 @@
 //
-//  FlowFunctionsDraft2.h
+//  FlowFunctions.h
 //  CSMP_GitHub
 //
 //  Created by Mahyar Madadi on 16/July/2018.
 //  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 
-#ifndef CSMP_FLOW_FUNCTIONS_DRAFT2_H
-#define CSMP_FLOW_FUNCTIONS_DRAFT2_H
+#ifndef CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
+#define CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
 
-#include "BrooksCoreySaturationFunctionsWithHysteresis.h"
 #include "VariableSet_CO2GeoSequestration.h"
-#include "VariablePlacement.h"
+#include "BrooksCoreySaturationFunctionsWithHysteresis.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -20,6 +19,11 @@ template<size_t> class Element;
 template<size_t> class Region;
 template<size_t> class Model;
 
+/// auxiliary functions for spline interpolation
+double64 spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+double64 spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
+  
 /**
     @brief 2-phase flow functions
 
@@ -45,13 +49,13 @@ template<size_t> class Model;
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 template<size_t dim>
-class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,              ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-    public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsDraft2>,  ///< placeholder for saturation function model
-    public Fluid<dim,FlowFunctionsDraft2>         {                          ///< placeholder for fluids module / EOS interface
+class FlowFunctionsBC_Hysteretic : public variables::VariableSet_CO2GeoSequestration,    ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+    public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsBC_Hysteretic>, ///< placeholder for saturation function model
+    public Fluid<dim,FlowFunctionsBC_Hysteretic> {                                       ///< placeholder for fluids module / EOS interface
       
   public:
     
-    FlowFunctionsDraft2(const PropertyDatabase<dim>& db);
+    FlowFunctionsBC_Hysteretic(const PropertyDatabase<dim>& db);
     
     /// current water saturation initialised inside of the model
     template<class TARGET_PLACEMENT>
@@ -59,26 +63,26 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
       
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
     template<class TARGET_PLACEMENT>
-    double64 Mobility( TARGET_PLACEMENT&, size_t phase ) const;
+    double64 Mobility( TARGET_PLACEMENT& p , size_t phase ) const;
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw)
     template<class TARGET_PLACEMENT>
-    double64 Mobility( TARGET_PLACEMENT&, size_t phase, double64 ) const;     
+    double64 Mobility_at( TARGET_PLACEMENT& p , size_t phase, double64 ) const;
 
     /// d lambda_i / dsw
     template<class TARGET_PLACEMENT>
-    double64 MobilityDerivative( TARGET_PLACEMENT&, size_t phase ) const;
+    double64 MobilityDerivative( TARGET_PLACEMENT& p , size_t phase, bool evaluate_numerically=false ) const;
  
     template<class TARGET_PLACEMENT>
-    double64 MobilityDerivative( TARGET_PLACEMENT&, size_t phase, double64 ) const;
+    double64 MobilityDerivative_at( TARGET_PLACEMENT& p, size_t phase, double64 ) const;
                         
     /// lambda_t: sum of phase mobilities
     template<class TARGET_PLACEMENT>
-    double64 TotalMobility( TARGET_PLACEMENT& ) const;
+    double64 TotalMobility( TARGET_PLACEMENT& p ) const;
     
     /// lambda_t: sum of phase mobilities (using prescribed sw)
     template<class TARGET_PLACEMENT>
-    double64 TotalMobility( TARGET_PLACEMENT&, double64 ) const;     
+    double64 TotalMobility_at( TARGET_PLACEMENT& p, double64 ) const;
     
     /// lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G
     template<class TARGET_PLACEMENT>
@@ -86,10 +90,10 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
 
     /// d lambda overbar / dsw also known as dGds
     template<class TARGET_PLACEMENT>
-    double64 MobilityProductDerivative( TARGET_PLACEMENT& ) const;
+    double64 MobilityProductDerivative( TARGET_PLACEMENT&, bool  evaluate_numerically=false ) const;
                         
     template<class TARGET_PLACEMENT>
-    double64 MobilityProductDerivative( TARGET_PLACEMENT&, double64 ) const;
+    double64 MobilityProductDerivative_at( TARGET_PLACEMENT&, double64 ) const;
 
      /// fractional flow; 0=water, 1=non-wetting phase
     template<class TARGET_PLACEMENT>
@@ -97,7 +101,7 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
     
      /// fractional flow; 0=water, 1=non-wetting phase  (using prescribed sw)
     template<class TARGET_PLACEMENT>
-    double64 f( TARGET_PLACEMENT&, size_t phase, double64 ) const;     
+    double64 f_at( TARGET_PLACEMENT&, size_t phase, double64 ) const;     
     
     /// Permeability
     template<class TARGET_PLACEMENT>
@@ -105,21 +109,23 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
     template<class TARGET_PLACEMENT>
-    double64 dfds( TARGET_PLACEMENT&, size_t phase ) const;
+    double64 dfds( TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
     
     template<class TARGET_PLACEMENT>
-    double64 dfds( TARGET_PLACEMENT&, size_t phase, double64 ) const;
-                        
+    double64 dfds_at( TARGET_PLACEMENT&, double64 sw ) const;     
+    
     /// maximum value of previous derivative
     template<class TARGET_PLACEMENT>
     double64 MaxFractionalFlowDerivative( TARGET_PLACEMENT& ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     template<class TARGET_PLACEMENT>
-   	double64 AdvectionMultiplier( TARGET_PLACEMENT& ) const;
+   	double64 AdvectionMultiplier( TARGET_PLACEMENT&, bool evaluate_numerically=false ) const;
 
     template<class TARGET_PLACEMENT> double64 ShockSpeed( TARGET_PLACEMENT& ) const;
     template<class TARGET_PLACEMENT> double64 ShockHeight( TARGET_PLACEMENT& ) const;
+    template<class TARGET_PLACEMENT> void     ShockSpeedHeight( TARGET_PLACEMENT&, double64& speed, double64& height) const;
+    template<class TARGET_PLACEMENT> double64 ShockSaturation( TARGET_PLACEMENT&, size_t, bool evaluate_numerically=false) const;
 
     /// multipliers for gravity-driven flow (advection multiplier and source term)
     template<class TARGET_PLACEMENT>
@@ -129,7 +135,7 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
     double64 GravityMultiplier_G( TARGET_PLACEMENT& ) const;
     
     template<class TARGET_PLACEMENT>
-    double64 GravityMultiplier_dGds( TARGET_PLACEMENT& ) const;
+    double64 GravityMultiplier_dGds( TARGET_PLACEMENT&, bool evaluate_numerically=false ) const;
 
     /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase)
     template<class TARGET_PLACEMENT>
@@ -141,8 +147,30 @@ class FlowFunctionsDraft2 : public variables::VariableSet_CO2GeoSequestration,  
     
     template<class TARGET_PLACEMENT>
     double64 CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMENT&, size_t phase ) const;
+      
+    private:
+      
+    template<class TARGET_PLACEMENT>
+    double64 dfds_Numerical( TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
+      
+    template<class TARGET_PLACEMENT>
+    double64 dfds_at_Numerical( TARGET_PLACEMENT&, double64 sw, double64 h = 0.001 ) const;
+      
+    template<class TARGET_PLACEMENT>
+    double64 dGds_Numerical( TARGET_PLACEMENT&, double64 h = 0.000001 ) const;
+      
+    template<class TARGET_PLACEMENT>
+    double64 dlwds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+      
+    template<class TARGET_PLACEMENT>
+    double64 dlnds_Numerical( TARGET_PLACEMENT&, double64 h = 0.001 ) const;
 };
+
+// ALWAYS JUST USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
+typedef FlowFunctionsBC_Hysteretic<3U>  ACGSS_FlowFunctions;
+
+
 
 } // end csmp
 
-#endif /* CSMP_FLOW_FUNCTIONS_DARAFT2_H */
+#endif /* CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H */

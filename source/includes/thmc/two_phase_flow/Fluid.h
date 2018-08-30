@@ -80,10 +80,10 @@ class Fluid {
   
     // with or without dissolved CO2
     template<class TARGET_PLACEMENT>
-    double64 Viscosity( TARGET_PLACEMENT&, size_t phase=0 ) const;
+    double64 Viscosity( TARGET_PLACEMENT& p, size_t phase=0 ) const;
 
     template<class TARGET_PLACEMENT>
-    double64 Density( TARGET_PLACEMENT&, size_t phase=0 ) const;
+    double64 Density( TARGET_PLACEMENT& p, size_t phase=0 ) const;
 
     template<class TARGET_PLACEMENT>
     double64 DensityMixture( TARGET_PLACEMENT&, double64 salinity=0. ) const;
