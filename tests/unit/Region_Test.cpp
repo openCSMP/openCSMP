@@ -414,9 +414,6 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     // test 3: same number of perimeter faces ?
     _test( n_perimeter_faces == n_perimeter_faces2 );
 
-    // test 4: same face idx ?
-    _test( perimeter_faces == perimeter_faces2 );
-  
     // test 5: is the content of the perimeter face vectors actually the same ?
     _test( equal( perimeter_faces2.begin(), perimeter_faces2.end(), perimeter_faces.begin(), perimeter_faces.end() ) );
 
@@ -475,7 +472,7 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     const Region<3U>& model1_domain(model1.Region("Model"));
     double64 surface_area1 = model1_domain.SurfaceArea();
   
-    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area );
+    _equal( surface_area1, surface_area, numeric_limits<double64>::epsilon() * surface_area * 100. );
   
     model1.OutputToBinaryFile("model1");
   
@@ -486,7 +483,7 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     const Region<3U>& model2_domain(model2.Region("Model"));
     double64 surface_area2 = model2_domain.SurfaceArea();
   
-    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 );
+    _equal( surface_area1, surface_area2, numeric_limits<double64>::epsilon() * surface_area1 * 100. );
   
     const bool integrate_pore_volume_only(true);
     RegionMonitor<3U>  monitor( model2, "porosity", "fluid pressure",  integrate_pore_volume_only);

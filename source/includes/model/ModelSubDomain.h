@@ -67,11 +67,6 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// constructs incomplete subregion for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
 
-    /// reconstructor for valid subdomains that were stored in file before
-    ModelSubDomain( const PropertyDatabase<dim>& pref,
-                    const ModelSubDomain<dim,CELL>& mesh,
-                    const SubDomainInfo& info );
-  
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
   

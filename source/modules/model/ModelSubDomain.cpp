@@ -78,81 +78,11 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 
-/**
-     Reconstructor for model subregions that are valid and were stored in file before.
- 
-     TODO: needs to be ported to PrimitiveContainer usage.
-*/
-template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( const PropertyDatabase<dim>& pref,
-                                          const ModelSubDomain<dim,CELL>& mesh,
-                                          const SubDomainInfo& info )
- : pref_(pref),
-   first_bd_node_(info.interior_nodes.size()),
-   subdomain_name_(info.name),
-   verbose_(true)
- {
-    // building the element vector
-    // ---------------------------
-    elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-    // assigning pointers to the interior elements
-    for ( auto it=info.interior_elmts.begin(); it!=info.interior_elmts.end(); ++it )
-      elmt_vec_.push_back( mesh.elmt_vec_[ (*it) ] );
-    // assigning pointers to the perimeter elements
-    for ( auto it=info.perimeter_elmts.begin(); it!=info.perimeter_elmts.end(); ++it )
-      elmt_vec_.push_back( mesh.elmt_vec_[ (*it) ] );
-    // sorting the subvectors for future searching
-    const auto perimeterElementsBegin( next(elmt_vec_.begin(), info.interior_elmts.size()) );
-    sort( elmt_vec_.begin(), perimeterElementsBegin );
-    sort( perimeterElementsBegin, elmt_vec_.end() );
-
-    // building the vector of vectors of those faces of the simplices that lie on the subdomain perimeter
-    // --------------------------------------------------------------------------------------------------
-    this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-    const auto elementsEnd(this->elmt_vec_.end());
-    for ( auto it=perimeterElementsBegin; it!=elementsEnd; ++it ) {
-         assert( (*it)->Faces() == (*it)->Neighbors() );
-         // for all the faces of the element that are located on the model boundary
-         vector<ONE_BYTE_NUMBER>  boundary_faces;
-         const size_t faces((*it)->Faces());
-         boundary_faces.reserve(faces);
-         for ( size_t face=0U; face<faces; ++face )
-           if ( (*it)->Neighbor(face) == nullptr )
-             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-         // storing the boundary face vector for the current element
-         this->bd_face_vec_.emplace_back( boundary_faces );
-      }
-
-    // building the node vector
-    // ------------------------
-    node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
-    // assigning pointers to the interior nodes
-    for ( auto it=info.interior_nodes.begin(); it!=info.interior_nodes.end(); ++it )
-      node_vec_.push_back( mesh.node_vec_[ (*it) ] );
-
-    // assigning pointers to the perimeter nodes
-    this->first_bd_node_ = info.interior_nodes.size();
-    for ( auto it=info.perimeter_nodes.begin(); it!=info.perimeter_nodes.end(); ++it )
-      node_vec_.push_back( mesh.node_vec_[ (*it) ] );
-
-    // sorting the subvectors for future searching
-    const auto perimeterNodesBegin( next(node_vec_.begin(), info.interior_nodes.size()) );
-    sort( node_vec_.begin(), perimeterNodesBegin );
-    sort( perimeterNodesBegin, node_vec_.end() );
-
-    // allocating the storage for subdomain properties
-    // -----------------------------------------------
-    this->ResizePropertyStorage( pref.LocalVariablesAt( parsePlacement<dim,CELL>() ) );
- 
- } // end constructor
-
-
-
-
 template<size_t dim, template<size_t> class CELL>
 ModelSubDomain<dim,CELL>::~ModelSubDomain()
  {
  }
+
 
 
 template<size_t dim, template<size_t> class CELL>

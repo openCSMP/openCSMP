@@ -108,46 +108,59 @@ class MeshManager {
     const csmp::InterFace<dim>& RootInterFace() const;
 
     // Accessors
-    // IMPORTANT: These methods should only be used during mesh construction fom a file.
-  
-    /// checks whether there are any nodes are on the freelist, i.e. have been deleted, if so index operations are not safe
+    /// checks whether entitities in PrimitiveContainer were deleted or added which may have upset construction
     bool NodeAtIndexIsSafe() const;
-  
-    /// retrieve node by index; call NodeAtIndexIsSafe() to see whether this operation is safe first
-    csmp::Node<dim>& NodeAtIndex(size_t i);
-    /// retrieve node by index; call NodeAtIndexIsSafe() to see whether this operation is safe first
-    const csmp::Node<dim>& NodeAtIndex(size_t i) const;
+    csmp::Node<dim>& NodeAtIndex( size_t );
+    const csmp::Node<dim>& NodeAtIndex( size_t ) const;
 
     /// checks whether there are any elements are on the freelist, i.e. have been deleted, if so index operations are not safe
     bool ElementAtIndexIsSafe() const;
+    csmp::Element<dim>& ElementAtIndex( size_t );
+    const csmp::Element<dim>& ElementAtIndex( size_t ) const;
 
-    /// retrieve element by index; call NodeAtIndexIsSafe() to see whether this operation is safe first
-    csmp::Element<dim>& ElementAtIndex(size_t i);
-    /// retrieve element by index; call NodeAtIndexIsSafe() to see whether this operation is safe first
-    const csmp::Element<dim>& ElementAtIndex(size_t i) const;
+    bool FaceAtIndexIsSafe() const;
+    csmp::Face<dim>& FaceAtIndex( size_t );
+    const csmp::Face<dim>& FaceAtIndex( size_t ) const;
 
-    csmp::Face<dim>& FaceAtIndex(size_t i);
-    const csmp::Face<dim>& FaceAtIndex(size_t i) const;
+    bool InterFaceAtIndexIsSafe() const;
+    csmp::InterFace<dim>& InterFaceAtIndex( size_t );
+    const csmp::InterFace<dim>& InterFaceAtIndex( size_t ) const;
 
-    /// checks whether the given Node is on the freelist, if so it has been destructed and cannot be accessed anymore
-    bool VerifyNode(const Node<dim>* n) const { return !node_collection_.OnFreeList(n); }
-    /// checks whether the given Element is on the freelist, if so it has been destructed and cannot be accessed anymore
-    bool VerifyElement(const Element<dim>* n) const { return !elmt_collection_.OnFreeList(n); }
+    /// returns a pointer to the Node storead at index i in the PrimitiveContainer; check validy before with NodeAtIndexIsSafe()
+    csmp::Node<dim>*      const PointerToNodeAtIndex( size_t ) const;
+    csmp::Element<dim>*   const PointerToElementAtIndex( size_t ) const;
+    csmp::Face<dim>*      const PointerToFaceAtIndex( size_t ) const;
+    csmp::InterFace<dim>* const PointerToInterFaceAtIndex( size_t ) const;
 
-    // Insertion methods
-  
-    /// emplaces (no copying) a node at the end of the deque in which the Node objects may be stored (when adaptive_remeshing_ false)
-    csmp::Node<dim>*      PushBack( csmp::Node<dim>&& );
+    /// checks whether the node pointed to by n was destructed
+    bool Verify( const Node<dim>* n ) const     { return !node_collection_.OnFreeList(n); }
+    bool Verify(const Element<dim>* n ) const   { return !elmt_collection_.OnFreeList(n); }
+    bool Verify(const Face<dim>* n ) const      { return !face_collection_.OnFreeList(n); }
+    bool Verify(const InterFace<dim>* n ) const { return !interface_collection_.OnFreeList(n); }
 
-    /// emplaces (no copying) an element at the end of the deque in which the Element objects may be stored (when adaptive_remeshing_ false)
-    csmp::Element<dim>*   PushBack( csmp::Element<dim>&& );
+    // Insertion
+    /// emplaces (avoiding copying by move semantics) a temporary node into the PrimitiveContainer
+    csmp::Node<dim>*  PushBack( csmp::Node<dim>&& );
 
-    /// emplaces (no copying) a face at the end of the deque in which the Face objects may be stored (when adaptive_remeshing_ false)
+    /// emplaces (avoiding copying by move semantics) temporary multiple nodes into the PrimitiveContainer
+    template<typename... Args>
+    csmp::Node<dim>*  EmplaceNode(Args&&... args) { node_collection_.Emplace(std::forward<Args>(args)...); }
+
+    csmp::Element<dim>*  PushBack( csmp::Element<dim>&& );
+
+    template<typename... Args>
+    csmp::Element<dim>* EmplaceElement(Args&&... args) { elmt_collection_.Emplace(std::forward<Args>(args)...); }
+
     csmp::Face<dim>* const PushBack( csmp::Face<dim>&& );
 
-    /// emplaces (no copying) an interface at the end of the deque in which the InterFace objects may be stored (when adaptive_remeshing_ false)
+    template<typename... Args>
+    csmp::Face<dim>*  EmplaceFace(Args&&... args) { face_collection_.Emplace(std::forward<Args>(args)...); }
+
     csmp::InterFace<dim>* PushBack( csmp::InterFace<dim>&& );
 
+    template<typename... Args>
+    csmp::InterFace<dim>* EmplaceInterFace(Args&&... args) { interface_collection_.Emplace(std::forward<Args>(args)...); }
+ 
     /// pushes back Node object if it does not already exist in the node deque
     csmp::Node<dim>*      PushBackIfUnique( csmp::Node<dim>&& );
     csmp::Element<dim>*   PushBackIfUnique( csmp::Element<dim>&& );
@@ -186,7 +199,6 @@ class MeshManager {
     void Out() const;
     
   private:
-
     /// constructs Elements (no Faces or InterFaces) and initialises their property storage
     bool BuildElementsAndVariableStorage( const PropertyDatabase<dim>&,
                                           const FiniteElementManager&, 
