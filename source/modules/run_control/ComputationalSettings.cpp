@@ -591,6 +591,7 @@ const char* parseTimeStrategy( TIME_STRATEGY  time_strategy )
     else if ( time_strategy == DARING )       return "DARING";
     else if ( time_strategy == PRESCRIBED )   return "PRESCRIBED";
     else if ( time_strategy == CAREFUL )      return "CAREFUL";
+    else if ( time_strategy == ASYNCHRONOUS ) return "ASYNCHRONOUS";
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

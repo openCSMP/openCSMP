@@ -78,18 +78,21 @@ class Fluid {
     template<class TARGET_PLACEMENT>
     double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YH2O); }
   
-    // with or without dissolved CO2
+    /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
     template<class TARGET_PLACEMENT>
-    double64 Viscosity( TARGET_PLACEMENT& p, size_t phase=0 ) const;
+    double64 Viscosity( const TARGET_PLACEMENT&, size_t phase=0 ) const;
 
+    /// the returned node property fluid density (of phase) has been interpolated to the user-specified target placement (argument parameter)
     template<class TARGET_PLACEMENT>
-    double64 Density( TARGET_PLACEMENT& p, size_t phase=0 ) const;
+    double64 Density( const TARGET_PLACEMENT&, size_t phase=0 ) const;
 
+    /// returns saturation-weighted density of the fluid mixture interpolated to the target placement
     template<class TARGET_PLACEMENT>
-    double64 DensityMixture( TARGET_PLACEMENT&, double64 salinity=0. ) const;
+    double64 DensityMixture( const TARGET_PLACEMENT&, double64 salinity=0. ) const;
   
+    /// returns the ratio of the phase viscosities at the target placement
     template<class TARGET_PLACEMENT>
-    double64 ViscosityRatio( TARGET_PLACEMENT&, double64 salinity=0. ) const;
+    double64 ViscosityRatio( const TARGET_PLACEMENT&, double64 salinity=0. ) const;
 
   protected:
     Fluid();

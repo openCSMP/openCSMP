@@ -14,7 +14,9 @@
 #include "ImplicitTransport.h"
 #include "finiteVolumeFunctions.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
+#include "VectorVariable.h"
 #include "vectorOperations.h"
+#include "TensorVariable.h"
 
 using namespace std;
 
@@ -88,38 +90,46 @@ namespace csmp {
   
   template<size_t dim, template<size_t> class USER>
   void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>& e ) const
-  {
-    auto user = User();
-    auto bctr = e.AtBarycenter();
-    VectorVariable<dim> grad_p(bctr.Gradient(user->key_PF));
+    {
+      // determining FE placement
+      auto bctr = e.AtBarycenter();
 
-    if (!reuse_previous_velocity) {
-      // Compute the interstitial (=transport) velocity
-      bctr.Obtain(user->key_k, k_ );
-      double64 phi = bctr.Read( user->key_PHI );
-      double64 mu  = bctr.Obtain( user->key_MU );
-      vi_  = -1. / (phi * mu);// interstitial velocity in opposite direction to pressure gradient
-      vi_ *= (k_ * grad_p);
-      bctr.Store( user->key_V, vi_ );
-    }
-
-    // computing total facet fluxes by projecting vt onto facet normals
-    for (auto fip : e.AllFacetIntegrationPoints()) {
-         Point<dim> signed_facet_area = fip.Read(user->key_fAk);
-         double64 facet_flux = (reuse_previous_velocity) ? fip.Read( User()->key_ff ) : dotProduct( signed_facet_area, vi_ );
-         // storing the volumetric facet flux without altering the variables flag
-         const auto ff_flag = fip.Status( user->key_ff );
-         fip.Store( User()->key_ff, makeScalar(ff_flag,facet_flux) );
-
-         // Get concentration from upwind node
-         auto upstream_node = fip.UpstreamNode( facet_flux );
-         auto c = upstream_node.Read( user->key_C );
-         auto ffc = facet_flux * c;
-
-         // Store facet flux concentration
-         const auto ffc_flag = fip.Status(user->key_ffC);
-         fip.Store( user->key_ffC, makeScalar(ffc_flag, ffc) );
+      if (!reuse_previous_velocity) {
+        Point<dim> grad_p = bctr.Gradient(User()->key_PF);
+        // Compute the interstitial (=transport) velocity
+        bctr.Obtain(User()->key_k, k_ );
+        const double64 phi = bctr.Read( User()->key_PHI );
+ // TODO: there is no template instantiation for this
+ //       const double64 mu  = bctr.Obtain( User()->key_MU );
+        ScalarVariable mu;
+        e.PropertyValueAtBaryCenter( User()->key_MU, mu );
+        k_  /=  mu;
+        vi_  =  k_ * grad_p;
+        vi_ *= -phi; // end result: interstitial velocity in opposite direction of pressure gradient
+        bctr.Store( User()->key_V, vi_ );
       }
+
+      // computing total facet fluxes by projecting vt onto facet normals
+      for ( auto fip : e.AllFacetIntegrationPoints() ) {
+           const Point<dim> fAk( fip.Read( User()->key_fAk ) );
+           double64 facet_flux = (reuse_previous_velocity) ? fip.Read( User()->key_ff ) : 0.;
+           if ( !reuse_previous_velocity ) {
+                for ( int i; i<dim; ++i )
+                  facet_flux += vi_[i] * fAk[i];
+             }
+           // storing the volumetric facet flux without altering the variables flag
+           const auto ff_flag = fip.Status( User()->key_ff );
+           fip.Store( User()->key_ff, makeScalar(ff_flag,facet_flux) );
+
+           // Get concentration from upwind node
+           auto upstream_node = fip.UpstreamNode( facet_flux );
+           auto c = upstream_node.Read( User()->key_C );
+           auto ffc = facet_flux * c;
+
+           // Store facet flux concentration
+           const auto ffc_flag = fip.Status(User()->key_ffC);
+           fip.Store( User()->key_ffC, makeScalar(ffc_flag, ffc) );
+        }
 
   } // end Advective_O1_FluxesInterior
 

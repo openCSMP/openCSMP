@@ -8,7 +8,7 @@ namespace csmp {
   
   
   enum FLUID_PHASE {H2O, CO2} ;
-  enum TWO_PHASE_FLOW_PROCESS {DRAINAGE, IMBIBITION} ;
+  enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION } ;
   enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7} ;  /// suggested by Stephan 17/Aug/2018
   
   /**
@@ -37,10 +37,10 @@ namespace csmp {
    
    They are ordered as: HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7} ;
    
-   They will be read automatically by using the "InitialiseBrooksCoreyParameters( TARGET_PLACEMENT )". There are two other method to read input parameters:
+   They will be read automatically by using the "InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT& )". There are two other method to read input parameters:
    
-   a) Force to have a process as either Drainage or Imbibitions:                                "InitialiseBrooksCoreyParameters( TARGET_PLACEMENT, a,  c , ProcessPath)"
-   b) Alternatively, Unforced and the results from modelling will be taking into account:       "InitialiseBrooksCoreyParameters( TARGET_PLACEMENT, a, c )"
+   a) Force to have a process as either Drainage or Imbibitions:                                "InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, a,  c , ProcessPath)"
+   b) Alternatively, Unforced and the results from modelling will be taking into account:       "InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, a, c )"
    
    The results are relative permeabilities, derivatives... which they will be used in the FlowFunctions class.
    
@@ -85,136 +85,108 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
         or input from rocktype parameter file.
      
     */
-    template<class TARGET_PLACEMENT>
-    void InitialiseBrooksCoreyParameters( TARGET_PLACEMENT ) ; // Method (a)
-    
-    
-    template<class TARGET_PLACEMENT>
-    void InitialiseBrooksCoreyParameters( TARGET_PLACEMENT, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c , TWO_PHASE_FLOW_PROCESS ProcessPath) ; // Method (b)
-    
-    template<class TARGET_PLACEMENT>
-    void InitialiseBrooksCoreyParameters( TARGET_PLACEMENT, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c ) ; // Method (c)
-    
-    
-    template<class TARGET_PLACEMENT>
-    double64 EffectiveSaturation( TARGET_PLACEMENT  ) const ; // Effective Saturation function
   
+    /// Initialision  Method (a)
     template<class TARGET_PLACEMENT>
-    double64 EffectiveSaturation_at( TARGET_PLACEMENT , double64 ) const ; // Effective Saturation function
-  
+    void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT& ) ;
     
+    /// Initialision  Method (b)
     template<class TARGET_PLACEMENT>
-    double64 pc( TARGET_PLACEMENT );               // The Capillary pressure Eq. (2) from Skjaeveland et al. 2000
+    void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c , TWO_PHASE_FLOW_PROCESS ProcessPath) ;
   
+    /// Initialision  Method (c)
+    template<class TARGET_PLACEMENT>
+    void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c ) ; 
     
+    /// Effective Saturation function
     template<class TARGET_PLACEMENT>
-    double64 dpcds( TARGET_PLACEMENT )  const ;          // The first derivative of Capillary pressure.
-    
+    double64 EffectiveSaturation( const TARGET_PLACEMENT&  ) const ;
+  
+    /// Effective Saturation function fro saturation S
     template<class TARGET_PLACEMENT>
-    double64 OilResidualSaturation( TARGET_PLACEMENT ) const ;   // The oil residual saturation estimated from Land's formula.
-    
+    double64 EffectiveSaturation_at( const TARGET_PLACEMENT& , double64 ) const ;
   
-    /**
-     
-     The Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
-    
-    */
+    /// The Capillary pressure Eq. (2) from Skjaeveland et al. 2000
     template<class TARGET_PLACEMENT>
-    double64 WaterResidualSaturation( TARGET_PLACEMENT p, double64 Sro) const ;
+    double64 pc( const TARGET_PLACEMENT& );
   
-  
-    /**
-     
-     Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
-     
-    */
+    /// The first derivative of Capillary pressure.
     template<class TARGET_PLACEMENT>
-    void WaterAndOilResidualSaturationImbibitionToDrainage( TARGET_PLACEMENT p, double64& Swr_, double64& Sor_)  const;
+    double64 dpcds( const TARGET_PLACEMENT& )  const ;
   
+    /// The oil residual saturation estimated from Land's formula.
+    template<class TARGET_PLACEMENT>
+    double64 OilResidualSaturation( const TARGET_PLACEMENT& ) const ;
   
-    /**
+    /// The Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
+    template<class TARGET_PLACEMENT>
+    double64 WaterResidualSaturation( const TARGET_PLACEMENT& p, double64 Sro) const ;
 
-     The relative Permeability and first derivatives are evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    
-     */
+    /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
     template<class TARGET_PLACEMENT>
-    double64 krw( TARGET_PLACEMENT& ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 krw_at( TARGET_PLACEMENT& , double64 S) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 krn( TARGET_PLACEMENT& ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 krn_at( TARGET_PLACEMENT& , double64 S) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 dkrwds( TARGET_PLACEMENT& ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 dkrwds_at( TARGET_PLACEMENT& , double64 S) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 dkrnds( TARGET_PLACEMENT& ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 dkrnds_at( TARGET_PLACEMENT& , double64 S) const ;
-  
-    /**
-     
-     Claculating the  Inflection point, Tnagent Point and Shock velocity and Shock saturation based on Buckley Leverett approximations
-  
-     */
-    template<class TARGET_PLACEMENT>
-    double64 InflectionPointSaturation( TARGET_PLACEMENT ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 TangentPointSaturation( TARGET_PLACEMENT ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 ShockFrontVelocity( TARGET_PLACEMENT ) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 BuckleyLeverettFunction( TARGET_PLACEMENT , double64 S) const ;
-    
-    template<class TARGET_PLACEMENT>
-    double64 TheSecantMethod( TARGET_PLACEMENT , double64 S1, double64 S2) const ;
-    
-    template<class TARGET_PLACEMENT>
-    void CheckTheProcess( TARGET_PLACEMENT, TWO_PHASE_FLOW_PROCESS& ProcessPath);
+    void WaterAndOilResidualSaturationImbibitionToDrainage( const TARGET_PLACEMENT& p, double64& Swr_, double64& Sor_)  const;
   
   
-    /**
-   
-     Check the capillary function is in the bounded limits..
-   
-    */
+    /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
     template<class TARGET_PLACEMENT>
-    std::array <double64, 2> TheCapilaryPressureLimits( TARGET_PLACEMENT ) const;
+    double64 krw( const TARGET_PLACEMENT& ) const ;
     
     template<class TARGET_PLACEMENT>
-    void CheckThePcLimitsAndResetResiduals( TARGET_PLACEMENT , double64& S1, double64& S2) ;
+    double64 krw_at( const TARGET_PLACEMENT& , double64 S) const ;
+  
+    /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
+    template<class TARGET_PLACEMENT>
+    double64 krn( const TARGET_PLACEMENT& ) const ;
+    
+    template<class TARGET_PLACEMENT>
+    double64 krn_at( const TARGET_PLACEMENT& , double64 S) const ;
+  
+    /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds( const TARGET_PLACEMENT& ) const ;
+    
+    template<class TARGET_PLACEMENT>
+    double64 dkrwds_at( const TARGET_PLACEMENT& , double64 S) const ;
+  
+    /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds( const TARGET_PLACEMENT& ) const ;
+    
+    template<class TARGET_PLACEMENT>
+    double64 dkrnds_at( const TARGET_PLACEMENT& , double64 S) const ;
+  
+    /// print out the two phase flow process state based on the current and new CO2 Saturation functions for each element based on the  interpolation of saturations at the bary center.
+    template<class TARGET_PLACEMENT>
+    TWO_PHASE_FLOW_PROCESS FlowProcess( const TARGET_PLACEMENT& );
+  
+    /// print out the capillary function bounds upper and lowwer limits..
+    template<class TARGET_PLACEMENT>
+    std::pair<double64,double64> CapillaryPressureLimits( const TARGET_PLACEMENT& ) const;
+  
+    /// Check the capillary pressure is in the limits and reset the pseduo residual water (newSrH2O) and CO2 saturations (newSrCO2)
+    template<class TARGET_PLACEMENT>
+    void CheckThePcLimitsAndResetResiduals( const TARGET_PLACEMENT& , double64& newSrH2O , double64& newSrCO2 );
 
-    
-    const double64  C_land_ = 0.89; //Land's parameter for Air and CO2 "Prather Bray Seymour Codd 2016" paper
+    /// Land's parameter for Air and CO2 "Prather Bray Seymour Codd 2016" paper
+    const double64  C_land_ = 0.89;
+  
+    /// Maximum Capillary pressure for the Sw < Srw
     const double64  MaxCapillaryPressure = 1e7; // Pa
     const double64  MaxCapillaryPressureDerivative = 1e6; //Pa
   
   
-  // Numerical derivative added
-  
+    /// Numerical derivatives of first derivatives of relative permeability of water and CO2
     template<class TARGET_PLACEMENT>
-    double64 dkrwds_Numerical( TARGET_PLACEMENT& p, double64 h ) const ;
+    double64 dkrwds_Numerical( const TARGET_PLACEMENT& p, double64 h ) const ;
 
     template<class TARGET_PLACEMENT>
-    double64 dkrwds_at_Numerical( TARGET_PLACEMENT& p, double64 sw, double64 h ) const ;
+    double64 dkrwds_at_Numerical( const TARGET_PLACEMENT& p, double64 sw, double64 h ) const ;
 
     template<class TARGET_PLACEMENT>
-    double64 dkrnds_Numerical( TARGET_PLACEMENT& p, double64 h ) const ;
+    double64 dkrnds_Numerical( const TARGET_PLACEMENT& p, double64 h ) const ;
   
     template<class TARGET_PLACEMENT>
-    double64 dkrnds_at_Numerical( TARGET_PLACEMENT& p, double64 sw, double64 h ) const ;
+    double64 dkrnds_at_Numerical( const TARGET_PLACEMENT& p, double64 sw, double64 h ) const ;
 
   
     
