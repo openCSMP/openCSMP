@@ -251,8 +251,9 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
     static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
     static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));
-    csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
-    assert( k_key.type == TENSOR );  
+    //csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
+    //assert( k_key.type == TENSOR );  
+    static Index  k_key(mdl.Database().StorageKey("permeability")); 
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
@@ -272,11 +273,12 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
         //total mobility
         auto e = (*eit) -> AtBarycenter();
         double64 mob_t = flowfunctions.TotalMobility(e);
-        
+        /*
         TensorVariable<2U> K;
         e.Read( k_key, K );
         double k = K.Trace() / 2.;
-
+        */
+        double64 k = (*eit)->Read(k_key);
         mob_t *= k;  
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 

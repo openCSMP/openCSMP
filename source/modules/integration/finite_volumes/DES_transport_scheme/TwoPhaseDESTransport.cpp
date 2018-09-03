@@ -33,7 +33,7 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
-    calculatePermeabilityProjections(m.Region(target_region));
+    calculatePermeabilityProjections(m.Region(target_region),tensor_permeability_);
          
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
@@ -64,7 +64,7 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
-    calculatePermeabilityProjections(m.Region(target_region));
+    calculatePermeabilityProjections(m.Region(target_region),tensor_permeability_);
          
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
@@ -74,35 +74,47 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 
 //Precalculates facet normal permeability and vertical permeability
 template<size_t dim>
-void TwoPhaseDESTransport<dim>::calculatePermeabilityProjections( Region<dim>& gref )
+void TwoPhaseDESTransport<dim>::calculatePermeabilityProjections( Region<dim>& gref, bool tensor_permeability )
 {    
-    // Vertical vector points up in the y direction.
-    Point<dim> verticalVector(0.f);
-    if (dim > 1) {
-      verticalVector[1] = 1.f;
-    }
 
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
-      auto e = (*eit)->AtBarycenter();
-      
-      TensorVariable<dim> K;
-      e.Read( this->key_k, K );
-      
+    if(!tensor_permeability) { //use scalar permeability - simply set vertical and facet normal k equal to k at element barycenter
+      for (auto eit = gref.ElementsBegin(); eit != gref.ElementsEnd(); ++eit) {
+        auto e = (*eit)->AtBarycenter();    
+        ScalarVariable k;
+        e.Read( this->key_k, k );
+        e.Store(this->key_kV, makeScalar(k.Flag(), k()));
+        for (auto fip : (*eit)->AllFacetIntegrationPoints()) {
+          fip.Store(this->key_kfn, makeScalar(k.Flag(), k()));
+        }        
+      }
+    } else { //use tensor permeability
+      // Vertical vector points up in the y direction.
+      Point<dim> verticalVector(0.f);
       if (dim > 1) {
-        double64 kV = (K * verticalVector).Length();
-        e.Store(this->key_kV, makeScalar(K.Flag(), kV));
+        verticalVector[1] = 1.f;
       }
-      else {
-        e.Store(this->key_kV, makeScalar(K.Flag(), K(0,0)));
-      }
+
+      for (auto eit = gref.ElementsBegin(); eit != gref.ElementsEnd(); ++eit) {
+        auto e = (*eit)->AtBarycenter();
       
-      for (auto fip : (*eit)->AllFacetIntegrationPoints()) {
-        Point<dim> n = fip.FacetNormal();
-        double64 kfn = (K * n).Length();
-        fip.Store(this->key_kfn, makeScalar(K.Flag(), kfn));
+        TensorVariable<dim> K;
+        e.Read( this->key_kk, K );
+      
+        if (dim > 1) {
+          double64 kV = (K * verticalVector).Length();
+          e.Store(this->key_kV, makeScalar(K.Flag(), kV));
+        }
+        else {
+          e.Store(this->key_kV, makeScalar(K.Flag(), K(0,0)));
+        }
+
+        for (auto fip : (*eit)->AllFacetIntegrationPoints()) {
+          Point<dim> n = fip.FacetNormal();
+          double64 kfn = (K * n).Length();
+          fip.Store(this->key_kfn, makeScalar(K.Flag(), kfn));
+        }
       }
-    }
+   }
 }
 
   

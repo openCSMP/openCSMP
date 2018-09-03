@@ -50,7 +50,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   //private:
 
     virtual void initializeVariablsAndKeys(Model<dim>& m);
-    void calculatePermeabilityProjections( Region<dim>& gref );       
+    void calculatePermeabilityProjections( Region<dim>& gref, bool tensor_permeability );       
     void initializeFiniteVolumeProperties(Event<dim>* event);
     void ResetCFLMultiplier();
     void ComputeSaturationGradient (Event<dim>* event );
@@ -76,6 +76,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     double64 PEP_multiplier_;
     double64 CFL_multiplier_; //cfl multiplier (applied on saturation front)
     double64 relaxing_factor_; //relaxing factor for cfl multiplier at areas other than saturation front
+    bool	tensor_permeability_=false;
     
     csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_ssn, key_ssw;
     csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> key_grad;
