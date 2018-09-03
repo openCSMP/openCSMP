@@ -964,6 +964,20 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
             
         cout<<"  iteration count = "<<count<<endl;
     };
+    
+    //reset all events and add them to PEPList (for advection at next integration step)
+    EventHeap.clear();
+    PEPList.clear();
+    const typename vector<Event<dim>*>::iterator stack_end(FullList.end());
+    for ( typename vector<Event<dim>*>::iterator it=FullList.begin(); it!=stack_end; ++it )       
+    {  
+        Event<dim>* event = *it;
+        PEPList.push_back(event);
+        event->inPEPStack(true);          
+        event->valid(false);
+        event->inQueue(false);
+    }    
+    
     T_AdvectVariable_+= clock() - begin;
 
     cout<<"Finish DESTransport<dim>::AdvectVariable_DES_serial "<<endl;
@@ -1165,6 +1179,20 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, 
             
         cout<<"  iteration count = "<<count<<endl;
     };
+    
+    //reset all events and add them to PEPList (for advection at next integration step)
+    EventHeap.clear();
+    PEPList.clear();
+    const typename vector<Event<dim>*>::iterator stack_end(FullList.end());
+    for ( typename vector<Event<dim>*>::iterator it=FullList.begin(); it!=stack_end; ++it )       
+    {  
+        Event<dim>* event = *it;
+        PEPList.push_back(event);
+        event->inPEPStack(true);          
+        event->valid(false);
+        event->inQueue(false);
+    } 
+    
     T_AdvectVariable_+= omp_get_wtime() - begin;
 
     cout<<"Finish DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;

@@ -38,12 +38,11 @@ class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim> {
 
   private:    
     // key_components - an ArrayVariable key for the variation rates of mass (kg/s) of different transport components:
-    // [0] CO2 in carbonic phase (YCO2)
-    // [1] H2O in carbonic phase (YH2O)
-    // [2] CO2 in aqueous phase  (XCO2)
-    // [3] H2O in aqueous phase  (XH2O)
+    // [0] dissolved CO2 (CO2aq)
+    // [1] evaporated water (H2Og)
     csmp::INDEX<ARRAY,NODE> key_components;
-     
+
+    double64 upper_CO2aq_, lower_CO2aq_, upper_H2Og_, lower_H2Og_; ///< range in which the result is allowed to vary     
 };
   
 
