@@ -145,10 +145,8 @@ void DESTwoPhaseFlow3D_Example::Run()
     vtu.OutputDataToVTU( "saturation oil", "saturation carbonic phase",    "Model", 0 );
     vtu.OutputDataToVTU( "fluid_velocity", "total velocity",    "Model", 0 );
     if (multi_component) { 
-      vtu.OutputDataToVTU( "XCO2", "mass fraction CO2 aqueous phase",    "Model", 0 );
-      vtu.OutputDataToVTU( "XH2O", "mass fraction H2O aqueous phase",    "Model", 0 );
-      vtu.OutputDataToVTU( "YCO2", "mass fraction CO2 carbonic phase",    "Model", 0 );
-      vtu.OutputDataToVTU( "YH2O", "mass fraction H2O carbonic phase",    "Model", 0 );    
+      vtu.OutputDataToVTU( "dissolved CO2", "dissolved CO2",    "Model", 0 ); 
+      vtu.OutputDataToVTU( "evaporated water", "evaporated water",    "Model", 0 );   
     }
 
     // -------------------------------------------------------------
@@ -211,10 +209,8 @@ void DESTwoPhaseFlow3D_Example::Run()
                   vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
                   vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );
                   if (multi_component) { 
-                    vtu.OutputDataToVTU( "DES_XCO2", "mass fraction CO2 aqueous phase",    "Model", time );
-                    vtu.OutputDataToVTU( "DES_XH2O", "mass fraction H2O aqueous phase",    "Model", time );
-                    vtu.OutputDataToVTU( "DES_YCO2", "mass fraction CO2 carbonic phase",    "Model", time );
-                    vtu.OutputDataToVTU( "DES_YH2O", "mass fraction H2O carbonic phase",    "Model", time ); 
+                    vtu.OutputDataToVTU( "DES_dissolved CO2", "dissolved CO2",    "Model", time );
+                    vtu.OutputDataToVTU( "DES_evaporated water", "evaporated water",    "Model", time );
                   }                   
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
@@ -223,10 +219,8 @@ void DESTwoPhaseFlow3D_Example::Run()
                   vtu.OutputDataToVTU( "TDS_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );   
                   if (multi_component) {   
-                    vtu.OutputDataToVTU( "TDS_XCO2", "mass fraction CO2 aqueous phase",    "Model", time );
-                    vtu.OutputDataToVTU( "TDS_XH2O", "mass fraction H2O aqueous phase",    "Model", time );
-                    vtu.OutputDataToVTU( "TDS_YCO2", "mass fraction CO2 carbonic phase",    "Model", time );
-                    vtu.OutputDataToVTU( "TDS_YH2O", "mass fraction H2O carbonic phase",    "Model", time ); 
+                    vtu.OutputDataToVTU( "TDS_dissolved CO2", "dissolved CO2",    "Model", time );
+                    vtu.OutputDataToVTU( "TDS_evaporated water", "evaporated water",    "Model", time );
                   }                       
               }   
               save_counter = 0;
@@ -256,8 +250,9 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFuncti
     static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
     static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));
-    csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
-    assert( k_key.type == TENSOR );  
+    //csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
+    //assert( k_key.type == TENSOR );  
+    static Index  k_key(mdl.Database().StorageKey("permeability")); 
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
@@ -277,11 +272,12 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFuncti
         //total mobility
         auto e = (*eit) -> AtBarycenter();
         double64 mob_t = flowfunctions.TotalMobility(e);
-        
+        /*
         TensorVariable<3U> K;
         e.Read( k_key, K );
         double k = K.Trace() / 3.;
-
+        */
+        double64 k = (*eit)->Read(k_key);
         mob_t *= k;  
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 

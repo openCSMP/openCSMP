@@ -1,13 +1,13 @@
 name	MParameter	unit	index	min.	max.	place
-mass fraction CO2 aqueous phase	XCO2	kg/kg	1	-5.00e-02	1.05e+00	NODE
-mass fraction H2O aqueous phase	XH2O	kg/kg	1	-5.00e-02	1.05e+00	NODE
-mass fraction CO2 carbonic phase	YCO2	kg/kg	1	-5.00e-02	1.05e+00	NODE
-mass fraction H2O carbonic phase	YH2O	kg/kg	1	-5.00e-02	1.05e+00	NODE
+mass fraction CO2 aqueous phase	XCO2	kg/kg	1	-5.00e-00	1.05e+02	NODE
+mass fraction H2O aqueous phase	XH2O	kg/kg	1	-5.00e-00	1.05e+02	NODE
+mass fraction CO2 carbonic phase	YCO2	kg/kg	1	-5.00e-00	1.05e+02	NODE
+mass fraction H2O carbonic phase	YH2O	kg/kg	1	-5.00e-00	1.05e+02	NODE
 mole fraction CO2 aqueous phase	xCO2	mol/mol	1	-5.00e-02	1.05e+00	NODE
 mole fraction H2O aqueous phase	xH2O	mol/mol	1	-5.00e-02	1.05e+00	NODE
 mole fraction NaCl aqueous phase	xSalt	mol/mol	1	-5.00e-02	1.05e+00	NODE
 mole fraction CO2 carbonic phase	yCO2	mol/mol	1	-5.00e-02	1.05e+00	NODE
-mole fraction H2O aqueous phase	yH2O	mol/mol	1	-5.00e-02	1.05e+00	NODE
+mole fraction H2O carbonic phase	yH2O	mol/mol	1	-5.00e-02	1.05e+00	NODE
 dissolved CO2	CO2aq	kg/m3	1	0.00e+00	1.50e+02	NODE
 evaporated water	H2Og	kg/m3	1	0.00e+00	5.00e+01	NODE
 molality salt	msalt	mol/kg	1	0.00e+00	5.00e+00	NODE
@@ -132,3 +132,13 @@ schedule count			SCC	none		1	0.00E+00	1.00E+10	NODE
 synchronize count		SYC	none		1	0.00E+00	1.00E+10	NODE
 cfl multiplier		CFL	none		1	0.00E+00	1.00E+10	NODE
 non-wetting phase timing array	NTA	none		7	-1.00E+10	1.00E+10	NODE
+brooks corey parameter aqueous phase	aw	none	1	0.00e+00	8.00e+00	ELEMENT
+brooks corey parameter carbonic phase	ao	none	1	0.00e+00	8.00e+00	ELEMENT
+entry pressure aqueous phase	cw	Pa	1	0.00e+00	5.00e+07	ELEMENT
+entry pressure carbonic phase	co	Pa	1	0.00e+00	5.00e+07	ELEMENT
+previous drainage saturation endpoint of aqueous phase	SwDrToImb	m3/m3	1	-5.00E-02	1.05E+00	NODE
+previous imbibition saturation endpoint of aqueous phase	SwImbToDr	m3/m3	1	-5.00E-02	1.05E+00	NODE
+pseudo residual saturation carbonic phase	psrCO2	m3/m3	1	0.00E+00	5.00E-01	ELEMENT
+pseudo residual saturation aqueous phase	psrH2O	m3/m3	1	0.00E+00	5.00E-01	ELEMENT
+Hysteresis relative permeability model Parameters	HisBCparam	none	8	0.00E+00	5.00E+07	ELEMENT
+

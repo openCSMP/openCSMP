@@ -33,8 +33,9 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
+
 // TODO: perhaps only where you have to    calculatePermeabilityProjections(m.Region(target_region));
-         
+  
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
     cout<<"TwoPhaseDESTransport constructed"<<endl;
@@ -63,12 +64,15 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
+
 // TODO: perhaps only where you have to        calculatePermeabilityProjections(m.Region(target_region));
-         
+  
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
     cout<<"TwoPhaseDESTransport constructed"<<endl;
 } // end constructor 
+
+
 
 
   
@@ -930,6 +934,20 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
             
         cout<<"  iteration count = "<<count<<endl;
     };
+    
+    //reset all events and add them to PEPList (for advection at next integration step)
+    EventHeap.clear();
+    PEPList.clear();
+    const typename vector<Event<dim>*>::iterator stack_end(FullList.end());
+    for ( typename vector<Event<dim>*>::iterator it=FullList.begin(); it!=stack_end; ++it )       
+    {  
+        Event<dim>* event = *it;
+        PEPList.push_back(event);
+        event->inPEPStack(true);          
+        event->valid(false);
+        event->inQueue(false);
+    }    
+    
     T_AdvectVariable_+= clock() - begin;
 
     cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial "<<endl;
@@ -1131,6 +1149,20 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
             
         cout<<"  iteration count = "<<count<<endl;
     };
+    
+    //reset all events and add them to PEPList (for advection at next integration step)
+    EventHeap.clear();
+    PEPList.clear();
+    const typename vector<Event<dim>*>::iterator stack_end(FullList.end());
+    for ( typename vector<Event<dim>*>::iterator it=FullList.begin(); it!=stack_end; ++it )       
+    {  
+        Event<dim>* event = *it;
+        PEPList.push_back(event);
+        event->inPEPStack(true);          
+        event->valid(false);
+        event->inQueue(false);
+    } 
+    
     T_AdvectVariable_+= omp_get_wtime() - begin;
 
     cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp "<<endl;
