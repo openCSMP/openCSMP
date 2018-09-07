@@ -56,7 +56,7 @@ class Fluid {
   
     /// salinity, mSalt (molality = moles/kg)
     template<class TARGET_PLACEMENT>
-    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_msalt); }
+    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_NaClaq); }
   
     /// salinity, mass fraction
     template<class TARGET_PLACEMENT>
@@ -95,7 +95,7 @@ class Fluid {
     double64 ViscosityRatio( const TARGET_PLACEMENT&, double64 salinity=0. ) const;
 
   protected:
-    Fluid();
+    Fluid() {}
   
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }

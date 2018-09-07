@@ -1,5 +1,5 @@
 //
-//  FlowFunctions.h
+//  FlowFunctionsBC_Hysteretic.h
 //  CSMP_GitHub
 //
 //  Created by Mahyar Madadi on 16/July/2018.
@@ -9,49 +9,21 @@
 #ifndef CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
 #define CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
 
-#include "VariableSet_CO2GeoSequestration.h"
-#include "BrooksCoreySaturationFunctionswithHysteresis.h"
-#include "Fluid.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Region;
-template<size_t> class Model;
-
 /**
-    @brief 2-phase flow functions
+    @brief 2-phase multiphase flow functions
 
-    Captures all relevant input values from the model which are then used to compute the
-    relevant constitutive relations at the point of interest in the element.
+    Generates all relevant input values for transport scheme from relperm model and fluids module
+    using the constitutive relationships specified therein.    
     
-    The variables that are specific to each relperm model and capillary pressure curve are stored
-    there. All other variables are stored here.
-    
-    @section example Example
-    ...
-    Initialize( model_domain, e );
-    InitializeForBaryCenter( e );
-    double lt = TotalMobility();
-    
-    @attention the phases are numbered 0..2, phase 0 is the water phase (usually the wetting phase)
-    
-    @attention for simplicity and efficiency, fluid property values are always computed at the nodes by respective EOS modules.
-    Subsequently these values are interpolated to the points of interest.
-    
-    Code serves as an example of how static polymorphism can be used to implement constitutive relationships for multiphase flow.
-    
-    TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
+    The results are written to the model at the respective variable placements.
 */
-template<size_t dim>
-class FlowFunctionsBC_Hysteretic : public variables::VariableSet_CO2GeoSequestration,    ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-    public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsBC_Hysteretic>, ///< placeholder for saturation function model
-    public Fluid<dim,FlowFunctionsBC_Hysteretic> {                                       ///< placeholder for fluids module / EOS interface
-      
+template<size_t dim, template<size_t> class USER>
+class FlowFunctionsBC_Hysteretic {
   public:
-    
-    FlowFunctionsBC_Hysteretic(const PropertyDatabase<dim>& db);
-    
     /// current water saturation initialised inside of the model
     template<class TARGET_PLACEMENT>
     double64 Sw( const TARGET_PLACEMENT& p ) const { return p.Obtain(this->key_sH2O); }
@@ -121,17 +93,17 @@ class FlowFunctionsBC_Hysteretic : public variables::VariableSet_CO2GeoSequestra
     template<class TARGET_PLACEMENT>
     double64 ShockSpeed(  const TARGET_PLACEMENT& ) const;
     
-    /// output Shock Height
+    /// outputs the water saturation at the shock front
     template<class TARGET_PLACEMENT>
     double64 ShockHeight( const TARGET_PLACEMENT& ) const;
     
-    /// calculated Shock Height and Speed
+    /// calculated shock height and speed
     template<class TARGET_PLACEMENT>
-    void     ShockSpeedHeight( const TARGET_PLACEMENT&, double64& speed, double64& height) const;
+    void     ShockSpeedHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
     
-    /// ???
+    /// outputs the saturation of the desired phase at the shock front
     template<class TARGET_PLACEMENT>
-    double64 ShockSaturation(  const TARGET_PLACEMENT&, size_t, bool evaluate_numerically=false) const;
+    double64 ShockSaturation( const TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
 
     /// multipliers for gravity-driven flow (advection multiplier and source term)
     template<class TARGET_PLACEMENT>
@@ -154,29 +126,14 @@ class FlowFunctionsBC_Hysteretic : public variables::VariableSet_CO2GeoSequestra
     template<class TARGET_PLACEMENT>
     double64 CapillaryDiffusionMultiplier_Phase(  const TARGET_PLACEMENT&, size_t phase ) const;
 
-
-    /// calculating the  Inflection point
-    template<class TARGET_PLACEMENT>
-    double64 InflectionPointSaturation( const TARGET_PLACEMENT& ) const ;
-    
-    /// calculating the Tangent Point
-    template<class TARGET_PLACEMENT>
-    double64 TangentPointSaturation( const TARGET_PLACEMENT& ) const ;
-    
     /// calculating the Shock velocity
     template<class TARGET_PLACEMENT>
     double64 ShockFrontVelocity( const TARGET_PLACEMENT& ) const ;
     
-    /// calculating  Buckley Leverett function... this has to be zero at shock point
-    template<class TARGET_PLACEMENT>
-    double64 BuckleyLeverettFunction( const TARGET_PLACEMENT&, double64 S) const ;
-    
-    /// finding root of  Buckley Leverett function... which results is shock point saturation.
-    template<class TARGET_PLACEMENT>
-    double64 FindRootSecantMethod( const TARGET_PLACEMENT&, double64 S1, double64 S2) const ;
- 
            
   private:
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
       
     template<class TARGET_PLACEMENT>
     double64 dfds_Numerical(  const TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
@@ -192,12 +149,26 @@ class FlowFunctionsBC_Hysteretic : public variables::VariableSet_CO2GeoSequestra
       
     template<class TARGET_PLACEMENT>
     double64 dlnds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+
+    // NON-STANDARD INTERFACES
+
+    /// calculating the  Inflection point
+    template<class TARGET_PLACEMENT>
+    double64 InflectionPointSaturation( const TARGET_PLACEMENT& ) const ;
+    
+    /// calculating the Tangent Point
+    template<class TARGET_PLACEMENT>
+    double64 TangentPointSaturation( const TARGET_PLACEMENT& ) const ;
+    
+    /// calculating  Buckley Leverett function... this has to be zero at shock point
+    template<class TARGET_PLACEMENT>
+    double64 BuckleyLeverettFunction( const TARGET_PLACEMENT&, double64 S) const ;
+    
+    /// finding root of  Buckley Leverett function... which results is shock point saturation.
+    template<class TARGET_PLACEMENT>
+    double64 FindRootSecantMethod( const TARGET_PLACEMENT&, double64 S1, double64 S2) const ;
+
 };
-
-// ALWAYS JUST USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
-typedef FlowFunctionsBC_Hysteretic<3U>  ACGSS_FlowFunctions;
-
-
 
 } // end csmp
 

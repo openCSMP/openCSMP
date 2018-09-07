@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
+#include "FlowFunctions1.h"
 #if defined(_OPENMP)
 #include "omp.h"
 #endif
@@ -11,19 +12,18 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
-TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 FlowFunctions<dim>& flowfunctions, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
+                                                                 const char* target_region,
+                                                                 bool with_capillary_spreading,
+                                                                 bool with_gravity_forces,
+                                                                 double64 PEP_multiplier,
+                                                                 double64 cfl_multiplier)
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
       gref_(m.Region(target_region)),
-      flowfunctions_(flowfunctions),
       with_capillary_spreading_(with_capillary_spreading),
       with_gravity_forces_(with_gravity_forces),
+      flowfunctions_(m.Database()),
       upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
       T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
       first_step_(true),
@@ -33,7 +33,7 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
-    calculatePermeabilityProjections(m.Region(target_region));
+// TODO: perhaps only where you have to    calculatePermeabilityProjections(m.Region(target_region));
          
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
@@ -41,20 +41,19 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 } // end constructor  
 
 
-template<size_t dim>
-TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 FlowFunctions<dim>& flowfunctions, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier,
-                                                 double64 relaxing_factor)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
+                                                                 const char* target_region,
+                                                                 bool with_capillary_spreading,
+                                                                 bool with_gravity_forces,
+                                                                 double64 PEP_multiplier,
+                                                                 double64 cfl_multiplier,
+                                                                 double64 relaxing_factor)
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
       gref_(m.Region(target_region)),
-      flowfunctions_(flowfunctions),
       with_capillary_spreading_(with_capillary_spreading),
       with_gravity_forces_(with_gravity_forces),
+      flowfunctions_(m.Database()),
       upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
       T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
       first_step_(true),
@@ -64,7 +63,7 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
-    calculatePermeabilityProjections(m.Region(target_region));
+// TODO: perhaps only where you have to        calculatePermeabilityProjections(m.Region(target_region));
          
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
@@ -72,43 +71,10 @@ TwoPhaseDESTransport<dim>::TwoPhaseDESTransport( Model<dim>& m,
 } // end constructor 
 
 
-//Precalculates facet normal permeability and vertical permeability
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::calculatePermeabilityProjections( Region<dim>& gref )
-{    
-    // Vertical vector points up in the y direction.
-    Point<dim> verticalVector(0.f);
-    if (dim > 1) {
-      verticalVector[1] = 1.f;
-    }
-
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
-      auto e = (*eit)->AtBarycenter();
-      
-      TensorVariable<dim> K;
-      e.Read( this->key_k, K );
-      
-      if (dim > 1) {
-        double64 kV = (K * verticalVector).Length();
-        e.Store(this->key_kV, makeScalar(K.Flag(), kV));
-      }
-      else {
-        e.Store(this->key_kV, makeScalar(K.Flag(), K(0,0)));
-      }
-      
-      for (auto fip : (*eit)->AllFacetIntegrationPoints()) {
-        Point<dim> n = fip.FacetNormal();
-        double64 kfn = (K * n).Length();
-        fip.Store(this->key_kfn, makeScalar(K.Flag(), kfn));
-      }
-    }
-}
-
   
 
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeVariablsAndKeys(Model<dim>& m)
 {
     //creating new variables if not defined yet from input file
     if(!m.Database().IsDefined("variation rate nonwetting phase")) m.CreateProperty( "variation rate nonwetting phase", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
@@ -194,8 +160,8 @@ as specified in the property database.
 This method will not integrate element variables. The obvious choice
 for their volume integration is the finite element method.
 */
-template<size_t dim>
-double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>& sg,
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+double64  TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>& sg,
                                                                                 const char* property,
                                                                                 bool take_porosity_into_account ) const
 {
@@ -265,8 +231,8 @@ double64  TwoPhaseDESTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( 
 
 
 
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Event<dim>* event)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(Event<dim>* event)
 {
 
     Node<dim>* nd = event->getNode();
@@ -296,8 +262,8 @@ void TwoPhaseDESTransport<dim>::initializeFiniteVolumeProperties(Event<dim>* eve
 
 
 //resest cfl multipliers to default value = CFL_multiplier_*relaxing_factor_ for all nodes
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::ResetCFLMultiplier()
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ResetCFLMultiplier()
 {
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
@@ -313,8 +279,8 @@ void TwoPhaseDESTransport<dim>::ResetCFLMultiplier()
 
 
 //Compute non-wetting phase saturaiton gradient
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::ComputeSaturationGradient (Event<dim>* event )
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeSaturationGradient (Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
@@ -322,7 +288,7 @@ void TwoPhaseDESTransport<dim>::ComputeSaturationGradient (Event<dim>* event )
     
     for (auto fip : nd->AllFacetIntegrationPoints()) {
     
-        Point<dim> snw_gradient = fip.Gradient (this->key_sCO2);     
+        Point<dim> snw_gradient = fip.Gradient(this->key_sCO2);
         
         VectorVariable<dim> grad;
         grad(0) = snw_gradient[0];
@@ -336,8 +302,8 @@ void TwoPhaseDESTransport<dim>::ComputeSaturationGradient (Event<dim>* event )
 
 
 //Compute the rate of change of non-wetting phase in a node/FV
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
@@ -504,8 +470,8 @@ void TwoPhaseDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 
 
 //schedule an event associated with a node/FV
-template<size_t dim>
-bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+bool TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, double64 t_end)
 {
     //ComputeCFLMultipiler(event);
 
@@ -547,8 +513,8 @@ bool TwoPhaseDESTransport<dim>::Schedule(Event<dim>* event, double64 t_end)
 
 
 //update solution and check it against the specified range (with DES)
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double64 t_clock)
 {
     update_count_++;//recording
     Node<dim>* nd = event->getNode();
@@ -590,8 +556,8 @@ void TwoPhaseDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
 
 
 //update solution and check it against the specified range (with TDS)
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double64 delta_t)
 {
     update_count_++;//recording
     Node<dim>* nd = event->getNode();
@@ -623,8 +589,8 @@ void TwoPhaseDESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
 
 
 //Synchronize neighbor nodes/FVs
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,double64& t_remove)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Synchronize(Event<dim>* event,double64 t_clock,double64& t_remove)
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL ); 
@@ -677,8 +643,8 @@ void TwoPhaseDESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,d
 
 
 //advect variable with TDS (time-driven simulation)
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time_interval)
 {
     if(first_step_){
         //create events for all nodes and add them to PEPList
@@ -763,7 +729,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval)
     
     T_AdvectVariable_+= clock() - begin;
 
-    cout<<"Finish DESTransport<dim>::AdvectVariable_TDS "<<endl;
+    cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
@@ -777,8 +743,8 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_TDS( double64 time_interval)
 
 
 //advect variable with DES (discrete event simulation)
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_DES( double64 model_time, size_t num_threads )
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 model_time, size_t num_threads )
 {
 #if defined(_OPENMP)
     if (num_threads <= 0) {
@@ -808,11 +774,11 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES( double64 model_time, size_t 
 
 
 //advect variable with DES (discrete event simulation), serial version
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double64 model_time)
 {
     double64 begin=clock();
-    cout<<"Start DESTransport<dim>::AdvectVariable_DES_serial "<<endl;
+    cout<<"Start DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial "<<endl;
     double64 time(0.);
     bool Finished = false;
     //uncomment for recording events at each time interval
@@ -966,7 +932,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
     };
     T_AdvectVariable_+= clock() - begin;
 
-    cout<<"Finish DESTransport<dim>::AdvectVariable_DES_serial "<<endl;
+    cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_ /double64(CLOCKS_PER_SEC) << endl;
@@ -982,11 +948,11 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_serial( double64 model_time)
 
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel version
-template<size_t dim>
-void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, size_t num_threads)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double64 model_time, size_t num_threads)
 {
     double64 begin=omp_get_wtime();
-    cout<<"Start DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout<<"Start DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp "<<endl;
     cout << "Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
     double64 time(0.);
     bool Finished = false;
@@ -1167,7 +1133,7 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, 
     };
     T_AdvectVariable_+= omp_get_wtime() - begin;
 
-    cout<<"Finish DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
     cout <<"update_count_ = "<<update_count_<<endl; 
     cout <<"T_Schedule_ = "<< T_Schedule_  << endl;
@@ -1182,9 +1148,13 @@ void TwoPhaseDESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, 
 
 
 
-template class TwoPhaseDESTransport<1U>;
-template class TwoPhaseDESTransport<2U>;
-template class TwoPhaseDESTransport<3U>;
+template class TwoPhaseDESTransport<1U,FlowFunctions1>;
+template class TwoPhaseDESTransport<2U,FlowFunctions1>;
+template class TwoPhaseDESTransport<3U,FlowFunctions1>;
+
+template class TwoPhaseDESTransport<1U,FlowFunctions2>;
+template class TwoPhaseDESTransport<2U,FlowFunctions2>;
+template class TwoPhaseDESTransport<3U,FlowFunctions2>;
 
 } // end csmp 
 
