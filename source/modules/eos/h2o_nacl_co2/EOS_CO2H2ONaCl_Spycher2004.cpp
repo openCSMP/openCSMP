@@ -1605,7 +1605,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double64 densBrine,
     //  [volume]      = molar volume at pressure p  here , unit is m3/mol:
 */
 double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double64 temperature,
-                                                       double64 phaseVolumeCo2 )
+                                                                 double64 phaseVolumeCo2 )
 {
     double64 pressureVolumeGradient( 0. ),
             a ( a_mix(temperature) ),
