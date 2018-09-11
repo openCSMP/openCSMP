@@ -20,11 +20,6 @@ template<size_t> class Element;
 template<size_t> class Region;
 template<size_t> class Model;
 
-/// auxiliary functions for spline interpolation
-double64 spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
-double64 spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
-double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2);
-  
 /**
     @brief 2-phase flow functions
 

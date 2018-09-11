@@ -78,7 +78,7 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
    if (n.Idx() == 186) {
      std::cerr << "This is the interesting case\n";
    }
-   size_t i = 0;
+
      for (auto fip : n.AllFacetIntegrationPoints()) {
        const double64 ffc = fip.Read(User()->key_ffC);
        const double64 sign = fip.FromInside() ? 1. : -1.;

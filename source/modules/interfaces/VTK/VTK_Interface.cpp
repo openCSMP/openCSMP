@@ -3168,7 +3168,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
 
      // 7. writing POINT_DATA point-type data values
      // --------------------------------------------
-     size_t  line_break, offset(3); // offset for case where x,y,z are stored
      bool    first_iteration(true);
 
      // property after property
@@ -3178,7 +3177,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
        {
           if ( prop_key.type != ARRAY || prop_key.type != FLAGGEDARRAY )
             cout <<"\n\tWriting property: '"<< (*npit) <<"' to VTK file..."<< endl;
-          line_break = 1;
           // getting the property data, but only after first set was written
           if ( first_iteration ) {
                ofs <<"POINT_DATA "<< subdomain.PerimeterNodes() << endl;
@@ -3190,7 +3188,6 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                variable = (*npit).c_str();
                replaceWhiteSpaceBy( variable, '_');
                // now only get data without coordinates
-               offset = 0;
             }
        
           // writing the property data

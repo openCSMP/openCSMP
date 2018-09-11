@@ -573,8 +573,7 @@ template double64 FlowFunctions<3U>::GravityMultiplier_dGds( FiniteElementPlacem
 
 
 /**
-    Returns the diffusion coefficient for the phase of interest. If not
-    overloaeded, the hydraulic conductivity is returned.
+    Returns the diffusion coefficient for the phase of interest. 
 */
 template<size_t dim>
 template<class TARGET_PLACEMENT>
@@ -582,8 +581,8 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
 {
      assert( phase == 1U or phase == 2U );
   
-    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(key_kfn) / ( (phase==1u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
+    // TODO: Scalar permeability at the moment, make sure that this is the permeability in the direction of the facet normal
+    return p.Obtain(key_k) / ( (phase==0u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
 } 
 
 template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
@@ -600,7 +599,7 @@ template<class TARGET_PLACEMENT>
 double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier( TARGET_PLACEMENT& p ) const
 {
    // TODO: Make sure that this is the permeability in the direction of the facet normal
-   return p.Obtain(this->key_kfn) * MobilityProduct(p) * this->dpcds(p);
+   return p.Obtain(this->key_k) * MobilityProduct(p) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
@@ -619,7 +618,7 @@ double64 FlowFunctions<dim>::CapillaryDiffusionMultiplier_Phase( TARGET_PLACEMEN
     assert( phase == 0U or phase == 1U );
     
    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(this->key_kfn) * ( (phase==0U) ? Mobility( p, 0U ) : Mobility( p, 1U ) ) * this->dpcds(p);
+    return p.Obtain(this->key_k) * ( (phase==0U) ? Mobility( p, 0U ) : Mobility( p, 1U ) ) * this->dpcds(p);
 } 
 
 template double64 FlowFunctions<1U>::CapillaryDiffusionMultiplier_Phase( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
@@ -833,6 +832,52 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
 
 }
+
+
+// ====================================================================================
+
+//    NON-MEMBER FUNCTIONS
+
+// ====================================================================================
+
+
+/// Interpolations
+/*
+
+double64 spline_value( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return (1. - t)*y1 + t*y2 + t*(1.-t)*( a*(1.-t) + b*t);
+
+}
+
+
+double64 spline_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return (y2-y1)/( x2-x1 ) + (1.-2.*t)*( a*(1.-t)+b*t)/(x2-x1) + t*(1.-t)*(b-a)/(x2-x1);
+
+}
+
+
+double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
+
+}
+
+*/
+
 
 
 template class FlowFunctions<1U>;

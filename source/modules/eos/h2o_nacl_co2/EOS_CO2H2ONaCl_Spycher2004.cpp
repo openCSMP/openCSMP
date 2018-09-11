@@ -74,25 +74,29 @@ complex<double64> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double64>
 /**
     @brief returns the compressed volume of CO2.
 
-    //  Spycher et al (2003),
-    //  Co2-H2O mixtures in the geological sequestration of co2.
-    //  I. assessment and calculation of mutual solubilities from 12 to 100 C  and up to 600 bar,
-    //  Geochimica et Cosmochimica acta, vol 67, No 16
+    Spycher et al (2003),
+    Co2-H2O mixtures in the geological sequestration of co2.
+    I. assessment and calculation of mutual solubilities from 12 to 100 C  and up to 600 bar,
+    Geochimica et Cosmochimica acta, vol 67, No 16
 
-    //  R.W.D. Nickalls (1993),
-    //  A new approach to solving the cubic: Cardan's solution revealed,
-    //  The mathematical gazette, Vol 77
+    R.W.D. Nickalls (1993),
+    A new approach to solving the cubic: Cardan's solution revealed,
+    The mathematical gazette, Vol 77
 
-    // T in C
-    // P in Pa
-    // compressedVolumeCo2 in m3/mol
+    T in C
+    P in Pa
+    compressedVolumeCo2 in m3/mol
 
-    // Range T:  12 < T <100 C
-    // Range P:  P<600 bar
+    Range T:  12 < T <100 C
+    Range P:  P<600 bar
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::compressedVolumeCo2( double64 pressure,double64 temperature  )
+double64 EOS_CO2H2ONaCl_Spycher04::compressedVolumeCo2( double64 pressure, double64 temperature  )
 {
+    assert( temperature >= 12. );
+    assert( temperature <= 100. );
+    assert( pressure <= 6.0e7 );
+
     complex<double64> delta(0.,0.), lambda(0.,0.), theta(0.,0.), h(0.,0.), complex2RealDummy;
 
     const double64 temp(degreeCToKelvin(temperature)), coeff_a(1.);
@@ -365,6 +369,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::fugacityCo2( double64 pressure,
                                       double64 temperature,
                                       double64 phaseVolumeCo2 )
 {
+    assert( temperature >= 12. );
+    assert( temperature <= 100. );
+    assert( pressure <= 6.0e7 );
+
     const double64 temp(degreeCToKelvin(temperature));
 
     //  A1 = log ( V_root / ( V_root - b_mix ) );
@@ -449,9 +457,13 @@ double64 EOS_CO2H2ONaCl_Spycher04::fugacityCo2( double64 pressure,
     // Range P:  P<600 bar
 */
 double64 EOS_CO2H2ONaCl_Spycher04::fugacityH2o( double64 pressure,
-                                      double64 temperature,
-                                      double64 phaseVolumeCo2 )
+                                                double64 temperature,
+                                                double64 phaseVolumeCo2 )
 {
+    assert( temperature >= 12. );
+    assert( temperature <= 100. );
+    assert( pressure <= 6.0e7 );
+
     const double64 temp(degreeCToKelvin(temperature));
 
     //  B1 = log ( V_root / ( V_root - b_mix ) );
@@ -1553,12 +1565,10 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double64 phaseVolumeCo2
 {
     //  phaseVolumeCo2 in              m^3 /mol
     //  densityCarbonicPhase in        kg/m^3
+    // double64 itsDensCo2    =  molarMassCo2 / phaseVolumeCo2;
+    assert( molarMassCo2 > 0. );
 
-    double64  itsDensCo2(0.);
-
-    itsDensCo2    =  molarMassCo2 / phaseVolumeCo2;
-
-    return    itsDensCo2;
+    return  molarMassCo2 / phaseVolumeCo2;
 }
 
 

@@ -5,7 +5,7 @@
 
 #include "Model.h"
 #include "TwoPhaseModel.h"
-#include "FlowFunctions.h"
+#include "FlowFunctions1.h"
 
 namespace csmp {
 
@@ -19,7 +19,7 @@ public:
 private:
 
     // a simple function that computes the total mobility from the chosen relative permeability model
-    void computeTotalMobility( Model<3U>& mdl, FlowFunctions<3U>& flowfunctions );
+    void computeTotalMobility( Model<3U>& mdl, FlowFunctions2<3U>& flowfunctions );
 
 };
 

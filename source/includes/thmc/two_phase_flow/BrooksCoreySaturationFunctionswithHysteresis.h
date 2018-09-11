@@ -60,6 +60,14 @@ namespace csmp {
    @attention needs the Brooks-Corey constants (a's and c's)
    
    @note The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability has been implemented from the Skjaeveland et al. 2000
+ 
+   @note  Initialising the input parameter in three alternative methods :
+     
+     a) directly from input files.
+     b) forced Process and in the fly, this can be used for Primary Drainage and other examples which we force the process to be either Drainage or Imbibition.
+     c) unforced Process and in the fly... This can help to change the parameters if needed in the process.  For example for any change of rock type during modelling
+        or input from rocktype parameter file.
+
    
    @section  Reference
    Svein M. Skjaeveland, L. M. Siqveland, A. Kjosavik, W. L. Hammervold and G. A. Virnovsky, (2000).
@@ -75,52 +83,41 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   public:
     BrooksCoreySaturationFunctionsWithHysteresis();
   
-    /**
-  
-     Initialising the input parameter in three alternative methods :
-     
-     a) directly from input files.
-     b) forced Process and in the fly, this can be used for Primary Drainage and other examples which we force the process to be either Drainage or Imbibition.
-     c) unforced Process and in the fly... This can help to change the parameters if needed in the process.  For example for any change of rock type during modelling
-        or input from rocktype parameter file.
-     
-    */
-  
-    /// Initialision  Method (a)
+    /// Initialision  method (a)
     template<class TARGET_PLACEMENT>
     void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT& ) ;
     
-    /// Initialision  Method (b)
+    /// Initialision  method (b)
     template<class TARGET_PLACEMENT>
     void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c , TWO_PHASE_FLOW_PROCESS ProcessPath) ;
   
-    /// Initialision  Method (c)
+    /// Initialision  method (c)
     template<class TARGET_PLACEMENT>
     void InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT&, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c ) ; 
     
-    /// Effective Saturation function
+    /// Effective saturation function
     template<class TARGET_PLACEMENT>
     double64 EffectiveSaturation( const TARGET_PLACEMENT&  ) const ;
   
-    /// Effective Saturation function fro saturation S
+    /// Effective saturation function fro saturation S
     template<class TARGET_PLACEMENT>
     double64 EffectiveSaturation_at( const TARGET_PLACEMENT& , double64 ) const ;
   
-    /// The Capillary pressure Eq. (2) from Skjaeveland et al. 2000
+    /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000
     template<class TARGET_PLACEMENT>
     double64 pc( const TARGET_PLACEMENT& );
   
-    /// The first derivative of Capillary pressure.
+    /// First derivative of capillary pressure.
     template<class TARGET_PLACEMENT>
-    double64 dpcds( const TARGET_PLACEMENT& )  const ;
+    double64 dpcds( const TARGET_PLACEMENT& )  const;
   
-    /// The oil residual saturation estimated from Land's formula.
+    /// Oil residual saturation estimated from Land's formula.
     template<class TARGET_PLACEMENT>
-    double64 OilResidualSaturation( const TARGET_PLACEMENT& ) const ;
+    double64 OilResidualSaturation( const TARGET_PLACEMENT& ) const;
   
-    /// The Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
+    /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
     template<class TARGET_PLACEMENT>
-    double64 WaterResidualSaturation( const TARGET_PLACEMENT& p, double64 Sro) const ;
+    double64 WaterResidualSaturation( const TARGET_PLACEMENT&, double64 Sro ) const;
 
     /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
     template<class TARGET_PLACEMENT>
@@ -139,21 +136,21 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     double64 krn( const TARGET_PLACEMENT& ) const ;
     
     template<class TARGET_PLACEMENT>
-    double64 krn_at( const TARGET_PLACEMENT& , double64 S) const ;
+    double64 krn_at( const TARGET_PLACEMENT&, double64 S) const ;
   
     /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
     template<class TARGET_PLACEMENT>
     double64 dkrwds( const TARGET_PLACEMENT& ) const ;
     
     template<class TARGET_PLACEMENT>
-    double64 dkrwds_at( const TARGET_PLACEMENT& , double64 S) const ;
+    double64 dkrwds_at( const TARGET_PLACEMENT&, double64 S) const ;
   
     /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
     template<class TARGET_PLACEMENT>
     double64 dkrnds( const TARGET_PLACEMENT& ) const ;
     
     template<class TARGET_PLACEMENT>
-    double64 dkrnds_at( const TARGET_PLACEMENT& , double64 S) const ;
+    double64 dkrnds_at( const TARGET_PLACEMENT&, double64 S) const ;
   
     /// print out the two phase flow process state based on the current and new CO2 Saturation functions for each element based on the  interpolation of saturations at the bary center.
     template<class TARGET_PLACEMENT>

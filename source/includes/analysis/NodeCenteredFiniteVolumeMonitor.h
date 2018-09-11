@@ -1,8 +1,7 @@
 #ifndef NODE_CENTERED_FINITE_VOLUME_MONITOR_H
 #define NODE_CENTERED_FINITE_VOLUME_MONITOR_H
 
-#include "NodeCenteredFiniteVolumeTransport.h"
-#include "TwoPhaseDESTransport.h"
+#include "Model.h"
 
 namespace csmp {
 
@@ -18,14 +17,7 @@ class NodeCenteredFiniteVolumeMonitor {
                                      bool monitor_regions );
     
     /// triggering monitoring with the option to write to the file specified during class construction
-    void MonitorPropertyIntegrals( const Model<dim>&, 
-                                   const NodeCenteredFiniteVolumeTransport<dim>&,
-                                   bool consider_porosity,
-                                   bool normalize_by_initial_integral, 
-                                   bool write_output );
-                                   
-    void MonitorPropertyIntegrals( const Model<dim>&, 
-                                   const TwoPhaseDESTransport<dim>&,
+    void MonitorPropertyIntegrals( const Model<dim>&,
                                    bool consider_porosity,
                                    bool normalize_by_initial_integral, 
                                    bool write_output );                                   

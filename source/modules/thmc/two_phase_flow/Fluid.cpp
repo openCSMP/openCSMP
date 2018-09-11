@@ -8,7 +8,7 @@
 
 #include "Fluid.h"
 #include "FlowFunctions.h"
-#include "FlowFunctionsBC_Hysteretic.h"
+#include "FlowFunctions1.h"
 // this specific incarnation
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 #include "FiniteElementPlacement.h"
@@ -17,12 +17,6 @@
 namespace csmp {
 
 EOS_CO2H2ONaCl_Spycher04  eos;
-
-template<size_t dim, template<size_t> class USER>
-Fluid<dim,USER>::Fluid()
-{
-}
-
 
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
@@ -54,19 +48,52 @@ template double64 Fluid<1U,FlowFunctions>::Viscosity( const FiniteElementPlaceme
 template double64 Fluid<2U,FlowFunctions>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
   
-
 template double64 Fluid<3U,FlowFunctions>::Viscosity( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Viscosity( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Viscosity( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+
+template double64 Fluid<1U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
   
+template double64 Fluid<1U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Viscosity( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
   
+template double64 Fluid<1U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+  
+template double64 Fluid<1U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Viscosity( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;  
   
   // Mahyar: we need these all.. 24/8/2018
-
-  
-template double64 Fluid<1U,FlowFunctionsBC_Hysteretic>::Viscosity( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctionsBC_Hysteretic>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctionsBC_Hysteretic>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
   
 
  
@@ -94,14 +121,68 @@ template double64 Fluid<3U,FlowFunctions>::Density( const FiniteElementPlacement
 template double64 Fluid<3U,FlowFunctions>::Density( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 template double64 Fluid<3U,FlowFunctions>::Density( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
   
+template double64 Fluid<2U,FlowFunctions>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions>::Density( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions>::Density( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions>::Density( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions>::Density( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions>::Density( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions>::Density( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions>::Density( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions>::Density( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+ 
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions1>::Density( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions1>::Density( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions1>::Density( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+ 
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<3U,FlowFunctions2>::Density( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+  
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<2U,FlowFunctions2>::Density( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 Fluid<1U,FlowFunctions2>::Density( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
   
   
   // Mahyar: we need these all.. 24/8/2018
   
   
-template double64 Fluid<1U,FlowFunctionsBC_Hysteretic>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,FlowFunctionsBC_Hysteretic>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,FlowFunctionsBC_Hysteretic>::Density( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
   
 
 
@@ -115,10 +196,9 @@ double64 Fluid<dim,USER>::DensityMixture( const TARGET_PLACEMENT& p, double64 ms
           (1. - p.Obtain(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
  }
 
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
-
+template double64 Fluid<3U,FlowFunctions1>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions1>::DensityMixture( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions1>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
 
 /**
@@ -131,9 +211,9 @@ double64 Fluid<dim,USER>::ViscosityRatio( const TARGET_PLACEMENT& p, double64 sa
     return eos.mu_AqueousPhase( Pressure(p), Temperature(p), Salinity(p) ) / eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
  }
 
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,FlowFunctions>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions1>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions1>::ViscosityRatio( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
+template double64 Fluid<3U,FlowFunctions1>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -167,17 +247,14 @@ double64 Fluid<dim,USER>::DensityMixture( double64 pf, double64 T, double64 sw, 
  }
 */
  
- 
 
+template class Fluid<1U,FlowFunctions1>;
+template class Fluid<2U,FlowFunctions1>;
+template class Fluid<3U,FlowFunctions1>;
 
-template class Fluid<1U,FlowFunctions>;
-template class Fluid<2U,FlowFunctions>;
-template class Fluid<3U,FlowFunctions>;
-  
-template class Fluid<1U,FlowFunctionsBC_Hysteretic>;
-template class Fluid<2U,FlowFunctionsBC_Hysteretic>;
-template class Fluid<3U,FlowFunctionsBC_Hysteretic>;
-
+template class Fluid<1U,FlowFunctions2>;
+template class Fluid<2U,FlowFunctions2>;
+template class Fluid<3U,FlowFunctions2>;
 
 // conversions
 
@@ -228,8 +305,7 @@ double64 molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt)
 
 double64 molalNaClToPpmInAqueousPhase( double64 mSalt )
 {
-    double64
-            conversion( molalNaClToMassFracNaClInAqueousPhase( mSalt) );
+    double64 conversion( molalNaClToMassFracNaClInAqueousPhase( mSalt) );
 
     conversion  *=  1.e-2*1.e6; //  ppm \in [0, 1.e6] ,1.e-2 because mass fraction is in %
 

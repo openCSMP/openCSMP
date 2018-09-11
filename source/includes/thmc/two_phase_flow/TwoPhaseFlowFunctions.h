@@ -1,13 +1,13 @@
 //
-//  FlowFunctionsBC_Hysteretic.h
+//  TwoPhaseFlowFunctions.h
 //  CSMP_GitHub
 //
-//  Created by Mahyar Madadi on 16/July/2018.
-//  Copyright © 2017 Stephan Matthai. All rights reserved.
+//  Created by Stephan Matthai.
+//  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
-#ifndef CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
-#define CSMP_FLOW_FUNCTIONS_BC_HYSTERETIC_H
+#ifndef CSMP_TWO_PHASE_FLOW_FUNCTIONS_H
+#define CSMP_TWO_PHASE_FLOW_FUNCTIONS_H
 
 #include "CSMP_definitions.h"
 
@@ -22,7 +22,7 @@ namespace csmp {
     The results are written to the model at the respective variable placements.
 */
 template<size_t dim, template<size_t> class USER>
-class FlowFunctionsBC_Hysteretic {
+class TwoPhaseFlowFunctions {
   public:
     /// current water saturation initialised inside of the model
     template<class TARGET_PLACEMENT>
@@ -89,22 +89,26 @@ class FlowFunctionsBC_Hysteretic {
     template<class TARGET_PLACEMENT>
    	double64 AdvectionMultiplier(  const TARGET_PLACEMENT&, bool evaluate_numerically=false ) const;
 
-    /// output Shock Speed
-    template<class TARGET_PLACEMENT>
-    double64 ShockSpeed(  const TARGET_PLACEMENT& ) const;
-    
-    /// outputs the water saturation at the shock front
-    template<class TARGET_PLACEMENT>
-    double64 ShockHeight( const TARGET_PLACEMENT& ) const;
-    
-    /// calculated shock height and speed
-    template<class TARGET_PLACEMENT>
-    void     ShockSpeedHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
-    
     /// outputs the saturation of the desired phase at the shock front
     template<class TARGET_PLACEMENT>
     double64 ShockSaturation( const TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
 
+    /// output Shock Speed
+//    template<class TARGET_PLACEMENT>
+//    double64 ShockSpeed(  const TARGET_PLACEMENT& ) const;
+    
+    /// outputs the water saturation at the shock front
+//    template<class TARGET_PLACEMENT>
+//    double64 ShockHeight( const TARGET_PLACEMENT& ) const;
+    
+    /// calculated shock height and speed
+//    template<class TARGET_PLACEMENT>
+//    void     ShockSpeedHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
+
+    /// calculating the Shock velocity
+//    template<class TARGET_PLACEMENT>
+//double64 ShockFrontVelocity( const TARGET_PLACEMENT& ) const ;
+    
     /// multipliers for gravity-driven flow (advection multiplier and source term)
     template<class TARGET_PLACEMENT>
     double64 GravityTerm(  const TARGET_PLACEMENT& ) const;
@@ -125,12 +129,8 @@ class FlowFunctionsBC_Hysteretic {
     
     template<class TARGET_PLACEMENT>
     double64 CapillaryDiffusionMultiplier_Phase(  const TARGET_PLACEMENT&, size_t phase ) const;
-
-    /// calculating the Shock velocity
-    template<class TARGET_PLACEMENT>
-    double64 ShockFrontVelocity( const TARGET_PLACEMENT& ) const ;
     
-           
+  
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
@@ -149,25 +149,9 @@ class FlowFunctionsBC_Hysteretic {
       
     template<class TARGET_PLACEMENT>
     double64 dlnds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.001 ) const;
-
-    // NON-STANDARD INTERFACES
-
-    /// calculating the  Inflection point
+  
     template<class TARGET_PLACEMENT>
-    double64 InflectionPointSaturation( const TARGET_PLACEMENT& ) const ;
-    
-    /// calculating the Tangent Point
-    template<class TARGET_PLACEMENT>
-    double64 TangentPointSaturation( const TARGET_PLACEMENT& ) const ;
-    
-    /// calculating  Buckley Leverett function... this has to be zero at shock point
-    template<class TARGET_PLACEMENT>
-    double64 BuckleyLeverettFunction( const TARGET_PLACEMENT&, double64 S) const ;
-    
-    /// finding root of  Buckley Leverett function... which results is shock point saturation.
-    template<class TARGET_PLACEMENT>
-    double64 FindRootSecantMethod( const TARGET_PLACEMENT&, double64 S1, double64 S2) const ;
-
+    double64 InflectionPointSaturation( const TARGET_PLACEMENT& p ) const;
 };
 
 } // end csmp
