@@ -582,7 +582,7 @@ double64 FlowFunctions<dim>::DiffusionMultiplier( TARGET_PLACEMENT& p, size_t ph
      assert( phase == 1U or phase == 2U );
   
     // TODO: Scalar permeability at the moment, make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(key_k) / ( (phase==1u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
+    return p.Obtain(key_k) / ( (phase==0u) ? this->Viscosity( p, 0U ) : this->Viscosity( p, 1U ) );
 } 
 
 template double64 FlowFunctions<3U>::DiffusionMultiplier( FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;

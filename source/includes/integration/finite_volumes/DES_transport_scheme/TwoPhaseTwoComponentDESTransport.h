@@ -7,13 +7,12 @@
 
 namespace csmp {
 
-template<size_t dim>
-class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim> {
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNCTIONS> {
 
   public:
     TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
                            const char* target_region, 
-                           FlowFunctions<dim>& flowfunctions, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
                            double64 PEP_multiplier, 
@@ -21,7 +20,6 @@ class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim> {
                            
     TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
                            const char* target_region, 
-                           FlowFunctions<dim>& flowfunctions, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces, 
                            double64 PEP_multiplier,

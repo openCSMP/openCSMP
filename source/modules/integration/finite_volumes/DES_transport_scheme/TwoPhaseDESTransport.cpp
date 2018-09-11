@@ -1179,7 +1179,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
 #endif
 
 
-
 template class TwoPhaseDESTransport<1U,FlowFunctions1>;
 template class TwoPhaseDESTransport<2U,FlowFunctions1>;
 template class TwoPhaseDESTransport<3U,FlowFunctions1>;

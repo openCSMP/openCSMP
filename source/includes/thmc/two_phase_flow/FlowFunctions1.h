@@ -10,7 +10,7 @@
 #define CSMP_FLOW_FUNCTIONS1_H
 
 #include "VariableSet_CO2GeoSequestration.h"
-#include "BrooksCoreySaturationFunctionsWithHysteresis.h"
+#include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "ExperimentalSaturationFunctions.h"
 #include "FlowFunctionsBC_Hysteretic.h"
 #include "TwoPhaseFlowFunctions.h"
@@ -49,6 +49,7 @@ double64 spline_second_derivative( double64 x, double64 x1, double64 x2, double6
     
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
+
 template<size_t dim>
 class FlowFunctions1 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctions1>,  ///< placeholder for saturation function model

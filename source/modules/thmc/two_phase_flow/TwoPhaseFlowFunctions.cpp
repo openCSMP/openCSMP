@@ -31,7 +31,19 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility(  const  Fi
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
   
-  
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<1U,NODE>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<2U,NODE>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteVolumePlacement<3U,NODE>&, size_t ) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;  
   
    
 /**
@@ -51,11 +63,16 @@ double64 TwoPhaseFlowFunctions<dim,USER>::Mobility_at( const  TARGET_PLACEMENT& 
     return User()->krn_at(p,sw) / User()->Viscosity( p, 1U );
  }
   
-  template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
-  template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
-  template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
   
-
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<1U,NODE>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<2U,NODE>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::Mobility_at(  const  FiniteVolumePlacement<3U,NODE>&, size_t, double64 ) const;
 
 /**
     Mobility saturation derivative for phase i.
@@ -76,6 +93,10 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( const  TARGET_PLAC
 template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, bool ) const;
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t , bool) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t , bool) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityDerivative(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, bool ) const;
 
 
   /**
@@ -118,7 +139,16 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility(  cons
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 /**
@@ -138,6 +168,12 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility_at(  c
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&,  double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&,  double64 ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::TotalMobility_at(  const  FiniteVolumePlacement<3U,NODE>&, double64 ) const;
 
 
 /**
@@ -159,6 +195,13 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::MobilityProduct(  co
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::MobilityProduct(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProduct(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::MobilityProduct(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::MobilityProduct(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProduct(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProduct(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProduct(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProduct(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
 /** 
@@ -194,7 +237,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::MobilityProductDeriv
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::MobilityProductDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, bool ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
-
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
   
   /**
@@ -251,6 +296,14 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::f(  const  FiniteEle
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::f(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::f(  const  FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::f(  const  FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f(  const  FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+
 
   
   /**
@@ -272,6 +325,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::f_at(  const  Finite
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::f_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::f_at(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::f_at(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::f_at(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const; 
   
 
 /**
@@ -303,6 +359,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds(  const  Finite
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t,  bool  ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t,  bool  ) const;
 
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, bool ) const;
 
 
 
@@ -332,7 +391,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds_at(  const  Fin
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds_at(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_at(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
-
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds_at(  const  FiniteVolumePlacement<1U,NODE>&,  double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds_at(  const  FiniteVolumePlacement<2U,NODE>&,  double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_at(  const  FiniteVolumePlacement<3U,NODE>&,  double64 ) const;
   
 
 /**
@@ -410,7 +471,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::MaxFractionalFlowDer
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
   
 // shock speed base on Buckley Leverett theory
@@ -477,7 +540,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::AdvectionMultiplier(
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::AdvectionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>&, bool ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
-
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
   
   
@@ -520,6 +585,10 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::GravityTerm(  const 
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::GravityTerm(  const  FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityTerm(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
   
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::GravityTerm(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::GravityTerm(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityTerm(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
   
   
 /**
@@ -538,7 +607,13 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::GravityMultiplier_G(
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
   
   
@@ -559,7 +634,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::GravityMultiplier_dG
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::GravityMultiplier_dGds(  const  FiniteElementPlacement<2U,ELEMENT>& , bool ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,ELEMENT>& , bool ) const;
 
-
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, bool ) const;
 
   
   
@@ -576,7 +653,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::DiffusionMultiplier( const  TARGET_PLA
     assert( phase == 1U or phase == 0U );
     
     // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(User()->key_k) / ( (phase==1U) ? User()->Viscosity( p, 0U ) : User()->Viscosity( p, 1U ) );
+    return p.Obtain(User()->key_k) / ( (phase==0U) ? User()->Viscosity( p, 0U ) : User()->Viscosity( p, 1U ) );
   }
   
 
@@ -584,7 +661,7 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::DiffusionMultiplier(
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::DiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::DiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
-
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::DiffusionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 //template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::DiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
 //template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::DiffusionMultiplier( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
 //template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::DiffusionMultiplier( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
@@ -620,7 +697,10 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::CapillaryDiffusionMu
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
   
   
@@ -635,13 +715,19 @@ template<size_t dim, template<size_t> class USER>
     assert( phase == 0U or phase == 1U );
     
     // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(User()->key_k) * ( (phase==0U) ? Mobility( p, 1U ) : Mobility( p, 0U ) )* User()->dpcds(p);
+    return p.Obtain(User()->key_k) * ( (phase==0U) ? Mobility( p, 0U ) : Mobility( p, 1U ) )* User()->dpcds(p);
   }
   
  
-  template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-  template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-  template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+  
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ,size_t ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;  
 
   // linearized diffusion multiplier for large-timestep calculations
   /*
@@ -660,17 +746,65 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 TwoPhaseFlowFunctions<dim,USER>::ShockSaturation( const TARGET_PLACEMENT& p, size_t phase, bool evaluate_numerically ) const
 {
+   /*
    cerr <<"\nTwoPhaseFlowFunctions<dim,USER>::ShockSaturation: not implemented yet.\n";
  // if ( phase == 0 ) return TangentPointSaturation(p);
  // return 1. - TangentPointSaturation(p);
    return -1.;
+   */
+    assert( phase == 0U or phase == 1U );
+    
+    double64  dfds_max(0.), dfds_s_max(0.), s_shock, speed, height; 
+    
+    double64 swr = p.Obtain(User()->key_srH2O);
+    double64 snr = p.Obtain(User()->key_srCO2);    
+    
+    if(phase==0U){    
+        // loop over the saturation interval finding the maximum value of the fractional flow derivative
+        // note the bounds! - only within these dfds is actually defined
+        for ( double64 sw=swr; sw<=(1.-snr); sw+=0.005 ) {
+            double64 dfds;
+            if (evaluate_numerically) dfds = dfds_at_Numerical(p,sw);
+            else dfds = dfds_at(p,sw);
+            // max fractional flow derivative
+            dfds_max = std::max( dfds_max, dfds );
+            // dfds at shock front and shock height
+            double64 dfds_s = dfds * sw;
+            if ( dfds_s > dfds_s_max ) {
+                dfds_s_max = dfds_s;
+                speed = dfds;
+                height = dfds_s;
+                s_shock = sw;
+            }
+        }
+        return s_shock;
+    }
+        
+    for ( double64 sn=snr; sn<=(1.-swr); sn+=0.005 ) {
+         double64 dfds;
+         if (evaluate_numerically) dfds = dfds_at_Numerical(p,1.-sn); //dfndsn = dfwdsw
+         else dfds = dfds_at(p,1.-sn);             
+         // max fractional flow derivative
+         dfds_max = std::max( dfds_max, dfds );
+         // dfds at shock front and shock height
+         double64 dfds_s = dfds * sn;
+         if ( dfds_s > dfds_s_max ) {
+              dfds_s_max = dfds_s;
+              speed = dfds;
+              height = dfds_s;
+              s_shock = sn;
+         }
+    }
+    return s_shock;   
 }
   
 template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::ShockSaturation(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, bool ) const;
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::ShockSaturation(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, bool ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::ShockSaturation(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
 
-  
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::ShockSaturation(  const  FiniteVolumePlacement<1U,NODE>&, size_t, bool) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::ShockSaturation(  const  FiniteVolumePlacement<2U,NODE>&, size_t, bool) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::ShockSaturation(  const  FiniteVolumePlacement<3U,NODE>&, size_t, bool) const;  
   
   
   
@@ -717,6 +851,10 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds_Numerical(  con
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
 
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_Numerical(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t, double64 ) const;
+
 
 
   /**
@@ -740,6 +878,11 @@ template<size_t dim, template<size_t> class USER>
 template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64, double64 ) const;
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64, double64 ) const;
+
+template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteVolumePlacement<1U,NODE>&, double64, double64 ) const;
+template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteVolumePlacement<2U,NODE>&, double64, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dfds_at_Numerical(  const  FiniteVolumePlacement<3U,NODE>&, double64, double64 ) const;
+
 
 
 template<size_t dim, template<size_t> class USER>
@@ -795,6 +938,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dGds_Numerical(  con
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dGds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dGds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dGds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dGds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dGds_Numerical(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -810,6 +956,10 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dlwds_Numerical( const  TARGET_PLACEME
 template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlwds_Numerical(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -827,7 +977,9 @@ template double64 TwoPhaseFlowFunctions<1U,FlowFunctions2>::dlnds_Numerical(  co
 template double64 TwoPhaseFlowFunctions<2U,FlowFunctions2>::dlnds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlnds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
-  
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlnds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlnds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 TwoPhaseFlowFunctions<3U,FlowFunctions2>::dlnds_Numerical(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;  
   
   
   

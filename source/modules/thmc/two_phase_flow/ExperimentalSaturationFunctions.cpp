@@ -129,6 +129,20 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveS
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
 
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<1U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<2U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteVolumePlacement<3U,NODE>& ) const;
+
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<3U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
 
 
   
@@ -152,6 +166,13 @@ template<size_t dim, template<size_t> class USER>
 template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation_at( const FiniteElementPlacement<1U,ELEMENT>&  , double64 sw) const ;
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation_at( const FiniteElementPlacement<2U,ELEMENT>&  , double64 sw) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation_at( const FiniteElementPlacement<3U,ELEMENT>&  , double64 sw) const ;
+
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<1U,NODE>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<2U,NODE>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::EffectiveSaturation_at( const FiniteVolumePlacement<3U,NODE>&, double64 sw ) const;
 
 
 
@@ -178,6 +199,10 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::pc( const 
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::pc( const FiniteElementPlacement<2U,ELEMENT>&  )  ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::pc( const FiniteElementPlacement<3U,ELEMENT>&  )  ;
 
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::pc( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& );
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::pc( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& );
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::pc( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& );  
+
   
   
   
@@ -202,6 +227,14 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dpcds( con
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dpcds( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dpcds( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
   
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dpcds( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dpcds( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dpcds( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dpcds( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dpcds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dpcds( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 
 
   
@@ -219,6 +252,20 @@ template<size_t dim, template<size_t> class USER>
 template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+  
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw( const FiniteVolumePlacement<1U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw( const FiniteVolumePlacement<2U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteVolumePlacement<3U,NODE>& ) const;
+
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
   
 
   
@@ -249,6 +296,13 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw_at( co
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
   
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krw_at( const FiniteVolumePlacement<3U,NODE>&, double64 ) const;
+  
 
   
   
@@ -275,6 +329,20 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn( const
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
   
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn( const FiniteVolumePlacement<1U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn( const FiniteVolumePlacement<2U,NODE>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteVolumePlacement<3U,NODE>& ) const;
+
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 
   
 /**
@@ -293,6 +361,13 @@ template<size_t dim, template<size_t> class USER>
 template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<1U,NODE>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<2U,NODE>&, double64 sw ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::krn_at( const FiniteVolumePlacement<3U,NODE>&, double64 sw ) const;
   
 
   
@@ -317,6 +392,10 @@ template<size_t dim, template<size_t> class USER>
 template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+  
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
   
 
   
@@ -349,6 +428,13 @@ template<size_t dim, template<size_t> class USER>
 template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_at( const FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_at( const FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at( const FiniteVolumePlacement<3U,NODE>&, double64 ) const;
 
 
   
@@ -383,6 +469,10 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds( co
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
   
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+  
 
   
   
@@ -415,6 +505,13 @@ template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_at(
 template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
 template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_at( const FiniteVolumePlacement<1U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_at( const FiniteVolumePlacement<2U,NODE>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at( const FiniteVolumePlacement<3U,NODE>&, double64 ) const;
+
 
   
   
@@ -441,9 +538,13 @@ template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at(
     return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_Numerical( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;  
   
   
   
@@ -468,10 +569,16 @@ template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at(
     return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
   
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteVolumePlacement<1U,NODE>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteVolumePlacement<2U,NODE>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrwds_at_Numerical( const FiniteVolumePlacement<3U,NODE>&, double64, double64 ) const;    
   
   
   
@@ -500,9 +607,13 @@ template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at(
     return ( this->krn_at(p,seff + h) - this->krn_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_Numerical( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64 ) const;  
   
   
   
@@ -535,10 +646,16 @@ template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at(
   }
   
   
-  template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
   
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<1U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteVolumePlacement<1U,NODE>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<2U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteVolumePlacement<2U,NODE>&, double64, double64 ) const;
+template double64 ExperimentalSaturationFunctions<3U,FlowFunctions2>::dkrnds_at_Numerical( const FiniteVolumePlacement<3U,NODE>&, double64, double64 ) const;    
   
   
   
