@@ -2,7 +2,6 @@
 #define CSMP_TWOPHASE_DES_TRANSPORT_H
 
 #include "CSMP_number_types.h"
-#include "Node.h"
 #include "Index.h"
 #include "Event.h"
 #include "VariableSet_CO2GeoSequestration.h"
@@ -38,7 +37,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   
     virtual ~TwoPhaseDESTransport() { /* nothing to do here? */ }
                            
-    double64 VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>& sg, const char* property, bool take_porosity_into_account ) const;  
+    double64 VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>&, const char* property, bool take_porosity_into_account ) const;
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );
     void AdvectVariable_DES_openmp ( double64 model_time, size_t num_threads );
@@ -48,7 +47,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
   //private:
 
-    virtual void initializeVariablsAndKeys(Model<dim>& m);
+    virtual void InitializeVariablesAndKeys(Model<dim>& );
  // TODO: if needed   void calculatePermeabilityProjections( Region<dim>& gref );
     void initializeFiniteVolumeProperties(Event<dim>* event);
     void ResetCFLMultiplier();
@@ -89,7 +88,6 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     // [5] target change of solution
     // [6] CFL multiplier
     csmp::INDEX<ARRAY,NODE> key_time;
-     
 };
   
 

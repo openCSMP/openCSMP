@@ -304,6 +304,199 @@ template void average( const vector<TensorVariable<3U> >&, TensorVariable<3U>& )
 
 
 
+
+/// spline interpolation of values
+double64 splineValue( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return (1. - t)*y1 + t*y2 + t*(1.-t)*( a*(1.-t) + b*t);
+}
+
+
+
+double64 splineDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return (y2-y1)/( x2-x1 ) + (1.-2.*t)*( a*(1.-t)+b*t)/(x2-x1) + t*(1.-t)*(b-a)/(x2-x1);
+}
+
+
+
+double64 splineSecondDerivative( double64 x, double64 x1, double64 x2, double64 y1, double64 y2, double64 k1, double64 k2)
+{
+    const double64 a =  k1*( x2-x1 ) - ( y2 - y1 );
+    const double64 b = -k2*( x2-x1 ) + ( y2 - y1 );
+    const double64 t = ( x - x1) / ( x2 - x1 );
+
+    return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
+}
+
+
+
+
+/** 
+    Finding the root of the function by the Secant method
+
+*/
+double64 secant_method( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance)
+{
+  double64 xm, x0;
+  double64 c;
+  
+  if (function(xmin) * function(xmax) < 0) {  // check the range for finding root
+    do {
+      
+      x0 = (xmin * function(xmax) - xmax * function(xmin)) / (function(xmax) - function(xmin));
+      c = function(xmin) * function(x0);
+
+      xmin = xmax;
+      xmax = x0;
+
+      if (c == 0) break;
+      
+      xm = (xmin * function(xmax) - xmax * function(xmin)) / (function(xmax) - function(xmin));
+      
+    } while (fabs(xm - x0) >= tolerance); // repeat the loop
+    
+  } else
+  {
+    cout << "Error at CSMP_mathUtilities:the_secant_method Can not find a root in the given interval";
+    xm =  std::numeric_limits<double>::quiet_NaN() ;
+  }
+  
+  return xm;
+}
+
+
+
+
+/**
+ 
+ finding maximum of a function using golden-section search, see:
+ 
+ https://en.wikipedia.org/wiki/Golden-section_search
+ 
+ */
+double64 maximum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance )
+{
+  
+  double64 gr((sqrt(5.)+1.0)/2.0);  // golden ratio
+  
+  double64 xup(xmax - (xmax - xmin) / gr);
+  double64 xlow(xmin + (xmax - xmin) / gr);
+  
+  do {
+    if (function(xup) > function(xlow))   // check the function is maximized
+    {
+      xmax = xlow;
+    } else
+    {
+      xmin = xup;
+    }
+    
+    xup  = xmax - (xmax - xmin) / gr;
+    xlow = xmin + (xmax - xmin) / gr;
+    
+  } while(fabs(xup - xlow) >= tolerance) ;
+  
+  return (xup + xlow)/2. ;
+  
+}
+ 
+  
+  
+  
+  
+/**
+ 
+ finding minimum of a function using golden-section search, see:
+ 
+ https://en.wikipedia.org/wiki/Golden-section_search
+ 
+ */
+double64 minimum_of_function( double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 tolerance )
+{
+  
+  double64 gr((sqrt(5.)+1.0)/2.0); // golden ratio
+  
+  double64 xup(xmax - (xmax - xmin) / gr);
+  double64 xlow(xmin + (xmax - xmin) / gr);
+  
+  do {
+    if (function(xup) < function(xlow))  // check the function is minimized
+    {
+      xmax = xlow;
+    } else
+    {
+      xmin = xup;
+    }
+    
+    xup  = xmax - (xmax - xmin) / gr;
+    xlow = xmin + (xmax - xmin) / gr;
+    
+  } while(fabs(xup - xlow) >= tolerance) ;
+  
+  return (xup + xlow)/2. ;
+  
+}
+
+  
+  
+  
+/**
+ 
+ finding the x value, in the range [xmin,xmax],  where function the df(x)/dx-(f(x)-f(x1))/(x-x1).. this line is the secant and tangent to f(x) at the shock point
+ Mahyar: this is a basic function for two phase shock velocity analysis.
+
+*/
+double64 g( double64 x, double64 x1, double64 (*function)( double64 ), double64 (*dfunction)( double64 ))   // "g(x) = df(x)/dx-(f(x)-f(x1))/(x-x1)"
+  {
+    return dfunction(x)-(function(x)-function(x1))/(x-x1) ;
+  }
+  
+  
+  
+double64 secant_line( double64 x1, double64 xmin, double64 xmax, double64 (*function)( double64 ), double64 (*dfunction)( double64 ), double64 tolerance)
+  {
+    
+    double64 xm, x0;
+    double64 c;
+    
+     if (g(xmin,x1,function ,dfunction) * g(xmax,x1,function ,dfunction) < 0) {  // check the range for finding root
+       do {
+        
+        x0 = (xmin * g(xmax,x1,function ,dfunction) - xmax * g(xmin,x1,function ,dfunction)) / (g(xmax,x1,function ,dfunction) - g(xmin,x1,function ,dfunction));
+        c  = g(xmin,x1,function ,dfunction) * g(x0,x1,function ,dfunction);
+        
+        xmin = xmax;
+        xmax = x0;
+        
+        if (c == 0.0) break;
+        
+        xm = (xmin * g(xmax,x1,function ,dfunction) - xmax * g(xmin,x1,function ,dfunction)) / (g(xmax,x1,function ,dfunction) - g(xmin,x1,function ,dfunction));
+        
+       } while (fabs(xm - x0) >= tolerance); // repeat the loop
+      
+     }
+    else
+    {
+      cout << "Error at CSMP_mathUtilities:the_secant_method Can not find a root in the given interval";
+      xm =  std::numeric_limits<double>::quiet_NaN() ;
+    }
+    
+    return xm;
+  }
+
+
+
+
+
 } // csmp
 
 

@@ -70,10 +70,10 @@ namespace csmp {
 
    
    @section  Reference
+   
    Svein M. Skjaeveland, L. M. Siqveland, A. Kjosavik, W. L. Hammervold and G. A. Virnovsky, (2000).
    Capillary Pressure Correlation for Mixed-Wet Reservoirs. SPE Reservoir Evaluation & Engineering. 3. 10.2118/39497-MS.
    
-   @author S.K. Matthai
    @author Mahyar Madadi
    @date 2018
    
@@ -190,7 +190,6 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-    
   
     double64  aw_ ;
     double64  ao_ ;

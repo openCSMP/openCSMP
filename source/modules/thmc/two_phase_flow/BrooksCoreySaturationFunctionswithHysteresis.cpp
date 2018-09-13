@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "BrooksCoreySaturationFunctionsWithHysteresis.h"
-#include "FlowFunctions1.h"
+#include "CO2H2O_FunctionsModule1.h"
 #include "FiniteElementPlacement.h"
 #include "FiniteVolumePlacement.h"
 #include "CSMP_mathUtilities.h"
@@ -66,9 +66,9 @@ template<size_t dim, template<size_t> class USER>
     
   }
 
-template void BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&  )  ;
-template void BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&  )  ;
-template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&  )  ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&  )  ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&  )  ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&  )  ;
  
   
  
@@ -83,8 +83,10 @@ template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::I
  
 */
 template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT& p, std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_)
+template<class TARGET_PLACEMENT>
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const TARGET_PLACEMENT& p,
+                                                                                              std::array<std::array<double64, 2>,2> a_,
+                                                                                              std::array<std::array<double64, 2>,2> c_)
   {
     TWO_PHASE_FLOW_PROCESS ProcessPath = this->FlowProcess(p);  // Here , the process is checked ... either is Imbibitions or Drainage
     
@@ -108,12 +110,11 @@ template<size_t dim, template<size_t> class USER>
   }
 
   
-  template void BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_) ;
-  template void BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_) ;
-  template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_) ;
-  
- 
-  
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&, std::array<std::array<double64, 2>,2>, std::array<std::array<double64, 2>,2> ) ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&, std::array<std::array<double64, 2>,2>, std::array<std::array<double64, 2>,2> ) ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&, std::array<std::array<double64, 2>,2>, std::array<std::array<double64, 2>,2> ) ;
+
+
   
 
   
@@ -149,9 +150,9 @@ template<size_t dim, template<size_t> class USER>
     
   }
 
-  template void BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
-  template void BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
-  template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
+  template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<1U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
+  template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<2U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
+  template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::InitialiseBrooksCoreyParameters( const FiniteElementPlacement<3U,ELEMENT>&  , std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath) ;
   
   
 
@@ -174,18 +175,20 @@ template<size_t dim, template<size_t> class USER>
     return std::min( std::max( seff, 0. ), 1. );
   }
 
-  
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::EffectiveSaturation( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::EffectiveSaturation( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::EffectiveSaturation( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::EffectiveSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  ) const ;
 
 
   
   
 template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( const TARGET_PLACEMENT& p, double64 sw ) const
+template<class TARGET_PLACEMENT>
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( const TARGET_PLACEMENT& p, double64 sw ) const
   {
     double64 seff =  (sw - p.Obtain(User()->key_srH2O)) /
     (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2));
@@ -193,10 +196,13 @@ template<size_t dim, template<size_t> class USER>
     return std::min( std::max( seff, 0. ), 1. );
   }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::EffectiveSaturation_at( const FiniteElementPlacement<1U,ELEMENT>&  , double64 sw) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::EffectiveSaturation_at( const FiniteElementPlacement<2U,ELEMENT>&  , double64 sw) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::EffectiveSaturation_at( const FiniteElementPlacement<3U,ELEMENT>&  , double64 sw) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<1U,ELEMENT>&  , double64 sw) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<2U,ELEMENT>&  , double64 sw) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<3U,ELEMENT>&  , double64 sw) const ;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  , double64 sw) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  , double64 sw) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::EffectiveSaturation_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  , double64 sw) const ;
 
 
   
@@ -234,9 +240,13 @@ template<size_t dim, template<size_t> class USER>
     return pc;
 }
 
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::pc( const FiniteElementPlacement<1U,ELEMENT>&  )  ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::pc( const FiniteElementPlacement<2U,ELEMENT>&  )  ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::pc( const FiniteElementPlacement<3U,ELEMENT>&  )  ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<1U,ELEMENT>&  )  ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<2U,ELEMENT>&  )  ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<3U,ELEMENT>&  )  ;
+
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  )  ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  )  ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::pc( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  )  ;
 
   
   
@@ -275,9 +285,13 @@ template<size_t dim, template<size_t> class USER>
     return Dpc ;
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dpcds( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dpcds( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dpcds( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
+  
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dpcds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  ) const ;
   
 
   
@@ -297,10 +311,13 @@ template<size_t dim, template<size_t> class USER>
     return 1./(C_land_+1./p.Obtain(User()->key_sCO2)) ;
 }
 
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::OilResidualSaturation( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::OilResidualSaturation( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::OilResidualSaturation( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::OilResidualSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  ) const ;
 
   
   
@@ -340,10 +357,13 @@ template<size_t dim, template<size_t> class USER>
     return  srH2O ;
   }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::WaterResidualSaturation( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::WaterResidualSaturation( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::WaterResidualSaturation( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const ;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::WaterResidualSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const ;
   
   
   
@@ -402,10 +422,14 @@ template<size_t dim, template<size_t> class USER>
     if ((sH2O > srH2O) && (sH2O < 1.-srCO2))  Swr_ = 1.-(1.-Sw1)/(1.-RHS) ;  // Mahyar: this way with assumeing the lowest saturation of water is more effected by the assumptatic behaviour of water part of curve.
     
 }
-template void BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<1U,ELEMENT>&, double64&, double64& ) const;
-template void BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<2U,ELEMENT>&, double64&, double64&) const ;
-template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<3U,ELEMENT>&, double64&, double64&) const ;
 
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<1U,ELEMENT>&, double64&, double64& ) const;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<2U,ELEMENT>&, double64&, double64&) const ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<3U,ELEMENT>&, double64&, double64&) const ;
+
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64&, double64& ) const;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64&, double64&) const ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::WaterAndOilResidualSaturationImbibitionToDrainage( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64&, double64&) const ;
 
   
   
@@ -446,10 +470,14 @@ template<size_t dim, template<size_t> class USER>
     
     return (cw_*krwww - co_*krwow) / (cw_ - co_) ;  // Mahyar: If sH2O< srH2O or sH2O > 1-srCO2 .. The krw will be between 0 or 1
 }
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::krw( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::krw( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::krw( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
   
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krw( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
   
   
@@ -491,11 +519,14 @@ template<size_t dim, template<size_t> class USER>
     return (cw_*krwww - co_*krwow) / (cw_ - co_) ;  // Mahyar: If sH2O< srH2O or sH2O > 1-srCO2 .. The krw will be between 0 or 1
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::krw_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::krw_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::krw_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
   
-
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krw_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+ 
   
   
   
@@ -534,10 +565,16 @@ template<size_t dim, template<size_t> class USER>
     return (cw_*kroww - co_*kroow) / (cw_ - co_) ; // Mahyar: If sCO2< srCO2 or sCO2 > 1-srH2O .. The krn will be between 0 or 1
 }
 
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::krn( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::krn( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::krn( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
   
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krn( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
+
+
+
 
   
 /**
@@ -568,9 +605,13 @@ template<size_t dim, template<size_t> class USER>
     return (cw_*kroww - co_*kroow) / (cw_ - co_) ;
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::krn_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::krn_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::krn_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::krn_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
   
 
   
@@ -612,11 +653,13 @@ template<size_t dim, template<size_t> class USER>
     return (cw_*dkrwww-co_*dkrwow)/(cw_-co_) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
 }
   
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrwds( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrwds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrwds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
-  
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
   
   
@@ -663,10 +706,13 @@ template<size_t dim, template<size_t> class USER>
     return (cw_*dkrwww-co_*dkrwow)/(cw_-co_) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrwds_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrwds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrwds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 
   
   
@@ -718,9 +764,13 @@ template<size_t dim, template<size_t> class USER>
     
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrnds( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrnds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrnds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+  
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
   
 
   
@@ -768,10 +818,13 @@ template<size_t dim, template<size_t> class USER>
     
 }
   
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrnds_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrnds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrnds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_at( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 
   
   
@@ -802,10 +855,13 @@ TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::F
     
 } // end FlowProcess
 
-template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::FlowProcess( const FiniteElementPlacement<1U,ELEMENT>& ) ;
-template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::FlowProcess( const FiniteElementPlacement<2U,ELEMENT>& ) ;
-template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::FlowProcess( const FiniteElementPlacement<3U,ELEMENT>& ) ;
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<1U,ELEMENT>& ) ;
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<2U,ELEMENT>& ) ;
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<3U,ELEMENT>& ) ;
 
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) ;
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) ;
+template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::FlowProcess( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) ;
   
   
   
@@ -821,6 +877,8 @@ template TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<3U,
 /**
  
  Check The Limits of Capillary presure and reset the residuals
+ 
+ TODO: a function that checks should not change anything
  
 */
 template<size_t dim, template<size_t> class USER>
@@ -862,10 +920,13 @@ template<size_t dim, template<size_t> class USER>
     }
 }
   
-template void BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<1U,ELEMENT>&  , double64& , double64& ) ;
-template void BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<2U,ELEMENT>&  , double64& , double64& )  ;
-template void BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<3U,ELEMENT>&  , double64& , double64& ) ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<1U,ELEMENT>&  , double64& , double64& ) ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<2U,ELEMENT>&  , double64& , double64& )  ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<3U,ELEMENT>&  , double64& , double64& ) ;
 
+template void BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  , double64& , double64& ) ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  , double64& , double64& )  ;
+template void BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::CheckThePcLimitsAndResetResiduals( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  , double64& , double64& ) ;
 
   
   
@@ -914,12 +975,13 @@ template<size_t dim, template<size_t> class USER>
     return pc_PrimaryImbibitionDrainage;
   }
   
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
 
-  
-template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::CapillaryPressureLimits( const FiniteElementPlacement<1U,ELEMENT>&  ) const ;
-template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::CapillaryPressureLimits( const FiniteElementPlacement<2U,ELEMENT>&  ) const ;
-template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::CapillaryPressureLimits( const FiniteElementPlacement<3U,ELEMENT>&  ) const ;
-
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&  ) const ;
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&  ) const ;
+template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::CapillaryPressureLimits( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&  ) const ;
 
   
   
@@ -947,11 +1009,14 @@ template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteres
     return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrwds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrwds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
   
-  
+   template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+ 
   
   
   
@@ -974,10 +1039,13 @@ template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteres
     return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
   
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64  ) const;
   
   
   
@@ -1006,17 +1074,13 @@ template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteres
     return ( this->krn_at(p,seff + h) - this->krn_at(p,seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrnds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrnds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
   
-  
-  
-  
-  
-  
-  
-  
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
   
   
   
@@ -1041,30 +1105,21 @@ template std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteres
   }
   
   
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
-  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ template double64 BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
+  template double64 BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64  ) const;
   
   
   
   
   
 
-  
-template class BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctions1>;
-template class BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctions1>;
-template class BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctions1>;
-  
-  
+template class BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>;
+
 } // csmp

@@ -1,6 +1,7 @@
 #include "TwoPhaseTwoComponentDESTransport.h"
 #include "Region.h"
 #include "Model.h"
+#include "CO2H2O_FunctionsModule1.h"
 
 using namespace std;
 
@@ -8,42 +9,40 @@ namespace csmp {
 
 template<size_t dim>
 TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 FlowFunctions<dim>& flowfunctions, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier)
-    : TwoPhaseDESTransport<dim> (m,target_region,flowfunctions,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier) 
+                                                                         const char* target_region,
+                                                                         bool with_capillary_spreading,
+                                                                         bool with_gravity_forces,
+                                                                         double64 PEP_multiplier,
+                                                                         double64 cfl_multiplier)
+    : TwoPhaseDESTransport<dim,CO2H2O_FunctionsModule1>(m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier)
 {
-    initializeVariablsAndKeys(m);
+    InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );
     m.Database().RangeOf( m.Database().Name(this->key_H2Og), lower_H2Og_, upper_H2Og_ );    
-    cout<<"TwoPhaseTwoComponentDESTransport constructed"<<endl;
+    cout<<"TwoPhaseTwoComponentDESTransport constructed."<<endl;
 } // end constructor  
 
 
 template<size_t dim>
 TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 FlowFunctions<dim>& flowfunctions, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier,
-                                                 double64 relaxing_factor)
-    : TwoPhaseDESTransport<dim> (m,target_region,flowfunctions,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
+                                                                         const char* target_region,
+                                                                         bool with_capillary_spreading,
+                                                                         bool with_gravity_forces,
+                                                                         double64 PEP_multiplier,
+                                                                         double64 cfl_multiplier,
+                                                                         double64 relaxing_factor)
+    : TwoPhaseDESTransport<dim,CO2H2O_FunctionsModule1>(m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
-    initializeVariablsAndKeys(m);
+    InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );
     m.Database().RangeOf( m.Database().Name(this->key_H2Og), lower_H2Og_, upper_H2Og_ );     
-    cout<<"TwoPhaseTwoComponentDESTransport constructed"<<endl;
+    cout<<"TwoPhaseTwoComponentDESTransport constructed."<<endl;
 } // end constructor 
 
   
 
 template<size_t dim>
-void TwoPhaseTwoComponentDESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
+void TwoPhaseTwoComponentDESTransport<dim>::InitializeVariablesAndKeys(Model<dim>& m)
 {
     if(!m.Database().IsDefined("component mass variation rates array")) m.CreateProperty( "component mass variation rates array", "kg/s", ARRAY, NODE, 2, -1.00E+10,1.00E+10);   
     this->key_components = INDEX<ARRAY,NODE>( m.Database().StorageKey("component mass variation rates array") );

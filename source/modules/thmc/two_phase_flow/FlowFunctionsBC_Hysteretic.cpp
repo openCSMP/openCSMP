@@ -1,4 +1,4 @@
-#include "FlowFunctions1.h"
+#include "CO2H2O_FunctionsModule1.h"
 #include "FlowFunctionsBC_Hysteretic.h"
 #include "Fluid.h"
 #include "ErrorHandler.h"
@@ -27,10 +27,13 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::Mobility( const  TARGET_PLACEMENT
 
   
  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::Mobility(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::Mobility(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::Mobility(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
   
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::Mobility(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
   
   
    
@@ -51,9 +54,13 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::Mobility_at( const  TARGET_PLACEM
     return User()->krn_at(p,sw) / User()->Viscosity( p, 1U );
  }
   
-  template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::Mobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
-  template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::Mobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
-  template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::Mobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::Mobility_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
   
 
 
@@ -73,9 +80,14 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::MobilityDerivative( const  TARGET
   }
   
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MobilityDerivative(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MobilityDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t , bool) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t , bool) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t , bool) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t , bool) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t , bool) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t , bool) const;
+
 
 
   /**
@@ -93,11 +105,14 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityDerivat
     return User()->dkrnds_at(p,sw) / User()->Viscosity( p, 1U );
   }
   
-   template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MobilityDerivative_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
-   template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MobilityDerivative_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
-   template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityDerivative_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
   
-  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityDerivative_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+
   
   
   
@@ -112,12 +127,13 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityDerivat
          + User()->krw(p) / User()->Viscosity( p, 0U );
  }
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::TotalMobility(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::TotalMobility(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::TotalMobility(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TotalMobility(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -132,11 +148,15 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::TotalMobility_at( const  TARGET_P
     return User()->krn_at(p,sw) / User()->Viscosity( p, 1U )
          + User()->krw_at(p,sw) / User()->Viscosity( p, 0U );
  }
-  
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::TotalMobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::TotalMobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&,  double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::TotalMobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&,  double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<2U,ELEMENT>&,  double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<3U,ELEMENT>&,  double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&,  double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TotalMobility_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&,  double64 ) const;
+
 
 
 
@@ -154,10 +174,14 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::MobilityProduct( const  TARGET_PL
     return Mobility(p,0U) * Mobility(p,1U) / TotalMobility(p);
  }
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MobilityProduct(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MobilityProduct(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityProduct(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProduct(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
 
 
 
@@ -187,13 +211,13 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::MobilityProductDerivative( const 
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
   }
   
-  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<1U,ELEMENT>&, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
 
-
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MobilityProductDerivative(  const  FiniteElementPlacement<1U,ELEMENT>&, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MobilityProductDerivative(  const  FiniteElementPlacement<2U,ELEMENT>&, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
-
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProductDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, bool ) const;
 
 
   
@@ -221,11 +245,13 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityProduct
     return ( dlwds*ln2 + dlnds*lw2 )/lt2;
   }
   
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
   
-  template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MobilityProductDerivative_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
   
   
 
@@ -247,13 +273,18 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::f( const  TARGET_PLACEMENT& p, si
     return Mobility( p, phase ) / TotalMobility(p);
   }
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::f(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::f(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::f(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::f(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 
   
-  /**
+  
+
+/**
 
 Computes the fractional flow of the wetting (phase=1) and non-wetting
 (phase=2) phases using prescribed sw value, instead of intepolated value.
@@ -266,11 +297,16 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::f_at( const  TARGET_PLACEMENT& p,
     assert( phase == 0U or phase == 1U );
     
     return Mobility_at( p, phase, sw) / TotalMobility_at(p, sw);
-  }
+ }
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::f_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::f_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::f_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::f_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+
 
   
 
@@ -281,11 +317,9 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::f_at(  const  F
 */
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::dfds( const  TARGET_PLACEMENT& p, size_t phase, bool evaluate_numerically ) const
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::dfds( const  TARGET_PLACEMENT& p, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-
-    if ( evaluate_numerically ) return dfds_Numerical(p,phase,true);
 
     const double64 lw  = User()->krw(p) / User()->Viscosity( p, 0U );
     const double64 ln  = User()->krn(p) / User()->Viscosity( p, 1U );
@@ -297,11 +331,15 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::dfds( const  TARGET_PLACEMENT& p,
     
     return ( dlwds*ln - dlnds*lw ) / lt2;
  }
-
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dfds(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t,  bool  ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dfds(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t,  bool  ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dfds(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t,  bool  ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t  ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t  ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t  ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t  ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t  ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t  ) const;
+
 
 
 
@@ -327,121 +365,46 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::dfds_at( const  TARGET_PLACEMENT&
     return ( dlwds*ln - dlnds*lw ) / lt2;
   }
   
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dfds_at(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dfds_at(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dfds_at(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-
-
-  
-  
-  
-  /*
-   @attension: Generally "MaxFractionalFlowDerivative" is not speed. It is after Buckley-Leverett problem
-   */
-  
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::MaxFractionalFlowDerivative( const  TARGET_PLACEMENT& p ) const
-  {
-    double64 S = InflectionPointSaturation(p);   // This is correct maximum fractional flow derivative of water phase.
-    
-    return dfds_at(p, S );
-  }
-  
-
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-
-
-
-  
-  // shock speed base on Buckley Leverett theory
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockSpeed( const  TARGET_PLACEMENT& p ) const
-  {
-    return ShockFrontVelocity(p) ;
-  }
-  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::ShockSpeed(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::ShockSpeed(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockSpeed(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-
-
-
-
-  
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockHeight( const TARGET_PLACEMENT& p ) const
-{
-  return TangentPointSaturation(p);
-}
-  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::ShockHeight(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::ShockHeight(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockHeight(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-  
-
-// same as above
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockSaturation( const TARGET_PLACEMENT& p, size_t phase, bool evaluate_numerically ) const
-{
-  if ( phase == 0 ) return TangentPointSaturation(p);
-  return 1. - TangentPointSaturation(p);
-}
-  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::ShockSaturation(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::ShockSaturation(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockSaturation(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_at(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 
   
   
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  void FlowFunctionsBC_Hysteretic<dim,USER>::ShockSpeedHeight( const TARGET_PLACEMENT& p, double64& speed, double64& height) const
-  {
-    height = ShockHeight(p) ;
-    speed  = ShockSpeed(p)  ;
-    
-  }
   
-  template void FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::ShockSpeedHeight(  const  FiniteElementPlacement<1U,ELEMENT>& , double64& , double64& ) const;
-  template void FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::ShockSpeedHeight(  const  FiniteElementPlacement<2U,ELEMENT>& , double64& , double64& ) const;
-  template void FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockSpeedHeight(  const  FiniteElementPlacement<3U,ELEMENT>& , double64& , double64& ) const;
-  
-  
-  
+
   
 /**
- fractional flow derivative for wetting phase = 0.
- 
- If not overloaded, this returns the derivative of the fractional flow
- function at the current saturation of the wetting phase (see Helmig, 1997,
- p. 108, eqn. 3.74, term 2 (first part).
+     fractional flow derivative for wetting phase = 0.
+     
+     If not overloaded, this returns the derivative of the fractional flow
+     function at the current saturation of the wetting phase (see Helmig, 1997,
+     p. 108, eqn. 3.74, term 2 (first part).
  */
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::AdvectionMultiplier( const  TARGET_PLACEMENT& p, bool evaluate_numerically ) const
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::AdvectionMultiplier( const  TARGET_PLACEMENT& p ) const
 {
-  return dfds(p,0U, evaluate_numerically );
+  return dfds( p, 0U );
 }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::AdvectionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>&, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::AdvectionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>&, bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>&, bool ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::AdvectionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
   
   
 /**
- k * delta_rho * g
+     k * delta_rho * g
  */
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
@@ -459,94 +422,70 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::GravityTerm( const TARGET_PLACEME
   return k_g_drho;
 }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<1U,NODE>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<2U,NODE>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<3U,NODE>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<1U,NODE>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<2U,NODE>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<3U,NODE>& ) const;
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>& ) const;
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityTerm(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityTerm(  const  FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>& ) const;
   
   
   
-  /**
-   See Sebastian Geiger's thesis (2004), closed form, i.e.
-   
-   G = lambda_overbar * k * delta_rho * g
-   */
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::GravityMultiplier_G( const TARGET_PLACEMENT& p ) const
-  {
-    return GravityTerm(p) * MobilityProduct(p);
-  }
+/**
+     See Sebastian Geiger's thesis (2004), closed form, i.e.
+ 
+     G = lambda_overbar * k * delta_rho * g
+ */
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::GravityMultiplier_G( const TARGET_PLACEMENT& p ) const
+{
+  return GravityTerm(p) * MobilityProduct(p);
+}
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityMultiplier_G(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityMultiplier_G(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-
-
-  
-  
-  /**
-   Computes multiplier for advection gravity coefficient. The divergence
-   lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
-   p. 108, eqn. 3.74, term 2 (second part).
-   */
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::GravityMultiplier_dGds( const  TARGET_PLACEMENT& p , bool evaluate_numerically ) const
-  {
-    return GravityTerm(p) * MobilityProductDerivative(p);
-  }
-  
-  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<1U,ELEMENT>& , bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<2U,ELEMENT>& , bool ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,ELEMENT>& , bool ) const;
-
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityMultiplier_G(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
   
   
+/**
+ Computes multiplier for advection gravity coefficient. The divergence
+ lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
+ p. 108, eqn. 3.74, term 2 (second part).
+ */
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::GravityMultiplier_dGds( const  TARGET_PLACEMENT& p ) const
+{
+  return GravityTerm(p) * MobilityProductDerivative(p);
+}
   
-  
-  /**
-   Returns the diffusion coefficient for the phase of interest. If not
-   overloaeded, the hydraulic conductivity is returned.
-   */
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::DiffusionMultiplier( const  TARGET_PLACEMENT& p, size_t phase ) const
-  {
-    assert( phase == 1U or phase == 0U );
-    
-    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(User()->key_k) / ( (phase==1U) ? User()->Viscosity( p, 0U ) : User()->Viscosity( p, 1U ) );
-  }
-  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::DiffusionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::DiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::DiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-
-
-//template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::DiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-//template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::DiffusionMultiplier( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-//template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::DiffusionMultiplier( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::GravityMultiplier_dGds(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
 
@@ -554,31 +493,58 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::DiffusionMultip
   
   
   
+/**
+ Returns the diffusion coefficient for the phase of interest. If not
+ overloaeded, the hydraulic conductivity is returned.
+ */
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::DiffusionMultiplier( const TARGET_PLACEMENT& p, size_t phase ) const
+{
+  assert( phase == 1U or phase == 0U );
   
-  
-  
-  
-  /**
-   See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
-   permeability in direction of flow  x  lambda_overbar  x pc-gradient.
-   */
-  template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 FlowFunctionsBC_Hysteretic<dim,USER>::CapillaryDiffusionMultiplier( const  TARGET_PLACEMENT& p ) const
-  {
-    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return p.Obtain(User()->key_k) * MobilityProduct(p) * User()->dpcds(p);
-  }
+  // TODO: Make sure that this is the permeability in the direction of the facet normal
+  return p.Obtain(User()->key_k) / ( (phase==1U) ? User()->Viscosity( p, 0U ) : User()->Viscosity( p, 1U ) );
+}
   
 
-//template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>& ) const;
-//template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>& ) const;
-//template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::CapillaryDiffusionMultiplier( FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::DiffusionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+/**
+ See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
+ permeability in direction of flow  x  lambda_overbar  x pc-gradient.
+ */
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::CapillaryDiffusionMultiplier( const  TARGET_PLACEMENT& p ) const
+{
+  // TODO: Make sure that this is the permeability in the direction of the facet normal
+  return p.Obtain(User()->key_k) * MobilityProduct(p) * User()->dpcds(p);
+}
+  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
 
 
   
@@ -598,9 +564,13 @@ template<size_t dim, template<size_t> class USER>
   }
   
  
-  template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-  template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-  template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+  template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
+  template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
+  template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
+ 
+  template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
+  template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
+  template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::CapillaryDiffusionMultiplier_Phase(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
 
   // linearized diffusion multiplier for large-timestep calculations
   /*
@@ -658,9 +628,14 @@ template<size_t dim, template<size_t> class USER>
     
   }
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dfds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dfds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dfds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, size_t, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t, double64 ) const;
+
 
 
 
@@ -682,9 +657,18 @@ template<size_t dim, template<size_t> class USER>
     return (dNumerator*Denumerator-dDenumerator*Numerator)/(Denumerator*Denumerator);
   }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dfds_at_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dfds_at_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dfds_at_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dfds_at_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
+
+
+
+
+
 
 
 template<size_t dim, template<size_t> class USER>
@@ -736,10 +720,13 @@ template<size_t dim, template<size_t> class USER>
 
 }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dGds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dGds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dGds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dGds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -752,9 +739,16 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::dlwds_Numerical( const  TARGET_PL
     return User()->dkrwds_Numerical( p, h ) / User()->Viscosity( p, 0U );
  }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dlwds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dlwds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dlwds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dlwds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+
+
+
 
 
 
@@ -768,9 +762,16 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::dlnds_Numerical( const  TARGET_PL
 
  }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::dlnds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::dlnds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::dlnds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::dlnds_Numerical(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
+
+
+
 
 
 
@@ -824,12 +825,14 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::InflectionPointSaturation( const 
     
     return S ;
 }
-
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::InflectionPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::InflectionPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::InflectionPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::InflectionPointSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
   
   
@@ -852,49 +855,28 @@ template<class TARGET_PLACEMENT>
 double64 FlowFunctionsBC_Hysteretic<dim,USER>::TangentPointSaturation( const TARGET_PLACEMENT& p ) const
   {
     
-    double64 Si = InflectionPointSaturation(p);
-    double64 Sf = 1-p.Obtain(User()->key_srCO2) ;
+    const double64 Si = InflectionPointSaturation(p);
+    const double64 Sf = 1-p.Obtain(User()->key_srCO2) ;
+    double64 St = FindRootSecantMethod(p,Si,Sf) ;
     
-    double64 St=FindRootSecantMethod(p,Si,Sf) ;
     St = std::min( std::max( St, 0. ), 1. );
     
     return  St;
     
 }
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::TangentPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::TangentPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::TangentPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
 
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TangentPointSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
   
   
   
   
-  
-  
-  
-/**
-
-  The Shock front wave calculated after estimation of tangent Saturation point.
-  
-*/
-
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockFrontVelocity( const TARGET_PLACEMENT& p ) const
-  {
-    
-    double64 S = TangentPointSaturation(p) ;
-    S = std::min( std::max( S, 0. ), 1. );
-    
-    return dfds_at(p, S);
-}
-  
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::ShockFrontVelocity( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::ShockFrontVelocity( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockFrontVelocity( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
-
-
   
   
   
@@ -912,15 +894,15 @@ template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::ShockFrontVeloc
 */
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
-double64 FlowFunctionsBC_Hysteretic<dim,USER>::BuckleyLeverettFunction( const TARGET_PLACEMENT& p, double64 S ) const
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::TangentOfFractionalFlowFunction( const TARGET_PLACEMENT& p, double64 S ) const
   {
      const double64 srH2O = p.Obtain(User()->key_srH2O);
      return dfds_at(p, S) - (f_at(p, 0U, S) - f_at(p, 0U, srH2O)) / (S - srH2O);
   }
   
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::BuckleyLeverettFunction( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const ;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::BuckleyLeverettFunction( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const ;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::BuckleyLeverettFunction( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const ;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const ;
 
 
   
@@ -946,8 +928,8 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::FindRootSecantMethod( const TARGE
 
     while ( abs(F1)>1e-10 ) {
       
-        F1 = BuckleyLeverettFunction(p, S1);
-        double64 F2 = BuckleyLeverettFunction(p, S2);
+        F1 = TangentOfFractionalFlowFunction(p, S1);
+        double64 F2 = TangentOfFractionalFlowFunction(p, S2);
         
         double64 NewPoint = S1 - F1*(S1-S2)/(F1-F2) ;
         
@@ -958,20 +940,115 @@ double64 FlowFunctionsBC_Hysteretic<dim,USER>::FindRootSecantMethod( const TARGE
     return  S1;
 }
 
-template double64 FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>::FindRootSecantMethod( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 )const ;
-template double64 FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>::FindRootSecantMethod( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const ;
-template double64 FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>::FindRootSecantMethod( const FiniteElementPlacement<3U,ELEMENT>&, double64 , double64 )const ;
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::FindRootSecantMethod( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 )const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::FindRootSecantMethod( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::FindRootSecantMethod( const FiniteElementPlacement<3U,ELEMENT>&, double64 , double64 )const ;
 
   
   
   
+/**
+ @attension: Generally "MaxFractionalFlowDerivative" is not speed. It is after Buckley-Leverett problem
+ */
+
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::MaxFractionalFlowDerivative( const  TARGET_PLACEMENT& p ) const
+{
+  double64 S = InflectionPointSaturation(p);   // This is correct maximum fractional flow derivative of water phase.
+  
+  return dfds_at(p, S );
+}
+  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::MaxFractionalFlowDerivative(  const  FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const;
+
+
+  
+/// shock speed base on Buckley Leverett theory
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockSpeed( const  TARGET_PLACEMENT& p ) const
+{
+  return ShockFrontVelocity(p) ;
+}
+  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::ShockSpeed(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::ShockSpeed(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::ShockSpeed(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+
+
+
+
+  
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockHeight( const TARGET_PLACEMENT& p ) const
+{
+  return TangentPointSaturation(p);
+}
+  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::ShockHeight(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::ShockHeight(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::ShockHeight(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
+  
+
+ 
+  
+  
+  
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+void FlowFunctionsBC_Hysteretic<dim,USER>::ShockSpeedAndHeight( const TARGET_PLACEMENT& p, double64& speed, double64& height) const
+{
+  height = ShockHeight(p) ;
+  speed  = ShockSpeed(p)  ;
+  
+}
+
+template void FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::ShockSpeedAndHeight(  const  FiniteElementPlacement<1U,ELEMENT>& , double64& , double64& ) const;
+template void FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::ShockSpeedAndHeight(  const  FiniteElementPlacement<2U,ELEMENT>& , double64& , double64& ) const;
+template void FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::ShockSpeedAndHeight(  const  FiniteElementPlacement<3U,ELEMENT>& , double64& , double64& ) const;
+  
+  
+
+
+
+/**
+
+  The Shock front wave calculated after estimation of tangent Saturation point.
+  
+*/
+
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+double64 FlowFunctionsBC_Hysteretic<dim,USER>::ShockFrontVelocity( const TARGET_PLACEMENT& p ) const
+  {
+    
+    double64 S = TangentPointSaturation(p);
+    S = std::min( std::max( S, 0. ), 1. );
+    
+    return dfds_at(p, S);
+}
+  
+template double64 FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>::ShockFrontVelocity( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>::ShockFrontVelocity( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
+template double64 FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>::ShockFrontVelocity( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+
+  
+  
   
 
   
 
-template class FlowFunctionsBC_Hysteretic<1U,FlowFunctions1>;
-template class FlowFunctionsBC_Hysteretic<2U,FlowFunctions1>;
-template class FlowFunctionsBC_Hysteretic<3U,FlowFunctions1>;
+template class FlowFunctionsBC_Hysteretic<1U,CO2H2O_FunctionsModule1>;
+template class FlowFunctionsBC_Hysteretic<2U,CO2H2O_FunctionsModule1>;
+template class FlowFunctionsBC_Hysteretic<3U,CO2H2O_FunctionsModule1>;
 
 
 } // end namespace csmp

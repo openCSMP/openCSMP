@@ -76,7 +76,7 @@ class FlowFunctionsBC_Hysteretic {
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
     template<class TARGET_PLACEMENT>
-    double64 dfds(  const TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
+    double64 dfds(  const TARGET_PLACEMENT&, size_t phase ) const;
     
     template<class TARGET_PLACEMENT>
     double64 dfds_at( const TARGET_PLACEMENT&, double64 sw ) const;
@@ -87,24 +87,20 @@ class FlowFunctionsBC_Hysteretic {
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     template<class TARGET_PLACEMENT>
-   	double64 AdvectionMultiplier(  const TARGET_PLACEMENT&, bool evaluate_numerically=false ) const;
+   	double64 AdvectionMultiplier(  const TARGET_PLACEMENT& ) const;
 
-    /// output Shock Speed
+    /// outputs the shock wave celerity
     template<class TARGET_PLACEMENT>
     double64 ShockSpeed(  const TARGET_PLACEMENT& ) const;
     
-    /// outputs the water saturation at the shock front
+    /// outputs the water saturation at the non-wetting phase shock front
     template<class TARGET_PLACEMENT>
     double64 ShockHeight( const TARGET_PLACEMENT& ) const;
     
     /// calculated shock height and speed
     template<class TARGET_PLACEMENT>
-    void     ShockSpeedHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
+    void     ShockSpeedAndHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
     
-    /// outputs the saturation of the desired phase at the shock front
-    template<class TARGET_PLACEMENT>
-    double64 ShockSaturation( const TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
-
     /// multipliers for gravity-driven flow (advection multiplier and source term)
     template<class TARGET_PLACEMENT>
     double64 GravityTerm(  const TARGET_PLACEMENT& ) const;
@@ -113,7 +109,7 @@ class FlowFunctionsBC_Hysteretic {
     double64 GravityMultiplier_G(  const TARGET_PLACEMENT& ) const;
     
     template<class TARGET_PLACEMENT>
-    double64 GravityMultiplier_dGds(  const TARGET_PLACEMENT&, bool evaluate_numerically=false ) const;
+    double64 GravityMultiplier_dGds(  const TARGET_PLACEMENT& ) const;
 
     /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase)
     template<class TARGET_PLACEMENT>
@@ -130,11 +126,6 @@ class FlowFunctionsBC_Hysteretic {
     template<class TARGET_PLACEMENT>
     double64 ShockFrontVelocity( const TARGET_PLACEMENT& ) const ;
     
-           
-  private:
-    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
-    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-      
     template<class TARGET_PLACEMENT>
     double64 dfds_Numerical(  const TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
       
@@ -150,6 +141,11 @@ class FlowFunctionsBC_Hysteretic {
     template<class TARGET_PLACEMENT>
     double64 dlnds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.001 ) const;
 
+           
+  private:
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+      
     // NON-STANDARD INTERFACES
 
     /// calculating the  Inflection point
@@ -162,12 +158,11 @@ class FlowFunctionsBC_Hysteretic {
     
     /// calculating  Buckley Leverett function... this has to be zero at shock point
     template<class TARGET_PLACEMENT>
-    double64 BuckleyLeverettFunction( const TARGET_PLACEMENT&, double64 S) const ;
+    double64 TangentOfFractionalFlowFunction( const TARGET_PLACEMENT&, double64 S) const ;
     
     /// finding root of  Buckley Leverett function... which results is shock point saturation.
     template<class TARGET_PLACEMENT>
     double64 FindRootSecantMethod( const TARGET_PLACEMENT&, double64 S1, double64 S2) const ;
-
 };
 
 } // end csmp

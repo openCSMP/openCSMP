@@ -3,7 +3,7 @@
 #include "Model.h"
 #include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
-#include "FlowFunctions1.h"
+#include "CO2H2O_FunctionsModule1.h"
 #if defined(_OPENMP)
 #include "omp.h"
 #endif
@@ -32,7 +32,7 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       relaxing_factor_(10.)
 {
     m.InstantiateFiniteVolumes();
-    initializeVariablsAndKeys(m);
+    InitializeVariablesAndKeys(m);
 
 // TODO: perhaps only where you have to    calculatePermeabilityProjections(m.Region(target_region));
   
@@ -63,7 +63,7 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       relaxing_factor_(relaxing_factor)
 {
     m.InstantiateFiniteVolumes();
-    initializeVariablsAndKeys(m);
+    InitializeVariablesAndKeys(m);
 
 // TODO: perhaps only where you have to        calculatePermeabilityProjections(m.Region(target_region));
   
@@ -78,7 +78,7 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
   
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeVariablsAndKeys(Model<dim>& m)
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<dim>& m)
 {
     //creating new variables if not defined yet from input file
     if(!m.Database().IsDefined("variation rate nonwetting phase")) m.CreateProperty( "variation rate nonwetting phase", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
@@ -283,6 +283,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ResetCFLMultiplier()
 
 
 //Compute non-wetting phase saturaiton gradient
+// TODO: super expensive approach - use values from neighboring nodes 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeSaturationGradient (Event<dim>* event )
 {
@@ -811,12 +812,12 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
             (*nit)->Store( key_time, arrayVariable );  
             
             auto np=(*nit)->AtNode();
+            //compute wetting phase saturation at shock (expensive)
+            const double64 sw_shock = flowfunctions_.ShockHeight(np);
             //compute non-wetting phase saturation at shock
-            double64 sn_shock = flowfunctions_.ShockSaturation(np,1U,false);
-            (*nit)->Store( key_ssn, makeScalar( (*nit)->Status( key_ssn), sn_shock ) );
-            //compute wetting phase saturation at shock
-            double64 sw_shock = flowfunctions_.ShockSaturation(np,0U,false);
+            double64 sn_shock  = 1. - sw_shock;
             (*nit)->Store( key_ssw, makeScalar( (*nit)->Status( key_ssw), sw_shock ) );
+            (*nit)->Store( key_ssn, makeScalar( (*nit)->Status( key_ssn), sn_shock ) );
                    
             if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
                 (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
@@ -1180,13 +1181,13 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
 
 
 
-template class TwoPhaseDESTransport<1U,FlowFunctions1>;
-template class TwoPhaseDESTransport<2U,FlowFunctions1>;
-template class TwoPhaseDESTransport<3U,FlowFunctions1>;
+template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>;
 
-template class TwoPhaseDESTransport<1U,FlowFunctions2>;
-template class TwoPhaseDESTransport<2U,FlowFunctions2>;
-template class TwoPhaseDESTransport<3U,FlowFunctions2>;
+template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule2>;
 
 } // end csmp 
 
