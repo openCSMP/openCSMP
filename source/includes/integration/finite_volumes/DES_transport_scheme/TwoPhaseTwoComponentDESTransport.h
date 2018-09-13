@@ -3,30 +3,28 @@
 
 #include "FibonacciHeap.h"
 #include "TwoPhaseDESTransport.h"
-#include "CO2H2O_FunctionsModule1.h"
 
 namespace csmp {
 
-template<size_t dim>
-class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim,CO2H2O_FunctionsModule1> {
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNCTIONS> {
 
   public:
     TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
-                                       const char* target_region,
-                                       bool with_capillary_spreading,
-                                       bool with_gravity_forces,
-                                       double64 PEP_multiplier, 
-                                       double64 cfl_multiplier);
-  
+                           const char* target_region, 
+                           bool with_capillary_spreading, 
+                           bool with_gravity_forces,
+                           double64 PEP_multiplier, 
+                           double64 cfl_multiplier);
+                           
     TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
-                                       const char* target_region,
-                                       bool with_capillary_spreading, 
-                                       bool with_gravity_forces, 
-                                       double64 PEP_multiplier,
-                                       double64 cfl_multiplier, 
-                                       double64 relaxing_factor);    
+                           const char* target_region, 
+                           bool with_capillary_spreading, 
+                           bool with_gravity_forces, 
+                           double64 PEP_multiplier,
+                           double64 cfl_multiplier, 
+                           double64 relaxing_factor);    
   
-    
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
     virtual void InitializeVariablesAndKeys(Model<dim>& m);

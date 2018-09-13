@@ -16,7 +16,7 @@ CO2H2O_FunctionsModule1<dim>::CO2H2O_FunctionsModule1( const PropertyDatabase<di
 template<size_t dim>
 CO2H2O_FunctionsModule2<dim>::CO2H2O_FunctionsModule2( const PropertyDatabase<dim>& db )
  : variables::VariableSet_CO2GeoSequestration(db)
-//   ExperimentalSaturationFunctions<dim,FlowFunctions2>("rocktypes")
+//   ExperimentalSaturationFunctions<dim,CO2H2O_FunctionsModule2>("rocktypes")
  {
  }
 

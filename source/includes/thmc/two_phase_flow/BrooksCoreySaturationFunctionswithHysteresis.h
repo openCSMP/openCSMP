@@ -211,7 +211,68 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     
     ArrayVariable  ac_params_;
 };
+
+
+// INLINE METHODS
+
+template<size_t dim, template<size_t> class USER>
+  template<class TARGET_PLACEMENT>
+inline double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation( const TARGET_PLACEMENT& p ) const
+  {
+    double64 seff =  (p.Obtain(User()->key_sH2O) - p.Obtain(User()->key_srH2O)) /
+    (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2));
+    
+    return std::min( std::max( seff, 0. ), 1. );
+  }
+
+
+
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+inline double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( const TARGET_PLACEMENT& p, double64 sw ) const
+  {
+    double64 seff =  (sw - p.Obtain(User()->key_srH2O)) /
+    (1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2));
+    
+    return std::min( std::max( seff, 0. ), 1. );
+  }
+
+
+
+/**
+   
+  Oil residual saturation has been estimated from Land's formula based on the initial oil saturations.
   
+*/
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+inline double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSaturation( const TARGET_PLACEMENT& p) const
+  {
+    return 1./(C_land_+1./p.Obtain(User()->key_sCO2)) ;
+}
+
+
+/**
+ 
+    Check whether the process is imbibition or drainage.
+ 
+*/
+template<size_t dim, template<size_t> class USER>
+template<class TARGET_PLACEMENT>
+inline TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const TARGET_PLACEMENT& p )
+  {
+    double64 S_old = p.Obtain(User()->key_sCO2);    // the old saturation at Barycenter
+    double64 S_new = p.Obtain(User()->key_sCO2_1);  // the new saturation at Barycenter
+    
+    if (S_old > S_new) return IMBIBITION;
+    
+    if (S_old < S_new) return DRAINAGE;
+   
+   return DRAINAGE;
+    
+} // end FlowProcess
+
+
   
 }  // end namespace csmp
 

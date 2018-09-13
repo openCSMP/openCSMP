@@ -813,7 +813,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
             
             auto np=(*nit)->AtNode();
             //compute wetting phase saturation at shock (expensive)
-            const double64 sw_shock = flowfunctions_.ShockHeight(np);
+            const double64 sw_shock = 0.3; // TODO: SKM_FIX - shock-height makes only sense for an Element not for a FV:  flowfunctions_.ShockHeight(np);
             //compute non-wetting phase saturation at shock
             double64 sn_shock  = 1. - sw_shock;
             (*nit)->Store( key_ssw, makeScalar( (*nit)->Status( key_ssw), sw_shock ) );
@@ -1178,7 +1178,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
     cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;
 } 
 #endif
-
 
 
 template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule1>;

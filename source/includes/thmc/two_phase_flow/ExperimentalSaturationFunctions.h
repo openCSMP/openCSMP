@@ -33,7 +33,6 @@ class ExperimentalSaturationFunctions {
     template<class TARGET_PLACEMENT>
     double64 dpcds( const TARGET_PLACEMENT& )  const ;
   
-  
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
     template<class TARGET_PLACEMENT>
     double64 krw( const TARGET_PLACEMENT& ) const ;

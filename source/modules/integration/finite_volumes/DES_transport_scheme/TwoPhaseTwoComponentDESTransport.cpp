@@ -7,14 +7,14 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
-TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
-                                                                         const char* target_region,
-                                                                         bool with_capillary_spreading,
-                                                                         bool with_gravity_forces,
-                                                                         double64 PEP_multiplier,
-                                                                         double64 cfl_multiplier)
-    : TwoPhaseDESTransport<dim,CO2H2O_FunctionsModule1>(m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
+                                                 const char* target_region, 
+                                                 bool with_capillary_spreading, 
+                                                 bool with_gravity_forces,
+                                                 double64 PEP_multiplier,
+                                                 double64 cfl_multiplier)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier) 
 {
     InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );
@@ -23,15 +23,19 @@ TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<d
 } // end constructor  
 
 
-template<size_t dim>
-TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
-                                                                         const char* target_region,
-                                                                         bool with_capillary_spreading,
-                                                                         bool with_gravity_forces,
-                                                                         double64 PEP_multiplier,
-                                                                         double64 cfl_multiplier,
-                                                                         double64 relaxing_factor)
-    : TwoPhaseDESTransport<dim,CO2H2O_FunctionsModule1>(m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
+
+
+
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseTwoComponentDESTransport( Model<dim>& m, 
+                                                 const char* target_region, 
+                                                 bool with_capillary_spreading, 
+                                                 bool with_gravity_forces,
+                                                 double64 PEP_multiplier,
+                                                 double64 cfl_multiplier,
+                                                 double64 relaxing_factor)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
     InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );
@@ -41,8 +45,10 @@ TwoPhaseTwoComponentDESTransport<dim>::TwoPhaseTwoComponentDESTransport( Model<d
 
   
 
-template<size_t dim>
-void TwoPhaseTwoComponentDESTransport<dim>::InitializeVariablesAndKeys(Model<dim>& m)
+
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<dim>& m)
 {
     if(!m.Database().IsDefined("component mass variation rates array")) m.CreateProperty( "component mass variation rates array", "kg/s", ARRAY, NODE, 2, -1.00E+10,1.00E+10);   
     this->key_components = INDEX<ARRAY,NODE>( m.Database().StorageKey("component mass variation rates array") );
@@ -62,8 +68,8 @@ void TwoPhaseTwoComponentDESTransport<dim>::InitializeVariablesAndKeys(Model<dim
 
 
 //Compute the rate of change of non-wetting phase in a node/FV, as well as the mass variation rate for each of components
-template<size_t dim>
-void TwoPhaseTwoComponentDESTransport<dim>::ComputeRateofChange( Event<dim>* event )
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
@@ -269,8 +275,8 @@ void TwoPhaseTwoComponentDESTransport<dim>::ComputeRateofChange( Event<dim>* eve
 
 
 //update solution and check it against the specified range (with DES). Also update mass fraction of each
-template<size_t dim>
-void TwoPhaseTwoComponentDESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double64 t_clock)
 {
     this->update_count_++;//recording
     Node<dim>* nd = event->getNode();
@@ -339,8 +345,8 @@ void TwoPhaseTwoComponentDESTransport<dim>::Update_DES(Event<dim>* event, double
 
 
 //update solution and check it against the specified range (with TDS)
-template<size_t dim>
-void TwoPhaseTwoComponentDESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double64 delta_t)
 {
     this->update_count_++;//recording
     Node<dim>* nd = event->getNode();
@@ -397,9 +403,14 @@ void TwoPhaseTwoComponentDESTransport<dim>::Update_TDS(Event<dim>* event, double
 }
 
 
-template class TwoPhaseTwoComponentDESTransport<1U>;
-template class TwoPhaseTwoComponentDESTransport<2U>;
-template class TwoPhaseTwoComponentDESTransport<3U>;
+
+template class TwoPhaseTwoComponentDESTransport<1U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseTwoComponentDESTransport<3U,CO2H2O_FunctionsModule1>;
+
+template class TwoPhaseTwoComponentDESTransport<1U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseTwoComponentDESTransport<3U,CO2H2O_FunctionsModule2>;
 
 } // end csmp 
 

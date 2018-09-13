@@ -94,12 +94,12 @@ void DESTwoPhaseFlow2D_Example::Run()
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    FlowFunctions<2U> flowfunctions(model.Database());
-    TwoPhaseDESTransport<2U>* DEStransport;
+    FlowFunctions2<2U> flowfunctions(model.Database());
+    TwoPhaseDESTransport<2U,FlowFunctions2>* DEStransport;
     if (!multi_component)
-      DEStransport = new TwoPhaseDESTransport<2U>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseDESTransport<2U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
     else 
-      DEStransport = new TwoPhaseTwoComponentDESTransport<2U>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier); 
+      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier); 
 
     computeTotalMobility( model, flowfunctions );
 
@@ -243,7 +243,7 @@ void DESTwoPhaseFlow2D_Example::Run()
 } // Run()
 
 
-void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFunctions<2U>& flowfunctions )
+void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFunctions2<2U>& flowfunctions )
  {
      
     static const Region<2U>& mref = mdl.Region("Model"); 

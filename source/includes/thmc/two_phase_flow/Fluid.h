@@ -80,11 +80,11 @@ class Fluid {
   
     /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
     template<class TARGET_PLACEMENT>
-    double64 Viscosity( const TARGET_PLACEMENT&, size_t phase=0 ) const;
+    double64 Viscosity( const TARGET_PLACEMENT&, size_t phase ) const;
 
     /// the returned node property fluid density (of phase) has been interpolated to the user-specified target placement (argument parameter)
     template<class TARGET_PLACEMENT>
-    double64 Density( const TARGET_PLACEMENT&, size_t phase=0 ) const;
+    double64 Density( const TARGET_PLACEMENT&, size_t phase ) const;
 
     /// returns saturation-weighted density of the fluid mixture interpolated to the target placement
     template<class TARGET_PLACEMENT>

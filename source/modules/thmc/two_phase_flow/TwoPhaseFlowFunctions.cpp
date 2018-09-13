@@ -1,21 +1,11 @@
-#include "CO2H2O_FunctionsModule1.h"
 #include "TwoPhaseFlowFunctions.h"
-#include "ErrorHandler.h"
-#include "CSMP_physical_constants.h"
-#include "FiniteElementPlacement.h"
-//#include "FiniteVolumePlacement.h"
+#include "CO2H2O_FunctionsModule1.h"
+#include "Element.h"
 
 using namespace std;
 
 namespace csmp {
-  
 
-
-/**
-
- The Buckley- Leverett slope see Eq. 1.86 in page 44 from Guinot book.
-  
-*/
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const TARGET_PLACEMENT& p, double64 S ) const
@@ -23,7 +13,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const
      const double64 srH2O = p.Obtain(User()->key_srH2O);
      return dfds_at(p, S) - (f_at(p, 0U, S) - f_at(p, 0U, srH2O)) / (S - srH2O);
   }
-  
+ 
 template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,NODE>&, double64 ) const ;
 template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,NODE>&, double64 ) const ;
 template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,NODE>&, double64 ) const ;
@@ -35,6 +25,7 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFr
 template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const ;
 template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const ;
 template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const ;
+
 
 
 
@@ -74,6 +65,7 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSec
 template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
 template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
 template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
+
 
 
 
@@ -177,6 +169,7 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentPoin
 
 
 
+
 template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const TARGET_PLACEMENT& p ) const
@@ -189,7 +182,7 @@ template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockHeight
 template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockHeight(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
   
 
- 
+
 /**
 
   The Shock front wave calculated after estimation of tangent Saturation point.
@@ -200,7 +193,6 @@ template<size_t dim, template<size_t> class USER>
 template<class TARGET_PLACEMENT>
 double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const TARGET_PLACEMENT& p ) const
   {
-    
     double64 S = TangentPointSaturation(p);
     S = std::min( std::max( S, 0. ), 1. );
     
@@ -210,6 +202,8 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const TARGET_PLACE
 template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
 template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
 template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
+
+
 
 
 
@@ -239,20 +233,13 @@ void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( const TARGET_PLACEMEN
 {
   height = ShockHeight(p) ;
   speed  = ShockSpeed(p)  ;
-  
 }
 
 template void TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<1U,ELEMENT>& , double64& , double64& ) const;
 template void TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<2U,ELEMENT>& , double64& , double64& ) const;
 template void TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<3U,ELEMENT>& , double64& , double64& ) const;
-  
-  
 
 
-
-  
-  
-  
 
 
 
