@@ -55,22 +55,22 @@ double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      double64 dt_min(max_time_increment);
 
      // 1. processing interior and FVs for which all facet fluxes have been initialised
-     auto interior_nodes_end(gref_.InteriorNodesEnd());
-     for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
+     const typename vector<Node<dim>*>::iterator interior_nodes_end(gref_.PerimeterNodesBegin());
+     for ( typename vector<Node<dim>*>::iterator nit=gref_.NodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( **nit );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit );
           dt_min = std::min( dt_min, time_increment );
        }
 
      // 2. collecting time-stepping constraints from FVs on region perimeter
-     const typename vector<Node<dim>*>::const_iterator nodes_end(gref_.PerimeterNodesEnd());
-     for ( typename vector<Node<dim>*>::const_iterator
+     const typename vector<Node<dim>*>::iterator nodes_end(gref_.PerimeterNodesEnd());
+     for ( typename vector<Node<dim>*>::iterator
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( **nit ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit ) );
        }
 
     return dt_min;
@@ -113,7 +113,7 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
-        auto n = (*nit)->AtNode();
+        auto n = *(*nit);
         
         // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
         const double64 c0 = n.Read(this->key_C);
@@ -157,25 +157,30 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
 template<size_t dim>
 void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval )
  {
-    const auto nodes_end(gref_.PerimeterNodesEnd());
-    for ( auto nit = gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
+    const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
+    for ( typename vector<Node<dim>*>::iterator nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
       {
-          auto n = (*nit)->AtNode();
-
           double64 div(0.);
+          // for each finite volume, f is evaluated on a sector by sector basis
+          const size_t parents((*nit)->Parents());
+          for ( size_t t=0U; t<parents; t++ ) {
+               Element<dim>* const eptr((*nit)->Parent(t));
+               const size_t nid((*nit)->ParentNodeNumber(t));
 
-          for (auto fip : n.AllFacetIntegrationPoints()) {
-            const double64 velo = fip.ProjectOntoFacetNormal( this->key_V );
-            if ( fip.FromInside() )
-              div += velo;
-            else
-              div -= velo;
+               // for all FACETS per SECTOR surrounding the finite volume at the boundary
+               for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
+                    size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
+                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
+                    if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
+                    else div -= velo;
+                }
            }
-        ScalarVariable result;
-        n.Read(this->key_NC, result);
-        result() += div;
-        n.Store( this->key_NC, result );
+          ScalarVariable result( makeScalar( (*nit)->Status(this->key_NC), (*nit)->Read(this->key_NC) ) );
+          result += div;
+          (*nit)->Store( this->key_NC, result );
+      
       } // end for cycle for nodes
+
 } // end AdjustResultsAssumingDivergenceFreeVelocityField
 
 
@@ -199,7 +204,8 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
 
     const auto nodes_end(gref_.NodesEnd());
     for ( auto nit = gref_.NodesBegin(); nit != nodes_end; ++nit) {
-        auto n = (*nit)->AtNode();
+          auto n = *(*nit);
+
           const VARIABLE_FLAG status(n.Status( this->key_C ));
           if ( status != DIRICH )
             {

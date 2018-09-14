@@ -386,6 +386,37 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
   }
 
 
+
+// scalar version of previous method
+template<size_t dim, template<size_t> class SIMPLEX>
+double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt( const csmp::Index& idx,
+                                                            const std::vector<double64>& xyz ) const
+  {
+    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE ) {
+         return eptr->Read( idx );
+    }
+    if ( idx.place != NODE ) {
+       std::cerr <<"\nFiniteElementPolicy<"<< dim;
+       std::cerr <<">::PropertyValueAt: This method only interpolates the ";
+       std::cerr <<"values of NODE properties."<< std::endl;
+       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAt");
+    }
+
+    assert( fptr_ != nullptr );
+    CoordinateMatrix();
+    fptr_->N( fptr_->NRST, xyz );
+
+    double64 var(0.);
+    const size_t  n_nodes(fptr_->Nodes());
+    for ( size_t i=0U; i<n_nodes; i++ )
+       var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
+
+    return var;
+}
+
+
 /**
 
 Node variables are interpolated to barycenter.
@@ -450,6 +481,61 @@ void FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::In
        var += temp * fptr_->NRST[i];
     }
   }
+
+
+
+
+template<size_t dim, template<size_t> class SIMPLEX>
+double64 FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter( const csmp::Index& idx ) const
+  {
+    const SIMPLEX<dim>* eptr( static_cast<const SIMPLEX<dim>*>(this) );
+    assert( fptr_ != nullptr );
+
+    if ( idx.place == ELEMENT or idx.place == FACE or idx.place == INTER_FACE )  return eptr->Read( idx );
+
+    if ( idx.place != NODE  and idx.place != ELEMENT_INTEGRATION_POINT and idx.place != SECTOR_INTEGRATION_POINT) {
+       std::cerr <<"\nFiniteElementPolicy<"<< dim;
+       std::cerr <<">::PropertyValueAtBaryCenter: This method only interpolates the ";
+       std::cerr <<"values of NODE properties."<< std::endl;
+       std::cerr <<"values of ELEMENT_INTEGRATION_POINT properties are averaged."<< std::endl;
+       throw std::domain_error("FiniteElementPolicy<dim,SIMPLEX>::PropertyValueAtBaryCenter");
+    }
+
+    double64 var(0.);
+
+    // simple averaging of integration point properties
+    if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
+       const size_t n_integration_points(IntegrationPoints());
+       for ( size_t i=0U; i < n_integration_points; i++ ) {
+            var += eptr->Read( i, idx );
+         }
+       var /= static_cast<double64>(fptr_->IntegrationPoints());
+       return var;
+    }
+    if ( idx.place == SECTOR_INTEGRATION_POINT ) {
+       const size_t n_sector_integration_points(eptr->FV()->Sectors());
+       for ( size_t i=0U; i < n_sector_integration_points; i++ ) {
+            var += eptr->Read( i, 0U, idx );
+         }
+       var /= static_cast<double64>(n_sector_integration_points);
+       return var;
+    }
+
+    if ( !fptr_->UsesLocalCoordinates() ) CoordinateMatrix();
+    fptr_->N_AtBaryCenter( fptr_->NRST );
+
+    const size_t  n_nodes(fptr_->Nodes());
+    for ( size_t i=0U; i<n_nodes; i++ ) {
+       var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
+    }
+    
+    return var;
+    
+  } // end scalar version
+
+
+
+
 
 /**
 Interpolates node properties to the integration points.

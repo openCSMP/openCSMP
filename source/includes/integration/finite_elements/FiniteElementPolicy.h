@@ -73,11 +73,16 @@ class FiniteElementPolicy {
     template<class Var>
     void       PropertyValueAt( const csmp::Index&,
                                 const std::vector<double64>& xyz, Var& ) const;
-
+    /// scalar version
+    double64   PropertyValueAt( const csmp::Index&, const std::vector<double64>& xyz ) const;
+  
     /// returns the value of any property interpolated to the element's center of gravity
     template<class Var>
     void       PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
 
+    /// scalar version
+    double64   PropertyValueAtBaryCenter( const csmp::Index& ) const;
+  
     /// returns the value of any property interpolated to the integration point of interest
     template<class Var>
     void       PropertyValueAtIntegrationPoint( const csmp::Index&, size_t integration_point, Var& ) const;

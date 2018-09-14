@@ -55,12 +55,12 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      double64 dt_min(max_time_increment);
  
      // 1. processing interior and FVs for which all facet fluxes have been initialised
-     auto interior_nodes_end(gref_.InteriorNodesEnd());
+     auto interior_nodes_end(gref_.PerimeterNodesBegin());
      for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( **nit );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -70,7 +70,7 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( **nit ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit ) );
        }
    
     return dt_min;

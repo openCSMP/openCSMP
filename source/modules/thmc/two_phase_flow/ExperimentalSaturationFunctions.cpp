@@ -1,8 +1,7 @@
 
 #include "ExperimentalSaturationFunctions.h"
 #include "CO2H2O_FunctionsModule1.h"
-#include "FiniteElementPlacement.h"
-#include "FiniteVolumePlacement.h"
+#include "Element.h"
 
 using namespace std;
 
@@ -100,27 +99,18 @@ ExperimentalSaturationFunctions<dim,USER>::ExperimentalSaturationFunctions( cons
   // Numerical derivative added
   
   template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const TARGET_PLACEMENT& p, double64 h ) const
+  double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
   {
-    const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
-    const double64 seff(EffectiveSaturation(p));
+    const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
+    const double64 seff(EffectiveSaturation(e));
     
     if ( seff < 0.+h )
-      return ( this->krw_at(p,seff + h) - this->krw_at(p,seff) ) / h * dSedSw;
+      return ( this->krw_at( e, seff + h) - this->krw_at( e, seff) ) / h * dSedSw;
     if ( seff > 1.-h )
-      return ( this->krw_at(p,seff) - this->krw_at(p,seff - h)) / h * dSedSw;
+      return ( this->krw_at( e, seff) - this->krw_at( e, seff - h)) / h * dSedSw;
     
-    return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
+    return ( this->krw_at( e, seff + h) - this->krw_at( e, seff - h) ) / (2. * h) * dSedSw;
   }
-  
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-  
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrwds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
   
   
   
@@ -130,30 +120,18 @@ ExperimentalSaturationFunctions<dim,USER>::ExperimentalSaturationFunctions( cons
   
   
   template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( const TARGET_PLACEMENT& p, double64 sw, double64 h ) const
+  double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
   {
-    const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
-    const double64 seff(EffectiveSaturation_at(p,sw));
+    const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
+    const double64 seff(EffectiveSaturation_at( e, sw));
     
     if ( seff < 0.+h )
-      return ( this->krw_at(p,seff + h) - this->krw_at(p,seff) ) / h * dSedSw;
+      return ( this->krw_at( e, seff + h) - this->krw_at( e, seff) ) / h * dSedSw;
     if ( seff > 1.-h )
-      return ( this->krw_at(p,seff) - this->krw_at(p,seff - h)) / h * dSedSw;
+      return ( this->krw_at( e, seff) - this->krw_at( e, seff - h)) / h * dSedSw;
     
-    return ( this->krw_at(p,seff + h) - this->krw_at(p,seff - h) ) / (2. * h) * dSedSw;
+    return ( this->krw_at( e, seff + h) - this->krw_at( e, seff - h) ) / (2. * h) * dSedSw;
   }
-  
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
-  
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrwds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64  ) const;
- 
-  
-  
   
   
   
@@ -165,72 +143,213 @@ ExperimentalSaturationFunctions<dim,USER>::ExperimentalSaturationFunctions( cons
   
   
   template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( const TARGET_PLACEMENT& p, double64 h ) const
+  double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( const Element<dim>* const e, double64 h ) const
   {
-    const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
-    const double64 seff(EffectiveSaturation(p));
+    const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
+    const double64 seff(EffectiveSaturation(e));
     
     if ( seff < 0.+h )
-      return ( this->krn_at(p,seff + h) - this->krn_at(p,seff) ) / h * dSedSw;
+      return ( this->krn_at( e, seff + h) - this->krn_at( e, seff) ) / h * dSedSw;
     if ( seff > 1.-h )
-      return ( this->krn_at(p,seff) - this->krn_at(p,seff - h)) / h * dSedSw;
+      return ( this->krn_at( e, seff) - this->krn_at( e, seff - h)) / h * dSedSw;
     
-    return ( this->krn_at(p,seff + h) - this->krn_at(p,seff - h) ) / (2. * h) * dSedSw;
+    return ( this->krn_at( e, seff + h) - this->krn_at( e, seff - h) ) / (2. * h) * dSedSw;
   }
   
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-  
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrnds_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const;
- 
   
   
   
   
-  
-  
-  
-  
-  
-  
-  
+
   
   
   
   template<size_t dim, template<size_t> class USER>
-  template<class TARGET_PLACEMENT>
-  double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at_Numerical( const TARGET_PLACEMENT& p, double64 sw, double64 h ) const
+  double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
   {
-    const double64 dSedSw(1./(1. - p.Obtain(User()->key_srH2O) - p.Obtain(User()->key_srCO2)));
-    const double64 seff(EffectiveSaturation_at(p,sw));
+    const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
+    const double64 seff(EffectiveSaturation_at( e, sw));
     
     if ( seff < 0.+h )
-      return ( this->krn_at(p,seff + h) - this->krn_at(p,seff) ) / h * dSedSw;
+      return ( this->krn_at( e, seff + h) - this->krn_at( e, seff) ) / h * dSedSw;
     if ( seff > 1.-h )
-      return ( this->krn_at(p,seff) - this->krn_at(p,seff - h)) / h * dSedSw;
+      return ( this->krn_at( e, seff) - this->krn_at( e, seff - h)) / h * dSedSw;
     
-    return ( this->krn_at(p,seff + h) - this->krn_at(p,seff - h) ) / (2. * h) * dSedSw;
+    return ( this->krn_at( e, seff + h) - this->krn_at( e, seff - h) ) / (2. * h) * dSedSw;
   }
   
   
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,ELEMENT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,ELEMENT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,ELEMENT>&, double64, double64  ) const;
   
-  template double64 ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64, double64 ) const;
-  template double64 ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>::dkrnds_at_Numerical( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64, double64  ) const;
+  
+  
+// INLINE FUNCTIONS
+  
+template<size_t dim, template<size_t> class USER>
+size_t ExperimentalSaturationFunctions<dim,USER>::RockType( const Element<dim>* const e ) const
+ {
+    const size_t rocktype = static_cast<size_t>(e->Read( User()->key_RRT ));
+    assert( rocktype < 254 );
+    return rocktype;
+ }
+
+
+
+
+
+
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( const Element<dim>* const e ) const
+{
+  double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+
+  double64 seff = (sw - e->Read(User()->key_srH2O)) /
+                  (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+  
+  return std::min( std::max( seff, 0. ), 1. );
+}
+  
+  
+  
+
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at( const Element<dim>* const e, double64 sw ) const
+  {
+    double64 seff = (sw - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    
+    return std::min( std::max( seff, 0. ), 1. );
+  }
+  
+
+
+/**
+    TODO: capillary pressure also exists outside of the effective saturation range
+*/
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::pc( const Element<dim>* const e )
+{
+    return pc_[ RockType(e) ].Value( EffectiveSaturation(e) );
+}
+
+
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcds( const Element<dim>* const e) const
+  {
+    double64 srH2O  = e->Read(User()->key_srH2O);
+    double64 srCO2  = e->Read(User()->key_srCO2);
+    
+    const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
+    return pc_[ RockType(e) ].Derivative( EffectiveSaturation(e) ) * seff_mult;
+}
+  
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* const e ) const
+{
+   return kr1_[ RockType(e) ].Value( EffectiveSaturation(e) );
+}
+  
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* const e , double64 S) const
+{
+   double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+   return kr1_[ RockType(e) ].Value( seff );
+}
+
+
+/**
+   
+   For calculating the oil relative permeability, we use notation which it has been inherated from the Skjaeveland et al. 2000
+   The relative permeability has been calculated from the Brooks Corey Capillary pressure. These formula has been called as
+   the Corey-Burdine realative permeablity equations... for further information see the page 65 in Skjaeveland et al. 2000.
+   
+*/
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* const e) const
+  {
+    return kr2_[ RockType(e) ].Value( EffectiveSaturation(e) );
+  }
+
+  
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* const e, double64 S) const
+{
+    double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    return kr2_[ RockType(e) ].Value( seff );
+}
+  
+
+
+/**
  
-  
-  
-  
-  
-  
-  
+ calculating the 1st derivative of water relative permeability
+ 
+*/
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds( const Element<dim>* const e ) const
+  {
+    const double64 srH2O  = e->Read(User()->key_srH2O);
+    const double64 srCO2  = e->Read(User()->key_srCO2);
+    const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
+    
+    return kr1_[ RockType(e) ].Derivative( EffectiveSaturation(e) ) * seff_mult;
+}
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( const Element<dim>* const e , double64 S) const
+  {
+    const double64 srH2O  = e->Read(User()->key_srH2O);
+    const double64 srCO2  = e->Read(User()->key_srCO2);
+    const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
+    
+    double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+
+    return kr1_[ RockType(e) ].Derivative( seff ) * seff_mult;
+}
+
+
+
+
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds( const Element<dim>* const e) const
+  {
+    const double64 srH2O  = e->Read(User()->key_srH2O);
+    const double64 srCO2  = e->Read(User()->key_srCO2);
+    const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
+    
+    return kr2_[ RockType(e) ].Derivative( EffectiveSaturation(e) ) * seff_mult;
+}
+
+
+
+/**
+   
+   calculating the 1st derivative of oil relative permeability for any water saturations
+   
+*/
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>* const e, double64 S ) const
+  {
+    const double64 srH2O  = e->Read(User()->key_srH2O);
+    const double64 srCO2  = e->Read(User()->key_srCO2);
+    const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
+    
+    const double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    
+    return kr2_[ RockType(e) ].Derivative( seff ) * seff_mult;
+    
+}
+
+
   
   
 

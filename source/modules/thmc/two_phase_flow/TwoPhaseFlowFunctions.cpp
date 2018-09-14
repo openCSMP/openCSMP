@@ -7,24 +7,11 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const TARGET_PLACEMENT& p, double64 S ) const
+double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const Element<dim>* const e, double64 S ) const
   {
-     const double64 srH2O = p.Obtain(User()->key_srH2O);
-     return dfds_at(p, S) - (f_at(p, 0U, S) - f_at(p, 0U, srH2O)) / (S - srH2O);
+     const double64 srH2O = e->Read(User()->key_srH2O);
+     return dfds_at(e, S) - (f_at(e, 0U, S) - f_at(e, 0U, srH2O)) / (S - srH2O);
   }
- 
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,NODE>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,NODE>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,NODE>&, double64 ) const ;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,ELEMENT>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,ELEMENT>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const ;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFractionalFlowFunction( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 ) const ;
 
 
 
@@ -35,15 +22,14 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentOfFr
  
 */
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const TARGET_PLACEMENT& p, double64 S1, double64 S2 ) const
+double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const Element<dim>* const e, double64 S1, double64 S2 ) const
   {
     double64 F1 = 10000.;
 
     while ( abs(F1)>1e-10 ) {
       
-        F1 = TangentOfFractionalFlowFunction(p, S1);
-        double64 F2 = TangentOfFractionalFlowFunction(p, S2);
+        F1 = TangentOfFractionalFlowFunction(e, S1);
+        double64 F2 = TangentOfFractionalFlowFunction(e, S2);
         
         double64 NewPoint = S1 - F1*(S1-S2)/(F1-F2) ;
         
@@ -53,18 +39,6 @@ double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const TARGET_PLA
     
     return  S1;
 }
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<1U,NODE>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<2U,NODE>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<3U,NODE>&, double64 , double64 ) const;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<1U,ELEMENT>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<2U,ELEMENT>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<3U,ELEMENT>&, double64 , double64 ) const;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSecantMethod( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, double64 , double64 ) const;
 
 
 
@@ -76,13 +50,11 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::FindRootSec
  
 */
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const TARGET_PLACEMENT& p ) const
+double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const Element<dim>* const e ) const
   {
-    double64 S = 1.-p.Obtain(User()->key_srCO2) ;
-    
-    double64 Swmin = p.Obtain(User()->key_srH2O) ;
-    double64 Swmax = 1.0-p.Obtain(User()->key_srCO2);
+    double64 S     = 1.-e->Read(User()->key_srCO2) ;
+    double64 Swmin = e->Read(User()->key_srH2O) ;
+    double64 Swmax = 1. - S;
     
     double64 DS(0.001);
     double64 Fold(-10000.);
@@ -92,12 +64,12 @@ double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const TARGE
     
     while (it < Maxiter){
       
-      double64 F1 = dfds_at(p, S);
+      double64 F1 = dfds_at(e, S);
       while (F1 > Fold) {
         
         S = S - DS ;
         Fold = F1 ;
-        F1 = dfds_at(p, S);
+        F1 = dfds_at(e, S);
         
         if((S<Swmin)||(S>Swmax)) return S=0;
         
@@ -118,18 +90,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const TARGE
     
     return S ;
 }
-  
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<1U,NODE>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<2U,NODE>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<3U,NODE>& ) const ;
 
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::InflectionPointSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
 
 
@@ -140,104 +101,21 @@ template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::InflectionP
  */
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( const TARGET_PLACEMENT& p ) const
+double64 TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( const Element<dim>* const e ) const
   {
-    const double64 Si = InflectionPointSaturation(p);
-    const double64 Sf = 1-p.Obtain(User()->key_srCO2) ;
+    const double64 Si = InflectionPointSaturation(e);
+    const double64 Sf = 1-e->Read(User()->key_srCO2) ;
     
-    double64 St = FindRootSecantMethod(p,Si,Sf) ;
+    double64 St = FindRootSecantMethod(e,Si,Sf) ;
     St = std::min( std::max( St, 0. ), 1. );
     
     return  St;
     
 }
 
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<1U,NODE>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<2U,NODE>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<3U,NODE>& ) const ;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
-
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::TangentPointSaturation( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>& ) const ;
 
 
 
-
-
-
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const TARGET_PLACEMENT& p ) const
-{
-  return TangentPointSaturation(p);
-}
-  
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockHeight(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockHeight(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockHeight(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-  
-
-
-/**
-
-  The Shock front wave calculated after estimation of tangent Saturation point.
-  
-*/
-
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const TARGET_PLACEMENT& p ) const
-  {
-    double64 S = TangentPointSaturation(p);
-    S = std::min( std::max( S, 0. ), 1. );
-    
-    return dfds_at(p, S);
-}
-  
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<1U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<2U,ELEMENT>& ) const ;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockFrontVelocity( const FiniteElementPlacement<3U,ELEMENT>& ) const ;
-
-
-
-
-
-
-/// shock speed base on Buckley Leverett theory
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( const  TARGET_PLACEMENT& p ) const
-{
-  return ShockFrontVelocity(p) ;
-}
-  
-template double64 TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockSpeed(  const  FiniteElementPlacement<1U,ELEMENT>& ) const;
-template double64 TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockSpeed(  const  FiniteElementPlacement<2U,ELEMENT>& ) const;
-template double64 TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockSpeed(  const  FiniteElementPlacement<3U,ELEMENT>& ) const;
-
-
-
-
-  
-  
-  
-  
-template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( const TARGET_PLACEMENT& p, double64& speed, double64& height) const
-{
-  height = ShockHeight(p) ;
-  speed  = ShockSpeed(p)  ;
-}
-
-template void TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<1U,ELEMENT>& , double64& , double64& ) const;
-template void TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<2U,ELEMENT>& , double64& , double64& ) const;
-template void TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>::ShockSpeedAndHeight(  const  FiniteElementPlacement<3U,ELEMENT>& , double64& , double64& ) const;
 
 
 

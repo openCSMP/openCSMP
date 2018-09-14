@@ -9,10 +9,56 @@
 #ifndef CSMP_FLUID_H
 #define CSMP_FLUID_H
 
-#include "CSMP_definitions.h"
-#include "VariablePlacement.h"
+#include "Node.h"
 
 namespace csmp {
+
+/**
+    blueprint for any specific Fluid property class to be used in the generic transport scheme.
+*/
+template<size_t dim, template<size_t> class USER>
+class Fluid {
+  public:
+  
+ // TODO: these keys now are part of the new composition array
+    /// salinity, mass fraction from the node
+    double64 MassFractionNaCl( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xSalt); }
+
+    /// composition: mass fraction (0..1) of CO2 in the aqueous phase
+    double64 XCO2_AqueousPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xCO2); }
+
+    /// composition: mass fraction (0..1) of water in the aqueous phase
+    double64 XH2O_AqueousPhase( const Node<dim>* const n) const; // fix { return n->Read(User()->key_xH2O); }
+
+    /// composition: mass fraction (0..1) of CO2 in the carbonic phase
+    double64 YCO2_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YCO2); }
+
+    /// composition: mass fraction (0..1) of water in the carbonic phase
+    double64 YH2O_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YH2O); }
+  
+    /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
+    double64 Viscosity( const Node<dim>* const n, size_t phase ) const;
+    double64 Viscosity( const Element<dim>* const n, size_t phase ) const;
+
+    /// the returned node property fluid density (of phase) has been interpolated to the user-specified target placement (argument parameter)
+    double64 Density( const Node<dim>* const n, size_t phase ) const;
+    double64 Density( const Element<dim>* const n, size_t phase ) const;
+
+    /// returns saturation-weighted density of the fluid mixture interpolated to the target placement
+    double64 DensityMixture( const Node<dim>* const n, double64 salinity=0. ) const;
+  
+    /// returns the ratio of the phase viscosities at the target placement
+    double64 ViscosityRatio( const Node<dim>* const n, double64 salinity=0. ) const;
+
+  protected:
+    Fluid() {}
+  
+    /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+  
+    // member is EOS module
+};
 
 //  unit conversions
 
@@ -40,70 +86,6 @@ namespace csmp {
 
     double64  KelvinTodegreeC( double64 temperatureInK );
 
-/**
-    blueprint for any specific Fluid property class to be used in the generic transport scheme.
-*/
-template<size_t dim, template<size_t> class USER>
-class Fluid {
-  public:
-    /// temperature oC at current initialisation point in Element
-    template<class TARGET_PLACEMENT>
-    double64 Temperature( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_T); }
-  
-    /// fluid pressure (Pa) at current initialisation point in Element
-    template<class TARGET_PLACEMENT>
-    double64 Pressure( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_pf); }
-  
-    /// salinity, mSalt (molality = moles/kg)
-    template<class TARGET_PLACEMENT>
-    double64 Salinity( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_NaClaq); }
-  
-    /// salinity, mass fraction
-    template<class TARGET_PLACEMENT>
-    double64 MassFractionNaCl( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xSalt); }
-
-    /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    template<class TARGET_PLACEMENT>
-    double64 XCO2_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xCO2); }
-
-    /// composition: mass fraction (0..1) of water in the aqueous phase
-    template<class TARGET_PLACEMENT>
-    double64 XH2O_AqueousPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_xH2O); }
-
-    /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    template<class TARGET_PLACEMENT>
-    double64 YCO2_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YCO2); }
-
-    /// composition: mass fraction (0..1) of water in the carbonic phase
-    template<class TARGET_PLACEMENT>
-    double64 YH2O_CarbonicPhase( TARGET_PLACEMENT& p ) const { return p.Obtain(User()->key_YH2O); }
-  
-    /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
-    template<class TARGET_PLACEMENT>
-    double64 Viscosity( const TARGET_PLACEMENT&, size_t phase ) const;
-
-    /// the returned node property fluid density (of phase) has been interpolated to the user-specified target placement (argument parameter)
-    template<class TARGET_PLACEMENT>
-    double64 Density( const TARGET_PLACEMENT&, size_t phase ) const;
-
-    /// returns saturation-weighted density of the fluid mixture interpolated to the target placement
-    template<class TARGET_PLACEMENT>
-    double64 DensityMixture( const TARGET_PLACEMENT&, double64 salinity=0. ) const;
-  
-    /// returns the ratio of the phase viscosities at the target placement
-    template<class TARGET_PLACEMENT>
-    double64 ViscosityRatio( const TARGET_PLACEMENT&, double64 salinity=0. ) const;
-
-  protected:
-    Fluid() {}
-  
-    /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
-    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
-    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-  
-    // member is EOS module
-};
-
-}
+} // end csmp
 
 #endif /* CSMP_FLUID_H */

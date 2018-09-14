@@ -129,6 +129,10 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       return NeighbourNodeCollection<dim>(*user->e_.N(user->idx1_));
     }
   };
+  
+  
+  
+  
 
   template<size_t dim>
   struct FiniteElementPlacementOperations<dim,ELEMENT_INTEGRATION_POINT>
@@ -147,6 +151,10 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       return User()->e_.IntegrationWeight();
     }
   };
+  
+  
+  
+  
 
   template<size_t dim>
   struct FiniteElementPlacementOperations<dim,FACET_INTEGRATION_POINT>
@@ -285,6 +293,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
   };
 
 
+
+
+
   template<size_t dim>
   struct FiniteElementPlacementWorker<dim,ELEMENT>
   {
@@ -322,6 +333,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
   };
 
 
+
+
+
   template<size_t dim>
   struct FiniteElementPlacementWorker<dim,NODE>
   {
@@ -357,6 +371,10 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       return e.N(idx1)->Read(prop);
     }
   };
+
+
+
+
 
   template<size_t dim>
   struct FiniteElementPlacementWorker<dim,ELEMENT_INTEGRATION_POINT>
@@ -403,6 +421,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       return e.Read(idx1, prop);
     }
   };
+  
+  
+  
 
   template<size_t dim>
   struct FiniteElementPlacementWorker<dim,FACET_INTEGRATION_POINT>
@@ -440,6 +461,10 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
     }
   };
 
+
+
+
+
   template<size_t dim>
   struct FiniteElementPlacementWorker<dim,SECTOR_INTEGRATION_POINT>
   {
@@ -475,6 +500,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       return e.Read(idx1, idx2, prop);
     }
   };
+
+
+
 
 
   template<size_t dim>
@@ -525,6 +553,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
   };
 
 
+
+
+// HERE IS THE ACTUAL CLASS !
   template<size_t dim, PLACEMENT pl>
   class FiniteElementPlacement : public FiniteElementPlacementOperations<dim,pl>
   {
@@ -605,6 +636,9 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
 
 
 
+
+
+
   template<size_t dim, PLACEMENT pl>
   struct FiniteElementPlacementIterator
   {
@@ -650,6 +684,11 @@ template<> struct ElementObtainerDispatch<from,to> { static constexpr FiniteElem
       max_idx2_ = worker.PlacementsPerFeature(e);
     }
   };
+
+
+
+
+
 
   template<size_t dim, PLACEMENT pl>
   struct FiniteElementPlacementCollection

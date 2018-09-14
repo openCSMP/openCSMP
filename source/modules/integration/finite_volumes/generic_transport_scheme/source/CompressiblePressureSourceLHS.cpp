@@ -30,7 +30,8 @@ namespace csmp {
                             "The current pressure variable must be SCALAR and placed on NODE"  );
   } // end constructor
   
-  
+/* TODO: port back 
+
   template<size_t dim>
   void CompressiblePressureSourceLHS<dim>::AccumulateStencil( Element<dim>& fe, SparseMatrix& mat ) const
   {
@@ -69,6 +70,7 @@ namespace csmp {
   template class CompressiblePressureSourceLHS<1U>;
   template class CompressiblePressureSourceLHS<2U>;
   template class CompressiblePressureSourceLHS<3U>;
+*/
   
 } // end csmp
 

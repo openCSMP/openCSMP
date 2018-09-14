@@ -25,121 +25,95 @@ template<size_t dim, template<size_t> class USER>
 class FlowFunctionsBC_Hysteretic {
   public:
     /// current water saturation initialised inside of the model
-    template<class TARGET_PLACEMENT>
-    double64 Sw( const TARGET_PLACEMENT& p ) const { return p.Obtain(this->key_sH2O); }
+    double64 Sw( const Element<dim>* const e ) const {
+      
+      ScalarVariable sH2O;
+      e->PropertyValueAtBaryCentre( User()->key_sH2O, sH2O );
+      
+      return sH2O.Component(1U);
+    }
       
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
-    template<class TARGET_PLACEMENT>
-    double64 Mobility( const TARGET_PLACEMENT&, size_t phase ) const;
+    double64 Mobility( const Element<dim>* const, size_t phase ) const;
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw)
-    template<class TARGET_PLACEMENT>
-    double64 Mobility_at( const TARGET_PLACEMENT&, size_t phase, double64 ) const;
+    double64 Mobility_at( const Element<dim>* const, size_t phase, double64 ) const;
 
     /// d lambda_i / dsw
-    template<class TARGET_PLACEMENT>
-    double64 MobilityDerivative( const TARGET_PLACEMENT&, size_t phase, bool evaluate_numerically=false ) const;
+    double64 MobilityDerivative( const Element<dim>* const, size_t phase, bool evaluate_numerically=false ) const;
  
-    template<class TARGET_PLACEMENT>
-    double64 MobilityDerivative_at( const TARGET_PLACEMENT&, size_t phase, double64 ) const;
+    double64 MobilityDerivative_at( const Element<dim>* const, size_t phase, double64 ) const;
                         
     /// lambda_t: sum of phase mobilities
-    template<class TARGET_PLACEMENT>
-    double64 TotalMobility(  const TARGET_PLACEMENT& ) const;
+    double64 TotalMobility(  const Element<dim>* const ) const;
     
     /// lambda_t: sum of phase mobilities (using prescribed sw)
-    template<class TARGET_PLACEMENT>
-    double64 TotalMobility_at(  const TARGET_PLACEMENT&, double64 ) const;
+    double64 TotalMobility_at(  const Element<dim>* const, double64 ) const;
     
     /// lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G
-    template<class TARGET_PLACEMENT>
-    double64 MobilityProduct(  const TARGET_PLACEMENT& ) const;
+    double64 MobilityProduct(  const Element<dim>* const ) const;
 
     /// d lambda overbar / dsw also known as dGds
-    template<class TARGET_PLACEMENT>
-    double64 MobilityProductDerivative( const TARGET_PLACEMENT&, bool  evaluate_numerically=false ) const;
+    double64 MobilityProductDerivative( const Element<dim>* const, bool  evaluate_numerically=false ) const;
                         
-    template<class TARGET_PLACEMENT>
-    double64 MobilityProductDerivative_at( const TARGET_PLACEMENT&, double64 ) const;
+    double64 MobilityProductDerivative_at( const Element<dim>* const, double64 ) const;
 
      /// fractional flow; 0=water, 1=non-wetting phase
-    template<class TARGET_PLACEMENT>
-    double64 f( const TARGET_PLACEMENT&, size_t phase ) const;
+    double64 f( const Element<dim>* const, size_t phase ) const;
     
      /// fractional flow; 0=water, 1=non-wetting phase  (using prescribed sw)
-    template<class TARGET_PLACEMENT>
-    double64 f_at( const TARGET_PLACEMENT&, size_t phase, double64 ) const;
+    double64 f_at( const Element<dim>* const, size_t phase, double64 ) const;
     
     /// Permeability
-    template<class TARGET_PLACEMENT>
-    double64 Permeability(  const TARGET_PLACEMENT& ) const;    
+    double64 Permeability(  const Element<dim>* const ) const;
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    template<class TARGET_PLACEMENT>
-    double64 dfds(  const TARGET_PLACEMENT&, size_t phase ) const;
+    double64 dfds(  const Element<dim>* const, size_t phase ) const;
     
-    template<class TARGET_PLACEMENT>
-    double64 dfds_at( const TARGET_PLACEMENT&, double64 sw ) const;
+    double64 dfds_at( const Element<dim>* const, double64 sw ) const;
     
     /// maximum value of previous derivative
-    template<class TARGET_PLACEMENT>
-    double64 MaxFractionalFlowDerivative(  const TARGET_PLACEMENT& ) const;
+    double64 MaxFractionalFlowDerivative(  const Element<dim>* const ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-    template<class TARGET_PLACEMENT>
-   	double64 AdvectionMultiplier(  const TARGET_PLACEMENT& ) const;
+   	double64 AdvectionMultiplier(  const Element<dim>* const ) const;
 
     /// outputs the shock wave celerity
-    template<class TARGET_PLACEMENT>
-    double64 ShockSpeed(  const TARGET_PLACEMENT& ) const;
+    double64 ShockSpeed(  const Element<dim>* const ) const;
     
     /// outputs the water saturation at the non-wetting phase shock front
-    template<class TARGET_PLACEMENT>
-    double64 ShockHeight( const TARGET_PLACEMENT& ) const;
+    double64 ShockHeight( const Element<dim>* const ) const;
     
     /// calculated shock height and speed
-    template<class TARGET_PLACEMENT>
-    void     ShockSpeedAndHeight( const TARGET_PLACEMENT&, double64& speed, double64& height ) const;
+    void     ShockSpeedAndHeight( const Element<dim>* const, double64& speed, double64& height ) const;
     
     /// multipliers for gravity-driven flow (advection multiplier and source term)
-    template<class TARGET_PLACEMENT>
-    double64 GravityTerm(  const TARGET_PLACEMENT& ) const;
+    double64 GravityTerm(  const Element<dim>* const ) const;
     
-    template<class TARGET_PLACEMENT>
-    double64 GravityMultiplier_G(  const TARGET_PLACEMENT& ) const;
+    double64 GravityMultiplier_G(  const Element<dim>* const ) const;
     
-    template<class TARGET_PLACEMENT>
-    double64 GravityMultiplier_dGds(  const TARGET_PLACEMENT& ) const;
+    double64 GravityMultiplier_dGds(  const Element<dim>* const ) const;
 
     /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase)
-    template<class TARGET_PLACEMENT>
-    double64 DiffusionMultiplier(  const TARGET_PLACEMENT&, size_t phase ) const;
+    double64 DiffusionMultiplier(  const Element<dim>* const, size_t phase ) const;
     
     /// driven by capillary pressure gradient
-    template<class TARGET_PLACEMENT>
-    double64 CapillaryDiffusionMultiplier( const TARGET_PLACEMENT& ) const;
+    double64 CapillaryDiffusionMultiplier( const Element<dim>* const ) const;
     
-    template<class TARGET_PLACEMENT>
-    double64 CapillaryDiffusionMultiplier_Phase(  const TARGET_PLACEMENT&, size_t phase ) const;
+    double64 CapillaryDiffusionMultiplier_Phase(  const Element<dim>* const, size_t phase ) const;
 
     /// calculating the Shock velocity
-    template<class TARGET_PLACEMENT>
-    double64 ShockFrontVelocity( const TARGET_PLACEMENT& ) const ;
+    double64 ShockFrontVelocity( const Element<dim>* const ) const ;
     
-    template<class TARGET_PLACEMENT>
-    double64 dfds_Numerical(  const TARGET_PLACEMENT&, size_t phase, double64 h = 0.001 ) const;
+    double64 dfds_Numerical(  const Element<dim>* const, size_t phase, double64 delta_s = 0.001 ) const;
       
-    template<class TARGET_PLACEMENT>
-    double64 dfds_at_Numerical(  const TARGET_PLACEMENT&, double64 sw, double64 h = 0.001 ) const;
+    double64 dfds_at_Numerical(  const Element<dim>* const, double64 sw, double64 delta_s = 0.001 ) const;
       
-    template<class TARGET_PLACEMENT>
-    double64 dGds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.000001 ) const;
+    double64 dGds_Numerical(  const Element<dim>* const, double64 delta_s = 0.000001 ) const;
       
-    template<class TARGET_PLACEMENT>
-    double64 dlwds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+    double64 dlwds_Numerical(  const Element<dim>* const, double64 delta_s = 0.001 ) const;
       
-    template<class TARGET_PLACEMENT>
-    double64 dlnds_Numerical(  const TARGET_PLACEMENT&, double64 h = 0.001 ) const;
+    double64 dlnds_Numerical(  const Element<dim>* const, double64 delta_s = 0.001 ) const;
 
            
   private:
@@ -149,20 +123,16 @@ class FlowFunctionsBC_Hysteretic {
     // NON-STANDARD INTERFACES
 
     /// calculating the  Inflection point
-    template<class TARGET_PLACEMENT>
-    double64 InflectionPointSaturation( const TARGET_PLACEMENT& ) const ;
+    double64 InflectionPointSaturation( const Element<dim>* const ) const ;
     
     /// calculating the Tangent Point
-    template<class TARGET_PLACEMENT>
-    double64 TangentPointSaturation( const TARGET_PLACEMENT& ) const ;
+    double64 TangentPointSaturation( const Element<dim>* const ) const ;
     
     /// calculating  Buckley Leverett function... this has to be zero at shock point
-    template<class TARGET_PLACEMENT>
-    double64 TangentOfFractionalFlowFunction( const TARGET_PLACEMENT&, double64 S) const ;
+    double64 TangentOfFractionalFlowFunction( const Element<dim>* const, double64 S) const ;
     
     /// finding root of  Buckley Leverett function... which results is shock point saturation.
-    template<class TARGET_PLACEMENT>
-    double64 FindRootSecantMethod( const TARGET_PLACEMENT&, double64 S1, double64 S2) const ;
+    double64 FindRootSecantMethod( const Element<dim>* const, double64 S1, double64 S2) const ;
 };
 
 } // end csmp

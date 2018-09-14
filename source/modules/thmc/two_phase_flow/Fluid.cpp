@@ -10,218 +10,103 @@
 #include "CO2H2O_FunctionsModule1.h"
 // this specific incarnation
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
-#include "FiniteElementPlacement.h"
-#include "FiniteVolumePlacement.h"
 
 namespace csmp {
 
 EOS_CO2H2ONaCl_Spycher04  eos;
 
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::Viscosity( const TARGET_PLACEMENT& p, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
     /*uncomment to compute from PTX properties*/
-    if ( phase == 0U ) return eos.mu_brine( Pressure(p), Temperature(p), Salinity(p) );
-      return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
-    
-    /*direct interpolation*/
-    if ( phase == 0U ) return p.Obtain( User()->key_muH2O );
-    return p.Obtain( User()->key_muCO2 );
+    if ( phase == 0U )
+      return eos.mu_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
+   
+    return eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
  }
 
-// CO2H2O_Functions 1
-// finite element placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    // TODO: replace with single interpolation loop
+    const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
+    const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
+   
+    /*uncomment to compute from PTX properties*/
+    if ( phase == 0U ) {
+         const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
+         return eos.mu_brine( pf, T, NaCl_aq );
+      }
+   
+    return eos.mu_CarbonicPhase( pf, T );
+ }
 
-// finite volume placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Viscosity( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-// CO2H2O_Functions 2
-// finite element placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-
-// finite volume placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Viscosity( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-  
+ 
 
   
 
  
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::Density( const TARGET_PLACEMENT& p, size_t phase ) const
+double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     /*uncomment to compute from PTX properties*/
-    if ( phase == 0U ) return eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) );
-      return eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    if ( phase == 0U ) return eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
+      return eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
     
     /*direct interpolation*/
-    if ( phase == 0U ) return p.Obtain( User()->key_rhoH2O );
-    return p.Obtain( User()->key_rhoCO2 );
+    if ( phase == 0U ) return n->Read( User()->key_rhoH2O );
+    return n->Read( User()->key_rhoCO2 );
  }
 
-// CO2H2O_Functions 1
-// finite element placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
 
-// finite volume placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
+    // TODO: replace with single interpolation loop
+    const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
+    const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::Density( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
+    /*uncomment to compute from PTX properties*/
+    if ( phase == 0U ) {
+         const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
+         return eos.Rho_brine( pf, T, NaCl_aq );
+      }
 
-// CO2H2O_Functions 2
-// finite element placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<3U,NODE>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<1U,ELEMENT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<2U,ELEMENT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<3U,ELEMENT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<1U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<2U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, size_t ) const;
+    return eos.Rho_CarbonicPhase( pf, T );
+ }
 
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteElementPlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-
-// finite volume placements
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<1U,NODE>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<2U,NODE>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<3U,NODE>&, size_t ) const;
-
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<1U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<2U,FACET_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<3U,FACET_INTEGRATION_POINT>&, size_t ) const;
-  
-template double64 Fluid<1U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<1U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<2U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<2U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule2>::Density( const FiniteVolumePlacement<3U,SECTOR_INTEGRATION_POINT>&, size_t ) const;
-  
-  
   
 
 
 
  
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::DensityMixture( const TARGET_PLACEMENT& p, double64 msalt ) const
+double64 Fluid<dim,USER>::DensityMixture( const Node<dim>* const n, double64 msalt ) const
  {
-    return p.Obtain( User()->key_sH2O ) * eos.Rho_brine( Pressure(p), Temperature(p), Salinity(p) ) +
-          (1. - p.Obtain(User()->key_sH2O)) * eos.Rho_CarbonicPhase( Pressure(p), Temperature(p) );
+    return n->Read( User()->key_sH2O ) * eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) ) +
+          (1. - n->Read(User()->key_sH2O)) * eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
  }
 
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::DensityMixture( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::DensityMixture( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
+
 
 
 /**
      aqueous phase viscosity / carbonic phase viscosity
 */
 template<size_t dim, template<size_t> class USER>
-template<class TARGET_PLACEMENT>
-double64 Fluid<dim,USER>::ViscosityRatio( const TARGET_PLACEMENT& p, double64 salinity ) const
+double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n, double64 salinity ) const
  {
-    return eos.mu_AqueousPhase( Pressure(p), Temperature(p), Salinity(p) ) / eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
+    return eos.mu_AqueousPhase( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) ) / eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
  }
 
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT>&, double64 ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::ViscosityRatio( const FiniteElementPlacement<3U,NODE>&, double64 ) const;
-template double64 Fluid<3U,CO2H2O_FunctionsModule1>::ViscosityRatio( const FiniteElementPlacement<3U,ELEMENT_INTEGRATION_POINT>&, double64 ) const;
 
 
 
@@ -231,8 +116,8 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
  {
     assert( phase <= 1U );
-    if ( phase == 0U ) return eos.mu_AqueousPhase( Pressure(p), Temperature(p), msalt );
-    return eos.mu_CarbonicPhase( Pressure(p), Temperature(p) );
+    if ( phase == 0U ) return eos.mu_AqueousPhase( Pressure(p), n->Read(User()->key_T), msalt );
+    return eos.mu_CarbonicPhase( Pressure(p), n->Read(User()->key_T) );
  }
  
  
@@ -263,6 +148,11 @@ template class Fluid<3U,CO2H2O_FunctionsModule1>;
 template class Fluid<1U,CO2H2O_FunctionsModule2>;
 template class Fluid<2U,CO2H2O_FunctionsModule2>;
 template class Fluid<3U,CO2H2O_FunctionsModule2>;
+
+
+
+
+
 
 // conversions
 
