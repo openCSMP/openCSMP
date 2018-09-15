@@ -49,9 +49,7 @@
 #include "DESAdvectionOfTracer2D_Example.h"
 #include "DESAdvectionOfTracer3D_Example.h"
 #include "DESTwoPhaseFlow2D_Example.h"
-#include "MelbourneTransportScheme_Example.h" // Andrew's first implementation of the new transport scheme
 #include "DESTwoPhaseFlow3D_Example.h"
 #include "Variables_Example.h"
-#include "FiniteElementVariablePlacement_Example.h"
 
 #endif

@@ -94,12 +94,12 @@ void DESTwoPhaseFlow2D_Example::Run()
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    FlowFunctions2<2U> flowfunctions(model.Database());
-    TwoPhaseDESTransport<2U,FlowFunctions2>* DEStransport;
+    CO2H2O_FunctionsModule1<2U> flowfunctions(model.Database());
+    TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>* DEStransport;
     if (!multi_component)
-      DEStransport = new TwoPhaseDESTransport<2U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
     else 
-      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier); 
+      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -243,7 +243,7 @@ void DESTwoPhaseFlow2D_Example::Run()
 } // Run()
 
 
-void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFunctions2<2U>& flowfunctions )
+void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_FunctionsModule1<2U>& flowfunctions )
  {
      
     static const Region<2U>& mref = mdl.Region("Model"); 
@@ -271,8 +271,7 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFuncti
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
         //total mobility
-        auto e = (*eit) -> AtBarycenter();
-        double64 mob_t = flowfunctions.TotalMobility(e);
+        double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*
         TensorVariable<2U> K;
         e.Read( k_key, K );

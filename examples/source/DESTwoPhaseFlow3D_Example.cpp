@@ -16,6 +16,7 @@
 
 // relative permeability calculations
 #include "BrooksCorey.h"
+#include "CO2H2O_FunctionsModule1.h"
 
 // monitoring individual regions
 #include "RegionMonitor.h"
@@ -94,12 +95,12 @@ void DESTwoPhaseFlow3D_Example::Run()
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    FlowFunctions2<3U> flowfunctions(model.Database());
-    TwoPhaseDESTransport<3U,FlowFunctions2>* DEStransport;
+    CO2H2O_FunctionsModule1<3U> flowfunctions(model.Database());
+    TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>* DEStransport;
     if (!multi_component)
-      DEStransport = new TwoPhaseDESTransport<3U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
     else 
-      DEStransport = new TwoPhaseTwoComponentDESTransport<3U,FlowFunctions2>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseTwoComponentDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -242,7 +243,7 @@ void DESTwoPhaseFlow3D_Example::Run()
 } // Run()
 
 
-void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFunctions2<3U>& flowfunctions )
+void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, CO2H2O_FunctionsModule1<3U>& flowfunctions )
  {
      
     static const Region<3U>& mref = mdl.Region("Model"); 
@@ -270,8 +271,7 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFuncti
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
         //total mobility
-        auto e = (*eit) -> AtBarycenter();
-        double64 mob_t = flowfunctions.TotalMobility(e);
+        double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*
         TensorVariable<3U> K;
         e.Read( k_key, K );
