@@ -52,7 +52,7 @@ macro(GenerateVariables structname source_csv target_header)
     INSTALL(FILES "${GEN_INCLUDES_DIR}/${target_header}" DESTINATION include)
 endmacro()
 
-GenerateVariables(Variables_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv Variables_TracerTransfer.h)
+GenerateVariables(VariableSet_TracerTransfer ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TracerTransfer.csv VariableSet_TracerTransfer.h)
 GenerateVariables(Variables_TwoPhaseFlow ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_TwoPhaseFlow.csv Variables_TwoPhaseFlow.h)
 GenerateVariables(VariableSet_CO2GeoSequestration ${CMAKE_CURRENT_SOURCE_DIR}/includes/integration/finite_volumes/generic_transport_scheme/VariableSet_CO2GeoSequestration.csv VariableSet_CO2GeoSequestration.h)
 

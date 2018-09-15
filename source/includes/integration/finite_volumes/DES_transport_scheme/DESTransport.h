@@ -5,7 +5,7 @@
 #include "Node.h"
 #include "Index.h"
 #include "Event.h"
-#include "Variables_TracerTransfer.h"
+#include "VariableSet_TracerTransfer.h"
 #include "FibonacciHeap.h"
 
 
@@ -17,7 +17,7 @@ template<size_t> class Model;
 
 
 template<size_t dim>
-class DESTransport : public variables::Variables_TracerTransfer {
+class DESTransport : public variables::VariableSet_TracerTransfer {
 
   public:
     DESTransport ( Model<dim>& m, const char* target_region);
