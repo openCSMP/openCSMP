@@ -8,17 +8,18 @@
 #include "ExplicitTransport.h"
 #include "Region.h"
 #include "Model.h"
-#include "finiteVolumeUniversalFunctions.h"
+#include "finiteVolumeFunctions.h"
 
 #include "VTK_Interface.h"
 
 using namespace std;
+using namespace csmp::variables;
 
 namespace csmp {
 
 template<size_t dim>
 ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region )
-  : VariableSet_TracerTransferExplicit<dim>(m.Database()),
+  : VariableSet_TracerTransfer(m.Database()),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.)
  {
@@ -28,7 +29,7 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
     m.Region("Model").InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
    
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->C0_key), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_C0), lower_limit_, upper_limit_ );
  }
   
 
@@ -148,23 +149,23 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
          // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
-         double64 accumulation = (*nit)->Read(this->C1_key);
+         double64 accumulation = (*nit)->Read(this->key_C1);
         
          // 2. correcting this sum for div vD using 'flux balance' except for at model boundary
          //if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulation * (*nit)->Read( this->fb_key );
-         accumulation -= accumulation * (*nit)->Read( this->fb_key );
+         accumulation -= accumulation * (*nit)->Read( this->key_FB );
         
          // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
-         accumulation = (*nit)->Read(this->C0_key) - (delta_t/(*nit)->Read(this->PV_key)) * accumulation;
+         accumulation = (*nit)->Read(this->key_C0) - (delta_t/(*nit)->Read(this->key_FVPV)) * accumulation;
 
          // 4. accounting for absolute 'nodal fluid volume source' terms or sinks after the advection step
          // TODO: make this more accurate using a fractional step method where the source is accounted for at 2 time levels using dt/2 and C0 and C1
-         const double64 source((*nit)->Read(this->nsrc_key));
+         const double64 source((*nit)->Read(this->key_NQV));
          //                               new concentration
-         accumulation += source * (*nit)->Read(this->C1_key) * delta_t;
+         accumulation += source * (*nit)->Read(this->key_C1) * delta_t;
         
          // 5. storing the new concentration
-         (*nit)->Store( this->C1_key, makeScalar( (*nit)->Status(this->C1_key), accumulation ) );
+         (*nit)->Store( this->key_C1, makeScalar( (*nit)->Status(this->key_C1), accumulation ) );
     }
    
 } // end AssembleSolution
@@ -195,16 +196,16 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                const size_t nid((*nit)->ParentNodeNumber(t));
 
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
-               for ( size_t i=0U; i<eptr->FV_Stencil()->FacetsPerSector(nid); i++ ) {
-                    size_t iFacet( eptr->FV_Stencil()->FacetSurroundingSector(nid,i) );
-                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->vD_key );
-                    if ( nid == eptr->FV_Stencil()->InsideNode(iFacet) )div += velo;
+               for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
+                    size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
+                    double64 velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
+                    if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;
                     else div -= velo;
                 }
            }
-          ScalarVariable result( makeScalar( (*nit)->Status(this->C1_key), (*nit)->Read(this->C1_key) ) );
+          ScalarVariable result( makeScalar( (*nit)->Status(this->key_C1), (*nit)->Read(this->key_C1) ) );
           result += div;
-          (*nit)->Store( this->C1_key, result );
+          (*nit)->Store( this->key_C1, result );
       
       } // end for cycle for nodes
 
@@ -234,25 +235,25 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
    
     while ( nit != nodes_end )
        {
-          const VARIABLE_FLAG status((*nit)->Status( this->C0_key ));
+          const VARIABLE_FLAG status((*nit)->Status( this->key_C0 ));
           if ( status != DIRICH )
             {
                // reading the newly computed saturation values
-               (*nit)->Read( this->C1_key, C1 );
+               (*nit)->Read( this->key_C1, C1 );
                amin = std::min( amin, C1() );
                amax = std::max( amax, C1() );
 
                // reading the previous values and calculating the maximum change per node
-               const double64 C0 = (*nit)->Read( this->C0_key );
+               const double64 C0 = (*nit)->Read( this->key_C0 );
                difference_to_last_output = std::max( difference_to_last_output, fabs(C1() - C0) );
   
                // result checking and assignment
-               if ( C1 <= upper_limit_ && C1 >= lower_limit_ ) (*nit)->Store( this->C0_key, C1 );
+               if ( C1() <= upper_limit_ && C1() >= lower_limit_ ) (*nit)->Store( this->key_C0, C1 );
                else {
                     cerr <<"\nExplicitTransport<dim>::VerifyAndAssignResults: ";
                     cerr <<"value: "<< C1() <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-                    if ( C1() > upper_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, upper_limit_ ) );
-                    else if ( C1() < lower_limit_ ) (*nit)->Store( this->C0_key, makeScalar( status, lower_limit_ ) );
+                    if ( C1() > upper_limit_ ) (*nit)->Store( this->key_C0, makeScalar( status, upper_limit_ ) );
+                    else if ( C1() < lower_limit_ ) (*nit)->Store( this->key_C0, makeScalar( status, lower_limit_ ) );
                     error_counter++;
                  }
             }
@@ -302,7 +303,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
-    cout <<"\n\tSolution steps needed = "<< std::max(rint(floor(time_interval/time_increment)),1);
+    cout <<"\n\tSolution steps needed = "<< std::max( rint(floor(time_interval/time_increment)),1. );
 
     cout <<"\n\n\nExplicitTransport::EvolveSolution: FV transport simulation initiated...\n";
     size_t   substep(1);

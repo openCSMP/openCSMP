@@ -6,6 +6,7 @@
 namespace csmp {
 
 template<size_t> class Node;
+template<size_t> class Element;
 
 /// for application to individual FVs
 template<size_t dim, template<size_t> class USER>
@@ -20,7 +21,7 @@ class TimeStepEvaluator {
     double64 OutFlowLessThanContentIncrementBoundary( const Node<dim>* const ) const;
 
     /// anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance
-    double64 StreamlineCFL( Node<dim>* const ) const;
+    double64 StreamlineCFL( const Element<dim>* const ) const;
   
     /// adjust setting for the solve (default=0.5)
     void StepSizeReductionFactor( double64=0.5 );

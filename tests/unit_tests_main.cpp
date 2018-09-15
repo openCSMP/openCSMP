@@ -75,8 +75,6 @@
 #include "StatisticalAnalyzer_Test.h"
 #include "RegionMonitor_Test.h"
 #include "Visitor_TestSuite.h"
-#include "Placement_Test_2D.h"
-#include "Placement_Test_3D.h"
 
 #include "ModelSubDomain_Test.h"
 #include "BoundaryInterface_Test.h"
@@ -110,8 +108,6 @@
 
 // new tests 2017 onwards
 #include "LinearCuboid_Test.h"
-#include "Placement_Test_2D.h"
-#include "Placement_Test_3D.h"
 
 //#include "DirichletPressureBoxModel_VVCase.h"
 
@@ -318,8 +314,6 @@ TEST_CASE("Unported tests", "[Unported]") {
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new Variables_Test("FracBox") );
-      composite.addTest( new Placement_Test_2D() );
-      composite.addTest( new Placement_Test_3D() );
 
       // constitutive relationships TODO: create a separate test section for this
       
