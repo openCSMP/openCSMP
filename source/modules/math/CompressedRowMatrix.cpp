@@ -13,47 +13,52 @@ using namespace std;
 
 namespace csmp {
 
+
+
 	void CompressedRowMatrix::Resize(size_t rows) {
-		JV.clear();
+		JV_.clear();
 		ia.clear();
 		ja.clear();
 		 a.clear();
 		 Dirich_.clear();
-		 mapDirich.clear();
-		JV.resize(rows);
+		 mapDirich_.clear();
+		JV_.resize(rows);
 		nnzi = 0;
 		for (size_t i = 0; i < rows; ++i)
 		{
-			JV[i].reserve(100);
+			JV_[i].reserve(100);
 			// For CRM we always need diagonal in the begining!
-			JV[i].push_back(Entry(i, 0.0));
+			JV_[i].push_back(Entry(i, 0.0));
 		}
 	}
 
+
+
 	void CompressedRowMatrix::AddToCRM(Entry& JVelem) {
-		ja.push_back(mapDirich[JVelem.ind] + 1); // Plus one is for SAMG (index starts from 1 not 0)
+		ja.push_back(mapDirich_[JVelem.ind] + 1); // Plus one is for SAMG (index starts from 1 not 0)
 		a.push_back(JVelem.val);
 		++nnzi;
 	}
+
+
 	/*
 	JVmap is a matrix! each row contaions a map that makes pair of col index (ind)
 	and val(row,col). For compressed row storage we do a need diagonal element in the begining
 	Already RHS and LHS are multipled by scale_factore_.
 	*/
-	void CompressedRowMatrix::Set_Dirichelet_RHS_CRM(vector<double64>& rhs, vector<Entry>& dirich)
+	void CompressedRowMatrix::SetDiricheletRHS_CRM(vector<double64>& rhs, vector<Entry>& dirich)
 	{
-		size_t ii(0), kk(0), Entries(0), Rows(JV.size());
-
-		mapDirich.resize(Rows, 1);
+		size_t Rows(JV_.size());
+		mapDirich_.resize(Rows, 1);
 		for (auto x : dirich) {
-			mapDirich[x.ind] = -1; 
+			mapDirich_[x.ind] = -1; 
 			Dirich_.insert(make_pair(x.ind, x.val));
 		}
 
-		kk = 0;
-		for (ii = 0; ii < Rows; ++ii) {
-			if (mapDirich[ii] == 1)	mapDirich[ii] = kk++;
-			Entries += JV[ii].size();
+		size_t kk(0), Entries(0);
+		for (size_t ii = 0; ii < Rows; ++ii) {
+			if (mapDirich_[ii] == 1)	mapDirich_[ii] = kk++;
+			Entries += JV_[ii].size();
 		}
 
 		ia.reserve(Rows + 1);
@@ -64,26 +69,29 @@ namespace csmp {
 
 		vector<double64> rh(Rows);
 		map<size_t, double64>::iterator itD;
-		for (ii = 0; ii < Rows; ++ii) {
-			if (mapDirich[ii] == -1) continue; // Dirchlet row
+		for (size_t ii = 0; ii < Rows; ++ii) {
+			if (mapDirich_[ii] == -1) continue; // Dirchlet row
 			double64 sumi(0.);
-			vector<Entry>& JVrow(JV[ii]);
+			vector<Entry>& JVrow(JV_[ii]);
 			for (auto itJV : JVrow)
-  			  if (mapDirich[itJV.ind] != -1) AddToCRM(itJV);  // If it's in Local Matrix:
+  			  if (mapDirich_[itJV.ind] != -1) AddToCRM(itJV);  // If it's in Local Matrix:
 			  else if (( itD = Dirich_.find(itJV.ind)) != Dirich_.end()) sumi += itD->second * itJV.val;
 			ia.push_back(nnzi);
-			rh[mapDirich[ii]] = rhs[ii] - sumi;
+			rh[mapDirich_[ii]] = rhs[ii] - sumi;
 		}
 
 		rhs.swap(rh);
 	}
 
+
+
+
 	void CompressedRowMatrix::mapToGlobal(vector<double64>& sol, vector<Entry>& dirich)
 	{
-		size_t Rows(mapDirich.size()), isol(0), idirich(0);
+		size_t Rows(mapDirich_.size()), isol(0), idirich(0);
 		vector<double64> xg(Rows);
 		for (size_t ii = 0; ii < Rows; ++ii)
-			if (mapDirich[ii] == -1)
+			if (mapDirich_[ii] == -1)
 				xg[ii] = dirich[idirich++].val;
 			else
 				xg[ii] = sol[isol++];
@@ -96,7 +104,7 @@ namespace csmp {
 		bool isNew(false);
 		size_t colj(0), sizeJVi;
 		for (size_t i = 0; i < vals.Rows(); ++i) {
-			vector<Entry>& JVi(JV[rows[i]]); // Just for renaming
+			vector<Entry>& JVi(JV_[rows[i]]); // Just for renaming
 			sizeJVi = JVi.size();
 			for (size_t j = 0; j < vals.Cols(); ++j) {
 				if ((valij = vals(i, j)*factor) != Zero_) {
@@ -114,31 +122,31 @@ namespace csmp {
 		}
 	}
 
-	void CompressedRowMatrix::set_indicator_UBA(int32 nsys, vector<int32>& iu)
+	void CompressedRowMatrix::SetIndicatorUBA(int32 nsys, vector<int32>& iu)
 	{
-		uint32 k(0),g(0),rows(mapDirich.size());
+		uint32 k(0),g(0),rows(mapDirich_.size());
 		for (int32 j = 0; j<nsys; j++)
 			for (int32 i = 0; i<(rows / nsys); i++)
-				 if(mapDirich[g++] != -1) iu[k++] = j + 1;
+				 if(mapDirich_[g++] != -1) iu[k++] = j + 1;
 	}
 
-	void CompressedRowMatrix::Set_PBA(int32 nsys, std::vector<double64>& u_, std::vector<double64>& f_, std::vector<double64>& x, std::vector<double64>& b) 
+	void CompressedRowMatrix::SetPBA(int32 nsys, std::vector<double64>& u_, std::vector<double64>& f_, std::vector<double64>& x, std::vector<double64>& b) 
 	{
-		uint32 k(0), rows(mapDirich.size());
+		uint32 k(0), rows(mapDirich_.size());
 		for (int32 i = 0U; i < rows; i++) 
-			if(mapDirich[i] != -1){
+			if(mapDirich_[i] != -1){
 				u_[k] = x[i%nsys*(rows / nsys) + i / nsys]; // initial guess for the solution vector
 				f_[k] = b[i%nsys*(rows / nsys) + i / nsys]; // right-hand side
 				k++;
 			}
 	}
 
-	void CompressedRowMatrix::set_indicator_PBA(int32 nsys, vector<int32>& iu)
+	void CompressedRowMatrix::SetIndicatorPBA(int32 nsys, vector<int32>& iu)
 	{
-		uint32 k(0), g(0), rows(mapDirich.size());
+		uint32 k(0), g(0), rows(mapDirich_.size());
 		for (int32 i = 0; i<(rows / nsys); i++)
 			for (int32 j = 0; j<nsys; j++)
-				if (mapDirich[g++] != -1) iu[k++] = j + 1;
+				if (mapDirich_[g++] != -1) iu[k++] = j + 1;
 	}
 
 
@@ -178,6 +186,9 @@ namespace csmp {
 
 
 	CompressedRowMatrix::CompressedRowMatrix( const CompressedRowMatrix& crm )
+		: ia(crm.ia),
+		  ja(crm.ja),
+		   a(crm.a)
  {
       *this = crm;
  }
@@ -191,7 +202,7 @@ namespace csmp {
 		ia.resize(ias);
 		ja.resize(jas);
 		a.resize(jas);
-		mapDirich.resize(ias-1);
+		mapDirich_.resize(ias-1);
 		trh_.resize(ias-1);
 		tx_.resize(ias - 1);
 
@@ -200,7 +211,7 @@ namespace csmp {
 		for (size_t i = 0; i < jas; ++i) ifs >> ja[i];
 		for (size_t i = 0; i < jas; ++i) ifs >> a[i];
 		for (size_t i = 0; i < ias - 1; ++i) ifs >> trh_[i];
-		for (size_t i = 0; i < ias - 1; ++i) ifs >> mapDirich[i];
+		for (size_t i = 0; i < ias - 1; ++i) ifs >> mapDirich_[i];
 		cout << "Reading from " << CRMfname << " finished completely." << endl;
 	}
 
@@ -208,6 +219,12 @@ namespace csmp {
 	CompressedRowMatrix&  CompressedRowMatrix::operator=( const CompressedRowMatrix& crm )
   {
        if ( &crm != this ) {
+		    JV_ = crm.JV_;
+		Dirich_ = crm.Dirich_;
+		  trh_ = crm.trh_;
+		   tx_ = crm.tx_;
+		  nnzi = crm.nnzi;
+		   dof_ = crm.dof_;
              ia = crm.ia;
              ja = crm.ja;
              a  = crm.a;

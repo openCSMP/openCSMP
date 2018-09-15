@@ -97,8 +97,6 @@ void GenericFiniteVolumeTransport_Test::run()
     // TestBasics();
     BenchmarkGlobalVersusParametricIntegration();
    
-   
-   
  } // end run
 
 
@@ -153,7 +151,6 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // 3. Building the transport scheme
      // ------------------------------------------------------------
      ExplicitTransport<3>  transport_scheme( model, "Model", false );
-     model.InstantiateFiniteVolumes();
 
 
       // optional visualization of the input permeability and boundary conditions
@@ -182,7 +179,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                                                             "fluid volume source" );
     
       // postprocessing of pressure gradients and flow velocities
-      VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+      VelocityAndVolumeFlux<3U>  postpro0( model, "conductivity", "porosity", "fluid pressure" );
       steady_state_pressure.AddPostProcess( &postpro0 );
 
       // the calculation of fluid pressure

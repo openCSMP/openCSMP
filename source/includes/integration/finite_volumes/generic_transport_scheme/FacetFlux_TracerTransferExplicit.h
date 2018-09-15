@@ -1,5 +1,5 @@
-#ifndef FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H
-#define FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H
+#ifndef FACET_FLUX_H
+#define FACET_FLUX_H
 
 #include "VectorVariable.h"
 #include "DenseMatrix.h"
@@ -8,37 +8,20 @@ namespace csmp {
 
 template<size_t> class Node;
 template<size_t> class Element;
-template<size_t> class Region;
 
-struct VariableSet_TracerTransferExplicit;
-
-
-
-/**
-
-@brief  Policy class that computes fluxes across finite-volume facets;
-for application to individual FVs using terms computed on linear FEs.
-
-\details   Part of trial implementation of Colleoli transport scheme.
-\author    Stephan K. Matthai
-\version   1a
-\date      21/2/2013
-\pre       high-level class depending on CSMP++ API
-\bug       NONE
-\warning   NONE
-\copyright Stephan K. Matthai
-
-*/
+/// for application to individual FVs using terms computed on linear FEs
 template<size_t dim, template<size_t> class USER>
 class FacetFlux_TracerTransferExplicit {
   public:
-    FacetFlux_TracerTransferExplicit();
+    FacetFlux_TracerTransferExplicit() { /* assumes external initialisation of variables in base class */ };
   
     /// initialisation
     void FacetNormalPermeabilities();
     void UpwindDirection();
-
-    void FacetFluxes( Region<dim>& gref, bool reuse_velocity, bool second_order );
+  
+    /// computes (A_i vD . n_i) * upstream C on all facets in element stencil and stores them there
+    void      Advective_O1_FluxesInterior( Element<dim>* ) const;
+    double64  Advective_O1_FluxesAtBoundary( Node<dim>* ) const;
   
     /// stores and returns FV flux balance computed from current facet fluxes
     double64  FluxBalance( Node<dim>* const ) const;
@@ -54,18 +37,47 @@ class FacetFlux_TracerTransferExplicit {
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
   
   private:
-    /// computes (A_i vD . n_i) * upstream C on all facets in element stencil and stores them there
-    void      Advective_O1_FluxesInterior( bool reuse_previous_velocity, Element<dim>& ) const;
-    double64  Advective_O1_FluxesAtBoundary( Node<dim>& ) const;
-    void      Advective_O2_FluxesInterior( bool reuse_previous_velocity, Element<dim>& ) const;
-    double64  Advective_O2_FluxesAtBoundary( Node<dim>& ) const;
-    
-    mutable TensorVariable<dim> k_;
-    mutable VectorVariable<dim> vi_;
+    mutable VectorVariable<dim>  vD_, nrml_, gradC_; ///< for efficient re-use
+    mutable Point<dim>           pt_;
+    mutable DenseMatrix<DM_MIN>  DN_;
 };
 
+/**
+@class FacetFlux_TracerTransferExplicit FacetFlux_TracerTransferExplicit  "reservoir_simulator/FacetFlux_TracerTransferExplicit.h"
 
+\brief     Policy class that computes fluxes across finite-volume facets.
+\details   Part of trial implementation of Colleoli transport scheme.
+\author    Stephan K. Matthai
+\version   1a
+\date      21/2/2013
+\pre       high-level class depending on CSMP++ API
+\bug
+\warning
+\copyright Stephan K. Matthai
+
+@section motivation Motivation
+
+
+@section design Design Intent
+
+
+@section applicability Applicability
+
+
+@section collaborations Collaborations
+
+
+@section implementation Implementation
+
+
+@section examples Application Examples
+
+@code
+
+@endcode
+
+*/
 
 } // end csmp
 
-#endif /* FACET_FLUX_TRACER_TRANSFER_EXPLICIT_H */
+#endif /* FACET_FLUX_H */

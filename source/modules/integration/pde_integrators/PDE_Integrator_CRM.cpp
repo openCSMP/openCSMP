@@ -64,7 +64,7 @@ namespace csmp {
 		// We need rh_ send a copy.
 		RH_ = rh_;
 		//cout << *max(rh_.begin(), rh_.end()) << endl << min(rh_.begin(), rh_.end()).operator[]; getchar();
-		G_.Set_Dirichelet_RHS_CRM(rh_, dirich_);
+		G_.SetDiricheletRHS_CRM(rh_, dirich_);
 		//cout << max(rh_.begin(), rh_.end()).operator[] << endl << rh_[min(rh_.begin(), rh_.end())]; getchar();
 		// 6. diagnostics
 		if (debug) {
@@ -101,7 +101,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
   for (size_t i = 0; i < jas; ++i) ofs << G_.a[i] << endl;
   assert(RH_.size() == ias-1);
   for (size_t i = 0; i < ias-1; ++i) ofs << RH_[i] << endl;
-  for (size_t i = 0; i < ias - 1; ++i) ofs << G_.mapDirich[i] << endl;
+  for (size_t i = 0; i < ias - 1; ++i) ofs << G_.mapDirich_[i] << endl;
   cout << "Writing to " << fname << " finished completely." << endl;
 }
   
@@ -1815,7 +1815,7 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 		// 5.1 Remove Dirichelet Condition from Matrix, Modify RHS and Convert data structure JV (in CRM G_) to ia, ja, a
 		// We need rh_ send a copy.
 		RH_ = rh_;
-		G_.Set_Dirichelet_RHS_CRM(rh_, dirich_);
+		G_.SetDiricheletRHS_CRM(rh_, dirich_);
 
 		// 6. diagnostics
 		if (debug) {

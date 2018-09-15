@@ -6,35 +6,21 @@
 namespace csmp {
 
 template<size_t> class Node;
-template<size_t> class Element;
 
-/**
-
-@brief Local time-increment calculator for application to individual FVs.
-
-Face-by-face calculation of CFL like timestepping criteria.
-
-\details   Part of Colleoli transport scheme.
-\author    Stephan K. Matthai
-\version   1a
-\date      21/2/2013
-\pre       high-level class depending on CSMP++ API
-\copyright Stephan K. Matthai
-
-*/
+/// for application to individual FVs
 template<size_t dim, template<size_t> class USER>
 class TimeStepEvaluator {
   public:
     explicit TimeStepEvaluator( double64 step_size_reduction_factor=0.5, double64 max_time_increment=86400. * 365. );
 
     /// returns robust delta_t criterion in the presence of fluid sources and sinks; also computes and stores flux balance
-    double64 OutFlowLessThanContentIncrement( Node<dim>* ) const;
+    double64 OutFlowLessThanContentIncrement( Node<dim>* const ) const;
   
     /// returns robust delta_t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched)
-    double64 OutFlowLessThanContentIncrementBoundary( Node<dim>* ) const;
+    double64 OutFlowLessThanContentIncrementBoundary( const Node<dim>* const ) const;
 
     /// anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance
-    double64 StreamlineCFL( Element<dim>* const ) const;
+    double64 StreamlineCFL( Node<dim>* const ) const;
   
     /// adjust setting for the solve (default=0.5)
     void StepSizeReductionFactor( double64=0.5 );
@@ -50,8 +36,44 @@ class TimeStepEvaluator {
 
   private:
     const double64 max_time_increment_;
-    double64       step_size_reduction_factor_;
+    bool step_size_reduction_factor_;
 };
+
+/**
+@class TimeStepEvaluator TimeStepEvaluator  "reservoir_simulator/TimeStepEvaluator.h"
+
+\brief     Face-by-face calculation of CFL like timestepping criteria.
+\details   Part of Colleoli transport scheme.
+\author    Stephan K. Matthai
+\version   1a
+\date      21/2/2013
+\pre       high-level class depending on CSMP++ API
+\bug
+\warning
+\copyright Stephan K. Matthai
+
+@section motivation Motivation
+
+
+@section design Design Intent
+
+
+@section applicability Applicability
+
+
+@section collaborations Collaborations
+
+
+@section implementation Implementation
+
+
+@section examples Application Examples
+
+@code
+
+@endcode
+
+*/
 
 } // end csmp
 
