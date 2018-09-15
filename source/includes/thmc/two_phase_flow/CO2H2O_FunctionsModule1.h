@@ -12,7 +12,6 @@
 #include "VariableSet_CO2GeoSequestration.h"
 #include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "ExperimentalSaturationFunctions.h"
-#include "FlowFunctionsBC_Hysteretic.h"
 #include "TwoPhaseFlowFunctions.h"
 #include "Fluid.h"
 
@@ -47,9 +46,9 @@ template<size_t> class PropertyDatabase;
 
 template<size_t dim>
 class CO2H2O_FunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-    public BrooksCoreySaturationFunctionsWithHysteresis<dim,CO2H2O_FunctionsModule1>,  ///< placeholder for saturation function model
-    public FlowFunctionsBC_Hysteretic<dim,CO2H2O_FunctionsModule1>,                    ///< placeholder mobilities etc.
-    public Fluid<dim,CO2H2O_FunctionsModule1> {                                        ///< placeholder for fluids module / EOS interface
+    public BrooksCoreySaturationFunctionsWithHysteresis<dim,CO2H2O_FunctionsModule1>,  ///< saturation function model
+    public TwoPhaseFlowFunctions<dim,CO2H2O_FunctionsModule1>,                         ///< mobilities etc.
+    public Fluid<dim,CO2H2O_FunctionsModule1> {                                        ///< fluids module / EOS interface
       
   public:
     explicit CO2H2O_FunctionsModule1( const PropertyDatabase<dim>& );

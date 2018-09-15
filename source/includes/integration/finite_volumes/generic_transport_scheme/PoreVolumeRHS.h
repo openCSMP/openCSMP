@@ -28,8 +28,7 @@ class PoreVolumeRHS : public VectorOperator<dim> {
     PoreVolumeRHS( const Model<dim>& model,
                    const char* pv_variable, const char* advected_variable, const char* porosity_variable );
   
-  virtual void AccumulateStencil( Element<dim>&, std::vector<double64>& right_hand_vector ) const;
-
+    virtual void AccumulateStencil( Element<dim>&, std::vector<double64>& right_hand_vector ) const;
     virtual void AccumulateFiniteVolume( Node<dim>&, std::vector<double64>& right_hand_vector ) const;
   
   private:

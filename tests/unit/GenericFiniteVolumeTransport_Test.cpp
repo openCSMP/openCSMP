@@ -150,7 +150,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // ------------------------------------------------------------
      // 3. Building the transport scheme
      // ------------------------------------------------------------
-     ExplicitTransport<3>  transport_scheme( model, "Model", false );
+     ExplicitTransport<3>  transport_scheme( model, "Model" );
 
 
       // optional visualization of the input permeability and boundary conditions
@@ -1379,7 +1379,7 @@ void testSchemeAsComponent()
 
 
       // first order version only
-      ExplicitTransport<3U>  explicit_advector( model3D, "Model", false );
+      ExplicitTransport<3U>  explicit_advector( model3D, "Model" );
       printRangeOfVariable( model3D, "sector volume" );
       printRangeOfVariable( model3D, "sector pore volume" );
       printRangeOfVariable( model3D, "finite volume" );
