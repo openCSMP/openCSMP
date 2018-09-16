@@ -1,5 +1,5 @@
 #include "CSMP_mathUtilities.h"
-#include "BrooksCoreySaturationFunctionsWithHysteresis.h"
+#include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "CO2H2O_FunctionsModule1.h"
 #include "Element.h"
 

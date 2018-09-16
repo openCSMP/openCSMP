@@ -37,7 +37,6 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   
     virtual ~TwoPhaseDESTransport() { /* nothing to do here? */ }
                            
-    double64 VolumeIntegrateScalarFiniteVolumeVariable( const Model<dim>&, const char* property, bool take_porosity_into_account ) const;
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );
     void AdvectVariable_DES_openmp ( double64 model_time, size_t num_threads );
@@ -49,7 +48,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
     virtual void InitializeVariablesAndKeys(Model<dim>& );
  // TODO: if needed   void calculatePermeabilityProjections( Region<dim>& gref );
-    void initializeFiniteVolumeProperties(Event<dim>* event);
+    void initializeFiniteVolumeProperties();
     void ResetCFLMultiplier();
     void ComputeSaturationGradient (Event<dim>* event );
     virtual void ComputeRateofChange( Event<dim>* event );
@@ -76,8 +75,9 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     double64 relaxing_factor_; //relaxing factor for cfl multiplier at areas other than saturation front
     bool	tensor_permeability_=false;
     
-    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_ssn, key_ssw;
-    csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> key_grad;
+    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL;
+    csmp::INDEX<VECTOR,ELEMENT> key_grad;
+    csmp::INDEX<SCALAR,ELEMENT> key_ssw;
         
     // key_time - an ArrayVariable key for DES releated variables:
     // [0] current time stamp

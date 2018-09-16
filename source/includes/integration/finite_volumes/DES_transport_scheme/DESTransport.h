@@ -30,14 +30,13 @@ class DESTransport : public variables::VariableSet_TracerTransfer {
 
   private:
     void initializeVariablsAndKeys(Model<dim>& m);
-    void initializeFiniteVolumeProperties(Node<dim>* node);
+    void initializeFiniteVolumeProperties();
     void ComputeFluxBalanceAndCFL( Event<dim>* event);    
     void ComputeRateofChange( Event<dim>* event );
     bool Schedule(Event<dim>* nd, double64 t_end, double64 cfl_multiplier);
     void Update_DES(Event<dim>* nd, double64 t_clock);
     void Update_TDS(Event<dim>* nd, double64 delta_t);
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
-    void Synchronize_openmp(Event<dim>* nd,double64 t_clock, size_t num_threads);
 
     Region<dim>& gref_;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary

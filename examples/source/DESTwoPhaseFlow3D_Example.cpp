@@ -105,7 +105,7 @@ void DESTwoPhaseFlow3D_Example::Run()
     computeTotalMobility( model, flowfunctions );
 
     // output the range of the result variable
-    printRangeOfVariable( model, "total mobility" );
+    printRangeOfVariable( model, "total mobility permeability product" );
 
     // ------------------------------------------------------------------------------------------
     // 5.0 Setting up an FE algorithm to solve the diffusion equation 0 = div(lambda_t grad p)
@@ -116,13 +116,13 @@ void DESTwoPhaseFlow3D_Example::Run()
 
     // create a steady-state CSMP FE Algorithm using a high-level class
     SteadyStateDiffusor<3U,Region> fluid_pressure( model,
-                                                          "total mobility",
+                                                          "total mobility permeability product",
                                                           "fluid pressure",
                                                           "fluid volume source" );
 
     // operation to compute velocity
     VelocityAndVolumeFlux<3U,Element<3U> >  velo( model,
-                               "total mobility",
+                               "total mobility permeability product",
                                "porosity",
                                "fluid pressure", true, "total velocity" );
 
@@ -155,8 +155,8 @@ void DESTwoPhaseFlow3D_Example::Run()
     // -------------------------------------------------------------
 
     model.InputPropertyValue( "nodal fluid volume source", makeScalar( PLAIN,0.0) ); // no FV sources/sinks
-    model.InputPropertyValue( "diffusivity coefficient carbonic phase", makeScalar(PLAIN,1.0e-25) ); // very small value
-    model.InputPropertyValue( "diffusivity coefficient aqueous phase", makeScalar(PLAIN,1.0e-25) ); // very small value
+    //model.InputPropertyValue( "diffusivity coefficient carbonic phase", makeScalar(PLAIN,1.0e-25) ); // very small value
+    //model.InputPropertyValue( "diffusivity coefficient aqueous phase", makeScalar(PLAIN,1.0e-25) ); // very small value
 
     // -----------------------
     // 8.0 Time Loop Variables
@@ -207,7 +207,7 @@ void DESTwoPhaseFlow3D_Example::Run()
                   vtu.OutputDataToVTU( "DES_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "DES_Update_count", "update count", "Model",  time );
                   vtu.OutputDataToVTU( "DES_CFL_multiplier", "cfl multiplier", "Model",  time );
-                  vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
+                  //vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
                   vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );
                   if (multi_component) { 
                     vtu.OutputDataToVTU( "DES_dissolved CO2", "dissolved CO2",    "Model", time );
@@ -248,7 +248,7 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, CO2H2O_Fun
      
     static const Region<3U>& mref = mdl.Region("Model"); 
     // keys to properties
-    static Index  mobt_key(mdl.Database().StorageKey("total mobility"));
+    static Index  mobt_key(mdl.Database().StorageKey("total mobility permeability product"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
     static Index  snw_key(mdl.Database().StorageKey("saturation carbonic phase"));
     //csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   

@@ -1,6 +1,6 @@
 ﻿variable name,notation,units,type,minval,maxval,placement,usage,explanation,reference,notes
-composition carbonic phase,CO2_comp,Ymass,ARRAY2,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=2
-composition aqueous phase,H2O_comp,Xmass,ARRAY3,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=3
+composition carbonic phase,CO2_comp,Ymass,ARRAY,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=2
+composition aqueous phase,H2O_comp,Xmass,ARRAY,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=3
 dissolved CO2,CO2aq,kg/m3,SCALAR,0.00E+00,1.50E+02,NODE,computed/input,output,,only used for visualisation
 evaporated water,H2Og,kg/m3,SCALAR,0.00E+00,5.00E+01,NODE,computed,output,,only used for visualisation
 salt,NaCl,kg,SCALAR,0.00E+00,5.00E+00,NODE,computed/input,chemistry,,precipitate to be converted into volume
@@ -31,7 +31,7 @@ displacement,displ,m,VECTOR,-1.00E+03,1.00E+03,NODE,computed,mechanics,Fjaer et 
 dry rock density,rhod,kg/m3,SCALAR,2.00E+02,1.00E+04,ELEMENT,input,mechanics,Fjaer et al. 2008,density of air-filled porous medium
 effective stress,Se,Pa,SCALAR,-1.00E+08,1.00E+08,REGION,from-rocktype,mechanics,Fjaer et al. 2008,least principal stress minus pore pressure
 failure,fail,binary,SCALAR,-1.00E+01,1.00E+01,ELEMENT_INTEGRATION_POINT,calculated,mechanics,Fjaer et al. 2008,placed at IP not to miss critically stressed elements
-force,F,kgm/s2	,VECTOR,-1.00E+12,1.00E+12,NODE,computed,mechanics,Fjaer et al. 2008,used in the application of body forces and point loads
+force,F,kgm/s2,VECTOR,-1.00E+12,1.00E+12,NODE,computed,mechanics,Fjaer et al. 2008,used in the application of body forces and point loads
 friction angle,frica,deg,SCALAR,0.00E+00,9.00E+01,ELEMENT,from-rocktype,mechanics,Fjaer et al. 2008,given in degrees not radians
 max shear stress,SSmax,Pa,SCALAR,-1.00E+10,1.00E+10,ELEMENT,computed,mechanics,Fjaer et al. 2008,deviatoric stress acting in a particular element
 mean stress,Smean,Pa,SCALAR,-1.00E+12,1.00E+12,ELEMENT,computed,mechanics,Fjaer et al. 2008,average of eigenvalues of stress tensor
@@ -72,8 +72,8 @@ total velocity,vt,m/s,VECTOR,-1.00E+03,1.00E+03,ELEMENT,calculated,multiphase fl
 volume flux,qf,m3/s,SCALAR,0.00E+00,1.00E+02,ELEMENT,computed,multiphase flow,,volumetric flow rate
 model time,t,s,SCALAR,0.00E+00,1.00E+15,MODEL,computed,multiphase flow,,geologic time evolved in a simulation
 brooks corey parameter,bcp,none,SCALAR,0.00E+00,8.00E+00,ELEMENT,input ,multiphase flow,,lambda parameter from BC model scaling with the heterogeneity
-gravity force,Fg,kgm/s2	,VECTOR,-1.00E+15,1.00E+15,ELEMENT,calculated,multiphase flow,,body force due to the action of gravity
-previous drainage endpoint ,SwDrToImb,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
+gravity force,Fg,kgm/s2,VECTOR,-1.00E+15,1.00E+15,ELEMENT,calculated,multiphase flow,,body force due to the action of gravity
+previous drainage endpoint,SwDrToImb,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
 previous imbibition endpoint,SwImbToDr,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
 pseudo residual saturation carbonic phase,psrCO2,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model
 pseudo residual saturation aqueous phase,psrH2O,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model

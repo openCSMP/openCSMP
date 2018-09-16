@@ -12,7 +12,7 @@ namespace csmp {
 
 template<size_t dim>
 DESTransport<dim>::DESTransport( Model<dim>& m, const char* target_region )
-  : variables::Variables_TracerTransfer(m.Database()),
+  : variables::VariableSet_TracerTransfer(m.Database()),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.), rate_count_(0U), update_count_(0U),
     T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.),
@@ -21,7 +21,7 @@ DESTransport<dim>::DESTransport( Model<dim>& m, const char* target_region )
     m.InstantiateFiniteVolumes();
     initializeVariablsAndKeys(m);
     // retrieving the physically meaningful upper and lower solution limit from database
-    m.Database().RangeOf( m.Database().Name(this->key_C), lower_limit_, upper_limit_ );
+    m.Database().RangeOf( m.Database().Name(this->key_C0), lower_limit_, upper_limit_ );
     cout<<"DESTransport constructed"<<endl;
 }
 
@@ -72,20 +72,62 @@ void DESTransport<dim>::initializeVariablsAndKeys(Model<dim>& m)
 }
 
 
-
 template<size_t dim>
-void DESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
-{
-    double64 pore_volume  = 0.;
-    for (auto sip : nd->AllSectorIntegrationPoints()) {
-        const double64 sector_volume = sip.SectorVolume();
-        double64 phi = sip.Obtain( this->key_PHI );
-        double64 thickness = sip.Obtain( this->key_THI );
-        if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
-        pore_volume += sector_volume * phi;
-    }
-    nd->Store( this->key_FVPV, makeScalar(PLAIN, pore_volume) ); 
-          
+void DESTransport<dim>::initializeFiniteVolumeProperties()
+ {
+    // For the interior elements of the region compute relevant variable values
+    const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
+    for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
+    {
+         const size_t sectors((*it)->Sectors());
+         const size_t facets((*it)->Facets());
+
+         // computing sector pore volumes
+         double64 phi = (*it)->Read( this->key_THI);
+         const double64 thickness = (*it)->Read( this->key_THI );
+         if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
+         
+         for ( size_t i=0U; i<sectors; ++i ) {
+              const double64 sector_volume = (*it)->SectorVolume(i);       
+              double64 pore_volume   = (*it)->N(i)->Read( this->key_FVPV );
+              pore_volume   += phi * sector_volume;
+              (*it)->N(i)->Store( this->key_FVPV, makeScalar(PLAIN,pore_volume) );
+         }
+
+         // computing facet normals and areas
+         for ( size_t j=0U; j<facets; ++j ) {
+              const double64 facet_area = (*it)->FacetArea(j);
+              (*it)->Store( j, 0U, this->key_fA, makeScalar( PLAIN, facet_area ) );
+              Point<dim> nrml = (*it)->FacetNormal(j);
+              VectorVariable<dim>  fnrml;
+              fnrml(0) = nrml[0];
+              if ( dim != 1U ) fnrml(1) = nrml[1];
+              if ( dim == 3U ) fnrml(2) = nrml[2];
+              (*it)->Store( j, 0U, this->key_fn, fnrml );
+         }            
+   }
+
+   // initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
+   // (here the pore volumes do not include the sectors outside the region)
+   const typename vector<Node<dim>*>::iterator nit_end(gref_.NodesEnd());
+   for ( typename vector<Node<dim>*>::iterator nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
+        const size_t parent_elements((*nit)->Parents());      
+        for ( size_t i=0U; i<parent_elements; ++i ) {
+             Element<dim>* const eptr = (*nit)->Parent(i);
+             // computing facet normals and areas
+             const size_t facets(eptr->Facets());
+             for ( size_t j=0U; j<facets; ++j ) {
+                  const double64 facet_area = eptr->FacetArea(j);
+                  eptr->Store( j, 0U, this->key_fA, makeScalar( PLAIN, facet_area ) );
+                  Point<dim> nrml = eptr->FacetNormal(j);
+                  VectorVariable<dim>  fnrml;
+                  fnrml(0) = nrml[0];
+                  if ( dim != 1U ) fnrml(1) = nrml[1];
+                  if ( dim == 3U ) fnrml(2) = nrml[2];
+                  eptr->Store( j, 0U, this->key_fn, fnrml );
+             }             
+        }
+   }
  } // end initializeFiniteVolumeProperties
 
 
@@ -95,20 +137,41 @@ void DESTransport<dim>::initializeFiniteVolumeProperties(Node<dim>* nd)
 template<size_t dim>
 void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 {
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_C ) != DIRICH);
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
 
+  if(nd  != NULL && nd->Status(  this->key_C0 ) != DIRICH) {
     double64 flux_balance(0.), outflow(0.);
     
-    VectorVariable<dim> vD;
-    for (auto fip : nd->AllFacetIntegrationPoints()) {
-        const double64 sign = fip.FromInside() ? 1. : -1.;
-        fip.Obtain( this->key_V, vD );
-        const double64 vD_nA = vD.DotProduct(fip.DirectedArea());
-        const double64 facet_flux = sign * vD_nA;
-        flux_balance += facet_flux;       
-        if ( facet_flux > 0. ) outflow += facet_flux ;        
+    VectorVariable<dim> vD, facetNrml;
+    const size_t node_parent_elements(nd->Parents());
+    
+    for ( size_t t=0U; t<node_parent_elements; t++ )
+    {
+        Element<dim>* const eptr(nd->Parent(t));
+        assert( eptr != NULL );
+        const size_t pnid(nd->ParentNodeNumber(t));
+        eptr->Read( this->key_V, vD);
+
+        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( size_t i=0U; i<sector_facets; i++ )
+        {
+            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+                        
+            eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
+            const double64  vD_n = vD.DotProduct(facetNrml);
+            const double64  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
+            
+            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            //compute facet fluid flux
+            double64 facet_flux = sign * vD_n * facetArea;
+            //update flux balance
+            flux_balance += facet_flux;
+            //update outflow
+            if ( facet_flux > 0. ) outflow += facet_flux;
+        }
     }
         
     nd->Store(  this->key_FB, makeScalar( nd->Status(  this->key_FB ), flux_balance ) );//flux balance
@@ -121,6 +184,7 @@ void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     else 
         array2.Component(2, nd->Read(  this->key_FVPV ) / outflow);  
     nd->Store(key_time, array2);
+  }
 }
 
 
@@ -129,27 +193,48 @@ void DESTransport<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 template<size_t dim>
 void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 {
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_C ) != DIRICH);
-
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
+    
+  if(nd  != NULL && nd->Status(  this->key_C0 ) != DIRICH) {
     rate_count_++;//recording
     nd->Store(  key_rate, makeScalar( nd->Status( key_rate), nd->Read( key_rate) + 1 ) );
 
     double64 accumulation(0.);
-    VectorVariable<dim> vD;
-    for (auto fip : nd->AllFacetIntegrationPoints()) {
-        fip.Obtain( this->key_V, vD );
-        const double64 facet_flux = vD.DotProduct(fip.DirectedArea());        
-      
-        auto upstream_node = fip.UpstreamNode(facet_flux);
-        const double64 C_upstream = upstream_node.Read( this->key_C );
+    VectorVariable<dim> vD, facetNrml;
+    const size_t node_parent_elements(nd->Parents());
+    
+    for ( size_t t=0U; t<node_parent_elements; t++ )
+    {
+        Element<dim>* const eptr(nd->Parent(t));
+        assert( eptr != NULL );
+        const size_t pnid(nd->ParentNodeNumber(t));
+        eptr->Read( this->key_V, vD);
 
-        const double64 sign = ( fip.FromInside() ) ? 1. : -1.;
-        accumulation += sign * facet_flux * C_upstream;    
-    }
+        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( size_t i=0U; i<sector_facets; i++ )
+        {
+            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));            
+            
+            eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
+            const double64  vD_n = vD.DotProduct(facetNrml);
+            const double64  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
+            
+            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            //compute facet fluid flux
+            double64 facet_flux = sign * vD_n * facetArea;
+            // finding the upstream node
+            const size_t upstream_node = (vD_n < 0.) ? outside_node : inside_node;
+            const double64 C_upstream = eptr->N(upstream_node)->Read( this->key_C0 );
+            accumulation += facet_flux * C_upstream;  
+        }
+    }    
 
-    nd->Store(  this->key_NC, makeScalar( nd->Status( this->key_NC ), accumulation ) );    
+    nd->Store(  this->key_C1, makeScalar( nd->Status( this->key_C1 ), accumulation ) );    
+  }
 } 
 
 
@@ -159,9 +244,11 @@ void DESTransport<dim>::ComputeRateofChange( Event<dim>* event )
 template<size_t dim>
 bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl_multiplier)
 {
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_C ) != DIRICH);
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
+    
+  if(nd  != NULL && nd->Status(  this->key_C0 ) != DIRICH) {    
     ArrayVariable array;
     nd->Read(key_time, array);
 
@@ -170,8 +257,8 @@ bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl
     //compute target change
     double64 CFL = array[2];//CFL number
     double64 PV = nd->Read( this->key_FVPV);//Pore volume
-    double64 ChangeRate = nd->Read( this->key_NC);//rate of change
-    double64 C0 = nd->Read(  this->key_C);//concentration
+    double64 ChangeRate = nd->Read( this->key_C1);//rate of change
+    double64 C0 = nd->Read(  this->key_C0);//concentration
     double64 flux_balance = nd->Read(  this->key_FB);//flux balance
 
     double64 dC_CFL = -CFL*cfl_multiplier/PV*(ChangeRate-C0*flux_balance);//targe change
@@ -197,6 +284,7 @@ bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl
         nd->Store(key_time,array);
         return true;
     };
+  }
 }
 
 
@@ -204,17 +292,19 @@ bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl
 template<size_t dim>
 void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
 {
-    update_count_++;//recording
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_C ) != DIRICH);
-    const VARIABLE_FLAG status(nd->Status( this->key_C ));
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
+    
+  if(nd  != NULL && nd->Status(  this->key_C0 ) != DIRICH) {  
+    update_count_++;//recording  
+    const VARIABLE_FLAG status(nd->Status( this->key_C0 ));
     ArrayVariable array;
     nd->Read(key_time, array);
 
     // 1. starting with the sum of facet flux-concentration products stored in C1
-    double64 ChangeRate = nd->Read( this->key_NC);   
-    double64 solution = nd->Read( this->key_C);//concentration
+    double64 ChangeRate = nd->Read( this->key_C1);   
+    double64 solution = nd->Read( this->key_C0);//concentration
     // 2. correcting this sum for div vD using 'flux balance'   
     ChangeRate -= solution * nd->Read( this->key_FB ); 
     // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
@@ -226,16 +316,16 @@ void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     // new concentration
     new_solution += source * (t_clock - t_current);
 
-    double64 C_last = nd->Read(this->key_C);//last concentration
+    double64 C_last = nd->Read(this->key_C0);//last concentration
         
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C0, makeScalar( status, new_solution ));//store solution value to this->key_C0
     else {
         cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
+        if ( new_solution > upper_limit_ ) nd->Store( this->key_C0, makeScalar( status, upper_limit_ ) );
+        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C0, makeScalar( status, lower_limit_ ) );
     }
         
-    double64 C_current = nd->Read(this->key_C);//current concentration
+    double64 C_current = nd->Read(this->key_C0);//current concentration
     double64 dC_cumulative = array[4];
     array.Component(4, dC_cumulative + (C_current-C_last));//update cumulative change
         
@@ -243,6 +333,7 @@ void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     nd->Store(key_time, array);
 
     nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
+  }
 }
 
 
@@ -250,15 +341,17 @@ void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
 template<size_t dim>
 void DESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
 {
-    update_count_++;//recording
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );    
-    assert( nd->Status(  this->key_C ) != DIRICH);
-    const VARIABLE_FLAG status(nd->Status( this->key_C ));
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );    
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
+    
+  if(nd  != NULL && nd->Status(  this->key_C0 ) != DIRICH) {  
+    update_count_++;//recording     
+    const VARIABLE_FLAG status(nd->Status( this->key_C0 ));
     
     // 1. starting with the sum of facet flux-concentration products stored in C1
-    double64 ChangeRate = nd->Read(this->key_NC);   
-    double64 solution = nd->Read(this->key_C);//concentration
+    double64 ChangeRate = nd->Read(this->key_C1);   
+    double64 solution = nd->Read(this->key_C0);//concentration
     // 2. correcting this sum for div vD using 'flux balance'   
     ChangeRate -= solution * nd->Read(  this->key_FB ); 
     // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
@@ -269,14 +362,15 @@ void DESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
     // new concentration
     new_solution += source * delta_t;
  
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C, makeScalar( status, new_solution ));//store solution value to this->key_C
+    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) nd->Store(this->key_C0, makeScalar( status, new_solution ));//store solution value to this->key_C0
     else {
         cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) nd->Store( this->key_C, makeScalar( status, upper_limit_ ) );
-        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C, makeScalar( status, lower_limit_ ) );
+        if ( new_solution > upper_limit_ ) nd->Store( this->key_C0, makeScalar( status, upper_limit_ ) );
+        else if ( new_solution < lower_limit_ ) nd->Store( this->key_C0, makeScalar( status, lower_limit_ ) );
     }
     
     nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) ); 
+  }
 }
 
 
@@ -285,106 +379,56 @@ void DESTransport<dim>::Update_TDS(Event<dim>* event, double64 delta_t)
 template<size_t dim>
 void DESTransport<dim>::Synchronize(Event<dim>* event,double64 t_clock,double64& t_remove )
 {
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL ); 
-    assert( nd->Status(  this->key_C ) != DIRICH);
-    
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL ); 
+  assert( nd->Status(  this->key_C0 ) != DIRICH);
+  if(nd  != NULL && nd->Status( this->key_C0 ) != DIRICH){     
     nd->Store( key_synchronize, makeScalar( nd->Status(key_synchronize), nd->Read(key_synchronize) + 1 ) );
     event->valid(false);
     ArrayVariable array;
     nd->Read(key_time, array);
-    array.Component(4, 0.); //cumulative change of solution
+    array.Component(4, 0.); //reset cumulative change of solution
     nd->Store(key_time, array);
     for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
-        if( neighbor_node->Status(  this->key_C ) != DIRICH){
-            int index = neighbor_node->Read(key_EventIndex);
-            Event<dim>* neighbor_event = FullList[index];  
-            assert( neighbor_event  != NULL ); 
-            if (neighbor_event->inPEPStack() == false) {
-                PEPList.push_back(neighbor_event);
-                neighbor_event->inPEPStack(true);
-                Update_DES(neighbor_event,t_clock);
-                ArrayVariable neighbor_array;
-                neighbor_node->Read(key_time, neighbor_array); 
-                double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
-                double64 dC_target = neighbor_array[5];//target change of solution
-                if (fabs(dC_cumulative) >= fabs(dC_target)) {
-                    clock_t t_begin = clock();
-                    if (neighbor_event->inQueue()){
-                        Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
-                        EventHeap.remove(neighbor_heap_node);
-                        neighbor_event->inQueue(false);
-                    }
-                    t_remove += clock() - t_begin; 
-                    Synchronize (neighbor_event, t_clock,t_remove); 
+        if( neighbor_node != NULL && neighbor_node->Status(  this->key_C0 ) != DIRICH){
+            size_t index = neighbor_node->Read(key_EventIndex);
+            if(index >= 0 && index < FullList.size()){
+                Event<dim>* neighbor_event = FullList[index];  
+                assert( neighbor_event  != NULL ); 
+                if (neighbor_event != NULL && neighbor_event->inPEPStack() == false) {
+                    PEPList.push_back(neighbor_event);
+                    neighbor_event->inPEPStack(true);
+                    Update_DES(neighbor_event,t_clock);
+                    ArrayVariable neighbor_array;
+                    neighbor_node->Read(key_time, neighbor_array); 
+                    double64 dC_cumulative = neighbor_array[4];//cumulative change of solution
+                    double64 dC_target = neighbor_array[5];//target change of solution
+                    if (fabs(dC_cumulative) >= fabs(dC_target)) {
+                        #if defined(_OPENMP)
+                        double64 t_begin = omp_get_wtime();
+                        #else
+                        clock_t t_begin = clock();
+                        #endif
+                        if (neighbor_event->inQueue()){
+                            Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
+                            EventHeap.remove(neighbor_heap_node);
+                            neighbor_event->inQueue(false);
+                        }
+                        #if defined(_OPENMP)
+                        t_remove += omp_get_wtime() - t_begin;
+                        #else
+                        t_remove += clock() - t_begin; 
+                        #endif
+                        Synchronize (neighbor_event, t_clock,t_remove); 
+                    };
                 };
             };
         };
     };
+  }
 }
 
-
-#if defined(_OPENMP )
-//Synchronize neighbor nodes/FVs
-template<size_t dim>
-void DESTransport<dim>::Synchronize_openmp(Event<dim>* event,double64 t_clock, size_t num_threads)
-{
-    /*
-    std::vector<Event<dim>*> UpdateList, SynList;
-    SynList.push_back(event);
-    
-    while (SynList.size() > 0) {
-        #pragma omp parallel num_threads(num_threads)
-        {
-            #pragma omp for schedule(dynamic)
-            for(size_t i = 0U; i < SynList.size(); ++i)
-            {
-                auto it1 = SynList.begin()+i;
-                (*it1)->valid(false);
-                ArrayVariable array;
-                (*it1)->getNode()->Read(key_time, array);
-                array.Component(4, 0.); //cumulative change of solution
-                (*it1)->getNode()->Store(key_time, array);
-                (*it1)->getVariable1()->dC_cumulative_ = 0.;        
-                for ( size_t n=0U; n<(*it1)->Neighbors(); ++n ) {
-                    Node<dim>* neighor_node = (*it1)->Neighbor(n);
-                    size_t index = static_cast<long>(neighbor_node->Read(key_EventIndex));
-                    Event<dim>* neighbor_event = EntireQueue[index];
-                    #pragma omp critical
-                    {    
-                        if (neighbor_event->inPEPStack() == false) {
-                            PEPStack.push_back(neighbor_event);
-                            neighbor_event->inPEPStack() = true;
-                            UpdateList.push_back(neighbor_event);
-                        }
-                    }
-                }
-            }
-            #pragma omp single    
-            SynList.clear();    
-
-            #pragma omp for schedule(dynamic)
-            for(size_t i = 0U; i < UpdateList.size(); ++i)
-            {
-                auto it2 = UpdateList.begin()+i;
-                Update_DES(*it2,t_clock);
-                ArrayVariable array2;
-                (*it2)->getNode()->Read(key_time, array2); 
-                double64 dC_cumulative = array2[4];//cumulative change of solution
-                double64 dC_target = array2[5];//target change of solution                
-                if (fabs(dC_cumulative) >= fabs(dC_target)) {
-                    #pragma omp critical
-                    SynList.push_back(*it2);
-                }
-            }
-            #pragma omp single 
-            UpdateList.clear();
-        }
-    }
-    */
-}
-#endif
 
 
 //advect variable with TDS (time-driven simulation)
@@ -392,6 +436,7 @@ template<size_t dim>
 void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl_multiplication_factor, double64 PEP_parameter )
 {
     if(first_step_){
+        initializeFiniteVolumeProperties();
         //create events for all nodes and add them to PEPList
         size_t dirich_count = 0;
         const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
@@ -405,8 +450,8 @@ void DESTransport<dim>::AdvectVariable_TDS( double64 time_interval, double64 cfl
             ArrayVariable arrayVariable( 6, 0., PLAIN );         
             (*nit)->Store( key_time, arrayVariable );  
                    
-            initializeFiniteVolumeProperties(*nit);
-            if((*nit)->Status(  this->key_C ) != DIRICH) {
+            //initializeFiniteVolumeProperties(*nit);
+            if((*nit)->Status(  this->key_C0 ) != DIRICH) {
                 Event<dim>* event = new Event<dim>(*nit);
                 event->valid(false);
                 ComputeFluxBalanceAndCFL(event);
@@ -516,18 +561,18 @@ void DESTransport<dim>::AdvectVariable_DES( double64 model_time, double64 cfl_mu
 }
 
 
-#if defined(_OPENMP )
+
+
+#if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), with openmp
 template<size_t dim>
 void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64 cfl_multiplication_factor, double64 PEP_parameter, size_t num_threads)
 {
-    /*
     double64 begin=omp_get_wtime();
-    cout<<"Start DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout<<"Start DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp "<<endl;
+    cout << "Using threads = "<<num_threads<<" Maximum available threads ="<< omp_get_max_threads() << endl;
     double64 time(0.);
     bool Finished = false;
-    */
-    
     //uncomment for recording events at each time interval
     /*
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
@@ -537,109 +582,181 @@ void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64
     }
     */
     
-    /*
-    double64 T_begin;
+    if(first_step_){
+        initializeFiniteVolumeProperties();
+        //create events for all nodes and add them to event lists
+        size_t index = 0;
+        size_t dirich_count = 0;
+        const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
+        for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+        { 
+            (*nit)->Store( key_update, makeScalar( (*nit)->Status( key_update), 0 ) ); //update count
+            (*nit)->Store( key_rate, makeScalar( (*nit)->Status( key_rate), 0 ) ); //changerate count
+            (*nit)->Store( key_schedule, makeScalar( (*nit)->Status( key_schedule), 0 ) ); //schedule count
+            (*nit)->Store( key_synchronize, makeScalar( (*nit)->Status( key_synchronize), 0 ) ); //synchronize count   
+        
+            ArrayVariable arrayVariable( 7, 0., PLAIN );         
+            (*nit)->Store( key_time, arrayVariable );  
+                   
+            if((*nit)->Status(  this->key_C0 ) != DIRICH) {
+                (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
+                Event<dim>* event = new Event<dim>(*nit);
+                PEPList.push_back(event);
+                event->inPEPStack(true);
+                ComputeRateofChange(event);
+                Schedule(event, model_time, cfl_multiplication_factor);
+                event->valid(false);
+                Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
+                HeapNodeFullList.push_back(heap_node);
+                FullList.push_back(event);
+                event->inQueue(false);
+
+                index++;
+        
+            } else {
+                dirich_count++;
+            }
+        }
+        cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
+        first_step_=false;
+    }  
 
     while (!Finished)
-    {
+    {   
+        double64 T_begin;
+        
         T_begin = omp_get_wtime();
-        size_t PEPStack_size = PEPStack.size();
-        cout << "Number of threads = "<<num_threads<<" Maximum number of threads ="<< omp_get_max_threads() << " PEPStack_size = " << PEPStack_size;
+                
+        size_t PEPList_size = PEPList.size();
+           
+        std::vector<Event<dim>*> tempList;
         #pragma omp parallel num_threads(num_threads)
         {
-        #pragma omp for schedule(dynamic)
-            for(size_t i = 0U; i < PEPStack_size; ++i)
+            std::vector<Event<dim>*> privateList;
+            
+            #pragma omp for schedule(dynamic)
+            for(size_t i = 0U; i < PEPList_size; ++i)
             {
-                auto it = PEPStack.begin()+i;
-                ComputeRateofChange(*it);            
-                if ((*it)->valid() == false)
-                    if (Schedule(*it, model_time, cfl_multiplication_factor)){
-                    #pragma omp critical
-                        Queue.push_back(*it);
-                    }         
-                (*it)->inPEPStack(false);             
+                auto it = PEPList.begin()+i;
+                Event<dim>* event = *it;                                
+                ComputeRateofChange((*it)); 
+                
+                if (event->valid() == false) 
+                    if (Schedule(event, model_time, cfl_multiplication_factor)) privateList.push_back(event);
+                event->inPEPStack(false); 
             };
-        }   
-        T_RateOfChange_ += omp_get_wtime() - T_begin;
-        cout <<" Queue size = "<< Queue.size()<<endl;   
+            
+            #pragma omp critical
+            tempList.insert(tempList.end(), privateList.begin(), privateList.end());            
+        } 
+        
+        size_t tempList_size = tempList.size();
+        for(size_t i = 0U; i < tempList_size; ++i)
+        {
+            auto it = tempList.begin()+i;
+            Event<dim>* event = *it;                 
+            double64 scheduled_time = event->t_schedule();
+            size_t index = event->getNode()->Read(key_EventIndex);
+            Heap_Node* heap_node = new Heap_Node(scheduled_time,index);                    
+            EventHeap.insert(heap_node);
+            HeapNodeFullList[index] = heap_node;
+            event->inQueue(true);
+        }
+        tempList.clear();
+        
+        
+        T_RateOfChange_ += omp_get_wtime() - T_begin; 
+        cout <<"  PEPList size = " << PEPList.size() << "  Queue size = "<< EventHeap.size()<<endl;          
 
-        T_begin= omp_get_wtime();        
-        if (Queue.empty()) {
-            time=model_time;
-        } else {
-            sort(Queue.begin(),Queue.end(),sort_queue<dim>());
-            const typename vector<Event<dim>*>::iterator begin(Queue.begin());
-            ArrayVariable begin_array;
-            (*begin)->getNode()->Read(key_time, begin_array);
-            time = begin_array[1]; //scheduled time stamp
-        };
-        T_SortQueue_ += omp_get_wtime() - T_begin;
+            
+        if (EventHeap.empty()) time=model_time;
+        else time = EventHeap.minimum()->getK();
         cout<<"  time = "<<time<<" model_time = "<<model_time<<endl;
 
         if (time == model_time) {
             Finished = true;
-            const typename vector<Vector<dim>*>::iterator End(PEPStack.end());
-            for ( typename vector<Vector<dim>*>::iterator e=PEPStack.begin(); e!=End; ++e )
+            const typename vector<Event<dim>*>::iterator End(PEPList.end());
+            for ( typename vector<Event<dim>*>::iterator e=PEPList.begin(); e!=End; ++e )
                 (*e)->valid(false);
             break;
         };
 
-        PEPStack.clear();
+        PEPList.clear();
     
         double64 dt_PEP=numeric_limits<double64>::max();
         size_t count = 0U;
-        while (!Queue.empty())
-        {
-            count++;
-            const typename vector<Event<dim>*>::iterator top(Queue.begin());
+        while (!EventHeap.empty())
+        {           
+            Heap_Node* root_node = EventHeap.minimum();
+            size_t top_index = root_node->getV();
+            Event<dim>* top_event = FullList[top_index];
+            
+            if(top_event->valid() == false) {
+                T_begin= omp_get_wtime();
+                EventHeap.remove(root_node);
+                top_event->inQueue(false);
+                T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
+                continue;
+            }
+            
+            count++;            
             ArrayVariable array;
-            (*top)->getNode()->Read(key_time, array);
-            double64 dt_target = array[3];
+            top_event->getNode()->Read(key_time, array);
+            double64 dt_target = array[3];//target time stamp
             dt_PEP = min(dt_PEP, PEP_parameter*dt_target);
-            double64 t_schedule = array[1];//schedule time stamp
-            if (t_schedule > (time+dt_PEP)) break;
-            if ((*top)->inPEPStack() == false) {
-                PEPStack.push_back((*top));
-                (*top)->inPEPStack(true);
-            }; 
+            double64 t_schedule = array[1];//scheduled time stamp
+            if (t_schedule > (time+dt_PEP)) break;            
+            if (top_event->inPEPStack() == false) {
+                PEPList.push_back(top_event);
+                top_event->inPEPStack(true);
+                T_begin= omp_get_wtime();
+                Update_DES(top_event,time);
+                T_Update_ += omp_get_wtime() - T_begin;                
+            };  
+            
             T_begin= omp_get_wtime();
-            Update_DES((*top),time);
-            T_Update_ += omp_get_wtime() - T_begin;
+            EventHeap.remove(root_node); 
+            top_event->inQueue(false);
+            T_RemoveFromHeap_ += omp_get_wtime() - T_begin;
+            
             T_begin= omp_get_wtime();
-            Synchronize_openmp((*top),time,num_threads);
-            T_Synchronize_ += omp_get_wtime() - T_begin;
-            Queue.erase(top); 
-            //remove invalid events/nodes from Queue
-            T_begin= omp_get_wtime();
-            if(!Queue.empty()) {
-                size_t queue_size = Queue.size();
-                for ( size_t n = 0U; n<queue_size; n++ )
-                {  
-                    if (Queue[n]->valid() == false) {
-                        Queue.erase(Queue.begin()+n);
-                        queue_size --;
-                    };
-                };
-            };
-            T_RemoveFromQueue_ += omp_get_wtime() - T_begin;
+            double64 t_remove(0.);    
+            Synchronize(top_event,time,t_remove);
+            T_RemoveFromHeap_ += t_remove;
+            T_Synchronize_ += omp_get_wtime() - T_begin - t_remove;
         };
-        cout<<"  count =  "<<count<<endl;
+            
+        cout<<"  iteration count = "<<count<<endl;
     };
-    T_AdvectVariable_+=omp_get_wtime()-begin; 
+    /*
+    //reset all events and add them to PEPList (for advection at next integration step)
+    EventHeap.clear();
+    PEPList.clear();
+    const typename vector<Event<dim>*>::iterator stack_end(FullList.end());
+    for ( typename vector<Event<dim>*>::iterator it=FullList.begin(); it!=stack_end; ++it )       
+    {  
+        Event<dim>* event = *it;
+        PEPList.push_back(event);
+        event->inPEPStack(true);          
+        event->valid(false);
+        event->inQueue(false);
+    } 
+    */
+    T_AdvectVariable_+= omp_get_wtime() - begin;
 
-    cout <<"Finish DESTransport<dim>::AdvectVariable_DES_openmp "<<endl;
+    cout<<"Finish DESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
-    cout <<"update_count_ = "<<update_count_<<endl;   
-    cout <<"T_Schedule_ = "<< T_Schedule_ << endl;
-    cout <<"T_SortQueue_ = "<< T_SortQueue_ << endl;
-    cout <<"T_Update_  = "<< T_Update_ << endl;
-    cout <<"T_Synchronize_ = "<< T_Synchronize_ << endl;
-    cout <<"T_RemoveFromQueue_ = "<< T_RemoveFromQueue_ << endl;   
-    cout <<"T_RateOfChange_ = "<< T_RateOfChange_ << endl;   
-    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;   
-    */   
-}  
+    cout <<"update_count_ = "<<update_count_<<endl; 
+    cout <<"T_Schedule_ = "<< T_Schedule_  << endl;
+    cout <<"T_Update_  = "<< T_Update_  << endl;
+    cout <<"T_Synchronize_ = "<< T_Synchronize_<< endl;
+    cout <<"T_RateOfChange_(including_T_Schedule_) = "<< T_RateOfChange_ << endl;
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ << endl; 
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ << endl; 
+    cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;
+} 
 #endif
+
 
 
 
@@ -662,6 +779,7 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
     
     
     if(first_step_){
+        initializeFiniteVolumeProperties();
         //create events for all nodes and add them to PEPStack and EntireQueue
         size_t index = 0;
         size_t dirich_count = 0;
@@ -676,16 +794,16 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
             ArrayVariable arrayVariable( 6, 0., PLAIN );         
             (*nit)->Store( key_time, arrayVariable );  
                    
-            initializeFiniteVolumeProperties(*nit);
-            if((*nit)->Status(  this->key_C ) != DIRICH) {
+            //initializeFiniteVolumeProperties(*nit);
+            if((*nit)->Status(  this->key_C0 ) != DIRICH) {
                 (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
                 Event<dim>* event = new Event<dim>(*nit);
-                event->valid(false);
                 ComputeFluxBalanceAndCFL(event);
                 PEPList.push_back(event);
                 event->inPEPStack(true);
                 ComputeRateofChange(event);
                 Schedule(event, model_time, cfl_multiplication_factor);
+                event->valid(false);
                 Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
                 HeapNodeFullList.push_back(heap_node);
                 FullList.push_back(event);

@@ -66,15 +66,15 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAn
 }
 
 
-
-//Compute the rate of change of non-wetting phase in a node/FV, as well as the mass variation rate for each of components
+//Compute the rate of change of non-wetting phase in a node/FV
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* event )
 {
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_sCO2 ) != DIRICH);
+    
+  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){ 
     this->rate_count_++;//recording
     nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
 
@@ -82,151 +82,157 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
     double64 accumulation_CO2aq(0.), accumulation_H2Og(0.);
         
     const size_t v( (dim==1u) ? 0u : 1u );
-    VectorVariable<dim> vD;
+    VectorVariable<dim> vD, facetNrml;
+    const size_t node_parent_elements(nd->Parents());
     
     double64 cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
-    size_t index = 0;
-    for (auto fip : nd->AllFacetIntegrationPoints()) {
-        const double64 sign = fip.FromInside() ? 1. : -1.;
-        //compute facet flux
-        fip.Obtain( this->key_vt, vD );
-        //double64 vD_n = fip.ProjectOntoFacetNormal(vD);  
-        double64 facetArea = event->facetAreaCollection[index];
-        Point<dim> facetNrml = event->facetNormalCollection[index];
-        index++;
-        double64 vD_n = dotProduct(vD.P(), facetNrml); 
-              
-        const double64 facet_flux = sign * vD_n * facetArea;
-        flux_balance += facet_flux;       
-        if ( facet_flux > 0. ) outflow += facet_flux ; 
-        
-        //compute mobilities on inside and outside nodes          
-        auto inside_node = fip.InsideNode();
-        auto outside_node = fip.OutsideNode(); 
-       
-        const double64 sn_inside_node = inside_node.Read( this->key_sCO2 );
-        const double64 sw_inside_node = 1.-sn_inside_node;
-        const double64 ln_inside_node = this->flowfunctions_.Mobility_at(fip,1U,1.0-sn_inside_node); 
-        const double64 lw_inside_node = this->flowfunctions_.Mobility_at(fip,0U,1.0-sn_inside_node); 
-        const double64 CO2aq_inside_node = inside_node.Read( this->key_CO2aq ); //dissolved CO2
-        const double64 H2Og_inside_node = inside_node.Read( this->key_H2Og ); //evaporated water
-        
-        const double64 sn_outside_node = outside_node.Read( this->key_sCO2 );
-        const double64 sw_outside_node = 1.-sn_outside_node;
-        const double64 ln_outside_node = this->flowfunctions_.Mobility_at(fip,1U,1.0-sn_outside_node); 
-        const double64 lw_outside_node = this->flowfunctions_.Mobility_at(fip,0U,1.0-sn_outside_node);      
-        const double64 CO2aq_outside_node = outside_node.Read( this->key_CO2aq ); //dissolved CO2
-        const double64 H2Og_outside_node = outside_node.Read( this->key_H2Og ); //evaporated water
-         
-        //compute velocities at facet integration point                      
-        double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-        double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
-            
-        if( this->with_gravity_forces_ ){                       
-            vn_gravity_component_of_velocity = this->flowfunctions_.Mobility(fip, 0U) * this->flowfunctions_.GravityTerm(fip) * facetNrml[v];
-            vw_gravity_component_of_velocity = this->flowfunctions_.Mobility(fip, 1U) * this->flowfunctions_.GravityTerm(fip) * facetNrml[v];
-        }         
-            
-        if(this->with_capillary_spreading_){  
-            VectorVariable<dim> grad;
-            fip.Read(this->key_grad, grad);
-            Point<dim> snw_gradient=grad.P();       
-            
-            double64 dsdn = dotProduct(snw_gradient, facetNrml);
-            
-            if(!isnan(dsdn)){
-                vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,0U);
-                vw_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(fip,1U);
-            }   
-        }  
-            
-        double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
-        double64 vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity;  
-  
-        //determine upstream mobilities
-        double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);  
-        double64 upstream_CO2aq(0.0), upstream_H2Og(0.0); 
-              
-        if(vn_at_facet_int_point>0.0) {
-            upstream_mobility_n=ln_inside_node;
-            upstream_H2Og=H2Og_inside_node; 
-        } else if (vn_at_facet_int_point<0.0) {
-            upstream_mobility_n=ln_outside_node;
-            upstream_H2Og=H2Og_outside_node;
-        } else { 
-            upstream_mobility_n=0.5*(ln_inside_node+ln_outside_node);
-            upstream_H2Og=0.5*(H2Og_inside_node+H2Og_outside_node);
-        }    
-            
-        if(vw_at_facet_int_point>0.0) {
-            upstream_mobility_w=lw_inside_node;
-            upstream_CO2aq=CO2aq_inside_node; 
-        } else if (vw_at_facet_int_point<0.0) {
-            upstream_mobility_w=lw_outside_node;
-            upstream_CO2aq=CO2aq_outside_node;  
-        } else {
-            upstream_mobility_w=0.5*(lw_inside_node+lw_outside_node);
-            upstream_CO2aq=0.5*(CO2aq_inside_node+CO2aq_outside_node);
-        }
-                            
-        total_mobility=upstream_mobility_n+upstream_mobility_w;
-        double64 upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
-        double64 upstream_fw=(total_mobility!=0.0? upstream_mobility_w/total_mobility : 0.0); 
-        double64 upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);
-        
-        //compute each velocity component     
-        double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);  
-        double64 viscous_velocity_component_w(0.0), capillary_velocity_component_w(0.0), gravity_velocity_component_w(0.0); 
-                     
-        viscous_velocity_component = vD_n * upstream_fn;
-        viscous_velocity_component_w = vD_n * upstream_fw; 
-                                       
-        if( this->with_gravity_forces_ ) {
-            gravity_velocity_component = upstream_lambda_overbar * this->flowfunctions_.GravityTerm(fip) * facetNrml[v];
-            gravity_velocity_component_w = upstream_lambda_overbar * this->flowfunctions_.GravityTerm(fip) * facetNrml[v];
-        }
 
-        if( this->with_capillary_spreading_ ) {
-            capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
-            capillary_velocity_component_w = upstream_fw * vw_capillary_component_of_velocity;
-        }
+    for ( size_t t=0U; t<node_parent_elements; t++ )
+    {
+        Element<dim>* const eptr(nd->Parent(t));
+        assert( eptr != NULL );
+        const size_t pnid(nd->ParentNodeNumber(t));
+        eptr->Read( this->key_vt, vD);
+
+        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( size_t i=0U; i<sector_facets; i++ )
+        {
+            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+            
+            eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
+            const double64  vD_n = vD.DotProduct(facetNrml);
+            const double64  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
+            
+            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
+            //compute facet fluid flux
+            double64 facet_flux = sign * vD_n * facetArea;
+            //update flux balance
+            flux_balance += facet_flux;
+            //update outflow
+            if ( facet_flux > 0. ) outflow += facet_flux;
+                         
+            //compute inside and outside node mobilities, by using their saturations
+            const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
+            const double64 sw_inside_node = 1.-sn_inside_node;
+            const double64 ln_inside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node); 
+            const double64 lw_inside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node); 
+            const double64 CO2aq_inside_node = eptr->N(inside_node)->Read( this->key_CO2aq ); //dissolved CO2
+            const double64 H2Og_inside_node = eptr->N(inside_node)->Read( this->key_H2Og ); //evaporated water            
         
-        //update non-wetting flux accumulation 
-        double64 fn = sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;
-        accumulation += fn;
-        accumulation_H2Og +=  fn * upstream_H2Og; 
+            const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
+            const double64 sw_outside_node = 1.-sn_outside_node;
+            const double64 ln_outside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node); 
+            const double64 lw_outside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);   
+            const double64 CO2aq_outside_node = eptr->N(outside_node)->Read( this->key_CO2aq ); //dissolved CO2
+            const double64 H2Og_outside_node = eptr->N(outside_node)->Read( this->key_H2Og ); //evaporated water            
+            
+            //compute phase velocities at facet integration point                      
+            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
+            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
+            
+            if( this->with_gravity_forces_ ){                       
+                vn_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 0U) * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+                vw_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 1U) * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+            }         
+            
+            if(this->with_capillary_spreading_){  
+                VectorVariable<dim> grad;
+                eptr->Read(this->key_grad, grad);
+                double64 dsdn = grad.DotProduct(facetNrml);
+            
+                if(!isnan(dsdn)){
+                    vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,0U);
+                    vw_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,1U);
+                }   
+            }  
+            
+            double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
+            double64 vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity; 
         
-        double64 fw = sign * ( viscous_velocity_component_w + gravity_velocity_component_w + capillary_velocity_component_w) * facetArea;
-        accumulation_CO2aq +=  fw * upstream_CO2aq; 
+            //determine upstream mobilities
+            double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);   
+            double64 upstream_CO2aq(0.0), upstream_H2Og(0.0);  
+            
+            if(vn_at_facet_int_point>0.0) {
+                upstream_mobility_n=ln_inside_node;
+                upstream_H2Og=H2Og_inside_node; 
+            } else if (vn_at_facet_int_point<0.0) {
+                upstream_mobility_n=ln_outside_node;
+                upstream_H2Og=H2Og_outside_node;
+            } else { 
+                upstream_mobility_n=0.5*(ln_inside_node+ln_outside_node);
+                upstream_H2Og=0.5*(H2Og_inside_node+H2Og_outside_node);
+            }    
+            
+            if(vw_at_facet_int_point>0.0) {
+                upstream_mobility_w=lw_inside_node;
+                upstream_CO2aq=CO2aq_inside_node; 
+            } else if (vw_at_facet_int_point<0.0) {
+                upstream_mobility_w=lw_outside_node;
+                upstream_CO2aq=CO2aq_outside_node;  
+            } else {
+                upstream_mobility_w=0.5*(lw_inside_node+lw_outside_node);
+                upstream_CO2aq=0.5*(CO2aq_inside_node+CO2aq_outside_node);
+            }
+                            
+            total_mobility=upstream_mobility_n+upstream_mobility_w;
+            double64 upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
+            double64 upstream_fw=(total_mobility!=0.0? upstream_mobility_w/total_mobility : 0.0); 
+            double64 upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);
+            
+            //compute each velocity component     
+            double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0); 
+            double64 viscous_velocity_component_w(0.0), capillary_velocity_component_w(0.0), gravity_velocity_component_w(0.0);  
+                     
+            viscous_velocity_component = vD_n * upstream_fn;
+            viscous_velocity_component_w = vD_n * upstream_fw;
+                                       
+            if( this->with_gravity_forces_ ) {
+                gravity_velocity_component = upstream_lambda_overbar * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+                gravity_velocity_component_w = upstream_lambda_overbar * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+            }
+
+            if( this->with_capillary_spreading_ ) {
+                capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
+                capillary_velocity_component_w = upstream_fw * vw_capillary_component_of_velocity;
+            }
+                
+            //update non-wetting flux accumulation 
+            double64 fn = sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;
+            accumulation += fn;
+            accumulation_H2Og +=  fn * upstream_H2Og; 
         
-        //determine cfl_multiplier based on non-wetting phase shock saturation
-        if (cfl_multiplier != this->CFL_multiplier_){
-            if(vn_at_facet_int_point < 0.0) { //flowing in from outside node (upstream node)
-                double64 sn_outside_shock = outside_node.Read(this->key_ssn); //sn at shock for outside node
-                if (sn_outside_node >= sn_outside_shock) { //upstream node passed shock saturation
-                    double64 sn_inside_shock = inside_node.Read(this->key_ssn); //sn at shock for inside node (current node)
-                    if (sn_inside_node < sn_inside_shock) {//current node not yet reach shock saturation   
-                        cfl_multiplier = this->CFL_multiplier_;
+            double64 fw = sign * ( viscous_velocity_component_w + gravity_velocity_component_w + capillary_velocity_component_w) * facetArea;
+            accumulation_CO2aq +=  fw * upstream_CO2aq;
+
+            //determine cfl_multiplier based on non-wetting phase shock saturation
+            if (cfl_multiplier != this->CFL_multiplier_){
+                if(vn_at_facet_int_point < 0.0) { //flowing in from outside node (upstream node)
+                    double64 sn_shock = 1.0-eptr->Read(this->key_ssw); //sn at shock for outside node
+                    if (sn_outside_node >= sn_shock) { //upstream node passed shock saturation
+                        if (sn_inside_node < sn_shock) {//current node not yet reach shock saturation   
+                            cfl_multiplier = this->CFL_multiplier_;
+                        }
                     }
                 }
             }
-        }
         
-        //determine cfl_multiplier based on wetting phase shock saturation
-        if (cfl_multiplier != this->CFL_multiplier_){
-            if(vw_at_facet_int_point < 0.0) { //flowing from outside node (upstream node)
-            //if(vD_n < 0.0) { //flowing from outside node (upstream node)
-                double64 sw_outside_shock = outside_node.Read(this->key_ssw); //sw at shock for outside node
-                if (sw_outside_node >= sw_outside_shock) { //upstream node passed shock saturation
-                    double64 sw_inside_shock = inside_node.Read(this->key_ssw); //sn at shock for inside node (current node)
-                    if (sw_inside_node < sw_inside_shock) {//current node not yet reach shock saturation   
-                        cfl_multiplier = this->CFL_multiplier_;
+            //determine cfl_multiplier based on wetting phase shock saturation
+            if (cfl_multiplier != this->CFL_multiplier_){
+                if(vw_at_facet_int_point < 0.0) { //flowing from outside node (upstream node)
+                    double64 sw_shock = eptr->Read(this->key_ssw); //sw at shock for outside node
+                    if (sw_outside_node >= sw_shock) { //upstream node passed shock saturation
+                        if (sw_inside_node < sw_shock) {//current node not yet reach shock saturation   
+                            cfl_multiplier = this->CFL_multiplier_;
+                        }
                     }
-                }
-            }        
+                }        
+            }
         }
-    } 
-    
+    }
+        
     ArrayVariable array2;
     nd->Read(this->key_time, array2);
    
@@ -241,7 +247,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
         
     nd->Store(this->key_time, array2);
     
-     
+     /* 
     // divergence free correction
     // compute average fractional flow for the current finite volume
     if (fabs(flux_balance) > numeric_limits<double64>::epsilon()) {
@@ -259,7 +265,8 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
         accumulation_H2Og -= fn_avg*flux_balance*nd->Read(this->key_H2Og); 
         accumulation_CO2aq -= fw_avg*flux_balance*nd->Read(this->key_CO2aq); 
         
-    }     
+    } 
+    */   
     
     //compute and store variation rate    
     double64 PV = nd->Read(  this->key_fvPV );
@@ -269,8 +276,10 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
     nd->Read(this->key_components, component_array);
     component_array.Component(0, accumulation_CO2aq);
     component_array.Component(1, accumulation_H2Og);
-    nd->Store(this->key_components, component_array);
+    nd->Store(this->key_components, component_array);    
+  }
 }  
+
 
 
 
@@ -278,10 +287,11 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double64 t_clock)
 {
-    this->update_count_++;//recording
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );
-    assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );
+  assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
+  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){     
+    this->update_count_++;//recording   
     const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
     ArrayVariable array;
     nd->Read(this->key_time, array);
@@ -340,6 +350,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>
     nd->Store(this->key_time, array);
 
     nd->Store( this->key_update, makeScalar( nd->Status(this->key_update), nd->Read(this->key_update) + 1 ) );
+  }
 }
 
 
@@ -348,10 +359,11 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double64 delta_t)
 {
-    this->update_count_++;//recording
-    Node<dim>* nd = event->getNode();
-    assert( nd  != NULL );   
-    assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
+  Node<dim>* nd = event->getNode();
+  assert( nd  != NULL );   
+  assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
+  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){     
+    this->update_count_++;//recording     
     const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
     
     double64 ChangeRate = nd->Read(this->key_dsnw);//variation rate  
@@ -400,6 +412,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>
     }      
         
     nd->Store( this->key_update, makeScalar( nd->Status(this->key_update), nd->Read(this->key_update) + 1 ) );   
+  }
 }
 
 
