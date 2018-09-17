@@ -83,12 +83,12 @@ void DESTransport<dim>::initializeFiniteVolumeProperties()
          const size_t facets((*it)->Facets());
 
          // computing sector pore volumes
-         double64 phi = (*it)->Read( this->key_THI);
+         double64 phi = (*it)->Read( this->key_PHI);
          const double64 thickness = (*it)->Read( this->key_THI );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
          for ( size_t i=0U; i<sectors; ++i ) {
-              const double64 sector_volume = (*it)->SectorVolume(i);       
+              const double64 sector_volume = (*it)->SectorVolume(i);  
               double64 pore_volume   = (*it)->N(i)->Read( this->key_FVPV );
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( this->key_FVPV, makeScalar(PLAIN,pore_volume) );
@@ -268,7 +268,7 @@ bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl
         array.Component(3, numeric_limits<double64>::max());//target time increment          
     } else {
         array.Component(5, dC_CFL);//target change of solution
-        array.Component(3, cfl_multiplier*CFL);//target time increment          
+        array.Component(3, cfl_multiplier*CFL);//target time increment      
     };
 
     double64 t_current = array[0];//current time stamp
@@ -303,7 +303,7 @@ void DESTransport<dim>::Update_DES(Event<dim>* event, double64 t_clock)
     nd->Read(key_time, array);
 
     // 1. starting with the sum of facet flux-concentration products stored in C1
-    double64 ChangeRate = nd->Read( this->key_C1);   
+    double64 ChangeRate = nd->Read( this->key_C1); 
     double64 solution = nd->Read( this->key_C0);//concentration
     // 2. correcting this sum for div vD using 'flux balance'   
     ChangeRate -= solution * nd->Read( this->key_FB ); 
@@ -601,6 +601,7 @@ void DESTransport<dim>::AdvectVariable_DES_openmp( double64 model_time, double64
             if((*nit)->Status(  this->key_C0 ) != DIRICH) {
                 (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
                 Event<dim>* event = new Event<dim>(*nit);
+                ComputeFluxBalanceAndCFL(event);
                 PEPList.push_back(event);
                 event->inPEPStack(true);
                 ComputeRateofChange(event);

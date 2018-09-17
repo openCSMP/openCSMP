@@ -154,7 +154,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
          const size_t facets((*it)->Facets());
 
          // computing sector pore volumes
-         double64 phi = (*it)->Read( this->key_thi);
+         double64 phi = (*it)->Read( this->key_phi);
          const double64 thickness = (*it)->Read( this->key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
@@ -1126,6 +1126,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
     cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ << endl;
 } 
 #endif
+
 
 
 template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule1>;
