@@ -470,8 +470,9 @@ bool TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, doubl
         array.Component(1, t_current + dt_target);//schedule time stamp
         nd->Store(key_time,array);
         return true;
-    };
+    }
   }
+  return false;
 }
 
 

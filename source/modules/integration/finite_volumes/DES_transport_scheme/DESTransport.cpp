@@ -283,8 +283,9 @@ bool DESTransport<dim>::Schedule(Event<dim>* event, double64 t_end, double64 cfl
         array.Component(1, t_current + dt_target);//schedule time stamp
         nd->Store(key_time,array);
         return true;
-    };
+    }
   }
+  return false;
 }
 
 
@@ -909,7 +910,7 @@ void DESTransport<dim>::AdvectVariable_DES_serial( double64 model_time, double64
         };
         
         cout<<"  iteration count = "<<count<<endl;
-    };
+    }
     T_AdvectVariable_+= clock() - begin;
 
     cout<<"Finish DESTransport<dim>::AdvectVariable_DES_serial "<<endl;

@@ -1,7 +1,7 @@
 #ifndef CSMP_IMPLICIT_TRANSPORT_H
 #define CSMP_IMPLICIT_TRANSPORT_H
 
-#include "Variables_TracerTransfer.h"
+#include "VariableSet_TracerTransfer.h"
 #include "FacetFlux_TracerTransferExplicit.h"
 #include "Equation_TracerTransferImplicit.h"
 #include "TimeStepEvaluator.h"
@@ -18,7 +18,7 @@ template<size_t> class TwoPhaseModel;
 template<size_t> class LinearSystemAccumulator;
 
 template<size_t dim>
-class ImplicitTransport : public variables::Variables_TracerTransfer,
+class ImplicitTransport : public variables::VariableSet_TracerTransfer,
                           public FacetFlux_TracerTransferExplicit<dim,ImplicitTransport>,
                           public Equation_TracerTransferImplicit<dim>,
                           public TimeStepEvaluator<dim,ImplicitTransport> {
