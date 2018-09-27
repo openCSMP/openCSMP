@@ -3,8 +3,7 @@
 #include "Model1D.h"
 #include "InputDataManager.h"
 
-#include "FlowFunctionsBC_Hysteretic.h"
-#include "BrooksCoreySaturationFunctionswithHysteresis.h"
+#include "CO2H2O_FunctionsModule1.h"
 
 #include "TwoPhaseModelWithHysteresis_Test.h"
 
@@ -37,30 +36,31 @@ namespace csmp {
 /**
  1. the process test.. loop over saturation and check the process is picking the correct path
 */
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Process_Test(Model<1U>& mdl) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Process_Test( const Model<1U>& mdl) {
     
-    const PropertyDatabase<1>&   p_ref = mdl.Database();
+    const PropertyDatabase<1U>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
     
     vector< pair<double64,double64> > SwPc;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
+    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+  
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
       
     {
-      auto E1 = (*it)->AtBarycenter() ;
-      SatFunctions.InitialiseBrooksCoreyParameters(E1) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it)) ;
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
+      double64 Sw = SatFunctions.Sw((*it)) ;
+      
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
       bool flag_  = (Sw > Sw_min)&&(Sw < Sw_max) ;
       
       if (flag_) {
         
-        double64 pc = SatFunctions.pc(E1) ;
+        double64 pc = SatFunctions.pc((*it)) ;
         SwPc.push_back(make_pair(Sw,pc)) ;
         
       }
@@ -81,7 +81,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Process_Tes
 2.  Imbibition test... loop over saturation and calculate Pc
 */
   
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Imbibition_Test(Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Imbibition_Test( const Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -89,26 +89,27 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Imbibition_
     vector< pair<double64,double64> > SwPc;
     TWO_PHASE_FLOW_PROCESS Process_path = IMBIBITION ;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+     CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+
     
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
       
     {
-      auto E1 = (*it)->AtBarycenter() ;
+    
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
       
-      SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Process_path) ;
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it), a_ , c_ , Process_path) ;
       
+      double64 Sw = SatFunctions.Sw((*it)) ;
+
       bool flag_  = (Sw > Sw_min)&&(Sw < Sw_max) ;
       
       if (flag_) {
         
-        double64 pc = SatFunctions.pc(E1) ;
+        double64 pc = SatFunctions.pc((*it)) ;
         SwPc.push_back(make_pair(Sw,pc)) ;
         
       }
@@ -128,7 +129,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Imbibition_
    3.  Drainage test... loop over saturation and calculate Pc
 */
   
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Drainage_Test(Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Drainage_Test( const Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -136,27 +137,25 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Drainage_Te
     vector< pair<double64,double64> > SwPc;
     TWO_PHASE_FLOW_PROCESS Process_path = DRAINAGE ;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+     CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
     
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
       
     {
       
-      auto E1 = (*it)->AtBarycenter() ;
       
-      SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Process_path) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it), a_ , c_ , Process_path) ;
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      double64 Sw = SatFunctions.Sw((*it)) ;
       
       bool flag_  = (Sw > Sw_min)&&(Sw < Sw_max) ;
       
       if (flag_) {
         
-        double64 pc = SatFunctions.pc(E1) ;
+        double64 pc = SatFunctions.pc((*it)) ;
         SwPc.push_back(make_pair(Sw,pc)) ;
         
       }
@@ -177,7 +176,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Drainage_Te
 /**
  4. Update water and oil residual saturations
 */
-void TwoPhaseModelwithHysteresis_Test::UpdatePseduoResidualSaturations(Model<1U>& mdl , double64 Srw , double64 Sro ){
+void TwoPhaseModelwithHysteresis_Test::UpdatePseduoResidualSaturations(const Model<1U>& mdl , double64 Srw , double64 Sro ){
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -207,7 +206,7 @@ void TwoPhaseModelwithHysteresis_Test::UpdatePseduoResidualSaturations(Model<1U>
 /**
  5. The transition from Drainage to Imbibition and reverse test... loop over saturation and calculate Pc
 */
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionProcess_Test(Model<1U>& mdl) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionProcess_Test( const Model<1U>& mdl) {
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -216,8 +215,8 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
     
     double64  tol_(0.01) ;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+  
     double64 newSro(0) ;
     double64 newSrw(0) ;
     
@@ -228,21 +227,20 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
       
     {
       
-      auto E1 = (*it)->AtBarycenter() ;
       
       double64 psrCO2 = (*it)->Read(var.key_psrCO2) ;
       double64 psrH2O = (*it)->Read(var.key_psrH2O) ;
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
-      SatFunctions.InitialiseBrooksCoreyParameters(E1) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it)) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      double64 Sw = SatFunctions.Sw((*it)) ;
       
        //, Sw_min, Sw_max
       
-      TWO_PHASE_FLOW_PROCESS ProcessPath = SatFunctions.FlowProcess( E1 );
+      TWO_PHASE_FLOW_PROCESS ProcessPath = SatFunctions.FlowProcess( (*it) );
       
       bool flag_(false) ;
       
@@ -252,13 +250,13 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
           
           if ( flag_ ) {
             
-            newSro = SatFunctions.OilResidualSaturation(E1) ;
+            newSro = SatFunctions.OilResidualSaturation((*it)) ;
             cerr <<"At saturation: "<< Sw <<"\n" ;
             cerr <<"old oil residual pseudo saturation: "<< psrCO2 <<"\n" ;
             cerr <<"new oil residual pseudo saturation: "<< newSro <<"\n" ;
             cerr <<"\n" ;
             
-            newSrw = SatFunctions.WaterResidualSaturation(E1, newSro) ;
+            newSrw = SatFunctions.WaterResidualSaturation((*it), newSro) ;
             
             cerr <<"old water residual pseudo saturation: "<< psrH2O <<"\n" ;
             cerr <<"new water residual pseudo saturation: "<< newSrw <<"\n" ;
@@ -275,7 +273,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
             newSrw = psrH2O ;
             newSro = psrCO2 ;
             
-            SatFunctions.WaterAndOilResidualSaturationImbibitionToDrainage(E1, newSrw, newSro) ;  // Mahyar: Here the oil saturation will change...
+            SatFunctions.WaterAndOilResidualSaturationImbibitionToDrainage((*it), newSrw, newSro) ;  // Mahyar: Here the oil saturation will change...
             
             cerr <<"At saturation: "<< Sw <<"\n" ;
             cerr <<"old oil residual pseudo saturation: "<< psrCO2 <<"\n" ;
@@ -328,7 +326,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
 /**
  6. The Drainage To Imbibition test... loop over saturation and calculate Pc
 */
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToImbibition_Test(Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToImbibition_Test(const Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -337,8 +335,8 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToI
     
     double64  tol_(0.01) ;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+
     double64 newSro(0) ;
     double64 newSrw(0) ;
     
@@ -346,31 +344,31 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToI
       
     {
       
-      auto E1 = (*it)->AtBarycenter() ;
+     
       
-      double64 psrCO2 = (*it)->Read(var.key_psrCO2) ;
-      double64 psrH2O = (*it)->Read(var.key_psrH2O) ;
+      double64 psrCO2 = (*it)->Read(var.key_psrCO2);
+      double64 psrH2O = (*it)->Read(var.key_psrH2O);
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
       TWO_PHASE_FLOW_PROCESS Process_path = DRAINAGE ;
       
-      SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Process_path) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it), a_ , c_ , Process_path) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      double64 Sw = SatFunctions.Sw((*it)) ;
       
       bool flag_ = (abs(Sw-Sw_min)/Sw_min < tol_) ;
       
       if ( flag_ ) {
         
-        newSro = SatFunctions.OilResidualSaturation(E1) ;
+        newSro = SatFunctions.OilResidualSaturation((*it)) ;
         cerr <<"At saturation: "<< Sw <<"\n" ;
         cerr <<"old oil residual Pseduo saturation: "<< psrCO2 <<"\n" ;
         cerr <<"new oil residual Pseduo saturation: "<< newSro <<"\n" ;
         cerr <<"\n" ;
         
-        newSrw = SatFunctions.WaterResidualSaturation(E1, newSro) ;
+        newSrw = SatFunctions.WaterResidualSaturation((*it), newSro) ;
         
         cerr <<"old water residual Pseduo saturation: "<< psrH2O <<"\n" ;
         cerr <<"new water residual Pseduo saturation: "<< newSrw <<"\n" ;
@@ -401,7 +399,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToI
 /**
    7. The Imbibition to Drainage test... loop over saturation and calculate Pc
 */
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionToDrainage_Test(Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
+vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionToDrainage_Test(const Model<1U>& mdl, const array<array<double64,2>,2>&  a_, const array<array<double64,2>,2>&  c_) {
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -410,8 +408,8 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionT
     
     double64  tol_(0.01) ;
     
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+  
     double64 newSro(0) ;
     double64 newSrw(0) ;
     
@@ -420,19 +418,17 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionT
       
     {
       
-      auto E1 = (*it)->AtBarycenter() ;
       
       double64 psrCO2 = (*it)->Read(var.key_psrCO2) ;
       double64 psrH2O = (*it)->Read(var.key_psrH2O) ;
       
       TWO_PHASE_FLOW_PROCESS Process_path = IMBIBITION ;
-      SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Process_path) ;
+      SatFunctions.InitialiseBrooksCoreyParameters((*it), a_ , c_ , Process_path) ;
       
-      double64 Sw = SatFunctions.Sw(E1) ;
+      double64 Sw = SatFunctions.Sw((*it)) ;
       
-      double64 Sw_min = E1.Obtain(var.key_SwDrToImb) ;
-      double64 Sw_max = E1.Obtain(var.key_SwImbToDr) ;
-      
+      double64 Sw_min = (*it)->PropertyValueAtBaryCenter( var.key_SwDrToImb) ;
+      double64 Sw_max = (*it)->PropertyValueAtBaryCenter( var.key_SwImbToDr) ;
       
       bool flag_ = (abs(Sw-Sw_max)/Sw_max < tol_) ;
       
@@ -441,7 +437,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionT
         newSrw = psrH2O ;
         newSro = psrCO2 ;
         
-        SatFunctions.WaterAndOilResidualSaturationImbibitionToDrainage(E1, newSrw, newSro) ;  // Mahyar: Here the oil saturation will change...
+        SatFunctions.WaterAndOilResidualSaturationImbibitionToDrainage((*it), newSrw, newSro) ;  // Mahyar: Here the oil saturation will change...
         
         cerr <<"old oil residual Pseduo saturation: "<< psrCO2 <<"\n" ;
         cerr <<"new oil residual Pseduo saturation: "<< newSro <<"\n" ;
@@ -537,9 +533,10 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange(Model<1U>& mdl) {
      10.1 first create the Main Drainage and Imbibition curves...
      
      */
-    
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions=FlowFunctionsBC_Hysteretic<1U>(mdl.Database()) ;
-    
+    const PropertyDatabase<1>&   p_ref = mdl.Database();
+  
+    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+
     ofstream outputfile;
     outputfile.open ("MainDrainageandImbibitions.csv");
     outputfile<<"Sw , Pc "<<endl ;
@@ -577,8 +574,8 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange(Model<1U>& mdl) {
     cerr <<"The Main Drainage test....\n" ;
     cerr <<"\n" ;
     
-    mdl.InputPropertyValue("previous drainage saturation endpoint of aqueous phase", makeScalar(PLAIN, 0)) ;  //update the starting Imbibitions point
-    mdl.InputPropertyValue("previous imbibition saturation endpoint of aqueous phase", makeScalar(PLAIN, 1)) ; //update the ending  Imbibitions point
+    mdl.InputPropertyValue("previous drainage endpoint", makeScalar(PLAIN, 0)) ;  //update the starting Imbibitions point
+    mdl.InputPropertyValue("previous imbibition endpoint", makeScalar(PLAIN, 1)) ; //update the ending  Imbibitions point
     
     CreateArtifitialDrainageProcess(mdl);
     auto SwPc1_st_Drainage = Process_Test(mdl) ;
@@ -610,8 +607,8 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange(Model<1U>& mdl) {
     cerr <<"Then first Dranaige test....\n" ;
     cerr <<"\n" ;
     
-    mdl.InputPropertyValue("previous drainage saturation endpoint of aqueous phase", makeScalar(PLAIN, 0.45)) ;  //update the starting Imbibitions point
-    mdl.InputPropertyValue("previous imbibition saturation endpoint of aqueous phase", makeScalar(PLAIN, 0.6)) ; //update the ending  Imbibitions point
+    mdl.InputPropertyValue("previous drainage endpoint", makeScalar(PLAIN, 0.45)) ;  //update the starting Imbibitions point
+    mdl.InputPropertyValue("previous imbibition endpoint", makeScalar(PLAIN, 0.6)) ; //update the ending  Imbibitions point
     
     
     CreateArtifitialDrainageProcess(mdl);
@@ -661,7 +658,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange(Model<1U>& mdl) {
 /**
    11) create drainage process
  */
-void TwoPhaseModelwithHysteresis_Test::CreateArtifitialDrainageProcess(Model<1U>& mdl){
+void TwoPhaseModelwithHysteresis_Test::CreateArtifitialDrainageProcess(const Model<1U>& mdl){
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -692,7 +689,7 @@ void TwoPhaseModelwithHysteresis_Test::CreateArtifitialDrainageProcess(Model<1U>
 /**
  11) create imbibition process
 */
-void TwoPhaseModelwithHysteresis_Test::CreateArtifitialImbibitionProcess(Model<1U>& mdl){
+void TwoPhaseModelwithHysteresis_Test::CreateArtifitialImbibitionProcess(const Model<1U>& mdl){
     
     const PropertyDatabase<1>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
@@ -718,235 +715,456 @@ void TwoPhaseModelwithHysteresis_Test::CreateArtifitialImbibitionProcess(Model<1
   
   
   
+  
+  
 
-  
-  
-  
 /**
  
  12) This is main file to run...
  
-*/
+ */
 void csmp::TwoPhaseModelwithHysteresis_Test::run() {
-    /**
-     
-     12.1) Create an 1D model without any spliting point in the model.
-     
-     */
-    double64 length   = 10;
-    size_t   elements = 1000;
-    
-    double64 srH2O(0.3) ;
-    double64 srCO2(0.35) ;
-    
-    double64 water_mu(0.001) ;
-    double64 CO2_mu(0.00002);
-  
-    Point<1U> origin = 0 ;
-    Point<1U> destination = 10;
-    
-    Model1D<1U> model( "Model1D", "TwoPhaseModelwithHysteresis_Test-variables.txt", length, elements );
-    Region<1U>& rref = model.Region( "Model" );
-    const PropertyDatabase<1>&   p_ref = model.Database();
-    variables::VariableSet_CO2GeoSequestration var( p_ref );
-    
-    printModelDimensions( model, true );
-    cout << "\n 1D Model created" << endl;
-    
-    /**
-     
-     12.2) Assign the storage keys and properties for the test.
-     
-     */
-    
-    // Build model and initialise with sensible saturation and parameter values
-    
-    // initialisation of model
-    model.InputPropertyValue("porosity", makeScalar(PLAIN, 0.20)) ;
-    model.InputPropertyValue("viscosity carbonic phase", makeScalar(PLAIN, CO2_mu)) ;
-    model.InputPropertyValue("viscosity aqueous phase", makeScalar(PLAIN, water_mu)) ;
-    
-    model.InputPropertyValue("residual saturation aqueous phase", makeScalar(PLAIN, srH2O)) ;
-    model.InputPropertyValue("residual saturation carbonic phase", makeScalar(PLAIN, srCO2)) ;
-    
-    
-    //  Brooks Corey model
-    model.InputPropertyValue("entry pressure", makeScalar(PLAIN, 10000)) ;
-    model.InputPropertyValue("brooks corey parameter", makeScalar(PLAIN, 2.)) ;
-    
-    // Brooks Corey Hysteresis model
-    
-    model.InputPropertyValue("previous drainage saturation endpoint of aqueous phase", makeScalar(PLAIN, srH2O)) ;
-    model.InputPropertyValue("previous imbibition saturation endpoint of aqueous phase", makeScalar(PLAIN, 1.-srCO2)) ;
-    
-    model.InputPropertyValue("pseudo residual saturation aqueous phase", makeScalar(PLAIN, srH2O)) ;
-    model.InputPropertyValue("pseudo residual saturation carbonic phase", makeScalar(PLAIN, srCO2)) ;
-    
-    model.InputPropertyValue("saturation aqueous phase", makeScalar(PLAIN, 0)) ;
-  
-    // Mahyar: this is all parameters we need for Drainage and Imbibition curves.. it is an array with 8 double number as ordered as:
-    // AWD, AOD, CWD, COD, AWI, AOI, CWI, COI  based on the paper by Skjaeveland et al. 2000
-    
-    /**
-     
-     12.3) Start using the Saturation functions functionallity in the 1D model
-     
-     */
-    
-    FlowFunctionsBC_Hysteretic<1U> SatFunctions = FlowFunctionsBC_Hysteretic<1U>(model.Database()) ;
-    
-    
-    /**
-     
-     12.3.1) accumulate the nodes with water satuaration from 0 to 1 ...
-     
-     */
-    double64 i(0.0) ;
-    for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
-    {
-      ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
-      (*it)->Store( var.key_sH2O, variable0_);
-      (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
-      (*it)->Store( var.key_sCO2_1,1.0-variable0_) ;
-      i++ ;
-    }
-    
-    /**
-     
-     12.3.2) define the Hysteresis relative permeability model Parameters on each elements
-     
-
-
-       Important
-     
-      AWD, AOD, CWD, COD, AWI, AOI, CWI, COI  based on the paper by Skjaeveland et al. 2000
-      Note: In "*-variable.txt" file, this has to be defined as:
-      Hysteresis relative permeability model Parameters  HisBCparam  none  8  0.00E+00  5.00E+07  ELEMENT
-                                                                         ^
-      This number counts as a "DataDepth" for the array
-    
-      array<array<double64,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
-      array<array<double64,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
-  
-      array<array<double64,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
-      array<array<double64,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
-     
-     
-     */
-  
-       array<array<double64,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
-       array<array<double64,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
-  
-    
-    ArrayVariable arrayvariable1_(8, PLAIN);
-    
-    arrayvariable1_(AWD) = a_[H2O][DRAINAGE];
-    arrayvariable1_(AOD) = a_[CO2][DRAINAGE];
-    arrayvariable1_(CWD) = c_[H2O][DRAINAGE];
-    arrayvariable1_(COD) = c_[CO2][DRAINAGE];
-    
-    arrayvariable1_(AWI) = a_[H2O][IMBIBITION];
-    arrayvariable1_(AOI) = a_[CO2][IMBIBITION];
-    arrayvariable1_(CWI) = c_[H2O][IMBIBITION];
-    arrayvariable1_(COI) = c_[CO2][IMBIBITION];
-    
+  /**
    
+   12.1) Create an 1D model without any spliting point in the model.
+   
+   */
+  double64 length   = 10;
+  size_t   elements = 1000;
+  
+  double64 srH2O(0.3) ;
+  double64 srCO2(0.35) ;
+  
+  double64 water_mu(0.001) ;
+  double64 CO2_mu(0.00002);
+  
+  Point<1U> origin = 0 ;
+  Point<1U> destination = 10;
+  
+  Model1D<1U> model( "Model1D", "CO2-geo-sequestration-variables.txt", length, elements );
+  
+  Region<1U>& rref = model.Region( "Model" );
+  const PropertyDatabase<1>&   p_ref = model.Database();
+  variables::VariableSet_CO2GeoSequestration var( p_ref );
+  
+  printModelDimensions( model, true );
+  cout << "\n 1D Model created" << endl;
+  
+  /**
+   
+   12.2) Assign the storage keys and properties for the test.
+   
+   */
+  
+  // Build model and initialise with sensible saturation and parameter values
+  
+  // initialisation of model
+  model.InputPropertyValue("porosity", makeScalar(PLAIN, 0.20)) ;
+  model.InputPropertyValue("viscosity carbonic phase", makeScalar(PLAIN, CO2_mu)) ;
+  model.InputPropertyValue("viscosity aqueous phase", makeScalar(PLAIN, water_mu)) ;
+  
+  model.InputPropertyValue("residual saturation aqueous phase", makeScalar(PLAIN, srH2O)) ;
+  model.InputPropertyValue("residual saturation carbonic phase", makeScalar(PLAIN, srCO2)) ;
+  
+  
+  //  Brooks Corey model
+  model.InputPropertyValue("entry pressure", makeScalar(PLAIN, 10000)) ;
+  model.InputPropertyValue("brooks corey parameter", makeScalar(PLAIN, 2.)) ;
+  
+  // Brooks Corey Hysteresis model
+  
+  model.InputPropertyValue("previous drainage endpoint", makeScalar(PLAIN, srH2O)) ;
+  model.InputPropertyValue("previous imbibition endpoint", makeScalar(PLAIN, 1.-srCO2)) ;
+  
+  model.InputPropertyValue("pseudo residual saturation aqueous phase", makeScalar(PLAIN, srH2O)) ;
+  model.InputPropertyValue("pseudo residual saturation carbonic phase", makeScalar(PLAIN, srCO2)) ;
+  
+  model.InputPropertyValue("saturation aqueous phase", makeScalar(PLAIN, 0)) ;
+  
     
-    for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
-    {
-      (*it)->Store( var.key_HisBCparam, arrayvariable1_);
-    }
+  model.InputPropertyValue("fluid pressure", makeScalar(PLAIN, 50000000)) ;
+  model.InputPropertyValue("temperature", makeScalar(PLAIN, 60)) ;
+  model.InputPropertyValue("salinity", makeScalar(PLAIN, 0)) ;
     
-    cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
+    
+  // Mahyar: this is all parameters we need for Drainage and Imbibition curves.. it is an array with 8 double number as ordered as:
+  // AWD, AOD, CWD, COD, AWI, AOI, CWI, COI  based on the paper by Skjaeveland et al. 2000
+  
+  /**
+   
+   12.3) Start using the Saturation functions functionallity in the 1D model
+   
+   */
+  
+   CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+  
+  
+  /**
+   
+   12.3.1) accumulate the nodes with water satuaration from 0 to 1 ...
+   
+   */
+  double64 i(0.0) ;
+  for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
+  {
+    ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
+    (*it)->Store( var.key_sH2O, variable0_);
+    (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
+    (*it)->Store( var.key_sCO2_1,1.0-variable0_) ;
+    i++ ;
+  }
+  
+  /**
+   
+   12.3.2) define the Hysteresis relative permeability model Parameters on each elements
+   
+   
+   
+   Important
+   
+   AWD, AOD, CWD, COD, AWI, AOI, CWI, COI  based on the paper by Skjaeveland et al. 2000
+   Note: In "*-variable.txt" file, this has to be defined as:
+   Hysteresis relative permeability model Parameters  HisBCparam  none  8  0.00E+00  5.00E+07  ELEMENT
+   ^
+   This number counts as a "DataDepth" for the array
+   
+   array<array<double64,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
+   array<array<double64,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
+   
+   array<array<double64,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
+   array<array<double64,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
+   
+   
+   */
+  
+  array<array<double64,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
+  array<array<double64,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
+  
+  
+  ArrayVariable arrayvariable1_(8, PLAIN);
+  
+  arrayvariable1_(AWD) = a_[H2O][DRAINAGE];
+  arrayvariable1_(AOD) = a_[CO2][DRAINAGE];
+  arrayvariable1_(CWD) = c_[H2O][DRAINAGE];
+  arrayvariable1_(COD) = c_[CO2][DRAINAGE];
+  
+  arrayvariable1_(AWI) = a_[H2O][IMBIBITION];
+  arrayvariable1_(AOI) = a_[CO2][IMBIBITION];
+  arrayvariable1_(CWI) = c_[H2O][IMBIBITION];
+  arrayvariable1_(COI) = c_[CO2][IMBIBITION];
+  
+  
+  
+  for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
+  {
+    (*it)->Store( var.key_kri_param, arrayvariable1_);
+  }
+  
+  cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
+  
+  
+  /**
+   
+   12.3.3) printing out water satuaration of each nodes
+   
+   */
+  
+  for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
+  {
+    
+    auto Sw = (*it)->Read(var.key_sH2O) ;
+    cerr <<"Water Saturation defined at Nodes: "<< Sw <<"\n" ;
+    
+  }
+  
+  // outputing into csv file of the Sw , Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv
+  
+  cout << "\n 1D Checking values of Water Saturation, Mobility, " << endl;
+  
+  ofstream outputfile;
+  outputfile.open ("Capillary_Pressure_correlations_for_Mixed_wet_Reservoirs.csv");
+  outputfile<<"Sw , Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv"<<endl ;
+  
+  
+  /**
+   
+   12.3.4) loop over each element and assign the process and constants to calculate the
+   Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv and etc.
+   
+   */
+  
+  for (auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it ) // loop over elements
+  {
+    auto idx_ = (*it)->Idx() ;
+
     
     
     /**
+     Important:
      
-     12.3.3) printing out water satuaration of each nodes
+     Mahyar: here I define contants for imbibitions and drainage
+     for example for primary dranage aw = 0.5, ao = 0.25, cw =3.0, co=0.0.
+     for the second dranage aw = 0.5, ao = 0.25, cw =3.0, co=-2.0.
+     for the second imbibitions aw = 0.25, ao = 0.5, cw = 3.0, co=-2.0.
+     
+     
+     There is other possibilities to initialise parameters.. check the header file of BrooksCoreySaturationFunctionsWithHysteresis.h
+     
+     SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Drainage) ;
+     SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ ) ; // Mahyar: to Initialaise Drainage process .. otherwise check the new CO2 saturation to to allocate the correct process
      
      */
     
-    for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
-    {
-      
-      auto Sw = (*it)->Read(var.key_sH2O) ;
-      cerr <<"Water Saturation defined at Nodes: "<< Sw <<"\n" ;
-      
-    }
+    SatFunctions.InitialiseBrooksCoreyParameters((*it)) ;
     
-    // outputing into csv file of the Sw , Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv
     
-    cout << "\n 1D Checking values of Water Saturation, Mobility, " << endl;
+    // Water Saturation of model at the BaryCenter.. this is not the same as water saturation of Nodes.. its is interploated from the nodes at BaryCenter
     
-    ofstream outputfile;
-    outputfile.open ("Capillary_Pressure_correlations_for_Mixed_wet_Reservoirs.csv");
-    outputfile<<"Sw , Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv"<<endl ;
+    double64 Sw = SatFunctions.Sw((*it)) ;
+    
+    double64 water_mu = SatFunctions.Viscosity((*it), 0) ;   // I relay on water viscousity from EOS
+    double64 CO2_mu = SatFunctions.Viscosity((*it), 1) ;     // I relay on CO2 viscousity from EOS
+
+    
+    cerr <<"\n" ;
+    cerr <<"Entering into Element: " << idx_ << "\n" ;
+    cerr <<"Water Saturation at the BaryCenter: "<< Sw <<"\n" ;
+    
+    // water Saturation
+    // ---------------------------------------------
+    _test( !( Sw < 0. || Sw > 1. ) );
+    
+    
+    //  Check the water saturation is in the range of
+    
+    double64 pc = SatFunctions.pc((*it)) ;
+    
+    cerr <<"Capillary pressure: "<< pc <<"\n" ;
+    
+    // checking capilary pressure
+    // ---------------------------------------------
+    //_test( !isnan(pc) );
+    
+    double64 dpcds = SatFunctions.dpcds((*it)) ;
+    
+    cerr <<"Derivative of capillary pressure: "<< dpcds <<"\n" ;
+    
+    // checking 1st derivative of capilary pressure
+    // ---------------------------------------------
+    _test( !isnan(dpcds) );
+    
+    double64 krw = SatFunctions.krw((*it)) ;
+    
+    cerr <<"Relative permability of Water: "<< krw <<"\n" ;
+    
+    // checking relative permeability of water
+    // ---------------------------------------------
+    _test( !isnan(krw) );
+    _test(!( krw < 0. || krw > 1. )) ;
+    
+    double64 dkrwds = SatFunctions.dkrwds((*it)) ;
+    
+    cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
+    
+    // checking 1st derivative of relative permeability of water
+    // ---------------------------------------------
+    _test( !isnan(dkrwds) );
+    
+    double64 krn = SatFunctions.krn((*it)) ;
+    
+    cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
+    
+    // checking relative permeability of CO2
+    // ---------------------------------------------
+    _test( !isnan(krn) );
+    _test(!( krn < 0. || krn > 1. )) ;
+    
+    double64 dkrnds = SatFunctions.dkrnds((*it)) ;
+    
+    cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
+    
+    
+    // checking 1st derivative of relative permeability of CO2
+    // ---------------------------------------------
+    _test( !isnan(dkrnds) );
+    
+    double64 lambda_w = SatFunctions.Mobility((*it), 0U) ;
+    
+    cerr <<"Mobility of Water: "<< lambda_w <<"\n" ;
+    
+    // water Mobility
+    // ---------------------------------------------
+    _test( !isnan(lambda_w) );
+    _test( !( lambda_w < 0. || lambda_w > (1./water_mu)) );   // Mahyar: upper limits of water mobility is 1/mu
+    
+    double64 dlambda_w = SatFunctions.MobilityDerivative((*it), 0U) ;
+    
+    cerr <<"1st derivative of Mobility of Water: "<< dlambda_w <<"\n" ;
+    
+    // checking 1st derivative of water Mobility
+    // ---------------------------------------------
+    _test( !isnan(dlambda_w) );
+    
+    
+    double64 tlambda = SatFunctions.TotalMobility((*it)) ;
+    
+    cerr <<"Total Mobility of Water and Co2: "<< tlambda <<"\n" ;
+    
+    // checking 1st derivative of total Mobility
+    // ---------------------------------------------
+    _test( !isnan(tlambda) );
+    _test( !( tlambda < 0. || tlambda > (1./water_mu + 1./CO2_mu) ) ); // Mahyar: upper limits of total mobility is sum of 1/mu
+    
+    
+    double64 Plambda = SatFunctions.MobilityProduct((*it)) ;
+    
+    cerr <<"Mobility product of Water and Co2: "<< Plambda <<"\n" ;
+    
+    // checking 1st product of Mobilities
+    // ---------------------------------------------
+    _test( !isnan(Plambda) );
+    _test( !( Plambda < 0. || Plambda > (1./water_mu * 1./CO2_mu) ) ); // Mahyar: upper limits of Product of mobility is product of 1/mu
+    
+    
+    double64 dPlambda =  SatFunctions.MobilityProductDerivative((*it)) ;
+    
+    cerr <<"1st derivative of Mobility product of Water: "<< dPlambda <<"\n" ;
+    
+    double64 Flowfraction = SatFunctions.f((*it), 0U) ;
+    
+    cerr <<"frcational flow function of water: "<< Flowfraction <<"\n" ;
+    
+    // checking Flow fraction
+    // ---------------------------------------------
+    _test( !isnan(Flowfraction) );
+    _test( !( Flowfraction < 0. || Flowfraction > 1. ) );
+    
+    double64 FirstDerivative_FlowFunctions = SatFunctions.dfds((*it), 0U) ;
+    _test( !isnan(FirstDerivative_FlowFunctions) );
+    
+    cerr <<"dfds of Water: "<< FirstDerivative_FlowFunctions <<"\n" ;
+    
+    double64 MaxFlowfraction = SatFunctions.MaxFractionalFlowDerivative((*it)) ;
+    _test( !isnan(MaxFlowfraction) );
+    
+    cerr <<"Max Flow fraction: "<< MaxFlowfraction <<"\n" ;
+    
+    double64 V_sh = SatFunctions.ShockSpeed((*it)) ;
+    
+    cerr <<"Shock Speed: "<< V_sh <<"\n" ;
+    
+    // checking Speed of shock
+    // ---------------------------------------------
+    _test( !isnan(V_sh) );
+    
+    double64 S_sh = SatFunctions.ShockHeight((*it)) ;
+    
+    cerr <<"Shock Saturations (Height): "<< S_sh <<"\n" ;
+    
+    // checking height of shock; saturation of shock
+    // ---------------------------------------------
+    _test( !isnan(S_sh) );
+    _test( !( S_sh < 0. || S_sh > 1. ) );
     
     
     /**
+     double64 GT = SatFunctions.GravityTerm(E1) ;  // should be check in 2D or 3D model
+     cerr <<"Gravity Term : "<< GT <<"\n" ;
      
-     12.3.4) loop over each element and assign the process and constants to calculate the
-     Pc , dPcdS , krw , krn , dkrwds , dkrnds , fw , Sh , Sv and etc.
+     // checking GravityTerm
+     // ---------------------------------------------
+     _test( !isnan(GT) );
+     
+     
+     double64 GM = SatFunctions.GravityMultiplier_G(E1) ;
+     
+     cerr <<"Gravity Multiplier : "<< GM <<"\n" ;
+     
+     // checking Gravity Multiplier
+     // ---------------------------------------------
+     _test( !isnan(GM) );
+     
+     double64 dGM = SatFunctions.GravityMultiplier_dGds(E1, false) ;
+     
+     cerr <<"Gravity Multiplier derivative : "<< dGM <<"\n" ;
+     
+     // checking Gravity Multiplier derivative
+     // ---------------------------------------------
+     _test( !isnan(dGM) );
+     
+     
+     
+     
+     
+     double64 DM_water = SatFunctions.DiffusionMultiplier(E1, 0U) ;
+     
+     cerr <<"Diffusion Multiplier  of water phase: "<< DM_water <<"\n" ;
+     
+     // checking Capillary Diffusion Multiplier
+     // ---------------------------------------------
+     _test( !isnan(DM_water) );
+     
+     
+     
+     double64 CDM = SatFunctions.CapillaryDiffusionMultiplier(E1) ;
+     
+     cerr <<"Capillary Diffusion Multiplier: "<< CDM <<"\n" ;
+     
+     // checking Gravity Multiplier derivative
+     // ---------------------------------------------
+     _test( !isnan(CDM) );
      
      */
     
-    for (auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it ) // loop over elements
-    {
-      auto idx_ = (*it)->Idx() ;
-      auto E1 = (*it)->AtBarycenter() ;  // Mahyar: Never, ever delete this line... The Finite Element Placement of E1  is important...
-      
-      
-      /**
-       Important:
-       
-        Mahyar: here I define contants for imbibitions and drainage
-        for example for primary dranage aw = 0.5, ao = 0.25, cw =3.0, co=0.0.
-        for the second dranage aw = 0.5, ao = 0.25, cw =3.0, co=-2.0.
-        for the second imbibitions aw = 0.25, ao = 0.5, cw = 3.0, co=-2.0.
-       
-       
-        There is other possibilities to initialise parameters.. check the header file of BrooksCoreySaturationFunctionsWithHysteresis.h
-       
-        SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ , Drainage) ;
-        SatFunctions.InitialiseBrooksCoreyParameters(E1, a_ , c_ ) ; // Mahyar: to Initialaise Drainage process .. otherwise check the new CO2 saturation to to allocate the correct process
-       
-       */
-      
-      SatFunctions.InitialiseBrooksCoreyParameters(E1) ;
-      
-      
-      // Water Saturation of model at the BaryCenter.. this is not the same as water saturation of Nodes.. its is interploated from the nodes at BaryCenter
-      
-      double64 Sw = SatFunctions.Sw(E1) ;
+    
+    //double64 S_tan = SatFunctions.TangentPointSaturation(E1) ;
+    
+    //cerr <<"Tangent Point Saturation : "<< S_tan <<"\n" ;
+    
+    // checking Tangent Point Saturation:
+    // ---------------------------------------------
+    //_test( !isnan(S_tan) );
+    //_test( !( S_tan < 0. || S_tan > 1. ) );
+    
+    
+    double64 V_f = SatFunctions.ShockFrontVelocity((*it)) ;
+    
+    cerr <<"ShockFrontVelocity: "<< V_f <<"\n" ;
+    
+    // checking Speed of shock
+    // ---------------------------------------------
+    _test( !isnan(V_f) );
+    
+    
+    /// Test has been done in all functions for Flow Functions
+    
+    
+    
+    
+    outputfile<<Sw<<" , "<<pc<<" , "<<dpcds<<" , "<<krw<<" , "<<krn<<" , "<<dkrwds<<" , "<<dkrnds<<" , "<<Flowfraction<<" , "<<S_sh<<" , "<<V_sh<<endl ; // otherwise we can not visulise with python
+    
+    cerr <<"\n" ;
+    
+    
+    cerr << "============================================================================\n" ;
+    cerr << "    Entering into Prescribed saturation loop, to test the functionality  \n" ;
+    cerr << "============================================================================\n" ;
+    
+    
+    // Functionality for the prescribed saturation
+    // ---------------------------------------------
+    for (double64 S(0.0); S <= 1.0; S+=0.1){
       
       cerr <<"\n" ;
-      cerr <<"Entering into Element: " << idx_ << "\n" ;
-      cerr <<"Water Saturation at the BaryCenter: "<< Sw <<"\n" ;
+      cerr <<"Prescribed saturation:  "<< S <<"\n" ;
+      
+      double64 S_at = SatFunctions.EffectiveSaturation_at((*it), S) ;
       
       // water Saturation
       // ---------------------------------------------
-      _test( !( Sw < 0. || Sw > 1. ) );
+      _test(!( S_at < 0. || S_at > 1.  ));
       
-      
-      //  Check the water saturation is in the range of
-      
-      double64 pc = SatFunctions.pc(E1) ;
-      
-      cerr <<"Capillary pressure: "<< pc <<"\n" ;
-      
-      // checking capilary pressure
-      // ---------------------------------------------
-      //_test( !isnan(pc) );
-      
-      double64 dpcds = SatFunctions.dpcds(E1) ;
-      
-      cerr <<"Derivative of capillary pressure: "<< dpcds <<"\n" ;
-      
-      // checking 1st derivative of capilary pressure
-      // ---------------------------------------------
-      _test( !isnan(dpcds) );
-      
-      double64 krw = SatFunctions.krw(E1) ;
+      double64 krw = SatFunctions.krw_at((*it), S) ;
       
       cerr <<"Relative permability of Water: "<< krw <<"\n" ;
       
@@ -955,7 +1173,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krw) );
       _test(!( krw < 0. || krw > 1. )) ;
       
-      double64 dkrwds = SatFunctions.dkrwds(E1) ;
+      double64 dkrwds = SatFunctions.dkrwds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
       
@@ -963,7 +1181,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       // ---------------------------------------------
       _test( !isnan(dkrwds) );
       
-      double64 krn = SatFunctions.krn(E1) ;
+      double64 krn = SatFunctions.krn_at((*it), S) ;
       
       cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
       
@@ -972,7 +1190,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krn) );
       _test(!( krn < 0. || krn > 1. )) ;
       
-      double64 dkrnds = SatFunctions.dkrnds(E1) ;
+      double64 dkrnds = SatFunctions.dkrnds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
       
@@ -982,7 +1200,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(dkrnds) );
       
       
-      double64 lambda_w = SatFunctions.Mobility(E1, 0) ;
+      double64 lambda_w = SatFunctions.Mobility_at((*it), 0U, S) ;
       
       cerr <<"Mobility of Water: "<< lambda_w <<"\n" ;
       
@@ -991,7 +1209,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(lambda_w) );
       _test( !( lambda_w < 0. || lambda_w > (1./water_mu)) );   // Mahyar: upper limits of water mobility is 1/mu
       
-      double64 dlambda_w = SatFunctions.MobilityDerivative(E1, 0) ;
+      double64 dlambda_w = SatFunctions.MobilityDerivative_at((*it), 0U, S) ;
       
       cerr <<"1st derivative of Mobility of Water: "<< dlambda_w <<"\n" ;
       
@@ -1000,7 +1218,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(dlambda_w) );
       
       
-      double64 tlambda = SatFunctions.TotalMobility(E1) ;
+      double64 tlambda = SatFunctions.TotalMobility_at((*it), S) ;
       
       cerr <<"Total Mobility of Water and Co2: "<< tlambda <<"\n" ;
       
@@ -1010,21 +1228,12 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !( tlambda < 0. || tlambda > (1./water_mu + 1./CO2_mu) ) ); // Mahyar: upper limits of total mobility is sum of 1/mu
       
       
-      double64 Plambda = SatFunctions.MobilityProduct(E1) ;
       
-      cerr <<"Mobility product of Water and Co2: "<< Plambda <<"\n" ;
-      
-      // checking 1st product of Mobilities
-      // ---------------------------------------------
-      _test( !isnan(Plambda) );
-      _test( !( Plambda < 0. || Plambda > (1./water_mu * 1./CO2_mu) ) ); // Mahyar: upper limits of Product of mobility is product of 1/mu
-      
-      
-      double64 dPlambda =  SatFunctions.MobilityProductDerivative(E1) ;
+      double64 dPlambda =  SatFunctions.MobilityProductDerivative_at((*it), S) ;
       
       cerr <<"1st derivative of Mobility product of Water: "<< dPlambda <<"\n" ;
       
-      double64 Flowfraction = SatFunctions.f(E1, 0) ;
+      double64 Flowfraction = SatFunctions.f_at((*it), 0U, S) ;
       
       cerr <<"frcational flow function of water: "<< Flowfraction <<"\n" ;
       
@@ -1033,254 +1242,43 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(Flowfraction) );
       _test( !( Flowfraction < 0. || Flowfraction > 1. ) );
       
-      double64 FirstDerivative_FlowFunctions = SatFunctions.dfds(E1, 0) ;
-       _test( !isnan(FirstDerivative_FlowFunctions) );
+      double64 FirstDerivative_FlowFunctions = SatFunctions.dfds_at((*it), Sw) ;
       
       cerr <<"dfds of Water: "<< FirstDerivative_FlowFunctions <<"\n" ;
       
-      double64 S_inf = SatFunctions.InflectionPointSaturation(E1) ;
       
-      cerr <<"Infelection point: "<< S_inf <<"\n" ;
-      
-      // checking Infelection point:
-      // ---------------------------------------------
-      _test( !isnan(S_inf) );
-      _test( !( S_inf < 0. || S_inf > 1. ) );
-      
-      double64 MaxFlowfraction = SatFunctions.MaxFractionalFlowDerivative(E1) ;
-      _test( !isnan(MaxFlowfraction) );
-
-      cerr <<"Max Flow fraction: "<< MaxFlowfraction <<"\n" ;
-      
-      double64 V_sh = SatFunctions.ShockSpeed(E1) ;
-      
-      cerr <<"Shock Speed: "<< V_sh <<"\n" ;
-      
-      // checking Speed of shock
-      // ---------------------------------------------
-      _test( !isnan(V_sh) );
-      
-      double64 S_sh = SatFunctions.ShockHeight(E1) ;
-      
-      cerr <<"Shock Saturations (Height): "<< S_sh <<"\n" ;
-      
-      // checking height of shock; saturation of shock
-      // ---------------------------------------------
-      _test( !isnan(S_sh) );
-      _test( !( S_sh < 0. || S_sh > 1. ) );
+    }
     
-      
-      /**
-      double64 GT = SatFunctions.GravityTerm(E1) ;  // should be check in 2D or 3D model
-      cerr <<"Gravity Term : "<< GT <<"\n" ;
-      
-      // checking GravityTerm
-      // ---------------------------------------------
-      _test( !isnan(GT) );
+    cerr << "============================================================================\n" ;
+    cerr << "    Finishing Prescribed saturation loop  \n" ;
+    cerr << "============================================================================\n" ;
     
-      
-      double64 GM = SatFunctions.GravityMultiplier_G(E1) ;
-      
-      cerr <<"Gravity Multiplier : "<< GM <<"\n" ;
-      
-      // checking Gravity Multiplier
-      // ---------------------------------------------
-      _test( !isnan(GM) );
-      
-      double64 dGM = SatFunctions.GravityMultiplier_dGds(E1, false) ;
-      
-      cerr <<"Gravity Multiplier derivative : "<< dGM <<"\n" ;
-      
-      // checking Gravity Multiplier derivative
-      // ---------------------------------------------
-      _test( !isnan(dGM) );
-       
-      
-      
-      
-      
-      double64 DM_water = SatFunctions.DiffusionMultiplier(E1, 0U) ;
-      
-      cerr <<"Diffusion Multiplier  of water phase: "<< DM_water <<"\n" ;
-      
-      // checking Capillary Diffusion Multiplier
-      // ---------------------------------------------
-      _test( !isnan(DM_water) );
-       
+    
+    
+    cerr <<"\n" ;
+    cerr << Sw<<" , "<<pc<<endl ;
+    
+    
+  } // end loop over elements
   
-      
-      double64 CDM = SatFunctions.CapillaryDiffusionMultiplier(E1) ;
-      
-      cerr <<"Capillary Diffusion Multiplier: "<< CDM <<"\n" ;
-      
-      // checking Gravity Multiplier derivative
-      // ---------------------------------------------
-      _test( !isnan(CDM) );
-       
-       */
-      
-      
-      double64 S_tan = SatFunctions.TangentPointSaturation(E1) ;
-      
-      cerr <<"Tangent Point Saturation : "<< S_tan <<"\n" ;
-      
-      // checking Tangent Point Saturation:
-      // ---------------------------------------------
-      _test( !isnan(S_tan) );
-      _test( !( S_tan < 0. || S_tan > 1. ) );
-      
-      
-      double64 V_f = SatFunctions.ShockFrontVelocity(E1) ;
-      
-      cerr <<"ShockFrontVelocity: "<< V_f <<"\n" ;
-      
-      // checking Speed of shock
-      // ---------------------------------------------
-      _test( !isnan(V_f) );
-      
-      
-      /// Test has been done in all functions for Flow Functions
-      
-      
-      
-      
-      outputfile<<Sw<<" , "<<pc<<" , "<<dpcds<<" , "<<krw<<" , "<<krn<<" , "<<dkrwds<<" , "<<dkrnds<<" , "<<Flowfraction<<" , "<<S_sh<<" , "<<V_sh<<endl ; // otherwise we can not visulise with python
-      
-      cerr <<"\n" ;
-      
-      
-      cerr << "============================================================================\n" ;
-      cerr << "    Entering into Prescribed saturation loop, to test the functionality  \n" ;
-      cerr << "============================================================================\n" ;
-      
-      
-      // Functionality for the prescribed saturation
-      // ---------------------------------------------
-      for (double64 S(0.0); S <= 1.0; S+=0.1){
-        
-        cerr <<"\n" ;
-        cerr <<"Prescribed saturation:  "<< S <<"\n" ;
-      
-        double64 S_at = SatFunctions.EffectiveSaturation_at(E1, S) ;
-        
-        // water Saturation
-        // ---------------------------------------------
-        _test(!( S_at < 0. || S_at > 1.  ));
-        
-        double64 krw = SatFunctions.krw_at(E1, S) ;
-        
-        cerr <<"Relative permability of Water: "<< krw <<"\n" ;
-        
-        // checking relative permeability of water
-        // ---------------------------------------------
-        _test( !isnan(krw) );
-        _test(!( krw < 0. || krw > 1. )) ;
-        
-        double64 dkrwds = SatFunctions.dkrwds_at(E1, S) ;
-        
-        cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
-        
-        // checking 1st derivative of relative permeability of water
-        // ---------------------------------------------
-        _test( !isnan(dkrwds) );
-        
-        double64 krn = SatFunctions.krn_at(E1, S) ;
-        
-        cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
-        
-        // checking relative permeability of CO2
-        // ---------------------------------------------
-        _test( !isnan(krn) );
-        _test(!( krn < 0. || krn > 1. )) ;
-        
-        double64 dkrnds = SatFunctions.dkrnds_at(E1, S) ;
-        
-        cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
-        
-        
-        // checking 1st derivative of relative permeability of CO2
-        // ---------------------------------------------
-        _test( !isnan(dkrnds) );
-        
-        
-        double64 lambda_w = SatFunctions.Mobility_at(E1, 0U, S) ;
-        
-        cerr <<"Mobility of Water: "<< lambda_w <<"\n" ;
-        
-        // water Mobility
-        // ---------------------------------------------
-        _test( !isnan(lambda_w) );
-        _test( !( lambda_w < 0. || lambda_w > (1./water_mu)) );   // Mahyar: upper limits of water mobility is 1/mu
-        
-        double64 dlambda_w = SatFunctions.MobilityDerivative_at(E1, 0U, S) ;
-        
-        cerr <<"1st derivative of Mobility of Water: "<< dlambda_w <<"\n" ;
-        
-        // checking 1st derivative of water Mobility
-        // ---------------------------------------------
-        _test( !isnan(dlambda_w) );
-        
-        
-        double64 tlambda = SatFunctions.TotalMobility_at(E1, S) ;
-        
-        cerr <<"Total Mobility of Water and Co2: "<< tlambda <<"\n" ;
-        
-        // checking 1st derivative of total Mobility
-        // ---------------------------------------------
-        _test( !isnan(tlambda) );
-        _test( !( tlambda < 0. || tlambda > (1./water_mu + 1./CO2_mu) ) ); // Mahyar: upper limits of total mobility is sum of 1/mu
-        
-        
-        
-        double64 dPlambda =  SatFunctions.MobilityProductDerivative_at(E1, S) ;
-        
-        cerr <<"1st derivative of Mobility product of Water: "<< dPlambda <<"\n" ;
-        
-        double64 Flowfraction = SatFunctions.f_at(E1, 0U, S) ;
-        
-        cerr <<"frcational flow function of water: "<< Flowfraction <<"\n" ;
-        
-        // checking Flow fraction
-        // ---------------------------------------------
-        _test( !isnan(Flowfraction) );
-        _test( !( Flowfraction < 0. || Flowfraction > 1. ) );
-        
-        double64 FirstDerivative_FlowFunctions = SatFunctions.dfds_at(E1, Sw) ;
-        
-        cerr <<"dfds of Water: "<< FirstDerivative_FlowFunctions <<"\n" ;
-        
-      
-      }
-      
-      cerr << "============================================================================\n" ;
-      cerr << "    Finishing Prescribed saturation loop  \n" ;
-      cerr << "============================================================================\n" ;
-      
-    
-
-      cerr <<"\n" ;
-      cerr << Sw<<" , "<<pc<<endl ;
-      
-      
-    } // end loop over elements
-    
-    outputfile.close() ;
-    
-    
-    cerr << "\n The Unit Test has been done ....\n" ;
-    
-    //
-    //  The unit test has been done.. the following of code is going to run over different saturation
-    //  and create an example of turing bpoint in saturations curve....
-    //
-    
-    cerr << "==========================================================\n" ;
-    cerr << "         Start run over saturations  \n" ;
-    cerr << "==========================================================\n" ;
-    
-    runOverSaturationRange(model) ;
-    
-    
+  outputfile.close() ;
+  
+  
+  cerr << "\n The Unit Test has been done ....\n" ;
+  
+  //
+  //  The unit test has been done.. the following of code is going to run over different saturation
+  //  and create an example of turing bpoint in saturations curve....
+  //
+  
+  cerr << "==========================================================\n" ;
+  cerr << "         Start run over saturations  \n" ;
+  cerr << "==========================================================\n" ;
+  
+  runOverSaturationRange(model) ;
+  
+  
 } // run()
-  
+
+
 } // csmp
