@@ -57,11 +57,13 @@ nodal fluid volume source,nQV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,mul
 fluid volume source,QV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,ELEMENT,input,multiphase flow,,to deal with volume changes in the fluid or compaction
 flux balance,fb,m3,SCALAR,-1.00E+08,1.00E+08,NODE,computed,multiphase flow,,incoming minus outgoing fluxes in a finite-volume cell
 gravity term,gt,N/m,VECTOR,-1.00E+08,1.00E+08,ELEMENT,calculated,multiphase flow,,REMOVE - compute on the fly with a PDE operator
-new saturation carbonic phase,sCO2_1,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,saturation at next time level
+old saturation carbonic phase,sCO2_0,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,saturation at previous time level
 residual saturation carbonic phase,srCO2,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,input,multiphase flow,,ACTION - will need to be computed from max saturation reached
 residual saturation aqueous phase,srH2O,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,input,multiphase flow,,connate water saturation = irreducible water saturation
 saturation carbonic phase,sCO2,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed primary variable,multiphase flow,, main variable in CO2 transport
 saturation aqueous phase,sH2O,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed/input,multiphase flow,,water saturation
+shock saturation aqueous phase,ssH2O,m3/m3,SCALAR,-5.00E-02,1.05E+00,ELEMENT,computed,multiphase flow,,water saturation at shock
+change of saturation carbonic phase,dsCO2,m3/m3,SCALAR,-5.00E-02,1.05E+00,ELEMENT,computed,multiphase flow,, change of saturation
 total dissolved solids,TDS,kg/m3,SCALAR,0.00E+00,3.00E+02,NODE,computed/input,multiphase flow,,to account for any solids not handled by equation of state
 mobility aqueous phase,lH2O,1/(Pa.s),SCALAR,0.00E+00,1.00E+05,ELEMENT,calculated,multiphase flow ,,relative permeability divided by viscosity
 mobility carbonic phase,lCO2,1/(Pa.s),SCALAR,0.00E+00,1.00E+05,ELEMENT,calculated,multiphase flow,,relative permeability divided by viscosity
@@ -77,7 +79,7 @@ previous drainage endpoint,SwDrToImb,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,comput
 previous imbibition endpoint,SwImbToDr,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
 pseudo residual saturation carbonic phase,psrCO2,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model
 pseudo residual saturation aqueous phase,psrH2O,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model
-relative permeability model parameters,kri_param,none,ARRAY,0.00E+00,5.00E+07,ELEMENT,input,multiphase flow,,extra 6 parameters needed by hysteretic relperm model
+relative permeability model parameters,kri_param,none,ARRAY,-5.00E+07,5.00E+07,ELEMENT,input,multiphase flow,,extra 8 parameters needed by hysteretic relperm model
 dip vector,dip,none,VECTOR,-1.00E+00,1.00E+00,ELEMENT,computed,numeric modelling,,for the projection of the gravity force acting on lower-dimensional elements
 sector pore volume,sPV,m3,SCALAR,1.00E-08,1.00E+06,SECTOR_INTEGRATION_POINT,computed,numeric modelling,,as computed with the finite volume method
 facet area,fA,m2,SCALAR,1.00E-08,1.00E+06,FACET_INTEGRATION_POINT,computed,numeric modelling,,of the outer surface segment of a finite volume

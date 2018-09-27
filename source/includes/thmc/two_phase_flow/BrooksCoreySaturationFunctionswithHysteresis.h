@@ -94,6 +94,9 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   
     /// Initialision  method (c)
         void InitialiseBrooksCoreyParameters( const Element<dim>* const, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c );
+        
+    /// Update parameter values when necessary    
+        void UpdateBrooksCoreyParameters( Element<dim>* );
     
     /// Effective saturation function
         double64 EffectiveSaturation( const Element<dim>* const ) const;

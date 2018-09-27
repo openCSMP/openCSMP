@@ -67,6 +67,10 @@ class ExperimentalSaturationFunctions {
   public:
     /// TODO: reads capillary preessure and saturation functions from "rocktype" file
     explicit ExperimentalSaturationFunctions( const char* filename="rocktypes" );
+    
+    /// Pseudo functions that do nothing
+        void InitialiseBrooksCoreyParameters( const Element<dim>* const );
+        void UpdateBrooksCoreyParameters( Element<dim>* e );    
   
     /// Effective Saturation function
         double64 EffectiveSaturation( const Element<dim>* const ) const ;

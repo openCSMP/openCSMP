@@ -670,8 +670,8 @@ void TwoPhaseModelwithHysteresis_Test::CreateArtifitialDrainageProcess(const Mod
       
       if ( SCO2 < 1.-S)
       {
-        ScalarVariable variable1_((*it)->Status(var.key_sCO2_1), SCO2*1.1) ;
-        (*it)->Store(var.key_sCO2_1, variable1_) ;
+        ScalarVariable variable1_((*it)->Status(var.key_sCO2_0), SCO2/1.1) ;
+        (*it)->Store(var.key_sCO2_0, variable1_) ;
       }
     }
 }
@@ -700,8 +700,8 @@ void TwoPhaseModelwithHysteresis_Test::CreateArtifitialImbibitionProcess(const M
       double64 S = (*it)->Read(var.key_SwImbToDr) ;
       if ( SCO2 > 1.-S)
       {
-        ScalarVariable variable1_((*it)->Status(var.key_sCO2_1), SCO2*0.9) ;
-        (*it)->Store(var.key_sCO2_1, variable1_) ;
+        ScalarVariable variable1_((*it)->Status(var.key_sCO2_0), SCO2/0.9) ;
+        (*it)->Store(var.key_sCO2_0, variable1_) ;
       }
     }
 }
@@ -810,7 +810,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
     (*it)->Store( var.key_sH2O, variable0_);
     (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
-    (*it)->Store( var.key_sCO2_1,1.0-variable0_) ;
+    (*it)->Store( var.key_sCO2_0,1.0-variable0_) ;
     i++ ;
   }
   

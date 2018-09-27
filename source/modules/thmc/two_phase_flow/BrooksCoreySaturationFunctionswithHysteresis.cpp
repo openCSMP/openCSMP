@@ -75,8 +75,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatu
 template<size_t dim, template<size_t> class USER>
 TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e )
   {
-    const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
-    const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2_1 );
+    const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
+    const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
     
     if (S_old > S_new) return IMBIBITION;
     
@@ -209,7 +209,68 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCor
   
   
   
-  
+template<size_t dim, template<size_t> class USER>
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyParameters( Element<dim>* e )
+{ 
+      const double64 dsCO2_old = e->Read(User()->key_dsCO2);
+      const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
+      const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );  
+      const double64 dsCO2_new = S_new - S_old;
+      e->Store( User()->key_dsCO2, makeScalar( e->Status( User()->key_dsCO2), dsCO2_new ));
+      
+      //do nothing if saturation has not changed
+      if (dsCO2_new == 0.) return;
+      
+      //update parameter values if required
+      InitialiseBrooksCoreyParameters(e);
+      double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O ); //water saturation
+      double64 Sw_min = e->PropertyValueAtBaryCenter( User()->key_SwDrToImb ); //previous drainage endpoint
+      double64 Sw_max = e->PropertyValueAtBaryCenter( User()->key_SwImbToDr ); //previous imbibition endpoint    
+      double64 newSro(0); //new pseudo residual saturation carbonic phase
+      double64 newSrw(0); //new pseudo residual saturation aqueous phase      
+      double64  tol_(0.01) ;
+      bool flag_(false) ;      
+      
+      if (dsCO2_old > 0. && dsCO2_new < 0.) {//turning from DRAINAGE to IMBIBITION 
+          if(Sw_min==0.)
+            flag_ = (abs(Sw-Sw_min) < tol_*0.1);
+          else          
+            flag_ = (abs(Sw-Sw_min)/Sw_min < tol_) ;
+          if ( flag_ ) {
+            //compute and store new pseudo residual saturations
+            newSro = OilResidualSaturation(e); 
+            newSrw = WaterResidualSaturation(e, newSro) ;
+            e->Store( User()->key_psrCO2, makeScalar( e->Status( User()->key_psrCO2), newSro )); 
+            e->Store( User()->key_psrH2O, makeScalar( e->Status( User()->key_psrH2O), newSrw )); 
+
+            //update previous drainage endpoint
+            e->Store( User()->key_SwDrToImb, makeScalar( e->Status( User()->key_SwDrToImb), 1.0-S_old ));     
+          
+            //update shock height
+            double64 sw_shock = User()->ShockHeight(e);
+            e->Store( User()->key_ssH2O, makeScalar( e->Status( User()->key_ssH2O), sw_shock ) );              
+          }  
+            
+      } else if ( dsCO2_old < 0. && dsCO2_new > 0. ) { //turning from IMBIBITION to DRAINAGE   
+          if(Sw_max ==0.)
+            flag_ = (abs(Sw-Sw_max) < tol_*0.1);
+          else
+            flag_ = (abs(Sw-Sw_max)/Sw_max < tol_) ;
+          if ( flag_ ) {
+            //compute and store new pseudo residual saturations
+            WaterAndOilResidualSaturationImbibitionToDrainage(e, newSrw, newSro);
+            e->Store( User()->key_psrCO2, makeScalar( e->Status( User()->key_psrCO2), newSro ));
+            e->Store( User()->key_psrH2O, makeScalar( e->Status( User()->key_psrH2O), newSrw )); 
+            
+            //update previous imbibition endpoint
+            e->Store( User()->key_SwImbToDr, makeScalar( e->Status( User()->key_SwImbToDr), S_old ));  
+          
+            //update shock height
+            double64 sw_shock = User()->ShockHeight(e);
+            e->Store( User()->key_ssH2O, makeScalar( e->Status( User()->key_ssH2O), sw_shock ) );            
+          }  
+      }       
+}  
 
   
   
@@ -586,7 +647,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( const E
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( const Element<dim>* const e, double64 S) const
   {
-    const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    const double64 sH2O (S);
     const double64 sCO2 = 1. - sH2O;
     
     double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;

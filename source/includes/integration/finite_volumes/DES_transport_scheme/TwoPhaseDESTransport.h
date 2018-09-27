@@ -51,6 +51,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     void initializeFiniteVolumeProperties();
     void ResetCFLMultiplier();
     void ComputeSaturationGradient (Event<dim>* event );
+    void UpdateBCParameters (Event<dim>* event );
     virtual void ComputeRateofChange( Event<dim>* event );
     bool Schedule(Event<dim>* nd, double64 t_end);
     virtual void Update_DES(Event<dim>* nd, double64 t_clock);
@@ -60,8 +61,8 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
   protected:
     Region<dim>& gref_;
+    PropertyDatabase<dim>& db_;
     bool with_capillary_spreading_, with_gravity_forces_;
-    FLOW_FUNCTIONS<dim>  flowfunctions_;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
     std::vector<Event<dim>*> PEPList, FullList;
     std::vector<Heap_Node*> HeapNodeFullList; 
@@ -77,7 +78,6 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     
     csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL;
     csmp::INDEX<VECTOR,ELEMENT> key_grad;
-    csmp::INDEX<SCALAR,ELEMENT> key_ssw;
         
     // key_time - an ArrayVariable key for DES releated variables:
     // [0] current time stamp

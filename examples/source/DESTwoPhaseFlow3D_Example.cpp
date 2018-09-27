@@ -270,6 +270,7 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, CO2H2O_Fun
     vector<Element<3U>* >::const_iterator eit;
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
+        flowfunctions.InitialiseBrooksCoreyParameters(*eit);
         //total mobility
         double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*

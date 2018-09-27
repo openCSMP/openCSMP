@@ -17,6 +17,18 @@ ExperimentalSaturationFunctions<dim,USER>::ExperimentalSaturationFunctions( cons
   }
   
 
+//pseudo function to avoid compile errors  
+template<size_t dim, template<size_t> class USER>
+void ExperimentalSaturationFunctions<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e )
+  {
+  }
+  
+//pseudo function to avoid compile errors  
+template<size_t dim, template<size_t> class USER>
+void ExperimentalSaturationFunctions<dim,USER>::UpdateBrooksCoreyParameters( Element<dim>* e )
+  {
+  } 
+
 
 
 /**
