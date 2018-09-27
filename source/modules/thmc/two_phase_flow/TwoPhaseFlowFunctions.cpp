@@ -856,8 +856,9 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const Element<dim>
   
   
   
-  
-  
+template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule0>;
   
 
 template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule1>;

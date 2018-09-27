@@ -10,6 +10,7 @@
 #define CSMP_CO2_H2O_FUNCTIONS_MODULE_H
 
 #include "VariableSet_CO2GeoSequestration.h"
+#include "BrooksCoreySaturationFunctions.h"
 #include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "ExperimentalSaturationFunctions.h"
 #include "TwoPhaseFlowFunctions.h"
@@ -43,6 +44,20 @@ template<size_t> class PropertyDatabase;
     
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
+
+template<size_t dim>
+class CO2H2O_FunctionsModule0 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+    public BrooksCoreySaturationFunctions<dim,CO2H2O_FunctionsModule0>,  ///< saturation function model
+    public TwoPhaseFlowFunctions<dim,CO2H2O_FunctionsModule0>,                         ///< mobilities etc.
+    public Fluid<dim,CO2H2O_FunctionsModule0> {                                        ///< fluids module / EOS interface
+      
+  public:
+    explicit CO2H2O_FunctionsModule0( const PropertyDatabase<dim>& );
+};
+
+// USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
+typedef CO2H2O_FunctionsModule0<3U>  ACGSS_FlowFunctions;
+
 
 template<size_t dim>
 class CO2H2O_FunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)

@@ -422,7 +422,9 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>
   }
 }
 
-
+template class TwoPhaseTwoComponentDESTransport<1U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseTwoComponentDESTransport<3U,CO2H2O_FunctionsModule0>;
 
 template class TwoPhaseTwoComponentDESTransport<1U,CO2H2O_FunctionsModule1>;
 template class TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>;

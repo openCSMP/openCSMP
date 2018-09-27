@@ -6,6 +6,12 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
+CO2H2O_FunctionsModule0<dim>::CO2H2O_FunctionsModule0( const PropertyDatabase<dim>& db )
+ : variables::VariableSet_CO2GeoSequestration(db)
+ {
+ }
+
+template<size_t dim>
 CO2H2O_FunctionsModule1<dim>::CO2H2O_FunctionsModule1( const PropertyDatabase<dim>& db )
  : variables::VariableSet_CO2GeoSequestration(db)
  {
@@ -17,6 +23,10 @@ CO2H2O_FunctionsModule2<dim>::CO2H2O_FunctionsModule2( const PropertyDatabase<di
 //   ExperimentalSaturationFunctions<dim,CO2H2O_FunctionsModule2>("rocktypes")
  {
  }
+
+template class CO2H2O_FunctionsModule0<1U>;
+template class CO2H2O_FunctionsModule0<2U>;
+template class CO2H2O_FunctionsModule0<3U>;
 
 template class CO2H2O_FunctionsModule1<1U>;
 template class CO2H2O_FunctionsModule1<2U>;
