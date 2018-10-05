@@ -144,7 +144,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
             
             if(this->with_capillary_spreading_){  
                 VectorVariable<dim> grad;
-                eptr->Read(this->key_grad, grad);
+                eptr->Read(this->key_gradSn, grad);
                 double64 dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){

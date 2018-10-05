@@ -12,6 +12,7 @@
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseDESTransport.h"
 #include "TwoPhaseTwoComponentDESTransport.h"
+#include "TwoPhaseMassBasedDESTransport.h"
 #include "ExplicitStencilProcessor.h"
 
 // relative permeability calculations
@@ -96,10 +97,13 @@ void DESTwoPhaseFlow2D_Example::Run()
     // ---------------------------------------------------------------------
     CO2H2O_FunctionsModule1<2U> flowfunctions(model.Database());
     TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>* DEStransport;
-    if (!multi_component)
-      DEStransport = new TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
-    else 
+    if (!multi_component) {
+      //DEStransport = new TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseMassBasedDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+      DEStransport->SetNoFlowBoundaryCondition(false);
+    } else {
       DEStransport = new TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
+    }
 
     computeTotalMobility( model, flowfunctions );
 
@@ -155,8 +159,6 @@ void DESTwoPhaseFlow2D_Example::Run()
     //TwoPhaseDESTransport<2U> DEStransport(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces);
 
     model.InputPropertyValue( "nodal fluid volume source", makeScalar( PLAIN,0.0) ); // no FV sources/sinks
-    //model.InputPropertyValue( "diffusivity coefficient carbonic phase", makeScalar(PLAIN,1.0e-25) ); // very small value
-    //model.InputPropertyValue( "diffusivity coefficient aqueous phase", makeScalar(PLAIN,1.0e-25) ); // very small value
 
     // -----------------------
     // 8.0 Time Loop Variables
@@ -254,6 +256,7 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_Fun
     //csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
     //assert( k_key.type == TENSOR );  
     static Index  k_key(mdl.Database().StorageKey("permeability")); 
+    static Index  thi_key(mdl.Database().StorageKey("thickness")); 
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
@@ -270,7 +273,7 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_Fun
     vector<Element<2U>* >::const_iterator eit;
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
-        flowfunctions.InitialiseBrooksCoreyParameters(*eit);
+        flowfunctions.UpdateBrooksCoreyParameters(*eit);
         //total mobility
         double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*
@@ -280,6 +283,8 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_Fun
         */
         double64 k = (*eit)->Read(k_key);
         mob_t *= k;  
+        double64 thi = (*eit)->Read(thi_key);
+        if(!isnan(thi)) mob_t *= thi;
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 
 
