@@ -14,13 +14,15 @@ class TwoPhaseMassBasedDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNC
                            const char* target_region, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
+                           bool tensor_k,
                            double64 PEP_multiplier, 
                            double64 cfl_multiplier);
                            
     TwoPhaseMassBasedDESTransport ( Model<dim>& m, 
                            const char* target_region, 
                            bool with_capillary_spreading, 
-                           bool with_gravity_forces, 
+                           bool with_gravity_forces,
+                           bool tensor_k, 
                            double64 PEP_multiplier,
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);    

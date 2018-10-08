@@ -14,13 +14,15 @@ class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_F
                            const char* target_region, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
+                           bool tensor_k,
                            double64 PEP_multiplier, 
                            double64 cfl_multiplier);
                            
     TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
                            const char* target_region, 
                            bool with_capillary_spreading, 
-                           bool with_gravity_forces, 
+                           bool with_gravity_forces,
+                           bool tensor_k, 
                            double64 PEP_multiplier,
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);    

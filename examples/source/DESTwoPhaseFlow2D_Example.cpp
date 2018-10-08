@@ -97,13 +97,10 @@ void DESTwoPhaseFlow2D_Example::Run()
     // ---------------------------------------------------------------------
     CO2H2O_FunctionsModule1<2U> flowfunctions(model.Database());
     TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>* DEStransport;
-    if (!multi_component) {
-      //DEStransport = new TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
-      DEStransport = new TwoPhaseMassBasedDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
-      DEStransport->SetNoFlowBoundaryCondition(false);
-    } else {
-      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, PEP_parameter, Courant_multiplier);
-    }
+    if (!multi_component)
+      DEStransport = new TwoPhaseMassBasedDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+    else
+      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 

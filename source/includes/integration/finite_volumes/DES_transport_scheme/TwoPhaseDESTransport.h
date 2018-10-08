@@ -24,13 +24,15 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
                            const char* target_region, 
                            bool with_capillary_spreading,
                            bool with_gravity_forces,
+                           bool tensor_k,
                            double64 PEP_multiplier, 
                            double64 cfl_multiplier);
                            
     TwoPhaseDESTransport ( Model<dim>& m, 
                            const char* target_region, 
                            bool with_capillary_spreading, 
-                           bool with_gravity_forces, 
+                           bool with_gravity_forces,
+                           bool tensor_k, 
                            double64 PEP_multiplier,
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);
@@ -64,6 +66,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     Region<dim>& gref_;
     PropertyDatabase<dim>& db_;
     bool with_capillary_spreading_, with_gravity_forces_;
+    bool tensor_k_= false;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
     std::vector<Event<dim>*> PEPList, FullList;
     std::vector<Heap_Node*> HeapNodeFullList; 

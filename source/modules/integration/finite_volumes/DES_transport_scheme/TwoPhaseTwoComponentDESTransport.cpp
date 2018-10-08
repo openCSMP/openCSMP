@@ -12,9 +12,10 @@ TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseTwoComponentDESTra
                                                  const char* target_region, 
                                                  bool with_capillary_spreading, 
                                                  bool with_gravity_forces,
+                                                 bool tensor_k,
                                                  double64 PEP_multiplier,
                                                  double64 cfl_multiplier)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier) 
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier) 
 {
     InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );
@@ -32,10 +33,11 @@ TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseTwoComponentDESTra
                                                  const char* target_region, 
                                                  bool with_capillary_spreading, 
                                                  bool with_gravity_forces,
+                                                 bool tensor_k,
                                                  double64 PEP_multiplier,
                                                  double64 cfl_multiplier,
                                                  double64 relaxing_factor)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
     InitializeVariablesAndKeys(m);
     m.Database().RangeOf( m.Database().Name(this->key_CO2aq), lower_CO2aq_, upper_CO2aq_ );

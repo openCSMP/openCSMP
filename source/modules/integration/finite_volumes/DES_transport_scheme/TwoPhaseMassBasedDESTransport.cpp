@@ -12,9 +12,10 @@ TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMassBasedDESTransport
                                                  const char* target_region, 
                                                  bool with_capillary_spreading, 
                                                  bool with_gravity_forces,
+                                                 bool tensor_k,
                                                  double64 PEP_multiplier,
                                                  double64 cfl_multiplier)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier) 
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier) 
 {
     InitializeVariablesAndKeys(m);
     cout<<"TwoPhaseMassBasedDESTransport constructed."<<endl;
@@ -30,10 +31,11 @@ TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMassBasedDESTransport
                                                  const char* target_region, 
                                                  bool with_capillary_spreading, 
                                                  bool with_gravity_forces,
+                                                 bool tensor_k,
                                                  double64 PEP_multiplier,
                                                  double64 cfl_multiplier,
                                                  double64 relaxing_factor)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,PEP_multiplier,cfl_multiplier, relaxing_factor)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
     InitializeVariablesAndKeys(m);
     cout<<"TwoPhaseMassBasedDESTransport constructed."<<endl;
@@ -106,14 +108,22 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
         //compute total velocity (without gravity)
         VectorVariable<dim> gradP;
         eptr->Read(this->key_gradP, gradP); //pressure gradient
-        double64 k = eptr->Read( this->key_k ); //permeability
         double64 lambda_t = flowfunctions.TotalMobility(eptr);
-        lambda_t *= k;
         double64 thickness = eptr->Read(this->key_thi); //thickness
-        if (!isnan(thickness)) lambda_t *= thickness;
-        vD(0) = lambda_t * gradP(0);
-        if ( dim != 1U ) vD(1) = lambda_t * gradP(1);
-        if ( dim == 3U ) vD(2) = lambda_t * gradP(2);   
+        if(!this->tensor_k_) { //scalar permeability
+            double64 k = eptr->Read( this->key_k ); //permeability
+            k *= lambda_t;
+            if (!isnan(thickness)) k *= thickness;
+            vD(0) = k * gradP(0);
+            if ( dim != 1U ) vD(1) = k * gradP(1);
+            if ( dim == 3U ) vD(2) = k * gradP(2);
+        } else { //tensor permeability
+            TensorVariable<dim> kk;
+            eptr->Read( this->key_kk, kk );
+            kk *= lambda_t;
+            if (!isnan(thickness)) kk *= thickness;
+            vD= kk * gradP;
+        }  
 
         /*
         if( this->with_gravity_forces_ ){ //take into account gravity effect
