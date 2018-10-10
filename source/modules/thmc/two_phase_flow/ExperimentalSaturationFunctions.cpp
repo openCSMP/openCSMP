@@ -272,7 +272,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* con
 template<size_t dim, template<size_t> class USER>
 double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* const e , double64 S) const
 {
-   double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+   //double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+   double64 seff =  EffectiveSaturation_at(e, S);
    return kr1_[ RockType(e) ].Value( seff );
 }
 
@@ -294,7 +295,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* con
 template<size_t dim, template<size_t> class USER>
 double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* const e, double64 S) const
 {
-    double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    //double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    double64 seff =  EffectiveSaturation_at(e, S);
     return kr2_[ RockType(e) ].Value( seff );
 }
   
@@ -323,7 +325,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( const Element<dim
     const double64 srCO2  = e->Read(User()->key_srCO2);
     const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
     
-    double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    //double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    double64 seff =  EffectiveSaturation_at(e, S);
 
     return kr1_[ RockType(e) ].Derivative( seff ) * seff_mult;
 }
@@ -355,7 +358,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( const Element<dim
     const double64 srCO2  = e->Read(User()->key_srCO2);
     const double64 seff_mult( 1.0/ (1.0 - srH2O - srCO2 ) );
     
-    const double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    //const double64 seff =  (S - e->Read(User()->key_srH2O)) /(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    double64 seff =  EffectiveSaturation_at(e, S);
     
     return kr2_[ RockType(e) ].Derivative( seff ) * seff_mult;
     

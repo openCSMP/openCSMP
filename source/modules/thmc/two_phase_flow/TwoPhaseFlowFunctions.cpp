@@ -456,7 +456,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( co
     assert( phase == 0U or phase == 1U );
     
     // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return  e->Read(User()->key_k) * ( (phase==0U) ? Mobility( e, 1U ) : Mobility( e, 0U ) )* User()->dpcds(e);
+    return  e->Read(User()->key_k) * ( (phase==0U) ? Mobility( e, 0U ) : Mobility( e, 1U ) )* User()->dpcds(e);
   }
   
  
@@ -766,7 +766,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const Element<di
   
   
 /**
- @attension: Generally "MaxFractionalFlowDerivative" is not speed. It is after Buckley-Leverett problem
+ @attension: Generally "MaxFractionalqFlowDerivative" is not speed. It is after Buckley-Leverett problem
  */
 
 template<size_t dim, template<size_t> class USER>
