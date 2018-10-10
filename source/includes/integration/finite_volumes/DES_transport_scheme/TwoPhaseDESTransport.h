@@ -65,6 +65,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   protected:
     Region<dim>& gref_;
     PropertyDatabase<dim>& db_;
+    FLOW_FUNCTIONS<dim>* flowfunctions_;
     bool with_capillary_spreading_, with_gravity_forces_;
     bool tensor_k_= false;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary

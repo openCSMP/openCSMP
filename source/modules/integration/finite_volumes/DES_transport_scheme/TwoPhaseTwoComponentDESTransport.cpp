@@ -80,7 +80,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
     this->rate_count_++;//recording
     nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
     
-    FLOW_FUNCTIONS<dim> flowfunctions(this->db_);
+    //FLOW_FUNCTIONS<dim> flowfunctions(this->db_);
 
     double64 accumulation(0.), flux_balance(0.), outflow(0.);
     double64 accumulation_CO2aq(0.), accumulation_H2Og(0.);
@@ -96,7 +96,7 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
         Element<dim>* const eptr(nd->Parent(t));
         assert( eptr != NULL );
         
-        flowfunctions.InitialiseBrooksCoreyParameters(eptr); 
+        this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr); 
         
         const size_t pnid(nd->ParentNodeNumber(t));
         eptr->Read( this->key_vt, vD);
@@ -123,15 +123,15 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
             //compute inside and outside node mobilities, by using their saturations
             const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
             const double64 sw_inside_node = 1.-sn_inside_node;
-            const double64 ln_inside_node = flowfunctions.Mobility_at(eptr,1U,1.0-sn_inside_node); 
-            const double64 lw_inside_node = flowfunctions.Mobility_at(eptr,0U,1.0-sn_inside_node); 
+            const double64 ln_inside_node = this->flowfunctions_->Mobility_at(eptr,1U,1.0-sn_inside_node); 
+            const double64 lw_inside_node = this->flowfunctions_->Mobility_at(eptr,0U,1.0-sn_inside_node); 
             const double64 CO2aq_inside_node = eptr->N(inside_node)->Read( this->key_CO2aq ); //dissolved CO2
             const double64 H2Og_inside_node = eptr->N(inside_node)->Read( this->key_H2Og ); //evaporated water            
         
             const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
             const double64 sw_outside_node = 1.-sn_outside_node;
-            const double64 ln_outside_node = flowfunctions.Mobility_at(eptr,1U,1.0-sn_outside_node); 
-            const double64 lw_outside_node = flowfunctions.Mobility_at(eptr,0U,1.0-sn_outside_node);   
+            const double64 ln_outside_node = this->flowfunctions_->Mobility_at(eptr,1U,1.0-sn_outside_node); 
+            const double64 lw_outside_node = this->flowfunctions_->Mobility_at(eptr,0U,1.0-sn_outside_node);   
             const double64 CO2aq_outside_node = eptr->N(outside_node)->Read( this->key_CO2aq ); //dissolved CO2
             const double64 H2Og_outside_node = eptr->N(outside_node)->Read( this->key_H2Og ); //evaporated water            
             
@@ -140,8 +140,8 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
             double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
             
             if( this->with_gravity_forces_ ){                       
-                vn_gravity_component_of_velocity = flowfunctions.Mobility(eptr, 0U) * flowfunctions.GravityTerm(eptr) * facetNrml[v];
-                vw_gravity_component_of_velocity = flowfunctions.Mobility(eptr, 1U) * flowfunctions.GravityTerm(eptr) * facetNrml[v];
+                vn_gravity_component_of_velocity = this->flowfunctions_->Mobility(eptr, 0U) * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
+                vw_gravity_component_of_velocity = this->flowfunctions_->Mobility(eptr, 1U) * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
             }         
             
             if(this->with_capillary_spreading_){  
@@ -150,8 +150,8 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
                 double64 dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){
-                    vn_capillary_component_of_velocity = -dsdn*flowfunctions.CapillaryDiffusionMultiplier_Phase(eptr,0U);
-                    vw_capillary_component_of_velocity = -dsdn*flowfunctions.CapillaryDiffusionMultiplier_Phase(eptr,1U);
+                    vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,0U);
+                    vw_capillary_component_of_velocity = -dsdn*this->flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,1U);
                 }   
             }  
             
@@ -197,8 +197,8 @@ void TwoPhaseTwoComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( 
             viscous_velocity_component_w = vD_n * upstream_fw;
                                        
             if( this->with_gravity_forces_ ) {
-                gravity_velocity_component = upstream_lambda_overbar * flowfunctions.GravityTerm(eptr) * facetNrml[v];
-                gravity_velocity_component_w = upstream_lambda_overbar * flowfunctions.GravityTerm(eptr) * facetNrml[v];
+                gravity_velocity_component = upstream_lambda_overbar * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
+                gravity_velocity_component_w = upstream_lambda_overbar * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
             }
 
             if( this->with_capillary_spreading_ ) {
