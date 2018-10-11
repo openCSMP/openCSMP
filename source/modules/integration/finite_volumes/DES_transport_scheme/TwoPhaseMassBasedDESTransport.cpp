@@ -80,6 +80,7 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
 
     double64 flux_balance(0.), outflow(0.);
     double64 mCO2_accumulation(0.);
+    double64 dsdn;
         
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> vD, facetNrml;
@@ -177,7 +178,7 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
             if(this->with_capillary_spreading_){  
                 VectorVariable<dim> grad;
                 eptr->Read(this->key_gradSn, grad);
-                double64 dsdn = grad.DotProduct(facetNrml);
+                dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){
                     vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,0U);
@@ -223,9 +224,8 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
                 gravity_velocity_component = upstream_lambda_overbar_rho * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v]; 
             }
             
-            if( this->with_capillary_spreading_ ) {
-                double64 mobility_product = this->flowfunctions_->MobilityProduct(eptr);
-                capillary_velocity_component=(mobility_product!=0.0 ? upstream_lambda_overbar_rho*this->flowfunctions_->CapillaryDiffusionMultiplier(eptr)/mobility_product : 0.0);
+            if( this->with_capillary_spreading_) {
+                capillary_velocity_component=vn_capillary_component_of_velocity/this->flowfunctions_->Mobility(eptr, 0U)*upstream_lambda_overbar_rho;
             }
                 
             //update non-wetting flux accumulation 

@@ -7,20 +7,22 @@ namespace csmp {
 
 template<size_t dim>
 CO2H2O_FunctionsModule0<dim>::CO2H2O_FunctionsModule0( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+ : variables::VariableSet_CO2GeoSequestration(db),
+   Fluid<dim,CO2H2O_FunctionsModule0> (false)
  {
  }
 
 template<size_t dim>
 CO2H2O_FunctionsModule1<dim>::CO2H2O_FunctionsModule1( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+ : variables::VariableSet_CO2GeoSequestration(db),
+   Fluid<dim,CO2H2O_FunctionsModule1> (false)
  {
  }
 
 template<size_t dim>
 CO2H2O_FunctionsModule2<dim>::CO2H2O_FunctionsModule2( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
-//   ExperimentalSaturationFunctions<dim,CO2H2O_FunctionsModule2>("rocktypes")
+ : variables::VariableSet_CO2GeoSequestration(db),
+   Fluid<dim,CO2H2O_FunctionsModule2> (false) 
  {
  }
 
