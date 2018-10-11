@@ -12,10 +12,15 @@ namespace csmp {
 template<size_t> class Node;
 template<size_t> class Element;
 template<size_t> class Region;
+template<size_t> class Model;
 
 /**
 @addtogroup CSMPglobalFunctions
 */
+
+/// sector volume, finite volume, FV pore volume
+template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&  );
+
 
 double64  diffusionVelocity( const Region<1>& super_group,
                              const Node<1U>* const nd,

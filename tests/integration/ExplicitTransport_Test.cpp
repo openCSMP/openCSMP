@@ -13,7 +13,7 @@
 #include "Index.h"
 
 // is being tested
-#include "finiteVolumeFunctions.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
 
 using namespace std;
 

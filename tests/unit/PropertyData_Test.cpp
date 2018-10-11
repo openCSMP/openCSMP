@@ -7,7 +7,7 @@
 //
 
 #include <limits>
-#include "PropertyData_Test.hpp"
+#include "PropertyData_Test.h"
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
