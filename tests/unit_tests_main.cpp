@@ -64,7 +64,7 @@
 
 #include "PropertyDatabase_Test.h"
 #include "Index_Test.h"
-#include "PropertyData_Test.hpp"
+#include "PropertyData_Test.h"
 #include "ColorPalette_Test.h"
 
 #include "InputDataManager_Test.h"

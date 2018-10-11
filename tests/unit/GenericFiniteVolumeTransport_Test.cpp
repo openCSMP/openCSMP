@@ -8,7 +8,7 @@
 
 // generic transport scheme
 #include "GenericFiniteVolumeTransport_Test.h"
-#include "finiteVolumeFunctions.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
 #include "FacetFlux_TracerTransferExplicit.h"
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
