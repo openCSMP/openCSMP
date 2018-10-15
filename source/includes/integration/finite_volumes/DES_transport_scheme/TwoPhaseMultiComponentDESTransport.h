@@ -1,5 +1,5 @@
-#ifndef CSMP_TWOPHASE_TWOCOMPONENT_DES_TRANSPORT_H
-#define CSMP_TWOPHASE_TWOCOMPONENT_DES_TRANSPORT_H
+#ifndef CSMP_TWOPHASE_MULTI_COMPONENT_DES_TRANSPORT_H
+#define CSMP_TWOPHASE_MULTI_COMPONENT_DES_TRANSPORT_H
 
 #include "FibonacciHeap.h"
 #include "TwoPhaseDESTransport.h"
@@ -7,10 +7,10 @@
 namespace csmp {
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNCTIONS> {
+class TwoPhaseMultiComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNCTIONS> {
 
   public:
-    TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
+    TwoPhaseMultiComponentDESTransport ( Model<dim>& m, 
                            const char* target_region, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
@@ -18,7 +18,7 @@ class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_F
                            double64 PEP_multiplier, 
                            double64 cfl_multiplier);
                            
-    TwoPhaseTwoComponentDESTransport ( Model<dim>& m, 
+    TwoPhaseMultiComponentDESTransport ( Model<dim>& m, 
                            const char* target_region, 
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
@@ -31,16 +31,22 @@ class TwoPhaseTwoComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_F
 
     virtual void InitializeVariablesAndKeys(Model<dim>& m);
     virtual void ComputeRateofChange( Event<dim>* event );
+    virtual bool Schedule(Event<dim>* nd, double64 t_end);
     virtual void Update_DES(Event<dim>* nd, double64 t_clock);
     virtual void Update_TDS(Event<dim>* nd, double64 delta_t); 
 
   private:    
-    // key_components - an ArrayVariable key for the variation rates of mass (kg/s) of different transport components:
-    // [0] dissolved CO2 (CO2aq)
-    // [1] evaporated water (H2Og)
-    csmp::INDEX<ARRAY,NODE> key_components;
+    //key for array variable storing variation rates of compositional mass of carbonic phase
+    //[0] CO2 carbonic phase (supercritical/gasous CO2)
+    //[1] H2O carbonic phase (evaporated water)
+    csmp::INDEX<ARRAY,NODE> key_dcmCO2; 
 
-    double64 upper_CO2aq_, lower_CO2aq_, upper_H2Og_, lower_H2Og_; ///< range in which the result is allowed to vary     
+    //key for array variable storing variation rates of compositional mass of aqueous phase
+    //[0] H2O aqueous phase (liquid water)
+    //[1] CO2 aqueous phase (dissolved CO2)
+    //[2] NaCl aqeous phase (dissolved salt)     
+    csmp::INDEX<ARRAY,NODE> key_dcmH2O;
+        
 };
   
 
