@@ -1527,12 +1527,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
     // if region appears to be valid reference is created
     if( !boundaryComplex->ContainsRegion( region ) )
       csmp_error.notice( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces", region, "Region does not exist." );
-    csmp::Region<dim>&  rref( boundaryComplex->Region(region) );
-    // establishing name following convention "RegionName-Face"
-    std::string regionName( region );
-    std::string bName( regionName );
+    const csmp::Region<dim>&  rref( boundaryComplex->Region(region) );
+    // establishing name following convention "RegionName_BOUNDARY"
+    std::string bName( region );
     BOX_BOUNDARY bflag = (bName == "Model") ? IRREGULAR : INTERNAL;
-// TODO:    bName += "_BOUNDARY";
+    if ( bName == "Model" ) {
+         bName = "IRREGULAR";
+      }
+    else bName += "_BOUNDARY";
+    
     // inserting boundary if not existing yet
     std:: pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), bflag ) ) );
@@ -1542,6 +1545,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
         boundaryComplex->UpdateIndices();
         //                                 FACE & BOUNDARY CREATION
         bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
+        assert( succeeded == true );
         boundaryComplex->UpdateIndices();
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: created boundary around " << region << std::endl;
         return succeeded;

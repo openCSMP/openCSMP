@@ -71,6 +71,7 @@ int main()
             examplesSuite.RegisterExample( new Geothermal_Example() );
             examplesSuite.RegisterExample( new LinearSolver_Example() );
             examplesSuite.RegisterExample( new EclipseMeshInterface_Example() );
+            examplesSuite.RegisterExample( new SlopeMechanics_Example() );
 //            examplesSuite.RegisterExample( new DESAdvectionOfTracer2D_Example() );
 //            examplesSuite.RegisterExample( new DESAdvectionOfTracer3D_Example() );
 //            examplesSuite.RegisterExample( new DESTwoPhaseFlow2D_Example() );

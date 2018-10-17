@@ -51,5 +51,6 @@
 #include "DESTwoPhaseFlow2D_Example.h"
 #include "DESTwoPhaseFlow3D_Example.h"
 #include "Variables_Example.h"
+#include "SlopeMechanics_Example.h" // developed for UoM SMD course, pore-pressure and gravitational loading
 
 #endif

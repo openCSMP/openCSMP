@@ -958,7 +958,7 @@ bool Boundary<dim>::CreateAround( MeshManager<dim>& meshManager,
                ( dim == 2 and !region.E(i)->IsSurfaceElement() ) )
             continue;
 
-          // for each perimter face
+          // for each perimeter face
           const size_t perimeter_faces(region.PerimeterFaces(i));
           for ( size_t j=0U; j<perimeter_faces; ++j )
             {
