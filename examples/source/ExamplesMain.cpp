@@ -72,10 +72,10 @@ int main()
             examplesSuite.RegisterExample( new LinearSolver_Example() );
             examplesSuite.RegisterExample( new EclipseMeshInterface_Example() );
             examplesSuite.RegisterExample( new SlopeMechanics_Example() );
-//            examplesSuite.RegisterExample( new DESAdvectionOfTracer2D_Example() );
-//            examplesSuite.RegisterExample( new DESAdvectionOfTracer3D_Example() );
-//            examplesSuite.RegisterExample( new DESTwoPhaseFlow2D_Example() );
-//            examplesSuite.RegisterExample( new DESTwoPhaseFlow3D_Example() );
+            examplesSuite.RegisterExample( new DESAdvectionOfTracer2D_Example() );
+            examplesSuite.RegisterExample( new DESAdvectionOfTracer3D_Example() );
+            examplesSuite.RegisterExample( new DESTwoPhaseFlow2D_Example() );
+            examplesSuite.RegisterExample( new DESTwoPhaseFlow3D_Example() );
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI

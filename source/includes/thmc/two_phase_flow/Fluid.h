@@ -52,6 +52,9 @@ class Fluid {
 
   protected:
     Fluid() {}
+    Fluid(bool PTX_dependent) {PTX_dependent_ = PTX_dependent;}
+    
+    bool PTX_dependent_ = false;
   
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }

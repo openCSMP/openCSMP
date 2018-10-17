@@ -19,14 +19,15 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
-    /*uncomment to compute from PTX properties*/
-    /*
-    if ( phase == 0U )
-      return eos.mu_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
+    if(PTX_dependent_) {
+        /*compute from PTX properties*/
+        if ( phase == 0U )
+          return eos.mu_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
    
-    return eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
-    */
-    /*direct interpolation*/
+        return eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
+    }
+    
+    /*direct read/interpolation*/
     if ( phase == 0U ) return n->Read( User()->key_muH2O );
     return n->Read( User()->key_muCO2 );     
  }
@@ -41,16 +42,17 @@ double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase )
     const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
     const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
    
-    /*uncomment to compute from PTX properties*/
-    /*
-    if ( phase == 0U ) {
-         const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
-         return eos.mu_brine( pf, T, NaCl_aq );
-      }
+    if(PTX_dependent_) {
+        /*compute from PTX properties*/
+        if ( phase == 0U ) {
+             const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
+             return eos.mu_brine( pf, T, NaCl_aq );
+        }
    
-    return eos.mu_CarbonicPhase( pf, T );
-    */
-    /*direct interpolation*/
+        return eos.mu_CarbonicPhase( pf, T );
+    }
+    
+    /*direct read/interpolation*/
     if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_muH2O );
     return e->PropertyValueAtBaryCenter( User()->key_muCO2 );      
  }
@@ -64,13 +66,13 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-    /*uncomment to compute from PTX properties*/
-    /*
-    if ( phase == 0U ) return eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
-      return eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
-    */
+    if(PTX_dependent_) {
+        /*compute from PTX properties*/
+        if ( phase == 0U ) return eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
+        return eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
+    }
     
-    /*direct interpolation*/
+    /*direct read/interpolation*/
     if ( phase == 0U ) return n->Read( User()->key_rhoH2O );
     return n->Read( User()->key_rhoCO2 );
  }
@@ -85,17 +87,18 @@ double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) c
     // TODO: replace with single interpolation loop
     const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
     const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
+    
+    if(PTX_dependent_) {
+        /*compute from PTX properties*/
+        if ( phase == 0U ) {
+             const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
+             return eos.Rho_brine( pf, T, NaCl_aq );
+        }
 
-    /*uncomment to compute from PTX properties*/
-    /*
-    if ( phase == 0U ) {
-         const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
-         return eos.Rho_brine( pf, T, NaCl_aq );
-      }
-
-    return eos.Rho_CarbonicPhase( pf, T );
-    */
-    /*direct interpolation*/
+        return eos.Rho_CarbonicPhase( pf, T );
+    }
+    
+    /*direct read/interpolation*/
     if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_rhoH2O );
     return e->PropertyValueAtBaryCenter( User()->key_rhoCO2 );     
  }

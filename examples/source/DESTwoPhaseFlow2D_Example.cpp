@@ -11,8 +11,8 @@
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseDESTransport.h"
-#include "TwoPhaseTwoComponentDESTransport.h"
 #include "TwoPhaseMassBasedDESTransport.h"
+#include "TwoPhaseMultiComponentDESTransport.h"
 #include "ExplicitStencilProcessor.h"
 
 // relative permeability calculations
@@ -100,7 +100,7 @@ void DESTwoPhaseFlow2D_Example::Run()
     if (!multi_component)
       DEStransport = new TwoPhaseMassBasedDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
     else
-      DEStransport = new TwoPhaseTwoComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseMultiComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
