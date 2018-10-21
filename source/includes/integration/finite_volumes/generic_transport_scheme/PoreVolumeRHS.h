@@ -33,9 +33,8 @@ class PoreVolumeRHS : public VectorOperator<dim> {
   
   private:
     const csmp::Index  pv_key_;   ///< the pore volume of the FV as integrated over the sectors surrounding the node
-
-  const csmp::Index  adv_key_;  ///< the transported variable
-  const csmp::Index  phi_key_;  ///< porosity
+    const csmp::Index  adv_key_;  ///< the transported variable
+    const csmp::Index  phi_key_;  ///< porosity
 };
 
 
