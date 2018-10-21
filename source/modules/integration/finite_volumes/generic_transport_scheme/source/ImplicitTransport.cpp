@@ -8,7 +8,7 @@
 #include "ImplicitTransport.h"
 #include "Region.h"
 #include "Model.h"
-#include "finiteVolumeFunctions.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
 #include "CSMP_mathUtilities.h"
 #include "VTK_Interface.h"
 #include "LinearSystemAccumulator.h"
@@ -28,7 +28,7 @@ ImplicitTransport<dim>::GetModel() const
 
 template<size_t dim>
 ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const char* target_region, bool second_order )
-  : variables::Variables_TracerTransfer(m.Database()),
+  : variables::VariableSet_TracerTransfer(m.Database()),
     Equation_TracerTransferImplicit<dim>( m, target_region ),
     solver_(solver),
     model_(m),

@@ -356,7 +356,7 @@ namespace csmp
     else if(x <= 5.0e-2){ x_res = 5.0e-3; myix = 19+static_cast<long>((x-1.0e-2)/x_res); }
     else if(x <= 2.0e-1){ x_res = 1.0e-2; myix = 27+static_cast<long>((x-5.0e-2)/x_res); }
     else if(x <= 1.0e0 ){ x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); } 
-    else{ ix =  82; }//                x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); /* throw out of range ? */ }
+    else{ myix =  82; }//                x_res = 0.02e0; myix = 42+static_cast<long>((x-2.0e-1)/x_res); /* throw out of range ? */ }
     return myix;
   }
   
