@@ -611,7 +611,7 @@ void recreateBoxBoundaryFlags( Model<1U>& )
     Using the side boundaries of the model, 
     the method recreateBoxBoundaryFlags recreates the corresponding box-boundary flagging.
     
-    @attention the boundaries LEFT, RIGHT, TOP, BOTTOM must be present
+    @attention the boundaries LEFT, RIGHT, TOP(or IRREGULAR), BOTTOM must be present
 */
 void recreateBoxBoundaryFlags( Model<2U>& model )
  {

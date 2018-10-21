@@ -235,13 +235,13 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
                              ModelTopology& mesh_topology,
                              VSet<dim>& vset,
                              bool create_boundaries,
-                             bool non_box_shaped_model )
+                             bool fully_irregular_mesh )
 {
     // 1. eliminating the unwanted mesh regions from topology and vset
     mesh_topology.ReduceToRegions( regions_file_prefix );
   
     // 2. building the model with variable storage
-    Initialize( mesh_topology, vset, create_boundaries, non_box_shaped_model );
+    Initialize( mesh_topology, vset, create_boundaries, fully_irregular_mesh );
   
 } // end Initialize (with regions from file)
 
@@ -255,7 +255,7 @@ template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
                              VSet<dim>& vset,
                              bool create_boundaries,
-                             bool non_box_shaped_model )
+                             bool fully_irregular_mesh )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -339,21 +339,26 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     if ( mesh_topology.BoxShapedModel() ) {
          cout <<"\nModel<"<< dim <<">::Initialize: This model is box-shaped so that you can assign ";
          cout <<"boundary conditions in the standard way. "<< endl;
+
+          if ( fully_irregular_mesh )
+            ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
+                                            "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
       }
 
     // 7. Forming Boundaries
     if ( create_boundaries )
       {
           const bool remove_original_lower_dimensional_regions(true);
-          bool box_shaped(this->BoxShaped());
-          if ( box_shaped and box_shaped != !non_box_shaped_model )
-            ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
-                                            "while model contains all relevant box side boundaries it will be treated as non-box shaped." );
-          
-          if ( !non_box_shaped_model && box_shaped )
-            this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
-          else
-            this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
+        
+          // if the model is box-shaped (albeit perhaps with irregular top surface)
+          if ( !fully_irregular_mesh ) {
+               this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
+               // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+               cout<<"\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+               recreateBoxBoundaryFlags( *this );
+            }
+          // irregularly shaped models
+          else this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 

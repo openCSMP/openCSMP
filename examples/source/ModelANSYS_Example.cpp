@@ -25,7 +25,8 @@ void ModelANSYS_Example::Run()
   cout << "\nModel Name: ";
   cin >> modelName;
   cout << endl << endl;
-  ANSYS_Model3D model( modelName.c_str(), "CSMP-1phase-variables.txt", true );
+  const bool irregular_mesh(true);
+  ANSYS_Model3D model( modelName.c_str(), "CSMP-1phase-variables.txt", irregular_mesh );
   // now you need to onfigure the model from file and you can start your calculation
 }
 
