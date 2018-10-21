@@ -563,9 +563,9 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     if ( with_volume_elements )  counter++;
     if ( with_surface_elements ) counter++;
     if ( with_line_elements )    counter++;
-    int32 highest_spatial_dim(1);
-    if      ( with_volume_elements )  highest_spatial_dim = 3;
-    else if ( with_surface_elements ) highest_spatial_dim = 2;
+    int32 highest_spatial_dim(LINE);
+    if      ( with_volume_elements )  highest_spatial_dim = VOLUME;
+    else if ( with_surface_elements ) highest_spatial_dim = SURFACE;
 
     return make_pair( counter, highest_spatial_dim );
 
@@ -836,6 +836,9 @@ cerr << endl;
 template<size_t dim, template<size_t> class CELL>
 void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
  {
+    // 0. recreate Pfverts information for testing
+    //EstablishNeighborConnectivity();
+   
     // 1. putting the perimeter elements at the end of the elmt_vec and sorting
     //    interior and perimeter cell ranges subsequently
     // ----------------------------------------------------
@@ -888,9 +891,9 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     //   (at this point the elements and nodes are already known)
     // -----------------------------------------------------------------
     set<CELL<dim>*> interior_elmts, boundary_elmts;
-    set<Node<dim>*>                   boundary_nodes;
+    set<Node<dim>*>                boundary_nodes;
     set<pair<CELL<dim>*,size_t> >  boundary_faces;
-    vector<size_t>  fnids;
+    vector<size_t>                 fnids;
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
@@ -937,7 +940,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
         // a. identify the boundary elements among the highest dimensional elements,
         //    also collecting all their node pointers into a set.
         set<CELL<dim>*> lesser_dim_elmts;
-        set<Node<dim>*>    highest_dim_elmt_nodes;
+        set<Node<dim>*> highest_dim_elmt_nodes;
 
         for ( typename vector<CELL<dim>*>::const_iterator
               eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
@@ -1102,7 +1105,7 @@ set<CELL<dim>*> elmts_with_bfaces;
 for ( typename set<pair<CELL<dim>*,size_t> >::const_iterator it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
       if ( boundary_elmts.find( (*it).first ) == boundary_elmts.end() ) {
            if ( no_error_yet ) {
-                cerr <<"\nboundary face parent elements vx. boundary elements:\n";
+                cerr <<"\nboundary face parent elements vs. boundary elements:\n";
                 no_error_yet=false;
              }
            cerr <<" "<< (*it).first->Idx() <<": "<< parseFiniteElementType( (*it).first->FE_Type() );

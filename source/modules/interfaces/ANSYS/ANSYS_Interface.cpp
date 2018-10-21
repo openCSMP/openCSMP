@@ -1476,21 +1476,22 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     fread( (void*) &entries, uibytes, 1U, fp );
     assert( entries > 0 );
     assert( entries < ULONG_MAX );
-    if( csmp_error.Verbose() )
-    {
-        std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
-        std::cout.flush();
-    }
+    if ( csmp_error.Verbose() ) {
+         std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
+         std::cout.flush();
+      }
     // TODO: eventually this must be an array of 'long64' records
     int32* pfverts = new int32[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );
 
+    // reading the C array into the resized pfverts deque inside VData
+    // ---------------------------------------------------------------
     std::deque<std::vector<long64> >::iterator it(vset.PfvertsBegin());
-    size_t                           nentry(0U);
+    size_t  nentry(0U);
     for ( size_t i=0; i<nelements; i++, it++ )
-      if ( nbors[i] > 2 ) // SKM: not sure anymore why the restriction was imposed
-        for ( size_t j=0U; j<nbors[i]; j++ )
-          (*it)[j] = pfverts[nentry++];
+      for ( size_t j=0U; j<nbors[i]; j++ )
+        (*it)[j] = pfverts[nentry++];
+
     delete[] pfverts;
 
     return true;
@@ -1500,6 +1501,25 @@ template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<1U>& );
 template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<2U>& );
 template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<3U>& );
 
+// TESTING of previous function
+
+// test: deque is OK, although XCode debugger shows it with a size of 0
+//std::cerr <<"\nReadPfvertsBinary: neighbor info\n:";
+//for ( auto it=nbors.begin(); it!=nbors.end(); ++it )
+//  std::cerr << (*it) <<" ";
+
+// TESTING
+/*
+std::cerr <<"\nReadPfvertsBinary: neighbor info\n:";
+size_t i(0);
+ for ( std::deque<std::vector<long64> >::const_iterator
+       ft=vset.PfvertsBegin(); ft!=vset.PfvertsEnd(); ft++, i++ )
+   {
+      std::cout << i <<": \t";
+      for ( size_t j=0U; j<(*ft).size(); j++ ) std::cout << (*ft)[j] <<"\t ";
+      std::cout << std::endl;
+   }
+*/
 
 
 

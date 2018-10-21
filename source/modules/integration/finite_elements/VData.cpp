@@ -1273,7 +1273,7 @@ void VData::Out() const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t";
+          for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
           cout << endl;
        }
 
@@ -1899,6 +1899,37 @@ size_t  VData::OrderOfFiniteElementInterpolationFunctions() const
     return 0;
        
  } // end 
+
+
+
+/**
+    Runs a series of tests to establish whether there is a plausible PFverts array
+    without checking the actual inter-element connectivity.
+    Certainty is built via negative discrimination.
+*/
+bool VData::WithNeighbourConnectivity() const
+ {
+     // empty
+     if ( pfverts.empty() ) return false;
+     // correct size
+     if ( pfverts.size() != plist.size() ) return false;
+     // negative and positive elements
+     size_t boundary_faces(0U);
+     const size_t elements_minus1(pfverts.size()-1U);
+     for ( deque<std::vector<long64> >::const_iterator
+           it=pfverts.begin(); it!=pfverts.end(); ++it )
+       for ( size_t i=0U; i<(*it).size(); ++i ) {
+            // recording elements at the model boundaries
+            if ( (*it)[i] < 0 ) boundary_faces++;
+            // nbor element number too large
+            else if ( (*it)[i] > elements_minus1 )
+              return false;
+         }
+   
+    // there should be elements at the model boundary
+    if ( boundary_faces == 0U ) return false;
+    return true;
+ }
 
 
  

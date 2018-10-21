@@ -285,14 +285,14 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     InputVariablesFrom( vset );
 
     // 4. forming default computational domain called "Model"
-    // TODO: VSet::WithNeighbourConnectivity() - must be fixed to reflect whether connectivity is really there
-//    const bool withNeighborConnectivity = (dim == 3U) ? vset.WithNeighbourConnectivity() : false;
+    //    (note that the "with neighbor connectivity" is not fool proof)
     const bool withNeighborConnectivity(vset.WithNeighbourConnectivity());
 
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
     const bool valid_model_region = this->CreateRegionFromLargestComponent( "Model", place_in_unique_regions, !withNeighborConnectivity );
 
 // ANDREWS fix for potentially discontiguous model regions (the largest contiguous lump will become the model)
+// vset.Out();
 
     // if the 'Model' region only contains a subset of all elements and nodes, disconnected ones are removed
     if ( !valid_model_region )

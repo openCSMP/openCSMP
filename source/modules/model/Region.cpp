@@ -1180,6 +1180,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
     this->IdentifyPerimeter();
 
     return this->elmt_vec_.size();
+   
  } // end FromLargestComponent
 
 

@@ -206,7 +206,8 @@ class VData {
     std::deque<std::vector<long64> >::const_iterator   PfvertsBegin() const;
     std::deque<std::vector<long64> >::const_iterator   PfvertsEnd() const;
   
-    bool WithNeighbourConnectivity() const { return !pfverts.empty(); }
+    /// checks whether pfverts, has right size and contains plausible information (no guarantees!)
+    bool WithNeighbourConnectivity() const;
 
     std::vector<size_t>::const_iterator                PlistBegin( size_t eidx ) const;
     std::vector<size_t>::const_iterator                PlistEnd( size_t eidx ) const;
