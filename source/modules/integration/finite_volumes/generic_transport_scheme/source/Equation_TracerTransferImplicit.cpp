@@ -10,7 +10,6 @@
 #include "Model.h"
 #include "Region.h"
 #include "ImplicitTransport.h"
-#include "finiteVolumeFunctions.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
 
 using namespace std;
