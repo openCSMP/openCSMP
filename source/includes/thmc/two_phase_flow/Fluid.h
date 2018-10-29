@@ -52,7 +52,7 @@ class Fluid {
 
   protected:
     Fluid() {}
-    Fluid(bool PTX_dependent) {PTX_dependent_ = PTX_dependent;}
+    Fluid(bool PTX_dependent);
     
     bool PTX_dependent_ = false;
   

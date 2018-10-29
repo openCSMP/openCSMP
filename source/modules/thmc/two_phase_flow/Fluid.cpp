@@ -16,6 +16,14 @@ namespace csmp {
 EOS_CO2H2ONaCl_Spycher04  eos;
 
 template<size_t dim, template<size_t> class USER>
+Fluid<dim,USER>::Fluid(bool PTX_dependent) 
+ {
+    PTX_dependent_ = PTX_dependent;
+ }
+
+
+
+template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
