@@ -7,7 +7,7 @@
 //
 
 #include "SlopeMechanics_Example.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 #include "ANSYS_Model2D.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
