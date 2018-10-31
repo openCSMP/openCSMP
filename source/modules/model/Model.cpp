@@ -235,14 +235,14 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
                              ModelTopology& mesh_topology,
                              VSet<dim>& vset,
                              bool create_boundaries,
-                             bool fully_irregular_mesh )
+                             bool fully_irregular_mesh)
 {
-    // 1. eliminating the unwanted mesh regions from topology and vset
-    mesh_topology.ReduceToRegions( regions_file_prefix );
-  
-    // 2. building the model with variable storage
-    Initialize( mesh_topology, vset, create_boundaries, fully_irregular_mesh );
-  
+	// 1. eliminating the unwanted mesh regions from topology and vset
+	mesh_topology.ReduceToRegions(regions_file_prefix);
+
+	// 2. building the model with variable storage
+	Initialize(mesh_topology, vset, create_boundaries, fully_irregular_mesh);
+
 } // end Initialize (with regions from file)
 
 
@@ -255,11 +255,11 @@ template<size_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
                              VSet<dim>& vset,
                              bool create_boundaries,
-                             bool fully_irregular_mesh )
+                             bool fully_irregular_mesh)
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    // 1. Reducing the mesh data to the desired element types as specified
+    // 1. reducing the mesh data to the desired element types as specified
     //    by the topology object
     map<size_t,size_t>  old_and_new_elmtids;
     mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
@@ -273,96 +273,77 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 3. building the finite element mesh (finite volume mesh) and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
-
+	
     if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
          Database().VariableCount(FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACE_FACET_INTEGRATION_POINT) or
          Database().VariableCount(INTER_FACE_SECTOR_INTEGRATION_POINT) or Database().VariableCount(INTER_FACE_FACET_INTEGRATION_POINT) or
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
-    // 3(a). assigning properties to mesh; this does not depend on regions,
+    // assigning properties to mesh; this does not depend on regions,
     // so this is safe to do before we have established them.
     InputVariablesFrom( vset );
 
-    // 4. forming default computational domain called "Model"
-    //    (note that the "with neighbor connectivity" is not fool proof)
-    const bool withNeighborConnectivity(vset.WithNeighbourConnectivity());
+    // 4. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+    const bool withNeighborConnectivity( vset.WithNeighbourConnectivity() );
 
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
-    const bool valid_model_region = this->CreateRegionFromLargestComponent( "Model", place_in_unique_regions, !withNeighborConnectivity );
 
-// ANDREWS fix for potentially discontiguous model regions (the largest contiguous lump will become the model)
-// vset.Out();
+	const bool contiguous_model( (mesh_manager_.ElementGroups() == 1) );
 
-    // if the 'Model' region only contains a subset of all elements and nodes, disconnected ones are removed
-    if ( !valid_model_region )
-      {
-        csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                          "model appears to contain domains that are not connected to one another?" );
-
-        auto& gref = this->Region("Model");
-        auto& mesh = Mesh();
-        size_t nodes_removed = 0, elmts_removed = 0;
-        // counting how many disconnected nodes were there
-          {
-            std::unordered_set<Node<dim>*> nodes_in_model_region(gref.NodesBegin(), gref.NodesEnd());
-            for (auto nit = mesh.NodesBegin(); nit != mesh.NodesEnd(); ++nit) {
-              if (!nodes_in_model_region.count(&*nit)) {
-                mesh.Erase(*nit);
-                ++nodes_removed;
-              }
-            }
-          }
-        // counting how many disconnected elements were there
-          {
-            std::unordered_set<Element<dim>*> elmts_in_model_region(gref.ElementsBegin(), gref.ElementsEnd());
-            for (auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit) {
-              if (!elmts_in_model_region.count(&*eit)) {
-                mesh.Erase(*eit);
-                ++elmts_removed;
-              }
-            }
-          }
-
-        cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
-           << nodes_removed << " disconnected nodes removed\n";
-        cout << "Model<dim>::Initialize(topo,vset,bool,bool): "
-           << elmts_removed << " disconnected elements removed\n";
-    }
+	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
+	bool valid_model_region = false;	
+	if(contiguous_model)
+		valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
+	else
+		valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+    
+    // if the 'Model' region or the contiguous mutiple regions contains their elements and nodes
+	if (!valid_model_region) {
+		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+			"model appears to contain domains that are not connected to one another!");
+	}
 
     cout <<"\nModel<dim>::Initialize: ";
-    cout <<"Mesh has been built successfully..." << endl;
+	if (contiguous_model)
+		cout << "Coontiguous mesh has been built successfully..." << endl;
+	else
+		cout << "Discontiguous mesh has been built successfully..." << endl;
 
-    // 6. Associating supplied subregions with regions (model subdomains)
-     this->FormRegionsFrom( mesh_topology );
-
+    // 6. associating supplied subregions with regions (model subdomains)
+    this->FormRegionsFrom( mesh_topology );	
+	
     if ( mesh_topology.BoxShapedModel() ) {
-         cout <<"\nModel<"<< dim <<">::Initialize: This model is box-shaped so that you can assign ";
-         cout <<"boundary conditions in the standard way. "<< endl;
-
-          if ( fully_irregular_mesh )
-            ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
-                                            "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
+		if (fully_irregular_mesh)
+			ErrorHandler::Instance().notice(WARNING, "Model<dim>::Initialize:",
+				"ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic.");
       }
 
-    // 7. Forming Boundaries
+    // 7. forming Boundaries
     if ( create_boundaries )
       {
           const bool remove_original_lower_dimensional_regions(true);
-        
-          // if the model is box-shaped (albeit perhaps with irregular top surface)
-          if ( !fully_irregular_mesh ) {
-               this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
-               // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-               cout<<"\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-               recreateBoxBoundaryFlags( *this );
-            }
-          // irregularly shaped models
-          else this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
-      }
+		  // if the model is box-shaped (albeit perhaps with irregular top surface)
+		  if (!fully_irregular_mesh) {
+			  this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
+			  // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+			  cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+			  recreateBoxBoundaryFlags(*this);
+		  }
+		  // irregularly shaped models
+		  else {
+			  if(contiguous_model)
+				  this->EstablishBoundariesFromRegions(remove_original_lower_dimensional_regions);
+			  else
+				  this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
+		  }
+	}
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
-    // 8. Adding property storage to the Model
+	// updating the mesh after forming boundaries
+	//mesh_manager_.Update();
+
+    // 8. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
@@ -376,18 +357,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
   
 } // end Initialize (VSet / ModelTopology)
 
-
-
-
-// TESTING
-/*
-
-set<BOX_BOUNDARY> node_flags;
-const Region<dim>& model(this->Region("Model"));
-for ( auto nit=model.NodesBegin(); nit!=model.NodesEnd(); nit++ )
-      node_flags.insert( (*nit)->AtBoundary() );
-*/
-              
 
 /**
     Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
@@ -420,11 +389,26 @@ void Model<dim>::Initialize( bool isoparametric_elements,
     // 3. forming root Region called "Model"
     const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
     const bool place_in_unique_regions(true); // if there is no neighbor connectivity, it has to be re-established (!)
-    this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
-  
-    if ( this->Region("Model").Elements() < mesh_manager_.Elements() )
-        csmp_error.notice( ERROR, "Model<dim>::Initialize:",
-                                  "Newly created Region 'Model' contains less elements than the model." );
+	const bool contiguous_model((mesh_manager_.ElementGroups() == 1));
+
+	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
+	bool valid_model_region = false;
+	if (contiguous_model)
+		valid_model_region = this->CreateRegionFromLargestComponent("Model", place_in_unique_regions, !withNeighborConnectivity);
+	else
+		valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+
+	// if the 'Model' region or the contiguous mutiple regions contains their elements and nodes
+	if (!valid_model_region) {
+		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+			"model appears to contain domains that are not connected to one another!");
+	}
+
+	cout << "\nModel<dim>::Initialize: ";
+	if (contiguous_model)
+		cout << "Coontiguous mesh has been built successfully..." << endl;
+	else
+		cout << "Discontiguous mesh has been built successfully..." << endl;
 
     // 4. creating the finite volume mesh if necessary
     if ( Database().VariableCount(SECTOR_INTEGRATION_POINT) or Database().VariableCount(FACET_INTEGRATION_POINT) or
@@ -774,6 +758,28 @@ size_t Model<dim>::UpdateIndices() const
     return runningIndex;
   }
 
+
+// Renumbers nodes, elements, faces & interfaces. Nodes and Element/Face/Interface may have same values, but the latter may not.
+template<size_t dim>
+size_t Model<dim>::UpdateIndices( const char* region_name ) const
+{
+	// elements and nodes
+	this->Region(region_name).UpdateMemberIndexes();
+	size_t runningIndex(this->Region(region_name).Elements());
+
+	// boundaries
+	for (typename Model<dim>::splitBoundaryConstIterator bit(this->SplitBoundariesBegin()); bit != this->SplitBoundariesEnd(); ++bit)
+	{
+		for (typename vector<InterFace<dim>*>::const_iterator face(bit->second.ElementsBegin()); face != bit->second.ElementsEnd(); ++face)
+			(*face)->Idx(runningIndex++);
+	}
+	for (typename Model<dim>::boundaryConstIterator bit(this->BoundariesBegin()); bit != this->BoundariesEnd(); ++bit)
+	{
+		for (typename vector<Face<dim>*>::const_iterator face(bit->second.ElementsBegin()); face != bit->second.ElementsEnd(); ++face)
+			(*face)->Idx(runningIndex++);
+	}
+	return runningIndex;
+}
 
 
 /**
@@ -2736,7 +2742,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
     const bool simplices_numbered_in_a_single_sequence(true);
     mesh_manager_.AssignUniqueNumbers( simplices_numbered_in_a_single_sequence );
     mesh_manager_.OutputMeshTo( vset );
-
+	
     // 2. property output into VSet including Face and InterFace data
     mesh_manager_.OutputStoredVariablesTo( Database(), vset );
 
@@ -2802,9 +2808,9 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
    
     // 4. boundaries "All Faces"
     this->OutputAllBoundariesToBinary( BinaryBoundariesFileName(file_string).c_str() );
-   
+	
     // 5. splitboundaries "AllInterFaces"
-//    this->OutputAllSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
+	this->OutputSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
    
     // 6. variable specifications through the database
     Database().BinaryOut( BinaryVariablesFileName(file_string).c_str() );
@@ -2812,13 +2818,6 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
     cout <<"' to CSMP binaries completed successfully.\n\n";
 
  } // end OutputToBinaryFile
-
-// TESTING
-//for ( auto bit=this->BoundariesBegin(); bit!=this->BoundariesEnd(); ++bit )
-//  (*bit).second.Out();
-
-
-
 
 
 /** reads model written by OutputToBinaryFile() including all associated properties
@@ -2841,7 +2840,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      cout << "\nModel<"<< dim <<">::InputFromBinaryFile: it is assumed that the model is based on 'isoparametric' finite elements.\n\n";
 
      // 3. rebuilds finite element mesh and associated property storage
-     mesh_manager_.Reconstruct( database_, fem_manager_, vset );
+     mesh_manager_.Initialize( database_, fem_manager_, vset );
    
      // 4. checking whether the FV stencils need to be initialised
      if ( vset.ContainsFiniteVolumeIntegrationPointData() )
@@ -2902,20 +2901,24 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
 
      // 6. reconstruction of the regions
      this->InputAllRegionsFromBinary( BinaryRegionsFileName(model_name).c_str() );
-     // making sure that the computational region has been built
-     if ( !this->ContainsRegion("Model") )
-       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
+     
+	 // making sure that the computational region has been built
+	 const bool contiguous_model((mesh_manager_.ElementGroups() == 1));
+	 if( contiguous_model )
+		if ( !this->ContainsRegion("Model") )
+			throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
      // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
-    this->InputAllBoundariesFromBinary( BinaryBoundariesFileName(model_name).c_str() );
+     this->InputAllBoundariesFromBinary( BinaryBoundariesFileName(model_name).c_str() );
 
      // 8. reconstructing the splitboundaries
-//    this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
+	 // JC: this is not completed yet.
+     //this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
 
-   // 9. do a final sanity check
-   CheckElementsAfterBuilding();
+	 // 9. do a final sanity check
+	 CheckElementsAfterBuilding();
 
-    cout << "\nModel<"<< dim <<">::InputFromBinaryFile: input from binaries (file set: "<< model_name <<") completed successfully.\n\n";
+     cout << "\nModel<"<< dim <<">::InputFromBinaryFile: input from binaries (file set: "<< model_name <<") completed successfully.\n\n";
 
  } // end InputFromBinaryFile
 
@@ -2936,44 +2939,57 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
     if ( !mesh.Elements() )
       throw csmp::Exception(ERROR, "Model<dim>::CheckElementsAfterBuilding", "the model contains no elements" );
 
+	// 1. traversal of the existing each region's nodes to find all its elements
+	deque<csmp::Element<dim>*>		elmts;
+	deque<csmp::Node<dim>*>	nodes;
+	exploreNodesAndElementsFromMesh(&mesh, nodes, elmts);
+	sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+
+	size_t found_elements = elmts.size();
+	size_t expected_elements = mesh.Elements();
+
+	if (found_elements < expected_elements) {
+		std::cerr << "\n\n\tdiscovered only " << found_elements << " versus " << expected_elements << " elements.\n\n";
+		csmp_error.notice(ERROR, "Model<dim>::CheckElementsAfterBuilding:",
+			"mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
+	}
+		
     // --------------------------------------------------------------------
-    // 0. detecting whether this region contains lower-dimensional elements
+    // 3. detecting whether this region contains lower-dimensional elements
     // --------------------------------------------------------------------
     int32 dimension_counter(0);
     int32 highest_spatial_dim(1);
-    {
-      bool with_volume_elements(false);
-      bool with_surface_elements(false);
-      bool with_line_elements(false);
+
+    bool with_volume_elements(false);
+    bool with_surface_elements(false);
+    bool with_line_elements(false);
       
-      for( auto it= mesh.ElementsBegin(); it!=mesh.ElementsEnd(); it++ ) {
-        if      ( !with_line_elements && it->IsLineElement() )    with_line_elements = true;
-        else if ( !with_surface_elements && it->IsSurfaceElement() ) with_surface_elements = true;
-        else if ( !with_volume_elements && it->IsVolumeElement() )  with_volume_elements = true;
-      }
-      
-      if ( with_volume_elements )  dimension_counter++;
-      if ( with_surface_elements ) dimension_counter++;
-      if ( with_line_elements )    dimension_counter++;
-      if      ( with_volume_elements )  highest_spatial_dim = 3;
-      else if ( with_surface_elements ) highest_spatial_dim = 2;
+	for (auto it : elmts) {
+    if      ( !with_line_elements && it->IsLineElement() )			with_line_elements = true;
+    else if ( !with_surface_elements && it->IsSurfaceElement() )	with_surface_elements = true;
+    else if ( !with_volume_elements && it->IsVolumeElement() )		with_volume_elements = true;
     }
+      
+    if ( with_volume_elements )  dimension_counter++;
+    if ( with_surface_elements ) dimension_counter++;
+    if ( with_line_elements )    dimension_counter++;
+    if      ( with_volume_elements )  highest_spatial_dim = 3;
+    else if ( with_surface_elements ) highest_spatial_dim = 2;
     
     // -----------------------------------------------------------------
-    // 1. distinguishing boundary from interior elements, same for nodes
+    // 4. distinguishing boundary from interior elements, same for nodes
     //   (at this point the elements and nodes are already known)
     // -----------------------------------------------------------------
     size_t interior_elmts(0);
     size_t boundary_elmts(0);
-    unordered_set<Node<dim>*> boundary_nodes;
+    set<Node<dim>*> boundary_nodes;
     vector<size_t>  fnids;
     
-    // 1.1 If all elements have the same spatial dimension
+    // 4.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
-    if ( dimension_counter == 1 )
-    {
-      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit )
-      {
+    if ( dimension_counter == 1 ) {
+		for (auto eit : elmts) {
         // identifying the boundary faces and their nodes
         // (each face potentially has a neighbor element)
         long  nbors_that_belong_to_group(eit->Neighbors());
@@ -2999,21 +3015,18 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
         else
           ++boundary_elmts;
       }
-    }
-    
-    // 1.2 If there are elements with different spatial dimensions
+    }    
+    // 4.2 If there are elements with different spatial dimensions
     // -----------------------------------------------------------
     //     the ones with highest dimensions are used to define perimeter
     //     all lower dimensional mesh that sticks out is flagged as perimeter as well.
-    else
-    {
+    else {
       // a. identify the boundary elements among the highest dimensional elements,
       //    also collecting all their node pointers into a set.
-      unordered_set<Element<dim>*> lesser_dim_elmts;
-      unordered_set<Node<dim>*>    highest_dim_elmt_nodes;
+      set<Element<dim>*> lesser_dim_elmts;
+	  set<Node<dim>*>    highest_dim_elmt_nodes;
       
-      for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit )
-      {
+	  for (auto eit : elmts) {
         // elements of the highest spatial dimension are used to define the boundary
         assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
         if ( parseFiniteElementDimension( eit->FE_Type() ) == highest_spatial_dim )
@@ -3035,7 +3048,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
           if ( nbors_that_belong_to_group == eit->Neighbors() ) ++interior_elmts;
           else ++boundary_elmts;
         }
-        else lesser_dim_elmts.insert( &*eit );
+        else lesser_dim_elmts.insert( eit );
       }
       assert( /* all elements are accounted for */ mesh.Elements() == interior_elmts + boundary_elmts + lesser_dim_elmts.size() );
       
@@ -3067,89 +3080,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
              cerr <<" "<< e->Idx();
         cerr << endl;
       }
-    } // end multi-dim element region
-
-
-    // --------------------------------------------------------------------
-    // 2. Search for detached elements
-    // --------------------------------------------------------------------
-
-    {
-      Node<dim>* root_node = &Mesh().RootNode();
-
-      // Find the largest component.
-      //
-      // This uses a fast almost-linear algorithm for finding connected
-      // components. The algorithm itself is in UnionFind.h, but the
-      // way we use it is straightforward: loop over each element, assign
-      // all nodes for the element to the same component, then extract
-      // the components.
-      //
-      // - AJB
-
-      {
-        UnionFind<Node<dim>*> union_find;
-        for ( auto eit = mesh.ElementsBegin(); eit != mesh.ElementsEnd(); ++eit ) {
-          auto fe = eit->FE();
-          const size_t iNrNodes = fe->Nodes();
-          auto n1 = eit->N(0u);
-          
-          for ( size_t iNode = 1; iNode < iNrNodes; ++iNode ) {
-            auto n2 = eit->N(iNode);
-            union_find.SameComponent(n1, n2);
-          }
-        }
-        
-        std::deque<std::pair<size_t,Node<dim>*>> components;
-        union_find.Components(components);
-        size_t component_size = 0;
-        for (auto c : components) {
-          if (c.first > component_size) {
-            root_node = c.second;
-            component_size = c.first;
-          }
-        }
-      }
-
-      // AJB TODO: We shouldn't need to do this traversal, since the
-      // union-find algorithm has essentially found the information already.
-      // We should just be able to loop over all nodes and elements and see
-      // if they are in the correct component.
-
-      unordered_set<csmp::Element<dim>*>       explored_elements;
-      unordered_set<csmp::Node<dim>*>    discovered_nodes;
-      deque<csmp::Node<dim>*>  current_nodes;
-      // starting at the root element
-      discovered_nodes.insert( root_node );
-      current_nodes.push_back( root_node );
-      
-      while ( !current_nodes.empty() ) {
-        const csmp::Node<dim>*  n_ptr(current_nodes.front());
-        current_nodes.pop_front();
-        
-        // for all parent elements of the current node
-        for ( size_t i=0U; i<n_ptr->Parents(); i++ ) {
-          // for all the nodes of each parent element
-          for ( size_t j=0U; j<n_ptr->Parent(i)->Nodes(); j++ )
-            // if this node is not the one from which we started
-            if ( j != n_ptr->ParentNodeNumber(i) ) {
-              auto new_node = discovered_nodes.insert( n_ptr->Parent(i)->N(j) );
-              if ( new_node.second ) current_nodes.push_back( n_ptr->Parent(i)->N(j) );
-            }
-          // storing the explored element
-          explored_elements.insert( n_ptr->Parent(i) );
-        }
-      }
-      
-      size_t found_elements = explored_elements.size();
-      size_t expected_elements = Mesh().Elements();
-      
-      if ( found_elements < expected_elements ) {
-        std::cerr <<"\n\n\tdiscovered only "<< found_elements <<" versus "<< expected_elements <<" elements.\n\n";
-        csmp_error.notice( ERROR, "Model<dim>::CheckElementsAfterBuilding:",
-                          "mesh tree travel discovered less elements than there are in the model; is the mesh disconnected? - is there stand-alone mesh?");
-      }
-    }
+    } // end multi-dim element region   
   } // end PartitionElementVector
 
 

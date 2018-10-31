@@ -432,7 +432,7 @@ and the regions file prefix is used to read the regions file.
         cout << endl;
 
       for( size_t b(0); b < boundaries_.size(); ++b )
-        this->InsertBoundary( boundaries_[b].data() );
+		  this->InsertBoundary( IRREGULAR, boundaries_[b].data() );
     }
 
 
@@ -477,9 +477,13 @@ and the regions file prefix is used to read the regions file.
         {
           if( elementsInUse_.find( elements_[e]->Idx() ) == elementsInUseEnd )
             {
-              // Detach Elements from its Nodes and Neighbors
-              elements_[e]->UnassignNodes();
-              elements_[e]->UnassignNeighbors();
+			  // update node-to-element pointers			  
+			  for (size_t node = 0; node < elements_[e]->Nodes(); node++)
+				elements_[e]->N(node)->Unassign(elements_[e]);
+
+			  // JC: fix it since ElementRemeshingTrait was removed.
+              //elements_[e]->UnassignNodes();
+              //elements_[e]->UnassignNeighbors();
 
               delete elements_[e];
               elements_.erase( elements_.begin()+e );

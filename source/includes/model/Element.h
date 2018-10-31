@@ -5,7 +5,6 @@
 #include "FiniteElement.h"
 #include "FiniteElementPolicy.h"
 #include "FiniteVolumePolicy.h"
-#include "ElementRemeshingTraits.h"
 
 #include "Box.h"
 
@@ -145,8 +144,7 @@ Thus, one can have an element with FEM but without FVM, but not vice versa.
 
 */
 template<size_t dim>
-class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo is this really needed? - else deprecate
-                public FiniteElementPolicy<dim,Element>,
+class Element : public FiniteElementPolicy<dim,Element>,
                 public FiniteVolumePolicy<dim,Element>,        
                 public LocalVariableStorage<dim,Element<dim> > ///< TODO: @todo fix template - template parameter
   {
@@ -198,9 +196,11 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
 
     /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
     void Assign( size_t nbor, Element<dim>* const );
+	void Unassign( Element<dim>* );
     
     /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
     void Assign( size_t node, Node<dim>* const );
+	void Unassign( csmp::Node<dim>* const nd_ptr );
 
     // ------------------------------------------------------------------------
     // Member access
@@ -268,8 +268,6 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
 
 
  private:
-    friend struct PrimitiveTraits<Element<dim>>;
-
     // ------------------------------------------------------------------------
     // Data members
     // ------------------------------------------------------------------------
@@ -280,16 +278,6 @@ class Element : public ElementRemeshingTraits<dim,Element>,    ///< TODO: @todo 
     BOX_BOUNDARY                   at_boundary_;
 };
 
-
-template<size_t dim>
-struct PrimitiveTraits<Element<dim>>
-{
-  void Clear(Element<dim>* n)
-  {
-    decltype(n->elmt_connector_)().swap(n->elmt_connector_);
-    decltype(n->node_connector_)().swap(n->node_connector_);
-  }
-};
 
 } // csmp
 

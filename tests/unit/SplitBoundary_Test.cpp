@@ -2,6 +2,7 @@
 #include "Boundary.h"
 #include "VTU_Interface.h"
 #include "ANSYS_Model.h"
+#include "VTK_Interface.h"
 
 using namespace std;
 
@@ -1015,6 +1016,10 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
       if ( verbose_ ) cout <<"\n\tboundary: "<< (*it).first;
     if ( verbose_ ) cout << endl;
   
+	//VTU_Interface<dim>  vtu(modelIN);
+	//if (verbose_) vtu.OutputDataToVTU("modelIN_", "element variable", string("Model"), 0);
+	//if (verbose_) vtu.OutputDataToVTU("modelIN_", "element variable", string("ZONE1"), 0);
+
     // Create SplitBoundaries
     modelIN.InsertSplitBoundary( "ZONE1", "ZONE2", false /* do not create region between */ );
     modelIN.InsertSplitBoundary( "ZONE2", "ZONE3", false /* do not create region between */ );

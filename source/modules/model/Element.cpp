@@ -69,6 +69,8 @@ Element<dim>::Element( csmp::FiniteElement* f )
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr)
  {
+	 elmt_connector_.resize(f->Neighbors(), nullptr);
+	 node_connector_.resize(f->Nodes(), nullptr);
  }
 
 
@@ -83,6 +85,8 @@ Element<dim>::Element( csmp::FiniteElement* f,
     elmt_connector_(f->Neighbors(),nullptr),
     node_connector_(f->Nodes(),nullptr)
  {
+	 elmt_connector_.resize(f->Neighbors(), nullptr);
+	 node_connector_.resize(f->Nodes(), nullptr);
  }                 
 
 
@@ -102,6 +106,9 @@ Element<dim>::Element( csmp::FiniteElement* f,
  {
     // variable storage is resized here because the
     // finite element pointer must be initialised first
+	 elmt_connector_.resize(f->Neighbors(), nullptr);
+	 node_connector_.resize(f->Nodes(), nullptr);
+
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, cp );
     else
@@ -126,6 +133,9 @@ Element<dim>::Element( size_t idx,
     node_connector_(f->Nodes(),nullptr),
     at_boundary_(boundary_flag)
  {
+	elmt_connector_.resize(f->Neighbors(), nullptr);
+	node_connector_.resize(f->Nodes(), nullptr);
+
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, cp );
     else
@@ -370,6 +380,21 @@ void Element<dim>::Assign( size_t i, Element<dim>* const e_ptr ) // neighbor ele
 
 
 template<size_t dim>
+void Element<dim>::Unassign( Element<dim>* e_ptr ) // unassigns the neighbor element
+{
+	for (size_t i = 0U; i < elmt_connector_.size(); i++) {
+		if (e_ptr == NULL || elmt_connector_[i] == NULL)
+			continue;
+		if ((*e_ptr) == (*elmt_connector_[i])) {
+			elmt_connector_.erase(elmt_connector_.begin() + i);
+			elmt_connector_.swap(elmt_connector_);
+			break;
+		}
+	}
+}
+
+
+template<size_t dim>
 void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
  {
     assert( node_connector_.size() == this->Nodes() );
@@ -378,6 +403,21 @@ void Element<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 
     node_connector_[i] = nd_ptr;
  }
+
+
+template<size_t dim>
+void Element<dim>::Unassign( csmp::Node<dim>* const nd_ptr )
+{
+	for (size_t i = 0U; i < node_connector_.size(); i++) {
+		if (nd_ptr == NULL || node_connector_[i] == NULL)
+			continue;
+		if ((*nd_ptr) == (*node_connector_[i])) {
+			node_connector_.erase(node_connector_.begin() + i);
+			node_connector_.swap(node_connector_);
+			break;
+		}
+	}
+}
 
 
 template<size_t dim>

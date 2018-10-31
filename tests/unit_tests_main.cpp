@@ -82,6 +82,7 @@
 #include "Region_Test.h"
 #include "Box_Test.h"
 #include "SplitBoundary_Test.h"
+#include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
@@ -242,6 +243,12 @@ TEST_CASE("Unported tests", "[Unported]") {
       basic.addTest( new VSet_Test() );
       basic.addTest( new ColorPalette_Test() );
       
+	  //mesh manager	  
+	  basic.addTest(new MeshManager_Test(true));
+	  basic.addTest(new BoundaryInterface_Test(true));
+	  basic.addTest(new Boundary_Test());
+	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
+
       // Running unit tests and reporting errors
       basic.run();
       fails_fundamentals = basic.report();

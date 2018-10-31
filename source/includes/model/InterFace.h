@@ -74,6 +74,9 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// assign the corresponding node of the higher-dimensional neigbor element
     void Assign( size_t n_local, Node<dim>*, INTERFACE_SIDE side );
   
+	/// unassign its interface neighbors
+	bool Unassign( InterFace<dim>* );
+
     // ------------------------------------------------------------------------
     // Basic information
     // ------------------------------------------------------------------------
@@ -188,8 +191,6 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     void Out() const;
 
   private:
-    friend struct PrimitiveTraits<InterFace<dim> >;
-  
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<size_t,size_t>  SharedElementFaces();
   
@@ -220,19 +221,6 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
 
     Element<dim>* baseElement_; ///< Element object from which interface was constructed; may not be there
 };
-
-
-template<size_t dim>
-struct PrimitiveTraits<InterFace<dim>>
-{
-  void Clear(InterFace<dim>* i)
-  {
-    decltype(i->node_connector_)().swap(i->node_connector_);
-    decltype(i->interface_connector_)().swap(i->interface_connector_);
-  }
-};
-
-
 
 /**
 

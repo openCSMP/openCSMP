@@ -389,8 +389,8 @@ template<size_t dim>
 Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
-        FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
-        FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
+		if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(fc.FE());
+		if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(fc.FV());
         idx_                  = fc.idx_;
         face_connector_       = fc.face_connector_;
         node_connector_       = fc.node_connector_;
@@ -463,6 +463,20 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
  }
 
 
+template<size_t dim>
+bool Face<dim>::Unassign(Face<dim>* f_ptr)
+{
+	assert(f_ptr != nullptr);	
+	assert(face_connector_.size() == this->FE()->Neighbors());
+	for (size_t i(0); i < face_connector_.size(); ++i)
+		if (f_ptr == face_connector_[i])
+		{
+			face_connector_.erase(face_connector_.begin() + i);
+			face_connector_.swap(face_connector_);
+			return true;
+		}
+	return false;
+} // end Unassign
 
 
 /**
@@ -1055,9 +1069,13 @@ void  Face<dim>::Out() const
 template<size_t dim>
 bool  Face<dim>::operator==( const Face<dim>& fc ) const
  {
-    if ( &fc != this )
-      if ( innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_ ) return false;
-    return true;
+	 if (&fc != this) {
+		 if (node_connector_.size() != fc.node_connector_.size()) return false;
+		 if (innerParent_ != fc.innerParent_ || outerParent_ != fc.outerParent_) return false;
+		 for (size_t i = 0U; i < node_connector_.size(); i++)
+			 if (node_connector_[i]->Idx() != fc.node_connector_[i]->Idx()) return false;
+	 }
+     return true;
  }
 
 

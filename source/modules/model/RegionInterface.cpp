@@ -213,6 +213,46 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
 */
 
 
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::CreateRegions(bool is_unique, bool reestablishNeighborConnectivity)
+{
+	ErrorHandler&  csmp_error(ErrorHandler::Instance());
+	REGION_COMPLEX<dim>* regionComplex(static_cast<REGION_COMPLEX<dim>* >(this));
+	auto& meshMgr = regionComplex->Mesh();
+
+	bool ret = true;
+	for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
+		std::string regionname = "Model_" + std::to_string(i);		
+
+		// does this region already exist
+		if (ContainsRegion(regionname)) {
+			csmp_error.notice(WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateRegions:",
+				regionname, "region already exists; nothing was done.");
+			ret = false;
+		}
+
+		std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
+			newRegion = (is_unique) ?
+			uniqueGroupMap_.insert(std::make_pair(regionname, csmp::Region<dim>(regionname,
+				static_cast<REGION_COMPLEX<dim>*>(this)->Database())))
+			:
+			groupMap_.insert(std::make_pair(regionname, csmp::Region<dim>(regionname,
+				static_cast<REGION_COMPLEX<dim>*>(this)->Database())));
+
+		// if region was inserted successfully
+		if (newRegion.second)
+			(*newRegion.first).second.AccumulateAll(meshMgr.RootNode(i), reestablishNeighborConnectivity);
+
+		else {
+			csmp_error.notice(ERROR, "RegionInterface<dim,REGION_COMPLEX>::CreateRegions:",
+				regionname, "region could not be formed.");
+			ret = false;
+		}
+	}
+
+	return ret;
+}
+
 
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity )
@@ -233,9 +273,9 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromRootNode( const char* 
                 groupMap_.insert( std::make_pair( regionname, csmp::Region<dim>( regionname,
                                                   static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
    
-     // if region was inserted successfully
+    // if region was inserted successfully	
     if ( newRegion.second )
-        (*newRegion.first).second.AccumulateAll( &(static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode()),
+        (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh().RootNode(0),
                                                   reestablishNeighborConnectivity );
    
     else {
@@ -330,7 +370,7 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( cons
                iterRegion( groupMap_.find( std::string(regionName) ) ),
                iterUniqueRegion( uniqueGroupMap_.find( std::string(regionName) ));
 
-       // alerting user that other regions may be accidentially damaged by deleting non-unique regions
+       // alerting user that other regions may be accidentally damaged by deleting non-unique regions
        if (delete_elements) {
            if ( iterRegion != groupMap_.end() ) {
                 ErrorHandler::Instance().notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion:",
@@ -342,40 +382,46 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateRegionFromLargestComponent( cons
               REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
               auto& meshMgr = regionComplex->Mesh();
               auto spatialDimensions = subdomain.ElementSpatialDimensions();
+			  auto& elementVector = subdomain.ElementVector();
 
-              // 1. Delete elements
-              for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
-                Element<dim>* e = *eit;
-                
+              // 1. Delete elements              
+			  for (size_t i = 0U; i < elementVector.size(); i++) {				
                 // 1.1 Remove this element from its neighbour's connections
-                for (auto& neighbour : e->NeighborElementVector()) {
-                  if (neighbour) {
-                    for (auto& nn : neighbour->NeighborElementVector()) {
-                      if (nn == e) {
-                        nn = nullptr;
-                      }
-                    }
-                  }
-                }
+				Element<dim>* e = elementVector[i];
+				auto& neighbourVector = e->NeighborElementVector();				
+				for (size_t j = 0U; j < neighbourVector.size(); j++) {
+					if (neighbourVector[j] == NULL) continue;
+					auto& nnVector = neighbourVector[j]->NeighborElementVector();					
+					for (size_t k = 0U; k < nnVector.size(); k++) {
+						auto& nn = nnVector[k];
+						if (nn == e) {
+							nn = NULL;
+						//	nnVector.erase(nnVector.begin() + k);
+						//	nnVector.swap(nnVector);
+						}
+					}
+				}
                 
-                // 1.2. Remove it
-                meshMgr.Erase( *e );
+                // 1.2. Remove it				
+                meshMgr.Erase( e );
+				elementVector.erase(elementVector.begin() + i);
+				elementVector.swap(elementVector);
+				i--;
               }
              
-              // 2. Rebuild node connections if necessary
+              // 2. Rebuild node connections if necessary			  
               if (spatialDimensions.second == dim) {
-                // 2.1 This is a region whose dimension is dim, so interior
-                // nodes must be removed.
-                for ( auto nit=subdomain.InteriorNodesBegin(); nit!=subdomain.InteriorNodesEnd(); ++nit ) {
-                  meshMgr.Erase( *(*nit) );
-                }
-                
-                // Update node connections on the region's perimeter nodes that were retained.
+				// This is a region whose dimension is dim, so interior
+				// nodes must be removed.
+				for (auto nit = subdomain.InteriorNodesBegin(); nit != subdomain.InteriorNodesEnd(); ++nit) {
+					meshMgr.Erase( *nit);
+				}
+
+				// Update node connections on the region's perimeter nodes that were retained.
                 meshMgr.RebuildParentRelationships(subdomain.PerimeterNodesBegin(), subdomain.PerimeterNodesEnd());
               }
               else {
-                // 2.2 This is a region whose dimension is less than dim (i.e.
-                // a boundary or split boundary). Just update nodes.
+                // This is a region whose dimension is less than dim (i.e. a boundary or split boundary). Just update nodes.
                 meshMgr.RebuildParentRelationships(subdomain.NodesBegin(), subdomain.NodesEnd());
               }
            }
@@ -479,10 +525,10 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
           BinaryFileSectionWrite hdr(fp, "ONE_REGN");
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
           // TODO: check the logic of the following conditional statement
-          assert( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() );
-          if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
+          //assert( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() );
+          //if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
             domainVariablesOut( fp, (*git).second, database );
-       }
+		  //}
        std::cout << (*git).first <<" ";
      }
      std::cout << std::endl;
@@ -885,7 +931,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
    // XXX AJB FIXME
      domainVariablesIn( fp, this->Region("Model"), database );
 
-     auto& meshmgr = regionComplex.Mesh();
+     auto& mesh = regionComplex.Mesh();
 
      // ------------------
      // unique regions
@@ -907,7 +953,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                    it=uniqueGroupMap_.insert( std::make_pair( text, binRegion ) );
                  //   ^^^^^^^^^^^^^^^
                  if ( it.second )
-                   (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), elmtIDs );
+                   (*it.first).second.AccumulateByNumber(mesh, elmtIDs);
 
                  if ( (*it.first).second.Elements() == 0U ) {
                       uniqueGroupMap_.erase( it.first );
@@ -937,7 +983,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                it=groupMap_.insert( std::make_pair( text, binRegion ) );
              //   ^^^^^^^^^
              if ( it.second )
-               (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), elmtIDs );
+               (*it.first).second.AccumulateByNumber(mesh, elmtIDs);
 
              if ( (*it.first).second.Elements() == 0U ) {
                this->groupMap_.erase( it.first );
@@ -1001,87 +1047,94 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
     The method is interactive and will prompt the user for the names of the
     groups which are created in the course of its execution. 
   */
-  template<size_t dim, template<size_t> class REGION_COMPLEX>
-  void RegionInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues( const char* prop, 
-                                                                            std::set<std::string>& group_names )
-   {
-      REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
-      if ( !group_names.empty() )
-         group_names.erase( group_names.begin(), group_names.end() );
+ template<size_t dim, template<size_t> class REGION_COMPLEX>
+ void RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues(const char* prop,
+	 std::set<std::string>& group_names)
+ {
+	 REGION_COMPLEX<dim>* regionComplex(static_cast<REGION_COMPLEX<dim>*>(this));
+	 if (!group_names.empty())
+		 group_names.erase(group_names.begin(), group_names.end());
 
-       csmp::Index  prop_key = regionComplex->Database().StorageKey(prop);
+	 csmp::Index  prop_key = regionComplex->Database().StorageKey(prop);
 
-       if ( prop_key.type != SCALAR )
-         throw csmp::Exception( INFO, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
-                                  "method can only be applied to SCALAR variables", 
-                                  "no assignments were made" );
+	 if (prop_key.type != SCALAR)
+		 throw csmp::Exception(INFO, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues",
+			 "method can only be applied to SCALAR variables",
+			 "no assignments were made");
 
-       auto& meshmgr = regionComplex->Mesh();
-       std::map<double64,std::string>  groups;
-       ScalarVariable                  sc;
-     
-       // 1. Making a map with one entry for each property value
-       // ------------------------------------------------------
-       switch( prop_key.place )
-         {
-            case NODE:
-                for ( auto nit=meshmgr.NodesBegin(); nit!=meshmgr.NodesEnd(); nit++ )
-                  {
-                     nit->Read( prop_key, sc );
-                     groups[ sc() ] = "undefined";
-                  }
-                break;
-            case ELEMENT_INTEGRATION_POINT: 
-                for ( auto eit=meshmgr.ElementsBegin(); eit!=meshmgr.ElementsEnd(); eit++ )
-                  for ( size_t i=0U; i<eit->IntegrationPoints(); i++ )
-                    {
-                       eit->Read( i, prop_key, sc );
-                       groups[ sc() ] = "undefined";
-                    }
-                break;
-            case ELEMENT:
-                for ( auto eit=meshmgr.ElementsBegin(); eit!=meshmgr.ElementsEnd(); eit++ )
-                  {
-                     eit->Read( prop_key, sc );
-                     groups[ sc() ] = "undefined";
-                  }
-                break;
-            default:
-                throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues", 
-             "Property placement not recognized; presumable placement REGION is not allowed in this context. ");
-         }
+	 auto& mesh = regionComplex->Mesh();
+	 std::map<double64, std::string>  groups;
+	 ScalarVariable                  sc;
 
-      // 2. Prompting user for group names and making groups
-      // ---------------------------------------------------
-       std::cout <<"\nModel<"<< dim <<">::FormRegionsFromPropertyValues: Generating region names";
-       std::cout <<" corresponding to unique values of the property: '"<< prop <<"' ";
-       std::cout <<"["<< regionComplex->Database().Unit(prop) <<"]." << std::endl;
-       std::string  gname("region_");
-       gname   += prop;
-       size_t  group_idx(0U);
-       char    num[30U];
-     
-       for ( typename std::map<double64,std::string>::iterator 
-             it=groups.begin(); it!=groups.end(); it++ )
-         {
-            std::cout <<"\nProperty value: "<< (*it).first;
-            sprintf( num, "%lu", group_idx++ );
-            (*it).second = std::string( gname + num );
+	 // 1. Making a map with one entry for each property value
+	 // ------------------------------------------------------
 
-            if ( (*it).second != "undefined" )
-              {
-                 assert( !ContainsRegion( (*it).second.c_str() ) );
-                 FormRegionFrom( (*it).second.c_str(), prop, 
-                                 (*it).first - std::numeric_limits<double64>::epsilon(),
-                                 (*it).first + std::numeric_limits<double64>::epsilon(), true );
+	 // traversal of the existing mesh nodes to find all its elements	
+	 std::deque<csmp::Element<dim>*>	elmts;
+	 std::deque<csmp::Node<dim>*>	nodes;
+	 exploreNodesAndElementsFromMesh(&mesh, nodes, elmts);
+	 sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	 sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 
-                 group_names.insert( (*it).second );
-              }
-            else
-            std::cout <<"\nModel<"<< dim <<">::FormRegionsFromPropertyValues: check predefined region name."<< std::endl;
-         }
+	 switch (prop_key.place)
+	 {
+	 case NODE:
+		 for(auto nit : nodes){
+			 nit->Read(prop_key, sc);
+			 groups[sc()] = "undefined";
+		 }
+		 break;
+	 case ELEMENT_INTEGRATION_POINT:
+		 for (auto eit : elmts) {
+			 for (size_t i = 0U; i < eit->IntegrationPoints(); i++)
+			 {
+				 eit->Read(i, prop_key, sc);
+				 groups[sc()] = "undefined";
+			 }
+		 }
+		 break;
+	 case ELEMENT:
+		 for (auto eit : elmts) {			 
+			 eit->Read(prop_key, sc);
+			 groups[sc()] = "undefined";
+		 }
+		 break;
+	 default:
+		 throw csmp::Exception(ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromPropertyValues",
+			 "Property placement not recognized; presumable placement REGION is not allowed in this context. ");
+	 }
 
-   } // end RegionsFromPropertyValues
+	 // 2. Prompting user for group names and making groups
+	 // ---------------------------------------------------
+	 std::cout << "\nModel<" << dim << ">::FormRegionsFromPropertyValues: Generating region names";
+	 std::cout << " corresponding to unique values of the property: '" << prop << "' ";
+	 std::cout << "[" << regionComplex->Database().Unit(prop) << "]." << std::endl;
+	 std::string  gname("region_");
+	 gname += prop;
+	 size_t  group_idx(0U);
+	 char    num[30U];
+
+	 for (typename std::map<double64, std::string>::iterator
+		 it = groups.begin(); it != groups.end(); it++)
+	 {
+		 std::cout << "\nProperty value: " << (*it).first;
+		 sprintf(num, "%lu", group_idx++);
+		 (*it).second = std::string(gname + num);
+
+		 if ((*it).second != "undefined")
+		 {
+			 assert(!ContainsRegion((*it).second.c_str()));
+			 FormRegionFrom((*it).second.c_str(), prop,
+				 (*it).first - std::numeric_limits<double64>::epsilon(),
+				 (*it).first + std::numeric_limits<double64>::epsilon(), true);
+
+			 group_names.insert((*it).second);
+		 }
+		 else
+			 std::cout << "\nModel<" << dim << ">::FormRegionsFromPropertyValues: check predefined region name." << std::endl;
+	 }
+
+ } // end RegionsFromPropertyValues
 
 
 
@@ -1146,8 +1199,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       if ( it.second )
         {
           constraints.InitializePropertyIndices( regionComplex->Database() );
-          auto& meshmgr = regionComplex->Mesh();
-          (*it.first).second.AccumulateWithinRange( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), constraints );
+          auto& mesh = regionComplex->Mesh();
+          (*it.first).second.AccumulateWithinRange( mesh, constraints );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -1241,10 +1294,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       if ( it.second )
         {
           REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
-          auto& meshmgr = regionComplex->Mesh();
-          (*it.first).second.AccumulateWithinRange( meshmgr.ElementsBegin(),
-                                                    meshmgr.ElementsEnd(),
-                                                    prop, min, max );
+          auto& mesh = regionComplex->Mesh();
+          (*it.first).second.AccumulateWithinRange( mesh, prop, min, max );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -1291,8 +1342,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
 
       if ( it.second ) {
           REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
-          auto& meshmgr = regionComplex->Mesh();
-          (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), element_ids );
+          auto& mesh = regionComplex->Mesh();
+          (*it.first).second.AccumulateByNumber( mesh, element_ids );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -1409,7 +1460,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
       // 2. assigning the regions to groups in the Model
       std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom: Forming the regions: ";
       REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>*>(this) );
-      auto& meshmgr = regionComplex->Mesh();
+      auto& mesh = regionComplex->Mesh();
 
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1429,9 +1480,9 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                 copy( topo.ElementsOfRegionBegin((*lit).c_str()),
                       topo.ElementsOfRegionEnd((*lit).c_str()),
                       back_inserter(element_ids) );
-                    
+				
                 // assigning the element IDs to the group & cleaning up
-                (*it.first).second.AccumulateByNumber( meshmgr.ElementsBegin(), meshmgr.ElementsEnd(), element_ids );
+                (*it.first).second.AccumulateByNumber( mesh, element_ids );
                 element_ids.erase( element_ids.begin(), element_ids.end() );
     
                 // removing the group if it contains no elements
@@ -1450,13 +1501,11 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
                                  "Region could not be formed. Does this region already exist?", (*lit).c_str() );
         }
       std::cout << std::endl;
-    
+
       if ( new_regions == topo.ModelRegions() ) return true;
       return false;
     
-   } // end FormRegionsFrom
-
-
+} // end FormRegionsFrom
 
 
   /**
@@ -1897,7 +1946,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
       if ( it.second )
         {
           auto& meshMgr = regionComplex->Mesh();
-          (*it.first).second.AccumulateRectangularRegion( meshMgr.ElementsBegin(), meshMgr.ElementsEnd(), min_xyz, max_xyz );
+          (*it.first).second.AccumulateRectangularRegion( meshMgr, min_xyz, max_xyz );
     
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
@@ -2074,7 +2123,7 @@ size_t RegionInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor( const cha
              throw csmp::Exception( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                                     output_region.c_str(), "region could not be formed." );
                            
-           else (*it.first).second.AccumulateByNumber( meshMgr.ElementsBegin(), meshMgr.ElementsEnd(), element_ids );
+           else (*it.first).second.AccumulateByNumber( meshMgr, element_ids );
         }
       else
       throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions", 

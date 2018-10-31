@@ -486,7 +486,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( c
                            "This method is intended for the creation of splitboundaries around unique Regions");
 
     std::string  splitboundaryName( region );
-    splitboundaryComplex->InsertBoundary( region.c_str(), IRREGULAR, false /* do not delete region*/ );
+    splitboundaryComplex->InsertBoundary( IRREGULAR, region.c_str() );
     Boundary<dim>& boundary( splitboundaryComplex->Boundary( splitboundaryName ) );
 
     // attempt to create a regular (InterFace-based) splitboundary

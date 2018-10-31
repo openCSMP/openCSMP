@@ -118,9 +118,6 @@ class BoundaryInterface {
     /// construct Boundary<Face> from lower dimensional boundary flagged elements of given region
     bool InsertBoundary( BOX_BOUNDARY boxBoundary, const char* region = "Model" );
 
-    /// DOES NOT WORK: Boundary<Face> from lower dimensional Region<Element> in model
-    bool InsertBoundary( const char* region, BOX_BOUNDARY boxBoundary = IRREGULAR, bool deleteRegionAndItsElements = false );
-
     /// insert Boundary<Face> between two equidimensional unique regions, first on the inside by convention
     bool InsertBoundary( const char* region1, const char* region2, bool createRegionBetween = false );
 
@@ -140,9 +137,25 @@ class BoundaryInterface {
 
     /// inserts irregular csmp::Boundary for all eligible regions in the model
     bool EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions );
-  
+
+	/// inserts irregular csmp::Boundary for all eligible regions in the discontiguous model
+	bool EstablishBoundariesFromDiscontiguousModel(bool remove_original_lower_dimensional_regions);
+
     /// partitions encompassing boundary 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishRegularities();
+
+	/// construct Boundary<Face> objects around a region
+	bool AddFaces(const char* region);
+
+	/// Splits boundary based on regions into new boundaries
+	bool DivideBoundary(typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
+		const typename std::map<std::string, Region<dim> >::const_iterator subRegion);
+
+	/// Splits boundary into remainder and new name with parameter name
+	bool DivideBoundary(typename std::map<std::string, csmp::Boundary<dim> >::iterator boundary,
+		const typename std::vector<Face<dim>*>::const_iterator facesBegin,
+		const typename std::vector<Face<dim>*>::const_iterator facesEnd,
+		const std::string& bName);
 
     // -----------------------------------------------
     // Binary input/output
@@ -160,20 +173,6 @@ class BoundaryInterface {
   private:
     BoundaryInterface( const BoundaryInterface& );
 
-  // TO DEPRECATE
-  public:
-    /// construct Boundary<Face> objects around a region
-    bool AddFaces( const char* region );
-
-    /// Splits boundary based on regions into new boundaries
-    bool DivideBoundary( typename std::map<std::string,csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::map<std::string,Region<dim> >::const_iterator subRegion );
-
-    /// Splits boundary into remainder and new name with parameter name
-    bool DivideBoundary( typename std::map<std::string,csmp::Boundary<dim> >::iterator boundary,
-                         const typename std::vector<Face<dim>*>::const_iterator facesBegin,
-                         const typename std::vector<Face<dim>*>::const_iterator facesEnd,
-                         const std::string& bName );
  };
 
 } // csmp

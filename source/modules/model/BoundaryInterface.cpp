@@ -323,36 +323,36 @@ std::string createNameOfInternalBoundaryFrom( const FaceConstructionData& fdata,
     we can't ask RectangularShapedModel anymore since boundary regions were replaced by boundaries.
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoxShaped() const
-  {
-    const BOUNDARY_COMPLEX<dim>& boundaryComplex( static_cast<const BOUNDARY_COMPLEX<dim>& >(*this) );
+bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
+{
+	const BOUNDARY_COMPLEX<dim>& boundaryComplex(static_cast<const BOUNDARY_COMPLEX<dim>& >(*this));
 
-    std::cout << "\nBoundaryInterface<"<< dim <<">::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
-    size_t boundaries( 6 );
-    if( dim == 2 )
-      boundaries = 4;
-    set<BOX_BOUNDARY> boundariesFound;
-    BOX_BOUNDARY currentBoundary(NOT);
-    const Region<dim>& region( boundaryComplex.Region( "Model" ) );
-    const typename std::vector<Node<dim>*>::const_iterator nodesEnd( region.NodesEnd() );
-    for( typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != nodesEnd; ++it )
-      {
-        currentBoundary = (*it)->AtBoundary();
-        if( currentBoundary != LEFT and currentBoundary != RIGHT and currentBoundary != BACK
-            and currentBoundary != FRONT and currentBoundary != BOTTOM and currentBoundary != TOP
-            and currentBoundary != IRREGULAR )
-          continue;
-        boundariesFound.insert( currentBoundary );
-        if ( boundariesFound.size() >= boundaries )
-          {
-            std::cout << "...true\n";
-            return true;
-          }
-        // TODO: dealing with the case where there might be one IRREGULAR boundary instead of the TOP boundary
-      }
-    std::cout << "...false\n";
-    return false;
-  }
+	std::cout << "\nBoundaryInterface<" << dim << ">::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
+	size_t boundaries(6);
+	if (dim == 2)
+		boundaries = 4;
+	set<BOX_BOUNDARY> boundariesFound;
+	BOX_BOUNDARY currentBoundary(NOT);
+	const Region<dim>& region(boundaryComplex.Region("Model"));
+	const typename std::vector<Node<dim>*>::const_iterator nodesEnd(region.NodesEnd());
+	for (typename std::vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != nodesEnd; ++it)
+	{
+		currentBoundary = (*it)->AtBoundary();
+		if (currentBoundary != LEFT and currentBoundary != RIGHT and currentBoundary != BACK
+			and currentBoundary != FRONT and currentBoundary != BOTTOM and currentBoundary != TOP
+			and currentBoundary != IRREGULAR)
+			continue;
+		boundariesFound.insert(currentBoundary);
+		if (boundariesFound.size() >= boundaries)
+		{
+			std::cout << "...true\n";
+			return true;
+		}
+		// TODO: dealing with the case where there might be one IRREGULAR boundary instead of the TOP boundary
+	}
+	std::cout << "...false\n";
+	return false;
+}
 
 
 
@@ -816,12 +816,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     // 2.2.4 trimming excess storage of the face-data vectors
     for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
       vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
- 
-// TESTING (correct number of faces)
-//cerr <<"\npatches recorded and their number of elements:";
-//for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
-//  cerr <<"\n\t"<< (*pit).first <<":  "<< (*pit).second.size();
-//cerr << endl;
+
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 3. Getting the MeshManager object to create Face objects for all boundary patches at the same time
@@ -839,7 +834,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
     vector<vector<Face<dim>*> >       face_ptr_per_patch(patch_simplexes.size());
    
-    size_t  patch_counter(0);
+    size_t patch_counter(0);	
     for ( map<string,vector<FaceConstructionData> >::const_iterator
           it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it ) {
         face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
@@ -849,12 +844,18 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
              // creating the faces
              // ------------------
              // storing pointers to the new faces in the vector from which the boundary will be constructed
-             face_vector.push_back( model.Mesh().PushBack( Face<dim>( *model_domain.E( (*pit).Element() ),
-                                                                      model_domain.E( (*pit).InnerElement() ),
-                                                                      model_domain.E( (*pit).OuterElement() ),
-                                                                      lvsFaces,
-                                                                      lvsIntegrationPoints ) ) );
-             // remembering which faces make up the patch
+			Face<dim> newface(*model_domain.E((*pit).Element()), model_domain.E((*pit).InnerElement()), model_domain.E((*pit).OuterElement()), lvsFaces, lvsIntegrationPoints);
+			 Face<dim>* faceObj = model.Mesh().Add(newface);
+			 
+			 // the first face is assigned into the root face of this face group in the mesh			 
+			 // the faces should be connected each other, otherwise each root face has only a single face
+			 if (face_ptr_per_patch[patch_counter].size() == 1) {
+				 model.Mesh().SetRootFace(face_vector.front());
+			 }
+
+			 face_vector.push_back(faceObj);
+
+			 // remembering which faces make up the patch
              face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
            }
          patch_counter++;
@@ -1432,6 +1433,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* group1
    NB: I am not sure whether the side identification algorithm works correctly at layer boundaries; this is worth a check! 
  
 */
+ /*
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* region, BOX_BOUNDARY boxBoundary, bool deleteRegionAndItsElements )
   {
@@ -1474,7 +1476,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* region
     return false;
   } // InsertBoundary
 
-
+  */
 
 
 /** Method forms a Boundary (ModelSubDomain<Face>) from nodes and elements flagged
@@ -1515,41 +1517,38 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( BOX_BOUNDARY boxBo
 
 
 
+	/**
+	Method forms a Boundary (ModelSubDomain<Face>) around a named existing Region<Element>.
+	The string "BOUNDARY" is appended to the region name to identify the newly generated boundary.
 
-
-
-/**
-    Method forms a Boundary (ModelSubDomain<Face>) around a named existing Region<Element>.
-    The string "BOUNDARY" is appended to the region name to identify the newly generated boundary.
-
-    @author P. Lang Aug 2011
-*/
+	@author P. Lang Aug 2011
+	*/
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces( const char* region )
-  {
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::AddFaces(const char* region)
+{
+	BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
+	ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
-    // if region appears to be valid reference is created
-    if( !boundaryComplex->ContainsRegion( region ) )
-      csmp_error.notice( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces", region, "Region does not exist." );
-    const csmp::Region<dim>&  rref( boundaryComplex->Region(region) );
-    // establishing name following convention "RegionName_BOUNDARY"
-    std::string bName( region );
-    BOX_BOUNDARY bflag = (bName == "Model") ? IRREGULAR : INTERNAL;
-    bName += "_BOUNDARY";
-    
+	// if region appears to be valid reference is created
+	if (!boundaryComplex->ContainsRegion(region))
+		csmp_error.notice(ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddFaces", region, "Region does not exist.");
+	const csmp::Region<dim>&  rref(boundaryComplex->Region(region));
+	// establishing name following convention "RegionName_BOUNDARY"
+	std::string bName(region);
+	BOX_BOUNDARY bflag = (bName == "Model") ? IRREGULAR : INTERNAL;	
+	bName += "_BOUNDARY";
+
     // inserting boundary if not existing yet
     std:: pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), bflag ) ) );
     if ( it.second )
       {
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: creating boundary around " << region << std::endl;
-        boundaryComplex->UpdateIndices();
+        boundaryComplex->UpdateIndices(region);
         //                                 FACE & BOUNDARY CREATION
         bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
-        assert( succeeded == true );
-        boundaryComplex->UpdateIndices();
+		assert( succeeded == true );
+        boundaryComplex->UpdateIndices(region);
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: created boundary around " << region << std::endl;
         return succeeded;
       }
@@ -1605,22 +1604,29 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::DivideBoundary( typename std::map<
   {
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+	std::string  bName( subRegion->first );
+	
+	// rename it due to discontiguous model
+	auto& meshMgr = boundaryComplex->Mesh();
+	if( meshMgr.NodeGroups() > 1 )
+		bName = (*boundary).second.Name() + "_" + subRegion->first;    
 
-    const std::string  bName( subRegion->first );
-    const BOX_BOUNDARY bFlag((*boundary).second.AtBoundary());
-    std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
-      subBoundary = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), bFlag ) ) );
-    if ( subBoundary.second )
-      {
-        if ( boundary->second.Divide( subRegion->second, subBoundary.first->second ) ) {
-            std::cout << "\nBoundaryInterface<"<< dim <<">::DivideBoundary created boundary " << bName << std::endl;
-            return true;
-          }
-        else throw csmp::Exception( ERROR, "BoundaryInterface::DivideBoundary", "Unable to form boundary" );
-      }
-    else csmp_error.notice( INFO, "BoundaryInterface::DivideBoundary",
-                            bName.c_str(),
-                            "Boundary already exists. Nothing was done.");
+	const BOX_BOUNDARY bFlag((*boundary).second.AtBoundary());
+	std::pair<typename std::map<std::string, csmp::Boundary<dim> >::iterator, bool>
+		subBoundary = faceBoundaryMap_.insert(std::make_pair(bName, csmp::Boundary<dim>(bName, boundaryComplex->Database(), bFlag)));
+	if (subBoundary.second)
+	{
+		if (boundary->second.Divide(subRegion->second, subBoundary.first->second)) {
+			auto& face_vec = subBoundary.first->second.FaceVector();
+			if (face_vec.size() > 0) boundaryComplex->Mesh().SetRootFace(face_vec[0]);
+			std::cout << "\nBoundaryInterface<" << dim << ">::DivideBoundary created boundary " << bName << std::endl;
+			return true;
+		}
+		else {
+			faceBoundaryMap_.erase(subBoundary.first);
+			csmp_error.notice(INFO, "BoundaryInterface::DivideBoundary", bName.c_str(), "Nothing to divide. Unable to form boundary.");			
+		}
+	}
 
     return false;    
   }
@@ -1646,6 +1652,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::DivideBoundary( typename std::map<
     {
       if( boundary->second.Divide( facesBegin, facesEnd, subBoundary.first->second ) )
       {
+		auto& face_vec = subBoundary.first->second.FaceVector();
+		if (face_vec.size() > 0) boundaryComplex->Mesh().SetRootFace(face_vec[0]);
         std::cout << "\nBoundaryInterface<"<< dim <<">::DivideBoundary created boundary " << bName << std::endl;
         return true;
       }
@@ -1792,8 +1800,7 @@ bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& boundar
     const LocalVariables lvsFaces( model.Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
 
-    shared_faces.reserve( perimeter_keys1.size() );
-   
+    shared_faces.reserve( perimeter_keys1.size() );	
     for ( typename map<set<csmp::Node<3U>*>,Face<3U>*>::const_iterator
           it1=perimeter_keys1.begin(); it1!=perimeter_keys1.end(); ++it1 )
       {
@@ -1830,18 +1837,23 @@ bool createBoundaryFromSharedEdge( Model<3U>& model, const Boundary<3U>& boundar
                           break;
                       }
                  }
-               // creating the faces
-              shared_faces.push_back( model.Mesh().PushBack( Face<3U>( fem_ptr,
-                                                                       inner, outer,
-                                                                       segment_nodes,
-                                                                       lvsFaces,
-                                                                       lvsIntegrationPoints ) ) );
+              // creating the faces
+			  Face<3U> new_face(fem_ptr, inner, outer, segment_nodes, lvsFaces, lvsIntegrationPoints);
+			  Face<3U>* faceObj = model.Mesh().Add(new_face);
+			  
+			  // the first face is assigned into the root face of this face group in the mesh
+			  // the faces should be connected each other, otherwise each root face has only a single face
+			  if (shared_faces.size()==1) {
+				  model.Mesh().SetRootFace(shared_faces.front());
+			  }
+			  
+			  shared_faces.push_back(faceObj);
            }
       }
    
     // assigning the equidimensional neighbors to the newly created faces
     createLineFaceConnectivity( shared_faces );
-   
+		
     // false if no shared faces could be detected
     return ( !shared_faces.empty() );
 
@@ -2146,12 +2158,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
   template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
   bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
    {
-      BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+      BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );	  
       std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundaries: Establishing Box-object boundaries for " << dim << " dimensional box shaped model...";
-     
-      // TOP may be missing, if there is an IRREGULAR boundary instead
-      if ( boundaryComplex->ContainsRegion("TOP") )
-        boundaryComplex->InsertBoundary( TOP, "TOP" );
+
+	  // TOP may be missing, if there is an IRREGULAR boundary instead
+	  if (boundaryComplex->ContainsRegion("TOP"))
+		  boundaryComplex->InsertBoundary(TOP, "TOP");
       boundaryComplex->InsertBoundary( BOTTOM, "BOTTOM" );
       boundaryComplex->InsertBoundary( RIGHT, "RIGHT" );
       boundaryComplex->InsertBoundary( LEFT, "LEFT" );
@@ -2185,13 +2197,16 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
           }
       std::cout << std::endl;
      
-      // the regions that were converted into boundaries are removed from the region 'Model'
+      // the regions that were converted into boundaries are removed from the region 'Model'	  
       boundaryComplex->RemoveFromRegion( "Model", elmts_to_remove );
       // then the regions and their elements are removed
       const bool remove_elements(true);
-      for ( auto rit=regionsToRemove.begin(); rit!=regionsToRemove.end(); ++rit )
-        boundaryComplex->RemoveRegion( (*rit).c_str(), remove_elements );
-
+	  for (auto rit = regionsToRemove.begin(); rit != regionsToRemove.end(); ++rit)
+	  {
+		  boundaryComplex->RemoveRegion((*rit).c_str(), remove_elements);
+		  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoxBoundaries: Removing the region " << (*rit).c_str();
+	  }
+	        
       std::cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
   }
@@ -2199,94 +2214,206 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 
 
 
-/**
-     Creates boundary around "Model" region determining whether lower-dimensional
-     regions shall become a boundary segments on the basis of whether their name contains
-     the string "BOUNDARY" or is one of the reserved boundary names.
-     
-     When a boundary (of Face objects) is created, the underpinning lower-dimensional (parent)
-     region is removed from the region "Model".
-     It is also moved from the unique to the non-unique region map if it was 
-     stored there originally.
-     
-     @attention by contrast to EstablishBoxBoundaries(),
-     EstablishBoundaries() does not require to be applied to box-shaped models, but is
-     more general.
-     
-     @test updated by SKM 2016
-*/
-template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions( bool remove_original_lower_dimensional_regions )
- {
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-    std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundaries: searching for eligible boundary domains...\n";
+  /**
+  Creates boundary around "Model" region determining whether lower-dimensional
+  regions shall become a boundary segments on the basis of whether their name contains
+  the string "BOUNDARY" or is one of the reserved boundary names.
 
-    // generate hull of Face objects around model calling it "Model_BOUNDARY"
-    AddFaces("Model");
-    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model_BOUNDARY") ) );
-    boundaryIterator     modelBoundaryIt( Boundary( modelBoundary ) );
+  When a boundary (of Face objects) is created, the underpinning lower-dimensional (parent)
+  region is removed from the region "Model".
+  It is also moved from the unique to the non-unique region map if it was
+  stored there originally.
 
-    std::vector<std::string> eligibleRegions;
-    eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
-    
-    for( typename std::map<std::string,csmp::Region<dim> >::iterator
-         it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it )
-      {
-        if( it->first == "Model_BOUNDARY" )
-          continue;
-        if( !IsBoundaryName( it->first ) )
-          continue;
-        if( !isOfLowerDimensionalRepresentation( it->second ) )
-          continue;
-        if( dim == 3U and containsVolumeElements( boundaryComplex->Region("Model") ) and !containsSurfaceElements( it->second ) )
-          continue;
-        eligibleRegions.push_back( it->first );
-        DivideBoundary( modelBoundaryIt, it );
-        if( modelBoundary.Elements() == 0 )
-          {
-            boundaryComplex->RemoveBoundary(modelBoundary);
-            std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundariesFromRegions: Boundary 'Model_BOUNDARY' entirely replaced by sub boundaries.\n";
-            break;
-          }
-      }
-    
-    // if the boundary called 'Model_BOUNDARY' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
-    if ( count( eligibleRegions.begin(), eligibleRegions.end(), "Model_BOUNDARY" ) == 0 ) faceBoundaryMap_.erase("Model_BOUNDARY");
+  @attention by contrast to EstablishBoxBoundaries(),
+  EstablishBoundaries() does not require to be applied to box-shaped models, but is
+  more general.
 
-    // moving the original regions from which the boundaries were created from model and into the non-unique regions map
-    for ( size_t i = 0; i < eligibleRegions.size(); ++i ) {
-      auto& region_name = eligibleRegions[i];
-      if ( region_name != "Model_BOUNDARY" ) {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoundariesFromRegions: Removing region '";
-        std::cout << region_name << "' from 'Model' since it was transformed into Boundary...";
-        boundaryComplex->RemoveFromRegion( "Model", region_name.c_str() );
-        if (remove_original_lower_dimensional_regions) {
-            boundaryComplex->RemoveRegion( region_name.c_str(), true );
-        }
-        else {
-            boundaryComplex->MoveToNonUniqueRegions( region_name.c_str() );
-        }
-      }
-    }
+  @test updated by SKM 2016
+  */
+  template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+  bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions(bool remove_original_lower_dimensional_regions)
+  {
 
-    // changing all BOX_BOUNDARY flags on the outside of the model to IRREGULAR, unless a box-boundary name is recognised
-    // (edges are not considered)
-  	for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it ) {
-         BOX_BOUNDARY bflag(IRREGULAR);
-         if ( isDiagnosticBoxBoundaryClassifier( (*it).first ) ) bflag = parseBoundary( (*it).first );
-         for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
-           (*nit)->AtBoundary( bflag );
-      }
+	  BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
+	  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
 
-    std::cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
-    return true;
-    
-} // end EstablishBoundariesFromRegions
+	  // generate hull of Face objects around model calling it "Model_BOUNDARY"
+	  AddFaces("Model");
+	  csmp::Boundary<dim>& modelBoundary(Boundary(std::string("Model_BOUNDARY")));
+	  boundaryIterator     modelBoundaryIt(Boundary(modelBoundary));
 
+	  std::vector<std::string> eligibleRegions;
+	  eligibleRegions.reserve(boundaryComplex->UniqueRegions());
 
+	  for (typename std::map<std::string, csmp::Region<dim> >::iterator
+		  it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it)
+	  {
+		  if (it->first == "Model_BOUNDARY")
+			  continue;
+		  if (!IsBoundaryName(it->first))
+			  continue;
+		  if (!isOfLowerDimensionalRepresentation(it->second))
+			  continue;
+		  if (dim == 3U and containsVolumeElements(boundaryComplex->Region("Model")) and !containsSurfaceElements(it->second))
+			  continue;
+		  eligibleRegions.push_back(it->first);
+		  DivideBoundary(modelBoundaryIt, it);
+		  if (modelBoundary.Elements() == 0)
+		  {
+			  boundaryComplex->RemoveBoundary(modelBoundary);
+			  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromRegions: Boundary 'Model_BOUNDARY' entirely replaced by sub boundaries.\n";
+			  break;
+		  }
+	  }
 
+	  // if the boundary called 'Model_BOUNDARY' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
+	  if (count(eligibleRegions.begin(), eligibleRegions.end(), "Model_BOUNDARY") == 0) {
+		  faceBoundaryMap_.erase("Model_BOUNDARY");		  
+	  }
 
+	  // moving the original regions from which the boundaries were created from model and into the non-unique regions map
+	  for (size_t i = 0; i < eligibleRegions.size(); ++i) {
+		  auto& region_name = eligibleRegions[i];
+		  if (region_name != "Model_BOUNDARY") {
+			  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromRegions: Removing region '";
+			  std::cout << region_name << "' from 'Model' since it was transformed into Boundary...";
+			  boundaryComplex->RemoveFromRegion("Model", region_name.c_str());
+			  if (remove_original_lower_dimensional_regions) {
+				  boundaryComplex->RemoveRegion(region_name.c_str(), true);
+			  }
+			  else {
+				  boundaryComplex->MoveToNonUniqueRegions(region_name.c_str());
+			  }
+		  }
+	  }
 
+	  // changing all BOX_BOUNDARY flags on the outside of the model to IRREGULAR, unless a box-boundary name is recognised
+	  // (edges are not considered)
+	  for (auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it) {
+		  BOX_BOUNDARY bflag(IRREGULAR);
+		  if (isDiagnosticBoxBoundaryClassifier((*it).first)) bflag = parseBoundary((*it).first);
+		  for (auto nit = (*it).second.NodesBegin(); nit != (*it).second.NodesEnd(); ++nit)
+			  (*nit)->AtBoundary(bflag);
+	  }
+
+	  std::cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
+	  return true;
+
+  } // end EstablishBoundariesFromRegions
+
+	/**
+	Creates boundaries around discontiguous model regions determining whether lower-dimensional
+	regions shall become a boundary segments on the basis of whether their name contains
+	the string "BOUNDARY" or is one of the reserved boundary names.
+
+	When a boundary (of Face objects) is created, the underpinning lower-dimensional (parent)
+	region is removed from the region "Model".
+	It is also moved from the unique to the non-unique region map if it was
+	stored there originally.
+
+	@attention by contrast to EstablishBoxBoundaries(),
+	EstablishBoundariesFromDiscontiguousModel() does not require to be applied to box-shaped models, but is
+	more general, and inserts irregular csmp::Boundary for all eligible regions in the discontiguous model
+	*/
+  template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+  bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromDiscontiguousModel(bool remove_original_lower_dimensional_regions)
+  {
+
+	  BOUNDARY_COMPLEX<dim>* boundaryComplex(static_cast<BOUNDARY_COMPLEX<dim>*>(this));
+	  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromDiscontiguousModel: searching for eligible boundary domains...\n";
+
+	  // generate hull of Face objects around model calling it "Model_#n_BOUNDARY"
+	  // ie. if there are 2 subdomains, one is "Model_0" and second is "Model_1".
+	  //     their boundary names are "Model_0_BOUNDARY" and "Model_1_BOUNDARY"
+	  auto& meshMgr = boundaryComplex->Mesh();
+
+	  std::vector<std::string> subdomains;	  
+	  std::string model_name = "Model";	  
+	  for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
+		  model_name = "Model_" + std::to_string(i);
+		  subdomains.push_back(model_name);
+	  }
+
+	  bool ret = true;
+	  for (auto model_name : subdomains)	  
+		  AddFaces(model_name.c_str());
+	  
+	  std::set<std::string> eligibleRegions;
+	  for (typename std::map<std::string, csmp::Region<dim> >::iterator
+		  it = boundaryComplex->UniqueRegionsBegin(); it != boundaryComplex->UniqueRegionsEnd(); ++it)
+	  {
+		  for (auto model_name : subdomains){
+			  std::string boundary_name = model_name + "_BOUNDARY";
+
+			  csmp::Boundary<dim>& modelBoundary(Boundary(boundary_name));
+			  boundaryIterator     modelBoundaryIt(Boundary(modelBoundary));
+
+			  if (it->first == boundary_name)
+				  continue;
+			  if (!IsBoundaryName(it->first))
+				  continue;
+			  if (!isOfLowerDimensionalRepresentation(it->second))
+				  continue;
+			  if (dim == 3U and containsVolumeElements(boundaryComplex->Region(model_name.c_str())) and !containsSurfaceElements(it->second))
+				  continue;
+			  eligibleRegions.insert(it->first);
+			  DivideBoundary(modelBoundaryIt, it);
+			  if (modelBoundary.Elements() == 0)
+			  {
+				  boundaryComplex->RemoveBoundary(modelBoundary);
+				  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromDiscontiguousModel: Boundary '" << boundary_name << "' entirely replaced by sub boundaries.\n";
+				  continue;
+			  }
+		  }
+	  }
+
+	  // if the boundary called 'Model_#n_BOUNDARY' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
+	  for (auto model_name : subdomains) {
+		  std::string boundary_name = model_name + "_BOUNDARY";
+		  if (count(eligibleRegions.begin(), eligibleRegions.end(), boundary_name) == 0) {
+			  faceBoundaryMap_.erase(boundary_name);			
+		  }
+	  }
+
+	  // moving the original regions from which the boundaries were created from model and into the non-unique regions map
+	  for (auto region_name : eligibleRegions) {		  
+		  for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
+			  std::string model_name = "Model_" + std::to_string(i);
+			  std::string boundary_name = model_name + "_BOUNDARY";
+			  if (region_name != boundary_name) {			  
+				  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromDiscontiguousModel: Removing region '";
+				  std::cout << region_name << "' from '"<< model_name << "' since it was transformed into Boundary...";
+				  boundaryComplex->RemoveFromRegion(model_name.c_str(), region_name.c_str());
+			  }
+		  }
+	  }
+
+	  for (auto region_name : eligibleRegions) {
+		  if (remove_original_lower_dimensional_regions) {
+			  boundaryComplex->RemoveRegion(region_name.c_str(), true);
+		  }
+		  else {
+			  boundaryComplex->MoveToNonUniqueRegions(region_name.c_str());
+		  }
+	  }
+  
+	  // changing all BOX_BOUNDARY flags on the outside of the model to IRREGULAR, unless a box-boundary name is recognised
+	  // (edges are not considered)
+	  for (auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it) {
+		  BOX_BOUNDARY bflag(IRREGULAR);
+		  if (isDiagnosticBoxBoundaryClassifier((*it).first)) bflag = parseBoundary((*it).first);
+		  for (auto nit = (*it).second.NodesBegin(); nit != (*it).second.NodesEnd(); ++nit)
+			  (*nit)->AtBoundary(bflag);
+	  }
+
+	  if (ret)
+		  std::cout << "\n\nBoundaryInterface::EstablishBoundariesFromDiscontiguousModel: established successfully!\n";
+
+	  return ret;
+
+  } // end EstablishBoundariesFromRegions
+	
+  
 
 
 // little utility

@@ -33,6 +33,7 @@
 #include "Node_Test.h"
 #include "Element_Test.h"
 #include "Face_Test.h"
+#include "MeshManager_Test.h"
 
 #include "FiniteElement_Test.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -150,6 +151,7 @@ TEST_CASE("Interfaces / containers tests", "[Interfaces]") {
 	TEST_SECTION(PropertyData)
     TEST_SECTION(VSet)
     TEST_SECTION(ColorPalette)
+	TEST_SECTION_V(MeshManager,true)
 }
 
 TEST_CASE("Finite elements and math operators", "[FiniteElements]"){

@@ -20,21 +20,32 @@ namespace csmp {
 */
 class MeshManager_Test : public Test {
   public:
-    MeshManager_Test( const char* ansys_test_model, bool reconstruct_model_from_CSMP_binary_file );
+    MeshManager_Test( bool reconstruct_model_from_CSMP_binary_file );
     MeshManager_Test( /* vset maker based model */ );
-    ~MeshManager_Test() { delete model_; }
+    ~MeshManager_Test() { delete model3d_; }
     virtual void run();
   
   private:
     void TestBasics();
-    bool TestEntityNumberingFunction();
-    bool TestElementDeletionAndInsertion();
-    bool TestFaceDeletionAndInsertion();
-    bool TestMemoryManagement();
+    
+	bool TestEntityNumberingFunction_2D();
+	bool TestElementDeletionAndInsertion_2D();
+	bool TestFaceDeletionAndInsertion_2D();
+	bool TestInterFaceDeletionAndInsertion_2D();
+	bool TestEraseAllPrimitives_2D();
   
+	bool TestEntityNumberingFunction_3D();
+	bool TestElementDeletionAndInsertion_3D();
+	bool TestFaceDeletionAndInsertion_3D();
+	bool TestInterFaceDeletionAndInsertion_3D();
+	bool TestEraseAllPrimitives_3D();
+
   private:
-    std::string model_name_;
-    Model<3U>*  model_ = nullptr;
+	std::string model2d_name_;
+	std::string model3d_name_;
+
+    Model<2U>*  model2d_ = nullptr;
+	Model<3U>*  model3d_ = nullptr;
 };
 
 

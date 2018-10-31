@@ -95,6 +95,9 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
   
+	/// unassign its face neighbors
+	bool Unassign( Face<dim>* );
+
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );
 
@@ -193,8 +196,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void  Out() const;
 
   private:
-    friend struct PrimitiveTraits<Face<dim>>;
-
     Face();
   
     // TODO: SKM: deprecate this inefficient method
@@ -212,19 +213,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Element<dim>*            innerParent_;     ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;     ///< (optional) higher-dimensional neighbor in direction of unit normal
 };
-
-
-template<size_t dim>
-struct PrimitiveTraits<Face<dim>>
-{
-  void Clear(Face<dim>* f)
-  {
-    decltype(f->node_connector_)().swap(f->node_connector_);
-    decltype(f->face_connector_)().swap(f->face_connector_);
-  }
-};
-
-
 
 /**  PRECURSOR VERSION
 

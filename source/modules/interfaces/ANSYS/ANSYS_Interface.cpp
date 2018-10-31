@@ -1489,8 +1489,9 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     std::deque<std::vector<long64> >::iterator it(vset.PfvertsBegin());
     size_t  nentry(0U);
     for ( size_t i=0; i<nelements; i++, it++ )
-      for ( size_t j=0U; j<nbors[i]; j++ )
-        (*it)[j] = pfverts[nentry++];
+      if (nbors[i] > 2) // SKM: not sure anymore why the restriction was imposed => JC: check it later due to some errors without this restriction especially for fault_boundary_test in BoundaryInterface_Test.
+        for ( size_t j=0U; j<nbors[i]; j++ )
+          (*it)[j] = pfverts[nentry++];
 
     delete[] pfverts;
 

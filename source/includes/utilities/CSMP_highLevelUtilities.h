@@ -132,6 +132,24 @@ size_t  findNode( const Model<3U>&,
 template<size_t dim, template<size_t> class CELL>
 void printNodes( const CELL<dim>& );
 
+/// retrieves and returns the nodes and the elements that are explored by mesh traversal from the starting root nodes
+template<size_t dim>
+void exploreNodesAndElementsFromMesh(MeshManager<dim>* mesh, std::deque<Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts);
+template<size_t dim>
+void exploreNodesAndElementsFromMesh(const MeshManager<dim>* mesh, std::deque<const Node<dim>*>& nodes, std::deque<Element<dim>*>& elmts);
+
+/// retrieves and returns the faces that are explored by mesh traversal from the starting root faces
+template<size_t dim>
+void exploreFacesFromMesh(MeshManager<dim>* mesh, std::deque<Face<dim>*>& faces);
+template<size_t dim>
+void exploreFacesFromMesh(const MeshManager<dim>* mesh, std::deque<const Face<dim>*>& faces);
+
+/// retrieves and returns the interfaces that are explored by mesh traversal from the starting root interfaces
+template<size_t dim>
+void exploreInterFacesFromMesh(MeshManager<dim>* mesh, std::deque<InterFace<dim>*>& interfaces);
+template<size_t dim>
+void exploreInterFacesFromMesh(const MeshManager<dim>* mesh, std::deque<const InterFace<dim>*>& interfaces);
+
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim> 
 void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );

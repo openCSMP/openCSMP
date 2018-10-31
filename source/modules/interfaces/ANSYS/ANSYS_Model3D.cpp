@@ -431,34 +431,40 @@ ANSYS_Model3D::~ANSYS_Model3D()
 */
 bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
  {
-    // making a binary tree of the original node numbers, searchable for point coordinates
-    map<Point<3U>,size_t>  original_node_numbers;
-    for ( size_t i=0U; i<node_coords_.size(); ++i )
-      original_node_numbers.insert( make_pair( node_coords_[i], i ) );
-   
-    // renumbering the nodes of the model consecutively
-    bool first_call(true), made_changes(false);
-    const auto nodesEnd(Mesh().NodesEnd());
-    const auto onodesEnd(original_node_numbers.end());
-    for ( auto nit=Mesh().NodesBegin(); nit!=nodesEnd; ++nit ) {
-         auto onit( original_node_numbers.find( (*nit).Coordinate() ) );
-         if ( onit != onodesEnd ) {
-              if ( (*nit).Idx() != (*onit).second ) {
-                   if ( first_call ) {
-                        if ( verbose ) cout <<"\nANSYS_Model3D::RestoreOriginalNodeNumbering: changed indices of following nodes:";
-                        first_call   = false;
-                        made_changes = true;
-                     }
-                   if ( verbose ) cout <<"\n\t"<< (*nit).Idx() <<" -> "<< (*onit).second;
-                }
-              (*nit).Idx( (*onit).second );
-           }
-         else
-           throw csmp::Exception( ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
-                                 "node could not be identified; has it been newly created?" );
-      }
-   
-   return made_changes;
+     // making a binary tree of the original node numbers, searchable for point coordinates
+	 map<Point<3U>, size_t>  original_node_numbers;
+	 for (size_t i = 0U; i<node_coords_.size(); ++i)
+		 original_node_numbers.insert(make_pair(node_coords_[i], i));
+
+	 // renumbering the nodes of the model consecutively
+	 bool first_call(true), made_changes(false);
+	 const auto onodesEnd(original_node_numbers.end());
+	 
+	 // traversal of the existing mesh nodes to find all its elements	
+	 deque<Node<3U>*> nodes;
+	 deque<Element<3U>*> elmts;
+	 exploreNodesAndElementsFromMesh(&Mesh(), nodes, elmts);
+	 sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	 
+	 for (auto nit : nodes) {
+		 auto onit(original_node_numbers.find(nit->Coordinate()));
+		 if (onit != onodesEnd) {
+			 if (nit->Idx() != (*onit).second) {
+				 if (first_call) {
+					 if (verbose) cout << "\nANSYS_Model3D::RestoreOriginalNodeNumbering: changed indices of following nodes:";
+					 first_call = false;
+					 made_changes = true;
+				 }
+				 if (verbose) cout << "\n\t" << nit->Idx() << " -> " << (*onit).second;
+			 }
+			 nit->Idx((*onit).second);
+		 }
+		 else
+			 throw csmp::Exception(ERROR, "ANSYS_Model3D::RestoreOriginalNodeNumbering:",
+				 "node could not be identified; has it been newly created?");
+	 }
+
+	 return made_changes;
    
  } // end RestoreOriginalNodeNumbering
 

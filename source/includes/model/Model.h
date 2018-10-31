@@ -280,6 +280,9 @@ public:
     /// renumbers everything, starting face and interface numbers after element index max; TODO: deprecate
     size_t UpdateIndices() const;
 
+	/// renumbers everything, starting face and interface numbers after element index max in the subdomain; TODO: deprecate
+	size_t UpdateIndices( const char* region_name ) const;
+
     /// sets the values of the distributed variable all across the model; to enter scalar value use makeScalar(flag,value) helper function
     template<class T>
     void InputPropertyValue( const char* input_prop, const T& value );

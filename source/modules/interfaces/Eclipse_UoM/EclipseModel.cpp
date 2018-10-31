@@ -176,14 +176,6 @@ void EclipseModel::Initialize()
         // identifying box boundaries if any
         EstablishRegularities();
         
-        // initialising grid to mesh i,j,k cell reference system needed to assign values from grid
-        auto& meshmgr = Mesh();
-        for (auto& entry : mesh_interface.IJKMap()) {
-          auto coord = entry.first;
-          Element<3u>* e = &meshmgr.ElementAtIndex(entry.second);
-          ijk_to_elmt_.emplace(coord, e);
-          elmt_to_ijk_.emplace(e, coord);
-        }
     }
     // ---------------------------------------------------
     // catching all possible standard and csmp::Exceptions
@@ -282,12 +274,12 @@ void EclipseModel::CreateBoundariesAroundFaults( bool keep_fault_regions )
 {
     this->MergeRegions(faults_,"FAULTS");
     faults_.insert("FAULTS");
-    this->InsertBoundary("FAULTS",csmp::IRREGULAR,keep_fault_regions);
+	this->InsertBoundary( csmp::IRREGULAR, "FAULTS" );
 
     // create boundaries
     for( std::set<std::string>::const_iterator
          rit = faults_.begin(); rit != faults_.end(); ++rit )
-        this->InsertBoundary( (*rit).c_str(), csmp::IRREGULAR, keep_fault_regions );
+		 this->InsertBoundary( csmp::IRREGULAR, (*rit).c_str() );
 }
 
 

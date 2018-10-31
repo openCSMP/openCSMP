@@ -983,13 +983,35 @@ namespace csmp
 
     cout <<"\nNaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX(): Initialising fluid properties"<< endl;
 
-    int count(0);
-    for ( auto it = pmesh.NodesBegin(); it != pmesh.NodesEnd(); it++ )
-      {
-        //	cout << count << endl;
-        count++;
-        // 1. reading input variables (fluid)
-        ReadAllVariables( &(*it) );
+	set<csmp::Node<dim>*>    discovered_nodes;
+	deque<csmp::Node<dim>*>  current_nodes;
+	for (size_t n = 0U; n < pmesh.NodeGroups(); n++) {
+		// starting at the root node in each region
+		auto root_node = pmesh.RootNode(n);
+		discovered_nodes.insert(root_node);
+		current_nodes.push_back(root_node);
+		while (!current_nodes.empty()) {
+			const csmp::Node<dim>*  n_ptr(*current_nodes.begin());
+			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
+				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++) {
+					if (j != n_ptr->ParentNodeNumber(i)) {
+						pair<typename set<csmp::Node<dim>*>::iterator, bool>
+							new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
+						cout << n_ptr->Parent(i)->N(j)->Idx() << " ";
+						if (new_node.second) current_nodes.push_back(n_ptr->Parent(i)->N(j));
+					}
+				}
+			}
+			current_nodes.pop_front();
+		}
+	}
+
+	int count(0);
+	for ( auto it : discovered_nodes ) {
+		//	cout << count << endl;
+		count++;
+		// 1. reading input variables (fluid)
+		ReadAllVariables(it);
         tp() = t();
         mtp() = 0.01;
         ml() = mlp() = mv() = mvp() = src_rate() = 0.0;

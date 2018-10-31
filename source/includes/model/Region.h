@@ -3,7 +3,6 @@
 
 #include "Element.h"
 #include "ModelSubDomain.h"
-#include "PrimitiveContainer.h"
 
 namespace csmp {
 
@@ -102,7 +101,7 @@ class Region : public ModelSubDomain<dim,Element> {
   
     /// re-constructor for regions via the MeshManager
     Region( const PropertyDatabase<dim>&,
-            const MeshManager<dim>&, ///< not constant since write access is granted to region
+                  MeshManager<dim>&,
             const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
     // --------------------------------------------
@@ -147,10 +146,6 @@ class Region : public ModelSubDomain<dim,Element> {
     void   Accumulate( typename std::deque<csmp::Element<dim> >::iterator start,
                        typename std::deque<csmp::Element<dim> >::iterator end );
 
-    /// accumulate a range of elements into a region defined by iterators over a CSMP primitive container
-    void   Accumulate( typename PrimitiveContainer<csmp::Element<dim> >::iterator start,
-                       typename PrimitiveContainer<csmp::Element<dim> >::iterator end );
-
     /// accumulate a range of elements into a region defined by constant iterators (accessors only) over an STL vector container
     void   Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
                        typename std::vector<csmp::Element<dim>*>::const_iterator end );
@@ -166,12 +161,8 @@ class Region : public ModelSubDomain<dim,Element> {
                                typename std::vector<csmp::Element<dim>*>::const_iterator end,
                                std::vector<size_t>& element_ids );
 
-    /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids'
-    void   AccumulateByNumber( typename PrimitiveContainer<csmp::Element<dim> >::iterator start,
-                               typename PrimitiveContainer<csmp::Element<dim> >::iterator end,
-                               std::vector<size_t>& element_ids );
-
-  
+	void AccumulateByNumber( const csmp::MeshManager<dim>& mesh, std::vector<size_t>& element_ids );
+    
     // Accumulate based on property values
 
     /// accumulates region whose elements have properties in the ranges defined inside of the PropertyConstraints object
@@ -179,24 +170,15 @@ class Region : public ModelSubDomain<dim,Element> {
                                   typename std::vector<csmp::Element<dim>*>::const_iterator end, 
                                   const PropertyConstraints& );
   
-    /// accumulates region whose elements have properties in the ranges defined inside of the PropertyConstraints object
-    void   AccumulateWithinRange( typename PrimitiveContainer<Element<dim>>::iterator start,
-                                  typename PrimitiveContainer<Element<dim>>::iterator end,
-                                  const PropertyConstraints& );
-  
-
     /// accumulates elements where (at least one node) has 'property' values in the range defined by 'min/max'
     void   AccumulateWithinRange( typename std::vector<csmp::Element<dim>*>::const_iterator start, 
                                   typename std::vector<csmp::Element<dim>*>::const_iterator end,
                                   const char* property,
                                   double64 min, double64 max );
-  
-    /// accumulates elements where (at least one node) has 'property' values in the range defined by 'min/max'
-    void   AccumulateWithinRange( typename PrimitiveContainer<Element<dim>>::iterator start,
-                                  typename PrimitiveContainer<Element<dim>>::iterator end,
-                                  const char* property,
-                                  double64 min, double64 max );
-  
+
+	void AccumulateWithinRange( const csmp::MeshManager<dim>& mesh, const PropertyConstraints& );
+
+	void AccumulateWithinRange( const csmp::MeshManager<dim>& mesh, const char* property, double64 min, double64 max );
 
     // Accumulate based on the location
 
@@ -205,12 +187,8 @@ class Region : public ModelSubDomain<dim,Element> {
                                         typename std::vector<csmp::Element<dim>*>::const_iterator end, 
                                         const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
-    /// accumulates region of elements whose barycenter lies within the defined bounding box
-    void   AccumulateRectangularRegion( typename PrimitiveContainer<csmp::Element<dim> >::iterator start,
-                                        typename PrimitiveContainer<csmp::Element<dim> >::iterator end,
-                                        const Point<dim>& xyz_min, const Point<dim>& xyz_max );
-  
-
+	void AccumulateRectangularRegion( const csmp::MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+	
     /// Accumulate from the largest component in a mesh
     size_t FromLargestComponent( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity );
 
@@ -276,11 +254,7 @@ class Region : public ModelSubDomain<dim,Element> {
   
     /// Local variable storage interface
     virtual PLACEMENT Placement() const { return REGION; }
-
-    // TODO: remove: not the task of a region
-    /// Method for permanent deletion of existing elements, including correction of neighbor connectivity
-    void   DetachElementsFromNodesAndNeighbors() const;
-
+	    
     // TODO: trivial and unclear
     virtual bool  ValidVariable( const char* variableName ) const;
 

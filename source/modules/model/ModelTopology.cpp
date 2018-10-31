@@ -1426,6 +1426,18 @@ template void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<2U>& );
 template void ModelTopology::RemoveLowDimElementsFromRegions( csmp::VSet<3U>& );
 
 
+/**
+	return names of regions in the model
+*/
+void ModelTopology::RegionNames(std::vector<std::string>& region_names) const
+{
+	std::string region_name;
+	size_t idx(0U);
+	for (std::map<std::string, std::pair<std::set<std::string>, std::vector<size_t> > >::const_iterator
+		it = model_regions.begin(); it != model_regions.end(); it++) {
+		region_names.push_back( (*it).first );
+	}
+}
 
 /*
     Region properties

@@ -33,9 +33,9 @@ void BoundaryInterface_Test::run()
   {
       TestBoxShapedModel();
   
-      string  input_file("fault_boundary_test");
-      // input_file = "hex2_s"; // hexahedral element test model
-      //input_file = "prism_test"; // hexahedral element test model
+      string  input_file("fault_boundary_test");	  
+      //input_file = "hex2_s"; // hexahedral element test model
+      //input_file = "prism_test"; // hexahedral element test model	  
       const size_t dim(3);
 
       // ------------------------------
@@ -65,7 +65,123 @@ void BoundaryInterface_Test::run()
       if ( verbose_ ) cout <<"\nBoundaryInterface_Test::run: identified "<< subregions <<" region patches in region NORMAL_FAULT touching "<< regions <<" model regions.\n";
       if ( verbose_ ) vtu.OutputDataToVTU( "test", patch_tag, string("NORMAL_FAULT"), 0 );
     
-    
+	  VTU_Interface<3> vtu_boundary(model);
+	  {
+		  std::string boundary_name("LEFT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if(model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }	  
+	  {
+		  std::string boundary_name("RIGHT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("FRONT");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("BACK");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("TOP");
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+	  {
+		  std::string boundary_name("BOTTOM");		  
+		  std::string variableName("face variable");
+		  Boundary<dim>& boundary(model.Boundary(boundary_name));
+		  Index areaKey(model.Database().StorageKey(variableName.c_str()));
+		  assert(areaKey.place == FACE); // this needs to be done for Face::Read bc Read is inherited from Element and can
+										 // either be Face, Element or InterFace
+		  ScalarVariable area(PLAIN, 0.);
+		  size_t surfaceElementCount(0);
+		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  {
+			  area = (*it)->Area();
+			  (*it)->Store(areaKey, area);
+			  ++surfaceElementCount;
+		  }
+		  if (model.ContainsBoundary(boundary_name))
+			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+	  }
+
+	  
 
       /// discerning patches by values for the region in terms of the diagnostic element variable
       // -------------------------------------------------------------
@@ -102,10 +218,11 @@ void BoundaryInterface_Test::run()
         }
       if ( verbose_ ) cout << endl;
 
+	  //JC: check this!!!
       // testing whether boundary segments can be found by combined search criteria
-      const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
-      string patch_name = findBoundary( model, intersected_regions );
-      _test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
+      //const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
+      //string patch_name = findBoundary( model, intersected_regions );	  
+      //_test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
       const size_t patches_found = model.FindBoundaryNames( search_strings, region_patches_found );
@@ -1003,11 +1120,9 @@ size_t createInternalBoundaryFromLowerDimensionalRegion( Model<3U>& model, const
              // creating the faces
              // ------------------
              // storing pointers to the new faces in the vector from which the boundary will be constructed
-             face_vector.push_back( model.Mesh().PushBack( Face<3U>( *model_domain.E( (*pit).Element() ),
-                                                                      model_domain.E( (*pit).InnerElement() ),
-                                                                      model_domain.E( (*pit).OuterElement() ),
-                                                                      lvsFaces,
-                                                                      lvsIntegrationPoints ) ) );
+			 Face<3U> new_face(*model_domain.E((*pit).Element()), model_domain.E((*pit).InnerElement()),
+							  model_domain.E((*pit).OuterElement()), lvsFaces, lvsIntegrationPoints);
+             face_vector.push_back( model.Mesh().Add( new_face ) );
              // remembering which faces make up the patch
              face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
            }
