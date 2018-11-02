@@ -2330,7 +2330,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 	  std::vector<std::string> subdomains;	  
 	  std::string model_name = "Model";	  
 	  for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
-		  model_name = "Model_" + std::to_string(i);
+		  if (i > 0) model_name = "Model_" + std::to_string(i); // first model name is 'Model', ann then Model_1, Model_2 and so on.
 		  subdomains.push_back(model_name);
 	  }
 
@@ -2379,6 +2379,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 	  for (auto region_name : eligibleRegions) {		  
 		  for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
 			  std::string model_name = "Model_" + std::to_string(i);
+			  if (i == 0) model_name = "Model"; // first model name is 'Model', ann then Model_1, Model_2 and so on.
 			  std::string boundary_name = model_name + "_BOUNDARY";
 			  if (region_name != boundary_name) {			  
 				  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundariesFromDiscontiguousModel: Removing region '";

@@ -212,7 +212,9 @@ bool RegionInterface<dim,REGION_COMPLEX>::CreateNonUniqueMasterRegionFromRootNod
  }
 */
 
-
+/**
+Forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
+*/
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::CreateRegions(bool is_unique, bool reestablishNeighborConnectivity)
 {
@@ -222,13 +224,12 @@ bool RegionInterface<dim, REGION_COMPLEX>::CreateRegions(bool is_unique, bool re
 
 	bool ret = true;
 	for (size_t i = 0; i < meshMgr.NodeGroups(); i++) {
-		std::string regionname = "Model_" + std::to_string(i);		
+		std::string regionname = "Model_" + std::to_string(i);
+		if (i == 0) regionname = "Model"; // first region name is 'Model', ann then Model_1, Model_2 and so on.
 
 		// does this region already exist
 		if (ContainsRegion(regionname)) {
-			csmp_error.notice(WARNING, "RegionInterface<dim,REGION_COMPLEX>::CreateRegions:",
-				regionname, "region already exists; nothing was done.");
-			ret = false;
+			RemoveRegion(regionname.c_str(), false);
 		}
 
 		std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
