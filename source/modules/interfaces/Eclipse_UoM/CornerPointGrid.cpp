@@ -527,7 +527,7 @@ namespace csmp {
 			}
 		}
 
-		/** JC: Why is it needed???
+		/**
 		x stays, y = -z and z=y.
 		*/
 		void CornerPointGrid_UoM
@@ -1494,9 +1494,8 @@ namespace csmp {
 			}
 
 			// 4. Set up the rest of the vset
-			// JC: There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.
-			vset.RemovePfverts();
-			//vset.ResizePfverts(generator.fem_types.size());
+			// There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.
+			vset.RemovePfverts();			
 			vset.ResizePlist(generator.plist.size());
 			vset.AddPlist(generator.plist.begin(), generator.plist.end());
 			vset.AddElementTypes(generator.fem_types.begin(), generator.fem_types.end());

@@ -563,7 +563,7 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		copy(node_connector.begin(), node_connector.end(), back_inserter(org_nodes));
 
 		// starting at the first node
-		discovered_nodes.insert(node_connector.front());
+		//discovered_nodes.insert(node_connector.front());
 		current_nodes.push_back(node_connector.front());
 
 		size_t group_idx = 0U;
@@ -587,9 +587,6 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 				current_nodes.pop_front();
 			}
 			if (discovered_nodes.size() == 0) {
-				if (csmp_error.Verbose())
-					cout << "\nMeshManager<" << dim << ">::Initialize: note that a certain region has only a node..." << endl;
-
 				discovered_nodes.insert(org_nodes.front());
 				explored_node_groups.push_back(discovered_nodes);
 				org_nodes.pop_front();
@@ -981,7 +978,7 @@ void MeshManager<dim>::InitializeFiniteVolumeStencils(const PropertyDatabase<dim
 	const IntegrationPointVariables ipvs(pref.IntegrationPointVariablesAt(ELEMENT));
 	
 	for (auto e : elmts) {
-		if (!e->FV())
+		if (e->FV() == NULL)
 		{
 			e->AssignFiniteVolume(fvs_manager.Stencil(e->FE_Type()));
 			e->ResizePropertyStorage(lvs, ipvs);

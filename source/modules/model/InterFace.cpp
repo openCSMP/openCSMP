@@ -173,8 +173,8 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
  {
     assert( &ifc != this );
  
-    FiniteElementPolicy<dim,csmp::InterFace>::Assign(move(ifc.FE()));
-    FiniteVolumePolicy<dim,csmp::InterFace>::AssignFiniteVolume(move(ifc.FV()));
+    if ( ifc.FE() ) FiniteElementPolicy<dim,csmp::InterFace>::Assign(move(ifc.FE()));
+    if ( ifc.FV() ) FiniteVolumePolicy<dim,csmp::InterFace>::AssignFiniteVolume(move(ifc.FV()));
 
     idx_                    = ifc.idx_;
     interface_connector_    = ifc.interface_connector_;

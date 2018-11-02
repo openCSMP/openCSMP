@@ -59,8 +59,7 @@ void Region_Test::run()
     // -----------------------------------------------------
     TestBoundaryFaceFunctionality(); // pyramid-hexa model generated with vsetMakers
     TestBoundaryFaceFunctionality("cube_flag");
-	//JC: invalid data. check if it is a discontiguous model.
-    //TestBoundaryFaceFunctionality("hex1_3");
+    TestBoundaryFaceFunctionality("hex1_3");
 
 
     // 2. test of the functionality of regions

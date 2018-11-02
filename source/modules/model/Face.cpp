@@ -412,8 +412,8 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
  {
     assert( &fc != this );
 
-    FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
-    FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
+    if ( fc.FE() ) FiniteElementPolicy<dim,csmp::Face>::Assign(move(fc.FE()));
+    if ( fc.FV() ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume(move(fc.FV()));
    
     idx_             = move(fc.idx_ );
     face_connector_  = move(fc.face_connector_);

@@ -289,26 +289,21 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
 
-	const bool contiguous_model( (mesh_manager_.ElementGroups() == 1) );
-
 	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-	bool valid_model_region = false;	
-	if(contiguous_model)
-		valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
-	else
-		valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+	bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
+
+	bool contiguous_model( false );
+	if ( valid_model_region ) contiguous_model = true;
+	else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);    
     
-    // if the 'Model' region or the contiguous mutiple regions contains their elements and nodes
-	if (!valid_model_region) {
+	if ( !valid_model_region ) {
 		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
 			"model appears to contain domains that are not connected to one another!");
 	}
 
     cout <<"\nModel<dim>::Initialize: ";
-	if (contiguous_model)
-		cout << "Coontiguous mesh has been built successfully..." << endl;
-	else
-		cout << "Discontiguous mesh has been built successfully..." << endl;
+	if ( contiguous_model ) cout << "Coontiguous model has been built successfully..." << endl;
+	else cout << "Discontiguous model has been built successfully..." << endl;
 
     // 6. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );	
@@ -320,8 +315,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
       }
 
     // 7. forming Boundaries
-    if ( create_boundaries )
-      {
+    if ( create_boundaries ) {
           const bool remove_original_lower_dimensional_regions(true);
 		  // if the model is box-shaped (albeit perhaps with irregular top surface)
 		  if (!fully_irregular_mesh) {
@@ -339,10 +333,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 		  }
 	}
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
-
-	// updating the mesh after forming boundaries
-	//mesh_manager_.Update();
-
+	
     // 8. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
@@ -2903,7 +2894,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      this->InputAllRegionsFromBinary( BinaryRegionsFileName(model_name).c_str() );
      
 	 // making sure that the computational region has been built
-	 const bool contiguous_model((mesh_manager_.ElementGroups() == 1));
+	 const bool contiguous_model( mesh_manager_.ElementGroups() == 1 );
 	 if( contiguous_model )
 		if ( !this->ContainsRegion("Model") )
 			throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
@@ -2912,8 +2903,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      this->InputAllBoundariesFromBinary( BinaryBoundariesFileName(model_name).c_str() );
 
      // 8. reconstructing the splitboundaries
-	 // JC: this is not completed yet.
-     //this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
+     this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
 
 	 // 9. do a final sanity check
 	 CheckElementsAfterBuilding();
@@ -2921,12 +2911,6 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
      cout << "\nModel<"<< dim <<">::InputFromBinaryFile: input from binaries (file set: "<< model_name <<") completed successfully.\n\n";
 
  } // end InputFromBinaryFile
-
-
-// TESTING
-//for ( auto bit=this->BoundariesBegin(); bit!=this->BoundariesEnd(); ++bit )
-//  (*bit).second.Out();
-
 
   
   template<size_t dim>

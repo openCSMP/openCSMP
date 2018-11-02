@@ -193,8 +193,8 @@ template<size_t dim>
 Element<dim>& Element<dim>::operator=( const Element<dim>& el )
  {
     if ( &el != this ) {
-        FiniteElementPolicy<dim,csmp::Element>::Assign(el.FE());
-        FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(el.FV());
+        if ( el.FE() ) FiniteElementPolicy<dim,csmp::Element>::Assign(el.FE());
+        if ( el.FV() ) FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(el.FV());
         at_boundary_    = el.at_boundary_;
         idx_            = el.idx_;
         elmt_connector_ = el.elmt_connector_;
@@ -215,8 +215,8 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
     // should never happen because a temporary variable cannot be an lvalue
     assert( &el != this );
 
-    FiniteElementPolicy<dim,csmp::Element>::Assign(move(el.FE()));
-    FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(move(el.FV()));
+    if ( el.FE() ) FiniteElementPolicy<dim,csmp::Element>::Assign(move(el.FE()));
+    if ( el.FV() ) FiniteVolumePolicy<dim,csmp::Element>::AssignFiniteVolume(move(el.FV()));
 
     at_boundary_    = move(el.at_boundary_);
     idx_            = move(el.idx_);
