@@ -290,12 +290,11 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
 
 	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-	bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
-
-	bool contiguous_model( false );
+	bool contiguous_model(false);
+	bool valid_model_region = this->CreateRegionFromRootNode("Model", place_in_unique_regions, !withNeighborConnectivity);
 	if ( valid_model_region ) contiguous_model = true;
-	else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);    
-    
+	else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+
 	if ( !valid_model_region ) {
 		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
 			"model appears to contain domains that are not connected to one another!");
@@ -333,7 +332,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 		  }
 	}
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
-	
+
     // 8. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
@@ -370,27 +369,18 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
     // 1. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), FE_Manager(), vset );
-  
-    // 2. Testing with a flood-fill whether the model is contiguous
-    //    if not Accumulate all will not have reached all the elements
-    if ( Mesh().Elements() < vset.Elements() )
-        csmp_error.notice( ERROR, "Model<dim>::Initialize:",
-                                  "Model appears to be fragmented. Are all regions connected?" );
-
-    // 3. forming root Region called "Model"
+   
+	// 2. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
     const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
     const bool place_in_unique_regions(true); // if there is no neighbor connectivity, it has to be re-established (!)
-	const bool contiguous_model((mesh_manager_.ElementGroups() == 1));
 
 	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-	bool valid_model_region = false;
-	if (contiguous_model)
-		valid_model_region = this->CreateRegionFromLargestComponent("Model", place_in_unique_regions, !withNeighborConnectivity);
-	else
-		valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+	bool contiguous_model(false);
+	bool valid_model_region = this->CreateRegionFromRootNode("Model", place_in_unique_regions, !withNeighborConnectivity);
+	if ( valid_model_region ) contiguous_model = true;
+	else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
 
-	// if the 'Model' region or the contiguous mutiple regions contains their elements and nodes
-	if (!valid_model_region) {
+	if ( !valid_model_region ) {
 		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
 			"model appears to contain domains that are not connected to one another!");
 	}
@@ -417,7 +407,12 @@ void Model<dim>::Initialize( bool isoparametric_elements,
                 this->EstablishBoxBoundaries();
                 if ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
             }
-          else this->EstablishBoundariesFromRegions( true );
+		  else {
+			  if (contiguous_model)
+				  this->EstablishBoundariesFromRegions( true );
+			  else
+				  this->EstablishBoundariesFromDiscontiguousModel( true );
+		  }
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 

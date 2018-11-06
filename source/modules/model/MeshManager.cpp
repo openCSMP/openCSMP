@@ -226,13 +226,13 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		{
 			Element<dim>* elmt = new Element<dim>(idx, fem_manager.E(csmpElementType), evars, cvars, NOT);
 			const size_t nodes(elmt->Nodes());
-			for (size_t j = 0U; j < nodes; ++j)
+			for (size_t j = 0U; j < nodes; j++)
 			{
 				elmt->Assign(j, node_connector[vset.Plist(elmt->Idx(), j)]);
 			}
 			elmt_connector.push_back(elmt);
-			++idx;
-			++first;
+			idx++;
+			first++;
 		}
 	}
 	// 2.2 If there are multiple element types
@@ -242,13 +242,13 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 			const int32 csmpElementType = vset.ElementType(idx);
 			Element<dim>* elmt = new Element<dim>(idx, fem_manager.E(csmpElementType), evars, cvars, NOT);
 			const size_t nodes(elmt->Nodes());
-			for (size_t j = 0U; j < nodes; ++j)
+			for (size_t j = 0U; j < nodes; j++)
 			{
 				elmt->Assign(j, node_connector[vset.Plist(elmt->Idx(), j)]);
 			}
 			elmt_connector.push_back(elmt);
-			++idx;
-			++first;
+			idx++;
+			first++;
 		}
 	}
 	n_elmts_ = elmt_connector.size();
@@ -261,7 +261,7 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 	if (vset.WithNeighbourConnectivity()) {
 		for (auto& e : elmt_connector) {
 			const size_t neighbors(e->Neighbors());
-			for (size_t j = 0U, nidx = 0u; j < neighbors; ++j) {
+			for (size_t j = 0U, nidx = 0u; j < neighbors; j++) {
 				// if there is a neighbor (as is the case if the stored index is greater than zero)			
 				if (j < vset.PfvertsSize(e->Idx())) {
 					const int32 index(static_cast<int32>(vset.Pfvert(e->Idx(), j)));
@@ -343,18 +343,18 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		}
 
 		// traversal of the existing mesh nodes to find all its faces
-		deque<set<Face<dim>*>>		explored_face_groups;
-		set<Face<dim>*>				discovered_faces;
-		deque<Face<dim>*>			current_faces;
-		deque<Face<dim>*>			org_faces;
-		copy(face_connector.begin(), face_connector.end(), back_inserter(org_faces));
+		deque<set<Face<dim>*>>	explored_face_groups;
+		set<Face<dim>*>			discovered_faces;
+		deque<Face<dim>*>		current_faces;
+		map<size_t, Face<dim>*> faces_map;
+		for (auto f : face_connector)
+			faces_map[f->Idx()] = f;
 
-		// starting at the first face
-		discovered_faces.insert(face_connector.front());
-		current_faces.push_back(face_connector.front());
+		// starting at the first face		
+		current_faces.push_back(faces_map.begin()->second);
 
 		size_t group_idx = 0U;
-		while (!org_faces.empty())
+		while (!faces_map.empty())
 		{
 			while (!current_faces.empty()) {
 				Face<dim>*  n_ptr(*current_faces.begin());
@@ -364,39 +364,44 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 
 					// if this neighbor is new one					
 					auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
-					if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
-
-					auto found_face = find(org_faces.begin(), org_faces.end(), n_ptr->Neighbor(i));
-					if (found_face != org_faces.end())
-						org_faces.erase(found_face);
+					if (new_face.second) {
+						current_faces.push_back(n_ptr->Neighbor(i));
+						faces_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the face from the discovered (but not yet explored) deque
 				current_faces.pop_front();
 			}
-			explored_face_groups.push_back(discovered_faces);
-			discovered_faces.clear();
-			group_idx++;
-
-			// if there is only one single interface left, it creates a new group of interface.
-			if (org_faces.size() == 1) {
-				discovered_faces.insert(org_faces.front());
+			if (discovered_faces.size() == 0) {
+				auto first_face = faces_map.begin()->second;
+				discovered_faces.insert(first_face);
 				explored_face_groups.push_back(discovered_faces);
+				faces_map.erase(first_face->Idx());
 				discovered_faces.clear();
 				group_idx++;
+				continue;
+			}
+			explored_face_groups.push_back(discovered_faces);
+
+			// if there is only one single face left, it creates a new group of faces.
+			if (faces_map.size() == 1) {
+				discovered_faces.clear();
+				auto first_face = faces_map.begin()->second;
+				discovered_faces.insert(first_face);
+				explored_face_groups.push_back(discovered_faces);
 				break;
 			}
-			if (org_faces.size() > 0) current_faces.push_back(org_faces.front());
+			if (faces_map.size() > 0) {
+				auto first_face = faces_map.begin()->second;
+				current_faces.push_back(first_face);
+			}
+
+			discovered_faces.clear();
+			group_idx++;
 		}
 
-		// assigning and trimming excess storage from the face pointer vector
 		for (auto group : explored_face_groups)
-		{
-			deque<Face<dim>*> faces_vec;
-			faces_vec.assign(group.begin(), group.end());
-			//sort(faces_vec.begin(), faces_vec.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-			root_face_group_.push_back(faces_vec.front());
-			faces_vec.clear();
-		}
+			root_face_group_.push_back((*group.begin()));
 	} // end faces
 
 	// 4. constructing the interfaces using the VSet nodes information
@@ -453,15 +458,15 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		deque<set<InterFace<dim>*>>	explored_interface_groups;
 		set<InterFace<dim>*>		discovered_interfaces;
 		deque<InterFace<dim>*>		current_interfaces;
-		deque<InterFace<dim>*>		org_interfaces;
-		copy(interface_connector.begin(), interface_connector.end(), back_inserter(org_interfaces));
+		map<size_t, InterFace<dim>*> interfaces_map;
+		for (auto f : interface_connector)
+			interfaces_map[f->Idx()] = f;
 
-		// starting at the first interface
-		discovered_interfaces.insert(interface_connector.front());
-		current_interfaces.push_back(interface_connector.front());
+		// starting at the first interface		
+		current_interfaces.push_back(interfaces_map.begin()->second);
 
 		size_t group_idx = 0U;
-		while (!org_interfaces.empty())
+		while (!interfaces_map.empty())
 		{
 			while (!current_interfaces.empty()) {
 				InterFace<dim>*  n_ptr(*current_interfaces.begin());
@@ -471,39 +476,44 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 
 					// if this neighbor is new one					
 					auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
-					if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
-
-					auto found_interface = find(org_interfaces.begin(), org_interfaces.end(), n_ptr->Neighbor(i));
-					if (found_interface != org_interfaces.end())
-						org_interfaces.erase(found_interface);
+					if (new_interface.second) {
+						current_interfaces.push_back(n_ptr->Neighbor(i));
+						interfaces_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the interface from the discovered (but not yet explored) deque
 				current_interfaces.pop_front();
 			}
-			explored_interface_groups.push_back(discovered_interfaces);
-			discovered_interfaces.clear();
-			group_idx++;
-
-			// if there is only one single interface left, it creates a new group of interface.
-			if (org_interfaces.size() == 1) {
-				discovered_interfaces.insert(org_interfaces.front());
+			if (discovered_interfaces.size() == 0) {
+				auto first_interface = interfaces_map.begin()->second;
+				discovered_interfaces.insert(first_interface);
 				explored_interface_groups.push_back(discovered_interfaces);
+				interfaces_map.erase(first_interface->Idx());
 				discovered_interfaces.clear();
 				group_idx++;
+				continue;
+			}
+			explored_interface_groups.push_back(discovered_interfaces);
+
+			// if there is only one single interface left, it creates a new group of interfaces.
+			if (interfaces_map.size() == 1) {
+				discovered_interfaces.clear();
+				auto first_interface = interfaces_map.begin()->second;
+				discovered_interfaces.insert(first_interface);
+				explored_interface_groups.push_back(discovered_interfaces);
 				break;
 			}
-			if (org_interfaces.size() > 0) current_interfaces.push_back(org_interfaces.front());
+			if (interfaces_map.size() > 0) {
+				auto first_interface = interfaces_map.begin()->second;
+				current_interfaces.push_back(first_interface);
+			}
+
+			discovered_interfaces.clear();
+			group_idx++;
 		}
 
-		// assigning and trimming excess storage from the interface pointer vector
 		for (auto group : explored_interface_groups)
-		{
-			deque<InterFace<dim>*> interfaces_vec;
-			interfaces_vec.assign(group.begin(), group.end());
-			//sort(interfaces_vec.begin(), interfaces_vec.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-			root_interface_group_.push_back(interfaces_vec.front());
-			interfaces_vec.clear();
-		}
+			root_interface_group_.push_back((*group.begin()));
 	} // end interfaces
 	
 	// ---------------------------------------------------------------------
@@ -559,37 +569,37 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		deque<set<Node<dim>*>>	explored_node_groups;
 		set<Node<dim>*>			discovered_nodes;
 		deque<Node<dim>*>		current_nodes;
-		deque<Node<dim>*>		org_nodes;
-		copy(node_connector.begin(), node_connector.end(), back_inserter(org_nodes));
+		map<size_t, Node<dim>*> nodes_map;
+		for (auto n : node_connector)
+			nodes_map[n->Idx()] = n;
 
 		// starting at the first node
-		//discovered_nodes.insert(node_connector.front());
-		current_nodes.push_back(node_connector.front());
+		current_nodes.push_back(nodes_map.begin()->second);
 
 		size_t group_idx = 0U;
-		while (!org_nodes.empty())
+		while (!nodes_map.empty())
 		{
 			while (!current_nodes.empty()) {
-				Node<dim>*  n_ptr(*current_nodes.begin());
+				auto n_ptr(*current_nodes.begin());
 				// for all neighbor nodes of the current node
 				for (size_t i = 0U; i < n_ptr->Neighbors(); i++) {
 					if (n_ptr->Neighbor(i) == NULL) continue;
 
 					// if this neighbor is new one					
 					auto new_node = discovered_nodes.insert(n_ptr->Neighbor(i));
-					if (new_node.second) current_nodes.push_back(n_ptr->Neighbor(i));
-
-					auto found_node = find(org_nodes.begin(), org_nodes.end(), n_ptr->Neighbor(i));
-					if (found_node != org_nodes.end())
-						org_nodes.erase(found_node);
+					if (new_node.second) {
+						current_nodes.push_back(n_ptr->Neighbor(i));
+						nodes_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the node from the discovered (but not yet explored) deque
 				current_nodes.pop_front();
 			}
 			if (discovered_nodes.size() == 0) {
-				discovered_nodes.insert(org_nodes.front());
+				auto first_node = nodes_map.begin()->second;
+				discovered_nodes.insert(first_node);
 				explored_node_groups.push_back(discovered_nodes);
-				org_nodes.pop_front();
+				nodes_map.erase(first_node->Idx());
 				discovered_nodes.clear();
 				group_idx++;
 				continue;
@@ -597,49 +607,55 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 			explored_node_groups.push_back(discovered_nodes);
 
 			// if there is only one single node left, it creates a new group of nodes.
-			if (org_nodes.size() == 1) {
-				discovered_nodes.insert(org_nodes.front());
-				explored_node_groups.push_back(discovered_nodes);
+			if (nodes_map.size() == 1) {
 				discovered_nodes.clear();
-				group_idx++;
+				auto first_node = nodes_map.begin()->second;
+				discovered_nodes.insert(first_node);
+				explored_node_groups.push_back(discovered_nodes);
 				break;
-			}			
-			if (org_nodes.size() > 0) current_nodes.push_back(org_nodes.front());
+			}
+			if (nodes_map.size() > 0) {
+				auto first_node = nodes_map.begin()->second;
+				current_nodes.push_back(first_node);
+			}
 
 			discovered_nodes.clear();
 			group_idx++;
 		}
 
-		// assigning and trimming excess storage from the node pointer vector
 		for (auto group : explored_node_groups)
-		{
-			deque<Node<dim>*> nodes_vec;
-			nodes_vec.assign(group.begin(), group.end());
-			//sort(nodes_vec.begin(), nodes_vec.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-			root_node_group_.push_back(nodes_vec.front());
-			nodes_vec.clear();
-		}
+			root_node_group_.push_back((*group.begin()));
+
 	} // end nodes
 
-	if(elmt_connector.size()>0){
-		//sort(elmt_connector.begin(), elmt_connector.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	set<Element<dim>*>	explored_elmt_groups;
+	if(elmt_connector.size()>0){		
 		// assgining the root pointers
 		for (auto root_node : root_node_group_)
 		{			
 			for (size_t i = 0; i < root_node->Parents(); i++) {
 				auto parent = root_node->Parent(i);
 				if (parent) {
-					root_elmt_group_.push_back(parent);
+					explored_elmt_groups.insert(parent);
 					break;
 				}
 			}
 		}
 	} // end elements
 
+	for (auto root_elmt : explored_elmt_groups)
+		root_elmt_group_.push_back(root_elmt);
+
+	if (root_node_group_.size() != root_elmt_group_.size()) {
+		root_node_group_.clear();
+		for (auto root_elmt : root_elmt_group_)
+			root_node_group_.push_back(root_elmt->N(0));
+	}
+
 	// 5. verify the constructed elements according to the VSet and assgin the root node and element
 	if (node_connector.size() != vset.Vertices() || elmt_connector.size() != vset.Elements()) {
-		cout << "\nMeshManager<" << dim << ">::ReconstructMeshAndVariableStorage: ";
-		cout << " The reconstructed elements have a different number of nodes than are stored in the VSet" << vset.Elements() << endl;
+		cout << "\nMeshManager<" << dim << ">::Initialize: ";
+		cout << " The constructed elements have a different number of nodes than are stored in the VSet" << vset.Elements() << endl;
 		return false;
 	}
 	return true;
@@ -675,15 +691,15 @@ void MeshManager<dim>::Update()
 		deque<set<Node<dim>*>>	explored_node_groups;
 		set<Node<dim>*>			discovered_nodes;
 		deque<Node<dim>*>		current_nodes;
-		deque<Node<dim>*>		org_nodes;
-		copy(nodes.begin(), nodes.end(), back_inserter(org_nodes));
+		map<size_t, Node<dim>*> nodes_map;
+		for (auto n : nodes)
+			nodes_map[n->Idx()] = n;
 
 		// starting at the first node
-		discovered_nodes.insert(nodes.front());
-		current_nodes.push_back(nodes.front());
+		current_nodes.push_back(nodes_map.begin()->second);
 
 		size_t group_idx = 0U;
-		while (!org_nodes.empty())
+		while (!nodes_map.empty())
 		{
 			while (!current_nodes.empty()) {
 				Node<dim>*  n_ptr(*current_nodes.begin());
@@ -693,19 +709,19 @@ void MeshManager<dim>::Update()
 
 					// if this neighbor is new one					
 					auto new_node = discovered_nodes.insert(n_ptr->Neighbor(i));
-					if (new_node.second) current_nodes.push_back(n_ptr->Neighbor(i));
-
-					auto found_node = find(org_nodes.begin(), org_nodes.end(), n_ptr->Neighbor(i));
-					if (found_node != org_nodes.end())
-						org_nodes.erase(found_node);
+					if (new_node.second) {
+						current_nodes.push_back(n_ptr->Neighbor(i));
+						nodes_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the node from the discovered (but not yet explored) deque
 				current_nodes.pop_front();
 			}
 			if (discovered_nodes.size() == 0) {
-				discovered_nodes.insert(org_nodes.front());
+				auto first_node = nodes_map.begin()->second;
+				discovered_nodes.insert(first_node);
 				explored_node_groups.push_back(discovered_nodes);
-				org_nodes.pop_front();
+				nodes_map.erase(first_node->Idx());
 				discovered_nodes.clear();
 				group_idx++;
 				continue;
@@ -713,14 +729,17 @@ void MeshManager<dim>::Update()
 			explored_node_groups.push_back(discovered_nodes);
 
 			// if there is only one single node left, it creates a new group of nodes.
-			if (org_nodes.size() == 1) {
-				discovered_nodes.insert(org_nodes.front());
-				explored_node_groups.push_back(discovered_nodes);
+			if (nodes_map.size() == 1) {
 				discovered_nodes.clear();
-				group_idx++;
+				auto first_node = nodes_map.begin()->second;
+				discovered_nodes.insert(first_node);
+				explored_node_groups.push_back(discovered_nodes);
 				break;
 			}
-			if (org_nodes.size() > 0) current_nodes.push_back(org_nodes.front());
+			if (nodes_map.size() > 0) {
+				auto first_node = nodes_map.begin()->second;
+				current_nodes.push_back(first_node);
+			}
 
 			discovered_nodes.clear();
 			group_idx++;
@@ -741,19 +760,31 @@ void MeshManager<dim>::Update()
 	} // end nodes	
 
 	if (elmts.size()>0) {
-		//update the element root pointers
-		std::deque<Element<dim>*> updated_root_elmt_group;
+		// assgining the root pointers
+		set<Element<dim>*>	explored_elmt_groups;
 		for (auto root_node : root_node_group_)
 		{
 			for (size_t i = 0; i < root_node->Parents(); i++) {
 				auto parent = root_node->Parent(i);
 				if (parent) {
-					updated_root_elmt_group.push_back(parent);
+					explored_elmt_groups.insert(parent);
 					break;
 				}
 			}
 		}
+
+		//update the element root pointers
+		std::deque<Element<dim>*> updated_root_elmt_group;
+		for (auto root_elmt : explored_elmt_groups)
+			updated_root_elmt_group.push_back(root_elmt);
+
 		root_elmt_group_.swap(updated_root_elmt_group);
+
+		if (root_node_group_.size() != root_elmt_group_.size()) {
+			root_node_group_.clear();
+			for (auto root_elmt : root_elmt_group_)
+				root_node_group_.push_back(root_elmt->N(0));
+		}		
 	} // end elements
 
 	// forming root pointers of the faces for contiguous regions
@@ -763,15 +794,15 @@ void MeshManager<dim>::Update()
 		deque<set<Face<dim>*>>		explored_face_groups;
 		set<Face<dim>*>				discovered_faces;
 		deque<Face<dim>*>			current_faces;
-		deque<Face<dim>*>			org_faces;
-		copy(faces.begin(), faces.end(), back_inserter(org_faces));
+		map<size_t, Face<dim>*>		faces_map;
+		for (auto f : faces)
+			faces_map[f->Idx()] = f;
 
-		// starting at the first face
-		discovered_faces.insert(faces.front());
+		// starting at the first face		
 		current_faces.push_back(faces.front());
 
 		size_t group_idx = 0U;
-		while (!org_faces.empty())
+		while (!faces_map.empty())
 		{
 			while (!current_faces.empty()) {
 				Face<dim>*  n_ptr(*current_faces.begin());
@@ -781,28 +812,40 @@ void MeshManager<dim>::Update()
 
 					// if this neighbor is new one					
 					auto new_face = discovered_faces.insert(n_ptr->Neighbor(i));
-					if (new_face.second) current_faces.push_back(n_ptr->Neighbor(i));
-
-					auto found_face = find(org_faces.begin(), org_faces.end(), n_ptr->Neighbor(i));
-					if (found_face != org_faces.end())
-						org_faces.erase(found_face);
+					if (new_face.second) {
+						current_faces.push_back(n_ptr->Neighbor(i));
+						faces_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the face from the discovered (but not yet explored) deque
 				current_faces.pop_front();
 			}
-			explored_face_groups.push_back(discovered_faces);
-			discovered_faces.clear();
-			group_idx++;
-
-			// if there is only one single interface left, it creates a new group of interface.
-			if (org_faces.size() == 1) {
-				discovered_faces.insert(org_faces.front());
+			if (discovered_faces.size() == 0) {
+				auto first_face = faces_map.begin()->second;
+				discovered_faces.insert(first_face);
 				explored_face_groups.push_back(discovered_faces);
+				faces_map.erase(first_face->Idx());
 				discovered_faces.clear();
 				group_idx++;
+				continue;
+			}
+			explored_face_groups.push_back(discovered_faces);
+
+			// if there is only one single face left, it creates a new group of faces.
+			if (faces_map.size() == 1) {
+				discovered_faces.clear();
+				auto first_face = faces_map.begin()->second;
+				discovered_faces.insert(first_face);
+				explored_face_groups.push_back(discovered_faces);
 				break;
 			}
-			if (org_faces.size() > 0) current_faces.push_back(org_faces.front());
+			if (faces_map.size() > 0) {
+				auto first_face = faces_map.begin()->second;
+				current_faces.push_back(first_face);
+			}
+
+			discovered_faces.clear();
+			group_idx++;
 		}
 
 		// update the face root pointers
@@ -822,18 +865,18 @@ void MeshManager<dim>::Update()
 	if (interfaces.size() > 0) {
 		// finding the root pointers
 		// traversal of the existing mesh nodes to find all its interfaces
-		deque<set<InterFace<dim>*>>	explored_interface_groups;
-		set<InterFace<dim>*>		discovered_interfaces;
-		deque<InterFace<dim>*>		current_interfaces;
-		deque<InterFace<dim>*>		org_interfaces;
-		copy(interfaces.begin(), interfaces.end(), back_inserter(org_interfaces));
+		deque<set<InterFace<dim>*>>		explored_interface_groups;
+		set<InterFace<dim>*>			discovered_interfaces;
+		deque<InterFace<dim>*>			current_interfaces;
+		map<size_t, InterFace<dim>*>	interfaces_map;
+		for (auto f : interfaces)
+			interfaces_map[f->Idx()] = f;
 
-		// starting at the first interface
-		discovered_interfaces.insert(interfaces.front());
+		// starting at the first interface		
 		current_interfaces.push_back(interfaces.front());
 
 		size_t group_idx = 0U;
-		while (!org_interfaces.empty())
+		while (!interfaces_map.empty())
 		{
 			while (!current_interfaces.empty()) {
 				InterFace<dim>*  n_ptr(*current_interfaces.begin());
@@ -843,28 +886,40 @@ void MeshManager<dim>::Update()
 
 					// if this neighbor is new one					
 					auto new_interface = discovered_interfaces.insert(n_ptr->Neighbor(i));
-					if (new_interface.second) current_interfaces.push_back(n_ptr->Neighbor(i));
-
-					auto found_interface = find(org_interfaces.begin(), org_interfaces.end(), n_ptr->Neighbor(i));
-					if (found_interface != org_interfaces.end())
-						org_interfaces.erase(found_interface);
+					if (new_interface.second) {
+						current_interfaces.push_back(n_ptr->Neighbor(i));
+						interfaces_map.erase(n_ptr->Neighbor(i)->Idx());
+					}
 				}
 				// removing the interface from the discovered (but not yet explored) deque
 				current_interfaces.pop_front();
 			}
-			explored_interface_groups.push_back(discovered_interfaces);
-			discovered_interfaces.clear();
-			group_idx++;
-
-			// if there is only one single interface left, it creates a new group of interface.
-			if (org_interfaces.size() == 1) {
-				discovered_interfaces.insert(org_interfaces.front());
+			if (discovered_interfaces.size() == 0) {
+				auto first_interface = interfaces_map.begin()->second;
+				discovered_interfaces.insert(first_interface);
 				explored_interface_groups.push_back(discovered_interfaces);
+				interfaces_map.erase(first_interface->Idx());
 				discovered_interfaces.clear();
 				group_idx++;
+				continue;
+			}
+			explored_interface_groups.push_back(discovered_interfaces);
+
+			// if there is only one single interface left, it creates a new group of interfaces.
+			if (interfaces_map.size() == 1) {
+				discovered_interfaces.clear();
+				auto first_interface = interfaces_map.begin()->second;
+				discovered_interfaces.insert(first_interface);
+				explored_interface_groups.push_back(discovered_interfaces);
 				break;
 			}
-			if (org_interfaces.size() > 0) current_interfaces.push_back(org_interfaces.front());
+			if (interfaces_map.size() > 0) {
+				auto first_interface = interfaces_map.begin()->second;
+				current_interfaces.push_back(first_interface);
+			}
+
+			discovered_interfaces.clear();
+			group_idx++;
 		}
 
 		// update the face root pointers
