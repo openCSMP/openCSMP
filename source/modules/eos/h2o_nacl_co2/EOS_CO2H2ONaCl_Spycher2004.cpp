@@ -91,7 +91,7 @@ complex<double64> EOS_CO2H2ONaCl_Spycher04::complex_acos(const complex<double64>
     Range P:  P<600 bar
 
 */
-double64 EOS_CO2H2ONaCl_Spycher04::compressedVolumeCo2( double64 pressure, double64 temperature  )
+double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, double64 temperature  )
 {
     assert( temperature >= 12. );
     assert( temperature <= 100. );
@@ -365,7 +365,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressedVolumeCo2( double64 pressure, doubl
     // Range T:  12 < T <100 C
     // Range P:  P<600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::fugacityCo2( double64 pressure,
+double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
                                       double64 temperature,
                                       double64 phaseVolumeCo2 )
 {
@@ -456,7 +456,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::fugacityCo2( double64 pressure,
     // Range T:  12 < T <100 C
     // Range P:  P<600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::fugacityH2o( double64 pressure,
+double64 EOS_CO2H2ONaCl_Spycher04::FugacityH2o( double64 pressure,
                                                 double64 temperature,
                                                 double64 phaseVolumeCo2 )
 {
@@ -1251,7 +1251,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::a_mix(double64 temperature)
 /// compressed volume molar CO2
 double64 EOS_CO2H2ONaCl_Spycher04::V_Co2(double64 pressure,double64 temperature )
 {
-    return compressedVolumeCo2 (pressure,temperature);
+    return CompressedVolumeCo2 (pressure,temperature);
 }
 
 
@@ -1279,7 +1279,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_Co2(double64 pressure,double64 temperature,
 
     double64 kCo2G = thermEquilConstCo2G( temperature );
 
-    double64 phiCo2 = fugacityCo2( pressure,temperature,phaseVolumeCo2 );
+    double64 phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
 
 // to use the activity Coefficient of Battistelli Etal 1997 as it is ready to use
 // activityCoeff = activityCoefficientBattistelliEtal1997( temperature,msalt );
@@ -1316,9 +1316,9 @@ double64 EOS_CO2H2ONaCl_Spycher04::y_H2o(double64 pressure,double64 temperature,
 
      double64 kCo2G = thermEquilConstCo2G( temperature );
 
-     double64 phiCo2 = fugacityCo2( pressure,temperature,phaseVolumeCo2 );
+     double64 phiCo2 = FugacityCo2( pressure,temperature,phaseVolumeCo2 );
 
-     double64 phiH2o = fugacityH2o( pressure,temperature,phaseVolumeCo2 );
+     double64 phiH2o = FugacityH2o( pressure,temperature,phaseVolumeCo2 );
 
      // we will use the  activity Coefficient of Battistelli Etal 1997 as it is ready to use
 
