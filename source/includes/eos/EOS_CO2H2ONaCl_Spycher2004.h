@@ -158,7 +158,7 @@ public:
 
     void plot_thermodynamics();
 
-private:
+public:
     // constants
     const double64 R,a_h2oco2, b_co2, b_h2o, b_mix,
                    stoichio,p0,vH2o, vCo2,
@@ -168,13 +168,13 @@ private:
     // plotting
     const double64 Tmax,Tmin,Pmax,Pmin,msaltmin,msaltmax,nTP,nmsalt;
 
-    double64           compressedVolumeCo2( double64 pressure, double64 temperature );
+	double64           CompressedVolumeCo2(double64 pressure, double64 temperature);
 
-    double64           fugacityCo2( double64 pressure,
+    double64           FugacityCo2( double64 pressure,
                                     double64 temperature,
                                     double64 phaseVolumeCo2 );
 
-    double64           fugacityH2o( double64 pressure,
+    double64           FugacityH2o( double64 pressure,
                                     double64 temperature,
                                     double64 phaseVolumeH2o );
 

@@ -1,7 +1,8 @@
 #include "SplitBoundary_Test.h"
 #include "Boundary.h"
 #include "VTU_Interface.h"
-#include "ANSYS_Model.h"
+#include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
 #include "VTK_Interface.h"
 
 using namespace std;
@@ -655,11 +656,12 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
      //ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const std::string variables_file( "CSMP-variables.txt" );
-    ANSYS_Model<dim> model( model_name,
-                            model_name,
-                            variables_file,
-                            false, true, true, true );
-
+	Model<dim>* model = NULL;
+	if (dim == 2U)
+		model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	else if (dim == 3U)
+		model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	
      // Visualization
      VTU_Interface<dim> vtu( model );
      vtu.OmitZeroInFileName(false);
@@ -668,8 +670,8 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
      ScalarVariable regionValue( ANY, 0.0 );
 
      if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
-     model.InputPropertyValue( "element variable", regionValue );
-     for ( typename Model<dim>::regionIterator it = model.RegionsBegin(); it != model.RegionsEnd(); it++ )
+     model->InputPropertyValue( "element variable", regionValue );
+     for ( typename Model<dim>::regionIterator it = model->RegionsBegin(); it != model->RegionsEnd(); it++ )
      {
          regionValue += 1.0;
          (*it).second.InputPropertyValue( "element variable", regionValue );
@@ -677,7 +679,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
      }
      if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
-     model.OutputToDisk( model_name.c_str() );
+     model->OutputToDisk( model_name.c_str() );
 }
 
 template<size_t dim>
@@ -689,12 +691,13 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
      //ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const std::string variables_file( "CSMP-variables.txt" );
-    ANSYS_Model<dim> model( model_name,
-                            model_name,
-                            variables_file,
-                            false, true, true, true );
-
-     // Visualization
+	Model<dim>* model = NULL;
+	if (dim == 2U)
+		model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	else if (dim == 3U)
+		model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	
+	// Visualization
      VTU_Interface<dim> vtu( model );
      vtu.OmitZeroInFileName(false);
      list<string> outputProps;
@@ -707,20 +710,20 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
      inputFromFile( std::string(spliboundary_regions_file+"-noncontiguous-regions.txt").c_str(), regions );
 
      if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
-     model.InputPropertyValue( "element variable", regionValue );
+     model->InputPropertyValue( "element variable", regionValue );
      for ( std::vector<string>::const_iterator it=regions.begin(); it!=regions.end(); it++ )
      {
          regionValue += 1.0;
-         model.Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
+         model->Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
          vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
      }
      if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
      // Create SplitBoundaries
      for ( std::vector<string>::const_iterator it=regions.begin(); it!=regions.end(); it++ )
-         model.InsertSplitBoundary( (*it).c_str(), false /* do not delete region */ );
+         model->InsertSplitBoundary( (*it).c_str(), false /* do not delete region */ );
 
-     model.OutputToDisk( model_name.c_str() );
+     model->OutputToDisk( model_name.c_str() );
 }
 
 
@@ -733,14 +736,15 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
      //ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const std::string variables_file( "CSMP-variables.txt" );
-    ANSYS_Model<dim> model( model_name,
-                            model_name,
-                            variables_file,
-                            false, true, true, true );
-
-     // Visualization
-     VTU_Interface<dim> vtu( model );
+     const std::string variables_file( "CSMP-variables.txt" );
+	 Model<dim>* model = NULL;
+	 if (dim == 2U)
+	 	 model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	 else if (dim == 3U)
+		 model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	
+	 // Visualization
+     VTU_Interface<dim> vtu( *model );
      vtu.OmitZeroInFileName(false);
      list<string> outputProps;
      outputProps.push_back( "element variable" );
@@ -756,44 +760,44 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
      // 2. Splitting input regions if they are discontigouos
      bool discontiguous_regions(false);
      for ( set<string>::const_iterator it=interface_basic_sets.begin(); it!=interface_basic_sets.end(); ++it )
-       if ( !model.IsContiguous( (*it).c_str() ) ) {
+       if ( !model->IsContiguous( (*it).c_str() ) ) {
             if ( verbose_ ) cerr <<"\n\tSplitBoundary_Test::PrepareModel: discovered discontiguous region: "<< (*it);
             discontiguous_regions = true;
          }
      if ( discontiguous_regions ){
          set<string>  original_region_names;
-         for ( typename RegionInterface<dim,Region>::regionIterator it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it )
+         for ( typename RegionInterface<dim,Region>::regionIterator it=model->UniqueRegionsBegin(); it!=model->UniqueRegionsEnd(); ++it )
            if ( (*it).first != "Model" )
                original_region_names.insert( (*it).first.c_str() );
 
           // partitioning regions without revisiting new partitions that can inserted into region map
           for ( set<string>::const_iterator it=original_region_names.begin(); it!=original_region_names.end(); ++it )
-              model.PartitionRegionIntoContiguousSubRegions( (*it).c_str() );
+              model->PartitionRegionIntoContiguousSubRegions( (*it).c_str() );
      }
 
      // 3. Preparing low dimensional regions for making SplitBoundaries around
-     etablishContiguosRegionsList( model, interface_basic_sets, interface_sets );
+     etablishContiguosRegionsList( *model, interface_basic_sets, interface_sets );
 
-     model.MergeRegions( interface_sets, "interfaces" );
+     model->MergeRegions( interface_sets, "interfaces" );
      interfaces.clear();
      interfaces.push_back( "interfaces" );
      outputToFile( std::string( spliboundary_regions_file + "-contiguous-regions.txt").c_str(), interfaces );
 
      if ( verbose_ ) cout <<"\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
-     model.InputPropertyValue( "element variable", regionValue );
+     model->InputPropertyValue( "element variable", regionValue );
      for ( std::vector<string>::const_iterator it=interfaces.begin(); it!=interfaces.end(); it++ )
      {
          regionValue += 1.0;
-         model.Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
+         model->Region( (*it).c_str()).InputPropertyValue( "element variable", regionValue );
          if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
      }
      if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
      // Create SplitBoundaries
      for ( std::vector<string>::const_iterator it=interfaces.begin(); it!=interfaces.end(); it++ )
-         model.InsertSplitBoundary( (*it).c_str(), false /* do not delete region */ );
+         model->InsertSplitBoundary( (*it).c_str(), false /* do not delete region */ );
 
-     model.OutputToBinaryFile( model_name.c_str() );
+     model->OutputToBinaryFile( model_name.c_str() );
 }
 
 // input name of regions to split
@@ -1001,18 +1005,20 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
 
     // Load Model
     const std::string variables_file( "CSMP-variables.txt" );
-    ANSYS_Model<dim> modelIN( model_name,
-                              model_name,
-                              variables_file,
-                              false, true, true, true );
-  
+	Model<dim>* modelIN = NULL;
+
+	if ( dim == 2U )
+		modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	else if (dim == 3U)
+		modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D(model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true));
+	  
     // validating the model
     if ( verbose_ ) cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the regions:";
-    for ( auto it=modelIN.RegionsBegin(); it!=modelIN.RegionsEnd(); it++ )
+    for ( auto it=modelIN->RegionsBegin(); it!=modelIN->RegionsEnd(); it++ )
       if ( verbose_ ) cout <<"\n\tboundary: "<< (*it).first;
     if ( verbose_ ) cout << endl;
     if ( verbose_ ) cout <<"\nSplitBoundary_Test<"<< dim <<">::test_splitboundary_between_regions: model contains the boundaries:";
-    for ( auto it=modelIN.BoundariesBegin(); it!=modelIN.BoundariesEnd(); it++ )
+    for ( auto it=modelIN->BoundariesBegin(); it!=modelIN->BoundariesEnd(); it++ )
       if ( verbose_ ) cout <<"\n\tboundary: "<< (*it).first;
     if ( verbose_ ) cout << endl;
   
@@ -1021,9 +1027,9 @@ void SplitBoundary_Test::test_splitboundary_between_regions()
 	//if (verbose_) vtu.OutputDataToVTU("modelIN_", "element variable", string("ZONE1"), 0);
 
     // Create SplitBoundaries
-    modelIN.InsertSplitBoundary( "ZONE1", "ZONE2", false /* do not create region between */ );
-    modelIN.InsertSplitBoundary( "ZONE2", "ZONE3", false /* do not create region between */ );
-    modelIN.OutputToBinaryFile( model_name.c_str() );
+    modelIN->InsertSplitBoundary( "ZONE1", "ZONE2", false /* do not create region between */ );
+    modelIN->InsertSplitBoundary( "ZONE2", "ZONE3", false /* do not create region between */ );
+    modelIN->OutputToBinaryFile( model_name.c_str() );
 
     // Read Model from Binary
     Model<dim> model( model_name.c_str() );

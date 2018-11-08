@@ -2453,7 +2453,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
          AddFaces("Model");
       }
 
-    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model") ) );
+    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model_Boundary") ) );
 
     std::vector<std::string> eligibleRegions;
     eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
