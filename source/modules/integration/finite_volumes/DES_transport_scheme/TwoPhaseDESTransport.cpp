@@ -959,9 +959,9 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
                 const double64 sector_volume = eptr->SectorVolume(pnid);
                 pore_volume   += phi * sector_volume;
             }
-        }
-        
-        (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) );       
+            (*nit)->Store( this->key_fvPV, makeScalar( (*nit)->Status( this->key_fvPV), pore_volume ) ); 
+            (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) ); 
+        }         
     }
 }       
 
