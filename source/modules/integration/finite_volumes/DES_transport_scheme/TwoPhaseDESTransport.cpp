@@ -4,6 +4,7 @@
 #include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
 #include "CO2H2O_FunctionsModule1.h"
+#include "equilibrateH2O_CO2_NaCl.h"
 #if defined(_OPENMP)
 #include "omp.h"
 #endif
@@ -99,11 +100,15 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, -1.00E+08 ,1.00E+08);  
     if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("truncated FV")) m.CreateProperty( "truncated FV", "none", SCALAR, NODE, 1, 0 ,1);
+    if(!m.Database().IsDefined("equilibrate")) m.CreateProperty( "equilibrate", "none", SCALAR, NODE, 1, 0 ,1);
+    if(!m.Database().IsDefined("update phi and k")) m.CreateProperty( "update phi and k", "none", SCALAR, ELEMENT, 1, 0 ,1);
     
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
     m.Region("Model").InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );    
     m.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE); 
+    m.Region("Model").InputPropertyValue( "equilibrate", makeScalar(PLAIN,0), COMPLETE); 
+    m.Region("Model").InputPropertyValue( "update phi and k", makeScalar(PLAIN,0), COMPLETE); 
     
     //assigning keys 
     key_dsnw = INDEX<SCALAR,NODE> ( m.Database().StorageKey("variation rate nonwetting phase") );
@@ -117,6 +122,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     key_gradSn = INDEX<VECTOR,ELEMENT>( m.Database().StorageKey("saturation gradient") );
     key_gradP = INDEX<VECTOR,ELEMENT>( m.Database().StorageKey("pressure gradient") );
     key_cut = INDEX<SCALAR,NODE> ( m.Database().StorageKey("truncated FV") );
+    key_equilibrate = INDEX<SCALAR,NODE> ( m.Database().StorageKey("equilibrate") );
+    key_UpdatePhiK = INDEX<SCALAR,ELEMENT> ( m.Database().StorageKey("update phi and k") );
     
     //checking keys 
     if ( key_dsnw.place != NODE || key_dsnw.type != SCALAR )
@@ -151,7 +158,13 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
         "The 'pressure gradient' variable must be VECTOR and placed on ELEMENT"  );          
     if ( key_cut.place != NODE || key_cut.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'truncated FV' variable must be SCALAR and placed on NODE"  );                                                           
+        "The 'truncated FV' variable must be SCALAR and placed on NODE"  ); 
+    if ( key_equilibrate.place != NODE || key_equilibrate.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'equilibrate' variable must be SCALAR and placed on NODE"  );  
+    if ( key_UpdatePhiK.place != ELEMENT || key_UpdatePhiK.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
+        "The 'update phi and k' variable must be SCALAR and placed on ELEMENT"  );                                                                          
 }
 
 
@@ -641,6 +654,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, dou
     nd->Store(key_time, array);
 
     nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
+    nd->Store( key_equilibrate, makeScalar( nd->Status(key_equilibrate), 1 ) );
   }
 }
 
@@ -867,6 +881,62 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
         cerr <<"WARNING: OpenMP is not available, using serial mode"<<endl;
     AdvectVariable_DES_serial( model_time );
 #endif
+
+    if (equilibration_) {
+        equilibrateFluid();
+        updatePorosityandPermeability();
+    }
+}
+
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid()
+{
+    size_t equilibrate;
+    variables::VariableSet_CO2GeoSequestration props(db_);
+    for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
+    { 
+        equilibrate = (*nit)->Read(key_equilibrate);
+        if(equilibrate == 1) {
+            equilibrateH2O_CO2_NaCl(props, *(*nit) );
+            (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) );
+
+            for ( size_t t=0U; t<(*nit)->Parents(); t++ )
+            {
+                Element<dim>* const eptr((*nit)->Parent(t));
+                eptr->Store( key_UpdatePhiK, makeScalar( (*nit)->Status( key_UpdatePhiK), 1 ) );                 
+            }
+        }
+    }  
+} 
+
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
+{
+    size_t update;
+    variables::VariableSet_CO2GeoSequestration props(db_);
+    for ( auto eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
+    {
+        update = (*eit)->Read(key_UpdatePhiK);
+        if(update == 1) {
+            double64 phi = (*eit)->Read(this->key_phi);
+            double64 permeability = (*eit)->Read(this->key_k);
+            double64 phi3(phi * phi * phi);
+            double64 t1((1.-phi) * (1.-phi));
+            double64 constant = permeability*t1/phi3 ;     
+            
+            porosityWithSalt( props, *(*eit) );
+            
+            phi = (*eit)->Read(this->key_phi);
+            phi3 = phi * phi * phi;
+            t1 = (1.-phi) * (1.-phi);
+            permeability = constant*phi3/t1;
+            
+            (*eit)->Store( this->key_k, makeScalar( (*eit)->Status( this->key_k), permeability ) );
+            (*eit)->Store( key_UpdatePhiK, makeScalar( (*eit)->Status( key_UpdatePhiK), 0 ) );
+        }
+    }
 }
 
 

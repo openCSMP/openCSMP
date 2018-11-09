@@ -17,6 +17,7 @@ TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMultiComponentDE
                                                  double64 cfl_multiplier)
     : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier) 
 {
+    this->SetEquilibration(true);
     InitializeVariablesAndKeys(m);
     cout<<"TwoPhaseMultiComponentDESTransport constructed."<<endl;
 } // end constructor  
@@ -37,6 +38,7 @@ TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMultiComponentDE
                                                  double64 relaxing_factor)
     : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
+    this->SetEquilibration(true);
     InitializeVariablesAndKeys(m);
     cout<<"TwoPhaseMultiComponentDESTransport constructed."<<endl;
 } // end constructor 
@@ -61,7 +63,7 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariables
         "The 'mass variation rates carbonic phase' variable must be ARRAY and placed on NODE"  );       
     if ( key_dcmH2O.place != NODE || key_dcmH2O.type != ARRAY )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys:",
-        "The 'mass variation rates aqueous phase' variable must be ARRAY and placed on NODE"  ); 
+        "The 'mass variation rates aqueous phase' variable must be ARRAY and placed on NODE"  );         
         
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "mass variation rates carbonic phase", ArrayVariable(2,0.,PLAIN), COMPLETE);

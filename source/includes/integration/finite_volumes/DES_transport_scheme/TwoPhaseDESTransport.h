@@ -60,6 +60,9 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     virtual void Update_TDS(Event<dim>* nd, double64 delta_t);
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
     void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;};
+    void SetEquilibration(bool equilibration) {equilibration_ = equilibration;};
+    void equilibrateFluid();
+    void updatePorosityandPermeability();
     
 
   protected:
@@ -80,9 +83,11 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     double64 CFL_multiplier_; //cfl multiplier (applied on saturation front)
     double64 relaxing_factor_; //relaxing factor for cfl multiplier at areas other than saturation front
     bool no_flow_boundary_ = false;
+    bool equilibration_ = false;
     
-    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_cut;
+    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_cut, key_equilibrate;
     csmp::INDEX<VECTOR,ELEMENT> key_gradSn, key_gradP;
+    csmp::INDEX<SCALAR,ELEMENT> key_UpdatePhiK;
         
     // key_time - an ArrayVariable key for DES releated variables:
     // [0] current time stamp
