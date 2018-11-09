@@ -885,6 +885,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
     if (equilibration_) {
         equilibrateFluid();
         updatePorosityandPermeability();
+        updatePoreVolume();
     }
 }
 
@@ -899,7 +900,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid()
         equilibrate = (*nit)->Read(key_equilibrate);
         if(equilibrate == 1) {
             equilibrateH2O_CO2_NaCl(props, *(*nit) );
-            (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) );
 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
             {
@@ -939,6 +939,31 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
     }
 }
 
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
+{
+    size_t equilibrate;
+    for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
+    {    
+        equilibrate = (*nit)->Read(key_equilibrate);
+        if(equilibrate == 1) {   
+            double64 pore_volume (0.); 
+            for ( size_t t=0U; t<(*nit)->Parents(); t++ )
+            {
+                Element<dim>* const eptr((*nit)->Parent(t));
+                double64 phi = eptr->Read( this->key_phi);
+                const double64 thickness = eptr->Read( this->key_thi );
+                if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
+                const size_t pnid((*nit)->ParentNodeNumber(t));
+                const double64 sector_volume = eptr->SectorVolume(pnid);
+                pore_volume   += phi * sector_volume;
+            }
+        }
+        
+        (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) );       
+    }
+}       
 
 
 //advect variable with DES (discrete event simulation), serial version

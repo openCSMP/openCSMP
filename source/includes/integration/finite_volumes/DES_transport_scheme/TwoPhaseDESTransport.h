@@ -63,6 +63,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     void SetEquilibration(bool equilibration) {equilibration_ = equilibration;};
     void equilibrateFluid();
     void updatePorosityandPermeability();
+    void updatePoreVolume();
     
 
   protected:
