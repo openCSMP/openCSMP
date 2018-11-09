@@ -169,7 +169,7 @@ void EclipseModel::Initialize()
 #endif
          {
              // all cells are lumped into the region "Eclipse Model" that is stored in the model topology
-             const bool isoparametric(true), box_shaped_model(true);
+             const bool isoparametric(true);
              csmp::Model<3U>::Initialize( isoparametric, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model );
          }
       

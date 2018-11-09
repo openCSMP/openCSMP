@@ -1,5 +1,6 @@
 #include "LinearElasticityA_VVCase.h"
 #include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
 #include "LUdcmp_Solver.h"
@@ -8,7 +9,6 @@
 #include "NumIntegral_BT_D_B_dV.h"
 #include "StressesAndStrains2.h"
 #include "ExtractTensorVariableComponent.h"
-#include "ANSYS_Model.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ namespace csmp
       const VectorVariable<DIM> zeroVectorDirichlet( DIRICH, 0. );
       
       // establishing model & output facility
-      ANSYS_Model<2> model( prefix_, prefix_, "LinEl.txt" );
+      ANSYS_Model2D model( prefix_, prefix_, "LinEl.txt" );
       VTU_Interface<DIM> vtu( model );
       vtu.OmitZeroInFileName(true);
 

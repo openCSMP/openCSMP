@@ -110,7 +110,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     if( csmp_error.Verbose() )
-        std::cout <<"\nEclipseInterface<::ReadFile: Reading ECLIPSE ASCII file '"<<fname<<"'..."<< std::endl;
+        std::cout <<"\nEclipseInterface::ReadFile: Reading ECLIPSE ASCII file '"<<fname<<"'..."<< std::endl;
 
     std::ifstream  ifs;
     size_t    line_length(256);
@@ -136,7 +136,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
     }
 
     if( csmp_error.Verbose() )
-        std::cout <<"\nEclipseInterface<::ReadFile: file '"<< fname <<"' read successfully!"<< std::endl;
+        std::cout <<"\nEclipseInterface::ReadFile: file '"<< fname <<"' read successfully!"<< std::endl;
 
     // 3. convert grid from cell-centered to corner point format
     //    by creating new pillars in the center of the cells
