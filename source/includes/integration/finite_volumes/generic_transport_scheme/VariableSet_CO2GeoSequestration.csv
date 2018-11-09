@@ -55,6 +55,7 @@ fluid pressure,pf,Pa,SCALAR,0.00E+00,1.00E+09,NODE,computed primary variable,mul
 mixture viscosity,mum,Pa.s,SCALAR,1.00E-06,1.00E-02,NODE,computed,multiphase flow,,REMOVE - compute on the fly with a PDE operator
 nodal fluid volume source,nQV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,multiphase flow,,for the assignment of point sources
 fluid volume source,QV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,ELEMENT,input,multiphase flow,,to deal with volume changes in the fluid or compaction
+fluid mass source,QM,kg/(kg.s),SCALAR,-1.00E+08,1.00E+08,ELEMENT,input,multiphase flow,,to deal with mass changes in the fluid
 flux balance,fb,m3,SCALAR,-1.00E+08,1.00E+08,NODE,computed,multiphase flow,,incoming minus outgoing fluxes in a finite-volume cell
 gravity term,gt,N/m,VECTOR,-1.00E+08,1.00E+08,ELEMENT,calculated,multiphase flow,,REMOVE - compute on the fly with a PDE operator
 old saturation carbonic phase,sCO2_0,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,saturation at previous time level
