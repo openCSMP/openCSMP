@@ -275,7 +275,6 @@ class PropertyDatabase  {
    void   UpdateIndexReferences();
    void   DetachIndices( std::string parameterName );
    void   AssignVariableIndices();
-   void   UpdateIndicesAfterDelete();
    void   TextToBinaryFile( const char* text_database_file, bool echo_to_screen=false );
    void   EstablishIndexLocalAndIntegrationPointVariables();
    void   EstablishIndexOffsets();

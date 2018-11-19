@@ -46,13 +46,13 @@ class EclipseModel : public csmp::Model<3U> {
       /// wells which do not have a discrete representation inside of Eclipse
       template<class Container>  void GetWells( Container& data );
 
-      /// processing special regions
+      /// JC: remove it later - processing special regions
       void CreateBoundariesAroundFaults( bool keep_fault_regions = false );
   
-      // TODO: not implemented yet
+      /// JC: remove it later - TODO: not implemented yet
       void CreateSplitBoundariesAroundFaults( bool delete_fault_regions = false );
   
-      /// BOX flag nodes and elements of volumetric target region
+	  /// JC: remove it later -  BOX flag nodes and elements of volumetric target region
       void AssignBoxBoundaryFlagsWherePossible( const char* target_region );
   
       /// Get ijk coordinates of corner-point grid cell that corresponds to csmp::Element
@@ -66,10 +66,7 @@ class EclipseModel : public csmp::Model<3U> {
   private:
       /// Master method to build the model
       void Initialize();
-  
-      /// tries to partition boundary "Model" into more telling subregions: TOP, BOTTOM, INTERNAL etc.
-      void CreateBoundariesWherePossible();
-  
+
       // PROPS and other specs from RUNSPECS file
       EclipseModelSettings      eclipse_model_settings_;
       std::set<std::string>     regions_;
