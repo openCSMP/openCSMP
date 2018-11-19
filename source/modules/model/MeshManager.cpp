@@ -224,8 +224,8 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 
 		while (first != last)
 		{
-			Element<dim>* elmt = new Element<dim>(idx, fem_manager.E(csmpElementType), evars, cvars, NOT);
-			const size_t nodes(elmt->Nodes());
+			Element<dim>* elmt = new Element<dim>(idx, fem_manager.E(csmpElementType), evars, cvars, NOT);			
+			const size_t nodes(fem_manager.E(csmpElementType)->Nodes());
 			for (size_t j = 0U; j < nodes; j++)
 			{
 				elmt->Assign(j, node_connector[vset.Plist(elmt->Idx(), j)]);
@@ -241,7 +241,7 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 		{
 			const int32 csmpElementType = vset.ElementType(idx);
 			Element<dim>* elmt = new Element<dim>(idx, fem_manager.E(csmpElementType), evars, cvars, NOT);
-			const size_t nodes(elmt->Nodes());
+			const size_t nodes(fem_manager.E(csmpElementType)->Nodes());
 			for (size_t j = 0U; j < nodes; j++)
 			{
 				elmt->Assign(j, node_connector[vset.Plist(elmt->Idx(), j)]);
@@ -612,6 +612,8 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 				auto first_node = nodes_map.begin()->second;
 				discovered_nodes.insert(first_node);
 				explored_node_groups.push_back(discovered_nodes);
+				if (csmp_error.Verbose())
+					cout << "\nMeshManager<" << dim << ">::Initialize: the node (" << first_node->Idx() << ") doesn't have any parents and neighbours..." << endl;
 				break;
 			}
 			if (nodes_map.size() > 0) {
@@ -3419,7 +3421,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			ScalarVariable value;
 			size_t i(0U);
 			for (auto e : elmts) {
-				read((*pit).second, i++, value);
+				read((*pit).second, e->Idx(), value);
 				e->Store(key, value);
 			}
 		}

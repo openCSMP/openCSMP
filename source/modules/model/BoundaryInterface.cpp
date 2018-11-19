@@ -1248,7 +1248,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                     it=faceBoundaryMap_.insert( std::make_pair( info.name.c_str(), csmp::Boundary<dim>(database,mesh,info,bflag) ) );
                   //   ^^^^^^^^^^^^^^^
                   if ( !it.second )
-                     throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputAllBoundariesFromBinary:",
+                       throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputAllBoundariesFromBinary:",
                                             info.name, "Boundary could not be formed; issue with binary file." );
                
                   // 1.3 reading the variable values
@@ -1256,6 +1256,9 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                
                   // 1.4 reporting out
                   cout <<"\n\t\t"<< (*it.first).first <<" ("<< parseBoundary(bflag) <<", "<< (*it.first).second.Elements() <<" faces).";
+
+				  if (info.name.c_str() == "LEFT")
+					  cout << "error after this!!!\n";
          }
      else csmp_error.notice( WARNING, "BoundaryInterface::InputAllBoundariesFromBinary:",
                             bin_file, "does not contain any boundary descriptions; no boundaries were initialised." );
@@ -1544,11 +1547,11 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::AddFaces(const char* region)
     if ( it.second )
       {
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: creating boundary around " << region << std::endl;
-        boundaryComplex->UpdateIndices(region);
+        //boundaryComplex->UpdateIndices(region);
         //                                 FACE & BOUNDARY CREATION
         bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
 		assert( succeeded == true );
-        boundaryComplex->UpdateIndices(region);
+        //boundaryComplex->UpdateIndices(region);
         std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: created boundary around " << region << std::endl;
         return succeeded;
       }
@@ -2453,7 +2456,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
          AddFaces("Model");
       }
 
-    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model_Boundary") ) );
+    csmp::Boundary<dim>& modelBoundary( Boundary( std::string("Model_BOUNDARY") ) );
 
     std::vector<std::string> eligibleRegions;
     eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
@@ -2534,7 +2537,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
         (*fit)->AtBoundary( IRREGULAR );
  
     // the boundary called 'Model' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
-    faceBoundaryMap_.erase("Model");
+    faceBoundaryMap_.erase("Model_BOUNDARY");
 
     // for remaining (new) TOP and BOTTOM boundaries
   	for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it )
