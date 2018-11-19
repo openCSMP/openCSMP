@@ -62,7 +62,7 @@ class Fluid {
   
     // member is EOS module
 };
-
+/*
 //  unit conversions
 
     double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
@@ -88,7 +88,7 @@ class Fluid {
     double64  degreeCToKelvin( double64 temperatureInC );
 
     double64  KelvinTodegreeC( double64 temperatureInK );
-
+*/
 } // end csmp
 
 #endif /* CSMP_FLUID_H */

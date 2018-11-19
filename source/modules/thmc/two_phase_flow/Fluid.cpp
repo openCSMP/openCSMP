@@ -184,7 +184,7 @@ template class Fluid<3U,CO2H2O_FunctionsModule2>;
 
 
 
-
+/*
 // conversions
 
 
@@ -289,7 +289,7 @@ double64 KelvinTodegreeC( double64 temperatureInK )
 {
    return  temperatureInK - 273.15;
 }
-
+*/
 
 
 

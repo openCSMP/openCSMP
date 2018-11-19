@@ -32,19 +32,27 @@ namespace csmp {
 
   /// computes new compositions of aqueous and carbonic phase, precipitates salt if any, updates and saturations, densities and viscosities
   template<size_t dim>
-  void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration&, Node<dim>& );
+  void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration&, Node<dim>&, double64 del_t );
   
   /// for given p,T and composition equilibrate phases with one-another
   template<size_t dim>
-  void equilibrateFluid( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  void equilibrateFluid( const variables::VariableSet_CO2GeoSequestration&, Region<dim>&, double64 del_t );  
   
   /// computes (barycentric) porosity from volume fraction of salt that is occupying the pore space
   template<size_t dim>
   double64 porosityWithSalt( const variables::VariableSet_CO2GeoSequestration&, Element<dim>& );
   
+  /// accounts for porosity and permeability changes due to salt precipitation
+  template<size_t dim>
+  void updatePorosityAndPermeability( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  
   /// accounts for pore-volume changes due to salt precipitation
   template<size_t dim>
-  void updatePorosity( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  void updatePoreVolume( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );   
+  
+  /// update PTX based fluid properties
+  template<size_t dim>
+  void updatePTXBasedFluidProperties( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );   
 
 }
 

@@ -538,6 +538,7 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<di
     nd->Store(this->key_time, array);
     
     nd->Store( this->key_update, makeScalar( nd->Status(this->key_update), nd->Read(this->key_update) + 1 ) );
+    nd->Store( this->key_equilibrate, makeScalar( nd->Status(this->key_equilibrate), 1 ) );
   }
 }
 

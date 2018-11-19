@@ -12,6 +12,21 @@ using namespace std;
 
 namespace csmp {
 
+    double64  psiToPa( double64 pressureInPsi );
+
+    double64  paToPsi( double64 pressureInPa );
+
+    double64  paTobar( double64 pressureInPa );
+
+    double64  barTopa( double64 pressureInbar );
+
+    double64  degreeCToKelvin( double64 temperatureInC );
+
+    double64  KelvinTodegreeC( double64 temperatureInK );
+
+
+
+
 class EOS_CO2H2ONaCl_Spycher04 {
 
 public:
@@ -132,43 +147,7 @@ public:
 
     double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
 
-    double64  psiToPa( double64 pressureInPsi );
-
-    double64  paToPsi( double64 pressureInPa );
-
-    double64  paTobar( double64 pressureInPa );
-
-    double64  barTopa( double64 pressureInbar );
-
-    double64  degreeCToKelvin( double64 temperatureInC );
-
-    double64  KelvinTodegreeC( double64 temperatureInK );
-
-
-    double64 temp( double64 depth );
-
-    double64 pres( double64 depth );
-
-
-    void plot_brine();
-
-    void plot_AqueousPhase();
-
-    void plot_CarbonicPhase();
-
-    void plot_thermodynamics();
-
-public:
-    // constants
-    const double64 R,a_h2oco2, b_co2, b_h2o, b_mix,
-                   stoichio,p0,vH2o, vCo2,
-                   molarMassH2o, molarMassCo2, molarMassNacl,
-                   pSC,tSC,therm_grad,pres_grad,temp_surface,pres_surface,max_depth;
-
-    // plotting
-    const double64 Tmax,Tmin,Pmax,Pmin,msaltmin,msaltmax,nTP,nmsalt;
-
-	double64           CompressedVolumeCo2(double64 pressure, double64 temperature);
+    double64           CompressedVolumeCo2( double64 pressure, double64 temperature );
 
     double64           FugacityCo2( double64 pressure,
                                     double64 temperature,
@@ -322,6 +301,25 @@ public:
     double64           GasFormationVolumeFactor( double64 pressure, double64 temperature );
 
     double64           WaterFormationVolumeFactor( double64 pressure, double64 temperature ,double64 msalt);
+
+
+
+    // plotting
+    void plot_brine();
+
+    void plot_AqueousPhase();
+
+    void plot_CarbonicPhase();
+
+    void plot_thermodynamics();
+
+
+  private:
+    // constants
+    const double64 R,a_h2oco2, b_co2, b_h2o, b_mix,
+                   stoichio,p0,vH2o, vCo2,
+                   molarMassH2o, molarMassCo2, molarMassNacl,
+                   pSC,tSC;
 };
 
 

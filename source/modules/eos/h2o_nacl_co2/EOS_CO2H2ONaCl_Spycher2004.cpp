@@ -29,25 +29,7 @@ EOS_CO2H2ONaCl_Spycher04::EOS_CO2H2ONaCl_Spycher04()
 
       // standard condition
       pSC( 100000. ), // Standard pressure: SPE
-      tSC(15.), // standard temperature:SPE
-
-      // needed for plotting
-      Tmax(100.),
-      Tmin(20.),
-      Pmax(35000000.), //350 bar
-      Pmin(100000), // 1 bar
-      msaltmin(0.),
-      msaltmax(1.5), //87664.5 ppm
-      nTP(100),
-      nmsalt(4),
-
-      therm_grad(0.03), //3 C/100m
-      pres_grad(10000), // 0.1 bar/m
-
-      temp_surface(20), // 20 C
-      pres_surface(100000),// 1 bar
-
-      max_depth(2600) //2600 m
+      tSC(15.) // standard temperature:SPE
 {
 }
 
@@ -366,8 +348,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     // Range P:  P<600 bar
 */
 double64 EOS_CO2H2ONaCl_Spycher04::FugacityCo2( double64 pressure,
-                                      double64 temperature,
-                                      double64 phaseVolumeCo2 )
+                                                double64 temperature,
+                                                double64 phaseVolumeCo2 )
 {
     assert( temperature >= 12. );
     assert( temperature <= 100. );
@@ -986,7 +968,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oCarbon( double64 spycherA,
     //  II. Partitioning in Chloride Brines at 12-100oC and up to 600 bar
 */
 double64 EOS_CO2H2ONaCl_Spycher04::molarFracCO2Brine( double64 yH2o,
-                                            double64 spycherB )
+                                                      double64 spycherB )
 {
     // spycherA in bar-1
     // SpycherB in bar
@@ -1426,7 +1408,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::X_salt(double64 pressure,double64 temperature
 
     double64 xs=X_s(pressure,temperature,msalt );
 
-    return massFracH2oInAqueousPhase(xCo2,xH20,xs);
+    return massFracNaClInAqueousPhase(xCo2,xH20,xs);
 }
 
 
@@ -1461,7 +1443,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_salt(double64 molalityCO2, double64 msalt )
 */
 double64 EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double64 temperature )
 {
-    double64 vPartialmolar = ( 37.51 - 9.585e-2 * temperature + 8.740e-4 * pow( temperature, 2 ) - 5.044e-7 * pow( temperature, 3) );
+    const double64 temperature2(temperature * temperature);
+    double64 vPartialmolar = ( 37.51 - 9.585e-2 * temperature + 8.740e-4 * temperature2 - 5.044e-7 * temperature2*temperature );
 
     return vPartialmolar* 1e-6;// conversion from cm^3/mol to m^3/mol
 }
@@ -1516,15 +1499,18 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityBrine( double64 pressure,
     massFracSalt = molalNaClToMassFracNaClInAqueousPhase(mSalt)*1.e-2; //conversion from salt molality to salt mass fraction
 
     //  density brine = 1/(A - B * press - C * pow(press, 2.) + massFracSalt * D  + pow(massFracSalt, 2.) * E - massFracSalt * F * press  - pow( massFracSalt, 2.) * G * press - 0.5 * H  * pow( press, 2.))
-    A         = 1.006741e2 / pow(temp, 2.) - 1.127522 / temp + 5.916365e-3 - 1.035794e-5 * temp + 9.270048e-9 * pow(temp, 2.);
-    B         = 1.042948 / pow(temp, 2.) - 1.1933677e-2 / temp + 5.307535e-5 - 1.0688768e-7 * temp + 8.492739e-11 * pow(temp, 2.);
+    const double64 temp2(temp * temp);
+    const double64 press2(press * press);
+    A         = 1.006741e2 / temp2 - 1.127522 / temp + 5.916365e-3 - 1.035794e-5 * temp + 9.270048e-9 * temp2;
+    B         = 1.042948 / temp2 - 1.1933677e-2 / temp + 5.307535e-5 - 1.0688768e-7 * temp + 8.492739e-11 * temp2;
     C         = 1.23268e-9 - 6.861928e-12 * temp;
-    D         = -2.5166e-3 + 1.11766e-5 * temp - 1.70552e-8 * pow(temp, 2.);
-    E         = 2.84851e-3 - 1.54305e-5 * temp + 2.23982e-8 * pow(temp, 2.);
-    F         = -1.5106e-5 + 8.4605e-8 * temp - 1.2715e-10 * pow(temp, 2.);
-    G         = 2.7676e-5 - 1.5694e-7 * temp + 2.3102e-10 * pow(temp, 2.);
-    H         = 6.4633e-8 - 4.1671e-10 * temp + 6.8599e-13 * pow(temp, 2.);
-    dummy1    = A - B * press - C * pow(press, 2.) + massFracSalt * D  + pow(massFracSalt, 2.) * E - massFracSalt * F * press  - pow( massFracSalt, 2.) * G * press - 0.5 * H  * pow( press, 2.) ;
+    D         = -2.5166e-3 + 1.11766e-5 * temp - 1.70552e-8 * temp2;
+    E         = 2.84851e-3 - 1.54305e-5 * temp + 2.23982e-8 * temp2;
+    F         = -1.5106e-5 + 8.4605e-8 * temp - 1.2715e-10 * temp2;
+    G         = 2.7676e-5 - 1.5694e-7 * temp + 2.3102e-10 * temp2;
+    H         = 6.4633e-8 - 4.1671e-10 * temp + 6.8599e-13 * temp2;
+    const double64  massFracSalt2(massFracSalt * massFracSalt);
+    dummy1    = A - B * press - C * press2 + massFracSalt * D  + massFracSalt2 * E - massFracSalt * F * press  - massFracSalt2 * G * press - 0.5 * H  * press2;
     densBrine = 1 / dummy1;
 
     return    densBrine;
@@ -1635,7 +1621,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double64 temper
     pressureVolumeGradient  *=  temp;
     Aux1                    =   phaseVolCo2;
     Aux1                    -=  b;
-    Aux1                    =   pow( Aux1 , 2);
+    Aux1                    *=  Aux1;
     pressureVolumeGradient  /=  Aux1;
 
     cout << "pressureVolumeGradient1 " << pressureVolumeGradient <<endl;
@@ -1644,11 +1630,11 @@ double64 EOS_CO2H2ONaCl_Spycher04::compressibilityCarbonicPhase( double64 temper
     Aux2                    =   2.*a;
     Aux2                    *=  phaseVolCo2;
     Aux2                    =+  b*a;
-    Aux3                    =   pow( temp, 0.5);
-    Aux3                   *=  pow( phaseVolCo2, 2 );
-    Aux3                    *=  pow ( ( phaseVolCo2 + b ), 2);
-    Aux2                    /=  Aux3;
-    pressureVolumeGradient  +=  Aux2;
+    Aux3                    =   sqrt(temp);
+    Aux3                   *=  phaseVolCo2 * phaseVolCo2;
+    Aux3                   *=  pow ( ( phaseVolCo2 + b ), 2);
+    Aux2                   /=  Aux3;
+    pressureVolumeGradient +=  Aux2;
 
     betaCarb  =   -1;
     betaCarb  /=  phaseVolCo2;
@@ -1742,20 +1728,22 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
             BB(0.),
             press( pressure * 1e-6);
 
+    const double64 temperature2(temperature * temperature);
+    const double64 mSalt2(mSalt * mSalt);
 
-    cs          = dd1 + dd2 * temperature + dd3 * pow( temperature, 2 );
-    betaW       = beta1 + beta2 * temperature + beta3 * pow( temperature, 2 ) + beta4 * pow( temperature, 3 ) + beta5 * pow( temperature, 4 );
+    cs          = dd1 + dd2 * temperature + dd3 * temperature2;
+    betaW       = beta1 + beta2 * temperature + beta3 * temperature2 + beta4 * temperature2 * temperature + beta5 * temperature2 * temperature2;
     betaStar    = ( 2.5 * ( mSalt / cs ) - 2.0 * pow( ( mSalt / cs ), 2 ) + 0.5 * pow( ( mSalt / cs ), 3 ) );
     viscosBeta  = ( 0.545 + 2.8e-3 * temperature - betaW ) * betaStar + betaW;
-    aux4        = ( cc1 * ( 20 - temperature )  + cc2 * pow( ( 20 - temperature ), 2 ) + cc3 * pow( ( 20 - temperature ), 3 ) + cc4 * pow( ( 20 - temperature ), 4 ) )  / ( 96 + temperature );
+    aux4        = ( cc1 * ( 20 - temperature )  + cc2 * pow( ( 20. - temperature ), 2 ) + cc3 * pow( ( 20. - temperature ), 3 ) + cc4 * pow( ( 20. - temperature ), 4 ) )  / ( 96 + temperature );
     muW         = pow( 10, aux4 ) * 1002;
-    BB          = bb1 * mSalt + bb2 * pow( mSalt, 2 ) + bb3 * pow( mSalt, 3 );
-    AA          = aa1 * mSalt + aa2 * pow( mSalt, 2 ) + aa3 * pow( mSalt, 3 );
+    BB          = bb1 * mSalt + bb2 * mSalt2 + bb3 * mSalt2 * mSalt;
+    AA          = aa1 * mSalt + aa2 * mSalt2 + aa3 * mSalt2 * mSalt;
     muR         = AA + BB *  aux4;
     muR         = pow( 10, muR );
     muZero      = muR * muW ;
 
-    viscosBrine = muZero * ( 1 +  1e-3 * viscosBeta * ( press) ); //  to account for GPa^(-1 )
+    viscosBrine = muZero * ( 1 +  1e-3 * viscosBeta * press ); //  to account for GPa^(-1 )
 
     return viscosBrine*1e-6; //conversion from micro Pa s to Pa s
 }
@@ -1782,7 +1770,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityBrine( double64 pressure,
 
 */
 double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
-                                                 double64 phaseVolumeCo2 )
+                                                           double64 phaseVolumeCo2 )
 {
     const double64
             aa0(0.235156),
@@ -1802,13 +1790,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
 
     const double64 molarvolume(phaseVolumeCo2), temp(degreeCToKelvin(temperature));
 
-    double64 rho    = densityCarbonicPhase(molarvolume);
-    double64 T_red  = temp / 251.196;
-    double64 dummy1 = aa0 *  pow( log(T_red), 0. ) + aa1 * pow( log(T_red), 1. ) + aa2 * pow( log(T_red), 2. ) + aa3 * pow( log(T_red), 3. ) + aa4 * pow( log(T_red), 4. );
+    double64 rho      = densityCarbonicPhase(molarvolume);
+    double64 T_red    = temp / 251.196;
+    double64 logT_red = log(T_red);
+    double64 dummy1 = aa0 * 1. + aa1 * logT_red + aa2 * logT_red*logT_red + aa3 * pow( logT_red, 3. ) + aa4 * pow( logT_red, 4. );
     dummy1          = exp( dummy1 );
 
-    double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;
-    double64 eta_excess  = dd1 * rho + dd2 * pow(rho, 2. ) + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;
+    double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;  //Eq. (3)
+    double64 eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;  //Eq.(8)
 
     //    eta_crit    = ee1 * rho + ee2 * pow(rho, 2.) + ee3 * pow(rho, 3.) + ee4 * pow(rho, 4.);
     //    viscosCo2   = eta_0 +  eta_excess + eta_crit;
@@ -1850,7 +1839,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::molecularDiffCoeffCo2intoBrine( double64 temp
 {
     double64 temp(degreeCToKelvin(temperature));
 
-    double64 D0 =  pow( 10,  -4.1764 + 712.52 /  temp - 2.5907e5 / pow( temp, 2 ) );
+    double64 D0 =  pow( 10.,  -4.1764 + 712.52 /  temp - 2.5907e5 / ( temp*temp ) );
 
     double64 Db = D0 / pow( 10, 0.87 * log10( viscoBrine *1e6 /1002 ) ); //conversion from Pa s to micro Pa s
 
@@ -2184,74 +2173,83 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToPpmInAqueousPhase( double64 mSalt 
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::psiToPa( double64 pressureInPsi )
+double64 EOS_CO2H2ONaCl_Spycher04::ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt )
+{
+    return massFracNaClToMolalNaClInAqueousPhase(ppmSalt*1.e-6*1.e2); //conversion from massfraction to molality
+}
+
+// NON MEMBER FUNCTIONS
+
+double64 psiToPa( double64 pressureInPsi )
 {
     return pressureInPsi * 6894.75729;
 }
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::paToPsi( double64 pressureInPa )
+double64 paToPsi( double64 pressureInPa )
 {
     return pressureInPa * 0.000145037738;
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::paTobar( double64 pressureInPa )
+double64 paTobar( double64 pressureInPa )
 {
     return  pressureInPa * 1.0e-5;
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::barTopa( double64 pressureInbar )
+double64 barTopa( double64 pressureInbar )
 {
     return  pressureInbar * 1.0e+5;
 }
 
 
 
-
-double64 EOS_CO2H2ONaCl_Spycher04::ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt )
-{
-    return massFracNaClToMolalNaClInAqueousPhase(ppmSalt*1.e-6*1.e2); //conversion from massfraction to molality
-}
-
-
-
-double64 EOS_CO2H2ONaCl_Spycher04::degreeCToKelvin( double64 temperatureInC )
+double64 degreeCToKelvin( double64 temperatureInC )
 {
    return  temperatureInC + 273.15;
 }
 
 
 
-double64 EOS_CO2H2ONaCl_Spycher04::KelvinTodegreeC( double64 temperatureInK )
+double64 KelvinTodegreeC( double64 temperatureInK )
 {
    return  temperatureInK - 273.15;
 }
 
 
 
-// temperature using geothermal gradient
+double64 temp( double64 depth )
+ {
+    const double64 temp_surface(20); // 20 C
+    const double64 therm_grad(0.03); //3 C/100m
+    return temp_surface + depth * therm_grad;
+ }
 
-double64 EOS_CO2H2ONaCl_Spycher04::temp (double64 depth)
-{
-    return temp_surface+depth*therm_grad;
-}
 
-
-// pressure using geopressure gradient
-
-double64 EOS_CO2H2ONaCl_Spycher04::pres (double64 depth)
-{
-    return pres_surface+depth*pres_grad;
-}
+double64 pres( double64 depth )
+ {
+    const double64 pres_grad(10000.); // 0.1 bar/m
+    const double64 pres_surface(100000); // 1 bar
+    return pres_surface + depth * pres_grad;
+ }
 
 
 /// plotting routine (data are in text file for spreadsheet)
 void EOS_CO2H2ONaCl_Spycher04::plot_brine()
 {
+    // needed for plotting
+    const double64 Tmax(100.);
+    const double64 Tmin(20.);
+    const double64 Pmax(35000000.); //350 bar
+    const double64 Pmin(100000.); // 1 bar
+    const double64 msaltmin(0.);
+    const double64 msaltmax(1.5); //87664.5 ppm
+    const double64 nTP(100);
+    const double64 nmsalt(4);
+    const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_Brine_depth,fout_viscosity_Brine_depth,fout_compressibility_Brine_depth;
     vector<double64> T(nTP),P(nTP),msalt(nmsalt),depth(nTP);
@@ -2314,6 +2312,20 @@ void EOS_CO2H2ONaCl_Spycher04::plot_brine()
 
 void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
 {
+    // needed for plotting
+    const double64 Tmax(100.);
+    const double64 Tmin(20.);
+    const double64 Pmax(35000000.); //350 bar
+    const double64 Pmin(100000.); // 1 bar
+    const double64 msaltmin(0.);
+    const double64 msaltmax(1.5); //87664.5 ppm
+    const double64 nTP(100);
+    const double64 nmsalt(4);
+    const double64 therm_grad(0.03); //3 C/100m
+    const double64 pres_grad(10000.); // 0.1 bar/m
+    const double64 temp_surface(20); // 20 C
+    const double64 pres_surface(100000); // 1 bar
+    const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_AqueousPhase_depth,fout_density_difference_depth,
             fout_Rs_depth,fout_D_Co2_depth,fout_Bw_depth,
@@ -2410,6 +2422,20 @@ void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
 
 void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
 {
+    // needed for plotting
+    const double64 Tmax(100.);
+    const double64 Tmin(20.);
+    const double64 Pmax(35000000.); //350 bar
+    const double64 Pmin(100000.); // 1 bar
+    const double64 msaltmin(0.);
+    const double64 msaltmax(1.5); //87664.5 ppm
+    const double64 nTP(100);
+    const double64 nmsalt(4);
+    const double64 therm_grad(0.03); //3 C/100m
+    const double64 pres_grad(10000.); // 0.1 bar/m
+    const double64 temp_surface(20); // 20 C
+    const double64 pres_surface(100000); // 1 bar
+    const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_CarbonicPhase_depth,fout_viscosity_CarbonicPhase_depth,
             fout_compressibility_CarbonicPhase_depth,fout_Zfacor_CarbonicPhase_depth,
@@ -2519,6 +2545,20 @@ void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
 
 void EOS_CO2H2ONaCl_Spycher04::plot_thermodynamics()
 {
+    // needed for plotting
+    const double64 Tmax(100.);
+    const double64 Tmin(20.);
+    const double64 Pmax(35000000.); //350 bar
+    const double64 Pmin(100000.); // 1 bar
+    const double64 msaltmin(0.);
+    const double64 msaltmax(1.5); //87664.5 ppm
+    const double64 nTP(100);
+    const double64 nmsalt(4);
+    const double64 therm_grad(0.03); //3 C/100m
+    const double64 pres_grad(10000.); // 0.1 bar/m
+    const double64 temp_surface(20); // 20 C
+    const double64 pres_surface(100000); // 1 bar
+    const double64 max_depth(2600.); //2600 m
 
     ofstream fout_y_Co2_depth,fout_y_H2o_depth,fout_x_Co2_depth,
             fout_x_H2o_depth,fout_x_s_depth,
