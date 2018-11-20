@@ -19,7 +19,7 @@ namespace csmp {
 
   enum AQUEOUS_PHASE { XH2O=0, XCO2=1, XNACl_aq=2 }; ///< mass fractions stored 
   enum CARBONIC_PHASE { YCO2=0, YH2O=1 };
-  enum THERMODYNAMIC_STATE { LIQUID, GASEOUS, SUPERCRITICAL };
+  enum THERMODYNAMIC_STATE { CSMP_LIQUID, GASEOUS, SUPERCRITICAL };
   
   /// computes phase state of pure CO2
   THERMODYNAMIC_STATE  stateOfCO2( double64 pCO2, double64 TC );
@@ -32,12 +32,16 @@ namespace csmp {
 
   /// computes new compositions of aqueous and carbonic phase, precipitates salt if any, updates and saturations, densities and viscosities
   template<size_t dim>
-  void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration&, Node<dim>& );
+  void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration&, Node<dim>&, double64 delta_t );
   
   /// for given p,T and composition equilibrate phases with one-another
   template<size_t dim>
-  void equilibrateFluid( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  void equilibrateFluid( const variables::VariableSet_CO2GeoSequestration&, Region<dim>&, double64 delta_t );
   
+  /// updating of fluid properties in all regions, not just where DES is invoked
+  template<size_t dim>
+  void updatePTXBasedFluidProperties(const variables::VariableSet_CO2GeoSequestration& props, Region<dim>& model_subdomain );
+
   /// computes (barycentric) porosity from volume fraction of salt that is occupying the pore space
   template<size_t dim>
   double64 porosityWithSalt( const variables::VariableSet_CO2GeoSequestration&, Element<dim>& );

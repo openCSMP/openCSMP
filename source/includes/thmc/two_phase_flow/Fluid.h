@@ -65,29 +65,29 @@ class Fluid {
 
 //  unit conversions
 
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+    inline double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
 
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+    inline double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
 
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+    inline double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
 
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+    inline double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
 
-    double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
+    inline double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
 
-    double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
+    inline double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
 
-    double64  psiToPa( double64 pressureInPsi );
+    inline double64  psiToPa( double64 pressureInPsi );
 
-    double64  paToPsi( double64 pressureInPa );
+    inline double64  paToPsi( double64 pressureInPa );
 
-    double64  paTobar( double64 pressureInPa );
+    inline double64  paTobar( double64 pressureInPa );
 
-    double64  barTopa( double64 pressureInbar );
+    inline double64  barTopa( double64 pressureInbar );
 
-    double64  degreeCToKelvin( double64 temperatureInC );
+    inline double64  degreeCToKelvin( double64 temperatureInC );
 
-    double64  KelvinTodegreeC( double64 temperatureInK );
+    inline double64  KelvinTodegreeC( double64 temperatureInK );
 
 } // end csmp
 

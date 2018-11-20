@@ -289,20 +289,20 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     const bool place_in_unique_regions( (mesh_topology.ModelRegions()==0) );
 
-	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
-	bool contiguous_model(false);
-	bool valid_model_region = this->CreateRegionFromRootNode("Model", place_in_unique_regions, !withNeighborConnectivity);
-	if ( valid_model_region ) contiguous_model = true;
-	else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
+    // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
+    bool contiguous_model(false);
+    bool valid_model_region = this->CreateRegionFromRootNode("Model", place_in_unique_regions, !withNeighborConnectivity);
+    if ( valid_model_region ) contiguous_model = true;
+    else valid_model_region = this->CreateRegions(place_in_unique_regions, !withNeighborConnectivity);
 
-	if ( !valid_model_region ) {
-		csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-			"model appears to contain domains that are not connected to one another!");
-	}
+    if ( !valid_model_region ) {
+      csmp_error.notice(WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+        "model appears to contain domains that are not connected to one another!");
+    }
 
-    cout <<"\nModel<dim>::Initialize: ";
-	if ( contiguous_model ) cout << "Coontiguous model has been built successfully..." << endl;
-	else cout << "Discontiguous model has been built successfully..." << endl;
+      cout <<"\nModel<dim>::Initialize: ";
+    if ( contiguous_model ) cout << "Coontiguous model has been built successfully..." << endl;
+    else cout << "Discontiguous model has been built successfully..." << endl;
 
     // 6. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );	
@@ -318,19 +318,19 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
           const bool remove_original_lower_dimensional_regions(true);
 		  // if the model is box-shaped (albeit perhaps with irregular top surface)
 		  if (!fully_irregular_mesh) {
-			  this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
-			  // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-			  cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
-			  recreateBoxBoundaryFlags(*this);
-		  }
-		  // irregularly shaped models
-		  else {
-			  if(contiguous_model)
-				  this->EstablishBoundariesFromRegions(remove_original_lower_dimensional_regions);
-			  else
-				  this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
-		  }
-	}
+            this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
+            // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+            cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+            recreateBoxBoundaryFlags(*this);
+          }
+          // irregularly shaped models
+          else {
+            if(contiguous_model)
+              this->EstablishBoundariesFromRegions(remove_original_lower_dimensional_regions);
+            else
+              this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
+          }
+      }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
     // 8. adding property storage to the Model
