@@ -807,7 +807,26 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( const Element<dim>* const 
 template<size_t dim, template<size_t> class USER>
 double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const Element<dim>* const e ) const
 {
-  return TangentPointSaturation(e);
+  //return TangentPointSaturation(e);
+  
+    double64  dfds_max(0.), dfds_s_max(0.), s_shock, dfds; 
+    double64 swr = e->Read(User()->key_srH2O);
+    double64 snr = e->Read(User()->key_srCO2);    
+       
+    // loop over the saturation interval finding the maximum value of the fractional flow derivative
+    // note the bounds! - only within these dfds is actually defined
+    for ( double64 sw=swr; sw<=(1.-snr); sw+=0.005 ) {
+        dfds = dfds_at(e,sw);
+        // max fractional flow derivative
+        dfds_max = std::max( dfds_max, dfds );
+        // dfds at shock front and shock height
+        double64 dfds_s = dfds * sw;
+        if ( dfds_s > dfds_s_max ) {
+            dfds_s_max = dfds_s;
+            s_shock = sw;
+        }
+    }
+    return s_shock;    
 }
   
 

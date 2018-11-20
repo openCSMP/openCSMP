@@ -316,12 +316,13 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
     // 7. forming Boundaries
     if ( create_boundaries ) {
           const bool remove_original_lower_dimensional_regions(true);
-		  // if the model is box-shaped (albeit perhaps with irregular top surface)
-		  if (!fully_irregular_mesh) {
+          // if the model is box-shaped (albeit perhaps with irregular top surface)
+          if (!fully_irregular_mesh) {
             this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */);
             // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
             cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
             recreateBoxBoundaryFlags(*this);
+            UpdateIndices();
           }
           // irregularly shaped models
           else {
@@ -329,6 +330,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
               this->EstablishBoundariesFromRegions(remove_original_lower_dimensional_regions);
             else
               this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
+            UpdateIndices();
           }
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
@@ -372,7 +374,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
    
 	// 2. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
     const bool withNeighborConnectivity( (vset.PfvertsBegin() != vset.PfvertsEnd()) );
-    const bool place_in_unique_regions(true); // if there is no neighbor connectivity, it has to be re-established (!)
+    const bool place_in_unique_regions( true ); // if there is no neighbor connectivity, it has to be re-established (!)
 
 	// if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
 	bool contiguous_model(false);

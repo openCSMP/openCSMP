@@ -3,8 +3,12 @@ composition carbonic phase,CO2_comp,Ymass,ARRAY,-5.00E-02,-5.00E-02,NODE,compute
 composition aqueous phase,H2O_comp,Xmass,ARRAY,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=3
 dissolved CO2,CO2aq,kg/m3,SCALAR,0.00E+00,1.50E+02,NODE,computed/input,output,,only used for visualisation
 evaporated water,H2Og,kg/m3,SCALAR,0.00E+00,5.00E+01,NODE,computed,output,,only used for visualisation
-salt,NaCl,kg,SCALAR,0.00E+00,5.00E+00,NODE,computed/input,chemistry,,precipitate to be converted into volume
+salt,NaCl,m3/m3,SCALAR,0.00E+00,5.00E+00,NODE,computed/input,chemistry,,volume fraction of precipitated salt in pores
 salinity,NaClaq,kg/m3,SCALAR,0.00E+00,4.00E+01,NODE,computed,output,,only used for visualisation
+mass H2O,mH2O,kg,SCALAR,0.00E+00,1.00E+08,NODE,computed,output,,total mass of H2O in different phases
+mass CO2,mCO2,kg,SCALAR,0.00E+00,1.00E+08,NODE,computed,output,,total mass of CO2 in different phases
+mass NaClaq,mNaClaq,kg,SCALAR,0.00E+00,1.00E+08,NODE,computed,output,,mass of salt in aqueous phase
+mass NaClsd,mNaClsd,kg,SCALAR,0.00E+00,1.00E+08,NODE,computed,output,,mass of precipitated salt
 compressibility carbonic phase,cCO2,1/Pa,SCALAR,1.00E-12,1.00E-04,NODE,computed,fluid properties,,REMOVE - compute on the fly
 compressibility aqueous phase,cH2O,1/Pa,SCALAR,1.00E-12,1.60E-04,NODE,computed,fluid properties,,REMOVE - compute on the fly
 density carbonic phase,rhoCO2,kg/m3,SCALAR,5.00E+01,1.00E+03,NODE,computed,fluid properties,,for pressure and saturation equation
@@ -54,6 +58,7 @@ face total mobility permeability product,flt,1/(Pa.s),VECTOR,1.00E-20,1.00E+00,F
 fluid pressure,pf,Pa,SCALAR,0.00E+00,1.00E+09,NODE,computed primary variable,multiphase flow,,governing equations
 mixture viscosity,mum,Pa.s,SCALAR,1.00E-06,1.00E-02,NODE,computed,multiphase flow,,REMOVE - compute on the fly with a PDE operator
 nodal fluid volume source,nQV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,multiphase flow,,for the assignment of point sources
+nodal fluid mass source,nQM,kg/(kg.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,multiphase flow,,for the assignment of point sources
 fluid volume source,QV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,ELEMENT,input,multiphase flow,,to deal with volume changes in the fluid or compaction
 fluid mass source,QM,kg/(kg.s),SCALAR,-1.00E+08,1.00E+08,ELEMENT,input,multiphase flow,,to deal with mass changes in the fluid
 flux balance,fb,m3,SCALAR,-1.00E+08,1.00E+08,NODE,computed,multiphase flow,,incoming minus outgoing fluxes in a finite-volume cell

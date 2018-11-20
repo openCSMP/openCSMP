@@ -640,6 +640,8 @@ void updatePTXBasedFluidProperties(const variables::VariableSet_CO2GeoSequestrat
         (*nit)->Store( props.key_mCO2, makeScalar((*nit)->Status(props.key_mCO2),new_mass_CO2*PV) );
         (*nit)->Store( props.key_mNaClaq, makeScalar((*nit)->Status(props.key_mNaClaq),new_mass_NaClaq*PV) );
         (*nit)->Store( props.key_mNaClsd, makeScalar((*nit)->Status(props.key_mNaClsd),new_mass_NaClsd) );
+            
+                       
     }
 } 
 

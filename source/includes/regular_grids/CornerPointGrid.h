@@ -12,7 +12,7 @@ namespace csmp {
 
 /// cell-centered grid container
 template<size_t dim>
-class  BlockCenteredGrid // TODO: call this cell-centered
+class  BlockCenteredGrid
 {
 public:
 

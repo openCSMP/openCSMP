@@ -46,9 +46,17 @@ namespace csmp {
   template<size_t dim>
   double64 porosityWithSalt( const variables::VariableSet_CO2GeoSequestration&, Element<dim>& );
   
+  /// accounts for porosity and permeability changes due to salt precipitation
+  template<size_t dim>
+  void updatePorosityAndPermeability( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  
   /// accounts for pore-volume changes due to salt precipitation
   template<size_t dim>
-  void updatePorosity( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );  
+  void updatePoreVolume( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );   
+  
+  /// update PTX based fluid properties
+  template<size_t dim>
+  void updatePTXBasedFluidProperties( const variables::VariableSet_CO2GeoSequestration&, Region<dim>& );   
 
 }
 

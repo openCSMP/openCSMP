@@ -19,22 +19,20 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class Fluid {
   public:
-  
- // TODO: these keys now are part of the new composition array
     /// salinity, mass fraction from the node
-    double64 MassFractionNaCl( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xSalt); }
+    double64 MassFractionNaCl( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    double64 XCO2_AqueousPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xCO2); }
+    double64 XCO2_AqueousPhase( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of water in the aqueous phase
-    double64 XH2O_AqueousPhase( const Node<dim>* const n) const; // fix { return n->Read(User()->key_xH2O); }
+    double64 XH2O_AqueousPhase( const Node<dim>* const n) const;
 
     /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    double64 YCO2_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YCO2); }
+    double64 YCO2_CarbonicPhase( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of water in the carbonic phase
-    double64 YH2O_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YH2O); }
+    double64 YH2O_CarbonicPhase( const Node<dim>* const n ) const; 
   
     /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
     double64 Viscosity( const Node<dim>* const n, size_t phase ) const;

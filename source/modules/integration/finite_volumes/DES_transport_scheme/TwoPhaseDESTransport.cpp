@@ -881,9 +881,14 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
         cerr <<"WARNING: OpenMP is not available, using serial mode"<<endl;
     AdvectVariable_DES_serial( model_time );
 #endif
+}
 
+
+template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK( double64 del_t )
+{
     if (equilibration_) {
-        equilibrateFluid();
+        equilibrateFluid(del_t);
         updatePorosityandPermeability();
         updatePoreVolume();
     }
@@ -891,7 +896,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
 
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid()
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(double64 del_t)
 {
     size_t equilibrate;
     variables::VariableSet_CO2GeoSequestration props(db_);
@@ -899,7 +904,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid()
     { 
         equilibrate = (*nit)->Read(key_equilibrate);
         if(equilibrate == 1) {
-            equilibrateH2O_CO2_NaCl(props, *(*nit) );
+            equilibrateH2O_CO2_NaCl(props, *(*nit), del_t );
 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
             {
@@ -907,7 +912,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid()
                 eptr->Store( key_UpdatePhiK, makeScalar( (*nit)->Status( key_UpdatePhiK), 1 ) );                 
             }
         }
-    }  
+    }
 } 
 
 
@@ -920,21 +925,18 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
     {
         update = (*eit)->Read(key_UpdatePhiK);
         if(update == 1) {
-            double64 phi = (*eit)->Read(this->key_phi);
-            double64 permeability = (*eit)->Read(this->key_k);
-            double64 phi3(phi * phi * phi);
-            double64 t1((1.-phi) * (1.-phi));
-            double64 constant = permeability*t1/phi3 ;     
-            
+            double64 phi_old = (*eit)->Read(this->key_phi);
             porosityWithSalt( props, *(*eit) );
+            double64 phi_new = (*eit)->Read(this->key_phi);
             
-            phi = (*eit)->Read(this->key_phi);
-            phi3 = phi * phi * phi;
-            t1 = (1.-phi) * (1.-phi);
-            permeability = constant*phi3/t1;
-            
-            (*eit)->Store( this->key_k, makeScalar( (*eit)->Status( this->key_k), permeability ) );
-            (*eit)->Store( key_UpdatePhiK, makeScalar( (*eit)->Status( key_UpdatePhiK), 0 ) );
+            if (phi_new != phi_old && phi_old != 0. && (1.-phi_new) != 0.) {
+                double64 k_old = (*eit)->Read(this->key_k);
+                double64 phi3 = (phi_new*phi_new*phi_new)/(phi_old*phi_old*phi_old);
+                double64 t1 = (1.-phi_old)*(1.-phi_old)/(1.-phi_new)/(1.-phi_new);
+                double64 k_new = k_old * phi3 * t1;
+                (*eit)->Store( this->key_k, makeScalar( (*eit)->Status( this->key_k), k_new ) );
+            }
+            (*eit)->Store( key_UpdatePhiK, makeScalar( (*eit)->Status( key_UpdatePhiK), 0 ) ); 
         }
     }
 }

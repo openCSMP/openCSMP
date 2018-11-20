@@ -1795,9 +1795,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
     double64 logT_red = log(T_red);
     double64 dummy1 = aa0 * 1. + aa1 * logT_red + aa2 * logT_red*logT_red + aa3 * pow( logT_red, 3. ) + aa4 * pow( logT_red, 4. );
     dummy1          = exp( dummy1 );
-
-    double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;
-    double64 eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;
+    double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;  //Eq. (3)
+    double64 eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;  //Eq.(8)
 
     //    eta_crit    = ee1 * rho + ee2 * pow(rho, 2.) + ee3 * pow(rho, 3.) + ee4 * pow(rho, 4.);
     //    viscosCo2   = eta_0 +  eta_excess + eta_crit;
@@ -2321,10 +2320,6 @@ void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
     const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_AqueousPhase_depth,fout_density_difference_depth,
@@ -2427,14 +2422,8 @@ void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
     const double64 Tmin(20.);
     const double64 Pmax(35000000.); //350 bar
     const double64 Pmin(100000.); // 1 bar
-    const double64 msaltmin(0.);
-    const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_CarbonicPhase_depth,fout_viscosity_CarbonicPhase_depth,
@@ -2554,10 +2543,6 @@ void EOS_CO2H2ONaCl_Spycher04::plot_thermodynamics()
     const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout_y_Co2_depth,fout_y_H2o_depth,fout_x_Co2_depth,
