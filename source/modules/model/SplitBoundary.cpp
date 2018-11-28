@@ -323,7 +323,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 
 
 /**
- @fn  void Boundary<dim>::Out( FILE* fp ) const
+ @fn  void Boundary<dim>::Out( fstream& fp ) const
 
  @brief Outs the boundary to binary fp.
  @attention Uses current index numbering.
@@ -351,7 +351,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
  @todo (2-C) Return values not used properly.
  */
 template<size_t dim>
-bool SplitBoundary<dim>::Out( FILE* fp ) const
+bool SplitBoundary<dim>::Out( fstream& fp ) const
   {
   // split-boundary variables
   domainVariablesOut( fp, *this, this->pref_ ); /// @todo (3-D) Use FEM_Data instead?
@@ -359,7 +359,7 @@ bool SplitBoundary<dim>::Out( FILE* fp ) const
   // number of interfaces
   size_t bytes( sizeof(size_t) );
   const size_t interfaceCount( this->Elements() );
-  fwrite( (void*) &interfaceCount, bytes, 1, fp );
+  fp.write( (char*) &interfaceCount, bytes );
 
   // fem type of interfaces
   CSMP_FEM_TYPE interfaceType;
@@ -371,7 +371,7 @@ bool SplitBoundary<dim>::Out( FILE* fp ) const
         if( !interface ) // we check in this loop only for nullptrs
             return false;
         interfaceType = interface->FE()->ElementType();
-        fwrite( (void*) &interfaceType, bytes, 1, fp );
+        fp.write( (char*) &interfaceType, bytes );
     }
 
   // interface parents
@@ -388,34 +388,34 @@ bool SplitBoundary<dim>::Out( FILE* fp ) const
         assert( interface->Parent(OUTSIDE) != nullptr );
 
         idx = interface->Parent(INSIDE)->Idx();
-        fwrite( &idx, bytes, 1, fp );
+		fp.write( (char*) &idx, bytes );
         const size_t innerParentFaceId( interface->ParentFaceID( INSIDE ) );
-        fwrite( &innerParentFaceId, bytes, 1, fp );
+        fp.write( (char*) &innerParentFaceId, bytes );
 
         idx = interface->Parent(OUTSIDE)->Idx();
-        fwrite( &idx, bytes, 1, fp );
+		fp.write( (char*) &idx, bytes );
         const size_t outerParentFaceId( interface->ParentFaceID( OUTSIDE ) );
-        fwrite( &outerParentFaceId, bytes, 1, fp );
+        fp.write( (char*) &outerParentFaceId, bytes );
 
         if( interface->BaseElement() )
         {
             idx = interface->BaseElement()->Idx();
-            fwrite( &idx, bytes, 1, fp );
+            fp.write( (char*) &idx, bytes );
         }
         else
         {
             idx = NULL_IDX;
-            fwrite( &idx, bytes, 1, fp );
+            fp.write( (char*) &idx, bytes );
         }
         const size_t nodesCount( interface->Nodes() );
-        fwrite( &nodesCount, bytes, 1, fp );
+        fp.write( (char*) &nodesCount, bytes );
         for( size_t fn(0); fn < nodesCount; ++fn )
         {
             const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
-            fwrite( &localInnerNodeIdx, bytes, 1, fp );
+            fp.write( (char*) &localInnerNodeIdx, bytes );
 
             const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
-            fwrite( &localOuterNodeIdx, bytes, 1, fp );
+            fp.write( (char*) &localOuterNodeIdx, bytes );
         }
     }
 
@@ -435,11 +435,11 @@ bool SplitBoundary<dim>::Out( FILE* fp ) const
 
 
 /**
- @fn  bool Boundary<dim>::In( const FiniteElementManager& femManager, FILE* fp ) const
+ @fn  bool Boundary<dim>::In( const FiniteElementManager& femManager, fstream& fp ) const
 
  @brief INS Boundary from the given binary file pointer.
 
- see Out( FILE* fp )
+ see Out( fstream& fp )
 
  @author  P. Lang
  @date  9/29/2012
@@ -454,20 +454,20 @@ template<size_t dim>
 bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
                              const FiniteElementManager& femManager,
                              const Region<dim>& modelRegion,
-                             FILE* fp )
+                             fstream& fp )
   {
     // splitboundary variables
     domainVariablesIn( fp, *this, this->pref_ );
     // number of faces
     size_t bytes( sizeof(size_t) );
     size_t interfaceCount(0);
-    fread( (void*) &interfaceCount, bytes, 1, fp );
+    fp.read( (char*) &interfaceCount, bytes );
 
     // fem type of interfaces
     bytes = sizeof(CSMP_FEM_TYPE);
     vector<CSMP_FEM_TYPE> interfaceTypes(interfaceCount);
     for ( size_t f(0); f < interfaceCount; ++f )
-    fread( (void*) &interfaceTypes[f], bytes, 1, fp );
+    fp.read( (char*) &interfaceTypes[f], bytes );
 
     // interface parents
     bytes = sizeof(size_t);
@@ -480,20 +480,20 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
     {
         interfaceParents[f].resize( 5, NULL_IDX );
 
-        fread( (void*) &interfaceParents[f][0], bytes, 1, fp );
-        fread( (void*) &interfaceParents[f][1], bytes, 1, fp );
+        fp.read( (char*) &interfaceParents[f][0], bytes );
+        fp.read( (char*) &interfaceParents[f][1], bytes );
 
-        fread( (void*) &interfaceParents[f][2], bytes, 1, fp );
-        fread( (void*) &interfaceParents[f][3], bytes, 1, fp );
+        fp.read( (char*) &interfaceParents[f][2], bytes );
+        fp.read( (char*) &interfaceParents[f][3], bytes );
 
-        fread( (void*) &interfaceParents[f][4], bytes, 1, fp );
+        fp.read( (char*) &interfaceParents[f][4], bytes );
 
-        fread( (void*) &interfaceNodes, bytes, 1, fp );
+        fp.read( (char*) &interfaceNodes, bytes );
         interfaceParentNodes[f].resize( interfaceNodes, make_pair( NULL_IDX, NULL_IDX ) );
         for( size_t fn(0); fn < interfaceNodes; ++fn )
         {
-            fread( (void*) &localInnerNodeIdx, bytes, 1, fp );
-            fread( (void*) &localOuterNodeIdx, bytes, 1, fp );
+            fp.read( (char*) &localInnerNodeIdx, bytes );
+            fp.read( (char*) &localOuterNodeIdx, bytes );
             interfaceParentNodes[f][fn] = make_pair( localInnerNodeIdx, localOuterNodeIdx );
         }
     }

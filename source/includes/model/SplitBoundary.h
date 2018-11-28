@@ -159,12 +159,12 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     // -----------------------------------------------
 
     /// output to binary file
-    bool Out( FILE* ) const;
+    bool Out( std::fstream& ) const;
   
     /// initializes split boundary from binary file
     bool In( MeshManager<dim>& ,
              const FiniteElementManager& ,
-             const Region<dim>&, FILE* );
+             const Region<dim>&, std::fstream& );
 
   protected:
     /// return physical variable count at given integration points

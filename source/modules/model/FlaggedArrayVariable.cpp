@@ -445,7 +445,7 @@ bool FlaggedArrayVariable::Out( const char* filename, size_t precision ) const
 
 
 /**
- @fn  bool FlaggedArrayVariable::Out( std::FILE* fp ) const
+ @fn  bool FlaggedArrayVariable::Out( std::fstream& fp ) const
 
  @brief Outs the array to given file pointer (binary format)
 
@@ -466,7 +466,7 @@ bool FlaggedArrayVariable::Out( const char* filename, size_t precision ) const
 
  @return  true if it succeeds, false if it fails.
  */
-bool FlaggedArrayVariable::Out( std::FILE* fp ) const
+bool FlaggedArrayVariable::Out( std::fstream& fp ) const
   {
     if (!fp)
       {
@@ -476,36 +476,36 @@ bool FlaggedArrayVariable::Out( std::FILE* fp ) const
 
     // size
     const size_t depth( Size() );
-    fwrite( (void*) &depth, sizeof(size_t), 1, fp );
+    fp.write( (char*) &depth, sizeof(size_t));
 
     // flags
     const size_t flags_size(sizeof(VARIABLE_FLAG));
     vector<VARIABLE_FLAG>::const_iterator flagsEnd( flags_.end() );
     for ( vector<VARIABLE_FLAG>::const_iterator it( flags_.begin() ); it != flagsEnd; ++it )
-      std::fwrite( (void*) &(*it), flags_size, 1, fp );
+      fp.write( (char*) &(*it), flags_size);
 
     // data
     const size_t bytes(sizeof(double64));
     vector<double>::const_iterator dataEnd( data_.end() );
     for ( vector<double>::const_iterator it( data_.begin() ); it != dataEnd; ++it )
-      std::fwrite( (void*) &(*it), bytes, 1, fp );
+      fp.write( (char*) &(*it), bytes);
 
     return true;
   }
 
 
 /**
- @fn  bool FlaggedArrayVariable::In( std::FILE* fp )
+ @fn  bool FlaggedArrayVariable::In( std::fstream& fp )
 
  @brief Reads the array from given file pointer (binary format)
 
- See bool FlaggedArrayVariable::Out( std::FILE* fp ) const
+ See bool FlaggedArrayVariable::Out( std::fstream& fp ) const
 
  @param [in,out]  fp  If non-null, the fp.
 
  @return  true if it succeeds, false if it fails.
  */
-bool FlaggedArrayVariable::In( std::FILE* fp )
+bool FlaggedArrayVariable::In( std::fstream& fp )
   {
     if (!fp)
       {
@@ -515,7 +515,7 @@ bool FlaggedArrayVariable::In( std::FILE* fp )
 
     // depth
     size_t depth(0);
-    if ( !std::fread( (void*) &depth, sizeof(size_t), 1, fp ) ) {
+    if ( !fp.read( (char*) &depth, sizeof(size_t)) ) {
       std::cout <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
       return false;
       }
@@ -525,7 +525,7 @@ bool FlaggedArrayVariable::In( std::FILE* fp )
     const size_t  flags_size( sizeof(VARIABLE_FLAG) );
     for ( size_t i(0); i < depth; ++i )
       {
-        if( !std::fread( (void*) &flags_[i], flags_size, 1, fp ) )
+        if( !fp.read( (char*) &flags_[i], flags_size) )
           {
           std::cout <<"\nFlaggedArrayVariable::In(): could not read binary flags record"<< std::endl;
           return false;
@@ -536,7 +536,7 @@ bool FlaggedArrayVariable::In( std::FILE* fp )
     const size_t  bytes( sizeof(double64) );
     for ( size_t i(0); i < depth; ++i )
       {
-        if( !std::fread( (void*) &data_[i], bytes, 1, fp ) )
+        if( !fp.read( (char*) &data_[i], bytes) )
           {
           std::cout <<"\nFlaggedArrayVariable::In(): could not read binary data record"<< std::endl;
           return false;

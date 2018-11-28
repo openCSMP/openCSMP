@@ -277,7 +277,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     // ----------------------------------------
 
     /// writes complete ModelSubDomain specifications in terms of unique indices as block to binary file
-    void WriteDomainIndexesToBinaryFile( FILE* ) const;
+    void WriteDomainIndexesToBinaryFile( std::fstream& ) const;
     // see non-member function readDomainIndexesFromBinaryFile() to read the indices back
 
     void      OutputVariableToScreen( const char* prop ) const;
@@ -299,6 +299,9 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     size_t                                      first_bd_node_;
     bool                                        verbose_;
 
+	bool										updated_;
+	std::deque<csmp::Node<dim>*>				nodes_;
+	std::deque<csmp::Element<dim>*>				elmts_;
   private:
     ModelSubDomain();
 };
@@ -313,7 +316,7 @@ template<size_t dim,template<size_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
-void readDomainIndexesFromBinaryFile( size_t dim, FILE*, SubDomainInfo& );
+void readDomainIndexesFromBinaryFile( size_t dim, std::fstream&, SubDomainInfo& );
 
 
 } // end namespace

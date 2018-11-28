@@ -50,10 +50,10 @@ struct Parameter {
     void           Out() const;
   
     /// writes parameter record to a binary file
-    bool           Out( FILE* fp ) const;
+    bool           Out( std::fstream& fp ) const;
   
     /// reads parameter record from a binary file
-    bool           In( FILE* fp );
+    bool           In( std::fstream& fp );
     
     std::string    name;        ///< typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks)
     std::string    notation;    ///< e.g., k for permeability, v for velocity etc.

@@ -4,6 +4,7 @@
 #define CSMP_PROPERTY_DATABASE_H
 
 #include <iostream>
+#include <fstream>
 #include <map>
 #include <unordered_map>
 #include <string>
@@ -180,9 +181,9 @@ class PropertyDatabase  {
    void DeepCopy( const PropertyDatabase<dim>& );
 
    bool BinaryOut( const char* fileName ) const;
-   bool BinaryOut( FILE* fp ) const;
+   bool BinaryOut( std::fstream& fp ) const;
    bool BinaryIn( const char* fileName );
-   bool BinaryIn( FILE* fp );
+   bool BinaryIn( std::fstream& fp );
 
    const char*    VariablesFile() const;
    csmp::Index    StorageKey( const char* property_name ) const;

@@ -400,43 +400,43 @@ void Index::Out() const
   cout << endl;
 }
 
-bool Index::Out( FILE* fp ) const
+bool Index::Out( fstream& fp ) const
 {
-fwrite( (void*) &type, sizeof(VARIABLE_TYPE), 1, fp );
-fwrite( (void*) &place, sizeof(PLACEMENT), 1, fp );
-fwrite( (void*) &index, sizeof(size_t), 1, fp );
-fwrite( (void*) &dataDepth, sizeof(size_t), 1, fp );
-fwrite( (void*) &flagDepth, sizeof(size_t), 1, fp );
-fwrite( (void*) &dataOffset, sizeof(size_t), 1, fp );
-fwrite( (void*) &flagOffset, sizeof(size_t), 1, fp );
-fwrite( (void*) &offsetFactorSimplex, sizeof(size_t), 1, fp );
-fwrite( (void*) &offsetFactorSector, sizeof(size_t), 1, fp );
-fwrite( (void*) &ipFactorSimplex, sizeof(size_t), 1, fp );
-fwrite( (void*) &ipFactorSector, sizeof(size_t), 1, fp );
-fwrite( (void*) &ipFactorFacet, sizeof(size_t), 1, fp );
-fwrite( (void*) &localVariables, sizeof(LocalVariables), 1, fp );
-fwrite( (void*) &integrationPointVariables, sizeof(IntegrationPointVariables), 1, fp );
+fp.write( (char*) &type, sizeof(VARIABLE_TYPE) );
+fp.write( (char*) &place, sizeof(PLACEMENT) );
+fp.write( (char*) &index, sizeof(size_t) );
+fp.write( (char*) &dataDepth, sizeof(size_t) );
+fp.write( (char*) &flagDepth, sizeof(size_t) );
+fp.write( (char*) &dataOffset, sizeof(size_t) );
+fp.write( (char*) &flagOffset, sizeof(size_t) );
+fp.write( (char*) &offsetFactorSimplex, sizeof(size_t) );
+fp.write( (char*) &offsetFactorSector, sizeof(size_t) );
+fp.write( (char*) &ipFactorSimplex, sizeof(size_t) );
+fp.write( (char*) &ipFactorSector, sizeof(size_t) );
+fp.write( (char*) &ipFactorFacet, sizeof(size_t) );
+fp.write( (char*) &localVariables, sizeof(LocalVariables) );
+fp.write( (char*) &integrationPointVariables, sizeof(IntegrationPointVariables) );
 // we don't store pointers
 
 return true; /// @todo (1-C) Meaningless return statement
 }
 
-bool Index::In( FILE* fp )
+bool Index::In( fstream& fp )
 {
-fread( (void*) &type, sizeof(VARIABLE_TYPE), 1, fp );
-fread( (void*) &place, sizeof(PLACEMENT), 1, fp );
-fread( (void*) &index, sizeof(size_t), 1, fp );
-fread( (void*) &dataDepth, sizeof(size_t), 1, fp );
-fread( (void*) &flagDepth, sizeof(size_t), 1, fp );
-fread( (void*) &dataOffset, sizeof(size_t), 1, fp );
-fread( (void*) &flagOffset, sizeof(size_t), 1, fp );
-fread( (void*) &offsetFactorSimplex, sizeof(size_t), 1, fp );
-fread( (void*) &offsetFactorSector, sizeof(size_t), 1, fp );
-fread( (void*) &ipFactorSimplex, sizeof(size_t), 1, fp );
-fread( (void*) &ipFactorSector, sizeof(size_t), 1, fp );
-fread( (void*) &ipFactorFacet, sizeof(size_t), 1, fp );
-fread( (void*) &localVariables, sizeof(LocalVariables), 1, fp );
-fread( (void*) &integrationPointVariables, sizeof(IntegrationPointVariables), 1, fp );
+fp.read( (char*) &type, sizeof(VARIABLE_TYPE) );
+fp.read( (char*) &place, sizeof(PLACEMENT) );
+fp.read( (char*) &index, sizeof(size_t) );
+fp.read( (char*) &dataDepth, sizeof(size_t) );
+fp.read( (char*) &flagDepth, sizeof(size_t) );
+fp.read( (char*) &dataOffset, sizeof(size_t) );
+fp.read( (char*) &flagOffset, sizeof(size_t) );
+fp.read( (char*) &offsetFactorSimplex, sizeof(size_t) );
+fp.read( (char*) &offsetFactorSector, sizeof(size_t) );
+fp.read( (char*) &ipFactorSimplex, sizeof(size_t) );
+fp.read( (char*) &ipFactorSector, sizeof(size_t) );
+fp.read( (char*) &ipFactorFacet, sizeof(size_t) );
+fp.read( (char*) &localVariables, sizeof(LocalVariables) );
+fp.read( (char*) &integrationPointVariables, sizeof(IntegrationPointVariables) );
 indexTracker = nullptr; // we don't store pointers
 
 return true; /// @todo (1-C) Meaningless return statement

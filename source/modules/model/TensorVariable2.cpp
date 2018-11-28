@@ -260,15 +260,15 @@ VectorVariable<2U> TensorVariable<2U>::Column( size_t iCol ) const
 }
 
 
- bool TensorVariable<2>::Out( FILE* fp ) const
+ bool TensorVariable<2>::Out( std::fstream& fp ) const
   {
-  fwrite( (void*)this, sizeof(TensorVariable<2>), 1, fp );
+  fp.write( (char*)this, sizeof(TensorVariable<2>) );
   return true;
   }
 
- bool TensorVariable<2>::In( FILE* fp )
+ bool TensorVariable<2>::In( std::fstream& fp )
   {
-  fread( (void*)this, sizeof(TensorVariable<2>), 1, fp );
+  fp.read( (char*)this, sizeof(TensorVariable<2>) );
   return true;
   }
 

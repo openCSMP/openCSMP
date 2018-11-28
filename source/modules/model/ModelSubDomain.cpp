@@ -37,11 +37,12 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
-                                          const PropertyDatabase<dim>& pref )
- :  pref_(pref),
-    subdomain_name_(subdomain_name),
-    verbose_(true)
+ModelSubDomain<dim, CELL>::ModelSubDomain(const string& subdomain_name,
+	const PropertyDatabase<dim>& pref)
+	: pref_(pref),
+	subdomain_name_(subdomain_name),
+	verbose_(true),
+	updated_(true)
  {
  }
 
@@ -54,7 +55,8 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
    first_bd_node_(ed.first_bd_node_),
    bd_face_vec_(ed.bd_face_vec_),
    subdomain_name_(ed.subdomain_name_),
-   verbose_(true)
+   verbose_(true),
+   updated_(true)
  {
    this->LVS( ed.LVS() );
  }
@@ -69,7 +71,8 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
    first_bd_node_{ed.first_bd_node_},
    bd_face_vec_{ed.bd_face_vec_},
    subdomain_name_{ed.subdomain_name_},
-   verbose_{true}
+   verbose_{true},
+   updated_{ true }
  {
    this->LVS( move(ed.LVS()) );
    cout <<"\nModelSubDomain<dim,CELL>::ModelSubDomain: called MOVE constructor.\n";
@@ -94,6 +97,7 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
           first_bd_node_  = ed.first_bd_node_;
           bd_face_vec_    = ed.bd_face_vec_;
           verbose_        = ed.verbose_;
+		  updated_        = ed.updated_;
           subdomain_name_ = ed.subdomain_name_;
           this->LVS( ed.LVS() );
        }
@@ -5371,7 +5375,7 @@ void ModelSubDomain<dim,CELL>::Out() const
     @note template template parameters for functions are not allowed
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
+void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
     assert( fp != nullptr );
    
@@ -5436,7 +5440,7 @@ out( IDs );
     this vector. It is therefore cheaper to rebuild the vector from scratch
     during the reconstruction.
 */
-void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
+void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& info )
  {
     assert( fp != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );

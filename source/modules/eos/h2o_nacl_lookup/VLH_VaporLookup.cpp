@@ -97,10 +97,9 @@ namespace csmp
 
     char filename[60];
     strcpy(filename,"VLH_VaporLookupTable.bin");
-    FILE* infile;
-    infile                     = fopen( filename, "rb" );
-	
-    if( infile == NULL )
+	fstream infile(filename, ios::in | ios::binary);
+
+	if (!infile.is_open())
       {
         cout << "VLH_VaporLookup : Lookup file missing, computing ...\n\n";
         it                     = 0;
@@ -173,9 +172,8 @@ namespace csmp
         storage_vector[t_dim*viscosity_index+it]       = brine.Viscosity();
 	    
         // write file
-        FILE* outfile;
-        outfile = fopen( filename, "wb");
-        if( outfile == NULL )
+		fstream outfile(filename, ios::out | ios::binary);
+		if (!outfile.is_open())
           {
             cout << "could not even open it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -186,7 +184,7 @@ namespace csmp
           {
             cout << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile, storage_vector );
-            fclose(outfile);
+			outfile.close();
             cout << "done!\n";
           }
       }
@@ -195,7 +193,7 @@ namespace csmp
       {
         cout << "reading file " << filename << " ... ";
         skm_C_fread( infile, storage_vector );
-        fclose( infile );
+		infile.close();
         cout << "done!\n";
 	
         // finding value for Tmax, Pmax

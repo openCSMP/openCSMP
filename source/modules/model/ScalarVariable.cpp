@@ -250,18 +250,18 @@ ScalarVariable  makeScalar( VARIABLE_FLAG flag, double64 val )
   }
 
 
-bool ScalarVariable::Out( FILE* fp ) const
+bool ScalarVariable::Out( std::fstream& fp ) const
   {
-  fwrite( (void*)&flag_, sizeof(VARIABLE_FLAG), 1, fp);
-  fwrite( (void*)&data_, sizeof(double64), 1, fp);
+  fp.write( (char*)&flag_, sizeof(VARIABLE_FLAG));
+  fp.write( (char*)&data_, sizeof(double64));
   return true;
   }
 
 
-bool ScalarVariable::In( FILE* fp )
+bool ScalarVariable::In( std::fstream& fp )
   {
-  fread( (void*)&flag_, sizeof(VARIABLE_FLAG), 1, fp);
-  fread( (void*)&data_, sizeof(double64), 1, fp);
+  fp.read( (char*)&flag_, sizeof(VARIABLE_FLAG));
+  fp.read( (char*)&data_, sizeof(double64));
   return true;
   }
 

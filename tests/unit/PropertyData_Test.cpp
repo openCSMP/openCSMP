@@ -116,14 +116,14 @@ void PropertyData_Test::run()
     _info("PropertyData_Test::run: dataset1 written to file and read back to memory:");
     PropertyData datasetN( dataset1 ); // backup copy
 
-    std::FILE* out_fp = fopen( "PropertyData_Test", "wb" );
+    std::fstream out_fp( "PropertyData_Test", ios::out | ios::binary );
     dataset1.OutBinary( out_fp );
-    fclose( out_fp );
+	out_fp.close();
   
     /// reading stored flag and data vaues from file
-    std::FILE* in_fp = fopen( "PropertyData_Test", "rb" );
+    std::fstream in_fp("PropertyData_Test", ios::in | ios::binary);
     datasetN = inBinaryPropertyData( in_fp );
-    fclose( in_fp );
+	in_fp.close();
     datasetN.Out();
     _test( datasetN == dataset1 );
 

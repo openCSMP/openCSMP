@@ -440,15 +440,15 @@ bool  VectorVariable<2U>::IsWithinRange( double64 vmin, double64 vmax ) const
  }
 
 
- bool VectorVariable<2U>::Out( FILE* fp ) const
+ bool VectorVariable<2U>::Out( std::fstream& fp ) const
   {
-     fwrite( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
+     fp.write( (char*)this, sizeof(VectorVariable<2U>) );
      return true;
   }
 
- bool VectorVariable<2U>::In( FILE* fp )
+ bool VectorVariable<2U>::In( std::fstream& fp )
   {
-     fread( (void*)this, sizeof(VectorVariable<2U>), 1, fp );
+     fp.read( (char*)this, sizeof(VectorVariable<2U>) );
      return true;
   }
 

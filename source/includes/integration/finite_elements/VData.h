@@ -241,10 +241,10 @@ class VData {
   
 
     /// write mesh to supplied binary file
-    void OutBinary( std::FILE* fp ) const;
+    void OutBinary( std::fstream& fp ) const;
   
     /// read mesh from supplied binary file
-    void InBinary( std::FILE* fp );
+    void InBinary( std::fstream& fp );
   
     /// initialise VData=mesh connectivity structures from binary file
     void InText( std::ifstream& ifs );

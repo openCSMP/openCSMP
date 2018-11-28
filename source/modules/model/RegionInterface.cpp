@@ -462,9 +462,8 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
     const PropertyDatabase<dim>& database( regionComplex.Database() );
    
     std::string bin_file(file_name);
-
-    FILE*  fp(0);
-    if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
+	std::fstream fp(bin_file.c_str(), std::ios::out | std::ios::binary);
+    if ( !fp.is_open() ) {
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary:",
                             bin_file, "file could not be opened; nothing was done." );
          return;
@@ -498,7 +497,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
       size_t records = this->UniqueRegions();
 
       // writing number of unique regions
-      fwrite( (void*) &records, sizeof(size_t), 1, fp );
+      fp.write( (char*) &records, sizeof(size_t) );
 
       for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
            git=UniqueRegionsBegin(); git!=UniqueRegionsEnd(); ++git )
@@ -519,7 +518,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
      
      size_t records = this->Regions() - this->UniqueRegions();
 
-     fwrite( (void*) &records, sizeof(size_t), 1, fp );
+     fp.write( (char*) &records, sizeof(size_t) );
 
      for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ )
        {
@@ -553,7 +552,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
    }
 
     // 5. clean up
-    fclose( fp );
+    fp.close();
     std::cout <<"\nRegionInterface<"<< dim <<",REGION_COMPLEX>::OutputAllRegionsToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
 
@@ -577,10 +576,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
 
      std::string bin_file(file_name);
-
-     FILE*  fp(0);
-     // opening the file
-     if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
+	 std::fstream fp(bin_file.c_str(), std::ios::in | std::ios::binary);
+	 if (!fp.is_open()) {
           csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
           return;
@@ -611,7 +608,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      size_t  records(0);  // region records
 
      // number of regions
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t) );
      if ( records > 0 )
         // reading the regions sequentially
         for ( size_t i=0U; i<records; i++ )
@@ -643,7 +640,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
 
      // getting number of non-unique region records from file
      size_t records(0);
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t) );
      if ( records > 0 )
         // reading the regions sequentially
         for ( size_t i=0U; i<records; i++ )
@@ -691,7 +688,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
    // 6. cleanup
    // -----------------------------
 
-    fclose( fp );
+    fp.close();
     std::cout <<"\n\nRegionInterface<"<< dim <<",REGION_COMPLEX>::InputAllRegionsFromBinary: file '";
     std::cout << bin_file <<"' has been read successfully.\n";
 
@@ -728,8 +725,8 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary(  const char* reg
     heading += bin_file;
     heading +="'.";
 
-    FILE*  fp(0);
-    if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
+	std::fstream fp(bin_file.c_str(), std::ios::out | std::ios::binary);
+	if (!fp.is_open()) {
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary:",
                             bin_file, "file could not be opened; nothing was done." );
          return;
@@ -740,7 +737,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary(  const char* reg
 
     // 2. writing number of regions=1
     const size_t records(1U);
-    fwrite( (void*) &records, sizeof(size_t), 1, fp );
+    fp.write( (char*) &records, sizeof(size_t) );
 
     // 3. writing the name of region
     skm_C_fwrite( fp, region_name );
@@ -755,7 +752,7 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputRegionToBinary(  const char* reg
     domainVariablesOut( fp, subdomain, database );
 
     // 6. cleaning up
-    fclose( fp );
+    fp.close();
     std::cout <<"\nRegionInterface<"<< dim <<",REGION_COMPLEX>::OutputRegionToBinary:: region '";
     std::cout << region_name <<"' has been successfully written to: '";
     std::cout << bin_file <<"'"<< std::endl;
@@ -786,8 +783,8 @@ void RegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary( const char* fil
      const PropertyDatabase<dim>& database( regionComplex.Database() );
 
      std::string bin_file(file_name);
-     FILE*       fp(0);
-     if ( (fp=fopen( bin_file.c_str(), "ab")) == NULL ) {
+	 std::fstream fp(bin_file.c_str(), std::ios::out | std::ios::app | std::ios::binary);
+	 if (!fp.is_open()) {
           std::cerr <<"\nRegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary: file: '"<< bin_file;
           std::cerr <<"' could not be opened."<< std::endl;
           return;
@@ -800,7 +797,7 @@ void RegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary( const char* fil
      // --------------------------
      // writing number of unique regions
      size_t records(this->UniqueRegions());
-     fwrite( (void*) &records, sizeof(size_t), 1, fp );
+     fp.write( (char*) &records, sizeof(size_t) );
 
      for ( typename std::map<std::string,csmp::Region<dim> >::const_iterator
            git=UniqueRegionsBegin(); git!=UniqueRegionsEnd(); ++git )
@@ -818,7 +815,7 @@ void RegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary( const char* fil
      // writing non-unique regions
      // --------------------------
      records = this->Regions() - this->UniqueRegions();
-     fwrite( (void*) &records, sizeof(size_t), 1, fp );
+     fp.write( (char*) &records, sizeof(size_t) );
 
      for ( auto git=RegionsBegin(); git!=RegionsEnd(); git++ ) {
        // avoiding the region which is the master region since it was already written before
@@ -832,7 +829,7 @@ void RegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary( const char* fil
      domainVariablesOut( fp, regionComplex, database );
 
      // cleaning up
-     fclose( fp );
+     fp.close();
      std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::AppendRegionsToBinary: regions have been successfully written to: '";
      std::cout << bin_file <<"'"<< std::endl;
 
@@ -854,9 +851,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary( const char* reg
 
     std::string bin_file(file_name);
 
-     FILE*  fp(0);
-     // opening the file
-     if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
+	std::fstream fp(bin_file.c_str(), std::ios::in | std::ios::binary);
+	if (!fp.is_open()) {
           csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
           return;
@@ -869,7 +865,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionFromBinary( const char* reg
 
      // reading how many records will follow (should be 1 for this method)
      size_t  records(0);  // region records
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t) );
    
      // there should just be the region of interest, else something is wrong
      if ( records == 1 ) {
@@ -912,9 +908,8 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
     size_t               records(0);
     std::vector<size_t>  elmtIDs;
 
-     FILE*  fp(0);
-     // opening the file
-     if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
+	std::fstream fp(bin_file.c_str(), std::ios::in | std::ios::binary);
+	if (!fp.is_open()) {
           std::cerr <<"\nRegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary: file: '"<< bin_file;
           std::cerr <<"' could not be opened."<< std::endl;
           return;
@@ -923,7 +918,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      // skipping header and the first "master region"
      char  text[256U];
      skm_C_fread( fp, text );
-     fread( (void*) &records, sizeof(size_t), 1, fp ); // record
+    fp.read( (char*) &records, sizeof(size_t) ); // record
      assert( records == 1 );
      skm_C_fread( fp, text );    // name of region
      skm_C_fread( fp, elmtIDs ); // element indices
@@ -937,7 +932,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      // ------------------
      // unique regions
      // ------------------
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t) );
      if ( records > 0 )
         // reading the regions sequentially
         for ( size_t i=0U; i<records; i++ )
@@ -969,7 +964,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      // ------------------
      // non-unique regions
      // ------------------
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+    fp.read( (char*) &records, sizeof(size_t) );
      if ( records > 0U )
          for ( size_t i=0U; i<records; i++ )
          {
@@ -999,7 +994,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary( const char* fi
      /// @todo (3-D) We misuse the regions file here to store Model variables
      domainVariablesIn( fp, regionComplex, database );
 
-     fclose( fp );
+     fp.close();
 
      if ( Regions() == records ) {
           std::cout <<"\nRegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary: "<< records;

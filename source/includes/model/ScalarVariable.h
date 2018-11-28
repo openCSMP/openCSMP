@@ -136,8 +136,8 @@ class ScalarVariable {
     void             Out() const;
   
     /// reading and writing of scalar variables to binary files
-    bool             Out( FILE* fp ) const;
-    bool             In( FILE* fp );
+    bool             Out( std::fstream& fp ) const;
+    bool             In( std::fstream& fp );
 
   private:
     VARIABLE_FLAG flag_;

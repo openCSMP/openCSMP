@@ -260,15 +260,15 @@ bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const
      return (this < &t);
  } 
 
- bool TensorVariable<3U>::Out( FILE* fp ) const
+ bool TensorVariable<3U>::Out( std::fstream& fp ) const
   {
-     fwrite( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
+     fp.write( (char*)this, sizeof(TensorVariable<3U>) );
      return true;
   }
 
- bool TensorVariable<3U>::In( FILE* fp )
+ bool TensorVariable<3U>::In( std::fstream& fp )
   {
-     fread( (void*)this, sizeof(TensorVariable<3U>), 1, fp );
+     fp.read( (char*)this, sizeof(TensorVariable<3U>) );
      return true;
   }
   
@@ -1454,8 +1454,8 @@ bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
 
         ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-        csmp_error.notice( WARNING, "TensorVariable::EigenValues(double,double,double):",
-                          "found complex conjugate roots when calculating the eigenvalues of a tensor.");
+        //csmp_error.notice( WARNING, "TensorVariable::EigenValues(double,double,double):",
+        //                  "found complex conjugate roots when calculating the eigenvalues of a tensor.");
         return false;
       }
 

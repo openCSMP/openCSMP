@@ -1122,9 +1122,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
     const PropertyDatabase<dim>& database( boundaryComplex.Database() );
 
     std::string bin_file(file_name);
-
-    FILE*  fp(0);
-    if ( (fp=fopen( bin_file.c_str(), "wb")) == nullptr ) {
+    fstream fp(bin_file.c_str(), ios::out | ios::binary);
+    if ( !fp.is_open() ) {
          csmp_error.notice( ERROR, "BoundaryInterface::OutputAllBoundariesToBinary:",
                             bin_file, "file could not be opened; nothing was done." );
          return false;
@@ -1147,7 +1146,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      BinaryFileSectionWrite sect(fp, "BOUNDARY");
 
      const size_t records(this->Boundaries());
-     fwrite( (void*) &records, sizeof(size_t), 1, fp );
+     fp.write( (char*) &records, sizeof(size_t) );
 
      for ( typename std::map<std::string,csmp::Boundary<dim> >::const_iterator
            git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
@@ -1159,8 +1158,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
           // 1.2 writing the boundary flags
           int32 bflag = (*git).second.AtBoundary();
           const size_t record(1U);
-          fwrite( (void*) &record, sizeof(size_t), 1, fp );
-          fwrite( (void*) &bflag, sizeof(int32), 1, fp );
+		  fp.write((char*) &record, sizeof(size_t));
+		  fp.write((char*) &bflag, sizeof(int32));
           // 1.3 writing the stored variables
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";
@@ -1179,7 +1178,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      BinaryFileSectionWrite sect(fp, "BNDFFOTR");
    }
 
-    fclose( fp );
+    fp.close();
     std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
    
@@ -1199,10 +1198,8 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      std::string bin_file(file_name);
-
-     FILE*  fp(0);
-     // opening the file
-     if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
+	 fstream fp(bin_file.c_str(), ios::in | ios::binary);
+	 if (!fp.is_open()) {
           csmp_error.notice( ERROR, "BoundaryInterface::InputAllBoundariesFromBinary:",
                              bin_file, "file could not be opened; nothing was done." );
           return;
@@ -1227,7 +1224,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      SubDomainInfo  info;
      size_t  records(0);  // region records
      // getting number of unique region records from file
-     fread( (void*) &records, sizeof(size_t), 1, fp );
+     fp.read( (char*) &records, sizeof(size_t) );
      if ( records > 0 )
         // reading the regions sequentially
         for ( size_t i=0U; i<records; ++i )
@@ -1239,10 +1236,10 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
             
                   // 1.2 reading BOX boundary flag of the boundary
                   size_t record;
-                  fread( (void*) &record, sizeof(size_t), 1, fp );
+                  fp.read( (char*) &record, sizeof(size_t) );
                   assert( record == 1 );
                   int32 box_boundary_index(IRREGULAR_OUTSIDE);
-                  fread( (void*) &box_boundary_index, sizeof(int32), 1, fp );
+                  fp.read( (char*) &box_boundary_index, sizeof(int32) );
                   BOX_BOUNDARY bflag = intToBOX_BOUNDARY( box_boundary_index );
                   std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
                     it=faceBoundaryMap_.insert( std::make_pair( info.name.c_str(), csmp::Boundary<dim>(database,mesh,info,bflag) ) );
@@ -1277,7 +1274,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      BinaryFileSectionRead sect(fp, "BNDFFOTR");
    }
 
-    fclose( fp );
+    fp.close();
     std::cout <<"\n\nBoundaryInterface<"<< dim <<",BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary: file '";
     std::cout << bin_file <<"' has been read successfully.\n";
 

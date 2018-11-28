@@ -109,24 +109,25 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
   : ModelSubDomain<dim,Element>(info.name,pref)
  {
-    // traversal of the existing mesh nodes to find all its elements	
-	deque<csmp::Node<dim>*>		nodes;
-	deque<csmp::Element<dim>*>	elmts;
-	exploreNodesAndElementsFromMesh(&mesh, nodes, elmts);
-	sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-	sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-
+    // traversal of the existing mesh nodes to find all its elements
+	if (updated_) {
+		exploreNodesAndElementsFromMesh(&mesh, nodes_, elmts_);
+		sort(nodes_.begin(), nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		sort(elmts_.begin(), elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		updated_ = false;
+	}
+	
 	// building the element vector
 	// ---------------------------
 	this->elmt_vec_.reserve(info.interior_elmts.size() + info.perimeter_elmts.size());
 
 	// assigning pointers to the interior elements
 	for (size_t i : info.interior_elmts)
-		this->elmt_vec_.push_back(elmts[i]);
+		this->elmt_vec_.push_back(elmts_[i]);
 
 	// assigning pointers to the perimeter elements
 	for (size_t i : info.perimeter_elmts)
-		this->elmt_vec_.push_back(elmts[i]);
+		this->elmt_vec_.push_back(elmts_[i]);
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
@@ -153,11 +154,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 	
 	// assigning pointers to the interior nodes
 	for (size_t i : info.interior_nodes)
-		this->node_vec_.push_back(nodes[i]);
+		this->node_vec_.push_back(nodes_[i]);
 
 	// assigning pointers to the perimeter nodes
 	for (size_t i : info.perimeter_nodes)
-		this->node_vec_.push_back(nodes[i]);
+		this->node_vec_.push_back(nodes_[i]);
    
     // allocating the storage for boundary properties
     // ----------------------------------------------
@@ -1079,18 +1080,19 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
      this->elmt_vec_.clear();
 
 	 // traversal of the existing mesh nodes to find all its elements	
-	 deque<csmp::Node<dim>*>	nodes_vec;
-	 deque<csmp::Element<dim>*>	elmts_vec;
-	 exploreNodesAndElementsFromMesh(&mesh, nodes_vec, elmts_vec);
-	 sort(nodes_vec.begin(), nodes_vec.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-	 sort(elmts_vec.begin(), elmts_vec.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	 if (updated_) {
+		 exploreNodesAndElementsFromMesh(&mesh, nodes_, elmts_);
+		 sort(nodes_.begin(), nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		 sort(elmts_.begin(), elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		 updated_ = false;
+	 }
 
      UnionFind<Node<dim>*> union_find;
 
      Node<dim>* component_node(nullptr);
 
      // 1. Loop over all elements, unioning node sets
-	 for(auto eit : elmts_vec) {
+	 for(auto eit : elmts_) {
 		 auto fe = eit->FE();
 		 const size_t iNrNodes = fe->Nodes();
 		 auto n1 = eit->N(0u);
@@ -1122,7 +1124,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 		 std::vector<Node<dim>*> discovered_nodes_in_component;
 		 discovered_nodes_in_component.reserve(component_size);
 
-		 for (auto nit : nodes_vec) {
+		 for (auto nit : nodes_) {
 			 auto component = union_find.resolve(nit);
 			 if (component == component_node) {
 				 discovered_nodes_in_component.push_back(nit);
@@ -1134,7 +1136,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 	 // 4. Find the elements in the component
 	 {
 		 std::deque<Element<dim>*> discovered_elements_in_component;
-		 for (auto eit : elmts_vec) {
+		 for (auto eit : elmts_) {
 			 auto component = union_find.resolve(eit->N(0u));
 			 if (component == component_node) {
 				 discovered_elements_in_component.push_back(eit);

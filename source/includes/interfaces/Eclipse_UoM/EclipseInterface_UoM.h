@@ -8,8 +8,6 @@
 namespace csmp {
 
 namespace eclipse {
-
-
 	/// @file EclipseInterface.h - glue that creates a file-based interface between CSMP and Eclipse
 
 	/**  Notes on Eclipse
@@ -156,8 +154,13 @@ namespace eclipse {
 		/// assigns CSMP parameter specifications to the interface so that corresponding variables can be read
 		void SetProperties(const std::map<int, csmp::Parameter>&);
 
+		/// inserts wells in the Eclipse data
+		void AddWell();
+
+		/// inserts a well from its start and end points
+		void AddWell(const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point);
+
 #if 0
-		/// inserts a well path that penetrates the centers of the faces of the supplied cells
 		void AddWellFacePath(const std::string& well_name, const std::vector<size_t>& cell_ids);
 
 		void AddWellFacePath(const std::string& well_name, const std::vector<size_t>& cell_ids,

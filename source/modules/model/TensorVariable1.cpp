@@ -435,15 +435,15 @@ VectorVariable<1U> TensorVariable<1U>::Column( size_t ) const
 	return VectorVariable<1U>( flag, data );
 }
 
- bool TensorVariable<1>::Out( FILE* fp ) const
+ bool TensorVariable<1>::Out( std::fstream& fp ) const
   {
-  fwrite( (void*)this, sizeof(TensorVariable<1>), 1, fp );
+  fp.write( (char*)this, sizeof(TensorVariable<1>) );
   return true;
   }
 
- bool TensorVariable<1>::In( FILE* fp )
+ bool TensorVariable<1>::In( std::fstream& fp )
   {
-  fread( (void*)this, sizeof(TensorVariable<1>), 1, fp );
+  fp.read( (char*)this, sizeof(TensorVariable<1>) );
   return true;
   }
 

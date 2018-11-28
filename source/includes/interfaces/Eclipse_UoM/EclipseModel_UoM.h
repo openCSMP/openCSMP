@@ -58,6 +58,9 @@ class EclipseModel : public csmp::Model<3U> {
       /// Get ijk coordinates of corner-point grid cell that corresponds to csmp::Element
       ijk EclipseCoordinates( Element<3u>* e ) const { return elmt_to_ijk_.find(e)->second; }
   
+	  /// inserts a well path that penetrates the centers of the faces of the supplied cells
+	  void AddWell(const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point);
+
   public: // SKM accessors
       /// the dimensions of the original corner-point grid
       void GridDimensions( size_t& max_I, size_t& max_J, size_t& max_K ) const
@@ -68,6 +71,7 @@ class EclipseModel : public csmp::Model<3U> {
       void Initialize();
 
       // PROPS and other specs from RUNSPECS file
+	  EclipseInterface			mesh_interface;
       EclipseModelSettings      eclipse_model_settings_;
       std::set<std::string>     regions_;
       std::set<std::string>     faults_;

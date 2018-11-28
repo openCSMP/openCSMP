@@ -48,10 +48,9 @@ namespace csmp
 
     char filename[60];
     strcpy(filename,"CriticalCurveLookupTable.bin");
-    FILE* infile;
-    infile=fopen( filename, "rb");
+    fstream infile (filename, ios::in | ios::binary);
     cout << "point1\n"; 
-    if ( infile == NULL )
+    if ( !infile.is_open() )
       {
         cout <<"\nCriticalCurveLookup: file "<< filename;
         cout <<" could not be opened, computing ..."<< endl;
@@ -102,9 +101,8 @@ namespace csmp
         cout << "vector computed, now writing file CriticalCurveLookupTable.bin...\n";
         // write file
 
-        FILE* outfile;
-        outfile = fopen( filename, "wb");
-        if( outfile == NULL )
+        fstream outfile ( filename, ios::out | ios::binary );
+        if( !outfile.is_open() )
           {
             cout << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -115,7 +113,7 @@ namespace csmp
           {
             cout << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile, storage_vector );
-            fclose(outfile);
+			outfile.close();
             cout << "done!\n";
           }
       }
@@ -123,7 +121,7 @@ namespace csmp
       {
         cout << "reading file " << filename << " ... ";
         skm_C_fread( infile, storage_vector );
-        fclose( infile );
+		infile.close();
         cout << "done!\n";
       }
     cout << "CriticalCurveLookup, leaving constructor ...\n\n";

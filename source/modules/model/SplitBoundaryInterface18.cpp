@@ -259,8 +259,8 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesT
   heading += bin_file;
   heading +="'.";
 
-  FILE*  fp(0);
-  if ( (fp=fopen( bin_file.c_str(), "wb")) == NULL ) {
+  fstream fp(bin_file.c_str(), ios::in | ios::binary);
+  if ( !fp.is_open() ) {
     throw csmp::Exception( ERROR, "SplitBoundaryInterface18<dim>::OutputSplitBoundariesToBinary:", "Binary file could not be created." );
     return false;
     }
@@ -269,7 +269,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesT
 
   // writing number of splitboundaries
   size_t records(this->SplitBoundaries());
-  fwrite( (void*) &records, sizeof(size_t), 1, fp );
+  fp.write( (char*) &records, sizeof(size_t) );
 
   for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); bit++ )
     {
@@ -281,7 +281,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesT
     }
 
   // cleaning up
-  fclose( fp );
+  fp.close();
   std::cout <<"\nSplitBoundaryInterface18<dim>::OutputSplitBoundariesToBinary: split boundaries have been successfully written to: '";
   std::cout << bin_file <<"'"<< std::endl;
   return true;
@@ -298,8 +298,8 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFr
   const csmp::Region<dim>&  rref( splitboundaryComplex->Region("Model") );
 
   std::string bin_file(file_name);
-  FILE*  fp(0);
-  if ( (fp=fopen( bin_file.c_str(), "rb")) == NULL ) {
+  fstream fp(bin_file.c_str(), ios::in | ios::binary);
+  if ( !fp.is_open() ) {
     throw csmp::Exception( ERROR, "BoundaryInterface<dim>::InputSplitBoundariesFromBinary:", "Binary file could not be opened." );
     return false;
     }
@@ -310,7 +310,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFr
 
   // reading number of splitboundaries
   size_t records(0);
-  fread( (void*) &records, sizeof(size_t), 1, fp );
+  fp.read( (char*) &records, sizeof(size_t) );
 
   std::cout << "\nSplitBoundaryInterface18<dim>::InputSplitBoundariesFromBinary: reading " << csCache << " containing "
             << records << " splitboundaries\n" <<  std::endl;
@@ -331,7 +331,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFr
       return false;
     std::cout << "\nSplitBoundaryInterface18<dim>::InputSplitBoundariesFromBinary: read boundary " << bName << " successfully.\n";
     }
-  fclose(fp);
+  fp.close();
   return true;
   
 } // end InputSplitBoundariesFromBinary
