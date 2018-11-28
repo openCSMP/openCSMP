@@ -110,9 +110,9 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   : ModelSubDomain<dim,Element>(info.name,pref)
  {
     // traversal of the existing mesh nodes to find all its elements
-	if (updated_) {
+	if (this->updated_) {
 		exploreNodesAndElementsFromMesh(&mesh, this->nodes_, this->elmts_);
-		updated_ = false;
+		this->updated_ = false;
 	}
 	sort(this->nodes_.begin(), this->nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 	sort(this->elmts_.begin(), this->elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
@@ -124,11 +124,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
 	// assigning pointers to the interior elements
 	for (size_t i : info.interior_elmts)
-		this->elmt_vec_.push_back(elmts_[i]);
+		this->elmt_vec_.push_back(this->elmts_[i]);
 
 	// assigning pointers to the perimeter elements
 	for (size_t i : info.perimeter_elmts)
-		this->elmt_vec_.push_back(elmts_[i]);
+		this->elmt_vec_.push_back(this->elmts_[i]);
 
     // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
     // -------------------------------------------------------------------------------------------------
@@ -1081,11 +1081,11 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
      this->elmt_vec_.clear();
 
 	 // traversal of the existing mesh nodes to find all its elements	
-	 if (updated_) {
+	 if (this->updated_) {
 		 exploreNodesAndElementsFromMesh(&mesh, this->nodes_, this->elmts_);
 		 sort(this->nodes_.begin(), this->nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 		 sort(this->elmts_.begin(), this->elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-		 updated_ = false;
+		 this->updated_ = false;
 	 }
 
      UnionFind<Node<dim>*> union_find;
