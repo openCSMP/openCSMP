@@ -5377,8 +5377,6 @@ void ModelSubDomain<dim,CELL>::Out() const
 template<size_t dim, template<size_t> class CELL>
 void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
-    assert( fp != nullptr );
-   
     // 1. writing name of the region
     skm_C_fwrite( fp, Name().c_str() );
    
@@ -5442,7 +5440,6 @@ out( IDs );
 */
 void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& info )
  {
-    assert( fp != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the region

@@ -190,9 +190,9 @@ class Boundary : public ModelSubDomain<dim,Face> {
 
     // auxilliary binary IO
     template<class Var>
-    bool Out( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
+    bool Out( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
     template<class Var>
-    bool In( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype );
+    bool In( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype );
 
     BOX_BOUNDARY boundaryFlag_;
 };

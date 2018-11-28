@@ -271,14 +271,14 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
  */
 template<size_t dim>
 template<class Var>
-bool Boundary<dim>::Out( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype ) const
+bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const
   {
   set<string> propList;
   size_t vCount(0), bytes( sizeof(size_t) );
 
   this->pref_.ListProperties( place, vtype, propList );
   vCount = propList.size();
-  fwrite( (void*) &vCount, bytes, 1, fp );
+  fp.write( (char*) &vCount, bytes );
   if( vCount != 0 )
     {
     FEM_Data<Var> femData;
@@ -417,10 +417,10 @@ template void Boundary<3>::OutputVariableTo<TensorVariable<3U> >( const char*, F
  */
 template<size_t dim>
 template<class Var>
-bool Boundary<dim>::In( FILE* fp, PLACEMENT, VARIABLE_TYPE )
+bool Boundary<dim>::In( fstream& fp, PLACEMENT, VARIABLE_TYPE )
   {
   size_t vCount(-1);
-  fread( (void*) &vCount, sizeof(size_t), 1, fp );
+  fp.read( (char*) &vCount, sizeof(size_t) );
   if( vCount == 0 )
       return true;
   FEM_Data<Var> femData;

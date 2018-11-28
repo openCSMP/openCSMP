@@ -111,11 +111,12 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
  {
     // traversal of the existing mesh nodes to find all its elements
 	if (updated_) {
-		exploreNodesAndElementsFromMesh(&mesh, nodes_, elmts_);
-		sort(nodes_.begin(), nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-		sort(elmts_.begin(), elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		exploreNodesAndElementsFromMesh(&mesh, this->nodes_, this->elmts_);
 		updated_ = false;
 	}
+	sort(this->nodes_.begin(), this->nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	sort(this->elmts_.begin(), this->elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+
 	
 	// building the element vector
 	// ---------------------------
@@ -154,11 +155,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 	
 	// assigning pointers to the interior nodes
 	for (size_t i : info.interior_nodes)
-		this->node_vec_.push_back(nodes_[i]);
+		this->node_vec_.push_back(this->nodes_[i]);
 
 	// assigning pointers to the perimeter nodes
 	for (size_t i : info.perimeter_nodes)
-		this->node_vec_.push_back(nodes_[i]);
+		this->node_vec_.push_back(this->nodes_[i]);
    
     // allocating the storage for boundary properties
     // ----------------------------------------------
@@ -1081,9 +1082,9 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 
 	 // traversal of the existing mesh nodes to find all its elements	
 	 if (updated_) {
-		 exploreNodesAndElementsFromMesh(&mesh, nodes_, elmts_);
-		 sort(nodes_.begin(), nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
-		 sort(elmts_.begin(), elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		 exploreNodesAndElementsFromMesh(&mesh, this->nodes_, this->elmts_);
+		 sort(this->nodes_.begin(), this->nodes_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+		 sort(this->elmts_.begin(), this->elmts_.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
 		 updated_ = false;
 	 }
 
@@ -1092,7 +1093,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
      Node<dim>* component_node(nullptr);
 
      // 1. Loop over all elements, unioning node sets
-	 for(auto eit : elmts_) {
+	 for(auto eit : this->elmts_) {
 		 auto fe = eit->FE();
 		 const size_t iNrNodes = fe->Nodes();
 		 auto n1 = eit->N(0u);
@@ -1124,7 +1125,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 		 std::vector<Node<dim>*> discovered_nodes_in_component;
 		 discovered_nodes_in_component.reserve(component_size);
 
-		 for (auto nit : nodes_) {
+		 for (auto nit : this->nodes_) {
 			 auto component = union_find.resolve(nit);
 			 if (component == component_node) {
 				 discovered_nodes_in_component.push_back(nit);
@@ -1136,7 +1137,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 	 // 4. Find the elements in the component
 	 {
 		 std::deque<Element<dim>*> discovered_elements_in_component;
-		 for (auto eit : elmts_) {
+		 for (auto eit : this->elmts_) {
 			 auto component = union_find.resolve(eit->N(0u));
 			 if (component == component_node) {
 				 discovered_elements_in_component.push_back(eit);
