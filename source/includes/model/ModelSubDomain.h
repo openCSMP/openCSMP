@@ -299,9 +299,6 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     size_t                                      first_bd_node_;
     bool                                        verbose_;
 
-	bool										updated_;
-	std::deque<csmp::Node<dim>*>				nodes_;
-	std::deque<csmp::Element<dim>*>				elmts_;
   private:
     ModelSubDomain();
 };

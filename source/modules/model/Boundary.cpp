@@ -139,7 +139,66 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
     this->ResizePropertyStorage( pref.LocalVariablesAt(BOUNDARY) );
  }
 
+/// new constructor: re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+template<size_t dim>
+Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
+						 const size_t& elements,
+						 const std::deque<Node<dim>*>& nodes,
+                         const std::deque<Face<dim>*>& faces,
+                         const SubDomainInfo& info,
+                         BOX_BOUNDARY bflag )
+  : ModelSubDomain<dim,Face>(info.name,pref),
+    boundaryFlag_(bflag)
+ {
+    // building the face vector
+    // ------------------------	 
+	 this->elmt_vec_.reserve(info.interior_elmts.size() + info.perimeter_elmts.size());
+	 	 
+	 // assigning pointers to the interior faces
+	 for (size_t i : info.interior_elmts)
+		 this->elmt_vec_.push_back(faces[i- elements]);
 
+	 // assigning pointers to the perimeter faces
+	 for (size_t i : info.perimeter_elmts)
+		 this->elmt_vec_.push_back(faces[i - elements]);
+
+	 // sorting the subvectors for future searching
+	 const auto perimeterFacesBegin(next(this->elmt_vec_.begin(), info.interior_elmts.size()));
+	 
+    // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
+    this->bd_face_vec_.reserve( info.perimeter_faces.size() );    
+	const auto facesEnd(this->elmt_vec_.end());
+    for ( auto it=perimeterFacesBegin; it!=facesEnd; ++it ) {		
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all the faces of the element that are located on the model boundary
+         vector<ONE_BYTE_NUMBER>  boundary_faces;
+         const size_t faces((*it)->Faces());
+         boundary_faces.reserve(faces);
+         for ( size_t face=0U; face<faces; ++face )
+           if ( (*it)->Neighbor(face) == nullptr )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         this->bd_face_vec_.emplace_back( boundary_faces );
+      }
+
+    // building the node vector
+    // ------------------------
+	// assigning pointers to the interior and perimeter nodes
+	this->first_bd_node_ = info.interior_nodes.size();
+	this->node_vec_.reserve(info.interior_nodes.size() + info.perimeter_nodes.size());
+		
+	// assigning pointers to the interior faces
+	for (size_t i : info.interior_nodes)
+		this->node_vec_.push_back(nodes[i]);
+
+	// assigning pointers to the perimeter faces
+	for (size_t i : info.perimeter_nodes)
+		this->node_vec_.push_back(nodes[i]);
+
+	// allocating the storage for boundary properties
+    // ----------------------------------------------
+    this->ResizePropertyStorage( pref.LocalVariablesAt(BOUNDARY) );
+ }
 
 template<size_t dim>
 IntegrationPointVariables Boundary<dim>::FaceIntegrationPointVariables() const

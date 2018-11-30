@@ -400,10 +400,13 @@ void Model<dim>::Initialize( bool isoparametric_elements,
          vset.ContainsFiniteVolumeIntegrationPointData() )
       InstantiateFiniteVolumes();
 
+	// 5. assigning properties to mesh
+	InputVariablesFrom(vset);
+
     cout <<"\nModel<dim>::Initialize(VSet): ";
     cout <<"Mesh has been built successfully..." << endl;
 
-    // 4. Forming Boundaries
+    // 6. Forming Boundaries
     if ( create_boundaries ) {
           if ( !non_box_shaped_model && this->BoxShaped() ) {
                 this->EstablishBoxBoundaries();
@@ -418,12 +421,12 @@ void Model<dim>::Initialize( bool isoparametric_elements,
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
-    // 5. Adding potentially required property storage
+    // 7. Adding potentially required property storage
     InitializeLocalVariableStorage();
     UpdateSubdomainPropertyStorage();
-
-    // 6. assigning properties to mesh
-    InputVariablesFrom( vset );
+	
+	// 8. final sanity check
+	CheckElementsAfterBuilding();
 
     cout << "\n================================================";
     cout << "\nModel has been established successfully!";

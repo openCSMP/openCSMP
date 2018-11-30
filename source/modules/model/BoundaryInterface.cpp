@@ -1218,6 +1218,20 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
      // 1. reading the boundaries
      const PropertyDatabase<dim>& database( static_cast<const BOUNDARY_COMPLEX<dim>& >(*this).Database() );
      MeshManager<dim>& mesh( static_cast<BOUNDARY_COMPLEX<dim>& >(*this).Mesh() );
+
+	 // traversal of the existing mesh root faces to find all its faces	
+	 const size_t elements(mesh.Elements());
+	 deque<Face<dim>*> faces;
+	 exploreFacesFromMesh(&mesh, faces);
+	 sort(faces.begin(), faces.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+
+	 // traversal of the existing mesh nodes to find all its elements	
+	 deque<Node<dim>*> nodes;
+	 deque<Element<dim>*> elmts;
+	 exploreNodesAndElementsFromMesh(&mesh, nodes, elmts);
+	 sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+
+
    {
      BinaryFileSectionRead sect(fp, "BOUNDARY");
      
@@ -1242,7 +1256,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                   fp.read( (char*) &box_boundary_index, sizeof(int32) );
                   BOX_BOUNDARY bflag = intToBOX_BOUNDARY( box_boundary_index );
                   std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
-                    it=faceBoundaryMap_.insert( std::make_pair( info.name.c_str(), csmp::Boundary<dim>(database,mesh,info,bflag) ) );
+                    it=faceBoundaryMap_.insert( std::make_pair( info.name.c_str(), csmp::Boundary<dim>(database, elements, nodes, faces, info,bflag) ) );
                   //   ^^^^^^^^^^^^^^^
                   if ( !it.second )
                        throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputAllBoundariesFromBinary:",

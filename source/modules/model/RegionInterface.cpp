@@ -601,6 +601,13 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
      // -----------------------------
      // 2. unique regions
      // -----------------------------
+
+	 std::deque<csmp::Node<dim>*>	 nodes;
+	 std::deque<csmp::Element<dim>*> elmts;
+	 exploreNodesAndElementsFromMesh(&regionComplex.Mesh(), nodes, elmts);
+	 std::sort(nodes.begin(), nodes.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+	 std::sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+
    SubDomainInfo  info;
 
    {
@@ -618,7 +625,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              readDomainIndexesFromBinaryFile( dim, fp, info );
              // reconstruct the region
              std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-               it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
+               it=uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database, nodes, elmts, info) ) );
              //   ^^^^^^^^^^^^^^^
              if ( !it.second )
                 throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
@@ -651,7 +658,7 @@ void RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary( const char*
              readDomainIndexesFromBinaryFile( dim, fp, info );
              // if the region info record is not empty the region is reconstructed
              std::pair<typename std::map<std::string,csmp::Region<dim> >::iterator,bool>
-                 it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database,regionComplex.Mesh(),info) ) );
+                 it=groupMap_.insert( std::make_pair( info.name, csmp::Region<dim>(database, nodes, elmts, info) ) );
              if ( !info.interior_elmts.empty() ) {
                  if ( !it.second )
                     throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
