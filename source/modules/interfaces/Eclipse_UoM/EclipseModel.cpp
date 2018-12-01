@@ -51,8 +51,7 @@ void EclipseModel::Initialize()
 		bool isoparametric_elements(true);
 
 		csmp::ModelTopology   mesh_topology(isoparametric_elements);
-		EclipseInterface      mesh_interface;
-
+		
 		// =====================================================================
 		// 0. reads grid from ECLIPSE input files and converts into CSMP mesh
 		// =====================================================================
@@ -153,7 +152,8 @@ if(0){
 
 		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
 		const bool isoparametric(true);
-		csmp::Model<3U>::Initialize(isoparametric, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false.
+		//csmp::Model<3U>::Initialize(isoparametric, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false.
+		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false.
 
 		// JC: move this into Model class - identifying box boundaries if any
 		EstablishRegularities();
@@ -213,8 +213,7 @@ if(0){
 template<class Container>
 void EclipseModel::GetRegions(Container& data)
 {
-	Container newdata(regions_.begin(), regions_.end());
-	std::swap(data, newdata);
+	mesh_interface.GetRegions(data);
 }
 
 template void EclipseModel::GetRegions(std::vector<std::string>&);
@@ -225,8 +224,7 @@ template void EclipseModel::GetRegions(std::set<std::string>&);
 template<class Container>
 void EclipseModel::GetFaults(Container& data)
 {
-	Container newdata(faults_.begin(), faults_.end());
-	std::swap(data, newdata);
+	mesh_interface.GetFaults(data);
 }
 
 template void EclipseModel::GetFaults(std::vector<std::string>&);
@@ -237,14 +235,17 @@ template void EclipseModel::GetFaults(std::set<std::string>&);
 template<class Container>
 void EclipseModel::GetWells(Container& data)
 {
-	Container newdata(wells_.begin(), wells_.end());
-	std::swap(data, newdata);
+	mesh_interface.GetWells(data);
 }
 
 template void EclipseModel::GetWells(std::vector<std::string>&);
 template void EclipseModel::GetWells(std::list<std::string>&);
 template void EclipseModel::GetWells(std::set<std::string>&);
 
+void EclipseModel::AddWell(const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point)
+{
+	mesh_interface.AddWell(well_name, well_start_point, well_end_point);
+}
 
 /// processing special regions
 void EclipseModel::CreateBoundariesAroundFaults(bool keep_fault_regions)

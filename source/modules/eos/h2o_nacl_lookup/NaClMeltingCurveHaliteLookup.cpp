@@ -45,9 +45,9 @@ namespace csmp
 	
     char filename[60];
     strcpy(filename,"NaClMeltingCurveHaliteLookupTable.bin");
-    FILE* infile;
-    infile=fopen( filename, "rb");
-    if ( infile == NULL )
+    
+	fstream infile(filename, ios::in | ios::binary);
+	if (!infile.is_open())
       {
         cerr << "NaClMeltingCurveHaliteLookup: file " << filename;
         cerr << " could not be openend, computing ...\n";
@@ -123,9 +123,8 @@ namespace csmp
           }
         cerr << "vector computed, now writing file NaClMeltingCurveHaliteLookupTable.bin...\n";
         // write file
-        FILE* outfile;
-        outfile = fopen( filename, "wb");
-        if( outfile == NULL )
+        fstream outfile(filename, ios::out | ios::binary);
+        if( !outfile.is_open() )
           {
             cerr << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -136,7 +135,7 @@ namespace csmp
           {
             cerr << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile, storage_vector );
-            fclose(outfile);
+            outfile.close();
             cerr << "done!\n";
           }
       }
@@ -144,7 +143,7 @@ namespace csmp
       {
         cerr << "reading file " << filename << " ... ";
         skm_C_fread( infile, storage_vector );
-        fclose( infile );
+		infile.close();
         cerr << "done!\n";
       }
     cerr << "NaClMeltingCurveHaliteLookup, leaving constructor ...\n\n";

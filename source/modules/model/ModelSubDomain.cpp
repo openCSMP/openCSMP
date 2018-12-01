@@ -37,11 +37,11 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim, template<size_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( const string& subdomain_name,
-                                          const PropertyDatabase<dim>& pref )
- :  pref_(pref),
-    subdomain_name_(subdomain_name),
-    verbose_(true)
+ModelSubDomain<dim, CELL>::ModelSubDomain(const string& subdomain_name,
+	const PropertyDatabase<dim>& pref)
+	: pref_(pref),
+	subdomain_name_(subdomain_name),
+	verbose_(true)
  {
  }
 
@@ -5371,10 +5371,8 @@ void ModelSubDomain<dim,CELL>::Out() const
     @note template template parameters for functions are not allowed
 */
 template<size_t dim, template<size_t> class CELL>
-void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( FILE* fp ) const
+void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) const
  {
-    assert( fp != nullptr );
-   
     // 1. writing name of the region
     skm_C_fwrite( fp, Name().c_str() );
    
@@ -5436,9 +5434,8 @@ out( IDs );
     this vector. It is therefore cheaper to rebuild the vector from scratch
     during the reconstruction.
 */
-void readDomainIndexesFromBinaryFile( size_t dim, FILE* fp, SubDomainInfo& info )
+void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& info )
  {
-    assert( fp != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // 1. reading name of the region

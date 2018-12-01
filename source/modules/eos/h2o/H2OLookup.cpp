@@ -53,76 +53,73 @@ namespace csmp {
 
     // 4. Try to locate and read existing lookup tables files declared above.
     //    If a file doesn't exist, compute lookup vectors and store in file.
-    FILE* vp;
-    FILE* lp;
     char vpname[200],lpname[200];
     strcpy(vpname,filename[0]);
     strcpy(lpname,filename[1]);
 	
-    vp = fopen(vpname,"rb");
-    if(vp == NULL ) 
+	fstream vp(vpname, ios::in | ios::binary);
+	if(!vp.is_open()) 
       {
 	cout <<"\nH2OLookup::H2OLookup() - File: "<< vpname;
 	cout <<" could not be opened, computing ..."<< endl;
 	BuildTable0And1();
 	// ... 
 	cout << "now reading newly built file " << vpname << " ... ";
-	vp = fopen(vpname,"rb");
+	vp.open(vpname, ios::in | ios::binary);
 	skm_C_fread( vp, satvap );
-	fclose(vp);
+	vp.close();
 	cout << "done!\n";
       }
     else
       {
 	cout << "reading file " << vpname << " ... ";
 	skm_C_fread( vp, satvap );
-	fclose(vp);
+	vp.close();
 	cout << "done!\n";
       }
 
-    lp = fopen(lpname, "rb");
-    if (lp == NULL )
+	fstream lp(lpname, ios::in | ios::binary);
+    if (!lp.is_open())
       {
 	cout <<"\nH2OLookup::H2OLookup() - File: "<< lpname;
 	cout <<" could not be opened, computing ..."<< endl;
 	BuildTable0And1();
 	// ...
 	cout << "now reading newly built file " << lpname << " ... ";
-	lp = fopen(lpname, "rb");
+	lp.open(lpname, ios::in | ios::binary);
 	skm_C_fread( lp, satliq );
-	fclose(lp);
+	lp.close();
 	cout << "done!\n";
       }
     else
       {
 	cout << "reading file " << lpname << " ... " ; 
 	skm_C_fread( lp, satliq );
-	fclose(lp);
+	lp.close();
 	cout << "done !\n";
       }
 
     // Single phase stuff
-    FILE* sp;
     char spname[200];
     strcpy(spname,filename[2]);
-    sp=fopen( spname, "rb");
-    if ( sp == NULL )
+	fstream sp(spname, ios::in | ios::binary);
+    if ( !sp.is_open() )
       {
 	cout <<"\nH2OLookup::H2OLookup() - File: "<< spname;
 	cout <<" could not be opened, computing ..."<< endl;
 	BuildTable2();
 	// ...
 	cout << "now reading newly built file " << spname << " ... ";
-	sp=fopen( spname, "rb");
+	sp.open(spname, ios::in | ios::binary);
 	skm_C_fread( sp, singlephase );
-	fclose(sp);
+	sp.close();
 	cout << "done!\n";
       }
     else
       {
 	cout << "reading file " << spname << " ... ";
 	skm_C_fread( sp, singlephase );
-	fclose(sp);
+	sp.close();
 	cout << "done!\n";
       }
 	
@@ -923,23 +920,23 @@ namespace csmp {
     freeProp(liqprops);
     freeProp(properties);
 
-    char vname[200];
-    FILE*  vp;
+    char vname[200];    
     strcpy( vname, filename[0] );
-    if ( (vp=fopen( vname, "wb")) == NULL )
+	fstream vp(vname, ios::out | ios::binary);
+    if ( !vp.is_open() )
       cout <<"\nH2OLookup::BinaryOut: File: "<< filename[0] << " could not be opened"<< endl;
     cout << "writing file " << vname << endl;
     skm_C_fwrite( vp, vap_vector ); 
-    fclose( vp );
+	vp.close();
 	    
     char lname[200];
-    FILE*  lp;
     strcpy( lname, filename[1] );
-    if ( (lp=fopen( lname, "wb")) == NULL )
+	fstream lp(lname, ios::out | ios::binary);
+	if (!lp.is_open())
       cout <<"\nH2OLookup::BinaryOut: File: "<< filename[1] << " could not be opened"<< endl;
     cout << "writing file " << lname << endl;
     skm_C_fwrite( lp, liq_vector ); 
-    fclose( lp );
+	lp.close();
 	    
   }
 
@@ -1065,14 +1062,14 @@ namespace csmp {
     freeProp(vapprops);
     freeProp(liqprops);
 
-    char sname[200];
-    FILE*  sp;
+    char sname[200];    
     strcpy( sname, filename[2] );
-    if ( (sp=fopen( sname, "wb+")) == NULL )
+	fstream sp(sname, ios::out | ios::binary);
+    if ( sp.is_open() )
       cout <<"\nH2OLookup::BinaryOut: File: "<< filename[2] << " could not be opened"<< endl;
     cout << "writing file " << sname << endl;
     skm_C_fwrite( sp, singlephase_vector ); 
-    fclose( sp );
+	sp.close();
 	
   }    
 

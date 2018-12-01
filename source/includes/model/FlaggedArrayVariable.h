@@ -149,8 +149,8 @@ class FlaggedArrayVariable
       bool           Out( const char* filename, size_t precision = 9 ) const;
       
       /// SKM: DO NOT USE C-STYLE I/O - for internal csmp binary IO
-      bool           Out( std::FILE* fp ) const;
-      bool           In( std::FILE* fp );
+      bool           Out( std::fstream& fp ) const;
+      bool           In( std::fstream& fp );
 
       FlaggedArrayContainer::const_iterator Begin() const;
       FlaggedArrayContainer::const_iterator End()   const;

@@ -194,8 +194,8 @@ class VectorVariable<3U> {
     // IO
     void            In();
     void            Out() const;
-    bool            In( FILE* );
-    bool            Out( FILE* ) const;
+    bool            In( std::fstream& );
+    bool            Out( std::fstream& ) const;
 
     friend class TensorVariable<3U>;
 

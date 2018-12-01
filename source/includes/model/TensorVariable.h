@@ -268,10 +268,10 @@ class TensorVariable<3U> {
     void              Out() const;
   
     /// reads the tensor from the supplied input file
-    bool              In( FILE* fp );
+    bool              In( std::fstream& fp );
   
     /// writes the tensor to the supplied output file
-    bool              Out( FILE* fp ) const;
+    bool              Out( std::fstream& fp ) const;
 
   private:
     std::array<VARIABLE_FLAG,3U>            flag;

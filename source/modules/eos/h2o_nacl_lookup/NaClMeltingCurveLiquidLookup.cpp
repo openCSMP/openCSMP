@@ -41,9 +41,8 @@ namespace csmp{
 	
     char filename[60];
     strcpy(filename,"NaClMeltingCurveLiquidLookupTable.bin");
-    FILE* infile;
-    infile=fopen( filename, "rb");
-    if ( infile == NULL ) 
+    fstream infile(filename, ios::in | ios::binary);
+	if (!infile.is_open())
       {
         cout << "NaClMeltingCurveLiquidLookup: file " << filename;
         cout << " could not be opened, computing ...\n";
@@ -117,10 +116,9 @@ namespace csmp{
                 //d cout << "NaClMeltingCurveLiquidLookup constructor, entry for t = " << tcurrent << " : survived all\n";
               }
           }	    cout << "vector computed, now writing file NaClMeltingCurveLiquidLookupTable.bin...\n";
-        // write file
-        FILE* outfile;
-        outfile = fopen( filename, "wb");
-        if( outfile == NULL ){
+        // write file        
+		fstream outfile(filename, ios::out | ios::binary);
+		if (!outfile.is_open()){
           cout << "could not even it for writing, please stop program and debug !!!!\n";
           char yesno;
           cout << "or enter any key to continue (simulation likely to crash or give wrong results!) :";
@@ -130,15 +128,15 @@ namespace csmp{
           {
             cout << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile, storage_vector );
-            fclose(outfile);
+			outfile.close();
             cout << "done!\n";
           }
       }
-    else
+      else
       {
         cout << "reading file " << filename << " ... ";
         skm_C_fread( infile, storage_vector );
-        fclose( infile );
+		infile.close();
         cout << "done!\n";
       }
     cout << "NaClMeltingCurveLiquidLookup, leaving constructor ...\n\n";

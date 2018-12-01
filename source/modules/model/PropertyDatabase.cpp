@@ -402,10 +402,10 @@ const char*  PropertyDatabase<dim>::Usage( const char* s ) const
  @return  true if it succeeds, false if it fails.
  */
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryOut( FILE* fp ) const
+bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
   {
   size_t parameterCount( propList_.size() );
-  fwrite( (void*) &parameterCount, sizeof(size_t), 1, fp );
+  fp.write( (char*) &parameterCount, sizeof(size_t) );
 
   for( auto& prop : propList_ )
     {
@@ -423,15 +423,14 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
   {
   string outputFileName(fileName);
 
-  FILE*  fp(0);
-  fp = fopen( outputFileName.c_str(), "wb" );
-  if (!fp)
+  fstream fp(outputFileName.c_str(), ios::out | ios::binary );
+  if (!fp.is_open())
    return false;
 
   if( !BinaryOut(fp) )
     return false;
 
-  fclose(fp);
+  fp.close();
   return true;
   }
 
@@ -448,10 +447,10 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
  @return  true if it succeeds, false if it fails.
  */
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( FILE* fp )
+bool PropertyDatabase<dim>::BinaryIn( fstream& fp )
   {
   size_t parameterCount(0);
-  fread( (void*) &parameterCount, sizeof(size_t), 1, fp );
+  fp.read( (char*) &parameterCount, sizeof(size_t) );
 
   char buf[255];
   for( size_t i(0); i < parameterCount; ++i )
@@ -475,15 +474,14 @@ bool PropertyDatabase<dim>::BinaryIn( const char* fileName )
 
   string inputFileName(fileName);
 
-  FILE*  fp(0);
-  fp = fopen( fileName, "rb" );
-  if (!fp)
+  fstream fp(inputFileName.c_str(), ios::in | ios::binary);
+  if (!fp.is_open())
     return false;
 
   if( !BinaryIn(fp) )
     return false;
 
-  fclose(fp);
+  fp.close();
   UpdateParametersAndDatabase();
   FlushToScreen();
   return true;

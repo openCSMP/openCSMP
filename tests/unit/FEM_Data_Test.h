@@ -173,13 +173,13 @@ void FEM_Data_Test::run()
   _test( femDataRange[ 0 ] != vectorVariableRange2 );
 
   // .) BINARY OPS
-  std::FILE * femDataBinary;
-  femDataBinary = std::fopen( "femDataBinary", "w" );
+  std::fstream femDataBinary ( "femDataBinary", std::ios::out | std::ios::binary );
   femDataVectorNode3inputVector.OutBinary( femDataBinary );
-  std::fclose( femDataBinary );
-  femDataBinary = std::fopen( "femDataBinary", "r" );
+  femDataBinary.close();
+
+  femDataBinary.open ( "femDataBinary", std::ios::in | std::ios::binary );
   femDataVectorNode3inputVectorCopy.InBinary( femDataBinary );
-  std::fclose( femDataBinary );
+  femDataBinary.close();
   _test( femDataVectorNode3inputVector == femDataVectorNode3inputVectorCopy );
 
 

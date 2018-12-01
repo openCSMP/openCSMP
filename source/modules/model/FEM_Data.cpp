@@ -194,24 +194,24 @@ void  FEM_Data<csp_type>::MinMaxOf( csp_type& tmin, csp_type& tmax ) const
 namespace femDataBinaryDispatch {
 
   template<typename csp_type>
-  bool outBinary( FILE* fp, const vector<csp_type>& cntr )
+  bool outBinary( fstream& fp, const vector<csp_type>& cntr )
     {
       return skm_C_fwrite( fp, cntr );
     }
 
   template<typename csp_type>
-  bool inBinary( FILE* fp, vector<csp_type>& cntr )
+  bool inBinary( fstream& fp, vector<csp_type>& cntr )
     {
       return skm_C_fread( fp, cntr );
     }
 
   template<>
-  bool outBinary( FILE* fp, const vector<ArrayVariable>& arrayVariables )
+  bool outBinary( fstream& fp, const vector<ArrayVariable>& arrayVariables )
     {      
       const size_t dataDepth( arrayVariables.size() );
 
       // size
-      fwrite( (void*) &dataDepth, sizeof(size_t), 1, fp );
+      fp.write((char*) &dataDepth, sizeof(size_t));
 
       // data
       for ( size_t i(0); i < dataDepth; ++i )
@@ -222,11 +222,11 @@ namespace femDataBinaryDispatch {
     }
 
   template<>
-  bool inBinary( FILE* fp, vector<ArrayVariable>& arrayVariables )
+  bool inBinary( fstream& fp, vector<ArrayVariable>& arrayVariables )
     {   
       // size
       size_t dataDepth(0);
-      fread( (void*) &dataDepth, sizeof(size_t), 1, fp );
+      fp.read( (char*) &dataDepth, sizeof(size_t));
       arrayVariables = vector<ArrayVariable>( dataDepth, ArrayVariable() );
 
       // data
@@ -238,12 +238,12 @@ namespace femDataBinaryDispatch {
     }
 
   template<>
-  bool outBinary( FILE* fp, const vector<FlaggedArrayVariable>& flaggedArrayVariables )
+  bool outBinary( fstream& fp, const vector<FlaggedArrayVariable>& flaggedArrayVariables )
     {
       const size_t dataDepth( flaggedArrayVariables.size() );
 
       // size
-      fwrite( (void*) &dataDepth, sizeof(size_t), 1, fp );
+      fp.write((char*) &dataDepth, sizeof(size_t));
 
       // data
       for ( size_t i(0); i < dataDepth; ++i )
@@ -254,11 +254,11 @@ namespace femDataBinaryDispatch {
     }
 
   template<>
-  bool inBinary( FILE* fp, vector<FlaggedArrayVariable>& flaggedArrayVariables )
+  bool inBinary( fstream& fp, vector<FlaggedArrayVariable>& flaggedArrayVariables )
     {
       // size
       size_t dataDepth(0);
-      fread( (void*) &dataDepth, sizeof(size_t), 1, fp );
+      fp.read( (char*) &dataDepth, sizeof(size_t));
       flaggedArrayVariables = vector<FlaggedArrayVariable>( dataDepth, FlaggedArrayVariable() );
 
       // data
@@ -273,7 +273,7 @@ namespace femDataBinaryDispatch {
 
 
 /**
- @fn  template<typename csp_type> void FEM_Data<csp_type>::OutBinary( FILE* fp ) const
+ @fn  template<typename csp_type> void FEM_Data<csp_type>::OutBinary( fstream& fp ) const
 
  @brief Out binary. 
 
@@ -281,11 +281,11 @@ namespace femDataBinaryDispatch {
  @param [in,out]  fp  If non-null, the fp.
  */
 template<typename csp_type>
-bool FEM_Data<csp_type>::OutBinary( FILE* fp ) const
+bool FEM_Data<csp_type>::OutBinary( fstream& fp ) const
  {
      // writing the variable placement
      int32  var_placement = static_cast<int32>(place);
-     fwrite( (void*) &var_placement, sizeof(int32), 1, fp );
+     fp.write((char*) &var_placement, sizeof(int32));
      
      // writing the dataset
      return femDataBinaryDispatch::outBinary( fp, data );
@@ -293,11 +293,11 @@ bool FEM_Data<csp_type>::OutBinary( FILE* fp ) const
  
  
 template<typename csp_type>
-void FEM_Data<csp_type>::InBinary( FILE* fp )
+void FEM_Data<csp_type>::InBinary( fstream& fp )
  {
      // reading the variable placement
      int32  var_placement(UNSPECIFIED);
-     fread( (void*) &var_placement, sizeof(int32), 1, fp );
+     fp.read( (char*) &var_placement, sizeof(int32));
      place = static_cast<PLACEMENT>(var_placement);
      
      // reading the dataset

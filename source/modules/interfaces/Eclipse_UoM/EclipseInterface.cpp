@@ -12,6 +12,7 @@
 #include "ErrorHandler.h"
 #include "TextFileInterface.h"
 #include "vectorOperations.h"
+#include "CellGenerator_UoM.h"
 
 namespace csmp {
 
@@ -73,6 +74,7 @@ void EclipseInterface::ClearAfter()
 //    multxyz_.clear();
 //    tranxyz_.clear();
 }
+
 
 #if 0
 void EclipseInterface
@@ -143,6 +145,18 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
     // KEY METHOD
     grid_.CreateModel( model_name_,*vset_, *model_topology_, zcorn_, regions_, faults_, wells_,
                        tetra_mesh, exclude_inactive_cells );
+
+	// 4. create a default region including all cells except wells and faults
+	std::vector<size_t> elmts;
+	std::set<std::string> fem_types;
+	for (size_t i = 0U; i < vset_->Elements(); i++) {
+		elmts.push_back(i);
+		fem_types.insert(csmp::parseFiniteElementType((vset_->ElementType(i))));
+	}
+	model_topology_->AddRegion("ALL_CELLS", fem_types, elmts);
+
+	//5. create descreate line elements for wells which are defined in Eclipse
+	AddWell();
 
    /// 4. Write properties to VSet
     WritePropertiesToVSet();
@@ -1786,7 +1800,7 @@ int readEclipseWellSpecs( std::map<std::string,EclipseWell>& well_data,
             }
 
             /// 5. assign well data
-            well_data[ well.well_name_ ] = well;
+            well_data.insert( make_pair(well.well_name_, well) );
         }
         ifs.getline( text_line, line_length );
         endOfblock = isEclipseEndOfBlock(text_line);
@@ -1863,8 +1877,11 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 well_name = token;
                 removeSymbolsFromString( well_name, symbolsToremove );
             }
-
-            EclipseWell& well( well_data[ well_name ] );
+			
+			//JC: it doesn't make sense since there is always no well_data.
+            //EclipseWell& well( well_data[ well_name ] );
+			EclipseWell well;
+			well.well_name_ = well_name;
             EclipseWellCompletion wellcomp;
 
             /// 2. read i,j,k_top,k_bot indices
@@ -1918,7 +1935,11 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
                 well.well_data_[wid].w_end_   = wpath.path[wid].to;
             }
             well_path.emplace( well_name, wpath );
+			
+			/// 5. assign well data
+			well_data.insert( make_pair(well.well_name_, well) );
         }
+
         ifs.getline( text_line, line_length );
         endOfblock = isEclipseEndOfBlock(text_line);
         if( !endOfblock && csmp::isBlankLine(text_line) )
@@ -3061,9 +3082,6 @@ template void EclipseInterface::GetRegions( std::list<std::string>& );
 template void EclipseInterface::GetRegions( std::set<std::string>& );
 
 
-
-
-
 template<class Container>
 void EclipseInterface
 ::GetFaults( Container& data )
@@ -3077,9 +3095,6 @@ template void EclipseInterface::GetFaults( std::list<std::string>& );
 template void EclipseInterface::GetFaults( std::set<std::string>& );
 
 
-
-
-
 template<class Container>
 void EclipseInterface
 ::GetWells( Container& data )
@@ -3091,16 +3106,209 @@ void EclipseInterface
 template void EclipseInterface::GetWells( std::vector<std::string>& );
 template void EclipseInterface::GetWells( std::list<std::string>& );
 template void EclipseInterface::GetWells( std::set<std::string>& );
-  
-  
-  
-  std::multimap<ijk,size_t>&
-  EclipseInterface::IJKMap()
-  {
-    return grid_.IJKMap();
-  }
 
- } // eclipse
+void EclipseInterface::AddWell()
+{
+	csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
+
+	if (well_face_path_.size() > 0) {
+		std::string           well_name;
+		std::vector<size_t>   well_elmts;
+		std::set<std::string> well_fem_types;
+		const csmp::CSMP_FEM_TYPE edge_fem_type(csmp::ISOPARAMETRIC_LINEAR_BAR);		
+
+		std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE>>> embedded_cells_;
+		for (std::map<std::string, EclipseWellPath>::const_iterator
+			it = well_face_path_.begin(); it != well_face_path_.end(); ++it)
+		{
+			bool valid_well(false);
+			well_elmts.clear();
+			well_fem_types.clear();
+			for (EclipseWellPathEntry wpe : it->second.path) {
+				size_t well_elmt(0U);
+				if (grid_.ConstructLineElement(wpe.cell.i, wpe.cell.j, wpe.cell.k, well_elmt)) {
+					well_elmts.push_back(well_elmt);
+					well_fem_types.insert(csmp::parseFiniteElementType(edge_fem_type));
+					valid_well = true;
+				}
+			}
+			if (!well_elmts.empty())
+			{
+				well_name = it->first;
+				model_topology_->AddRegion(well_name.c_str(), well_fem_types, well_elmts);
+				wells_.insert(well_name.c_str());
+				if (csmp_error.Verbose())
+					std::cout << "\nEclipseInterface::AddWell: '" << well_name << "' was added successfully!" << std::endl;
+			}
+		}
+
+		// set up the rest of the vset for wells
+		CellGenerator* generator = grid_.GetCellGenerator();
+		vset_->RemovePfverts();
+		vset_->ResizePlist(generator->plist.size());
+		vset_->AddPlist(generator->plist.begin(), generator->plist.end());
+		vset_->AddElementTypes(generator->fem_types.begin(), generator->fem_types.end());
+	}
+}
+
+void EclipseInterface::AddWell( const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point )
+{
+	csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
+
+	std::vector<size_t>   well_elmts;
+	std::set<std::string> well_fem_types;
+	const csmp::CSMP_FEM_TYPE edge_fem_type(csmp::ISOPARAMETRIC_LINEAR_BAR);	
+	
+	//BOGGYCREEK1 114 6 1 61 /
+	//CRC1 67 56 1 61 /
+	//CRC2 65 47 1 61 /
+	//CRC3 35 53 1 61 /
+
+	size_t i(well_start_point[0]), j(well_start_point[1]), kt(well_start_point[2]), kb(well_end_point[2]);
+	std::cout << "\nEclipseInterface::AddWell: '" << well_name << ": " << i << ", " << j << ", " << kt << "~" << kb << std::endl;
+
+	bool valid_well(false);
+	for (size_t k = kt; k < kb; k++) {
+		size_t well_elmt(0U);
+		if (grid_.ConstructLineElement(i, j, k, well_elmt)) {
+			well_elmts.push_back(well_elmt);
+			well_fem_types.insert(csmp::parseFiniteElementType(edge_fem_type));
+			valid_well = true;
+		}
+	}
+
+	if (valid_well)
+	{
+		model_topology_->AddRegion(well_name.c_str(), well_fem_types, well_elmts);
+		wells_.insert(well_name.c_str());
+		if (csmp_error.Verbose())
+			std::cout << "\nEclipseInterface::AddWell: '" << well_name << "' was added successfully!" << std::endl;
+	}
+
+	// set up the rest of the vset for wells
+	CellGenerator* generator = grid_.GetCellGenerator();
+	vset_->RemovePfverts();
+	vset_->ResizePlist(generator->plist.size());
+	vset_->AddPlist(generator->plist.begin(), generator->plist.end());
+	vset_->AddElementTypes(generator->fem_types.begin(), generator->fem_types.end());
+}
+
+std::multimap<ijk,size_t>&
+EclipseInterface::IJKMap()
+{
+return grid_.IJKMap();
+}
+
+// WELLS
+/// add well path based on symmetry assumption ( neighbouring cell defines the direction )
+/// by default well is assumed to be vertical
+void addWellPath(size_t NX, size_t NY, size_t NZ,
+	const std::string& well_name,
+	const std::vector<ijk>& cell_ids,
+	std::map<std::string, EclipseWellPath>& well_path)
+{
+	const size_t NX_x_NY(NX*NY);
+	std::map<int64_t, CORNER_POINT_CELL_FACE_INDEX> face_map;
+	face_map.insert(std::make_pair(-1, CORNER_POINT_CELL_FACE_Xminus));
+	face_map.insert(std::make_pair(+1, CORNER_POINT_CELL_FACE_Xplus));
+	face_map.insert(std::make_pair(-NX, CORNER_POINT_CELL_FACE_Yminus));
+	face_map.insert(std::make_pair(+NX, CORNER_POINT_CELL_FACE_Yplus));
+	face_map.insert(std::make_pair(-NX_x_NY, CORNER_POINT_CELL_FACE_Zminus));
+	face_map.insert(std::make_pair(+NX_x_NY, CORNER_POINT_CELL_FACE_Zplus));
+
+	EclipseWellPath  wpath;
+	size_t num_cells(cell_ids.size());
+	for (size_t cid = 0; cid<num_cells; ++cid)
+	{
+		wpath.path.emplace_back(cell_ids[cid], CORNER_POINT_CELL_FACE_Zminus, CORNER_POINT_CELL_FACE_Zplus);
+	}
+	if (wpath.path.size() > 1)
+	{
+		size_t nid(wpath.path.size() - num_cells + 1); /// neighbour is a next cell
+		for (size_t cid = 0; cid <(num_cells - 1); ++cid, ++nid)
+		{
+			//              neighbor id          cell id
+			int64_t face_id = ((int64_t)wpath.path[nid].cell.i - (int)cell_ids[cid].i)
+				+ ((int64_t)wpath.path[nid].cell.j - (int64_t)cell_ids[cid].j) * (int64_t)NX
+				+ ((int64_t)wpath.path[nid].cell.k - (int64_t)cell_ids[cid].k) * (int64_t)NX_x_NY;
+			if (nid - 1 == 0) wpath.path[nid - 1].from = face_map[-face_id];
+			wpath.path[nid - 1].to = face_map[face_id];
+			wpath.path[nid].from = face_map[-face_id];
+			wpath.path[nid].to = face_map[face_id];
+		}
+	}
+	well_path.emplace(well_name, wpath);
+}
+
+/// add well path with explicitly specified faces
+void addWellPath(const std::string& well_name,
+	const std::vector<size_t>& cell_ids,
+	const std::vector<std::pair<size_t, size_t> >& face_ids,
+	std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path)
+{
+	/// temp data
+	std::pair<size_t, size_t> direction;
+	std::pair<size_t, std::pair<size_t, size_t> > path;
+	size_t cell_id;
+	size_t num_cells(cell_ids.size());
+	std::vector<std::pair<size_t, std::pair<size_t, size_t> > >   empty_path;
+	well_path.insert(std::make_pair(well_name, empty_path));
+	std::vector<std::pair<size_t, std::pair<size_t, size_t> > >& wpath(well_path[well_name]);
+	for (size_t cid = 0; cid<num_cells; ++cid)
+	{
+		cell_id = cell_ids[cid];
+		direction.first = face_ids[cid].first;
+		direction.second = face_ids[cid].second;
+		path.first = cell_id;
+		path.second = direction;
+		wpath.push_back(path);
+	}
+}
+
+/// add well path with explicitly specified faces ( same for all cells )
+void addWellPath(const std::string& well_name,
+	const std::vector<size_t>& cell_ids,
+	std::pair<size_t, size_t> face_id,
+	std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path)
+{
+	/// temp data
+	std::pair<size_t, size_t> direction;
+	std::pair<size_t, std::pair<size_t, size_t> > path;
+	size_t cell_id;
+	size_t num_cells(cell_ids.size());
+	std::vector<std::pair<size_t, std::pair<size_t, size_t> > >   empty_path;
+	well_path.insert(std::make_pair(well_name, empty_path));
+	std::vector<std::pair<size_t, std::pair<size_t, size_t> > >& wpath(well_path[well_name]);
+	for (size_t i = 0; i<num_cells; ++i)
+	{
+		cell_id = cell_ids[i];
+		direction.first = face_id.first;
+		direction.second = face_id.second;
+		path.first = cell_id;
+		path.second = direction;
+		wpath.push_back(path);
+	}
+}
+
+/// add well path with explicitly specified faces ( for single cell )
+void addWellPath(const std::string& well_name,
+	size_t cell_id,
+	std::pair<size_t, size_t> face_id,
+	std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path)
+{
+	/// temp data
+	std::pair<size_t, size_t> direction;
+	std::pair<size_t, std::pair<size_t, size_t> > path;
+	direction.first = face_id.first;
+	direction.second = face_id.second;
+	path.first = cell_id;
+	path.second = direction;
+	std::vector<std::pair<size_t, std::pair<size_t, size_t> > >   empty_path;
+	well_path.insert(std::make_pair(well_name, empty_path));
+	well_path[well_name].push_back(path);
+}
+
+} // eclipse
 
 } // end namespace csmp
 

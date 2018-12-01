@@ -13,6 +13,7 @@ template<typename> class FEM_Data;
 template<size_t> class Point;
 template<size_t> class Node;
 template<size_t> class Element;
+template<size_t> class Face;
 template<size_t> class Region;
 
 
@@ -82,6 +83,14 @@ class Boundary : public ModelSubDomain<dim,Face> {
     /// SKM new constructor: re-constructor of boundary from index data stored in SubDomainInfo
     Boundary( const PropertyDatabase<dim>&,
               MeshManager<dim>&,       ///< not constant since write access is granted to boundary
+              const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
+              BOX_BOUNDARY=IRREGULAR );
+
+	/// new constructor: re-constructor of boundary from index data stored in SubDomainInfo and faces from the MeshManager
+	Boundary( const PropertyDatabase<dim>&,
+			  const size_t&,
+			  const std::deque<Node<dim>*>&,
+              const std::deque<Face<dim>*>&,
               const SubDomainInfo&,    ///< contains correctly partitioned vectors and boundary faces
               BOX_BOUNDARY=IRREGULAR );
 
@@ -190,9 +199,9 @@ class Boundary : public ModelSubDomain<dim,Face> {
 
     // auxilliary binary IO
     template<class Var>
-    bool Out( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
+    bool Out( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
     template<class Var>
-    bool In( FILE* fp, PLACEMENT place, VARIABLE_TYPE vtype );
+    bool In( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype );
 
     BOX_BOUNDARY boundaryFlag_;
 };

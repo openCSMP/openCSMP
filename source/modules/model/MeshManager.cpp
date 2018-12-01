@@ -2460,7 +2460,7 @@ void MeshManager<dim>::OutputStoredVariablesTo(const PropertyDatabase<dim>& data
 					const size_t sectors((*it).Sectors());
 					for (size_t i = 0U; i<sectors; ++i) {
 						const size_t ips_per_sector((*it).IntegrationPointsPerSector());
-						for (size_t j = 0U; j<ips_per_sector; ++j) {
+						for (size_t j = 0U; j<ips_per_sector; ++j) {							
 							(*it).Read(i, j, (*pit).second, value);
 							pushBack(data, value);
 						}
@@ -3568,7 +3568,8 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 		case SCALAR: {
 			ScalarVariable value;
 			size_t entry(0U);
-			for (auto e : elmts) {
+			for (auto e : elmts) {				
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t sectors(e->Sectors());
 				for (size_t i = 0U; i<sectors; ++i) {
 					const size_t ips_per_sector(e->IntegrationPointsPerSector());
@@ -3585,6 +3586,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			VectorVariable<dim> value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t sectors(e->Sectors());
 				for (size_t i = 0U; i<sectors; ++i) {
 					const size_t ips_per_sector(e->IntegrationPointsPerSector());
@@ -3601,6 +3603,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			TensorVariable<dim> value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t sectors(e->Sectors());
 				for (size_t i = 0U; i<sectors; ++i) {
 					const size_t ips_per_sector(e->IntegrationPointsPerSector());
@@ -3617,6 +3620,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			ArrayVariable value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t sectors(e->Sectors());
 				for (size_t i = 0U; i<sectors; ++i) {
 					const size_t ips_per_sector(e->IntegrationPointsPerSector());
@@ -3633,6 +3637,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			FlaggedArrayVariable value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t sectors(e->Sectors());
 				for (size_t i = 0U; i<sectors; ++i) {
 					const size_t ips_per_sector(e->IntegrationPointsPerSector());

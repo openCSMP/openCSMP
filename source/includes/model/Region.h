@@ -104,6 +104,12 @@ class Region : public ModelSubDomain<dim,Element> {
                   MeshManager<dim>&,
             const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
+	/// re-constructor for regions via the nodes and elements which are explored by the MeshManager
+    Region( const PropertyDatabase<dim>&,
+			const std::deque<Node<dim>*>&,
+			const std::deque<Element<dim>*>&,
+            const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
+
     // --------------------------------------------
     // Property input/output
     // --------------------------------------------

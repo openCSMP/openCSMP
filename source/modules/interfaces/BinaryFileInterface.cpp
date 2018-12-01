@@ -85,9 +85,9 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
     name += ".bin";
     
     // 1. opening the file
-    FILE*  fp(0);  
+    fstream fp( name.c_str(), ios::out | ios::binary);
      
-     if ( (fp=fopen( name.c_str(), "wb")) == NULL ) {
+     if ( !fp.is_open() ) {
           cerr <<"\nBinaryFileInterface<" << dim;
           cerr <<">::WriteDataTo: File: "<< name;
           cerr <<" could not be opened"<< endl;
@@ -141,11 +141,11 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
          else write_error = true;
        }
 
-    fclose( fp );
+	 fp.close();
 
     if ( write_error ) {
          size_t  n0(0);
-         fwrite( (void*) &n0, sizeof(size_t), 1, fp );
+         fp.write( (char*) &n0, sizeof(size_t) );
 
          throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::WriteDataTo",
                          "Variable record was empty:", var_name );
@@ -170,12 +170,12 @@ bool BinaryFileInterface<dim>::WriteDataTo( const Model<dim>& sg,
 template<size_t dim>
 string  BinaryFileInterface<dim>::ReadVariableName( const char* file_name ) const
  {
-     // 1. opening the file
-     FILE*  fp(0);
+     // 1. opening the file     
      string name(file_name);
      name +=".bin";
 
-     if ( (fp=fopen( name.c_str(), "rb")) == NULL )
+	 fstream fp(name.c_str(), ios::in | ios::binary);
+     if ( !fp.is_open() )
           throw csmp::Exception( FATAL_ERROR, "BinaryFileInterface<dim>::ReadDataFrom: file: ",
                                  file_name, " could not be opened" );
    
@@ -185,7 +185,7 @@ string  BinaryFileInterface<dim>::ReadVariableName( const char* file_name ) cons
      skm_C_fread( fp, variable );
 
      // 3. cleaning up
-     fclose( fp );
+	 fp.close();
 
      return string(variable);
 
@@ -202,11 +202,11 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
                                                 FEM_Data<Var>& var_data ) const
 {
      // 1. opening the file
-     FILE*  fp(nullptr);
      string name(file_name);
      name +=".bin";
   
-     if ( (fp=fopen( name.c_str(), "rb")) == NULL ) {
+	 fstream fp(name.c_str(), ios::in | ios::binary);
+     if ( !fp.is_open() ) {
           cerr <<"\nBinaryFileInterface<" << dim;
           cerr <<">::ReadDataFrom<Var>: File: "<< name;
           cerr <<" could not be opened"<< endl;
@@ -219,7 +219,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
      if ( !pref.IsDefined(variable) ) {
           throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
                          "Variable is not defined in model database:", variable );
-          fclose( fp );
+		  fp.close();
           return string(variable);
        }
        
@@ -235,7 +235,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
      if ( input_var_type != pref.Type(variable) ) {
           throw csmp::Exception( ERROR, "BinaryFileInterface<dim>::ReadDataFrom<Var>",
                          "Supplied data object has different type than data" );
-          fclose( fp );
+		  fp.close();
           return string(variable);
        }
        
@@ -244,7 +244,7 @@ string  BinaryFileInterface<dim>::ReadDataFrom( const char* file_name,
      var_data.InBinary( fp );
 
      // 5. cleaning up
-     fclose( fp );
+	 fp.close();
 
    return string(variable);
 

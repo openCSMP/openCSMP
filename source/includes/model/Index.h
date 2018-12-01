@@ -2,6 +2,7 @@
 #define CSMP_INDEX_H
 
 #include <iostream>
+#include <fstream>
 #include <climits>
 #include <cstdio>
 #include <set>
@@ -107,8 +108,8 @@ struct Index {
     void UpdateData( const csmp::Index& idx );
 
     void Out() const;
-    bool Out( FILE* fp ) const;
-    bool In( FILE* fp );
+    bool Out( std::fstream& fp ) const;
+    bool In( std::fstream& fp );
 
 
     VARIABLE_TYPE               type;

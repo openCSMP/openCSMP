@@ -75,10 +75,10 @@ namespace csmp
 
     char filename[60];
     strcpy(filename,"VLH_HaliteLookupTable.bin");
-    FILE* infile;
-    infile = fopen( filename, "rb" );
+	fstream infile(filename, ios::in | ios::binary);
 	
-    if( infile == NULL )
+	if (!infile.is_open() )
+
       {
         cout << "VLH_HaliteLookup : Lookup file missing, computing ...\n\n";
         it = 0;
@@ -127,9 +127,8 @@ namespace csmp
         storage_vector[t_dim*viscosity_index+it]       = 1.0e10;
 	    
         // write file
-        FILE* outfile;
-        outfile = fopen( filename, "wb");
-        if( outfile == NULL )
+		fstream outfile(filename, ios::out | ios::binary);
+		if (!outfile.is_open())
           {
             cout << "could not even it for writing, please stop program and debug !!!!\n";
             char yesno;
@@ -140,7 +139,7 @@ namespace csmp
           {
             cout << "writing file " << filename << " ... ";
             skm_C_fwrite( outfile, storage_vector );
-            fclose(outfile);
+			outfile.close();
             cout << "done!\n";
           }
       }
@@ -149,7 +148,7 @@ namespace csmp
       {
         cout << "reading file " << filename << " ... ";
         skm_C_fread( infile, storage_vector );
-        fclose( infile );
+		infile.close();
         cout << "done!\n";
       }
     cout << "VLH_HaliteLookup, leaving constructor ...\n\n";

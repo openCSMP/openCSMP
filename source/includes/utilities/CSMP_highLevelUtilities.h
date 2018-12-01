@@ -286,10 +286,10 @@ inline void initVariable( csmp::Index key, FlaggedArrayVariable& var )
 
 /// domain (Model, Region...) variables binary IO
 template<class V, class D, size_t dim>
-bool variablesOut( FILE* fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
+bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
   {
   size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
-  fwrite( (void*)&vcount, sizeof(size_t), 1, fp );
+  fp.write( (char*)&vcount, sizeof(size_t)) ;
   std::set<std::string> propList;
   pref.ListProperties( domain.Placement(), vtype, propList );
   for( std::set<std::string>::const_iterator it( propList.begin() ); it != propList.end(); ++it )
@@ -307,10 +307,10 @@ bool variablesOut( FILE* fp, const D& domain, const PropertyDatabase<dim>& pref,
 
 
 template<class V, class D, size_t dim>
-bool variablesIn( FILE* fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
+bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
   {
   size_t vcount(-1);
-  fread( (void*)&vcount, sizeof(size_t), 1, fp );
+ fp.read( (char*)&vcount, sizeof(size_t) );
   for( size_t i(0); i < vcount; ++i )
     {
     V var;
@@ -326,7 +326,7 @@ bool variablesIn( FILE* fp, D& domain, const PropertyDatabase<dim>& pref, VARIAB
   }
 
 template<class D, size_t dim>
-bool domainVariablesOut( FILE* fp, const D& domain, const PropertyDatabase<dim>& pref )
+bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref )
   {
     if( !variablesOut<ScalarVariable>       ( fp, domain, pref, SCALAR ) )
       return false;
@@ -342,7 +342,7 @@ bool domainVariablesOut( FILE* fp, const D& domain, const PropertyDatabase<dim>&
   }
 
 template<class D, size_t dim>
-bool domainVariablesIn( FILE* fp, D& domain, const PropertyDatabase<dim>& pref )
+bool domainVariablesIn(std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref )
   {
   if( !variablesIn<ScalarVariable>          ( fp, domain, pref, SCALAR ) )
     return false;
