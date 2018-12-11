@@ -207,13 +207,16 @@ class Element : public FiniteElementPolicy<dim,Element>,
     // ------------------------------------------------------------------------
 
     /// number of nodes of this element
-    size_t  Nodes() const     { return node_connector_.size(); };
+    size_t  Nodes() const;
     
     /// number of equidimensional neighbor elements of this element (not necessarily connected)
-    size_t  Neighbors() const { return elmt_connector_.size(); };
+    size_t  Neighbors() const;
+
+	/// number of equidimensional neighbor elements of this element (necessarily connected)
+	size_t  ConnectedNeighbors() const;
     
     /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
-    size_t  Faces() const { return elmt_connector_.size(); };
+    size_t  Faces() const;
 
     typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();

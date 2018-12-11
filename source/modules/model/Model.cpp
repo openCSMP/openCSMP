@@ -301,7 +301,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 	}
 
     cout <<"\nModel<dim>::Initialize: ";
-	if ( contiguous_model ) cout << "Coontiguous model has been built successfully..." << endl;
+	if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
 	else cout << "Discontiguous model has been built successfully..." << endl;
 
     // 6. associating supplied subregions with regions (model subdomains)
@@ -389,7 +389,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 
 	cout << "\nModel<dim>::Initialize: ";
 	if (contiguous_model)
-		cout << "Coontiguous mesh has been built successfully..." << endl;
+		cout << "Contiguous mesh has been built successfully..." << endl;
 	else
 		cout << "Discontiguous mesh has been built successfully..." << endl;
 

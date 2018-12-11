@@ -310,6 +310,37 @@ void Element<dim>::Accept( csmp::Visitor<dim>& vis )
  } // end Accept    
 
 
+/// number of nodes of this element
+template<size_t dim>
+size_t  Element<dim>::Nodes() const
+{ 
+	return node_connector_.size(); 
+}
+
+/// number of equidimensional neighbor elements of this element (not necessarily connected)
+template<size_t dim>
+size_t  Element<dim>::Neighbors() const
+{
+	return elmt_connector_.size(); 
+}
+
+/// number of equidimensional neighbor elements of this element (necessarily connected)
+template<size_t dim>
+size_t  Element<dim>::ConnectedNeighbors() const
+{
+	size_t nulls(0);
+	for (auto f : elmt_connector_)
+		if (!f) nulls++;
+	return (elmt_connector_.size() - nulls);
+}
+
+/// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
+template<size_t dim>
+size_t  Element<dim>::Faces() const
+{
+	return elmt_connector_.size(); 
+}
+
 // ITERATORS
 
 /// iterator to the element nodes

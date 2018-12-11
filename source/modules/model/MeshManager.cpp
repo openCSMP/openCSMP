@@ -258,17 +258,37 @@ bool  MeshManager<dim>::Initialize(const PropertyDatabase<dim>& phys_vars,
 	// ----------------------------------------------------------------
 	if (csmp_error.Verbose())
 		cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
-	if (vset.WithNeighbourConnectivity()) {
-		for (auto& e : elmt_connector) {
-			const size_t neighbors(e->Neighbors());
-			for (size_t j = 0U, nidx = 0u; j < neighbors; j++) {
-				// if there is a neighbor (as is the case if the stored index is greater than zero)			
-				if (j < vset.PfvertsSize(e->Idx())) {
-					const int32 index(static_cast<int32>(vset.Pfvert(e->Idx(), j)));
-					if (index >= 0 && index < n_elmts_)
-						e->Assign(nidx++, elmt_connector[static_cast<size_t>(index)]);
-					else
-						e->Assign(nidx++, static_cast<Element<dim>*>(NULL));
+	size_t eidx (0U);
+	if (vset.WithNeighbourConnectivity()) {		
+		if (!vset.HybridElementTypeMesh()) {
+			const int32 csmpElementType = vset.ElementType(0U);
+			for (auto& e : elmt_connector) {
+				const size_t neighbors(fem_manager.E(csmpElementType)->Neighbors());
+				for (size_t j = 0U, nidx = 0U; j < neighbors; j++) {
+					// if there is a neighbor (as is the case if the stored index is greater than zero)			
+					if (j < vset.PfvertsSize(e->Idx())) {
+						const int32 index(static_cast<int32>(vset.Pfvert(e->Idx(), j)));
+						if (index >= 0 && index < n_elmts_)
+							e->Assign(nidx++, elmt_connector[static_cast<size_t>(index)]);
+						else
+							e->Assign(nidx++, static_cast<Element<dim>*>(NULL));
+					}
+				}
+			}
+		}
+		else {
+			for (auto& e : elmt_connector) {				
+				const int32 csmpElementType = vset.ElementType(eidx++);
+				const size_t neighbors(fem_manager.E(csmpElementType)->Neighbors());
+				for (size_t j = 0U, nidx = 0U; j < neighbors; j++) {
+					// if there is a neighbor (as is the case if the stored index is greater than zero)			
+					if (j < vset.PfvertsSize(e->Idx())) {
+						const int32 index(static_cast<int32>(vset.Pfvert(e->Idx(), j)));
+						if (index >= 0 && index < n_elmts_)
+							e->Assign(nidx++, elmt_connector[static_cast<size_t>(index)]);
+						else
+							e->Assign(nidx++, static_cast<Element<dim>*>(NULL));
+					}
 				}
 			}
 		}
@@ -3673,6 +3693,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			ScalarVariable value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t facets(e->Facets());
 				for (size_t i = 0U; i<facets; ++i) {
 					const size_t ips_per_facet(e->IntegrationPointsPerFacet());
@@ -3689,6 +3710,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			VectorVariable<dim> value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t facets(e->Facets());
 				for (size_t i = 0U; i<facets; ++i) {
 					const size_t ips_per_facet(e->IntegrationPointsPerFacet());
@@ -3705,6 +3727,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			TensorVariable<dim> value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t facets(e->Facets());
 				for (size_t i = 0U; i<facets; ++i) {
 					const size_t ips_per_facet(e->IntegrationPointsPerFacet());
@@ -3721,6 +3744,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			ArrayVariable value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t facets(e->Facets());
 				for (size_t i = 0U; i<facets; ++i) {
 					const size_t ips_per_facet(e->IntegrationPointsPerFacet());
@@ -3737,6 +3761,7 @@ void MeshManager<dim>::InputStoredVariablesFrom(const PropertyDatabase<dim>& dat
 			FlaggedArrayVariable value;
 			size_t entry(0U);
 			for (auto e : elmts) {
+				if (e->FE_Type() == ISOPARAMETRIC_LINEAR_BAR) continue;
 				const size_t facets(e->Facets());
 				for (size_t i = 0U; i<facets; ++i) {
 					const size_t ips_per_facet(e->IntegrationPointsPerFacet());

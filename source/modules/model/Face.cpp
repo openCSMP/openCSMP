@@ -478,6 +478,34 @@ bool Face<dim>::Unassign(Face<dim>* f_ptr)
 	return false;
 } // end Unassign
 
+template<size_t dim>
+size_t  Face<dim>::Nodes() const
+{
+	return node_connector_.size();
+}
+
+template<size_t dim>
+size_t  Face<dim>::Neighbors() const
+{
+	return face_connector_.size();
+}
+
+template<size_t dim>
+size_t  Face<dim>::ConnectedNeighbors() const
+{
+	size_t nulls(0);
+	for (auto f : face_connector_)
+		if (!f) nulls++;
+	return (face_connector_.size() - nulls);
+}
+
+/// for element face, there can be a neighbor
+template<size_t dim>
+size_t  Face<dim>::Faces() const
+{
+	return face_connector_.size();
+}
+
 
 /**
     Connects face to the higher-dimensional parent elements which it may be sandwiched between.

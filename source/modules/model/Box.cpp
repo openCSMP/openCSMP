@@ -1255,7 +1255,8 @@ void flagElementUsingNodal_BOX_BOUNDARY_Flags(typename std::deque<csmp::Element<
 		
 		// the bflags of each element are stored in a set
 		SmallSet<BOX_BOUNDARY>  eflags;
-		for (size_t i = 0U; i<(*it)->Nodes(); ++i)              // NB: negative numbers !
+		const size_t nodes((*it)->Nodes());
+		for (size_t i = 0U; i<nodes; ++i)              // NB: negative numbers !
 			if ((*it)->N(i)->AtBoundary() != NOT && (*it)->N(i)->AtBoundary() >= INTERNAL)
 				eflags.insert((*it)->N(i)->AtBoundary());
 
