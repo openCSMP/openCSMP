@@ -524,11 +524,11 @@ void RegionInterface<dim,REGION_COMPLEX>::OutputAllRegionsToBinary( const char* 
        {
           BinaryFileSectionWrite hdr(fp, "ONE_REGN");
           (*git).second.WriteDomainIndexesToBinaryFile( fp );
-          // TODO: check the logic of the following conditional statement
+          // JC: check the logic of the following conditional statement
           //assert( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() );
-          //if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
+          if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
             domainVariablesOut( fp, (*git).second, database );
-		  //}
+		  }
        std::cout << (*git).first <<" ";
      }
      std::cout << std::endl;

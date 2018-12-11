@@ -18,6 +18,7 @@ namespace csmp {
 template<size_t dim>
 class CoordinateTransformer {
   public:
+    /// no translation, scaling nor inversion of coordinate axis
     CoordinateTransformer();
   
     /// transform point coordinates using all specified operations, @todo make sure that specified sequence is honored

@@ -897,40 +897,54 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
-    if ( elmt_dim.first == 1 )
-      {
-        for ( typename vector<CELL<dim>*>::const_iterator
-              eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
-           {
-             // identifying the boundary faces and their nodes
-             // (each face potentially has a neighbor element)
-             long  nbors_that_belong_to_group((*eit)->Neighbors());
-             for ( size_t i=0U; i<(*eit)->Faces(); i++ )
-               // if the face is at a model boundary or has a neighbor that does not belong to the region
-               if ( (*eit)->Neighbor(i) == NULL  or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i) ) )
-                 {
-                    // boundary faces
-                    boundary_faces.insert( make_pair( (*eit), i ) );
-                    // boundary nodes
-                    assert( (*eit)->FE() != NULL );
-                    (*eit)->FE()->NodesOfFace( i, fnids );
-                    for ( size_t j=0U; j<fnids.size(); ++j )
-                      boundary_nodes.insert( (*eit)->N(fnids[j]) );
-                    // counting neighbors
-                    nbors_that_belong_to_group--;
-                 }
+	if (elmt_dim.first == 1)
+	{
+		for (typename vector<CELL<dim>*>::const_iterator
+			eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++)
+		{
+			// identifying the boundary faces and their nodes
+			// (each face potentially has a neighbor element)			 
+			long  nbors_that_belong_to_group((*eit)->Neighbors());
+			for (size_t i = 0U; i<(*eit)->Faces(); i++)
+				// if the face is at a model boundary or has a neighbor that does not belong to the region
+				if ((*eit)->Neighbor(i) == NULL or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)))
+				{
+					// boundary faces
+					boundary_faces.insert(make_pair((*eit), i));
+					// boundary nodes
+					assert((*eit)->FE() != NULL);
+					(*eit)->FE()->NodesOfFace(i, fnids);
+					for (size_t j = 0U; j<fnids.size(); ++j)
+						boundary_nodes.insert((*eit)->N(fnids[j]));
+					// counting neighbors
+					nbors_that_belong_to_group--;
+				}
 
-             // storing the distinguished elements in the respective vectors
-             // ------------------------------------------------------------
-             // interior elements
-             if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
-                 interior_elmts.insert( (*eit) );
-             // elements with at least one face on the region boundary
-             else
-                 boundary_elmts.insert( (*eit) );
-          }
-       }
-
+			// storing the distinguished elements in the respective vectors
+			// ------------------------------------------------------------
+			// interior elements
+			// note that same dimentional line elements is processed selectivley: ex) well lines in a 3D model
+			if ( (dim == 3U) && ((*eit)->IsLineElement()) ) {
+				int internal_nodes = 0;
+				for (size_t i = 0U; i < (*eit)->Nodes(); i++) {
+					Node<dim>* n = (*eit)->N(i);
+					if (n->AtBoundary() == NOT || n->AtBoundary() == INTERNAL || n->AtBoundary() == IRREGULAR)
+						internal_nodes++;
+				}
+				if (internal_nodes)
+					interior_elmts.insert((*eit));
+				else
+					boundary_elmts.insert((*eit));
+			}
+			else {
+				if (nbors_that_belong_to_group == (*eit)->Neighbors())
+					interior_elmts.insert((*eit));
+				// elements with at least one face on the region boundary
+				else
+					boundary_elmts.insert((*eit));
+			}
+		}
+	}
     // 1.2 If there are elements with different spatial dimensions
     // -----------------------------------------------------------
     //     the ones with highest dimensions are used to define perimeter
@@ -1121,30 +1135,34 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // 3. creating the boundary face vector
     // --------------------------------------------------
     if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
-    this->bd_face_vec_.reserve( this->elmt_vec_.size() - boundary_elmts.size() );
-    //       parent element of face, face
-    typename set<pair<CELL<dim>*,size_t> >::const_iterator  bfit( boundary_faces.begin() );
-    typename set<pair<CELL<dim>*,size_t> >::const_iterator  ffit( boundary_faces.begin() );
-    vector<ONE_BYTE_NUMBER>  bface_data;
-    bface_data.reserve(3);
-    size_t counter(0U);
+	// bd_face_vec_ is only avaialble if there are boundary elements.
+	if (boundary_elmts.size() > 0) 
+	{
+		this->bd_face_vec_.reserve(this->elmt_vec_.size() - boundary_elmts.size());
+		//       parent element of face, face
+		typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
+		typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
+		vector<ONE_BYTE_NUMBER>  bface_data;
+		bface_data.reserve(3);
+		size_t counter(0U);
 
-    while ( bfit != boundary_faces.end() ) {
-         assert( (*ffit).first == this->elmt_vec_[counter + interior_elmts.size()] );
-         while ( (*bfit).first == (*ffit).first ) {
-              bface_data.push_back( static_cast<ONE_BYTE_NUMBER>( (*bfit).second ) );
-              bfit++;
-              if ( bfit == boundary_faces.end() )
-                  break;
-           }
-         ffit = bfit;
-         counter++;
-         this->bd_face_vec_.push_back( bface_data );
-         bface_data.clear();
-      }
-    vector<vector<ONE_BYTE_NUMBER> >( this->bd_face_vec_ ).swap( this->bd_face_vec_ );
+		while (bfit != boundary_faces.end()) {
+			assert((*ffit).first == this->elmt_vec_[counter + interior_elmts.size()]);
+			while ((*bfit).first == (*ffit).first) {
+				bface_data.push_back(static_cast<ONE_BYTE_NUMBER>((*bfit).second));
+				bfit++;
+				if (bfit == boundary_faces.end())
+					break;
+			}
+			ffit = bfit;
+			counter++;
+			this->bd_face_vec_.push_back(bface_data);
+			bface_data.clear();
+		}
+		vector<vector<ONE_BYTE_NUMBER> >(this->bd_face_vec_).swap(this->bd_face_vec_);
 
-    assert( this->bd_face_vec_.size() == this->Elements() - this->InteriorElements() );
+		assert(this->bd_face_vec_.size() == this->Elements() - this->InteriorElements());
+	}
 
 
     // --------------------------------------------------

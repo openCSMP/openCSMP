@@ -108,11 +108,12 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // Basic information
     // ------------------------------------------------------------------------
 
-    size_t  Nodes() const     { return node_connector_.size(); };
-    size_t  Neighbors() const { return face_connector_.size(); };
+    size_t  Nodes() const;
+    size_t  Neighbors() const;
+	size_t  ConnectedNeighbors() const;
     
     /// for element face, there can be a neighbor
-    size_t  Faces() const { return face_connector_.size(); };
+    size_t  Faces() const;
 
     /// compares faces with one-another
     bool operator==( const Face<dim>& ) const;
