@@ -1124,7 +1124,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2InCarbonicPhase( double64 molarFra
     double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
-    return    (molarFracCo2InCarbonicPhase * molarMassCo2 / bulkMassFrac)*100;// mass fraction in % weight;
+    return    (molarFracCo2InCarbonicPhase * molarMassCo2 / bulkMassFrac)*100.;// mass fraction in % weight;
 }
 
 
@@ -1135,7 +1135,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInCarbonicPhase( double64 molarFra
     double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
-    return    (molarFracH2oInCarbonicPhase * molarMassH2o / bulkMassFrac)*100;// mass fraction in % weight;
+    return    (molarFracH2oInCarbonicPhase * molarMassH2o / bulkMassFrac)*100.;// mass fraction in % weight;
 }
 
 
@@ -1462,7 +1462,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double64 temperature )
     //
     //  from cgs to SI by
     //
-    //  Kestin etal 1981
+    //  Kestin et al 1981
     //  Tables of the Dynamic and Kinematic Viscosity of Aqueous NaCl Solutions in
     //  the Temperature Range 20-150 C and the Pressure Range 0.1-35 MPa
     //  J. Phys. Chem. Ref. Data, Vol. 10, No. 1,
@@ -1574,8 +1574,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double64 phaseVolumeCo2
 
 */
 double64 EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double64 densBrine,
-                                               double64 pressure,
-                                               double64 densBrineRef )
+                                                         double64 pressure,
+                                                         double64 densBrineRef )
 {
     const double64 pressureRef( 101.325 ), press( pressure * 1e-3);
 
@@ -2125,7 +2125,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Bw( double64 pressure, double64 temperature,d
 double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt)
 {
     // mass fraction in % weight
-    return 1. * massFracSalt / ( molarMassNacl * ( 100 - massFracSalt ) );
+    return 1. * massFracSalt / ( molarMassNacl * ( 100. - massFracSalt ) );
 }
 
 
@@ -2143,7 +2143,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolarFracNaClInAqueousPhase( do
 {
     double64 molarFrac =  massFracSalt * molarMassH2o;
 
-    double64 dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100 * molarMassNacl;
+    double64 dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100. * molarMassNacl;
 
     return molarFrac / dummy;
 }

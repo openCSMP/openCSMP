@@ -24,6 +24,10 @@ namespace csmp {
   /// computes phase state of pure CO2
   THERMODYNAMIC_STATE  stateOfCO2( double64 pCO2, double64 TC );
   
+  /// loops over neighbouring elements finding the maximum capillary entry pressure
+  template<size_t dim>
+  double64 maxEntryPressure( const csmp::Index& pd_key, const Node<dim>& );
+  
   /// Pruess (2005), compute aqueous phase density from brine density and amount of CO2 dissolved
   double64 aqueousPhaseDensity_H2O_CO2_NaCl( double64 brine_density, double64 rhoCO2, double64 X_CO2 );
   

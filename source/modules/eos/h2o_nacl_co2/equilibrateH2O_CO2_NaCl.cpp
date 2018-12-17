@@ -52,10 +52,35 @@ THERMODYNAMIC_STATE stateOfCO2( double64 pCO2, double64 ToC)
  }
 
   
-  
+ 
+ 
+/**
+     loops over neighbouring elements finding the maximum capillary entry pressure
+*/
+template<size_t dim>
+double64 maxEntryPressure( const csmp::Index& pd_key, const Node<dim>& n )
+ {
+    assert( pd_key.place == ELEMENT );
+    assert( pd_key.type  == SCALAR );
+    double64 pd(0.);
+   
+    for ( size_t i=0U; i<n.Parents(); ++i ) {
+         const Element<dim>* eptr(n.Parent(i));
+         assert( eptr != nullptr );
+         pd = max( pd, eptr->Read(pd_key) );
+      }
+   
+    return pd;
+   
+ } // end
+
   
   
 /**  equilibrateH2O_CO2_NaCl()
+
+@date 12/12/2018 revised SKM
+
+@todo TODO: zap salt that may precipitate during initialisation
 
    Computes new compositions of aqueous and carbonic phase, precipitates salt if any, updates and saturations, densities and viscosities.
    Call this after each transport step. Then merely read (do not recompute) densities etc. when the fractional flow functions etc.
@@ -65,19 +90,20 @@ THERMODYNAMIC_STATE stateOfCO2( double64 pCO2, double64 ToC)
  
 0. Read input compositions and PT data
  
-1. Compute fugacity of (pure) CO2 phase and vapourisation pressure of aqueous phase
+1. Compute solubilities of NaCl
 
-2. Compute solubilities of NaCl and CO2 within the aqueous phase
+2. For new NaCl molality, compute CO2 solubility in aqueous phase
 
-3. Compute solubility of water in the CO2 = carbonic phase
+3. Compute solubility of water in CO2 = carbonic phase
 
-4. Compare equilibrium mass fractions of components in the phases for the new composition and PT conditions
+4. Recompute new phase partitioning on the bases of the obtained mass fractions.
 
-   4.1 Dissolve whatever extra fits in
+   4.1 Precipitate NaCl as salt if its solubility is exceeded
+
+   This will also:
    4.2 Exsolve water into CO2 phase
    4.3 Evaporate CO2 from aqueous phase as the pressure decreases
-   4.4 Precipitate salt if there is more salt than the saturation level
-   4.5 Recompute phase densities and saturations
+   4.4 Recompute phase densities and saturations
 
 5. Compute aqueous diffusivity of CO2 (TODO: not stored at moment)
  
@@ -87,10 +113,11 @@ THERMODYNAMIC_STATE stateOfCO2( double64 pCO2, double64 ToC)
 
 8. Update phase compositions and store them
 
-9. compute the fluid mass sources or sinks that are due to the compositional changes and the  expansion or compression of the fluid that occurred
+9. feedback the fluid volume change that occured in response to the compositional changes into the fluid pressure equation.
  
-We need to take into account the capillary pressure, i.e. the elevated pressure of the non-wetting phase, see Reichenberger paper.
+@todo We need to take into account capillary pressure, i.e. the elevated pressure of the non-wetting phase, see Reichenberger paper.
 
+@assumption this calculation can be done non-iteratively, i.e. the X and Y fractions computed the first time are correct.
 @assumption input phase saturations sum up to 1.
 
 @attention EOS functions take and return mass fraction percentages 0..100 -> in CSMP we store mass fractions, therefore we have conversions
@@ -120,10 +147,10 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
     n.Read( props.key_H2O_comp, H2Ocomposition );
     n.Read( props.key_CO2_comp, CO2composition );
     
-    if (fabs(H2Ocomposition(XH2O)+H2Ocomposition(XCO2)+H2Ocomposition(XNACl_aq)-1.) > numeric_limits<double64>::epsilon() )
+    if ( fabs(H2Ocomposition(XH2O)+H2Ocomposition(XCO2)+H2Ocomposition(XNACl_aq)-1.) > numeric_limits<double64>::epsilon() )
       throw csmp::Exception( ERROR, "equilibrateH2O_CO2_NaCl:", "mass fractions of aqueous phase do not add up to 1.");
 
-    if (fabs(CO2composition(YH2O)+CO2composition(YCO2)-1.) > numeric_limits<double64>::epsilon() )
+    if ( fabs(CO2composition(YH2O)+CO2composition(YCO2)-1.) > numeric_limits<double64>::epsilon() )
       throw csmp::Exception( ERROR, "equilibrateH2O_CO2_NaCl:", "mass fractions of carbonic phase do not add up to 1."); 
          
       
@@ -133,6 +160,8 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
     double64 old_rhoH2O = n.Read( props.key_rhoH2O );
     double64 old_rhoCO2 = n.Read( props.key_rhoCO2 );
     const double64 rhoNaCl(2170.); // density = 2170 kg/m3
+   
+    // mass totals used below for the computation of the new phase saturations and compositions
     // water
     const double64 old_sw(1. - old_sCO2);
     const double64 mass_H2O = H2Ocomposition(XH2O) * old_rhoH2O * old_sw  +
@@ -142,6 +171,8 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
                               CO2composition(YCO2) * old_rhoCO2 * old_sCO2;
     // dissolved salt
     double64 mass_NaClaq = H2Ocomposition(XNACl_aq) * old_rhoH2O * old_sw;
+   
+    // optional quantities
     // total mass
     double64 total_mass = mass_H2O + mass_CO2 + mass_NaClaq;
     // bulk density
@@ -149,76 +180,66 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
     // volume
     const double64 old_fluid_volume = total_mass / bulk_density;
 
+#ifdef CSMP_DEBUG_aqueousPhaseDensity_H2O_CO2_NaCl
+      double64 old_XCO2(H2Ocomposition(XCO2)), old_XH2O(H2Ocomposition(XH2O)), old_XNACl_aq(H2Ocomposition(XNACl_aq)),
+               old_YCO2(CO2composition(YCO2)), old_YH2O(CO2composition(YH2O));
+#endif
+
 
     // 1. From P,T and pure CO2-phase molar volume, compute CO2 state and partial pressures of phases
     // ----------------------------------------------------------------------------------------------
-    // TODO: local capillary pressure not taken into account yet correctly
     const double64 Pf(n.Read( props.key_pf ));
     const double64 ToC(n.Read( props.key_T )); // temperature in centrigrade
-    // compute phase state
-    //THERMODYNAMIC_STATE CO2_phase_state = stateOfCO2( pCO2, ToC);
-    //Qi: use total pressure for now SKM - OK
-    THERMODYNAMIC_STATE CO2_phase_state = stateOfCO2( Pf, ToC );
+    assert( Pf >= 100325. );
+    assert( ToC <= 100. );
+    // FLASH CALCULATION = phase stability test
+    const double64 entry_pressure( maxEntryPressure( props.key_pd, n ) );
+    THERMODYNAMIC_STATE CO2_phase_state = stateOfCO2( Pf + entry_pressure, ToC );
 #ifdef DEBUG
    if ( CO2_phase_state == GASEOUS )
       cerr <<"\nequilibrateH2O_CO2_NaCl: the CO2 us in the gaseous state.";
 #endif
+    // compute the saturation pressure of the aqueous phase
+    const double64 phaseVolumeH2O(eos_csmp.CompressedVolumeCo2( Pf, ToC ) ); // m3/mol
+    // multiplication with fugacity coefficient
+    const double64 PfH2O = Pf * eos_csmp.FugacityH2o( Pf, ToC, phaseVolumeH2O );
 
-    // 2. Compute NaCl and CO2 solubilities in the brine phase as mass fractions
-    //    precipitating salt if brine is oversaturated,
-    //    dissolving salt, if any, into undersaturated brine
-    //    updating overall mass balance.
+
+    // 2. Computing NaCl solubility in the brine phase as mass fraction.
+    //    correcting the NaCl molality accordingly before any other computations are done:
+    //    - precipitating excess salt
+    //    - dissolving salt, if any, into undersaturated brine
+    //    - updating salt and overall fluid mass balance.
     // ----------------------------------------------------------------------------
-    // NaCl dissolved in aqueous phase is converted into molality (notice stupid mass percentages)
-    double64 molalityNaCl( eos_csmp.massFracNaClToMolalNaClInAqueousPhase(H2Ocomposition(XNACl_aq)*100.) );
-    // solid salt if any ('key_NaCl' gives volume fraction of salt in pore space)
-    double64  salt(n.Read(props.key_NaCl));
-    // 'xNACl_aq' in H2Ocomposition, taking CO2 content of brine (tested against Driesner EOS, SKM OK)
-//    double64 max_XNaCl_aq = eos_csmp.X_salt( Pf, ToC, molalityNaCl ) / 100.; // limit increases with moality to unplausible values
+    HaliteLiquidus liquidus( ToC, PfH2O ); // PfH2O=Pw_sat takes into account the presence of a separate CO2 phase
+    const double64 max_XNaCl_aq = liquidus.MassFractionNaCl(); // at 25C and reasonably low P should give ca. 0.26
+    const double64 salt(n.Read(props.key_NaCl));
 
-    HaliteLiquidus liquidus( ToC, Pf );
-    double64 max_XNaCl_aq = liquidus.MassFractionNaCl(); // at 25C and reasonably low P should give ca.
+    // 2.1 if the brine with the new composition is super-saturated, its NaCl molality needs to be corrected before XCO2 is calculated
+    const bool salt_precipitation = ( H2Ocomposition(XNACl_aq) > max_XNaCl_aq ) ? true : false;
+   
+    // 2.2 if the brine is undersaturated and there is salt to dissolve, else the current salinity is used
+    const double64 XNaCl_considering_dissolution = ( salt > 0. && max_XNaCl_aq-H2Ocomposition(XNACl_aq) > 0. ) ?
+              min( max_XNaCl_aq, H2Ocomposition(XNACl_aq) + (salt * rhoNaCl) / (old_rhoH2O * old_sw) ) : H2Ocomposition(XNACl_aq);
+   
+    // 2.3 estimating the molatity of salt for the computation of the brine phase properties
+    const double64 XNACl_aq_guess = (salt_precipitation == true) ? max_XNaCl_aq : XNaCl_considering_dissolution;
+    // trial molality salt
+    double64 molalityNaCl( eos_csmp.massFracNaClToMolalNaClInAqueousPhase(XNACl_aq_guess*100.) );
+    // this value still is a guess, but better than that without considering dissolution or precipitation
+    double64 XNaCl_new = eos_csmp.X_salt( Pf, ToC, molalityNaCl ) / 100.;
 
-    double64 delta_XNaCl_aq(H2Ocomposition(XNACl_aq) - max_XNaCl_aq);
-    // precipitating excess salt if brine becomes supersaturated
-    if ( delta_XNaCl_aq > 0. ) {
-         // RESULT
-         double64 kg_NaCl_precipitated = delta_XNaCl_aq * old_rhoH2O * old_sw;
-         double64 V_NaCl_precipitated = kg_NaCl_precipitated / rhoNaCl;
-         // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
-         if ( n.Status(props.key_NaCl) != DIRICH )
-           n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt+V_NaCl_precipitated) );
-         // updating mass balance
-         mass_NaClaq -= kg_NaCl_precipitated;
-         total_mass  -= kg_NaCl_precipitated;
-      }
-    // conversely, (re)dissolving solid salt if aqueous fluid was undersaturated
-    else if ( salt > 0. ) { //                                 kg_NaCl_precipitated
-         double64 V_salt_to_dissolve = std::min( salt, -(delta_XNaCl_aq * old_rhoH2O * old_sw) / rhoNaCl );
-         // removing the dissolved solid salt
-         if ( n.Status(props.key_NaCl) != DIRICH )
-           n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt-V_salt_to_dissolve) );
-         // RESULT - conversion into mass
-         double64 kg_salt_to_dissolve = V_salt_to_dissolve * rhoNaCl;
-         // updating mass balance
-         mass_NaClaq += kg_salt_to_dissolve;
-         total_mass  += kg_salt_to_dissolve;
-      }
-    // updating NaCL molality, to account for the removal of salt
-    molalityNaCl = eos_csmp.massFracNaClToMolalNaClInAqueousPhase( max_XNaCl_aq * 100. );
-    // updating fluid salinity is done after the density has been recomputed, see below
 
-    // maximum aqueous CO2 mass fraction that can be dissolved
+   
+    // 3. Calculating the new CO2 content of brine and water content of carbonic phase
+    // -------------------------------------------------------------------------------
     // fugacity is calculated inside of X_CO2 function
-    double64 maxXCO2_aq = eos_csmp.X_Co2( Pf, ToC, molalityNaCl ) / 100.; // OK
-   
-   
-    // 3. Compute solubility of H2O into CO2 phase; salt precipitation considered next time
-    // ---------------------------------------------------------------------------------------------
-    const double64 maxYH2O_carbonic = eos_csmp.Y_H2o( Pf, ToC, molalityNaCl ) / 100.; // OK
-   
+    double64 XCO2_new = eos_csmp.X_Co2( Pf, ToC, molalityNaCl ) / 100.; // OK
+    // YH2O will later be used to evaporate water into the CO2 phase
+    double64 YH2O_new = eos_csmp.Y_H2o( Pf, ToC, molalityNaCl ) / 100.; // OK
 
-    // 4. Computing mass transfer between phases
+
+    // 4. Computing new composition of phases
     /* ---------------------------------------------------------------------------------------------------
 
         - CO2 saturation in water
@@ -229,117 +250,101 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
         - computing aqueous diffusivity of CO2 */
 
     // ---------------------------------------------------------------------------------------------------
-#ifdef CSMP_DEBUG_aqueousPhaseDensity_H2O_CO2_NaCl
-      double64 old_XCO2(H2Ocomposition(XCO2)), old_XH2O(H2Ocomposition(XH2O)), old_XNACl_aq(H2Ocomposition(XNACl_aq)),
-               old_YCO2(CO2composition(YCO2)), old_YH2O(CO2composition(YH2O));
-#endif
-   
-    // 4.1 Calculating adjustment of CO2 content of brine
-    // ---------------------------------------------------------------------
-    // comparing CO2-solubility in aqueous phase with current CO2 mass fraction of
-    // and calculating how much extra CO2 could be dissolved in aqueous (or degree of oversaturation)
-    // (positive value indicates that more CO2 can be dissolved)
-    //                   max-massfraction   current mass fraction
-    const double64 delta_XCO2aq = maxXCO2_aq - H2Ocomposition(XCO2);
-    // imposing limit on dissolution due to restricted amount of CO2 left in carbonic phase
-    const double64 mass_CO2_carbonic = CO2composition(YCO2) * old_rhoCO2 * old_sCO2; 
-    // imposing limit on degasification due to restricted amount of CO2 left in aquesous phase 
-    const double64 mass_CO2_aq = H2Ocomposition(XCO2) * old_rhoH2O * old_sw; 
-    // RESULT - how much CO2 to dissolve in brine
-    const double64 kg_CO2_to_dissolve = (delta_XCO2aq > 0. ) ? min( delta_XCO2aq * old_rhoH2O * old_sw, mass_CO2_carbonic) : max(delta_XCO2aq * old_rhoH2O * old_sw, -mass_CO2_aq);
-    //double64 XCO2aq_new = H2Ocomposition(XCO2) + kg_CO2_to_dissolve / (old_rhoH2O * old_sw);
-    double64 XCO2aq_new = H2Ocomposition(XCO2);
-    if (old_rhoH2O * old_sw != 0.) XCO2aq_new  += kg_CO2_to_dissolve / (old_rhoH2O * old_sw);
-    XCO2aq_new = max(XCO2aq_new, 0.);
 
-    // 4.2 Calculating adjustment of water content of CO2 phase
-    // ---------------------------------------------------------------------
-    // calculating how much extra H2O could be dissolved (or degree of oversaturation)
-    // (positive value indicates that more H2O can be dissolved)
-    //                            max-massfraction   current mass fraction
-    const double64 delta_YH2O_carbonic = (maxYH2O_carbonic - CO2composition(YH2O));
-    // imposing limit on condensation due to restricted amount of water left in carbonic phase
-    const double64 mass_H2O_carbonic = CO2composition(YH2O) * old_rhoCO2 * old_sCO2; 
-    // imposing limit on evaporation due to restricted amount of water left in aqueous phase
-    const double64 mass_H2O_aq = H2Ocomposition(XH2O) * old_rhoH2O * old_sw;
-    // RESULT - amount of water to evaporate into CO2 phase
-    const double64 kg_H2O_to_transfer = (delta_YH2O_carbonic > 0. ) ? min( delta_YH2O_carbonic * old_rhoCO2 * old_sCO2, mass_H2O_aq ) : max(delta_YH2O_carbonic * old_rhoCO2 * old_sCO2, -mass_H2O_carbonic);
- 
-
-    // 4.3 Updating fluid densities: CO2 and brine phase
+    // 4.1 Updating fluid densities: CO2 and brine phase
     // ---------------------------------------------------------------------
     // RESULT
-    const double64 rhoCO2    = eos_csmp.Rho_CarbonicPhase( Pf, ToC);
-    n.Store( props.key_rhoCO2, makeScalar(n.Status(props.key_rhoCO2),rhoCO2) );
-    const double64 rho_brine = eos_csmp.Rho_brine(Pf, ToC, molalityNaCl );
-    // RESULT - harmonic mean of the densities of brine and CO2
-    double64 rho_brine_CO2   = aqueousPhaseDensity_H2O_CO2_NaCl( rho_brine, rhoCO2, XCO2aq_new );
-rho_brine_CO2 = std::max( rho_brine_CO2, rho_brine );
-    assert( rho_brine_CO2 >= rho_brine ); // Pruess, 2005
-    // saving
+    const double64 rhoCO2 = eos_csmp.Rho_CarbonicPhase( Pf, ToC );
+    if ( n.Status(props.key_rhoCO2) != DIRICH )
+      n.Store( props.key_rhoCO2, makeScalar(n.Status(props.key_rhoCO2),rhoCO2) );
+   
+    // density taking into account dissolved CO2 and NaCl
+    const double64 rho_brine_CO2 = eos_csmp.densityAqueousPhase( eos_csmp.volumePartialMolarCo2(ToC),
+                                                                 eos_csmp.densityBrine( Pf, ToC, molalityNaCl ), XCO2_new );
     if ( n.Status(props.key_rhoH2O) != DIRICH )
       n.Store( props.key_rhoH2O, makeScalar(n.Status(props.key_rhoH2O),rho_brine_CO2) );
 
 
-    // 4.4 Updating saturations using the new mass fractions (vf=volume fraction, mf=mass fraction)
-    // --------------------------------------------------------------------------------------------
-    const double64 mf_Y_phase = (old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve + kg_H2O_to_transfer) / total_mass;
-    //const double64 mf_X_phase = (old_rhoH2O * old_sH2O + kg_CO2_to_dissolve - kg_H2O_to_transfer) / total_mass;
-    //  s1 = vf1=1/(1+(rho1/rho2)*(1/mf1-1)) = -(rho2 * mf1) / (rho1 * mf1 - rho2 * mf1 - rho1)
-    double64 sCO2new = -(rho_brine_CO2 * mf_Y_phase) / (rhoCO2 * mf_Y_phase - rho_brine_CO2 * mf_Y_phase - rhoCO2);
-    assert( sCO2new >= 0. );
-    assert( sCO2new < 1. + numeric_limits<double64>::epsilon() );
-    sCO2new = std::max( sCO2new, 0. );
-    sCO2new = std::min( sCO2new, 1. );
+    // 4.4 Updating saturations using the new mass fractions (sw=volume fraction, X,Y=mass fractions)
+    // ----------------------------------------------------------------------------------------------
+    // this already takes into account density effects of salt precipitation or dissolution
+    const double64 sw_new = ( mass_H2O > mass_CO2 ) ?
+                      (YH2O_new * rhoCO2 - mass_H2O - mass_NaClaq) / (XCO2_new * rho_brine_CO2 + YH2O_new * rhoCO2 - rho_brine_CO2) :
+                      (YH2O_new * rhoCO2 + mass_CO2) / (XCO2_new * rho_brine_CO2 + YH2O_new * rhoCO2 + rho_brine_CO2);
+
+// TESTING: saturations are a few % different for these 2 approaches
+//    double64 sw_new0 = (YH2O_new * rhoCO2 - mass_H2O - mass_NaClaq) / (XCO2_new * rho_brine_CO2 + YH2O_new * rhoCO2 - rho_brine_CO2);
+//    double64 sw_new1 = (YH2O_new * rhoCO2 + mass_CO2) / (XCO2_new * rho_brine_CO2 + YH2O_new * rhoCO2 + rho_brine_CO2);
+
+    assert( sw_new >= 0. );
+    assert( sw_new < 1. + numeric_limits<double64>::epsilon() );
     // RESULT - assuming that saturations add up to 1 and the brine phase is less compressible than the CO2 phase
     if ( n.Status(props.key_sCO2) != DIRICH )
-      n.Store( props.key_sCO2, makeScalar(n.Status(props.key_sCO2),sCO2new) );
+      n.Store( props.key_sCO2, makeScalar(n.Status(props.key_sCO2),1.-sw_new) );
     if ( n.Status(props.key_sH2O) != DIRICH )
-      n.Store( props.key_sH2O, makeScalar(n.Status(props.key_sH2O),1. - sCO2new) );
+      n.Store( props.key_sH2O, makeScalar(n.Status(props.key_sH2O),sw_new) );
+
+
+    // 4.5 dealing with salt precipitation or dissolution (in terms of salt and mass fractions in aqueous phase)
+    // ---------------------------------------------------------------------------------------------------------
+    // TODO: deal with the porosity change
+    double64 mass_aq(rho_brine_CO2 * sw_new); // mass of aqueous phase
    
+    if ( salt_precipitation ) {
+          // RESULT
+          const double64 kg_NaCl_to_precipitate = -mass_aq * max_XNaCl_aq + mass_NaClaq;
+          assert( kg_NaCl_to_precipitate > 0. );
+          const double64 extra_salt_volume  = kg_NaCl_to_precipitate / rhoNaCl;
+          // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
+          if ( n.Status(props.key_NaCl) != DIRICH )
+            n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt + extra_salt_volume) );
+          // updating mass balance
+          mass_aq     -= kg_NaCl_to_precipitate;
+          mass_NaClaq -= kg_NaCl_to_precipitate;
+          total_mass  -= kg_NaCl_to_precipitate;
+       }
+    // if there is extra salt that gets dissolved
+    else if ( salt > 0. ) {
+         // how much salt is available versus how much can be dissolved in the fluid
+         double64 kg_salt_to_dissolve = std::min( salt * rhoNaCl, (max_XNaCl_aq-XNaCl_new) * mass_aq );
+         // removing the dissolved solid salt
+         if ( n.Status(props.key_NaCl) != DIRICH )
+           n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt-(kg_salt_to_dissolve/rhoNaCl)) );
+         // RESULT
+         // updating mass balance
+         mass_aq     += kg_salt_to_dissolve;
+         mass_NaClaq += kg_salt_to_dissolve;
+         total_mass  += kg_salt_to_dissolve;
+      }
 
-    // 4.5 Computing and storing new compositions
+    // renormalizing mass fractions of aqueous phase
+    XNaCl_new = mass_NaClaq / mass_aq;
+    XCO2_new  = (XCO2_new * rho_brine_CO2 * sw_new) / mass_aq;
+    YH2O_new  = (YH2O_new * rho_brine_CO2 * sw_new) / mass_aq;
+
+    // updating overall composition
+    CO2composition(YH2O)     = YH2O_new;
+    CO2composition(YCO2)     = 1. - YH2O_new;
+    H2Ocomposition(XCO2)     = XCO2_new;
+    H2Ocomposition(XNACl_aq) = XNaCl_new;
+    H2Ocomposition(XH2O)     = 1. - XCO2_new - XNaCl_new;
+    assert( fabs((H2Ocomposition(XH2O) + H2Ocomposition(XCO2) + H2Ocomposition(XNACl_aq))-1.) <= numeric_limits<double64>::epsilon() );
+    assert( fabs((CO2composition(YH2O) + CO2composition(YCO2))-1.) <= numeric_limits<double64>::epsilon() );
+
+
+
+    // 4.6 Storing new phase compositions
     // ------------------------------------------------------------------------------------
-    double64 sH2Onew = 1. - sCO2new;
-    //const double64 new_mass_aqueous_phase(rho_brine_CO2 * sH2Onew);
-    const double64 new_mass_aqueous_phase = old_rhoH2O * old_sw + kg_CO2_to_dissolve - kg_H2O_to_transfer;
-    // aqueous phase
-    if(new_mass_aqueous_phase > numeric_limits<double64>::epsilon()) { 
-        H2Ocomposition(XCO2) = ( H2Ocomposition(XCO2) * old_rhoH2O * old_sw + kg_CO2_to_dissolve) / new_mass_aqueous_phase;
-        H2Ocomposition(XCO2)     = std::min( H2Ocomposition(XCO2), maxXCO2_aq );
-        H2Ocomposition(XCO2)     = std::max( H2Ocomposition(XCO2), 0. );
-        //H2Ocomposition(XH2O)    -= kg_H2O_to_transfer / new_mass_aqueous_phase;
-        H2Ocomposition(XH2O) = ( H2Ocomposition(XH2O) * old_rhoH2O * old_sw - kg_H2O_to_transfer) / new_mass_aqueous_phase;
-        H2Ocomposition(XH2O)     = std::max( H2Ocomposition(XH2O), 0. );
-        H2Ocomposition(XNACl_aq) = mass_NaClaq / new_mass_aqueous_phase;
-        H2Ocomposition(XNACl_aq) = std::max( H2Ocomposition(XNACl_aq), 0. );
-      
-        // renormalisation
-        H2Ocomposition /= (H2Ocomposition(XH2O) + H2Ocomposition(XCO2) + H2Ocomposition(XNACl_aq));
-        assert( fabs((H2Ocomposition(XH2O) + H2Ocomposition(XCO2) + H2Ocomposition(XNACl_aq))-1.) <= numeric_limits<double64>::epsilon() );
-    } else {
-        H2Ocomposition(XH2O) = 1.;
-        H2Ocomposition(XCO2) = 0.;
-        H2Ocomposition(XNACl_aq) = 0.;
-    }
-    // carbonic phase: OK
-    //const double64 new_mass_carbonic_phase(rhoCO2 * sCO2new);
-    const double64 new_mass_carbonic_phase = old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve + kg_H2O_to_transfer;
-    if(new_mass_carbonic_phase > numeric_limits<double64>::epsilon()) { 
-        CO2composition(YH2O) = ( CO2composition(YH2O) * old_rhoCO2 * old_sCO2 + kg_H2O_to_transfer) / new_mass_carbonic_phase;
-        CO2composition(YH2O)  = std::min( CO2composition(YH2O), maxYH2O_carbonic );
-        CO2composition(YH2O)  = std::max( CO2composition(YH2O), 0. );
-        //CO2composition(YCO2) -= kg_CO2_to_dissolve / new_mass_carbonic_phase;
-        CO2composition(YCO2) = ( CO2composition(YCO2) * old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve) / new_mass_carbonic_phase;
-        CO2composition(YCO2)  = std::max( CO2composition(YCO2), 0. );
-        // renormalisation
-        CO2composition /= (CO2composition(YH2O) + CO2composition(YCO2));
-        assert( fabs((CO2composition(YH2O) + CO2composition(YCO2))-1.) <= numeric_limits<double64>::epsilon() );
-
-    } else {
+    // TODO: are these sensible values to give to the mass fractions of a phase that does not exist ? - does it matter ?
+    if ( sw_new <= numeric_limits<double64>::epsilon() ) {
+         H2Ocomposition(XH2O) = 1.;
+         H2Ocomposition(XCO2) = 0.;
+         H2Ocomposition(XNACl_aq) = 0.;
+      }
+    else if ( fabs(1.-sw_new) <= numeric_limits<double64>::epsilon() ) {
         CO2composition(YCO2) = 1.;
         CO2composition(YH2O) = 0.;
-    }
+     }
 
     // storing compositions
     if ( n.Status( props.key_CO2_comp ) != DIRICH ) n.Store( props.key_CO2_comp, CO2composition );
@@ -349,23 +354,20 @@ rho_brine_CO2 = std::max( rho_brine_CO2, rho_brine );
     // compute and store dissolved CO2, evaporated water and salinity for visualisation
     // dissolved CO2 (kg/m3)
     if ( n.Status(props.key_CO2aq) != DIRICH ) {
-      //const double64 dissolved_CO2 = H2Ocomposition(XCO2) * rho_brine_CO2 * sH2Onew; 
       const double64 dissolved_CO2 = H2Ocomposition(XCO2);
       n.Store( props.key_CO2aq, makeScalar(n.Status(props.key_CO2aq),dissolved_CO2) );
     }     
     // salinity (kg/m3)
     if ( n.Status(props.key_NaClaq) != DIRICH ) {
-         // mass salt within a cubic meter of brine (kg/m3)
+         // mass salt in a cubic meter of brine (kg/m3)
          double64 salinity = H2Ocomposition(XNACl_aq) * rho_brine_CO2;
          n.Store( props.key_NaClaq, makeScalar(n.Status(props.key_NaClaq),salinity) );
       }
-   
     // evaporated water (kg/m3)
     if ( n.Status(props.key_H2Og) != DIRICH ) {
-      //const double64 evaporated_water = CO2composition(YH2O) * rhoCO2 * sCO2new; 
-      const double64 evaporated_water = CO2composition(YH2O); 
-      n.Store( props.key_H2Og, makeScalar(n.Status(props.key_H2Og),evaporated_water) );
-    }      
+         const double64 evaporated_water = CO2composition(YH2O);
+         n.Store( props.key_H2Og, makeScalar(n.Status(props.key_H2Og),evaporated_water) );
+      }
     
       
    
@@ -403,20 +405,18 @@ rho_brine_CO2 = std::max( rho_brine_CO2, rho_brine );
     // 8. Computing mass sources or sinks
     // ----------------------------------
     // do the mass fractions add up?
-assert( fabs(sH2Onew - sCO2new) < 1. + numeric_limits<double64>::epsilon() );
-
     // water
-    const double64 new_mass_H2O = H2Ocomposition(XH2O) * rho_brine_CO2 * sH2Onew  +
-                                  CO2composition(YH2O) * rhoCO2 * sCO2new;
+    const double64 new_mass_H2O = H2Ocomposition(XH2O) * rho_brine_CO2 * sw_new  +
+                                  CO2composition(YH2O) * rhoCO2 * (1.-sw_new);
     // carbondioxide
-    const double64 new_mass_CO2 = H2Ocomposition(XCO2) * rho_brine_CO2 * sH2Onew  +
-                                  CO2composition(YCO2) * rhoCO2 * sCO2new;
+    const double64 new_mass_CO2 = H2Ocomposition(XCO2) * rho_brine_CO2 * sw_new  +
+                                  CO2composition(YCO2) * rhoCO2 * (1.-sw_new);
     // dissolved salt
-    const double64 new_mass_NaClaq = H2Ocomposition(XNACl_aq) * rho_brine_CO2 * sH2Onew;
+    const double64 new_mass_NaClaq = H2Ocomposition(XNACl_aq) * rho_brine_CO2 * sw_new;
     // total mass
     const double64 new_total_mass = new_mass_H2O + new_mass_CO2 + new_mass_NaClaq;
     // bulk density
-    const double64 new_bulk_density(rho_brine_CO2 * sH2Onew + rhoCO2 * sCO2new);
+    const double64 new_bulk_density(rho_brine_CO2 * sw_new + rhoCO2 * (1.-sw_new));
     // new volume (mass/density)
     const double64 new_fluid_volume = new_total_mass / new_bulk_density;
 
@@ -445,13 +445,13 @@ assert( fabs(sH2Onew - sCO2new) < 1. + numeric_limits<double64>::epsilon() );
 
     // reporting mass fractions
 #ifdef CSMP_DEBUG_aqueousPhaseDensity_H2O_CO2_NaCl
-      cerr <<"\n\nNode "<< n.Idx() <<": y-coordinate (datum): "<< n.y() <<" m, pf: "<< Pf <<" Pa, T: "<< ToC <<" oC, NaCl molality: "<< molalityNaCl;
+      cerr <<"\n\nNode "<< n.Idx() <<": y-coordinate: "<< n.y() <<" m, pf: "<< Pf <<" Pa, T: "<< ToC <<" oC, NaCl molality: "<< molalityNaCl;
       cerr <<"\n\ninitial sum of mass fractions: ";
       cerr <<"\n\tH2O: "<< old_XCO2+old_XH2O+old_XNACl_aq;
       cerr <<"\n\tCO2: "<< old_YCO2+old_YH2O;
       cerr <<"\n";
       cerr <<"\nequilibration calculation: phase properties (BEFORE) and AFTER calculation: ";
-      cerr <<"\n\tCO2 saturation:         ("<< old_sCO2     <<") "<< sCO2new;
+      cerr <<"\n\tCO2 saturation:         ("<< old_sCO2     <<") "<< (1.-sw_new);
       cerr <<"\n\tXCO2:                   ("<< old_XCO2     <<") "<< H2Ocomposition(XCO2);
       cerr <<"\n\tXH2O:                   ("<< old_XH2O     <<") "<< H2Ocomposition(XH2O);
       cerr <<"\n\tXNaCl:                  ("<< old_XNACl_aq <<") "<< H2Ocomposition(XNACl_aq);
@@ -460,7 +460,7 @@ assert( fabs(sH2Onew - sCO2new) < 1. + numeric_limits<double64>::epsilon() );
       cerr <<"\n\tnew CO2 density:        ("<< old_rhoCO2   <<") "<< rhoCO2 <<" kg/m3";
       cerr <<"\n\tnew brine density:      ("<< old_rhoH2O   <<") "<< rho_brine_CO2 <<" kg/m3";
       cerr <<"\n\tnew salinity:           "<< n.Read(props.key_NaClaq) <<" kg/m3";
-      cerr <<"\n\tnew salt:               "<< n.Read(props.key_NaCl) <<" X/m3";
+      cerr <<"\n\tnew salt:               "<< n.Read(props.key_NaCl) <<" m3/m3";
       cerr <<"\n\tCO2 diffusivity in H2O: "<< D_Co2 * 1.0e9 <<" 10^-9 m2/s";
       cerr <<"\n\tCO2 dynamic viscosity:  "<< muCO2 <<" Pa.s";
       cerr <<"\n\tH2O dynamic viscosity:  "<< muH2O <<" Pa.s";
@@ -477,377 +477,72 @@ template void equilibrateH2O_CO2_NaCl<1U>( const variables::VariableSet_CO2GeoSe
 template void equilibrateH2O_CO2_NaCl<2U>( const variables::VariableSet_CO2GeoSequestration&, Node<2U>&, double64 );
 template void equilibrateH2O_CO2_NaCl<3U>( const variables::VariableSet_CO2GeoSequestration&, Node<3U>&, double64 );
 
+/* OLD SALT STUFF
+
+   if ( mass_NaClaq / mass_H2O > max_XNaCl_aq ) {
+          // RESULT
+          const double64 kg_NaCl_precipitated = delta_XNaCl_aq * old_rhoH2O * old_sw;
+          const double64 V_NaCl_precipitated = kg_NaCl_precipitated / rhoNaCl;
+          // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
+          if ( n.Status(props.key_NaCl) != DIRICH )
+            n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt+V_NaCl_precipitated) );
+          // updating mass balance
+          mass_NaClaq -= kg_NaCl_precipitated;
+          total_mass  -= kg_NaCl_precipitated;
+       }
 
 
-
-// PREVIOUS VERSION
-template<size_t dim>
-void equilibrateH2O_CO2_NaCl1( const variables::VariableSet_CO2GeoSequestration& props, Node<dim>& n, double64 del_t )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-    // 0. Reading fluid composition after transport and computing mass balances
-    // ------------------------------------------------------------------------
-    ArrayVariable  H2Ocomposition(3), CO2composition(2);
-    n.Read( props.key_H2O_comp, H2Ocomposition );
-    n.Read( props.key_CO2_comp, CO2composition );
-   
-    if (fabs(H2Ocomposition(XH2O)+H2Ocomposition(XCO2)+H2Ocomposition(XNACl_aq)-1.) > numeric_limits<double64>::epsilon() )
-      throw csmp::Exception( ERROR, "equilibrateH2O_CO2_NaCl:", "mass fractions of aqueous phase do not add up to 1.");
-
-    if (fabs(CO2composition(YH2O)+CO2composition(YCO2)-1.) > numeric_limits<double64>::epsilon() )
-      throw csmp::Exception( ERROR, "equilibrateH2O_CO2_NaCl:", "mass fractions of carbonic phase do not add up to 1.");
-   
-   
-    // saturation
-    double64 old_sCO2 = n.Read( props.key_sCO2 );
-    // phase densities (0) vs. new (1)
-    double64 old_rhoH2O = n.Read( props.key_rhoH2O );
-    double64 old_rhoCO2 = n.Read( props.key_rhoCO2 );
-    const double64 rhoNaCl(2170.); // density = 2170 kg/m3
-    // water
-    const double64 old_sw(1. - old_sCO2);
-    const double64 mass_H2O = H2Ocomposition(XH2O) * old_rhoH2O * old_sw  +
-                              CO2composition(YH2O) * old_rhoCO2 * old_sCO2;
-    // carbondioxide
-    const double64 mass_CO2 = H2Ocomposition(XCO2) * old_rhoH2O * old_sw  +
-                              CO2composition(YCO2) * old_rhoCO2 * old_sCO2;
-    // dissolved salt
-    double64 mass_NaClaq = H2Ocomposition(XNACl_aq) * old_rhoH2O * old_sw;
-    // total mass
-    double64 total_mass = mass_H2O + mass_CO2 + mass_NaClaq;
-    // bulk density
-    const double64 bulk_density(old_rhoH2O * old_sw + old_rhoCO2 * old_sCO2);
-    // volume
-    const double64 old_fluid_volume = total_mass / bulk_density;
-
-
-    // 1. From P,T and pure CO2-phase molar volume, compute CO2 state and partial pressures of phases
-    // ----------------------------------------------------------------------------------------------
-    // TODO: local capillary pressure not taken into account yet correctly
-    const double64 Pf(n.Read( props.key_pf ));
-    const double64 ToC(n.Read( props.key_T )); // temperature in centrigrade
-    // compute phase state
-    //THERMODYNAMIC_STATE CO2_phase_state = stateOfCO2( pCO2, ToC);
-    //Qi: use total pressure for now SKM - OK
-    THERMODYNAMIC_STATE CO2_phase_state = stateOfCO2( Pf, ToC );
-#ifdef DEBUG
-   if ( CO2_phase_state == GASEOUS )
-      cerr <<"\nequilibrateH2O_CO2_NaCl: the CO2 us in the gaseous state.";
-#endif
-
-    // 2. Compute NaCl and CO2 solubilities in the brine phase as mass fractions
-    //    precipitating salt if brine is oversaturated,
-    //    dissolving salt, if any, into undersaturated brine
-    //    updating overall mass balance.
-    // ----------------------------------------------------------------------------
-    // NaCl dissolved in aqueous phase is converted into molality (notice stupid mass percentages)
-    double64 molalityNaCl( eos_csmp.massFracNaClToMolalNaClInAqueousPhase(H2Ocomposition(XNACl_aq)*100.) );
-    // solid salt if any ('key_NaCl' gives volume fraction of salt in pore space)
-    double64  salt(n.Read(props.key_NaCl));
-    // 'xNACl_aq' in H2Ocomposition, taking CO2 content of brine (tested against Driesner EOS, SKM OK)
-//    double64 max_XNaCl_aq = eos_csmp.X_salt( Pf, ToC, molalityNaCl ) / 100.; // limit increases with moality to unplausible values
-
-    HaliteLiquidus liquidus( ToC, Pf );
-    double64 max_XNaCl_aq = liquidus.MassFractionNaCl(); // at 25C and reasonably low P should give ca.
-
-    double64 delta_XNaCl_aq(H2Ocomposition(XNACl_aq) - max_XNaCl_aq);
-    // precipitating excess salt if brine becomes supersaturated
-    if ( delta_XNaCl_aq > 0. ) {
-         // RESULT
-         double64 kg_NaCl_precipitated = delta_XNaCl_aq * old_rhoH2O * old_sw;
-         double64 V_NaCl_precipitated = kg_NaCl_precipitated / rhoNaCl;
-         // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
-         if ( n.Status(props.key_NaCl) != DIRICH )
-           n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt+V_NaCl_precipitated) );
-         // updating mass balance
-         mass_NaClaq -= kg_NaCl_precipitated;
-         total_mass  -= kg_NaCl_precipitated;
-      }
-    // conversely, (re)dissolving solid salt if aqueous fluid was undersaturated
-    else if ( salt > 0. ) { //                                 kg_NaCl_precipitated
-         double64 V_salt_to_dissolve = std::min( salt, -(delta_XNaCl_aq * old_rhoH2O * old_sw) / rhoNaCl );
-         // removing the dissolved solid salt
-         if ( n.Status(props.key_NaCl) != DIRICH )
-           n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt-V_salt_to_dissolve) );
-         // RESULT - conversion into mass
-         double64 kg_salt_to_dissolve = V_salt_to_dissolve * rhoNaCl;
-         // updating mass balance
-         mass_NaClaq += kg_salt_to_dissolve;
-         total_mass  += kg_salt_to_dissolve;
-      }
-    // updating NaCL molality, to account for the removal of salt
-    molalityNaCl = eos_csmp.massFracNaClToMolalNaClInAqueousPhase( max_XNaCl_aq * 100. );
-    // updating fluid salinity is done after the density has been recomputed, see below
-
-    // maximum aqueous CO2 mass fraction that can be dissolved
-    // fugacity is calculated inside of X_CO2 function
-    double64 maxXCO2_aq = eos_csmp.X_Co2( Pf, ToC, molalityNaCl ) / 100.; // OK
-   
-   
-    // 3. Compute solubility of H2O into CO2 phase; salt precipitation considered next time
-    // ---------------------------------------------------------------------------------------------
-    const double64 maxYH2O_carbonic = eos_csmp.Y_H2o( Pf, ToC, molalityNaCl ) / 100.; // OK
-   
-
-    // 4. Computing mass transfer between phases
-    /* ---------------------------------------------------------------------------------------------------
-
-        - CO2 saturation in water
-        - H2O evaporated into CO2
-        - new densities, including brine density with CO2 (Pruess approach)
-        - new saturations
-        - renormalised mass fractions
-        - computing aqueous diffusivity of CO2 */
-
-    // ---------------------------------------------------------------------------------------------------
-#ifdef CSMP_DEBUG_aqueousPhaseDensity_H2O_CO2_NaCl
-      double64 old_XCO2(H2Ocomposition(XCO2)), old_XH2O(H2Ocomposition(XH2O)), old_XNACl_aq(H2Ocomposition(XNACl_aq)),
-               old_YCO2(CO2composition(YCO2)), old_YH2O(CO2composition(YH2O));
-#endif
-   
-    // 4.1 Calculating adjustment of CO2 content of brine
-    // ---------------------------------------------------------------------
-    // comparing CO2-solubility in aqueous phase with current CO2 mass fraction of
-    // and calculating how much extra CO2 could be dissolved in aqueous (or degree of oversaturation)
-    // (positive value indicates that more CO2 can be dissolved)
-    //                   max-massfraction   current mass fraction
-    const double64 delta_XCO2aq = maxXCO2_aq - H2Ocomposition(XCO2);
-    // imposing limit on dissolution due to restricted amount of CO2 left in carbonic phase
-    const double64 mass_CO2_carbonic = CO2composition(YCO2) * old_rhoCO2 * old_sCO2;
-    // imposing limit on degasification due to restricted amount of CO2 left in aquesous phase
-    const double64 mass_CO2_aq = H2Ocomposition(XCO2) * old_rhoH2O * old_sw;
-    // RESULT - how much CO2 to dissolve in brine
-    const double64 kg_CO2_to_dissolve = (delta_XCO2aq > 0. ) ? min( delta_XCO2aq * old_rhoH2O * old_sw, mass_CO2_carbonic) : max(delta_XCO2aq * old_rhoH2O * old_sw, -mass_CO2_aq);
-    //double64 XCO2aq_new = H2Ocomposition(XCO2) + kg_CO2_to_dissolve / (old_rhoH2O * old_sw);
-    double64 XCO2aq_new = H2Ocomposition(XCO2);
-    if (old_rhoH2O * old_sw != 0.) XCO2aq_new  += kg_CO2_to_dissolve / (old_rhoH2O * old_sw);
-    XCO2aq_new = max(XCO2aq_new, 0.);
-
-    // 4.2 Calculating adjustment of water content of CO2 phase
-    // ---------------------------------------------------------------------
-    // calculating how much extra H2O could be dissolved (or degree of oversaturation)
-    // (positive value indicates that more H2O can be dissolved)
-    //                            max-massfraction   current mass fraction
-    const double64 delta_YH2O_carbonic = (maxYH2O_carbonic - CO2composition(YH2O));
-    // imposing limit on condensation due to restricted amount of water left in carbonic phase
-    const double64 mass_H2O_carbonic = CO2composition(YH2O) * old_rhoCO2 * old_sCO2;
-    // imposing limit on evaporation due to restricted amount of water left in aqueous phase
-    const double64 mass_H2O_aq = H2Ocomposition(XH2O) * old_rhoH2O * old_sw;
-    // RESULT - amount of water to evaporate into CO2 phase
-    const double64 kg_H2O_to_transfer = (delta_YH2O_carbonic > 0. ) ? min( delta_YH2O_carbonic * old_rhoCO2 * old_sCO2, mass_H2O_aq ) : max(delta_YH2O_carbonic * old_rhoCO2 * old_sCO2, -mass_H2O_carbonic);
+     if ( H2Ocomposition(XNACl_aq) <= max_XNaCl_aq )
+       {
+          // extra salt, if any, will get dissolved
+          if ( salt <= numeric_limits<double64>::epsilon() ) {
+               double64 V_salt_to_dissolve = std::min( salt, -(delta_XNaCl_aq * old_rhoH2O * old_sw) / rhoNaCl );
+               // removing the dissolved solid salt
+               if ( n.Status(props.key_NaCl) != DIRICH )
+                 n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt-V_salt_to_dissolve) );
+               // RESULT - conversion into mass
+               double64 kg_salt_to_dissolve = V_salt_to_dissolve * rhoNaCl;
+               // updating mass balance
+               mass_NaClaq += kg_salt_to_dissolve;
+               total_mass  += kg_salt_to_dissolve;
+            }
+       }
+      // 2.2 if the brine is super-saturated with NaCl
+      else {
+          // RESULT
+          const double64 kg_NaCl_precipitated = delta_XNaCl_aq * old_rhoH2O * old_sw;
+          const double64 V_NaCl_precipitated = kg_NaCl_precipitated / rhoNaCl;
+          // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
+          if ( n.Status(props.key_NaCl) != DIRICH )
+            n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl),salt+V_NaCl_precipitated) );
+          // updating mass balance
+          mass_NaClaq -= kg_NaCl_precipitated;
+          total_mass  -= kg_NaCl_precipitated;
+       }
  
-
-    // 4.3 Updating fluid densities: CO2 and brine phase
-    // ---------------------------------------------------------------------
-    // RESULT
-    const double64 rhoCO2    = eos_csmp.Rho_CarbonicPhase( Pf, ToC);
-    n.Store( props.key_rhoCO2, makeScalar(n.Status(props.key_rhoCO2),rhoCO2) );
-    const double64 rho_brine = eos_csmp.Rho_brine(Pf, ToC, molalityNaCl );
-    // RESULT - harmonic mean of the densities of brine and CO2
-    double64 rho_brine_CO2   = aqueousPhaseDensity_H2O_CO2_NaCl( rho_brine, rhoCO2, XCO2aq_new );
-rho_brine_CO2 = std::max( rho_brine_CO2, rho_brine );
-    assert( rho_brine_CO2 >= rho_brine ); // Pruess, 2005
-    // saving
-    if ( n.Status(props.key_rhoH2O) != DIRICH )
-      n.Store( props.key_rhoH2O, makeScalar(n.Status(props.key_rhoH2O),rho_brine_CO2) );
-
-
-    // 4.4 Updating saturations using the new mass fractions (vf=volume fraction, mf=mass fraction)
-    // --------------------------------------------------------------------------------------------
-    const double64 mf_Y_phase = (old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve + kg_H2O_to_transfer) / total_mass;
-    //const double64 mf_X_phase = (old_rhoH2O * old_sH2O + kg_CO2_to_dissolve - kg_H2O_to_transfer) / total_mass;
-    //  s1 = vf1=1/(1+(rho1/rho2)*(1/mf1-1)) = -(rho2 * mf1) / (rho1 * mf1 - rho2 * mf1 - rho1)
-    double64 sCO2new = -(rho_brine_CO2 * mf_Y_phase) / (rhoCO2 * mf_Y_phase - rho_brine_CO2 * mf_Y_phase - rhoCO2);
-    assert( sCO2new >= 0. );
-    assert( sCO2new < 1. + numeric_limits<double64>::epsilon() );
-    sCO2new = std::max( sCO2new, 0. );
-    sCO2new = std::min( sCO2new, 1. );
-    // RESULT - assuming that saturations add up to 1 and the brine phase is less compressible than the CO2 phase
-    if ( n.Status(props.key_sCO2) != DIRICH )
-      n.Store( props.key_sCO2, makeScalar(n.Status(props.key_sCO2),sCO2new) );
-    if ( n.Status(props.key_sH2O) != DIRICH )
-      n.Store( props.key_sH2O, makeScalar(n.Status(props.key_sH2O),1. - sCO2new) );
-   
-
-    // 4.5 Computing and storing new compositions
-    // ------------------------------------------------------------------------------------
-    double64 sH2Onew = 1. - sCO2new;
-    //const double64 new_mass_aqueous_phase(rho_brine_CO2 * sH2Onew);
-    const double64 new_mass_aqueous_phase = old_rhoH2O * old_sw + kg_CO2_to_dissolve - kg_H2O_to_transfer;
-    // aqueous phase
-    if(new_mass_aqueous_phase > numeric_limits<double64>::epsilon()) {
-        H2Ocomposition(XCO2) = ( H2Ocomposition(XCO2) * old_rhoH2O * old_sw + kg_CO2_to_dissolve) / new_mass_aqueous_phase;
-        H2Ocomposition(XCO2)     = std::min( H2Ocomposition(XCO2), maxXCO2_aq );
-        H2Ocomposition(XCO2)     = std::max( H2Ocomposition(XCO2), 0. );
-        //H2Ocomposition(XH2O)    -= kg_H2O_to_transfer / new_mass_aqueous_phase;
-        H2Ocomposition(XH2O) = ( H2Ocomposition(XH2O) * old_rhoH2O * old_sw - kg_H2O_to_transfer) / new_mass_aqueous_phase;
-        H2Ocomposition(XH2O)     = std::max( H2Ocomposition(XH2O), 0. );
-        H2Ocomposition(XNACl_aq) = mass_NaClaq / new_mass_aqueous_phase;
-        H2Ocomposition(XNACl_aq) = std::max( H2Ocomposition(XNACl_aq), 0. );
-      
-        // renormalisation
-        H2Ocomposition /= (H2Ocomposition(XH2O) + H2Ocomposition(XCO2) + H2Ocomposition(XNACl_aq));
-        assert( fabs((H2Ocomposition(XH2O) + H2Ocomposition(XCO2) + H2Ocomposition(XNACl_aq))-1.) <= numeric_limits<double64>::epsilon() );
-    } else {
-        H2Ocomposition(XH2O) = 1.;
-        H2Ocomposition(XCO2) = 0.;
-        H2Ocomposition(XNACl_aq) = 0.;
-    }
-    // carbonic phase: OK
-    //const double64 new_mass_carbonic_phase(rhoCO2 * sCO2new);
-    const double64 new_mass_carbonic_phase = old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve + kg_H2O_to_transfer;
-    if(new_mass_carbonic_phase > numeric_limits<double64>::epsilon()) {
-        CO2composition(YH2O) = ( CO2composition(YH2O) * old_rhoCO2 * old_sCO2 + kg_H2O_to_transfer) / new_mass_carbonic_phase;
-        CO2composition(YH2O)  = std::min( CO2composition(YH2O), maxYH2O_carbonic );
-        CO2composition(YH2O)  = std::max( CO2composition(YH2O), 0. );
-        //CO2composition(YCO2) -= kg_CO2_to_dissolve / new_mass_carbonic_phase;
-        CO2composition(YCO2) = ( CO2composition(YCO2) * old_rhoCO2 * old_sCO2 - kg_CO2_to_dissolve) / new_mass_carbonic_phase;
-        CO2composition(YCO2)  = std::max( CO2composition(YCO2), 0. );
-        // renormalisation
-        CO2composition /= (CO2composition(YH2O) + CO2composition(YCO2));
-        assert( fabs((CO2composition(YH2O) + CO2composition(YCO2))-1.) <= numeric_limits<double64>::epsilon() );
-
-    } else {
-        CO2composition(YCO2) = 1.;
-        CO2composition(YH2O) = 0.;
-    }
-
-    // storing compositions
-    if ( n.Status( props.key_CO2_comp ) != DIRICH ) n.Store( props.key_CO2_comp, CO2composition );
-    if ( n.Status( props.key_H2O_comp ) != DIRICH ) n.Store( props.key_H2O_comp, H2Ocomposition );
-    // fluid salinity
-   
-    // compute and store dissolved CO2, evaporated water and salinity for visualisation
-    // dissolved CO2 (kg/m3)
-    if ( n.Status(props.key_CO2aq) != DIRICH ) {
-      //const double64 dissolved_CO2 = H2Ocomposition(XCO2) * rho_brine_CO2 * sH2Onew;
-      const double64 dissolved_CO2 = H2Ocomposition(XCO2);
-      n.Store( props.key_CO2aq, makeScalar(n.Status(props.key_CO2aq),dissolved_CO2) );
-    }
-    // salinity (kg/m3)
-    if ( n.Status(props.key_NaClaq) != DIRICH ) {
-         // mass salt within a cubic meter of brine (kg/m3)
-         double64 salinity = H2Ocomposition(XNACl_aq) * rho_brine_CO2;
-         n.Store( props.key_NaClaq, makeScalar(n.Status(props.key_NaClaq),salinity) );
+    // updating the salt mass balance
+ 
+    double64 molalityNaCl( eos_csmp.massFracNaClToMolalNaClInAqueousPhase(H2Ocomposition(XNACl_aq)*100.) );
+    // check: The mass balance may have to get updated again if more salt precipitates
+    double64 XNaCl_new = eos_csmp.X_salt( Pf, ToC, molalityNaCl ) / 100.;
+    // repeat step 2.2 if necessary
+    if ( XNaCl_new > max_XNaCl_aq ) {
+          // RESULT
+          const double64 kg_NaCl_precipitated = (XNaCl_new - max_XNaCl_aq) * old_rhoH2O * old_sw;
+          const double64 V_NaCl_precipitated = kg_NaCl_precipitated / rhoNaCl;
+          // storing salt precipitate (recorded as volume fraction occupied by solid in fluid phase)
+          if ( n.Status(props.key_NaCl) != DIRICH )
+            n.Store( props.key_NaCl, makeScalar(n.Status(props.key_NaCl), n.Read( props.key_NaCl)+V_NaCl_precipitated) );
+          // updating mass balance
+          mass_NaClaq -= kg_NaCl_precipitated;
+          total_mass  -= kg_NaCl_precipitated;
+          H2Ocomposition(XNACl_aq) = XNaCl_new = max_XNaCl_aq;
+          // updating molality NaCl
+          molalityNaCl = eos_csmp.massFracNaClToMolalNaClInAqueousPhase(H2Ocomposition(XNACl_aq)*100.);
       }
-   
-    // evaporated water (kg/m3)
-    if ( n.Status(props.key_H2Og) != DIRICH ) {
-      //const double64 evaporated_water = CO2composition(YH2O) * rhoCO2 * sCO2new;
-      const double64 evaporated_water = CO2composition(YH2O);
-      n.Store( props.key_H2Og, makeScalar(n.Status(props.key_H2Og),evaporated_water) );
-    }
-   
-   
-   
-    // 5. computing diffusivity of CO2 in water at the given P, T, salinity
-    // ---------------------------------------------------------------------
-    const double64 D_Co2 = eos_csmp.D_Co2( Pf, ToC, molalityNaCl );
-    if ( D_Co2 < 2.0e-9 || D_Co2 > 12.5e-9 ) {
-         cerr <<"\n\t"<< D_Co2 <<" m2/s.";
-         csmp_error.notice( WARNING, "equilibrateH2O_CO2_NaCl:", "CO2 diffusivity out of bounds defined by Cardogan et al. 2014.");
-      }
-    // store value
-    // TODO: add aqueous diffusivity of CO2 to variable list and consider it in transport calculation
-    // if ( n.Status(props.key_DCO2aq) != DIRICH )
-    //  n.Store( props.key_DCO2aq, makeScalar(n.Status(props.key_DCO2aq),D_Co2) );   // nodal CO2 diffusivity in brine
-   
 
-    // 6. Viscosities
-    // ------------------------------------------------------------------------------------
-    const double64 muH2O = eos_csmp.mu_AqueousPhase( Pf, ToC, molalityNaCl );
-    const double64 muCO2 = eos_csmp.mu_CarbonicPhase( Pf, ToC);
-    n.Store( props.key_muH2O, makeScalar(n.Status(props.key_muH2O),muH2O) );
-    n.Store( props.key_muCO2, makeScalar(n.Status(props.key_muCO2),muCO2) );
+*/
 
-
-
-    // 7. Phase compressibilities
-    // ------------------------------------------------------------------------------------
-    const double64 betaH2O = eos_csmp.C_AqueousPhase( Pf, ToC, molalityNaCl );
-    const double64 betaCO2 = eos_csmp.C_CarbonicPhase( Pf, ToC);
-    n.Store( props.key_cH2O, makeScalar(n.Status(props.key_cH2O),betaH2O) );
-    n.Store( props.key_cCO2, makeScalar(n.Status(props.key_cCO2),betaCO2) );
-
-
-
-    // 8. Computing mass sources or sinks
-    // ----------------------------------
-    // do the mass fractions add up?
-assert( fabs(sH2Onew - sCO2new) < 1. + numeric_limits<double64>::epsilon() );
-
-    // water
-    const double64 new_mass_H2O = H2Ocomposition(XH2O) * rho_brine_CO2 * sH2Onew  +
-                                  CO2composition(YH2O) * rhoCO2 * sCO2new;
-    // carbondioxide
-    const double64 new_mass_CO2 = H2Ocomposition(XCO2) * rho_brine_CO2 * sH2Onew  +
-                                  CO2composition(YCO2) * rhoCO2 * sCO2new;
-    // dissolved salt
-    const double64 new_mass_NaClaq = H2Ocomposition(XNACl_aq) * rho_brine_CO2 * sH2Onew;
-    // total mass
-    const double64 new_total_mass = new_mass_H2O + new_mass_CO2 + new_mass_NaClaq;
-    // bulk density
-    const double64 new_bulk_density(rho_brine_CO2 * sH2Onew + rhoCO2 * sCO2new);
-    // new volume (mass/density)
-    const double64 new_fluid_volume = new_total_mass / new_bulk_density;
-
-    // RESULT - computing 'nodal fluid volume source' from apparent change in fluid masss
-    double64  nodal_mass_source = new_total_mass - total_mass;
-    if ( n.Status(props.key_nQM) != DIRICH )
-      n.Store( props.key_nQM, makeScalar(n.Status(props.key_nQM),nodal_mass_source) );
-
-    // RESULT - computing 'nodal fluid volume source' from apparent change in fluid masss
-    const double64  expansion_factor  = 1. - (nodal_mass_source / new_bulk_density) / new_fluid_volume;
-   
-    // store nodal fluid mass source for pressure computation
-    const double64 PV = n.Read(props.key_fvPV);
-   
-    nodal_mass_source *= (PV/del_t);
-    if (n.Status(props.key_nQM) != DIRICH)
-        n.Store( props.key_nQM, makeScalar(n.Status(props.key_nQM),nodal_mass_source) );
-   
-    // store mass
-    n.Store( props.key_mH2O, makeScalar(n.Status(props.key_mH2O),new_mass_H2O*PV) );
-    n.Store( props.key_mCO2, makeScalar(n.Status(props.key_mCO2),new_mass_CO2*PV) );
-    n.Store( props.key_mNaClaq, makeScalar(n.Status(props.key_mNaClaq),new_mass_NaClaq*PV) );
-    const double64 new_V_salt(n.Read(props.key_NaCl));
-    const double64 new_mass_NaClsd = new_V_salt *PV *rhoNaCl;
-    n.Store( props.key_mNaClsd, makeScalar(n.Status(props.key_mNaClsd),new_mass_NaClsd) );
-
-    // reporting mass fractions
-#ifdef CSMP_DEBUG_aqueousPhaseDensity_H2O_CO2_NaCl
-      cerr <<"\n\nNode "<< n.Idx() <<": y-coordinate (datum): "<< n.y() <<" m, pf: "<< Pf <<" Pa, T: "<< ToC <<" oC, NaCl molality: "<< molalityNaCl;
-      cerr <<"\n\ninitial sum of mass fractions: ";
-      cerr <<"\n\tH2O: "<< old_XCO2+old_XH2O+old_XNACl_aq;
-      cerr <<"\n\tCO2: "<< old_YCO2+old_YH2O;
-      cerr <<"\n";
-      cerr <<"\nequilibration calculation: phase properties (BEFORE) and AFTER calculation: ";
-      cerr <<"\n\tCO2 saturation:         ("<< old_sCO2     <<") "<< sCO2new;
-      cerr <<"\n\tXCO2:                   ("<< old_XCO2     <<") "<< H2Ocomposition(XCO2);
-      cerr <<"\n\tXH2O:                   ("<< old_XH2O     <<") "<< H2Ocomposition(XH2O);
-      cerr <<"\n\tXNaCl:                  ("<< old_XNACl_aq <<") "<< H2Ocomposition(XNACl_aq);
-      cerr <<"\n\tYCO2:                   ("<< old_YCO2     <<") "<< CO2composition(YCO2);
-      cerr <<"\n\tYH2O:                   ("<< old_YH2O     <<") "<< CO2composition(YH2O);
-      cerr <<"\n\tnew CO2 density:        ("<< old_rhoCO2   <<") "<< rhoCO2 <<" kg/m3";
-      cerr <<"\n\tnew brine density:      ("<< old_rhoH2O   <<") "<< rho_brine_CO2 <<" kg/m3";
-      cerr <<"\n\tnew salinity:           "<< n.Read(props.key_NaClaq) <<" kg/m3";
-      cerr <<"\n\tnew salt:               "<< n.Read(props.key_NaCl) <<" X/m3";
-      cerr <<"\n\tCO2 diffusivity in H2O: "<< D_Co2 * 1.0e9 <<" 10^-9 m2/s";
-      cerr <<"\n\tCO2 dynamic viscosity:  "<< muCO2 <<" Pa.s";
-      cerr <<"\n\tH2O dynamic viscosity:  "<< muH2O <<" Pa.s";
-      cerr <<"\n\tfluid expansion caused: "<< expansion_factor <<" (fraction of original volume.)";
-      const double64 dV = (old_fluid_volume - new_fluid_volume) / old_fluid_volume;
-      cerr <<"\n\nfluid volume mismatch error (divergence): "<< dV;
-      cerr <<"\n\n";
-#endif
-
-} // end equilibrateH2O_CO2_NaCl (vs.1)
-
-
-//template void equilibrateH2O_CO2_NaCl<1U>( const variables::VariableSet_CO2GeoSequestration&, Node<1U>&, double64 );
-//template void equilibrateH2O_CO2_NaCl<2U>( const variables::VariableSet_CO2GeoSequestration&, Node<2U>&, double64 );
-//template void equilibrateH2O_CO2_NaCl<3U>( const variables::VariableSet_CO2GeoSequestration&, Node<3U>&, double64 );
 
 
 
