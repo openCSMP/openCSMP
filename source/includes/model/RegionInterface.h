@@ -138,11 +138,11 @@ class RegionInterface
     size_t                    UniqueRegions() const;
 
     // -----------------------------------------------
-    // Regions creation
+    // Region creation
     // -----------------------------------------------
     
-	/// forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
-	bool CreateRegions( bool is_unique, bool reestablishNeighborConnectivity = true );
+	  /// forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
+	  bool CreateRegions( bool is_unique, bool reestablishNeighborConnectivity = true );
 
     /// forms region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
     bool CreateRegionFromRootNode( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity=true );
