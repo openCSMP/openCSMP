@@ -276,54 +276,6 @@ void CornerPointGrid_UoM::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
       size_t i = index.first;
       size_t j = index.second;
 
-      //JC: ignore the following invalid centroid point (idx: 474409) in OtwaySub
-      //For the subset model of Otway
-      if ( NX_ > 100 && NX_ < 200 ) {
-        if ( i == 4 && j == 55 && k == 33 ||
-             i == 18 && j == 60 && k == 33 ||
-             i == 20 && j == 58 && k == 33 ||
-             i == 56 && j == 13 && k == 37 ||
-             i == 56 && j == 14 && k == 50 )
-          continue;
-      }
-      else if ( NX_ > 200 ) { //For the full model of Otway
-        if ( i == 2 && j == 31 && k == 33 ||
-             i == 4 && j == 26 && k == 32 ||
-             i == 4 && j == 27 && k == 32 ||
-             i == 5 && j == 26 && k == 32 ||
-             i == 6 && j == 27 && k == 33 ||
-             i == 6 && j == 63 && k == 32 ||
-             i == 10 && j == 26 && k == 34 ||
-             i == 25 && j == 23 && k == 33 ||
-             i == 25 && j == 24 && k == 33 ||
-             i == 26 && j == 79 && k == 32 ||
-             i == 34 && j == 22 && k == 53 ||
-             i == 35 && j == 76 && k == 33 ||
-             i == 36 && j == 73 && k == 33 ||
-             i == 37 && j == 54 && k == 32 ||
-             i == 37 && j == 79 && k == 33 ||
-             i == 37 && j == 80 && k == 33 ||
-             i == 43 && j == 63 && k == 33 ||
-             i == 57 && j == 68 && k == 33 ||
-             i == 59 && j == 66 && k == 33 ||
-             i == 95 && j == 21 && k == 37 ||
-             i == 95 && j == 22 && k == 50 ||
-             i == 195 && j == 70 && k == 56 ||
-             i == 195 && j == 73 && k == 53 ||
-             i == 202 && j == 57 && k == 27 ||
-             i == 202 && j == 61 && k == 27 ||
-             i == 204 && j == 61 && k == 27 ||
-             i == 204 && j == 61 && k == 29 ||
-             i == 204 && j == 61 && k == 50 ||
-             i == 204 && j == 62 && k == 31 ||
-             i == 204 && j == 62 && k == 50 ||
-             i == 205 && j == 61 && k == 31 ||
-             i == 205 && j == 61 && k == 50 ||
-             i == 207 && j == 63 && k == 50 ||
-             i == 208 && j == 60 && k == 50 )
-          continue;
-      }
-
       generator_->setIJ( i, j );
 
       ECLIPSE_CELL_CLASSIFICATION cellType = cell.classification;
