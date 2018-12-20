@@ -464,7 +464,7 @@ void equilibrateH2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& 
       cerr <<"\n\tCO2 diffusivity in H2O: "<< D_Co2 * 1.0e9 <<" 10^-9 m2/s";
       cerr <<"\n\tCO2 dynamic viscosity:  "<< muCO2 <<" Pa.s";
       cerr <<"\n\tH2O dynamic viscosity:  "<< muH2O <<" Pa.s";
-      cerr <<"\n\tfluid expansion caused: "<< expansion_factor <<" (fraction of original volume.)";
+      cerr <<"\n\tfluid expansion caused: "<< expansion_factor <<" (fraction of original volume)";
       const double64 dV = (old_fluid_volume - new_fluid_volume) / old_fluid_volume;
       cerr <<"\n\nfluid volume mismatch error (divergence): "<< dV;
       cerr <<"\n\n";

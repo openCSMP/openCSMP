@@ -87,14 +87,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     double64 coeff_b = R;
     coeff_b *=  temp;
     coeff_b /=  pressure;
-    coeff_b *=  -1;
+    coeff_b *=  -1.;
 
     //  coeff_c = -( R * T * b_co2 / P ) + a_mix / (P * sqrt( T ) ) - pow(b_co2,2);
     double64 coeff_c = R;
     coeff_c *=  temp;
     coeff_c *=  b_co2;
     coeff_c /=  pressure;
-    coeff_c *=  -1;
+    coeff_c *=  -1.;
     double64 dummy1  = a_mix(temperature);
     dummy1  /=  pressure;
     double64 dummy2  = sqrt( temp );
@@ -109,7 +109,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     coeff_d /=  pressure;
     dummy1  =   sqrt( temp );
     coeff_d /=  dummy1;
-    coeff_d *=  -1;
+    coeff_d *=  -1.;
 
     //  x_N     = - coeff_b / ( 3. * coeff_a );
     double64 x_N = coeff_b;
@@ -174,7 +174,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         double64 aux2 =  yNSquare;
         aux2 -= hSquare;
         aux2 =  sqrt( aux2 );
-        aux2 *= -1;
+        aux2 *= -1.;
         aux2 -= y_N;
         aux2 *= 0.5;
       
@@ -1979,7 +1979,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::mu_CarbonicPhase(double64 pressure,double64 t
 
 
 
-/// viscosity Aqueous Phase (contain dissolved CO2)
+/// compressibility of the carbonic phase
 double64 EOS_CO2H2ONaCl_Spycher04::C_CarbonicPhase(double64 pressure,double64 temperature )
 {
 //    double64 comp(0.0),phaseVolumeCo2(0.);

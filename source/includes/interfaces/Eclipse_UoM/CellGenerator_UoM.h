@@ -427,30 +427,34 @@ public:
 		case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132: {
 			return FACE_TYPE::SPLIT_13_OR_57;
 		}
-		case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
-			if (cell.z[0][0] < cell.z[0][1]) {
-				return FACE_TYPE::SPLIT_13_OR_57;
-			}
-			else return FACE_TYPE::FULL_QUAD;
-		}
-		case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
-			if (cell.z[1][0] < cell.z[1][1]) {
-				return FACE_TYPE::SPLIT_02_OR_46;
-			}
-			else return FACE_TYPE::FULL_QUAD;
-		}
-		case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
-			if (cell.z[2][0] < cell.z[2][1]) {
-				return FACE_TYPE::SPLIT_13_OR_57;
-			}
-			else return FACE_TYPE::FULL_QUAD;
-		}
-		case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
-			if (cell.z[3][0] < cell.z[3][1]) {
-				return FACE_TYPE::SPLIT_02_OR_46;
-			}
-			else return FACE_TYPE::FULL_QUAD;
-		}
+    case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
+      if ( cell.z[0][0] < cell.z[0][1] ) {
+        //return FACE_TYPE::SPLIT_13_OR_57;
+        return FACE_TYPE::SPLIT_02_OR_46;
+      }
+      else return FACE_TYPE::FULL_QUAD;
+    }
+    case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
+      if ( cell.z[1][0] < cell.z[1][1] ) {
+        //return FACE_TYPE::SPLIT_02_OR_46;
+        return FACE_TYPE::SPLIT_13_OR_57;
+      }
+      else return FACE_TYPE::FULL_QUAD;
+    }
+    case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
+      if ( cell.z[2][0] < cell.z[2][1] ) {
+        //return FACE_TYPE::SPLIT_13_OR_57;
+        return FACE_TYPE::SPLIT_02_OR_46;
+      }
+      else return FACE_TYPE::FULL_QUAD;
+    }
+    case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
+      if ( cell.z[3][0] < cell.z[3][1] ) {
+        //return FACE_TYPE::SPLIT_02_OR_46;
+        return FACE_TYPE::SPLIT_13_OR_57;
+      }
+      else return FACE_TYPE::FULL_QUAD;
+    }
 		default:
 			return FACE_TYPE::FULL_QUAD;
 		}

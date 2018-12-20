@@ -23,79 +23,82 @@ template<size_t> class Model;
 @addtogroup CSMPglobalEnums
 @{
 */
-enum { IRREGULAR_OUTSIDE    = -1,
-       LEFT_OUTSIDE         = -2,  ///< model boundary flags
-       RIGHT_OUTSIDE        = -3,  ///< ...
-       BOTTOM_OUTSIDE       = -4,
-       TOP_OUTSIDE          = -5,  
-       FRONT_OUTSIDE        = -6,
-       BACK_OUTSIDE         = -7,
-       CNR_MIN              = -8,  ///< min-x, min-y, min-z
-       CNR_MAX              = -9,  ///< max-x, max-y, max-z
-       CNR_MIN_MAXX         = -10, ///< see users guide
-       CNR_MIN_MAXXZ        = -11,
-       CNR_MIN_MAXZ         = -12,
-       CNR_MAX_MINXZ        = -13,
-       CNR_MAX_MAXX         = -14,
-       CNR_MAX_MAXZ         = -15,
-       BACK_BOTTOM          = -16, ///< model edges: BACK and BOTTOM
-       BACK_RIGHT           = -17, ///< BACK and RIGHT
-       BACK_TOP             = -18, ///< BACK and TOP
-       BACK_LEFT            = -19, ///< BACK and LEFT
-       BOTTOM_RIGHT         = -20, ///< BOTTOM and RIGHT
-       TOP_RIGHT            = -21, ///< TOP and RIGHT
-       TOP_LEFT             = -22, ///< TOP and LEFT
-       BOTTOM_LEFT          = -23, ///< BOTTOM and LEFT
-       FRONT_BOTTOM         = -24, ///< FRONT and BOTTOM
-       FRONT_RIGHT          = -25, ///< FRONT and RIGHT
-       FRONT_TOP            = -26, ///< FRONT and TOP
-       FRONT_LEFT           = -27, ///< FRONT and LEFT
-       REGION_BOUNDARY      = -28
-     };
+enum {
+  IRREGULAR_OUTSIDE = -1,
+  LEFT_OUTSIDE = -2,  ///< model boundary flags
+  RIGHT_OUTSIDE = -3,  ///< ...
+  BOTTOM_OUTSIDE = -4,
+  TOP_OUTSIDE = -5,
+  FRONT_OUTSIDE = -6,
+  BACK_OUTSIDE = -7,
+  CNR_MIN = -8,  ///< min-x, min-y, min-z
+  CNR_MAX = -9,  ///< max-x, max-y, max-z
+  CNR_MIN_MAXX = -10, ///< see users guide
+  CNR_MIN_MAXXZ = -11,
+  CNR_MIN_MAXZ = -12,
+  CNR_MAX_MINXZ = -13,
+  CNR_MAX_MAXX = -14,
+  CNR_MAX_MAXZ = -15,
+  BACK_BOTTOM = -16, ///< model edges: BACK and BOTTOM
+  BACK_RIGHT = -17, ///< BACK and RIGHT
+  BACK_TOP = -18, ///< BACK and TOP
+  BACK_LEFT = -19, ///< BACK and LEFT
+  BOTTOM_RIGHT = -20, ///< BOTTOM and RIGHT
+  TOP_RIGHT = -21, ///< TOP and RIGHT
+  TOP_LEFT = -22, ///< TOP and LEFT
+  BOTTOM_LEFT = -23, ///< BOTTOM and LEFT
+  FRONT_BOTTOM = -24, ///< FRONT and BOTTOM
+  FRONT_RIGHT = -25, ///< FRONT and RIGHT
+  FRONT_TOP = -26, ///< FRONT and TOP
+  FRONT_LEFT = -27, ///< FRONT and LEFT
+  REGION_BOUNDARY = -28
+};
 
 /// @enum BOX_BOUNDARY uniquely identifies the placement of nodes and elements on the boundary of a box-shaped model
-enum BOX_BOUNDARY { NOT,                            ///< not located on a model boundary
-                    IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)
-                    TOP       = TOP_OUTSIDE,
-                    BOTTOM    = BOTTOM_OUTSIDE,
-                    LEFT      = LEFT_OUTSIDE,
-                    RIGHT     = RIGHT_OUTSIDE,
-                    FRONT     = FRONT_OUTSIDE,
-                    BACK      = BACK_OUTSIDE,
-                    CNR1      = CNR_MIN,
-                    CNR2      = CNR_MIN_MAXX,
-                    CNR3      = CNR_MAX_MAXX,
-                    CNR4      = CNR_MAX_MINXZ,
-                    CNR5      = CNR_MIN_MAXZ,
-                    CNR6      = CNR_MIN_MAXXZ,
-                    CNR7      = CNR_MAX,
-                    CNR8      = CNR_MAX_MAXZ,
-                    EDGE1     = BACK_BOTTOM,
-                    EDGE2     = BACK_RIGHT,
-                    EDGE3     = BACK_TOP,
-                    EDGE4     = BACK_LEFT,
-                    EDGE5     = BOTTOM_LEFT,
-                    EDGE6     = BOTTOM_RIGHT,
-                    EDGE7     = TOP_RIGHT,
-                    EDGE8     = TOP_LEFT,
-                    EDGE9     = FRONT_BOTTOM,
-                    EDGE10    = FRONT_RIGHT,
-                    EDGE11    = FRONT_TOP,
-                    EDGE12    = FRONT_LEFT,
-                    INTERNAL  = REGION_BOUNDARY  ///< internal model boundary (usually inside bounding box, with neighbors on either side)
-                 };
+enum BOX_BOUNDARY {
+  NOT,                            ///< not located on a model boundary
+  IRREGULAR = IRREGULAR_OUTSIDE,  ///< located on a not-specified outside boundary of model (usually in the bounding box)
+  TOP = TOP_OUTSIDE,
+  BOTTOM = BOTTOM_OUTSIDE,
+  LEFT = LEFT_OUTSIDE,
+  RIGHT = RIGHT_OUTSIDE,
+  FRONT = FRONT_OUTSIDE,
+  BACK = BACK_OUTSIDE,
+  CNR1 = CNR_MIN,
+  CNR2 = CNR_MIN_MAXX,
+  CNR3 = CNR_MAX_MAXX,
+  CNR4 = CNR_MAX_MINXZ,
+  CNR5 = CNR_MIN_MAXZ,
+  CNR6 = CNR_MIN_MAXXZ,
+  CNR7 = CNR_MAX,
+  CNR8 = CNR_MAX_MAXZ,
+  EDGE1 = BACK_BOTTOM,
+  EDGE2 = BACK_RIGHT,
+  EDGE3 = BACK_TOP,
+  EDGE4 = BACK_LEFT,
+  EDGE5 = BOTTOM_LEFT,
+  EDGE6 = BOTTOM_RIGHT,
+  EDGE7 = TOP_RIGHT,
+  EDGE8 = TOP_LEFT,
+  EDGE9 = FRONT_BOTTOM,
+  EDGE10 = FRONT_RIGHT,
+  EDGE11 = FRONT_TOP,
+  EDGE12 = FRONT_LEFT,
+  INTERNAL = REGION_BOUNDARY  ///< internal model boundary (usually inside bounding box, with neighbors on either side)
+};
+
 /**
 @}
 */
 
 /**
-    @brief brings together all functionality needed to deal with Box shaped models whose boundaries
-    are identified by BOX_BOUNDARY flags.
+@brief brings together all functionality needed to deal with Box shaped models whose boundaries
+are identified by BOX_BOUNDARY flags.
 */
 class Box {
-  public:
-    void UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, 
-                       std::vector<double64>& nrml ) const;
+public:
+  void UnitNormalTo( BOX_BOUNDARY bdry, size_t dim,
+                     std::vector<double64>& nrml ) const;
 
 };
 
@@ -141,10 +144,10 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY,
                                 csmp::Point<1U>& model_coord_max );
 
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 2D model
-void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<2U>&, csmp::Point<2U>&  );
+void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<2U>&, csmp::Point<2U>& );
 
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 3D model
-void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<3U>&, csmp::Point<3U>&  );
+void boundaryMinMaxCoordinates( BOX_BOUNDARY, csmp::Point<3U>&, csmp::Point<3U>& );
 
 /// compares the supplied string with valid BOX_BOUNDARY classifications; returns true if it is among them
 bool isDiagnosticBoxBoundaryClassifier( const std::string& );
@@ -155,9 +158,9 @@ void recreateBoxBoundaryFlags( Model<2U>& );
 void recreateBoxBoundaryFlags( Model<3U>& );
 
 /// using the nodal BOX_BOUNDARY flag values, the elements are flagged accordingly
-template<size_t dim> 
+template<size_t dim>
 void flagElementUsingNodal_BOX_BOUNDARY_Flags( typename std::deque<csmp::Element<dim>* >::iterator,
-											   typename std::deque<csmp::Element<dim>* >::iterator);
+                                               typename std::deque<csmp::Element<dim>* >::iterator );
 
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
 template<size_t dim>
