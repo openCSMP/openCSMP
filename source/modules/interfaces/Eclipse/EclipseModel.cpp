@@ -603,8 +603,8 @@ Element<dim>* EclipseModel<dim>::operator()( size_t i, size_t j, size_t k )
 
 
 
-template class EclipseModel<1U>;
-template class EclipseModel<2U>;
+//template class EclipseModel<1U>;
+//template class EclipseModel<2U>;
 template class EclipseModel<3U>;
 
 } // end csmp

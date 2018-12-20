@@ -700,15 +700,15 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
      fprintf( fp, "%s  data (SI units).\n", outfile_prefix.c_str() );
      if ( key.place == NODE or
           (parsePlacement(key.place)).find("POINT") != string::npos ) {
-          if ( dim == 1U )      fprintf( fp, "Point data\tX\t" );
-          else if ( dim == 2U ) fprintf( fp, "Point data\tX\tY\t" );
-          else if ( dim == 3U ) fprintf( fp, "Point data\tX\tY\tZ\t" );
+          if ( dim == 1U )      fprintf( fp, "Point data: X\t" );
+          else if ( dim == 2U ) fprintf( fp, "Point data: X\tY\t" );
+          else if ( dim == 3U ) fprintf( fp, "Point data: X\tY\tZ\t" );
        }
      // any other properties are considered cell properties
      else {
-          if ( dim == 1U )      fprintf( fp, "Cell data\tX\t" );
-          else if ( dim == 2U ) fprintf( fp, "Cell data\tX\tY\t" );
-          else if ( dim == 3U ) fprintf( fp, "Cell data\tX\tY\tZ\t" );
+          if ( dim == 1U )      fprintf( fp, "Cell data: X\t" );
+          else if ( dim == 2U ) fprintf( fp, "Cell data: X\tY\t" );
+          else if ( dim == 3U ) fprintf( fp, "Cell data: X\tY\tZ\t" );
        }
      // printing variable names, appending indices if these are vector or tensor variables
      vector<csmp::Index>  var_keys(outvars.size());

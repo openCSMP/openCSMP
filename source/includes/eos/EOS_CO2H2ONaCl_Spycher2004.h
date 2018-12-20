@@ -28,8 +28,7 @@ namespace csmp {
 
 
 class EOS_CO2H2ONaCl_Spycher04 {
-
-public:
+  public:
     EOS_CO2H2ONaCl_Spycher04();
     ~EOS_CO2H2ONaCl_Spycher04();
 
@@ -55,7 +54,7 @@ public:
     /// mole fraction of salt from salt molality in aqueous phase (may contain CO2 : molality)
     double64  x_salt( double64 molalityCO2, double64 msalt );
 
-    /// mass fraction (0..1) of salt in aqueous phase
+    /// mass fraction (0..1) of salt in aqueous phase (weight percent)
     double64  X_salt(double64 pressure,double64 temperature, double64 msalt );
 
     /// mass fraction of CO2 in carbonic phase (weight percent)
@@ -109,7 +108,7 @@ public:
     /// compressibility of the carbonic phase
     double64  C_CarbonicPhase(double64 pressure,double64 temperature );
 
-    /// Z compressbility factor for carbonic phase
+    /// Z compressibility factor for carbonic phase
     double64  Z_CarbonicPhase(double64 pressure,double64 temperature);
 
     /// molecular diffusion coefficient of CO2 in brine
@@ -135,13 +134,13 @@ public:
 
 //  unit conversions
 
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
 
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // input XNaCl
 
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// input XNaCl
 
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt); // input NaCl molality
 
     double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
 
@@ -313,12 +312,12 @@ public:
 
     void plot_thermodynamics();
 
+    const double64 R, molarMassH2o, molarMassCo2, molarMassNacl;
 
   private:
     // constants
-    const double64 R,a_h2oco2, b_co2, b_h2o, b_mix,
+    const double64 a_h2oco2, b_co2, b_h2o, b_mix,
                    stoichio,p0,vH2o, vCo2,
-                   molarMassH2o, molarMassCo2, molarMassNacl,
                    pSC,tSC;
 };
 

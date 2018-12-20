@@ -87,14 +87,14 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     double64 coeff_b = R;
     coeff_b *=  temp;
     coeff_b /=  pressure;
-    coeff_b *=  -1;
+    coeff_b *=  -1.;
 
     //  coeff_c = -( R * T * b_co2 / P ) + a_mix / (P * sqrt( T ) ) - pow(b_co2,2);
     double64 coeff_c = R;
     coeff_c *=  temp;
     coeff_c *=  b_co2;
     coeff_c /=  pressure;
-    coeff_c *=  -1;
+    coeff_c *=  -1.;
     double64 dummy1  = a_mix(temperature);
     dummy1  /=  pressure;
     double64 dummy2  = sqrt( temp );
@@ -109,7 +109,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     coeff_d /=  pressure;
     dummy1  =   sqrt( temp );
     coeff_d /=  dummy1;
-    coeff_d *=  -1;
+    coeff_d *=  -1.;
 
     //  x_N     = - coeff_b / ( 3. * coeff_a );
     double64 x_N = coeff_b;
@@ -174,7 +174,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
         double64 aux2 =  yNSquare;
         aux2 -= hSquare;
         aux2 =  sqrt( aux2 );
-        aux2 *= -1;
+        aux2 *= -1.;
         aux2 -= y_N;
         aux2 *= 0.5;
       
@@ -1060,8 +1060,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalCo2FromBrineMoleFractionCo2( double64 xC
     //  CO2-H2O Mixtures in the Geological Sequestration of CO2.
     //  II. Partitioning in Chloride Brines at 12-100oC and up to 600 bar
 */
-double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2(double64 molalCo2,
-                                                       double64 mSalt)
+double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2( double64 molalCo2,
+                                                                  double64 mSalt)
 {
    return molalCo2 / ( molalCo2 + 55.508 + stoichio * mSalt );
 }
@@ -1078,7 +1078,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2FromBrineMolalCo2(double64 molalC
 
 */
 double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInCo2SatAqueousPhase(double64 molalCo2,
-                                                                      double64 mSalt)
+                                                                                double64 mSalt)
 {
     //  massSalt = stoichio * mSalt / ( 55.508 + stoichio * mSalt + molalityCo2 );
     double64 xSalt = stoichio;
@@ -1104,7 +1104,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::molalNaClToMolarFracNaClInCo2SatAqueousPhase(
 
 */
 double64 EOS_CO2H2ONaCl_Spycher04::molarFracH2oBrine ( double64 xCo2,
-                                             double64 xSalt )
+                                                       double64 xSalt )
 {
     return 1. - xCo2 - xSalt;
 }
@@ -1119,23 +1119,23 @@ double64 EOS_CO2H2ONaCl_Spycher04::molarFracCo2Carbon( double64 yH2oBrine )
 
 
 double64 EOS_CO2H2ONaCl_Spycher04::massFracCo2InCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                     double64 molarFracH2oInCarbonicPhase )
+                                                               double64 molarFracH2oInCarbonicPhase )
 {
     double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
-    return    (molarFracCo2InCarbonicPhase * molarMassCo2 / bulkMassFrac)*100;// mass fraction in % weight;
+    return    (molarFracCo2InCarbonicPhase * molarMassCo2 / bulkMassFrac)*100.;// mass fraction in % weight;
 }
 
 
 
 double64 EOS_CO2H2ONaCl_Spycher04::massFracH2oInCarbonicPhase( double64 molarFracCo2InCarbonicPhase,
-                                                     double64 molarFracH2oInCarbonicPhase )
+                                                               double64 molarFracH2oInCarbonicPhase )
 {
     double64 bulkMassFrac  = molarFracCo2InCarbonicPhase * molarMassCo2;
     bulkMassFrac += molarFracH2oInCarbonicPhase * molarMassH2o;
 
-    return    (molarFracH2oInCarbonicPhase * molarMassH2o / bulkMassFrac)*100;// mass fraction in % weight;
+    return    (molarFracH2oInCarbonicPhase * molarMassH2o / bulkMassFrac)*100.;// mass fraction in % weight;
 }
 
 
@@ -1332,7 +1332,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::x_H2o(double64 pressure,double64 temperature,
 
 
 
-/// molar fraction salt in aqueuse phase, Xs
+/// molar fraction salt in aqueous phase, Xs
 double64 EOS_CO2H2ONaCl_Spycher04::X_s(double64 pressure,double64 temperature, double64 msalt )
 {
     double64 xCo2=x_Co2(pressure,temperature,msalt );
@@ -1462,7 +1462,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::volumePartialMolarCo2( double64 temperature )
     //
     //  from cgs to SI by
     //
-    //  Kestin etal 1981
+    //  Kestin et al 1981
     //  Tables of the Dynamic and Kinematic Viscosity of Aqueous NaCl Solutions in
     //  the Temperature Range 20-150 C and the Pressure Range 0.1-35 MPa
     //  J. Phys. Chem. Ref. Data, Vol. 10, No. 1,
@@ -1574,8 +1574,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::densityCarbonicPhase( double64 phaseVolumeCo2
 
 */
 double64 EOS_CO2H2ONaCl_Spycher04::compressibilityBrine( double64 densBrine,
-                                               double64 pressure,
-                                               double64 densBrineRef )
+                                                         double64 pressure,
+                                                         double64 densBrineRef )
 {
     const double64 pressureRef( 101.325 ), press( pressure * 1e-3);
 
@@ -1795,7 +1795,6 @@ double64 EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase( double64 temperature,
     double64 logT_red = log(T_red);
     double64 dummy1 = aa0 * 1. + aa1 * logT_red + aa2 * logT_red*logT_red + aa3 * pow( logT_red, 3. ) + aa4 * pow( logT_red, 4. );
     dummy1          = exp( dummy1 );
-
     double64 eta_0       = 1.00697 * pow( temp, 0.5 ) / dummy1;  //Eq. (3)
     double64 eta_excess  = dd1 * rho + dd2 * rho*rho + dd3 * pow(rho, 6. ) / pow(T_red, 3.) + dd4 * pow(rho, 8.) + dd5 * pow(rho, 8) / T_red;  //Eq.(8)
 
@@ -1980,7 +1979,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::mu_CarbonicPhase(double64 pressure,double64 t
 
 
 
-/// viscosity Aqueous Phase (contain dissolved CO2)
+/// compressibility of the carbonic phase
 double64 EOS_CO2H2ONaCl_Spycher04::C_CarbonicPhase(double64 pressure,double64 temperature )
 {
 //    double64 comp(0.0),phaseVolumeCo2(0.);
@@ -2126,7 +2125,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::Bw( double64 pressure, double64 temperature,d
 double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt)
 {
     // mass fraction in % weight
-    return 1. * massFracSalt / ( molarMassNacl * ( 100 - massFracSalt ) );
+    return 1. * massFracSalt / ( molarMassNacl * ( 100. - massFracSalt ) );
 }
 
 
@@ -2144,7 +2143,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::massFracNaClToMolarFracNaClInAqueousPhase( do
 {
     double64 molarFrac =  massFracSalt * molarMassH2o;
 
-    double64 dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100 * molarMassNacl;
+    double64 dummy = massFracSalt * (molarMassH2o - molarMassNacl) + 100. * molarMassNacl;
 
     return molarFrac / dummy;
 }
@@ -2321,10 +2320,6 @@ void EOS_CO2H2ONaCl_Spycher04::plot_AqueousPhase()
     const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_AqueousPhase_depth,fout_density_difference_depth,
@@ -2427,14 +2422,8 @@ void EOS_CO2H2ONaCl_Spycher04::plot_CarbonicPhase()
     const double64 Tmin(20.);
     const double64 Pmax(35000000.); //350 bar
     const double64 Pmin(100000.); // 1 bar
-    const double64 msaltmin(0.);
-    const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout,fout_density_CarbonicPhase_depth,fout_viscosity_CarbonicPhase_depth,
@@ -2554,10 +2543,6 @@ void EOS_CO2H2ONaCl_Spycher04::plot_thermodynamics()
     const double64 msaltmax(1.5); //87664.5 ppm
     const double64 nTP(100);
     const double64 nmsalt(4);
-    const double64 therm_grad(0.03); //3 C/100m
-    const double64 pres_grad(10000.); // 0.1 bar/m
-    const double64 temp_surface(20); // 20 C
-    const double64 pres_surface(100000); // 1 bar
     const double64 max_depth(2600.); //2600 m
 
     ofstream fout_y_Co2_depth,fout_y_H2o_depth,fout_x_Co2_depth,
