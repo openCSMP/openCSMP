@@ -14,19 +14,8 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctions<dim,USER>::BrooksCoreySaturationFunctions()
   {
   }
-  
-//pseudo function to avoid compile errors  
-template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctions<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e )
-  {
-  } 
 
-//pseudo function to avoid compile errors   
-template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctions<dim,USER>::UpdateBrooksCoreyParameters( Element<dim>* e )
-  {
-  }
- 
+
 
 // INLINE METHODS
 

@@ -941,7 +941,7 @@ database.
 template<size_t dim>
 csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
-                                                 double64 vmin, double64 vmax , string usage )
+                                                 double64 vmin, double64 vmax, string usage )
  {
     auto iter(propList_.find(string(s)));
 
@@ -972,7 +972,6 @@ csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit
          if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< s <<"'\n";
 
          /// Roman,2013: Added explicit way of reading the size of variable
-         //EstablishVariableTypeDependentProperties( static_cast<int>(vtype), added_prop.key );
          EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
          EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
 

@@ -85,19 +85,6 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   public:
     BrooksCoreySaturationFunctionsWithHysteresis();
   
-    /// Initialision  method (a)
-        void InitialiseBrooksCoreyParameters( const Element<dim>* const );
-    
-    /// Initialision  method (b)
-        void InitialiseBrooksCoreyParameters( const Element<dim>* const, std::array<std::array<double64, 2>,2> a,
-                                              std::array<std::array<double64, 2>,2> c , TWO_PHASE_FLOW_PROCESS ProcessPath );
-  
-    /// Initialision  method (c)
-        void InitialiseBrooksCoreyParameters( const Element<dim>* const, std::array<std::array<double64, 2>,2> a, std::array<std::array<double64, 2>,2> c );
-        
-    /// Update parameter values when necessary    
-        void UpdateBrooksCoreyParameters( Element<dim>* );
-    
     /// Effective saturation function
         double64 EffectiveSaturation( const Element<dim>* const ) const;
   
@@ -114,10 +101,10 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
         double64 OilResidualSaturation( const Element<dim>* const ) const;
   
     /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
-        double64 WaterResidualSaturation( const Element<dim>* const, double64 Sor_ ) const;
+        double64 WaterResidualSaturation( const Element<dim>* const, double64 Sor ) const;
 
     /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
-        void WaterAndOilResidualSaturationImbibitionToDrainage( const Element<dim>* const e, double64& Swr_, double64& Sor_)  const;
+        void WaterAndOilResidualSaturationImbibitionToDrainage( const Element<dim>* const e, double64& Swr, double64& Sor )  const;
   
   
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
@@ -147,7 +134,7 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
         std::pair<double64,double64> CapillaryPressureLimits( const Element<dim>* const ) const;
   
     /// Check the capillary pressure is in the limits and reset the pseduo residual water (newSrH2O) and CO2 saturations (newSrCO2)
-        void CheckPcLimitsAndResetResiduals( const Element<dim>* const , double64& newSrH2O , double64& newSrCO2 ) const;
+        void CheckPcLimitsAndResetResiduals( const Element<dim>* const, double64& newSrH2O, double64& newSrCO2 ) const;
 
     /// Land's parameter for Air and CO2 "Prather Bray Seymour Codd 2016" paper
     const double64  C_land_ = 0.89;
@@ -171,6 +158,20 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+ 
+    /// Initialision  method (a)
+    void InitialiseBrooksCoreyParameters( const Element<dim>* const );
+  
+    /// Initialision  method (b)
+    void InitialiseBrooksCoreyParameters( const Element<dim>* const,
+                                          const std::array<std::array<double64,2>,2>& a,
+                                          const std::array<std::array<double64,2>,2>& c, TWO_PHASE_FLOW_PROCESS ProcessPath );
+    /// Initialision  method (c)
+    void InitialiseBrooksCoreyParameters( const Element<dim>* const,
+                                          const std::array<std::array<double64, 2>,2>& a, const std::array<std::array<double64,2>,2>& c );
+  
+    /// Update parameter values when necessary
+    void UpdateBrooksCoreyParameters( Element<dim>* );
   
     mutable double64  aw_ ; ///< TODO: document what these guys are !
     mutable double64  ao_ ;

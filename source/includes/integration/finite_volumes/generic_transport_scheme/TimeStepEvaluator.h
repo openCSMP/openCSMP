@@ -37,7 +37,7 @@ class TimeStepEvaluator {
 
   private:
     const double64 max_time_increment_;
-    bool step_size_reduction_factor_;
+    double64 step_size_reduction_factor_;
 };
 
 /**

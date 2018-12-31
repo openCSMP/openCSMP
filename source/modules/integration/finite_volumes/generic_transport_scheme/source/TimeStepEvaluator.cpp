@@ -8,6 +8,7 @@
 
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
+#include "ImplicitTransport.h"
 #include "Exception.h"
 #include "Element.h"
 #include "Region.h"
@@ -254,6 +255,8 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const 
 
 /** multiphase flow version
 
+*/
+/* TODO: port this to new relperm framework
 template<size_t dim, template<size_t> class USER>
 double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64 max_time_increment ) const
  {
@@ -347,11 +350,11 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
     return courant_increment;
    
  } // end StreamlineCFL (multiphase case)
-
-
 */
 
+
 template class TimeStepEvaluator<3U,ExplicitTransport>;
+template class TimeStepEvaluator<3U,ImplicitTransport>;
 
 } // end csmp
 

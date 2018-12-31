@@ -37,7 +37,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);
   
-    virtual ~TwoPhaseDESTransport() { /* nothing to do here? */ }
+    virtual ~TwoPhaseDESTransport() { delete flowfunctions_; }
                            
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );

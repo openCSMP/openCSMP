@@ -46,7 +46,7 @@ INTERSECTION  lineTriangle3DIntersect( const Edge3D& e, const Triangle3D& p, dou
 
 Polygon*  project( const Triangle3D& p, int h, int v );
 
-bool clipPolygonToEdge( const Polygon&, const Edge&, Polygon* ); // MJL, p. 127
+bool clipPolygonToEdge( const Polygon&, const Edge&, Polygon& ); // MJL, p. 127
  
 /// variation of clipPolygonToEdge(), MJL, p. 127
 bool clipEdgeToPolygon( const Polygon&, Edge& );

@@ -99,7 +99,7 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
         continue;
         
       } else {
-        this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr); 
+// SKM FIX - should be inside of sat-function: this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr);
         
         const size_t pnid(nd->ParentNodeNumber(t));
         
@@ -295,7 +295,7 @@ void TwoPhaseMassBasedDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Eve
         for ( size_t t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
-            this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
+// SKM FIX - should be inside of sat-function:             this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
             fn_avg += this->flowfunctions_->f_at(eptr,1U,sw);
         }
         fn_avg /= static_cast<double64>(node_parent_elements);

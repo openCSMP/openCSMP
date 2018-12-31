@@ -32,9 +32,9 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       first_step_(true),
       PEP_multiplier_(PEP_multiplier),
       CFL_multiplier_(cfl_multiplier),
-      relaxing_factor_(10.)
+      relaxing_factor_(10.),
+      flowfunctions_(new FLOW_FUNCTIONS<dim>(m.Database()))
 {
-    flowfunctions_ = new FLOW_FUNCTIONS<dim> (db_);
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
 
@@ -66,9 +66,9 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       first_step_(true),
       PEP_multiplier_(PEP_multiplier),
       CFL_multiplier_(cfl_multiplier),
-      relaxing_factor_(relaxing_factor)
+      relaxing_factor_(relaxing_factor),
+      flowfunctions_(new FLOW_FUNCTIONS<dim>(m.Database()))
 {
-    flowfunctions_ = new FLOW_FUNCTIONS<dim> (db_);
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
 
@@ -97,8 +97,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     if(!m.Database().IsDefined("nonwetting phase timing array")) m.CreateProperty( "nonwetting phase timing array", "none", ARRAY, NODE, 7, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("cfl multiplier")) m.CreateProperty( "cfl multiplier", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!m.Database().IsDefined("shock saturation aqueous phase")) m.CreateProperty( "shock saturation aqueous phase", "none", SCALAR, ELEMENT, 1, -5.00E-02 ,1.05E+00);     
-    if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, -1.00E+08 ,1.00E+08);  
-    if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, -1.00E+10 ,1.00E+10);
+    if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, 3, -1.00E+08 ,1.00E+08);
+    if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("truncated FV")) m.CreateProperty( "truncated FV", "none", SCALAR, NODE, 1, 0 ,1);
     if(!m.Database().IsDefined("equilibrate")) m.CreateProperty( "equilibrate", "none", SCALAR, NODE, 1, 0 ,1);
     if(!m.Database().IsDefined("update phi and k")) m.CreateProperty( "update phi and k", "none", SCALAR, ELEMENT, 1, 0 ,1);
@@ -177,7 +177,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
     const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
     for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
-         flowfunctions_->InitialiseBrooksCoreyParameters(*it);
+// SKM FIX - this should occur on demand inside sat-function:                 flowfunctions_->InitialiseBrooksCoreyParameters(*it);
             
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -219,7 +219,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
         bool truncated_node = false;   
         for ( size_t i=0U; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
-             flowfunctions_->InitialiseBrooksCoreyParameters(eptr);
+// SKM FIX - this should occur on demand inside sat-function:                     flowfunctions_->InitialiseBrooksCoreyParameters(eptr);
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
@@ -317,15 +317,15 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::UpdateBCParameters (Event<dim>* e
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
   assert( nd->Status(  this->key_sCO2 ) != DIRICH);
- 
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){ 
+
+  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){
     //FLOW_FUNCTIONS<dim> flowfunctions(db_);
     const size_t node_parent_elements(nd->Parents());
     for ( size_t t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
         assert( eptr != NULL );
-        flowfunctions_->UpdateBrooksCoreyParameters(eptr);
+// SKM FIX - this should occur on demand inside sat-function:        flowfunctions_->UpdateBrooksCoreyParameters(eptr);
     }
   }
 }
@@ -365,7 +365,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         
       } else {        
         
-        flowfunctions_->InitialiseBrooksCoreyParameters(eptr); 
+// SKM FIX - this should occur on demand inside sat-function:                flowfunctions_->InitialiseBrooksCoreyParameters(eptr);
         
         const size_t pnid(nd->ParentNodeNumber(t));
         
@@ -553,7 +553,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         for ( size_t t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
-            flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
+// SKM FIX - this should occur on demand inside sat-function:                    flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
             fn_avg += flowfunctions_->f_at(eptr,1U,sw);
         }
         fn_avg /= static_cast<double64>(node_parent_elements);
