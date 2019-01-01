@@ -10,22 +10,24 @@ template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 class TwoPhaseMultiComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW_FUNCTIONS> {
 
   public:
-    TwoPhaseMultiComponentDESTransport ( Model<dim>& m, 
-                           const char* target_region, 
-                           bool with_capillary_spreading, 
-                           bool with_gravity_forces,
-                           bool tensor_k,
-                           double64 PEP_multiplier, 
-                           double64 cfl_multiplier);
+    TwoPhaseMultiComponentDESTransport( Model<dim>& m,
+                                         const char* target_region,
+                                         FLOW_FUNCTIONS<dim>&,
+                                         bool with_capillary_spreading,
+                                         bool with_gravity_forces,
+                                         bool tensor_k,
+                                         double64 PEP_multiplier,
+                                         double64 cfl_multiplier );
                            
-    TwoPhaseMultiComponentDESTransport ( Model<dim>& m, 
-                           const char* target_region, 
-                           bool with_capillary_spreading, 
-                           bool with_gravity_forces,
-                           bool tensor_k, 
-                           double64 PEP_multiplier,
-                           double64 cfl_multiplier, 
-                           double64 relaxing_factor);    
+    TwoPhaseMultiComponentDESTransport( Model<dim>& m,
+                                         const char* target_region,
+                                         FLOW_FUNCTIONS<dim>&,
+                                         bool with_capillary_spreading,
+                                         bool with_gravity_forces,
+                                         bool tensor_k,
+                                         double64 PEP_multiplier,
+                                         double64 cfl_multiplier,
+                                         double64 relaxing_factor );
   
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
@@ -45,8 +47,7 @@ class TwoPhaseMultiComponentDESTransport : public TwoPhaseDESTransport<dim, FLOW
     //[0] H2O aqueous phase (liquid water)
     //[1] CO2 aqueous phase (dissolved CO2)
     //[2] NaCl aqeous phase (dissolved salt)     
-    csmp::INDEX<ARRAY,NODE> key_dcmH2O;
-        
+    csmp::INDEX<ARRAY,NODE> key_dcmH2O;        
 };
   
 

@@ -173,17 +173,10 @@ template<size_t dim>
 class PropertyDatabase  {
  public:
    PropertyDatabase();
-   explicit PropertyDatabase( const char* variablesFileName, bool isBinary = false );
+   PropertyDatabase( const char* variablesFileName, bool isBinary = false );
+   PropertyDatabase( const PropertyDatabase<dim>& );
    ~PropertyDatabase();
-  
    PropertyDatabase<dim>& operator=( const PropertyDatabase<dim>& p );
-   void Initialize( const char* variables_file );
-   void DeepCopy( const PropertyDatabase<dim>& );
-
-   bool BinaryOut( const char* fileName ) const;
-   bool BinaryOut( std::fstream& fp ) const;
-   bool BinaryIn( const char* fileName );
-   bool BinaryIn( std::fstream& fp );
 
    const char*    VariablesFile() const;
    csmp::Index    StorageKey( const char* property_name ) const;
@@ -198,6 +191,7 @@ class PropertyDatabase  {
    bool           IsDefined( const csmp::Index& idx ) const;
    void           RangeOf( const char* property_name, double64& min, double64& max ) const;
    void           CheckRange( const char* property_name, double64& var ) const;
+   void           SetRangeOf( const char* property_name, double64 vmin, double64 vmax );
    const char*    Unit( const char* property_name ) const;
   
    LocalVariables             LocalVariablesAt( PLACEMENT within ) const;
@@ -211,12 +205,12 @@ class PropertyDatabase  {
                                         const char* desired_system, 
                                         const char* unit ) const;
 
-   /// adding a property at runtime from the command line (NB: you should call method of model to do this)
+   /// adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this)
    csmp::Index    AddProperty();    
 
-   csmp::Index    AddProperty(const char* property_name, const char* unit, size_t last_max_index,
+   csmp::Index    AddProperty( const char* property_name, const char* unit, size_t last_max_index,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
-                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30 , std::string usage="???");
+                               double64 vmin=-1.0e+30 , double64 vmax=1.0e+30 , std::string usage="???" );
 
    csmp::Index    AddProperty( const char* property_name, const char* unit,
                                VARIABLE_TYPE, PLACEMENT, size_t vsize = 1,
@@ -256,6 +250,11 @@ class PropertyDatabase  {
 
    void   Out() const;
 
+   bool   BinaryOut( const char* fileName ) const;
+   bool   BinaryOut( std::fstream& fp ) const;
+   bool   BinaryIn( const char* fileName );
+   bool   BinaryIn( std::fstream& fp );
+
    void   Verbose(bool verbose) { this->verbose_=verbose; }
    bool   Verbose() { return this->verbose_; }
 
@@ -266,8 +265,8 @@ class PropertyDatabase  {
    std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> > variableCount_; ///< all placements and variable types in here
    std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
    IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
-
-   PropertyDatabase( const PropertyDatabase<dim>& );
+  
+   void   Initialize( const char* variables_file );
    void   InitializeCount();
    void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& );
    void   UpdateParametersAndDatabase();

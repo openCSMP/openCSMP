@@ -2,6 +2,7 @@
 #include "ExperimentalSaturationFunctions.h"
 #include "CO2H2O_FunctionsModule1.h"
 #include "Element.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -13,92 +14,122 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 ExperimentalSaturationFunctions<dim,USER>::ExperimentalSaturationFunctions( const char* filename )
   {
-    ConstructRTs(filename);
+     InitialiseReservoirRockTypes(filename);
   }
   
 
 
 /**
  
- read from Rock Type file
+ reading the rocktype file
  
  */
- template<size_t dim, template<size_t> class USER>
- void ExperimentalSaturationFunctions<dim,USER>::ConstructRTs(const char* rt_file_name)
+template<size_t dim, template<size_t> class USER>
+size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( const char* rt_file_name )
   {
-    std::cout << "\nExperimentalRT::ConstructRTs()\n";
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+    std::cout << "\nExperimentalSaturationFunctions::InitialiseReservoirRockTypes: reading data from file: '"<< rt_file_name <<"' ...\n";
     
     std::ifstream rt_file;
     rt_file.open(rt_file_name);
     
-    if (!rt_file)
-    {
-      std::cout << "\nExperimentalRT::ConstructRTs(): " << rt_file_name << " file doesn't exist.\n";
-      std::exit(1);
-    }
-    else
-    {
-      unsigned int number_of_tables;
-      rt_file >> number_of_tables;
+    if ( !rt_file.is_open() )
+      throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "input file not found." );
+
+    int number_of_tables(0);
+    rt_file >> number_of_tables;
+  
+    std::cout << "\nExperimentalSaturationFunctions::InitialiseReservoirRockTypes: Number of tables: " << number_of_tables << "\n";
+    if ( number_of_tables <= 0 )
+      throw csmp::Exception( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes", "no data tables contained in input file." );
+
+    kr1_.resize(number_of_tables);
+    kr2_.resize(number_of_tables);
+    pc_.resize(number_of_tables);
+  
+    for ( int i=0; i < number_of_tables; i++ )
+      {
+        std::cout << "\nReading data table for RRT: " << i << "\n";
       
-      std::cout << "\nExperimentalRT::ConstructRTs(): Number of tables: " << number_of_tables << "\n";
+        unsigned int number_of_entries;
+        rt_file >> number_of_entries;
       
-      kr1_.resize(number_of_tables);
-      kr2_.resize(number_of_tables);
-      pc_.resize(number_of_tables);
+        double64 kro_start_derivative, kro_end_derivative, krw_start_derivative, krw_end_derivative, pc_start_derivative, pc_end_derivative;
+        rt_file >> kro_start_derivative >> kro_end_derivative >> krw_start_derivative >> krw_end_derivative >> pc_start_derivative >> pc_end_derivative;
+        cout << "Derivatives (krnw0,krnw1,krw0,krw1,dpcds0,dpcds1):\t" << kro_start_derivative << "\t" << kro_end_derivative;
+        cout << "\t" << krw_start_derivative << "\t" << krw_end_derivative << "\t" << pc_start_derivative << "\t" << pc_end_derivative << "\n";
+ 
+        if ( fabs(pc_start_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of pc at sw_min: "<< pc_start_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
+        if ( fabs(pc_end_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of pc at sw_max: "<< pc_end_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
+        if ( fabs(krw_start_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of krw at sw_min: "<< krw_start_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
+        if ( fabs(krw_end_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of krw at sw_max: "<< krw_end_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
+        if ( fabs(kro_start_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of krn at sw_min: "<< kro_start_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
+        if ( fabs(kro_end_derivative) > max_derivative_ ) {
+             cerr <<"\n\tsaturation derivative of krn at sw_max: "<< kro_end_derivative;
+             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+          }
       
-      for (unsigned int i = 0; i < number_of_tables; i++)
-        {
-          std::cout << "\nTable " << i << "\n";
-          
-          double64 kro_start_derivative, kro_end_derivative, krw_start_derivative, krw_end_derivative, pc_start_derivative, pc_end_derivative;
-          std::vector<double64> sw, kro, krw, pc;
-          
-          double64 sw_value, kro_value, krw_value, pc_value;
-          
-          unsigned int number_of_entries;
-          
-          rt_file >> number_of_entries;
-          
-          rt_file >> kro_start_derivative >> kro_end_derivative >> krw_start_derivative >> krw_end_derivative >> pc_start_derivative >> pc_end_derivative;
-          
-          std::cout << "Derivaties:\t" << kro_start_derivative << "\t" << kro_end_derivative << "\t" << krw_start_derivative << "\t" << krw_end_derivative
-          << "\t" << pc_start_derivative << "\t" << pc_end_derivative << "\n";
-          
-          std::cout << "sw\tkro\tkrw\tpc\n";
-          
-          for ( size_t n = 0; n < number_of_entries; n++ )
+        std::cout << "sw\tkro\tkrw\tpc\n";
+      
+        std::vector<double64> sw, kro, krw, pc;
+        for ( size_t n = 0; n < number_of_entries; n++ )
           {
+            double64 sw_value, kro_value, krw_value, pc_value;
             rt_file >> sw_value >> kro_value >> krw_value >> pc_value;
-            
+          
             std::cout << sw_value << "\t" << kro_value << "\t" << krw_value << "\t" << pc_value <<"\n";
-            
+          
             sw.push_back(sw_value);
             kro.push_back(kro_value);
             krw.push_back(krw_value);
             pc.push_back(pc_value);
           }
-          
-          std::cout << "\n"; 
-          
-          kr1_[i].Initialize(sw, krw, krw_start_derivative, krw_end_derivative);
-          kr2_[i].Initialize(sw, kro, kro_start_derivative, kro_end_derivative);
-          pc_[i].Initialize(sw, pc, pc_start_derivative, pc_end_derivative);
-       }
-    }
-    
-  } // end ConstructRTs
+      
+        std::cout << "\n";
+      
+        kr1_[i].Initialize( sw, krw, krw_start_derivative, krw_end_derivative );
+        kr2_[i].Initialize( sw, kro, kro_start_derivative, kro_end_derivative );
+        pc_[i].Initialize( sw, pc, pc_start_derivative, pc_end_derivative );
+     }
+
+  //Out();
+  // limiting the rocktype number range in the property database to the actual maximum value
+
+  cout << "\nExperimentalSaturationFunctions::InitialiseReservoirRockTypes: rock types initialised successfully from file '"<< rt_file_name <<".'"<< endl;
+  return pc_.size();
+  
+} // end InitialiseReservoirRockTypes
 
  
-  
+
+
+
+template<size_t dim, template<size_t> class USER>
+size_t ExperimentalSaturationFunctions<dim,USER>::RockTypes() const
+ { return pc_.size(); }
+
 
   
   
   
-  // Numerical derivative added
-  
-  template<size_t dim, template<size_t> class USER>
-  double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
+template<size_t dim, template<size_t> class USER>
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation(e));
@@ -354,7 +385,31 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( const Element<dim
 
 
   
-  
+template<size_t dim, template<size_t> class USER>
+void ExperimentalSaturationFunctions<dim,USER>::Out() const
+ {
+    cout <<"\nExperimentalSaturationFunctions<dim,USER>::Out: current rock type data:\n";
+    cout <<"\nrelative permeability of phase 1 (krw(sw)), for all rock types:\n";
+    int number(0);
+    for ( auto it=kr1_.begin(); it!=kr1_.end(); it++ ) {
+        cout <<"\nrock type "<< number++;
+        (*it).Out();
+      }
+    cout <<"\nrelative permeability of phase 2 (krnw(sw)), for all rock types:\n";
+    number = 0;
+    for ( auto it=kr2_.begin(); it!=kr2_.end(); it++ ) {
+        cout <<"\nrock type "<< number++;
+        (*it).Out();
+      }
+    cout <<"\ncapillary pressure curve, pc(sw), for all rock types:\n";
+    number = 0;
+    for ( auto it=kr2_.begin(); it!=kr2_.end(); it++ ) {
+        cout <<"\nrock type "<< number++;
+        (*it).Out();
+      }
+
+    cout <<"\nmaximum slope of derivative curves: "<< max_derivative_ << endl;
+ }
 
   
 template class ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>;
