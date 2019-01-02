@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-/// implementation of a cubic splite using 3 constraint points and 2 derivatives at the curve ends
+/// implementation of a cubic spline using 3 constraint points and 2 derivatives at the curve ends
 class CubicSpline {
   public:
     CubicSpline();

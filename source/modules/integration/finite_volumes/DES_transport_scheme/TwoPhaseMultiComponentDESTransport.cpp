@@ -9,13 +9,14 @@ namespace csmp {
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMultiComponentDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 bool tensor_k,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier) 
+                                                                                             const char* target_region,
+                                                                                             FLOW_FUNCTIONS<dim>& ff,
+                                                                                             bool with_capillary_spreading,
+                                                                                             bool with_gravity_forces,
+                                                                                             bool tensor_k,
+                                                                                             double64 PEP_multiplier,
+                                                                                             double64 cfl_multiplier)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier)
 {
     this->SetEquilibration(true);
     InitializeVariablesAndKeys(m);
@@ -29,14 +30,15 @@ TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMultiComponentDE
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseMultiComponentDESTransport( Model<dim>& m, 
-                                                 const char* target_region, 
-                                                 bool with_capillary_spreading, 
-                                                 bool with_gravity_forces,
-                                                 bool tensor_k,
-                                                 double64 PEP_multiplier,
-                                                 double64 cfl_multiplier,
-                                                 double64 relaxing_factor)
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
+                                                                                             const char* target_region,
+                                                                                             FLOW_FUNCTIONS<dim>& ff,
+                                                                                             bool with_capillary_spreading,
+                                                                                             bool with_gravity_forces,
+                                                                                             bool tensor_k,
+                                                                                             double64 PEP_multiplier,
+                                                                                             double64 cfl_multiplier,
+                                                                                             double64 relaxing_factor)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
 {
     this->SetEquilibration(true);
     InitializeVariablesAndKeys(m);
@@ -105,7 +107,7 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
         continue;
         
       } else {
-        this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr); 
+// SKM FIX - should be inside of sat-function:         this->flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
         
         const size_t pnid(nd->ParentNodeNumber(t));
         
@@ -115,7 +117,7 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
         //compute total velocity (without gravity)
         VectorVariable<dim> gradP;
         eptr->Read(this->key_gradP, gradP); //pressure gradient
-        double64 lambda_t = this->flowfunctions_->TotalMobility(eptr);
+        double64 lambda_t = this->flowfunctions_.TotalMobility(eptr);
         double64 thickness = eptr->Read(this->key_thi); //thickness
         if(!this->tensor_k_) { //scalar permeability
             double64 k = eptr->Read( this->key_k ); //permeability
@@ -164,21 +166,21 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
             //compute inside and outside node mobilities, by using their saturations
             const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
             const double64 sw_inside_node = 1.-sn_inside_node;
-            const double64 ln_inside_node = this->flowfunctions_->Mobility_at(eptr,1U,1.0-sn_inside_node); 
-            const double64 lw_inside_node = this->flowfunctions_->Mobility_at(eptr,0U,1.0-sn_inside_node); 
+            const double64 ln_inside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node);
+            const double64 lw_inside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node);
             
             const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
             const double64 sw_outside_node = 1.-sn_outside_node;
-            const double64 ln_outside_node = this->flowfunctions_->Mobility_at(eptr,1U,1.0-sn_outside_node); 
-            const double64 lw_outside_node = this->flowfunctions_->Mobility_at(eptr,0U,1.0-sn_outside_node);   
+            const double64 ln_outside_node = this->flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node);
+            const double64 lw_outside_node = this->flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);
             
             //compute phase velocities at facet integration point                      
             double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
             double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
             
             if( this->with_gravity_forces_ ){                       
-                vn_gravity_component_of_velocity = this->flowfunctions_->Mobility(eptr, 0U) * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
-                vw_gravity_component_of_velocity = this->flowfunctions_->Mobility(eptr, 1U) * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
+                vn_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 0U) * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+                vw_gravity_component_of_velocity = this->flowfunctions_.Mobility(eptr, 1U) * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
             }         
             
             if(this->with_capillary_spreading_){  
@@ -187,8 +189,8 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
                 dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){
-                    vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,0U);
-                    vw_capillary_component_of_velocity = -dsdn*this->flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,1U);
+                    vn_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,0U);
+                    vw_capillary_component_of_velocity = -dsdn*this->flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,1U);
                 }   
             }  
             
@@ -243,13 +245,13 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
             viscous_velocity_component_w = vD_n * upstream_fw * rho_w;
 
             if( this->with_gravity_forces_ ) {
-                //gravity_velocity_component = rho_n * upstream_lambda_overbar * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];
-                gravity_velocity_component = upstream_lambda_overbar_rho * this->flowfunctions_->GravityTerm(eptr) * facetNrml[v];              
+                //gravity_velocity_component = rho_n * upstream_lambda_overbar * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+                gravity_velocity_component = upstream_lambda_overbar_rho * this->flowfunctions_.GravityTerm(eptr) * facetNrml[v];
             }
             
             if( this->with_capillary_spreading_) {
-                capillary_velocity_component_n=vn_capillary_component_of_velocity/this->flowfunctions_->Mobility(eptr, 0U)*upstream_lambda_overbar_rho;
-                capillary_velocity_component_w=vw_capillary_component_of_velocity/this->flowfunctions_->Mobility(eptr, 1U)*upstream_lambda_overbar_rho;   
+                capillary_velocity_component_n=vn_capillary_component_of_velocity/this->flowfunctions_.Mobility(eptr, 0U)*upstream_lambda_overbar_rho;
+                capillary_velocity_component_w=vw_capillary_component_of_velocity/this->flowfunctions_.Mobility(eptr, 1U)*upstream_lambda_overbar_rho;
             }
                       
             double64 fn = sign*(viscous_velocity_component_n-gravity_velocity_component-capillary_velocity_component_n)*facetArea; // kg/s
@@ -350,9 +352,9 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
         for ( size_t t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
-            this->flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
-            fn_avg += this->flowfunctions_->f_at(eptr,1U,sw);
-            fw_avg += this->flowfunctions_->f_at(eptr,0U,sw);
+// SKM FIX - should be inside of sat-function:             this->flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
+            fn_avg += this->flowfunctions_.f_at(eptr,1U,sw);
+            fw_avg += this->flowfunctions_.f_at(eptr,0U,sw);
         }
         
         fn_avg /= static_cast<double64>(node_parent_elements);

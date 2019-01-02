@@ -16,11 +16,12 @@ namespace csmp {
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
                                                                  const char* target_region,
+                                                                 FLOW_FUNCTIONS<dim>& ff,
                                                                  bool with_capillary_spreading,
                                                                  bool with_gravity_forces,
                                                                  bool tensor_k,
                                                                  double64 PEP_multiplier,
-                                                                 double64 cfl_multiplier)
+                                                                 double64 cfl_multiplier )
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
       gref_(m.Region(target_region)),
       db_(m.Database()),
@@ -32,9 +33,9 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       first_step_(true),
       PEP_multiplier_(PEP_multiplier),
       CFL_multiplier_(cfl_multiplier),
-      relaxing_factor_(10.)
+      relaxing_factor_(10.),
+      flowfunctions_(ff)
 {
-    flowfunctions_ = new FLOW_FUNCTIONS<dim> (db_);
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
 
@@ -47,14 +48,15 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
 
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
+TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport(  Model<dim>& m,
                                                                  const char* target_region,
+                                                                 FLOW_FUNCTIONS<dim>& ff,
                                                                  bool with_capillary_spreading,
                                                                  bool with_gravity_forces,
                                                                  bool tensor_k,
                                                                  double64 PEP_multiplier,
                                                                  double64 cfl_multiplier,
-                                                                 double64 relaxing_factor)
+                                                                 double64 relaxing_factor )
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
       gref_(m.Region(target_region)),
       db_(m.Database()),
@@ -66,9 +68,9 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
       first_step_(true),
       PEP_multiplier_(PEP_multiplier),
       CFL_multiplier_(cfl_multiplier),
-      relaxing_factor_(relaxing_factor)
+      relaxing_factor_(relaxing_factor),
+      flowfunctions_(ff)
 {
-    flowfunctions_ = new FLOW_FUNCTIONS<dim> (db_);
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
 
@@ -97,8 +99,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     if(!m.Database().IsDefined("nonwetting phase timing array")) m.CreateProperty( "nonwetting phase timing array", "none", ARRAY, NODE, 7, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("cfl multiplier")) m.CreateProperty( "cfl multiplier", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!m.Database().IsDefined("shock saturation aqueous phase")) m.CreateProperty( "shock saturation aqueous phase", "none", SCALAR, ELEMENT, 1, -5.00E-02 ,1.05E+00);     
-    if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, -1.00E+08 ,1.00E+08);  
-    if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, -1.00E+10 ,1.00E+10);
+    if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, 3, -1.00E+08 ,1.00E+08);
+    if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("truncated FV")) m.CreateProperty( "truncated FV", "none", SCALAR, NODE, 1, 0 ,1);
     if(!m.Database().IsDefined("equilibrate")) m.CreateProperty( "equilibrate", "none", SCALAR, NODE, 1, 0 ,1);
     if(!m.Database().IsDefined("update phi and k")) m.CreateProperty( "update phi and k", "none", SCALAR, ELEMENT, 1, 0 ,1);
@@ -177,7 +179,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
     const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
     for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
-         flowfunctions_->InitialiseBrooksCoreyParameters(*it);
+// SKM FIX - this should occur on demand inside sat-function:                 flowfunctions_.InitialiseBrooksCoreyParameters(*it);
             
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -207,7 +209,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
          }
          
          //compute wetting phase saturation at shock
-         double64 sw_shock = flowfunctions_->ShockHeight(*it);
+         double64 sw_shock = flowfunctions_.ShockHeight(*it);
          (*it)->Store( this->key_ssH2O, makeScalar( (*it)->Status( this->key_ssH2O), sw_shock ) );                
    }
 
@@ -219,7 +221,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
         bool truncated_node = false;   
         for ( size_t i=0U; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
-             flowfunctions_->InitialiseBrooksCoreyParameters(eptr);
+// SKM FIX - this should occur on demand inside sat-function:                     flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
@@ -233,7 +235,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
                   eptr->Store( j, 0U, this->key_fn, fnrml );
              }
              //compute wetting phase saturation at shock
-             double64 sw_shock = flowfunctions_->ShockHeight(eptr);
+             double64 sw_shock = flowfunctions_.ShockHeight(eptr);
              eptr->Store( this->key_ssH2O, makeScalar( eptr->Status( this->key_ssH2O), sw_shock ) );    
              //determine whether FV node is truncated
              if(!gref_.Contains(eptr)) { //parent elment located outside domain
@@ -317,15 +319,15 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::UpdateBCParameters (Event<dim>* e
   Node<dim>* nd = event->getNode();
   assert( nd  != NULL );
   assert( nd->Status(  this->key_sCO2 ) != DIRICH);
- 
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){ 
+
+  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){
     //FLOW_FUNCTIONS<dim> flowfunctions(db_);
     const size_t node_parent_elements(nd->Parents());
     for ( size_t t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
         assert( eptr != NULL );
-        flowfunctions_->UpdateBrooksCoreyParameters(eptr);
+// SKM FIX - this should occur on demand inside sat-function:        flowfunctions_.UpdateBrooksCoreyParameters(eptr);
     }
   }
 }
@@ -365,7 +367,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         
       } else {        
         
-        flowfunctions_->InitialiseBrooksCoreyParameters(eptr); 
+// SKM FIX - this should occur on demand inside sat-function:                flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
         
         const size_t pnid(nd->ParentNodeNumber(t));
         
@@ -374,7 +376,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         //compute total velocity (without gravity)
         VectorVariable<dim> gradP;
         eptr->Read(this->key_gradP, gradP); //pressure gradient
-        double64 lambda_t = flowfunctions_->TotalMobility(eptr);
+        double64 lambda_t = flowfunctions_.TotalMobility(eptr);
         double64 thickness = eptr->Read(this->key_thi); //thickness
         if(!tensor_k_) { //scalar permeability
             double64 k = eptr->Read( this->key_k ); //permeability
@@ -423,21 +425,21 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
             //compute inside and outside node mobilities, by using their saturations
             const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
             const double64 sw_inside_node = 1.-sn_inside_node;
-            const double64 ln_inside_node = flowfunctions_->Mobility_at(eptr,1U,1.0-sn_inside_node); 
-            const double64 lw_inside_node = flowfunctions_->Mobility_at(eptr,0U,1.0-sn_inside_node); 
+            const double64 ln_inside_node = flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node);
+            const double64 lw_inside_node = flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node);
         
             const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
             const double64 sw_outside_node = 1.-sn_outside_node;
-            const double64 ln_outside_node = flowfunctions_->Mobility_at(eptr,1U,1.0-sn_outside_node); 
-            const double64 lw_outside_node = flowfunctions_->Mobility_at(eptr,0U,1.0-sn_outside_node);   
+            const double64 ln_outside_node = flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node);
+            const double64 lw_outside_node = flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);
             
             //compute phase velocities at facet integration point                      
             double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
             double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
             
             if( with_gravity_forces_ ){                       
-                vn_gravity_component_of_velocity = flowfunctions_->Mobility(eptr, 0U) * flowfunctions_->GravityTerm(eptr) * facetNrml[v];
-                vw_gravity_component_of_velocity = flowfunctions_->Mobility(eptr, 1U) * flowfunctions_->GravityTerm(eptr) * facetNrml[v];
+                vn_gravity_component_of_velocity = flowfunctions_.Mobility(eptr, 0U) * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
+                vw_gravity_component_of_velocity = flowfunctions_.Mobility(eptr, 1U) * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
             }         
             
             if(with_capillary_spreading_){  
@@ -446,8 +448,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
                 double64 dsdn = grad.DotProduct(facetNrml);
             
                 if(!isnan(dsdn)){
-                    vn_capillary_component_of_velocity = -dsdn*flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,0U);
-                    vw_capillary_component_of_velocity = -dsdn*flowfunctions_->CapillaryDiffusionMultiplier_Phase(eptr,1U);
+                    vn_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,0U);
+                    vw_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,1U);
                 }   
             }  
             
@@ -481,7 +483,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
             viscous_velocity_component = vD_n * upstream_fn;
                                        
             if( with_gravity_forces_ )
-                gravity_velocity_component = upstream_lambda_overbar * flowfunctions_->GravityTerm(eptr) * facetNrml[v];
+                gravity_velocity_component = upstream_lambda_overbar * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
 
             if( with_capillary_spreading_ )
                 capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
@@ -553,8 +555,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         for ( size_t t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
-            flowfunctions_->InitialiseBrooksCoreyParameters(eptr);   
-            fn_avg += flowfunctions_->f_at(eptr,1U,sw);
+// SKM FIX - this should occur on demand inside sat-function:                    flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
+            fn_avg += flowfunctions_.f_at(eptr,1U,sw);
         }
         fn_avg /= static_cast<double64>(node_parent_elements);
         accumulation -= fn_avg*flux_balance;

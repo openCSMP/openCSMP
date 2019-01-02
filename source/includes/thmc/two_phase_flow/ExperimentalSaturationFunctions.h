@@ -66,64 +66,67 @@ template<size_t dim, template<size_t> class USER>
 class ExperimentalSaturationFunctions {
   public:
     /// TODO: reads capillary preessure and saturation functions from "rocktype" file
-    explicit ExperimentalSaturationFunctions( const char* filename="rocktypes" );
+    explicit ExperimentalSaturationFunctions( const char* filename );
     
-    /// Pseudo functions that do nothing
-        void InitialiseBrooksCoreyParameters( const Element<dim>* const );
-        void UpdateBrooksCoreyParameters( Element<dim>* e );    
-  
     /// Effective Saturation function
-        double64 EffectiveSaturation( const Element<dim>* const ) const ;
+    double64 EffectiveSaturation( const Element<dim>* const ) const ;
   
     /// Effective Saturation function fro saturation S
-        double64 EffectiveSaturation_at( const Element<dim>* const , double64 ) const ;
+    double64 EffectiveSaturation_at( const Element<dim>* const , double64 ) const ;
   
     /// The Capillary pressure Eq. (2) from Skjaeveland et al. 2000
-        double64 pc( const Element<dim>* const );
+    double64 pc( const Element<dim>* const );
   
     /// The first derivative of Capillary pressure.
-        double64 dpcds( const Element<dim>* const )  const ;
+    double64 dpcds( const Element<dim>* const )  const ;
   
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krw( const Element<dim>* const ) const ;
+    double64 krw( const Element<dim>* const ) const ;
     
-        double64 krw_at( const Element<dim>* const, double64 sw ) const ;
+    double64 krw_at( const Element<dim>* const, double64 sw ) const ;
   
     /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krn( const Element<dim>* const ) const ;
+    double64 krn( const Element<dim>* const ) const ;
     
-        double64 krn_at( const Element<dim>* const, double64 sw ) const ;
+    double64 krn_at( const Element<dim>* const, double64 sw ) const ;
   
     /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrwds( const Element<dim>* const ) const ;
+    double64 dkrwds( const Element<dim>* const ) const ;
     
-        double64 dkrwds_at( const Element<dim>* const, double64 sw ) const ;
+    double64 dkrwds_at( const Element<dim>* const, double64 sw ) const ;
   
     /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrnds( const Element<dim>* const ) const ;
+    double64 dkrnds( const Element<dim>* const ) const ;
     
-        double64 dkrnds_at( const Element<dim>* const, double64 sw ) const ;
+    double64 dkrnds_at( const Element<dim>* const, double64 sw ) const ;
 
     /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-        double64 dkrwds_Numerical( const Element<dim>* const p, double64 h ) const ;
+    double64 dkrwds_Numerical( const Element<dim>* const p, double64 h ) const ;
 
-        double64 dkrwds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
+    double64 dkrwds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
 
-        double64 dkrnds_Numerical( const Element<dim>* const p, double64 h ) const ;
+    double64 dkrnds_Numerical( const Element<dim>* const p, double64 h ) const ;
   
-        double64 dkrnds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
-
+    double64 dkrnds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
+  
+    /// returns number of RRTs (reservoir rock types) for which saturation function values are stored
+    size_t RockTypes() const;
+  
+    void Out() const;
+  
     
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
   
-    void ConstructRTs( const char* rt_file_name );
+    /// reads rock types from file, establishing how many there are and returning this value
+    size_t InitialiseReservoirRockTypes( const char* rt_file_name );
   
     /// converts the floating-point rocktype identifier into a positive integer 0..254
-        size_t RockType( const Element<dim>* const ) const;
+    size_t RockType( const Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
+    const double64 max_derivative_ = 1.0e+8; ///< the absolute value of any derivative should be less than this
 };
   
 } // end namespace csmp

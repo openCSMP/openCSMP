@@ -286,7 +286,7 @@ void LinearTriangle::N( vector<double64>& N, const vector<double64>& xyz )
                           XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
                           XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) ) );
 
-   // calculation the exponents of the interpolation functions
+   // calculation the coefficients of the element interpolation functions
    a[0] = XY(1,0) * XY(2,1) - XY(2,0) * XY(1,1);
    a[1] = XY(2,0) * XY(0,1) - XY(0,0) * XY(2,1);
    a[2] = XY(0,0) * XY(1,1) - XY(1,0) * XY(0,1); 

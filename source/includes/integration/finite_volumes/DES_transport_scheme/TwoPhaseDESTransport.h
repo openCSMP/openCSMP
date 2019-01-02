@@ -21,7 +21,8 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
   public:
     TwoPhaseDESTransport ( Model<dim>& m, 
-                           const char* target_region, 
+                           const char* target_region,
+                           FLOW_FUNCTIONS<dim>&,
                            bool with_capillary_spreading,
                            bool with_gravity_forces,
                            bool tensor_k,
@@ -29,7 +30,8 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
                            double64 cfl_multiplier);
                            
     TwoPhaseDESTransport ( Model<dim>& m, 
-                           const char* target_region, 
+                           const char* target_region,
+                           FLOW_FUNCTIONS<dim>&,
                            bool with_capillary_spreading, 
                            bool with_gravity_forces,
                            bool tensor_k, 
@@ -37,7 +39,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
                            double64 cfl_multiplier, 
                            double64 relaxing_factor);
   
-    virtual ~TwoPhaseDESTransport() { /* nothing to do here? */ }
+    virtual ~TwoPhaseDESTransport() {}
                            
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
     void AdvectVariable_DES_serial( double64 model_time );
@@ -70,7 +72,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   protected:
     Region<dim>& gref_;
     PropertyDatabase<dim>& db_;
-    FLOW_FUNCTIONS<dim>* flowfunctions_;
+    FLOW_FUNCTIONS<dim>& flowfunctions_;
     bool with_capillary_spreading_, with_gravity_forces_;
     bool tensor_k_= false;
     double64 upper_limit_, lower_limit_; ///< range in which the result is allowed to vary

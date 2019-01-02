@@ -1201,7 +1201,11 @@ void reportAssignment( const string& prop,
   {
     cout << "\tassigned bi-linear '" << prop << "' gradient field [" << unit << "]\t\t\t";
     cout << " to '" << bound << "' model boundary. Corner values:" << endl;
-    cout << "\t", printPropertyValue( av1 ), cout << " to ", printPropertyValue( av2 ), cout << endl;
+    cout << "\t";
+    printPropertyValue( av1 );
+    cout << " to ";
+    printPropertyValue( av2 );
+    cout << endl;
     cout << endl;
   }
 }
@@ -1224,8 +1228,16 @@ void reportAssignment( const string& prop,
   {
     cout << "\tassigned bi-linear '" << prop << "' gradient field [" << unit << "]\t\t\t";
     cout << " to '" << bound << "' model boundary. Corner values:" << endl;
-    cout << "\t", printPropertyValue( av1 ), cout << " to ", printPropertyValue( av2 ), cout << endl;
-    cout << "\t", printPropertyValue( av3 ), cout << " to ", printPropertyValue( av4 ), cout << endl;
+    cout << "\t";
+    printPropertyValue( av1 );
+    cout << " to ";
+    printPropertyValue( av2 );
+    cout << endl;
+    cout << "\t";
+    printPropertyValue( av3 );
+    cout << " to ";
+    printPropertyValue( av4 );
+    cout << endl;
     cout << endl;
   }
 }
@@ -1250,7 +1262,11 @@ void reportAssignment( const string& prop,
   {
     cout << "\tassigned bi-linear '" << prop << "' gradient field [" << unit << "]\t\t\t";
     cout << " to '" << bound << "' model boundary. Corner values:" << endl;
-    cout << "\t", printPropertyValue( fv1 ), cout << " to ", printPropertyValue( fv2 ), cout << endl;
+    cout << "\t";
+    printPropertyValue( fv1 );
+    cout << " to ";
+    printPropertyValue( fv2 );
+    cout << endl;
     cout << endl;
   }
 }
@@ -1273,8 +1289,16 @@ void reportAssignment( const string& prop,
   {
     cout << "\tassigned bi-linear '" << prop << "' gradient field [" << unit << "]\t\t\t";
     cout << " to '" << bound << "' model boundary. Corner values:" << endl;
-    cout << "\t", printPropertyValue( fv1 ), cout << " to ", printPropertyValue( fv2 ), cout << endl;
-    cout << "\t", printPropertyValue( fv3 ), cout << " to ", printPropertyValue( fv4 ), cout << endl;
+    cout << "\t";
+    printPropertyValue( fv1 );
+    cout << " to ";
+    printPropertyValue( fv2 );
+    cout << endl;
+    cout << "\t";
+    printPropertyValue( fv3 );
+    cout << " to ";
+    printPropertyValue( fv4 );
+    cout << endl;
     cout << endl;
   }
 }
@@ -2183,7 +2207,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
   VARIABLE_TYPE  prop_type;
   vector<VARIABLE_FLAG>  flags;
   size_t         length;
-  size_t         position;
+  size_t         position(0);
   bool           digit( false );
 
   if ( verbose )

@@ -81,7 +81,8 @@ class CO2H2O_FunctionsModule2 : public variables::VariableSet_CO2GeoSequestratio
                                 public Fluid<dim,CO2H2O_FunctionsModule2> {
       
   public:
-    explicit CO2H2O_FunctionsModule2( const PropertyDatabase<dim>& );
+    /// initialises saturation functions from file and set range of rocktype values accordingly in property database
+    CO2H2O_FunctionsModule2( PropertyDatabase<dim>&, const char* model_name="ACGSS_simulator" );
 };
 
 typedef CO2H2O_FunctionsModule2<3U>  ACGSS_ExperimentalFlowFunctions;

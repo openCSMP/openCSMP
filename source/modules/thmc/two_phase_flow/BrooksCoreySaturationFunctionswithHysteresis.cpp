@@ -147,27 +147,27 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCor
 */
 template<size_t dim, template<size_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e,
-                                                                                              std::array<std::array<double64, 2>,2> a_,
-                                                                                              std::array<std::array<double64, 2>,2> c_)
+                                                                                              const std::array<std::array<double64,2>,2>& a,
+                                                                                              const std::array<std::array<double64,2>,2>& c )
   {
-    TWO_PHASE_FLOW_PROCESS ProcessPath = this->FlowProcess(e);  // Here , the process is checked ... either is Imbibitions or Drainage
+    TWO_PHASE_FLOW_PROCESS ProcessPath = this->FlowProcess(e);  // Here , the process is checked ... either imbibition or drainage
     
-    aw_ = a_[H2O][ProcessPath] ;
-    ao_ = a_[CO2][ProcessPath] ;
-    cw_ = c_[H2O][ProcessPath] ;
-    co_ = c_[CO2][ProcessPath] ;
+    aw_ = a[H2O][ProcessPath] ;
+    ao_ = a[CO2][ProcessPath] ;
+    cw_ = c[H2O][ProcessPath] ;
+    co_ = c[CO2][ProcessPath] ;
     
-    awd_ = a_[H2O][DRAINAGE] ;
-    aod_ = a_[CO2][DRAINAGE] ;
+    awd_ = a[H2O][DRAINAGE] ;
+    aod_ = a[CO2][DRAINAGE] ;
     
-    cwd_ = c_[H2O][DRAINAGE] ;
-    cod_ = c_[CO2][DRAINAGE] ;
+    cwd_ = c[H2O][DRAINAGE] ;
+    cod_ = c[CO2][DRAINAGE] ;
     
-    awi_ = a_[H2O][IMBIBITION] ;
-    aoi_ = a_[CO2][IMBIBITION] ;
+    awi_ = a[H2O][IMBIBITION] ;
+    aoi_ = a[CO2][IMBIBITION] ;
     
-    cwi_ = c_[H2O][IMBIBITION] ;
-    coi_ = c_[CO2][IMBIBITION] ;
+    cwi_ = c[H2O][IMBIBITION] ;
+    coi_ = c[CO2][IMBIBITION] ;
     
   }
 
@@ -185,24 +185,26 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCor
 */
 template<size_t dim, template<size_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e,
-                    std::array<std::array<double64, 2>,2> a_, std::array<std::array<double64, 2>,2> c_, TWO_PHASE_FLOW_PROCESS ProcessPath)
+                                                                                              const std::array<std::array<double64, 2>,2>& a,
+                                                                                              const std::array<std::array<double64, 2>,2>& c,
+                                                                                              TWO_PHASE_FLOW_PROCESS ProcessPath )
   {
-    aw_ = a_[H2O][ProcessPath] ;
-    ao_ = a_[CO2][ProcessPath] ;
-    cw_ = c_[H2O][ProcessPath] ;
-    co_ = c_[CO2][ProcessPath] ;
+    aw_ = a[H2O][ProcessPath] ;
+    ao_ = a[CO2][ProcessPath] ;
+    cw_ = c[H2O][ProcessPath] ;
+    co_ = c[CO2][ProcessPath] ;
     
-    awd_ = a_[H2O][DRAINAGE] ;
-    aod_ = a_[CO2][DRAINAGE] ;
+    awd_ = a[H2O][DRAINAGE] ;
+    aod_ = a[CO2][DRAINAGE] ;
     
-    cwd_ = c_[H2O][DRAINAGE] ;
-    cod_ = c_[CO2][DRAINAGE] ;
+    cwd_ = c[H2O][DRAINAGE] ;
+    cod_ = c[CO2][DRAINAGE] ;
     
-    awi_ = a_[H2O][IMBIBITION] ;
-    aoi_ = a_[CO2][IMBIBITION] ;
+    awi_ = a[H2O][IMBIBITION] ;
+    aoi_ = a[CO2][IMBIBITION] ;
     
-    cwi_ = c_[H2O][IMBIBITION] ;
-    coi_ = c_[CO2][IMBIBITION] ;
+    cwi_ = c[H2O][IMBIBITION] ;
+    coi_ = c[CO2][IMBIBITION] ;
    }
  
 

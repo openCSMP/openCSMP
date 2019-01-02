@@ -15,10 +15,6 @@ class BrooksCoreySaturationFunctions {
   public:
         BrooksCoreySaturationFunctions();
         
-        /// Pseudo functions that do nothing
-        void InitialiseBrooksCoreyParameters( const Element<dim>* const );  
-        void UpdateBrooksCoreyParameters( Element<dim>* e );   
-    
         double64 EffectiveSaturation( const Element<dim>* const ) const;
   
         double64 EffectiveSaturation_at( const Element<dim>* const, double64 s1 ) const;

@@ -5471,49 +5471,12 @@ void readDomainIndexesFromBinaryFile( size_t dim, fstream& fp, SubDomainInfo& in
 
     // 3. reading the perimeter element records of the region
     skm_C_fread( fp, info.perimeter_elmts );
-    assert( !info.perimeter_elmts.empty() );
+//    assert( !info.perimeter_elmts.empty() );
    
-    // 4. reading the boundary faces (not done anymore because pointer locations get scrambled)
-    // -----------------------------
-    /* 
-        expects flat vector in which all entries that refer to
-        multiple values per element are prefaced by a negative numer that indicates
-        how many multiple faces per element follow, for example
-        1 5  5 3 -2 6 2 3 3 5 6
-                    ^^^          marking the 2 local face indices that relate to an element that has
-        2 faces on the model boundary.
-        where there is no negative number, a single entry is assumed
-    
-    std::vector<int8> faceIDs; // signed byte -127..128: small because only the local face IDs are needed
-    skm_C_fread( fp, faceIDs );
-    assert( !faceIDs.empty() );
-
-// TESTING
-cerr <<"\ninput boundary face vector:\n";
-for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) cerr << static_cast<int>(*it) <<" ";
- 
-    if ( !info.perimeter_faces.empty() ) info.perimeter_faces.clear();
-    info.perimeter_faces.reserve( faceIDs.size() );
-    for ( std::vector<int8>::const_iterator it=faceIDs.begin(); it!=faceIDs.end(); ++it ) {
-         // checking whether a negative number indicates that the element has more than 1 perimeter face
-         const size_t perimeter_faces = ((*it) < 0) ? abs(*it) : 1;
-         // incrementing the vector to the first perimeter face if necessary
-         if ( perimeter_faces > 1 ) it++;
-         // reading the face numbers of the perimeter faces
-         std::vector<int8> face_ids(perimeter_faces);
-         for ( size_t i=0U; i<perimeter_faces; ++i ) {
-              face_ids[i] = *it;
-              it++;
-           }
-         info.perimeter_faces.push_back( move(face_ids) );
-         if ( it == faceIDs.end() ) break;
-      }
-    */
-   
-    // 5. reading the interior nodes
+    // 4. reading the interior nodes
     skm_C_fread( fp, info.interior_nodes );
   
-    // 6. reading the perimeter nodes
+    // 5. reading the perimeter nodes
     skm_C_fread( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
