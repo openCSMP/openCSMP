@@ -328,9 +328,9 @@ void supportingLine( const mjl::Point& s, Polygon* p, LOCATION side )
 
 
 
-bool clipPolygonToEdge( const Polygon& s, const Edge& e, Polygon* result ) // MJL, p. 127
+bool clipPolygonToEdge( const Polygon& s, const Edge& e, Polygon& result ) // MJL, p. 127
  {
-    Polygon*    p = new Polygon();
+    Polygon*    p = &result;
     mjl::Point  crossingPt;
     
     for ( int i=0; i<static_cast<int>(s.Size()); s.Advance(CLOCKWISE), i++ ) {
@@ -359,7 +359,6 @@ bool clipPolygonToEdge( const Polygon& s, const Edge& e, Polygon* result ) // MJ
            } 
       }
     
-    result = p;
     return ( p->Size() > 0u );  
       
  } // end 

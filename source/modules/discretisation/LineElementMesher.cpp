@@ -253,8 +253,8 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
 /// create an uniform mesh
 template<size_t dim>
 void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
-                                 double64 length,
-                                 size_t n_elements )
+                                          double64 length,
+                                          size_t n_elements )
  {
    const size_t  n_vertices( n_elements + 1U );
    const double  dx( length/static_cast<double>( n_elements ) );

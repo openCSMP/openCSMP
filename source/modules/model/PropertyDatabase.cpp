@@ -51,6 +51,9 @@ PropertyDatabase<dim>::PropertyDatabase()
     InitializeCount();
  }
 
+
+
+
 /// @attention We do not copy the IndexTracker here!
 template<size_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
@@ -66,15 +69,16 @@ PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
   }
 
 
-template<size_t dim>
-void PropertyDatabase<dim>::DeepCopy( const PropertyDatabase<dim>& p )
-{
-  physvarsFile = p.physvarsFile;
-  variableCount_ = p.variableCount_;
-  propList_ = p.propList_;
-  verbose_ = p.verbose_;
-  UpdateParametersAndDatabase();
-}
+
+
+
+
+
+
+
+
+
+
 
 ///  Initialization with variable specifications read from '*-variables.txt' ascii file.
 template<size_t dim>
@@ -93,6 +97,8 @@ void PropertyDatabase<dim>::Initialize( const char* variables_file )
         FlushToScreen();
     }
   }
+
+
 
 template<size_t dim>
 void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& typeCount )
@@ -115,15 +121,18 @@ void PropertyDatabase<dim>::InitializeCount()
   }
 
 
+
 template<size_t dim>
 PropertyDatabase<dim>& PropertyDatabase<dim>::operator=( const PropertyDatabase<dim>& p )
  {
-    if ( &p == this ) 
-      return *this;
+    if ( &p == this ) return *this;
 
     physvarsFile = p.physvarsFile;
     variableCount_ = p.variableCount_;
     propList_  = p.propList_;
+    verbose_ = p.verbose_;
+
+    UpdateParametersAndDatabase();
 
     return *this;
  }
@@ -941,7 +950,7 @@ database.
 template<size_t dim>
 csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
-                                                 double64 vmin, double64 vmax , string usage )
+                                                 double64 vmin, double64 vmax, string usage )
  {
     auto iter(propList_.find(string(s)));
 
@@ -972,7 +981,6 @@ csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit
          if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< s <<"'\n";
 
          /// Roman,2013: Added explicit way of reading the size of variable
-         //EstablishVariableTypeDependentProperties( static_cast<int>(vtype), added_prop.key );
          EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
          EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
 
@@ -1310,13 +1318,33 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double64& var ) const
             //cout <<"\n Error: PropertyDatabase<dim>::CheckRange: value too high"<< endl;
             //cout <<"\t User defined'"<< s <<"' maximum: "<< mx <<", versus: "<< var << endl;
             //var = mx;
-            ss<<var<<' '<<mx;
+            ss<<var<<' '<< mx;
             ss>>msg1>>msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while maximum was established at: "+msg2;
             error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," Attempting to input a value above the maximum specified.",errmsg.c_str());
          }
         
  } // end CheckRange
+
+
+
+
+
+/**
+     Sets of the range of the target variable at runtime in case relevant information becomes available.
+*/
+template<size_t dim>
+void PropertyDatabase<dim>::SetRangeOf( const char* property_name, double64 vmin, double64 vmax )
+ {
+    auto iter = propList_.find(string(property_name));
+    ErrorHandler& error_handler ( ErrorHandler::Instance() );
+    if ( iter != propList_.end() )
+      (*iter).second.Range( vmin, vmax );
+    else
+      error_handler.notice( ERROR, "PropertyDatabase<dim>::SetRangeOf:", property_name, "property could not be identified.");
+ }
+
+
 
 
 /** Finds the name of the physical variable on the basis of its Index.

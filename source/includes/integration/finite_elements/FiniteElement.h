@@ -280,8 +280,7 @@ class FiniteElement {
     /// reports the values of the interpolation functions at the center of gravity of the element
     virtual   void      N_AtBaryCenter( std::vector<double64>& N );
     
-	virtual   void		Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
-	/// first derivatives of interpolation functions for elements where this is a single constant value
+    /// first derivatives of interpolation functions for elements where this is a single constant value
     virtual   void      dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
@@ -331,6 +330,10 @@ class FiniteElement {
     
     // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
     // TODO AJB: Consolidate N() methods; we don't need both std::vector and pointer versions.
+
+    // from Hani Akbari: for analytic integration
+    virtual   void    Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
+  
 
     /// 1D element interpolation functions N(r)
     virtual void  Nr(  double64 r, std::vector<double64>& NRST ) const;

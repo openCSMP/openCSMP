@@ -809,7 +809,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const Element<dim>* const
 {
   //return TangentPointSaturation(e);
   
-    double64  dfds_max(0.), dfds_s_max(0.), s_shock, dfds; 
+    double64  dfds_max(0.), dfds_s_max(0.), s_shock(1.), dfds; 
     double64 swr = e->Read(User()->key_srH2O);
     double64 snr = e->Read(User()->key_srCO2);    
        

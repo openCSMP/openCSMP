@@ -19,22 +19,20 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class Fluid {
   public:
-  
- // TODO: these keys now are part of the new composition array
     /// salinity, mass fraction from the node
-    double64 MassFractionNaCl( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xSalt); }
+    double64 MassFractionNaCl( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of CO2 in the aqueous phase
-    double64 XCO2_AqueousPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_xCO2); }
+    double64 XCO2_AqueousPhase( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of water in the aqueous phase
-    double64 XH2O_AqueousPhase( const Node<dim>* const n) const; // fix { return n->Read(User()->key_xH2O); }
+    double64 XH2O_AqueousPhase( const Node<dim>* const n) const;
 
     /// composition: mass fraction (0..1) of CO2 in the carbonic phase
-    double64 YCO2_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YCO2); }
+    double64 YCO2_CarbonicPhase( const Node<dim>* const n ) const;
 
     /// composition: mass fraction (0..1) of water in the carbonic phase
-    double64 YH2O_CarbonicPhase( const Node<dim>* const n ) const; // fix { return n->Read(User()->key_YH2O); }
+    double64 YH2O_CarbonicPhase( const Node<dim>* const n ) const; 
   
     /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
     double64 Viscosity( const Node<dim>* const n, size_t phase ) const;
@@ -62,33 +60,33 @@ class Fluid {
   
     // member is EOS module
 };
-/*
+
 //  unit conversions
 
-    double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
+    inline double64  molalNaClToMassFracNaClInAqueousPhase( double64 mSalt); // no CO2
 
-    double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
+    inline double64  massFracNaClToMolalNaClInAqueousPhase( double64 massFracSalt); // no CO2
 
-    double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
+    inline double64  massFracNaClToMolarFracNaClInAqueousPhase( double64 massFracSalt);// no CO2
 
-    double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
+    inline double64  molalNaClToMolarFracNaClInAqueousPhase( double64 mSalt);// no CO2
 
-    double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
+    inline double64  ppmNaClToMolalNaClInAqueousPhase( double64 ppmSalt );
 
-    double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
+    inline double64  molalNaClToPpmInAqueousPhase( double64 mSalt );
 
-    double64  psiToPa( double64 pressureInPsi );
+    inline double64  psiToPa( double64 pressureInPsi );
 
-    double64  paToPsi( double64 pressureInPa );
+    inline double64  paToPsi( double64 pressureInPa );
 
-    double64  paTobar( double64 pressureInPa );
+    inline double64  paTobar( double64 pressureInPa );
 
-    double64  barTopa( double64 pressureInbar );
+    inline double64  barTopa( double64 pressureInbar );
 
-    double64  degreeCToKelvin( double64 temperatureInC );
+    inline double64  degreeCToKelvin( double64 temperatureInC );
 
-    double64  KelvinTodegreeC( double64 temperatureInK );
-*/
+    inline double64  KelvinTodegreeC( double64 temperatureInK );
+
 } // end csmp
 
 #endif /* CSMP_FLUID_H */
