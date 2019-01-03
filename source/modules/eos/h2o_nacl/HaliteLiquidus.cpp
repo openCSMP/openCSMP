@@ -47,6 +47,11 @@ namespace csmp
     return XNaCl2Massfraction( molefraction_nacl_ );
   }
 
+  double64 HaliteLiquidus::MoleFractionNaCl()
+  {
+      CheckState();
+      return molefraction_nacl_;
+  }
 
   /** Update internal variables for current temperature and pressure
    */
