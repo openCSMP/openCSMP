@@ -19,7 +19,7 @@ CO2H2O_FunctionsModule1<dim>::CO2H2O_FunctionsModule1( const PropertyDatabase<di
 
 template<size_t dim>
 CO2H2O_FunctionsModule2<dim>::CO2H2O_FunctionsModule2( PropertyDatabase<dim>& db, const char* model_name )
- : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim,CO2H2O_FunctionsModule2>( (string(model_name) + "-rock_types.txt").c_str() )
+ : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim, csmp::CO2H2O_FunctionsModule2>( (string(model_name) + "-rock_types.txt").c_str() )
  {
     // setting the maximum number of rock types in the database to the number of records red from the -rock_types.txt file
     db.SetRangeOf( "rocktype", 0., this->RockTypes() );

@@ -152,27 +152,25 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
         double64 dkrnds_Numerical( const Element<dim>* const, double64 delta_s ) const ;
   
         double64 dkrnds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s ) const ;
-
-  
-    
-  private:
-    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
-    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
- 
+            
     /// Initialision  method (a)
     void InitialiseBrooksCoreyParameters( const Element<dim>* const );
-  
+
     /// Initialision  method (b)
     void InitialiseBrooksCoreyParameters( const Element<dim>* const,
-                                          const std::array<std::array<double64,2>,2>& a,
-                                          const std::array<std::array<double64,2>,2>& c, TWO_PHASE_FLOW_PROCESS ProcessPath );
+                                          const std::array<std::array<double64, 2>, 2>& a,
+                                          const std::array<std::array<double64, 2>, 2>& c, TWO_PHASE_FLOW_PROCESS ProcessPath );
     /// Initialision  method (c)
     void InitialiseBrooksCoreyParameters( const Element<dim>* const,
-                                          const std::array<std::array<double64, 2>,2>& a, const std::array<std::array<double64,2>,2>& c );
-  
+                                          const std::array<std::array<double64, 2>, 2>& a, const std::array<std::array<double64, 2>, 2>& c );
+
     /// Update parameter values when necessary
     void UpdateBrooksCoreyParameters( Element<dim>* );
-  
+    
+  private:    
+    USER<dim>* User() { return static_cast<USER<dim>*>(this); }
+    USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+
     mutable double64  aw_ ; ///< TODO: document what these guys are !
     mutable double64  ao_ ;
     mutable double64  cw_ ;
