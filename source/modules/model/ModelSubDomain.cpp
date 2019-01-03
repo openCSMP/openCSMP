@@ -923,26 +923,11 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 			// storing the distinguished elements in the respective vectors
 			// ------------------------------------------------------------
 			// interior elements
-			// note that same dimentional line elements is processed selectivley: ex) well lines in a 3D model
-			if ( (dim == 3U) && ((*eit)->IsLineElement()) ) {
-				int internal_nodes = 0;
-				for (size_t i = 0U; i < (*eit)->Nodes(); i++) {
-					Node<dim>* n = (*eit)->N(i);
-					if (n->AtBoundary() == NOT || n->AtBoundary() == INTERNAL || n->AtBoundary() == IRREGULAR)
-						internal_nodes++;
-				}
-				if (internal_nodes)
-					interior_elmts.insert((*eit));
-				else
-					boundary_elmts.insert((*eit));
-			}
-			else {
 				if (nbors_that_belong_to_group == (*eit)->Neighbors())
 					interior_elmts.insert((*eit));
 				// elements with at least one face on the region boundary
 				else
 					boundary_elmts.insert((*eit));
-			}
 		}
 	}
     // 1.2 If there are elements with different spatial dimensions
