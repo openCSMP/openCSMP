@@ -48,6 +48,14 @@ namespace csmp
   }
 
 
+
+  double HaliteLiquidus::MoleFractionNaCl()
+  {
+      CheckState();
+      return molefraction_nacl_ ;
+  }
+
+
   /** Update internal variables for current temperature and pressure
    */
   void HaliteLiquidus::CheckState()
