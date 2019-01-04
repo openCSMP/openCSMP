@@ -23,6 +23,7 @@ namespace csmp
 			~HaliteLiquidus();
       
       double64         MassFractionNaCl();
+      double64         MoleFractionNaCl();
 
     private:
       HaliteLiquidus(); // disable default construction
