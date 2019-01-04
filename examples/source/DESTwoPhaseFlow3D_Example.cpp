@@ -98,9 +98,9 @@ void DESTwoPhaseFlow3D_Example::Run()
     CO2H2O_FunctionsModule1<3U> flowfunctions(model.Database());
     TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>* DEStransport;
     if (!multi_component)
-      DEStransport = new TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
     else 
-      DEStransport = new TwoPhaseMultiComponentDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+      DEStransport = new TwoPhaseMultiComponentDESTransport<3U,CO2H2O_FunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
