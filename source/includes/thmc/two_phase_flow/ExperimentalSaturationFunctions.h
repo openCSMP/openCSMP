@@ -68,52 +68,57 @@ class ExperimentalSaturationFunctions {
     /// TODO: reads capillary preessure and saturation functions from "rocktype" file
     explicit ExperimentalSaturationFunctions( const char* filename );
     
-    /// Effective Saturation function
-    double64 EffectiveSaturation( const Element<dim>* const ) const ;
+    // pc, kri, and derivative methods that use a user supplied saturation value
   
-    /// Effective Saturation function fro saturation S
-    double64 EffectiveSaturation_at( const Element<dim>* const , double64 ) const ;
+    /// Effective non-wetting phase saturation as calculated from the supplied saturation value, sw
+    double64 EffectiveSaturation_at( const Element<dim>* const , double64 sw ) const;
   
-    /// The Capillary pressure Eq. (2) from Skjaeveland et al. 2000
-    double64 pc( const Element<dim>* const );
-  
-    /// The first derivative of Capillary pressure.
-    double64 dpcds( const Element<dim>* const )  const ;
-  
-    /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 krw( const Element<dim>* const ) const ;
-    
-    double64 krw_at( const Element<dim>* const, double64 sw ) const ;
-  
-    /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 krn( const Element<dim>* const ) const ;
-    
-    double64 krn_at( const Element<dim>* const, double64 sw ) const ;
-  
-    /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 dkrwds( const Element<dim>* const ) const ;
-    
-    double64 dkrwds_at( const Element<dim>* const, double64 sw ) const ;
-  
-    /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-    double64 dkrnds( const Element<dim>* const ) const ;
-    
-    double64 dkrnds_at( const Element<dim>* const, double64 sw ) const ;
+    double64 pc_at( const Element<dim>* const, double64 sw ) const;
+ 
+    double64 dpcds_at( const Element<dim>* const, double64 sw ) const;
 
-    /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-    double64 dkrwds_Numerical( const Element<dim>* const p, double64 h ) const ;
+    double64 krw_at( const Element<dim>* const, double64 sw ) const;
+  
+    double64 krn_at( const Element<dim>* const, double64 sw ) const;
+
+    double64 dkrwds_at( const Element<dim>* const, double64 sw ) const;
+ 
+    double64 dkrnds_at( const Element<dim>* const, double64 sw ) const;
+
+    double64 dpcdsw_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
 
     double64 dkrwds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
 
-    double64 dkrnds_Numerical( const Element<dim>* const p, double64 h ) const ;
-  
     double64 dkrnds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
   
-    /// returns number of RRTs (reservoir rock types) for which saturation function values are stored
+  
+    // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
+  
+    /// Effective wetting phase saturation at the barycentre of the element
+    double64 EffectiveSaturation( const Element<dim>* const ) const;
+  
+    double64 pc( const Element<dim>* const ) const;
+  
+    double64 dpcds( const Element<dim>* const ) const;
+  
+    double64 krw( const Element<dim>* const ) const;
+  
+    double64 krn( const Element<dim>* const ) const;
+  
+    double64 dkrwds( const Element<dim>* const ) const;
+  
+    double64 dkrnds( const Element<dim>* const ) const;
+
+    double64 dpcdsw_Numerical( const Element<dim>* const p, double64 h ) const;
+
+    double64 dkrwds_Numerical( const Element<dim>* const p, double64 h ) const;
+
+    double64 dkrnds_Numerical( const Element<dim>* const p, double64 h ) const;
+  
+    /// @return number of RRTs (reservoir rock types) for which saturation function values are stored
     size_t RockTypes() const;
   
     void Out() const;
-  
     
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
@@ -126,7 +131,7 @@ class ExperimentalSaturationFunctions {
     size_t RockType( const Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
-    const double64 max_derivative_ = 1.0e+8; ///< the absolute value of any derivative should be less than this
+    const double64 max_derivative_ = 1.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
 };
   
 } // end namespace csmp
