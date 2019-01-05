@@ -31,18 +31,18 @@ class TwoPhaseFlowFunctions {
     double64 Mobility( const Element<dim>* const, size_t phase ) const;
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw)
-    double64 Mobility_at( const Element<dim>* const, size_t phase, double64 ) const;
+    double64 Mobility_at( const Element<dim>* const, size_t phase, double64 sw ) const;
 
     /// d lambda_i / dsw
     double64 MobilityDerivative( const Element<dim>* const, size_t phase, bool evaluate_numerically=false ) const;
  
-    double64 MobilityDerivative_at( const Element<dim>* const, size_t phase, double64 ) const;
+    double64 MobilityDerivative_at( const Element<dim>* const, size_t phase, double64 sw ) const;
                         
     /// lambda_t: sum of phase mobilities
     double64 TotalMobility(  const Element<dim>* const ) const;
     
     /// lambda_t: sum of phase mobilities (using prescribed sw)
-    double64 TotalMobility_at(  const Element<dim>* const, double64 ) const;
+    double64 TotalMobility_at(  const Element<dim>* const, double64 sw ) const;
     
     /// lambda overbar: l1 * l2 / l1 + l2 = mobility product / total mobility also known as G
     double64 MobilityProduct(  const Element<dim>* const ) const;
@@ -50,13 +50,13 @@ class TwoPhaseFlowFunctions {
     /// d lambda overbar / dsw also known as dGds
     double64 MobilityProductDerivative( const Element<dim>* const, bool  evaluate_numerically=false ) const;
                         
-    double64 MobilityProductDerivative_at( const Element<dim>* const, double64 ) const;
+    double64 MobilityProductDerivative_at( const Element<dim>* const, double64 sw ) const;
 
      /// fractional flow; 0=water, 1=non-wetting phase
     double64 f( const Element<dim>* const, size_t phase ) const;
     
      /// fractional flow; 0=water, 1=non-wetting phase  (using prescribed sw)
-    double64 f_at( const Element<dim>* const, size_t phase, double64 ) const;
+    double64 f_at( const Element<dim>* const, size_t phase, double64 sw ) const;
     
     /// Permeability
     double64 Permeability(  const Element<dim>* const ) const;
