@@ -24,7 +24,8 @@ ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_reg
     upper_limit_(1.), lower_limit_(0.)
  {
     m.InstantiateFiniteVolumes();
-    initializeFiniteVolumeProperties( m, m.Region(target_region) );
+    const bool initialise_flux(true);
+    initializeFiniteVolumeProperties( m, m.Region(target_region), initialise_flux );
     // 0. model-wide initialisation: results will be accumulated into this variable
     m.Region("Model").InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
    

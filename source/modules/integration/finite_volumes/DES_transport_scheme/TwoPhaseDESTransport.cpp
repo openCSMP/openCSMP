@@ -887,10 +887,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
 
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK( double64 del_t )
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t )
 {
     if (equilibration_) {
-        equilibrateFluid(del_t);
+        equilibrateFluid(pvtx_calculator, del_t);
         updatePorosityandPermeability();
         updatePoreVolume();
     }
@@ -898,7 +898,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK( do
 
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(double64 del_t)
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t)
 {
     size_t equilibrate;
     variables::VariableSet_CO2GeoSequestration props(db_);
@@ -906,13 +906,15 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(double64 del_t)
     { 
         equilibrate = (*nit)->Read(key_equilibrate);
         if(equilibrate == 1) {
-            equilibrateH2O_CO2_NaCl(props, *(*nit), del_t );
+            pvtx_calculator.Equilibrate( *nit, del_t );
 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
             {
                 Element<dim>* const eptr((*nit)->Parent(t));
                 eptr->Store( key_UpdatePhiK, makeScalar( (*nit)->Status( key_UpdatePhiK), 1 ) );                 
             }
+        } else {
+            updateFluidProperties(props, *(*nit), del_t);
         }
     }
 } 

@@ -19,7 +19,7 @@ template<size_t> class Model;
 */
 
 /// sector volume, finite volume, FV pore volume
-template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&  );
+template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&, bool initialize_flux );
 
 
 double64  diffusionVelocity( const Region<1>& super_group,

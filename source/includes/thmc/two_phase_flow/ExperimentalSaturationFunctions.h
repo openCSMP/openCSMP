@@ -131,7 +131,7 @@ class ExperimentalSaturationFunctions {
     size_t RockType( const Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
-    const double64 max_derivative_ = 1.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double64 max_derivative_ = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
 };
   
 } // end namespace csmp

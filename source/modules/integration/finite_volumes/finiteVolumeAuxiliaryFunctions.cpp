@@ -560,14 +560,11 @@ template double64 limitProperty_LSMGRAD( const Element<3U>&,
      but are themselves not part of it.
 */
 template<size_t dim>
-void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
+void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, bool initialize_flux )
  {
-    const bool initialize_flux(true);
-   
     const csmp::Index phi_key = model.Database().StorageKey("porosity");
     const csmp::Index thi_key = model.Database().StorageKey("thickness");
-    const csmp::Index vt_key  = model.Database().StorageKey("velocity");
-
+    const csmp::Index vt_key  = model.Database().StorageKey("total velocity");
     const csmp::Index fv_key  = model.Database().StorageKey("finite volume");
     const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
     const csmp::Index sv_key  = model.Database().StorageKey("sector volume");
@@ -711,8 +708,8 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref )
  } // end initializeFiniteVolumeProperties
 
 // explicit instantiation of function template in 2 and 3D
-template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>& );
-template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>& );
+template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>&, bool );
+template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>&, bool );
 
 
 } // end namespace csmp

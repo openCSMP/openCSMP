@@ -13,6 +13,7 @@ namespace csmp {
 template<size_t> class PropertyDatabase;
 template<size_t> class Region;
 template<size_t> class Model;
+template<size_t> class PVTX_Calculator_H2O_CO2_NaCl;
 
 
 
@@ -63,8 +64,8 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
     void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;};
     void SetEquilibration(bool equilibration) {equilibration_ = equilibration;};
-    void EquilibrateFluidAndUpdatePhiK(double64 del_t);
-    void equilibrateFluid(double64 del_t);
+    void EquilibrateFluidAndUpdatePhiK(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator,double64 del_t);
+    void equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator,double64 del_t);
     void updatePorosityandPermeability();
     void updatePoreVolume();
     

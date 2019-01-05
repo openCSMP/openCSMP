@@ -39,7 +39,8 @@ ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const 
     m.InstantiateFiniteVolumes();
      m.Region(target_region).InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
 
-    initializeFiniteVolumeProperties( m, m.Region(target_region) );
+    const bool initialise_flux(true);
+    initializeFiniteVolumeProperties( m, m.Region(target_region), initialise_flux );
     // 0. model-wide initialisation: results will be accumulated into this variable
    
     // retrieving the physically meaningful upper and lower solution limit from database
