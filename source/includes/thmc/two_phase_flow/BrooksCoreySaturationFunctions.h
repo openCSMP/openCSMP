@@ -17,17 +17,28 @@ class BrooksCoreySaturationFunctions {
   
         // pc, kri, and derivative methods that use a user supplied saturation value
         
-        double64 EffectiveSaturation_at( const Element<dim>* const, double64 s1 ) const;
+        double64 EffectiveSaturation_at( const Element<dim>* const, double64 sw ) const;
   
-        double64 krw_at( const Element<dim>* const , double64 S) const;
+        double64 pc_at( const Element<dim>* const, double64 sw ) const;
   
-        double64 krn_at( const Element<dim>* const, double64 S) const;
+        double64 dpcds_at( const Element<dim>* const, double64 sw ) const;
   
-        double64 dkrwds_at( const Element<dim>* const, double64 S) const;
+        double64 krw_at( const Element<dim>* const, double64 sw ) const;
   
-        double64 dkrnds_at( const Element<dim>* const, double64 S) const;
+        double64 krn_at( const Element<dim>* const, double64 sw ) const;
   
-        // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
+        double64 dkrwds_at( const Element<dim>* const, double64 sw ) const;
+  
+        double64 dkrnds_at( const Element<dim>* const, double64 sw ) const;
+  
+        double64 dpcds_at_Numerical(  const Element<dim>* const, double64 sw, double64 h = 0.00001 ) const;
+  
+        double64 dkrwds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
+
+        double64 dkrnds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
+
+
+       // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
   
         double64 EffectiveSaturation( const Element<dim>* const ) const;
   
@@ -43,27 +54,21 @@ class BrooksCoreySaturationFunctions {
   
         double64 dkrnds( const Element<dim>* const ) const;
   
-       /// maximum value of pc
-        double64 MaxCapillaryPressure() const { return 1e7; /* Pa */ }
-        /// maximum value of dpcdS
-        double64 MaxCapillaryPressureDerivative() const { return 1e6; /* Pa m-1 */ }
-  
+        /// maximum value of pc (Pa)
+        double64 MaxCapillaryPressure() const { return max_pc_; }
   
         /// Numerical derivatives of first derivatives of relative permeability of water and CO2
         double64 dkrwds_Numerical( const Element<dim>* const, double64 delta_s=0.001 ) const ;
 
-        double64 dkrwds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const ;
-
         double64 dkrnds_Numerical( const Element<dim>* const, double64 delta_s=0.001 ) const ;
   
-        double64 dkrnds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const ;
-        
         double64 dpcds_Numerical(  const Element<dim>* const, double64 h = 0.00001 ) const;
-  
-    
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
+
+    const double64 max_derivative_ = 1.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double64 max_pc_         = 5.0e+7; ///< the absolute value of any capillary pressure must not exceed the tensile strength of the rock
 };
 
   

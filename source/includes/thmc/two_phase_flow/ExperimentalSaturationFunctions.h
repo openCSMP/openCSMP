@@ -85,7 +85,7 @@ class ExperimentalSaturationFunctions {
  
     double64 dkrnds_at( const Element<dim>* const, double64 sw ) const;
 
-    double64 dpcdsw_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
+    double64 dpcdsw_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
 
     double64 dkrwds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
 

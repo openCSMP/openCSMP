@@ -442,7 +442,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( const Elem
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
