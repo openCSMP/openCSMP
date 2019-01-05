@@ -278,7 +278,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* con
     const double64 snr  = e->Read(User()->key_srCO2);
     if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Value(1.-snr), 1. );
   
-    return kr1_[ RockType(e) ].Value( sw );
+    return max( kr1_[ RockType(e) ].Value( sw ), 0. );
 }
   
 
@@ -295,7 +295,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* 
     const double64 snr  = e->Read(User()->key_srCO2);
     if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Value(1.-snr), 1. );
   
-    return kr1_[ RockType(e) ].Value( sw );
+    return max( kr1_[ RockType(e) ].Value( sw ), 0. );
  }
 
 
@@ -312,7 +312,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* con
     const double64 snr  = e->Read(User()->key_srCO2);
     if ( sw >= 1. - snr ) return 0.; // kr2_[ RockType(e) ].Value(1.-snr);
   
-    return kr2_[ RockType(e) ].Value( sw );
+    return max( kr2_[ RockType(e) ].Value( sw ), 0. );
   }
 
  
@@ -330,7 +330,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* 
     const double64 snr  = e->Read(User()->key_srCO2);
     if ( sw >= 1. - snr ) return 0.; // kr2_[ RockType(e) ].Value(1.-snr);
   
-    return kr2_[ RockType(e) ].Value( sw );
+    return max( kr2_[ RockType(e) ].Value( sw ), 0. );
  }
   
 
@@ -460,6 +460,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( const E
     // water saturation between the endpoints
     return ( pc_at( e, sw + h ) - pc_at( e, sw - h ) ) / (2. * h);
 }
+
+
 
 
 
