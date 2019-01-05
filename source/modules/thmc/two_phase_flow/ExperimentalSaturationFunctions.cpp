@@ -273,10 +273,10 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* con
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
     const double64 swr = e->Read(User()->key_srH2O);
-    if ( sw <= swr ) return kr1_[ RockType(e) ].Value(swr);
+    if ( sw <= swr ) return 0.; // kr1_[ RockType(e) ].Value(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    if ( sw >= 1. - snr ) return kr1_[ RockType(e) ].Value(1.-snr);
+    if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Value(1.-snr), 1. );
   
     return kr1_[ RockType(e) ].Value( sw );
 }
@@ -290,10 +290,10 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* 
     assert( sw <= 1. );
   
     const double64 swr = e->Read(User()->key_srH2O);
-    if ( sw <= swr ) return kr1_[ RockType(e) ].Value(swr);
+    if ( sw <= swr ) return 0.; // kr1_[ RockType(e) ].Value(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    if ( sw >= 1. - snr ) return kr1_[ RockType(e) ].Value(1.-snr);
+    if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Value(1.-snr), 1. );
   
     return kr1_[ RockType(e) ].Value( sw );
  }
@@ -307,10 +307,10 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* con
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
     const double64 swr = e->Read(User()->key_srH2O);
-    if ( sw <= swr ) return kr2_[ RockType(e) ].Value(swr);
+    if ( sw <= swr ) return min( kr2_[ RockType(e) ].Value(swr), 1. );
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    if ( sw >= 1. - snr ) return kr2_[ RockType(e) ].Value(1.-snr);
+    if ( sw >= 1. - snr ) return 0.; // kr2_[ RockType(e) ].Value(1.-snr);
   
     return kr2_[ RockType(e) ].Value( sw );
   }
@@ -325,10 +325,10 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* 
     assert( sw <= 1. );
 
     const double64 swr = e->Read(User()->key_srH2O);
-    if ( sw <= swr ) return kr2_[ RockType(e) ].Value(swr);
+    if ( sw <= swr ) return min( kr2_[ RockType(e) ].Value(swr), 1. );
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    if ( sw >= 1. - snr ) return kr2_[ RockType(e) ].Value(1.-snr);
+    if ( sw >= 1. - snr ) return 0.; // kr2_[ RockType(e) ].Value(1.-snr);
   
     return kr2_[ RockType(e) ].Value( sw );
  }
