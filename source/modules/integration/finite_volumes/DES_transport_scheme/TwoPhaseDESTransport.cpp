@@ -174,13 +174,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties()
  {
-    //FLOW_FUNCTIONS<dim>  flowfunctions(db_);
     // For the interior elements of the region compute relevant variable values
     const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
     for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
-// SKM FIX - this should occur on demand inside sat-function:                 flowfunctions_.InitialiseBrooksCoreyParameters(*it);
-            
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
 
@@ -221,7 +218,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
         bool truncated_node = false;   
         for ( size_t i=0U; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
-// SKM FIX - this should occur on demand inside sat-function:                     flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
@@ -243,9 +239,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties(
                  truncated_node = true;
              }     
         }
-        if(truncated_node) (*nit)->Store( key_cut, makeScalar( (*nit)->Status( key_cut), 1 ) ); 
+        if (truncated_node) (*nit)->Store( key_cut, makeScalar( (*nit)->Status( key_cut), 1 ) );
    }
-   
    
  } // end initializeFiniteVolumeProperties
 
@@ -345,8 +340,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
     rate_count_++;//recording
     nd->Store(  key_rate, makeScalar( nd->Status( key_rate), nd->Read( key_rate) + 1 ) );
     
-    //FLOW_FUNCTIONS<dim> flowfunctions(db_);
-
     double64 accumulation(0.), flux_balance(0.), outflow(0.);
         
     const size_t v( (dim==1u) ? 0u : 1u );
@@ -366,8 +359,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
         continue;
         
       } else {        
-        
-// SKM FIX - this should occur on demand inside sat-function:                flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
         
         const size_t pnid(nd->ParentNodeNumber(t));
         

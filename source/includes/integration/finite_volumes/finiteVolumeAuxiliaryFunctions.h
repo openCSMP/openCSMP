@@ -18,8 +18,15 @@ template<size_t> class Model;
 @addtogroup CSMPglobalFunctions
 */
 
-/// sector volume, finite volume, FV pore volume
+/**
+    taking into account element thickness and total velocity, initialises:
+      finite volume, sector volume, sector pore volume, FV pore volume, facet area, facet normal,
+      facet flux, flux balance.
+*/
 template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<dim>&, bool initialize_flux );
+
+/// taking into account thickness, initialising FV sector volume, FV pore volume, facet area, facet normal
+template<size_t dim> void initializeBasicFiniteVolumeProperties( Model<dim>&, Region<dim>& );
 
 
 double64  diffusionVelocity( const Region<1>& super_group,
