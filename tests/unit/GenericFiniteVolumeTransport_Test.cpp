@@ -1337,7 +1337,8 @@ void testSchemeAsComponent()
            - sector weight: sector pore volume / finite volume pore volume = weighting factor
       */
       Region<3U>&  flow_domain(model3D.Region("Model"));
-      initializeFiniteVolumeProperties( model3D, flow_domain );
+      const bool initialize_flux(true);
+      initializeFiniteVolumeProperties( model3D, flow_domain, initialize_flux );
     
 // TESTING SECTOR INTEGRATION POINT STORAGE
       const csmp::Index swt_key(model3D.Database().StorageKey("node number"));
