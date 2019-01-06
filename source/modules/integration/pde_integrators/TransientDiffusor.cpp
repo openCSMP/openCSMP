@@ -334,6 +334,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
+// TODO: fix: rhs_diffusivity is never used
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
@@ -370,12 +371,12 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
     if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             lhs_diffusivity, "lefthand variable must be placed on element or constraint point" ); 
+                             lhs_diffusivity, "lefthand variable must be placed on element or integration point" );
 
     csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
     if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             rhs_diffusivity, "righthand variable must be placed on element or constraint point" ); 
+                             rhs_diffusivity, "righthand variable must be placed on element or integration point" );
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
@@ -386,13 +387,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             storage_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             storage_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             spatial_source_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  gradient_variable_key = p_ref.StorageKey(gradient_variable);
     if ( (gradient_variable_key.place != ELEMENT || gradient_variable_key.place != ELEMENT_INTEGRATION_POINT) && gradient_variable_key.type != VECTOR )
@@ -423,6 +424,9 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
+
+
+// TODO: fix: rhs_diffusivity is never used
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
@@ -460,12 +464,12 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     csmp::Index  lhs_diffusivity_key = p_ref.StorageKey(lhs_diffusivity);
     if ( lhs_diffusivity_key.place != ELEMENT  and  lhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             lhs_diffusivity, "lefthand variable must be placed on element or constraint point" ); 
+                             lhs_diffusivity, "lefthand variable must be placed on element or integration point" );
 
     csmp::Index  rhs_diffusivity_key = p_ref.StorageKey(rhs_diffusivity);
     if ( rhs_diffusivity_key.place != ELEMENT  and  rhs_diffusivity_key.place != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             rhs_diffusivity, "righthand variable must be placed on element or constraint point" ); 
+                             rhs_diffusivity, "righthand variable must be placed on element or integration point" );
 
     csmp::Index  diffusing_variable_key = p_ref.StorageKey(diffusing_variable);
     if ( diffusing_variable_key.place != NODE || diffusing_variable_key.type != SCALAR )
@@ -476,13 +480,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
     if ( (storage_variable_key.place != ELEMENT  and  storage_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          storage_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             storage_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             storage_variable, "variable must be a scalar placed on element or integration point" );
 
     csmp::Index  source_variable_key = p_ref.StorageKey(spatial_source_variable);
     if ( (source_variable_key.place != ELEMENT  and  source_variable_key.place != ELEMENT_INTEGRATION_POINT) ||
          source_variable_key.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TransientDiffusor<>::(constructor):", 
-                             spatial_source_variable, "variable must be a scalar placed on element or constraint point" ); 
+                             spatial_source_variable, "variable must be a scalar placed on element or integration point" );
                              
     csmp::Index  nsource_variable_key = p_ref.StorageKey(point_source_variable);
     if ( nsource_variable_key.place != NODE  and  nsource_variable_key.type != SCALAR )

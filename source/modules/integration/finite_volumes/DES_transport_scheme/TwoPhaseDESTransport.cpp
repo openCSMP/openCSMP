@@ -271,8 +271,9 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* eve
     Node<dim>* nd = event->getNode();
     assert( nd  != NULL );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-    
-    size_t truncated_node = nd->Read(this->key_cut);//check if node is truncated by domain boundary
+  
+    //check if node is truncated by domain boundary
+    int truncated_node = static_cast<int>(nd->Read(this->key_cut));
     
     const size_t parent_elements(nd->Parents());      
     for ( size_t i=0U; i<parent_elements; ++i ) {
@@ -348,7 +349,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
     
     double64 cfl_multiplier = CFL_multiplier_*relaxing_factor_; //default value
     
-    size_t truncated_node = nd->Read(this->key_cut);//check if node is truncated by domain boundary
+    int truncated_node = static_cast<int>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
     for ( size_t t=0U; t<node_parent_elements; t++ )
     {
@@ -706,7 +707,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Synchronize(Event<dim>* event,dou
     for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
         if( neighbor_node != NULL && neighbor_node->Status(  this->key_sCO2 ) != DIRICH){
-            size_t index = neighbor_node->Read(key_EventIndex);
+            int index = static_cast<int>(neighbor_node->Read(key_EventIndex));
             if(index >= 0 && index < FullList.size()){
                 Event<dim>* neighbor_event = FullList[index];  
                 assert( neighbor_event  != NULL ); 
@@ -891,11 +892,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK(PVT
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t)
 {
-    size_t equilibrate;
     variables::VariableSet_CO2GeoSequestration props(db_);
     for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
     { 
-        equilibrate = (*nit)->Read(key_equilibrate);
+        int equilibrate = static_cast<int>((*nit)->Read(key_equilibrate));
         if(equilibrate == 1) {
             pvtx_calculator.Equilibrate( *nit, del_t );
 
@@ -914,11 +914,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
 {
-    size_t update;
     variables::VariableSet_CO2GeoSequestration props(db_);
     for ( auto eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
     {
-        update = (*eit)->Read(key_UpdatePhiK);
+        int update = static_cast<int>((*eit)->Read(key_UpdatePhiK));
         if(update == 1) {
             double64 phi_old = (*eit)->Read(this->key_phi);
             porosityWithSalt( props, *(*eit) );
@@ -926,6 +925,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
             
             if (phi_new != phi_old && phi_old != 0. && (1.-phi_new) != 0.) {
                 double64 k_old = (*eit)->Read(this->key_k);
+                // using the Kozeny-Carman relationship here to scale k to new porosity value
                 double64 phi3 = (phi_new*phi_new*phi_new)/(phi_old*phi_old*phi_old);
                 double64 t1 = (1.-phi_old)*(1.-phi_old)/(1.-phi_new)/(1.-phi_new);
                 double64 k_new = k_old * phi3 * t1;
@@ -940,10 +940,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
 {
-    size_t equilibrate;
+
     for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
     {    
-        equilibrate = (*nit)->Read(key_equilibrate);
+        int equilibrate = static_cast<int>((*nit)->Read(key_equilibrate));
         if(equilibrate == 1) {   
             double64 pore_volume (0.); 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
@@ -1041,7 +1041,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
                 if (isactive) {
                     T_begin= clock();
                     double64 scheduled_time = event->t_schedule();
-                    size_t index = event->getNode()->Read(key_EventIndex);
+                    int index = static_cast<int>(event->getNode()->Read(key_EventIndex));
                     Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
                     EventHeap.insert(heap_node);
                     HeapNodeFullList[index] = heap_node;
@@ -1052,7 +1052,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
             event->inPEPStack(false);         
         };    
         T_RateOfChange_ += clock() - T_begin; 
-        cout <<"  PEPList size = " << PEPList.size() << "  Queue size = "<< EventHeap.size()<<endl;   
+        cout <<"  PEPList size = "<< PEPList.size() <<"  Queue size = "<< EventHeap.size() << endl;
 
             
         if (EventHeap.empty()) time=model_time;
