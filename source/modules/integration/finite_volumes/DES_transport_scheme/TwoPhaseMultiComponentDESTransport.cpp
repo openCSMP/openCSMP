@@ -96,7 +96,7 @@ void TwoPhaseMultiComponentDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange
     
     double64 cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
     
-    size_t truncated_node = nd->Read(this->key_cut);//check if node is truncated by domain boundary
+    long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
            
     for ( size_t t=0U; t<node_parent_elements; t++ )
     {

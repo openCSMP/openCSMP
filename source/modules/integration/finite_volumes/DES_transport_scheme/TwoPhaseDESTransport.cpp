@@ -272,7 +272,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* eve
     assert( nd  != NULL );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
     
-    size_t truncated_node = nd->Read(this->key_cut);//check if node is truncated by domain boundary
+    long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
     
     const size_t parent_elements(nd->Parents());      
     for ( size_t i=0U; i<parent_elements; ++i ) {
@@ -348,7 +348,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* 
     
     double64 cfl_multiplier = CFL_multiplier_*relaxing_factor_; //default value
     
-    size_t truncated_node = nd->Read(this->key_cut);//check if node is truncated by domain boundary
+    long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
     for ( size_t t=0U; t<node_parent_elements; t++ )
     {
@@ -891,11 +891,11 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK(PVT
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t)
 {
-    size_t equilibrate;
+    long equilibrate;
     variables::VariableSet_CO2GeoSequestration props(db_);
     for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
     { 
-        equilibrate = (*nit)->Read(key_equilibrate);
+        equilibrate = static_cast<long>((*nit)->Read(key_equilibrate));
         if(equilibrate == 1) {
             pvtx_calculator.Equilibrate( *nit, del_t );
 
@@ -914,11 +914,11 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
 {
-    size_t update;
+    long update;
     variables::VariableSet_CO2GeoSequestration props(db_);
     for ( auto eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
     {
-        update = (*eit)->Read(key_UpdatePhiK);
+        update = static_cast<long>((*eit)->Read(key_UpdatePhiK));
         if(update == 1) {
             double64 phi_old = (*eit)->Read(this->key_phi);
             porosityWithSalt( props, *(*eit) );
@@ -940,10 +940,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
 {
-    size_t equilibrate;
+    long equilibrate;
     for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
     {    
-        equilibrate = (*nit)->Read(key_equilibrate);
+        equilibrate = static_cast<long>((*nit)->Read(key_equilibrate));
         if(equilibrate == 1) {   
             double64 pore_volume (0.); 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
