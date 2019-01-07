@@ -274,7 +274,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* eve
   
     //check if node is truncated by domain boundary
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
-    
+  
     const size_t parent_elements(nd->Parents());      
     for ( size_t i=0U; i<parent_elements; ++i ) {
         Element<dim>* const eptr = nd->Parent(i);
@@ -918,7 +918,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
     for ( auto eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
     {
         int update = static_cast<int>((*eit)->Read(key_UpdatePhiK));
-        if(update == 1) {
+       if(update == 1) {
             double64 phi_old = (*eit)->Read(this->key_phi);
             porosityWithSalt( props, *(*eit) );
             double64 phi_new = (*eit)->Read(this->key_phi);
@@ -940,11 +940,10 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
 {
-
     for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
     {    
         int equilibrate = static_cast<int>((*nit)->Read(key_equilibrate));
-        if(equilibrate == 1) {   
+        if(equilibrate == 1) {
             double64 pore_volume (0.); 
             for ( size_t t=0U; t<(*nit)->Parents(); t++ )
             {

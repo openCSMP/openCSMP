@@ -13,7 +13,8 @@
 #include "BrooksCoreySaturationFunctions.h"
 #include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "ExperimentalSaturationFunctions.h"
-#include "TwoPhaseFlowFunctions.h"
+//#include "TwoPhaseFlowFunctions.h"
+#include "H2O_CO2_NaCl_FlowFunctions.h"
 #include "Fluid.h"
 
 namespace csmp {
@@ -48,8 +49,8 @@ template<size_t> class PropertyDatabase;
 template<size_t dim>
 class CO2H2O_FunctionsModule0 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctions<dim,CO2H2O_FunctionsModule0>,  ///< saturation function model
-    public TwoPhaseFlowFunctions<dim,CO2H2O_FunctionsModule0>,                         ///< mobilities etc.
-    public Fluid<dim,CO2H2O_FunctionsModule0> {                                        ///< fluids module / EOS interface
+    public H2O_CO2_NaCl_FlowFunctions<dim,CO2H2O_FunctionsModule0>,      ///< mobilities etc.
+    public Fluid<dim,CO2H2O_FunctionsModule0> {                          ///< fluids module / EOS interface
       
   public:
     explicit CO2H2O_FunctionsModule0( const PropertyDatabase<dim>& );
@@ -62,7 +63,7 @@ typedef CO2H2O_FunctionsModule0<3U>  ACGSS_FlowFunctions;
 template<size_t dim>
 class CO2H2O_FunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctionsWithHysteresis<dim,CO2H2O_FunctionsModule1>,  ///< saturation function model
-    public TwoPhaseFlowFunctions<dim,CO2H2O_FunctionsModule1>,                         ///< mobilities etc.
+    public H2O_CO2_NaCl_FlowFunctions<dim,CO2H2O_FunctionsModule1>,                    ///< mobilities etc.
     public Fluid<dim,CO2H2O_FunctionsModule1> {                                        ///< fluids module / EOS interface
       
   public:
@@ -77,7 +78,7 @@ typedef CO2H2O_FunctionsModule1<3U>  ACGSS_HystereticFlowFunctions;
 template<size_t dim>
 class CO2H2O_FunctionsModule2 : public variables::VariableSet_CO2GeoSequestration,
                                 public ExperimentalSaturationFunctions<dim,CO2H2O_FunctionsModule2>,
-                                public TwoPhaseFlowFunctions<dim,CO2H2O_FunctionsModule2>,
+                                public H2O_CO2_NaCl_FlowFunctions<dim,CO2H2O_FunctionsModule2>,
                                 public Fluid<dim,CO2H2O_FunctionsModule2> {
       
   public:

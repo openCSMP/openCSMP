@@ -121,3 +121,5 @@ barycenter carbonic phase density,rhoCO2bc,kg/m3,SCALAR,2.00E+00,1.00E+03,ELEMEN
 barycenter aqueous phase density,rhoH2Obc,kg/m3,SCALAR,8.00E+02,1.30E+03,ELEMENT,calculated,multiphase flow,,interpolated to the barycentre
 barycenter carbonic phase viscosity,muCO2bc,Pa.s,SCALAR,1.00E-06,1.00E-04,ELEMENT,calculated,multiphase flow,,interpolated to the barycentre
 barcycenter aqueous phase viscosity,muH2Obc,Pa. s,SCALAR,1.00E-04,1.60E-03,ELEMENT,calculated,multiphase flow,,interpolated to the barycentre
+nodal system state,nPHS,none,SCALAR,0,7,NODE,calculated,multiphase flow,,system phase state for node determined from PhaseStateFinder class
+element system state,ePHS,none,SCALAR,0,7,ELEMENT,calculated,multiphase flow,,system phase state for element determined from PhaseStateFinder class

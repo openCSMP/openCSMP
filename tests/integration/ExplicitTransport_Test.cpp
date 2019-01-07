@@ -62,7 +62,8 @@ vtk_output.OutputDataToVTK( model, "test_output1", "permeability", 0 );
     Region<test_dim>  gref_model    = model.Region("Model");
     //Region<test_dim>  gref_interior = model.Region("interior");
     // call of testee
-    initializeFiniteVolumeProperties( model, gref_model );
+    const bool initialize_flux( true );
+    initializeFiniteVolumeProperties( model, gref_model, initialize_flux );
    
     // test 1: is the volume correct
     csmp::Index  vol_key(model.Database().StorageKey("finite volume"));

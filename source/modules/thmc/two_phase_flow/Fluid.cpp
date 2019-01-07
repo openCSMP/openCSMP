@@ -8,33 +8,23 @@
 
 #include "Fluid.h"
 #include "CO2H2O_FunctionsModule1.h"
-// this specific incarnation
-#include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 namespace csmp {
 
-EOS_CO2H2ONaCl_Spycher04  eos;
-
 template<size_t dim, template<size_t> class USER>
-Fluid<dim,USER>::Fluid(bool PTX_dependent) 
+Fluid<dim,USER>::Fluid()
+ // testing the key that is used to indicate the phase state
+ : state_key_( User()->key_k )
  {
-    PTX_dependent_ = PTX_dependent;
+     assert( state_key_.place == NODE );
+     assert( state_key_.type == SCALAR );
  }
-
 
 
 template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
-    if(PTX_dependent_) {
-        /*compute from PTX properties*/
-        if ( phase == 0U )
-          return eos.mu_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
-   
-        return eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
-    }
-    
     /*direct read/interpolation*/
     if ( phase == 0U ) return n->Read( User()->key_muH2O );
     return n->Read( User()->key_muCO2 );     
@@ -46,20 +36,6 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-    // TODO: replace with single interpolation loop
-    const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
-    const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
-   
-    if(PTX_dependent_) {
-        /*compute from PTX properties*/
-        if ( phase == 0U ) {
-             const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
-             return eos.mu_brine( pf, T, NaCl_aq );
-        }
-   
-        return eos.mu_CarbonicPhase( pf, T );
-    }
-    
     /*direct read/interpolation*/
     if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_muH2O );
     return e->PropertyValueAtBaryCenter( User()->key_muCO2 );      
@@ -74,12 +50,6 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-    if(PTX_dependent_) {
-        /*compute from PTX properties*/
-        if ( phase == 0U ) return eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) );
-        return eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
-    }
-    
     /*direct read/interpolation*/
     if ( phase == 0U ) return n->Read( User()->key_rhoH2O );
     return n->Read( User()->key_rhoCO2 );
@@ -91,21 +61,6 @@ template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
-
-    // TODO: replace with single interpolation loop
-    const double64 pf = e->PropertyValueAtBaryCenter(User()->key_pf);
-    const double64 T  = e->PropertyValueAtBaryCenter(User()->key_T);
-    
-    if(PTX_dependent_) {
-        /*compute from PTX properties*/
-        if ( phase == 0U ) {
-             const double64 NaCl_aq = e->PropertyValueAtBaryCenter(User()->key_NaClaq);
-             return eos.Rho_brine( pf, T, NaCl_aq );
-        }
-
-        return eos.Rho_CarbonicPhase( pf, T );
-    }
-    
     /*direct read/interpolation*/
     if ( phase == 0U ) return e->PropertyValueAtBaryCenter( User()->key_rhoH2O );
     return e->PropertyValueAtBaryCenter( User()->key_rhoCO2 );     
@@ -115,24 +70,14 @@ double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) c
 
 
 
- 
-template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::DensityMixture( const Node<dim>* const n, double64 msalt ) const
- {
-    return n->Read( User()->key_sH2O ) * eos.Rho_brine( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) ) +
-          (1. - n->Read(User()->key_sH2O)) * eos.Rho_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
- }
-
-
-
-
 /**
      aqueous phase viscosity / carbonic phase viscosity
 */
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n, double64 salinity ) const
+double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n ) const
  {
-    return eos.mu_AqueousPhase( n->Read(User()->key_pf), n->Read(User()->key_T), n->Read(User()->key_NaClaq) ) / eos.mu_CarbonicPhase( n->Read(User()->key_pf), n->Read(User()->key_T) );
+    return n->Read(User()->key_muH2O) / n->Read(User()->key_muCO2);
+    return 1.;
  }
 
 
@@ -183,9 +128,7 @@ template class Fluid<3U,CO2H2O_FunctionsModule2>;
 
 
 
-
-/*
-// conversions
+// unit conversions
 
 
 const double64 molarMassH2o ( 18.01528e-3);  // Kilograms per mole
@@ -289,7 +232,6 @@ double64 KelvinTodegreeC( double64 temperatureInK )
 {
    return  temperatureInK - 273.15;
 }
-*/
 
 
 
