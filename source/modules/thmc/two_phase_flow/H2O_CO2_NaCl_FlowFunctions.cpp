@@ -1,5 +1,5 @@
 #include "CO2H2O_FunctionsModule1.h"
-#include "TwoPhaseFlowFunctions.h"
+#include "H2O_CO2_NaCl_FlowFunctions.h"
 #include "Fluid.h"
 #include "ErrorHandler.h"
 #include "CSMP_physical_constants.h"
@@ -10,8 +10,11 @@ using namespace std;
 
 namespace csmp {
   
+/**
+    Saturation is always expected to have a value.
+*/
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::Sw( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( const Element<dim>* const e ) const
   {
      assert( e != nullptr );
      return e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -24,7 +27,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::Sw( const Element<dim>* const e ) cons
       Mobility of phase i, kri(sw) / mu_i.
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::Mobility( const Element<dim>* const e, size_t phase ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( const Element<dim>* const e, size_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -50,7 +53,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::Mobility( const Element<dim>* const e,
     Using prescribed sw value, instead of intepolated value.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::Mobility_at( const Element<dim>* const e, size_t phase, double64 sw ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( const Element<dim>* const e, size_t phase, double64 sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -75,7 +78,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::Mobility_at( const Element<dim>* const
     Mobility saturation derivative for phase i.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>* const e, size_t phase, bool evaluate_numerically ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>* const e, size_t phase, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -93,7 +96,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>
    Mobility saturation derivative for phase i.
    */
   template<size_t dim, template<size_t> class USER>
-  double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative_at( const Element<dim>* const e, size_t phase, double64 sw ) const
+  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( const Element<dim>* const e, size_t phase, double64 sw ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -112,7 +115,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>
       Sum of mobilities (not multiplied with permeability).
    */
   template<size_t dim, template<size_t> class USER>
-  double64 TwoPhaseFlowFunctions<dim,USER>::TotalMobility(const Element<dim>* const e ) const
+  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(const Element<dim>* const e ) const
   {
     assert( e != nullptr );
     return User()->krn(e) / User()->Viscosity( e, 1U )
@@ -127,7 +130,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>
     Using prescribed sw value, instead of intepolated value.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::TotalMobility_at( const Element<dim>* const e, double64 sw ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility_at( const Element<dim>* const e, double64 sw ) const
  {
     assert( e != nullptr );
     return User()->krn_at(e,sw) / User()->Viscosity( e, 1U )
@@ -147,7 +150,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::TotalMobility_at( const Element<dim>* 
     and de Neef (1998). Note that Initialize() must be called first.
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::MobilityProduct( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( const Element<dim>* const e ) const
  {
     assert( e != nullptr );
     return Mobility(e,0U) * Mobility(e,1U) / TotalMobility(e);
@@ -164,7 +167,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityProduct( const Element<dim>* c
     Saturation derivative of mobility product.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative( const Element<dim>* const e, bool evaluate_numerically ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const Element<dim>* const e, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
     // product is zero at endmember saturations
@@ -197,7 +200,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative( const Eleme
    Saturation derivative of mobility product.
    */
   template<size_t dim, template<size_t> class USER>
-  double64 TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative_at( const Element<dim>* const e , double64 sw) const
+  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at( const Element<dim>* const e , double64 sw) const
   {
     assert( e != nullptr );
     // product is zero at endmember saturations
@@ -234,7 +237,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::f( const Element<dim>* const e, size_t phase ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( const Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -259,7 +262,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::f_at( const Element<dim>* const e, size_t phase, double64 sw ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( const Element<dim>* const e, size_t phase, double64 sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -281,7 +284,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::f_at( const Element<dim>* const e, siz
     @todo check whether code for end-member cases has to be reinstated.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dfds( const Element<dim>* const e, size_t phase ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( const Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -309,7 +312,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dfds( const Element<dim>* const e, siz
     @todo check whether code for end-member cases has to be reinstated.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dfds_at( const Element<dim>* const e, double64 sw ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( const Element<dim>* const e, double64 sw ) const
  {
    assert( e != nullptr );
    const double64 lw  = User()->krw_at(e, sw) / User()->Viscosity( e, 0U );
@@ -338,7 +341,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dfds_at( const Element<dim>* const e, 
      p. 108, eqn. 3.74, term 2 (first part).
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::AdvectionMultiplier( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( const Element<dim>* const e ) const
 {
    assert( e != nullptr );
    return dfds( e, 0U );
@@ -353,7 +356,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::AdvectionMultiplier( const Element<dim
      k * delta_rho * g
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const e) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const e) const
 {
   assert( e != nullptr );
   // note that the projected gravity acts opposite the y-axis, term rhow - rhoo
@@ -379,7 +382,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const
      G = lambda_overbar * k * delta_rho * g
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e ) const
   {
     assert( e != nullptr );
     return GravityTerm(e) * MobilityProduct(e);
@@ -397,7 +400,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim
  p. 108, eqn. 3.74, term 2 (second part).
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e ) const
  {
     assert( e != nullptr );
     return GravityTerm(e) * MobilityProductDerivative(e);
@@ -414,7 +417,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<
  overloaeded, the hydraulic conductivity is returned.
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::DiffusionMultiplier( const Element<dim>* const e, size_t phase ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( const Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 1U or phase == 0U );
@@ -435,7 +438,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::DiffusionMultiplier( const Element<dim
  permeability in direction of flow  x  lambda_overbar  x pc-gradient.
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( const Element<dim>* const e ) const
 {
     assert( e != nullptr );
   // TODO: Make sure that this is the permeability in the direction of the facet normal
@@ -449,7 +452,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( const El
   
   
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( const Element<dim>* const e, size_t phase ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( const Element<dim>* const e, size_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -472,7 +475,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( co
   // ===============================================================================================
   
   template<size_t dim, template<size_t> class USER>
-  double64 TwoPhaseFlowFunctions<dim,USER>::dfds_Numerical( const Element<dim>* const e, size_t phase, double64 h ) const
+  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_Numerical( const Element<dim>* const e, size_t phase, double64 h ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -505,7 +508,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( co
    @todo check whether code for end-member cases has to be reinstated.
    */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dfds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h) const
   {
     assert( e != nullptr );
     double64 Denumerator = TotalMobility_at(e,sw);
@@ -523,7 +526,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dfds_at_Numerical( const Element<dim>*
   
 
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dGds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dGds_Numerical( const Element<dim>* const e, double64 h ) const
   {
     assert( e != nullptr );
     const double64 lw  = User()->krw(e) / User()->Viscosity( e, 0U );
@@ -547,7 +550,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dGds_Numerical( const Element<dim>* co
 
 /// derivative of wetting phase mobility
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dlwds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlwds_Numerical( const Element<dim>* const e, double64 h ) const
  {
     assert( e != nullptr );
     return User()->dkrwds_Numerical( e, h ) / User()->Viscosity( e, 0U );
@@ -562,7 +565,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dlwds_Numerical( const Element<dim>* c
 
 /// derivative of non-wetting phase mobility
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::dlnds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlnds_Numerical( const Element<dim>* const e, double64 h ) const
  {
     assert( e != nullptr );
     return User()->dkrnds_Numerical( e, h ) / User()->Viscosity( e, 1U );
@@ -583,7 +586,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::dlnds_Numerical( const Element<dim>* c
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::InflectionPointSaturation( const Element<dim>* const e ) const
   {
     assert( e != nullptr );
     double64 S = 1.-e->Read(User()->key_srCO2) ;
@@ -642,7 +645,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( const Eleme
  */
 
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentPointSaturation( const Element<dim>* const e ) const
   {
     assert( e != nullptr );
     const double64 Si = InflectionPointSaturation(e);
@@ -668,7 +671,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( const Element<
   
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const Element<dim>* const e, double64 S ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const Element<dim>* const e, double64 S ) const
   {
      assert( e != nullptr );
      const double64 srH2O =e->Read(User()->key_srH2O);
@@ -689,7 +692,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( const
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const Element<dim>* const e, double64 S1, double64 S2 ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::FindRootSecantMethod( const Element<dim>* const e, double64 S1, double64 S2 ) const
   {
     assert( e != nullptr );
     double64 F1 = 10000.;
@@ -720,7 +723,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( const Element<di
  */
 
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::MaxFractionalFlowDerivative( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MaxFractionalFlowDerivative( const Element<dim>* const e ) const
 {
     assert( e != nullptr );
   double64 S = InflectionPointSaturation(e);   // This is correct maximum fractional flow derivative of water phase.
@@ -737,7 +740,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::MaxFractionalFlowDerivative( const Ele
   
 /// shock speed base on Buckley Leverett theory
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeed( const Element<dim>* const e ) const
 {
     assert( e != nullptr );
   return ShockFrontVelocity(e) ;
@@ -749,7 +752,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( const Element<dim>* const 
 
   
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockHeight( const Element<dim>* const e ) const
 {
     assert( e != nullptr );
   //return TangentPointSaturation(e);
@@ -782,7 +785,7 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockHeight( const Element<dim>* const
   
   
 template<size_t dim, template<size_t> class USER>
-void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( const Element<dim>* const e, double64& speed, double64& height) const
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeedAndHeight( const Element<dim>* const e, double64& speed, double64& height) const
 {
     assert( e != nullptr );
   height = ShockHeight(e) ;
@@ -803,7 +806,7 @@ void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( const Element<dim>* c
 */
 
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const Element<dim>* const e ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockFrontVelocity( const Element<dim>* const e ) const
   {
      assert( e != nullptr );
     double64 S = TangentPointSaturation(e);
@@ -814,23 +817,22 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const Element<dim>
   
 
   
- /*
   
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule0>;
+  
+template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule0>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule0>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule0>;
   
 
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule1>;
+template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule1>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule1>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule1>;
 
 
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>;
+template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule2>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule2>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule2>;
 
-*/
 
 } // end namespace csmp
 
