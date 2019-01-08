@@ -31,19 +31,27 @@ class Fluid {
     /// default constructor that tests the phase-state key
     Fluid();
 
-    /// the node property fluid viscosity returned has been interpolated to the user-specified target placement (argument parameter)
+    /// the node property fluid viscosity (Pa.s) returned has been interpolated to the user-specified target placement (argument parameter)
     double64 Viscosity( const Node<dim>* const, size_t phase ) const;
+    /// the node property fluid viscosity (Pa.s) interpolated to element barycentre
     double64 Viscosity( const Element<dim>* const, size_t phase ) const;
+    /// the node property fluid viscosity (Pa.s) at the node i of the element
+    double64 Viscosity( const Element<dim>* const, size_t node, size_t phase ) const;
 
-    /// the returned node property fluid density (of phase) has been interpolated to the user-specified target placement (argument parameter)
+    /// the returned node property fluid density (of phase) (kg/m3) interpolated to the user-specified target placement (argument parameter)
     double64 Density( const Node<dim>* const, size_t phase ) const;
     double64 Density( const Element<dim>* const, size_t phase ) const;
+    double64 Density( const Element<dim>* const, size_t node, size_t phase ) const;
 
-    /// returns saturation-weighted density of the fluid mixture interpolated to the target placement
-    double64 DensityMixture( const Node<dim>* const ) const;
-  
+    /// returns saturation-weighted density average (kg/m3) for the fluid mixture; properties are interpolated to the target placement
+    double64 MixtureDensity( const Node<dim>* const ) const;
+    double64 MixtureDensity( const Element<dim>* const ) const;
+    double64 MixtureDensity( const Element<dim>* const, size_t node ) const;
+
     /// returns the ratio of the phase viscosities at the target placement
-    double64 ViscosityRatio( const Node<dim>* const  ) const;
+    double64 ViscosityRatio( const Node<dim>* const ) const;
+    double64 ViscosityRatio( const Element<dim>* const ) const;
+    double64 ViscosityRatio( const Element<dim>* const, size_t node ) const;
 
   protected:
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of

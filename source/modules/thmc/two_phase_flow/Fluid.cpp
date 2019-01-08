@@ -31,6 +31,16 @@ double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) co
  }
 
 
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t node, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    assert( node < e->Nodes() );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->N(node)->Read( User()->key_muH2O );
+    return e->N(node)->Read( User()->key_muCO2 );
+ }
+
 
 template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase ) const
@@ -56,6 +66,16 @@ double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) cons
  }
 
 
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t node, size_t phase ) const
+ {
+    assert( phase == 0U or phase == 1U );
+    assert( node < e->Nodes() );
+    /*direct read/interpolation*/
+    if ( phase == 0U ) return e->N(node)->Read( User()->key_rhoH2O );
+    return e->N(node)->Read( User()->key_rhoCO2 );
+ }
+
 
 template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) const
@@ -76,42 +96,72 @@ double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) c
 template<size_t dim, template<size_t> class USER>
 double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n ) const
  {
+    assert( n != nullptr );
     return n->Read(User()->key_muH2O) / n->Read(User()->key_muCO2);
-    return 1.;
  }
 
 
-
-
-/*
-    // versions that account for dissolved CO2; TODO: check where the XCO2 and YH2) can be taken into account
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
+double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e, size_t node ) const
  {
-    assert( phase <= 1U );
-    if ( phase == 0U ) return eos.mu_AqueousPhase( Pressure(p), n->Read(User()->key_T), msalt );
-    return eos.mu_CarbonicPhase( Pressure(p), n->Read(User()->key_T) );
+    assert( e != nullptr );
+    const double64 muw = e->N(node)->Read( User()->key_muH2O );
+    const double64 mun = e->N(node)->Read( User()->key_muCO2 );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    return muw / mun;
  }
- 
- 
- 
+
+
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( double64 pf, double64 T, double64 msalt, double64 XCO2, double64 YH2O, size_t phase ) const
+double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e ) const
  {
-    assert( phase <= 1U );  // TODO: check how to get XCO2, YH2O accounted for?
-    if ( phase == 0U ) return eos.Rho_AqueousPhase( pf, T, msalt );
-    return eos.Rho_CarbonicPhase( pf, T );
+    assert( e != nullptr );
+    const double64 muw = e->PropertyValueAtBaryCenter( User()->key_muH2O );
+    const double64 mun = e->PropertyValueAtBaryCenter( User()->key_muCO2 );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    return muw / mun;
  }
- 
- 
- 
+
+
+
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::DensityMixture( double64 pf, double64 T, double64 sw, double64 msalt, double64 XCO2, double64 YH2O ) const
+double64 Fluid<dim,USER>::MixtureDensity( const Node<dim>* const n ) const
  {
-    // TODO: check how to get XCO2, YH2O accounted for?
-    return sw * eos.Rho_AqueousPhase( pf, T, msalt ) + (1. - sw) * eos.Rho_CarbonicPhase( pf, T );
+    assert( n != nullptr );
+    const double64 sw = n->Read( User()->key_sH2O );
+    return sw * n->Read(User()->key_rhoH2O) + (1.-sw) * n->Read(User()->key_rhoCO2);
  }
-*/
+
+
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e, size_t node ) const
+ {
+    const double64 sw = e->N(node)->Read( User()->key_sH2O );
+    assert( e != nullptr );
+    const double64 rhow = e->N(node)->Read( User()->key_rhoH2O );
+    const double64 rhon = e->N(node)->Read( User()->key_rhoCO2 );
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    return sw * rhow + (1. - sw) * rhon;
+ }
+
+
+template<size_t dim, template<size_t> class USER>
+double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e ) const
+ {
+    const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert( e != nullptr );
+    const double64 rhow = e->PropertyValueAtBaryCenter( User()->key_rhoH2O );
+    const double64 rhon = e->PropertyValueAtBaryCenter( User()->key_rhoCO2 );
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    return sw * rhow + (1. - sw) * rhon;
+ }
+
+
+
 
 template class Fluid<1U,CO2H2O_FunctionsModule0>;
 template class Fluid<2U,CO2H2O_FunctionsModule0>;

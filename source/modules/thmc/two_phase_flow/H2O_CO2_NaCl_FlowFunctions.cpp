@@ -11,7 +11,7 @@ using namespace std;
 namespace csmp {
   
 /**
-    Saturation is always expected to have a value.
+    Saturation is always expected to have a value between 0..1.
 */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( const Element<dim>* const e ) const
@@ -24,7 +24,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( const Element<dim>* const e )
   
   
 /**
-      Mobility of phase i, kri(sw) / mu_i.
+      Mobility of phase i, lambda_i = rho_i * kri(sw) / mu_i.
  */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( const Element<dim>* const e, size_t phase ) const
@@ -37,20 +37,21 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( const Element<dim>* con
     if ( phase == 0U ) {
          assert( User()->krw(e) >= 0. );
          assert( User()->krw(e) <= 1. );
-         return User()->krw(e) / User()->Viscosity( e, 0U );
+         return User()->Density( e, 0U ) * (User()->krw(e) / User()->Viscosity( e, 0U ));
       }
    
     assert( User()->krn(e) >= 0. );
     assert( User()->krn(e) <= 1. );
-    return User()->krn(e) / User()->Viscosity( e, 1U );
+    return User()->Density( e, 1U ) * (User()->krn(e) / User()->Viscosity( e, 1U ));
  }
 
 
   
    
 /**
-    Mobility of phase i, kri(sw) / mu_i.
-    Using prescribed sw value, instead of intepolated value.
+    Mobility of phase i, lambda_i = rho_i * kri(sw) / mu_i.
+ 
+    Using prescribed sw value, instead of value intepolated to element barycentre.
 */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( const Element<dim>* const e, size_t phase, double64 sw ) const
@@ -63,12 +64,12 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( const Element<dim>* 
     if ( phase == 0U ) {
          assert( User()->krw_at(e,sw) >= 0. );
          assert( User()->krw_at(e,sw) <= 1. );
-         return User()->krw_at(e,sw) / User()->Viscosity( e, 0U );
+         return User()->Density( e, 0U ) * (User()->krw_at(e,sw) / User()->Viscosity( e, 0U ));
       }
    
     assert( User()->krn_at(e,sw) >= 0. );
     assert( User()->krn_at(e,sw) <= 1. );
-    return User()->krn_at(e,sw) / User()->Viscosity( e, 1U );
+    return User()->Density( e, 1U ) * (User()->krn_at(e,sw) / User()->Viscosity( e, 1U ));
  }
   
 
@@ -78,15 +79,15 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( const Element<dim>* 
     Mobility saturation derivative for phase i.
 */
 template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>* const e, size_t phase, bool evaluate_numerically ) const
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( const Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
     
     if ( phase == 0U )
-      return User()->dkrwds(e) / User()->Viscosity( e, 0U );
+      return User()->Density( e, 0U ) * (User()->dkrwds(e) / User()->Viscosity( e, 0U ));
     
-    return User()->dkrnds(e) / User()->Viscosity( e, 1U );
+    return User()->Density( e, 1U ) * (User()->dkrnds(e) / User()->Viscosity( e, 1U ));
   }
   
 
@@ -102,9 +103,9 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( const Element
     assert( phase == 0U or phase == 1U );
     
     if ( phase == 0U )
-      return User()->dkrwds_at(e,sw) / User()->Viscosity( e, 0U );
+      return User()->Density( e, 0U ) * (User()->dkrwds_at(e,sw) / User()->Viscosity( e, 0U ));
     
-    return User()->dkrnds_at(e,sw) / User()->Viscosity( e, 1U );
+    return User()->Density( e, 1U ) * (User()->dkrnds_at(e,sw) / User()->Viscosity( e, 1U ));
   }
   
 
@@ -112,14 +113,14 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( const Element
   
   
   /**
-      Sum of mobilities (not multiplied with permeability).
+      Sum of mass mobilities (not multiplied with permeability).
    */
   template<size_t dim, template<size_t> class USER>
   double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(const Element<dim>* const e ) const
   {
     assert( e != nullptr );
-    return User()->krn(e) / User()->Viscosity( e, 1U )
-         + User()->krw(e) / User()->Viscosity( e, 0U );
+    return User()->Density( e, 1U ) * (User()->krn(e) / User()->Viscosity( e, 1U )) +
+           User()->Density( e, 0U ) * (User()->krw(e) / User()->Viscosity( e, 0U ));
  }
 
 
@@ -133,8 +134,8 @@ template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility_at( const Element<dim>* const e, double64 sw ) const
  {
     assert( e != nullptr );
-    return User()->krn_at(e,sw) / User()->Viscosity( e, 1U )
-         + User()->krw_at(e,sw) / User()->Viscosity( e, 0U );
+    return User()->Density( e, 1U ) * (User()->krn_at(e,sw) / User()->Viscosity( e, 1U )) +
+           User()->Density( e, 0U ) * (User()->krw_at(e,sw) / User()->Viscosity( e, 0U ));
  }
 
 
@@ -153,7 +154,11 @@ template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( const Element<dim>* const e ) const
  {
     assert( e != nullptr );
-    return Mobility(e,0U) * Mobility(e,1U) / TotalMobility(e);
+    const double64 lw = Mobility(e,0U);
+    const double64 ln = Mobility(e,1U);
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    return  (lw * rhow * ln * rhon) / (lw * rhow + ln * rhon);
  }
 
 
@@ -165,6 +170,8 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( const Element<di
 
 /** 
     Saturation derivative of mobility product.
+ 
+    rhow*rhon*((diff(lw(sw), sw))*ln(sw)^2*rhon*sw+lw(sw)^2*rhow)/((rhow*lw(sw)+rhon*ln(sw))^2*sw);
 */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const Element<dim>* const e, bool evaluate_numerically ) const
@@ -178,15 +185,19 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const 
 
     const double64 lw  = User()->krw(e) / User()->Viscosity( e, 0U );
     const double64 ln  = User()->krn(e) / User()->Viscosity( e, 1U );
-    const double64 lt  = lw + ln;
-    const double64 lt2 = lt*lt;
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    const double64 lt  = lw * rhow + ln * rhon;
+    const double64 lt2 = lt * lt;
     const double64 ln2 = ln*ln;
     const double64 lw2 = lw*lw;
     
     const double64 dlwds = User()->dkrwds(e) / User()->Viscosity( e, 0U );
     const double64 dlnds = User()->dkrnds(e) / User()->Viscosity( e, 1U );
-    
-    return ( dlwds*ln2 + dlnds*lw2 )/lt2;
+ 
+    // TODO: check whether this is mathematically correct
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative", "method not properly implemented yet.");
+    return ( rhow * dlwds*ln2 + rhon * dlnds*lw2 ) / lt2;
   }
   
 
@@ -197,7 +208,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const 
 
   
   /**
-   Saturation derivative of mobility product.
+      Saturation derivative of mobility product.
    */
   template<size_t dim, template<size_t> class USER>
   double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at( const Element<dim>* const e , double64 sw) const
@@ -207,34 +218,34 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const 
     //    if ( User()->EffectiveSaturation(e) <= 0. || User()->EffectiveSaturation(e) >= 1. )
     //    return static_cast<double64>(0.);
     
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
     const double64 lw  = User()->krw_at(e, sw) / User()->Viscosity( e, 0U );
     const double64 ln  = User()->krn_at(e, sw) / User()->Viscosity( e, 1U );
-    const double64 lt  = lw + ln;
+    const double64 lt  = lw * rhow + ln * rhon;
     const double64 lt2 = lt*lt;
     const double64 ln2 = ln*ln;
     const double64 lw2 = lw*lw;
     
+    // TODO: check whether this is mathematically correct
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at", "method not properly implemented yet.");
     const double64 dlwds = User()->dkrwds_at(e, sw) / User()->Viscosity( e, 0U );
     const double64 dlnds = User()->dkrnds_at(e, sw) / User()->Viscosity( e, 1U );
     
-    return ( dlwds*ln2 + dlnds*lw2 )/lt2;
+    return ( rhow*dlwds*ln2 + rhon*dlnds*lw2 )/lt2;
   }
   
 
   
   
   
-  
-  
-
 
 
 
 /**
- 
-Computes the fractional flow of the wetting (ehase=1) and non-wetting
-(ehase=2) phases using the relative k's. and viscosities. Note that
-Initialize() must be called first.  
+    Computes the fractional mass flow of the wetting (phase=0) or non-wetting
+    (phase=1) phases using the relative k's. and viscosities. Note that
+    Initialize() must be called first.
 */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( const Element<dim>* const e, size_t phase ) const
@@ -252,13 +263,11 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( const Element<dim>* const e, s
   
   
   
-  
-  
 
 /**
 
-Computes the fractional flow of the wetting (ehase=1) and non-wetting
-(ehase=2) phases using prescribed sw value, instead of intepolated value.
+Computes the fractional flow of the wetting (phase=0) and non-wetting
+(phase=1) phases using the prescribed water saturation value, in stead of the intepolated value.
 
 */
 template<size_t dim, template<size_t> class USER>
@@ -281,7 +290,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( const Element<dim>* const e
 /**
     Derivative of fractional flow function (advection multipliers).
  
-    @todo check whether code for end-member cases has to be reinstated.
+    @todo TODO: test whether this produces plausible results
 */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( const Element<dim>* const e, size_t phase ) const
@@ -289,15 +298,23 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( const Element<dim>* const e
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
 
-    const double64 lw  = User()->krw(e) / User()->Viscosity( e, 0U );
-    const double64 ln  = User()->krn(e) / User()->Viscosity( e, 1U );
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    const double64 muw = User()->Viscosity( e, 0U );
+    const double64 mun = User()->Viscosity( e, 1U );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    const double64 lw  = rhow * (User()->krw(e) / muw);
+    const double64 ln  = rhon * (User()->krn(e) / mun);
     const double64 lt  = lw + ln;
     const double64 lt2 = lt * lt;
     
-    const double64 dlwds = User()->dkrwds(e) / User()->Viscosity( e, 0U );
-    const double64 dlnds = User()->dkrnds(e) / User()->Viscosity( e, 1U );
+    const double64 dlwds = rhow * (User()->dkrwds(e) / muw);
+    const double64 dlnds = rhon * (User()->dkrnds(e) / mun);
     
-    return ( dlwds*ln - dlnds*lw ) / lt2;
+    return (dlwds * ln - dlnds * lw) / lt2;
  }
   
 
@@ -314,17 +331,26 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( const Element<dim>* const e
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( const Element<dim>* const e, double64 sw ) const
  {
-   assert( e != nullptr );
-   const double64 lw  = User()->krw_at(e, sw) / User()->Viscosity( e, 0U );
-   const double64 ln  = User()->krn_at(e, sw) / User()->Viscosity( e, 1U );
-   const double64 lt  = lw + ln;
-   const double64 lt2 = lt * lt;
+    assert( e != nullptr );
+    assert( sw >= 0. and sw <= 1. );
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    const double64 muw = User()->Viscosity( e, 0U );
+    const double64 mun = User()->Viscosity( e, 1U );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    const double64 lw  = rhow * (User()->krw_at(e, sw) / muw);
+    const double64 ln  = rhon * (User()->krn_at(e, sw) / mun);
+    const double64 lt  = lw + ln;
+    const double64 lt2 = lt * lt;
    
-   const double64 dlwds = User()->dkrwds_at(e, sw) / User()->Viscosity( e, 0U );
-   const double64 dlnds = User()->dkrnds_at(e, sw) / User()->Viscosity( e, 1U );
+    const double64 dlwds = User()->dkrwds_at(e, sw) / muw;
+    const double64 dlnds = User()->dkrnds_at(e, sw) / mun;
     
     return ( dlwds*ln - dlnds*lw ) / lt2;
-  }
+ }
   
 
   
@@ -353,21 +379,34 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( const Elemen
   
   
 /**
-     k * delta_rho * g
+     Mass-based formulation:  k * (kri/mui * rho_i^2 + kri/muj * rhoj^2) g grad_Y
+ 
+     @note Since the gravity term is a vector variable in the case of lower dimensional elements
+     it is written back to the model.
+ 
+     @param dip_vc the resulting gravity term is returned into the supplied vector.
  */
 template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const e) const
-{
-  assert( e != nullptr );
-  // note that the projected gravity acts opposite the y-axis, term rhow - rhoo
-  const double64 delta_rho = User()->Density( e, 0U ) - User()->Density( e, 1U );
-  
-  // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
-  // TODO: use the specific acceleration of gravity that is stored on the actual model.
-   const double64 k_g_drho = e->Read(User()->key_kV) * -ACC_GRAVITY * delta_rho;
-  
-  // else compute result using G saturation derivative
-  return k_g_drho;
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const e,
+                                                        VectorVariable<dim>& dip_vc ) const
+ {
+    assert( e != nullptr );
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    const double64 muw = User()->Viscosity( e, 0U );
+    const double64 mun = User()->Viscosity( e, 1U );
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    const double64 termw = rhow * rhow * (User()->krw(e) / muw);
+    const double64 termn = rhon * rhon * (User()->krn(e) / mun);
+
+    // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
+    // TODO: use the specific acceleration of gravity that is stored on the actual model.
+    e->Read( User()->key_dip, dip_vc );
+    assert( !isnan(e->Read(User()->key_kV)) );
+    dip_vc *= e->Read(User()->key_kV) * -ACC_GRAVITY * (termw + termn);
 }
 
 
@@ -377,16 +416,16 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( const Element<dim>* 
   
   
 /**
-     See Sebastian Geiger's thesis (2004), closed form, i.e.
- 
-     G = lambda_overbar * k * delta_rho * g
+     Gravity term multiplied with lambda_overbar for the mass-based transport scheme.
  */
 template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e ) const
-  {
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e,
+                                                                VectorVariable<dim>& dip_vc ) const
+ {
     assert( e != nullptr );
-    return GravityTerm(e) * MobilityProduct(e);
-  }
+    GravityTerm(e,dip_vc);
+    dip_vc *= MobilityProduct(e);
+ }
 
 
   
@@ -400,10 +439,12 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( const Elemen
  p. 108, eqn. 3.74, term 2 (second part).
  */
 template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e ) const
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e,
+                                                                   VectorVariable<dim>& dip_vc ) const
  {
     assert( e != nullptr );
-    return GravityTerm(e) * MobilityProductDerivative(e);
+    GravityTerm(e,dip_vc);
+    dip_vc *= MobilityProductDerivative(e);
  }
   
 
@@ -413,16 +454,21 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( const Ele
   
   
 /**
- Returns the diffusion coefficient for the phase of interest. If not
- overloaeded, the hydraulic conductivity is returned.
+     Returns the self diffusion coefficient (m2/s) for the phase of interest.
+ 
+     Rethink: diffusion makes sense only for a higher order scheme,
+     but in multicompenent transport the diffusivities of the components in the phase are needed,
+     which is a vector of quantities.
  */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( const Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 1U or phase == 0U );
+ 
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier", "this method must still be implemented");
   
-    // TODO: Make sure that this is the permeability in the direction of the facet normal
+    // TODO: Make sure that this uses the permeability in the direction of the facet normal
     return e->Read(User()->key_k) / ( (phase==1U) ? User()->Viscosity( e, 0U ) : User()->Viscosity( e, 1U ) );
  }
   
@@ -434,33 +480,28 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( const Elemen
   
   
 /**
- See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
- permeability in direction of flow  x  lambda_overbar  x pc-gradient.
+    When capillary spreading is simulated using the FE method, it can be modelled as a nonlinear diffusion process.
+    Nonlinear because the driving gradient varies with saturation.
+ 
+          diffusion multiplier
+    Dpc = k * lambda_overbar * dpc/dsw * grad_sw
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+    See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
+    permeability in direction of flow  x  lambda_overbar  x pc-gradient.
  */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( const Element<dim>* const e ) const
 {
-    assert( e != nullptr );
-  // TODO: Make sure that this is the permeability in the direction of the facet normal
-  return e->Read(User()->key_k) * MobilityProduct(e) * User()->dpcds(e);
+   assert( e != nullptr );
+   assert( User()->key_k.type == SCALAR );
+   const double64 k     = e->Read(User()->key_k);
+   const double64 dpcds = User()->dpcds(e);
+   assert( !isnan(k) );
+   assert( !isnan(dpcds) );
+   return k * MobilityProduct(e) * dpcds;
 }
-  
-  
-  
-  
-  
-  
-  
-template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( const Element<dim>* const e, size_t phase ) const
-  {
-    assert( e != nullptr );
-    assert( phase == 0U or phase == 1U );
-    
-    // TODO: Make sure that this is the permeability in the direction of the facet normal
-    return  e->Read(User()->key_k) * ( (phase==0U) ? Mobility( e, 0U ) : Mobility( e, 1U ) )* User()->dpcds(e);
-  }
-  
+ 
  
   
   
@@ -470,7 +511,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phas
   
   // ===============================================================================================
   
-  // Numerical derivatives
+  // Numerical derivatives (not cross-checked yet)
   
   // ===============================================================================================
   

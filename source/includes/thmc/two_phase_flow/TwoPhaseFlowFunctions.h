@@ -14,12 +14,11 @@
 namespace csmp {
 
 /**
-    @brief 2-phase multiphase flow functions
+    @brief 2-phase multiphase flow functions for immiscible displacement of slightly compressible fluids.
 
-    Generates all relevant input values for transport scheme from relperm model and fluids module
-    using the constitutive relationships specified therein.    
-    
-    The results are written to the model at the respective variable placements.
+    Generates all relevant input values for 2-phase immiscible (saturation-based volume) transport scheme.
+    Uses the SaturationFunctions and Fluid module and the
+    constitutive relationships specified therein.
 */
 template<size_t dim, template<size_t> class USER>
 class TwoPhaseFlowFunctions {
