@@ -60,6 +60,9 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
     double64 MobilityProduct(  const Element<dim>* const ) const;
 
+    /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
+    double64 MobilityProduct_at(  const Element<dim>* const, double64 sw ) const;
+
     /// d lambda overbar / dsw also known as dGds
     double64 MobilityProductDerivative( const Element<dim>* const, bool  evaluate_numerically=false ) const;
                         

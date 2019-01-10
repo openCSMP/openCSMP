@@ -162,7 +162,22 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( const Element<di
  }
 
 
-  
+
+
+/**
+   Mobility product evaluated at the users supplied water saturation.
+*/
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct_at( const Element<dim>* const e, double64 sw ) const
+ {
+    assert( e != nullptr );
+    const double64 lw = Mobility_at(e,0U,sw);
+    const double64 ln = Mobility_at(e,1U,sw);
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    return  (lw * rhow * ln * rhon) / (lw * rhow + ln * rhon);
+ }
+
   
   
   
@@ -211,12 +226,14 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( const 
       Saturation derivative of mobility product.
    */
   template<size_t dim, template<size_t> class USER>
-  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at( const Element<dim>* const e , double64 sw) const
+  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at( const Element<dim>* const e, double64 sw ) const
   {
     assert( e != nullptr );
-    // product is zero at endmember saturations
-    //    if ( User()->EffectiveSaturation(e) <= 0. || User()->EffectiveSaturation(e) >= 1. )
-    //    return static_cast<double64>(0.);
+    const double64 srw  = e->Read( User()->key_srH2O );
+    const double64 srn  = e->Read( User()->key_srCO2 );
+    // mobility product is zero at endmember saturations
+    if ( sw < srw ) return 0.;
+    if ( sw > 1. - srn ) return 0.;
     
     const double64 rhow = User()->Density(e,0U);
     const double64 rhon = User()->Density(e,1U);
