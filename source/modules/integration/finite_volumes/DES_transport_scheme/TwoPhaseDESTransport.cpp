@@ -3,8 +3,7 @@
 #include "Model.h"
 #include "DenseMatrix.h"
 #include "CSMP_mathUtilities.h"
-#include "CO2H2O_FunctionsModule1.h"
-#include "equilibrateH2O_CO2_NaCl.h"
+#include "FlowFunctionsModule.h"
 #if defined(_OPENMP)
 #include "omp.h"
 #endif
@@ -102,15 +101,11 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     if(!m.Database().IsDefined("saturation gradient")) m.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, 3, -1.00E+08 ,1.00E+08);
     if(!m.Database().IsDefined("pressure gradient")) m.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
     if(!m.Database().IsDefined("truncated FV")) m.CreateProperty( "truncated FV", "none", SCALAR, NODE, 1, 0 ,1);
-    if(!m.Database().IsDefined("equilibrate")) m.CreateProperty( "equilibrate", "none", SCALAR, NODE, 1, 0 ,1);
-    if(!m.Database().IsDefined("update phi and k")) m.CreateProperty( "update phi and k", "none", SCALAR, ELEMENT, 1, 0 ,1);
     
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
     m.Region("Model").InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );    
     m.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE); 
-    m.Region("Model").InputPropertyValue( "equilibrate", makeScalar(PLAIN,0), COMPLETE); 
-    m.Region("Model").InputPropertyValue( "update phi and k", makeScalar(PLAIN,0), COMPLETE); 
     
     //assigning keys 
     key_dsnw = INDEX<SCALAR,NODE> ( m.Database().StorageKey("variation rate nonwetting phase") );
@@ -124,8 +119,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     key_gradSn = INDEX<VECTOR,ELEMENT>( m.Database().StorageKey("saturation gradient") );
     key_gradP = INDEX<VECTOR,ELEMENT>( m.Database().StorageKey("pressure gradient") );
     key_cut = INDEX<SCALAR,NODE> ( m.Database().StorageKey("truncated FV") );
-    key_equilibrate = INDEX<SCALAR,NODE> ( m.Database().StorageKey("equilibrate") );
-    key_UpdatePhiK = INDEX<SCALAR,ELEMENT> ( m.Database().StorageKey("update phi and k") );
     
     //checking keys 
     if ( key_dsnw.place != NODE || key_dsnw.type != SCALAR )
@@ -160,13 +153,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
         "The 'pressure gradient' variable must be VECTOR and placed on ELEMENT"  );          
     if ( key_cut.place != NODE || key_cut.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'truncated FV' variable must be SCALAR and placed on NODE"  ); 
-    if ( key_equilibrate.place != NODE || key_equilibrate.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'equilibrate' variable must be SCALAR and placed on NODE"  );  
-    if ( key_UpdatePhiK.place != ELEMENT || key_UpdatePhiK.type != SCALAR )
-      throw csmp::Exception( FATAL_ERROR, "TwoPhaseDESTransport::initializeKeys:",
-        "The 'update phi and k' variable must be SCALAR and placed on ELEMENT"  );                                                                          
+        "The 'truncated FV' variable must be SCALAR and placed on NODE"  );                                                                   
 }
 
 
@@ -308,387 +295,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* eve
 
 
 
-//update hysteretic brooks-corey parameters
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::UpdateBCParameters (Event<dim>* event )
-{
-  Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
-  assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){
-    //FLOW_FUNCTIONS<dim> flowfunctions(db_);
-    const size_t node_parent_elements(nd->Parents());
-    for ( size_t t=0U; t<node_parent_elements; t++ )
-    {
-        Element<dim>* const eptr(nd->Parent(t));
-        assert( eptr != NULL );
-// SKM FIX - this should occur on demand inside sat-function:        flowfunctions_.UpdateBrooksCoreyParameters(eptr);
-    }
-  }
-}
-
-
-//Compute the rate of change of non-wetting phase in a node/FV
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* event )
-{
-  Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
-  assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-    
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){
-    rate_count_++;//recording
-    nd->Store(  key_rate, makeScalar( nd->Status( key_rate), nd->Read( key_rate) + 1 ) );
-    
-    double64 accumulation(0.), flux_balance(0.), outflow(0.);
-        
-    const size_t v( (dim==1u) ? 0u : 1u );
-    VectorVariable<dim> vD, facetNrml;
-    const size_t node_parent_elements(nd->Parents());
-    
-    double64 cfl_multiplier = CFL_multiplier_*relaxing_factor_; //default value
-    
-    int truncated_node = static_cast<int>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
-
-    for ( size_t t=0U; t<node_parent_elements; t++ )
-    {
-      Element<dim>* const eptr(nd->Parent(t));
-      assert( eptr != NULL );
-        
-      if(truncated_node == 1 && (this->halo_stencils_.find(eptr) != this->halo_stencils_.end())) { //ignore if parent element located outside domain
-        continue;
-        
-      } else {        
-        
-        const size_t pnid(nd->ParentNodeNumber(t));
-        
-        //eptr->Read( this->key_vt, vD);
-        
-        //compute total velocity (without gravity)
-        VectorVariable<dim> gradP;
-        eptr->Read(this->key_gradP, gradP); //pressure gradient
-        double64 lambda_t = flowfunctions_.TotalMobility(eptr);
-        double64 thickness = eptr->Read(this->key_thi); //thickness
-        if(!tensor_k_) { //scalar permeability
-            double64 k = eptr->Read( this->key_k ); //permeability
-            k *= lambda_t;
-            if (!isnan(thickness)) k *= thickness;
-            vD(0) = k * gradP(0);
-            if ( dim != 1U ) vD(1) = k * gradP(1);
-            if ( dim == 3U ) vD(2) = k * gradP(2);
-        } else { //tensor permeability
-            TensorVariable<dim> kk;
-            eptr->Read( this->key_kk, kk );
-            kk *= lambda_t;
-            if (!isnan(thickness)) kk *= thickness;
-            vD= kk * gradP;
-        }
-        
-        /*
-        if( this->with_gravity_forces_ ){ //take into account gravity effect
-            double64 delta_rho = rho_w - rho_n;
-            double64 gravity_t = lambda_t * delta_rho * ACC_GRAVITY;
-            vD(v) += gravity_t;
-        }
-        */         
-        
-        double64 inflow(0.), CO2_inflow (0.);
-        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( size_t i=0U; i<sector_facets; i++ )
-        {
-            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
-            
-            eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
-            const double64  vD_n = vD.DotProduct(facetNrml);
-            const double64  facetArea = eptr->Read( iFacet, 0U,  this->key_fA ); 
-            
-            const double64 sign = ( pnid == inside_node ) ? 1. : -1.;
-            //compute facet fluid flux
-            double64 facet_flux = sign * vD_n * facetArea;
-            //update flux balance
-            flux_balance += facet_flux;
-            inflow += facet_flux;
-            //update outflow
-            if ( facet_flux > 0. ) outflow += facet_flux;
-                         
-            //compute inside and outside node mobilities, by using their saturations
-            const double64 sn_inside_node = eptr->N(inside_node)->Read(  this->key_sCO2 );
-            const double64 sw_inside_node = 1.-sn_inside_node;
-            const double64 ln_inside_node = flowfunctions_.Mobility_at(eptr,1U,1.0-sn_inside_node);
-            const double64 lw_inside_node = flowfunctions_.Mobility_at(eptr,0U,1.0-sn_inside_node);
-        
-            const double64 sn_outside_node = eptr->N(outside_node)->Read(  this->key_sCO2 );
-            const double64 sw_outside_node = 1.-sn_outside_node;
-            const double64 ln_outside_node = flowfunctions_.Mobility_at(eptr,1U,1.0-sn_outside_node);
-            const double64 lw_outside_node = flowfunctions_.Mobility_at(eptr,0U,1.0-sn_outside_node);
-            
-            //compute phase velocities at facet integration point                      
-            double64 vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
-            double64 vn_capillary_component_of_velocity ( 0.0 ), vw_capillary_component_of_velocity ( 0.0 );
-            
-            if( with_gravity_forces_ ){                       
-                vn_gravity_component_of_velocity = flowfunctions_.Mobility(eptr, 0U) * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
-                vw_gravity_component_of_velocity = flowfunctions_.Mobility(eptr, 1U) * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
-            }         
-            
-            if(with_capillary_spreading_){  
-                VectorVariable<dim> grad;
-                eptr->Read(this->key_gradSn, grad);
-                double64 dsdn = grad.DotProduct(facetNrml);
-            
-                if(!isnan(dsdn)){
-                    vn_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,0U);
-                    vw_capillary_component_of_velocity = -dsdn*flowfunctions_.CapillaryDiffusionMultiplier_Phase(eptr,1U);
-                }   
-            }  
-            
-            double64 vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
-            double64 vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity + vw_capillary_component_of_velocity; 
-        
-            //determine upstream mobilities
-            double64 upstream_mobility_n(0.0),upstream_mobility_w(0.0),total_mobility(0.0);    
-              
-            if(vn_at_facet_int_point>0.0)
-                upstream_mobility_n=ln_inside_node;
-            else if (vn_at_facet_int_point<0.0)
-                upstream_mobility_n=ln_outside_node;
-            else 
-                upstream_mobility_n=0.5*(ln_inside_node+ln_outside_node);
-            
-            if(vw_at_facet_int_point>0.0)
-                upstream_mobility_w=lw_inside_node;
-            else if (vw_at_facet_int_point<0.0)
-                upstream_mobility_w=lw_outside_node;
-            else
-                upstream_mobility_w=0.5*(lw_inside_node+lw_outside_node);
-                            
-            total_mobility=upstream_mobility_n+upstream_mobility_w;
-            double64 upstream_fn=(total_mobility!=0.0? upstream_mobility_n/total_mobility : 0.0);
-            double64 upstream_lambda_overbar=(total_mobility!=0.0? (upstream_mobility_n*upstream_mobility_w)/total_mobility : 0.0);        
-
-            //compute each velocity component     
-            double64 viscous_velocity_component(0.0), capillary_velocity_component(0.0), gravity_velocity_component(0.0);  
-                     
-            viscous_velocity_component = vD_n * upstream_fn;
-                                       
-            if( with_gravity_forces_ )
-                gravity_velocity_component = upstream_lambda_overbar * flowfunctions_.GravityTerm(eptr) * facetNrml[v];
-
-            if( with_capillary_spreading_ )
-                capillary_velocity_component = upstream_fn * vn_capillary_component_of_velocity; 
-        
-            //update non-wetting flux accumulation   
-            double64 fn = sign * ( viscous_velocity_component - gravity_velocity_component - capillary_velocity_component) * facetArea;                                        
-            accumulation += fn; 
-            CO2_inflow += fn;
-
-            //determine cfl_multiplier based on non-wetting phase shock saturation
-            if (cfl_multiplier != CFL_multiplier_){
-                if(vn_at_facet_int_point < 0.0) { //flowing in from outside node (upstream node)
-                    double64 sn_shock = 1.0-eptr->Read(this->key_ssH2O); //sn at shock for outside node
-                    if (sn_outside_node >= sn_shock) { //upstream node passed shock saturation
-                        if (sn_inside_node < sn_shock) {//current node not yet reach shock saturation   
-                            cfl_multiplier = CFL_multiplier_;
-                        }
-                    }
-                }
-            }
-        
-            //determine cfl_multiplier based on wetting phase shock saturation
-            if (cfl_multiplier != CFL_multiplier_){
-                if(vw_at_facet_int_point < 0.0) { //flowing from outside node (upstream node)
-                    double64 sw_shock = eptr->Read(this->key_ssH2O); //sw at shock for outside node
-                    if (sw_outside_node >= sw_shock) { //upstream node passed shock saturation
-                        if (sw_inside_node < sw_shock) {//current node not yet reach shock saturation   
-                            cfl_multiplier = CFL_multiplier_;
-                        }
-                    }
-                }        
-            }
-        } //end sector_facets loop
-        
-        if (!this->no_flow_boundary_) {
-            //inflow/outflow compensation for truncated boundary node 
-            if (truncated_node == 1) {      
-                if (inflow > 0.) {flux_balance += inflow; outflow += inflow;} //inflow compensation
-                else if (inflow < 0.) {flux_balance -= inflow;}; //outflow compensation
-            
-                if ( CO2_inflow > 0. ) accumulation += CO2_inflow; //inflow compensation
-                else if ( CO2_inflow < 0. ) accumulation -= CO2_inflow; //outflow compensation
-            }
-        }
-        
-      } //end else        
-    } //end parent element loop
-        
-    ArrayVariable array2;
-    nd->Read(key_time, array2);
-   
-    //compute CFL time increment 
-    if (outflow < numeric_limits<double64>::epsilon())
-        array2.Component(2, numeric_limits<double64>::max());
-    else 
-        array2.Component(2, nd->Read(  this->key_fvPV ) / outflow);
-    
-    nd->Store( key_CFL, makeScalar( nd->Status( key_CFL ),cfl_multiplier ) );
-    array2.Component(6, cfl_multiplier);    
-        
-    nd->Store(key_time, array2);
-    
-    
-    // divergence free correction (only when node is located inside domain and flux balance not equal to zero)
-    if (truncated_node !=1 && fabs(flux_balance) > numeric_limits<double64>::epsilon()) {
-         // compute average fractional flow for the current finite volume
-        double64 fn_avg = 0.;
-        double64 sw = 1. - nd->Read(this->key_sCO2); //saturation aqueous phase at current node
-        for ( size_t t=0U; t<node_parent_elements; t++ )
-        {
-            Element<dim>* const eptr(nd->Parent(t));
-// SKM FIX - this should occur on demand inside sat-function:                    flowfunctions_.InitialiseBrooksCoreyParameters(eptr);
-            fn_avg += flowfunctions_.f_at(eptr,1U,sw);
-        }
-        fn_avg /= static_cast<double64>(node_parent_elements);
-        accumulation -= fn_avg*flux_balance;
-    }     
-    
-    //compute and store variation rate    
-    double64 PV = nd->Read(  this->key_fvPV );
-    nd->Store( key_dsnw, makeScalar( nd->Status( key_dsnw ), accumulation/PV ) );    
-  }
-    
-}  
-
-
-
-//schedule an event associated with a node/FV
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-bool TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, double64 t_end)
-{
-  Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
-  assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){     
-    ArrayVariable array;
-    nd->Read(key_time, array);
-
-    nd->Store( key_schedule, makeScalar( nd->Status( key_schedule), nd->Read( key_schedule) + 1 ) );
-    event->valid(true);
-    //compute target change
-    double64 dt_CFL = array[2];//CFL time increment
-    double64 ChangeRate = nd->Read( key_dsnw);//rate of change
-    double64 source = nd->Read(this->key_nQV);
-    double64 dC_CFL = dt_CFL*CFL_multiplier_*(-ChangeRate+source);//targe change
-
-    if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
-        array.Component(5, numeric_limits<double64>::epsilon());//target change of solution
-        array.Component(3, numeric_limits<double64>::max());//target time increment          
-    } else {
-        array.Component(5, dC_CFL);//target change of solution
-        array.Component(3, dt_CFL*array[6]);//target time increment  
-    };
-
-    double64 t_current = array[0];//current time stamp
-    double64 dt_target = array[3];//target time increment
-    if ((dt_target + t_current) >= t_end) {
-        nd->Store(key_time, array);
-        return false;
-    } else {
-        event->t_schedule(t_current + dt_target);
-        array.Component(1, t_current + dt_target);//schedule time stamp
-        nd->Store(key_time,array);
-        return true;
-    }
-  }
-  return false;
-}
-
-
-
-//update solution and check it against the specified range (with DES)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double64 t_clock)
-{
-  Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
-  assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){     
-    update_count_++;//recording
-    const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
-    ArrayVariable array;
-    nd->Read(key_time, array);
-
-    double64 ChangeRate = nd->Read( key_dsnw);//variaition rate   
-    double64 solution = nd->Read( this->key_sCO2);//old solution
-    nd->Store(this->key_sCO2_0, makeScalar( status, solution ));//store old solution
-    double64 t_current = array[0]; //current time stamp
-    double64 new_solution = solution - (t_clock - t_current) * ChangeRate;//compute new solution
-    const double64 source(nd->Read(this->key_nQV));
-    new_solution += source * (t_clock - t_current);//add source to new solution
-        
-    //check new solution value against range and stored it to key_sCO2
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) {
-        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
-    } else {
-        cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) new_solution = upper_limit_;
-        else if ( new_solution < lower_limit_ ) new_solution = lower_limit_;
-        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
-    }  
-    new_solution = nd->Read(this->key_sCO2);//stored new solution
-    double64 dsn_cumulative = array[4];
-    array.Component(4, dsn_cumulative + (new_solution-solution));//update cumulative change
-        
-    array.Component(0, t_clock); //current time stamp
-    
-    nd->Store(key_time, array);
-
-    nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );
-    nd->Store( key_equilibrate, makeScalar( nd->Status(key_equilibrate), 1 ) );
-  }
-}
-
-
-
-//update solution and check it against the specified range (with TDS)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double64 delta_t)
-{
-  Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );   
-  assert( nd->Status(  this->key_sCO2 ) != DIRICH); 
-  if(nd  != NULL && nd->Status( this->key_sCO2 ) != DIRICH){     
-    update_count_++;//recording    
-    const VARIABLE_FLAG status(nd->Status( this->key_sCO2 ));
-    
-    double64 ChangeRate = nd->Read(key_dsnw);//variation rate  
-    double64 solution = nd->Read(this->key_sCO2);//old solution
-    nd->Store(this->key_sCO2_0, makeScalar( status, solution ));//store old solution
-    double64 new_solution = solution - delta_t * ChangeRate;//compute new solution
-    const double64 source(nd->Read( this->key_nQV));
-    new_solution += source * delta_t;//add source to new solution.
-                
-    //check new solution value against range and stored it to key_sCO2
-    if ( new_solution <= upper_limit_ && new_solution >= lower_limit_ ) {
-        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
-    } else {
-        cerr <<"value: "<< new_solution <<" versus range from PropertyDatabase: "<< lower_limit_ <<"-"<< upper_limit_ << endl;
-        if ( new_solution > upper_limit_ ) new_solution = upper_limit_;
-        else if ( new_solution < lower_limit_ ) new_solution = lower_limit_;
-        nd->Store(this->key_sCO2, makeScalar( status, new_solution ));
-        nd->Store(this->key_sH2O, makeScalar( status, 1. - new_solution ));
-    }
-        
-    nd->Store( key_update, makeScalar( nd->Status(key_update), nd->Read(key_update) + 1 ) );   
-  }
-}
-
-
 
 //Synchronize neighbor nodes/FVs
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
@@ -787,7 +393,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time
     {   
         //if (with_capillary_spreading_) ComputeSaturationGradient ((*it)); 
         ComputeGradients ((*it));
-        UpdateBCParameters ((*it));
         ComputeRateofChange((*it));  
         ArrayVariable array;
         (*it)->getNode()->Read(key_time, array);
@@ -820,7 +425,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time
         for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
             ComputeGradients ((*it));
-            UpdateBCParameters ((*it));
             ComputeRateofChange((*it));
             ArrayVariable array2;
             (*it)->getNode()->Read(key_time, array2);
@@ -878,89 +482,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double64 mode
 }
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::EquilibrateFluidAndUpdatePhiK(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t )
-{
-    if (equilibration_) {
-        equilibrateFluid(pvtx_calculator, del_t);
-        updatePorosityandPermeability();
-        updatePoreVolume();
-    }
-}
-
-
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator, double64 del_t)
-{
-    variables::VariableSet_CO2GeoSequestration props(db_);
-    for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
-    { 
-        int equilibrate = static_cast<int>((*nit)->Read(key_equilibrate));
-        if(equilibrate == 1) {
-            pvtx_calculator.Equilibrate( *nit, del_t );
-
-            for ( size_t t=0U; t<(*nit)->Parents(); t++ )
-            {
-                Element<dim>* const eptr((*nit)->Parent(t));
-                eptr->Store( key_UpdatePhiK, makeScalar( (*nit)->Status( key_UpdatePhiK), 1 ) );                 
-            }
-        } else {
-            updateFluidProperties(props, *(*nit), del_t);
-        }
-    }
-} 
-
-
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePorosityandPermeability()
-{
-    variables::VariableSet_CO2GeoSequestration props(db_);
-    for ( auto eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
-    {
-        int update = static_cast<int>((*eit)->Read(key_UpdatePhiK));
-       if(update == 1) {
-            double64 phi_old = (*eit)->Read(this->key_phi);
-            porosityWithSalt( props, *(*eit) );
-            double64 phi_new = (*eit)->Read(this->key_phi);
-            
-            if (phi_new != phi_old && phi_old != 0. && (1.-phi_new) != 0.) {
-                double64 k_old = (*eit)->Read(this->key_k);
-                // using the Kozeny-Carman relationship here to scale k to new porosity value
-                double64 phi3 = (phi_new*phi_new*phi_new)/(phi_old*phi_old*phi_old);
-                double64 t1 = (1.-phi_old)*(1.-phi_old)/(1.-phi_new)/(1.-phi_new);
-                double64 k_new = k_old * phi3 * t1;
-                (*eit)->Store( this->key_k, makeScalar( (*eit)->Status( this->key_k), k_new ) );
-            }
-            (*eit)->Store( key_UpdatePhiK, makeScalar( (*eit)->Status( key_UpdatePhiK), 0 ) ); 
-        }
-    }
-}
-
-
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::updatePoreVolume()
-{
-    for ( auto nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); ++nit )
-    {    
-        int equilibrate = static_cast<int>((*nit)->Read(key_equilibrate));
-        if(equilibrate == 1) {
-            double64 pore_volume (0.); 
-            for ( size_t t=0U; t<(*nit)->Parents(); t++ )
-            {
-                Element<dim>* const eptr((*nit)->Parent(t));
-                double64 phi = eptr->Read( this->key_phi);
-                const double64 thickness = eptr->Read( this->key_thi );
-                if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
-                const size_t pnid((*nit)->ParentNodeNumber(t));
-                const double64 sector_volume = eptr->SectorVolume(pnid);
-                pore_volume   += phi * sector_volume;
-            }
-            (*nit)->Store( this->key_fvPV, makeScalar( (*nit)->Status( this->key_fvPV), pore_volume ) ); 
-            (*nit)->Store( key_equilibrate, makeScalar( (*nit)->Status( key_equilibrate), 0 ) ); 
-        }         
-    }
-}       
-
 
 //advect variable with DES (discrete event simulation), serial version
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
@@ -1002,7 +523,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
                 PEPList.push_back(event);
                 event->inPEPStack(true);
                 ComputeGradients (event );
-                UpdateBCParameters (event );
                 ComputeRateofChange(event);
                 Schedule(event, model_time);
                 event->valid(false);
@@ -1030,7 +550,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
             Event<dim>* event = *it;
             T_begin= clock();
             ComputeGradients (event );
-            UpdateBCParameters (event);
             ComputeRateofChange((*it));    
             T_RateOfChange_ += clock() - T_begin;         
             if ((*it)->valid() == false) {
@@ -1185,7 +704,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
                 PEPList.push_back(event);
                 event->inPEPStack(true);
                 ComputeGradients (event );
-                UpdateBCParameters (event);
                 ComputeRateofChange(event);
                 Schedule(event, model_time);
                 event->valid(false);
@@ -1218,14 +736,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
             Event<dim>* event = *it;   
             ComputeGradients (event );
         }
-        
-        for(size_t i = 0U; i < PEPList_size; ++i)
-        {
-            auto it = PEPList.begin()+i;
-            Event<dim>* event = *it;   
-            UpdateBCParameters (event );
-        }              
-        
+
         std::vector<Event<dim>*> tempList;
         #pragma omp parallel num_threads(num_threads)
         {
@@ -1355,19 +866,29 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_openmp( double
 } 
 #endif
 
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule1>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule1>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule1>;
 
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule2>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule2>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule2>;
 
-template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule3>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule3>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule3>;
 
-template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule4>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule4>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule4>;
 
-template class TwoPhaseDESTransport<1U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseDESTransport<3U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule5>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule5>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule5>;
+
+template class TwoPhaseDESTransport<1U,FlowFunctionsModule6>;
+template class TwoPhaseDESTransport<2U,FlowFunctionsModule6>;
+template class TwoPhaseDESTransport<3U,FlowFunctionsModule6>;
 
 } // end csmp 
 

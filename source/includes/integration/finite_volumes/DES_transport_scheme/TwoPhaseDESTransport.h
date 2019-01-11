@@ -13,7 +13,6 @@ namespace csmp {
 template<size_t> class PropertyDatabase;
 template<size_t> class Region;
 template<size_t> class Model;
-template<size_t> class PVTX_Calculator_H2O_CO2_NaCl;
 
 
 
@@ -52,23 +51,16 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
   //private:
 
     virtual void InitializeVariablesAndKeys(Model<dim>& );
- // TODO: if needed   void calculatePermeabilityProjections( Region<dim>& gref );
     void initializeFiniteVolumeProperties();
     void ResetCFLMultiplier();
     void ComputeGradients (Event<dim>* event );
-    void UpdateBCParameters (Event<dim>* event );
-    virtual void ComputeRateofChange( Event<dim>* event );
-    virtual bool Schedule(Event<dim>* nd, double64 t_end);
-    virtual void Update_DES(Event<dim>* nd, double64 t_clock);
-    virtual void Update_TDS(Event<dim>* nd, double64 delta_t);
+    virtual void ComputeRateofChange( Event<dim>* event ) {};
+    virtual bool Schedule(Event<dim>* nd, double64 t_end) {};
+    virtual void Update_DES(Event<dim>* nd, double64 t_clock) {};
+    virtual void Update_TDS(Event<dim>* nd, double64 delta_t) {};
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
     void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;};
-    void SetEquilibration(bool equilibration) {equilibration_ = equilibration;};
-    void EquilibrateFluidAndUpdatePhiK(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator,double64 del_t);
-    void equilibrateFluid(PVTX_Calculator_H2O_CO2_NaCl<dim>& pvtx_calculator,double64 del_t);
-    void updatePorosityandPermeability();
-    void updatePoreVolume();
-    
+
 
   protected:
     Region<dim>& gref_;
@@ -88,11 +80,9 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     double64 CFL_multiplier_; //cfl multiplier (applied on saturation front)
     double64 relaxing_factor_; //relaxing factor for cfl multiplier at areas other than saturation front
     bool no_flow_boundary_ = false;
-    bool equilibration_ = false;
     
-    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_cut, key_equilibrate;
+    csmp::INDEX<SCALAR,NODE> key_dsnw, key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_CFL, key_cut;
     csmp::INDEX<VECTOR,ELEMENT> key_gradSn, key_gradP;
-    csmp::INDEX<SCALAR,ELEMENT> key_UpdatePhiK;
         
     // key_time - an ArrayVariable key for DES releated variables:
     // [0] current time stamp

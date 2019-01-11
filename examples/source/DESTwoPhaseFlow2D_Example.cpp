@@ -10,9 +10,7 @@
 // FV algorithms
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
-#include "TwoPhaseDESTransport.h"
-#include "TwoPhaseMassBasedDESTransport.h"
-#include "TwoPhaseMultiComponentDESTransport.h"
+#include "SlightlyCompressible2PhaseDESTransport.h"
 #include "ExplicitStencilProcessor.h"
 
 // relative permeability calculations
@@ -72,7 +70,6 @@ void DESTwoPhaseFlow2D_Example::Run()
 
     Standard_IO_Handler  stdio;
     bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES? (y=DES, n=TDS)"); 
-    bool  multi_component = stdio.YesNo("Do you want to perform multi-component transport?");
     double64 Courant_multiplier, PEP_parameter;
     cerr <<"\nEnter CFL multiplier (suggested value: 0.3) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
@@ -95,12 +92,9 @@ void DESTwoPhaseFlow2D_Example::Run()
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    CO2H2O_FunctionsModule1<2U> flowfunctions(model.Database());
-    TwoPhaseDESTransport<2U,CO2H2O_FunctionsModule1>* DEStransport;
-    if (!multi_component)
-      DEStransport = new TwoPhaseMassBasedDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
-    else
-      DEStransport = new TwoPhaseMultiComponentDESTransport<2U,CO2H2O_FunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+    FlowFunctionsModule1<2U> flowfunctions(model.Database());
+    TwoPhaseDESTransport<2U,FlowFunctionsModule1>* DEStransport;
+    DEStransport = new SlightlyCompressible2PhaseDESTransport<2U,FlowFunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -145,10 +139,6 @@ void DESTwoPhaseFlow2D_Example::Run()
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", 0 );
     vtu.OutputDataToVTU( "saturation oil", "saturation carbonic phase",    "Model", 0 );
     vtu.OutputDataToVTU( "fluid_velocity", "total velocity",    "Model", 0 );
-    if (multi_component) { 
-      vtu.OutputDataToVTU( "dissolved CO2", "dissolved CO2",    "Model", 0 ); 
-      vtu.OutputDataToVTU( "evaporated water", "evaporated water",    "Model", 0 ); 
-    }
 
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
@@ -207,21 +197,13 @@ void DESTwoPhaseFlow2D_Example::Run()
                   vtu.OutputDataToVTU( "DES_Update_count", "update count", "Model",  time );
                   vtu.OutputDataToVTU( "DES_CFL_multiplier", "cfl multiplier", "Model",  time );
                   //vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
-                  vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );
-                  if (multi_component) {
-                    vtu.OutputDataToVTU( "DES_dissolved CO2", "dissolved CO2",    "Model", time );
-                    vtu.OutputDataToVTU( "DES_evaporated water", "evaporated water",    "Model", time );
-                  }                 
+                  vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );                 
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "TDS_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );  
-                  if (multi_component) {  
-                    vtu.OutputDataToVTU( "TDS_dissolved CO2", "dissolved CO2",    "Model", time );
-                    vtu.OutputDataToVTU( "TDS_evaporated water", "evaporated water",    "Model", time );
-                  }                         
               }   
               save_counter = 0;
          }
@@ -242,7 +224,7 @@ void DESTwoPhaseFlow2D_Example::Run()
 } // Run()
 
 
-void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_FunctionsModule1<2U>& flowfunctions )
+void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFunctionsModule1<2U>& flowfunctions )
  {
      
     static const Region<2U>& mref = mdl.Region("Model"); 
@@ -270,7 +252,7 @@ void DESTwoPhaseFlow2D_Example::computeTotalMobility( Model<2U>& mdl, CO2H2O_Fun
     vector<Element<2U>* >::const_iterator eit;
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
-        flowfunctions.UpdateBrooksCoreyParameters(*eit);
+        //flowfunctions.UpdateBrooksCoreyParameters(*eit);
         //total mobility
         double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*
