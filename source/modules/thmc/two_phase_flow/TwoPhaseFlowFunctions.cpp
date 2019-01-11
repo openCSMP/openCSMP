@@ -1,4 +1,4 @@
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 #include "TwoPhaseFlowFunctions.h"
 #include "Fluid.h"
 #include "ErrorHandler.h"
@@ -353,20 +353,25 @@ double64 TwoPhaseFlowFunctions<dim,USER>::AdvectionMultiplier( const Element<dim
      k * delta_rho * g
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const e) const
-{
-  assert( e != nullptr );
-  // note that the projected gravity acts opposite the y-axis, term rhow - rhoo
-  const double64 delta_rho = User()->Density( e, 0U ) - User()->Density( e, 1U );
-  
-  // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
-  // TODO: use the specific acceleration of gravity that is stored on the actual model.
-   const double64 k_g_drho = e->Read(User()->key_kV) * -ACC_GRAVITY * delta_rho;
-  
-  // else compute result using G saturation derivative
-  return k_g_drho;
-}
-
+void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier( const Element<dim>* const e,
+                                                        VectorVariable<dim>& dip_vc ) const
+ {
+    assert( e != nullptr );
+    const double64 rhow = User()->Density(e,0U);
+    const double64 rhon = User()->Density(e,1U);
+    assert( !isnan(rhow) );
+    assert( !isnan(rhon) );
+    
+    // note that the projected gravity acts opposite the y-axis, term rhow - rhoo
+    const double64 delta_rho = rhow- rhon;
+    
+    // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
+    // TODO: use the specific acceleration of gravity that is stored on the actual model.
+    e->Read( User()->key_dip, dip_vc );
+    assert( !isnan(e->Read(User()->key_kV)) );
+    dip_vc *= e->Read(User()->key_kV) * -ACC_GRAVITY * delta_rho;  
+}   
+ 
 
   
 
@@ -379,11 +384,13 @@ double64 TwoPhaseFlowFunctions<dim,USER>::GravityTerm( const Element<dim>* const
      G = lambda_overbar * k * delta_rho * g
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e ) const
-  {
+void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim>* const e,
+                                                           VectorVariable<dim>& dip_vc ) const
+ {
     assert( e != nullptr );
-    return GravityTerm(e) * MobilityProduct(e);
-  }
+    GravityMultiplier(e,dip_vc);
+    dip_vc *= MobilityProduct(e);
+ } 
 
 
   
@@ -397,13 +404,13 @@ double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( const Element<dim
  p. 108, eqn. 3.74, term 2 (second part).
  */
 template<size_t dim, template<size_t> class USER>
-double64 TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e ) const
+void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( const Element<dim>* const e,
+                                                                   VectorVariable<dim>& dip_vc ) const
  {
     assert( e != nullptr );
-    return GravityTerm(e) * MobilityProductDerivative(e);
- }
-  
-
+    GravityMultiplier(e,dip_vc);
+    dip_vc *= MobilityProductDerivative(e);
+ }   
   
   
 
@@ -814,23 +821,21 @@ double64 TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( const Element<dim>
   
 
   
- /*
   
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule0>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule0>;
+template class TwoPhaseFlowFunctions<1U,FlowFunctionsModule1>;
+template class TwoPhaseFlowFunctions<2U,FlowFunctionsModule1>;
+template class TwoPhaseFlowFunctions<3U,FlowFunctionsModule1>;
   
 
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule1>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule1>;
+template class TwoPhaseFlowFunctions<1U,FlowFunctionsModule2>;
+template class TwoPhaseFlowFunctions<2U,FlowFunctionsModule2>;
+template class TwoPhaseFlowFunctions<3U,FlowFunctionsModule2>;
 
 
-template class TwoPhaseFlowFunctions<1U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseFlowFunctions<2U,CO2H2O_FunctionsModule2>;
-template class TwoPhaseFlowFunctions<3U,CO2H2O_FunctionsModule2>;
+template class TwoPhaseFlowFunctions<1U,FlowFunctionsModule3>;
+template class TwoPhaseFlowFunctions<2U,FlowFunctionsModule3>;
+template class TwoPhaseFlowFunctions<3U,FlowFunctionsModule3>;
 
-*/
 
 } // end namespace csmp
 

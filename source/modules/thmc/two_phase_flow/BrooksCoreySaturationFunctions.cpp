@@ -1,6 +1,6 @@
 #include "CSMP_mathUtilities.h"
 #include "BrooksCoreySaturationFunctions.h"
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 #include "Element.h"
 
 
@@ -514,9 +514,13 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at_Numerical( const Ele
 
   
 
-template class BrooksCoreySaturationFunctions<1U,CO2H2O_FunctionsModule0>;
-template class BrooksCoreySaturationFunctions<2U,CO2H2O_FunctionsModule0>;
-template class BrooksCoreySaturationFunctions<3U,CO2H2O_FunctionsModule0>;
+template class BrooksCoreySaturationFunctions<1U,FlowFunctionsModule1>;
+template class BrooksCoreySaturationFunctions<2U,FlowFunctionsModule1>;
+template class BrooksCoreySaturationFunctions<3U,FlowFunctionsModule1>;
+
+template class BrooksCoreySaturationFunctions<1U,FlowFunctionsModule4>;
+template class BrooksCoreySaturationFunctions<2U,FlowFunctionsModule4>;
+template class BrooksCoreySaturationFunctions<3U,FlowFunctionsModule4>;
 
 
 } // csmp

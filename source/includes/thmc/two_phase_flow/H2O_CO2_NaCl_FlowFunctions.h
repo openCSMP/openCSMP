@@ -99,6 +99,8 @@ class H2O_CO2_NaCl_FlowFunctions {
 
     /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
     void GravityTerm( const Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
+    
+    void GravityMultiplier_phase( const Element<dim>* const, VectorVariable<dim>& dip_vec, size_t phase ) const;
   
     /// gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * G (=mobility product); writes result on dip vector
     void GravityMultiplier_G( const Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
@@ -111,6 +113,10 @@ class H2O_CO2_NaCl_FlowFunctions {
     
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
     double64 CapillaryDiffusionMultiplier( const Element<dim>* const ) const;
+    
+    double64 CapillaryDiffusionMultiplier( const Element<dim>* const, double64 ) const;
+    
+    double64 CapillaryDiffusionMultiplier_Phase(  const Element<dim>* const, size_t phase ) const;
 
     /// to model cappillary diffusion of the non-wetting, simply use a negative sign on the multiplier computed with previous function
     //double64 CapillaryDiffusionMultiplier( const Element<dim>* const, size_t phase ) const;

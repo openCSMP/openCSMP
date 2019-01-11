@@ -7,7 +7,7 @@
 //
 
 #include "Fluid.h"
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 
 namespace csmp {
 
@@ -163,17 +163,29 @@ double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e ) const
 
 
 
-template class Fluid<1U,CO2H2O_FunctionsModule0>;
-template class Fluid<2U,CO2H2O_FunctionsModule0>;
-template class Fluid<3U,CO2H2O_FunctionsModule0>; 
+template class Fluid<1U,FlowFunctionsModule1>;
+template class Fluid<2U,FlowFunctionsModule1>;
+template class Fluid<3U,FlowFunctionsModule1>;
 
-template class Fluid<1U,CO2H2O_FunctionsModule1>;
-template class Fluid<2U,CO2H2O_FunctionsModule1>;
-template class Fluid<3U,CO2H2O_FunctionsModule1>;
+template class Fluid<1U,FlowFunctionsModule2>;
+template class Fluid<2U,FlowFunctionsModule2>;
+template class Fluid<3U,FlowFunctionsModule2>;
 
-template class Fluid<1U,CO2H2O_FunctionsModule2>;
-template class Fluid<2U,CO2H2O_FunctionsModule2>;
-template class Fluid<3U,CO2H2O_FunctionsModule2>;
+template class Fluid<1U,FlowFunctionsModule3>;
+template class Fluid<2U,FlowFunctionsModule3>;
+template class Fluid<3U,FlowFunctionsModule3>; 
+
+template class Fluid<1U,FlowFunctionsModule4>;
+template class Fluid<2U,FlowFunctionsModule4>;
+template class Fluid<3U,FlowFunctionsModule4>; 
+
+template class Fluid<1U,FlowFunctionsModule5>;
+template class Fluid<2U,FlowFunctionsModule5>;
+template class Fluid<3U,FlowFunctionsModule5>; 
+
+template class Fluid<1U,FlowFunctionsModule6>;
+template class Fluid<2U,FlowFunctionsModule6>;
+template class Fluid<3U,FlowFunctionsModule6>; 
 
 
 

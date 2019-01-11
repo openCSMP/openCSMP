@@ -1,4 +1,4 @@
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 #include "H2O_CO2_NaCl_FlowFunctions.h"
 #include "Fluid.h"
 #include "ErrorHandler.h"
@@ -379,7 +379,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( const Elemen
   
   
 /**
-     Mass-based formulation:  k * (kri/mui * rho_i^2 + kri/muj * rhoj^2) g grad_Y
+     Mass-based formulation for pressure equation:  k * (kri/mui * rho_i^2 + kri/muj * rhoj^2) g grad_Y
  
      @note Since the gravity term is a vector variable in the case of lower dimensional elements
      it is written back to the model.
@@ -410,7 +410,39 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( const Element<dim>* cons
 }
 
 
-  
+
+/**
+     Mass-based formulation for transport equation:  k * (kri/mui * rho_i^2) g grad_Y
+ 
+     @note Since the gravity term is a vector variable in the case of lower dimensional elements
+     it is written back to the model.
+ 
+     @param dip_vc the resulting gravity term is returned into the supplied vector.
+ */
+template<size_t dim, template<size_t> class USER>
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_phase( const Element<dim>* const e,
+                                                        VectorVariable<dim>& dip_vc, size_t phase ) const
+ {
+    assert( e != nullptr );
+    assert( phase == 0U or phase == 1U );
+    
+    if(phase == 0U) {
+        const double64 rhow = User()->Density(e,0U);
+        assert( !isnan(rhow) );
+        const double64 muw = User()->Viscosity( e, 0U );
+        assert( !isnan(muw) );
+        e->Read( User()->key_dip, dip_vc );
+        dip_vc *= e->Read(User()->key_kV) * (User()->krw(e) / muw) * rhow * rhow * -ACC_GRAVITY;
+    } else if (phase == 1U){
+        const double64 rhon = User()->Density(e,1U);
+        assert( !isnan(rhon) );
+        const double64 mun = User()->Viscosity( e, 1U );
+        assert( !isnan(mun) );
+        e->Read( User()->key_dip, dip_vc );
+        dip_vc *= e->Read(User()->key_kV) * (User()->krn(e) / mun) * rhon * rhon * -ACC_GRAVITY;    
+    }  
+}  
+    
 
   
   
@@ -501,10 +533,33 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( con
    assert( !isnan(dpcds) );
    return k * MobilityProduct(e) * dpcds;
 }
+
+
+//by supplying mobility product
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( const Element<dim>* const e, double64 lambda_overbar ) const
+{
+   assert( e != nullptr );
+   assert( User()->key_k.type == SCALAR );
+   const double64 k     = e->Read(User()->key_k);
+   const double64 dpcds = User()->dpcds(e);
+   assert( !isnan(k) );
+   assert( !isnan(dpcds) );
+   return k * lambda_overbar * dpcds;
+}
  
  
   
-  
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( const Element<dim>* const e, size_t phase ) const
+  {
+    assert( e != nullptr );
+    assert( phase == 0U or phase == 1U );
+    
+    // TODO: Make sure that this is the permeability in the direction of the facet normal
+    return  e->Read(User()->key_k) * ( (phase==0U) ? Mobility( e, 0U ) : Mobility( e, 1U ) )* User()->dpcds(e);
+  }
+    
 
   
   
@@ -860,19 +915,19 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockFrontVelocity( const Element
   
   
   
-template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule0>;
-template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule0>;
-template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule0>;
+template class H2O_CO2_NaCl_FlowFunctions<1U,FlowFunctionsModule4>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,FlowFunctionsModule4>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,FlowFunctionsModule4>;
   
 
-template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule1>;
-template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule1>;
-template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule1>;
+template class H2O_CO2_NaCl_FlowFunctions<1U,FlowFunctionsModule5>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,FlowFunctionsModule5>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,FlowFunctionsModule5>;
 
 
-template class H2O_CO2_NaCl_FlowFunctions<1U,CO2H2O_FunctionsModule2>;
-template class H2O_CO2_NaCl_FlowFunctions<2U,CO2H2O_FunctionsModule2>;
-template class H2O_CO2_NaCl_FlowFunctions<3U,CO2H2O_FunctionsModule2>;
+template class H2O_CO2_NaCl_FlowFunctions<1U,FlowFunctionsModule6>;
+template class H2O_CO2_NaCl_FlowFunctions<2U,FlowFunctionsModule6>;
+template class H2O_CO2_NaCl_FlowFunctions<3U,FlowFunctionsModule6>;
 
 
 } // end namespace csmp

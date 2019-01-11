@@ -3,7 +3,7 @@
 #include "Model1D.h"
 #include "InputDataManager.h"
 
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 
 #include "TwoPhaseModelWithHysteresis_Test.h"
 
@@ -43,7 +43,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Process_Tes
     
     vector< pair<double64,double64> > SwPc;
     
-    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+    FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
   
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
       
@@ -89,7 +89,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Imbibition_
     vector< pair<double64,double64> > SwPc;
     TWO_PHASE_FLOW_PROCESS Process_path = IMBIBITION ;
     
-     CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+     FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
 
     
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
@@ -137,7 +137,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Drainage_Te
     vector< pair<double64,double64> > SwPc;
     TWO_PHASE_FLOW_PROCESS Process_path = DRAINAGE ;
     
-     CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+     FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
     
     for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
       
@@ -215,7 +215,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::TransitionP
     
     double64  tol_(0.01) ;
     
-    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+    FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
   
     double64 newSro(0) ;
     double64 newSrw(0) ;
@@ -335,7 +335,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::DrainageToI
     
     double64  tol_(0.01) ;
     
-    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+    FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
 
     double64 newSro(0) ;
     double64 newSrw(0) ;
@@ -408,7 +408,7 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::ImbibitionT
     
     double64  tol_(0.01) ;
     
-    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+    FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
   
     double64 newSro(0) ;
     double64 newSrw(0) ;
@@ -535,7 +535,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange(Model<1U>& mdl) {
      */
     const PropertyDatabase<1>&   p_ref = mdl.Database();
   
-    CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+    FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
 
     ofstream outputfile;
     outputfile.open ("MainDrainageandImbibitions.csv");
@@ -796,7 +796,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    
    */
   
-   CO2H2O_FunctionsModule1<1U> SatFunctions( p_ref ) ;
+   FlowFunctionsModule2<1U> SatFunctions( p_ref ) ;
   
   
   /**

@@ -1,6 +1,6 @@
 #include "CSMP_mathUtilities.h"
 #include "BrooksCoreySaturationFunctionswithHysteresis.h"
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 #include "Element.h"
 
 
@@ -973,8 +973,12 @@ template<size_t dim, template<size_t> class USER>
   
   
 
-template class BrooksCoreySaturationFunctionsWithHysteresis<1U,CO2H2O_FunctionsModule1>;
-template class BrooksCoreySaturationFunctionsWithHysteresis<2U,CO2H2O_FunctionsModule1>;
-template class BrooksCoreySaturationFunctionsWithHysteresis<3U,CO2H2O_FunctionsModule1>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctionsModule2>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctionsModule2>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctionsModule2>;
+
+template class BrooksCoreySaturationFunctionsWithHysteresis<1U,FlowFunctionsModule5>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<2U,FlowFunctionsModule5>;
+template class BrooksCoreySaturationFunctionsWithHysteresis<3U,FlowFunctionsModule5>;
 
 } // csmp

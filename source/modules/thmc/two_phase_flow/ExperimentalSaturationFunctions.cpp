@@ -1,6 +1,6 @@
 
 #include "ExperimentalSaturationFunctions.h"
-#include "CO2H2O_FunctionsModule1.h"
+#include "FlowFunctionsModule.h"
 #include "Element.h"
 #include "ErrorHandler.h"
 
@@ -616,9 +616,13 @@ void ExperimentalSaturationFunctions<dim,USER>::Out() const
  }
 
   
-template class ExperimentalSaturationFunctions<1U,CO2H2O_FunctionsModule2>;
-template class ExperimentalSaturationFunctions<2U,CO2H2O_FunctionsModule2>;
-template class ExperimentalSaturationFunctions<3U,CO2H2O_FunctionsModule2>;
+template class ExperimentalSaturationFunctions<1U,FlowFunctionsModule3>;
+template class ExperimentalSaturationFunctions<2U,FlowFunctionsModule3>;
+template class ExperimentalSaturationFunctions<3U,FlowFunctionsModule3>;
+
+template class ExperimentalSaturationFunctions<1U,FlowFunctionsModule6>;
+template class ExperimentalSaturationFunctions<2U,FlowFunctionsModule6>;
+template class ExperimentalSaturationFunctions<3U,FlowFunctionsModule6>;
   
   
 } // csmp

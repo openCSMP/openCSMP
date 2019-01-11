@@ -81,11 +81,11 @@ class TwoPhaseFlowFunctions {
     void     ShockSpeedAndHeight( const Element<dim>* const, double64& speed, double64& height ) const;
     
     /// multipliers for gravity-driven flow (advection multiplier and source term)
-    double64 GravityTerm(  const Element<dim>* const ) const;
+    void GravityMultiplier( const Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
     
-    double64 GravityMultiplier_G(  const Element<dim>* const ) const;
+    void GravityMultiplier_G( const Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
     
-    double64 GravityMultiplier_dGds(  const Element<dim>* const ) const;
+    void GravityMultiplier_dGds( const Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
 
     /// multiplier for diffusion coefficient in the case of non-linear diffusion uses viscosity(phase)
     double64 DiffusionMultiplier(  const Element<dim>* const, size_t phase ) const;
