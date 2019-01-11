@@ -16,6 +16,11 @@
 
 namespace csmp {
 
+class ScalarVariable;
+template<size_t> class VectorVariable;
+template<size_t> class TensorVariable;
+class ArrayVariable;
+class FlaggedArrayVariable;
                                         
 /**
  
@@ -186,13 +191,29 @@ class PropertyDatabase  {
    VARIABLE_TYPE  Type( const char* property_name ) const;
    size_t         Components( const char* property_name ) const;
    const char*    Name( const csmp::Index& idx ) const;
+   const char*    Unit( const char* property_name ) const;
    const char*    Usage( const char* property_name ) const;
    bool           IsDefined( const char* property_name ) const;
    bool           IsDefined( const csmp::Index& idx ) const;
    void           RangeOf( const char* property_name, double64& min, double64& max ) const;
-   void           CheckRange( const char* property_name, double64& var ) const;
    void           SetRangeOf( const char* property_name, double64 vmin, double64 vmax );
-   const char*    Unit( const char* property_name ) const;
+
+   // range checking
+   /// prints details of the range check to screen and terminates program is value is out of range
+   void           CheckRange( const char* property_name, double64& var ) const;
+  
+   /// checks value against the range specified in the database; @note not fast; use only for selected values
+   bool           CheckRange( const char* property_name, const ScalarVariable& ) const;
+  
+   /// checks whether the magnitude of the specified variable value is within database range
+   bool           CheckRange( const char* property_name, const VectorVariable<dim>& ) const;
+  
+   /// checks whether the determinant of the tensor is within range assuming that it is symmetric, diagonally dominant
+   bool           CheckRange( const char* property_name, const TensorVariable<dim>& ) const;
+  
+   /// L1 norm of the supplied arrays
+   bool           CheckRange( const char* property_name, const ArrayVariable& ) const;
+   bool           CheckRange( const char* property_name, const FlaggedArrayVariable& ) const;
   
    LocalVariables             LocalVariablesAt( PLACEMENT within ) const;
    IntegrationPointVariables  IntegrationPointVariablesAt( PLACEMENT within ) const;
