@@ -1281,7 +1281,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 
 
 
-
+/**
+    Generates 24 hexahedra + 6 prism elements.
+    The model can be distorted on demand.
+*/
 void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);

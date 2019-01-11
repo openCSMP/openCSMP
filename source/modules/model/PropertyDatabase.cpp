@@ -1338,7 +1338,6 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var
  {
     double64 mn, mx;
     auto iter = propList_.find(string(s));
-    ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(scalar)", "property could not be identified");
     if ( var() < mn ) return false;
@@ -1350,11 +1349,10 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var
 
 
 template<size_t dim>
-bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim& var ) const
+bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim>& var ) const
  {
     double64 mn, mx;
     auto iter = propList_.find(string(s));
-    ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(vector)", "property could not be identified");
     if ( -var.Length() < mn ) return false;
@@ -1367,11 +1365,10 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim&
 
 
 template<size_t dim>
-bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim& var ) const
+bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim>& var ) const
  {
     double64 mn, mx;
     auto iter = propList_.find(string(s));
-    ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(tensor)", "property could not be identified");
     const double64 det = var.Determinant();
@@ -1393,10 +1390,10 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var 
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(array)", "property could not be identified");
-    double64 ary_min(var(0)), ary_max(var(0));
+    double64 ary_min(var[0]), ary_max(var[0]);
     for ( size_t i=1U; i<var.Size(); ++i ) {
-        ary_min = min( ary_min, var(i) );
-        ary_max = max( ary_max, var(i) );
+        ary_min = min( ary_min, var[i] );
+        ary_max = max( ary_max, var[i] );
       }
     if ( ary_min < mn ) return false;
     else if ( ary_max > mx ) return false;
@@ -1416,10 +1413,10 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariabl
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
     if ( iter != propList_.end() ) (*iter).second.Range( mn, mx );
     else throw csmp::Exception( FATAL_ERROR, "PropertyDatabase<dim>::CheckRange(flagged array)", "property could not be identified");
-    double64 ary_min(var(0)), ary_max(var(0));
+    double64 ary_min(var[0]), ary_max(var[0]);
     for ( size_t i=1U; i<var.Size(); ++i ) {
-        ary_min = min( ary_min, var(i) );
-        ary_max = max( ary_max, var(i) );
+        ary_min = min( ary_min, var[i] );
+        ary_max = max( ary_max, var[i] );
       }
     if ( ary_min < mn ) return false;
     else if ( ary_max > mx ) return false;
