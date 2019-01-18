@@ -48,16 +48,16 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
-  //private:
-
-    virtual void InitializeVariablesAndKeys(Model<dim>& );
-    void initializeFiniteVolumeProperties();
+    void InitializeFiniteVolumeProperties();
     void ResetCFLMultiplier();
     void ComputeGradients (Event<dim>* event );
-    virtual void ComputeRateofChange( Event<dim>* event ) {};
-    virtual bool Schedule(Event<dim>* nd, double64 t_end) {};
-    virtual void Update_DES(Event<dim>* nd, double64 t_clock) {};
-    virtual void Update_TDS(Event<dim>* nd, double64 delta_t) {};
+
+    virtual void InitializeVariablesAndKeys(Model<dim>& );
+    virtual void ComputeRateofChange( Event<dim>* event ) = 0;
+    virtual bool Schedule(Event<dim>* nd, double64 t_end) = 0;
+    virtual void Update_DES(Event<dim>* nd, double64 t_clock) = 0;
+    virtual void Update_TDS(Event<dim>* nd, double64 delta_t) = 0;
+
     void Synchronize(Event<dim>* nd,double64 t_clock,double64& t_remove);
     void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;};
 

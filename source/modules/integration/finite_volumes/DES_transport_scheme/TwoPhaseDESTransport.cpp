@@ -159,7 +159,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
 
 
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
-void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::initializeFiniteVolumeProperties()
+void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
  {
     // For the interior elements of the region compute relevant variable values
     const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
@@ -356,7 +356,7 @@ template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time_interval)
 {
     if(first_step_){
-        initializeFiniteVolumeProperties();
+        InitializeFiniteVolumeProperties();
         //create events for all nodes and add them to PEPList
         size_t dirich_count = 0;
         const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
@@ -502,7 +502,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double
 
     ResetCFLMultiplier();
     if(first_step_){
-        initializeFiniteVolumeProperties();
+        InitializeFiniteVolumeProperties();
         //create events for all nodes and add them to event lists
         size_t index = 0;
         size_t dirich_count = 0;
