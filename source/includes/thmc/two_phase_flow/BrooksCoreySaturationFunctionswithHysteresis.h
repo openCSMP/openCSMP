@@ -39,10 +39,10 @@ template<size_t> class Element;
    
    They are ordered as: HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7} ;
    
-   They will be read automatically by using the "InitialiseBrooksCoreyParameters( const Element<dim>* const )". There are two other method to read input parameters:
+   They will be read automatically by using the "InitialiseBrooksCoreyParameters( Element<dim>* const )". There are two other method to read input parameters:
    
-   a) Force to have a process as either Drainage or Imbibitions:                                "InitialiseBrooksCoreyParameters( const Element<dim>* const, a,  c , ProcessPath)"
-   b) Alternatively, Unforced and the results from modelling will be taking into account:       "InitialiseBrooksCoreyParameters( const Element<dim>* const, a, c )"
+   a) Force to have a process as either Drainage or Imbibitions:                                "InitialiseBrooksCoreyParameters( Element<dim>* const, a,  c , ProcessPath)"
+   b) Alternatively, Unforced and the results from modelling will be taking into account:       "InitialiseBrooksCoreyParameters( Element<dim>* const, a, c )"
    
    The results are relative permeabilities, derivatives... which they will be used in the FlowFunctions class.
    
@@ -86,55 +86,55 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     BrooksCoreySaturationFunctionsWithHysteresis();
   
     /// Effective saturation function
-        double64 EffectiveSaturation( const Element<dim>* const ) const;
+        double64 EffectiveSaturation( Element<dim>* const ) const;
   
     /// Effective saturation function fro saturation S
-        double64 EffectiveSaturation_at( const Element<dim>* const, double64 s1 ) const;
+        double64 EffectiveSaturation_at( Element<dim>* const, double64 s1 ) const;
   
     /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000
-        double64 pc( const Element<dim>* const ) const;
+        double64 pc( Element<dim>* const ) const;
   
     /// First derivative of capillary pressure.
-        double64 dpcds( const Element<dim>* const ) const;
+        double64 dpcds( Element<dim>* const ) const;
   
     /// Oil residual saturation estimated from Land's formula.
-        double64 OilResidualSaturation( const Element<dim>* const ) const;
+        double64 OilResidualSaturation( Element<dim>* const ) const;
   
     /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
-        double64 WaterResidualSaturation( const Element<dim>* const, double64 Sor ) const;
+        double64 WaterResidualSaturation( Element<dim>* const, double64 Sor ) const;
 
     /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
-        void WaterAndOilResidualSaturationImbibitionToDrainage( const Element<dim>* const e, double64& Swr, double64& Sor )  const;
+        void WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr, double64& Sor )  const;
   
   
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krw( const Element<dim>* const ) const ;
+        double64 krw( Element<dim>* const ) const ;
     
-        double64 krw_at( const Element<dim>* const , double64 S) const ;
+        double64 krw_at( Element<dim>* const , double64 S) const ;
   
     /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krn( const Element<dim>* const ) const ;
+        double64 krn( Element<dim>* const ) const ;
     
-        double64 krn_at( const Element<dim>* const, double64 S) const ;
+        double64 krn_at( Element<dim>* const, double64 S) const ;
   
     /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrwds( const Element<dim>* const ) const ;
+        double64 dkrwds( Element<dim>* const ) const ;
     
-        double64 dkrwds_at( const Element<dim>* const, double64 S) const ;
+        double64 dkrwds_at( Element<dim>* const, double64 S) const ;
   
     /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrnds( const Element<dim>* const ) const ;
+        double64 dkrnds( Element<dim>* const ) const ;
     
-        double64 dkrnds_at( const Element<dim>* const, double64 S) const ;
+        double64 dkrnds_at( Element<dim>* const, double64 S) const ;
   
     /// print out the two phase flow process state based on the current and new CO2 Saturation functions for each element based on the  interpolation of saturations at the bary center.
-        TWO_PHASE_FLOW_PROCESS FlowProcess( const Element<dim>* const );
+        TWO_PHASE_FLOW_PROCESS FlowProcess( Element<dim>* const );
   
     /// print out the capillary function bounds upper and lowwer limits..
-        std::pair<double64,double64> CapillaryPressureLimits( const Element<dim>* const ) const;
+        std::pair<double64,double64> CapillaryPressureLimits( Element<dim>* const ) const;
   
     /// Check the capillary pressure is in the limits and reset the pseduo residual water (newSrH2O) and CO2 saturations (newSrCO2)
-        void CheckPcLimitsAndResetResiduals( const Element<dim>* const, double64& newSrH2O, double64& newSrCO2 ) const;
+        void CheckPcLimitsAndResetResiduals( Element<dim>* const, double64& newSrH2O, double64& newSrCO2 ) const;
 
     /// Land's parameter for Air and CO2 "Prather Bray Seymour Codd 2016" paper
     const double64  C_land_ = 0.89;
@@ -145,23 +145,23 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   
   
     /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-        double64 dkrwds_Numerical( const Element<dim>* const, double64 delta_s ) const ;
+        double64 dkrwds_Numerical( Element<dim>* const, double64 delta_s ) const ;
 
-        double64 dkrwds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s ) const ;
+        double64 dkrwds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
 
-        double64 dkrnds_Numerical( const Element<dim>* const, double64 delta_s ) const ;
+        double64 dkrnds_Numerical( Element<dim>* const, double64 delta_s ) const ;
   
-        double64 dkrnds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s ) const ;
+        double64 dkrnds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
             
     /// Initialision  method (a)
-    void InitialiseBrooksCoreyParameters( const Element<dim>* const );
+    void InitialiseBrooksCoreyParameters( Element<dim>* const );
 
     /// Initialision  method (b)
-    void InitialiseBrooksCoreyParameters( const Element<dim>* const,
+    void InitialiseBrooksCoreyParameters( Element<dim>* const,
                                           const std::array<std::array<double64, 2>, 2>& a,
                                           const std::array<std::array<double64, 2>, 2>& c, TWO_PHASE_FLOW_PROCESS ProcessPath );
     /// Initialision  method (c)
-    void InitialiseBrooksCoreyParameters( const Element<dim>* const,
+    void InitialiseBrooksCoreyParameters( Element<dim>* const,
                                           const std::array<std::array<double64, 2>, 2>& a, const std::array<std::array<double64, 2>, 2>& c );
 
     /// Update parameter values when necessary

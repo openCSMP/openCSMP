@@ -20,7 +20,7 @@ template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctions
 
 /// get seff at the element barycentre
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
   
@@ -33,7 +33,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( const El
 
 /// get seff from the supplied saturation value
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -45,7 +45,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( const
 
 
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::pc( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
   {
     const double64  seff(EffectiveSaturation(e));
     const double64  bcp(e->Read(User()->key_bcp));
@@ -85,7 +85,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc( const Element<dim>* const
   
   
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::pc_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -132,7 +132,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc_at( const Element<dim>* co
   
   
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
   {
     const double64  seff(EffectiveSaturation(e));
     const double64  bcp(e->Read(User()->key_bcp));
@@ -166,7 +166,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( const Element<dim>* co
 
 
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -203,7 +203,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( const Element<dim>*
   
   
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krw( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
   {
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
@@ -218,7 +218,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw( const Element<dim>* cons
    
  
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -235,7 +235,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( const Element<dim>* c
 
   
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krn( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
@@ -249,7 +249,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn( const Element<dim>* cons
 
 
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -272,7 +272,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( const Element<dim>* c
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
     //  switch to linear relperm model if lambda = 0
@@ -293,7 +293,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( const Element<dim>* c
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -316,7 +316,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( const Element<dim>
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
   {
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
 
@@ -339,7 +339,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( const Element<dim>* c
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -362,7 +362,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>
   // Numerical derivative added
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
+  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation(e));
@@ -380,7 +380,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>
  
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -403,7 +403,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>
   
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_Numerical( const Element<dim>* const e, double64 h ) const
+  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation(e));
@@ -422,7 +422,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>
   
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+  double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -473,7 +473,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>
 
 
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( Element<dim>* const e, double64 h ) const
   {
    const double64 sw(e->PropertyValueAtBaryCenter(User()->key_sH2O));
    const double64 swr(e->Read(User()->key_srH2O)), snr(e->Read(User()->key_srCO2));
@@ -493,7 +493,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( const Elemen
 
 
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
  {
    assert( sw >= 0. );
    assert( sw <= 1. );

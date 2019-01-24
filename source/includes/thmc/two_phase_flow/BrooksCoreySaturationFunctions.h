@@ -17,52 +17,52 @@ class BrooksCoreySaturationFunctions {
   
         // pc, kri, and derivative methods that use a user supplied saturation value
         
-        double64 EffectiveSaturation_at( const Element<dim>* const, double64 sw ) const;
+        double64 EffectiveSaturation_at( Element<dim>* const, double64 sw ) const;
   
-        double64 pc_at( const Element<dim>* const, double64 sw ) const;
+        double64 pc_at( Element<dim>* const, double64 sw ) const;
   
-        double64 dpcds_at( const Element<dim>* const, double64 sw ) const;
+        double64 dpcds_at( Element<dim>* const, double64 sw ) const;
   
-        double64 krw_at( const Element<dim>* const, double64 sw ) const;
+        double64 krw_at( Element<dim>* const, double64 sw ) const;
   
-        double64 krn_at( const Element<dim>* const, double64 sw ) const;
+        double64 krn_at( Element<dim>* const, double64 sw ) const;
   
-        double64 dkrwds_at( const Element<dim>* const, double64 sw ) const;
+        double64 dkrwds_at( Element<dim>* const, double64 sw ) const;
   
-        double64 dkrnds_at( const Element<dim>* const, double64 sw ) const;
+        double64 dkrnds_at( Element<dim>* const, double64 sw ) const;
   
-        double64 dpcds_at_Numerical(  const Element<dim>* const, double64 sw, double64 h = 0.00001 ) const;
+        double64 dpcds_at_Numerical(  Element<dim>* const, double64 sw, double64 h = 0.00001 ) const;
   
-        double64 dkrwds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
+        double64 dkrwds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
 
-        double64 dkrnds_at_Numerical( const Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
+        double64 dkrnds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s=0.001 ) const;
 
 
        // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
   
-        double64 EffectiveSaturation( const Element<dim>* const ) const;
+        double64 EffectiveSaturation( Element<dim>* const ) const;
   
-        double64 pc( const Element<dim>* const ) const;
+        double64 pc( Element<dim>* const ) const;
   
-        double64 dpcds( const Element<dim>* const ) const;
+        double64 dpcds( Element<dim>* const ) const;
   
-        double64 krw( const Element<dim>* const ) const;
+        double64 krw( Element<dim>* const ) const;
   
-        double64 krn( const Element<dim>* const ) const;
+        double64 krn( Element<dim>* const ) const;
   
-        double64 dkrwds( const Element<dim>* const ) const;
+        double64 dkrwds( Element<dim>* const ) const;
   
-        double64 dkrnds( const Element<dim>* const ) const;
+        double64 dkrnds( Element<dim>* const ) const;
   
         /// maximum value of pc (Pa)
         double64 MaxCapillaryPressure() const { return max_pc_; }
   
         /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-        double64 dkrwds_Numerical( const Element<dim>* const, double64 delta_s=0.001 ) const ;
+        double64 dkrwds_Numerical( Element<dim>* const, double64 delta_s=0.001 ) const ;
 
-        double64 dkrnds_Numerical( const Element<dim>* const, double64 delta_s=0.001 ) const ;
+        double64 dkrnds_Numerical( Element<dim>* const, double64 delta_s=0.001 ) const ;
   
-        double64 dpcds_Numerical(  const Element<dim>* const, double64 h = 0.00001 ) const;
+        double64 dpcds_Numerical(  Element<dim>* const, double64 h = 0.00001 ) const;
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }

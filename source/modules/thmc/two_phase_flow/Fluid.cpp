@@ -22,7 +22,7 @@ Fluid<dim,USER>::Fluid()
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
     /*direct read/interpolation*/
@@ -32,7 +32,7 @@ double64 Fluid<dim,USER>::Viscosity( const Node<dim>* const n, size_t phase ) co
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t node, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t node, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     assert( node < e->Nodes() );
@@ -43,7 +43,7 @@ double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t node, s
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase ) const
+double64 Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     /*direct read/interpolation*/
@@ -57,7 +57,7 @@ double64 Fluid<dim,USER>::Viscosity( const Element<dim>* const e, size_t phase )
 
  
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) const
+double64 Fluid<dim,USER>::Density( Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     /*direct read/interpolation*/
@@ -67,7 +67,7 @@ double64 Fluid<dim,USER>::Density( const Node<dim>* const n, size_t phase ) cons
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t node, size_t phase ) const
+double64 Fluid<dim,USER>::Density( Element<dim>* const e, size_t node, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     assert( node < e->Nodes() );
@@ -78,7 +78,7 @@ double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t node, siz
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) const
+double64 Fluid<dim,USER>::Density( Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
     /*direct read/interpolation*/
@@ -94,7 +94,7 @@ double64 Fluid<dim,USER>::Density( const Element<dim>* const e, size_t phase ) c
      aqueous phase viscosity / carbonic phase viscosity
 */
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Node<dim>* const n ) const
  {
     assert( n != nullptr );
     return n->Read(User()->key_muH2O) / n->Read(User()->key_muCO2);
@@ -102,7 +102,7 @@ double64 Fluid<dim,USER>::ViscosityRatio( const Node<dim>* const n ) const
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e, size_t node ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e, size_t node ) const
  {
     assert( e != nullptr );
     const double64 muw = e->N(node)->Read( User()->key_muH2O );
@@ -114,7 +114,7 @@ double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e, size_t no
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e ) const
+double64 Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e ) const
  {
     assert( e != nullptr );
     const double64 muw = e->PropertyValueAtBaryCenter( User()->key_muH2O );
@@ -127,7 +127,7 @@ double64 Fluid<dim,USER>::ViscosityRatio( const Element<dim>* const e ) const
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::MixtureDensity( const Node<dim>* const n ) const
+double64 Fluid<dim,USER>::MixtureDensity( Node<dim>* const n ) const
  {
     assert( n != nullptr );
     const double64 sw = n->Read( User()->key_sH2O );
@@ -136,7 +136,7 @@ double64 Fluid<dim,USER>::MixtureDensity( const Node<dim>* const n ) const
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e, size_t node ) const
+double64 Fluid<dim,USER>::MixtureDensity( Element<dim>* const e, size_t node ) const
  {
     const double64 sw = e->N(node)->Read( User()->key_sH2O );
     assert( e != nullptr );
@@ -149,7 +149,7 @@ double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e, size_t no
 
 
 template<size_t dim, template<size_t> class USER>
-double64 Fluid<dim,USER>::MixtureDensity( const Element<dim>* const e ) const
+double64 Fluid<dim,USER>::MixtureDensity( Element<dim>* const e ) const
  {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     assert( e != nullptr );

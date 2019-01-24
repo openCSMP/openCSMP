@@ -133,7 +133,7 @@ size_t ExperimentalSaturationFunctions<dim,USER>::RockTypes() const
     returns the rocktype associated with the current Element
 */
 template<size_t dim, template<size_t> class USER>
-size_t ExperimentalSaturationFunctions<dim,USER>::RockType( const Element<dim>* const e ) const
+size_t ExperimentalSaturationFunctions<dim,USER>::RockType( Element<dim>* const e ) const
  {
     const size_t rocktype = static_cast<size_t>(e->Read( User()->key_RRT ));
     assert( rocktype < pc_.size() );
@@ -152,7 +152,7 @@ size_t ExperimentalSaturationFunctions<dim,USER>::RockType( const Element<dim>* 
     @attention seff can assume values greater or smaller than 0 or 1 outside of the end-point saturations.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
  {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     return (sw - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
@@ -168,7 +168,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation( const E
     @attention seff can assume values greater or smaller than 0 or 1 outside of the end-point saturations.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double64 sw ) const
   {
      assert( sw >= 0. );
      assert( sw <= 1. );
@@ -181,7 +181,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::EffectiveSaturation_at( cons
     @note Note that capillary pressure also exists outside of the effective saturation range
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::pc( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
  {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
@@ -203,7 +203,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::pc( const Element<dim>* cons
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::pc_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double64 sw ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -228,7 +228,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::pc_at( const Element<dim>* c
     wetting phase saturation is always negative.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dpcds( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
   {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
@@ -247,7 +247,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcds( const Element<dim>* c
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dpcds_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -268,7 +268,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcds_at( const Element<dim>
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
 {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
@@ -284,7 +284,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw( const Element<dim>* con
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double64 sw ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -302,7 +302,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( const Element<dim>* 
 
   
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
@@ -319,7 +319,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn( const Element<dim>* con
  
  
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double64 sw ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -341,7 +341,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn_at( const Element<dim>* 
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
  
@@ -359,7 +359,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds( const Element<dim>* 
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double64 sw ) const
 {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -381,7 +381,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( const Element<dim
     kri is expected to have a negative slope w.r.t. water saturation.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds( const Element<dim>* const e ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
  {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
  
@@ -401,7 +401,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds( const Element<dim>* 
     1st derivative of non-wetting phase relative permeability as a function of saturation.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( const Element<dim>* const e, double64 sw ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double64 sw ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -421,7 +421,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( const Element<dim
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( const Element<dim>* const e, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( Element<dim>* const e, double64 h ) const
   {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
 
@@ -442,7 +442,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( const Elem
 
 
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -469,7 +469,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( const E
     Computes derivative of the wetting phase relative permeability using central finite difference method.
 */
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double64 h ) const
   {
     assert( h > 0. );
     assert( h <= 0.01 );
@@ -498,7 +498,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( const Elem
   
   
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );
@@ -529,7 +529,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( const E
   
   
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( const Element<dim>* const e, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double64 h ) const
  {
     assert( h > 0. );
     assert( h <= 0.01 );
@@ -559,7 +559,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( const Elem
   
   
 template<size_t dim, template<size_t> class USER>
-double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
  {
     assert( sw >= 0. );
     assert( sw <= 1. );

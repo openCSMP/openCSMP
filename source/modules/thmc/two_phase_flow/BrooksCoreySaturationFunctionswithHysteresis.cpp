@@ -23,7 +23,7 @@ template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctions
 
 /// get seff at the element barycentre
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
   
@@ -38,7 +38,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSatura
 
 /// get seff from the supplied saturation value
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( const Element<dim>* const e, double64 sw ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double64 sw ) const
   {
     double64 seff =  (sw - e->Read(User()->key_srH2O)) /
     (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
@@ -56,7 +56,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSatura
   
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSaturation( const Element<dim>* const e) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSaturation( Element<dim>* const e) const
   {
     const double64 sCO2 = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
 
@@ -73,7 +73,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatu
  
 */
 template<size_t dim, template<size_t> class USER>
-TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e )
+TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( Element<dim>* const e )
   {
     const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
     const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
@@ -97,7 +97,7 @@ TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::F
  The main Initialisation of functions...Read the parameters from the input variables file...
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e )
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e )
   {
     e->Read(User()->key_kri_param, ac_params_);
     
@@ -146,7 +146,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCor
  
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e,
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e,
                                                                                               const std::array<std::array<double64,2>,2>& a,
                                                                                               const std::array<std::array<double64,2>,2>& c )
   {
@@ -184,7 +184,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCor
  
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( const Element<dim>* const e,
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e,
                                                                                               const std::array<std::array<double64, 2>,2>& a,
                                                                                               const std::array<std::array<double64, 2>,2>& c,
                                                                                               TWO_PHASE_FLOW_PROCESS ProcessPath )
@@ -286,7 +286,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -322,7 +322,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( const Eleme
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -360,7 +360,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( const El
   
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSaturation( const Element<dim>* const e, double64 Sro) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSaturation( Element<dim>* const e, double64 Sro) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -398,7 +398,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSa
  
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidualSaturationImbibitionToDrainage( const Element<dim>* const e, double64& Swr_, double64& Sor_) const
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr_, double64& Sor_) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
   
@@ -451,7 +451,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidual
 */
   
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -491,7 +491,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( const Elem
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( const Element<dim>* const e, double64 S) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element<dim>* const e, double64 S) const
   {
     double64 sH2O(S) ;
     double64 sCO2(1.-S);
@@ -531,7 +531,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( const E
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -566,7 +566,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( const Elem
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( const Element<dim>* const e, double64 S) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element<dim>* const e, double64 S) const
   {
     double64 sH2O = S ;
     double64 sCO2 = 1.-S ;
@@ -602,7 +602,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( const E
  
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -647,7 +647,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( const E
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( const Element<dim>* const e, double64 S) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Element<dim>* const e, double64 S) const
   {
     const double64 sH2O (S);
     const double64 sCO2 = 1. - sH2O;
@@ -696,7 +696,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( cons
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( const Element<dim>* const e ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
@@ -740,7 +740,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( const E
    
 */
 template<size_t dim, template<size_t> class USER>
-double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( const Element<dim>* const e, double64 S ) const
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Element<dim>* const e, double64 S ) const
   {
     const double64 sH2O = S;
     const double64 sCO2 = 1. - sH2O;
@@ -791,7 +791,7 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( cons
  
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( const Element<dim>* const e, double64& newSrH2O , double64& newSrCO2 ) const
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e, double64& newSrH2O , double64& newSrCO2 ) const
   {
     const double64 srH2O(e->Read(User()->key_srH2O));  // To have primary Drianage and Imibition parameters
     const double64 srCO2(e->Read(User()->key_srCO2));
@@ -841,7 +841,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndRes
    
 */
 template<size_t dim, template<size_t> class USER>
-  std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CapillaryPressureLimits( const Element<dim>* const e ) const
+  std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CapillaryPressureLimits( Element<dim>* const e ) const
   {
     std::pair<double64,double64> pc_PrimaryImbibitionDrainage;
     
@@ -880,7 +880,7 @@ template<size_t dim, template<size_t> class USER>
   // Numerical derivative added
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_Numerical( const Element<dim>* const e, double64 h ) const
+  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation(e));
@@ -905,7 +905,7 @@ template<size_t dim, template<size_t> class USER>
   
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation_at(e,sw));
@@ -931,7 +931,7 @@ template<size_t dim, template<size_t> class USER>
   
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_Numerical( const Element<dim>* const e, double64 h ) const
+  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation(e));
@@ -956,7 +956,7 @@ template<size_t dim, template<size_t> class USER>
   
   
   template<size_t dim, template<size_t> class USER>
-  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at_Numerical( const Element<dim>* const e, double64 sw, double64 h ) const
+  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
     const double64 dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
     const double64 seff(EffectiveSaturation_at(e,sw));

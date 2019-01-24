@@ -71,49 +71,49 @@ class ExperimentalSaturationFunctions {
     // pc, kri, and derivative methods that use a user supplied saturation value
   
     /// Effective non-wetting phase saturation as calculated from the supplied saturation value, sw
-    double64 EffectiveSaturation_at( const Element<dim>* const , double64 sw ) const;
+    double64 EffectiveSaturation_at( Element<dim>* const , double64 sw ) const;
   
-    double64 pc_at( const Element<dim>* const, double64 sw ) const;
+    double64 pc_at( Element<dim>* const, double64 sw ) const;
  
-    double64 dpcds_at( const Element<dim>* const, double64 sw ) const;
+    double64 dpcds_at( Element<dim>* const, double64 sw ) const;
 
-    double64 krw_at( const Element<dim>* const, double64 sw ) const;
+    double64 krw_at( Element<dim>* const, double64 sw ) const;
   
-    double64 krn_at( const Element<dim>* const, double64 sw ) const;
+    double64 krn_at( Element<dim>* const, double64 sw ) const;
 
-    double64 dkrwds_at( const Element<dim>* const, double64 sw ) const;
+    double64 dkrwds_at( Element<dim>* const, double64 sw ) const;
  
-    double64 dkrnds_at( const Element<dim>* const, double64 sw ) const;
+    double64 dkrnds_at( Element<dim>* const, double64 sw ) const;
 
-    double64 dpcdsw_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
+    double64 dpcdsw_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const;
 
-    double64 dkrwds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const ;
+    double64 dkrwds_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const ;
 
-    double64 dkrnds_at_Numerical( const Element<dim>* const p, double64 sw, double64 h ) const;
+    double64 dkrnds_at_Numerical( Element<dim>* const p, double64 sw, double64 h ) const;
   
   
     // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
   
     /// Effective wetting phase saturation at the barycentre of the element
-    double64 EffectiveSaturation( const Element<dim>* const ) const;
+    double64 EffectiveSaturation( Element<dim>* const ) const;
   
-    double64 pc( const Element<dim>* const ) const;
+    double64 pc( Element<dim>* const ) const;
   
-    double64 dpcds( const Element<dim>* const ) const;
+    double64 dpcds( Element<dim>* const ) const;
   
-    double64 krw( const Element<dim>* const ) const;
+    double64 krw( Element<dim>* const ) const;
   
-    double64 krn( const Element<dim>* const ) const;
+    double64 krn( Element<dim>* const ) const;
   
-    double64 dkrwds( const Element<dim>* const ) const;
+    double64 dkrwds( Element<dim>* const ) const;
   
-    double64 dkrnds( const Element<dim>* const ) const;
+    double64 dkrnds( Element<dim>* const ) const;
 
-    double64 dpcdsw_Numerical( const Element<dim>* const p, double64 h ) const;
+    double64 dpcdsw_Numerical( Element<dim>* const p, double64 h ) const;
 
-    double64 dkrwds_Numerical( const Element<dim>* const p, double64 h ) const;
+    double64 dkrwds_Numerical( Element<dim>* const p, double64 h ) const;
 
-    double64 dkrnds_Numerical( const Element<dim>* const p, double64 h ) const;
+    double64 dkrnds_Numerical( Element<dim>* const p, double64 h ) const;
   
     /// @return number of RRTs (reservoir rock types) for which saturation function values are stored
     size_t RockTypes() const;
@@ -128,7 +128,7 @@ class ExperimentalSaturationFunctions {
     size_t InitialiseReservoirRockTypes( const char* rt_file_name );
   
     /// converts the floating-point rocktype identifier into a positive integer 0..254
-    size_t RockType( const Element<dim>* const ) const;
+    size_t RockType( Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
     const double64 max_derivative_ = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value

@@ -52,7 +52,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     void ResetCFLMultiplier();
     void ComputeGradients (Event<dim>* event );
 
-    virtual void InitializeVariablesAndKeys(Model<dim>& );
+    virtual void InitializeVariablesAndKeys( Model<dim>& );
     virtual void ComputeRateofChange( Event<dim>* event ) = 0;
     virtual bool Schedule(Event<dim>* nd, double64 t_end) = 0;
     virtual void Update_DES(Event<dim>* nd, double64 t_clock) = 0;
