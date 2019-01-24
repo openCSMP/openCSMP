@@ -13,11 +13,7 @@ namespace csmp {
 
 template<size_t dim, template<size_t> class USER>
 Fluid<dim,USER>::Fluid()
- // testing the key that is used to indicate the phase state
- : state_key_( User()->key_k )
  {
-     assert( state_key_.place == NODE );
-     assert( state_key_.type == SCALAR );
  }
 
 

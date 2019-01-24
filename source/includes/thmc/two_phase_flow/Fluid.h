@@ -57,8 +57,6 @@ class Fluid {
     /// shorthand for accessing the class that FacetFlux_TracerTransferExplicit is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-  
-    const csmp::Index state_key_;
 };
 
 //  unit conversions
