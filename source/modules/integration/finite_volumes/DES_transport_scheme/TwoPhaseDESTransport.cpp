@@ -421,7 +421,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time
         T_Update_ += clock() - T_begin;
         
         T_begin= clock();
-        double64 new_time_increment(time_interval); 
         for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
         { 
             ComputeGradients ((*it));
@@ -429,7 +428,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double64 time
             ArrayVariable array2;
             (*it)->getNode()->Read(key_time, array2);
             double64 dt_CFL = array2[2];//CFL time increment
-            new_time_increment=min(new_time_increment, dt_CFL*CFL_multiplier_);
+            time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
         };
         T_RateOfChange_ += clock() - T_begin; 
 

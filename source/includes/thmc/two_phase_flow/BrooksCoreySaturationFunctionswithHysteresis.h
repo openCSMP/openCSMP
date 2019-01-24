@@ -96,6 +96,8 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
   
     /// First derivative of capillary pressure.
         double64 dpcds( Element<dim>* const ) const;
+        
+        double64 dpcds_at( Element<dim>* const, double64 ) const;
   
     /// Oil residual saturation estimated from Land's formula.
         double64 OilResidualSaturation( Element<dim>* const ) const;

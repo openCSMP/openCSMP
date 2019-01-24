@@ -42,9 +42,9 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
     virtual ~TwoPhaseDESTransport() {}
                            
     void AdvectVariable_DES( double64 model_time, size_t num_threads );
-    void AdvectVariable_DES_serial( double64 model_time );
+    virtual void AdvectVariable_DES_serial( double64 model_time );
     void AdvectVariable_DES_openmp ( double64 model_time, size_t num_threads );
-    void AdvectVariable_TDS( double64 time_interval );
+    virtual void AdvectVariable_TDS( double64 time_interval );
     
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
