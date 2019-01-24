@@ -345,7 +345,29 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<
   
  
   
+template<size_t dim, template<size_t> class USER>
+double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Element<dim>* const e, double64 sH2O ) const
+  {
+    assert( sH2O >= 0. );
+    assert( sH2O <= 1. );
   
+    const double64 sCO2 = 1. - sH2O;
+    
+    double64 PseudoSor_ = e->Read(User()->key_psrCO2)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_psrH2O)  ;  // To have primary Drianage and Imibition parameters
+    
+    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
+  
+    double64 Dpc(0);
+    
+    // first calculate the upper limits and lower limits of the capilary curve.
+    if (sH2O < PseudoSwr_ )     Dpc = -MaxCapillaryPressureDerivative;
+    else if (sCO2 < PseudoSor_) Dpc = -MaxCapillaryPressureDerivative ;
+    else
+      Dpc = -aw_*cw_*pow((1.0 - PseudoSwr_) / (sH2O - PseudoSwr_), aw_) / (sH2O - PseudoSwr_) + ao_*co_*pow((1.0 - PseudoSor_) / (sCO2 - PseudoSor_), ao_) / (sCO2 - PseudoSor_);
+    
+    return Dpc ;
+}    
   
   
   

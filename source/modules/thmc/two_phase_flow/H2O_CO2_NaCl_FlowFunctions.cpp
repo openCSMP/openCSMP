@@ -154,11 +154,9 @@ template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const e ) const
  {
     assert( e != nullptr );
-    const double64 lw = Mobility(e,0U);
-    const double64 ln = Mobility(e,1U);
-    const double64 rhow = User()->Density(e,0U);
-    const double64 rhon = User()->Density(e,1U);
-    return  (lw * rhow * ln * rhon) / (lw * rhow + ln * rhon);
+    const double64 lw_rhow = Mobility(e,0U);
+    const double64 ln_rhon = Mobility(e,1U);
+    return  (lw_rhow * ln_rhon) / (lw_rhow + ln_rhon);
  }
 
 
@@ -171,11 +169,9 @@ template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct_at( Element<dim>* const e, double64 sw ) const
  {
     assert( e != nullptr );
-    const double64 lw = Mobility_at(e,0U,sw);
-    const double64 ln = Mobility_at(e,1U,sw);
-    const double64 rhow = User()->Density(e,0U);
-    const double64 rhon = User()->Density(e,1U);
-    return  (lw * rhow * ln * rhon) / (lw * rhow + ln * rhon);
+    const double64 lw_rhow = Mobility_at(e,0U,sw);
+    const double64 ln_rhon = Mobility_at(e,1U,sw);
+    return  (lw_rhow * ln_rhon) / (lw_rhow + ln_rhon);
  }
 
   
