@@ -216,6 +216,8 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
     
     }
     else if ( yNSquare < hSquare ) {
+        // SKM FIX - pi as in Robert's original equation
+        constexpr double64 PI(3.14159265359);
         //    theta  = acos ( -y_N / h ) / 3.;
         theta  =  -y_N;
         theta /=  h ;
@@ -233,7 +235,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
 
         //    complex2RealDummy = delta * cos( 2. * PI / 3. + theta);
         complex2RealDummy =   2.;
-        complex2RealDummy *=  PI ;
+        complex2RealDummy *=  PI;
         complex2RealDummy /=  3.;
         complex2RealDummy +=  theta;
         complex2RealDummy =   cos( complex2RealDummy );
@@ -246,7 +248,7 @@ double64 EOS_CO2H2ONaCl_Spycher04::CompressedVolumeCo2( double64 pressure, doubl
 
         //    complex2RealDummy = delta * cos( 4. * PI / 3. + theta);
         complex2RealDummy =   4.;
-        complex2RealDummy *=  PI ;
+        complex2RealDummy *=  PI;
         complex2RealDummy /=  3.;
         complex2RealDummy +=  theta;
         complex2RealDummy =   cos( complex2RealDummy );
