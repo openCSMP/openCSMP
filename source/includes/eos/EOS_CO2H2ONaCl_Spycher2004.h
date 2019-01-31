@@ -6,7 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include"CSMP_mathUtilities.h"
+#include"CSMP_definitions.h"
 
 using namespace std;
 
