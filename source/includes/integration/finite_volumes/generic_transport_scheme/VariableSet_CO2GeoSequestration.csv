@@ -1,6 +1,7 @@
 ﻿variable name,notation,units,type,minval,maxval,placement,usage,explanation,reference,notes
 composition carbonic phase,CO2_comp,Ymass,ARRAY,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=2
 composition aqueous phase,H2O_comp,Xmass,ARRAY,-5.00E-02,-5.00E-02,NODE,computed,chemistry,Geiger et al. 2009,array size=3
+bulk mass and fractions,Xbulk,none,ARRAY,0.00E+00,1.00E+08,NODE,computed,chemistry,Geiger et al. 2009,array size=4
 dissolved CO2,CO2aq,kg/m3,SCALAR,0.00E+00,1.50E+02,NODE,computed/input,output,,only used for visualisation
 evaporated water,H2Og,kg/m3,SCALAR,0.00E+00,5.00E+01,NODE,computed,output,,only used for visualisation
 salt,NaCl,m3/m3,SCALAR,0.00E+00,5.00E+00,NODE,computed/input,chemistry,,volume fraction of precipitated salt in pores
