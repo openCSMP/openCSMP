@@ -174,6 +174,12 @@ bool hasAllSideBoundaries( const Model<3U>& );
 bool isStrictlyBoxShaped( const Model<2U>& );
 bool isStrictlyBoxShaped( const Model<3U>& );
 
+/// reports the range of property values on the nodes flagged with the BOX_BOUNDARY identifier
+template<size_t dim>
+void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
+                               const char* node_property, double64& bmin, double64& bmax );
+
+
 } // end namespace csmp
 
 #endif

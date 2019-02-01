@@ -3255,6 +3255,65 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
 
 
 
+
+// VTK STUFF
+
+template<size_t dim>
+void  outputPropertiesOfRegionToVTK( const Model<dim>& sg,
+                                     VTK_Interface<dim>& vtk,
+                                     const char* group, long output_time )
+{
+  // file output
+  vtk.OutputDataToVTK( sg, string( group ), string( "fluid-pressure" ), string( "fluid pressure" ), output_time );
+  vtk.OutputDataToVTK( sg, string( group ), string( "saturation-carbonic`" ), string( "saturation carbonic phase" ), output_time );
+  vtk.OutputDataToVTK( sg, string( group ), string( "velocity" ), string( "velocity" ), output_time );
+
+} // end outputPropertiesOfRegion
+
+
+template void  outputPropertiesOfRegionToVTK( const Model<2U>&, VTK_Interface<2U>&, const char* group, long );
+template void  outputPropertiesOfRegionToVTK( const Model<3U>&, VTK_Interface<3U>&, const char* group, long );
+
+
+
+
+
+
+/**
+    Reads binary model file and writes target variable in target region to VTK file
+    @attention the reading of variable names and region names takes into account that these
+    may contain whitespace.
+
+*/
+void csmpBinaryToVTK( const char* modelBinFIleName )
+{
+  string propertyName( "" );
+
+  cin.ignore( numeric_limits<streamsize>::max(), '\n' );
+  cout << "\n\ncsmpBinaryToVTK: Enter name of property to output: " << flush;
+  getline( cin, propertyName );
+
+  string regionName( "" );
+  cout << "\n\ncsmpBinaryToVTK: Enter name of region for which to output '" << propertyName << "': " << flush;
+  getline( cin, regionName );
+
+  Model<3> model( modelBinFIleName );
+
+  if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
+    cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
+    return;
+  }
+  if ( !model.ContainsRegion( regionName.c_str() ) ) {
+    cerr << "\ncsmpBinaryToVTK: target region '" << regionName << "' is undefined. Check name and try again.\n";
+    return;
+  }
+
+  VTK_Interface<3> vtk;
+  vtk.OutputDataToVTK( model, regionName, propertyName, propertyName, 0 );
+}
+
+
+
 } // end namespace csmp
 
 

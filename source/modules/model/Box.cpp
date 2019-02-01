@@ -1540,4 +1540,50 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
 template void boxFlagsToVariable( Model<2>&, const char*, const char* );
 template void boxFlagsToVariable( Model<3>&, const char*, const char* );
 
+
+
+template<size_t dim>
+void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
+                               const char* node_property, double64& bmin, double64& bmax )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  const csmp::Index  prop_key = sg.Database().StorageKey( node_property );
+  
+  if ( prop_key.place != NODE || prop_key.type != SCALAR )
+    csmp_error.notice( ERROR, "boxBoundaryPropertyRange",
+                      "Property must a scalar placed on the nodes; nothing was done.");
+
+  bool  first_value( true ), verbose( false );
+
+  const csmp::Region<dim>& sgref = sg.Region( "Model" );
+
+  // measuring the property ranges
+  for ( typename vector<Node<dim>*>::const_iterator
+        nit = sgref.PerimeterNodesBegin(); nit != sgref.NodesEnd(); nit++ )
+    if ( (*nit)->AtBoundary() == boundary )
+    {
+      if ( first_value ) {
+        bmin = bmax = (*nit)->Read( prop_key );
+        first_value = false;
+      }
+      else {
+        bmin = std::min( bmin, (*nit)->Read( prop_key ) );
+        bmax = std::max( bmax, (*nit)->Read( prop_key ) );
+      }
+      if ( verbose )
+        cout << "\nboundary node " << (*nit)->Idx() << ": " << (*nit)->x() << " " << (*nit)->y() << " " << (*nit)->z();
+    }
+
+  if ( verbose ) {
+    cout << "\nFiniteVolumeTransport::BoundaryPropertyRanges: of physical variable '" << node_property << "':";
+    cout << "\nrange of '" << node_property << "' at boundary:  " << bmin << " to " << bmax << endl;
+  }
+
+} // end BoundaryPropertyRanges
+
+template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double64&, double64& );
+
 } // end namespace csmp

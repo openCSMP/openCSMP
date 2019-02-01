@@ -6,6 +6,9 @@
 
 namespace csmp {
 
+template<size_t> class Model;
+template<size_t> class VTK_Interface;
+
 /// for the given CSMP element type, finds the matching VTK geometric primitive
 VTK_TYPE parseElementType( CSMP_FEM_TYPE );
 
@@ -37,6 +40,14 @@ void outputRegionBoundaryToVTK( const Model<2U>&, const char* region, const char
 /// output the perimeter surface of a region to VTK file
 void outputRegionBoundaryToVTK( const Model<3U>&, const char* region, const char* file );
 
+/// all properties discretised on the model; region by region
+template<size_t dim>
+void  outputPropertiesOfRegionToVTK( const Model<dim>&,
+                                     VTK_Interface<dim>&,
+                                     const char* region, long output_time );
+
+/// interactive function that allows extraction of desired variable from csmp binary file into a VTK file
+void csmpBinaryToVTK( const char* modelBinFIleName );
 
 
 /** Outputs csmp data to VTK Ascii text format
