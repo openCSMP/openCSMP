@@ -47,6 +47,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( Eleme
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
   {
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     const double64  seff(EffectiveSaturation(e));
     const double64  bcp(e->Read(User()->key_bcp));
     const double64  entry_pressure(e->Read(User()->key_pd));
@@ -83,12 +84,18 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc( Element<dim>* const e ) c
   
 } // end pc
   
-  
+ 
+ 
+ 
+ 
+ 
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double64 sw ) const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
+    assert( !isnan(e->Read(User()->key_bcp) ) );
+    assert( !isnan(e->Read(User()->key_pd) ) );
 
     const double64  seff(EffectiveSaturation_at(e,sw));
     const double64  bcp(e->Read(User()->key_bcp));
@@ -134,6 +141,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::pc_at( Element<dim>* const e,
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
   {
+    assert( !isnan(e->Read(User()->key_bcp) ) );
+    assert( !isnan(e->Read(User()->key_pd) ) );
     const double64  seff(EffectiveSaturation(e));
     const double64  bcp(e->Read(User()->key_bcp));
     const double64  entry_pressure(e->Read(User()->key_pd));
@@ -170,6 +179,8 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
+    assert( !isnan(e->Read(User()->key_bcp) ) );
+    assert( !isnan(e->Read(User()->key_pd) ) );
 
     const double64  seff(EffectiveSaturation_at(e,sw));
     const double64  bcp(e->Read(User()->key_bcp));
@@ -205,6 +216,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
   {
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
       return EffectiveSaturation(e);
@@ -222,6 +234,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
+    assert( !isnan(e->Read(User()->key_bcp) ) );
 
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
@@ -237,6 +250,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
       return 1. - EffectiveSaturation(e);
@@ -253,6 +267,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
+    assert( !isnan(e->Read(User()->key_bcp) ) );
 
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
@@ -274,6 +289,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
     //  switch to linear relperm model if lambda = 0
     if ( e->Read(User()->key_bcp) == 0. ) return seff_mult;
@@ -297,6 +313,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* cons
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
+    assert( !isnan(e->Read(User()->key_bcp) ) );
 
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
     //  switch to linear relperm model if lambda = 0
@@ -321,6 +338,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
 
     //  switch to linear relperm model if lambda = 0
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     if ( e->Read(User()->key_bcp) == 0. ) return -seff_mult;
 
     const double64  seff(EffectiveSaturation(e));
@@ -347,6 +365,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* cons
     const double64 seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
 
     //  switch to linear relperm model if lambda = 0
+    assert( !isnan(e->Read(User()->key_bcp) ) );
     if ( e->Read(User()->key_bcp) == 0. ) return -seff_mult;
 
     const double64  seff(EffectiveSaturation_at(e,sw));
