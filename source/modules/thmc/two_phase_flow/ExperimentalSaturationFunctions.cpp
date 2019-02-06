@@ -271,7 +271,9 @@ template<size_t dim, template<size_t> class USER>
 double64 ExperimentalSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
 {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
- 
+    assert( sw >= 0. );
+    assert( sw <= 1. );
+
     const double64 swr = e->Read(User()->key_srH2O);
     if ( sw <= swr ) return 0.; // kr1_[ RockType(e) ].Value(swr);
 
@@ -305,7 +307,9 @@ template<size_t dim, template<size_t> class USER>
 double64 ExperimentalSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
     const double64 sw = e->PropertyValueAtBaryCenter( User()->key_sH2O  );
- 
+    assert( sw >= 0. );
+    assert( sw <= 1. );
+
     const double64 swr = e->Read(User()->key_srH2O);
     if ( sw <= swr ) return min( kr2_[ RockType(e) ].Value(swr), 1. );
 

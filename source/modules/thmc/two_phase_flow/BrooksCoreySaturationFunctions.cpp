@@ -23,8 +23,11 @@ template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-  
-    return (sH2O - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    assert( sH2O >= 0. );
+    assert( sH2O <= 1. );
+    const double64 seff = (sH2O - e->Read(User()->key_srH2O)) /
+                          (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    return seff;
   }
 
 
@@ -215,15 +218,17 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const
   
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
-  {
-    assert( !isnan(e->Read(User()->key_bcp) ) );
+ {
+    const double64 bcp(e->Read(User()->key_bcp));
+    assert( !isnan(bcp) );
+   
     //  switch to linear relperm model if lambda = 0
-    if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
-      return EffectiveSaturation(e);
+    if ( bcp == static_cast<double64>(0.) )
+      return min( 1., max( 0., EffectiveSaturation(e) ) );
 
     // pm2 = lambda, the Brooks-Corey parameter
-    return std::pow( EffectiveSaturation(e), 2. / e->Read(User()->key_bcp) + 3. );  
-  
+    const double64 seff = min( 1., max( 0., EffectiveSaturation(e) ) );
+    return std::pow( seff, 2. / bcp + 3. );
 }
   
   
@@ -234,14 +239,16 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
-    assert( !isnan(e->Read(User()->key_bcp) ) );
+    const double64 bcp(e->Read(User()->key_bcp));
+    assert( !isnan(bcp) );
 
     //  switch to linear relperm model if lambda = 0
-    if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
-      return EffectiveSaturation_at(e,sw);
-
+    if ( bcp == static_cast<double64>(0.) )
+      return min( 1., max( 0., EffectiveSaturation_at(e,sw) ) );
+    
     // pm2 = lambda, the Brooks-Corey parameter
-    return std::pow( EffectiveSaturation_at(e,sw), 2. / e->Read(User()->key_bcp) + 3. );
+    const double64 seff = min( 1., max( 0., EffectiveSaturation(e) ) );
+    return std::pow( seff, 2. / bcp + 3. );
 }
 
 
@@ -250,13 +257,16 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
-    assert( !isnan(e->Read(User()->key_bcp) ) );
-    //  switch to linear relperm model if lambda = 0
-    if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
-      return 1. - EffectiveSaturation(e);
+    const double64 bcp(e->Read(User()->key_bcp));
+    assert( !isnan(bcp) );
 
-    const double64  seffn(1. - EffectiveSaturation(e));
-    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(e), 2./ e->Read(User()->key_bcp) + 1.) );
+    //  switch to linear relperm model if lambda = 0
+    if ( bcp == static_cast<double64>(0.) )
+      return min( 1., max( 0., 1. - EffectiveSaturation(e) ) );
+
+    const double64  seffn = min( 1., max( 0., 1. - EffectiveSaturation(e) ) );
+    
+    return (seffn * seffn) * (1. - pow(  EffectiveSaturation(e), 2./ bcp + 1.) );
 }
 
 
@@ -267,14 +277,16 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e
   {
     assert( sw >= 0. );
     assert( sw <= 1. );
-    assert( !isnan(e->Read(User()->key_bcp) ) );
+    const double64 bcp(e->Read(User()->key_bcp));
+    assert( !isnan(bcp) );
 
     //  switch to linear relperm model if lambda = 0
-    if ( e->Read(User()->key_bcp) == static_cast<double64>(0.) )
-      return 1. - EffectiveSaturation_at(e,sw);
+    if ( bcp == static_cast<double64>(0.) )
+      return min( 1., max( 0., 1. - EffectiveSaturation_at(e,sw) ) );
 
-    const double64  seffn(1. - EffectiveSaturation_at(e,sw));
-    return (seffn * seffn) * (1. - pow(  EffectiveSaturation_at(e,sw), 2./ e->Read(User()->key_bcp) + 1.) );
+    const double64  seffn = min( 1., max( 0., 1. - EffectiveSaturation(e) ) );
+
+    return (seffn * seffn) * (1. - pow(  EffectiveSaturation_at(e,sw), 2./ bcp + 1.) );
 }
 
 

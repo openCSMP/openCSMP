@@ -58,15 +58,25 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( Element<dim>* const 
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
-    assert( User()->Viscosity( e, phase ) > 0. );
-    assert( User()->Viscosity( e, phase ) < 1. );
+    const double64 srw  = e->Read( User()->key_srH2O );
+    const double64 srn  = e->Read( User()->key_srCO2 );
 
     if ( phase == 0U ) {
+         if ( sw <= srw ) return 0.;
+         if ( sw >= 1. - srn ) return 1.;
+         assert( User()->Viscosity( e, phase ) > 0. );
+         assert( User()->Viscosity( e, phase ) < 1. );
          assert( User()->krw_at(e,sw) >= 0. );
          assert( User()->krw_at(e,sw) <= 1. );
          return User()->Density( e, 0U ) * (User()->krw_at(e,sw) / User()->Viscosity( e, 0U ));
       }
    
+    // if there is only 1 mobile phase 0 (water)
+    if ( sw <= srw ) return 1.;
+    if ( sw >= 1. - srn ) return 0.;
+    // else
+    assert( User()->Viscosity( e, phase ) > 0. );
+    assert( User()->Viscosity( e, phase ) < 1. );
     assert( User()->krn_at(e,sw) >= 0. );
     assert( User()->krn_at(e,sw) <= 1. );
     return User()->Density( e, 1U ) * (User()->krn_at(e,sw) / User()->Viscosity( e, 1U ));
@@ -288,6 +298,20 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( Element<dim>* const e, size
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
+    assert( sw >= 0. && sw <= 1. );
+
+    const double64 srw = e->Read( User()->key_srH2O );
+    const double64 srn = e->Read( User()->key_srCO2 );
+
+    if ( phase == 0 ) {
+         if ( sw <= srw ) return 0.;
+         else if ( sw  >= 1. - srn ) return 1.;
+      }
+    else if ( phase == 1 ) {
+         if ( sw <= srw ) return 1.;
+         else if ( sw  >= 1. - srn ) return 0.;
+      }
+
     assert( Mobility_at( e, phase, sw ) > 0. );
     assert( TotalMobility_at(e,sw) > 0. );
 
@@ -311,6 +335,13 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
 
+    // the fractional flow derivative is zero beyond the end-point saturations
+    const double64 sw  = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    const double64 srw = e->Read( User()->key_srH2O );
+    const double64 srn = e->Read( User()->key_srCO2 );
+    if      ( sw <= srw )       return 0.;
+    else if ( sw  >= 1. - srn ) return 0.;
+ 
     const double64 rhow = User()->Density(e,0U);
     const double64 rhon = User()->Density(e,1U);
     assert( !isnan(rhow) );
@@ -319,13 +350,13 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size
     const double64 mun = User()->Viscosity( e, 1U );
     assert( !isnan(muw) );
     assert( !isnan(mun) );
-    const double64 lw  = rhow * (User()->krw(e) / muw);
-    const double64 ln  = rhon * (User()->krn(e) / mun);
+    const double64 lw  = rhow * (User()->krw_at(e,sw) / muw);
+    const double64 ln  = rhon * (User()->krn_at(e,sw) / mun);
     const double64 lt  = lw + ln;
     const double64 lt2 = lt * lt;
     
-    const double64 dlwds = rhow * (User()->dkrwds(e) / muw);
-    const double64 dlnds = rhon * (User()->dkrnds(e) / mun);
+    const double64 dlwds = rhow * (User()->dkrwds_at(e,sw) / muw);
+    const double64 dlnds = rhon * (User()->dkrnds_at(e,sw) / mun);
     
     return (dlwds * ln - dlnds * lw) / lt2;
  }
@@ -341,11 +372,19 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size
  
     @todo check whether code for end-member cases has to be reinstated.
 */
+// TODO: refactor because it falls down in single phase case where the physical properties of the phase are not known
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, double64 sw ) const
  {
     assert( e != nullptr );
     assert( sw >= 0. and sw <= 1. );
+
+    // the fractional flow derivative is zero beyond the end-point saturations
+    const double64 srw = e->Read( User()->key_srH2O );
+    const double64 srn = e->Read( User()->key_srCO2 );
+    if      ( sw <= srw )       return 0.;
+    else if ( sw  >= 1. - srn ) return 0.;
+
     const double64 rhow = User()->Density(e,0U);
     const double64 rhon = User()->Density(e,1U);
     assert( !isnan(rhow) );
