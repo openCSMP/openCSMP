@@ -11,6 +11,134 @@ using namespace std;
 
 namespace csmp {
 
+/**
+
+  ANSYS_Model3D::ANSYS_Model3D(const char* icem_file_set,
+                               const char* variable_file,
+                               const char* regions_file_prefix,
+                               bool irregular_mesh,
+                               bool binary_file )
+\par Description:
+Default constructor of Model is called.
+The model is built from the 'icem_file_set' '*.asc' and '*.dat',
+variables file, and the configuration file prefix is used to read the regions file.
+Uses the method Initialize.
+
+Added by: Julian E. Mindel 16-03-2012
+
+*/
+
+ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+                              const char* regions_file_prefix,
+                              const char* variable_file,
+                              bool irregular_mesh,
+                              bool binary_file,
+                              bool use_regions_file,
+                              bool create_boundaries)
+ : Model<3U>( variable_file, false )
+ {
+    this->Name( icem_file_set );
+    Initialize( icem_file_set,
+                regions_file_prefix,
+                irregular_mesh,
+                binary_file,
+                use_regions_file,
+                create_boundaries );
+ }
+
+/**
+
+ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+const char* variable_file )
+\par Description:
+Choose isoparametric or non-isoparametric!
+Default constructor of Model is called. Then the model is build
+from the 'icem_file_set' '*.asc' and '*.dat' files using the method
+Initialize.
+*/
+
+ANSYS_Model3D::ANSYS_Model3D( bool isoparametric,
+                              const char* icem_file_set,
+                              const char* variable_file,
+                              bool irregular_mesh,
+                              bool binary_file,
+                              bool use_regions_file,
+                              bool create_boundaries)
+  : Model<3U>(variable_file, false)
+{
+  this->Name(icem_file_set);
+  Initialize(isoparametric,
+    icem_file_set,
+    icem_file_set,
+    irregular_mesh,
+    binary_file,
+    use_regions_file,
+    create_boundaries);
+}
+/**
+
+  ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+                                const char* variable_file )
+\par Description:
+
+Default constructor of Model is called. Then the model is build
+from the 'icem_file_set' '*.asc' and '*.dat' files using the method
+Initialize.
+*/
+
+ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+                              const char* variable_file,
+                              bool irregular_mesh,
+                              bool binary_file,
+                              bool use_regions_file,
+                              bool create_boundaries)
+ : Model<3U>( variable_file, false )
+ {
+    this->Name( icem_file_set );
+    Initialize( icem_file_set,
+                icem_file_set,
+                irregular_mesh,
+                binary_file,
+                use_regions_file,
+                create_boundaries);
+ }
+
+
+
+
+/**
+@ Description:
+Default constructor of Model is called.
+The model is built from the 'icem_file_set' '*.asc' and '*.dat',
+variables file, and the configuration file prefix is used to read the regions file.
+Uses the method Initialize.
+
+@author Julian E. Mindel 16-03-2012
+*/
+ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
+                              bool irregular_mesh,
+                              bool binary_file,
+                              bool use_regions_file,
+                              bool create_boundaries )
+{
+    this->Name(icem_file_set);
+    Initialize( icem_file_set,
+                icem_file_set,
+                irregular_mesh,
+                binary_file,
+                use_regions_file,
+                create_boundaries);
+}
+
+
+
+/// nothing needs to be done here
+ANSYS_Model3D::~ANSYS_Model3D()
+ {
+ }
+ 
+ 
+
 /** Builds Model after it was constructed with the default constructor.
     
     The following steps are performed:
@@ -33,14 +161,13 @@ namespace csmp {
     @attention per default isoparametric is true and the connectivity information
     between the elements from ANSYS is not used, but this data is recreated
 */
-
-	void ANSYS_Model3D::Initialize(bool isoparametric,
-		const char* mesh_file_set,
-		const char* regions_file_prefix,
-		bool irregular_mesh,
-		bool binary_input_file,
-		bool use_regions_file,
-		bool create_boundaries)
+void ANSYS_Model3D::Initialize( bool isoparametric,
+                                const char* mesh_file_set,
+                                const char* regions_file_prefix,
+                                bool irregular_mesh,
+                                bool binary_input_file,
+                                bool use_regions_file,
+                                bool create_boundaries )
 	{
 		double64& model_time(ModelTime::Instance().modelTime);
 		model_time = 0.;
@@ -50,34 +177,49 @@ namespace csmp {
 		// data imported into a vset.
 		// -------------------------------------------------
 		try {
-			VSet<3U>  vset;
-			bool isoparametric_elements(isoparametric);
+			 VSet<3U>  vset;
+			 bool isoparametric_elements(isoparametric);
 
-			ModelTopology   mesh_topology(isoparametric_elements);
-			ANSYS_Interface mesh_interface(isoparametric_elements);
+			 ModelTopology   mesh_topology(isoparametric_elements);
+			 ANSYS_Interface mesh_interface(isoparametric_elements);
 
-			// 0. reading the mesh from ANSYS-CSMP-input files
-			mesh_interface.Read_ANSYS_Mesh(std::string(mesh_file_set), vset, mesh_topology, binary_input_file, irregular_mesh);
+			 // 0. reading the mesh from ANSYS-CSMP-input files
+			 mesh_interface.Read_ANSYS_Mesh(std::string(mesh_file_set), vset, mesh_topology, binary_input_file, irregular_mesh);
 
-			// 1. preserving numbered node coordinates in a vector
+       // 1. writing element and node numbers to property data and storing them in the VSet
+       if ( Database().IsDefined("element number") ) {
+            // element numbers
+            PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+            elmt_nums.Reserve( vset.Elements() );
+            for ( size_t i=0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar(ANY,i) );
+            vset.AddData( "element number", elmt_nums );
+         }
+       if ( Database().IsDefined("node number") ) {
+            // node numbers
+            PropertyData node_nums( NODE, SCALAR, 3U );
+            node_nums.Reserve( vset.Vertices() );
+            for ( size_t i=0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar(ANY,i) );
+            vset.AddData( "element number", node_nums );
+         }
+    
+			// 2. preserving numbered node coordinates in a vector
 			const size_t vertices(vset.Vertices());
 			node_coords_.reserve(vertices);
 			for (size_t i = 0U; i<vertices; ++i)
 				node_coords_.emplace_back(Point<3U>(vset.Px(i), vset.Py(i), vset.Pz(i)));
 
-			// 2. construct model based on obtained model topology and vset
+			// 3. construct model based on obtained model topology and vset
 			if (use_regions_file)
-				Model<3U>::Initialize(regions_file_prefix,
-					mesh_topology,
-					vset,
-					create_boundaries,
-					irregular_mesh);
+				Model<3U>::Initialize( regions_file_prefix,
+					                     mesh_topology,
+					                     vset,
+					                     create_boundaries,
+                               irregular_mesh );
 			else
-				Model<3U>::Initialize(mesh_topology,
-					vset,
-					create_boundaries,
-					irregular_mesh);
-
+				Model<3U>::Initialize( mesh_topology,
+					                     vset,
+					                     create_boundaries,
+					                     irregular_mesh );
 		}
 
 		// -------------------------------------------------
@@ -129,6 +271,10 @@ namespace csmp {
 
 	} // end Initialize
 
+
+
+
+
 void ANSYS_Model3D::Initialize( const char* mesh_file_set,
                                 const char* regions_file_prefix,
                                 bool irregular_mesh,
@@ -157,13 +303,29 @@ void ANSYS_Model3D::Initialize( const char* mesh_file_set,
        // later on this connectivity will be recreated inside of the Model where suitable machinery exists.
        vset.RemovePfverts();
 
-       // 1. preserving numbered node coordinates in a vector
+       // 1. writing element and node numbers to property data and storing them in the VSet
+       if ( Database().IsDefined("element number") ) {
+            // element numbers
+            PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
+            elmt_nums.Reserve( vset.Elements() );
+            for ( size_t i=0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar(ANY,i) );
+            vset.AddData( "element number", elmt_nums );
+         }
+       if ( Database().IsDefined("node number") ) {
+            // node numbers
+            PropertyData node_nums( NODE, SCALAR, 3U );
+            node_nums.Reserve( vset.Vertices() );
+            for ( size_t i=0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar(ANY,i) );
+            vset.AddData( "element number", node_nums );
+         }
+    
+       // 2. preserving originally numbered node coordinates in a vector
        const size_t vertices(vset.Vertices());
        node_coords_.reserve(vertices);
        for ( size_t i=0U; i<vertices; ++i )
          node_coords_.emplace_back( Point<3U>(vset.Px(i),vset.Py(i),vset.Pz(i)) );
 
-       // 2. construct model based on obtained model topology and vset
+       // 3. construct model based on obtained model topology and vset
        if ( use_regions_file )
          Model<3U>::Initialize( regions_file_prefix,
                                 mesh_topology,
@@ -293,133 +455,7 @@ std::vector<Point<3U> >::const_iterator ANSYS_Model3D::VerticesEnd() const { ret
 
 
 
-/**
 
-  ANSYS_Model3D::ANSYS_Model3D(const char* icem_file_set,
-                               const char* variable_file,
-                               const char* regions_file_prefix,
-                               bool irregular_mesh,
-                               bool binary_file )
-\par Description:
-Default constructor of Model is called.
-The model is built from the 'icem_file_set' '*.asc' and '*.dat',
-variables file, and the configuration file prefix is used to read the regions file.
-Uses the method Initialize.
-
-Added by: Julian E. Mindel 16-03-2012
-
-*/
-
-ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-                              const char* regions_file_prefix,
-                              const char* variable_file,
-                              bool irregular_mesh,
-                              bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries)
- : Model<3U>( variable_file, false )
- {
-    this->Name( icem_file_set );
-    Initialize( icem_file_set,
-                regions_file_prefix,
-                irregular_mesh,
-                binary_file,
-                use_regions_file,
-                create_boundaries);
- }
-
-/**
-
-ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-const char* variable_file )
-\par Description:
-Choose isoparametric or non-isoparametric!
-Default constructor of Model is called. Then the model is build
-from the 'icem_file_set' '*.asc' and '*.dat' files using the method
-Initialize.
-*/
-
-ANSYS_Model3D::ANSYS_Model3D(bool isoparametric,
-	const char* icem_file_set,
-	const char* variable_file,
-	bool irregular_mesh,
-	bool binary_file,
-	bool use_regions_file,
-	bool create_boundaries)
-	: Model<3U>(variable_file, false)
-{
-	this->Name(icem_file_set);
-	Initialize(isoparametric,
-		icem_file_set,
-		icem_file_set,
-		irregular_mesh,
-		binary_file,
-		use_regions_file,
-		create_boundaries);
-}
-/**
-
-  ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-                                const char* variable_file )
-\par Description:
-
-Default constructor of Model is called. Then the model is build
-from the 'icem_file_set' '*.asc' and '*.dat' files using the method
-Initialize.
-*/
-
-ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-                              const char* variable_file,
-                              bool irregular_mesh,
-                              bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries)
- : Model<3U>( variable_file, false )
- {
-    this->Name( icem_file_set );
-    Initialize( icem_file_set,
-                icem_file_set,
-                irregular_mesh,
-                binary_file,
-                use_regions_file,
-                create_boundaries);
- }
-
-
-
-
-/**
-@ Description:
-Default constructor of Model is called.
-The model is built from the 'icem_file_set' '*.asc' and '*.dat',
-variables file, and the configuration file prefix is used to read the regions file.
-Uses the method Initialize.
-
-@author Julian E. Mindel 16-03-2012
-*/
-ANSYS_Model3D::ANSYS_Model3D( const char* icem_file_set,
-                              bool irregular_mesh,
-                              bool binary_file,
-                              bool use_regions_file,
-                              bool create_boundaries )
-{
-    this->Name(icem_file_set);
-    Initialize( icem_file_set,
-                icem_file_set,
-                irregular_mesh,
-                binary_file,
-                use_regions_file,
-                create_boundaries);
-}
-
-
-
-/// nothing needs to be done here
-ANSYS_Model3D::~ANSYS_Model3D()
- {
- }
- 
- 
  
 /** 
      Renumbers the nodes (0..n) as in the original ANSYS model.
