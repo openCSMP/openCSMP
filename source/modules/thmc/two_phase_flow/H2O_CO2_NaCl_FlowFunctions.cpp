@@ -5,14 +5,171 @@
 #include "CSMP_physical_constants.h"
 #include "Element.h"
 
+/*
+    SKM testing log - full three-phase case:  brine - CO2 - halite
+*/
 
 using namespace std;
 
 namespace csmp {
+
+// helper functions
+
+/**
+    Reports the existence of aqueous, carbonic and halite phases.
+    Returns true if both fluid phases co-exist and halite is absent.
+    Else, returns false.
+*/
+template<size_t dim, template<size_t> class USER>
+bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::ContinuousPhases( Element<dim>* const e, bool& aqueous, bool& carbonic, bool& halite ) const
+ {
+    assert( e != nullptr );
+    const size_t nodes(e->Nodes());
+    aqueous = carbonic = halite = true;
+
+    for ( size_t i=0; i<nodes; ++i ) {
+         double64 s = e->N(i)->Read( User()->key_sH2O );
+         if ( isnan(s) && s <= numeric_limits<double64>::epsilon()*2 ) aqueous = false;
+         s = e->N(i)->Read( User()->key_sCO2 );
+         if ( isnan(s) && s <= numeric_limits<double64>::epsilon()*2 ) carbonic = false;
+         s = e->N(i)->Read( User()->key_NaCl );
+         if ( isnan(s) && s <= numeric_limits<double64>::epsilon()*2 ) halite = false;
+      }
+   
+    if ( aqueous == true && carbonic == true && halite == false ) return true;
+   
+    return false;
+ }
+ 
+ 
+
+/**
+    Uses the IPOL vector
+*/
+template<size_t dim, template<size_t> class USER>
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhaseIgnoring_NAN_Values( Element<dim>* const e, double64& sw, double64& rhow, double64& muw ) const
+ {
+    assert( e != nullptr );
+    e->N_AtBaryCenter( e->FE()->NRST );
+    const size_t nodes(e->Nodes());
+    double64     ipol_sum(0.);
+   
+    sw = rhow = muw = 0.;
+
+    for ( size_t i=0; i<nodes; ++i ) {
+         double64 s = e->N(i)->Read( User()->key_sH2O );
+         if ( s > 0. ) {
+             sw   += e->FE()->NRST[i] * s;
+             rhow += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoH2O );
+             muw  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muH2O );
+             ipol_sum += e->FE()->NRST[i];
+          }
+      }
+    // correcting for the changed weighting factor when nodes have no density or viscosity values
+    rhow *= 1. / ipol_sum;
+    muw  *= 1. / ipol_sum;
+   
+ } // end InterpolateAqueousPhaseIgnoring_NAN_Values
+
+
+
+
+
+
+template<size_t dim, template<size_t> class USER>
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhaseIgnoring_NAN_Values( Element<dim>* const e,
+                                                                                        double64& sw, double64& snw,
+                                                                                        double64& rhon, double64& mun ) const
+ {
+    assert( e != nullptr );
+    e->N_AtBaryCenter( e->FE()->NRST );
+    const size_t nodes(e->Nodes());
+    double64     ipol_sum(0.);
+   
+    sw = snw = rhon = mun = 0.;
+
+    for ( size_t i=0; i<nodes; ++i ) {
+        // aqueous phase
+        double64 s = e->N(i)->Read( User()->key_sH2O );
+        if ( !isnan(s) && s > 0. )
+          sw += e->FE()->NRST[i] * s;
+        // carbonic phase
+        s = e->N(i)->Read( User()->key_sCO2 );
+        if ( s > 0. ) {
+             snw  += e->FE()->NRST[i] * s;
+             rhon += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoCO2 );
+             mun  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muCO2);
+             ipol_sum += e->FE()->NRST[i];
+          }
+       }
+    // correcting for the changed weighting factor when nodes have no density or viscosity values
+    rhon *= 1. / ipol_sum;
+    mun  *= 1. / ipol_sum;
+
+ } // end InterpolateAqueousPhaseIgnoring_NAN_Values
+
+
+
+
+
+
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystemIgnoring_NAN_Values( Element<dim>* const e,
+                                                                                     double64& sw, double64& rhow, double64& muw,
+                                                                                     double64& snw, double64& rhon, double64& mun ) const
+ {
+    assert( e != nullptr );
+    e->N_AtBaryCenter( e->FE()->NRST );
+    const size_t nodes(e->Nodes());
+    double64 halite_saturation(0.);
+    double64 ipol_sum1(0.), ipol_sum2(0.);
+
+    sw = rhow = muw = snw = rhon = mun = 0.;
+
+    for ( size_t i=0; i<nodes; ++i ) {
+         double64 s = e->N(i)->Read( User()->key_sH2O );
+         if ( s > 0. ) {
+              sw   += e->FE()->NRST[i] * s;
+              rhow += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoH2O );
+              muw  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muH2O );
+              ipol_sum1 += e->FE()->NRST[i];
+           }
+         s = e->N(i)->Read( User()->key_sCO2 );
+         if ( s > 0. ) {
+              snw  += e->FE()->NRST[i] * s;
+              rhon += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoCO2 );
+              mun  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muCO2);
+              ipol_sum2 += e->FE()->NRST[i];
+           }
+         halite_saturation += e->N(i)->Read( User()->key_NaCl );
+      }
+    // correcting for the changed weighting factor when nodes have no density or viscosity values
+    rhow *= 1. / ipol_sum1;
+    muw  *= 1. / ipol_sum1;
+    rhon *= 1. / ipol_sum2;
+    mun  *= 1. / ipol_sum2;
+
+    assert( fabs(sw + snw + halite_saturation) <= 1 + numeric_limits<double64>::epsilon()*2. );
+    assert( fabs(sw + snw + halite_saturation) >= 1 - numeric_limits<double64>::epsilon()*2. );
+    return halite_saturation;
+    
+} // InterpolateSystemIgnoring_NAN_Values
+  
+
+
+
+
+
+
+
+
+
+// FLOW FUNCTIONS
   
 /**
     Saturation is always expected to have a value between 0..1.
 */
+// SKM OK
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
   {
@@ -21,6 +178,16 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
   }
   
 
+// SKM OK
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Snw( Element<dim>* const e ) const
+  {
+     assert( e != nullptr );
+     return e->PropertyValueAtBaryCenter( User()->key_sCO2 );
+  }
+
+  
+  
   
   
 /**
@@ -31,18 +198,23 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const e, 
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
-    assert( User()->Viscosity( e, phase ) > 0. );
-    assert( User()->Viscosity( e, phase ) < 1. );
- 
+
+    // aqueous phase
     if ( phase == 0U ) {
-         assert( User()->krw(e) >= 0. );
-         assert( User()->krw(e) <= 1. );
-         return User()->Density( e, 0U ) * (User()->krw(e) / User()->Viscosity( e, 0U ));
+         double64 sw, rhow, muw;
+         InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw, rhow, muw );
+         assert( User()->krw_at(e,sw) >= 0. );
+         assert( User()->krw_at(e,sw) <= 1. );
+         return rhow * (User()->krw_at(e,sw) / muw);
       }
    
-    assert( User()->krn(e) >= 0. );
-    assert( User()->krn(e) <= 1. );
-    return User()->Density( e, 1U ) * (User()->krn(e) / User()->Viscosity( e, 1U ));
+    // carbonic phase
+    double64 sw, snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw, snw, rhon, mun );
+    assert( User()->krn_at(e,sw) >= 0. );
+    assert( User()->krn_at(e,sw) <= 1. );
+    
+    return rhon * (User()->krn_at(e,sw) / mun);
  }
 
 
@@ -63,23 +235,20 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( Element<dim>* const 
 
     if ( phase == 0U ) {
          if ( sw <= srw ) return 0.;
-         if ( sw >= 1. - srn ) return 1.;
-         assert( User()->Viscosity( e, phase ) > 0. );
-         assert( User()->Viscosity( e, phase ) < 1. );
+         double64 sw, rhow, muw;
+         InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw, rhow, muw );
          assert( User()->krw_at(e,sw) >= 0. );
          assert( User()->krw_at(e,sw) <= 1. );
-         return User()->Density( e, 0U ) * (User()->krw_at(e,sw) / User()->Viscosity( e, 0U ));
+         return rhow * (User()->krw_at(e,sw) / muw);
       }
    
-    // if there is only 1 mobile phase 0 (water)
-    if ( sw <= srw ) return 1.;
+    // carbonic phase
     if ( sw >= 1. - srn ) return 0.;
-    // else
-    assert( User()->Viscosity( e, phase ) > 0. );
-    assert( User()->Viscosity( e, phase ) < 1. );
+    double64 snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw, snw, rhon, mun );
     assert( User()->krn_at(e,sw) >= 0. );
     assert( User()->krn_at(e,sw) <= 1. );
-    return User()->Density( e, 1U ) * (User()->krn_at(e,sw) / User()->Viscosity( e, 1U ));
+    return rhon * (User()->krn_at(e,sw) / mun);
  }
   
 
@@ -94,43 +263,79 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>*
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
     
-    if ( phase == 0U )
-      return User()->Density( e, 0U ) * (User()->dkrwds(e) / User()->Viscosity( e, 0U ));
-    
-    return User()->Density( e, 1U ) * (User()->dkrnds(e) / User()->Viscosity( e, 1U ));
-  }
+    if ( phase == 0U ) {
+          double64 sw, rhow, muw;
+          InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw, rhow, muw );
+          if ( sw <= e->Read( User()->key_srH2O ) ) return 0.;
+          return rhow * (User()->dkrwds_at(e,sw) / muw);
+       }
+    // carbonic phase
+    double64 sw, snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw, snw, rhon, mun );
+    if ( sw >= 1. - e->Read( User()->key_srCO2 ) ) return 0.;
+    assert( User()->krn_at(e,sw) >= 0. );
+    assert( User()->krn_at(e,sw) <= 1. );
+
+    return rhon * (User()->dkrnds_at(e,sw) / mun);
+ }
   
 
 
 
-  /**
-   Mobility saturation derivative for phase i.
-   */
-  template<size_t dim, template<size_t> class USER>
-  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, size_t phase, double64 sw ) const
+/**
+    Mobility saturation derivative for aqueous (i=0) or carbonic (i=1) phase.
+ */
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, size_t phase, double64 sw ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
     
-    if ( phase == 0U )
-      return User()->Density( e, 0U ) * (User()->dkrwds_at(e,sw) / User()->Viscosity( e, 0U ));
-    
-    return User()->Density( e, 1U ) * (User()->dkrnds_at(e,sw) / User()->Viscosity( e, 1U ));
+    if ( phase == 0U ) {
+          double64 sw_ignored, rhow, muw;
+          InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw_ignored, rhow, muw );
+          if ( sw <= e->Read( User()->key_srH2O ) ) return 0.;
+          return rhow * (User()->dkrwds_at(e,sw) / muw);
+       }
+    // carbonic phase
+    double64 sw_ignored, snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw_ignored, snw, rhon, mun );
+    if ( sw >= 1. - e->Read( User()->key_srCO2 ) ) return 0.;
+    assert( User()->krn_at(e,sw) >= 0. );
+    assert( User()->krn_at(e,sw) <= 1. );
+
+    return rhon * (User()->dkrnds_at(e,sw) / mun);
   }
   
 
   
   
   
-  /**
-      Sum of mass mobilities (not multiplied with permeability).
-   */
-  template<size_t dim, template<size_t> class USER>
-  double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(Element<dim>* const e ) const
+/**
+    Sum of mass mobilities (not multiplied with permeability).
+ */
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(Element<dim>* const e ) const
   {
     assert( e != nullptr );
-    return User()->Density( e, 1U ) * (User()->krn(e) / User()->Viscosity( e, 1U )) +
-           User()->Density( e, 0U ) * (User()->krw(e) / User()->Viscosity( e, 0U ));
+    
+    double64 sw, rhow, muw;
+    InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw, rhow, muw );
+    assert( sw >= 0. && sw <= 1. );
+   
+    // if there is a mobile aqueous phase and the carbonic phase is immobile
+    assert( !isnan(User()->krw_at(e,sw)) );
+    double64 mob_t = ( sw > 0. ) ? rhow * User()->krw_at(e,sw) / muw : 0.;
+    const double64 srn = e->Read( User()->key_srCO2 );
+    if ( sw >= (1. - srn) ) return mob_t;
+
+    // if there is a mobile carbonic phase as well
+    double64 snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw, snw, rhon, mun );
+    assert( !isnan(User()->krn_at(e,sw)) );
+    if ( snw > 0. ) mob_t += rhon * User()->krn_at(e,sw) / mun;
+    
+    return mob_t;
  }
 
 
@@ -144,8 +349,24 @@ template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility_at( Element<dim>* const e, double64 sw ) const
  {
     assert( e != nullptr );
-    return User()->Density( e, 1U ) * (User()->krn_at(e,sw) / User()->Viscosity( e, 1U )) +
-           User()->Density( e, 0U ) * (User()->krw_at(e,sw) / User()->Viscosity( e, 0U ));
+
+    double64 sw_ignore, rhow, muw;
+    InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw_ignore, rhow, muw );
+    assert( sw >= 0. && sw <= 1. );
+   
+    // if there is a mobile aqueous phase and the carbonic phase is immobile
+    assert( !isnan(User()->krw_at(e,sw)) );
+    double64 mob_t = ( sw > 0. ) ? rhow * User()->krw_at(e,sw) / muw : 0.;
+    const double64 srn = e->Read( User()->key_srCO2 );
+    if ( sw >= (1. - srn) ) return mob_t;
+
+    // if there is a mobile carbonic phase as well
+    double64 snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw_ignore, snw, rhon, mun );
+    assert( !isnan(User()->krn_at(e,sw)) );
+    if ( snw > 0. ) mob_t += rhon * User()->krn_at(e,sw) / mun;
+     
+    return mob_t;
  }
 
 
@@ -443,22 +664,20 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( Element<dim>* const e,
                                                         VectorVariable<dim>& dip_vc ) const
  {
     assert( e != nullptr );
-    const double64 rhow = User()->Density(e,0U);
-    const double64 rhon = User()->Density(e,1U);
-    assert( !isnan(rhow) );
-    assert( !isnan(rhon) );
-    const double64 muw = User()->Viscosity( e, 0U );
-    const double64 mun = User()->Viscosity( e, 1U );
-    assert( !isnan(muw) );
-    assert( !isnan(mun) );
-    const double64 termw = rhow * rhow * (User()->krw(e) / muw);
-    const double64 termn = rhon * rhon * (User()->krn(e) / mun);
+    // aqueous phase
+    double64 sw, rhow, muw;
+    InterpolateAqueousPhaseIgnoring_NAN_Values( e, sw, rhow, muw );
+    double64 gravity_term = (sw > 0.) ? rhow * rhow * (User()->krw(e) / muw) : 0.;
+    // carbonic phase
+    double64 snw, rhon, mun;
+    InterpolateCarbonicPhaseIgnoring_NAN_Values( e, sw, snw, rhon, mun );
+    if ( snw > 0. ) gravity_term += rhon * rhon * (User()->krn(e) / mun);
 
     // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
     // TODO: use the specific acceleration of gravity that is stored on the actual model.
     e->Read( User()->key_dip, dip_vc );
     assert( !isnan(e->Read(User()->key_kV)) );
-    dip_vc *= e->Read(User()->key_kV) * -ACC_GRAVITY * (termw + termn);
+    dip_vc *= e->Read(User()->key_kV) * User()->acceleration_of_gravity_ * gravity_term;
 }
 
 
@@ -473,7 +692,7 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( Element<dim>* const e,
  */
 template<size_t dim, template<size_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_phase( Element<dim>* const e,
-                                                        VectorVariable<dim>& dip_vc, size_t phase ) const
+                                                                    VectorVariable<dim>& dip_vc, size_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -484,14 +703,14 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_phase( Element<dim>
         const double64 muw = User()->Viscosity( e, 0U );
         assert( !isnan(muw) );
         e->Read( User()->key_dip, dip_vc );
-        dip_vc *= e->Read(User()->key_kV) * (User()->krw(e) / muw) * rhow * rhow * -ACC_GRAVITY;
+        dip_vc *= e->Read(User()->key_kV) * (User()->krw(e) / muw) * rhow * rhow * User()->acceleration_of_gravity_;
     } else if (phase == 1U){
         const double64 rhon = User()->Density(e,1U);
         assert( !isnan(rhon) );
         const double64 mun = User()->Viscosity( e, 1U );
         assert( !isnan(mun) );
         e->Read( User()->key_dip, dip_vc );
-        dip_vc *= e->Read(User()->key_kV) * (User()->krn(e) / mun) * rhon * rhon * -ACC_GRAVITY;    
+        dip_vc *= e->Read(User()->key_kV) * (User()->krn(e) / mun) * rhon * rhon * User()->acceleration_of_gravity_;
     }  
 }  
     
@@ -573,6 +792,8 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>
  
     See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
     permeability in direction of flow  x  lambda_overbar  x pc-gradient.
+ 
+    @note lambda overbar contains the fluid densities and viscosities.
  */
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const e ) const
@@ -585,35 +806,281 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Ele
    assert( !isnan(dpcds) );
    return k * MobilityProduct(e) * dpcds;
 }
-
-
-//by supplying mobility product
-template<size_t dim, template<size_t> class USER>
-double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const e, double64 lambda_overbar ) const
-{
-   assert( e != nullptr );
-   assert( User()->key_k.type == SCALAR );
-   const double64 k     = e->Read(User()->key_k);
-   const double64 dpcds = User()->dpcds(e);
-   assert( !isnan(k) );
-   assert( !isnan(dpcds) );
-   return k * lambda_overbar * dpcds;
-}
  
  
-  
+// TODO: create versions for tensor permeability
 template<size_t dim, template<size_t> class USER>
 double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Element<dim>* const e, size_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
+    assert( User()->key_k.type == SCALAR );
     
     // TODO: Make sure that this is the permeability in the direction of the facet normal
     return  e->Read(User()->key_k) * ( (phase==0U) ? Mobility( e, 0U ) : Mobility( e, 1U ) )* User()->dpcds(e);
   }
     
 
+
+
+  // ===============================================================================================
   
+  // NODE-BASED COMPUTATIONS using element parameters, but saturations and fluid properties from the current node
+
+  // ===============================================================================================
+  
+    /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const eptr, size_t n, size_t phase ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+    assert( phase == 0U || phase == 1U );
+   
+    // aqueous case
+    if ( phase == 0U )
+      return eptr->N(n)->Read(User()->key_rhoH2O) * (User()->krw_at(eptr,eptr->N(n)->Read(User()->key_sH2O)) / eptr->N(n)->Read(User()->key_muH2O));
+   
+    // carbonic phase
+    return eptr->N(n)->Read(User()->key_rhoCO2) * (User()->krn_at(eptr,eptr->N(n)->Read(User()->key_sH2O)) / eptr->N(n)->Read(User()->key_muCO2));
+   
+ } // end Mobility
+
+
+
+
+    /// d lambda_i / dsw
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const eptr, size_t n, size_t phase ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+    assert( phase == 0U || phase == 1U );
+
+    // aqueous phase
+    if ( phase == 0U ) {
+          const double64 sw(eptr->N(n)->Read(User()->key_sH2O)),
+                         rhow(eptr->N(n)->Read(User()->key_rhoH2O)),
+                         muw(eptr->N(n)->Read(User()->key_muH2O));
+      
+          if ( sw <= eptr->Read( User()->key_srH2O ) ) return 0.;
+          return rhow * (User()->dkrwds_at(eptr,sw) / muw);
+       }
+   
+    // carbonic phase
+    const double64 sw(eptr->N(n)->Read(User()->key_sH2O)),
+                   snw(eptr->N(n)->Read(User()->key_sCO2)),
+                   rhon(eptr->N(n)->Read(User()->key_rhoCO2)), mun(eptr->N(n)->Read(User()->key_muCO2));
+
+    if ( sw >= 1. - eptr->Read( User()->key_srCO2 ) ) return 0.;
+    assert( User()->krn_at(eptr,sw) >= 0. );
+    assert( User()->krn_at(eptr,sw) <= 1. );
+
+    return rhon * (User()->dkrnds_at(eptr,sw) / mun);
+
+ } // end MobilityDerivative
+ 
+ 
+ 
+ 
+    /// lambda_t: sum of phase-mobility * density products
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility( Element<dim>* const eptr, size_t n ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+
+    // if there is a mobile aqueous phase and the carbonic phase is immobile
+    const double64 sw(eptr->N(n)->Read(User()->key_sH2O));
+    double64 mob_t = ( sw > 0. ) ? eptr->N(n)->Read(User()->key_rhoH2O) * User()->krw_at(eptr,sw) / eptr->N(n)->Read(User()->key_muH2O) : 0.;
+    const double64 srn = eptr->Read( User()->key_srCO2 );
+    if ( sw >= (1. - srn) ) return mob_t;
+
+    // if there is a mobile carbonic phase as well
+    const double64 snw(eptr->N(n)->Read(User()->key_sCO2));
+    if ( snw > 0. ) mob_t += eptr->N(n)->Read(User()->key_rhoCO2) * User()->krn_at(eptr,sw) / eptr->N(n)->Read(User()->key_muCO2);
+   
+    return mob_t;
+
+ } // end TotalMobility
+ 
+ 
+  
+    /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const eptr, size_t node ) const
+ {
+    assert( eptr != nullptr );
+    assert( node < eptr->Nodes() );
+   
+    const double64 lambda_w = Mobility( eptr, node, 0U );
+    const double64 lambda_n = Mobility( eptr, node, 1U );
+
+    return (lambda_w * lambda_n) / (lambda_w + lambda_n);
+   
+ } // end MobilityProduct
+ 
+ 
+
+    /// d lambda overbar / dsw also known as dGds
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>* const e, size_t n, bool evaluate_numerically ) const
+ {
+    assert( e != nullptr );
+    assert( n < e->Nodes() );
+
+    // product is zero at endmember saturations
+    const double64 sw(e->N(n)->Read(User()->key_sH2O));
+    if ( User()->EffectiveSaturation_at(e,sw) <= 0. || User()->EffectiveSaturation_at(e,sw) >= 1. )
+      return static_cast<double64>(0.);
+
+    if ( evaluate_numerically )
+      throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative", "numerical version not implemented yet");
+
+    const double64 lw   = Mobility( e, n, 0U );
+    const double64 ln   = Mobility( e, n, 1U );
+    const double64 rhow = (sw > 0.) ? e->N(n)->Read(User()->key_rhoH2O) : 0.;
+    const double64 srn  = e->Read( User()->key_srCO2 );
+    const double64 rhon = (srn > 0.) ? e->N(n)->Read(User()->key_rhoCO2) : 0.;
+    const double64 lt   = lw * rhow + ln * rhon;
+    const double64 lt2  = lt * lt;
+    const double64 ln2  = ln * ln;
+    const double64 lw2  = lw * lw;
+   
+    const double64 dlwds = User()->dkrwds(e) / e->N(n)->Read(User()->key_muH2O);
+    const double64 dlnds = User()->dkrnds(e) / e->N(n)->Read(User()->key_muCO2);
+ 
+    return ( rhow * dlwds*ln2 + rhon * dlnds*lw2 ) / lt2;
+
+ } // end MobilityProductDerivative
+ 
+ 
+ 
+
+     /// fractional mass flow; 0=water, 1=non-wetting phase
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const eptr, size_t node, size_t phase ) const
+ {
+    assert( eptr != nullptr );
+    assert( node < eptr->Nodes() );
+    assert( phase == 0U || phase == 1U );
+   
+    const double64 lw = Mobility( eptr, node, 0U );
+    const double64 ln = Mobility( eptr, node, 1U );
+
+    if ( phase == 0U ) return lw / (lw + ln);
+      
+    return ln / (lw + ln);
+
+ } // end f
+ 
+ 
+ 
+
+    /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t n, size_t phase ) const
+ {
+    assert( e != nullptr );
+    assert( n < e->Nodes() );
+    assert( phase == 0U || phase == 1U );
+
+    // the fractional flow derivative is zero beyond the end-point saturations
+    const double64 sw  = e->N(n)->Read(User()->key_sH2O);
+    const double64 sn  = e->N(n)->Read(User()->key_sCO2);
+    const double64 srw = e->Read( User()->key_srH2O );
+    const double64 srn = e->Read( User()->key_srCO2 );
+    if      ( sw <= srw )       return 0.;
+    else if ( sw  >= 1. - srn ) return 0.;
+ 
+    const double64 rhow = (sw > 0.) ? e->N(n)->Read(User()->key_rhoH2O) : 0.;
+    const double64 rhon = (sn > 0.) ? e->N(n)->Read(User()->key_rhoCO2) : 0.;
+    const double64 muw = e->N(n)->Read(User()->key_muH2O);
+    const double64 mun = e->N(n)->Read(User()->key_muCO2);
+    assert( !isnan(muw) );
+    assert( !isnan(mun) );
+    const double64 lw  = rhow * (User()->krw_at(e,sw) / muw);
+    const double64 ln  = rhon * (User()->krn_at(e,sw) / mun);
+    const double64 lt  = lw + ln;
+    const double64 lt2 = lt * lt;
+   
+    const double64 dlwds = rhow * (User()->dkrwds_at(e,sw) / muw);
+    const double64 dlnds = rhon * (User()->dkrnds_at(e,sw) / mun);
+   
+    return (dlwds * ln - dlnds * lw) / lt2;
+
+ } // end dfds
+ 
+ 
+ 
+
+    /// multiplier for advection viscosity coefficient in the case of non-linear advection
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const eptr, size_t n ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier", "numerical version not implemented yet");
+
+ } // end AdvectionMultiplier
+ 
+ 
+ 
+
+    /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
+template<size_t dim, template<size_t> class USER>
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm(Element<dim>* const eptr, size_t n, VectorVariable<dim>& dip_vc ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+
+    // aqueous phase
+    const double64 sw(eptr->N(n)->Read(User()->key_sH2O)),
+                   rhow(eptr->N(n)->Read(User()->key_rhoH2O)),
+                   muw(eptr->N(n)->Read(User()->key_muH2O));
+    double64 gravity_term = (sw > 0.) ? rhow * rhow * (User()->krw_at(eptr,sw) / muw) : 0.;
+   
+    // carbonic phase
+    const double64 snw(eptr->N(n)->Read(User()->key_sCO2)),
+                   rhon(eptr->N(n)->Read(User()->key_rhoCO2)),
+                   mun(eptr->N(n)->Read(User()->key_muCO2));
+    if ( snw > 0. ) gravity_term += rhon * rhon * (User()->krn_at(eptr,sw) / mun);
+
+    // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
+    // TODO: use the specific acceleration of gravity that is stored on the actual model.
+    eptr->Read( User()->key_dip, dip_vc );
+    assert( !isnan(eptr->Read(User()->key_kV)) );
+    dip_vc *= eptr->Read(User()->key_kV) * User()->acceleration_of_gravity_ * gravity_term;
+
+ } // end GravityTerm
+ 
+ 
+ 
+
+    /// average mass diffusion coefficient for CO2 in the aqueous phase
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* const eptr, size_t n, size_t phase ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+    assert( phase == 0U || phase == 1U );
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier", "numerical version not implemented yet");
+
+ } // end DiffusionMultiplier
+ 
+ 
+ 
+  
+    /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const eptr, size_t n ) const
+ {
+    assert( eptr != nullptr );
+    assert( n < eptr->Nodes() );
+    throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier", "numerical version not implemented yet");
+
+ } // end CapillaryDiffusionMultiplier
+
   
   
   // ===============================================================================================

@@ -57,9 +57,13 @@ namespace csmp {
      0.8	0.2	0.8	0
      1	0	1	0
   @endcode
+ 
+  @attention there is no effective saturation as this is already accounted for in terms of the spline values
+  negative values are avoided by returning 0 or 1 at saturations below and above the end-point saturations.
 
    @author SKM 
    @date 14/1/2007
+   @update 9/2/2019
  
 */
 template<size_t dim, template<size_t> class USER>
@@ -67,11 +71,14 @@ class ExperimentalSaturationFunctions {
   public:
     /// TODO: reads capillary preessure and saturation functions from "rocktype" file
     explicit ExperimentalSaturationFunctions( const char* filename );
-    
-    // pc, kri, and derivative methods that use a user supplied saturation value
   
-    /// Effective non-wetting phase saturation as calculated from the supplied saturation value, sw
-    double64 EffectiveSaturation_at( Element<dim>* const , double64 sw ) const;
+    /// (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
+    double64 EffectiveSaturation( Element<dim>* const ) const;
+    
+    /// (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
+    double64 EffectiveSaturation_at( Element<dim>* const, double64 sw ) const;
+
+    // pc, kri, and derivative methods that use a user supplied saturation value
   
     double64 pc_at( Element<dim>* const, double64 sw ) const;
  
@@ -93,9 +100,6 @@ class ExperimentalSaturationFunctions {
   
   
     // pc, kri, and derivative methods that use saturation values at the element barycentre (for FE mobility calculations etc.)
-  
-    /// Effective wetting phase saturation at the barycentre of the element
-    double64 EffectiveSaturation( Element<dim>* const ) const;
   
     double64 pc( Element<dim>* const ) const;
   
@@ -131,7 +135,8 @@ class ExperimentalSaturationFunctions {
     size_t RockType( Element<dim>* const ) const;
   
     std::vector<csmp::CubicSpline> kr1_, kr2_, pc_;
-    const double64 max_derivative_ = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double64 max_derivative_         = 5.0e+8; ///< the absolute value of any derivative calculated herein must be less than this value
+    const double64 max_capillary_pressure_ = 2.0e+7; ///< 20 MPa ~ tensile strength of the rock
 };
   
 } // end namespace csmp

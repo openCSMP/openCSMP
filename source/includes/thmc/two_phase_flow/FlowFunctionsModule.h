@@ -47,13 +47,14 @@ template<size_t> class PropertyDatabase;
 */
 
 template<size_t dim>
-class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-    public BrooksCoreySaturationFunctions<dim,FlowFunctionsModule1>,  ///< saturation function model
-    public TwoPhaseFlowFunctions<dim,FlowFunctionsModule1>,      ///< mobilities etc.
-    public Fluid<dim,FlowFunctionsModule1> {                          ///< fluids module / EOS interface
+class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,               ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
+                             public BrooksCoreySaturationFunctions<dim,FlowFunctionsModule1>, ///< saturation function model
+                             public TwoPhaseFlowFunctions<dim,FlowFunctionsModule1>,          ///< mobilities etc.
+                             public Fluid<dim,FlowFunctionsModule1> {                         ///< fluids module / EOS interface
       
-  public:
-    explicit FlowFunctionsModule1( const PropertyDatabase<dim>& );
+   public:
+     explicit FlowFunctionsModule1( const PropertyDatabase<dim>&, double64 acc_gravity );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 // USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
@@ -61,29 +62,30 @@ typedef FlowFunctionsModule1<3U>  ACGSS_SlightlyCompressible2PhaseFlowFunctions;
 
 
 template<size_t dim>
-class FlowFunctionsModule2 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
-    public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsModule2>,  ///< saturation function model
-    public TwoPhaseFlowFunctions<dim,FlowFunctionsModule2>,                    ///< mobilities etc.
-    public Fluid<dim,FlowFunctionsModule2> {                                        ///< fluids module / EOS interface
+class FlowFunctionsModule2 : public variables::VariableSet_CO2GeoSequestration,                             ///< all variables in transport scheme
+                             public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsModule2>, ///< saturation function model
+                             public TwoPhaseFlowFunctions<dim,FlowFunctionsModule2>,                        ///< mobilities etc.
+                             public Fluid<dim,FlowFunctionsModule2> {                                       ///< fluids module / EOS interface
       
-  public:
-    explicit FlowFunctionsModule2( const PropertyDatabase<dim>& );
+   public:
+     explicit FlowFunctionsModule2( const PropertyDatabase<dim>&, double64 acc_gravity );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
-// USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
 typedef FlowFunctionsModule2<3U>  ACGSS_Hysteretic_SlightlyCompressible2PhaseFlowFunctions;
 
 
 
 template<size_t dim>
 class FlowFunctionsModule3 : public variables::VariableSet_CO2GeoSequestration,
-                                public ExperimentalSaturationFunctions<dim,FlowFunctionsModule3>,
-                                public TwoPhaseFlowFunctions<dim,FlowFunctionsModule3>,
-                                public Fluid<dim,FlowFunctionsModule3> {
+                             public ExperimentalSaturationFunctions<dim,FlowFunctionsModule3>,
+                             public TwoPhaseFlowFunctions<dim,FlowFunctionsModule3>,
+                             public Fluid<dim,FlowFunctionsModule3> {
       
-  public:
-    /// initialises saturation functions from file and set range of rocktype values accordingly in property database
-    FlowFunctionsModule3( PropertyDatabase<dim>&, const char* model_name="ACGSS_simulator" );
+   public:
+     /// initialises saturation functions from file and set range of rocktype values accordingly in property database
+     FlowFunctionsModule3( PropertyDatabase<dim>&, double64 acc_gravity, const char* model_name="ACGSS_simulator" );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
 typedef FlowFunctionsModule3<3U>  ACGSS_Experimental_SlightlyCompressible2PhaseFlowFunctions;
@@ -97,11 +99,11 @@ class FlowFunctionsModule4 : public variables::VariableSet_CO2GeoSequestration, 
     public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule4>,      ///< mobilities etc.
     public Fluid<dim,FlowFunctionsModule4> {                          ///< fluids module / EOS interface
       
-  public:
-    explicit FlowFunctionsModule4( const PropertyDatabase<dim>& );
+   public:
+     explicit FlowFunctionsModule4( const PropertyDatabase<dim>&, double64 acc_gravity );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
-// USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
 typedef FlowFunctionsModule4<3U>  ACGSS_Compositional_H2O_CO2_NaCl_FlowFunctions;
 
 
@@ -111,24 +113,25 @@ class FlowFunctionsModule5 : public variables::VariableSet_CO2GeoSequestration, 
     public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule5>,                    ///< mobilities etc.
     public Fluid<dim,FlowFunctionsModule5> {                                        ///< fluids module / EOS interface
       
-  public:
-    explicit FlowFunctionsModule5( const PropertyDatabase<dim>& );
+   public:
+     explicit FlowFunctionsModule5( const PropertyDatabase<dim>&, double64 acc_gravity );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
 };
 
-// USE THIS TYPE RATHER THAN THE COMPLEX TEMPLATE
 typedef FlowFunctionsModule5<3U>  ACGSS_Hysteretic_Compositional_H2O_CO2_NaCl_FlowFunctions;
 
 
 
 template<size_t dim>
 class FlowFunctionsModule6 : public variables::VariableSet_CO2GeoSequestration,
-                                public ExperimentalSaturationFunctions<dim,FlowFunctionsModule6>,
-                                public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule6>,
-                                public Fluid<dim,FlowFunctionsModule6> {
+                             public ExperimentalSaturationFunctions<dim,FlowFunctionsModule6>,
+                             public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule6>,
+                             public Fluid<dim,FlowFunctionsModule6> {
       
-  public:
-    /// initialises saturation functions from file and set range of rocktype values accordingly in property database
-    FlowFunctionsModule6( PropertyDatabase<dim>&, const char* model_name="ACGSS_simulator" );
+   public:
+     /// initialises saturation functions from file and set range of rocktype values accordingly in property database
+     FlowFunctionsModule6( PropertyDatabase<dim>&, double64 acc_gravity, const char* model_name="ACGSS_simulator" );
+     double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
 };
 
 typedef FlowFunctionsModule6<3U>  ACGSS_Experimental_Compositional_H2O_CO2_NaCl_FlowFunctions;

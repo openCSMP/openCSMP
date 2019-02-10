@@ -33,12 +33,21 @@ namespace csmp {
     @date 7/1/2019
  
 */
+// TODO: use these to generate values at nodes as well (no interpolations required!)
+// TODO: does the capillary diffusion multiplier need multiplication with density
+// TODO: create tensor permeability versions of these functions
 template<size_t dim, template<size_t> class USER>
 class H2O_CO2_NaCl_FlowFunctions {
   public:
+  
+    // ELEMENT BASED CALCULATIONS with '_at' versions for computations involving facet and sector integration point saturations
+  
     /// water saturation interpolated to element barycentre; use Read( key_sH2O ) to get nodal value
     double64 Sw( Element<dim>* const e ) const;
       
+    /// non-wetting phase saturation interpolated to element barycentre; use Read( key_sCO2 ) to get nodal value
+    double64 Snw( Element<dim>* const e ) const;
+
     /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
     double64 Mobility( Element<dim>* const, size_t phase ) const;
     
@@ -117,12 +126,44 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
     double64 CapillaryDiffusionMultiplier( Element<dim>* const ) const;
     
-    double64 CapillaryDiffusionMultiplier( Element<dim>* const, double64 ) const;
-    
     double64 CapillaryDiffusionMultiplier_Phase( Element<dim>* const, size_t phase ) const;
 
-    /// to model cappillary diffusion of the non-wetting, simply use a negative sign on the multiplier computed with previous function
-    //double64 CapillaryDiffusionMultiplier(Element<dim>* const, size_t phase ) const;
+  
+    // NODE-BASED COMPUTATIONS using element parameters, but saturations and fluid properties from the current node
+
+    /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
+    double64 Mobility( Element<dim>* const, size_t node, size_t phase ) const;
+
+    /// d lambda_i / dsw
+    double64 MobilityDerivative( Element<dim>* const, size_t node, size_t phase ) const;
+ 
+    /// lambda_t: sum of phase-mobility * density products
+    double64 TotalMobility( Element<dim>* const, size_t node ) const;
+  
+    /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
+    double64 MobilityProduct( Element<dim>* const, size_t node ) const;
+
+    /// d lambda overbar / dsw also known as dGds
+    double64 MobilityProductDerivative( Element<dim>* const, size_t node, bool  evaluate_numerically=false ) const;
+
+     /// fractional mass flow; 0=water, 1=non-wetting phase
+    double64 f(Element<dim>* const, size_t node, size_t phase ) const;
+
+    /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
+    double64 dfds( Element<dim>* const, size_t node, size_t phase ) const;
+
+    /// multiplier for advection viscosity coefficient in the case of non-linear advection
+    double64 AdvectionMultiplier( Element<dim>* const, size_t node ) const;
+
+    /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
+    void     GravityTerm(Element<dim>* const, size_t node, VectorVariable<dim>& dip_vec ) const;
+
+    /// average mass diffusion coefficient for CO2 in the aqueous phase
+    double64 DiffusionMultiplier( Element<dim>* const, size_t node, size_t phase ) const;
+  
+    /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
+    double64 CapillaryDiffusionMultiplier( Element<dim>* const, size_t node ) const;
+
 
     // central difference derivatives of saturation and flow functions
   
@@ -142,19 +183,31 @@ class H2O_CO2_NaCl_FlowFunctions {
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
       
     // NON-STANDARD INTERFACES
+    /// quick look at which phases exist on all nodes, returns true if aqueous and carbonic phases are continuous and there is no salt
+    bool ContinuousPhases( Element<dim>* const, bool& aqueous, bool& carbonic, bool& halite ) const;
+  
+    /// NAN values of rhow or muw are ignored in the interpolation
+    void InterpolateAqueousPhaseIgnoring_NAN_Values( Element<dim>* const, double64& sw, double64& rhow, double64& muw ) const;
+
+    /// interpolates the saturation of the aqueous and carbonic phase; NAN values of rhon or mun are ignored in the interpolation
+    void InterpolateCarbonicPhaseIgnoring_NAN_Values( Element<dim>* const, double64& sw, double64& snw, double64& rhon, double64& mun ) const;
+  
+    /// returns halite saturation = volume fraction of salt
+    double64 InterpolateSystemIgnoring_NAN_Values( Element<dim>* const,
+                                                   double64& sw, double64& rhow, double64& muw,
+                                                   double64& snw, double64& rhon, double64& mun ) const;
 
     /// calculating the  Inflection point
-    double64 InflectionPointSaturation( Element<dim>* const ) const ;
+    double64 InflectionPointSaturation( Element<dim>* const ) const;
     
     /// calculating the Tangent Point
-    double64 TangentPointSaturation( Element<dim>* const ) const ;
+    double64 TangentPointSaturation( Element<dim>* const ) const;
     
     /// calculating  Buckley Leverett function... this has to be zero at shock point
-    double64 TangentOfFractionalFlowFunction( Element<dim>* const, double64 S) const ;
+    double64 TangentOfFractionalFlowFunction( Element<dim>* const, double64 S) const;
     
     /// finding root of  Buckley Leverett function... which results is shock point saturation.
-    double64 FindRootSecantMethod( Element<dim>* const, double64 S1, double64 S2) const ;
-
+    double64 FindRootSecantMethod( Element<dim>* const, double64 S1, double64 S2) const;
 };
 
 } // end csmp

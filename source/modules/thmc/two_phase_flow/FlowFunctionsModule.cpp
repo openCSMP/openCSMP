@@ -6,40 +6,46 @@ using namespace std;
 namespace csmp {
 
 template<size_t dim>
-FlowFunctionsModule1<dim>::FlowFunctionsModule1( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+FlowFunctionsModule1<dim>::FlowFunctionsModule1( const PropertyDatabase<dim>& db, double64 acc_gravity )
+ : variables::VariableSet_CO2GeoSequestration(db),
+   acceleration_of_gravity_(acc_gravity)
  {
  }
 
 template<size_t dim>
-FlowFunctionsModule2<dim>::FlowFunctionsModule2( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+FlowFunctionsModule2<dim>::FlowFunctionsModule2( const PropertyDatabase<dim>& db, double64 acc_gravity )
+ : variables::VariableSet_CO2GeoSequestration(db),
+   acceleration_of_gravity_(acc_gravity)
  {
  }
 
 template<size_t dim>
-FlowFunctionsModule3<dim>::FlowFunctionsModule3( PropertyDatabase<dim>& db, const char* model_name )
- : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim, csmp::FlowFunctionsModule3>( (string(model_name) + "-rock_types.txt").c_str() )
+FlowFunctionsModule3<dim>::FlowFunctionsModule3( PropertyDatabase<dim>& db, double64 acc_gravity, const char* model_name )
+ : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim, csmp::FlowFunctionsModule3>( (string(model_name) + "-rock_types.txt").c_str() ),
+   acceleration_of_gravity_(acc_gravity)
  {
     // setting the maximum number of rock types in the database to the number of records red from the -rock_types.txt file
     db.SetRangeOf( "rocktype", 0., this->RockTypes() );
  }
  
  template<size_t dim>
-FlowFunctionsModule4<dim>::FlowFunctionsModule4( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+FlowFunctionsModule4<dim>::FlowFunctionsModule4( const PropertyDatabase<dim>& db, double64 acc_gravity )
+ : variables::VariableSet_CO2GeoSequestration(db),
+   acceleration_of_gravity_(acc_gravity)
  {
  }
 
 template<size_t dim>
-FlowFunctionsModule5<dim>::FlowFunctionsModule5( const PropertyDatabase<dim>& db )
- : variables::VariableSet_CO2GeoSequestration(db)
+FlowFunctionsModule5<dim>::FlowFunctionsModule5( const PropertyDatabase<dim>& db, double64 acc_gravity )
+ : variables::VariableSet_CO2GeoSequestration(db),
+   acceleration_of_gravity_(acc_gravity)
  {
  }
 
 template<size_t dim>
-FlowFunctionsModule6<dim>::FlowFunctionsModule6( PropertyDatabase<dim>& db, const char* model_name )
- : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim, csmp::FlowFunctionsModule6>( (string(model_name) + "-rock_types.txt").c_str() )
+FlowFunctionsModule6<dim>::FlowFunctionsModule6( PropertyDatabase<dim>& db, double64 acc_gravity, const char* model_name )
+ : variables::VariableSet_CO2GeoSequestration(db), ExperimentalSaturationFunctions<dim, csmp::FlowFunctionsModule6>( (string(model_name) + "-rock_types.txt").c_str() ),
+   acceleration_of_gravity_(acc_gravity)
  {
     // setting the maximum number of rock types in the database to the number of records red from the -rock_types.txt file
     db.SetRangeOf( "rocktype", 0., this->RockTypes() );
