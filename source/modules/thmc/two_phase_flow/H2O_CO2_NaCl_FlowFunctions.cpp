@@ -169,7 +169,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim
    
     return true;
 
- } // end InterpolateAqueousPhase
+ } // end InterpolateCarbonicPhase
 
 
 
@@ -204,7 +204,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* 
               mun  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muCO2);
               ipol_sum2 += e->FE()->NRST[i];
            }
-         halite_saturation += e->N(i)->Read( User()->key_NaCl );
+         halite_saturation += e->FE()->NRST[i] * e->N(i)->Read( User()->key_NaCl );
       }
     // correcting for the changed weighting factor when nodes have no density or viscosity values
     if ( ipol_sum1 > 0. ) {
@@ -221,7 +221,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* 
    
     return halite_saturation;
     
-} // InterpolateSystemIgnoring_NAN_Values
+} // InterpolateSystem
   
 
 
