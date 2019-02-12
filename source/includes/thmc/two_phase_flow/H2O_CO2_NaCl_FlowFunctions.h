@@ -32,6 +32,12 @@ namespace csmp {
     @author Stephan Matthai
     @date 7/1/2019
  
+    @discussion Phase state cannot be interpolated between nodes !
+      If we read the system state from the element,
+      in the case of an element-based phase state calculation, it may be
+      entirely different from that computed at the nodes and therefore,
+      we may try to fetch densities and viscosities which do not exist ?!
+
 */
 // TODO: use these to generate values at nodes as well (no interpolations required!)
 // TODO: does the capillary diffusion multiplier need multiplication with density
@@ -120,7 +126,7 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * saturation derivative of the mobility product dG/ds, writes result on dip vectpor
     void GravityMultiplier_dGds( Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
 
-    /// average mass diffusion coefficient for CO2 in the aqueous phase
+    ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1
     double64 DiffusionMultiplier( Element<dim>* const, size_t phase ) const;
     
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
@@ -158,7 +164,7 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
     void     GravityTerm(Element<dim>* const, size_t node, VectorVariable<dim>& dip_vec ) const;
 
-    /// average mass diffusion coefficient for CO2 in the aqueous phase
+    ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1
     double64 DiffusionMultiplier( Element<dim>* const, size_t node, size_t phase ) const;
   
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
@@ -186,16 +192,22 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// quick look at which phases exist on all nodes, returns true if aqueous and carbonic phases are continuous and there is no salt
     bool ContinuousPhases( Element<dim>* const, bool& aqueous, bool& carbonic, bool& halite ) const;
   
-    /// NAN values of rhow or muw are ignored in the interpolation
-    void InterpolateAqueousPhaseIgnoring_NAN_Values( Element<dim>* const, double64& sw, double64& rhow, double64& muw ) const;
+    /// just the saturation of the aqueous phase
+    double64 InterpolateAqueousPhaseSaturation( const Element<dim>* const ) const;
+  
+    /// interpolates saturations of all mobile phases to barycenter and returns their sum which should be 1 - halite_saturation
+    double64 InterpolateSaturations( Element<dim>* const, double64& sw, double64& snw ) const;
+  
+    /// returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false
+    bool InterpolateAqueousPhase( Element<dim>* const, double64& sw, double64& rhow, double64& muw ) const;
 
-    /// interpolates the saturation of the aqueous and carbonic phase; NAN values of rhon or mun are ignored in the interpolation
-    void InterpolateCarbonicPhaseIgnoring_NAN_Values( Element<dim>* const, double64& sw, double64& snw, double64& rhon, double64& mun ) const;
+    /// returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false
+    bool InterpolateCarbonicPhase( Element<dim>* const, double64& snw, double64& rhon, double64& mun ) const;
   
     /// returns halite saturation = volume fraction of salt
-    double64 InterpolateSystemIgnoring_NAN_Values( Element<dim>* const,
-                                                   double64& sw, double64& rhow, double64& muw,
-                                                   double64& snw, double64& rhon, double64& mun ) const;
+    double64 InterpolateSystem( Element<dim>* const,
+                                double64& sw, double64& rhow, double64& muw,
+                                double64& snw, double64& rhon, double64& mun ) const;
 
     /// calculating the  Inflection point
     double64 InflectionPointSaturation( Element<dim>* const ) const;
@@ -208,6 +220,16 @@ class H2O_CO2_NaCl_FlowFunctions {
     
     /// finding root of  Buckley Leverett function... which results is shock point saturation.
     double64 FindRootSecantMethod( Element<dim>* const, double64 S1, double64 S2) const;
+  
+  private:
+    mutable double64 sw_,   ///< saturation aqueous phase
+                     sn_,   ///< saturation carbonic phase
+                     swr_,  ///< irreducible saturation aqueous phase
+                     snr_,  ///< residual saturation carbonic phase
+                     rhow_, ///< density aqueous phase (kg/m3)
+                     rhon_, ///< density carbonic phase
+                     muw_,  ///< viscosity aqueous phase (Pa.s)
+                     mun_;  ///< viscosity carbonic phase
 };
 
 } // end csmp

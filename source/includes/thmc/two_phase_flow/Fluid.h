@@ -10,6 +10,7 @@
 #define CSMP_FLUID_H
 
 #include "Node.h"
+#include "PVTX_Calculator_H2O_CO2_NaCl.h"
 
 namespace csmp {
 
