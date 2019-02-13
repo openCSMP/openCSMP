@@ -95,10 +95,10 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
     double64 dfds( Element<dim>* const, size_t phase ) const;
     
-    double64 dfds_at( Element<dim>* const, double64 sw ) const;
+    double64 dfds_at( Element<dim>* const, size_t phase, double64 sw ) const;
     
     /// maximum value of fractional flow / saturation derivative
-    double64 MaxFractionalFlowDerivative( Element<dim>* const ) const;
+    double64 MaxFractionalFlowDerivative( Element<dim>* const, size_t phase ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     double64 AdvectionMultiplier( Element<dim>* const ) const;
@@ -131,17 +131,20 @@ class H2O_CO2_NaCl_FlowFunctions {
     
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
     double64 CapillaryDiffusionMultiplier( Element<dim>* const ) const;
-    
-    double64 CapillaryDiffusionMultiplier_Phase( Element<dim>* const, size_t phase ) const;
+  
+    /// k * dpds(sw) * mobility_product(sw), @attention value can be zero.
+    double64 CapillaryDiffusionMultiplier_at( Element<dim>* const, double64 sw ) const;
+
+    // TODO: used when? double64 CapillaryDiffusionMultiplier_Phase( Element<dim>* const, size_t phase ) const;
 
   
     // NODE-BASED COMPUTATIONS using element parameters, but saturations and fluid properties from the current node
 
     /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
-    double64 Mobility( Element<dim>* const, size_t node, size_t phase ) const;
+    double64 Mobility( Element<dim>* const, size_t phase, size_t node ) const;
 
     /// d lambda_i / dsw
-    double64 MobilityDerivative( Element<dim>* const, size_t node, size_t phase ) const;
+    double64 MobilityDerivative( Element<dim>* const, size_t phase, size_t node ) const;
  
     /// lambda_t: sum of phase-mobility * density products
     double64 TotalMobility( Element<dim>* const, size_t node ) const;
@@ -153,21 +156,20 @@ class H2O_CO2_NaCl_FlowFunctions {
     double64 MobilityProductDerivative( Element<dim>* const, size_t node, bool  evaluate_numerically=false ) const;
 
      /// fractional mass flow; 0=water, 1=non-wetting phase
-    double64 f(Element<dim>* const, size_t node, size_t phase ) const;
+    double64 f( Element<dim>* const, size_t phase, size_t node ) const;
 
     /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double64 dfds( Element<dim>* const, size_t node, size_t phase ) const;
+    double64 dfds( Element<dim>* const, size_t phase, size_t node ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     double64 AdvectionMultiplier( Element<dim>* const, size_t node ) const;
 
     /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
-    void     GravityTerm(Element<dim>* const, size_t node, VectorVariable<dim>& dip_vec ) const;
+    void     GravityTerm( Element<dim>* const, size_t node, VectorVariable<dim>& dip_vec ) const;
 
-    ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1
-    double64 DiffusionMultiplier( Element<dim>* const, size_t node, size_t phase ) const;
+    ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from Element
   
-    /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
+    /// mass-based coefficient for non-linear diffusion of saturation due to saturation-dependent dpc/ds, @attention value can be zero
     double64 CapillaryDiffusionMultiplier( Element<dim>* const, size_t node ) const;
 
 
@@ -224,8 +226,6 @@ class H2O_CO2_NaCl_FlowFunctions {
   private:
     mutable double64 sw_,   ///< saturation aqueous phase
                      sn_,   ///< saturation carbonic phase
-                     swr_,  ///< irreducible saturation aqueous phase
-                     snr_,  ///< residual saturation carbonic phase
                      rhow_, ///< density aqueous phase (kg/m3)
                      rhon_, ///< density carbonic phase
                      muw_,  ///< viscosity aqueous phase (Pa.s)
