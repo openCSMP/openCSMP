@@ -335,8 +335,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krw_at( Element<dim>* const 
     if ( sw <= swr ) return min( kr1_[ RockType(e) ].Value(swr), 1. );
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Value(1.-snr), 1. );
 
     return max( kr1_[ RockType(e) ].Value( sw ), 0. );
@@ -358,7 +358,7 @@ double64 ExperimentalSaturationFunctions<dim,USER>::krn( Element<dim>* const e )
     if ( sw <= swr ) return min( kr2_[ RockType(e) ].Value(swr), 1. );
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
+    assert( snr >= 0. );
     assert( snr <= 1. );
     // below its residual saturation, a phase is immobile and its relative permeability is zero
     if ( sw >= 1. - snr ) return 0.;
@@ -404,8 +404,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const 
     if ( sw <= swr ) return kr1_[ RockType(e) ].Derivative(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Derivative(1.-snr), max_derivative_ );
   
     return min( kr1_[ RockType(e) ].Derivative( sw ), max_derivative_ );
@@ -427,8 +427,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* con
     if ( sw <= swr ) return kr1_[ RockType(e) ].Derivative(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw >= 1. - snr ) return min( kr1_[ RockType(e) ].Derivative(1.-snr), max_derivative_ );
   
     return min( kr1_[ RockType(e) ].Derivative( sw ), max_derivative_ );
@@ -452,8 +452,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const 
     if ( sw <= swr ) return kr2_[ RockType(e) ].Derivative(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw >= 1. - snr ) return max( kr2_[ RockType(e) ].Derivative(1.-snr), -max_derivative_ );
   
     return max( kr2_[ RockType(e) ].Derivative( sw ), -max_derivative_ );
@@ -477,8 +477,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* con
     if ( sw <= swr ) return kr2_[ RockType(e) ].Derivative(swr);
 
     const double64 snr  = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw >= 1. - snr ) return max( kr2_[ RockType(e) ].Derivative(1.-snr), -max_derivative_ );
   
     return max( kr2_[ RockType(e) ].Derivative( sw ), -max_derivative_ );
@@ -496,8 +496,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_Numerical( Element<di
 
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( pc_at( e, (1. - snr) ) - pc_at( e, sw - h)) / h;
   
@@ -522,8 +522,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dpcdsw_at_Numerical( Element
 
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( pc_at( e, (1. - snr) ) - pc_at( e, sw - h)) / h;
   
@@ -555,8 +555,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_Numerical( Element<di
   
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( krw_at( e, (1. - snr) ) - krw_at( e, sw - h)) / h;
   
@@ -588,8 +588,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element
 
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( krw_at( e, (1. - snr) ) - krw_at( e, sw - h)) / h;
   
@@ -623,8 +623,8 @@ double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_Numerical( Element<di
   
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( krn_at( e, (1. - snr) ) - krn_at( e, sw - h)) / h;
   
@@ -651,15 +651,15 @@ template<size_t dim, template<size_t> class USER>
 double64 ExperimentalSaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
  {
     assert( sw >= 0. );
-    assert( sw <= 1. );
+    assert( sw <  1. );
 
     assert( h > 0. );
     assert( h <= 0.01 );
   
     // deal with the more common case of a high water saturation first
     const double64 snr = e->Read(User()->key_srCO2);
-    assert( snr  > 0. );
-    assert( snr <= 1. );
+    assert( snr >= 0. );
+    assert( snr <  1. );
     if ( sw > (1. - snr) - h )
       return ( krn_at( e, (1. - snr) ) - krn_at( e, sw - h)) / h;
   
