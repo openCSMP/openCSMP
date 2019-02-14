@@ -829,7 +829,7 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>
       throw csmp::Exception( ERROR, "H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier",
                             "diffusion coefficient of water in CO2-saturated porous medium not implemented yet");
     assert( phase == 1U );
-    SYSTEM_STATE state = static_cast<SYSTEM_STATE>(e->Read( User()->key_ePHS ));
+    SYSTEM_STATE state = static_cast<SYSTEM_STATE>(static_cast<long>(e->Read( User()->key_ePHS )));
     if (  state == SYSTEM_STATE::aq || state == SYSTEM_STATE::aq_carb || state == SYSTEM_STATE::aq_carb_salt )
       {
          // TODO: we need a meaningful expression here for p,T dependent diffusion in a mass-based framework
