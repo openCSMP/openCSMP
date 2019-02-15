@@ -104,7 +104,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
-    m.Region("Model").InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );    
+// SKM FIX:    m.Region("Model").InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );    
     m.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE); 
     
     //assigning keys 

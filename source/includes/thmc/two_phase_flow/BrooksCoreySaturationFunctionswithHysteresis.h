@@ -11,7 +11,14 @@ template<size_t> class Element;
   
   enum FLUID_PHASE {H2O, CO2} ;
   enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION } ;
-  enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7} ;  /// suggested by Stephan 17/Aug/2018
+/*
+    SKM suggestion:  all element parameters you need, go into the variable referred to with  'key_kri_param'
+    Question: is there a problem setting nodal params from this model that gets applied to the element ? - previous drainage and imbibition endpoints ?
+    - create a private ArrayVariable for the model to hold the array data
+    read the array only once and write it only once
+*/
+  //                                                                                       NEW     NEW
+  enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7, PSWR=8, PSNR=9 } ;  /// suggested by Stephan 17/Aug/2018
   
   /**
    @brief The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability and their first derivatives.

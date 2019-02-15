@@ -3,7 +3,9 @@
 #include "FlowFunctionsModule.h"
 #include "Element.h"
 
-
+/*
+    SKM suggestion:  all parameters you need, go into the variable referred to with  'key_kri_param'
+*/
 using namespace std;
 
 namespace csmp {
@@ -225,9 +227,10 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
       
       //update parameter values if required
       InitialiseBrooksCoreyParameters(e);
+      // TODO: interpolate these guys in one go and make the variables element-based so that they can be reused
       double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O ); //water saturation
-      double64 Sw_min = e->PropertyValueAtBaryCenter( User()->key_SwDrToImb ); //previous drainage endpoint
-      double64 Sw_max = e->PropertyValueAtBaryCenter( User()->key_SwImbToDr ); //previous imbibition endpoint    
+      double64 Sw_min = e->PropertyValueAtBaryCenter( User()->key_kri_param ); //previous drainage endpoint
+      double64 Sw_max = e->PropertyValueAtBaryCenter( User()->key_kri_param ); //previous imbibition endpoint
       double64 newSro(0); //new pseudo residual saturation carbonic phase
       double64 newSrw(0); //new pseudo residual saturation aqueous phase      
       double64  tol_(0.01) ;
@@ -242,11 +245,11 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
             //compute and store new pseudo residual saturations
             newSro = OilResidualSaturation(e); 
             newSrw = WaterResidualSaturation(e, newSro) ;
-            e->Store( User()->key_psrCO2, makeScalar( e->Status( User()->key_psrCO2), newSro )); 
-            e->Store( User()->key_psrH2O, makeScalar( e->Status( User()->key_psrH2O), newSrw )); 
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSro ));
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSrw ));
 
             //update previous drainage endpoint
-            e->Store( User()->key_SwDrToImb, makeScalar( e->Status( User()->key_SwDrToImb), 1.0-S_old ));     
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), 1.0-S_old ));
           
             //update shock height
             double64 sw_shock = User()->ShockHeight(e);
@@ -261,11 +264,11 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
           if ( flag_ ) {
             //compute and store new pseudo residual saturations
             WaterAndOilResidualSaturationImbibitionToDrainage(e, newSrw, newSro);
-            e->Store( User()->key_psrCO2, makeScalar( e->Status( User()->key_psrCO2), newSro ));
-            e->Store( User()->key_psrH2O, makeScalar( e->Status( User()->key_psrH2O), newSrw )); 
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSro ));
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSrw ));
             
             //update previous imbibition endpoint
-            e->Store( User()->key_SwImbToDr, makeScalar( e->Status( User()->key_SwImbToDr), S_old ));  
+            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), S_old ));
           
             //update shock height
             double64 sw_shock = User()->ShockHeight(e);
@@ -291,8 +294,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_psrCO2)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_psrH2O)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
     
     double64 pc(0);
     
@@ -327,8 +330,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_psrCO2)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_psrH2O)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
   
@@ -353,8 +356,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Eleme
   
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_psrCO2)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_psrH2O)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
   
@@ -387,8 +390,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSa
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_psrCO2)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_psrH2O)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
   
     double64 srH2O = PseudoSwr_ ;
     
@@ -424,8 +427,8 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidual
   {
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
   
-    double64 Sw1(e->Read(User()->key_SwDrToImb)) ;
-    double64 Sw2(e->Read(User()->key_SwImbToDr)) ;
+    double64 Sw1 = 0; // TODO: get new key:    e->Read(User()->key_SwDrToImb)) ;
+    double64 Sw2 = 0.; // TODO: get new key:    (e->Read(User()->key_SwImbToDr)) ;
     
     double64 So2(1.-Sw2);
     double64 So1(1.-Sw1);
@@ -478,8 +481,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<di
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
+    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
     
     // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
@@ -518,8 +521,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element
     double64 sH2O(S) ;
     double64 sCO2(1.-S);
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
@@ -558,8 +561,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<di
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    (e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     
     // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
@@ -593,8 +596,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element
     double64 sH2O = S ;
     double64 sCO2 = 1.-S ;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
 
@@ -629,8 +632,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
 
@@ -674,8 +677,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Elem
     const double64 sH2O (S);
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
 
@@ -723,8 +726,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
 
@@ -767,8 +770,8 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Elem
     const double64 sH2O = S;
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_(e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_(e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
+    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
     
     CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
 
