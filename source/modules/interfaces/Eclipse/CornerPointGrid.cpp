@@ -1,13 +1,13 @@
-#include "CornerPointGrid_UoM.h"
+#include "CornerPointGrid.h"
 #include "PropertyData.h"
 #include "CSMP_highLevelUtilities.h"
 #include "STL_utilities.h"
-#include "Pillar_UoM.h"
-#include "CellGenerator_UoM.h"
+#include "Pillar.h"
+#include "CellGenerator.h"
 
 #include "ErrorHandler.h"
-#include "EclipseInterface_UoM.h"
-#include "PolygonGrid_UoM.h"
+#include "EclipseInterface.h"
+#include "PolygonGrid.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"

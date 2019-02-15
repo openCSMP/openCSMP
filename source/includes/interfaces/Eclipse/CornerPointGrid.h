@@ -3,7 +3,7 @@
 
 #include "VSet.h"
 #include "ModelTopology.h"
-#include "CornerPointCell_UoM.h"
+#include "CornerPointCell.h"
 #include "CSMP_highLevelUtilities.h"
 
 namespace csmp {

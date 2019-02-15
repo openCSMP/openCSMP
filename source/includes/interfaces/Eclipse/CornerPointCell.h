@@ -1,10 +1,10 @@
 #ifndef CORNER_POINT_CELL_UOM_H
 #define CORNER_POINT_CELL_UOM_H
 
-#include "PolygonGrid_UoM.h"
-#include "PolygonCell_UoM.h"
-#include "Pillar_UoM.h"
-#include "meshingTools_UoM.h"
+#include "PolygonGrid.h"
+#include "PolygonCell.h"
+#include "Pillar.h"
+#include "MeshingTools.h"
 
 namespace csmp {
 

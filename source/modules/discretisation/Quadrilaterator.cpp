@@ -1,7 +1,7 @@
 #include "Quadrilaterator.h"
 #include "Box.h"
 #include "PropertyDatabase.h"
-#include "convertColorToPermeability.h"
+#include "ConvertColorToPermeability.h"
 #include "TextInterface.h"
 #include "IsoparametricLinearQuadrilateral.h"
 #include "VSet.h"

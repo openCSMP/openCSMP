@@ -2,7 +2,7 @@
 #define POLYGON_CELL_UOM_H
 
 #include "Point.h"
-#include "PolygonGrid_UoM.h"
+#include "PolygonGrid.h"
 
 namespace csmp {
 

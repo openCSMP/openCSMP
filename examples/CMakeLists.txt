@@ -50,7 +50,7 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${INCLUDES_DIR}/eos
 	${INCLUDES_DIR}/interfaces
 	${INCLUDES_DIR}/interfaces/ANSYS
-	${INCLUDES_DIR}/interfaces/Eclipse_UoM
+	${INCLUDES_DIR}/interfaces/Eclipse
 	${INCLUDES_DIR}/interfaces/VTK
 	${INCLUDES_DIR}/interfaces/JPEG
 	${INCLUDES_DIR}/interfaces/Matlab

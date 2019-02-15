@@ -1,7 +1,7 @@
 #ifndef CELL_GENERATOR_UOM_H
 #define CELL_GENERATOR_UOM_H
 
-#include "CornerPointGrid_UoM.h"
+#include "CornerPointGrid.h"
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"

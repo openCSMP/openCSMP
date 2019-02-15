@@ -5,7 +5,7 @@
 #include "VTU_Interface.h"
 #include "InputDataManager.h"
 
-#include "EclipseModel_UoM.h"
+#include "EclipseModel.h"
 #include "VTK_Interface.h"
 
 using namespace std;

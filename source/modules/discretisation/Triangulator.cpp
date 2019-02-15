@@ -5,7 +5,7 @@
 #include "Exception.h"
 #include "LinearTriangle.h"
 #include "TextInterface.h"
-#include "convertColorToPermeability.h"
+#include "ConvertColorToPermeability.h"
 
 using namespace std;
 

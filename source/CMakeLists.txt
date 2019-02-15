@@ -67,7 +67,6 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
-	${MODULES_DIR}/interfaces/Eclipse/EclipseModel.cpp
 	${MODULES_DIR}/model/SplitBoundaryInterface.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
 	#${MODULES_DIR}/integration/finite_volumes/generic_transport_scheme/source/*.cpp
@@ -136,7 +135,6 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${INCLUDES_DIR}/interfaces/ANSYS
     ${INCLUDES_DIR}/interfaces/CGNS
     ${INCLUDES_DIR}/interfaces/Eclipse
-    ${INCLUDES_DIR}/interfaces/Eclipse_UoM
     ${INCLUDES_DIR}/interfaces/Fracman
     ${INCLUDES_DIR}/interfaces/GeoModeller
     ${INCLUDES_DIR}/interfaces/gOcad_SKUA
@@ -187,7 +185,6 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${MODULES_DIR}/interfaces/ANSYS
     ${MODULES_DIR}/interfaces/CGNS
     ${MODULES_DIR}/interfaces/Eclipse
-    ${MODULES_DIR}/interfaces/Eclipse_UoM
     ${MODULES_DIR}/interfaces/Fracman
     ${MODULES_DIR}/interfaces/GeoModeller
     ${MODULES_DIR}/interfaces/gOcad_SKUA

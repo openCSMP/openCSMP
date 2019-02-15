@@ -3,15 +3,15 @@
 
 namespace csmp {
 
+namespace eclipse {
 
 // GATHERING CELLS, FACES AND NODES
 
-template<size_t dim>
-bool checkCell( const std::vector<csmp::GridNode<dim>*>& cell )
+bool checkCell( const std::vector<GridNode*>& cell )
 {
     /// check uniquines
     const size_t num_cell_nodes( cell.size() );
-    std::set<csmp::Point<dim> >unique_points;
+    std::set<csmp::Point<3U> >unique_points;
     for( size_t nid = 0; nid<num_cell_nodes; ++nid )
         unique_points.insert( cell[nid]->GetPoint() );
     assert( unique_points.size() == num_cell_nodes );
@@ -20,15 +20,15 @@ bool checkCell( const std::vector<csmp::GridNode<dim>*>& cell )
     return true;
 }
 
-template bool checkCell( const std::vector<csmp::GridNode<1U>*>& );
-template bool checkCell( const std::vector<csmp::GridNode<2U>*>& );
-template bool checkCell( const std::vector<csmp::GridNode<3U>*>& );
 
 
-template<size_t dim>
-void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3, csmp::GridNode<dim>* n4, csmp::GridNode<dim>* n5, csmp::GridNode<dim>* n6, csmp::GridNode<dim>* n7 )
+
+
+// TODO: do we need this monster vector of GridNode finite-element pairs ?
+void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                  GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3, GridNode* n4, GridNode* n5, GridNode* n6, GridNode* n7 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON;
     if( isCounterClockWiseOrientation( n0->GetPoint(), n1->GetPoint(), n2->GetPoint(), n4->GetPoint() ) )
     {
@@ -56,20 +56,17 @@ void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::Gr
     cells.push_back( cell );
 }
 
-template void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addHexaCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
+
 
 
 
 /**
     SKM improved form of function
 */
-template<size_t dim>
-void addHexaCellTo( typename Cell<dim>::Vector& cells, GridNode<dim>* const n0, GridNode<dim>* const n1, GridNode<dim>* const n2, GridNode<dim>* const n3,
-                                                       GridNode<dim>* const n4, GridNode<dim>* const n5, GridNode<dim>* const n6, GridNode<dim>* const n7 )
+void addHexaCellTo( Cell::Vector& cells, GridNode* const n0, GridNode* const n1, GridNode* const n2, GridNode* const n3,
+                                         GridNode* const n4, GridNode* const n5, GridNode* const n6, GridNode* const n7 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON;
     if( isCounterClockWiseOrientation( n0->GetPoint(), n1->GetPoint(), n2->GetPoint(), n4->GetPoint() ) )
     {
@@ -102,10 +99,11 @@ void addHexaCellTo( typename Cell<dim>::Vector& cells, GridNode<dim>* const n0, 
 
 
 
-template<size_t dim>
-void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3, csmp::GridNode<dim>* n4, csmp::GridNode<dim>* n5 )
+
+void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                   GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3, GridNode* n4, GridNode* n5 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_PRISM;
     if( isCounterClockWiseOrientation( n0->GetPoint(), n1->GetPoint(), n2->GetPoint(), n3->GetPoint() ) )
     {
@@ -129,15 +127,15 @@ void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::G
     cells.push_back( cell );
 }
 
-template void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addPrismCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3, csmp::GridNode<dim>* n4 )
+
+
+
+
+void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3, GridNode* n4 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_PYRAMID;
     if( isCounterClockWiseOrientation( n0->GetPoint(), n1->GetPoint(), n2->GetPoint(), n4->GetPoint() ) )
     {
@@ -159,15 +157,16 @@ void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp:
     cells.push_back( cell );
 }
 
-template void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addPyramidCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3 )
+
+
+
+
+
+void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_TETRAHEDRON;
     if( isCounterClockWiseOrientation( n0->GetPoint(), n1->GetPoint(), n2->GetPoint(), n3->GetPoint() ) )
     {
@@ -187,15 +186,15 @@ void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::G
     cells.push_back( cell );
 }
 
-template void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addTetraCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3 )
+
+
+
+
+void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL;
     cell.second.push_back( n0 );
     cell.second.push_back( n1 );
@@ -205,15 +204,15 @@ void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::Gr
     cells.push_back( cell );
 }
 
-template void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addQuadCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2 )
+
+
+
+
+void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0, GridNode* n1, GridNode* n2 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_TRIANGLE;
     cell.second.push_back( n0 );
     cell.second.push_back( n1 );
@@ -222,15 +221,16 @@ void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::Gri
     cells.push_back( cell );
 }
 
-template void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addTriCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1 )
+
+
+
+
+
+void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0, GridNode* n1 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::ISOPARAMETRIC_LINEAR_BAR;
     cell.second.push_back( n0 );
     cell.second.push_back( n1 );
@@ -238,29 +238,29 @@ void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::Gri
     cells.push_back( cell );
 }
 
-template void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addBarCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-void addPointCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells, csmp::GridNode<dim>* n0 )
+
+
+
+
+void addPointCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells, GridNode* n0 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > cell;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > cell;
     cell.first = csmp::POINT_ELEMENT;
     cell.second.push_back( n0 );
     //checkCell( cell.second );
     cells.push_back( cell );
 }
 
-template void addPointCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,csmp::GridNode<1U>* );
-template void addPointCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,csmp::GridNode<2U>* );
-template void addPointCell( std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,csmp::GridNode<3U>* );
 
-template<size_t dim>
-void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces, size_t fid, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2, csmp::GridNode<dim>* n3 )
+
+
+
+
+void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces, size_t fid, GridNode* n0, GridNode* n1, GridNode* n2, GridNode* n3 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > face;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > face;
     face.first = csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL;
     face.second.push_back( n0 );
     face.second.push_back( n1 );
@@ -270,14 +270,15 @@ void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vec
     faces[fid].push_back( face );
 }
 
-template void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,size_t,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,size_t,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addQuadFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,size_t,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
-template<size_t dim>
-void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces, size_t fid, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1, csmp::GridNode<dim>* n2 )
+
+
+
+
+
+void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces, size_t fid, GridNode* n0, GridNode* n1, GridNode* n2 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > face;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > face;
     face.first = csmp::ISOPARAMETRIC_LINEAR_TRIANGLE;
     face.second.push_back( n0 );
     face.second.push_back( n1 );
@@ -286,14 +287,14 @@ void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vect
     faces[fid].push_back( face );
 }
 
-template void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,size_t,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,size_t,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addTriFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,size_t,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
-template<size_t dim>
-void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces, size_t fid, csmp::GridNode<dim>* n0, csmp::GridNode<dim>* n1 )
+
+
+
+
+void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces, size_t fid, GridNode* n0, GridNode* n1 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > face;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > face;
     face.first = csmp::ISOPARAMETRIC_LINEAR_BAR;
     face.second.push_back( n0 );
     face.second.push_back( n1 );
@@ -301,44 +302,45 @@ void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vect
     faces[fid].push_back( face );
 }
 
-template void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,size_t,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,size_t,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addBarFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,size_t,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
-template<size_t dim>
-void addPointFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces, size_t fid, csmp::GridNode<dim>* n0 )
+
+
+
+
+void addPointFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces, size_t fid, GridNode* n0 )
 {
-    std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > face;
+    std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > face;
     face.first = csmp::POINT_ELEMENT;
     face.second.push_back( n0 );
     //checkCell( face.second );
     faces[fid].push_back( face );
 }
 
-template void addPointFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,size_t,csmp::GridNode<1U>* );
-template void addPointFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,size_t,csmp::GridNode<2U>* );
-template void addPointFace( std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,size_t,csmp::GridNode<3U>* );
 
-template<size_t dim>
-void addExtraNode( std::vector<csmp::GridNode<dim>*>& extra_nodes, csmp::GridNode<dim>* n )
+
+
+
+
+void addExtraNode( std::vector<GridNode*>& extra_nodes, GridNode* n )
 {
     extra_nodes.push_back( n );
 }
 
-template void addExtraNode( std::vector<csmp::GridNode<1U>*>&,csmp::GridNode<1U>* );
-template void addExtraNode( std::vector<csmp::GridNode<2U>*>&,csmp::GridNode<2U>* );
-template void addExtraNode( std::vector<csmp::GridNode<3U>*>&,csmp::GridNode<3U>* );
+
+
+
+
+
 
 // ADDITIONAL EDGES ON QUADRILATERAL FACES
 
 
-template<size_t dim>
 size_t isEdgeExist( std::set<std::set<size_t> >& additional_edges,
                     std::vector<size_t>& diag_nodes,
-                    csmp::GridNode<dim>* pt0,
-                    csmp::GridNode<dim>* pt1,
-                    csmp::GridNode<dim>* pt2,
-                    csmp::GridNode<dim>* pt3 )
+                    GridNode* pt0,
+                    GridNode* pt1,
+                    GridNode* pt2,
+                    GridNode* pt3 )
 {
     std::set<size_t> edge02;
     edge02.insert( pt0->GetIdx() );
@@ -375,17 +377,17 @@ size_t isEdgeExist( std::set<std::set<size_t> >& additional_edges,
     return 0;
 }
 
-template size_t isEdgeExist( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t isEdgeExist( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t isEdgeExist( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
 
-template<size_t dim>
+
+
+
+
 size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >& additional_edges,
                                        std::vector<size_t>& diag_nodes,
-                                       csmp::GridNode<dim>* pt0,
-                                       csmp::GridNode<dim>* pt1,
-                                       csmp::GridNode<dim>* pt2,
-                                       csmp::GridNode<dim>* pt3 )
+                                       GridNode* pt0,
+                                       GridNode* pt1,
+                                       GridNode* pt2,
+                                       GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -441,17 +443,18 @@ size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >& additional_e
     return 0;
 }
 
-template size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t addValidAndPreferablyFirstEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
 
-template<size_t dim>
+
+
+
+
+
 size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >& additional_edges,
                                         std::vector<size_t>& diag_nodes,
-                                        csmp::GridNode<dim>* pt0,
-                                        csmp::GridNode<dim>* pt1,
-                                        csmp::GridNode<dim>* pt2,
-                                        csmp::GridNode<dim>* pt3 )
+                                        GridNode* pt0,
+                                        GridNode* pt1,
+                                        GridNode* pt2,
+                                        GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -507,18 +510,19 @@ size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >& additional_
     return 0;
 }
 
-template size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t addValidAndPreferablySecondEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
 
 
-template<size_t dim>
+
+
+
+
+
 size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >& additional_edges,
                                 std::vector<size_t>& diag_nodes,
-                                csmp::GridNode<dim>* pt0,
-                                csmp::GridNode<dim>* pt1,
-                                csmp::GridNode<dim>* pt2,
-                                csmp::GridNode<dim>* pt3 )
+                                GridNode* pt0,
+                                GridNode* pt1,
+                                GridNode* pt2,
+                                GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -574,28 +578,31 @@ size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >& a
     return 0;
 }
 
-template size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t addValidAndShortestOrBiggerSolidAngleEdge( std::set<std::set<size_t> >&,std::vector<size_t>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
+
+
+
+
+
+
+
 
 /// avoiding ear clipping
-template<size_t dim>
 size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& diag_nodes,
-                                          csmp::GridNode<dim>* pt0,
-                                          csmp::GridNode<dim>* pt1,
-                                          csmp::GridNode<dim>* pt2,
-                                          csmp::GridNode<dim>* pt3 )
+                                          GridNode* pt0,
+                                          GridNode* pt1,
+                                          GridNode* pt2,
+                                          GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// points
-    const csmp::Point<dim>& n0 = pt0->GetPoint();
-    const csmp::Point<dim>& n1 = pt1->GetPoint();
-    const csmp::Point<dim>& n2 = pt2->GetPoint();
-    const csmp::Point<dim>& n3 = pt3->GetPoint();
+    const csmp::Point<3U>& n0 = pt0->GetPoint();
+    const csmp::Point<3U>& n1 = pt1->GetPoint();
+    const csmp::Point<3U>& n2 = pt2->GetPoint();
+    const csmp::Point<3U>& n3 = pt3->GetPoint();
 
-    const double angle1  = csmp::dihedralDegAngle( n1, n3, n0, n2 );
-    const double angle2  = csmp::dihedralDegAngle( n0, n2, n1, n3 );
+    const double angle1  = dihedralDegAngle( n1, n3, n0, n2 );
+    const double angle2  = dihedralDegAngle( n0, n2, n1, n3 );
     const bool is_edge02_valid( angle1 != 0.0 );
     const bool is_edge13_valid( angle2 != 0.0 );
 
@@ -654,27 +661,29 @@ size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& diag_nodes,
     return 0;
 }
 
-template size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& ids,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& ids,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t chooseValidAndPreferablyFirstEdge( std::vector<size_t>& ids,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
 
-template<size_t dim>
+
+
+
+
+
+
 size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& diag_nodes,
-                                           csmp::GridNode<dim>* pt0,
-                                           csmp::GridNode<dim>* pt1,
-                                           csmp::GridNode<dim>* pt2,
-                                           csmp::GridNode<dim>* pt3 )
+                                           GridNode* pt0,
+                                           GridNode* pt1,
+                                           GridNode* pt2,
+                                           GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// points
-    const csmp::Point<dim>& n0 = pt0->GetPoint();
-    const csmp::Point<dim>& n1 = pt1->GetPoint();
-    const csmp::Point<dim>& n2 = pt2->GetPoint();
-    const csmp::Point<dim>& n3 = pt3->GetPoint();
+    const csmp::Point<3U>& n0 = pt0->GetPoint();
+    const csmp::Point<3U>& n1 = pt1->GetPoint();
+    const csmp::Point<3U>& n2 = pt2->GetPoint();
+    const csmp::Point<3U>& n3 = pt3->GetPoint();
 
-    const double angle1  = csmp::dihedralDegAngle( n1, n3, n0, n2 );
-    const double angle2  = csmp::dihedralDegAngle( n0, n2, n1, n3 );
+    const double angle1  = dihedralDegAngle( n1, n3, n0, n2 );
+    const double angle2  = dihedralDegAngle( n0, n2, n1, n3 );
     const bool is_edge02_valid( angle1 != 0.0 );
     const bool is_edge13_valid( angle2 != 0.0 );
 
@@ -733,27 +742,30 @@ size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& diag_nodes,
     return 0;
 }
 
-template size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& ids,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& ids,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t chooseValidAndPreferablySecondEdge( std::vector<size_t>& ids,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
 
-template<size_t dim>
+
+
+
+
+
+
+
 size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& diag_nodes,
-                                                     csmp::GridNode<dim>* pt0,
-                                                     csmp::GridNode<dim>* pt1,
-                                                     csmp::GridNode<dim>* pt2,
-                                                     csmp::GridNode<dim>* pt3 )
+                                                     GridNode* pt0,
+                                                     GridNode* pt1,
+                                                     GridNode* pt2,
+                                                     GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// points
-    const csmp::Point<dim>& n0 = pt0->GetPoint();
-    const csmp::Point<dim>& n1 = pt1->GetPoint();
-    const csmp::Point<dim>& n2 = pt2->GetPoint();
-    const csmp::Point<dim>& n3 = pt3->GetPoint();
+    const csmp::Point<3U>& n0 = pt0->GetPoint();
+    const csmp::Point<3U>& n1 = pt1->GetPoint();
+    const csmp::Point<3U>& n2 = pt2->GetPoint();
+    const csmp::Point<3U>& n3 = pt3->GetPoint();
 
-    const double angle1  = csmp::dihedralDegAngle( n1, n3, n0, n2 );
-    const double angle2  = csmp::dihedralDegAngle( n0, n2, n1, n3 );
+    const double angle1  = dihedralDegAngle( n1, n3, n0, n2 );
+    const double angle2  = dihedralDegAngle( n0, n2, n1, n3 );
     const bool is_edge02_valid( angle1 != 0.0 );
     const bool is_edge13_valid( angle2 != 0.0 );
 
@@ -764,8 +776,8 @@ size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& diag_n
         if( ( angle1 == 180.0 ) && ( angle2 == 180.0 ) )
         {
             /// choose the shortest one
-            csmp::Point<dim> e02 = n2; e02 -= n0;
-            csmp::Point<dim> e13 = n3; e13 -= n1;
+            csmp::Point<3U> e02 = n2; e02 -= n0;
+            csmp::Point<3U> e13 = n3; e13 -= n1;
             if( e02.Length() < e13.Length() )
             {
                 diag_nodes.push_back( 0 );
@@ -825,9 +837,11 @@ size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& diag_n
     return 0;
 }
 
-template size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& ids,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*);
-template size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& ids,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*);
-template size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t>& ids,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*);
+
+
+
+
+
 
 
 // ADDITIONAL POINTS
@@ -837,13 +851,12 @@ template size_t chooseValidAndShortestOrBiggerSolidAngleEdge( std::vector<size_t
    @todo SKM method should return an iterator rather than a naked pointer to a map element
 
 */
-template<size_t dim>
-bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                   csmp::GridNode<dim>*& pt,
-                   csmp::GridNode<dim>* const pt0,
-                   csmp::GridNode<dim>* const pt1,
-                   csmp::GridNode<dim>* const pt2,
-                   csmp::GridNode<dim>* const pt3 )
+bool doesPointExist( const std::map<std::set<size_t>,GridNode*>& additional_points,
+                   GridNode*& pt,
+                   GridNode* const pt0,
+                   GridNode* const pt1,
+                   GridNode* const pt2,
+                   GridNode* const pt3 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
@@ -851,7 +864,7 @@ bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     face.insert( pt2->GetIdx() );
     face.insert( pt3->GetIdx() );
 
-    typename std::map<std::set<size_t>,csmp::GridNode<dim>*>::const_iterator
+    typename std::map<std::set<size_t>,GridNode*>::const_iterator
             it = additional_points.find( face );
     if( it != additional_points.end() )
     {
@@ -861,22 +874,25 @@ bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return false;
 }
 
+
+
+
+
 /**
     No references to pointers please !
 */
-template<size_t dim>
-bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                   csmp::GridNode<dim>*& pt,
-                   csmp::GridNode<dim>* const pt0,
-                   csmp::GridNode<dim>* const pt1,
-                   csmp::GridNode<dim>* const pt2 )
+bool doesPointExist( const std::map<std::set<size_t>,GridNode*>& additional_points,
+                   GridNode*& pt,
+                   GridNode* const pt0,
+                   GridNode* const pt1,
+                   GridNode* const pt2 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
     face.insert( pt1->GetIdx() );
     face.insert( pt2->GetIdx() );
 
-    typename std::map<std::set<size_t>,csmp::GridNode<dim>*>::const_iterator
+    typename std::map<std::set<size_t>,GridNode*>::const_iterator
             it = additional_points.find( face );
     if( it != additional_points.end() )
     {
@@ -886,17 +902,22 @@ bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return false;
 }
 
-template<size_t dim>
-bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                   csmp::GridNode<dim>*& pt,
-                   csmp::GridNode<dim>* const pt0,
-                   csmp::GridNode<dim>* const pt1 )
+
+
+
+
+
+
+bool doesPointExist( const std::map<std::set<size_t>,GridNode*>& additional_points,
+                   GridNode*& pt,
+                   GridNode* const pt0,
+                   GridNode* const pt1 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
     face.insert( pt1->GetIdx() );
 
-    typename std::map<std::set<size_t>,csmp::GridNode<dim>*>::const_iterator
+    typename std::map<std::set<size_t>,GridNode*>::const_iterator
             it = additional_points.find( face );
     if( it != additional_points.end() )
     {
@@ -906,35 +927,27 @@ bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return false;
 }
 
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>* const,csmp::GridNode<1U>* const,csmp::GridNode<1U>* const ,csmp::GridNode<1U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>* const,csmp::GridNode<1U>* const,csmp::GridNode<1U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>* const,csmp::GridNode<1U>* const);
-
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>* const,csmp::GridNode<2U>* const,csmp::GridNode<2U>* const ,csmp::GridNode<2U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>* const,csmp::GridNode<2U>* const,csmp::GridNode<2U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>* const,csmp::GridNode<2U>* const);
-
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>* const,csmp::GridNode<3U>* const,csmp::GridNode<3U>* const, csmp::GridNode<3U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>* const,csmp::GridNode<3U>* const,csmp::GridNode<3U>* const );
-template bool isPointExist( const std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>* const,csmp::GridNode<3U>* const);
 
 
 
 
-template<size_t dim>
-bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                             const std::vector<csmp::GridNode<dim>*>& nodes,
+
+
+
+
+bool containRemeshedFaces( const std::map<std::set<size_t>,GridNode*>& additional_points,
+                             const std::vector<GridNode*>& nodes,
                              const std::vector<std::vector<size_t> >& face_nodes )
 {
     const size_t num_faces( face_nodes.size() );
 
-    csmp::GridNode<dim>* gn;
+    GridNode* gn(nullptr);
     for( size_t fid = 0; fid < num_faces; ++fid )
     {
         const size_t num_face_nodes( face_nodes[fid].size() );
         if( num_face_nodes == 4U )
         {
-            if( isPointExist( additional_points,gn,
+            if( doesPointExist( additional_points,gn,
                               nodes[face_nodes[fid][0]],
                               nodes[face_nodes[fid][1]],
                               nodes[face_nodes[fid][2]],
@@ -945,7 +958,7 @@ bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<dim>*>& ad
         }
         else if( num_face_nodes == 3U )
         {
-            if( isPointExist( additional_points,gn,
+            if( doesPointExist( additional_points,gn,
                               nodes[face_nodes[fid][0]],
                               nodes[face_nodes[fid][1]],
                               nodes[face_nodes[fid][2]] ) )
@@ -957,26 +970,26 @@ bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<dim>*>& ad
     return false;
 }
 
-template bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool isContainRemeshedFaces( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
 
-template<size_t dim>
-bool isContainRemeshedEdges( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                             const std::vector<csmp::GridNode<dim>*>& nodes,
+
+
+
+
+
+
+bool containRemeshedEdges( const std::map<std::set<size_t>,GridNode*>& additional_points,
+                             const std::vector<GridNode*>& nodes,
                              const std::vector<std::vector<size_t> >& face_nodes )
 {
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
     const size_t num_faces( face_nodes.size() );
 
-    csmp::GridNode<dim>* gn;
+    GridNode* gn(nullptr);
     for( size_t fid = 0; fid < num_faces; ++fid )
     {
         const size_t num_face_nodes( face_nodes[fid].size() );
         for( size_t nid = 0; nid < num_face_nodes; ++nid )
         {
-            if( isPointExist( additional_points,gn,
+            if( doesPointExist( additional_points,gn,
                               nodes[face_nodes[fid][nid]],
                               nodes[face_nodes[fid][(nid+1)%num_face_nodes]] ) )
             {
@@ -987,18 +1000,18 @@ bool isContainRemeshedEdges( std::map<std::set<size_t>,csmp::GridNode<dim>*>& ad
     return false;
 }
 
-template bool isContainRemeshedEdges( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool isContainRemeshedEdges( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool isContainRemeshedEdges( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
 
 
-template<size_t dim>
-void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                              csmp::GridNode<dim>* pt,
-                              csmp::GridNode<dim>* pt0,
-                              csmp::GridNode<dim>* pt1,
-                              csmp::GridNode<dim>* pt2,
-                              csmp::GridNode<dim>* pt3 )
+
+
+
+
+void addExistingFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                              GridNode* pt,
+                              GridNode* pt0,
+                              GridNode* pt1,
+                              GridNode* pt2,
+                              GridNode* pt3 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
@@ -1008,12 +1021,17 @@ void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& a
     additional_points.insert( std::make_pair( face, pt ) );
 }
 
-template<size_t dim>
-void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                              csmp::GridNode<dim>* pt,
-                              csmp::GridNode<dim>* pt0,
-                              csmp::GridNode<dim>* pt1,
-                              csmp::GridNode<dim>* pt2 )
+
+
+
+
+
+
+void addExistingFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                              GridNode* pt,
+                              GridNode* pt0,
+                              GridNode* pt1,
+                              GridNode* pt2 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
@@ -1022,11 +1040,16 @@ void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& a
     additional_points.insert( std::make_pair( face, pt ) );
 }
 
-template<size_t dim>
-void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                              csmp::GridNode<dim>* pt,
-                              csmp::GridNode<dim>* pt0,
-                              csmp::GridNode<dim>* pt1 )
+
+
+
+
+
+
+void addExistingFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                              GridNode* pt,
+                              GridNode* pt0,
+                              GridNode* pt1 )
 {
     std::set<size_t> face;
     face.insert( pt0->GetIdx() );
@@ -1034,31 +1057,25 @@ void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& a
     additional_points.insert( std::make_pair( face, pt ) );
 }
 
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
 
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
 
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template void addExistingFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
-template<size_t dim>
-bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                         csmp::GridNode<dim>& gn_ref,
-                         csmp::GridNode<dim>* pt0,
-                         csmp::GridNode<dim>* pt1,
-                         csmp::GridNode<dim>* pt2,
-                         csmp::GridNode<dim>* pt3 )
+
+
+
+
+bool chooseFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                         GridNode& gn_ref,
+                         GridNode* pt0,
+                         GridNode* pt1,
+                         GridNode* pt2,
+                         GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// check whether point exist
-    csmp::GridNode<dim>* gn_ptr(0);
-    if( isPointExist( additional_points, gn_ptr, pt0, pt1, pt2, pt3 ) )
+    GridNode* gn_ptr(nullptr);
+    if( doesPointExist( additional_points, gn_ptr, pt0, pt1, pt2, pt3 ) )
     {
         gn_ref = *gn_ptr;
         return true;
@@ -1068,8 +1085,7 @@ bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     std::vector<size_t> diag_nodes;
     if( chooseValidAndShortestOrBiggerSolidAngleEdge(diag_nodes,pt0,pt1,pt2,pt3) != 0 )
     {
-        csmp::Point<dim> pt;
-        pt  = 0.0;
+        csmp::Point<3U> pt(0.);
         pt += ( diag_nodes[0] == 0 ? pt0->GetPoint() : pt1->GetPoint() );
         pt += ( diag_nodes[1] == 2 ? pt2->GetPoint() : pt3->GetPoint() );
         pt /= 2.0;
@@ -1084,26 +1100,28 @@ bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return false;
 }
 
-template<size_t dim>
-bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                         csmp::GridNode<dim>& gn_ref,
-                         csmp::GridNode<dim>* pt0,
-                         csmp::GridNode<dim>* pt1,
-                         csmp::GridNode<dim>* pt2 )
-{
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
+
+
+
+
+
+bool chooseFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                         GridNode& gn_ref,
+                         GridNode* pt0,
+                         GridNode* pt1,
+                         GridNode* pt2 )
+{
     /// check whether point exist
-    csmp::GridNode<dim>* gn_ptr(0);
-    if( isPointExist( additional_points, gn_ptr, pt0, pt1, pt2 ) )
+    GridNode* gn_ptr(nullptr);
+    if( doesPointExist( additional_points, gn_ptr, pt0, pt1, pt2 ) )
     {
         gn_ref = *gn_ptr;
         return true;
     }
 
     /// add new point
-    csmp::Point<dim> pt;
-    pt = 0.0;
+    csmp::Point<3U> pt(0.);
     pt += pt0->GetPoint();
     pt += pt1->GetPoint();
     pt += pt2->GetPoint();
@@ -1113,25 +1131,27 @@ bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return true;
 }
 
-template<size_t dim>
-bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                         csmp::GridNode<dim>& gn_ref,
-                         csmp::GridNode<dim>* pt0,
-                         csmp::GridNode<dim>* pt1 )
-{
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
+
+
+
+
+
+bool chooseFaceCentroid( std::map<std::set<size_t>,GridNode*>& additional_points,
+                         GridNode& gn_ref,
+                         GridNode* pt0,
+                         GridNode* pt1 )
+{
     /// check whether point exist
-    csmp::GridNode<dim>* gn_ptr(0);
-    if( isPointExist( additional_points, gn_ptr, pt0, pt1 ) )
+    GridNode* gn_ptr(nullptr);
+    if( doesPointExist( additional_points, gn_ptr, pt0, pt1 ) )
     {
         gn_ref = *gn_ptr;
         return true;
     }
 
     /// add new point
-    csmp::Point<dim> pt;
-    pt = 0.0;
+    csmp::Point<3U> pt(0.);
     pt += pt0->GetPoint();
     pt += pt1->GetPoint();
     pt /= 2.0;
@@ -1140,32 +1160,25 @@ bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<dim>*>& additi
     return true;
 }
 
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>&,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>&,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template bool chooseFaceCentroid( std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>&,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
 
 
-template<size_t dim>
-bool addFaceCentroid( PolygonGridManager<dim>* pgm,
-                      std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                      csmp::GridNode<dim>*& gn_ptr,
-                      csmp::GridNode<dim>* pt0,
-                      csmp::GridNode<dim>* pt1,
-                      csmp::GridNode<dim>* pt2,
-                      csmp::GridNode<dim>* pt3 )
+
+
+
+
+
+bool addFaceCentroid( PolygonGridManager* pgm,
+                      std::map<std::set<size_t>,GridNode*>& additional_points,
+                      GridNode*& gn_ptr,
+                      GridNode* pt0,
+                      GridNode* pt1,
+                      GridNode* pt2,
+                      GridNode* pt3 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// choose face centroid
-    csmp::GridNode<dim> gn_ref;
+    GridNode gn_ref;
     if( chooseFaceCentroid(additional_points,gn_ref,pt0,pt1,pt2,pt3) )
     {
         /// add new node
@@ -1188,18 +1201,24 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
     return false;
 }
 
-template<size_t dim>
-bool addFaceCentroid( PolygonGridManager<dim>* pgm,
-                      std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                      csmp::GridNode<dim>*& gn_ptr,
-                      csmp::GridNode<dim>* pt0,
-                      csmp::GridNode<dim>* pt1,
-                      csmp::GridNode<dim>* pt2 )
+
+
+
+
+
+
+
+bool addFaceCentroid( PolygonGridManager* pgm,
+                      std::map<std::set<size_t>,GridNode*>& additional_points,
+                      GridNode*& gn_ptr,
+                      GridNode* pt0,
+                      GridNode* pt1,
+                      GridNode* pt2 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// choose face centroid
-    csmp::GridNode<dim> gn_ref;
+    GridNode gn_ref;
     if( chooseFaceCentroid(additional_points,gn_ref,pt0,pt1,pt2) )
     {
         /// add new node
@@ -1221,17 +1240,23 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
     return false;
 }
 
-template<size_t dim>
-bool addFaceCentroid( PolygonGridManager<dim>* pgm,
-                      std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
-                      csmp::GridNode<dim>*& gn_ptr,
-                      csmp::GridNode<dim>* pt0,
-                      csmp::GridNode<dim>* pt1 )
+
+
+
+
+
+
+
+bool addFaceCentroid( PolygonGridManager* pgm,
+                      std::map<std::set<size_t>,GridNode*>& additional_points,
+                      GridNode*& gn_ptr,
+                      GridNode* pt0,
+                      GridNode* pt1 )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
     /// choose face centroid
-    csmp::GridNode<dim> gn_ref;
+    GridNode gn_ref;
     if( chooseFaceCentroid(additional_points,gn_ref,pt0,pt1) )
     {
         /// add new node
@@ -1252,27 +1277,22 @@ bool addFaceCentroid( PolygonGridManager<dim>* pgm,
     return false;
 }
 
-template bool addFaceCentroid( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template bool addFaceCentroid( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>*,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
-template bool addFaceCentroid( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,csmp::GridNode<1U>*&,csmp::GridNode<1U>*,csmp::GridNode<1U>* );
 
-template bool addFaceCentroid( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template bool addFaceCentroid( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>*,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
-template bool addFaceCentroid( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,csmp::GridNode<2U>*&,csmp::GridNode<2U>*,csmp::GridNode<2U>* );
 
-template bool addFaceCentroid( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template bool addFaceCentroid( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>*,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
-template bool addFaceCentroid( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,csmp::GridNode<3U>*&,csmp::GridNode<3U>*,csmp::GridNode<3U>* );
+
+
+
+
+
 
 
 // EXTRA USEFUL MESHING TOOLS
 
-template<size_t dim>
-bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
-                                      std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+bool addOverlappingCellFaceCentroids( PolygonGridManager* pgm,
+                                      std::map<std::set<size_t>,GridNode*>& additional_points,
                                       std::set<std::set<size_t> >& additional_edges,
-                                      csmp::GridNode<dim>*& cgn,
-                                      const std::vector<csmp::GridNode<dim>*>& nodes,
+                                      GridNode*& cgn,
+                                      const std::vector<GridNode*>& nodes,
                                       const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1285,10 +1305,10 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
         /// find one face centroid
         std::vector<size_t> diag_nodes;
         size_t valid_edge;
-        int found_point( -1 );
+        long found_point( -1 );
         for( size_t fid = 0; fid<num_faces; ++fid )
         {
-            if( isPointExist( additional_points,cgn,
+            if( doesPointExist( additional_points,cgn,
                               nodes[face_nodes[fid][0]],
                               nodes[face_nodes[fid][1]],
                               nodes[face_nodes[fid][2]],
@@ -1375,10 +1395,10 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
     else if( num_face_nodes == 3 )
     {
         /// find one face centroid
-        int found_point( -1 );
+        long found_point( -1 );
         for( size_t fid = 0; fid<num_faces; ++fid )
         {
-            if( isPointExist( additional_points,cgn,
+            if( doesPointExist( additional_points,cgn,
                               nodes[face_nodes[fid][0]],
                               nodes[face_nodes[fid][1]],
                               nodes[face_nodes[fid][2]] ) )
@@ -1418,10 +1438,10 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
     else if( num_face_nodes == 2 )
     {
         /// find one face centroid
-        int found_point( -1 );
+        long found_point( -1 );
         for( size_t fid = 0; fid<num_faces; ++fid )
         {
-            if( isPointExist( additional_points,cgn,
+            if( doesPointExist( additional_points,cgn,
                               nodes[face_nodes[fid][0]],
                               nodes[face_nodes[fid][1]]) )
             {
@@ -1460,15 +1480,19 @@ bool addOverlappingCellFaceCentroids( PolygonGridManager<dim>* pgm,
     return true;
 }
 
-template bool addOverlappingCellFaceCentroids( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<1U>*&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addOverlappingCellFaceCentroids( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<2U>*&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addOverlappingCellFaceCentroids( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<3U>*&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
 
-template<size_t dim>
-bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
-                           std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+
+
+
+
+
+
+
+
+bool addCellFaceCentroids( PolygonGridManager* pgm,
+                           std::map<std::set<size_t>,GridNode*>& additional_points,
                            std::set<std::set<size_t> >& additional_edges,
-                           const std::vector<csmp::GridNode<dim>*>& nodes,
+                           const std::vector<GridNode*>& nodes,
                            const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1478,13 +1502,13 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
     /// add cell face centroid points
     size_t valid_edge;
     std::vector<size_t> diag_nodes;
-    csmp::GridNode<dim>* gn;
+    GridNode* gn;
     for( size_t fid = 0; fid < num_faces; ++fid )
     {
         const size_t num_face_nodes( face_nodes[fid].size() );
         if( num_face_nodes == 4U )
         {
-            if( !isPointExist( additional_points,gn,
+            if( !doesPointExist( additional_points,gn,
                                nodes[face_nodes[fid][0]],
                                nodes[face_nodes[fid][1]],
                                nodes[face_nodes[fid][2]],
@@ -1527,7 +1551,7 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
         }
         else if( num_face_nodes == 3U )
         {
-            if( !isPointExist( additional_points,gn,
+            if( !doesPointExist( additional_points,gn,
                                nodes[face_nodes[fid][0]],
                                nodes[face_nodes[fid][1]],
                                nodes[face_nodes[fid][2]] ) )
@@ -1546,7 +1570,7 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
         }
         else if( num_face_nodes == 2U )
         {
-            if( !isPointExist( additional_points,gn,
+            if( !doesPointExist( additional_points,gn,
                                nodes[face_nodes[fid][0]],
                                nodes[face_nodes[fid][1]] ) )
             {
@@ -1565,9 +1589,12 @@ bool addCellFaceCentroids( PolygonGridManager<dim>* pgm,
     return true;
 }
 
-template bool addCellFaceCentroids( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addCellFaceCentroids( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addCellFaceCentroids( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
 
 
 
@@ -1579,12 +1606,11 @@ template bool addCellFaceCentroids( PolygonGridManager<3U>*,std::map<std::set<si
     
     @todo remove reference to pointer in argument list, it's simply too dangerous
 */
-template<size_t dim>
-bool addCellCentroid( PolygonGridManager<dim>* pgm,
-                      std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+bool addCellCentroid( PolygonGridManager* pgm,
+                      std::map<std::set<size_t>,GridNode*>& additional_points,
                       std::set<std::set<size_t> >& additional_edges,
-                      csmp::GridNode<dim>*& cgn,
-                      const std::vector<csmp::GridNode<dim>*>& nodes,
+                      GridNode*& cgn,
+                      const std::vector<GridNode*>& nodes,
                       const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1607,18 +1633,18 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
 
     /// add cell centroid point
     const size_t num_quad_faces( quad_face_nodes.size() );
-    std::vector<csmp::Point<dim> > axis;
+    std::vector<csmp::Point<3U> > axis;
     if( num_quad_faces > 1 )
     {
         /// hexahedron, prism cases
         size_t valid_edge;
         std::vector<size_t>  diag_nodes;
-        csmp::GridNode<dim>* gn_ptr(0);
-        csmp::GridNode<dim>  gn_ref;
-        csmp::Point<dim>     pt;
+        GridNode* gn_ptr(0);
+        GridNode  gn_ref;
+        csmp::Point<3U>     pt;
         for( size_t fid = 0; fid < num_quad_faces; fid += ( num_quad_faces - 1 ) )
         {
-            if( isPointExist( additional_points,gn_ptr,
+            if( doesPointExist( additional_points,gn_ptr,
                               nodes[quad_face_nodes[fid][0]],
                               nodes[quad_face_nodes[fid][1]],
                               nodes[quad_face_nodes[fid][2]],
@@ -1680,11 +1706,11 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
 
         size_t valid_edge;
         std::vector<size_t>  diag_nodes;
-        csmp::GridNode<dim>* gn_ptr(0);
-        csmp::GridNode<dim>  gn_ref;
-        csmp::Point<dim>     pt;
+        GridNode* gn_ptr(0);
+        GridNode  gn_ref;
+        csmp::Point<3U>     pt;
         size_t fid = 0;
-        if( isPointExist( additional_points,gn_ptr,
+        if( doesPointExist( additional_points,gn_ptr,
                           nodes[quad_face_nodes[fid][0]],
                           nodes[quad_face_nodes[fid][1]],
                           nodes[quad_face_nodes[fid][2]],
@@ -1755,7 +1781,7 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
     else if( num_nodes > 1 )
     {
         /// tetrahedron, triangle, bar cases
-        csmp::Point<dim>    pt;
+        csmp::Point<3U>    pt;
         pt = 0.0;
         for( size_t nid = 0; nid<num_nodes; ++nid )
             pt += nodes[nid]->GetPoint();
@@ -1767,30 +1793,35 @@ bool addCellCentroid( PolygonGridManager<dim>* pgm,
     return true;
 }
 
-template bool addCellCentroid( PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<1U>*&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addCellCentroid( PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<2U>*&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool addCellCentroid( PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,csmp::GridNode<3U>*&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
+
 
 
 
 // PROCESSING CELLS
 
 
-/// processing cells (with\without) cell centroids, (with\without) face centroids, (with\without) edge centroids
-/// cases without cell centroids can be proceeded only for restricted set of cell types
-template<size_t dim>
+/**
+    processing cells (with\without) cell centroids, (with\without) face centroids, (with\without) edge centroids
+    cases without cell centroids can be proceeded only for restricted set of cell types
+*/
 bool processCellWithCentroids( bool add_edge_centroids,
                                bool add_face_centroids,
                                bool add_cell_centroids,
                                bool is_volumetric_element,
                                bool tetra_mesh,
-                               PolygonGridManager<dim>* pgm,
-                               std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                               PolygonGridManager* pgm,
+                               std::map<std::set<size_t>,GridNode*>& additional_points,
                                std::set<std::set<size_t> >& additional_edges,
-                               std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                               std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                               std::vector<csmp::GridNode<dim>* >& extra_nodes,
-                               const std::vector<csmp::GridNode<dim>*>& nodes,
+                               std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                               std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                               std::vector<GridNode* >& extra_nodes,
+                               const std::vector<GridNode*>& nodes,
                                const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -1798,7 +1829,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
     const size_t num_nodes( nodes.size() );
     const size_t num_faces( face_nodes.size() );
 
-    csmp::GridNode<dim>* cgn;
+    GridNode* cgn(nullptr);
 
     /// 0.0 process degenerate cases ( < 2 nodes )
     if( num_nodes == 0 )
@@ -1813,7 +1844,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
     else if( num_nodes == 2 )
     {
         bool edge_centroid_exist( false );
-        if( isPointExist( additional_points,cgn,
+        if( doesPointExist( additional_points,cgn,
                           nodes[0],
                           nodes[1] ) )
         {
@@ -1846,10 +1877,10 @@ bool processCellWithCentroids( bool add_edge_centroids,
     }
 
     /// 2.0 add face centroids if required
-    csmp::GridNode<dim>* gn;
-    std::vector<csmp::GridNode<dim>*> face_cgn( num_faces, NULL );
-    std::vector<csmp::GridNode<dim>*> quad_face_gn;
-    std::vector<csmp::GridNode<dim>*> tri_face_gn;
+    GridNode* gn(nullptr);
+    std::vector<GridNode*> face_cgn( num_faces, NULL );
+    std::vector<GridNode*> quad_face_gn;
+    std::vector<GridNode*> tri_face_gn;
     bool face_centroid_exist( false );
     for( size_t fid = 0; fid<num_faces; ++fid )
     {
@@ -1857,7 +1888,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
         face_centroid_exist = false;
         if( num_face_nodes == 4 )
         {
-            face_centroid_exist = isPointExist( additional_points,gn,
+            face_centroid_exist = doesPointExist( additional_points,gn,
                                                 nodes[face_nodes[fid][0]],
                                                 nodes[face_nodes[fid][1]],
                                                 nodes[face_nodes[fid][2]],
@@ -1875,7 +1906,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
         }
         else if( num_face_nodes == 3 )
         {
-            face_centroid_exist = isPointExist( additional_points,gn,
+            face_centroid_exist = doesPointExist( additional_points,gn,
                                                 nodes[face_nodes[fid][0]],
                                                 nodes[face_nodes[fid][1]],
                                                 nodes[face_nodes[fid][2]] );
@@ -1937,8 +1968,8 @@ bool processCellWithCentroids( bool add_edge_centroids,
         /// volumetric and planar elements ( num_faces > 1 || num_faces == 1 )
         /// elements with cell centroid and without ( cgn != face_cgn || cgn == face_cgn )
         std::set<size_t> edge;
-        std::map<std::set<size_t>,csmp::GridNode<dim>*> edge_nodes;
-        std::pair<typename std::map<std::set<size_t>,csmp::GridNode<dim>*>::iterator,bool> eit;
+        std::map<std::set<size_t>,GridNode*> edge_nodes;
+        std::pair<typename std::map<std::set<size_t>,GridNode*>::iterator,bool> eit;
         bool edge_centroid_exist( false );
         bool planar_cell_exist( false );
         for( size_t fid = 0; fid<num_faces; ++fid )
@@ -1956,7 +1987,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
                     {
                         edge_centroid_exist = true;
                     }
-                    else if( isPointExist( additional_points,gn,
+                    else if( doesPointExist( additional_points,gn,
                                            nodes[face_nodes[fid][nid]],
                                            nodes[face_nodes[fid][(nid+1)%num_face_nodes]] ) )
                     {
@@ -1975,7 +2006,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
                         eit = edge_nodes.insert( std::make_pair( edge, gn ) );
                         if( eit.second == true )
                             addExtraNode( extra_nodes, gn );
-                        csmp::GridNode<dim>* en( (*eit.first).second );
+                        GridNode* en( (*eit.first).second );
 
                         /// volumetric element with cell centroid
                         if( is_volumetric_element )
@@ -2037,7 +2068,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
                     {
                         edge_centroid_exist = true;
                     }
-                    else if( isPointExist( additional_points,gn,
+                    else if( doesPointExist( additional_points,gn,
                                            nodes[face_nodes[fid][nid]],
                                            nodes[face_nodes[fid][(nid+1)%num_face_nodes]] ) )
                     {
@@ -2056,7 +2087,7 @@ bool processCellWithCentroids( bool add_edge_centroids,
                         eit = edge_nodes.insert( std::make_pair( edge, gn ) );
                         if( eit.second == true )
                             addExtraNode( extra_nodes, gn );
-                        csmp::GridNode<dim>* en( (*eit.first).second );
+                        GridNode* en( (*eit.first).second );
 
                         /// bar0 face
                         addBarFace(faces,fid, nodes[face_nodes[fid][nid]],en );
@@ -2226,9 +2257,13 @@ bool processCellWithCentroids( bool add_edge_centroids,
     return true;
 }
 
-template bool processCellWithCentroids( bool,bool,bool,bool,bool,PolygonGridManager<1U>*,std::map<std::set<size_t >,csmp::GridNode<1U>*>&,std::set<std::set<size_t > >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processCellWithCentroids( bool,bool,bool,bool,bool,PolygonGridManager<2U>*,std::map<std::set<size_t >,csmp::GridNode<2U>*>&,std::set<std::set<size_t > >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processCellWithCentroids( bool,bool,bool,bool,bool,PolygonGridManager<3U>*,std::map<std::set<size_t >,csmp::GridNode<3U>*>&,std::set<std::set<size_t > >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
+
 
 
 /**
@@ -2255,15 +2290,14 @@ Faces:  bottom quad face ( 0123 )
         left tri face    ( 063  )
 */
 
-template<size_t dim>
 bool processDegenerateHexahedronElement( bool tetra_mesh,
-                                         PolygonGridManager<dim>* pgm,
-                                         std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                                         PolygonGridManager* pgm,
+                                         std::map<std::set<size_t>,GridNode*>& additional_points,
                                          std::set<std::set<size_t> >& additional_edges,
-                                         std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                                         std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                                         std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                                         const std::vector<csmp::GridNode<dim>*>& nodes,
+                                         std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                                         std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                                         std::vector<GridNode*>& extra_nodes,
+                                         const std::vector<GridNode*>& nodes,
                                          const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -2482,7 +2516,7 @@ bool processDegenerateHexahedronElement( bool tetra_mesh,
     if( undividable )
     {
         /// add cell centroid
-        csmp::GridNode<dim>* cgn;
+        GridNode* cgn;
         addCellCentroid(pgm,additional_points,additional_edges,cgn,nodes,face_nodes);
         addExtraNode( extra_nodes, cgn );
 
@@ -2514,9 +2548,14 @@ bool processDegenerateHexahedronElement( bool tetra_mesh,
     return false;
 }
 
-template bool processDegenerateHexahedronElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processDegenerateHexahedronElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processDegenerateHexahedronElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
+
+
 
 
 /**
@@ -2548,15 +2587,14 @@ certain pieces of algorithm are based on:
 
 */
 
-template<size_t dim>
 bool processHexahedronElement( bool tetra_mesh,
-                              PolygonGridManager<dim>* pgm,
-                              std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                              PolygonGridManager* pgm,
+                              std::map<std::set<size_t>,GridNode*>& additional_points,
                               std::set<std::set<size_t> >& additional_edges,
-                              std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                              std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                              std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                              const std::vector<csmp::GridNode<dim>*>& nodes,
+                              std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                              std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                              std::vector<GridNode*>& extra_nodes,
+                              const std::vector<GridNode*>& nodes,
                               const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3061,7 +3099,7 @@ bool processHexahedronElement( bool tetra_mesh,
     if( undividable )
     {
         /// add cell centroid
-        csmp::GridNode<dim>* cgn;
+        GridNode* cgn;
         addCellCentroid(pgm,additional_points,additional_edges,cgn,nodes,face_nodes);
         addExtraNode( extra_nodes, cgn );
 
@@ -3089,9 +3127,16 @@ bool processHexahedronElement( bool tetra_mesh,
     return false;
 }
 
-template bool processHexahedronElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processHexahedronElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processHexahedronElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
+
+
+
+
 
 
 /**
@@ -3123,15 +3168,14 @@ Faces:  left quad face    ( 0253 )
         back tri face     ( 354  )
 */
 
-template<size_t dim>
 bool processPrismElement( bool tetra_mesh,
-                          PolygonGridManager<dim>* pgm,
-                          std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                          PolygonGridManager* pgm,
+                          std::map<std::set<size_t>,GridNode*>& additional_points,
                           std::set<std::set<size_t> >& additional_edges,
-                          std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                          std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                          std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                          const std::vector<csmp::GridNode<dim>*>& nodes,
+                          std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                          std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                          std::vector<GridNode*>& extra_nodes,
+                          const std::vector<GridNode*>& nodes,
                           const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3326,7 +3370,7 @@ bool processPrismElement( bool tetra_mesh,
     if( undividable )
     {
         /// add cell centroid
-        csmp::GridNode<dim>* cgn;
+        GridNode* cgn;
         addCellCentroid(pgm,additional_points,additional_edges,cgn,nodes,face_nodes);
         addExtraNode( extra_nodes, cgn );
 
@@ -3358,9 +3402,14 @@ bool processPrismElement( bool tetra_mesh,
     return false;
 }
 
-template bool processPrismElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPrismElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPrismElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
+
+
 
 
 /**
@@ -3390,15 +3439,15 @@ Faces:  bottom quad face ( 0321 )
         right tri face   ( 124  )
         back tri face    ( 234  )
  */
-template<size_t dim>
+
 bool processPyramidElement( bool tetra_mesh,
-                           PolygonGridManager<dim>* pgm,
-                           std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                           PolygonGridManager* pgm,
+                           std::map<std::set<size_t>,GridNode*>& additional_points,
                            std::set<std::set<size_t> >& additional_edges,
-                           std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                           std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                           std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                           const std::vector<csmp::GridNode<dim>*>& nodes,
+                           std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                           std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                           std::vector<GridNode*>& extra_nodes,
+                           const std::vector<GridNode*>& nodes,
                            const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3486,9 +3535,11 @@ bool processPyramidElement( bool tetra_mesh,
     return false;
 }
 
-template bool processPyramidElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPyramidElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPyramidElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
 
 
 /**
@@ -3518,19 +3569,16 @@ Faces:  tri face ( 021 )
         tri face ( 032 )
 */
 
-template<size_t dim>
 bool processTetrahedronElement( bool tetra_mesh,
-                               PolygonGridManager<dim>* pgm,
-                               std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                               PolygonGridManager* pgm,
+                               std::map<std::set<size_t>,GridNode*>& additional_points,
                                std::set<std::set<size_t> >& additional_edges,
-                               std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                               std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                               std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                               const std::vector<csmp::GridNode<dim>*>& nodes,
+                               std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                               std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                               std::vector<GridNode*>& extra_nodes,
+                               const std::vector<GridNode*>& nodes,
                                const std::vector<std::vector<size_t> >& face_nodes )
 {
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
     addTetraCell(cells,nodes[0],nodes[1],nodes[2],nodes[3]);
     /// add faces
     const size_t num_faces( face_nodes.size() );
@@ -3542,9 +3590,12 @@ bool processTetrahedronElement( bool tetra_mesh,
     return true;
 }
 
-template bool processTetrahedronElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processTetrahedronElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processTetrahedronElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
 
 
 /**
@@ -3562,15 +3613,14 @@ Faces:  quad face ( 0321 )
 
  */
 
-template<size_t dim>
 bool processQuadrilateralElement( bool tetra_mesh,
-                                 PolygonGridManager<dim>* pgm,
-                                 std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                                 PolygonGridManager* pgm,
+                                 std::map<std::set<size_t>,GridNode*>& additional_points,
                                  std::set<std::set<size_t> >& additional_edges,
-                                 std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                                 std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                                 std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                                 const std::vector<csmp::GridNode<dim>*>& nodes,
+                                 std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                                 std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                                 std::vector<GridNode*>& extra_nodes,
+                                 const std::vector<GridNode*>& nodes,
                                  const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3658,9 +3708,11 @@ bool processQuadrilateralElement( bool tetra_mesh,
     return false;
 }
 
-template bool processQuadrilateralElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processQuadrilateralElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processQuadrilateralElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
 
 
 /**
@@ -3680,19 +3732,16 @@ Faces:  tri face ( 012 )
 
 */
 
-template<size_t dim>
 bool processTriangleElement( bool tetra_mesh,
-                            PolygonGridManager<dim>* pgm,
-                            std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                            PolygonGridManager* pgm,
+                            std::map<std::set<size_t>,GridNode*>& additional_points,
                             std::set<std::set<size_t> >& additional_edges,
-                            std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                            std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                            std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                            const std::vector<csmp::GridNode<dim>*>& nodes,
+                            std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                            std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                            std::vector<GridNode*>& extra_nodes,
+                            const std::vector<GridNode*>& nodes,
                             const std::vector<std::vector<size_t> >& face_nodes )
 {
-    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
     addTriCell(cells,nodes[0],nodes[1],nodes[2]);
     /// add faces
     const size_t num_faces( face_nodes.size() );
@@ -3706,9 +3755,12 @@ bool processTriangleElement( bool tetra_mesh,
     return true;
 }
 
-template bool processTriangleElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processTriangleElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processTriangleElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
 
 
 /**
@@ -3720,15 +3772,14 @@ Faces: line face ( 01 )
 
 */
 
-template<size_t dim>
 bool processBarElement( bool tetra_mesh,
-                       PolygonGridManager<dim>* pgm,
-                       std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                       PolygonGridManager* pgm,
+                       std::map<std::set<size_t>,GridNode*>& additional_points,
                        std::set<std::set<size_t> >& additional_edges,
-                       std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                       std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                       std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                       const std::vector<csmp::GridNode<dim>*>& nodes,
+                       std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                       std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                       std::vector<GridNode*>& extra_nodes,
+                       const std::vector<GridNode*>& nodes,
                        const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3737,9 +3788,12 @@ bool processBarElement( bool tetra_mesh,
     return true;
 }
 
-template bool processBarElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processBarElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processBarElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
+
+
+
+
+
+
 
 
 /**
@@ -3750,15 +3804,14 @@ Faces: point face ( 0 )
 
 */
 
-template<size_t dim>
 bool processPointElement( bool tetra_mesh,
-                         PolygonGridManager<dim>* pgm,
-                         std::map<std::set<size_t>,csmp::GridNode<dim>*>& additional_points,
+                         PolygonGridManager* pgm,
+                         std::map<std::set<size_t>,GridNode*>& additional_points,
                          std::set<std::set<size_t> >& additional_edges,
-                         std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > >& cells,
-                         std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<dim>*> > > >& faces,
-                         std::vector<csmp::GridNode<dim>*>& extra_nodes,
-                         const std::vector<csmp::GridNode<dim>*>& nodes,
+                         std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >& cells,
+                         std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > >& faces,
+                         std::vector<GridNode*>& extra_nodes,
+                         const std::vector<GridNode*>& nodes,
                          const std::vector<std::vector<size_t> >& face_nodes )
 {
     csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3767,10 +3820,7 @@ bool processPointElement( bool tetra_mesh,
     return true;
 }
 
-template bool processPointElement( bool,PolygonGridManager<1U>*,std::map<std::set<size_t>,csmp::GridNode<1U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<1U>*> > > >&,std::vector<csmp::GridNode<1U>* >&,const std::vector<csmp::GridNode<1U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPointElement( bool,PolygonGridManager<2U>*,std::map<std::set<size_t>,csmp::GridNode<2U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<2U>*> > > >&,std::vector<csmp::GridNode<2U>* >&,const std::vector<csmp::GridNode<2U>*>&,const std::vector<std::vector<size_t> >& );
-template bool processPointElement( bool,PolygonGridManager<3U>*,std::map<std::set<size_t>,csmp::GridNode<3U>*>&,std::set<std::set<size_t> >&,std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > >&,std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<csmp::GridNode<3U>*> > > >&,std::vector<csmp::GridNode<3U>* >&,const std::vector<csmp::GridNode<3U>*>&,const std::vector<std::vector<size_t> >& );
-
+} // eclipse
 
 } // end namespace csmp
 

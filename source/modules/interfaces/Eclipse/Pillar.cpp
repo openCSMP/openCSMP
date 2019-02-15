@@ -1,4 +1,4 @@
-#include "Pillar_UoM.h"
+#include "Pillar.h"
 #include "ErrorHandler.h"
 
 namespace csmp {
