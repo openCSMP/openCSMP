@@ -124,7 +124,7 @@ protected:
     std::vector<GridNode*>   extra_nodes_;
     std::vector<GridNode*>   nodes_;
     std::vector<GridNode*>   nodes_in_custom_order_;
-    std::vector<size_t>            custom_node_order_;
+    std::vector<size_t>      custom_node_order_;
 
     /// cells TODO: what is the physical meaning of this data structure?
     std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > elements_;
