@@ -1,4 +1,4 @@
-#include "ConvertColorToPermeability.h"
+#include "convertColorToPermeability.h"
 #include "Matrix.h"
 
 using namespace std;
