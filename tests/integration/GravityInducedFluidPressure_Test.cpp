@@ -19,9 +19,9 @@ using namespace std;
 namespace csmp {
 
 GravityInducedFluidPressure_Test::GravityInducedFluidPressure_Test()
- : top_(0.)
+ : top_(3000.), verbose_(true)
  {
-    InitialiseModel1D();
+    InitialiseModel1D( 3000. );
  }
 
 
@@ -32,23 +32,30 @@ GravityInducedFluidPressure_Test::~GravityInducedFluidPressure_Test()
 
 
 
-void GravityInducedFluidPressure_Test::InitialiseModel1D()
+
+
+/**
+    Builds a 2km-tall 1D (100-element) model
+*/
+void GravityInducedFluidPressure_Test::InitialiseModel1D( double64 model_height )
  {
-    // 0. build 2km-tall 1D (100-element) model
+    assert( model_height > 0. );
     VSet<1U>                mesh_container;
     const uint32            N_ELEMENTS(100);
     LineElementMesher<1U>   mesher;
-    top_ = 2000.; // 2,000 meter tall model
-    mesher.BuildUniformMesh( mesh_container, top_, N_ELEMENTS+1 );
+    top_ = model_height; 
+    mesher.BuildUniformMesh( mesh_container, model_height, N_ELEMENTS );
     // mesh_container.Out(); // OK - neighbor connectivity etc.
  
-//    model1D_ = new Model<1U>( mesh_container, "CO2-geo-sequestration-variables.txt", true, false );
     model1D_ = new Model<1U>( mesh_container, "GravityInducedFluidPressure_Test-variables.txt", true, false );
     Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
     printModelDimensions( *model1D_ );
     // NOTE: Y points upward, else gravity will act in opposite direction
-    const size_t topNode2km   = findNode( *model1D_, 2000., 1.0e-3 );
-    const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-3 );
+    const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+    const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
+    assert( topNode2km < N_ELEMENTS+1 );
+    assert( bottomNode0m < 101 );
     cout <<"\nGravityInducedFluidPressure_Test: model end points:\n";
     cout <<"\t"<< model_domain.N(bottomNode0m)->Coordinate() << endl;
     cout <<"\t"<< model_domain.N(topNode2km)->Coordinate() << endl;
@@ -103,12 +110,13 @@ void GravityInducedFluidPressure_Test::run()
     ReferencePressureForFixedDensity( ref_density );
     ReferencePressureByTopDownIntegration( ref_density );
     _test( TestComputedWithReferencePressure() );
-   
+    if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test0" );
+
     // testing computation for compressible CO2 (Spycher EOS)
-    const double64 grad_T_K_per_m(0.03); // 30oC/km
-    InitialiseTemperatureProfile( 17., grad_T_K_per_m );
+    const double64 grad_T_K_per_m(0.02); // 20oC/km
+    InitialiseTemperatureProfile( 12., grad_T_K_per_m );
     ReferencePressureByTopDownIntegrationCO2();
-    OutputResultsToText( "GravityInducedFluidPressure_Test" );
+    if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test1" );
  }
   
   
@@ -124,8 +132,9 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
      const csmp::Index key_pf(model1D_->Database().StorageKey("fluid pressure"));
      const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
      Region<1U>& model_domain(model1D_->Region("Model"));
-     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-3 );
-     const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-3 );
+     model_domain.UpdateMemberIndexes();
+     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+     const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
      const double64 acc_gravity(model1D_->Read(g_key));
 
      // finding the top node
@@ -155,7 +164,10 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
           nptr2->Store( key_pf, makeScalar(DIRICH,pf) );
          
           // continue to next element
-          eptr = (nptr2->Parent(0) == eptr) ? nptr2->Parent(1) : nptr2->Parent(0);
+          if ( nptr2->Parents() > 1U ) {
+               eptr = (nptr2->Parent(0) == eptr) ? nptr2->Parent(1) : nptr2->Parent(0);
+            }
+          else break;
           nptr = nptr2;
        }
  
@@ -174,7 +186,7 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
     Integrating from the surface downward to the bottom of the model, the pressure is accumulated.
     CO2 density is taken from the Spycher et al equation of state.
 */
-void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2()
+void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2( double64 pf_top )
   {
      const csmp::Index key_T(model1D_->Database().StorageKey("temperature"));
      const csmp::Index key_pf(model1D_->Database().StorageKey("fluid pressure"));
@@ -185,8 +197,9 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
      const csmp::Index key_rhom(model1D_->Database().StorageKey("fluid mixture density"));
 
      Region<1U>& model_domain(model1D_->Region("Model"));
-     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-3 );
-     const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-3 );
+     model_domain.UpdateMemberIndexes();
+     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+     const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
      // finding the top node
      Node<1U>* nptr = model_domain.N(topNode2km);
      Node<1U>* const bottom_node_ptr = model_domain.N(bottomNode0m);
@@ -194,7 +207,7 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
      Element<1U>* eptr = nptr->Parent(0);
      assert( eptr != nullptr );
      // initialising EOS on first node
-     nptr->Store( key_pf, makeScalar(DIRICH,patm_) );
+     nptr->Store( key_pf, makeScalar(DIRICH,pf_top) );
     
      // Spycher et al 2003 EOS
      EOS_CO2H2ONaCl_Spycher04  eos;
@@ -224,7 +237,10 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
           nptr2->Store( key_mu, makeScalar( nptr2->Status(key_mu), eos.mu_CarbonicPhase( pf_below, ToC ) ) );
           eptr->Store( key_rhom, makeScalar(eptr->Status(key_rhom),rho_mix) );
           // continue to next element
-          eptr = (nptr2->Parent(0) == eptr) ? nptr2->Parent(1) : nptr2->Parent(0);
+          if ( nptr2->Parents() > 1U ) {
+               eptr = (nptr2->Parent(0) == eptr) ? nptr2->Parent(1) : nptr2->Parent(0);
+            }
+          else break;
           nptr = nptr2;
        }
  
@@ -295,8 +311,10 @@ bool GravityInducedFluidPressure_Test::TestComputedWithReferencePressure()
 void GravityInducedFluidPressure_Test::OutputResultsToText( const char* file_name ) const
  {
     TextInterface  text_output;
-    list<string>   output_variables({"fluid pressure", "temperature", "fluid mixture density",
-                                     "density carbonic phase", "viscosity carbonic phase" });
+    list<string>   output_variables_node({"fluid pressure", "temperature",
+                                          "density carbonic phase", "viscosity carbonic phase" });
+
+    list<string>   output_variables_elmt({"fluid mixture density"});
 
     // plot these results with MS Excel or similar
     CoordinateTransformer<1U>  no_transformations;
@@ -304,7 +322,11 @@ void GravityInducedFluidPressure_Test::OutputResultsToText( const char* file_nam
     filename += "-results";
     text_output.OutputDataAsTextColumns( *model1D_, filename.c_str(), "Model",
                                          no_transformations,
-                                         output_variables );
+                                         output_variables_node );
+
+    text_output.OutputDataAsTextColumns( *model1D_, filename.c_str(), "Model",
+                                         no_transformations,
+                                         output_variables_elmt );
  } // end OutputResultsToText
 
 

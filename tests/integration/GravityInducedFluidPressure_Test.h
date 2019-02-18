@@ -35,7 +35,7 @@ class GravityInducedFluidPressure_Test : public Test {
     GravityInducedFluidPressure_Test();
     virtual ~GravityInducedFluidPressure_Test();
   
-    void InitialiseModel1D();
+    void InitialiseModel1D( double64 model_height );
     void InitialiseTemperatureProfile( double64 T_top, double64 grad_T_K_per_m );
   
     virtual void run();
@@ -44,7 +44,7 @@ class GravityInducedFluidPressure_Test : public Test {
   
   private:
     void ReferencePressureByTopDownIntegration( double64 fluid_density );
-    void ReferencePressureByTopDownIntegrationCO2();
+    void ReferencePressureByTopDownIntegrationCO2( double64 pf_top );
     void ReferencePressureForFixedDensity( double64 ref_density );
   
     bool TestComputedWithReferencePressure();
@@ -54,7 +54,8 @@ class GravityInducedFluidPressure_Test : public Test {
     Model<1U>* model1D_  = nullptr;
     const double64 patm_ = 100325.;  ///< Pa
     const double64 ptol_ = 5e3;      ///< tolerance for tests (5 kPa)
-    double64       top_;             ///< elevation of model top relevative to sea level
+    double64       top_;             ///< elevation of model top relevative to sea level, will be set in run
+    const bool     verbose_;
 };
 
 } // end csmp
