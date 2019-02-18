@@ -93,7 +93,7 @@ void DESTwoPhaseFlow3D_Example::Run()
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    FlowFunctionsModule1<3U> flowfunctions(model.Database());
+    FlowFunctionsModule1<3U> flowfunctions(model.Database(), model.Read( model.Database().StorageKey("acceleration gravity") ));
     TwoPhaseDESTransport<3U,FlowFunctionsModule1>* DEStransport;
     DEStransport = new SlightlyCompressible2PhaseDESTransport<3U,FlowFunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
 

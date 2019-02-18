@@ -124,3 +124,6 @@ barycenter carbonic phase viscosity,muCO2bc,Pa.s,SCALAR,1.00E-06,1.00E-04,ELEMEN
 barcycenter aqueous phase viscosity,muH2Obc,Pa. s,SCALAR,1.00E-04,1.60E-03,ELEMENT,calculated,multiphase flow,,interpolated to the barycentre
 nodal system state,nPHS,none,SCALAR,0,7,NODE,calculated,multiphase flow,,system phase state for node determined from PhaseStateFinder class
 element system state,ePHS,none,SCALAR,0,7,ELEMENT,calculated,multiphase flow,,system phase state for element determined from PhaseStateFinder class
+CO2 diffusivity,diff,m2/Pa,SCALAR,1.00E-50,1.00,ELEMENT,calculated,multiphase flow,,the aqueous diffusivity of CO2
+end of injection,eoi,secs,SCALAR,0.00E+00,1.00E+15,MODEL,input,numeric modelling,,mass source is set to zero after the time specified
+previous fluid mass source,QM0,kg/(kg.s),SCALAR,-100000000,100000000,ELEMENT,computed,numeric modelling,,to track the spatio-temporal evolution of fluid source terms
