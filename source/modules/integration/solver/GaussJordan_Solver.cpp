@@ -45,7 +45,7 @@ void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double64>& b )
 
     for (j=0;j<n;j++) ipiv[j]=0;
     for (i=0;i<n;i++) {
-        cout<<" i : "<<i<<endl;
+//        cout<<" i : "<<i<<endl;
         big = 0.;
         for (j=0;j<n;j++)
             if (ipiv[j] != 1)

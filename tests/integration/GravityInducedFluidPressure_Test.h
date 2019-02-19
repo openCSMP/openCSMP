@@ -35,23 +35,34 @@ class GravityInducedFluidPressure_Test : public Test {
     GravityInducedFluidPressure_Test();
     virtual ~GravityInducedFluidPressure_Test();
   
-    void InitialiseModel1D( double64 model_height );
-    void InitialiseTemperatureProfile( double64 T_top, double64 grad_T_K_per_m );
-  
     virtual void run();
   
     void OutputResultsToText( const char* file_name ) const;
   
   private:
+    void InitialiseModel1D( double64 model_height );
+    void InitialiseModel3D( const char* model );
+  
+    void InitialiseTemperatureProfile( double64 T_top, double64 grad_T_K_per_m );
+
     void ReferencePressureByTopDownIntegration( double64 fluid_density );
     void ReferencePressureByTopDownIntegrationCO2( double64 pf_top );
     void ReferencePressureForFixedDensity( double64 ref_density );
   
     bool TestComputedWithReferencePressure();
   
+    /// like in vertical fluid pressure example
+    void ComputeCO2Pressure_PDE_Integrator( double64 pf_top );
   
+    /// total pressure like in simulator
+    void ComputeCO2Pressure_PDE_Integrator2( double64 pf_top );
+
+     /// reduced pressure based on deviations from a reference density
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( double64 pf_top );
+
   private:
     Model<1U>* model1D_  = nullptr;
+    Model<3U>* model3D_  = nullptr;
     const double64 patm_ = 100325.;  ///< Pa
     const double64 ptol_ = 5e3;      ///< tolerance for tests (5 kPa)
     double64       top_;             ///< elevation of model top relevative to sea level, will be set in run

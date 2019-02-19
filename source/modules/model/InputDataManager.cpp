@@ -1,8 +1,12 @@
 #include "InputDataManager.h"
-
+#include "ComputationalSettings.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
+#include "Node.h"
+#include "Element.h"
+#include "Face.h"
+#include "InterFace.h"
 
 #include "TextFileIO.h"
 

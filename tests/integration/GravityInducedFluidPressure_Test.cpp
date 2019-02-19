@@ -14,6 +14,17 @@
 #include "TextInterface.h"
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
+#include "PDE_Integrator.h"
+//#include "PDE_Integrator_CRM.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_op_dNi_dV.h"
+#include "NumIntegral_dNT_op_dV.h"
+#include "GaussJordan_Solver.h"
+
+#include "ANSYS_Model3D.h"
+#include "InputDataManager.h"
+#include "ComputationalSettings.h"
+
 using namespace std;
 
 namespace csmp {
@@ -45,32 +56,66 @@ void GravityInducedFluidPressure_Test::InitialiseModel1D( double64 model_height 
     LineElementMesher<1U>   mesher;
     top_ = model_height; 
     mesher.BuildUniformMesh( mesh_container, model_height, N_ELEMENTS );
-    // mesh_container.Out(); // OK - neighbor connectivity etc.
- 
+    delete model1D_;
     model1D_ = new Model<1U>( mesh_container, "GravityInducedFluidPressure_Test-variables.txt", true, false );
     Region<1U>& model_domain(model1D_->Region("Model"));
     model_domain.UpdateMemberIndexes();
     printModelDimensions( *model1D_ );
     // NOTE: Y points upward, else gravity will act in opposite direction
-    const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+    const size_t topNode   = findNode( *model1D_, top_, 1.0e-7 );
     const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
-    assert( topNode2km < N_ELEMENTS+1 );
+    assert( topNode < N_ELEMENTS+1 );
     assert( bottomNode0m < 101 );
     cout <<"\nGravityInducedFluidPressure_Test: model end points:\n";
     cout <<"\t"<< model_domain.N(bottomNode0m)->Coordinate() << endl;
-    cout <<"\t"<< model_domain.N(topNode2km)->Coordinate() << endl;
+    cout <<"\t"<< model_domain.N(topNode)->Coordinate() << endl;
 
     // Input of material properties and initial conditions
-    model1D_->InputPropertyValue( "total mobility permeability product", makeScalar(PLAIN,1.0e-13) );
+    model1D_->InputPropertyValue( "permeability", makeScalar(PLAIN,1.0e-10) );
+    model1D_->InputPropertyValue( "total mobility permeability product", makeScalar(PLAIN,1.0e-6) );
     model1D_->InputPropertyValue( "fluid pressure",        makeScalar(PLAIN,1.0e7) ); // 1 bar
     model1D_->InputPropertyValue( "thermal conductivity",  makeScalar(PLAIN,2.2) );
-//    model1D_->InputPropertyValue( "saturation aqueous phase",  makeScalar(PLAIN,0.) );
-//    model1D_->InputPropertyValue( "saturation carbonic phase",  makeScalar(PLAIN,1.) );
     model1D_->InputPropertyValue( "density carbonic phase",  makeScalar(PLAIN,200.) );
     model1D_->InputPropertyValue( "viscosity carbonic phase",  makeScalar(PLAIN,1.0e-5) );
     model1D_->InputPropertyValue( "acceleration gravity",  makeScalar(PLAIN,9.8061) );
    
  } // end InitialiseModel1D
+
+
+
+
+
+/**
+    Builds a 2km-tall 1D (100-element) model
+*/
+void GravityInducedFluidPressure_Test::InitialiseModel3D( const char* model )
+ {
+    // checking whether a binary version of the model already exists by looking for the prop database file
+    ifstream ifs( string(model) + "_variables.dat" );
+    const bool restart = (ifs.good()) ? true : false;
+ 
+    if (!restart)
+      model3D_ = new ANSYS_Model3D( model, model, "GravityInducedFluidPressure_Test-variables.txt", true, true, true );
+    else
+      model3D_ = new Model<3U>( string(model) );
+
+    Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
+    printModelDimensions( *model1D_ );
+
+    InputDataManager<3U>   model_configuration;
+    ComputationalSettings  run_settings;
+
+    if (!restart)
+      model_configuration.ConfigureFromFile( *model3D_, model, false,    // groupname from parameter range
+                                             true,    // default property values
+                                             true,    // regional property values
+                                             false,   // boundary conditions for box-shaped model
+                                             true,    // essential conditions for groups
+                                             true,    // csmp::Boundary properties
+                                             run_settings );
+   
+ } // end InitialiseModel3D
 
 
 
@@ -105,18 +150,27 @@ void GravityInducedFluidPressure_Test::InitialiseTemperatureProfile( double64 T_
 */
 void GravityInducedFluidPressure_Test::run()
  {
-    // testing pressure computation for a constant fluid density
+    // 1. testing pressure computation for a constant fluid density
+    // ------------------------------------------------------------
     const double64 ref_density(1000.);
     ReferencePressureForFixedDensity( ref_density );
     ReferencePressureByTopDownIntegration( ref_density );
     _test( TestComputedWithReferencePressure() );
     if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test0" );
 
-    // testing computation for compressible CO2 (Spycher EOS)
+    // 2. testing computation for compressible CO2 (Spycher EOS)
+    // ------------------------------------------------------------
     const double64 grad_T_K_per_m(0.02); // 20oC/km
-    InitialiseTemperatureProfile( 12., grad_T_K_per_m );
-    ReferencePressureByTopDownIntegrationCO2();
+    InitialiseTemperatureProfile( 25., grad_T_K_per_m );
+    const double pf_model_top( 4.0e6 ); // hydrostatic at 400-m depth
+    ReferencePressureByTopDownIntegrationCO2( pf_model_top );
     if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test1" );
+    // testing
+    ComputeCO2Pressure_PDE_Integrator( pf_model_top );
+    ComputeCO2Pressure_PDE_Integrator2( pf_model_top );
+    ComputeCO2PressureFromReducedPressure_PDE_Integrator2( pf_model_top );
+//    _test( TestComputedWithReferencePressure() );
+    if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test2" );
  }
   
   
@@ -133,12 +187,12 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
      const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
      Region<1U>& model_domain(model1D_->Region("Model"));
      model_domain.UpdateMemberIndexes();
-     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+     const size_t topNode   = findNode( *model1D_, top_, 1.0e-7 );
      const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
      const double64 acc_gravity(model1D_->Read(g_key));
 
      // finding the top node
-     Node<1U>* nptr = model_domain.N(topNode2km);
+     Node<1U>* nptr = model_domain.N(topNode);
      Node<1U>* const bottom_node_ptr = model_domain.N(bottomNode0m);
      assert( nptr != nullptr );
      Element<1U>* eptr = nptr->Parent(0);
@@ -156,8 +210,7 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
           // estimating pressure at deeper node using fluid density from current node
           double64 elength = eptr->Volume(); // =length in 1D
           // pressure calculation and storage
-          double64 rho_mix = fluid_density;
-          double64 pf      = nptr->Read(key_pf) + elength * rho_mix * acc_gravity;
+          double64 pf = nptr->Read(key_pf) + elength * fluid_density * acc_gravity;
          
           // recording the calculated fluid pressure value on the lower node
           // ---------------------------------------------------------------
@@ -172,7 +225,8 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
        }
  
      // get first idea about the results
-     assert( printRangeOfVariable( *model1D_, "fluid pressure" ) >= patm_ );
+     if ( verbose_ )
+       assert( printRangeOfVariable( *model1D_, "fluid pressure" ) >= patm_ );
 
  } // end ReferencePressureByTopDownIntegration
 
@@ -189,7 +243,7 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegration( do
 void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2( double64 pf_top )
   {
      const csmp::Index key_T(model1D_->Database().StorageKey("temperature"));
-     const csmp::Index key_pf(model1D_->Database().StorageKey("fluid pressure"));
+     const csmp::Index key_pf(model1D_->Database().StorageKey("reference pressure"));
      const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
      const double64    acc_gravity(model1D_->Read(g_key));
      const csmp::Index key_rho(model1D_->Database().StorageKey("density carbonic phase"));
@@ -198,10 +252,10 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
 
      Region<1U>& model_domain(model1D_->Region("Model"));
      model_domain.UpdateMemberIndexes();
-     const size_t topNode2km   = findNode( *model1D_, top_, 1.0e-7 );
+     const size_t topNode   = findNode( *model1D_, top_, 1.0e-7 );
      const size_t bottomNode0m = findNode( *model1D_, 0., 1.0e-7 );
      // finding the top node
-     Node<1U>* nptr = model_domain.N(topNode2km);
+     Node<1U>* nptr = model_domain.N(topNode);
      Node<1U>* const bottom_node_ptr = model_domain.N(bottomNode0m);
      assert( nptr != nullptr );
      Element<1U>* eptr = nptr->Parent(0);
@@ -211,6 +265,8 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
     
      // Spycher et al 2003 EOS
      EOS_CO2H2ONaCl_Spycher04  eos;
+     nptr->Store( key_rho, makeScalar( nptr->Status(key_rho), eos.Rho_CarbonicPhase( pf_top, nptr->Read(key_T) ) ) );
+     nptr->Store( key_mu, makeScalar( nptr->Status(key_mu), eos.mu_CarbonicPhase( pf_top, nptr->Read(key_T) ) ) );
  
      while ( nptr != bottom_node_ptr )
        {
@@ -245,12 +301,16 @@ void GravityInducedFluidPressure_Test::ReferencePressureByTopDownIntegrationCO2(
        }
  
      // for comparison, you may want to introduce a new variable
-     printRangeOfVariable( *model1D_, "density carbonic phase" );
-     printRangeOfVariable( *model1D_, "viscosity carbonic phase" );
-     printRangeOfVariable( *model1D_, "fluid mixture density" );
-     printRangeOfVariable( *model1D_, "fluid pressure" );
+     if ( verbose_ ) {
+          printRangeOfVariable( *model1D_, "density carbonic phase" );
+          printRangeOfVariable( *model1D_, "viscosity carbonic phase" );
+          printRangeOfVariable( *model1D_, "fluid mixture density" );
+          printRangeOfVariable( *model1D_, "reference pressure" );
+       }
 
  } // end ReferencePressureByTopDownIntegration
+
+
 
 
 
@@ -270,16 +330,22 @@ void GravityInducedFluidPressure_Test::ReferencePressureForFixedDensity( double6
    
     for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ )
       (*nit)->Store( p_key, makeScalar( (*nit)->Status(p_key), ((*nit)->y() - datum) * acc_gravity * ref_density + patm_ ) );
+   
+    if ( verbose_ ) printRangeOfVariable( *model1D_, "fluid pressure" );
  }
 
 
 
 
 
+/**
+    Checks whether the difference between 'fluid pressure'
+    and 'reference pressure' is smaller than the allowed tolerance.
+*/
 bool GravityInducedFluidPressure_Test::TestComputedWithReferencePressure()
  {
     const csmp::Index pr_key(model1D_->Database().StorageKey("reference pressure"));
-    const csmp::Index pf_key(model1D_->Database().StorageKey("reference pressure"));
+    const csmp::Index pf_key(model1D_->Database().StorageKey("fluid pressure"));
     const Region<1U>& model_domain = model1D_->Region("Model");
     size_t out_of_range_vals(0U);
 
@@ -299,6 +365,228 @@ bool GravityInducedFluidPressure_Test::TestComputedWithReferencePressure()
 
 
 
+
+/**
+    Uses SAMG solver and gravity term to compute vertical fluid pressure profile
+ 
+    This computation needs to read 'fluid mixture density' as input values.
+*/
+void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator( double64 pf_top )
+ {
+    cout << "\n\n\nComputeCO2Pressure_PDE_Integrator: Computing CO2-static pressure..." << endl;
+
+    csmp::Index rho_key = model1D_->Database().StorageKey("fluid mixture density");
+    // the last node (id=n_nodes) is located at the top of the model (by anology with the Y-axis)
+    Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
+    const size_t topNode = findNode( *model1D_, top_, 1.0e-7 );
+
+    model_domain.ChangePropertyStatus( "fluid pressure", ANY );
+    model_domain.N(topNode)->Store( model1D_->Database().StorageKey("fluid pressure"), makeScalar(DIRICH,pf_top) );
+
+    // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+    // --------------------------------------------------------------------------------------------
+    GaussJordan_Solver         GJ_solver;
+    PDE_Integrator<1U,Region>  hydrostatic_pressure(GJ_solver);
+  
+    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+
+    const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
+    const double64    acc_gravity(model1D_->Read(g_key));
+    // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
+    NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
+                                                                   "total mobility permeability product", "fluid pressure", acc_gravity );
+    hydrostatic_pressure.Add( &hydrostatic_conductance );
+    hydrostatic_pressure.Add( &hydrostatic_gravity );
+
+
+    // 8. Compute the initial hydrostatic pressure. Since fluid properties will change after the pressure was computed
+    //     recompute the fluid properties and fluid pressure 3 times such that fluid pressure and fluid properties converge
+    // --------------------------------------------------------------------------------------------------------------------
+//    model1D_->InputPropertyValue( "total mobility permeability product", makeScalar(PLAIN,1.0e-6) );
+    printRangeOfVariable( *model1D_, "total mobility permeability product" );
+    printRangeOfVariable( *model1D_, "fluid mixture density" );
+
+    hydrostatic_pressure.IntegrateOver( model_domain );
+   
+    printRangeOfVariable( *model1D_, "fluid pressure" );
+
+ } // end ComputeCO2Pressure_PDE_Integrator
+
+
+/* FOR ITERATIVE APPROXIMATION OF PROPERTIES
+
+    cout << "\n\n\nmain: Iterating fluid pressure to find correct fluid properties... " << endl;
+    for ( uint32 i=0; i<=5U; i++ ) {
+         cout <<"\n\titeration "<< i+1U <<":"<< endl;
+         model1D_->Apply( hydrostatic_pressure );
+         model1D_->Accept( properties_visitor );
+         model1D_->InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+         rhof += total_dissolved_solids;
+         printRangeOfVariable( *model1D_, "fluid pressure" );
+         printRangeOfVariable( *model1D_, "element fluid density" );
+      }
+
+*/
+
+
+
+
+/**
+    Version that computes the fluid-static pressure exactly like the ACGSS simulator
+*/
+void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator2( double64 pf_top )
+ {
+    cout << "\n\n\nComputeCO2Pressure_PDE_Integrator2: Computing CO2-static fluid pressure..." << endl;
+
+    Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
+    const size_t topNode = findNode( *model1D_, top_, 1.0e-7 );
+
+    model_domain.ChangePropertyStatus( "fluid pressure", ANY );
+    model_domain.N(topNode)->Store( model1D_->Database().StorageKey("fluid pressure"), makeScalar(DIRICH,pf_top) );
+
+    // 1. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+    // --------------------------------------------------------------------------------------------
+    const size_t                   dim(1U);
+    GaussJordan_Solver             GJ_solver;
+    PDE_Integrator<dim,Region>     hydrostatic_pressure(GJ_solver);
+    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model1D_->Database(), "total mobility permeability product", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dV<dim>     gravity( model1D_->Database(), "gravity term", "fluid pressure" );
+
+    hydrostatic_pressure.Add( &p_conductance );
+    hydrostatic_pressure.Add( &gravity );
+   
+    // 1.1 initialising 'total mobility permeability product' including the density term
+    const csmp::Index mobt_key = model1D_->Database().StorageKey("total mobility permeability product");
+    const csmp::Index k_key    = model1D_->Database().StorageKey("permeability");
+    const csmp::Index rho_key  = model1D_->Database().StorageKey("fluid mixture density");
+    const csmp::Index mu_key   = model1D_->Database().StorageKey("viscosity carbonic phase");
+    // rho k/mu
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+         double64 mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
+         (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
+      }
+    printRangeOfVariable( *model1D_, "total mobility permeability product" );
+
+    // 1.2 initialize gravity term
+    VectorVariable<dim>  grav_vec(DIRICH,0.);
+    grav_vec(1) = -1.;
+    model1D_->InputPropertyValue( "dip vector", grav_vec );
+    // recovering acceleration of gravity
+    const csmp::Index  g_key(model1D_->Database().StorageKey("acceleration gravity"));
+    const double64     acc_gravity(model1D_->Read(g_key));
+    // computing the gravity term: k g (rho_CO2 * lambda_CO2 * rho_CO2 + rho_water * lambda water * rho water) for the PDE operator
+    const csmp::Index  gv_key(model1D_->Database().StorageKey("dip vector"));
+    const csmp::Index  gt_key(model1D_->Database().StorageKey("gravity term"));
+    // single phase version: rho^2 k/mu g
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+        (*it)->Read( gv_key, grav_vec );
+        grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * (*it)->Read(rho_key) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
+        (*it)->Store( gt_key, grav_vec );
+     }
+    printRangeOfVariable( *model1D_, "gravity term" );
+
+
+    // 2. Compute hydrostatic pressure
+    // -------------------------------------------------------------
+    printRangeOfVariable( *model1D_, "fluid mixture density" );
+
+    hydrostatic_pressure.IntegrateOver( model_domain );
+   
+    printRangeOfVariable( *model1D_, "fluid pressure" );
+
+ } // end ComputeCO2Pressure_PDE_Integrator2
+
+
+
+
+
+
+/**
+    Version that computes the fluid-static pressure exactly like the ACGSS simulator
+*/
+void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE_Integrator2( double64 pf_top )
+ {
+    cout << "\n\n\nComputeCO2PressureFromReducedPressure_PDE_Integrator2: Computing reduced CO2-static pressure..." << endl;
+   
+    Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
+    const size_t topNode = findNode( *model1D_, top_, 1.0e-7 );
+
+    model_domain.ChangePropertyStatus( "reduced fluid pressure", ANY );
+    model_domain.N(topNode)->Store( model1D_->Database().StorageKey("reduced fluid pressure"), makeScalar(DIRICH,pf_top) );
+
+    // 1. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+    // --------------------------------------------------------------------------------------------
+    const size_t                   dim(1U);
+    GaussJordan_Solver             GJ_solver;
+    PDE_Integrator<dim,Region>     hydrostatic_pressure(GJ_solver);
+    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model1D_->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
+    NumIntegral_dNT_op_dV<dim>     gravity( model1D_->Database(), "gravity term", "reduced fluid pressure" );
+
+    hydrostatic_pressure.Add( &p_conductance );
+    hydrostatic_pressure.Add( &gravity );
+   
+    // 1.1 initialising 'total mobility permeability product' including the density term
+    const csmp::Index mobt_key = model1D_->Database().StorageKey("total mobility permeability product");
+    const csmp::Index k_key    = model1D_->Database().StorageKey("permeability");
+    const csmp::Index rho_key  = model1D_->Database().StorageKey("fluid mixture density");
+    const csmp::Index mu_key   = model1D_->Database().StorageKey("viscosity carbonic phase");
+    // rho k/mu
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+         double64 mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
+         (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
+      }
+    printRangeOfVariable( *model1D_, "total mobility permeability product" );
+   
+    // 1.2 choosing a reference fluid density
+    const double64 reference_density(100.);
+
+    // 1.3 initialize gravity term
+    VectorVariable<dim>  grav_vec(DIRICH,0.);
+    grav_vec(1) = -1.;
+    model1D_->InputPropertyValue( "dip vector", grav_vec );
+    // recovering acceleration of gravity
+    const csmp::Index  g_key(model1D_->Database().StorageKey("acceleration gravity"));
+    const double64     acc_gravity(model1D_->Read(g_key));
+    // computing the gravity term: k g (rho_CO2 * lambda_CO2 * rho_CO2 + rho_water * lambda water * rho water) for the PDE operator
+    const csmp::Index  gv_key(model1D_->Database().StorageKey("dip vector"));
+    const csmp::Index  gt_key(model1D_->Database().StorageKey("gravity term"));
+    // single phase version: rho^2 k/mu g
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+        (*it)->Read( gv_key, grav_vec );
+        grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * ((*it)->Read(rho_key) - reference_density) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
+        (*it)->Store( gt_key, grav_vec );
+     }
+    printRangeOfVariable( *model1D_, "gravity term" );
+
+
+    // 2. Compute hydrostatic pressure
+    // -------------------------------------------------------------
+    printRangeOfVariable( *model1D_, "fluid mixture density" );
+
+    hydrostatic_pressure.IntegrateOver( model_domain );
+   
+    printRangeOfVariable( *model1D_, "reduced fluid pressure" );
+   
+    // post-processing the absolute fluid pressure
+    const csmp::Index pr_key   = model1D_->Database().StorageKey("fluid pressure");
+    const csmp::Index pf_key   = model1D_->Database().StorageKey("reduced fluid pressure");
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
+         // adding ref-density-static pressure gradient to 'reduced pressure'
+         double64 pf = (*nit)->Read( pr_key ) + (top_ - (*nit)->x()) * reference_density * acc_gravity;
+         (*nit)->Store( pf_key, makeScalar( (*nit)->Status(pf_key),pf) );
+      }
+
+    printRangeOfVariable( *model1D_, "fluid pressure" );
+
+ } // end ComputeCO2PressureFromReducedPressure_PDE_Integrator2
+
+
+
+
+
 /**
     Outputs the variables discretised on the model:
  
@@ -311,7 +599,7 @@ bool GravityInducedFluidPressure_Test::TestComputedWithReferencePressure()
 void GravityInducedFluidPressure_Test::OutputResultsToText( const char* file_name ) const
  {
     TextInterface  text_output;
-    list<string>   output_variables_node({"fluid pressure", "temperature",
+    list<string>   output_variables_node({"fluid pressure", "temperature", "reference pressure",
                                           "density carbonic phase", "viscosity carbonic phase" });
 
     list<string>   output_variables_elmt({"fluid mixture density"});

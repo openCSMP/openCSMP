@@ -201,33 +201,6 @@ void TemperatureDensityPressure_Example::Run()
       }
 
 
-    // 9. Compare the numerical results with a top down integration
-    // ------------------------------------------------------------
-    /*
-        Exercise: try to get the same result by top down integration of density and without using iteration
-        see below some helpful hints how to get there.
-     
-    size_t  elmt = mref.Elements() - 1U;
-    size_t  node = mref.Nodes() - 2U;
-    long    increments(static_cast<long>(elmt));
-
-    // moving down into the subsurface
-    do {
-         double64 elength = mref.E(elmt)->Volume();
-         pfa += ACC_GRAVITY * elength * (mref.E(elmt)->Read( rhow_key ) + total_dissolved_solids);
-         mref.N(node)->Store( pfa_key, makeScalar(PLAIN,pfa) );
-         // cerr <<"\nelement: "<< elmt <<", length: "<< elength <<", rhow: ";
-         // cerr << mref.E(elmt)->Read( rhow_key ) <<", node: "<< node <<", pfa: "<< pfa;
-         elmt--;
-         node--;
-         increments--;
-      }
-    while( increments >= 0 );
-
-    // for comparison, you may want to introduce a new variable
-    printRangeOfVariable( model, "fluid pressure analytic" );
-    */
-
     // 9. Output of variables to screen and files
     // -------------------------------------------
     TextInterface  text_output;
