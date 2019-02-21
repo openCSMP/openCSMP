@@ -43,7 +43,10 @@ class GravityInducedFluidPressure_Test : public Test {
     void InitialiseModel1D( double64 model_height );
     void InitialiseModel3D( const char* model );
   
-    void InitialiseTemperatureProfile( double64 T_top, double64 grad_T_K_per_m );
+    void InitialiseTemperatureProfile1D( double64 T_top, double64 grad_T_K_per_m );
+    void InitialiseTemperatureProfile3D( double64 T_top, double64 grad_T_K_per_m );
+  
+    void InitialisePressure3D( double64 pf_top, double64 fluid_density );
 
     void ReferencePressureByTopDownIntegration( double64 fluid_density );
     void ReferencePressureByTopDownIntegrationCO2( double64 pf_top );
@@ -57,8 +60,12 @@ class GravityInducedFluidPressure_Test : public Test {
     /// total pressure like in simulator
     void ComputeCO2Pressure_PDE_Integrator2( double64 pf_top );
 
-     /// reduced pressure based on deviations from a reference density
-    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( double64 pf_top );
+    /// reduced pressure based on deviations from a reference density
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<1U>* const, double64 pf_top );
+
+    /// templatised version for 2D and 3D
+    template<size_t dim>
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<dim>* const, double64 pf_top );
 
   private:
     Model<1U>* model1D_  = nullptr;
