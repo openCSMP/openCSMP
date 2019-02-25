@@ -733,15 +733,15 @@ size_t Model<dim>::UpdateIndices() const
   this->Region( "Model" ).UpdateMemberIndexes();
   size_t runningIndex( this->Region( "Model" ).Elements() );
 
-  // boundaries
-  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
-  {
-    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
+  // boundaries  
   for ( typename Model<dim>::boundaryConstIterator bit( this->BoundariesBegin() ); bit != this->BoundariesEnd(); ++bit )
   {
     for ( typename vector<Face<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
+      (*face)->Idx( runningIndex++ );
+  }
+  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
+  {
+    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
       (*face)->Idx( runningIndex++ );
   }
   return runningIndex;
@@ -756,15 +756,15 @@ size_t Model<dim>::UpdateIndices( const char* region_name ) const
   this->Region( region_name ).UpdateMemberIndexes();
   size_t runningIndex( this->Region( region_name ).Elements() );
 
-  // boundaries
-  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
-  {
-    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
-      (*face)->Idx( runningIndex++ );
-  }
+  // boundaries  
   for ( typename Model<dim>::boundaryConstIterator bit( this->BoundariesBegin() ); bit != this->BoundariesEnd(); ++bit )
   {
     for ( typename vector<Face<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
+      (*face)->Idx( runningIndex++ );
+  }
+  for ( typename Model<dim>::splitBoundaryConstIterator bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
+  {
+    for ( typename vector<InterFace<dim>*>::const_iterator face( bit->second.ElementsBegin() ); face != bit->second.ElementsEnd(); ++face )
       (*face)->Idx( runningIndex++ );
   }
   return runningIndex;

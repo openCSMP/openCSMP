@@ -92,8 +92,11 @@ class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
     /// node_connector_.size() = total nodes on both sides of InterFace
     size_t  Nodes() const { return node_connector_.size(); };
   
-    /// the InterFace object neighbors of the InterFace (one per face of interface
+    /// the InterFace object neighbors of the InterFace (one per face of interface)
     size_t  Neighbors() const { return interface_connector_.size(); };
+
+    /// the InterFace object neighbors which are connected with the InterFace and not null.
+    size_t  ConnectedNeighbors() const;
     
     /// for element face, there can be a neighbor
     size_t  Faces() const { return interface_connector_.size(); };

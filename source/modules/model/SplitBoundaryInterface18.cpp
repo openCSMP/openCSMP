@@ -259,7 +259,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesT
   heading += bin_file;
   heading +="'.";
 
-  fstream fp(bin_file.c_str(), ios::in | ios::binary);
+  fstream fp(bin_file.c_str(), ios::out | ios::binary);
   if ( !fp.is_open() ) {
     throw csmp::Exception( ERROR, "SplitBoundaryInterface18<dim>::OutputSplitBoundariesToBinary:", "Binary file could not be created." );
     return false;
@@ -511,7 +511,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( c
                                       "boundary already exists. Nothing was done.");
 
      // remove temporal boundary
-     splitboundaryComplex->RemoveBoundary( boundary );
+     splitboundaryComplex->RemoveBoundary( boundary, true );
 
 
      // reestablish containers

@@ -376,6 +376,19 @@ bool InterFace<dim>::Unassign( InterFace<dim>* f_ptr )
 
 
 /** 
+    return the number of the Interface object neighbors which are connected with the InterFace and not null. 
+*/
+template<size_t dim>
+size_t  InterFace<dim>::ConnectedNeighbors() const
+{
+  size_t nulls( 0 );
+  for ( auto f : interface_connector_ )
+    if ( !f ) nulls++;
+  return (interface_connector_.size() - nulls);
+}
+
+
+/** 
     finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; 
     uses point coordinates that must be matched
 */
@@ -601,13 +614,18 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
     // the number of nodes on a single side of the interface
     const size_t if_FE_nodes(this->FE()->Nodes());
    
-    assert( n < if_FE_nodes );
-
     if ( side == INSIDE )
       return node_connector_[n];
    
-    if( side == OUTSIDE )
-      return node_connector_[n+if_FE_nodes];
+    if ( side == OUTSIDE ) {
+      size_t outside_idx = n + if_FE_nodes;
+      if ( n < if_FE_nodes )
+        return node_connector_[outside_idx];
+      else {
+        outside_idx %= node_connector_.size();
+        return node_connector_[outside_idx];
+      }
+    }
 
     assert( side == MIDDLE );
     if ( baseElement_ != nullptr )

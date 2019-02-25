@@ -555,8 +555,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // 3. matching the lower-dimensional face to a face of the higher-dimensional element
     // -----------------------------------------------------------------------------------
-    if ( (dim == 3U and this->IsSurfaceElement() ) or // Face is either a triangle or a quadrilateral in 3D
-         (dim == 2U and this->IsLineElement()) )      // Face is a line in 2D
+    if ( ((dim == 3U) && this->IsSurfaceElement() ) || // Face is either a triangle or a quadrilateral in 3D
+         ((dim == 2U) && this->IsLineElement()) )      // Face is a line in 2D
       {
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);
@@ -575,7 +575,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
                 }
               parent_nds.clear();
            }
-         assert( matching_face_found );
+         //JC: not matched case here?
+         //assert( matching_face_found );
          return;
       }
     
