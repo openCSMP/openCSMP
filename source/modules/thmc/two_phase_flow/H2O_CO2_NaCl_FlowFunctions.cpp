@@ -116,8 +116,8 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhase( Element<dim>
 
     for ( size_t i=0; i<nodes; ++i ) {
          double64 s = e->N(i)->Read( User()->key_sH2O );
+         sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
-             sw   += e->FE()->NRST[i] * s;
              rhow += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoH2O );
              muw  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muH2O );
              ipol_sum += e->FE()->NRST[i];
@@ -155,8 +155,8 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim
     for ( size_t i=0; i<nodes; ++i ) {
         // carbonic phase
         double64 sn = e->N(i)->Read( User()->key_sCO2 );
+        snw  += e->FE()->NRST[i] * sn;
         if ( sn > 0. ) {
-             snw  += e->FE()->NRST[i] * sn;
              rhon += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoCO2 );
              mun  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muCO2);
              ipol_sum += e->FE()->NRST[i];
@@ -191,15 +191,15 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* 
 
     for ( size_t i=0; i<nodes; ++i ) {
          double64 s = e->N(i)->Read( User()->key_sH2O );
+         sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
-              sw   += e->FE()->NRST[i] * s;
               rhow += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoH2O );
               muw  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muH2O );
               ipol_sum1 += e->FE()->NRST[i];
            }
          s = e->N(i)->Read( User()->key_sCO2 );
+         snw  += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
-              snw  += e->FE()->NRST[i] * s;
               rhon += e->FE()->NRST[i] * e->N(i)->Read( User()->key_rhoCO2 );
               mun  += e->FE()->NRST[i] * e->N(i)->Read( User()->key_muCO2);
               ipol_sum2 += e->FE()->NRST[i];
