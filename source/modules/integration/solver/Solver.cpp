@@ -14,6 +14,11 @@ namespace csmp {
 		SolveMatrixEquation(G, rh, x, no_unknowns);
 	}
 
+  void Solver::Solve(CompressedRowMatrix_hani& G, std::vector<double64>& rh, std::vector<double64>& x, size_t no_unknowns)
+  {
+    //SolveMatrixEquation( G, rh, x, no_unknowns );
+  }
+
 /**
  
 Default constructor chooses the algebraic multigrid method as solution

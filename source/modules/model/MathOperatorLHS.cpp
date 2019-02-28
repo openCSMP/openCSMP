@@ -1007,20 +1007,23 @@ void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, CompressedRowMa
 
 	// perform assignment from local matrix to global matrix
 
-	if (multiply_accumulate_)
-	{
-		/*for (size_t i = 0U; i<LHS.Rows(); i++)
-			for (size_t j = 0U; j<LHS.Cols(); j++)
-				G.MultiplyEntryWith(IDT[i],
-					IDB[j],
-					LHS(i, j) * factor_);*/
-	}
-	else if (add_accumulate_ || add_accumulate_later_) G.Add(IDT, IDB, LHS, factor_);
-	else if (subtract_accumulate_ || subtract_accumulate_later_) G.Add(IDT, IDB, LHS, -factor_);
-	else
-		throw csmp::Exception(ERROR,
-			"MathOperatorLHS<dim>::AssignToGlobal(Element): for CRM:",
-			"accumulation instructions could not be parsed.");
+  //JC: check it later!
+	//if (multiply_accumulate_)
+	//{
+	//	/*for (size_t i = 0U; i<LHS.Rows(); i++)
+	//		for (size_t j = 0U; j<LHS.Cols(); j++)
+	//			G.MultiplyEntryWith(IDT[i],
+	//				IDB[j],
+	//				LHS(i, j) * factor_);*/
+	//}
+	//else if (add_accumulate_ || add_accumulate_later_) 
+ //   G.Add(IDT, IDB, LHS, factor_);
+	//else if (subtract_accumulate_ || subtract_accumulate_later_) 
+ //   G.Add(IDT, IDB, LHS, -factor_);
+	//else
+	//	throw csmp::Exception(ERROR,
+	//		"MathOperatorLHS<dim>::AssignToGlobal(Element): for CRM:",
+	//		"accumulation instructions could not be parsed.");
 } // end AssignToGlobal (Element)
 
 template<size_t dim>

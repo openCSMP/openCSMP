@@ -235,11 +235,8 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 	template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
 	PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::~PDE_Integrator_CRM()
 	{
-		if (newed_Solver_object)
-		{
-			delete solver_;
-			cerr << "Deleted!"; getchar();
-		}
+		if (newed_Solver_object) delete solver_;
+
 #if defined(_OPENMP )
 		for (typename map<string, MathOperatorLHS<dim>*>::iterator
 			it_lhs = lhs_operators_.begin(); it_lhs != lhs_operators_.end(); it_lhs++)
@@ -1344,7 +1341,9 @@ void PDE_Integrator_CRM<dim, INTEGRATION_DOMAIN>::OutputCRM_ToFile( string fname
 						(*it_lhs).second->MultiplyWithTimeFactor(time_increment_);
 					if ((*it_lhs).second->DivideByTimeIncrement())
 						(*it_lhs).second->MultiplyWithTimeFactor(1. / time_increment_);
-					(*it_lhs).second->AssignToGlobal(*(*git), G_);
+
+          // JC: fix it!
+					//(*it_lhs).second->AssignToGlobal(*(*git), G_);
 				}
 
 		// accumulating via multiplication into the righthand vector 'rhs'

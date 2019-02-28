@@ -6,6 +6,7 @@
 #include <vector>
 #include "SolverSettings.h"
 #include "CompressedRowMatrix.h"
+#include "CompressedRowMatrix_hani.h"
 
 namespace csmp {
 
@@ -82,6 +83,12 @@ class Solver {
     bool  Verbose() const;
 
 	void  Solve(CompressedRowMatrix& G,
+		std::vector<double64>& rh,
+		std::vector<double64>& x,
+		size_t no_unknowns = 1U);
+
+  // JC: not tested yet!!!
+  void  Solve(CompressedRowMatrix_hani& G,
 		std::vector<double64>& rh,
 		std::vector<double64>& x,
 		size_t no_unknowns = 1U);

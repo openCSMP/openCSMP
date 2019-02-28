@@ -11,7 +11,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
-#include "CompressedRowMatrix.h"
+#include "CompressedRowMatrix_hani.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -357,7 +357,7 @@ template<size_t dim, template<size_t> class INTEGRATION_DOMAIN> class PDE_Integr
 		std::map<Parameter, size_t>                   basic_operands_;
 		std::map<Parameter, size_t>                   test_operands_;
 
-		CompressedRowMatrix     G_;
+		CompressedRowMatrix_hani G_;
 		std::vector<double64>   rh_;
 		std::vector<double64>   RH_;
 		std::vector<double64>   x_;
