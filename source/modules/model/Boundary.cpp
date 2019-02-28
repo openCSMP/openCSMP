@@ -1098,6 +1098,12 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
           // added to boundary
           this->elmt_vec_.emplace_back( faceObj );
+
+          // the first face is assigned into the root face of this face group in the mesh
+          if ( root_face == NULL ) {
+            root_face = faceObj;
+            meshManager.SetRootFace( faceObj );
+          }
         } // neighboring elements
 
     } // perimeter faces

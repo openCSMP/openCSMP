@@ -128,7 +128,7 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
        // 1. construct model based on obtained model topology and vset
        //    ansys neighbor info will be overwritten later since it includes neighbor information
        //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbor)
-       if ( use_regions_file )
+        if ( use_regions_file )
          Model<2U>::Initialize( regions_file_prefix,
                                 mesh_topology,
                                 vset,

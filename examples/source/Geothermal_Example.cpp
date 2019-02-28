@@ -8,6 +8,7 @@
 #include "SAMG_Solver.h"
 #include "CSMP_highLevelUtilities.h"
 #include "LUdcmp_Solver.h"
+#include "ComputationalSettings.h"
 
 // finite volumes 
 #include "ExplicitMassBasedTransport.h"
