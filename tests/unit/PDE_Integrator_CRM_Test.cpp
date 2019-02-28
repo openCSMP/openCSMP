@@ -237,7 +237,7 @@ void PDE_Integrator_CRM_Test::copyTest() {
 void PDE_Integrator_CRM_Test::AddOperatorLHSTest() {
   PDE_Integrator_CRM<2U, Region> pde;
 
-  auto& name = stiff_->Name();
+  //auto& name = stiff_->Name();
   pde.Add( stiff_ );
 
   //_test(pde.get_lhs_operators_().size() == 1);
@@ -252,7 +252,7 @@ void PDE_Integrator_CRM_Test::AddOperatorLHSTest() {
 void PDE_Integrator_CRM_Test::AddOperatorRHSTest() {
   PDE_Integrator_CRM<2U, Region> pde;
 
-  auto& name = source_->Name();
+  //auto& name = source_->Name();
   pde.Add( source_ );
 
   //_test(pde.get_rhs_operators_().size() == 1);
@@ -265,7 +265,7 @@ void PDE_Integrator_CRM_Test::AddOperatorRHSTest() {
 void PDE_Integrator_CRM_Test::AddPostProcessTest() {
 
   PDE_Integrator_CRM<2U, Region> pde;
-  auto& name = fluid_velocity->Name();
+  //auto& name = fluid_velocity->Name();
   pde.AddPostProcess( fluid_velocity );
 
   //_test(pde.get_postpro_operators_().size() == 1);
