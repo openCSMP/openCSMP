@@ -5,7 +5,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
-#include "CompressedRowMatrix.h"
+#include "CompressedSparseRowMatrix.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -143,13 +143,14 @@ class MathOperatorLHS {
     /// multiply with time increment if this is desired
     virtual void  MultiplyWithTimeFactor( double64 dt );
 
-	virtual void AssignToGlobal(const Element<dim>& e, CompressedRowMatrix& G);
-	virtual void AssignToGlobal(const InterFace<dim>& f, CompressedRowMatrix & G);
-	virtual void AssignToGlobal(const Face<dim>& e, CompressedRowMatrix & G);
+    /// for Luat's implementations
+    virtual void AssignToGlobal( const Element<dim>& e, CompressedSparseRowMatrix& G );
+    virtual void AssignToGlobal( const InterFace<dim>& f, CompressedSparseRowMatrix & G );
+    virtual void AssignToGlobal( const Face<dim>& e, CompressedSparseRowMatrix & G );
 
-	/// assigment to the left hand side global matrix (after everything was calculated )
-    virtual void  AssignToGlobal( const Element<dim>&,   SparseMatrix& );
-    virtual void  AssignToGlobal( const Face<dim>&,      SparseMatrix & );
+    /// assigment to the left hand side global matrix (after everything was calculated )
+    virtual void  AssignToGlobal( const Element<dim>&, SparseMatrix& );
+    virtual void  AssignToGlobal( const Face<dim>&, SparseMatrix & );
     virtual void  AssignToGlobal( const InterFace<dim>&, SparseMatrix& );
 
 //    virtual MathOperatorLHS<dim>* clone() const { return new MathOperatorLHS<dim>(*this); }

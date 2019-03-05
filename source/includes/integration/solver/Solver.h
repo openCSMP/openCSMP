@@ -5,12 +5,11 @@
 #include <cstdlib>
 #include <vector>
 #include "SolverSettings.h"
-#include "CompressedRowMatrix.h"
-#include "CompressedRowMatrix_hani.h"
 
 namespace csmp {
 
 class SparseMatrix;
+class CompressedSparseRowMatrix;
 
 /**
 
@@ -74,57 +73,51 @@ storage.
 
 */
 class Solver {
-  public:
-    Solver();
-    Solver( SolverSettings* settings );
-    virtual ~Solver();
+public:
+  Solver();
+  Solver( SolverSettings* settings );
+  virtual ~Solver();
 
-    void  Verbose(bool verb);
-    bool  Verbose() const;
-
-	void  Solve(CompressedRowMatrix& G,
-		std::vector<double64>& rh,
-		std::vector<double64>& x,
-		size_t no_unknowns = 1U);
-
-  // JC: not tested yet!!!
-  void  Solve(CompressedRowMatrix_hani& G,
-		std::vector<double64>& rh,
-		std::vector<double64>& x,
-		size_t no_unknowns = 1U);
-
-    void  Solve( SparseMatrix& G,
-                 std::vector<double64>& rh,
-                 std::vector<double64>& x,
-                 size_t no_unknowns = 1U );
-
-    void  Out( const SparseMatrix& mat,
-               const char* fname="SparseMatrix") const;
-
-    void  Out( const std::vector<double64>& vec,
-               const char* fname="CSP_Vec") const;
-
-    double64  CalculateResidual( const SparseMatrix& A,
-                                 const std::vector<double64>& b,
-                                 const std::vector<double64>& x ) const;
-
-    virtual SolverSettings* GetSolverSettings();
+  void  Verbose( bool verb );
+  bool  Verbose() const;
   
-  protected:
-    virtual void  SolveMatrixEquation( SparseMatrix& A,
-                                       std::vector<double64>& b,
-                                       std::vector<double64>& x,
-                                       size_t no_unknowns ) = 0;
-	
-	virtual void  SolveMatrixEquation( CompressedRowMatrix& A,
-										std::vector<double64>& b,
-										std::vector<double64>& x,
-										size_t no_unknowns) = 0;
+  void  Solve( SparseMatrix& G,
+               std::vector<double64>& rh,
+               std::vector<double64>& x,
+               size_t no_unknowns = 1U );
 
-    SolverSettings* solver_settings_;
-  
-  private:
-    bool  verbose_;
+  void  Solve( CompressedSparseRowMatrix& G,
+               std::vector<double64>& rh,
+               std::vector<double64>& x,
+               size_t no_unknowns = 1U );
+
+  void  Out( const SparseMatrix& mat,
+             const char* fname = "SparseMatrix" ) const;
+
+  void  Out( const std::vector<double64>& vec,
+             const char* fname = "CSP_Vec" ) const;
+
+  double64  CalculateResidual( const SparseMatrix& A,
+                               const std::vector<double64>& b,
+                               const std::vector<double64>& x ) const;
+
+  virtual SolverSettings* GetSolverSettings();
+
+protected:
+  virtual void  SolveMatrixEquation( SparseMatrix& A,
+                                     std::vector<double64>& b,
+                                     std::vector<double64>& x,
+                                     size_t no_unknowns ) = 0;
+
+  virtual void  SolveMatrixEquation( CompressedSparseRowMatrix& A,
+                                     std::vector<double64>& b,
+                                     std::vector<double64>& x,
+                                     size_t no_unknowns ) = 0;
+
+  SolverSettings* solver_settings_;
+
+private:
+  bool  verbose_;
 };
 
 } // csmp

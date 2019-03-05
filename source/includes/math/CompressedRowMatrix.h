@@ -24,7 +24,8 @@ This matrix is always square.
 Currently used to convert csmp::SparseMatrix objects before they are passed to the SAMG solver. 
 
 */
-struct CompressedRowMatrix {
+class CompressedRowMatrix {
+public:
     explicit CompressedRowMatrix( csmp::SparseMatrix& );
     CompressedRowMatrix();
     ~CompressedRowMatrix();
@@ -37,6 +38,7 @@ struct CompressedRowMatrix {
     void InitializePointBased( const SparseMatrix&, size_t nsys );
 
     size_t Rows() const { return (ia.size()-1U); }
+    size_t Cols() const { return (ja.size()-1U); }
     size_t TotalExistingEntries() const { return ja.size(); }
 
     void Out() const;

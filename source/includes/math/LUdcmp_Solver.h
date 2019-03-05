@@ -4,6 +4,7 @@
 
 #include "Solver.h"
 #include "SparseMatrix.h"
+#include "CompressedSparseRowMatrix.h"
 
 namespace csmp {
 
@@ -30,11 +31,10 @@ with csmp::SparseMatrix, STL and according functionality
                                         std::vector<double64>& x,
                                         size_t no_unknowns );
                                         
-      virtual void SolveMatrixEquation( CompressedRowMatrix& A,
+      virtual void SolveMatrixEquation( CompressedSparseRowMatrix& A,
                                         std::vector<double64>& b,
                                         std::vector<double64>& x,
-                                        size_t no_unknowns );  
-                                                                                
+                                        size_t no_unknowns ) = 0;
     private:
       void ludcmp( SparseMatrix& a,
                    long n,

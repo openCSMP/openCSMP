@@ -1,397 +1,314 @@
 #include "PDE_Integrator_CRM_Test.h"
 
+#include "ModelTime.h"
+#include "Triangulator.h"
+#include "ConstantFactor.h"
+#include "VTK_Interface.h"
+#include "PDE_Integrator_CRM.h"
+
 using namespace std;
 
 namespace csmp {
 
 PDE_Integrator_CRM_Test::PDE_Integrator_CRM_Test()
 {
-  const bool       isoparametric( true );
-  ANSYS_Interface  mesh_interface( isoparametric );  // true = isoparametric elements
-  VSet<2U>         mesh_container;
-  ModelTopology    mesh_topology( isoparametric );   // true = isoparametric elements
-
-                                                     // Building Region object from ANSYS data files
-  cout << "Reading mesh..." << endl;
-  string mesh_name( "pde_integrator_test" );
-  const bool binary_file( true );
-  const bool irregular_mesh( false );
-  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
-  cout << "Finished reading mesh..." << endl;
-  cout << "Building Model..." << endl;
-  sg_ = new Model<2U>( mesh_topology, mesh_container, "CSMP-2phase-variables.txt" );
-
-  // Set values on nodes and elements
-  sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1. ) );
-  sg_->InputPropertyValue( "diffusivity", makeScalar( PLAIN, 0. ) );
-  sg_->InputPropertyValue( "permeability", makeScalar( PLAIN, 1. ) );
-
-  // Set boundary conditions
-  sg_->InputBoundaryValue( BOTTOM, "fluid pressure", makeScalar( DIRICH, 0.0 ) );
-  sg_->InputBoundaryValue( RIGHT, "fluid pressure", makeScalar( DIRICH, 1.0 ) );
-  sg_->InputBoundaryValue( TOP, "fluid pressure", makeScalar( DIRICH, 0.0 ) );
-  sg_->InputBoundaryValue( LEFT, "fluid pressure", makeScalar( DIRICH, 0.0 ) );
-
-  // Create pde-operators
-  source_ = new Integral_NT_op_N_dV<2U, Element<2U> >( sg_->Database(),
-                                                       "diffusivity", "fluid pressure" );
-
-  stiff_ = new Integral_dNT_op_dN_dV<2U, Element<2U> >( sg_->Database(),
-                                                        "permeability",
-                                                        "fluid pressure",
-                                                        "fluid pressure" );
-
-  // Create algorithm object and add pde-operators
-#ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Settings  settings;
-  settings.Set_eps( 0. );
-  alg_ = new PDE_Integrator_CRM<2U, Region>( new SAMG_Solver( &settings ) );
-#else
-  alg_ = new PDE_Integrator_CRM<2U, Region>( new CSMP_DEFAULT_LINEAR_SOLVER() );
-#endif
-  alg_->Add( source_ );
-  alg_->Add( stiff_ );
 
 }
 
 PDE_Integrator_CRM_Test::~PDE_Integrator_CRM_Test()
 {
-  if ( sg_ != 0 )
-    delete sg_;
-  if ( source_ != 0 )
-    delete source_;
-  if ( stiff_ != 0 )
-    delete stiff_;
-  if ( alg_ != 0 )
-    delete alg_;
+
 }
-
-
 
 void PDE_Integrator_CRM_Test::run()
 {
+if(0){ // for testing Tutorial4_Example
+  // ----------------------------------------------------------------------------------
+  // 0.0 Set variables used throughout the simulation
+  // ----------------------------------------------------------------------------------
+  clock_t start( clock() ); // record the CPU time
 
-  sameSolverTest();
-  //constructorTest();
-  //copyTest();
-  //AddOperatorLHSTest();
-  //AddOperatorRHSTest();
-  //AddPostProcessTest();
-  ////AddBoundaryIntegralsTest();
-  //TimeIncrementTest();
-  //TransientTest();
-  IntegrateOverTest();
+  string input_file;
+  cout << "\nPDE_Integrator_CRM_Test: Please enter the name of input mesh ( default: pores ): ";
+  cin >> input_file;
 
+  // ------------------------------
+  // 1.0 Build the CSMP Model
+  // ------------------------------
+  ANSYS_Model2D model( input_file.c_str(), "stokes_variables.txt" );
+  const PropertyDatabase<2U>&  p_ref = model.Database();
+  Region<2U>&                  r_ref = model.Region( "PORES" ); // reference to PORE region where calculations are performed
+  scaleRegion( model, 20000.0 ); // scale the model size by 1/value
+  printModelDimensions( model, true );
 
-  //SetSolverTest();
-  //GetSolverTest();
+  // ------------------------------------
+  // 2.0 Boundary and initial conditions
+  // ------------------------------------
 
+  // input material and fluid properties
+  const double64 viscosity( 0.001 ); // in Pa sec
+  model.InputPropertyValue( "viscosity", makeScalar( PLAIN, viscosity ) );
+  model.InputPropertyValue( "porosity", makeScalar( PLAIN, 1.0 ) );
+  model.InputPropertyValue( "zero", makeScalar( PLAIN, 0.0 ) ); // dummy variable needed to close coupled FE algorithm
 
-}
+                                                                // assigning initial conditions
+  model.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
+  model.InputPropertyValue( "nodal velocity x", makeScalar( PLAIN, 0.0 ) );
+  model.InputPropertyValue( "nodal velocity y", makeScalar( PLAIN, 0.0 ) );
+  model.InputPropertyValue( "Neumann traction x", makeScalar( PLAIN, 0.0 ) );
+  model.InputPropertyValue( "Neumann traction y", makeScalar( PLAIN, 0.0 ) );
 
-/*
-void PDE_Integrator_Test::exchangeSolverTest() {
-try {
-alg_->SetSolver(new SAMG_Solver());
-sg_->Apply(*alg_);
-alg_->SetSolver(new SAMG_Solver());
-sg_->Apply(*alg_);
+  // Dirichlet (no-slip) conditions for velocity at horizontal model boundaries
+  model.InputBoundaryValue( TOP, "nodal velocity x", makeScalar( DIRICH, 0.0 ) );
+  model.InputBoundaryValue( TOP, "nodal velocity y", makeScalar( DIRICH, 0.0 ) );
+  model.InputBoundaryValue( BOTTOM, "nodal velocity x", makeScalar( DIRICH, 0.0 ) );
+  model.InputBoundaryValue( BOTTOM, "nodal velocity y", makeScalar( DIRICH, 0.0 ) );
 
-} catch(...) {
-_fail("Error while calling solver in exchangeSolverTest");
-}
-_succeed();
-}
-*/
+  // Dirichlet (no-slip) conditions for velocity at boundaries of mineral grains
+  model.Region( "GRAINS" ).ChangePropertyStatus( "nodal velocity x", DIRICH );
+  model.Region( "GRAINS" ).ChangePropertyStatus( "nodal velocity y", DIRICH );
 
-void PDE_Integrator_CRM_Test::sameSolverTest()
-{
+  // Neumann condition for traction term. This uses a work around to translate the flux
+  // into a nodal point source because the FE algorithm integration of surface fluxes
+  // does not work yet and should be replaced once the PDE_Integrator can be used
+  // to compute flux boundary conditions
+  model.InputBoundaryValue( LEFT, "Neumann traction x", makeScalar( DIRICH, 200.0 ) );
+  assignFluxToPointSource( model, "Neumann traction x" ); // translate into nodal source term, not needed if value is zero
+  model.InputBoundaryValue( LEFT, "Neumann traction y", makeScalar( DIRICH, 0.0 ) );
+  model.InputBoundaryValue( RIGHT, "Neumann traction x", makeScalar( DIRICH, 0.0 ) );
+  model.InputBoundaryValue( RIGHT, "Neumann traction y", makeScalar( DIRICH, 0.0 ) );
+
+  // visitor for calculation of the stabilization parameter, which is needed to compute
+  // Stokes flow using FEs which have the same basis functions for velocity and pressure
+  StabilizationParameterVisitor<2U> stabpar_visitor( model, viscosity, 2.0, "stabilization parameter" );
+  model.Accept( stabpar_visitor );
+  printRangeOfVariable( model, "stabilization parameter" );
+
+  // ------------------------------------------------------------
+  // 3.0 Coupled FE algorithm for solving Stokes equation
+  // ------------------------------------------------------------
+
 #ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Solver* samg = new SAMG_Solver();
+  // custom SAMG settings for multi-variable solution as identified by Malte Foerster
+  SAMG_Settings settings;
+
+  // nsolve
+  settings.Set_napproach( 3 ); // interpolation seperate for each unknown
+  settings.Set_nxtyp( 1 );     // ILU relaxation
+  settings.Set_internal( 0 );  // primary matrix is user defined
+  settings.Set_nprim( 1 );
+  // ncyc
+  settings.Set_igam( 1 );
+  settings.Set_ncgrad( 3 );
+  settings.Set_nkdim( 9 );
+  settings.Set_ncycle( 50 );
+
+  // FE algorithm with specialised SAMG settings
+  SAMG_Solver  samg_solver( &settings );
+  PDE_Integrator_CRM<2U, Region>  stokes_flow( samg_solver );
 #else
-  CSMP_DEFAULT_LINEAR_SOLVER* samg = new CSMP_DEFAULT_LINEAR_SOLVER();
+  CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+  PDE_Integrator<2U, Region>  stokes_flow( linear_solver );
 #endif
-  alg_->SetSolver( samg );
-  alg_->SetSolver( samg );
-  _test( samg != NULL );
-  delete samg;
+
+  // Stokes lubrication equation
+
+  // LHS operators                                        operand       basic function      test function
+  NumIntegral_dNT_op_dN_dV<2U>  viscosity_matr_x( p_ref, "viscosity", "nodal velocity x", "nodal velocity x" );
+  NumIntegral_NT_dNi_dV_sc<2U>  gradient_x( p_ref, "zero", "fluid pressure", "nodal velocity x" );
+  gradient_x.SpatialDerivative( X_DIRECTION );
+  //    gradient_x.Transposed();
+  gradient_x.MultiplyBy( -1.0 );
+
+  NumIntegral_dNT_op_dN_dV<2U>  viscosity_matr_y( p_ref, "viscosity", "nodal velocity y", "nodal velocity y" );
+  NumIntegral_NT_dNi_dV_sc<2U>  gradient_y( p_ref, "zero", "fluid pressure", "nodal velocity y" );
+  gradient_y.SpatialDerivative( Y_DIRECTION );
+  //    gradient_y.Transposed();
+  gradient_y.MultiplyBy( -1.0 );
+
+  // LHS operators                                    operand  basic function      test function
+  NumIntegral_NT_dNi_dV_sc<2U>  divergence_x( p_ref, "zero", "nodal velocity x", "fluid pressure" );
+  divergence_x.SpatialDerivative( X_DIRECTION );
+  divergence_x.Transposed();
+  //    divergence_x.MultiplyBy(-1.0);
+
+  NumIntegral_NT_dNi_dV_sc<2U>  divergence_y( p_ref, "zero", "nodal velocity y", "fluid pressure" );
+  divergence_y.SpatialDerivative( Y_DIRECTION );
+  divergence_y.Transposed();
+  //    divergence_y.MultiplyBy(-1.0);
+
+  NumIntegral_dNT_op_dN_dV<2U>  stab_matrix( p_ref, "stabilization parameter", "fluid pressure", "fluid pressure" );
+
+  // RHS operators                              operand               test function
+  PointSource_rhsop<2U>  extpressure_x( p_ref, "Neumann traction x", "nodal velocity x" );
+  PointSource_rhsop<2U>  extpressure_y( p_ref, "Neumann traction y", "nodal velocity y" );
+
+  // RHS operators                           operand   test function
+  NumIntegral_NT_op_N_dV<2U>  dummy( p_ref, "zero", "fluid pressure" );
+
+  // add each PDE Operator to the FE algorithm
+
+  // Navier-Stokes equation
+  stokes_flow.Add( &viscosity_matr_x );
+  stokes_flow.Add( &gradient_x );
+  stokes_flow.Add( &viscosity_matr_y );
+  stokes_flow.Add( &gradient_y );
+  stokes_flow.Add( &extpressure_x );
+  stokes_flow.Add( &extpressure_y );
+
+  // Continuity equation
+  stokes_flow.Add( &divergence_x );
+  stokes_flow.Add( &divergence_y );
+  stokes_flow.Add( &stab_matrix );
+  stokes_flow.Add( &dummy );
+
+  // solve the Stokes equation and release memory
+  stokes_flow.IntegrateOver( r_ref );
+  stokes_flow.Reset();
+
+  // output resulting variable ranges
+  printRangeOfVariable( model, "nodal velocity x" );
+  printRangeOfVariable( model, "nodal velocity y" );
+  printRangeOfVariable( model, "fluid pressure" );
+
+  // construct nodal velocity vector
+  constructVelocityVector( model );
+
+  // output results to VTU
+  VTU_Interface<2U>   vtu( model );
+  std::list<std::string> outputProps;
+  outputProps.push_back( "fluid pressure" );
+  outputProps.push_back( "nodal velocity" );
+
+  // output pressure and (nodal) velocity to the same VTU file
+  vtu.OutputDataToVTU( "PoreScaleVariables", outputProps, "PORES", static_cast<int>(0) );
+
+  // record timing of the simulation
+  clock_t end( clock() );
+  cerr << "\n\nmain: CPU time was " << static_cast<double64>((end - start) / CLOCKS_PER_SEC) << " seconds " << endl << endl;
+
+  // terminate
+  cerr << "\n\nmain: That's it, run completed successfully..." << endl;
+}
 }
 
+/**
+Quick hack that loops over a 2D boundary, reads in a nodal source term and scales it by 0.5 of the length
+of the edges of the connected FEs wich lie at the model boundary (here it is the LEFT boundary)
+*/
+void PDE_Integrator_CRM_Test::assignFluxToPointSource( Model<2U>& mdl, const char* flux )
+{
 
-void PDE_Integrator_CRM_Test::constructorTest() {
+  // backup the fluxes that are orginally assigned in a temporary variable
+  std::string         temp_flux( "flux" );
 
-  // default constructor
-  {
+  if ( !mdl.Database().IsDefined( temp_flux.c_str() ) )
+    mdl.CreateProperty( temp_flux.c_str(), "X", SCALAR, NODE );
+  mdl.CopyReplace( flux, temp_flux.c_str() );
 
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings  settings;
-    settings.Set_eps( 0. );
-    SAMG_Solver solver( &settings );
-#else 
-    CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
+  // define variables needed to compute the length of the FE edges that lie at the boundary
+  // and read the temporary flux and store the final flux
+  csmp::Index       tf_key( mdl.Database().StorageKey( temp_flux.c_str() ) ),
+    f_key( mdl.Database().StorageKey( flux ) );
+  ScalarVariable    tf, f;
+  double64          y[2], area, length( 0.0 );
+  size_t            j;
 
-    PDE_Integrator_CRM<2U, Region> pde;
-    //_test(typeid(pde.GetSolver()) == typeid(solver));
+  cout << "\nassignFluxToPointSource: Translating '" << flux << "' into a nodal point source" << endl;
 
-    //_test(4 == pde.dim2_());
-    //_test(0 == pde.dof_per_node_());
-    //_test(false == pde.get_setup_established_());
-    //_test(false == pde.get_retain_matrix_());
-    //_test(true == pde.get_newed_Solver_object());
-    //_test(0. == pde.get_time_increment_());
-    //_test(true == pde.GetVerbose());
+  // final flux is zero initionally
+  mdl.InputPropertyValue( flux, makeScalar( PLAIN, 0.0 ) ); // set to zero initially
+
+                                                            // loop over all finite elements and identify elements that lie at the same model boundary of interest (here LEFT)
+  const Region<2U>&   mref = mdl.Region( "Model" );
+  vector<Element<2U>* >::const_iterator eit;
+  for ( eit = mref.ElementsBegin(); eit != mref.ElementsEnd(); eit++ ) {
+    if ( (*eit)->AtBoundary() == LEFT or
+         (*eit)->AtBoundary() == CNR1 or
+         (*eit)->AtBoundary() == CNR4 ) {
+      j = 0;
+      // first loop to calculate length of the FE edge that lies at the boundary
+      for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
+        if ( (*eit)->N( i )->AtBoundary() == LEFT or
+             (*eit)->N( i )->AtBoundary() == CNR1 or
+             (*eit)->N( i )->AtBoundary() == CNR4 ) {
+          y[j] = (*eit)->N( i )->y();
+          j++;
+        }
+      }
+      // provide a warning if the edge has less than 2 nodes (as it is a 2D models, 2D elements should have 2 nodes
+      // at the model boundary)
+      if ( j != 2 ) {
+        cerr << "\nassignFluxToPointSource: ERROR: Counted less than two boundary nodes for element " << endl;
+        (*eit)->Out();
+        area = 0.0;
+      }
+      // calculate length (area)
+      else {
+        area = y[0] - y[1];
+        if ( area < 0.0 ) area *= -1.0;
+        length += area;
+        area /= static_cast<double64>(j); // 2 nodes per triangle or quadrilateral
+      }
+      // second loop to calculate and scale nodal flux
+      for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
+        if ( (*eit)->N( i )->AtBoundary() == LEFT or
+             (*eit)->N( i )->AtBoundary() == CNR1 or
+             (*eit)->N( i )->AtBoundary() == CNR4 ) {
+          // read existing flux at node i
+          tf = (*eit)->N( i )->Read( tf_key );
+          // read existing source at node i
+          f = (*eit)->N( i )->Read( f_key );
+          // add current heat flux to this value
+          f += tf() * area;
+          // store it back to node
+          (*eit)->N( i )->Store( f_key, f );
+        }
+      }
+    }
   }
 
+  printRangeOfVariable( mdl, flux );
+  cout << "\nassignFluxToPointSource: Successfully assigned '" << flux << "' to the nodes... " << endl;
 
+}
+
+
+/// simple combine x and y component of computed velocities into a vector and saves it to the grod
+void PDE_Integrator_CRM_Test::constructVelocityVector( Model<2U>& mdl )
+{
+  VectorVariable<2U> v;
+  ScalarVariable     p;
+  csmp::Index vx_key( mdl.Database().StorageKey( "nodal velocity x" ) ),
+    vy_key( mdl.Database().StorageKey( "nodal velocity y" ) ),
+    v_key( mdl.Database().StorageKey( "nodal velocity" ) );
+
+  const Region<2U>& mref = mdl.Region( "Model" );
+  vector<Node<2U>* >::const_iterator nit;
+  for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
   {
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings  settings;
-    settings.Set_eps( 0. );
-    SAMG_Solver solver( &settings );
-#else 
-    CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
-
-    PDE_Integrator_CRM<2U, Region> pde( solver );
-    //_test(4 == pde.dim2_());
-    //_test(0 == pde.dof_per_node_());
-    //_test(false == pde.get_setup_established_());
-    //_test(false == pde.get_retain_matrix_());
-    //_test(false == pde.get_newed_Solver_object());    // using reference
-    //_test(0. == pde.get_time_increment_());
-    //_test(true == pde.GetVerbose());
+    v( 0 ) = (*nit)->Read( vx_key );
+    v( 1 ) = (*nit)->Read( vy_key );
+    (*nit)->Store( v_key, v );
   }
+}
 
 
+/// scale the size of the CSMP model (NB divides by the provided factor!)
+void PDE_Integrator_CRM_Test::scaleRegion( Model<2U>& mdl, double64 scale_factor )
+{
+  double64       x_, y_;
+  const double64 factor( scale_factor );
+
+  static const Region<2U>& mref = mdl.Region( "Model" );
+  vector<Node<2U>* >::const_iterator nit;
+  for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
   {
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings  settings;
-    settings.Set_eps( 0. );
-    SAMG_Solver solver( &settings );
-#else 
-    CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
-
-    PDE_Integrator_CRM<2U, Region> pde( &solver );
-    //_test(4 == pde.dim2_());
-    //_test(0 == pde.dof_per_node_());
-    //_test(false == pde.get_setup_established_());
-    //_test(false == pde.get_retain_matrix_());
-    //_test(false == pde.get_newed_Solver_object());
-    //_test(0. == pde.get_time_increment_());
-    //_test(true == pde.GetVerbose());
+    x_ = (*nit)->x();
+    (*nit)->x( x_ / factor );
+    y_ = (*nit)->y();
+    (*nit)->y( y_ / factor );
   }
-
-
 }
-
-
-
-void PDE_Integrator_CRM_Test::copyTest() {
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Settings  settings;
-  settings.Set_eps( 0. );
-  SAMG_Solver solver( &settings );
-#else 
-  CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
-
-  PDE_Integrator_CRM<2U, Region> pde( solver );
-  //PDE_Integrator_CRM<2U, Region> copy(pde);
-
-  // check deep copy 
-  //_test(copy.GetSolver() != pde.GetSolver());
-  //_test(&(copy.get_G_()) != &(pde.get_G_()));
-  //_test(&(copy.get_rh_()) != &(pde.get_rh_()));
-  //_test(&(copy.get_x_()) != &(pde.get_x_()));
-  //_test(&(copy.get_lhs_operators_()) != &(pde.get_lhs_operators_()));
-  //_test(&(copy.get_rhs_operators_()) != &(pde.get_rhs_operators_()));
-  //_test(&(copy.get_basic_operands_()) != &(pde.get_basic_operands_()));
-  //_test(&(copy.get_test_operands_()) != &(pde.get_test_operands_()));
-  //_test(&(copy.get_postpro_operators_()) != &(pde.get_postpro_operators_()));
-  //_test(copy.dim2_() == pde.dim2_());
-  //_test(copy.dof_per_node_() == pde.dof_per_node_());
-  //_test(copy.get_setup_established_() == pde.get_setup_established_());
-  //_test(copy.get_retain_matrix_() == pde.get_retain_matrix_());
-
-  //_test(copy.get_newed_Solver_object() != pde.get_newed_Solver_object());   // false true
-  //_test(copy.get_time_increment_() == pde.get_time_increment_());
-  //_test(copy.get_retain_matrix_() == pde.get_retain_matrix_());
-
-
-  // TODO: need to assert  && beware
-  /*
-  _test(&(copy.get_RH_()) != &(pde.get_RH_()));
-  _test(); // scale_factor
-  _      ; // target
-
-  */
-
-}
-
-
-void PDE_Integrator_CRM_Test::AddOperatorLHSTest() {
-  PDE_Integrator_CRM<2U, Region> pde;
-
-  //auto& name = stiff_->Name();
-  pde.Add( stiff_ );
-
-  //_test(pde.get_lhs_operators_().size() == 1);
-  //_test(pde.get_lhs_operators_()[name] == stiff_);
-
-  // need adding more LHS operand
-
-
-}
-
-
-void PDE_Integrator_CRM_Test::AddOperatorRHSTest() {
-  PDE_Integrator_CRM<2U, Region> pde;
-
-  //auto& name = source_->Name();
-  pde.Add( source_ );
-
-  //_test(pde.get_rhs_operators_().size() == 1);
-  //_test(pde.get_rhs_operators_()[name] == source_);
-
-  // need adding more RHS operand
-
-}
-
-void PDE_Integrator_CRM_Test::AddPostProcessTest() {
-
-  PDE_Integrator_CRM<2U, Region> pde;
-  //auto& name = fluid_velocity->Name();
-  pde.AddPostProcess( fluid_velocity );
-
-  //_test(pde.get_postpro_operators_().size() == 1);
-  //_test(pde.get_postpro_operators_()[name] == fluid_velocity);
-
-  // need adding more RHS operand
-
-}
-
-
-void PDE_Integrator_CRM_Test::TimeIncrementTest() {
-  PDE_Integrator_CRM<2U, Region> pde;
-
-  double64 dt( 100 );
-  pde.TimeIncrement( dt );
-  //_test(pde.get_time_increment_() == dt);
-
-  dt = 0.;
-  pde.TimeIncrement( dt );
-  //_test(pde.get_time_increment_() == dt);
-
-  dt = -100.;
-  pde.TimeIncrement( dt );
-  //_test(pde.get_time_increment_() == dt);
-
-}
-
-
-void PDE_Integrator_CRM_Test::TransientTest() {
-  PDE_Integrator_CRM<2U, Region> pde;
-
-  double64 dt( 100 );
-  pde.TimeIncrement( dt );
-  _test( pde.Transient() == true );
-
-  dt = 0.;
-  pde.TimeIncrement( dt );
-  _test( pde.Transient() == false );
-
-  dt = -100.;
-  pde.TimeIncrement( dt );
-  _test( pde.Transient() == false );
-
-}
-
-void PDE_Integrator_CRM_Test::SetSolverTest() {
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Settings  settings;
-  settings.Set_eps( 0. );
-  SAMG_Solver solver( &settings );
-#else 
-  CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
-
-  PDE_Integrator_CRM<2U, Region>* pde = new PDE_Integrator_CRM<2U, Region>( solver );
-  PDE_Integrator_CRM<2U, Region>* another = new PDE_Integrator_CRM<2U, Region>( solver );
-
-  _test( pde->GetSolver() == another->GetSolver() );
-  //_test(pde->get_newed_Solver_object() == false);
-
-  delete pde;
-  delete another;
-
-}
-
-
-void PDE_Integrator_CRM_Test::GetSolverTest() {
-
-#ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Settings  settings;
-  settings.Set_eps( 0. );
-  SAMG_Solver solver( &settings );
-#else 
-  CSMP_DEFAULT_LINEAR_SOLVER solver();
-#endif
-
-  PDE_Integrator_CRM<2U, Region>* pde = new PDE_Integrator_CRM<2U, Region>( solver );
-  _test( pde->GetSolver() == &solver );
-
-  delete pde;
-
-}
-
-void PDE_Integrator_CRM_Test::EstablishMatrixSetupTest() {
-  PDE_Integrator_CRM<2U, Region>* pde = new PDE_Integrator_CRM<2U, Region>();
-  pde->Add( stiff_ );
-  pde->Add( source_ );
-
-
-
-
-
-  delete pde;
-}
-
-void PDE_Integrator_CRM_Test::IntegrateOverTest() {
-  {
-    PDE_Integrator_CRM<2U, Region>* pde = new PDE_Integrator_CRM<2U, Region>();
-    pde->Add( stiff_ );
-    pde->Add( source_ );
-
-
-    (sg_->Region( "Model" )).E( 0 )->FE()->UsesLocalCoordinates();
-
-    pde->IntegrateOver( sg_->Region( "Model" ), true );
-
-
-
-    delete pde;
-  }
-
-  {
-    PDE_Integrator_CRM<2U, Region>* pde = new PDE_Integrator_CRM<2U, Region>();
-    pde->Add( stiff_ );
-    pde->Add( source_ );
-    pde->IntegrateOver( *sg_, sg_->Region( "Model" ), true );
-    delete pde;
-  }
-
-
-}
-
-
-
-////////////////////////////////////////////////////
-
 
 } // end namespace csmp

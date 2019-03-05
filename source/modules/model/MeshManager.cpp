@@ -1424,7 +1424,8 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
     deque<Node<dim>*> neighbor_nodes;
     for ( auto n : found_elmt->NodeVector() ) {
       if ( n->Parents() < 2 ) {// if the node is shared in other elements, do not delete it.
-        delete n; n = NULL; n_nodes_--;
+        //delete n; n = NULL; n_nodes_--;
+        Erase( n );
       }
       else
         neighbor_nodes.push_back( n );
@@ -1653,7 +1654,8 @@ void MeshManager<dim>::Erase( Element<dim>* elmt )
     deque<Node<dim>*> neighbor_nodes;
     for ( auto n : elmt->NodeVector() ) {
       if ( n->Parents() < 2 ) {// if the node is shared in other elements, do not delete it.
-        delete n; n = NULL; n_nodes_--;
+        //delete n; n = NULL; n_nodes_--;
+        Erase( n );
       }
       else
         neighbor_nodes.push_back( n );

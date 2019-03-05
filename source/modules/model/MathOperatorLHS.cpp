@@ -979,116 +979,24 @@ inline void MathOperatorLHS<dim>::MultiplyWithTimeFactor( double64 dt )
     LHS *= dt;
 }
 
-
-/// AssignToGlobal matrix function
+  /// AssignToGlobal matrix function
 template<size_t dim>
-void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, CompressedRowMatrix& G)
+void MathOperatorLHS<dim>::AssignToGlobal( const Element<dim>& e, CompressedSparseRowMatrix& G )
 {
-	// map local to global indexes for test and basic operands
-	
-	IDT.resize(e.Nodes());
-	IDB.resize(e.Nodes());
-	for (size_t i = 0U; i<e.Nodes(); i++) {
-		IDT[i] = e.N(i)->Idx();
-		IDB[i] = IDT[i];
-	}
+  // map local to global indexes for test and basic operands
 
-	if (TestOperandType() != SCALAR)
-		transformNodeIndexVector(dim, TestOperandKey(), IDT);
-
-	for (size_t i = 0U; i<IDT.size(); i++)
-		IDT[i] += this->TestOperandOffset();
-
-	if (BasicOperandType() != SCALAR)
-		transformNodeIndexVector(dim, BasicOperandKey(), IDB);
-
-	for (size_t i = 0U; i<IDB.size(); i++)
-		IDB[i] += this->BasicOperandOffset();
-
-	// perform assignment from local matrix to global matrix
-
-  //JC: check it later!
-	//if (multiply_accumulate_)
-	//{
-	//	/*for (size_t i = 0U; i<LHS.Rows(); i++)
-	//		for (size_t j = 0U; j<LHS.Cols(); j++)
-	//			G.MultiplyEntryWith(IDT[i],
-	//				IDB[j],
-	//				LHS(i, j) * factor_);*/
-	//}
-	//else if (add_accumulate_ || add_accumulate_later_) 
- //   G.Add(IDT, IDB, LHS, factor_);
-	//else if (subtract_accumulate_ || subtract_accumulate_later_) 
- //   G.Add(IDT, IDB, LHS, -factor_);
-	//else
-	//	throw csmp::Exception(ERROR,
-	//		"MathOperatorLHS<dim>::AssignToGlobal(Element): for CRM:",
-	//		"accumulation instructions could not be parsed.");
 } // end AssignToGlobal (Element)
 
 template<size_t dim>
-void MathOperatorLHS<dim>::AssignToGlobal(const Face<dim>& e, CompressedRowMatrix& G)
+void MathOperatorLHS<dim>::AssignToGlobal( const Face<dim>& e, CompressedSparseRowMatrix& G )
 {
-	// map local to global indexes for test and basic operands
-	/*
-	IDT.resize(e.Nodes());
-	IDB.resize(e.Nodes());
-	for (size_t i = 0U; i<e.Nodes(); i++) {
-		IDT[i] = e.N(i)->Idx();
-		IDB[i] = IDT[i];
-	}
 
-	if (TestOperandType() != SCALAR)
-		transformNodeIndexVector(dim, TestOperandKey(), IDT);
-
-	for (size_t i = 0U; i<IDT.size(); i++)
-		IDT[i] += this->TestOperandOffset();
-
-	if (BasicOperandType() != SCALAR)
-		transformNodeIndexVector(dim, BasicOperandKey(), IDB);
-
-	for (size_t i = 0U; i<IDB.size(); i++)
-		IDB[i] += this->BasicOperandOffset();
-
-	// perform assignment from local matrix to global matrix
-
-	if (multiply_accumulate_)
-	{
-		for (size_t i = 0U; i<LHS.Rows(); i++)
-			for (size_t j = 0U; j<LHS.Cols(); j++)
-				G.MultiplyEntryWith(IDT[i],
-					IDB[j],
-					LHS(i, j) * factor_);
-	}
-	else if (add_accumulate_ || add_accumulate_later_)
-	{
-		for (size_t i = 0U; i<LHS.Rows(); i++)
-			for (size_t j = 0U; j<LHS.Cols(); j++)
-				G.Add(IDT[i],
-					IDB[j],
-					LHS(i, j) * factor_);
-	}
-	else if (subtract_accumulate_ || subtract_accumulate_later_)
-	{
-		for (size_t i = 0U; i<LHS.Rows(); i++)
-			for (size_t j = 0U; j<LHS.Cols(); j++)
-				G.Add(IDT[i],
-					IDB[j],
-					-LHS(i, j) * factor_);
-	}
-	else
-		throw csmp::Exception(ERROR,
-			"MathOperatorLHS<dim>::AssignToGlobal(Face):",
-			"accumulation instructions could not be parsed.");
-	*/
 } // end AssignToGlobal (Face)
 
 template<size_t dim>
-void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, CompressedRowMatrix& G)
+void MathOperatorLHS<dim>::AssignToGlobal( const InterFace<dim>& f, CompressedSparseRowMatrix& G )
 {
-	std::cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): CRM: ";
-	std::cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << std::endl;
-	throw invalid_argument("MathOperatorLHS<dim>::AssignToGlobal(InterFace)");
+
 } // end AssignToGlobal (InterFace)
 
 
