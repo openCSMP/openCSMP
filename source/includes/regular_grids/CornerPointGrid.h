@@ -43,15 +43,15 @@ private:
 
 /**
 
-@class CornerPointGrid_UoM  CornerPointGrid_UoM
+@class CornerPointGrid  CornerPointGrid
 @author A.J. Bromage
 @date 2018
 
 */
-class  CornerPointGrid_UoM {
+class  CornerPointGrid {
 public:
-  CornerPointGrid_UoM();
-  ~CornerPointGrid_UoM();
+  CornerPointGrid();
+  ~CornerPointGrid();
 
   void CreateModel( const std::string&     model_name,
                     csmp::VSet<3U>&       vset,

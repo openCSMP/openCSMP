@@ -25,7 +25,7 @@ namespace eclipse {
 
 // CORNER POINT GRID
 
-CornerPointGrid_UoM::CornerPointGrid_UoM()
+CornerPointGrid::CornerPointGrid()
   : NX_( 0 ),
   NY_( 0 ),
   NZ_( 0 ),
@@ -33,12 +33,12 @@ CornerPointGrid_UoM::CornerPointGrid_UoM()
 {
 }
 
-CornerPointGrid_UoM::~CornerPointGrid_UoM()
+CornerPointGrid::~CornerPointGrid()
 {
 }
 
 
-void CornerPointGrid_UoM::AssignDimensions( size_t nx, size_t ny, size_t nz )
+void CornerPointGrid::AssignDimensions( size_t nx, size_t ny, size_t nz )
 {
   NX_ = nx;
   NY_ = ny;
@@ -46,7 +46,7 @@ void CornerPointGrid_UoM::AssignDimensions( size_t nx, size_t ny, size_t nz )
 }
 
 
-void CornerPointGrid_UoM
+void CornerPointGrid
 ::InitializeGridSpecs()
 {
   std::cout << "InitializeGridSpecs\n";
@@ -67,7 +67,7 @@ void CornerPointGrid_UoM
 /**
 x stays, y = -z and z=y.
 */
-void CornerPointGrid_UoM
+void CornerPointGrid
 ::ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt ) const
 {
   const double y( pt[1U] );
@@ -78,7 +78,7 @@ void CornerPointGrid_UoM
 
 
 uint8_t&
-CornerPointGrid_UoM::CellActivity( size_t i, size_t j, size_t k )
+CornerPointGrid::CellActivity( size_t i, size_t j, size_t k )
 {
   assert( i < NX_ && j < NY_ && k < NZ_ );
   return cell_activity_[i + j * NX_ + k * NX_x_NY_];
@@ -86,7 +86,7 @@ CornerPointGrid_UoM::CellActivity( size_t i, size_t j, size_t k )
 
 
 std::vector<uint8_t>&
-CornerPointGrid_UoM::GetCellActivity()
+CornerPointGrid::GetCellActivity()
 {
   return cell_activity_;
 }
@@ -96,7 +96,7 @@ CornerPointGrid_UoM::GetCellActivity()
 /**
 Builds the pillars and columns.
 */
-void CornerPointGrid_UoM::ConstructPillarsAndColumns( const std::vector<double64>& zcorn )
+void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double64>& zcorn )
 {
   const size_t NXxNY = NX_ * NY_;
   size_t node_count = 0;
@@ -205,7 +205,7 @@ void CornerPointGrid_UoM::ConstructPillarsAndColumns( const std::vector<double64
 
 
 
-void CornerPointGrid_UoM::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
+void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 {
   vset.HybridElementTypeMesh( true );
 
@@ -412,7 +412,7 @@ void CornerPointGrid_UoM::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   vset.AddElementTypes( generator_->fem_types.begin(), generator_->fem_types.end() );
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   bool faceAboveIsQuad = !cellAbove || generator_->getShapeOfBottomFace( *cellAbove ) == FACE_TYPE::FULL_QUAD;
   bool faceBeneathIsQuad = !cellBeneath || generator_->getShapeOfTopFace( *cellBeneath ) == FACE_TYPE::FULL_QUAD;
 
@@ -959,7 +959,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i
 }
 
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -994,7 +994,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1031,7 +1031,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   generator_->plist.emplace( generator_->elementID, generator_->degenerateToOnePrismAtEdge23( cell ) );
   addElementToMap( i, j, k, generator_->elementID );
   generator_->fem_types.push_back( ISOPARAMETRIC_LINEAR_PRISM );
@@ -1040,7 +1040,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0011( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1075,7 +1075,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   auto elementList = generator_->degenerateToTwoTetrahedraAtEdge13( cell );
   generator_->plist.emplace( generator_->elementID, elementList[0] );
   addElementToMap( i, j, k, generator_->elementID );
@@ -1089,7 +1089,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0101( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1118,7 +1118,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i
 }
 
 
-bool CornerPointGrid_UoM::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1146,7 +1146,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1184,7 +1184,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i
 }
 
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   generator_->plist.emplace( generator_->elementID, generator_->degenerateToOnePrismAtEdge30( cell ) );
   addElementToMap( i, j, k, generator_->elementID );
   generator_->fem_types.push_back( ISOPARAMETRIC_LINEAR_PRISM );
@@ -1193,7 +1193,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1001( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   auto elementList = generator_->degenerateToTwoTetrahedrasAtEdge02( cell );
   generator_->plist.emplace( generator_->elementID, elementList[0] );
   addElementToMap( i, j, k, generator_->elementID );
@@ -1207,7 +1207,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1235,7 +1235,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1263,7 +1263,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1291,7 +1291,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
+bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1319,7 +1319,7 @@ bool CornerPointGrid_UoM::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i
   return true;
 }
 
-bool CornerPointGrid_UoM::ConstructLineElement( size_t& i, size_t& j, size_t& k, size_t& new_elemt_idx ) {
+bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, size_t& new_elemt_idx ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1361,7 +1361,7 @@ bool CornerPointGrid_UoM::ConstructLineElement( size_t& i, size_t& j, size_t& k,
 }
 
 
-bool CornerPointGrid_UoM::ConstructLineElement( ColumnCell& cell, size_t& i, size_t& j, size_t& k ) {
+bool CornerPointGrid::ConstructLineElement( ColumnCell& cell, size_t& i, size_t& j, size_t& k ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
@@ -1401,7 +1401,7 @@ The PolygonGridManager is used to construct the pillars.
 
 @todo regions are not recognised properly.
 */
-void CornerPointGrid_UoM::CreateModel( const std::string&     model_name,
+void CornerPointGrid::CreateModel( const std::string&     model_name,
                                        csmp::VSet<3U>&       vset,
                                        csmp::ModelTopology&   model_topology,
                                        const std::vector<double64>& zcorn,
@@ -1423,14 +1423,14 @@ void CornerPointGrid_UoM::CreateModel( const std::string&     model_name,
 }
 
 
-void CornerPointGrid_UoM::addElementToMap( size_t i, size_t j, size_t k, size_t elementID )
+void CornerPointGrid::addElementToMap( size_t i, size_t j, size_t k, size_t elementID )
 {
   this->elementMap.emplace( ijk( i, j, k ), elementID );
 }
 
 
 template<class VarType>
-void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&             vset,
+void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
                                                const std::vector<VarType>& prop_data,
                                                const std::string&          prop_name,
                                                const csmp::PLACEMENT&      prop_place ) const
@@ -1468,14 +1468,14 @@ void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&             vset,
 
 } // end WritePropertyToVSet
 
-template void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
-template void CornerPointGrid_UoM::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ScalarVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<VectorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<TensorVariable<3U> >&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<ArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
+template void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&, const std::vector<FlaggedArrayVariable>&, const std::string&, const csmp::PLACEMENT& ) const;
 
 
-void CornerPointGrid_UoM::Resize( size_t i_pillar_max, size_t j_pillar_max )
+void CornerPointGrid::Resize( size_t i_pillar_max, size_t j_pillar_max )
 {
   pillars_.resize( i_pillar_max * j_pillar_max );
 }
@@ -1484,7 +1484,7 @@ void CornerPointGrid_UoM::Resize( size_t i_pillar_max, size_t j_pillar_max )
 /**
 accessing the contained pillars
 */
-Pillar & CornerPointGrid_UoM::operator()( size_t i, size_t j )
+Pillar & CornerPointGrid::operator()( size_t i, size_t j )
 {
   assert( i <= NX_ );
   assert( j <= NY_ );

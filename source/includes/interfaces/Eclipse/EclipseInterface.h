@@ -216,31 +216,31 @@ private:
   void WritePropertiesToVSet();
 
   void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                  const CornerPointGrid_UoM& grid,
+                                  const CornerPointGrid& grid,
                                   const std::vector<csmp::ScalarVariable>& scalar_data,
                                   const std::string& property_name,
                                   const csmp::PLACEMENT& place );
 
   void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                  const CornerPointGrid_UoM& grid,
+                                  const CornerPointGrid& grid,
                                   const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                   const std::string& property_name,
                                   const csmp::PLACEMENT& place );
 
   void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
-                                  const CornerPointGrid_UoM& grid,
+                                  const CornerPointGrid& grid,
                                   const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                   const std::string& property_name,
                                   const csmp::PLACEMENT& place );
 
   void WriteVectorPropertyToVSet( csmp::VSet<3U>& vset,
-                                  const CornerPointGrid_UoM& grid,
+                                  const CornerPointGrid& grid,
                                   const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                   const std::string& property_name,
                                   const csmp::PLACEMENT& place );
 
   void WriteTensorPropertyToVSet( csmp::VSet<3U>& vset,
-                                  const CornerPointGrid_UoM& grid,
+                                  const CornerPointGrid& grid,
                                   const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                   const std::string& property_name,
                                   const csmp::PLACEMENT& place );
@@ -279,7 +279,7 @@ private:
   size_t                      NY_;
   size_t                      NZ_;
   std::vector<double64>       zcorn_;
-  CornerPointGrid_UoM         grid_;
+  CornerPointGrid             grid_;
   CellCenteredGrid            block_grid_;
 
 #if 0
@@ -288,11 +288,12 @@ private:
 #endif
 
   // properties data
-  std::map<int, csmp::Parameter>           properties_;
+  std::map<int, csmp::Parameter>          properties_;
   std::vector<csmp::ScalarVariable>       ntg_;
   std::vector<csmp::ScalarVariable>       poro_;
-  std::vector<csmp::TensorVariable<3U> >  permxyz_;
-  std::map<std::string, double>            multflt_;
+  std::vector<csmp::ScalarVariable>       perm_;
+  std::vector<csmp::TensorVariable<3U>>   permxyz_;  
+  std::map<std::string, double>           multflt_;
   std::vector<csmp::ScalarVariable>       pressure_;
   std::vector<csmp::ScalarVariable>       swat_;
   std::vector<csmp::ScalarVariable>       soil_;
@@ -305,11 +306,11 @@ private:
   std::vector<csmp::ScalarVariable>       eqlnum_;
   std::vector<csmp::ScalarVariable>       fipnum_;
 
-  std::map<std::string, EclipseFault>      faults_data_;
+  std::map<std::string, EclipseFault>     faults_data_;
 
   // well specific data
-  std::map<std::string, EclipseWell>       well_data_;
-  std::map<std::string, EclipseWellPath>   well_face_path_;
+  std::map<std::string, EclipseWell>      well_data_;
+  std::map<std::string, EclipseWellPath>  well_face_path_;
 };
 
 
@@ -492,12 +493,12 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
                           std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
-                                  CornerPointGrid_UoM& grid,
+                                  CornerPointGrid& grid,
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                   );
 
 int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
-                             CornerPointGrid_UoM& grid,
+                             CornerPointGrid& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                              );
 
