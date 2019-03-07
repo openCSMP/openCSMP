@@ -34,7 +34,7 @@ with csmp::SparseMatrix, STL and according functionality
       virtual void SolveMatrixEquation( CompressedSparseRowMatrix& A,
                                         std::vector<double64>& b,
                                         std::vector<double64>& x,
-                                        size_t no_unknowns ) = 0;
+                                        size_t no_unknowns );
     private:
       void ludcmp( SparseMatrix& a,
                    long n,

@@ -8,7 +8,7 @@
 #include "PointSource_rhsop.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
@@ -28,7 +28,7 @@ template<size_t> class Model;
    
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-class TransientDiffusor : public PDE_Integrator_CRM<dim,COMPUTATION_DOMAIN> {
+class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
     typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
 
