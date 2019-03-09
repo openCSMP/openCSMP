@@ -56,7 +56,9 @@ class GravityInducedFluidPressure_Test : public Test {
   
     /// like in vertical fluid pressure example
     void ComputeCO2Pressure_PDE_Integrator( double64 pf_top );
-  
+    // TODO: remove when errors are fixed
+    void ComputeCO2Pressure_PDE_Integrator_CRM( double64 pf_top );
+
     /// total pressure like in simulator
     void ComputeCO2Pressure_PDE_Integrator2( double64 pf_top );
 

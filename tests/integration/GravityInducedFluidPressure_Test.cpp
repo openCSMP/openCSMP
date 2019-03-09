@@ -17,7 +17,7 @@
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 #include "PDE_Integrator.h"
-//#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator_CRM.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
@@ -231,7 +231,10 @@ void GravityInducedFluidPressure_Test::run()
     ComputeCO2PressureFromReducedPressure_PDE_Integrator2( model1D_, pf_model_top );
 //    _test( TestComputedWithReferencePressure() );
     if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test2" );
-   
+ 
+// TODO: PDE integrator CRM
+ComputeCO2Pressure_PDE_Integrator_CRM( pf_model_top );
+ 
    
     // 3. testing the same computation for a 3D model with surface topography
     //    and versions with difference element types
@@ -446,7 +449,7 @@ bool GravityInducedFluidPressure_Test::TestComputedWithReferencePressure()
 
 
 /**
-    Uses SAMG solver and gravity term to compute vertical fluid pressure profile
+    Uses Gauss-Jordan solver and gravity term to compute vertical fluid pressure profile
  
     This computation needs to read 'fluid mixture density' as input values.
 */
@@ -491,6 +494,59 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator( double
     printRangeOfVariable( *model1D_, "fluid pressure" );
 
  } // end ComputeCO2Pressure_PDE_Integrator
+
+
+
+
+
+/**
+    Using the compressed row matrix accumulation and Dirichlet dof elimination
+    procedure developed by Hani Akbari
+*/
+void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( double64 pf_top )
+ {
+    cout << "\n\n\nComputeCO2Pressure_PDE_Integrator_CRM: Computing CO2-static pressure..." << endl;
+
+    csmp::Index rho_key = model1D_->Database().StorageKey("fluid mixture density");
+    // the last node (id=n_nodes) is located at the top of the model (by anology with the Y-axis)
+    Region<1U>& model_domain(model1D_->Region("Model"));
+    model_domain.UpdateMemberIndexes();
+    const size_t topNode = findNode( *model1D_, top_, 1.0e-7 );
+
+    model_domain.ChangePropertyStatus( "fluid pressure", ANY );
+    model_domain.N(topNode)->Store( model1D_->Database().StorageKey("fluid pressure"), makeScalar(DIRICH,pf_top) );
+
+    // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+    // --------------------------------------------------------------------------------------------
+    GaussJordan_Solver             GJ_solver;
+    PDE_Integrator_CRM<1U,Region>  hydrostatic_pressure(GJ_solver);
+ 
+    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+
+    const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
+    const double64    acc_gravity(model1D_->Read(g_key));
+    // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
+    NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model1D_->Database(), "fluid mixture density",
+                                                                   "total mobility permeability product", "fluid pressure", acc_gravity );
+    hydrostatic_pressure.Add( &hydrostatic_conductance );
+    hydrostatic_pressure.Add( &hydrostatic_gravity );
+
+
+    // 8. Compute the initial hydrostatic pressure. Since fluid properties will change after the pressure was computed
+    //     recompute the fluid properties and fluid pressure 3 times such that fluid pressure and fluid properties converge
+    // --------------------------------------------------------------------------------------------------------------------
+//    model1D_->InputPropertyValue( "total mobility permeability product", makeScalar(PLAIN,1.0e-6) );
+    printRangeOfVariable( *model1D_, "total mobility permeability product" );
+    printRangeOfVariable( *model1D_, "fluid mixture density" );
+
+    hydrostatic_pressure.IntegrateOver( model_domain );
+ 
+    printRangeOfVariable( *model1D_, "fluid pressure" );
+
+ } // end ComputeCO2Pressure_PDE_Integrator_CRM
+
+
+
 
 
 

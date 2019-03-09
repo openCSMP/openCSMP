@@ -157,7 +157,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
 }
 
 
-
+// TODO: facet areas, sector volumes and normals should only be computed once since their computation is costly
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
  {
@@ -250,8 +250,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ResetCFLMultiplier()
 
 
 
-//Compute non-wetting phase saturaiton gradient at parement elements, for capillary component computation.
-// TODO: super expensive approach - use values from neighboring nodes 
+//Compute non-wetting phase saturation gradient at parent elements, for capillary flow component computation.
+// TODO: dependent on whether the capillary flow is computed with the FE method or the FVM, the gradients need to be computed on the element  or on the finite volume, respectively.
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* event )
 {
