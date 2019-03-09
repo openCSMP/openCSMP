@@ -20,8 +20,8 @@ namespace eclipse {
 
 EclipseInterface::EclipseInterface()
   : NX_( 0 ),
-  NY_( 0 ),
-  NZ_( 0 )
+    NY_( 0 ),
+    NZ_( 0 )
 {
 }
 
@@ -49,9 +49,7 @@ void EclipseInterface::ClearBefore()
 void EclipseInterface::ClearAfter()
 {
   /// grid
-  //	grid_.Clear();
   block_grid_.Clear();
-  //    box_.clear();
 
   /// regions
   satnum_.clear();
@@ -63,40 +61,14 @@ void EclipseInterface::ClearAfter()
   /// cell properties
   ntg_.clear();
   poro_.clear();
+  perm_.clear();
   permxyz_.clear();
   pressure_.clear();
   swat_.clear();
   soil_.clear();
   sgas_.clear();
-
-  /// face properties
-  //    multflt_.clear();
-  //    multxyz_.clear();
-  //    tranxyz_.clear();
 }
 
-
-#if 0
-void EclipseInterface
-::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids )
-{
-  grid_.AddWellFacePath( well_name, cell_ids );
-}
-
-
-void EclipseInterface
-::AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids, const std::vector<std::pair<size_t, size_t> >& face_ids )
-{
-  grid_.AddWellFacePath( well_name, cell_ids, face_ids );
-}
-
-
-void EclipseInterface
-::AddWellEdgePath( const std::string& well_name, const std::vector<size_t>& cell_ids, const std::vector<std::pair<size_t, size_t> >& edge_ids )
-{
-  grid_.AddWellEdgePath( well_name, cell_ids, edge_ids );
-}
-#endif
 
 /**
 MASTER METHOD of EclipseInterface which does everything:
@@ -203,14 +175,44 @@ void EclipseInterface::WritePropertiesToVSet()
                                poro_, properties_[ECLIPSE_PORO].name, properties_[ECLIPSE_PORO].key.place );
 
   /// 4. write permeability
+  if ( !perm_.empty() )
+  {
+    // The ‘Eclipse model’ is exported from Petrel which works only in miliDarcy. 
+    // The unit is converted to m2 according to the equation: Perm_M2 = ( Perm_mD1  / 1000.00) * (9.869233 * pow(10, -13.0))    
+    // Simply, the unit is mD (milliDarcy = 0.001 Darcy), 1D = 10^-12 m2
+    double64 conversion_factor = 1.0e-15;
+    const size_t num_cells( perm_.size() );
+    double64 min = properties_[ECLIPSE_PERM].min;
+    double64 max = properties_[ECLIPSE_PERM].max;
+    size_t invalid_value_count = 0U;
+
+    /// check value whether it is in the valid		
+    for ( size_t i = 0; i < num_cells; ++i ){
+      if ( perm_[i].IsWithinRange( -99999.0, min ) )
+        perm_[i] *= -1.0f;
+      
+      perm_[i] *= conversion_factor;
+      if ( !perm_[i].IsWithinRange( min, max ) ){
+        invalid_value_count++;
+        if ( perm_[i]() < min ) perm_[i] = min;
+        if ( perm_[i]() > max ) perm_[i] = max;
+      }
+    }
+
+    if ( invalid_value_count > 0 )
+      std::cout << "\nEclipseInterface::WritePropertiesToVSet (Invalid Permeability): The number of the pruned values = " << invalid_value_count << "\n";
+
+    WriteScalarPropertyToVSet( *vset_, grid_,
+                               perm_, properties_[ECLIPSE_PERM].name, properties_[ECLIPSE_PERM].key.place );
+  }
+
   if ( !permxyz_.empty() )
   {
     // The ‘Eclipse model’ is exported from Petrel which works only in miliDarcy. 
     // The unit is mD (milliDarcy = 0.001 Darcy),  1D = 10^-12 m2
     double64 conversion_factor = 1.0e-15;
     const size_t num_cells( permxyz_.size() );
-
-    //JC: need to get the min and max values from Database()
+        
     double64 min = properties_[ECLIPSE_PERM].min;
     double64 max = properties_[ECLIPSE_PERM].max;
     size_t invalid_value_count = 0U;
@@ -290,7 +292,7 @@ void EclipseInterface::WritePropertiesToVSet()
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                  const CornerPointGrid_UoM& grid,
+                                                  const CornerPointGrid& grid,
                                                   const std::vector<csmp::ScalarVariable>& scalar_data,
                                                   const std::string& property_name,
                                                   const csmp::PLACEMENT& place )
@@ -303,7 +305,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                  const CornerPointGrid_UoM& grid,
+                                                  const CornerPointGrid& grid,
                                                   const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                                   const std::string& property_name,
                                                   const csmp::PLACEMENT& place )
@@ -321,7 +323,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                  const CornerPointGrid_UoM& grid,
+                                                  const CornerPointGrid& grid,
                                                   const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                                   const std::string& property_name,
                                                   const csmp::PLACEMENT& place )
@@ -340,7 +342,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteVectorPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                  const CornerPointGrid_UoM& grid,
+                                                  const CornerPointGrid& grid,
                                                   const std::vector<csmp::VectorVariable<3U> >& vector_data,
                                                   const std::string& property_name,
                                                   const csmp::PLACEMENT& place )
@@ -354,7 +356,7 @@ void EclipseInterface::WriteVectorPropertyToVSet( csmp::VSet<3U>&  vset,
 
 
 void EclipseInterface::WriteTensorPropertyToVSet( csmp::VSet<3U>&  vset,
-                                                  const CornerPointGrid_UoM& grid,
+                                                  const CornerPointGrid& grid,
                                                   const std::vector<csmp::TensorVariable<3U> >& tensor_data,
                                                   const std::string& property_name,
                                                   const csmp::PLACEMENT& place )
@@ -393,8 +395,6 @@ bool EclipseInterface::ReadFile( std::ifstream&  ifs, size_t line_length )
   reader.AddKeyword( "COORD" );
   reader.AddKeyword( "ZCORN" );
   reader.AddKeyword( "FAULTS" );
-  //    reader.AddKeyword("BOX");
-  //    reader.AddKeyword("ENDBOX");
 
   /// regions
   reader.AddKeyword( "ACTNUM" );
@@ -414,18 +414,6 @@ bool EclipseInterface::ReadFile( std::ifstream&  ifs, size_t line_length )
   reader.AddKeyword( "SWAT" );
   reader.AddKeyword( "SOIL" );
   reader.AddKeyword( "SGAS" );
-
-  /// face properties
-  //    reader.AddKeyword("MULTFLT");
-  //    reader.AddKeyword("MULTX");
-  //    reader.AddKeyword("MULTY");
-  //    reader.AddKeyword("MULTZ");
-  //    reader.AddKeyword("MULTX-");
-  //    reader.AddKeyword("MULTY-");
-  //    reader.AddKeyword("MULTZ-");
-  //    reader.AddKeyword("TRANX");
-  //    reader.AddKeyword("TRANY");
-  //    reader.AddKeyword("TRANZ");
 
   /// well properties
   reader.AddKeyword( "WELSPECS" );
@@ -528,12 +516,10 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
   }
   else if ( keyword_ == "COORD" )
   {
-    // SKM fix:        return ReadPillarCoordinates( ifs, text_line, line_length );
     return Read_COORD( ifs, text_line, line_length );
   }
   else if ( keyword_ == "ZCORN" )
   {
-    // SKM fix        return ReadCornerDepths( ifs, text_line, line_length );
     return Read_ZCORN( ifs, text_line, line_length );
   }
   else if ( keyword_ == "FAULTS" )
@@ -576,7 +562,10 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
   {
     return ReadScalarProperty( ifs, text_line, line_length, poro_ );
   }
-  //JC: some bugs here, so need to debug this function later
+  else if ( keyword_ == "PERM" )
+  {
+    return ReadScalarProperty( ifs, text_line, line_length, perm_ );
+  }
   else if ( keyword_ == "PERMX" || keyword_ == "PERMY" || keyword_ == "PERMZ" )
   {
     return ReadTensorProperty( ifs, text_line, line_length, permxyz_, "PERMX", "PERMY", "PERMZ" );
@@ -597,19 +586,6 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
   {
     return ReadScalarProperty( ifs, text_line, line_length, sgas_ );
   }
-
-  /// FACE PROPERTIES
-  //    else if( keyword_ == "MULTFLT" )
-  //    {
-  //        return ReadFaultTransmissibilityMultipliers( ifs, text_line,line_length );
-  //    }
-  //    else if(   keyword_ == "MULTX" || keyword_ == "MULTY" || keyword_ == "MULTZ"
-  //            || keyword_ == "MULTX-" || keyword_ == "MULTY-" || keyword_ == "MULTZ-" )
-  //    {
-  //    }
-  //    else if(   keyword_ == "TRANX" || keyword_ == "TRANY" || keyword_ == "TRANZ" )
-  //    {
-  //    }
 
   /// WELL PROPERTIES
   else if ( keyword_ == "WELSPECS" )
@@ -647,10 +623,6 @@ bool EclipseInterface::ReadBlock( std::ifstream& ifs, char* text_line, size_t li
 }
 
 
-
-
-
-
 bool EclipseInterface::ReadDimensions( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -663,9 +635,6 @@ bool EclipseInterface::ReadDimensions( std::ifstream& ifs, char* text_line, size
 
   return true;
 }
-
-
-
 
 
 bool EclipseInterface::ReadGridSpecs( std::ifstream& ifs, char* text_line, size_t line_length )
@@ -732,8 +701,6 @@ bool EclipseInterface::ReadCornerDepths( std::ifstream& ifs, char* text_line, si
 }
 
 
-
-
 bool EclipseInterface::ReadActiveCells( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -742,8 +709,6 @@ bool EclipseInterface::ReadActiveCells( std::ifstream& ifs, char* text_line, siz
     return false;
   return true;
 }
-
-
 
 
 bool EclipseInterface::ReadWellSpecs( std::ifstream& ifs, char* text_line, size_t line_length )
@@ -755,7 +720,6 @@ bool EclipseInterface::ReadWellSpecs( std::ifstream& ifs, char* text_line, size_
     return false;
   return true;
 }
-
 
 
 bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
@@ -770,7 +734,6 @@ bool EclipseInterface::ReadWellCompletionsData( std::ifstream& ifs, char* text_l
 }
 
 
-
 bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -781,7 +744,6 @@ bool EclipseInterface::ReadExplicitFaceWellCompletionsData( std::ifstream& ifs, 
     return false;
   return true;
 }
-
 
 
 bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, char* text_line, size_t line_length )
@@ -796,7 +758,6 @@ bool EclipseInterface::ReadExplicitNodeWellCompletionsData( std::ifstream& ifs, 
 }
 
 
-
 bool EclipseInterface::ReadFaultsData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -806,8 +767,6 @@ bool EclipseInterface::ReadFaultsData( std::ifstream& ifs, char* text_line, size
     return false;
   return true;
 }
-
-
 
 
 bool EclipseInterface::ReadFaultTransmissibilityMultipliers( std::ifstream& ifs, char* text_line, size_t line_length )
@@ -844,7 +803,6 @@ bool EclipseInterface::ReadScalarProperty( std::ifstream& ifs, char* text_line, 
 }
 
 
-
 bool EclipseInterface::ReadTensorProperty( std::ifstream& ifs, char* text_line, size_t line_length,
                                            std::vector<csmp::TensorVariable<3U> >& prop_data,
                                            const std::string& compx_name, const std::string& compy_name, const std::string& compz_name )
@@ -863,7 +821,6 @@ bool EclipseInterface::ReadTensorProperty( std::ifstream& ifs, char* text_line, 
 }
 
 
-
 void EclipseInterface::SaveVectorProperty( size_t component,
                                            const std::vector<csmp::ScalarVariable>& scalar_data,
                                            std::vector<csmp::VectorVariable<3U> >&  vector_data )
@@ -875,7 +832,6 @@ void EclipseInterface::SaveVectorProperty( size_t component,
     for ( size_t j = component; j < 3U; j++ )
       vector_data[i]( j ) = scalar_data[i]();
 }
-
 
 
 void EclipseInterface::SaveTensorProperty( size_t component,
@@ -893,13 +849,7 @@ void EclipseInterface::SaveTensorProperty( size_t component,
 void EclipseInterface::AssignGridDimensions()
 {
   grid_.AssignDimensions( NX_, NY_, NZ_ );
-#if 0
-  block_grid_.AssignDimensionX( NX_ );
-  block_grid_.AssignDimensionY( NY_ );
-  block_grid_.AssignDimensionZ( NZ_ );
-#endif
 }
-
 
 
 int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
@@ -1072,7 +1022,7 @@ x(NX+1,NY+1)top   y(NX+1,NY+1)top   z(NX+1,NY+1)top
 x(NX+1,NY+1)btm   y(NX+1,NY+1)btm   z(NX+1,NY+1)btm\
 */
 int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
-                                  CornerPointGrid_UoM& grid, /* matrix of Pillars=cells? */
+                                  CornerPointGrid& grid, /* matrix of Pillars=cells? */
                                   std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                   )
 {
@@ -1241,7 +1191,7 @@ z(1,1,2)top,NW    z(1,1,2)top,NE    z(2,1,2)top,NW    z(2,1,2)top,NE   ... z(NX,
 z(1,NY,NZ)btm,SW  z(1,NY,NZ)btm,SE  z(2,NY,NZ)btm,SW  z(2,NY,NZ)btm,SE ... z(NX,NY,NZ)btm,SW  z(NX,NY,NZ)btm,SE
 */
 int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
-                             CornerPointGrid_UoM& grid,
+                             CornerPointGrid& grid,
                              std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
@@ -3141,11 +3091,6 @@ void EclipseInterface::AddWell( const std::string& well_name, const Point<3U>& w
   std::vector<size_t>   well_elmts;
   std::set<std::string> well_fem_types;
   const csmp::CSMP_FEM_TYPE edge_fem_type( csmp::ISOPARAMETRIC_LINEAR_BAR );
-
-  //BOGGYCREEK1 114 6 1 61 /
-  //CRC1 67 56 1 61 /
-  //CRC2 65 47 1 61 /
-  //CRC3 35 53 1 61 /
 
   size_t i( well_start_point[0] ), j( well_start_point[1] ), kt( well_start_point[2] ), kb( well_end_point[2] );
   std::cout << "\nEclipseInterface::AddWell: '" << well_name << ": " << i << ", " << j << ", " << kt << "~" << kb << std::endl;

@@ -3,16 +3,12 @@
 #include "CSMP_mathUtilities.h"
 #include "ModelTime.h"
 #include "SparseMatrix.h"
+#include "CompressedSparseRowMatrix.h"
 #include "SAMG_Solver.h"
 
 using namespace std;
 
 namespace csmp {
-
-	void Solver::Solve(CompressedRowMatrix& G, std::vector<double64>& rh, std::vector<double64>& x, size_t no_unknowns)
-	{
-		SolveMatrixEquation(G, rh, x, no_unknowns);
-	}
 
 /**
  
@@ -149,6 +145,49 @@ void  Solver::Solve( SparseMatrix& A,
       }
                                     
  } // end SolveMatrixEquation
+
+/*
+
+*/
+void  Solver::Solve( CompressedSparseRowMatrix& A,
+                     std::vector<double64>& b,
+                     std::vector<double64>& x,
+                     size_t no_unknowns )
+{
+  // checking for consistent sizes 
+  if ( A.Rows() != b.size() )
+    throw csmp::Exception( ERROR, "Solver::Solve", "sparse matrix G cols is not equal to RHS rows" );
+
+  x.resize( b.size() );
+  vector<double64>( x ).swap( x );
+
+  if ( Verbose() ) {    
+    cout << "\nSolver::SolveMatrixEquation: Global matrix before solution:" << endl;
+    A.Out();
+    cout << "\nSolver::SolveMatrixEquation: Righthand vector:" << endl;
+    out( b );
+  }
+
+  // Setup initial guess with correct BC, This assumes that b has been setup with Dirichlet
+  // BC and A with corresponding 1's on diagonal
+  // * Will prevent using x as a first guess
+  // x = b;
+
+  // Delegate solution process (this is a purely virtual function)
+
+  // cout << "\nSolving Ax=b with GuessSidel\n\n"; 
+  SolveMatrixEquation( A, b, x, no_unknowns );
+
+  if ( Verbose() ) {
+    cout << "\nSolver::SolveMatrixEquation: Global matrix after solution:" << endl;
+    A.Out();
+    cout << "\nSolver::SolveMatrixEquation: Righthand vector:" << endl;
+    out( b );
+    cout << "\nSolver::SolveMatrixEquation: Solution vector:" << endl;
+    out( x );
+  }
+
+} // end SolveMatrixEquation
 
 /**
  

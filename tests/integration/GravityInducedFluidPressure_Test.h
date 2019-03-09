@@ -54,6 +54,9 @@ class GravityInducedFluidPressure_Test : public Test {
   
     bool TestComputedWithReferencePressure();
   
+    template<size_t dim>
+    bool TestResultsByComparison( const Model<dim>* const, const char* test_variable, const char* reference_variable, double64 tolerance );
+  
     /// like in vertical fluid pressure example
     void ComputeCO2Pressure_PDE_Integrator( double64 pf_top );
     // TODO: remove when errors are fixed
@@ -65,9 +68,13 @@ class GravityInducedFluidPressure_Test : public Test {
     /// reduced pressure based on deviations from a reference density
     void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<1U>* const, double64 pf_top );
 
-    /// templatised version for 2D and 3D
+    /// templatised version for 2D and 3D (small models, Gauss-Jordan solver)
     template<size_t dim>
-    void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<dim>* const, double64 pf_top );
+    void ComputeCO2PressureFromReducedPressure_PDE_Integrator_GaussJordan( Model<dim>* const, double64 pf_top );
+
+    /// templatised version for 2D and 3D (big models, SAMG)
+    template<size_t dim>
+    void ComputeCO2PressureFromReducedPressure_PDE_IntegratorCRM_SAMG( Model<dim>* const, double64 pf_top );
 
   private:
     Model<1U>* model1D_  = nullptr;

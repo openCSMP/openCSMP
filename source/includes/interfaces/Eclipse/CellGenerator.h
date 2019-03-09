@@ -31,7 +31,7 @@ enum class FACE_TYPE {
 
 class CellGenerator {
 public:
-	CornerPointGrid_UoM& grid;
+	CornerPointGrid& grid;
 
 	size_t elementID = 0;
 	std::vector<Point<3u>> ordinaryNodes;
@@ -45,7 +45,7 @@ public:
 	Pillar* p2;
 	Pillar* p3;
 
-	CellGenerator(CornerPointGrid_UoM& grid)
+	CellGenerator(CornerPointGrid& grid)
 		: grid(grid)
 	{
 	}

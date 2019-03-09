@@ -58,7 +58,10 @@ namespace csmp {
      1	0	1	0
   @endcode
  
-  @attention there is no effective saturation as this is already accounted for in terms of the spline values
+  @attention DO NOT SET ANY SATURATION ENDPOINTS (swr or snr) when using experimentally determined saturation functions
+  as these will naturally emerge from the curves.
+ 
+  @attention consequently, effective saturation also is already accounted for in terms of the spline values
   negative values are avoided by returning 0 or 1 at saturations below and above the end-point saturations.
 
    @author SKM 
@@ -69,13 +72,13 @@ namespace csmp {
 template<size_t dim, template<size_t> class USER>
 class ExperimentalSaturationFunctions {
   public:
-    /// TODO: reads capillary preessure and saturation functions from "rocktype" file
+    /// reads capillary preessure and saturation functions from "rocktype" file
     explicit ExperimentalSaturationFunctions( const char* filename );
   
-    /// (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
+    /// TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
     double64 EffectiveSaturation( Element<dim>* const ) const;
     
-    /// (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
+    /// TODO: revise to extract this from the curves in a consistent fashion: (sw-swr) / (1-swr-snr); use only in 2-phase flow simulations
     double64 EffectiveSaturation_at( Element<dim>* const, double64 sw ) const;
 
     // pc, kri, and derivative methods that use a user supplied saturation value
