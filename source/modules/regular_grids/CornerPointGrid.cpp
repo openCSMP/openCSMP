@@ -416,12 +416,12 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   vset.AddXYZ( x, y, z );
 
   // 4. assigning top & bottom boundary flags on nodes  
-  cout << "\nassigning top & bottom boundary flags on nodes...";
+  cout << "\nassigning top & bottom boundary flags on nodes...\n";
   struct isEqual {
     isEqual( const Point<3U>& pt ) : m_pt( pt ) {};
     bool operator()( const Point<3U>& lpt )
     {
-      if ( Point<3U>( lpt - m_pt ).Length() > 0.001 ) return false;
+      if ( Point<3U>( lpt - m_pt ).Length() > 0.02 ) return false; // JC: the threshold 0.02 was optimized for the Otway model
       else return true;
     };
 
