@@ -143,6 +143,7 @@ class BoundaryInterface {
 
     /// partitions encompassing boundary 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishRegularities();
+    bool EstablishRegularitiesForEclipse();
 
 	/// construct Boundary<Face> objects around a region
 	bool AddFaces(const char* region);

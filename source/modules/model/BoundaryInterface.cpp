@@ -2565,7 +2565,105 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
     
 } // end EstablishRegularities
 
+/**
+Tries to partition and replace general boundary 'Model' with more computationally useful model patches
+such as TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc.
 
+@attention method assumes that model't top & bottom boundary flags were assgined on its nodes.
+@attention this method was designed primarily for three-dimensional models.
+*/
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishRegularitiesForEclipse()
+{
+
+  BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishRegularities: searching for eligible boundary domains...\n";
+
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+  AddFaces( "Model" );
+
+  csmp::Boundary<dim>& modelBoundary( Boundary( std::string( "Model_BOUNDARY" ) ) );
+
+  std::vector<std::string> eligibleRegions;
+  eligibleRegions.reserve( boundaryComplex->UniqueRegions() );
+
+  set<Face<dim>*>  top_faces, bottom_faces, left_faces, right_faces, front_faces, back_faces, irregular_faces;
+
+  // for all Face objects on the model boundary  
+  for ( auto fit = modelBoundary.ElementsBegin(); fit != modelBoundary.ElementsEnd(); ++fit )
+  {
+    BOX_BOUNDARY flag = IRREGULAR;
+    
+    for ( size_t n = 0; n < (*fit)->Nodes(); n++ )
+    {
+      if ( (*fit)->N( n )->AtBoundary() == TOP ) flag = TOP;
+      else if ( (*fit)->N( n )->AtBoundary() == BOTTOM ) flag = BOTTOM;
+    }
+
+    if ( flag == BOTTOM ) bottom_faces.insert( *fit ); // BOTTOM
+    else if ( flag == TOP ) top_faces.insert( *fit );  // TOP
+    else irregular_faces.insert( *fit );
+  } // end perimeter faces
+
+    // 2. Creating boundaries from the non-empty sets of faces
+    // -------------------------------------------------------------------------------------------------
+  vector<Face<dim>*> boundary_faces;
+  // BOTTOM
+  if ( !bottom_faces.empty() ) {
+    setToVector( bottom_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "BOTTOM" );
+  } // TOP
+  if ( !top_faces.empty() ) {
+    setToVector( top_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "TOP" );
+  } // LEFT
+  if ( !left_faces.empty() ) {
+    setToVector( left_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "LEFT" );
+  } // RIGHT
+  if ( !right_faces.empty() ) {
+    setToVector( right_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "RIGHT" );
+  } // FRONT
+  if ( !front_faces.empty() ) {
+    setToVector( front_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "FRONT" );
+  } // BACK
+  if ( !back_faces.empty() ) {
+    setToVector( back_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "BACK" );
+  } // IRREGULAR
+  if ( !irregular_faces.empty() ) {
+    setToVector( irregular_faces, boundary_faces );
+    boundaryComplex->InsertBoundary( boundary_faces.begin(), boundary_faces.end(), "IRREGULAR" );
+  }
+
+
+  // 4. changing BOX_BOUNDARY flags on the outside of the model so that TOP and BOTTOM are recognised; else they were set to irregular
+  // (edges are not considered)
+  // -------------------------------------------------------------------------------------------------
+  for ( auto fit = modelBoundary.NodesBegin(); fit != modelBoundary.NodesEnd(); ++fit )
+    if ( (*fit)->AtBoundary() == NOT )
+      (*fit)->AtBoundary( IRREGULAR );
+
+  // the boundary called 'Model' that was created by AddFaces() is removed, i.e. it is a leftover that is no-longer needed
+  faceBoundaryMap_.erase( "Model_BOUNDARY" );
+
+  // for remaining (new) TOP and BOTTOM boundaries
+  for ( auto it = boundaryComplex->BoundariesBegin(); it != boundaryComplex->BoundariesEnd(); ++it )
+    if ( (*it).first == "TOP" or (*it).first == "BOTTOM" )
+    {
+      BOX_BOUNDARY bflag( IRREGULAR );
+      if ( isDiagnosticBoxBoundaryClassifier( (*it).first ) ) bflag = parseBoundary( (*it).first );
+      for ( auto nit = (*it).second.NodesBegin(); nit != (*it).second.NodesEnd(); ++nit )
+        (*nit)->AtBoundary( bflag );
+    }
+
+  std::cout << "\n\nBoundaryInterface::EstablishRegularities: done!\n";
+  return true;
+
+} // end EstablishRegularities
 
 
 
