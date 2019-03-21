@@ -262,13 +262,42 @@ bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const
 
 bool TensorVariable<3U>::Out( std::fstream& fp ) const
 {
-  fp.write( (char*)this, sizeof( TensorVariable<3U> ) );
+  const int32 flag_0( this->flag[0] );
+  const int32 flag_1( this->flag[1] );
+  const int32 flag_2( this->flag[2] );
+  const size_t flag_size = sizeof( int32 );
+  fp.write( (char*)&flag_0, flag_size );
+  fp.write( (char*)&flag_1, flag_size );
+  fp.write( (char*)&flag_2, flag_size );
+  const size_t data_size = sizeof( double64 );
+  fp.write( (char*)&this->data[0][0], data_size );
+  fp.write( (char*)&this->data[1][0], data_size );
+  fp.write( (char*)&this->data[2][0], data_size );
+  fp.write( (char*)&this->data[0][1], data_size );
+  fp.write( (char*)&this->data[1][1], data_size );
+  fp.write( (char*)&this->data[2][1], data_size );
+  fp.write( (char*)&this->data[0][2], data_size );
+  fp.write( (char*)&this->data[1][2], data_size );
+  fp.write( (char*)&this->data[2][2], data_size );
   return true;
 }
 
 bool TensorVariable<3U>::In( std::fstream& fp )
 {
-  fp.read( (char*)this, sizeof( TensorVariable<3U> ) );
+  const size_t flag_size = sizeof( int32 );
+  fp.read( (char*)&this->flag[0], flag_size );
+  fp.read( (char*)&this->flag[1], flag_size );
+  fp.read( (char*)&this->flag[2], flag_size );
+  const size_t data_size = sizeof( double64 );
+  fp.read( (char*)&this->data[0][0], data_size );
+  fp.read( (char*)&this->data[1][0], data_size );
+  fp.read( (char*)&this->data[2][0], data_size );
+  fp.read( (char*)&this->data[0][1], data_size );
+  fp.read( (char*)&this->data[1][1], data_size );
+  fp.read( (char*)&this->data[2][1], data_size );
+  fp.read( (char*)&this->data[0][2], data_size );
+  fp.read( (char*)&this->data[1][2], data_size );
+  fp.read( (char*)&this->data[2][2], data_size );
   return true;
 }
 

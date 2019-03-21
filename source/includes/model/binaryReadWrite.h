@@ -24,7 +24,7 @@ public:
 private:
 	char hdr_[CSMP_BINARY_FILE_HDR_SIZE + 1];
 	std::fstream& fp_;
-	std::streampos offset_, sectoffset_;
+  ulong64 offset_, sectoffset_;
 };
 
 
@@ -37,7 +37,7 @@ public:
 
 private:
 	std::fstream& fp_;
-	std::streampos offset_;
+  ulong64 offset_;
 };
 
 

@@ -323,7 +323,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 
 
 /**
- @fn  void Boundary<dim>::Out( fstream& fp ) const
+ @fn  void Boundary<dim>::Out( std::fstream& fp ) const
 
  @brief Outs the boundary to binary fp.
  @attention Uses current index numbering.
@@ -351,7 +351,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
  @todo (2-C) Return values not used properly.
  */
 template<size_t dim>
-bool SplitBoundary<dim>::Out( fstream& fp ) const
+bool SplitBoundary<dim>::Out( std::fstream& fp ) const
   {
   // split-boundary variables
   domainVariablesOut( fp, *this, this->pref_ ); /// @todo (3-D) Use FEM_Data instead?
@@ -363,7 +363,7 @@ bool SplitBoundary<dim>::Out( fstream& fp ) const
 
   // fem type of interfaces
   CSMP_FEM_TYPE interfaceType;
-  bytes = sizeof(CSMP_FEM_TYPE);
+  bytes = sizeof(int32); //CSMP_FEM_TYPE
   InterFace<dim>* interface(NULL);
   for ( size_t f(0); f < interfaceCount; ++f )
     {
@@ -464,7 +464,7 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
     fp.read( (char*) &interfaceCount, bytes );
 
     // fem type of interfaces
-    bytes = sizeof(CSMP_FEM_TYPE);
+    bytes = sizeof(int32); //CSMP_FEM_TYPE
     vector<CSMP_FEM_TYPE> interfaceTypes(interfaceCount);
     for ( size_t f(0); f < interfaceCount; ++f )
     fp.read( (char*) &interfaceTypes[f], bytes );

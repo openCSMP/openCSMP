@@ -78,7 +78,7 @@ BinaryFileSectionRead::BinaryFileSectionRead(std::fstream& fp, const char* heade
 
 BinaryFileSectionRead::~BinaryFileSectionRead()
 {
-	std::streampos off = fp_.tellg();
+	ulong64 off = fp_.tellg();
 	if (off != offset_) {
 		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
 	}
@@ -99,7 +99,7 @@ BinaryFileSectionWrite::BinaryFileSectionWrite(std::fstream& fp, const char* hea
 
 BinaryFileSectionWrite::~BinaryFileSectionWrite()
 {
-	std::streampos off = fp_.tellg();
+	ulong64 off = fp_.tellg();
 	fp_.seekg(offset_, fp_.beg);
 	fp_.write((char*)&off, sizeof(off));
 	fp_.seekg(off, fp_.beg);

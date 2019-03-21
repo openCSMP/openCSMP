@@ -1158,8 +1158,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
           // 1.2 writing the boundary flags
           int32 bflag = (*git).second.AtBoundary();
           const size_t record(1U);
-		  fp.write((char*) &record, sizeof(size_t));
-		  fp.write((char*) &bflag, sizeof(int32));
+          fp.write( (char*)&record, sizeof( size_t ) );
+          fp.write( (char*)&bflag, sizeof( int32 ) );
           // 1.3 writing the stored variables
           domainVariablesOut( fp, (*git).second, database );
           std::cout << (*git).first <<" ";

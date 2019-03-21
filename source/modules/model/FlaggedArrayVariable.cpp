@@ -479,10 +479,10 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
     fp.write( (char*) &depth, sizeof(size_t));
 
     // flags
-    const size_t flags_size(sizeof(VARIABLE_FLAG));
+    const size_t flag_size(sizeof(int32));  // VARIABLE_FLAG
     vector<VARIABLE_FLAG>::const_iterator flagsEnd( flags_.end() );
     for ( vector<VARIABLE_FLAG>::const_iterator it( flags_.begin() ); it != flagsEnd; ++it )
-      fp.write( (char*) &(*it), flags_size);
+      fp.write( (char*) &(*it), flag_size);
 
     // data
     const size_t bytes(sizeof(double64));
@@ -522,7 +522,7 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
     Resize(depth);
 
     // flags
-    const size_t  flags_size( sizeof(VARIABLE_FLAG) );
+    const size_t  flags_size( sizeof( int32 ) );  // VARIABLE_FLAG
     for ( size_t i(0); i < depth; ++i )
       {
         if( !fp.read( (char*) &flags_[i], flags_size) )

@@ -441,8 +441,8 @@ bool ArrayVariable::Out( std::fstream& fp ) const
       }    
 
     // flag
-    const VARIABLE_FLAG flag(flag_);
-    fp.write( (char*) &flag, sizeof(VARIABLE_FLAG));
+    const int32 flag(flag_);
+    fp.write( (char*) &flag, sizeof(int32));  // VARIABLE_FLAG
 
     // size
     const size_t depth( Size() );
@@ -481,7 +481,7 @@ bool ArrayVariable::In( std::fstream& fp )
       }
 
     // flag
-    if ( !fp.read( (char*) &flag_, sizeof(VARIABLE_FLAG)) ) {
+    if ( !fp.read( (char*) &flag_, sizeof(int32)) ) {  // VARIABLE_FLAG
         std::cout <<"\nArrayVariable::In(): Not able to read binary record flag"<< std::endl;
         return false;
     }

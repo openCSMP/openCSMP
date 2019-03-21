@@ -400,46 +400,128 @@ void Index::Out() const
   cout << endl;
 }
 
-bool Index::Out( fstream& fp ) const
+bool Index::Out( std::fstream& fp ) const
 {
-fp.write( (char*) &type, sizeof(VARIABLE_TYPE) );
-fp.write( (char*) &place, sizeof(PLACEMENT) );
-fp.write( (char*) &index, sizeof(size_t) );
-fp.write( (char*) &dataDepth, sizeof(size_t) );
-fp.write( (char*) &flagDepth, sizeof(size_t) );
-fp.write( (char*) &dataOffset, sizeof(size_t) );
-fp.write( (char*) &flagOffset, sizeof(size_t) );
-fp.write( (char*) &offsetFactorSimplex, sizeof(size_t) );
-fp.write( (char*) &offsetFactorSector, sizeof(size_t) );
-fp.write( (char*) &ipFactorSimplex, sizeof(size_t) );
-fp.write( (char*) &ipFactorSector, sizeof(size_t) );
-fp.write( (char*) &ipFactorFacet, sizeof(size_t) );
-fp.write( (char*) &localVariables, sizeof(LocalVariables) );
-fp.write( (char*) &integrationPointVariables, sizeof(IntegrationPointVariables) );
-// we don't store pointers
+  const size_t flag_size = sizeof( int32 );
+  const size_t data_size = sizeof( size_t );
+  const int32 var_type( type );
+  const int32 place_type( place );
 
-return true; /// @todo (1-C) Meaningless return statement
+  fp.write( (char*)&var_type, flag_size );    // VARIABLE_TYPE
+  fp.write( (char*)&place_type, flag_size );   // PLACEMENT
+  fp.write( (char*)&index, data_size );
+  fp.write( (char*)&dataDepth, data_size );
+  fp.write( (char*)&flagDepth, data_size );
+  fp.write( (char*)&dataOffset, data_size );
+  fp.write( (char*)&flagOffset, data_size );
+  fp.write( (char*)&offsetFactorSimplex, data_size );
+  fp.write( (char*)&offsetFactorSector, data_size );
+  fp.write( (char*)&ipFactorSimplex, data_size );
+  fp.write( (char*)&ipFactorSector, data_size );
+  fp.write( (char*)&ipFactorFacet, data_size );
+  fp.write( (char*)&localVariables.scalars, data_size ); // LocalVariables
+  fp.write( (char*)&localVariables.vectors, data_size );
+  fp.write( (char*)&localVariables.tensors, data_size );
+  fp.write( (char*)&localVariables.arrayCount, data_size );
+  fp.write( (char*)&localVariables.arrayLength, data_size );
+  fp.write( (char*)&localVariables.flaggedArrayCount, data_size );
+  fp.write( (char*)&localVariables.flaggedArrayLength, data_size );
+  fp.write( (char*)&localVariables.totalDataDepth, data_size );
+  fp.write( (char*)&localVariables.totalFlagDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.scalars, data_size ); // IntegrationPointVariables: Simplex
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.vectors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.tensors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.arrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.arrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.totalDataDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSimplex.totalFlagDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.scalars, data_size ); // IntegrationPointVariables: Sector
+  fp.write( (char*)&integrationPointVariables.ipvSector.vectors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.tensors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.arrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.arrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.flaggedArrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.flaggedArrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.totalDataDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvSector.totalFlagDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.scalars, data_size ); // IntegrationPointVariables: Facet
+  fp.write( (char*)&integrationPointVariables.ipvFacet.vectors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.tensors, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.arrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.arrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.flaggedArrayCount, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.flaggedArrayLength, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.totalDataDepth, data_size );
+  fp.write( (char*)&integrationPointVariables.ipvFacet.totalFlagDepth, data_size );  
+  // we don't store pointers
+
+  return true; /// @todo (1-C) Meaningless return statement
 }
 
 bool Index::In( fstream& fp )
 {
-fp.read( (char*) &type, sizeof(VARIABLE_TYPE) );
-fp.read( (char*) &place, sizeof(PLACEMENT) );
-fp.read( (char*) &index, sizeof(size_t) );
-fp.read( (char*) &dataDepth, sizeof(size_t) );
-fp.read( (char*) &flagDepth, sizeof(size_t) );
-fp.read( (char*) &dataOffset, sizeof(size_t) );
-fp.read( (char*) &flagOffset, sizeof(size_t) );
-fp.read( (char*) &offsetFactorSimplex, sizeof(size_t) );
-fp.read( (char*) &offsetFactorSector, sizeof(size_t) );
-fp.read( (char*) &ipFactorSimplex, sizeof(size_t) );
-fp.read( (char*) &ipFactorSector, sizeof(size_t) );
-fp.read( (char*) &ipFactorFacet, sizeof(size_t) );
-fp.read( (char*) &localVariables, sizeof(LocalVariables) );
-fp.read( (char*) &integrationPointVariables, sizeof(IntegrationPointVariables) );
-indexTracker = nullptr; // we don't store pointers
+  const size_t flag_size = sizeof( int32 );
+  const size_t data_size = sizeof( size_t );
+  int32 var_type ( SCALAR );
+  int32 place_type( NODE );
 
-return true; /// @todo (1-C) Meaningless return statement
+  fp.read( (char*)&var_type, flag_size );   // VARIABLE_TYPE
+  fp.read( (char*)&place_type, flag_size );  // PLACEMENT
+  type = static_cast<VARIABLE_TYPE>( var_type );
+  place = static_cast<PLACEMENT>( place_type );
+
+  fp.read( (char*)&index, data_size );
+  fp.read( (char*)&dataDepth, data_size );
+  fp.read( (char*)&flagDepth, data_size );
+  fp.read( (char*)&dataOffset, data_size );
+  fp.read( (char*)&flagOffset, data_size );
+  fp.read( (char*)&offsetFactorSimplex, data_size );
+  fp.read( (char*)&offsetFactorSector, data_size );
+  fp.read( (char*)&ipFactorSimplex, data_size );
+  fp.read( (char*)&ipFactorSector, data_size );
+  fp.read( (char*)&ipFactorFacet, data_size );
+
+  fp.read( (char*)&localVariables.scalars, data_size ); // LocalVariables
+  fp.read( (char*)&localVariables.vectors, data_size );
+  fp.read( (char*)&localVariables.tensors, data_size );
+  fp.read( (char*)&localVariables.arrayCount, data_size );
+  fp.read( (char*)&localVariables.arrayLength, data_size );
+  fp.read( (char*)&localVariables.flaggedArrayCount, data_size );
+  fp.read( (char*)&localVariables.flaggedArrayLength, data_size );
+  fp.read( (char*)&localVariables.totalDataDepth, data_size );
+  fp.read( (char*)&localVariables.totalFlagDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.scalars, data_size ); // IntegrationPointVariables: Simplex
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.vectors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.tensors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.arrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.arrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.flaggedArrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.totalDataDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSimplex.totalFlagDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.scalars, data_size ); // IntegrationPointVariables: Sector
+  fp.read( (char*)&integrationPointVariables.ipvSector.vectors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.tensors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.arrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.arrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.flaggedArrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.flaggedArrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.totalDataDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvSector.totalFlagDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.scalars, data_size ); // IntegrationPointVariables: Facet
+  fp.read( (char*)&integrationPointVariables.ipvFacet.vectors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.tensors, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.arrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.arrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.flaggedArrayCount, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.flaggedArrayLength, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.totalDataDepth, data_size );
+  fp.read( (char*)&integrationPointVariables.ipvFacet.totalFlagDepth, data_size );
+  indexTracker = nullptr; // we don't store pointers
+
+  return true; /// @todo (1-C) Meaningless return statement
 }
 
 
