@@ -13,8 +13,6 @@ using namespace std;
 
 namespace csmp {
 
-namespace eclipse {
-
 void geometricCalculations_Test::run()
  {
    /// axes ( 1D )
@@ -119,7 +117,5 @@ bool   isTetra( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const cs
 */
  
  } // end run
-
-} // eclipse
 
 } // end csmp

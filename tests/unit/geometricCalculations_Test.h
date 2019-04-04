@@ -13,15 +13,11 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 class geometricCalculations_Test : public csmp::Test {
   public:
     /// here all the code for the testing goes
     virtual void run();
 };
-
-} // eclipse
 
 } // csmp
 
