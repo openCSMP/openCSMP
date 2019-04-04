@@ -6,8 +6,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 /// axes ( 1D )
 template<size_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, csmp::Point<dim>& e1 );
@@ -107,7 +105,6 @@ bool   isTetra( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2, const cs
 Geometric calculations
 
 */
-} // end eclipse
 
 }// end namespace csmp
 

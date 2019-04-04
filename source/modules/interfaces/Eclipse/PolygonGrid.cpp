@@ -4,8 +4,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 // GRID NODE
 
 GridNode::GridNode( size_t index, const Point<3U>& pt )
@@ -547,15 +545,4 @@ void PolygonGridManager::Out() const
 
  } // end Out
 
-} // eclipse
-
 } // end namespace csmp
-
-
-
-
-
-
-
-
-

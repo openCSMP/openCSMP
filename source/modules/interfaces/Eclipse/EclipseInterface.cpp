@@ -16,8 +16,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 EclipseInterface::EclipseInterface()
   : NX_( 0 ),
     NY_( 0 ),
@@ -3235,7 +3233,5 @@ void addWellPath( const std::string& well_name,
   well_path.insert( std::make_pair( well_name, empty_path ) );
   well_path[well_name].push_back( path );
 }
-
-} // eclipse
 
 } // end namespace csmp

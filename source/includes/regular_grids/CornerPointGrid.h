@@ -8,8 +8,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 class CellGenerator;
 
 class  CellCenteredGrid
@@ -140,7 +138,6 @@ private:
   size_t elements_, ordinaryNodes_;
   std::vector<csmp::Point<3U> >  axes_; ///< reservoir coordinate system
 };
-} // eclipse
 
 } // end namespace csmp
 

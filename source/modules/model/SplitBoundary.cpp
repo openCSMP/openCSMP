@@ -807,8 +807,7 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   // free excessive allocated capacity
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
-  // initialize splitboundary essentials
-  //JC: a fatal error ocurred!
+  // initialize splitboundary essentials  
   Initialize( true /* update neighbor connectivity*/, false /* do  not update member indexes */ );
 
   // split nodes and assign to corresponding elements
@@ -899,7 +898,7 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
           {
             /// TODO: WARNING: this operation inserts Node into Mesh Manager container without checking whether such Node already exist or not.
             /// Therefore this function should be called with caution and only if all previos steps approves it.
-			Node<dim> new_node(*originalNode);
+			      Node<dim> new_node(*originalNode);
             Node<dim>* duplicatedNode = model.Mesh().Add(new_node);
             updatedNodes.insert( duplicatedNode );
 

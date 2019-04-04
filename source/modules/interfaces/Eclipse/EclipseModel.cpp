@@ -6,8 +6,6 @@ using namespace std;
 
 namespace csmp {
 
-namespace eclipse {
-
 /// Model constructor with provided "variables_file.txt" file is used
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
 	const std::string& model_name,
@@ -439,7 +437,5 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	}
 
 } // end AssignBoxBoundaryFlagsWherePossible
-
-} // eclipse
 
 } // end csmp

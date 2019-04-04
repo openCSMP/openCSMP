@@ -19,8 +19,6 @@
 // these functions are used by the Eclipse interface
 namespace csmp {
 
-namespace eclipse {
-
 /// vector of pairs of FE-type - GridNode pointer vectors
  struct Cell {
     typedef std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >  Vector;
@@ -305,8 +303,6 @@ Common gridding utilities relying on a suite of classes in other directories: Gr
 @todo SKM: refactor GeometricCalculations collection of functions to make design cleared
 
 */
-
-} // eclipse
 
 }// end namespace csmp
 

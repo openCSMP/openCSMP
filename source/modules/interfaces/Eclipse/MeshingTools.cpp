@@ -3,10 +3,7 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 // GATHERING CELLS, FACES AND NODES
-
 bool checkCell( const std::vector<GridNode*>& cell )
 {
     /// check uniquines
@@ -3819,8 +3816,6 @@ bool processPointElement( bool tetra_mesh,
     addPointCell(cells,nodes[0]);
     return true;
 }
-
-} // eclipse
 
 } // end namespace csmp
 

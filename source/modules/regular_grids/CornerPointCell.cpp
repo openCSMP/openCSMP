@@ -4,8 +4,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 // CORNER POINT CELL
 
 CornerPointCell::CornerPointCell( PolygonGridManager& pgm )
@@ -2230,15 +2228,4 @@ void CornerPointCell::Out() const
     std::cout <<"\n\n";
  }
 
-} // eclipse
-
 } // end namespace csmp
-
-
-
-
-
-
-
-
-
