@@ -459,7 +459,7 @@ void SplitBoundary_Test::TestSplitNodeAssignment( const Model<dim>& model )
                 for( size_t n(0); n < innerParent->Nodes(); ++n )
                   innerParentsNodes.insert( innerParent->N(n)->Idx() );
 
-// if these test fails, the boundary was not split correctly
+                // if these test fails, the boundary was not split correctly
                 for( set<size_t>::const_iterator it( outerParentsNodes.begin() ); it != outerParentsNodes.end(); ++it )
                   _test( innerParentsNodes.find( *it ) == innerParentsNodes.end() );
 
@@ -492,7 +492,6 @@ void SplitBoundary_Test::TestSplitNodeAssignment( const Model<dim>& model )
               }else{
 
                 // Perimeter interfaces
-
                 for(size_t i=0; i<(*ifit)->Nodes();++i)
                     if( (*ifit)->N(i,INSIDE)->Idx() == (*ifit)->N(i,OUTSIDE)->Idx() )
                         not_duplicated_nodes.insert( (*ifit)->N(i)->Idx() );
@@ -1107,17 +1106,16 @@ void SplitBoundary_Test::test_splitboundary_around_regions()
 
 }
 
-
 void SplitBoundary_Test::run()
-  {
-    test_splitboundary_between_regions<2U>();
-    test_splitboundary_between_regions<3U>();
+{
+  test_splitboundary_between_regions<2U>();
+  test_splitboundary_between_regions<3U>();
 
-    //JC: need extra files named *-contiguous-regions.txt
-    //test_splitboundary_around_regions<2U>();
-    //test_splitboundary_around_regions<3U>();
+  //JC: need extra files named *-contiguous-regions.txt
+  //test_splitboundary_around_regions<2U>();
+  //test_splitboundary_around_regions<3U>();
 
-    return;
-  }
+  return;
+}
 
 } // csmp
