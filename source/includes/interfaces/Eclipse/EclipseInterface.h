@@ -65,7 +65,6 @@ struct EclipseWellCompletion
   EclipseWellCompletion();
   ~EclipseWellCompletion();
 
-  /// JC: not clear - COMPDAT connection specification?
   size_t ic_;      ///<
   size_t jc_;      ///<
   size_t k_top_;   ///<

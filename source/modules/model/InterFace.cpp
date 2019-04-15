@@ -407,7 +407,7 @@ std::pair<size_t,size_t>  InterFace<dim>::SharedElementFaces()
           innerParent_->FE()->NodesOfFace( face, nids );
           set<Point<dim> >  face_key;
           for ( size_t j=0U; j<nids.size(); ++j )
-            face_key.insert( innerParent_->N(j)->Coordinate() );
+            face_key.insert( innerParent_->N(nids[j])->Coordinate() );
           inner_elmt_faces.emplace( make_pair(face_key,make_pair(INSIDE,face) ) );
       }
     // outer parent element
@@ -415,20 +415,30 @@ std::pair<size_t,size_t>  InterFace<dim>::SharedElementFaces()
           outerParent_->FE()->NodesOfFace( face, nids );
           set<Point<dim> >  face_key;
           for ( size_t j=0U; j<nids.size(); ++j )
-            face_key.insert( outerParent_->N(j)->Coordinate() );
+            face_key.insert( outerParent_->N(nids[j])->Coordinate() );
           outer_elmt_faces.emplace( make_pair(face_key,make_pair(OUTSIDE,face) ) );
       }
    
    // 2. finding the shared faces
-   vector<pair<set<Point<dim> >,pair<INTERFACE_SIDE,size_t> > > result(2);
-   set_intersection( inner_elmt_faces.begin(), inner_elmt_faces.end(),
-                     outer_elmt_faces.begin(), outer_elmt_faces.end(), result.begin() );
+   //vector<pair<set<Point<dim> >,pair<INTERFACE_SIDE,size_t> > > result(2);
+   //set_intersection( inner_elmt_faces.begin(), inner_elmt_faces.end(),
+   //                  outer_elmt_faces.begin(), outer_elmt_faces.end(), result.begin() );
  
-   // assume that we only got a single result
-   auto value(result[0].second);
-   size_t inner_face_id = (value.first == INSIDE) ? value.second : result[1].second.second;
-   size_t outer_face_id = (value.first == OUTSIDE) ? value.second : result[1].second.second;
+   //// assume that we only got a single result
+   //auto value(result[0].second);
+   //size_t inner_face_id = (value.first == INSIDE) ? value.second : result[1].second.second;
+   //size_t outer_face_id = (value.first == OUTSIDE) ? value.second : result[1].second.second;
    
+   size_t inner_face_id, outer_face_id;
+   for ( auto inner_face : inner_elmt_faces ) {
+     for ( auto outer_face : outer_elmt_faces ) {
+       if ( inner_face.first == outer_face.first ) {
+         inner_face_id = inner_face.second.second;
+         outer_face_id = outer_face.second.second;
+         break;
+       }
+     }
+   }
    return make_pair( inner_face_id, outer_face_id );
  
  } // end SharedElementFaces

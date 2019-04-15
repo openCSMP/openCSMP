@@ -294,15 +294,18 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesT
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFromBinary( const char* file_name )
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  std::string bin_file( file_name );
+  fstream fp( bin_file.c_str(), ios::in | ios::binary );
+  if ( !fp.is_open() ) {
+    csmp_error.notice( ERROR, "SplitBoundaryInterface::InputSplitBoundariesFromBinary:",
+                       bin_file, "file could not be opened; nothing was done." );
+    return false;
+  }
+
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
   const csmp::Region<dim>&  rref( splitboundaryComplex->Region("Model") );
-
-  std::string bin_file(file_name);
-  fstream fp(bin_file.c_str(), ios::in | ios::binary);
-  if ( !fp.is_open() ) {
-    throw csmp::Exception( ERROR, "BoundaryInterface<dim>::InputSplitBoundariesFromBinary:", "Binary file could not be opened." );
-    return false;
-    }
 
   // reading the file header
   char csCache[255];
@@ -511,7 +514,7 @@ bool SplitBoundaryInterface18<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( c
                                       "boundary already exists. Nothing was done.");
 
      // remove temporal boundary
-     splitboundaryComplex->RemoveBoundary( boundary, true );
+     splitboundaryComplex->RemoveBoundary( boundary);
 
 
      // reestablish containers

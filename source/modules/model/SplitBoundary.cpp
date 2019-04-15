@@ -681,7 +681,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
     // creating the node index vector
     set<csmp::Node<dim>*>  nodes_set;
     for ( typename vector<InterFace<dim>*>::const_iterator it = this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ )
-        for ( typename vector<Node<dim>*>::size_type i=0U; i<(*it)->Nodes(); i++ )
+        for ( typename vector<Node<dim>*>::size_type i=0U; i<(*it)->FE()->Nodes(); i++ )
         {
             nodes_set.insert( (*it)->N(i, INSIDE ) );
             nodes_set.insert( (*it)->N(i, OUTSIDE ) );
@@ -742,8 +742,7 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   FiniteElement*  femPtr( NULL );
   Element<dim>*   innerElement( NULL );
   Element<dim>*   outerElement( NULL );
-  InterFace<dim>* root_interface( NULL );
-  
+
   deque<Face<dim>*> faces;
   exploreFacesFromMesh( &model.Mesh(), faces );
 
@@ -774,36 +773,11 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
     innerElement = NULL;
     outerElement = NULL;
 
-    // the first interface is assigned into the root interface of this interface group in the mesh
-    //if ( root_interface == NULL ) {
-      //root_interface = interfaceObj;
-      model.Mesh().SetRootInterFace( interfaceObj );
-    //}
+    // each interface is assigned into its interface group in the mesh    
+    model.Mesh().SetRootInterFace( interfaceObj );
 
   } // interfaces from faces
-
-  // assign neighbor interface  
-  //for ( size_t cn = 0U; cn < this->elmt_vec_.size(); cn++ )
-  //{
-  //  InterFace<dim>* pcif = this->elmt_vec_[cn];
-  //  if ( cn == 0 ) {
-  //    InterFace<dim>* pnif = this->elmt_vec_[cn + 1];
-  //    pcif->Assign( pcif->ConnectedNeighbors(), pnif );
-  //    InterFace<dim>* peif = this->elmt_vec_[this->elmt_vec_.size() - 1];
-  //    pcif->Assign( pcif->ConnectedNeighbors(), peif );
-  //  }
-  //  else if ( cn == this->elmt_vec_.size() - 1 ) {
-  //    InterFace<dim>* pbif = this->elmt_vec_[0];
-  //    pcif->Assign( pcif->ConnectedNeighbors(), pbif );
-  //  }
-  //  else
-  //  {
-  //    InterFace<dim>* pnif = this->elmt_vec_[cn + 1];
-  //    pcif->Assign( pcif->ConnectedNeighbors(), pnif );      
-  //    pnif->Assign( pnif->ConnectedNeighbors(), pcif );
-  //  }
-  //}
-
+    
   // free excessive allocated capacity
   vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
@@ -815,9 +789,7 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
 
   // establishing splitboundary essentials
   Initialize( false /* update neighbor connectivity*/, false /* do not update indexes */ );
-
-  // TODO: model region needs to be rebuild after this operation, since we have additional nodes now?
-
+  
   return true;
 }
 
@@ -854,23 +826,24 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
     std::vector<Node<dim>*> boundaryNodeCache( boundary.NodeVector() );
     boundary.NodeVector().clear();
 
-    // duplicate perimeter nodes of boundary only if they are located on already existing boundary or splitboundary
-    for( typename vector<Face<dim>*>::const_iterator fit( boundary.PerimeterElementsBegin() ); fit != boundary.ElementsEnd(); ++fit )
-      for( size_t n(0); n < (*fit)->Nodes(); ++n )
-        {
-          if( std::binary_search( nodesToDuplicate.begin(), nodesToDuplicate.end(), (*fit)->N(n) ) )
-            continue;
-          if( BoundaryConnector<dim>::BoundaryNode( *(*fit)->N(n), model ) )
-            { nodesToDuplicate.insert( (*fit)->N(n) ); continue; }
-          if( BoundaryConnector<dim>::SplitBoundaryNode( *(*fit)->N(n), model ) )
-            { nodesToDuplicate.insert( (*fit)->N(n) ); continue; }
-        }
+    //// duplicate perimeter nodes of boundary only if they are located on already existing boundary or splitboundary
+    //for( typename vector<Face<dim>*>::const_iterator fit( boundary.PerimeterElementsBegin() ); fit != boundary.ElementsEnd(); ++fit )
+    //  for( size_t n(0); n < (*fit)->Nodes(); ++n )
+    //    {
+    //      if( std::binary_search( nodesToDuplicate.begin(), nodesToDuplicate.end(), (*fit)->N(n) ) )
+    //        continue;
+    //      if( BoundaryConnector<dim>::BoundaryNode( *(*fit)->N(n), model ) )
+    //        { nodesToDuplicate.insert( (*fit)->N(n) ); continue; }
+    //      if( BoundaryConnector<dim>::SplitBoundaryNode( *(*fit)->N(n), model ) )
+    //        { nodesToDuplicate.insert( (*fit)->N(n) ); continue; }
+    //    }
 
     // restore boundary nodes
     boundary.NodeVector().swap( boundaryNodeCache );
 
     // duplicate all interior nodes of boundary
-    for( typename vector<Node<dim>*>::const_iterator nit( boundary.NodesBegin() ); nit != boundary.PerimeterNodesBegin(); ++nit )
+    //for( typename vector<Node<dim>*>::const_iterator nit( boundary.NodesBegin() ); nit != boundary.PerimeterNodesBegin(); ++nit )
+    for ( typename vector<Node<dim>*>::const_iterator nit( boundary.NodesBegin() ); nit != boundary.NodesEnd(); ++nit )
         nodesToDuplicate.insert( (*nit) );
 
 
@@ -879,6 +852,7 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
     Node<dim>*           originalNode  ( NULL );
     size_t               np(0);
 
+    Node<dim>* new_first_node_group( NULL );
     for( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
     {
       for( size_t ifn(0); ifn < (*ifit)->Nodes(); ++ifn )
@@ -900,7 +874,14 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
             /// Therefore this function should be called with caution and only if all previos steps approves it.
 			      Node<dim> new_node(*originalNode);
             Node<dim>* duplicatedNode = model.Mesh().Add(new_node);
+            duplicatedNode->Idx( model.Mesh().Nodes() );
             updatedNodes.insert( duplicatedNode );
+
+            if ( new_first_node_group == NULL ) {              
+              model.Mesh().SetRootNode( originalNode );
+              model.Mesh().SetRootNode( duplicatedNode );
+              new_first_node_group = duplicatedNode;
+            }
 
             // referencing index and checking if node connections already updated
             const size_t originalNodeIndex( originalNode->Idx() );
