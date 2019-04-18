@@ -137,7 +137,7 @@ void EffectiveStressDilatation2D_Example::Run()
   model.InsertSplitBoundary("SET1");
   model.InsertSplitBoundary("SET2");
   bool delete_underlying_region(true);
-  model.InsertSplitBoundary("WELL_FRACTURE",delete_underlying_region);
+  model.InsertSplitBoundary("WELL_FRACTURE");
   
   cout <<"\nmain: created split boundaries: ";
   for ( Model<2>::splitBoundaryConstIterator it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); it++ )

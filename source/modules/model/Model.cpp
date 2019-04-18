@@ -3124,9 +3124,9 @@ template class BoundaryInterface<1U, Model>;
 template class BoundaryInterface<2U, Model>;
 template class BoundaryInterface<3U, Model>;
 
-template class SplitBoundaryInterface18<1U, Model>;
-template class SplitBoundaryInterface18<2U, Model>;
-template class SplitBoundaryInterface18<3U, Model>;
+template class SplitBoundaryInterface<1U, Model>;
+template class SplitBoundaryInterface<2U, Model>;
+template class SplitBoundaryInterface<3U, Model>;
 
 template class Model<1U>;
 template class Model<2U>;

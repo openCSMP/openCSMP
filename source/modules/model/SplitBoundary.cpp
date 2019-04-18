@@ -235,12 +235,12 @@ LocalVariables  SplitBoundary<dim>::InterFaceVariables() const
 
 
 
-// TODO: check what the impact of this method is
+// JC: check what the impact of this method is
 template<size_t dim>
 void  SplitBoundary<dim>::DetachElementsFromNeighbors() const
 {
-  for ( typename vector<csmp::InterFace<dim>*>::const_iterator it( this->ElementsBegin() ); it != this->ElementsEnd(); ++it )
-    (*it)->Detach();
+  //for ( typename vector<csmp::InterFace<dim>*>::const_iterator it( this->ElementsBegin() ); it != this->ElementsEnd(); ++it )
+  //  (*it)->Detach();
 }
 
 // LOCAL VARIABLE STORAGE INTERFACE
