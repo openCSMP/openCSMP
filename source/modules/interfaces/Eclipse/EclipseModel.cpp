@@ -223,7 +223,7 @@ void EclipseModel::CreateSplitBoundariesAroundFaults(bool delete_fault_regions)
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->InsertSplitBoundary("FAULTS", delete_fault_regions);
+	this->InsertSplitBoundary("FAULTS");
 
 	// create splitboundaries
 	//for( std::set<std::string>::const_iterator

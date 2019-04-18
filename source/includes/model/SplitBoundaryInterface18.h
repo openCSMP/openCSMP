@@ -46,7 +46,7 @@ class SplitBoundaryInterface18 {
     bool DetectAndCreateSplitBoundaries();
 
     /// Creation of SplitBoundary around region
-    bool InsertSplitBoundary( const std::string& region, bool deleteRegionAndItsElements = false );
+    bool InsertSplitBoundary( const std::string& region );
 
     /// Creation of SplitBoundary between regions
     bool InsertSplitBoundary( const std::string& region1, const std::string& region2, bool createRegionBetween = false );

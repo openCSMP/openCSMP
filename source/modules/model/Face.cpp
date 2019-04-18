@@ -575,8 +575,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
                 }
               parent_nds.clear();
            }
-         
-         assert( matching_face_found );
+         //JC: not matched case here?
+         //assert( matching_face_found );
          return;
       }
     
@@ -601,7 +601,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
             }
           parent_nds.clear();
        }
-     assert( matching_segment_found );
+     //JC: not matched case here?
+     //assert( matching_segment_found );
 
  } // end assign
 

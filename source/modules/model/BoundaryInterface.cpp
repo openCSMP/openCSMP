@@ -482,12 +482,14 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     // if the projection is negative, the first element lies on the outside
     if ( dotproduct < 0. ) {
          nbors.second       = (*nbit).first->Idx();
-         materials.second   = static_cast<long>((*nbit).first->Read( mtrl_key ));
+         if ( mtrl_key.place != UNDEFINED )
+           materials.second   = static_cast<long>((*nbit).first->Read( mtrl_key ));
          outside_elmt_found = true;
       }
     else {
          nbors.first        = (*nbit).first->Idx();
-         materials.first    = static_cast<long>((*nbit).first->Read( mtrl_key ));
+         if ( mtrl_key.place != UNDEFINED )
+           materials.first    = static_cast<long>((*nbit).first->Read( mtrl_key ));
          inside_elmt_found  = true;
       }
     nbit++;
@@ -509,23 +511,139 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
          // checking that we have no duplication here
          assert( outside_elmt_found == false );
          nbors.second     = (*nbit).first->Idx();
-         materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
+         if ( mtrl_key.place != UNDEFINED )
+           materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
       }
     else {
          assert( inside_elmt_found == false );
          nbors.first      = (*nbit).first->Idx();
-         materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
+         if ( mtrl_key.place != UNDEFINED )
+           materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
       }
    
     // initialise with nbors, their faces, adjacent materials, and patch numbers
-    return FaceConstructionData( e.Idx(), nbors,  faces, materials,
-                                 static_cast<long>(e.Read( mtrl_key)) );
-   
+    if ( mtrl_key.place != UNDEFINED )
+      return FaceConstructionData( e.Idx(), nbors,  faces, materials,
+                                   static_cast<long>(e.Read( mtrl_key)) );
+    else
+      return FaceConstructionData( e.Idx(), nbors, faces, materials, -1 );
  } // end higherDimensionalNeighbors
 
 
+/**
+higherDimensionalNeighbors() - finds the higher-dim neighbor elements of
+a dim-1 element embedded within the higher-dim mesh.
 
+one inside element idx or two inside-outside element idxs are stored in the parameter 'in_out_elements'.
 
+assumptions
+- assumes that the nodes and elements in the entire model domain are numbered continuously
+*/
+template<size_t dim>
+bool  higherDimensionalNeighbors( const Element<dim>& e, std::vector<Element<dim>*>& in_out_elements )
+{
+  // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
+  // -----------------------------------------------------------------------------------------------------------------------------
+  // making a set of element nodes to later identify faces by comparison
+  set<size_t>   node_set, test_set;
+  const size_t  nodes( e.Nodes() );
+  for ( size_t i = 0U; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
+  map<Element<dim>*, size_t>  nbor_elmts;
+  vector<size_t> fnids;
+  for ( size_t i = 0U; i<nodes; i++ ) {
+    const size_t parents( e.N( i )->Parents() );
+    for ( size_t j = 0U; j<parents; ++j ) {
+      Element<dim>* eptr( e.N( i )->Parent( j ) );
+      const size_t faces( eptr->Faces() );
+      for ( size_t k = 0U; k<faces; ++k ) {
+        eptr->FE()->NodesOfFace( k, fnids );
+        size_t fnodes( fnids.size() );
+        for ( size_t l = 0U; l<fnodes; ++l )
+          test_set.insert( eptr->N( fnids[l] )->Idx() );
+        // if the face is shared the element and its face are recorded
+        if ( node_set == test_set ) {
+          // storing a pointer to this element and its local face number
+          // making sure that no duplicate is received
+          nbor_elmts.insert( make_pair( eptr, k ) );
+        }
+        test_set.clear();
+      }
+    }
+  }
+
+  if( nbor_elmts.size() == 1U ){
+    typename map<Element<dim>*, size_t>::const_iterator  nbit( nbor_elmts.begin() );
+    assert( (*nbit).first != nullptr );
+    in_out_elements.push_back( (*nbit).first );
+  }
+  else if ( nbor_elmts.size() == 2U ) {
+    // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
+    // -------------------------------------------------------------------------------------------------------------
+    vector<double64>  enrml, fnrml;
+    e.UnitNormal( enrml );
+    typename map<Element<dim>*, size_t>::const_iterator  nbit( nbor_elmts.begin() );
+    bool inside_elmt_found( false );
+    bool outside_elmt_found( false );
+    pair<Element<dim>*, Element<dim>*> nbors;
+    pair<size_t, size_t> faces;    
+
+    // first element
+    // -------------
+    assert( (*nbit).first != nullptr );
+    faces.first = (*nbit).second;
+    (*nbit).first->UnitNormalToFace( faces.first, fnrml );
+    double64 dotproduct( 0. );
+    for ( size_t k = 0U; k < dim; ++k )
+      dotproduct += enrml[k] * fnrml[k];
+
+    // if the projection is negative, the first element lies on the outside
+    if ( dotproduct < 0. ) {
+      nbors.second = (*nbit).first;
+    }
+    else {
+      nbors.first = (*nbit).first;
+    }
+    nbit++;
+    
+    // second element
+    // --------------
+    assert( (*nbit).first != nullptr );
+    faces.second = (*nbit).second;
+    (*nbit).first->UnitNormalToFace( faces.second, fnrml );
+    dotproduct = 0.;
+    for ( size_t k = 0U; k < dim; ++k )
+      dotproduct += enrml[k] * fnrml[k];
+
+    // if the projection is negative, the second element lies on the outside
+    if ( dotproduct < 0. ) {
+      // checking that we have no duplication here
+      assert( outside_elmt_found == false );
+      nbors.second = (*nbit).first;
+    }
+    else {
+      assert( inside_elmt_found == false );
+      nbors.first = (*nbit).first;
+    }
+
+    in_out_elements.push_back( nbors.first );
+    in_out_elements.push_back( nbors.second );
+    
+  }
+  else{
+    return false;
+  }
+
+  return true;
+} // end higherDimensionalNeighbors
+
+template<> bool  higherDimensionalNeighbors( const Element<1U>& e, std::vector<Element<1U>*>& )
+{
+  throw logic_error( "higherDimensionalNeighbor(in BoundaryInterface: there should be no boundaries in 1D model" );
+  return &e;
+}
+
+template bool  higherDimensionalNeighbors( const Element<2U>&, std::vector<Element<2U>*>& );
+template bool  higherDimensionalNeighbors( const Element<3U>&, std::vector<Element<3U>*>& );
 
 /**
      higherDimensionalNeighbor() - finds a higher-dimensional element, one face of which
@@ -1509,8 +1627,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( BOX_BOUNDARY boxBo
       csmp_error.notice( ERROR, "Model<dim,BOUNDARY_COMPLEX>::InsertBoundary(from dim-1 region):", region, "region does not exist." );
     const csmp::Region<dim>&  rref( boundaryComplex->Region(region) );
     // establishing name following convention "Face-RegionName", using BOX_BOUNDARY if supplied
-    std::string regionName( parseBoundary(boxBoundary) );
-    std::string bName( regionName );
+    //std::string regionName( parseBoundary(boxBoundary) );
+    std::string bName( region );
     // inserting boundary if not existing yet
     std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );

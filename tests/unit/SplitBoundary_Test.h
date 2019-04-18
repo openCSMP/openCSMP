@@ -22,10 +22,10 @@ namespace csmp {
       virtual void run();
 
       template<size_t dim>
-      void test_splitboundary_between_regions();
+      void test_splitboundary_between_regions( const std::string& model_name );
 
       template<size_t dim>
-      void test_splitboundary_around_regions();
+      void test_splitboundary_around_regions( const std::string& model_name );
 
       template<size_t dim>
       void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );

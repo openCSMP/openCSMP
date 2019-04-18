@@ -1643,8 +1643,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
     char         num[128];
     sprintf( num, "%lu", subgroupNum );
     subgroup_name = group_name + num;
-    std::cout << "\t\t\t'" << subgroup_name << "'";
-    std::cout << " (" << subgroupSize << " elmts)" << std::endl;
+    //std::cout << "\t\t\t'" << subgroup_name << "'";
+    //std::cout << " (" << subgroupSize << " elmts)" << std::endl;
 
     std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
       it = (unique_group) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
