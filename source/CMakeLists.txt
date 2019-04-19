@@ -67,7 +67,6 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
-	${MODULES_DIR}/model/SplitBoundaryInterface.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
 	#${MODULES_DIR}/integration/finite_volumes/generic_transport_scheme/source/*.cpp
 )
