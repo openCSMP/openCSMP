@@ -145,7 +145,7 @@ void Parameter::Out() const
  }
 
 
-bool Parameter::Out( fstream& fp ) const
+bool Parameter::Out( std::fstream& fp ) const
   {
   skm_C_fwrite( fp,  name.c_str() );
   skm_C_fwrite( fp,  notation.c_str() );

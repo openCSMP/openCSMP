@@ -484,7 +484,9 @@ bool PropertyData::OutBinary( fstream& fp ) const
      fp.write( (char*) &var_data_stride, sizeof(int32));
    
      // writing the number of records followed by flag values
-     bool return_value = skm_C_fwrite( fp, flags_ );
+     std::vector<uint32>  flags; //VARIABLE_FLAG
+     std::transform( flags_.begin(), flags_.end(), std::back_inserter( flags ), []( VARIABLE_FLAG flag ) -> uint32 { return flag; } );
+     bool return_value = skm_C_fwrite( fp, flags );
    
      // writing the data values
      return_value = skm_C_fwrite( fp, data_ );
@@ -532,7 +534,7 @@ PropertyData inBinaryPropertyData( fstream& fp )
      PropertyData data( static_cast<PLACEMENT>(var_placement), static_cast<VARIABLE_TYPE>(var_type), var_dim, array_length );
 
      // reading the number of records followed by flag values
-     std::vector<VARIABLE_FLAG>  flags;
+     std::vector<uint32>  flags; //VARIABLE_FLAG
      skm_C_fread( fp, flags );
    
      // reading the data values
@@ -540,8 +542,10 @@ PropertyData inBinaryPropertyData( fstream& fp )
      skm_C_fread( fp, values );
    
      // pushing the data into Property record
-     data.Reserve( flags.size(), values.size() );
-     for ( auto it=flags.begin(); it!=flags.end(); ++it ) data.PushBack( (*it) );
+     std::vector<VARIABLE_FLAG>  flags_tr;
+     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( uint32 flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
+     data.Reserve( flags_tr.size(), values.size() );
+     for ( auto it= flags_tr.begin(); it!= flags_tr.end(); ++it ) data.PushBack( (*it) );
      for ( auto it=values.begin(); it!=values.end(); ++it ) data.PushBack( (*it) );
    
      return data;

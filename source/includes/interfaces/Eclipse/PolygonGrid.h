@@ -6,8 +6,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 /**
     refactored - strictly 3D
     
@@ -159,8 +157,6 @@ class PolygonGridManager {
     std::map<csmp::Point<3U>,size_t>  points_; // duplicates storage
     std::vector<GridNode*>            grid_nodes_;
 };
-
-} // eclipse
 
 }// end namespace csmp
 

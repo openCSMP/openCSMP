@@ -6,8 +6,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 /**
 
 @class Pillar  Pillar "Pillar.h"
@@ -104,8 +102,6 @@ struct Column {
   {
   }
 };
-
-} // eclipse
 
 }// end namespace csmp
 

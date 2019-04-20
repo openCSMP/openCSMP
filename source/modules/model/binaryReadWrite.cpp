@@ -69,19 +69,13 @@ BinaryFileSectionRead::BinaryFileSectionRead(std::fstream& fp, const char* heade
 	memset(hdr_, 0, sizeof(hdr_));
 	memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
 	fp.read(readhdr, sizeof(char) * CSMP_BINARY_FILE_HDR_SIZE);
-	fp.read((char*)&offset_, sizeof(offset_));
 	if (memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE)) {
 		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
 	}
-	sectoffset_ = fp.tellg();
 }
 
 BinaryFileSectionRead::~BinaryFileSectionRead()
 {
-	std::streampos off = fp_.tellg();
-	if (off != offset_) {
-		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file appears to be corrupt");
-	}
 }
 
 BinaryFileSectionWrite::BinaryFileSectionWrite(std::fstream& fp, const char* header)
@@ -93,16 +87,10 @@ BinaryFileSectionWrite::BinaryFileSectionWrite(std::fstream& fp, const char* hea
 	memset(hdr, 0, sizeof(hdr));
 	memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
 	fp.write(hdr, sizeof(hdr) / sizeof(char));
-	offset_ = fp.tellg();
-	fp.write((char*)&offset_, sizeof(offset_));
 }
 
 BinaryFileSectionWrite::~BinaryFileSectionWrite()
 {
-	std::streampos off = fp_.tellg();
-	fp_.seekg(offset_, fp_.beg);
-	fp_.write((char*)&off, sizeof(off));
-	fp_.seekg(off, fp_.beg);
 }
 
 

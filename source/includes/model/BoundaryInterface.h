@@ -21,6 +21,8 @@ FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, con
 template<size_t dim>
 const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
                                                             size_t& local_face_number_of_e, double64& material_ID  );
+template<size_t dim>
+bool  higherDimensionalNeighbors( const Element<dim>& , std::vector<Element<dim>*>& );
 
 /**
 
@@ -143,6 +145,7 @@ class BoundaryInterface {
 
     /// partitions encompassing boundary 'Model' into TOP, BOTTOM, IRREGULAR if possible; updates BOX_BOUNDARY flags
     bool EstablishRegularities();
+    bool EstablishRegularitiesForEclipse();
 
 	/// construct Boundary<Face> objects around a region
 	bool AddFaces(const char* region);

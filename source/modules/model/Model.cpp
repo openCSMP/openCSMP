@@ -2801,7 +2801,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
   this->OutputAllBoundariesToBinary( BinaryBoundariesFileName( file_string ).c_str() );
 
   // 5. splitboundaries "AllInterFaces"
-  //this->OutputSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
+  this->OutputSplitBoundariesToBinary( BinarySplitBoundariesFileName(file_string).c_str() );
 
   // 6. variable specifications through the database
   Database().BinaryOut( BinaryVariablesFileName( file_string ).c_str() );
@@ -2904,7 +2904,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
   this->InputAllBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str() );
 
   // 8. reconstructing the splitboundaries
-  //this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
+  this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
 
   // 9. do a final sanity check
   CheckElementsAfterBuilding();
@@ -3124,9 +3124,9 @@ template class BoundaryInterface<1U, Model>;
 template class BoundaryInterface<2U, Model>;
 template class BoundaryInterface<3U, Model>;
 
-template class SplitBoundaryInterface18<1U, Model>;
-template class SplitBoundaryInterface18<2U, Model>;
-template class SplitBoundaryInterface18<3U, Model>;
+template class SplitBoundaryInterface<1U, Model>;
+template class SplitBoundaryInterface<2U, Model>;
+template class SplitBoundaryInterface<3U, Model>;
 
 template class Model<1U>;
 template class Model<2U>;

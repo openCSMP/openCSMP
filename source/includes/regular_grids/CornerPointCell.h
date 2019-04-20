@@ -8,8 +8,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 enum CORNER_POINT_CELL_TYPE
 {
     CORNER_POINT_CELL_UNDEFINED          = 0,
@@ -252,8 +250,6 @@ private:
     long                             well_face_dst_;
     std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > >    wells_;
 };
-
-} // eclipse
 
 }// end namespace csmp
 

@@ -12,8 +12,6 @@ using namespace std;
 
 namespace csmp {
 
-	using namespace eclipse;
-
 	void EclipseMeshInterface_Example::Specifications()
 	{
 		SetTitle("EclipseMeshInterface_Example");

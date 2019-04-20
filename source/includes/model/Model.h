@@ -9,7 +9,7 @@
 #include "MeshManager.h"
 #include "RegionInterface.h"
 #include "BoundaryInterface.h"
-#include "SplitBoundaryInterface18.h"
+#include "SplitBoundaryInterface.h"
 #include "LocalVariableStorage.h"
 
 namespace csmp {
@@ -185,7 +185,7 @@ model.OutputDataToHDF ( "computed_temperature", "temperature" );
 template<size_t dim>
 class Model : public RegionInterface<dim, Model>,
   public BoundaryInterface<dim, Model>,
-  public SplitBoundaryInterface18<dim, Model>,
+  public SplitBoundaryInterface<dim, Model>,
   public LocalVariableStorage<dim, Model<dim> > ///< @todo FIX TEMPLATE-TEMPLATE parameter
 {
 

@@ -139,6 +139,11 @@ public:
                    const csmp::Index& mtrl_key,
                    BOX_BOUNDARY boxBoundary );
 
+  bool CreateFromForSplitBoundary( MeshManager<dim>& meshManager,
+                   const Region<dim>& region,
+                   const csmp::Index& mtrl_key,
+                   BOX_BOUNDARY boxBoundary );
+  
   /// creates surface / perimeter line of Faces around the region ( only for volume regions in 3D and surface regions in 2D )
   bool CreateAround( MeshManager<dim>&,
                      const FiniteElementManager&,

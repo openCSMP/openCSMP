@@ -431,11 +431,15 @@ bool PhaseStateFinder_H2O_CO2_NaCl::EvaluateFractionsInTriangularRegion()
 
     weight_phase_a = -(weight_phase_b*y[1]+y[2]*(-weight_phase_b+1.)-y_bulkcomp)/(y[0]-y[2]);
     weight_phase_c = 1.0 - weight_phase_b - weight_phase_a;
-
+    /* epsilon seems too strict?
     if(weight_phase_b >= -std::numeric_limits<double64>::epsilon() &&
        weight_phase_a >= -std::numeric_limits<double64>::epsilon() &&
        weight_phase_c >= -std::numeric_limits<double64>::epsilon() ) return true;
-
+    */   
+    if(weight_phase_b >= -1.0e-6 &&
+       weight_phase_a >= -1.0e-6 &&
+       weight_phase_c >= -1.0e-6 ) return true;       
+    
     // if one of the weights is negative, the point is outside the triangle
     // it should be possible to identify then the next region to search!
     return false;

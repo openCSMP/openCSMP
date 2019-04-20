@@ -6,8 +6,6 @@ using namespace std;
 
 namespace csmp {
 
-namespace eclipse {
-
 /// Model constructor with provided "variables_file.txt" file is used
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
 	const std::string& model_name,
@@ -64,42 +62,6 @@ void EclipseModel::Initialize()
 			eclipse_model_settings_.exclude_inactive_cells_,
 			eclipse_model_settings_.tetra_mesh_);
 
-// JC: remove it later since it doesn't make sense
-if(0){
-		// if there is no REGIONS section, i.e. no FIPNUM, SATNUM, EQLNUM or PVTNUM cell specifiers in the Eclipse input deck
-		// a regions file must be present for the region to be preserved
-		if (eclipse_model_settings_.regions_.empty()) {
-			// the sets of strings will be empty if no regions, faults or wells were detected by the mesh interface
-			mesh_interface.GetRegions(regions_);
-			mesh_interface.GetFaults(faults_);
-			mesh_interface.GetWells(wells_);
-		}
-		else {
-			std::set<std::string>& desired_regions(eclipse_model_settings_.regions_);
-			std::set<std::string>  regions;
-
-			/// assign regions
-			regions.clear();
-			mesh_interface.GetRegions(regions);
-			std::set_intersection(desired_regions.begin(), desired_regions.end(),
-				regions.begin(), regions.end(),
-				std::inserter(regions_, regions_.begin()));
-			/// assign faults
-			regions.clear();
-			mesh_interface.GetFaults(regions);
-			std::set_intersection(desired_regions.begin(), desired_regions.end(),
-				regions.begin(), regions.end(),
-				std::inserter(faults_, faults_.begin()));
-
-			/// assign wells
-			regions.clear();
-			mesh_interface.GetWells(regions);
-			std::set_intersection(desired_regions.begin(), desired_regions.end(),
-				regions.begin(), regions.end(),
-				std::inserter(wells_, wells_.begin()));
-		}
-}
-
 		// =====================================================================
 		// 1. selectively read properties of interest, adding them to VSET
 		// =====================================================================
@@ -142,7 +104,7 @@ if(0){
 				error_handler.notice(csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str());
 			}
 		}
-
+    
 		// =====================================================================
 		// 2. construct CSMP model from obtained topology and mesh in vset
 		// =====================================================================
@@ -152,13 +114,9 @@ if(0){
 
 		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
 		const bool isoparametric(true);
-		//csmp::Model<3U>::Initialize(isoparametric, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false.
-		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false.
-
-		// JC: move this into Model class - identifying box boundaries if any
-		EstablishRegularities();
-		UpdateIndices();
-
+		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false here.    
+    EstablishRegularitiesForEclipse();
+		UpdateIndices();    
 	}
 	// ---------------------------------------------------
 	// catching all possible standard and csmp::Exceptions
@@ -265,7 +223,7 @@ void EclipseModel::CreateSplitBoundariesAroundFaults(bool delete_fault_regions)
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->InsertSplitBoundary("FAULTS", delete_fault_regions);
+	this->InsertSplitBoundary("FAULTS");
 
 	// create splitboundaries
 	//for( std::set<std::string>::const_iterator
@@ -479,7 +437,5 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	}
 
 } // end AssignBoxBoundaryFlagsWherePossible
-
-} // eclipse
 
 } // end csmp

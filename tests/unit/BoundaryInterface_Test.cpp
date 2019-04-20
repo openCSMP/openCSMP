@@ -218,7 +218,7 @@ void BoundaryInterface_Test::run()
         }
       if ( verbose_ ) cout << endl;
 
-	  //JC: check this!!!
+//JC: check this!!!
       // testing whether boundary segments can be found by combined search criteria
       //const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
       //string patch_name = findBoundary( model, intersected_regions );	  

@@ -6,8 +6,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 /**
 
 @class PolygonCell  PolygonCell "PolygonCell.h"
@@ -138,8 +136,6 @@ protected:
     /// faces[i][j] is a 6 x 5 matrix of faces defined by face-type and corresponding node pointers as entries (type-value pairs)
     std::vector<std::vector<std::pair<csmp::CSMP_FEM_TYPE,std::vector<GridNode*> > > > faces_;
 };
-
-} // eclipse
 
 }// end namespace csmp
 

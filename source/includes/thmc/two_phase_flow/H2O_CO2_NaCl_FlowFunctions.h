@@ -47,6 +47,12 @@ class H2O_CO2_NaCl_FlowFunctions {
   public:
   
     // ELEMENT BASED CALCULATIONS with '_at' versions for computations involving facet and sector integration point saturations
+
+    /// returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false
+    bool InterpolateAqueousPhase( Element<dim>* const, double64& sw, double64& rhow, double64& muw ) const;
+
+    /// returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false
+    bool InterpolateCarbonicPhase( Element<dim>* const, double64& snw, double64& rhon, double64& mun ) const;
   
     /// water saturation interpolated to element barycentre; use Read( key_sH2O ) to get nodal value
     double64 Sw( Element<dim>* const e ) const;
@@ -134,6 +140,8 @@ class H2O_CO2_NaCl_FlowFunctions {
   
     /// k * dpds(sw) * mobility_product(sw), @attention value can be zero.
     double64 CapillaryDiffusionMultiplier_at( Element<dim>* const, double64 sw ) const;
+    
+    double64 Dpcds_at( Element<dim>* const, double64 sw ) const;
 
     // TODO: used when? double64 CapillaryDiffusionMultiplier_Phase( Element<dim>* const, size_t phase ) const;
 
@@ -199,12 +207,6 @@ class H2O_CO2_NaCl_FlowFunctions {
   
     /// interpolates saturations of all mobile phases to barycenter and returns their sum which should be 1 - halite_saturation
     double64 InterpolateSaturations( Element<dim>* const, double64& sw, double64& snw ) const;
-  
-    /// returns aqueous phase properties at element barycentre, if there is a value at at least a single node, else returns false
-    bool InterpolateAqueousPhase( Element<dim>* const, double64& sw, double64& rhow, double64& muw ) const;
-
-    /// returns carbonic phase properties at element barycentre, if there is a value at at least a single node, else returns false
-    bool InterpolateCarbonicPhase( Element<dim>* const, double64& snw, double64& rhon, double64& mun ) const;
   
     /// returns halite saturation = volume fraction of salt
     double64 InterpolateSystem( Element<dim>* const,

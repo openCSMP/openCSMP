@@ -446,7 +446,7 @@ and the regions file prefix is used to read the regions file.
         cout << endl;
 
       for( size_t sb(0); sb < splitBoundaries_.size(); ++sb )
-          this->InsertSplitBoundary( splitBoundaries_[sb], false/* do not delete region */ );
+          this->InsertSplitBoundary( splitBoundaries_[sb] );
     }
 
 

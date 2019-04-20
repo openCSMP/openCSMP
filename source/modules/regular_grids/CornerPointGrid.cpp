@@ -21,8 +21,6 @@ using namespace std;
 
 namespace csmp {
 
-namespace eclipse {
-
 // CORNER POINT GRID
 
 CornerPointGrid::CornerPointGrid()
@@ -176,7 +174,7 @@ void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double64>& z
           cell.z[3][0] = p3.FindPoint( zcorn[(i + j * NX_ + k * NXxNY) * 8 + 2] ); // t_sw
           cell.z[3][1] = p3.FindPoint( zcorn[(i + j * NX_ + k * NXxNY) * 8 + 6] ); // b_sw
 
-                                                                                   // If all four corners are degenerate, the cell is fully degenerate.
+          // If all four corners are degenerate, the cell is fully degenerate.
           if ( cell.z[0][0] == cell.z[0][1]
                && cell.z[1][0] == cell.z[1][1]
                && cell.z[2][0] == cell.z[2][1]
@@ -251,15 +249,26 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   // 2. Constructing Elements
   generator_ = new CellGenerator( *this );
   generator_->ordinaryNodes.reserve( ordinaryNodes_ );
+
+  std::vector<Point<3U>> tp_pts;
+  std::vector<Point<3U>> bt_pts;
   for ( size_t i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
-      Pillar& pillar = (*this)(i, j);
+      Pillar& pillar = (*this)(i, j);      
       for ( size_t k = 0; k < pillar.GetNumPoints(); ++k ) {
-        generator_->ordinaryNodes.push_back( pillar.GetPoint( k ) );
+        generator_->ordinaryNodes.push_back( pillar.GetPoint( k ) );        
       }
+
+      // keep the top & the bottom points
+      Point<3U> bt = pillar.EndPoint();
+      Point<3U> tp = pillar.StartPoint();
+      ConvertFromReservoirToCSMPcoordinateSystem( bt );
+      ConvertFromReservoirToCSMPcoordinateSystem( tp );
+      bt_pts.push_back( bt );
+      tp_pts.push_back( tp );
     }
   }
-
+    
   badHexahedra_ = 0;
   badPyramids_ = 0;
   badTetrahedra_ = 0;
@@ -267,7 +276,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   badLines_ = 0;
 
   //Degeneration process starts!
-  cout << "\nCornerPointGrid_UoM::ConstructFiniteElementsFromColumns: creating elements...";
+  cout << "\nCornerPointGrid::ConstructFiniteElementsFromColumns: creating elements...";  
   for ( auto column = columns_.begin(); column != columns_.end(); column++ ) {
     Column& Col = column->second;
     for ( size_t k = 0; k < Col.cells_.size(); k++ ) {
@@ -279,7 +288,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
       generator_->setIJ( i, j );
 
       ECLIPSE_CELL_CLASSIFICATION cellType = cell.classification;
-
+      
       /// referred to the classifications of the cell above and the cell beneath  
       ColumnCell* cellAbove = nullptr;
       ColumnCell* cellBeneath = nullptr;
@@ -292,94 +301,95 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
         cellBeneath = &Col.cells_[k + 1];
       }
 
+      
       assert( generator_->elementID == generator_->plist.size() );
       assert( generator_->elementID == generator_->fem_types.size() );
 
       switch ( cellType ) {
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_HEXAHEDRON:				// 0000
           if ( !ConstructEclipseCell0000( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_HEXAHEDRON(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_HEXAHEDRON(" << i << "," << j << "," << k << ")";            
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_310_312:		// 0001
           if ( !ConstructEclipseCell0001( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMIDS_310_312(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMIDS_310_312(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_201_203:		// 0010
           if ( !ConstructEclipseCell0010( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMIDS_201_203(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMIDS_201_203(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_23:				// 0011
           if ( !ConstructEclipseCell0011( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PRISM_23(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PRISM_23(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_130_132:		// 0100
           if ( !ConstructEclipseCell0100( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMIDS_130_132(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMIDS_130_132(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_130_132:	// 0101
           if ( !ConstructEclipseCell0101( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_TETRAHEDRONS_130_132(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_TETRAHEDRONS_130_132(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_12:				// 0110
           if ( !ConstructEclipseCell0110( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PRISM_12(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PRISM_12(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0:				// 0111
           if ( !ConstructEclipseCell0111( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMID_0(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_0(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMIDS_021_023:		// 1000
           if ( !ConstructEclipseCell1000( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMIDS_021_023(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMIDS_021_023(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_03:				// 1001
           if ( !ConstructEclipseCell1001( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PRISM_03(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PRISM_03(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_TETRAHEDRONS_021_023:	// 1010
           if ( !ConstructEclipseCell1010( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_TETRAHEDRONS_021_023(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_TETRAHEDRONS_021_023(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1:				// 1011
           if ( !ConstructEclipseCell1011( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMID_1(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_1(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PRISM_01:				// 1100
           if ( !ConstructEclipseCell1100( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PRISM_01(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PRISM_01(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2:				// 1101
           if ( !ConstructEclipseCell1101( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMID_2(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_2(" << i << "," << j << "," << k << ")";
           break;
 
         case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3:				// 1110
           if ( !ConstructEclipseCell1110( cell, i, j, k, cellAbove, cellBeneath ) )
-            cout << "\ndetected a broken cell: CLIPSE_CELL_PYRAMID_3(" << i << "," << j << "," << k << ")";
+            cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_3(" << i << "," << j << "," << k << ")";
           break;
       }
     }
   }
 
   std::cerr << "\n\n";
-  std::cerr << "removed invalid hexahedra: " << badHexahedra_ << '\n';
-  std::cerr << "removed invalid pyramids: " << badPyramids_ << '\n';
-  std::cerr << "removed invalid tetrahedra: " << badTetrahedra_ << '\n';
-  std::cerr << "removed invalid prisms: " << badPrisms_ << '\n';
-  std::cerr << "removed invalid lines: " << badLines_ << '\n';
+  std::cerr << " removed invalid hexahedra: " << badHexahedra_ << '\n';
+  std::cerr << " removed invalid pyramids: " << badPyramids_ << '\n';
+  std::cerr << " removed invalid tetrahedra: " << badTetrahedra_ << '\n';
+  std::cerr << " removed invalid prisms: " << badPrisms_ << '\n';
+  std::cerr << " removed invalid lines: " << badLines_ << '\n';
 
   // 3. store node coordinates
   deque<double64> x, y, z;
@@ -396,6 +406,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
       }
     }
   }
+
   for ( auto p : generator_->extraNodes ) {
     ConvertFromReservoirToCSMPcoordinateSystem( p );
     x.push_back( p[0] );
@@ -404,12 +415,39 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   }
   vset.AddXYZ( x, y, z );
 
-  // 4. Set up the rest of the vset
+  // 4. assigning top & bottom boundary flags on nodes  
+  cout << "\nCornerPointGrid::ConstructFiniteElementsFromColumns: assigning top & bottom boundary flags on nodes...\n";
+  struct isEqual {
+    isEqual( const Point<3U>& pt ) : m_pt( pt ) {};
+    bool operator()( const Point<3U>& lpt )
+    {
+      if ( Point<3U>( lpt - m_pt ).Length() > 0.02 ) return false; // the threshold 0.02 was optimized for the Otway model since there are broken elements in the top or bottom surfaces
+      else return true;
+    };
+
+    Point<3U> m_pt;
+  };
+  unordered_map< size_t, long64> pbflags; // boundary type      
+  for ( size_t i = 0U; i < vset.Vertices(); ++i )
+  {
+    vector<double64> coord( 3U );
+    for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
+    Point<3U> pt( coord );
+    if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
+      pbflags.insert( make_pair( i, BOX_BOUNDARY::TOP ) );
+    else if ( std::find_if( bt_pts.begin(), bt_pts.end(), isEqual( pt ) ) != bt_pts.end() )
+      pbflags.insert( make_pair( i, BOX_BOUNDARY::BOTTOM ) );
+    else
+      pbflags.insert( make_pair( i, BOX_BOUNDARY::IRREGULAR ) );
+  }
+
+  // 5. Set up the rest of the vset
   // There is no neighbor information in the Eclipse data(*.grdecl). The information will be created later.
   vset.RemovePfverts();
   vset.ResizePlist( generator_->plist.size() );
   vset.AddPlist( generator_->plist.begin(), generator_->plist.end() );
   vset.AddElementTypes( generator_->fem_types.begin(), generator_->fem_types.end() );
+  vset.AddBFlags( pbflags.begin(), pbflags.end() );
 }
 
 bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
@@ -438,6 +476,8 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
     }
     else {
       size_t centroid = generator_->generateCellCentroid( cell );
+      if ( centroid == 0 ) return false;
+
       switch ( generator_->getShapeOfTopFace( *cellBeneath ) ) {
         case FACE_TYPE::SPLIT_02_OR_46:
           // Top face
@@ -585,6 +625,8 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
   else {
     if ( faceBeneathIsQuad ) {
       size_t centroid = generator_->generateCellCentroid( cell );
+      if ( centroid == 0 ) return false;
+
       switch ( generator_->getShapeOfBottomFace( *cellAbove ) ) {
         case FACE_TYPE::SPLIT_02_OR_46:
           // Left face
@@ -733,6 +775,8 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
       auto bottomShape = generator_->getShapeOfTopFace( *cellBeneath );
 
       size_t centroid = generator_->generateCellCentroid( cell );
+      if ( centroid == 0 ) return false;
+
       switch ( topShape ) {
         case FACE_TYPE::SPLIT_02_OR_46:
           switch ( bottomShape ) {
@@ -945,15 +989,8 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
     }
   }
 
-  if ( invalid_hexs > 0 || invalid_pyrs > 0 || invalid_tets > 0 || invalid_pris > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_hexs > 0 || invalid_pyrs > 0 || invalid_tets > 0 || invalid_pris > 0 )
     return false;
-  }
 
   return true;
 }
@@ -981,15 +1018,8 @@ bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, si
 
   badPyramids_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1018,15 +1048,8 @@ bool CornerPointGrid::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, si
 
   badPyramids_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1062,15 +1085,8 @@ bool CornerPointGrid::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, si
 
   badPyramids_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1104,20 +1120,13 @@ bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, si
 
   badPrisms_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
 
-
+//Eclipse cell type: ECLIPSE_CELL_PYRAMID_0
 bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
@@ -1133,15 +1142,8 @@ bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, si
 
   badTetrahedra_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1170,15 +1172,8 @@ bool CornerPointGrid::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, si
 
   badPyramids_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 ) 
     return false;
-  }
 
   return true;
 }
@@ -1193,6 +1188,7 @@ bool CornerPointGrid::ConstructEclipseCell1001( ColumnCell&  cell, size_t& i, si
   return true;
 }
 
+//Eclipse cell type: ECLIPSE_CELL_TETRAHEDRONS_021_023
 bool CornerPointGrid::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   auto elementList = generator_->degenerateToTwoTetrahedrasAtEdge02( cell );
   generator_->plist.emplace( generator_->elementID, elementList[0] );
@@ -1207,11 +1203,12 @@ bool CornerPointGrid::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, si
   return true;
 }
 
+//Eclipse cell type: ECLIPSE_CELL_PYRAMID_1
 bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
 
-  if ( generator_->ConstructTetrahedronOnFace( cell, 7, 5, 4, generator_->getNodeID( cell, 1 ) ) ) {
+  if ( generator_->ConstructTetrahedronOnFace( cell, 6, 5, 4, generator_->getNodeID( cell, 1 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
     addElementToMap( i, j, k, eid );
     new_elements.push_back( eid );
@@ -1222,15 +1219,8 @@ bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, si
 
   badTetrahedra_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1250,19 +1240,13 @@ bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, si
 
   badPrisms_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
 
+//Eclipse cell type: ECLIPSE_CELL_PYRAMID_2
 bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
@@ -1278,19 +1262,13 @@ bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, si
 
   badTetrahedra_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
 
+//Eclipse cell type: ECLIPSE_CELL_PYRAMID_3
 bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
   std::vector<size_t> new_elements;
@@ -1345,17 +1323,8 @@ bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, siz
 
   badLines_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 || new_elements.size() == 0 )
     return false;
-  }
-
-  if ( new_elements.size() == 0 ) return false;
 
   return true;
 }
@@ -1376,15 +1345,8 @@ bool CornerPointGrid::ConstructLineElement( ColumnCell& cell, size_t& i, size_t&
 
   badLines_ += invalid_elements;
 
-  if ( invalid_elements > 0 ) {
-    //this->elementMap.erase(ijk(i, j, k));
-    for ( auto eid : new_elements ) {
-      //generator_->plist.erase(eid);
-      //generator_->fem_types.pop_back();
-      //--generator_->elementID;
-    }
+  if ( invalid_elements > 0 )
     return false;
-  }
 
   return true;
 }
@@ -1499,9 +1461,11 @@ CellCenteredGrid::CellCenteredGrid()
 {
 }
 
+
 CellCenteredGrid::~CellCenteredGrid()
 {
 }
+
 
 void CellCenteredGrid::Clear()
 {
@@ -1513,19 +1477,16 @@ void CellCenteredGrid::Clear()
 }
 
 
-
 size_t CellCenteredGrid::GetNumCells() const
 {
   return NX_*NY_*NZ_;
 }
 
 
-
 std::vector<csmp::ScalarVariable>& CellCenteredGrid::GetCellDepths()
 {
   return tops_;
 }
-
 
 
 std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
@@ -1538,12 +1499,10 @@ std::vector<ScalarVariable>& CellCenteredGrid::GetCellSizes( size_t i )
 }
 
 
-
 void CellCenteredGrid::AssignDimensionX( size_t NX )
 {
   NX_ = NX;
 }
-
 
 
 void CellCenteredGrid::AssignDimensionY( size_t NY )
@@ -1552,12 +1511,9 @@ void CellCenteredGrid::AssignDimensionY( size_t NY )
 }
 
 
-
 void CellCenteredGrid::AssignDimensionZ( size_t NZ )
 {
   NZ_ = NZ;
 }
-
-} // eclipse
 
 } // end namespace csmp

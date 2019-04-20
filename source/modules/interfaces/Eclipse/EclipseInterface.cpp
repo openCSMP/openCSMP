@@ -16,8 +16,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 EclipseInterface::EclipseInterface()
   : NX_( 0 ),
     NY_( 0 ),
@@ -1816,8 +1814,6 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
         removeSymbolsFromString( well_name, symbolsToremove );
       }
 
-      //JC: it doesn't make sense since there is always no well_data.
-      //EclipseWell& well( well_data[ well_name ] );
       EclipseWell well;
       well.well_name_ = well_name;
       EclipseWellCompletion wellcomp;
@@ -2886,9 +2882,6 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     double64 z[8];
   };
   size_t NXxNY = NX_ * NY_;
-
-  //JC: To handle with Eclipse's shorthand notation
-  //    ex) n*val means that the value val shall be repeated n times.
   std::vector<double64> values;
 
   char*       token( 0 );
@@ -2940,7 +2933,6 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     }
   } while ( !endOfblock && !csmp::isBlankLine( text_line ) && !ifs.eof() );
 
-  //JC: verify # of values in the block ZCORN
   size_t num_zcorn = (NX_ * 4) * NY_ * 2 * NZ_;
   if ( num_zcorn != values.size() )
   {
@@ -3235,7 +3227,5 @@ void addWellPath( const std::string& well_name,
   well_path.insert( std::make_pair( well_name, empty_path ) );
   well_path[well_name].push_back( path );
 }
-
-} // eclipse
 
 } // end namespace csmp

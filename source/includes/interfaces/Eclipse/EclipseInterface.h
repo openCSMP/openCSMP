@@ -7,7 +7,6 @@
 
 namespace csmp {
 
-namespace eclipse {
 /// @file EclipseInterface.h - glue that creates a file-based interface between CSMP and Eclipse
 
 /**
@@ -66,7 +65,6 @@ struct EclipseWellCompletion
   EclipseWellCompletion();
   ~EclipseWellCompletion();
 
-  /// JC: not clear - COMPDAT connection specification?
   size_t ic_;      ///<
   size_t jc_;      ///<
   size_t k_top_;   ///<
@@ -575,10 +573,6 @@ void addWellPath( const std::string& well_name,
                   const ijk& cell_ids,
                   std::pair<ijk, CORNER_POINT_CELL_FACE_INDEX> face_id,
                   std::map<std::string, EclipseWellPath>& well_path );
-
-
-
-} // eclipse
 
 }// end namespace csmp
 

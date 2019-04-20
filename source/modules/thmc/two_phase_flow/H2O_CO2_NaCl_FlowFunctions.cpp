@@ -895,8 +895,14 @@ double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_at( 
    return k * lambda_overbar * dpcds;
 }
 
+
  
- 
+template<size_t dim, template<size_t> class USER>
+double64 H2O_CO2_NaCl_FlowFunctions<dim,USER>::Dpcds_at( Element<dim>* const e, double64 sw ) const
+{
+   assert( e != nullptr );
+   return User()->dpcds_at(e,sw);
+}  
  
  
 // TODO: create versions for tensor permeability
