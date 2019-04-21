@@ -45,10 +45,6 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental()
 
 
 
-/** Copy ctor.
-
-  @attention The constructor will not manage the supplied pointer.
-*/
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( Solver& solver )
  : solver_(&solver),

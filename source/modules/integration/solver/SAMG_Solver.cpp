@@ -1035,6 +1035,12 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #endif
 #endif
 
+// SKM_FIX dealing with potential negative diagonal values (setting = -1, causes them to be ignored)
+// int neg_diag=-1; SAMG_SET_NEG_DIAG(&neg_diag
+   
+    int neg_diag = settings_.Get_neg_diag();
+    SAMG_SET_NEG_DIAG( &neg_diag );
+
     SAMG( &nnu_, &nna_, &nsys_,
           &crmat_.ia[0], &crmat_.ja[0], &crmat_.a[0], &f_[0], &u_[0],
           &iu_[0], &ndiu_, &ip_[0], &ndip_, &matrix, &iscale_[0],

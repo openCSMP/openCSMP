@@ -13,8 +13,8 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 
-namespace csmp {
 
+namespace csmp {
 
 template<size_t> class Element;
 template<size_t> class Face;
@@ -143,18 +143,17 @@ class MathOperatorLHS {
     /// multiply with time increment if this is desired
     virtual void  MultiplyWithTimeFactor( double64 dt );
 
-    /// for Luat's implementations
-    virtual void AssignToGlobal( const Element<dim>& e, CompressedSparseRowMatrix& G );
-    virtual void AssignToGlobal( const InterFace<dim>& f, CompressedSparseRowMatrix & G );
-    virtual void AssignToGlobal( const Face<dim>& e, CompressedSparseRowMatrix & G );
-
     /// assigment to the left hand side global matrix (after everything was calculated )
     virtual void  AssignToGlobal( const Element<dim>&, SparseMatrix& );
     virtual void  AssignToGlobal( const Face<dim>&, SparseMatrix & );
     virtual void  AssignToGlobal( const InterFace<dim>&, SparseMatrix& );
 
-//    virtual MathOperatorLHS<dim>* clone() const { return new MathOperatorLHS<dim>(*this); }
-    virtual MathOperatorLHS<dim>* clone() const =0;
+    /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
+    virtual void AssignToGlobal( const Element<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const Face<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double64>&, const std::vector<size_t>& );
+
+    virtual MathOperatorLHS<dim>* clone() const = 0;
 
   protected:
 

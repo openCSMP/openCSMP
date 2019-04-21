@@ -17,7 +17,7 @@
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator_UoM.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
@@ -837,7 +837,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     // --------------------------------------------------------------------------------------------
     SAMG_Settings                  settings;
     SAMG_Solver                    samg_solver( &settings );
-    PDE_Integrator_CRM<dim,Region> hydrostatic_pressure(samg_solver);
+    PDE_Integrator_UoM<dim,Region> hydrostatic_pressure(samg_solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
