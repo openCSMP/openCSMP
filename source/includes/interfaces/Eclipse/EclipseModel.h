@@ -10,8 +10,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 /**
 
 @brief Input interface which converts a corner-point (hexahedral cell) grid from 
@@ -84,10 +82,5 @@ class EclipseModel : public csmp::Model<3U> {
       std::unordered_map<Element<3u>*,ijk>       elmt_to_ijk_; ///< stores mapping from elements to i,j,k
 };
 
-} // eclipse
-
 } // csmp
-
-
-
 #endif

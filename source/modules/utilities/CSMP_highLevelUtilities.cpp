@@ -2498,9 +2498,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
            }
            key.clear();
 
-           // unassign neirghbors outside of the provided vector range
-           if( unassign_neighbors_outside )
-               (*it)->UnassignNeighbors();
+           // JC: check it later! unassign neirghbors outside of the provided vector range
+           //if( unassign_neighbors_outside )
+               //(*it)->UnassignNeighbors();
         }
 
 

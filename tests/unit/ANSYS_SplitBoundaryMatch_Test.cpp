@@ -115,7 +115,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
    // checking which boundaries were created
    model.SplitBoundariesOut();
    // TODO: creates 3 SplitBoundary objects although only 1 was expected; 1st one is correct, what about the others (last one has only perimeter faces)
-   
+   model.OutputToBinaryFile( model_name.c_str() );
 
    // 3. change some property along split boundary to verify that assignments are made correctly
    // ------------------------------------------------------------------------------------------
@@ -150,7 +150,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
   
    // 5. see whether the split boundary survives being writting to and recovered from file
    // ------------------------------------------------------------------------------------------
-
+   
 } // end run
 
 

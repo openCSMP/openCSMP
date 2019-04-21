@@ -63,6 +63,7 @@ class TwoPhaseDESTransport : public variables::VariableSet_CO2GeoSequestration {
 
 
   protected:
+    Model<dim>& sg_;
     Region<dim>& gref_;
     PropertyDatabase<dim>& db_;
     FLOW_FUNCTIONS<dim>& flowfunctions_;

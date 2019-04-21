@@ -153,7 +153,7 @@ void Variables_Example::Run()
 
 
     // split
-    model.InsertSplitBoundary( "FRACTURE", false /* do not delete fracture region */ );
+    model.InsertSplitBoundary( "FRACTURE" );
     SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary("FRACTURE");
 
 

@@ -11,16 +11,14 @@
 
 namespace csmp {
 
-namespace eclipse {
-
 enum class FACE_TYPE {
 
-	//       3_________2
-	//    /|        /|
-	//     0_|_______1 |
-	//     | 7-------|-6
+	//       0_________1
+	//      /|        /|
+	//     3_|_______2 |
+	//     | 4-------|-5
 	//     |/        |/
-	//     4_________5
+	//     7_________6
 
 
 	FULL_QUAD,
@@ -115,19 +113,129 @@ public:
 		p3 = &grid(i + 0, j + 1);
 	}
 
-	size_t generateCellCentroid(ColumnCell& cell) {
-		Point<3> p(0, 0, 0);
-		p += p0->GetPoint(cell.z[0][0]);
-		p += p0->GetPoint(cell.z[0][1]);
-		p += p1->GetPoint(cell.z[1][0]);
-		p += p1->GetPoint(cell.z[1][1]);
-		p += p2->GetPoint(cell.z[2][0]);
-		p += p2->GetPoint(cell.z[2][1]);
-		p += p3->GetPoint(cell.z[3][0]);
-		p += p3->GetPoint(cell.z[3][1]);
-		size_t idx = ordinaryNodes.size() + extraNodes.size();
-		extraNodes.push_back(p * 0.125);
-		return idx;
+
+  struct vec3 {
+    double64 x, y, z;
+
+    vec3( double64 x0, double64 y0, double64 z0){
+      x = x0; y = y0; z = z0;
+    }
+
+    vec3 operator-( vec3 p ) const {
+      return vec3{ x - p.x, y - p.y, z - p.z };
+    }
+
+    vec3 cross( vec3 p ) const {
+      return vec3{
+        y * p.z - p.y * z,
+        z * p.x - p.z * x,
+        x * p.y - p.x * y
+      };
+    }
+
+    double dot( vec3 p ) const {
+      return x * p.x + y * p.y + z * p.z;
+    }
+
+    double norm() const {
+      return std::sqrt( x*x + y*y + z*z );
+    }
+  };
+
+  struct face3 {
+    std::vector<vec3> v;
+
+    vec3 normal() const {
+      assert( v.size() > 2 );
+      vec3 dir1 = v[1] - v[0];
+      vec3 dir2 = v[2] - v[0];
+      vec3 n = dir1.cross( dir2 );
+      double d = n.norm();
+      return vec3{ n.x / d, n.y / d, n.z / d };
+    }
+  };
+
+
+  bool is_inside_polyheadron( vec3 const& cp, std::vector<vec3> const& pts )
+  {
+    std::vector<face3> polyhedron{ // faces with 4 points
+      face3{ { pts[7], pts[6], pts[2], pts[3] } }, // front
+      face3{ { pts[4], pts[0], pts[1], pts[5] } }, // back
+      face3{ { pts[7], pts[3], pts[0], pts[4] } }, // left
+      face3{ { pts[6], pts[5], pts[1], pts[2] } }, // right
+      face3{ { pts[3], pts[2], pts[1], pts[0] } }, // top
+      face3{ { pts[7], pts[4], pts[5], pts[6] } }, // bottom
+    };
+
+    for ( face3 const& f : polyhedron ) {
+      vec3 p2f = f.v[0] - cp;  // an arbitrary point on face
+      double d = p2f.dot( f.normal() );
+      d /= p2f.norm();
+
+      double bound = -1e-15; // to exclude boundaries
+      if ( d < bound )
+        return false;
+    }
+
+    return true;
+  }
+
+	size_t generateCellCentroid(ColumnCell& cell) {    
+		Point<3> pts[8], cp(0, 0, 0), tcp(0, 0, 0), bcp(0, 0, 0);
+    
+		pts[0] = p0->GetPoint(cell.z[0][0]);
+    tcp += pts[0];
+    pts[1] = p1->GetPoint( cell.z[1][0] );
+    tcp += pts[1];
+    pts[2] = p2->GetPoint( cell.z[2][0] );
+    tcp += pts[2];
+    pts[3] = p3->GetPoint( cell.z[3][0] );
+    tcp += pts[3];
+    pts[4] = p0->GetPoint(cell.z[0][1]); 
+    bcp += pts[4];    
+    pts[5] = p1->GetPoint(cell.z[1][1]);
+    bcp += pts[5];    
+    pts[6] = p2->GetPoint(cell.z[2][1]);
+    bcp += pts[6];    
+    pts[7] = p3->GetPoint(cell.z[3][1]);
+    bcp += pts[7];    
+
+    tcp = tcp * 0.25;
+    bcp = bcp * 0.25;
+    cp = (tcp + bcp) * 0.5; // in normal cases
+    Point<3> rcp0 = (pts[0] + pts[6])*0.5; // in exceptial cases such as skewed cells
+    Point<3> rcp1 = (pts[2] + pts[4])*0.5;
+    Point<3> rcp2 = (pts[1] + pts[7])*0.5;
+    Point<3> rcp3 = (pts[3] + pts[5])*0.5;
+
+    std::vector<vec3> cp_vecs;
+    cp_vecs.push_back( vec3( cp[0], cp[1], cp[2] ));
+    cp_vecs.push_back( vec3( rcp0[0], rcp0[1], rcp0[2] ) );
+    cp_vecs.push_back( vec3( rcp1[0], rcp1[1], rcp1[2] ) );
+    cp_vecs.push_back( vec3( rcp2[0], rcp2[1], rcp2[2] ) );
+    cp_vecs.push_back( vec3( rcp3[0], rcp3[1], rcp3[2] ) );
+
+    std::vector<vec3> vecs; vecs.reserve( 8 );
+    for(auto p: pts) vecs.push_back( vec3( p[0], p[1], p[2] ) );
+    
+    // find a valid centroid which is inside of its cell
+    bool found (false);
+    for ( auto v : cp_vecs ) {      
+      if ( is_inside_polyheadron( v, vecs ) ){
+        cp = Point<3>( v.x, v.y, v.z ); 
+        found = true;
+        break; 
+      }
+    }
+    
+    // the centroid is not inside of the cell, return zero, otherwise return its new node index
+    if ( found ) { 
+      size_t idx = ordinaryNodes.size() + extraNodes.size();
+      extraNodes.push_back( cp );
+      return idx;
+    }
+    else
+      return found;
 	}
 
 	size_t vertexIDs[8];
@@ -429,29 +537,29 @@ public:
 		}
     case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_0: {
       if ( cell.z[0][0] < cell.z[0][1] ) {
-        //return FACE_TYPE::SPLIT_13_OR_57;
-        return FACE_TYPE::SPLIT_02_OR_46;
+        return FACE_TYPE::SPLIT_13_OR_57;
+        //return FACE_TYPE::SPLIT_02_OR_46;
       }
       else return FACE_TYPE::FULL_QUAD;
     }
     case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_1: {
       if ( cell.z[1][0] < cell.z[1][1] ) {
-        //return FACE_TYPE::SPLIT_02_OR_46;
-        return FACE_TYPE::SPLIT_13_OR_57;
+        return FACE_TYPE::SPLIT_02_OR_46;
+        //return FACE_TYPE::SPLIT_13_OR_57;
       }
       else return FACE_TYPE::FULL_QUAD;
     }
     case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_2: {
       if ( cell.z[2][0] < cell.z[2][1] ) {
-        //return FACE_TYPE::SPLIT_13_OR_57;
-        return FACE_TYPE::SPLIT_02_OR_46;
+        return FACE_TYPE::SPLIT_13_OR_57;
+        //return FACE_TYPE::SPLIT_02_OR_46;
       }
       else return FACE_TYPE::FULL_QUAD;
     }
     case ECLIPSE_CELL_CLASSIFICATION::ECLIPSE_CELL_PYRAMID_3: {
       if ( cell.z[3][0] < cell.z[3][1] ) {
-        //return FACE_TYPE::SPLIT_02_OR_46;
-        return FACE_TYPE::SPLIT_13_OR_57;
+        return FACE_TYPE::SPLIT_02_OR_46;
+        //return FACE_TYPE::SPLIT_13_OR_57;
       }
       else return FACE_TYPE::FULL_QUAD;
     }
@@ -509,7 +617,6 @@ public:
 		}
 	}
 };
-} // eclipse
 
 } // end namespace csmp
 

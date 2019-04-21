@@ -19,6 +19,7 @@
 #include "variableOperations.h"
 
 #include "Visitor.h"
+#include "FaceConstructionData.h"
 
 //#define BOUNDARY_DEBUG
 
@@ -866,7 +867,7 @@ When establishing face connectivity(parent elements) the convention is as outlin
 @attention convention 1: If the element is on the model boundary(attached to a single higher dimensional parent element only),
 the created face unit normal points outward.
 
-@attention This method will not work if face is at a split boundary, due to duplicate nodes.
+@attention This method will work as well for a split boundary.
 */
 template<size_t dim>
 bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
@@ -906,17 +907,25 @@ bool Boundary<dim>::CreateFrom( MeshManager<dim>& meshManager,
       continue;
 
     // finding the higher-dimensional element that sits adjacent to the lower-dimensional one
-    // that this iterator points to; it will be considered to be on the inside.
-    size_t    local_face_number_of_e;
-    double64  material_ID;
-    const csmp::Element<dim>* const eptr = higherDimensionalNeighbor( *(*it), mtrl_key,
-                                                                      local_face_number_of_e, material_ID );
+    Face<dim>* faceObj( NULL );
+    std::string region_name = region.Name();
+    std::vector<csmp::Element<dim>*> inner_outter_elements;
 
-    // which is used to create the new face using the variables prepared above (NULL is FV Stencil)
-    Face<dim> new_face( *(*it), const_cast<csmp::Element<dim>*>(eptr), nullptr, lvsFaces, lvsIntegrationPoints );
-    Face<dim>* faceObj = meshManager.Add( new_face );
-    // push back into face container
-    this->elmt_vec_.emplace_back( faceObj );
+    if( !higherDimensionalNeighbors( *(*it), inner_outter_elements ) ) continue;
+    if( inner_outter_elements.size() == 2){
+      // created a new face
+      Face<dim> new_face( *(*it), inner_outter_elements[0], inner_outter_elements[1], lvsFaces, lvsIntegrationPoints );
+      faceObj = meshManager.Add( new_face );
+      // push back into face container
+      this->elmt_vec_.emplace_back( faceObj );
+    }
+    else {
+      // created a new face
+      Face<dim> new_face( *(*it), const_cast<csmp::Element<dim>*>(inner_outter_elements[0]), nullptr, lvsFaces, lvsIntegrationPoints );
+      faceObj = meshManager.Add( new_face );
+      // push back into face container
+      this->elmt_vec_.emplace_back( faceObj );
+    }
 
     // the first face is assigned into the root face of this face group in the mesh
     if ( root_face == NULL ) {

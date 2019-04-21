@@ -8,9 +8,6 @@
 
 namespace csmp {
 
-namespace eclipse {
-
-
 // POLYGON
 
 PolygonCell::PolygonCell()
@@ -654,15 +651,4 @@ void PolygonCell::Out() const
 
  } // end Out
 
-} // end eclipse
-
 } // end namespace csmp
-
-
-
-
-
-
-
-
-

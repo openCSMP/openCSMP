@@ -57,6 +57,7 @@ entry pressure,pd,Pa,SCALAR,0.00E+00,5.00E+07,ELEMENT,input,multiphase flow,,cap
 face gravity term,fgt,N/m,VECTOR,-1.50E+08,1.50E+08,FACE,calculaled,multiphase flow,,REMOVE - compute on the fly with a PDE operator
 face total mobility permeability product,flt,1/(Pa.s),VECTOR,1.00E-20,1.00E+00,FACE,calculated,multiphase flow,,tensor projected onto face and used in PDE solves on model boundaries
 fluid pressure,pf,Pa,SCALAR,0.00E+00,1.00E+09,NODE,computed primary variable,multiphase flow,,governing equations
+reduced fluid pressure,rpf,Pa,SCALAR,0.00E+00,1.00E+09,NODE,computed primary variable,multiphase flow,,governing equations
 mixture viscosity,mum,Pa.s,SCALAR,1.00E-06,1.00E-02,NODE,computed,multiphase flow,,REMOVE - compute on the fly with a PDE operator
 nodal fluid volume source,nQV,m3/(m3.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,multiphase flow,,for the assignment of point sources
 nodal fluid mass source,nQM,kg/(kg.s),SCALAR,-1.00E+08,1.00E+08,NODE,input,multiphase flow,,for the assignment of point sources

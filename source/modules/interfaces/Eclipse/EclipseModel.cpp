@@ -6,8 +6,6 @@ using namespace std;
 
 namespace csmp {
 
-namespace eclipse {
-
 /// Model constructor with provided "variables_file.txt" file is used
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
 	const std::string& model_name,
@@ -225,7 +223,7 @@ void EclipseModel::CreateSplitBoundariesAroundFaults(bool delete_fault_regions)
 {
 	this->MergeRegions(faults_, "FAULTS");
 	faults_.insert("FAULTS");
-	this->InsertSplitBoundary("FAULTS", delete_fault_regions);
+	this->InsertSplitBoundary("FAULTS");
 
 	// create splitboundaries
 	//for( std::set<std::string>::const_iterator
@@ -439,7 +437,5 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	}
 
 } // end AssignBoxBoundaryFlagsWherePossible
-
-} // eclipse
 
 } // end csmp

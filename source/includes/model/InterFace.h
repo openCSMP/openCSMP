@@ -7,15 +7,13 @@
 #include "FiniteElement.h"
 #include "FiniteElementPolicy.h"
 #include "FiniteVolumePolicy.h"
-#include "InterFaceRemeshingTraits.h"
 
 
 namespace csmp {
 
 /// surface (3D) or line (2D) element connector for elements which share faces but not nodes
 template<size_t dim>
-class InterFace : public InterFaceRemeshingTraits<dim,InterFace>,
-                  public FiniteElementPolicy<dim,InterFace>,
+class InterFace : public FiniteElementPolicy<dim,InterFace>,
                   public FiniteVolumePolicy<dim,InterFace>,
                   public LocalVariableStorage<dim,InterFace<dim> >
 {

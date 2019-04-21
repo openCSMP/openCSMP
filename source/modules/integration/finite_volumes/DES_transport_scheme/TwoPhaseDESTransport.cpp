@@ -22,6 +22,7 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
                                                                  double64 PEP_multiplier,
                                                                  double64 cfl_multiplier )
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
+      sg_(m),
       gref_(m.Region(target_region)),
       db_(m.Database()),
       with_capillary_spreading_(with_capillary_spreading),
@@ -37,9 +38,8 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport( Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
+    InitializeFiniteVolumeProperties();
 
-// TODO: perhaps only where you have to    calculatePermeabilityProjections(m.Region(target_region));
-  
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
     cout<<"TwoPhaseDESTransport constructed"<<endl;
@@ -57,6 +57,7 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport(  Model<dim>& m,
                                                                  double64 cfl_multiplier,
                                                                  double64 relaxing_factor )
     : variables::VariableSet_CO2GeoSequestration(m.Database()),
+      sg_(m),
       gref_(m.Region(target_region)),
       db_(m.Database()),
       with_capillary_spreading_(with_capillary_spreading),
@@ -72,9 +73,8 @@ TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::TwoPhaseDESTransport(  Model<dim>& m,
 {
     m.InstantiateFiniteVolumes();
     InitializeVariablesAndKeys(m);
+    InitializeFiniteVolumeProperties();
 
-// TODO: perhaps only where you have to        calculatePermeabilityProjections(m.Region(target_region));
-  
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_sCO2), lower_limit_, upper_limit_ );
     cout<<"TwoPhaseDESTransport constructed"<<endl;
@@ -104,7 +104,6 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
     
     // model-wide initialisation
     m.Region("Model").InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
-// SKM FIX:    m.Region("Model").InputPropertyValue( "flux balance", makeScalar(PLAIN,0.), COMPLETE );    
     m.Region("Model").InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE); 
     
     //assigning keys 
@@ -161,10 +160,14 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeVariablesAndKeys(Model<
 template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
 void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
  {
+    //zeroing FV pore volumes for accumulation in element loop
+    gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
+ 
     // For the interior elements of the region compute relevant variable values
     const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
     for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
+         
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
 
@@ -192,6 +195,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties(
               (*it)->Store( j, 0U, this->key_fn, fnrml );
          }
          
+         
          //compute wetting phase saturation at shock
          double64 sw_shock = flowfunctions_.ShockHeight(*it);
          (*it)->Store( this->key_ssH2O, makeScalar( (*it)->Status( this->key_ssH2O), sw_shock ) );                
@@ -205,6 +209,7 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties(
         bool truncated_node = false;   
         for ( size_t i=0U; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
+             
              // computing facet normals and areas
              const size_t facets(eptr->Facets());
              for ( size_t j=0U; j<facets; ++j ) {
@@ -217,14 +222,18 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties(
                   if ( dim == 3U ) fnrml(2) = nrml[2];
                   eptr->Store( j, 0U, this->key_fn, fnrml );
              }
+             
              //compute wetting phase saturation at shock
              double64 sw_shock = flowfunctions_.ShockHeight(eptr);
              eptr->Store( this->key_ssH2O, makeScalar( eptr->Status( this->key_ssH2O), sw_shock ) );    
              //determine whether FV node is truncated
-             if(!gref_.Contains(eptr)) { //parent elment located outside domain
-                 halo_stencils_.insert(eptr);
-                 truncated_node = true;
-             }     
+             
+             if ((*nit)->AtBoundary() == NOT) { 
+                 if(!gref_.Contains(eptr)) { //parent elment located outside domain
+                     halo_stencils_.insert(eptr);
+                     truncated_node = true;
+                 }  
+             }   
         }
         if (truncated_node) (*nit)->Store( key_cut, makeScalar( (*nit)->Status( key_cut), 1 ) );
    }
@@ -279,7 +288,8 @@ void TwoPhaseDESTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* eve
         
         for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
             const double64 sn = eptr->N(j)->Read(this->key_sCO2);
-            const double64 p = eptr->N(j)->Read(this->key_pf);
+            //const double64 p = eptr->N(j)->Read(this->key_pf);
+            const double64 p = eptr->N(j)->Read(this->key_rpf);
             for ( size_t k=0U; k<dim; k++ ) {
                 if(with_capillary_spreading_) snw_gradient(k) += DN(k,j) * sn;
                 p_gradient(k) += -DN(k,j) * p;               
