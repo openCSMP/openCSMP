@@ -286,6 +286,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const 
               if (position != NULL_IDX) {
                 this->rh_[position] *= sc();
               }
+              
               niter++;
             }
             break;
