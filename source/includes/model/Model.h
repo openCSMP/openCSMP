@@ -25,7 +25,7 @@ template<size_t> class Visitor;
 template<size_t> class FiniteVolumeStencilManager;
 
 template<size_t, template<size_t> class> class PDE_Integrator;
-template<size_t, template<size_t> class> class PDE_Integrator_CRM;
+template<size_t, template<size_t> class> class PDE_Integrator_UoM;
 
 
 /**
@@ -368,14 +368,14 @@ public:
   void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug = false );
 
   /// TODO: fix - for ongoing developments for any of region, boundary or splitboundary
-  void Apply( PDE_Integrator_CRM<dim, csmp::Region>&, bool debug = false );
-  void Apply( PDE_Integrator_CRM<dim, csmp::Boundary>&, bool debug = false );
-  void Apply( PDE_Integrator_CRM<dim, csmp::SplitBoundary>&, bool debug = false );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Region>& );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>& );
+  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>& );
 
   /// TODO: fix - application of integration scheme to a particular region, boundary of split-boundary identified by name
-  void Apply( PDE_Integrator_CRM<dim, csmp::Region>&, const char* region_name, bool debug = false );
-  void Apply( PDE_Integrator_CRM<dim, csmp::Boundary>&, const std::string& boundary_name, bool debug = false );
-  void Apply( PDE_Integrator_CRM<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug = false );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Region>&, const char* region_name );
+  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>&, const std::string& boundary_name );
+  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name );
 
   // ----------------------------------------
   // Screen output

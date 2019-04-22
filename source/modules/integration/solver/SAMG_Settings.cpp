@@ -1017,6 +1017,23 @@ void SAMG_Settings::Set_npcol( int32 npcol ) {
     ExplicitSecondary( true );
 }
 
+
+/**
+    Deals with the handling of negative values in the diagonal of the solution matrix
+    (SAMG manual on Galerkin coarse-;eve; matrices.
+ 
+    Integer. Defines the maximum number of non‐positive diagonal entries allowed in computing the Galerkin operators before SAMG gives up its attempts to modify interpolation and continues without further checks.
+    If neg_diag<0, checking of the diagonal is completely de‐activated. Warning: In the latter case you should know what you are doing!
+*/
+void SAMG_Settings::Set_neg_diag( int neg_diag )
+ {
+    neg_diag_ = neg_diag;
+ }
+
+
+
+
+
 /** Switch levelx
 
 @section arguments Hidden Input Arguments
@@ -1115,6 +1132,7 @@ void SAMG_Settings::SetNegative_iout( bool negative_iout ) {
 void SAMG_Settings::ExplicitSecondary( bool explicit_secondary ) {
     explicit_secondary_ = explicit_secondary;
 }
+
 void SAMG_Settings::SetSolverInstance( int32 instance ) {
     solver_instance_ = instance;
 

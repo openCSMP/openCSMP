@@ -25,6 +25,8 @@ template<size_t> class Model;
     of depth is tried in different ways, comparing the results with thos obtained by
     top down integration.
  
+    @attention Test uses the model 'Greenshank_prism_mini' mini for the 3D testing.
+ 
     @author SKM
     @date 18/2/2019
  
