@@ -3443,4 +3443,21 @@ Element<3u>* pointInVolumeElement( const Region<3u>& region, const Point<3u>& qu
     }
 
 
+
+/// Utility that tokenises string into substrings using the supplied delimiter(s).
+std::vector<std::string> splitString( std::string str, char delimiter )
+{
+  size_t pos = 0U;
+  string token, s = str;
+  vector<string> items;
+  while ( (pos = s.find( delimiter )) != std::string::npos ) {
+    token = s.substr( 0, pos );
+    items.push_back( token );
+    s.erase( 0, pos + 1 );
+  }
+  if ( !s.empty() ) items.push_back( s );
+  return items;
+}
+
+
 } // end namespace csmp
