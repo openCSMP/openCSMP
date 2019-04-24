@@ -68,7 +68,11 @@ FILE(GLOB CSMP_CORE_SOURCE_EXCLUSIONS
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/interfaces/CGNS/CGNS_*.cpp
 	${MODULES_DIR}/run_control/ExampleSuiteMainWindow.cpp
-	#${MODULES_DIR}/integration/finite_volumes/generic_transport_scheme/source/*.cpp
+#	${MODULES_DIR}/eos/h2o_nacl_co2/PVTX_Calculator_H2O_CO2_NaCl.cpp
+	${MODULES_DIR}/integration/finite_volumes/DES_transport_scheme/SlightlyCompressible2PhaseDESTransport.cpp
+	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_CRM.cpp
+	${MODULES_DIR}/integration/pde_integrators/PDE_Integrator_UoM.cpp
+#	${MODULES_DIR}/thmc/two_phase_flow/BrooksCoreySaturationFunctionswithHysteresis.cpp
 )
 LIST(REMOVE_ITEM CSMP_CORE_SOURCE_FILES ${CSMP_CORE_SOURCE_EXCLUSIONS} ${CSMP_CORE_SOURCE_EXCLUSIONS_OLD} ${CSMP_CORE_SOURCE_EXCLUSIONS_NEW})
 
