@@ -1,13 +1,13 @@
 //
-//  GravityInducedFluidPressure_Test.hpp
+//  GravityInducedFluidPressure_Test.h
 //  CSMP_GitHub_UnitTests-Intel
 //
 //  Created by Stephan Matthai on 18/2/19.
 //  Copyright © 2019 Stephan Matthai. All rights reserved.
 //
 
-#ifndef GravityInducedFluidPressure_Test_hpp
-#define GravityInducedFluidPressure_Test_hpp
+#ifndef GRAVITY_INDUCED_FLUID_PRESSURE_TEST_H
+#define GRAVITY_INDUCED_FLUID_PRESSURE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -87,4 +87,4 @@ class GravityInducedFluidPressure_Test : public Test {
 
 } // end csmp
 
-#endif /* GravityInducedFluidPressure_Test_hpp */
+#endif /* GRAVITY_INDUCED_FLUID_PRESSURE_TEST_H */

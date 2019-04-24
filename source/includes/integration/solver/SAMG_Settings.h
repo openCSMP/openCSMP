@@ -95,6 +95,7 @@ namespace csmp {
       void SetNegative_ncyc( bool negative_ncyc );
       void SetNegative_idump( bool negative_idump );
       void SetNegative_iout( bool negative_iout );
+      /// if this is not set 'true' all attempts to set secondary parameters will fail (default=false)
       void ExplicitSecondary( bool explicit_secondary );
       void SetSolverInstance(  int32 instance  );
 
