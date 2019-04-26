@@ -243,10 +243,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesToBinary( const char* file_name ) const
 {
-  if ( this->SplitBoundaries() == 0 ) {
-    std::cout << "\nSplitBoundaryInterface<dim>::OutputSplitBoundariesToBinary: There are no split boundaries. Nothing to write.'";
-    return false;
-  }
+  if ( this->SplitBoundaries() == 0 ) return false;
 
   std::string bin_file( file_name );
   std::string heading( "Binary splitboundary list for CSMP model, file '" );
@@ -290,11 +287,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 
   std::string bin_file( file_name );
   fstream fp( bin_file.c_str(), ios::in | ios::binary );
-  if ( !fp.is_open() ) {
-    csmp_error.notice( ERROR, "SplitBoundaryInterface::InputSplitBoundariesFromBinary:",
-                       bin_file, "file could not be opened; nothing was done." );
-    return false;
-  }
+  if ( !fp.is_open() ) return false;
 
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
   const csmp::Region<dim>&  rref( splitboundaryComplex->Region( "Model" ) );
