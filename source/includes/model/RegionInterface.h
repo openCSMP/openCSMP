@@ -206,6 +206,9 @@ public:
   /// removes region and associated variable storage, and optionally the underlying elements, nodes etc.
   void    RemoveRegion( const char* regionname, bool delete_elements );
 
+  /// removes the defined elements and their nodes.
+  size_t  RemoveElements( const char* region_name, const std::set<long>& elmt_numbers );
+
   /// excludes the intersection of elements of the 2 regions from the non-unique region
   bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
 
