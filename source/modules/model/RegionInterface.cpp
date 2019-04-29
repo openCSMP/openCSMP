@@ -438,6 +438,69 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
 } // end RemoveRegion
 
 
+/**
+Removes specific elements according to the set of elmt_numbers.
+
+@param  region_name The name of region which includes the elements which shall be removed.
+@param  elmt_numbers the element numbers which shall be removed.
+@return the number of the removed elements is returned.
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+size_t RegionInterface<dim, REGION_COMPLEX>::RemoveElements( const char* region_name, const std::set<long>& elmt_numbers )
+{
+  long removed_elements( 0 );
+  // check whether region exists (should be a notice only, nothrow)
+  if ( !ContainsRegion( region_name ) )
+    throw csmp::Exception( WARNING,
+                           "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
+                           "region did not exist: ",
+                           region_name );
+
+  // finding the region in the corresponding map
+  typename std::map<std::string, csmp::Region<dim> >::iterator
+    iterRegion( groupMap_.find( std::string( region_name ) ) ),
+    iterUniqueRegion( uniqueGroupMap_.find( std::string( region_name ) ) );
+
+  // deleting the elements according to elmt_numbers
+  auto& subdomain = iterUniqueRegion->second;
+
+  REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
+  auto& meshMgr = regionComplex->Mesh();
+  auto spatialDimensions = subdomain.ElementSpatialDimensions();
+  auto& elementVector = subdomain.ElementVector();
+
+  for ( size_t i = 0U; i < elementVector.size(); i++ ) {
+    // 1.1 Remove this element from its neighbour's connections
+    Element<dim>* e = elementVector[i];
+    if ( elmt_numbers.find( e->Idx() ) == elmt_numbers.end() ) continue;
+    auto& neighbourVector = e->NeighborElementVector();
+    for ( size_t j = 0U; j < neighbourVector.size(); j++ ) {
+      if ( neighbourVector[j] == NULL ) continue;
+      auto& nnVector = neighbourVector[j]->NeighborElementVector();
+      for ( size_t k = 0U; k < nnVector.size(); k++ ) {
+        auto& nn = nnVector[k];
+        if ( nn == e ) {
+          nn = NULL;
+        }
+      }
+    }
+
+    // 1.2. Remove it
+    meshMgr.Erase( e );
+    elementVector.erase( elementVector.begin() + i );
+    elementVector.swap( elementVector );
+    removed_elements++;
+    i--;
+  }
+
+  // 2. Rebuild all of the connections of subdomain as well as the ones of mesh mananger
+  subdomain.EstablishNeighborConnectivity(); // TODO: needed, but this connectivity should have been established long ago !
+  subdomain.CreateNodePointerVector();
+  subdomain.IdentifyPerimeter();
+  meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
+  
+  return removed_elements;
+} // end RemoveElements
 
 
 // -----------------------------------------------
