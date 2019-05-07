@@ -2702,7 +2702,7 @@ double64  Region<dim>::SurfaceArea() const
         if ( etype == ISOPARAMETRIC_LINEAR_BAR or
              etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
           area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
-          csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
+          //csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
         }
         // additional case of point face where a line-element is perpendicular to a boundary node
       }

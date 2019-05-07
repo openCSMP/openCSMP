@@ -202,6 +202,16 @@ class  InputDataManager {
                             bool block6,            ///< boundary conditions for arbitrary-shaped model
                             ComputationalSettings& settings );
 
+    /// costumized configuration of CSMP models including a particualr configuration file
+    bool ConfigureFromSpecificFile( Model<dim>&, const char* configuration_fname,
+                            bool block1,            ///< region name from parameter range
+                            bool block2,            ///< default property values
+                            bool block3,            ///< regional property values
+                            bool block4,            ///< boundary conditions for box-shaped model
+                            bool block5,            ///< essential conditions for regions
+                            bool block6,            ///< boundary conditions for arbitrary-shaped model
+                            ComputationalSettings& settings );
+
     /// as above but without runtime information
     bool ConfigureFromFile( Model<dim>&, const char* fname,
                             bool block1,            ///< region name from parameter range
