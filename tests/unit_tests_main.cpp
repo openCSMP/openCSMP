@@ -170,7 +170,7 @@ TEST_CASE("Unported tests", "[Unported]") {
   test_interdependent1(true),
   test_interdependent2(true),
   test_composite(true),
-  test_refactoring(false),
+  test_refactoring(true),
   test_new_developments(false);
 // */
 /* TESTING
@@ -347,14 +347,13 @@ TEST_CASE("Unported tests", "[Unported]") {
       TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
       
       // TODO: review and get these tests to run (in this sequence)
-      // refactored.addTest( new Boundary_Test() );
-      // composite.addTest( new SplitBoundary_Test() );
+      refactored.addTest( new Boundary_Test() );
+      refactored.addTest( new SplitBoundary_Test() );
       // update composite.addTest( new ModelComparator_Test() ); // crashes on PropertyData
       // basic.addTest( new VariableBenchmarking_Test() ); - needs redesign, tests tensor with random numbers
       // basic.addTest( new PropertyStorageSpeed_Test( &cout )); // needs redesign, calls Eigenvectors on random numbers
-      
-//      refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
-//      refactored.addTest( new DirichletPressureBoxModel_VVCase() );
+      // refactored.addTest( new DirichletPressureBoxModel_VVCase("hex2_10") );
+      // refactored.addTest( new DirichletPressureBoxModel_VVCase() );
 
       refactored.run();
       long nFail = refactored.report();
