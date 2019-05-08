@@ -36,6 +36,9 @@ template<size_t> class MeshManager;
 @{
 */
 
+/// utility that tokenises string into substrings using the supplied delimiter(s).
+std::vector<std::string> splitString( std::string str, char delimiter );
+
 /// to fill whitespace in strings with character of choice, for instance '_'
 void replaceWhiteSpaceBy( std::string&, char ascii_char );
 

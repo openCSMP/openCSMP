@@ -66,9 +66,9 @@
 
 #include "ModelSubDomain_Test.h"
 #include "BoundaryInterface_Test.h"
-#include "Boundary_Test.h"            // sm: needs work
+#include "Boundary_Test.h"
 #include "Region_Test.h"
-#include "SplitBoundary_Test.h"       // sm: needs work
+#include "SplitBoundary_Test.h"
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
@@ -127,16 +127,15 @@ TEST_CASE("Variable tests", "[Variables]") {
 	TEST_SECTION(TensorVariable);
 	TEST_SECTION_N(TensorVariable, 1);
 	TEST_SECTION_N(TensorVariable, 2);
-	TEST_SECTION(ArrayVariable);
-	// basic.addTest( new Variables_TestCase("FracBox")); - requires refactoring of InterFace / SplitBoundary functionality
+	TEST_SECTION(ArrayVariable);	
 }
 
 TEST_CASE("Utilities tests", "[Utilities]") {
 	TEST_SECTION_V(Matrix,false)
 	TEST_SECTION_V(DenseMatrix,false)
 	TEST_SECTION_V(SparseMatrix,false)
-    TEST_SECTION(CompressedRowMatrix)
-    TEST_SECTION(CubicSpline)
+  TEST_SECTION(CompressedRowMatrix)
+  TEST_SECTION(CubicSpline)
 	TEST_SECTION(FibonacciHeap)
 
 	TEST_SECTION_V(FiniteVolumeStencil,false)
@@ -146,11 +145,11 @@ TEST_CASE("Utilities tests", "[Utilities]") {
 }
 
 TEST_CASE("Interfaces / containers tests", "[Interfaces]") {
-    TEST_SECTION(VData)
+  TEST_SECTION(VData)
 	TEST_SECTION(FEM_Data)
 	TEST_SECTION(PropertyData)
-    TEST_SECTION(VSet)
-    TEST_SECTION(ColorPalette)
+  TEST_SECTION(VSet)
+  TEST_SECTION(ColorPalette)
 	TEST_SECTION_V(MeshManager,true)
 }
 
@@ -183,6 +182,8 @@ TEST_CASE("Model-related interdependent functionality", "[ModelFunctionality]") 
 	TEST_SECTION(BinaryFileInterface)
 	TEST_SECTION(VTU_Interface)
 	TEST_SECTION(StatisticalAnalyzer)	
+  TEST_SECTION(Boundary)
+  TEST_SECTION(SplitBoundary)
 }
 
 TEST_CASE("Composite-dependent functionality", "[CompositeFunctionality]") {

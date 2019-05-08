@@ -32,7 +32,6 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const FiniteEl
 }
 
 
-
 // Deallocate all the dynamic storage
 template<size_t dim>
 MeshManager<dim>::~MeshManager()
@@ -128,25 +127,21 @@ MeshManager<dim>&  MeshManager<dim>::operator=( const MeshManager<dim>& mmgr )
 } // end operator=
 
 
+/**
+Configures the distributed variable storage, inialises the finite element container
+with the element types that are contained in the current mesh and builds the
+mesh including the connectivity among its elements.
 
+@note the neighbors of each element include only the elements of the same type, i.e.
+a line element only has line neighbors, a surface element surface element neighbors
+and so forth.
 
+@attention lower dimensional elements may have multiple neighbors for each of their
+faces. Yet only one of them will be assigned.
 
-  /**
-  Configures the distributed variable storage, inialises the finite element container
-  with the element types that are contained in the current mesh and builds the
-  mesh including the connectivity among its elements.
-
-  @note the neighbors of each element include only the elements of the same type, i.e.
-  a line element only has line neighbors, a surface element surface element neighbors
-  and so forth.
-
-  @attention lower dimensional elements may have multiple neighbors for each of their
-  faces. Yet only one of them will be assigned.
-
-  @todo SKM: create manifolds to deal with lower-dimensional elements that have
-  multiple neighbors per face.
-  */
-
+@todo SKM: create manifolds to deal with lower-dimensional elements that have
+multiple neighbors per face.
+*/
 template<size_t dim>
 bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
                                     const FiniteElementManager& fem_manager,
@@ -313,11 +308,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
     typename deque<vector<size_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
     while ( first != last ) {
       const int32 csmpElementType = vset.ElementType( idx );
+      if ( csmpElementType == UNKNOWN ) { ++first; continue;}
+
       Face<dim>* face = new Face<dim>( idx, fem_manager.E( csmpElementType ), evars, cvars );
       const size_t nodes( face->Nodes() );
       for ( size_t j = 0U; j<nodes; ++j ) {
         // assigning node indices
-        face->Assign( j, node_connector[vset.Plist( face->Idx(), j )] );
+        if( vset.Plist( face->Idx(), j ) < node_connector.size() )
+          face->Assign( j, node_connector[vset.Plist( face->Idx(), j )] );
       }
       face_connector.push_back( face );
       ++first;
@@ -624,7 +622,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
         group_idx++;
         continue;
       }
-      explored_node_groups.push_back( discovered_nodes );
+      explored_node_groups.push_back( discovered_nodes );      
 
       // if there is only one single node left, it creates a new group of nodes.
       if ( nodes_map.size() == 1 ) {
@@ -1357,6 +1355,45 @@ void MeshManager<dim>::Erase( Node<dim>& node )
 
 
 /**
+Deletes the corresponding node
+*/
+template<size_t dim>
+void MeshManager<dim>::Erase( Node<dim>* node )
+{
+  // if the found node is the root node
+  // change the root into one of its neighbors and delete the found node,		
+  Node<dim>* new_root_node( NULL );
+  Node<dim>* root_node( NULL );
+  if ( root_elmt_group_.size() > 0 ) {
+    for ( auto root : root_node_group_ )
+      if ( node == root ) {
+        root_node = root; break;
+      }
+
+    if ( root_node ) {
+      for ( size_t i = 0U; i < root_node->Neighbors(); i++ ) {
+        auto n = root_node->Neighbor( i );
+        if ( new_root_node != n ) {
+          new_root_node = n; break;
+        }
+      }
+      if ( new_root_node == NULL )
+        cerr << "MeshManager::Erase(Node): this is the root node which cannot be deleted. \n";
+      else
+        root_node = new_root_node;
+    }
+  }
+
+  // delete the node
+  if ( node ) {
+    delete node;
+    node = NULL;
+    n_nodes_--;
+  }
+}
+
+
+/**
 Deletes the corresponding element
 */
 template<size_t dim>
@@ -1423,12 +1460,7 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
     // delete the element's nodes which are not connected to any other elements
     deque<Node<dim>*> neighbor_nodes;
     for ( auto n : found_elmt->NodeVector() ) {
-      if ( n->Parents() < 2 ) {// if the node is shared in other elements, do not delete it.
-        //delete n; n = NULL; n_nodes_--;
-        Erase( n );
-      }
-      else
-        neighbor_nodes.push_back( n );
+      neighbor_nodes.push_back( n );
     }
 
     // update node-to-element pointers in remaining node objects
@@ -1439,6 +1471,60 @@ void MeshManager<dim>::Erase( Element<dim>& elmt )
 
     delete found_elmt;
     found_elmt = NULL;
+    n_elmts_--;
+  }
+}
+
+
+/**
+Deletes the corresponding element
+*/
+template<size_t dim>
+void MeshManager<dim>::Erase( Element<dim>* elmt )
+{
+  // if the found element is the root element
+  // change the root element into one of its neighbors and delete the found element,		
+  Element<dim>* new_root_elmt( NULL );
+  if ( root_elmt_group_.size() > 0 ) {
+    size_t group_idx( 0U );
+    for ( auto root : root_elmt_group_ ) {
+      if ( elmt == root ) { // if the found element is the root element				
+        for ( size_t i = 0U; i < root_node_group_[group_idx]->Neighbors(); i++ ) {
+          Node<dim>* n = root_node_group_[group_idx]->Neighbor( i );
+          for ( size_t j = 0U; j < n->Parents(); j++ ) {
+            auto e = n->Parent( j );
+            if ( elmt != e ) {
+              new_root_elmt = e;
+              break;
+            }
+          }
+        }
+        if ( new_root_elmt == NULL )
+          cerr << "MeshManager::Erase(*Element): this is the root element which cannot be deleted. \n";
+        else
+          root_elmt_group_[group_idx] = new_root_elmt;
+        break;
+      }
+      group_idx++;
+    }
+  }
+
+  // delete the element	
+  if ( elmt ) {
+    // delete the element's nodes which are not connected to any other elements
+    deque<Node<dim>*> neighbor_nodes;
+    for ( auto n : elmt->NodeVector() ) {
+      neighbor_nodes.push_back( n );
+    }
+
+    // update node-to-element pointers in remaining node objects
+    for ( auto n : neighbor_nodes )
+      if ( n != NULL )
+        n->Unassign( elmt );
+    neighbor_nodes.clear();
+
+    delete elmt;
+    elmt = NULL;
     n_elmts_--;
   }
 }
@@ -1510,6 +1596,48 @@ void MeshManager<dim>::Erase( Face<dim>& face )
   current_faces.clear();
 }
 
+
+/**
+Deletes the corresponding face
+*/
+template<size_t dim>
+void MeshManager<dim>::Erase( Face<dim>* face )
+{
+  // if the found face is the root face
+  // change the root face into one of its neighbors and delete the found face.
+  Face<dim>* new_root_face( NULL );
+  Face<dim>* root_face( NULL );
+  if ( root_face_group_.size() > 0 ) {
+    for ( auto root : root_face_group_ )
+      if ( face == root ) root_face = root;
+
+    if ( root_face ) {
+      for ( auto e : root_face->NeighborElementVector() ) {
+        if ( root_face != e ) {
+          new_root_face = e;
+          break;
+        }
+      }
+      if ( new_root_face == NULL )
+        cerr << "MeshManager::Erase(Face): this is the root face which cannot be deleted. \n";
+      else
+        root_face = new_root_face;
+    }
+  }
+
+  // delete the face
+  if ( face ) {
+    // unassign the connections of its neighbors
+    for ( auto n : face->NeighborElementVector() )
+      if ( n != NULL ) n->Unassign( face );
+
+    delete face;
+    face = NULL;
+    n_faces_--;
+  }
+}
+
+
 /**
 Deletes the corresponding interface
 */
@@ -1575,144 +1703,6 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
   current_interfaces.clear();
 }
 
-
-/**
-Deletes the corresponding node
-*/
-template<size_t dim>
-void MeshManager<dim>::Erase( Node<dim>* node )
-{
-  // if the found node is the root node
-  // change the root into one of its neighbors and delete the found node,		
-  Node<dim>* new_root_node( NULL );
-  Node<dim>* root_node( NULL );
-  if ( root_elmt_group_.size() > 0 ) {
-    for ( auto root : root_node_group_ )
-      if ( node == root ) {
-        root_node = root; break;
-      }
-
-    if ( root_node ) {
-      for ( size_t i = 0U; i < root_node->Neighbors(); i++ ) {
-        auto n = root_node->Neighbor( i );
-        if ( new_root_node != n ) {
-          new_root_node = n; break;
-        }
-      }
-      if ( new_root_node == NULL )
-        cerr << "MeshManager::Erase(Node): this is the root node which cannot be deleted. \n";
-      else
-        root_node = new_root_node;
-    }
-  }
-
-  // delete the node
-  if ( node ) {
-    delete node;
-    node = NULL;
-    n_nodes_--;
-  }
-}
-
-
-/**
-Deletes the corresponding element
-*/
-template<size_t dim>
-void MeshManager<dim>::Erase( Element<dim>* elmt )
-{
-  // if the found element is the root element
-  // change the root element into one of its neighbors and delete the found element,		
-  Element<dim>* new_root_elmt( NULL );
-  if ( root_elmt_group_.size() > 0 ) {
-    size_t group_idx( 0U );
-    for ( auto root : root_elmt_group_ ) {
-      if ( elmt == root ) { // if the found element is the root element				
-        for ( size_t i = 0U; i < root_node_group_[group_idx]->Neighbors(); i++ ) {
-          Node<dim>* n = root_node_group_[group_idx]->Neighbor( i );
-          for ( size_t j = 0U; j < n->Parents(); j++ ) {
-            auto e = n->Parent( j );
-            if ( elmt != e ) {
-              new_root_elmt = e;
-              break;
-            }
-          }
-        }
-        if ( new_root_elmt == NULL )
-          cerr << "MeshManager::Erase(Element): this is the root element which cannot be deleted. \n";
-        else
-          root_elmt_group_[group_idx] = new_root_elmt;
-        break;
-      }
-      group_idx++;
-    }
-  }
-
-  // delete the element	
-  if ( elmt ) {
-    // delete the element's nodes which are not connected to any other elements
-    deque<Node<dim>*> neighbor_nodes;
-    for ( auto n : elmt->NodeVector() ) {
-      if ( n->Parents() < 2 ) {// if the node is shared in other elements, do not delete it.
-        //delete n; n = NULL; n_nodes_--;
-        Erase( n );
-      }
-      else
-        neighbor_nodes.push_back( n );
-    }
-
-    // update node-to-element pointers in remaining node objects
-    for ( auto n : neighbor_nodes )
-      if ( n != NULL )
-        n->Unassign( elmt );
-    neighbor_nodes.clear();
-
-    delete elmt;
-    elmt = NULL;
-    n_elmts_--;
-  }
-}
-
-
-/**
-Deletes the corresponding face
-*/
-template<size_t dim>
-void MeshManager<dim>::Erase( Face<dim>* face )
-{
-  // if the found face is the root face
-  // change the root face into one of its neighbors and delete the found face.
-  Face<dim>* new_root_face( NULL );
-  Face<dim>* root_face( NULL );
-  if ( root_face_group_.size() > 0 ) {
-    for ( auto root : root_face_group_ )
-      if ( face == root ) root_face = root;
-
-    if ( root_face ) {
-      for ( auto e : root_face->NeighborElementVector() ) {
-        if ( root_face != e ) {
-          new_root_face = e;
-          break;
-        }
-      }
-      if ( new_root_face == NULL )
-        cerr << "MeshManager::Erase(Face): this is the root face which cannot be deleted. \n";
-      else
-        root_face = new_root_face;
-    }
-  }
-
-  // delete the face
-  if ( face ) {
-    // unassign the connections of its neighbors
-    for ( auto n : face->NeighborElementVector() )
-      if ( n != NULL ) n->Unassign( face );
-
-    delete face;
-    face = NULL;
-    n_faces_--;
-  }
-}
 
 /**
 Deletes the corresponding interface
@@ -1924,74 +1914,74 @@ void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
 } // end AssignUniqueNumbers
 
 
-  /** Writes MeshManager to VSet
+/** Writes MeshManager to VSet
 
-  Writes the elements, faces and interfaces
-  stored in the current MeshManager
-  to the supplied VSet.
-  This also includes the connectivity information,
-  i.e. the connections between these entities.
+Writes the elements, faces and interfaces
+stored in the current MeshManager
+to the supplied VSet.
+This also includes the connectivity information,
+i.e. the connections between these entities.
 
-  @param vset A VSet preferably empty, which is
-  resized first, if necessary and into which the
-  MeshManager connectivity information is input.
+@param vset A VSet preferably empty, which is
+resized first, if necessary and into which the
+MeshManager connectivity information is input.
 
-  @section conventions Conventions
+@section conventions Conventions
 
-  Connections will exist between elements of the
-  topology, i.e., between:
+Connections will exist between elements of the
+topology, i.e., between:
 
-  - volume elements
-  - surface elements
-  - line elements
+- volume elements
+- surface elements
+- line elements
 
-  these connections are made via pointers and exist
-  across the faces, edges, and end end point of these entities.
+these connections are made via pointers and exist
+across the faces, edges, and end end point of these entities.
 
-  Where there is no neighbor, like for a face that sits on a model
-  boundary, the neighbor pointer will be a 'NULL'.
+Where there is no neighbor, like for a face that sits on a model
+boundary, the neighbor pointer will be a 'NULL'.
 
-  Special rules apply to Face and Interface objects that
-  are essentially elements, but they are lower-dimensional
-  (for instance surfaces in a volumetric model)
+Special rules apply to Face and Interface objects that
+are essentially elements, but they are lower-dimensional
+(for instance surfaces in a volumetric model)
 
-  Faces and Interfaces also have extra connections
-  to their higher-dimensional "parent" elements.
+Faces and Interfaces also have extra connections
+to their higher-dimensional "parent" elements.
 
-  All these entities are stored in the VSet in a specific order:
+All these entities are stored in the VSet in a specific order:
 
-  1. highest dimensional elements (volumes in 3D)
-  2. dim-1 elements
-  3. dim-2 elements, if any
-  4. Face objects
-  5. InterFace objects
+1. highest dimensional elements (volumes in 3D)
+2. dim-1 elements
+3. dim-2 elements, if any
+4. Face objects
+5. InterFace objects
 
-  Since pointers cannot be written to file as such,
-  the first step in the output is to give all the entities
-  a unique numbering: 0..n-1 elements, then faces, last interfaces.
+Since pointers cannot be written to file as such,
+the first step in the output is to give all the entities
+a unique numbering: 0..n-1 elements, then faces, last interfaces.
 
-  @section application Application
+@section application Application
 
-  The data of the MeshManager is output to a VSet, for instance, when the
-  whole model is to be saved to a binary file.
+The data of the MeshManager is output to a VSet, for instance, when the
+whole model is to be saved to a binary file.
 
-  @attention If the VSet is initialized successfully
-  the method will report this.
+@attention If the VSet is initialized successfully
+the method will report this.
 
-  SKM 15/9/2014: fixed major bug in the output code blocks for
-  plist and pfverts.
+SKM 15/9/2014: fixed major bug in the output code blocks for
+plist and pfverts.
 
-  @attention renumber the elements of the mesh first, using
+@attention renumber the elements of the mesh first, using
 
-  @code
-  // renumbering the mesh; face numbers follow those of the elements
-  // last are the interface objects
-  // NB: we remember how many faces and interfaces there were to deduce the offsets at a later point
-  const bool in_a_single_sequence(true);
-  AssignUniqueNumbers( in_a_single_sequence );
-  @endcode
+@code
+// renumbering the mesh; face numbers follow those of the elements
+// last are the interface objects
+// NB: we remember how many faces and interfaces there were to deduce the offsets at a later point
+const bool in_a_single_sequence(true);
+AssignUniqueNumbers( in_a_single_sequence );
+@endcode
 
-  */
+*/
 template<size_t dim>
 void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
 {
@@ -2008,7 +1998,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   exploreNodesAndElementsFromMesh( this, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
   sort( elmts.begin(), elmts.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
-
+    
   // traversal of the existing mesh root faces to find all its faces	
   deque<const Face<dim>*> faces;
   exploreFacesFromMesh( this, faces );
@@ -2085,7 +2075,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
       ++i;
     }
   }
-
+  
   // 3. adding 'plist' connectivity list
   // -----------------------------------
   size_t eidx = 0;
@@ -2201,30 +2191,30 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
 } // end OutputMeshTo
 
 
-  /**
-  Storing distributed variables associated with the mesh in the VSet
+/**
+Storing distributed variables associated with the mesh in the VSet
 
-  For all finite volumes and elements, their integration points and nodes,
-  but not for any of the variables stored on the model, region, boundaries or splitboundaries
-  this method stores the current values in the VSet.
+For all finite volumes and elements, their integration points and nodes,
+but not for any of the variables stored on the model, region, boundaries or splitboundaries
+this method stores the current values in the VSet.
 
-  To store the properties in the VSet, they are first written to PropertyData objects.
-  These are then added to the VSet property storage.
+To store the properties in the VSet, they are first written to PropertyData objects.
+These are then added to the VSet property storage.
 
-  @attention  a continuous numbering of elements, faces, interfaces and nodes has to be
-  created with AssignUniqueNumbers() before this method is called.
+@attention  a continuous numbering of elements, faces, interfaces and nodes has to be
+created with AssignUniqueNumbers() before this method is called.
 
-  @note region properties are stored together with the regions in respective binary files
+@note region properties are stored together with the regions in respective binary files
 
-  @note this method is anything, but nice. Yet it will be quite a challenge to come up with a better
-  design; hopefully there will be no more extra variable placements or types in the future.
+@note this method is anything, but nice. Yet it will be quite a challenge to come up with a better
+design; hopefully there will be no more extra variable placements or types in the future.
 
-  @attention in the VSet, the variables are identified only by their (unique) names. The property
-  database is therefore essential to retrieve all other variable related information.
+@attention in the VSet, the variables are identified only by their (unique) names. The property
+database is therefore essential to retrieve all other variable related information.
 
-  @author SKM 5/5/2016
+@author SKM 5/5/2016
 
-  */
+*/
 template<size_t dim>
 void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& database, VSet<dim>& vset ) const
 {

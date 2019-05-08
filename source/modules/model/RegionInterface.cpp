@@ -438,6 +438,116 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
 } // end RemoveRegion
 
 
+/**
+Removes specific elements according to the set of elmt_numbers.
+
+@param  region_name The name of region which includes the elements which shall be removed.
+@param  elmt_numbers the element numbers which shall be removed.
+@return the number of the removed elements is returned.
+*/
+template<size_t dim, template<size_t> class REGION_COMPLEX>
+size_t RegionInterface<dim, REGION_COMPLEX>::RemoveElements( const char* region_name, const std::set<long>& elmt_numbers )
+{
+  // check whether region exists (should be a notice only, nothrow)
+  if ( !ContainsRegion( region_name ) )
+    throw csmp::Exception( WARNING,
+                           "RegionsInterface<dim,REGION_COMPLEX>::RemoveRegion",
+                           "region did not exist: ",
+                           region_name );
+
+  // finding the region in the corresponding map
+  typename std::map<std::string, csmp::Region<dim> >::iterator iterUniqueRegion( uniqueGroupMap_.find( std::string( region_name ) ) );
+
+  // deleting the elements according to elmt_numbers
+  auto& subdomain = iterUniqueRegion->second;
+  REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) ) ;
+  auto& meshMgr = regionComplex->Mesh();  
+  auto& elementVector = subdomain.ElementVector();
+  const csmp::Index key_enr = regionComplex->Database().StorageKey( "element number" );
+
+  long removed_elements( 0 );
+  std::set<Node<dim>*> candidate_nodes;  
+  for ( size_t i = 0U; i < elementVector.size(); i++ ) {
+    // 1.1 Remove this element from its neighbour's connections
+    Element<dim>* e = elementVector[i];
+    if ( e->AtBoundary() != NOT && e->AtBoundary() != IRREGULAR ) continue;
+    long idx = static_cast<long>(e->Read( key_enr ));
+    if ( elmt_numbers.find( idx ) == elmt_numbers.end() ) continue;    
+    
+    // 1.2. find candidate nodes belonging to this element
+    for ( size_t j = 0U; j < e->Nodes(); j++ ) {
+      Node<dim>* n = e->N( j );
+      candidate_nodes.insert( n );
+    }    
+    meshMgr.Erase( e );
+    elementVector.erase( elementVector.begin() + i );
+    elementVector.swap( elementVector );
+    removed_elements++;
+    i--;
+  }
+  for ( size_t i = 0U; i < elementVector.size(); i++ ) {
+    Element<dim>* e = elementVector[i];
+    // remove this element from its neighbour's connections
+    auto& neighbourVector = e->NeighborElementVector();
+    for ( size_t j = 0U; j < neighbourVector.size(); j++ ) {
+      if ( neighbourVector[j] == NULL ) continue;
+      auto& nnVector = neighbourVector[j]->NeighborElementVector();
+      for ( size_t k = 0U; k < nnVector.size(); k++ ) {
+        if ( nnVector[k] == NULL ) continue;
+        auto& nn = nnVector[k];        
+        if ( nn->Nodes() == 0 ) {
+          nn = NULL;
+        }
+      }
+    }
+  }
+  for(Node<dim>* n: candidate_nodes )
+  {
+    if ( n->Parents() == 0 )
+      meshMgr.Erase( n );
+  }
+  subdomain.CreateNodePointerVector();
+  subdomain.EstablishNeighborConnectivity();
+  subdomain.IdentifyPerimeter();
+
+  // remove those elements from the default region 'Model'
+  const char* default_model = "Model";
+  if ( ContainsRegion( default_model ) ) {
+    // finding the region in the corresponding map
+    typename std::map<std::string, csmp::Region<dim> >::iterator iterRegion( groupMap_.find( std::string( default_model ) ) );
+
+    auto defulat_domain = iterRegion->second;
+    auto& elementVector = defulat_domain.ElementVector();
+
+    for ( size_t i = 0U; i < elementVector.size(); i++ ) {
+      // remove this element 
+      Element<dim>* e = elementVector[i];
+      if ( e->Nodes() == 0 ) {
+        elementVector.erase( elementVector.begin() + i );
+        elementVector.swap( elementVector );
+        i--;
+      }
+    }
+    for ( size_t i = 0U; i < elementVector.size(); i++ ) {
+      Element<dim>* e = elementVector[i];
+      // remove this element from its neighbour's connections
+      auto& neighbourVector = e->NeighborElementVector();
+      for ( size_t j = 0U; j < neighbourVector.size(); j++ ) {
+        auto& ne = neighbourVector[j];
+        if ( ne == NULL ) continue;
+        if ( ne->Nodes() == 0 ) {
+          ne = NULL;
+        }
+      }
+    }
+    defulat_domain.CreateNodePointerVector();
+    defulat_domain.EstablishNeighborConnectivity();
+    defulat_domain.IdentifyPerimeter();
+  }  
+  meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
+  
+  return removed_elements;
+} // end RemoveElements
 
 
 // -----------------------------------------------
@@ -523,9 +633,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputAllRegionsToBinary( const char*
     for ( auto git = RegionsBegin(); git != RegionsEnd(); git++ )
     {
       BinaryFileSectionWrite hdr( fp, "ONE_REGN" );
-      (*git).second.WriteDomainIndexesToBinaryFile( fp );
-      // JC: check the logic of the following conditional statement
-      //assert( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() );
+      (*git).second.WriteDomainIndexesToBinaryFile( fp );            
       if ( (*git).second.InteriorElementsBegin() != (*git).second.InteriorElementsEnd() ) {
         domainVariablesOut( fp, (*git).second, database );
       }

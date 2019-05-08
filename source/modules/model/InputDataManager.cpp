@@ -679,6 +679,53 @@ bool InputDataManager<dim>
 } // end ConfigureFromFile (computational settings)
 
 
+/** Allows for the costumized configuration of CSMP models including a particualr configuration file
+Here we do not use the extension '-configuration.txt' which will be appended to the model name automatically.
+*/
+template<size_t dim>
+bool InputDataManager<dim>
+::ConfigureFromSpecificFile( Model<dim>& model, const char* configuration_fname,
+                     bool region_specifications,       // regionname from parameter range
+                     bool default_property_values,     // default property values
+                     bool region_property_values,      // regional property values
+                     bool box_boundary_conditions,     // boundary conditions for box-shaped model
+                     bool region_property_conditions,  // regional property conditions
+                     bool boundary_conditions,         // boundary conditions for arbitrary-shaped model
+                     ComputationalSettings& settings )
+{
+  ErrorHandler& csmp_error( ErrorHandler::Instance() );
+
+  cout << "\n\nInputDataManager<" << dim << ">::ConfigureFromFile: Configuring model from file..." << endl;
+
+  ifstream  ifs;
+  string    file_header;
+  
+  // 0. Open the file
+  openFile( ifs, configuration_fname );
+
+  // 1. Read the title
+  readFileHeader( ifs, file_header, csmp_error.Verbose() );
+
+  // 2. Read data in blocks
+  std::set<std::string> groups;
+  std::map<std::string, std::vector<double64> > well_data;
+  bool well_settings( false );  // well names, locations, rates, ratios
+  bool computational_settings( true );   // computational settings
+  ReadBlocks( model, ifs,
+              groups, well_data, settings,
+              region_specifications,
+              default_property_values,
+              region_property_values,
+              region_property_conditions,
+              box_boundary_conditions,
+              boundary_conditions,
+              well_settings,
+              computational_settings );
+
+  cout << "\nInputDataManager<" << dim << ">::ConfigureFromFile: Configuration completed." << endl;
+  return true;
+
+} // end ConfigureFromFile (computational settings)
 
 
 /**
