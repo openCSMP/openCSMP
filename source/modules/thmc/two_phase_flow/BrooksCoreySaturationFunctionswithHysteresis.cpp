@@ -3,32 +3,62 @@
 #include "FlowFunctionsModule.h"
 #include "Element.h"
 
-/*
-    SKM suggestion:  all parameters you need, go into the variable referred to with  'key_kri_param'
-*/
+
 using namespace std;
 
 namespace csmp {
   
-/**
-   The default constructor of Brooks Corey Saturation Functions With Hysteresis class
-*/
-template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis()
-  : ac_params_(8)
+  template<size_t dim, template<size_t> class USER>
+  BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis(  PropertyDatabase<dim>& pref )
   {
+    InitializeVariablsAndKeys( pref );
   }
   
- 
- 
+  
+  
+  
+  
+  
+  
+  
+  
+// Initialising the local variables and keys
+template<size_t dim, template<size_t> class USER>
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitializeVariablsAndKeys( PropertyDatabase<dim>& pref )
+  {
+  
+  //creating new variables if not defined yet from input file
+  if(!pref.IsDefined("previous imbibition endpoint"))      pref.AddProperty( "previous imbibition endpoint", "none", SCALAR, ELEMENT);
+  if(!pref.IsDefined("previous drainage endpoint"))        pref.AddProperty( "previous drainage endpoint", "none", SCALAR, ELEMENT);
+  if(!pref.IsDefined("pseudo residual water saturation"))  pref.AddProperty( "pseudo residual water saturation", "none", SCALAR, ELEMENT);
+  if(!pref.IsDefined("pseudo residual CO2 saturation"))    pref.AddProperty( "pseudo residual CO2 saturation", "none", SCALAR, ELEMENT);
+    
+  //assigning keys
+  key_SwImbToDr_ = pref.StorageKey("previous imbibition endpoint");
+  key_SwDrToImb_ = pref.StorageKey("previous drainage endpoint");
+  key_prsH2O_    = pref.StorageKey("pseudo residual water saturation");
+  key_prsCO2_    = pref.StorageKey("pseudo residual CO2 saturation");
+}
 
-// INLINE METHODS
 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
 /// get seff at the element barycentre
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
+
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-  
+    assert(sH2O >= 0 and sH2O <=1) ;
+    
     double64 seff =  (sH2O - e->Read(User()->key_srH2O)) / (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
     
     return std::min( std::max( seff, 0. ), 1. );
@@ -38,12 +68,21 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSatura
 
 
 
+  
+  
+  
+  
+  
+  
+  
+  
 /// get seff from the supplied saturation value
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double64 sw ) const
   {
     double64 seff =  (sw - e->Read(User()->key_srH2O)) /
     (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2));
+    
     
     return std::min( std::max( seff, 0. ), 1. );
   }
@@ -52,6 +91,11 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSatura
 
 
 
+  
+  
+  
+  
+  
 /**
    
   Oil residual saturation has been estimated from Land's formula based on the initial oil saturations.
@@ -60,7 +104,9 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSatura
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSaturation( Element<dim>* const e) const
   {
+
     const double64 sCO2 = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
+    assert(sCO2 >= 0 and sCO2 <=1) ;
 
     return 1. / ( C_land_ + 1. / sCO2 );
 }
@@ -68,6 +114,11 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatu
 
 
 
+  
+  
+  
+  
+  
 
 /**
  
@@ -75,13 +126,17 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatu
  
 */
 template<size_t dim, template<size_t> class USER>
-TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( Element<dim>* const e )
+TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e ) const
   {
+
     const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
+    assert(S_old >= 0 and S_old <=1) ;
+
     const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
+    assert(S_new >= 0 and S_new <=1) ;
+
     
     if (S_old > S_new) return IMBIBITION;
-    
     if (S_old < S_new) return DRAINAGE;
    
    return DRAINAGE;
@@ -95,184 +150,137 @@ TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::F
   
   
   
-/**
- The main Initialisation of functions...Read the parameters from the input variables file...
-*/
-template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e )
-  {
-    e->Read(User()->key_kri_param, ac_params_);
-    
-    awd_ = ac_params_[AWD];
-    aod_ = ac_params_[AOD];
-    
-    cwd_ = ac_params_[CWD];
-    cod_ = ac_params_[COD];
-    
-    awi_ = ac_params_[AWI];
-    aoi_ = ac_params_[AOI];
-    
-    cwi_ = ac_params_[CWI];
-    coi_ = ac_params_[COI];
-    
-    TWO_PHASE_FLOW_PROCESS ProcessPath = this->FlowProcess(e);
-    
-    switch (ProcessPath) {
-      case DRAINAGE:
-        aw_ =  ac_params_[AWD];
-        ao_ =  ac_params_[AOD];
-        cw_ =  ac_params_[CWD];
-        co_ =  ac_params_[COD];
-        break;
-        
-      case IMBIBITION:
-        aw_ =  ac_params_[AWI];
-        ao_ =  ac_params_[AOI];
-        cw_ =  ac_params_[CWI];
-        co_ =  ac_params_[COI];
-        break;
-    }
-    
+  
+  /**
+   
+   This function set the parameters for the Imbibitions of Drainage curves
+   
+   */
+  template<size_t dim, template<size_t> class USER>
+  void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double64, 2>& a,std::array<double64, 2>& c ) const {
+  
+  
+  e->Read(User()->key_kri_param,ac_params_) ;
+  
+  TWO_PHASE_FLOW_PROCESS ProcessPath = FlowProcess(e);
+  
+  switch (ProcessPath) {
+    case DRAINAGE:
+      a[H2O] =  ac_params_[AWD];
+      a[CO2] =  ac_params_[AOD];
+      c[H2O] =  ac_params_[CWD];
+      c[CO2] =  ac_params_[COD];
+      break;
+      
+    case IMBIBITION:
+      a[H2O] =  ac_params_[AWI];
+      a[CO2] =  ac_params_[AOI];
+      c[H2O] =  ac_params_[CWI];
+      c[CO2] =  ac_params_[COI];
+      break;
+
   }
- 
   
- 
-  
-  
-  
-  
-  
-/**
- 
- Second option for Initialisation  of parameters...Read the parameters on the fly and check that Process is Drainage or Imbibitions
- 
-*/
-template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e,
-                                                                                              const std::array<std::array<double64,2>,2>& a,
-                                                                                              const std::array<std::array<double64,2>,2>& c )
-  {
-    TWO_PHASE_FLOW_PROCESS ProcessPath = this->FlowProcess(e);  // Here , the process is checked ... either imbibition or drainage
-    
-    aw_ = a[H2O][ProcessPath] ;
-    ao_ = a[CO2][ProcessPath] ;
-    cw_ = c[H2O][ProcessPath] ;
-    co_ = c[CO2][ProcessPath] ;
-    
-    awd_ = a[H2O][DRAINAGE] ;
-    aod_ = a[CO2][DRAINAGE] ;
-    
-    cwd_ = c[H2O][DRAINAGE] ;
-    cod_ = c[CO2][DRAINAGE] ;
-    
-    awi_ = a[H2O][IMBIBITION] ;
-    aoi_ = a[CO2][IMBIBITION] ;
-    
-    cwi_ = c[H2O][IMBIBITION] ;
-    coi_ = c[CO2][IMBIBITION] ;
-    
   }
-
-
   
-
   
   
   
  
+  
+  
+  
+  
+  
+  
 /**
    
-   Third option for Initialisation  of parameters...Read the parameters on the fly and force the Process to be Drainage or Imbibitions
- 
+   This function update the pseudo residual and end point saturations
+   
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitialiseBrooksCoreyParameters( Element<dim>* const e,
-                                                                                              const std::array<std::array<double64, 2>,2>& a,
-                                                                                              const std::array<std::array<double64, 2>,2>& c,
-                                                                                              TWO_PHASE_FLOW_PROCESS ProcessPath )
-  {
-    aw_ = a[H2O][ProcessPath] ;
-    ao_ = a[CO2][ProcessPath] ;
-    cw_ = c[H2O][ProcessPath] ;
-    co_ = c[CO2][ProcessPath] ;
-    
-    awd_ = a[H2O][DRAINAGE] ;
-    aod_ = a[CO2][DRAINAGE] ;
-    
-    cwd_ = c[H2O][DRAINAGE] ;
-    cod_ = c[CO2][DRAINAGE] ;
-    
-    awi_ = a[H2O][IMBIBITION] ;
-    aoi_ = a[CO2][IMBIBITION] ;
-    
-    cwi_ = c[H2O][IMBIBITION] ;
-    coi_ = c[CO2][IMBIBITION] ;
-   }
- 
-
-  
-  
-  
-template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyParameters( Element<dim>* e )
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdatePseudoResidualAndEndpointSaturations( Element<dim>* e ) const
 { 
       const double64 dsCO2_old = e->Read(User()->key_dsCO2);
+  
       const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
-      const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );  
+      assert(S_old >= 0 and S_old <=1) ;
+  
+      const double64 S_new = e->PropertyValueAtBaryCenter( User()->key_sCO2 );
+      assert(S_new >= 0 and S_new <=1) ;
+
       const double64 dsCO2_new = S_new - S_old;
       e->Store( User()->key_dsCO2, makeScalar( e->Status( User()->key_dsCO2), dsCO2_new ));
-      
+    
+      const double64 oldSro =  e->Read(User()->key_srCO2) ;
+      const double64 oldSrw =  e->Read(User()->key_srH2O) ;
+  
+      if (isnan(e->Read(key_prsCO2_)))    e->Store(key_prsCO2_, makeScalar( e->Status(key_prsCO2_), oldSro ));
+      if (isnan(e->Read(key_prsH2O_)))    e->Store(key_prsH2O_, makeScalar( e->Status(key_prsH2O_), oldSrw ));
+  
+      if (isnan(e->Read(key_SwDrToImb_))) e->Store(key_SwDrToImb_, makeScalar( ANY , 0 ));
+      if (isnan(e->Read(key_SwImbToDr_))) e->Store(key_SwImbToDr_, makeScalar( ANY , 1 ));
+  
+      if (dsCO2_old > 0. && dsCO2_new < 0.)   {
+        e->Store(key_SwDrToImb_, makeScalar( e->Status(key_SwDrToImb_), e->PropertyValueAtBaryCenter( User()->key_sH2O ) ));
+      }
+      else if ( dsCO2_old < 0. && dsCO2_new > 0. ) {
+        e->Store(key_SwImbToDr_, makeScalar( e->Status(key_SwImbToDr_), e->PropertyValueAtBaryCenter( User()->key_sH2O ) ));
+      }
+  
       //do nothing if saturation has not changed
       if (dsCO2_new == 0.) return;
       
       //update parameter values if required
-      InitialiseBrooksCoreyParameters(e);
-      // TODO: interpolate these guys in one go and make the variables element-based so that they can be reused
-      double64 Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O ); //water saturation
-      double64 Sw_min = e->PropertyValueAtBaryCenter( User()->key_kri_param ); //previous drainage endpoint
-      double64 Sw_max = e->PropertyValueAtBaryCenter( User()->key_kri_param ); //previous imbibition endpoint
+      double64 Sw     = e->PropertyValueAtBaryCenter( User()->key_sH2O );      //water saturation
+      assert(Sw >= 0     and Sw <=1) ;
+
+      double64 Sw_min = e->Read( key_SwDrToImb_ ); //previous drainage endpoint
+      assert(Sw_min >= 0 and Sw_min <=1) ;
+
+      double64 Sw_max = e->Read( key_SwImbToDr_ ); //previous imbibition endpoint
+      assert(Sw_max >= 0 and Sw_max <=1) ;
+
       double64 newSro(0); //new pseudo residual saturation carbonic phase
       double64 newSrw(0); //new pseudo residual saturation aqueous phase      
-      double64  tol_(0.01) ;
+      double64 tol_(0.000001) ;
+  
       bool flag_(false) ;      
       
       if (dsCO2_old > 0. && dsCO2_new < 0.) {//turning from DRAINAGE to IMBIBITION 
           if(Sw_min==0.)
-            flag_ = (abs(Sw-Sw_min) < tol_*0.1);
+            flag_ = (Sw < tol_*0.1);
           else          
-            flag_ = (abs(Sw-Sw_min)/Sw_min < tol_) ;
+            flag_ = (abs(Sw-Sw_min)/Sw_min < tol_);
           if ( flag_ ) {
             //compute and store new pseudo residual saturations
             newSro = OilResidualSaturation(e); 
             newSrw = WaterResidualSaturation(e, newSro) ;
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSro ));
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSrw ));
+            
+            assert(newSro >= 0 and newSro <=1) ;
+            assert(newSrw >= 0 and newSrw <=1) ;
+            
+            e->Store(key_prsCO2_, makeScalar( e->Status(key_prsCO2_), newSro ));
+            e->Store(key_prsH2O_, makeScalar( e->Status(key_prsH2O_), newSrw ));
 
-            //update previous drainage endpoint
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), 1.0-S_old ));
-          
-            //update shock height
-            double64 sw_shock = User()->ShockHeight(e);
-            e->Store( User()->key_ssH2O, makeScalar( e->Status( User()->key_ssH2O), sw_shock ) );              
           }  
             
-      } else if ( dsCO2_old < 0. && dsCO2_new > 0. ) { //turning from IMBIBITION to DRAINAGE   
-          if(Sw_max ==0.)
-            flag_ = (abs(Sw-Sw_max) < tol_*0.1);
-          else
-            flag_ = (abs(Sw-Sw_max)/Sw_max < tol_) ;
+      } else if ( dsCO2_old < 0. && dsCO2_new > 0. ) { //turning from IMBIBITION to DRAINAGE
+          flag_ = (abs(Sw-Sw_max)/Sw_max < tol_) and (Sw_max > Sw_min) ;
           if ( flag_ ) {
             //compute and store new pseudo residual saturations
-            WaterAndOilResidualSaturationImbibitionToDrainage(e, newSrw, newSro);
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSro ));
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), newSrw ));
             
-            //update previous imbibition endpoint
-            e->Store( User()->key_kri_param, makeScalar( e->Status( User()->key_kri_param), S_old ));
-          
-            //update shock height
-            double64 sw_shock = User()->ShockHeight(e);
-            e->Store( User()->key_ssH2O, makeScalar( e->Status( User()->key_ssH2O), sw_shock ) );            
+            newSro = e->Read(key_prsCO2_) ;
+            newSrw = e->Read(key_prsH2O_) ;
+            
+            WaterAndOilResidualSaturationImbibitionToDrainage(e, newSrw, newSro);
+            
+            assert(newSro >= 0 and newSro <=1) ;
+            assert(newSrw >= 0 and newSrw <=1) ;
+            
+            e->Store( key_prsCO2_, makeScalar( e->Status( key_prsCO2_), newSro ));
+            e->Store( key_prsH2O_, makeScalar( e->Status( key_prsH2O_), newSrw ));
+            
           }  
       }       
 }  
@@ -281,6 +289,16 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
   
 
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
 
 /**
    
@@ -291,28 +309,118 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdateBrooksCoreyPa
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim>* const e ) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    
+    // update the pesudo residuals if it is necessory
+    this->UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(key_prsCO2_)  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_ = e->Read(key_prsH2O_)  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+
     
     double64 pc(0);
     
     if ((sH2O > PseudoSwr_)&&(sCO2 > PseudoSor_))
-      pc = cw_*pow((1. - PseudoSwr_)/(sH2O - PseudoSwr_),aw_) + co_*pow((1.0 - PseudoSor_)/(sCO2 - PseudoSor_),ao_ );
-    
-    if (pc > MaxCapillaryPressure)  return MaxCapillaryPressure ; // Check if it is not larger than the Maximum Capillary pressure
-    if (pc < -MaxCapillaryPressure) return -MaxCapillaryPressure ;// Check if it is not larger than the Minimum Capillary pressure
-
+      {
+      pc = c[H2O]*pow((1. - PseudoSwr_)/(sH2O - PseudoSwr_),a[H2O]) + c[CO2]*pow((1.0 - PseudoSor_)/(sCO2 - PseudoSor_),a[CO2] );
+      }
+    else if (sH2O <= PseudoSwr_) pc =  MaxCapillaryPressure ;
+    else if (sCO2 <= PseudoSor_) pc = -MaxCapillaryPressure ;
     
     std::pair<double64,double64> Pc_limits = this->CapillaryPressureLimits(e); // Check if it is in the range of Main Drainage and Imbibition limits
     
     if (pc <= Pc_limits.second) return Pc_limits.second;
     if (pc >= Pc_limits.first)  return Pc_limits.first;
     
+    if (pc >  MaxCapillaryPressure) return  MaxCapillaryPressure ; // Check if it is not larger than the Maximum Capillary pressure
+    if (pc < -MaxCapillaryPressure) return -MaxCapillaryPressure ; // Check if it is not larger than the Minimum Capillary pressure
+    
     return pc;
 }
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  // Capilary pressure at the specific saturations
+  template<size_t dim, template<size_t> class USER>
+  double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc_at( Element<dim>* const e, double64 s ) const
+  {
+    
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    
+    // update the pesudo residuals if it is necessory
+    this->UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
+    const double64 sH2O = s;
+    assert(sH2O >= 0 and sH2O <=1) ;
+    
+    const double64 sCO2 = 1. - sH2O;
+    
+    double64 PseudoSor_ = e->Read(key_prsCO2_)  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+    
+    double64 PseudoSwr_ = e->Read(key_prsH2O_)  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+    
+    
+    double64 pc(0);
+    
+    if ((sH2O > PseudoSwr_)&&(sCO2 > PseudoSor_))
+    {
+      pc = c[H2O]*pow((1. - PseudoSwr_)/(sH2O - PseudoSwr_),a[H2O]) + c[CO2]*pow((1.0 - PseudoSor_)/(sCO2 - PseudoSor_),a[CO2] );
+    }
+    else if (sH2O <= PseudoSwr_) pc = MaxCapillaryPressure ;
+    else if (sCO2 <= PseudoSor_) pc = -MaxCapillaryPressure ;
+    
+    std::pair<double64,double64> Pc_limits = this->CapillaryPressureLimits(e); // Check if it is in the range of Main Drainage and Imbibition limits
+    
+    if (pc <= Pc_limits.second) return Pc_limits.second;
+    if (pc >= Pc_limits.first)  return Pc_limits.first;
+    
+    if (pc > MaxCapillaryPressure)  return MaxCapillaryPressure ; // Check if it is not larger than the Maximum Capillary pressure
+    if (pc < -MaxCapillaryPressure) return -MaxCapillaryPressure ;// Check if it is not larger than the Minimum Capillary pressure
+    
+    return pc;
+  }
+  
+
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -327,27 +435,50 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<dim>* const e ) const
   {
+  
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
+
+    double64 PseudoSor_ = e->Read(key_prsCO2_)  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_ = e->Read(key_prsH2O_)  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
   
     double64 Dpc(0);
     
     // first calculate the upper limits and lower limits of the capilary curve.
+
     if (sH2O < PseudoSwr_ )     Dpc = -MaxCapillaryPressureDerivative;
     else if (sCO2 < PseudoSor_) Dpc = -MaxCapillaryPressureDerivative ;
     else
-      Dpc = -aw_*cw_*pow((1.0 - PseudoSwr_) / (sH2O - PseudoSwr_), aw_) / (sH2O - PseudoSwr_) + ao_*co_*pow((1.0 - PseudoSor_) / (sCO2 - PseudoSor_), ao_) / (sCO2 - PseudoSor_);
+      Dpc = -a[H2O]*c[H2O]*pow((1.0 - PseudoSwr_) / (sH2O - PseudoSwr_), a[H2O]) / (sH2O - PseudoSwr_) + a[CO2]*c[CO2]*pow((1.0 - PseudoSor_) / (sCO2 - PseudoSor_), a[CO2]) / (sCO2 - PseudoSor_);
     
     return Dpc ;
 }
   
  
+
   
+  
+  
+  
+  
+  
+  
+  
+// The first derivative of Capilary pressure at the specific saturations
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Element<dim>* const e, double64 sH2O ) const
   {
@@ -356,21 +487,40 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Eleme
   
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
     
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
-  
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
+    double64 PseudoSor_ = e->Read(key_prsCO2_)  ;
+    double64 PseudoSwr_ = e->Read(key_prsH2O_)  ;  // To have primary Drianage and Imibition parameters
+    
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+    
     double64 Dpc(0);
     
     // first calculate the upper limits and lower limits of the capilary curve.
     if (sH2O < PseudoSwr_ )     Dpc = -MaxCapillaryPressureDerivative;
     else if (sCO2 < PseudoSor_) Dpc = -MaxCapillaryPressureDerivative ;
     else
-      Dpc = -aw_*cw_*pow((1.0 - PseudoSwr_) / (sH2O - PseudoSwr_), aw_) / (sH2O - PseudoSwr_) + ao_*co_*pow((1.0 - PseudoSor_) / (sCO2 - PseudoSor_), ao_) / (sCO2 - PseudoSor_);
+      Dpc = -a[H2O]*c[H2O]*pow((1.0 - PseudoSwr_) / (sH2O - PseudoSwr_), a[H2O]) / (sH2O - PseudoSwr_) + a[CO2]*c[CO2]*pow((1.0 - PseudoSor_) / (sCO2 - PseudoSor_), a[CO2]) / (sCO2 - PseudoSor_);
     
     return Dpc ;
 }    
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -387,11 +537,29 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Eleme
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSaturation( Element<dim>* const e, double64 Sro) const
   {
+    
+    const double64 awd_ =  ac_params_[AWD];
+    const double64 aod_ =  ac_params_[AOD];
+    const double64 cwd_ =  ac_params_[CWD];
+    const double64 cod_ =  ac_params_[COD];
+    
+    const double64 awi_ =  ac_params_[AWI];
+    const double64 aoi_ =  ac_params_[AOI];
+    const double64 cwi_ =  ac_params_[CWI];
+    const double64 coi_ =  ac_params_[COI];
+   
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_ = e->Read(key_prsCO2_)  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_ = e->Read(key_prsH2O_)  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+
   
     double64 srH2O = PseudoSwr_ ;
     
@@ -414,52 +582,84 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSa
   
   
   
+  
+  
+  
+  
+  
+  
 /**
   Here , I calculate the residual water saturation and residual oil saturation for the transit process from  imbibition to drainage.
  
-  These  residual saturation has been estimated from the intersection of imbibition curve with drianage curve
+  These  residual saturation has been estimated from the intersection of imbibition curve with drianage curve.
   We assume the rock properties are constant, i.e. aw, ao, co, and cw are constant. Just we need to estimate
-  the water residual saturation.
+  the water and oil residual saturations.
  
 */
 template<size_t dim, template<size_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr_, double64& Sor_) const
   {
-    const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-  
-    double64 Sw1 = 0; // TODO: get new key:    e->Read(User()->key_SwDrToImb)) ;
-    double64 Sw2 = 0.; // TODO: get new key:    (e->Read(User()->key_SwImbToDr)) ;
+    const size_t    Nr(3);   // number of iteration of solving Non-linear system of equations to get the psedo-resduals.
+    const double64 awd_ =  ac_params_[AWD];
+    const double64 aod_ =  ac_params_[AOD];
+    const double64 cwd_ =  ac_params_[CWD];
+    const double64 cod_ =  ac_params_[COD];
     
+    const double64 awi_ =  ac_params_[AWI];
+    const double64 aoi_ =  ac_params_[AOI];
+    const double64 cwi_ =  ac_params_[CWI];
+    const double64 coi_ =  ac_params_[COI];
+    
+    const double64 iaod_(1.0/aod_) ;
+    const double64 iawd_(1.0/awd_) ;
+    
+    
+    const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
+    double64 Sw1(e->Read(key_SwDrToImb_)) ;
+    assert(Sw1 >= 0 and Sw1 <=1) ;
+
+    double64 Sw2(e->Read(key_SwImbToDr_)) ;
+    assert(Sw2 >= 0 and Sw2 <=1) ;
+
     double64 So2(1.-Sw2);
     double64 So1(1.-Sw1);
     
-    double64 srH2O(e->Read(User()->key_srH2O)) ;    // This means the algorithm use the current residual water saturation for the next steps
-    double64 srCO2(e->Read(User()->key_srCO2)) ;    // This means the algorithm use the current residual oil saturation for the next steps
+    double64 psrH2O(e->Read(key_prsH2O_)) ;    // This means the algorithm use the current residual water saturation for the next steps
+    assert(psrH2O >= 0 and psrH2O <=1) ;
+
+    double64 psrCO2(e->Read(key_prsCO2_)) ;    // The same for residual oil saturation for the next steps
+    assert(psrCO2 >= 0 and psrCO2 <=1) ;
     
+    double64 PcS2 = coi_*pow((1.0 - psrCO2)/(So2 - psrCO2),aoi_) + cwi_*pow((1.0 - psrH2O)/(Sw2 - psrH2O),awi_) ;
+    double64 PcS1 = coi_*pow((1.0 - psrCO2)/(So1 - psrCO2),aoi_) + cwi_*pow((1.0 - psrH2O)/(Sw1 - psrH2O),awi_) ;
     
+    Swr_= psrH2O ;
     
-    Swr_ = e->Read(User()->key_srH2O) ;    // This means the algorithm use the current residual water saturation for the next steps
-    Sor_ = e->Read(User()->key_srCO2) ;    // This means the algorithm use the current residual oil saturation for the next steps
+    for (size_t iter=0; iter<Nr ; iter++) { // do estimate for pesdu residual saturation
+      
+      // step one estimates the oil residual saturation from upper turning point
+      Sor_ = 1.0 - (1.0-So2)/(1.0 - pow(cod_/(PcS2 - cwd_*pow((1.0 - Swr_)/(Sw2 - Swr_),awd_)) ,iaod_)) ;
+      
+      // step two estimates the water residual saturation from lowwer turning point
+      Swr_ = 1.0 - (1.0-Sw1)/(1.0 - pow(cwd_/(PcS1 - cod_*pow((1.0 - Sor_)/(So1 - Sor_),aod_)) ,iawd_)) ;
+      
+    } ;
     
+    if (isnan(Swr_)) Swr_ = psrH2O ;  // in case the iterative solver give us nan, we use the default value which is previous pesdu saturations
+    if (isnan(Sor_)) Sor_ = psrCO2 ;  // in case the iterative solver give us nan, we use the default value which is previous pesdu saturations
     
-    double64 RHS = coi_*pow((1.0 - srCO2)/(So2 - srCO2),aoi_) + cwi_*pow((1.0 - srH2O)/(Sw2 - srH2O),awi_)- cwd_*pow((1.0 - srH2O)/(Sw2 - srH2O),awd_) ;
-    
-    RHS = cod_/RHS ;
-    RHS = pow(RHS,1./aod_) ;
-  
-    if ((sH2O > srH2O) && (sH2O < 1.-srCO2))  Sor_ = 1.-(1.-So2)/(1.-RHS) ;   // Mahyar: this way with assumeing the highest saturation of water is more effected by the assumptatic behaviour of oil part of curve.
-    
-    
-    Swr_ = srH2O ;    // This means the algorithm use the current residual water saturation for the next steps
-    
-    RHS = coi_*pow((1.0 - srCO2)/(So1 - srCO2),aoi_) + cwi_*pow((1.0 - srH2O)/(Sw1 - srH2O),awi_)- cod_*pow((1.0 - srCO2)/(So1 - srCO2),aod_) ;
-    
-    RHS = cwd_/RHS ;
-    RHS = pow(RHS,1./awd_) ;
-    
-    if ((sH2O > srH2O) && (sH2O < 1.-srCO2))  Swr_ = 1.-(1.-Sw1)/(1.-RHS) ;  // Mahyar: this way with assuming the lowest saturation of water is more effected by the assumptotic behaviour of water part of curve.
+    //if (Swr_ >= 0 and Swr_ <= 1) Swr_ = psrH2O ;
+    //if (Sor_ >= 0 and Sor_ <= 1) Sor_ = psrCO2 ;
+
 }
 
+  
+  
+  
+  
+  
   
   
   
@@ -478,15 +678,27 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidual
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<dim>* const e ) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
-    const double64 sCO2 = 1. - sH2O;
-    
-    double64 PseudoSor_ = e->Read(User()->key_kri_param)  ;
-    double64 PseudoSwr_ = e->Read(User()->key_kri_param)  ;  // To have primary Drianage and Imibition parameters
-    
-    // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_ );
+    assert(sH2O >= 0 and sH2O <=1) ;
 
+    const double64 sCO2 = 1. - sH2O;
+
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+
+    
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
     
@@ -494,11 +706,25 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<di
     Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     
     
-    double64 krwww = pow(Snw, 3.+2.*aw_) ; // refer to Eq. 10 from Skjaeveland et al. 2000
-    double64 krwow = (1. - pow(Sno, 2.* ao_+1.)) * square(1. - Sno);
+    double64 krwww = pow(Snw, 3.+2.*a[H2O]) ; // refer to Eq. 10 from Skjaeveland et al. 2000
+    double64 krwow = (1. - pow(Sno, 2.* a[CO2]+1.)) * square(1. - Sno);
     
-    return (cw_*krwww - co_*krwow) / (cw_ - co_) ;  // Mahyar: If sH2O< srH2O or sH2O > 1-srCO2 .. The krw will be between 0 or 1
+    double64 krw = (c[H2O]*krwww - c[CO2]*krwow) / (c[H2O] - c[CO2]) ;
+    
+    std::pair<double64, double64> limits  = this->krwLimits_at(e, sH2O) ;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    if ((PseudoSor_ != Sor_) || (PseudoSwr_ != Swr_))
+    {
+      krw = krw *(limits.second- limits.first) + limits.first ;
+    }
+    
+    return krw ;  // Mahyar: If sH2O< srH2O or sH2O > 1-srCO2 .. The krw will be between 0 or 1
 }
+  
+  
   
   
   
@@ -518,14 +744,23 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<di
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element<dim>* const e, double64 S) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     double64 sH2O(S) ;
     double64 sCO2(1.-S);
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -533,16 +768,32 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element
     Snw = std::min( std::max( Snw, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     
-    double64 krwww = pow(Snw, 3.+2.*aw_) ; // refer to Eq. 10 from Skjaeveland et al. 2000
-    double64 krwow = (1. - pow(Sno, 2.*ao_+1.)) * square(1. - Sno);
+    double64 krwww = pow(Snw, 3.+2.*a[H2O]) ; // refer to Eq. 10 from Skjaeveland et al. 2000
+    double64 krwow = (1. - pow(Sno, 2.*a[CO2]+1.)) * square(1. - Sno);
     
-    return (cw_*krwww - co_*krwow) / (cw_ - co_) ;  // Mahyar: If sH2O< srH2O or sH2O > 1-srCO2 .. The krw will be between 0 or 1
-}
+    double64 krw = (c[H2O]*krwww - c[CO2]*krwow) / (c[H2O] - c[CO2]) ;
+    
+    std::pair<double64, double64> limits  = this->krwLimits_at(e, sH2O) ;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    if ((PseudoSor_ != Sor_) || (PseudoSwr_ != Swr_))
+    {
+      krw = krw *(limits.second- limits.first) + limits.first ;
+    }
+    
+    return krw ;
+    
+  }
 
 
 
   
   
+  
+  
+
   
   
   
@@ -558,15 +809,23 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<dim>* const e ) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    (e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
     
-    
-    // Mahyar: This function will check if the capillary pressure stay in the bounds, and if not replace the correct process
-    CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -574,15 +833,33 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<di
     Snw = std::min( std::max( Snw, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     
-    double64 kroww = (1. - pow(Snw,2.*aw_+1.)) * square(1. - Snw);
-    double64 kroow = pow(Sno, 3.+2.*ao_) ; // refer to Eq. 12 from Skjaeveland et al. 2000
+    double64 kroww = (1. - pow(Snw,2.*a[H2O]+1.)) * square(1. - Snw);
+    double64 kroow = pow(Sno, 3.+2.*a[CO2]) ; // refer to Eq. 12 from Skjaeveland et al. 2000
     
-    return (cw_*kroww - co_*kroow) / (cw_ - co_) ; // Mahyar: If sCO2< srCO2 or sCO2 > 1-srH2O .. The krn will be between 0 or 1
-}
+    double64 krn = (c[H2O]*kroww - c[CO2]*kroow) / (c[H2O] - c[CO2]) ;
+    
+    std::pair<double64, double64> limits  = this->krnLimits_at(e, sH2O) ;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    if ((PseudoSor_ != Sor_) || (PseudoSwr_ != Swr_))
+    {
+      krn = krn *(limits.second- limits.first) + limits.first ;
+    }
+    
+    return krn ;
+    
+    }
 
 
 
 
+  
+  
+  
+  
+  
 
   
 /**
@@ -593,13 +870,25 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<di
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element<dim>* const e, double64 S) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     double64 sH2O = S ;
     double64 sCO2 = 1.-S ;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
+
+    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_, a, c);
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -607,15 +896,31 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element
     Snw = std::min( std::max( Snw, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
     
-    double64 kroww = (1. - pow(Snw,2.*aw_+1.)) * square(1. - Snw);
-    double64 kroow = pow(Sno, 3.+2.*ao_) ; // refer to Eq. 12 from Skjaeveland et al. 2000
+    double64 kroww = (1. - pow(Snw,2.*a[H2O]+1.)) * square(1. - Snw);
+    double64 kroow = pow(Sno, 3.+2.*a[CO2]) ; // refer to Eq. 12 from Skjaeveland et al. 2000
     
-    return (cw_*kroww - co_*kroow) / (cw_ - co_) ;
-}
+    double64 krn = (c[H2O]*kroww - c[CO2]*kroow) / (c[H2O] - c[CO2]) ;
+    
+    std::pair<double64, double64> limits  = this->krnLimits_at(e, sH2O) ;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    if ((PseudoSor_ != Sor_) || (PseudoSwr_ != Swr_))
+    {
+      krn = krn *(limits.second- limits.first) + limits.first ;
+    }
+    
+    return krn ;
+  }
 
 
 
 
+  
+  
+  
+  
   
   
   
@@ -629,13 +934,24 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals(e, PseudoSwr_, PseudoSor_);
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -650,14 +966,18 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element
     
     if (Snw*(1.-Snw)*Sno*(1.-Sno)==0.) dSnw = 0.0 ;
     
-    double64 dSno = dSo * dSnw; // dSo/(1.-p.Obtain(User()->key_srH2O)-p.Obtain(User()->key_srCO2)) ;
+    double64 dSno = dSo * dSnw;
     
-    double64 dkrwww = (3.+2.*aw_)*pow(Snw,(2.+2.*aw_))*dSnw ;
-    double64 dkrwow = (-(2*ao_+1)*pow(Sno,(2.*ao_))*square(1.-Sno) - 2.*(1.-pow(Sno,(2.*ao_+1.)))*(1.-Sno))*dSno ;
+    double64 dkrwww = (3.+2.*a[H2O])*pow(Snw,(2.+2.*a[H2O]))*dSnw ;
+    double64 dkrwow = (-(2*a[CO2]+1)*pow(Sno,(2.*a[CO2]))*square(1.-Sno) - 2.*(1.-pow(Sno,(2.*a[CO2]+1.)))*(1.-Sno))*dSno ;
     
-    return (cw_*dkrwww-co_*dkrwow)/(cw_-co_) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
+    return (c[H2O]*dkrwww-c[CO2]*dkrwow)/(c[H2O]-c[CO2]) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
 }
 
+  
+  
+  
+  
   
   
   
@@ -674,13 +994,23 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Element<dim>* const e, double64 S) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O (S);
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
+    double64 PseudoSor_(e->Read(key_prsCO2_));
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -695,14 +1025,17 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Elem
     
     if (Snw*(1.-Snw)*Sno*(1.-Sno)==0.) dSnw = 0.0 ;
     
-    double64 dSno = dSo * dSnw; // dSo/(1.-p.Obtain(User()->key_srH2O)-p.Obtain(User()->key_srCO2)) ;
+    double64 dSno = dSo * dSnw;
     
-    double64 dkrwww = (3.+2.*aw_)*pow(Snw,(2.+2.*aw_))*dSnw ;
-    double64 dkrwow = (-(2*ao_+1)*pow(Sno,(2.*ao_))*square(1.-Sno) - 2.*(1.-pow(Sno,(2.*ao_+1.)))*(1.-Sno))*dSno ;
+    double64 dkrwww = (3.+2.*a[H2O])*pow(Snw,(2.+2.*a[H2O]))*dSnw ;
+    double64 dkrwow = (-(2*a[CO2]+1)*pow(Sno,(2.*a[CO2]))*square(1.-Sno) - 2.*(1.-pow(Sno,(2.*a[CO2]+1.)))*(1.-Sno))*dSno ;
     
-    return (cw_*dkrwww-co_*dkrwow)/(cw_-co_) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
+    return (c[H2O]*dkrwww-c[CO2]*dkrwow)/(c[H2O]-c[CO2]) ; // 1st derivative of  Eq. 14a from Skjaeveland et al. 2000
 }
 
+  
+  
+  
   
   
   
@@ -723,13 +1056,27 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Elem
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element<dim>* const e ) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
+    assert(sH2O >= 0 and sH2O <=1) ;
+
+    
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -744,15 +1091,18 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element
     
     if (Snw*(1.-Snw)*Sno*(1.-Sno)==0.) dSnw = 0.0 ;
     
-    double64 dSno = dSo * dSnw; // dSo/(1.-p.Obtain(User()->key_srH2O)-p.Obtain(User()->key_srCO2)) ;
+    double64 dSno = dSo * dSnw;
     
-    double64 dkroww = (-(2*aw_+1)*pow(Snw,(2.*aw_))*square(1.-Snw) - 2.*(1.-pow(Snw,(2.*aw_+1.)))*(1.-Snw))*dSnw ;
-    double64 dkroow = (3.+2.*ao_)*pow(Sno,(2.+2.*ao_))*dSno  ;
+    double64 dkroww = (-(2*a[H2O]+1)*pow(Snw,(2.*a[H2O]))*square(1.-Snw) - 2.*(1.-pow(Snw,(2.*a[H2O]+1.)))*(1.-Snw))*dSnw ;
+    double64 dkroow = (3.+2.*a[CO2])*pow(Sno,(2.+2.*a[CO2]))*dSno  ;
     
-    return (cw_*dkroww-co_*dkroow)/(cw_-co_) ; // 1st derivative of  Eq. 14b from Skjaeveland et al. 2000
+    return (c[H2O]*dkroww-c[CO2]*dkroow)/(c[H2O]-c[CO2]) ; // 1st derivative of  Eq. 14b from Skjaeveland et al. 2000
     
 }
   
+  
+  
+
   
   
   
@@ -767,13 +1117,23 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element
 template<size_t dim, template<size_t> class USER>
 double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Element<dim>* const e, double64 S ) const
   {
+    
+    std::array<double64, 2> a ;
+    std::array<double64, 2> c ;
+    
+    SetBrooksCoreyCurvesParameters(e , a, c) ;
+    
+    // update the pesudo residuals if it is necessory
+    UpdatePseudoResidualAndEndpointSaturations(e) ;
+    
     const double64 sH2O = S;
     const double64 sCO2 = 1. - sH2O;
     
-    double64 PseudoSor_ = 0.; // TODO: get new key:    e->Read(User()->key_psrCO2))  ;
-    double64 PseudoSwr_ = 0.; // TODO: get new key:    e->Read(User()->key_psrH2O))  ;  // To have primary Drianage and Imibition parameters
-    
-    CheckPcLimitsAndResetResiduals( e, PseudoSwr_, PseudoSor_ );
+    double64 PseudoSor_(e->Read(key_prsCO2_))  ;
+    assert(PseudoSor_ >= 0 and PseudoSor_ <=1) ;
+
+    double64 PseudoSwr_(e->Read(key_prsH2O_))  ;  // To have primary Drianage and Imibition parameters
+    assert(PseudoSwr_ >= 0 and PseudoSwr_ <=1) ;
 
     double64 Snw = (sH2O - PseudoSwr_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
     double64 Sno = (sCO2 - PseudoSor_) / (1. - PseudoSwr_ - PseudoSor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
@@ -788,12 +1148,12 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Elem
     
     if (Snw*(1.-Snw)*Sno*(1.-Sno)==0.) dSnw = 0.0 ;
     
-    double64 dSno = dSo * dSnw; // dSo/(1.-p.Obtain(User()->key_srH2O)-p.Obtain(User()->key_srCO2)) ;
+    double64 dSno = dSo * dSnw;
     
-    double64 dkroww = (-(2*aw_+1)*pow(Snw,(2.*aw_))*square(1.-Snw) - 2.*(1.-pow(Snw,(2.*aw_+1.)))*(1.-Snw))*dSnw ;
-    double64 dkroow = (3.+2.*ao_)*pow(Sno,(2.+2.*ao_))*dSno  ;
+    double64 dkroww = (-(2*a[H2O]+1)*pow(Snw,(2.*a[H2O]))*square(1.-Snw) - 2.*(1.-pow(Snw,(2.*a[H2O]+1.)))*(1.-Snw))*dSnw ;
+    double64 dkroow = (3.+2.*a[CO2])*pow(Sno,(2.+2.*a[CO2]))*dSno  ;
     
-    return (cw_*dkroww-co_*dkroow)/(cw_-co_) ; // 1st derivative of  Eq. 14b from Skjaeveland et al. 2000
+    return (c[H2O]*dkroww-c[CO2]*dkroow)/(c[H2O]-c[CO2]) ; // 1st derivative of  Eq. 14b from Skjaeveland et al. 2000
     
 }
 
@@ -807,52 +1167,54 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Elem
   
   
   
-
+  
+  
+  
+  
 /**
  
  Check The Limits of Capillary presure and reset the residuals
  
- TODO: a function that checks should not change anything
- 
 */
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e, double64& newSrH2O , double64& newSrCO2 ) const
-  {
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e , double64& newSrH2O, double64& newSrCO2, std::array<double64, 2>& a,std::array<double64, 2>& c) const {
+  
     const double64 srH2O(e->Read(User()->key_srH2O));  // To have primary Drianage and Imibition parameters
+    assert(srH2O >= 0 and srH2O <=1) ;
+
     const double64 srCO2(e->Read(User()->key_srCO2));
-    
+    assert(srCO2 >= 0 and srCO2 <=1) ;
+
     std::pair<double64,double64> Pc_limits = CapillaryPressureLimits(e);
     
     double64 local_pc = pc(e);
     
-    //check if hit prmary drainage
+    //check if hit primary drainage
     if (local_pc >= Pc_limits.second ) {
       
       newSrCO2 = srCO2 ;
       newSrH2O = srH2O ;
       
-      aw_ = awd_ ;
-      cw_ = cwd_ ;
-      ao_ = aod_ ;
-      co_ = cod_ ;
+      a[H2O] =  ac_params_[AWD];
+      a[CO2] =  ac_params_[AOD];
+      c[H2O] =  ac_params_[CWD];
+      c[CO2] =  ac_params_[COD];
     }
     
-    //check if hit prmary Imbibition
+    //check if hit primary Imbibition
     if (local_pc <= Pc_limits.first ) {
       
       newSrCO2 = srCO2 ;
       newSrH2O = srH2O ;
       
-      aw_ = awi_ ;
-      cw_ = cwi_ ;
-      ao_ = aoi_ ;
-      co_ = coi_ ;
+      a[H2O] =  ac_params_[AWI];
+      a[CO2] =  ac_params_[AOI];
+      c[H2O] =  ac_params_[CWI];
+      c[CO2] =  ac_params_[COI];
     }
 }
   
-  
-  
-  
+
   
   
   
@@ -869,26 +1231,36 @@ template<size_t dim, template<size_t> class USER>
   std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CapillaryPressureLimits( Element<dim>* const e ) const
   {
     std::pair<double64,double64> pc_PrimaryImbibitionDrainage;
-    
     const double64 sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
     const double64 sCO2 = 1. - sH2O;
     
     double64 srCO2(e->Read(User()->key_srCO2))  ;
     double64 srH2O(e->Read(User()->key_srH2O))  ;  // To have primary Drianage and Imibition parameters
     
+    const double64 awd_ =  ac_params_[AWD];
+    const double64 aod_ =  ac_params_[AOD];
+    const double64 cwd_ =  ac_params_[CWD];
+    const double64 cod_ =  ac_params_[COD];
+    
+    const double64 awi_ =  ac_params_[AWI];
+    const double64 aoi_ =  ac_params_[AOI];
+    const double64 cwi_ =  ac_params_[CWI];
+    const double64 coi_ =  ac_params_[COI];
+    
+    
     // first calculate the upper limits and lower limits of the capilary curve.
-    if (sH2O < srH2O){
-      pc_PrimaryImbibitionDrainage.first  = MaxCapillaryPressure ;
-      pc_PrimaryImbibitionDrainage.second = MaxCapillaryPressure ;
-    }else if (sCO2 < srCO2) {
-      pc_PrimaryImbibitionDrainage.first  = -MaxCapillaryPressure ;
-      pc_PrimaryImbibitionDrainage.second = -MaxCapillaryPressure ;
-    }else{
-      
-      pc_PrimaryImbibitionDrainage.first  = cwd_*pow((1.0 - srH2O)/(sH2O - srH2O),awd_) + cod_*pow((1.0 - srCO2)/(sCO2 - srCO2),aod_);
-      pc_PrimaryImbibitionDrainage.second = cwi_*pow((1.0 - srH2O)/(sH2O - srH2O),awi_) + coi_*pow((1.0 - srCO2)/(sCO2 - srCO2),aoi_);
-      
-    }
+    
+    pc_PrimaryImbibitionDrainage.first  = cwd_*pow((1.0 - srH2O)/(sH2O - srH2O),awd_) + cod_*pow((1.0 - srCO2)/(sCO2 - srCO2),aod_);
+    pc_PrimaryImbibitionDrainage.second = cwi_*pow((1.0 - srH2O)/(sH2O - srH2O),awi_) + coi_*pow((1.0 - srCO2)/(sCO2 - srCO2),aoi_);
+    
+    if (pc_PrimaryImbibitionDrainage.first  > MaxCapillaryPressure)   pc_PrimaryImbibitionDrainage.first  = MaxCapillaryPressure ;
+    if (pc_PrimaryImbibitionDrainage.second > MaxCapillaryPressure)   pc_PrimaryImbibitionDrainage.second = MaxCapillaryPressure ;
+    
+    if (pc_PrimaryImbibitionDrainage.first  < -MaxCapillaryPressure)  pc_PrimaryImbibitionDrainage.first  = -MaxCapillaryPressure ;
+    if (pc_PrimaryImbibitionDrainage.second < -MaxCapillaryPressure)  pc_PrimaryImbibitionDrainage.second = -MaxCapillaryPressure ;
+    
+    if (isinf(pc_PrimaryImbibitionDrainage.first))  pc_PrimaryImbibitionDrainage.first  = MaxCapillaryPressure ;
+    if (isinf(pc_PrimaryImbibitionDrainage.second)) pc_PrimaryImbibitionDrainage.second = MaxCapillaryPressure ;
     
     return pc_PrimaryImbibitionDrainage;
   }
@@ -900,10 +1272,109 @@ template<size_t dim, template<size_t> class USER>
   
   
   
+  /**
+   
+   calculate the upper and lowwer limits of relative permeability of water
+   
+   */
+  template<size_t dim, template<size_t> class USER>
+  std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krwLimits_at( Element<dim>* const e, double64 const S ) const
+  {
+    std::pair<double64,double64> krw_PrimaryImbibitionDrainage;
+    const double64 sH2O = S ;
+    const double64 sCO2 = 1. - sH2O;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    const double64 awd_ =  ac_params_[AWD];
+    const double64 aod_ =  ac_params_[AOD];
+    const double64 cwd_ =  ac_params_[CWD];
+    const double64 cod_ =  ac_params_[COD];
+    
+    const double64 awi_ =  ac_params_[AWI];
+    const double64 aoi_ =  ac_params_[AOI];
+    const double64 cwi_ =  ac_params_[CWI];
+    const double64 coi_ =  ac_params_[COI];
+    
+    
+    // first calculate the upper limits and lower limits of the capilary curve.
+    
+  
+    double64 Snw = (sH2O - Swr_) / (1. - Swr_ - Sor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
+    double64 Sno = (sCO2 - Sor_) / (1. - Swr_ - Sor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
+    
+    Snw = std::min( std::max( Snw, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
+    Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
+    
+    krw_PrimaryImbibitionDrainage.first  = (cwd_*pow(Snw, 3.+2.*awd_)  - cod_*(1. - pow(Sno, 2.* aod_+1.)) * square(1. - Sno)) / (cwd_ - cod_) ;
+    krw_PrimaryImbibitionDrainage.second = (cwi_*pow(Snw, 3.+2.*awi_)  - coi_*(1. - pow(Sno, 2.* aoi_+1.)) * square(1. - Sno)) / (cwi_ - coi_) ;
+    
+    return krw_PrimaryImbibitionDrainage;
+  }
+
   
   
-  // Numerical derivative added
   
+  
+  
+  
+  
+  
+  /**
+   
+   calculate the upper and lowwer limits of relative permeability of non-wet phase
+   
+   */
+  template<size_t dim, template<size_t> class USER>
+  std::pair<double64,double64> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krnLimits_at( Element<dim>* const e, double64 const S ) const
+  {
+    std::pair<double64,double64> krn_PrimaryImbibitionDrainage;
+    const double64 sH2O = S ;
+    const double64 sCO2 = 1. - sH2O;
+    
+    double64 Sor_(e->Read(User()->key_srCO2))  ;
+    double64 Swr_(e->Read(User()->key_srH2O))  ;
+    
+    const double64 awd_ =  ac_params_[AWD];
+    const double64 aod_ =  ac_params_[AOD];
+    const double64 cwd_ =  ac_params_[CWD];
+    const double64 cod_ =  ac_params_[COD];
+    
+    const double64 awi_ =  ac_params_[AWI];
+    const double64 aoi_ =  ac_params_[AOI];
+    const double64 cwi_ =  ac_params_[CWI];
+    const double64 coi_ =  ac_params_[COI];
+    
+    
+    // first calculate the upper limits and lower limits of the capilary curve.
+    
+    
+    double64 Snw = (sH2O - Swr_) / (1. - Swr_ - Sor_);   // refer to Eq. 11 from Skjaeveland et al. 2000
+    double64 Sno = (sCO2 - Sor_) / (1. - Swr_ - Sor_);   // refer to Eq. 13 from Skjaeveland et al. 2000
+    
+    Snw = std::min( std::max( Snw, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
+    Sno = std::min( std::max( Sno, 0. ), 1. ); // be sure the normalize saturation varies between 0 and 1
+    
+    krn_PrimaryImbibitionDrainage.first   = (cwi_*(1. - pow(Snw,2.*awi_+1.)) * square(1. - Snw)  - coi_*pow(Sno, 3.+2.*aoi_)) / (cwi_ - coi_) ;
+    krn_PrimaryImbibitionDrainage.second  = (cwd_*(1. - pow(Snw,2.*awd_+1.)) * square(1. - Snw)  - cod_*pow(Sno, 3.+2.*aod_)) / (cwd_ - cod_) ;
+
+    return krn_PrimaryImbibitionDrainage;
+  }
+
+  
+  
+  
+  
+  
+  
+  
+  
+  /**
+   
+  Numerical derivative of relative water permeability
+  
+  */
   template<size_t dim, template<size_t> class USER>
   double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double64 h ) const
   {
@@ -928,7 +1399,11 @@ template<size_t dim, template<size_t> class USER>
   
   
   
-  
+  /**
+   
+  Numerical derivative of relative water permeability at specific saturation
+   
+  */
   template<size_t dim, template<size_t> class USER>
   double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {
@@ -954,7 +1429,11 @@ template<size_t dim, template<size_t> class USER>
   
   
   
-  
+  /**
+   
+   Numerical derivative of relative co2 permeability
+   
+   */
   template<size_t dim, template<size_t> class USER>
   double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double64 h ) const
   {
@@ -979,7 +1458,11 @@ template<size_t dim, template<size_t> class USER>
   
   
   
-  
+  /**
+   
+   Numerical derivative of relative co2 permeability at specific saturation
+   
+   */
   template<size_t dim, template<size_t> class USER>
   double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double64 sw, double64 h ) const
   {

@@ -5,7 +5,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
-#include "CompressedSparseRowMatrix.h"
+//#include "CompressedSparseRowMatrix.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"

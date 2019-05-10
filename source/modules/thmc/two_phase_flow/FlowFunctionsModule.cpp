@@ -13,8 +13,9 @@ FlowFunctionsModule1<dim>::FlowFunctionsModule1( const PropertyDatabase<dim>& db
  }
 
 template<size_t dim>
-FlowFunctionsModule2<dim>::FlowFunctionsModule2( const PropertyDatabase<dim>& db, double64 acc_gravity )
+FlowFunctionsModule2<dim>::FlowFunctionsModule2( PropertyDatabase<dim>& db, double64 acc_gravity )
  : variables::VariableSet_CO2GeoSequestration(db),
+   BrooksCoreySaturationFunctionsWithHysteresis<dim,csmp::FlowFunctionsModule2>(db),
    acceleration_of_gravity_(acc_gravity)
  {
  }
@@ -36,8 +37,9 @@ FlowFunctionsModule4<dim>::FlowFunctionsModule4( const PropertyDatabase<dim>& db
  }
 
 template<size_t dim>
-FlowFunctionsModule5<dim>::FlowFunctionsModule5( const PropertyDatabase<dim>& db, double64 acc_gravity )
+FlowFunctionsModule5<dim>::FlowFunctionsModule5( PropertyDatabase<dim>& db, double64 acc_gravity )
  : variables::VariableSet_CO2GeoSequestration(db),
+   BrooksCoreySaturationFunctionsWithHysteresis<dim,csmp::FlowFunctionsModule5>(db),
    acceleration_of_gravity_(acc_gravity)
  {
  }

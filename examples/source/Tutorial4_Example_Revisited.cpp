@@ -4,7 +4,7 @@
 #include "ANSYS_Model2D.h"
 
 // FE algorithm
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator_UoM.h"
 
 // PDE operators building the FE algorithm
 #include "NumIntegral_dNT_op_dN_dV.h"
@@ -145,7 +145,7 @@ void Tutorial4_Example_Revisited::Run()
 
   // FE algorithm with specialised SAMG settings
   SAMG_Solver  samg_solver( &settings );
-  PDE_Integrator_CRM<2U, Region>  stokes_flow( samg_solver );
+  PDE_Integrator_UoM<2U, Region>  stokes_flow( samg_solver );
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
   PDE_Integrator_CRM<2U, Region>  stokes_flow( linear_solver );

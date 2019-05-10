@@ -3,7 +3,7 @@
 #include "CSMP_mathUtilities.h"
 #include "ModelTime.h"
 #include "SparseMatrix.h"
-#include "CompressedSparseRowMatrix.h"
+#include "CompressedRowMatrix.h"
 #include "SAMG_Solver.h"
 
 using namespace std;
@@ -149,7 +149,7 @@ void  Solver::Solve( SparseMatrix& A,
 /*
 
 */
-void  Solver::Solve( CompressedSparseRowMatrix& A,
+void  Solver::Solve( CompressedRowMatrix& A,
                      std::vector<double64>& b,
                      std::vector<double64>& x,
                      size_t no_unknowns )

@@ -26,7 +26,7 @@ void GaussJordan_Solver::SolveMatrixEquation( SparseMatrix& A,
     x = b;
 }
 
-void GaussJordan_Solver::SolveMatrixEquation( CompressedSparseRowMatrix& A,
+void GaussJordan_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
                                               vector<double64>& b,
                                               vector<double64>& x,
                                               size_t )
