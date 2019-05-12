@@ -28,6 +28,17 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitializeVariablsA
   {
   
   //creating new variables if not defined yet from input file
+/* SKM FIX
+
+You need to call
+
+CreateProperty( const char* new_prop, const char* unit,
+                               VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
+                               size_t vsize = 1, double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
+                               std::string usage = "???" );
+
+on the model, else there is no storage for the variable and all hell breaks loose!
+
   if(!pref.IsDefined("previous imbibition endpoint"))      pref.AddProperty( "previous imbibition endpoint", "none", SCALAR, ELEMENT);
   if(!pref.IsDefined("previous drainage endpoint"))        pref.AddProperty( "previous drainage endpoint", "none", SCALAR, ELEMENT);
   if(!pref.IsDefined("pseudo residual water saturation"))  pref.AddProperty( "pseudo residual water saturation", "none", SCALAR, ELEMENT);
@@ -38,6 +49,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitializeVariablsA
   key_SwDrToImb_ = pref.StorageKey("previous drainage endpoint");
   key_prsH2O_    = pref.StorageKey("pseudo residual water saturation");
   key_prsCO2_    = pref.StorageKey("pseudo residual CO2 saturation");
+*/
 }
 
 
