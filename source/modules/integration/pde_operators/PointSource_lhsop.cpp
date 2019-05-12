@@ -63,6 +63,7 @@ template<size_t dim,class SIMPLEX>
 void PointSource_lhsop<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
 {
    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
+   MathOperatorLHS<dim>::LHS.Zero();
    for ( size_t i=0U; i<e.Nodes(); i++ )
      MathOperatorLHS<dim>::LHS(i,i) = SRC_[i]();
      
