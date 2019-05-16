@@ -3,6 +3,7 @@
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+#include "EclipseModel.h"
 #include "VTK_Interface.h"
 
 using namespace std;
@@ -600,7 +601,7 @@ void SplitBoundary_Test::PullApartSplitboundaries( Model<dim>& model, std::vecto
   size_t split_boundaries( model.SplitBoundaries() );
   for ( size_t i = 0; i<split_boundaries; i++ )
   {
-    split_boundary_name = interfaces[i];
+    split_boundary_name = "SPLITBOUNDARY_" + interfaces[i];
     shiftSplitBoundary( model.SplitBoundary( split_boundary_name.c_str() ), displacement );
     shiftInterfaceTips( model.Region( interfaces[i].c_str() ), displacement );
   }
@@ -712,27 +713,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   std::set<std::string> interface_sets;
   inputFromFile( std::string( spliboundary_regions_file + "-noncontiguous-regions.txt" ).c_str(), interface_basic_sets );
 
-
-  //JC: it this step necessary? check it later!!!
-  // 2. Splitting input regions if they are discontigouos
-  //bool discontiguous_regions( false );
-  //for ( set<string>::const_iterator it = interface_basic_sets.begin(); it != interface_basic_sets.end(); ++it )
-  //  if ( !model->IsContiguous( (*it).c_str() ) ) {
-  //    if ( verbose_ ) cerr << "\n\tSplitBoundary_Test::PrepareModel: discovered discontiguous region: " << (*it);
-  //    discontiguous_regions = true;
-  //  }
-  //if ( discontiguous_regions ) {
-  //  set<string>  original_region_names;
-  //  for ( typename RegionInterface<dim, Region>::regionIterator it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )
-  //    if ( (*it).first != "Model" )
-  //      original_region_names.insert( (*it).first.c_str() );
-
-  //  // partitioning regions without revisiting new partitions that can inserted into region map
-  //  for ( set<string>::const_iterator it = original_region_names.begin(); it != original_region_names.end(); ++it )
-  //    model->PartitionRegionIntoContiguousSubRegions( (*it).c_str() );
-  //}
-
-  // 3. Preparing low dimensional regions for making SplitBoundaries around
+  // 2. Preparing low dimensional regions for making SplitBoundaries around
   etablishContiguosRegionsList( *model, interface_basic_sets, interface_sets );
 
   model->MergeRegions( interface_sets, "interfaces" );
@@ -750,10 +731,10 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   }
   if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
 
-  // Create SplitBoundaries
+  // 3. Creating SplitBoundaries
   for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ )
     model->InsertSplitBoundary( (*it).c_str() );
-
+  
   model->OutputToBinaryFile( model_name.c_str() );
 }
 
@@ -1074,11 +1055,6 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   inputFromFile( spliboundary_regions_file.c_str(), interfaces );
   Model<dim> model( model_name.c_str() );
 
-#if 0 //JC: disabled temporally since the following functions are not available for cross-intersecting interface lines,
-  TestSplitNodeAssignment( model );
-  TestUnitNormals( model, test_name.c_str() );
-#endif
-
   // Visualize
   double64 displacement( 0.001 );
   PullApartSplitboundaries( model, interfaces, displacement );
@@ -1087,31 +1063,68 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   if ( verbose_ ) std::cerr << "\nFinish " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";
 }
 
+
+template<size_t dim>
+void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& model_name )
+{
+  const bool verbose( false );
+  const string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+
+  // 1. convert ansys model into CSMP model
+  Model<dim>* model = NULL;
+  if ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+  else if ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));  
+
+  // 2. build CSMP SplitBoundary
+  // ---------------------------------------------------------------------------------------
+  model->DetectAndCreateSplitBoundaries();
+   
+  // 3. see whether the split boundary survives being writting to and recovered from file
+  // ------------------------------------------------------------------------------------------
+  model->OutputToBinaryFile( model_name.c_str() );
+
+  csmp::Model<dim> model_out( model_name.c_str() );
+
+  // 4. visualising
+  std::string test_name( "DETECTED_SPLITBOUNDARY_TEST_FROM_" );
+  test_name += model_name;
+  double64 displacement( 0.001 );
+  PullApartSplitboundaries( model_out, displacement );
+  VisualiseSplitBoundaries( model_out, test_name );
+
+  return;
+}
+
 void SplitBoundary_Test::run()
 {
   // test splitboundary between 2D regions
-  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );           //passed
-  test_splitboundary_between_regions<2U>( "ThreeZones2D" );         //passed
+  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
+  test_splitboundary_between_regions<2U>( "ThreeZones2D" );
 
-  // test splitboundary between 3D regions                       
-  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );           //passed
-  //test_splitboundary_between_regions<3U>( "ThreeZones3D" );         //error, data loading error b/c the front and the back regions are not defined in the input ANSYS model
-
-  // test splitboundary around 2D regions
-  test_splitboundary_around_regions<2U>( "BoxHalfs2D" );            //passed, but check node-ordering of the interface lines in the input ANSYS model
-  test_splitboundary_around_regions<2U>( "ThreeZones2D" );          //passed, but check node-ordering of the interface lines in the input ANSYS model
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" ); //passed, but check node-ordering of the interface lines in the input ANSYS model
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" ); //passed, but check node-ordering of the interface lines in the input ANSYS model
-    
-  // test splitboundary around 3D regions
-  test_splitboundary_around_regions<3U>( "BoxHalfs3D" );            //passed  
-  //test_splitboundary_around_regions<3U>( "ThreeZones3D" );          //error, data loading error b/c the front and the back regions are not defined in the input ANSYS model
-
-  // cases of cross-intersecting interface lines  
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" ); //not passed in TestSplitNodeAssignment() and TestUnitNormals()
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );  //not passed in TestSplitNodeAssignment() and TestUnitNormals()
-  test_splitboundary_around_regions<3U>( "UnitCubeFracs_irregular" );    //not passed in TestSplitNodeAssignment() and TestUnitNormals()
+  // test splitboundary between 3D regions
+  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
   
+  // test splitboundary around 2D regions
+  test_splitboundary_around_regions<2U>( "BoxHalfs2D" );
+  test_splitboundary_around_regions<2U>( "ThreeZones2D" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  test_splitboundary_around_regions<2U>( "SplitBoundaries2D" );
+
+  // test splitboundary around 3D regions
+  test_splitboundary_around_regions<3U>( "BoxHalfs3D" );
+
+  // cases of cross-intersecting interface lines
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+  test_splitboundary_around_regions<3U>( "UnitCubeFracs_irregular" );
+
+  // test splitboundary from ansys models based on split or non-split edges  
+  detect_and_create_splitboundaries<3U>( "Dyke_Split" );  // non-split edges  
+  detect_and_create_splitboundaries<3U>( "Split_Edges" ); // split edges
+
   return;
 }
 

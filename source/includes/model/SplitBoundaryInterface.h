@@ -38,10 +38,7 @@ class SplitBoundaryInterface {
     // SplitBoundaries creation and deletion
     // -----------------------------------------------
     std::string  CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
-
-    /// checks whether name string contains SPLIT_BOUNDARY
-    bool IsEligibleSplitBoundaryRegionName( const std::string& regionName ) const;
-  
+        
     /// Creates SplitBoundary detecting and connecting node-matched disconnected perimeter element faces in mesh; these are grouped and named for regions
     bool DetectAndCreateSplitBoundaries();
 

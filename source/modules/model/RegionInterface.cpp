@@ -395,11 +395,8 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
           auto& nnVector = neighbourVector[j]->NeighborElementVector();
           for ( size_t k = 0U; k < nnVector.size(); k++ ) {
             auto& nn = nnVector[k];
-            if ( nn == e ) {
+            if ( nn == e )
               nn = NULL;
-              //	nnVector.erase(nnVector.begin() + k);
-              //	nnVector.swap(nnVector);
-            }
           }
         }
 
@@ -516,7 +513,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveElements( const char* region_
     // finding the region in the corresponding map
     typename std::map<std::string, csmp::Region<dim> >::iterator iterRegion( groupMap_.find( std::string( default_model ) ) );
 
-    auto defulat_domain = iterRegion->second;
+    auto& defulat_domain = iterRegion->second;
     auto& elementVector = defulat_domain.ElementVector();
 
     for ( size_t i = 0U; i < elementVector.size(); i++ ) {
@@ -543,7 +540,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveElements( const char* region_
     defulat_domain.CreateNodePointerVector();
     defulat_domain.EstablishNeighborConnectivity();
     defulat_domain.IdentifyPerimeter();
-  }  
+  }
+
   meshMgr.RebuildParentRelationships( subdomain.NodesBegin(), subdomain.NodesEnd() );
   
   return removed_elements;

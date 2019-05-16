@@ -22,6 +22,9 @@ namespace csmp {
       virtual void run();
 
       template<size_t dim>
+      void detect_and_create_splitboundaries( const std::string& model_name );
+            
+      template<size_t dim>
       void test_splitboundary_between_regions( const std::string& model_name );
 
       template<size_t dim>
