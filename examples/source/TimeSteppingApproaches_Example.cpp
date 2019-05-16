@@ -13,6 +13,7 @@
 #include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "SAMG_Solver.h"
 
 #include "ConstantFactor.h"
 

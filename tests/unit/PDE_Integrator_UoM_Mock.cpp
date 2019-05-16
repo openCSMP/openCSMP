@@ -1,12 +1,13 @@
 #include "PDE_Integrator_UoM_Mock.h"
-
+#include "Solver.h"
 
 using namespace std;
 
 namespace csmp {
 
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
-  PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::PDE_Integrator_UoM_Mock() : PDE_Integrator_UoM<dim, INTEGRATION_DOMAIN>() {
+  PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::PDE_Integrator_UoM_Mock( Solver& solver )
+  : PDE_Integrator_UoM<dim, INTEGRATION_DOMAIN>(solver) {
        
   }
   
@@ -16,22 +17,22 @@ namespace csmp {
 
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
   SparseMatrix const* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetG() const {
-    return &G_;
+    return &this->G_;
   }
 
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
   std::vector<double64> const* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetRH() const {
-    return &rh_;
+    return &this->rh_;
   }
   
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
   std::vector<double64>* PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetX() {
-	  return &x_;
+	  return &this->x_;
   }
 
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>
   const std::vector<size_t>& PDE_Integrator_UoM_Mock<dim, INTEGRATION_DOMAIN>::GetDOFIndex() const {
-    return DOF_indexes_;
+    return this->DOF_indexes_;
   }			
   
   template<size_t dim, template<size_t> class INTEGRATION_DOMAIN>

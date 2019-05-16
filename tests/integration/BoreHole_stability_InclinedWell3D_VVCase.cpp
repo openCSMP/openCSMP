@@ -1,6 +1,7 @@
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
+#include "SAMG_Solver.h"
 #include "PDE_Integrator.h"
 #include "PT_op.h"
 #include "NumIntegral_BT_D_B_dV.h"

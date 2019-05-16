@@ -362,8 +362,8 @@ void  PDE_Integrator_CRM<dim, COMPUTATION_DOMAIN>::OutputGlobals( int32 precisio
     for ( size_t j = 0; j<G_.Cols(); j++ )
     {
       cout.precision( precision );
-      if ( G_.At( i, j ) >= 0 ) cout << " ";
-      cout << G_.At( i, j ) << " ";
+      if ( G_( i, j ) >= 0 ) cout << " ";
+      cout << G_( i, j ) << " ";
     }
     cout << endl;
   }

@@ -12,7 +12,7 @@
 
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
-#include "CompressedSparseRowMatrix.h"
+#include "CompressedRowMatrix.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -116,7 +116,7 @@ protected:
   std::map<Parameter, size_t>                   basic_operands_;
   std::map<Parameter, size_t>                   test_operands_;
 
-  CompressedSparseRowMatrix G_;
+  CompressedRowMatrix       G_;
   std::vector<double64>     rh_;
   std::vector<double64>     x_;
   Solver*                   solver_;

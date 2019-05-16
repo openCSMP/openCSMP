@@ -43,6 +43,7 @@ void PointSource_rhsop<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
       // taking into account that the point source contributes to several elements
       for ( size_t i=0U; i<e.Nodes(); i++ )
         SRC_[i]() /= static_cast<double64>(e.N(i)->Parents());
+        
    } // end GetOperands
 
 

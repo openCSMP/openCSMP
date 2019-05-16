@@ -40,12 +40,12 @@ void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
   }
 
 
-void LUdcmp_Solver::SolveMatrixEquation( CompressedSparseRowMatrix& A,
+void LUdcmp_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
                                          vector<double64>& b,
                                          vector<double64>& x,
                                          size_t )
   {
-      throw csmp::Exception( ERROR, "LUdcmp_Solver::SolveMatrixEquation", "Method not implemented for CompressedSparseRowMatrix yet");
+      throw csmp::Exception( ERROR, "LUdcmp_Solver::SolveMatrixEquation", "Method not implemented for CompressedRowMatrix yet");
   }
 
 
