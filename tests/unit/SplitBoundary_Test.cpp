@@ -1097,6 +1097,36 @@ void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& m
   return;
 }
 
+template<size_t dim>
+void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( const std::string& model_name )
+{
+  const bool verbose( false );
+  const string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+
+  // 1. convert ansys model into CSMP model
+  Model<dim>* model = NULL;
+  const bool create_splitboundaries( true );
+  if ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
+  else if ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
+
+  // 2. see whether the split boundary survives being writting to and recovered from file
+  // ------------------------------------------------------------------------------------------
+  model->OutputToBinaryFile( model_name.c_str() );
+
+  csmp::Model<dim> model_out( model_name.c_str() );
+
+  // 4. visualising
+  std::string test_name( "CREATED_SPLITBOUNDARY_TEST_FROM_" );
+  test_name += model_name;
+  double64 displacement( 0.001 );
+  PullApartSplitboundaries( model_out, displacement );
+  VisualiseSplitBoundaries( model_out, test_name );
+
+  return;
+}
+
 void SplitBoundary_Test::run()
 {
   // test splitboundary between 2D regions
@@ -1125,6 +1155,10 @@ void SplitBoundary_Test::run()
   detect_and_create_splitboundaries<3U>( "Dyke_Split" );  // non-split edges  
   detect_and_create_splitboundaries<3U>( "Split_Edges" ); // split edges
 
+  // test splitboundary from constructor of ansys model based on split or non-split edges  
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );  // non-split edges  
+  detect_and_create_splitboundaries_from_constructor<3U>( "Split_Edges" ); // split edges
+  
   return;
 }
 
