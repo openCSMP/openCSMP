@@ -43,6 +43,7 @@ public:
 
   /// updates the root pointers of the mesh after modifying the mesh
   void Update();
+  void Update( std::deque<Node<dim>*> nodes, std::deque<Element<dim>*> elmts );
 
   /// assigns finite volume stencils to the FV pointers stored in each element
   void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>&,

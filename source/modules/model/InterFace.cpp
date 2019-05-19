@@ -404,15 +404,18 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
   }
 
   // 2. finding the shared faces
+  bool found( false );
   size_t inner_face_id, outer_face_id;
   for ( auto inner_face : inner_elmt_faces ) {
-    for ( auto outer_face : outer_elmt_faces ) {
+    for ( auto outer_face : outer_elmt_faces ) {      
       if ( inner_face.first == outer_face.first ) {
         inner_face_id = inner_face.second.second;
         outer_face_id = outer_face.second.second;
+        found = true;
         break;
       }
     }
+    if ( found ) break;
   }
   return make_pair( inner_face_id, outer_face_id );
 

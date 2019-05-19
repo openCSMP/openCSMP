@@ -246,7 +246,6 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 } // end Initialize (with regions from file)
 
 
-
 /**
 custom constructor
 @note should only be used for models created externally.
@@ -331,7 +330,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
             else
               this->EstablishBoundariesFromDiscontiguousModel(remove_original_lower_dimensional_regions);
             UpdateIndices();
-          }
+          }          
       }
     else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
@@ -417,7 +416,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
         this->EstablishBoundariesFromRegions( true );
       else
         this->EstablishBoundariesFromDiscontiguousModel( true );
-    }
+    }    
   }
   else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
@@ -435,6 +434,131 @@ void Model<dim>::Initialize( bool isoparametric_elements,
 }
 
 
+/**
+custom initialization for split boundaries
+@note should only be used for models created externally.
+*/
+template<size_t dim>
+void Model<dim>::Initialize( const char* regions_file_prefix,
+                             ModelTopology& mesh_topology,
+                             VSet<dim>& vset,
+                             bool create_boundaries,
+                             bool create_splitboundaries,
+                             bool fully_irregular_mesh )
+{
+  // 1. eliminating the unwanted mesh regions from topology and vset
+  mesh_topology.ReduceToRegions( regions_file_prefix );
+
+  // 2. building the model with variable storage
+  Initialize( mesh_topology, vset, create_boundaries, create_splitboundaries, fully_irregular_mesh );
+
+} // end Initialize (with regions from file)
+
+
+/**
+custom initialization for split boundaries
+@note should only be used for models created externally.
+*/
+template<size_t dim>
+void Model<dim>::Initialize( ModelTopology& mesh_topology,
+                             VSet<dim>& vset,
+                             bool create_boundaries,
+                             bool create_splitboundaries,
+                             bool fully_irregular_mesh )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // 1. reducing the mesh data to the desired element types as specified
+  //    by the topology object
+  map<size_t, size_t>  old_and_new_elmtids;
+  mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+  vset.ReduceTo( old_and_new_elmtids );
+  old_and_new_elmtids.clear();
+
+  // 2. initializing the finite-element manager true=isoparametric
+  fem_manager_.InitializeElements( dim,
+                                   mesh_topology.InterpolationOrder(),
+                                   mesh_topology.IsoparametricElements() );
+
+  // 3. building the finite element mesh (finite volume mesh) and property storage
+  mesh_manager_.Initialize( Database(), FE_Manager(), vset );
+
+  if ( Database().VariableCount( SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACET_INTEGRATION_POINT ) or
+       Database().VariableCount( FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( FACE_FACET_INTEGRATION_POINT ) or
+       Database().VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT ) or Database().VariableCount( INTER_FACE_FACET_INTEGRATION_POINT ) or
+       vset.ContainsFiniteVolumeIntegrationPointData() )
+    InstantiateFiniteVolumes();
+
+  // assigning properties to mesh; this does not depend on regions,
+  // so this is safe to do before we have established them.
+  InputVariablesFrom( vset );
+
+  // 4. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  const bool withNeighborConnectivity( vset.WithNeighbourConnectivity() );
+
+  const bool place_in_unique_regions( (mesh_topology.ModelRegions() == 0) );
+
+  // if the number of the element groups is only one, the default model will be formed. Otherwise, contiguous multiple subdomains will be formed.
+  bool contiguous_model( false );
+  bool valid_model_region = this->CreateRegionFromRootNode( "Model", place_in_unique_regions, !withNeighborConnectivity );
+  if ( valid_model_region ) contiguous_model = true;
+  else valid_model_region = this->CreateRegions( place_in_unique_regions, !withNeighborConnectivity );
+
+  if ( !valid_model_region ) {
+    csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
+                       "model appears to contain domains that are not connected to one another!" );
+  }
+
+  cout << "\nModel<dim>::Initialize: ";
+  if ( contiguous_model ) cout << "Contiguous model has been built successfully..." << endl;
+  else cout << "Discontiguous model has been built successfully..." << endl;
+
+  // 6. associating supplied subregions with regions (model subdomains)
+  this->FormRegionsFrom( mesh_topology );
+
+  if ( mesh_topology.BoxShapedModel() ) {
+    if ( fully_irregular_mesh )
+      ErrorHandler::Instance().notice( WARNING, "Model<dim>::Initialize:",
+                                       "ModelTopology indicates Box-shaped model, but this initialisation ignores this characteristic." );
+  }
+
+  // 7. forming Boundaries
+  if ( create_boundaries ) {
+    const bool remove_original_lower_dimensional_regions( true );
+    // if the model is box-shaped (albeit perhaps with irregular top surface)
+    if ( !fully_irregular_mesh ) {
+      this->EstablishBoxBoundaries( /* by default: remove_original_lower_dimensional_regions */ );
+      // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+      cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, the corresponding AT_BOUNDARY flags are created...\n";
+      recreateBoxBoundaryFlags( *this );
+      UpdateIndices();
+    }
+    // irregularly shaped models
+    else {
+      if ( contiguous_model )
+        this->EstablishBoundariesFromRegions( remove_original_lower_dimensional_regions );
+      else
+        this->EstablishBoundariesFromDiscontiguousModel( remove_original_lower_dimensional_regions );
+      UpdateIndices();
+    }
+    if ( create_splitboundaries )
+      this->DetectAndCreateSplitBoundaries();
+  }
+  else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
+
+  // 8. adding property storage to the Model
+  InitializeLocalVariableStorage();  // for the model
+  UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
+
+                                     // 10. final sanity check
+  CheckElementsAfterBuilding();
+
+  cout << "\n============================================================================";
+  cout << "\nModel '" << Name() << "' has been established successfully!";
+  cout << "\n============================================================================";
+  cout << endl;
+
+} // end Initialize (VSet / ModelTopology)
 
 
 template<size_t dim>

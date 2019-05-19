@@ -1297,7 +1297,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
    }
 
     fp.close();
-    std::cout <<"\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: file '";
+    std::cout <<"\n\nBoundaryInterface<"<< dim <<">::OutputAllBoundariesToBinary: file '";
     std::cout << bin_file <<"' has been successfully written.\n";
    
     return true;

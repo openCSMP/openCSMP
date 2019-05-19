@@ -415,6 +415,21 @@ protected:
                    bool create_boundaries,
                    bool non_box_shaped_model );
 
+  /// builds model for split boundaries from scratch including region information from file (this method is used by ANSYS_Model3D) 
+  void Initialize( const char* regions_file_prefix,
+                   ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool create_splitboundaries,
+                   bool non_box_shaped_model );
+
+  /// builds model for split boundaries from scratch without any region information; the only (unique) region will be 'Model'
+  void Initialize( ModelTopology& mesh_topology,
+                   VSet<dim>& vset,
+                   bool create_boundaries,
+                   bool create_splitboundaries,
+                   bool non_box_shaped_model );
+
   void InitializeLocalVariableStorage();
   bool UpdateSubdomainPropertyStorage();
 

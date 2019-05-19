@@ -2145,10 +2145,24 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
                line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            key.clear();
 
-           // unassign neirghbors outside of the provided vector range
-		   // JC: fix it since ElementRemeshingTrait was removed.
-           //if( unassign_neighbors_outside )
-               //(*it)->UnassignNeighbors();
+           // unassign neirghbors outside of the provided vector range		   
+           if ( unassign_neighbors_outside )
+           {
+             // remove element from neighbor list of its neighbors
+             const size_t neighbors( (*it)->Neighbors() );
+             for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
+               if ( (*it)->Neighbor( neighbor ) != NULL ) {
+                 const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
+                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
+                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
+                       (*it)->NeighborElementVector()[i] = NULL;
+                     }
+                 
+                 (*it)->NeighborElementVector()[neighbor] = NULL;
+               }
+             (*it)->NeighborElementVector().clear();
+           }
         }
 
 
@@ -2289,163 +2303,6 @@ template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>
 template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool );
 
 
-
-
-
-
-// CONNECTIVITY BETWEEN FACES
-
-/*
-template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::Face<dim>*>& simplexVector, bool unassign_neighbors_outside )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( simplexVector.empty() ) {
-         csmp_error.notice( WARNING, "establishNeighborConnectivity( Face )", "supplied element vector is empty; nothing was done" );
-         return;
-      }
-
-    cout << "\nestablishNeighborConnectivity( Face ): Establishing CSMP FE neighbor connectivity...\n";
-
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
-
-    //       key             face number neighbor
-    multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >  surface_neighbor_keys,
-                                                        line_neighbor_keys;
-    vector<size_t>                 fnids;
-    typename std::set<Node<dim>*>  key;
-
-    for ( typename vector<Face<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
-      for ( size_t face=0U; face<(*it)->Faces(); face++ )
-        {
-           if ( (*it) == NULL ) {
-                csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )",
-                                  "supplied element contains NULL pointer to elements; nothing was done" );
-                return;
-             }
-           // creating face key from idx's of face
-           (*it)->FE()->NodesOfFace( face, fnids );
-           for ( size_t j=0U; j<fnids.size(); j++ )
-               key.insert( (*it)->N( fnids[j] ) );
-
-           // inserting newly generated key into multimap
-           if ( (*it)->FE()->IsSurfaceElement() )
-               surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else if ( (*it)->FE()->IsLineElement() )
-               line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else{
-               csmp_error.notice( ERROR, "establishNeighborConnectivity( Face )", "supplied element vector contains volumetric element! nothing was done" );
-               return;
-           }
-           key.clear();
-
-           // unassign neighbors outside of the provided vector range
-           if( unassign_neighbors_outside )
-               (*it)->UnassignNeighbors();
-        }
-
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  Building element neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() ) {
-
-        Face<dim>* e1Ptr(NULL);
-        Face<dim>* e2Ptr(NULL);
-
-        cout << "\n\t\tline elements...";
-
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                              it2(line_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning eachothers faces
-                   //                          face pointer                   nbor face idx        neighbor pointer
-                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // dim=1
-
-    // 2.2 surface elements
-    // --------------------
-    cout << "surface elements...";
-
-    if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
-
-        Face<dim>* e1Ptr(NULL);
-        Face<dim>* e2Ptr(NULL);
-
-        cout << "\n\t\tsurface elements...";
-
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                              it2(surface_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                    // assigning eachothers faces
-                    //                          face pointer                   nbor face idx        neighbor pointer
-                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // surfaces
-
-
- } // end establishNeighborConnectivity
-
-template void establishNeighborConnectivity<1U>( std::vector<csmp::Face<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::Face<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::Face<3U>*>&, bool );
-*/
-
-
 // CONNECTIVITY BETWEEN INTERFACES
 
 template<size_t dim>
@@ -2498,9 +2355,24 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
            }
            key.clear();
 
-           // JC: check it later! unassign neirghbors outside of the provided vector range
-           //if( unassign_neighbors_outside )
-               //(*it)->UnassignNeighbors();
+           // unassign neirghbors outside of the provided vector range		   
+           if ( unassign_neighbors_outside )
+           {
+             // remove element from neighbor list of its neighbors
+             const size_t neighbors( (*it)->Neighbors() );
+             for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
+               if ( (*it)->Neighbor( neighbor ) != NULL ) {
+                 const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
+                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
+                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
+                       (*it)->NeighborElementVector()[i] = NULL;
+                     }
+
+                 (*it)->NeighborElementVector()[neighbor] = NULL;
+               }
+             (*it)->NeighborElementVector().clear();
+           }
         }
 
 
@@ -3074,13 +2946,53 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
          auto result = element_face_keys.equal_range( (*it).first );
          // if more than one value was found
          if ( distance( result.first, result.second ) > 1U ) {
-             // there should not be any manyfolds
-             assert( distance( result.first, result.second ) == 2U );
-             // advancing the result range iterator as necessary to find an Element different from (*it).second.first
-             do result.first++;
-             while ( (*result.first).second.first == (*it).second.first );
+           // there should not be any manyfolds
+           assert( distance( result.first, result.second ) == 2U );
+           // advancing the result range iterator as necessary to find an Element different from (*it).second.first
+           do result.first++;
+           while ( (*result.first).second.first == (*it).second.first );
+           
+           // building search maps that we will use to find the shared interfaces
+           // key=pointset   face iD
+           map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
+           vector<size_t>  nids;
+           // first element
+           Element<dim>* e1 = (*it).second.first;
+           for ( size_t face = 0U; face<e1->Faces(); ++face ) {
+             e1->FE()->NodesOfFace( face, nids );
+             set<Point<dim> >  face_key;
+             for ( size_t j = 0U; j<nids.size(); ++j )
+               face_key.insert( e1->N( nids[j] )->Coordinate() );
+             outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+           }
+           // second element
+           Element<dim>* e2 = (*result.first).second.first;
+           for ( size_t face = 0U; face<e2->Faces(); ++face ) {
+             e2->FE()->NodesOfFace( face, nids );
+             set<Point<dim> >  face_key;
+             for ( size_t j = 0U; j<nids.size(); ++j )
+               face_key.insert( e2->N( nids[j] )->Coordinate() );
+             inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+           }
+
+           // 2. finding the shared faces
+           bool found( false );
+           long64 inner_face_id(-1), outer_face_id(-1);
+           for ( auto inner_face : inner_elmt_faces ) {
+             for ( auto outer_face : outer_elmt_faces ) {
+               if ( inner_face.first == outer_face.first ) {
+                 inner_face_id = inner_face.second.second;
+                 outer_face_id = outer_face.second.second;
+                 found = true;
+                 break;
+               }
+             }
+             if ( found ) break;
+           }
+
            // we store the matching element pair
            // set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >
+           if ( found )
            interface_elmt_pairs.insert( make_pair(
                                         make_pair( (*it).second.first, (*it).second.second ),
                                         make_pair( (*result.first).second.first, (*result.first).second.second ) )

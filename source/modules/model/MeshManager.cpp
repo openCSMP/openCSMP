@@ -354,10 +354,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       const long64 index1( vset.Pfvert( e->Idx(), neighbors ) );
       // index of outer neighbor element which may be there		
       const long64 index2( vset.Pfvert( e->Idx(), neighbors + 1U ) );
+
+      Element<dim>* const innerElement = (index1 < 0) ? NULL : elmt_connector[index1];
       Element<dim>* const outerElement = (index2 < 0) ? NULL : elmt_connector[index2];
       // assigning inner and outer higher-dimensional neighbors
       //              inner element             outer element
-      e->Assign( elmt_connector[index1], outerElement );
+      e->Assign( innerElement, outerElement );
     }
 
     // traversal of the existing mesh nodes to find all its faces
@@ -469,6 +471,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
       // higher-dimensional neighbors
       // ----------------------------
       // (the 2 sides will always be present because interfaces exist only on internal boundaries)
+      if ( vset.Pfvert( e->Idx(), neighbors ) < 0 || vset.Pfvert( e->Idx(), neighbors + 1U) < 0 || vset.Pfvert( e->Idx(), neighbors ) >= elmt_connector.size() || vset.Pfvert( e->Idx(), neighbors + 1U ) >= elmt_connector.size() )
+        continue;
       e->Assign( elmt_connector[vset.Pfvert( e->Idx(), neighbors )], elmt_connector[vset.Pfvert( e->Idx(), neighbors + 1U )] );
     }
 
@@ -622,6 +626,27 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
         group_idx++;
         continue;
       }
+      // avoid the infinite iterative looping search
+      bool infinite_looping( false );
+      for ( size_t i = 0U; i < explored_node_groups.size(); i++)
+      {
+        if ( explored_node_groups[i] == discovered_nodes ) {
+          infinite_looping = true;
+          if ( csmp_error.Verbose() )
+            cout << "\nMeshManager<" << dim << ">::Initialize: node connections might be wrong..." << endl;
+        }
+
+      }
+
+      if ( infinite_looping ) {
+        discovered_nodes.clear();
+        if ( nodes_map.size() > 0 ) {
+          auto first_node = nodes_map.begin()->second;
+          discovered_nodes.insert( first_node );
+          nodes_map.erase( first_node->Idx() );
+        }        
+      }      
+      
       explored_node_groups.push_back( discovered_nodes );      
 
       // if there is only one single node left, it creates a new group of nodes.
@@ -685,6 +710,113 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars,
 /**
 Update the root pointers of the mesh after modifying the mesh.
 */
+
+template<size_t dim>
+void MeshManager<dim>::Update( std::deque<Node<dim>*> nodes, std::deque<Element<dim>*> elmts )
+{
+  // forming root pointers of the nodes for contiguous subdomains
+  if ( nodes.size()>0 ) {
+    // finding the root pointers		
+    deque<set<Node<dim>*>>	explored_node_groups;
+    set<Node<dim>*>			discovered_nodes;
+    deque<Node<dim>*>		current_nodes;
+    map<size_t, Node<dim>*> nodes_map;
+    for ( auto n : nodes )
+      nodes_map[n->Idx()] = n;
+
+    // starting at the first node
+    current_nodes.push_back( nodes_map.begin()->second );
+
+    size_t group_idx = 0U;
+    while ( !nodes_map.empty() )
+    {
+      while ( !current_nodes.empty() ) {
+        Node<dim>*  n_ptr( *current_nodes.begin() );
+        // for all neighbor nodes of the current node
+        for ( size_t i = 0U; i < n_ptr->Neighbors(); i++ ) {
+          if ( n_ptr->Neighbor( i ) == NULL ) continue;
+
+          // if this neighbor is new one					
+          auto new_node = discovered_nodes.insert( n_ptr->Neighbor( i ) );
+          if ( new_node.second ) {
+            current_nodes.push_back( n_ptr->Neighbor( i ) );
+            nodes_map.erase( n_ptr->Neighbor( i )->Idx() );
+          }
+        }
+        // removing the node from the discovered (but not yet explored) deque
+        current_nodes.pop_front();
+      }
+      if ( discovered_nodes.size() == 0 ) {
+        auto first_node = nodes_map.begin()->second;
+        discovered_nodes.insert( first_node );
+        explored_node_groups.push_back( discovered_nodes );
+        nodes_map.erase( first_node->Idx() );
+        discovered_nodes.clear();
+        group_idx++;
+        continue;
+      }
+      explored_node_groups.push_back( discovered_nodes );
+
+      // if there is only one single node left, it creates a new group of nodes.
+      if ( nodes_map.size() == 1 ) {
+        discovered_nodes.clear();
+        auto first_node = nodes_map.begin()->second;
+        discovered_nodes.insert( first_node );
+        explored_node_groups.push_back( discovered_nodes );
+        break;
+      }
+      if ( nodes_map.size() > 0 ) {
+        auto first_node = nodes_map.begin()->second;
+        current_nodes.push_back( first_node );
+      }
+
+      discovered_nodes.clear();
+      group_idx++;
+    }
+
+    //update the node root pointers
+    std::deque<Node<dim>*> updated_root_node_group;
+    for ( auto group : explored_node_groups )
+    {
+      deque<Node<dim>*> nodes_vec;
+      nodes_vec.assign( group.begin(), group.end() );
+      sort( nodes_vec.begin(), nodes_vec.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
+      updated_root_node_group.push_back( nodes_vec.front() );
+      nodes_vec.clear();
+    }
+
+    root_node_group_.swap( updated_root_node_group );
+  } // end nodes	
+
+  if ( elmts.size()>0 ) {
+    // assgining the root pointers
+    set<Element<dim>*>	explored_elmt_groups;
+    for ( auto root_node : root_node_group_ )
+    {
+      for ( size_t i = 0; i < root_node->Parents(); i++ ) {
+        auto parent = root_node->Parent( i );
+        if ( parent ) {
+          explored_elmt_groups.insert( parent );
+          break;
+        }
+      }
+    }
+
+    //update the element root pointers
+    std::deque<Element<dim>*> updated_root_elmt_group;
+    for ( auto root_elmt : explored_elmt_groups )
+      updated_root_elmt_group.push_back( root_elmt );
+
+    root_elmt_group_.swap( updated_root_elmt_group );
+
+    if ( root_node_group_.size() != root_elmt_group_.size() ) {
+      root_node_group_.clear();
+      for ( auto root_elmt : root_elmt_group_ )
+        root_node_group_.push_back( root_elmt->N( 0 ) );
+    }
+  } // end elements
+}
+
 template<size_t dim>
 void MeshManager<dim>::Update()
 {
@@ -2162,12 +2294,50 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
   // --------------------
   for ( auto f : interfaces ) {
     // equidimensional neighbors (=other interfaces) first
-    // TODO: each side will have neighbors on the separated sides of the interface; track!
     const size_t neighbors( f->Neighbors() );
     for ( size_t j = 0U; j<neighbors; ++j ) {
       InterFace<dim>* const ptr( f->Neighbor( j ) );
-      if ( ptr != NULL )
+      if ( ptr != NULL ) {
+        // building search maps that we will use to find the shared interfaces
+        // key=pointset   face iD
+        map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
+        vector<size_t>  nids;
+        // first element
+        Element<dim>* e1 = f->InnerParent();
+        for ( size_t face = 0U; face<e1->Faces(); ++face ) {
+          e1->FE()->NodesOfFace( face, nids );
+          set<Point<dim> >  face_key;
+          for ( size_t j = 0U; j<nids.size(); ++j )
+            face_key.insert( e1->N( nids[j] )->Coordinate() );
+          outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+        }
+        // second element
+        Element<dim>* e2 = f->OuterParent();
+        for ( size_t face = 0U; face<e2->Faces(); ++face ) {
+          e2->FE()->NodesOfFace( face, nids );
+          set<Point<dim> >  face_key;
+          for ( size_t j = 0U; j<nids.size(); ++j )
+            face_key.insert( e2->N( nids[j] )->Coordinate() );
+          inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+        }
+
+        // 2. finding the shared faces
+        bool found( false );
+        long64 inner_face_id( -1 ), outer_face_id( -1 );
+        for ( auto inner_face : inner_elmt_faces ) {
+          for ( auto outer_face : outer_elmt_faces ) {
+            if ( inner_face.first == outer_face.first ) {
+              inner_face_id = inner_face.second.second;
+              outer_face_id = outer_face.second.second;
+              found = true;
+              break;
+            }
+          }
+          if ( found ) break;
+        }
+
         vset.Pfvert( eidx, j, static_cast<int32>(ptr->Idx()) );
+      }
       else
         vset.Pfvert( eidx, j, REGION_BOUNDARY );
     }
@@ -2175,8 +2345,13 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
     // ( they must always exist because SplitBoundaries are internal model boundaries)
     assert( f->InnerParent() != NULL );
     assert( f->OuterParent() != NULL );
+    assert( f->InnerParent()->Idx() < elmts.size() );
+    assert( f->OuterParent()->Idx() < elmts.size() );
+
     vset.Pfvert( eidx, neighbors, static_cast<int32>(f->InnerParent()->Idx()) );
-    vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );
+    vset.Pfvert( eidx, neighbors + 1U, static_cast<int32>(f->OuterParent()->Idx()) );    
+    if ( f->InnerParent()->Idx() < 0 || f->OuterParent()->Idx() < 0 )
+      cout << "\n\t Negative Interface Idx in Element #" << eidx;
     ++eidx;
   }
 
