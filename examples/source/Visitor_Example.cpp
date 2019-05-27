@@ -46,7 +46,7 @@ void Visitor_Example::Run()
   const bool irregular_mesh( false );
   mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, irregular_mesh );
 
-  Model<2U> reservoir_model( mesh_topology, mesh_container, "Visitor_Example-var.txt" );
+  Model<2U> reservoir_model( mesh_topology, mesh_container, "VisitorExample-var.txt" );
 
 
   PressureSaturationInitializer<2U> pressure_saturation_initializer ( reservoir_model,

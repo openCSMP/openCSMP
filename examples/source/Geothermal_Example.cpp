@@ -4,7 +4,7 @@
 #include "GlobalVerbose.h"
 #include "Model.h"
 #include "VTU_Interface.h"
-#include "ANSYS_Model3D.h"
+#include "ANSYS_Model2D.h"
 #include "SAMG_Solver.h"
 #include "CSMP_highLevelUtilities.h"
 #include "LUdcmp_Solver.h"
@@ -70,11 +70,11 @@ void Geothermal_Example::Run()
     //! 1. Model construction - modify to use alternative model
     //! -------------------------------------------------------
     const std::string geometry_name ("2000x1000_mesh");
-	  const std::string regions_name ("2000x1000");
+	  const std::string regions_name ("2000x1000_mesh");
 	  const std::string config_name ("Geothermal_Example");
 	  const std::string vars_name ("Geothermal_Example-variables.txt");
     
-	  ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true, true);
+	  ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true, true);
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );
@@ -130,7 +130,7 @@ void Geothermal_Example::Run()
   
                                                                            
     //! finite element computation of transient pressure
-    PDE_Integrator<3U, Region>  transient_pressure( solver );
+    PDE_Integrator<DIM, Region>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
@@ -313,13 +313,13 @@ void Geothermal_Example::Run()
     where mu is the dynamic viscosity of water and, A and k and the flow-cross-sectional area and the 
     intrinsic permeability, respectively.
 */
-void Geothermal_Example::ComputeMassConductivity (Model<3U>& model)
+void Geothermal_Example::ComputeMassConductivity (Model<DIM>& model)
   {
-      PropertyHandle<3U> rho_ph ( model, "density liquid", SCALAR, NODE );
-      PropertyHandle<3U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
-      PropertyHandle<3U> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
+      PropertyHandle<DIM> rho_ph ( model, "density liquid", SCALAR, NODE );
+      PropertyHandle<DIM> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
+      PropertyHandle<DIM> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
       
-      ConductivityVisitor<3U> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
+      ConductivityVisitor<DIM> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
       model.Accept(conductivity_visitor);
 
       lambda_ph = 0.;
@@ -332,9 +332,9 @@ void Geothermal_Example::ComputeMassConductivity (Model<3U>& model)
 /**
     shorthand for the output of multiple variables to VTU
 */
-void Geothermal_Example::OutputToVTU( Model<3U>& model,string model_name, const list<string>& props, size_t timestep ) const
+void Geothermal_Example::OutputToVTU( Model<DIM>& model,string model_name, const list<string>& props, size_t timestep ) const
   {
-      static VTU_Interface<3U> vtu(model);
+      static VTU_Interface<DIM> vtu(model);
       vtu.OutputDataToVTU( (model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
   }
 
@@ -345,7 +345,7 @@ void Geothermal_Example::OutputToVTU( Model<3U>& model,string model_name, const 
    
    @todo replace dark ages C code and add a bit more flexibility
 */
-bool Geothermal_Example::Compare( Model<3U>& model, const string& file ) const
+bool Geothermal_Example::Compare( Model<DIM>& model, const string& file ) const
   {
     FILE* fin;
     double x, y, val, res, tol;
@@ -377,7 +377,7 @@ bool Geothermal_Example::Compare( Model<3U>& model, const string& file ) const
     nPoints = points.size();
 
     // finds CSMP computed temperature values at given points
-    PropertyAtPointVisitor<3U> pAt( model, points, "temperature" );
+    PropertyAtPointVisitor<DIM> pAt( model, points, "temperature" );
     model.Accept(pAt);
 
     res = 0.;
