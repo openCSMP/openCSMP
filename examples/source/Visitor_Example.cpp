@@ -23,7 +23,7 @@ void Visitor_Example::Specifications()
   AddDescription( "source in: Visitor_Example.cpp" );
   AddDescription( "application and implementation of csmp::Visitor" );
   AddRequirement( "LeftRight .asc,.dat,-regions.txt" );
-  AddRequirement( "Visitor_Example-var.txt" );
+  AddRequirement( "VisitorExample-var.txt" );
 }
 
 
@@ -53,9 +53,10 @@ void Visitor_Example::Run()
                                                                       "saturation water", "saturation oil",
                                                                       "water pressure", "oil pressure",
                                                                       1000., 700., 3., 5., 1e5, 2, 1e4, 0., 0.);
-
-
-  pressure_saturation_initializer.Visit( &reservoir_model );
+  
+  std::cout << "\nPressureSaturationInitializer::Visit(Node): Visiting reservoir model.\n";    
+  reservoir_model.Accept( pressure_saturation_initializer );
+  std::cout << "\nPressureSaturationInitializer::Visit(Node): Pressures and saturations initialized successfully!\n";
   VTK_Interface<2U>  vtk_output;
 
   vtk_output.OutputDataToVTK( reservoir_model, "oil-pressure", "oil pressure", 0 );
