@@ -12,4 +12,5 @@ nodal tensor					NT			X				3			0.00E+00	1.00E+10		node
 nodal array						NA			X				30		0.00E+00	1.00E+10		node
 region scalar					RS			kg			1			0.00E+00	1.00E+10		region
 boundary vector				BV			X				2			0.00E+00	1.00E+10		boundary
+split boundary vector				BV			X				2			0.00E+00	1.00E+10		splitboundary
 model array						MA			Pa			200		0.00E+00	1.00E+10		model

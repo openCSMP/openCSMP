@@ -25,12 +25,12 @@ void Variables_Example::Run()
     // OUTLINE
     // 1. ArrayVariable 
     // 2. Element and FiniteVolume integration point variables
-    // 3. Model/Region/Boundary variables
-    // 4. Internal splitting (SplitBoundary)
+    // 3. Model/Region/Boundary/splitboundary variables    
 
-    // creating the model
+    // creating the model and split boundary
     const size_t D(3);
-    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt" );
+    ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true );    
+    model.InsertSplitBoundary( "FRACTURE" );
 
 
     // getting keys from database
@@ -44,6 +44,7 @@ void Variables_Example::Run()
     Index nodalArrayKey = model.Database().StorageKey("nodal array");
     Index regionScalarKey = model.Database().StorageKey("region scalar");
     Index boundaryVectorKey = model.Database().StorageKey("boundary vector");
+    Index splitBoundaryVectorKey = model.Database().StorageKey( "split boundary vector" );
     Index modelArrayKey = model.Database().StorageKey("model array");
 
 
@@ -71,7 +72,7 @@ void Variables_Example::Run()
     model.Store( modelArrayKey, arrayVariablePlain );
 
 
-    // subdomains (regions, boundaries...)
+    // subdomains (regions, boundaries, splitboundaries...)
     Region<D>& fracture = model.Region("FRACTURE");
     fracture.Store( regionScalarKey, scalarVariable );
     fracture.Read( regionScalarKey, scalarVariablePlain );
@@ -82,6 +83,10 @@ void Variables_Example::Run()
     boundary.Read( boundaryVectorKey, vectorVariablePlain );
     cout << "\nBoundary vector: " << vectorVariablePlain << endl;
 
+    SplitBoundary<D>& splitboundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
+    splitboundary.Store( splitBoundaryVectorKey, vectorVariable );
+    splitboundary.Read( splitBoundaryVectorKey, vectorVariablePlain );
+    cout << "\nSplitBoundary scalar: " << vectorVariablePlain << endl;
 
     // nodal ops
     const vector<Node<D>*>::const_iterator modelNodesEnd( model.Region("Model").NodesEnd() );
@@ -152,16 +157,12 @@ void Variables_Example::Run()
     vtu.OutputDataToVTU( "VTU1", "face scalar", model.Boundary("BOUNDARY6"), static_cast<int>(0) );
 
 
-    // split
-    model.InsertSplitBoundary( "FRACTURE" );
-    SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary("FRACTURE");
-
-
-    // displace nodes
+    // displace nodes of splitboudnaries
+    SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
     const vector<InterFace<D>*>::const_iterator elementsEnd( fractureSplitBoundary.ElementsEnd() );
     for( vector<InterFace<D>*>::const_iterator it( fractureSplitBoundary.ElementsBegin() ); it != elementsEnd; ++it )
       {
-        ScalarVariable volume( PLAIN, (*it)->Volume() );
+        ScalarVariable volume( PLAIN, (*it)->InnerParent()->Volume() );
         (*it)->Store( interfaceScalarKey, volume );
         (*it)->N(0)->z( (*it)->N(0)->z() + 0.3 );
       }
