@@ -2946,8 +2946,8 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
          auto result = element_face_keys.equal_range( (*it).first );
          // if more than one value was found
          if ( distance( result.first, result.second ) > 1U ) {
-           // there should not be any manyfolds
-           assert( distance( result.first, result.second ) == 2U );
+           // if there are any manyfolds, then stop this process and return false.
+           if ( distance( result.first, result.second ) == 2U ) return false;
            // advancing the result range iterator as necessary to find an Element different from (*it).second.first
            do result.first++;
            while ( (*result.first).second.first == (*it).second.first );

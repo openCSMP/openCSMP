@@ -1156,7 +1156,8 @@ void SplitBoundary_Test::run()
   detect_and_create_splitboundaries<3U>( "Split_Edges" ); // split edges
 
   // test splitboundary from constructor of ansys model based on split or non-split edges  
-  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );  // non-split edges  
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );  // non-split edges
+  detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" ); // non-split edges
   detect_and_create_splitboundaries_from_constructor<3U>( "Split_Edges" ); // split edges
   
   return;
