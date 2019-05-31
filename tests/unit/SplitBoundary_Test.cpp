@@ -1073,9 +1073,9 @@ void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& m
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
   if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
   else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));  
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
 
   // 2. build CSMP SplitBoundary
   // ---------------------------------------------------------------------------------------
@@ -1107,9 +1107,9 @@ void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( con
   Model<dim>* model = NULL;
   const bool create_splitboundaries( true );
   if ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true, create_splitboundaries ));
   else if ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true, create_splitboundaries ));
 
   // 2. see whether the split boundary survives being writting to and recovered from file
   // ------------------------------------------------------------------------------------------
