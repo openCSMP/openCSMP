@@ -62,7 +62,6 @@ void PressureDiffusion_Example::Specifications()
 void PressureDiffusion_Example::Run()
 {
     double64& model_time( ModelTime::Instance().modelTime );
-     cout<<"\n First Try (Hani) \n";
     // 1. Set up interface and mesh container needed to read in a 'Triangle' FE mesh
     // -----------------------------------------------------------------------------
     TRIANGLE_Interface  mesh_interface;

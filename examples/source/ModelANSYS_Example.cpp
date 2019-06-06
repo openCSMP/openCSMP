@@ -22,7 +22,7 @@ void ModelANSYS_Example::Specifications()
 void ModelANSYS_Example::Run()
 {
   string modelName;
-  cout << "\nModel Name: ";
+  cout << "\nModel Name (ex: fracs4): ";
   cin >> modelName;
   cout << endl << endl;
   const bool irregular_mesh(true);

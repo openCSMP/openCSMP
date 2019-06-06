@@ -1,6 +1,6 @@
 #include "Averaging_Example.h"
 
-#include "ANSYS_Model3D.h"
+#include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
 #include "PL_Utilities.h"
 
@@ -27,11 +27,11 @@ void Averaging_Example::Specifications()
 void Averaging_Example::Run()
 {
   // initializing model and properties
-  ANSYS_Model3D model( "LeftRight", "CSMP-1phase-variables.txt", true );
-  PropertyHandle<3U> sourceSink( model, "fluid volume source", SCALAR, ELEMENT );
-  PropertyHandle<3U> nodalSourceSinkByDistance( model, "nodal fluid volume source distance", SCALAR, NODE );
-  PropertyHandle<3U> nodalSourceSinkByVolume( model, "nodal fluid volume source volume", SCALAR, NODE );
-  PropertyHandle<3U> nodalSourceSinkByCount( model, "nodal fluid volume source count", SCALAR, NODE );
+  ANSYS_Model2D model( "LeftRight", "CSMP-1phase-variables.txt", true );
+  PropertyHandle<2U> sourceSink( model, "fluid volume source", SCALAR, ELEMENT );
+  PropertyHandle<2U> nodalSourceSinkByDistance( model, "nodal fluid volume source distance", SCALAR, NODE );
+  PropertyHandle<2U> nodalSourceSinkByVolume( model, "nodal fluid volume source volume", SCALAR, NODE );
+  PropertyHandle<2U> nodalSourceSinkByCount( model, "nodal fluid volume source count", SCALAR, NODE );
 
   // resetting target variables
   nodalSourceSinkByDistance = 0.;
@@ -42,10 +42,10 @@ void Averaging_Example::Run()
   sourceSink = 1;
 
   // setting up VTU interface for visualization
-  VTU_Interface<3U> vtu( model, "Extrapolation Comparison" );
+  VTU_Interface<2U> vtu( model, "Extrapolation Comparison" );
 
   // creating a reference to the model region
-  Region<3>& region( model.Region( "Model" ) );
+  Region<2U>& region( model.Region( "Model" ) );
 
   // using the ModelSubDomain methods
   region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );

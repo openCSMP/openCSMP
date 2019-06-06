@@ -1735,7 +1735,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   std::cout << "region '" << group << "' is divided into the subregion(s):\n";
 
   size_t subgroupNum( 0 );
-  auto cmCBegin = componentMemberships.begin(), cmEnd = componentMemberships.end();
+  auto cmCBegin = componentMemberships.begin();
+  auto cmEnd = componentMemberships.end();
   while ( cmCBegin != cmEnd ) {
     auto cmCEnd = cmCBegin;
     size_t subgroupSize = 0;
@@ -1749,8 +1750,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
     char         num[128];
     sprintf( num, "%lu", subgroupNum );
     subgroup_name = group_name + num;
-    //std::cout << "\t\t\t'" << subgroup_name << "'";
-    //std::cout << " (" << subgroupSize << " elmts)" << std::endl;
+    std::cout << "\t\t\t'" << subgroup_name << "'";
+    std::cout << " (" << subgroupSize << " elmts)" << std::endl;
 
     std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
       it = (unique_group) ? uniqueGroupMap_.insert( make_pair( subgroup_name, csmp::Region<dim>( subgroup_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
@@ -1770,6 +1771,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
       // copy all values of region properties from parent to child region
       (*it.first).second.LVS( gref.LVS() );
     }
+    cmCBegin = cmCEnd;
   }
 
   // if the region has been partitioned succesfully and its name is not model, it will be removed
@@ -1933,7 +1935,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
         // and subgroups are searched for in the group_name set
         for ( std::set<std::string>::const_iterator it = group_names.begin(); it != group_names.end(); it++ )
           // if the groupname contains the search string, this is a subgroup to be deleted
-          if ( includes( (*it).begin(), (*it).end(), (*grit).first.begin(), (*grit).first.end() ) )
+          if ( (*it).find( target ) != std::string::npos )
             groups_to_remove.insert( (*it) );
 
         // the original group, however is kept by removing its name from the deletion list
@@ -1963,7 +1965,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
           // and subgroups are searched for in the group_name set
           for ( std::set<std::string>::const_iterator it = group_names.begin(); it != group_names.end(); it++ )
             // if the groupname contains the search string, this is a subgroup to be deleted
-            if ( includes( (*it).begin(), (*it).end(), (*grit).first.begin(), (*grit).first.end() ) )
+            if ( (*it).find( target ) != std::string::npos )
               groups_to_remove.insert( (*it) );
 
           // the original group, however is kept by removing its name from the deletion list

@@ -42,7 +42,6 @@
 #include "Tutorial2_Example.h"
 #include "Tutorial3_Example.h"
 #include "Tutorial4_Example.h"
-#include "Tutorial4_Example_Revisited.h"
 #include "Geothermal_Example.h"
 #include "LinearSolver_Example.h"
 #include "EclipseMeshInterface_Example.h"

@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-const size_t DIM(3U);
+const size_t DIM(2U);
 template<size_t> class Model;
 
 class Geothermal_Example : public Example {

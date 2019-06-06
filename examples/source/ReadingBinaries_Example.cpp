@@ -63,7 +63,7 @@ void ReadingBinaries_Example::Run()
   //ostream &cout = *GetStream();
 
   cout <<"\nmain: Converter: CSMP binary files to VTK."<< endl;
-  cout <<"\nmain: Enter name of connectivity and property database files (filenames without extensions): ";
+  cout <<"\nmain: Enter name of connectivity and property database files (filenames without extensions: example2 example2): ";
   string  connectivity_file, physvars_file;
   cin >> connectivity_file >> physvars_file;
   physvars_file += ".txt";
@@ -90,7 +90,9 @@ void ReadingBinaries_Example::Run()
   for ( ; ; ) {
        cout <<"\nmain: Enter name of binary (*.bin) data file (without extension); enter 'done' when finished: ";
        cin >> data_file;
-       data_file += ".bin";
+
+       // exit for loop if file name equates to "done"
+       if ( data_file == "done" ) break;
 
        // sniffing the variable name in the input file
        string  var = binary_interface.ReadVariableName( data_file.c_str() );
@@ -160,9 +162,6 @@ void ReadingBinaries_Example::Run()
            string  output_file(var);
            for ( string::iterator i=output_file.begin(); i!=output_file.end(); i++ ) if ( *i == ' ' ) *i = '_';
            vtk_output.OutputDataToVTK( binary_file_model, output_file.c_str(), var.c_str(), static_cast<size_t>(rint(model_time)) );
-
-       // exit for loop if file name equates to "done"
-       if ( data_file == "done" ) break;
     }
 
   cout <<"\nmain: That's it..."<< endl;
