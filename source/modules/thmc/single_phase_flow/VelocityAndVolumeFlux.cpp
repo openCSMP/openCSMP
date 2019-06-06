@@ -4,6 +4,7 @@
 #include "STL_utilities.h"
 #include "Element.h"
 #include "Face.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
@@ -58,7 +59,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
     verbose_(false),
     with_gravity_(false),
     with_multiplier_(false),
-    ac_gravity_(9.80665),  // m s-2
+    ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
     MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
@@ -160,7 +161,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
     verbose_(false),
     with_gravity_(true),
     with_multiplier_(false),
-    ac_gravity_(9.80665),  // m s-2
+    ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
     MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
@@ -269,7 +270,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
     verbose_(false),
     with_gravity_(true),
     with_multiplier_(true),
-    ac_gravity_(9.80665),  // m s-2
+    ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
     MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );

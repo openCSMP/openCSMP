@@ -1,0 +1,111 @@
+#ifndef CSMP_NIMBLE_REGION_H
+#define CSMP_NIMBLE_REGION_H
+
+#include "CSMP_definitions.h"
+
+namespace csmp {
+
+template<size_t> class Node;
+template<size_t> class Element;
+
+/// general flexible region template
+//template<size_t,template<size_t> class CELL> class NimbleRegion;
+
+/**
+    Specialisation for Element objects.
+ 
+    A light (non-unique) version of Region
+ 
+    By contrast with ModelSubDomain, there is no partitioning into interior and perimeter
+    as this would require the costly creation of the inter-element connectivity, which
+    is already there because all unique regions are already there.
+ 
+    The distinction of the perimeter is not needed either because boundary flags for computation
+    will be assigned by DES or any other user class of the NimbleRegion.
+ 
+    NimbleRegion also cannot have a name or properties of its own and it is not managed by the RegionInterface
+    but by DES or another algorithm.
+ 
+ @attention this algorithm works only for linear elements.
+ 
+    ===========================================================
+
+   Design specs: What should such a quick region be able to do?
+
+    0. Must be a template with integral parameter size_t dim
+    1. Be a suitable plugin into the PDE_Integrator, meaning that it has the methods:
+    2. Must have a contructor that accepts iterators to node pointers
+    3. Should be able to grow or shrink at low computational cost
+    4. have the interfaces that are needed by the PDE_Integrator to function:
+
+   5. Since it is based on vectors, it must run high-mem so that they do not need to be reallocated all the time.
+      This means that they should not be pruned back after creation.
+
+   6. may or may not have a name (Name() or ID).
+
+   7. Know its perimeter nodes / have nodes sorted into interior and perimeter ranges.
+      This is not critical because the PDE_Integrator finds essential conditions by looking at node flags anyway.
+ 
+      Create method, that allows DES algorithm to convey this information.
+*/
+template<size_t dim>
+//class NimbleRegion<dim,Element> {
+class NimbleRegion {
+  public:
+    /// for flexibility with regard to application domain
+    typedef Element<dim>  CellType;
+
+    /// construction region from nodes, relying on existing node-parent-element connectivity to identify elements
+    NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+
+    /// adds multiple nodes and potential extra elements to region, does not remove any nodes or elements
+    void AddNodes( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+ 
+    /// removes nodes and elements that might have become disconnected from the region
+    void RemoveNodes(std::vector<Node<dim>*>& );
+
+    /// erases and reconstructs region from nodes, relying on existing node-parent-element connectivity to identify elements
+    void Rebuild( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+  
+    /// drop all storage
+    void Erase();
+
+    // retrieving information
+  
+    size_t Nodes() const;
+    size_t InteriorNodes() const;
+    size_t PerimeterNodes() const;
+    size_t Elements() const;
+    size_t RenumberNodes() const;
+
+    // accessors
+    CellType* const E(size_t);
+    Node<dim>* const N(size_t);
+
+    const CellType* const E(size_t) const;
+    const Node<dim>* const N(size_t) const;
+
+    // iterators
+    typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
+    typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
+
+    typename std::vector<CellType*>::iterator               ElementsBegin();
+    typename std::vector<CellType*>::iterator               ElementsEnd();
+    typename std::vector<CellType*>::const_iterator         ElementsBegin() const;
+    typename std::vector<CellType*>::const_iterator         ElementsEnd() const;
+
+  private:
+    NimbleRegion() = delete;
+  
+    std::vector<Node<dim>*>     nodes_;             ///< sorted into interior and perimeter ranges
+    size_t                      n_interior_nodes_;  ///< first perimeter node
+    std::vector<Element<dim>*>  elements_;          ///< all elements, interior and exterior
+};
+
+} // csmp   
+
+#endif

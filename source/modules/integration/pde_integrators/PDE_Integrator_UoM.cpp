@@ -1,4 +1,5 @@
 #include "PDE_Integrator_UoM.h"
+#include "NimbleRegion.h"
 
 #if defined(_OPENMP )
 #include "omp.h"
@@ -836,5 +837,9 @@ template class PDE_Integrator_UoM<3U, Boundary>;
 template class PDE_Integrator_UoM<1U, SplitBoundary>;
 template class PDE_Integrator_UoM<2U, SplitBoundary>;
 template class PDE_Integrator_UoM<3U, SplitBoundary>;
+
+template class PDE_Integrator_UoM<1U,NimbleRegion>;
+template class PDE_Integrator_UoM<2U,NimbleRegion>;
+template class PDE_Integrator_UoM<3U,NimbleRegion>;
 
 } // end namespace csmp
