@@ -119,6 +119,8 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
 
    // for zero entry pressure capillary pressure always is zero
    if ( entry_pressure_ == 0. ) return 0.;
+  
+   return std::numeric_limits<double64>::quiet_NaN();
 
 } // end pc_Phase
 
@@ -147,7 +149,9 @@ double64 HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
     if ( entry_pressure_ == 0. )
        return 0.;
 
- } // end
+   return std::numeric_limits<double64>::quiet_NaN();
+   
+} // end
  
  
  
@@ -254,7 +258,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::dsdpc_Phase( double64 pc ) const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::dfds() const
 {
-	
+   return std::numeric_limits<double64>::quiet_NaN();
 }  // end dfdS
 
 
