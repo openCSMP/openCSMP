@@ -28,6 +28,12 @@ namespace csmp {
       void test_splitboundary_around_regions( const std::string& model_name );
 
       template<size_t dim>
+      void detect_and_create_splitboundaries( const std::string& model_name );
+
+      template<size_t dim>
+      void detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
+
+      template<size_t dim>
       void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );
 
       template<size_t dim>

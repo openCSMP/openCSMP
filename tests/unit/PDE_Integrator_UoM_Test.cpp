@@ -1,5 +1,5 @@
 #include "PDE_Integrator_UoM_Test.h"
-
+#include "GaussJordan_Solver.h"
 
 
 
@@ -100,14 +100,14 @@ namespace csmp {
     Index heatSourceKey = model->Database().StorageKey("thermal volume source");
     Index gravityVectorKey = model->Database().StorageKey("gravity vector");
 
-    for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       (*nIter)->Store(pressureKey, makeScalar(PLAIN, (*nIter)->Idx()));
       (*nIter)->Store(pressureValKey, makeScalar(PLAIN, (*nIter)->Idx()));
       (*nIter)->Store(temperatureKey, makeScalar(PLAIN, (*nIter)->Idx()));
       (*nIter)->Store(fluidNodeSourceKey, makeScalar(PLAIN, (*nIter)->Idx()));
     }
 
-    for (auto& eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); ++eIter) {
+    for (auto eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); ++eIter) {
       (*eIter)->Store(fluidVolumeKey, makeScalar(PLAIN, (*eIter)->Idx()));
       (*eIter)->Store(heatSourceKey, makeScalar(PLAIN, (*eIter)->Idx()) / elementNum);
       (*eIter)->Store(gravityVectorKey, makeVector(PLAIN, PLAIN, (*eIter)->BaryCenter()[0], (*eIter)->BaryCenter()[1]));
@@ -162,8 +162,10 @@ namespace csmp {
     Region<2U>& region = model->Region("Model");
     region.RenumberNodes();
 
-    pde_validate = new PDE_Integrator_UoM_Mock<2U, Region>();
-    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>();
+    GaussJordan_Solver solver;
+
+    pde_validate = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
+    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
 
     pde_validate->Add(pressureLHS);
     pde_validate->Add(sourceVolume);
@@ -182,7 +184,7 @@ namespace csmp {
 
     size_t pressureDirchletDOFs(0);
     Index pressureKey = model->Database().StorageKey("fluid pressure");
-    for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) == DIRICH) {
         pressureDirchletDOFs += 1;
       }
@@ -227,11 +229,16 @@ namespace csmp {
     delete pde_test;
   }
 
-  void PDE_Integrator_UoM_Test::TestTwoScalarVariables() {
+
+
+void PDE_Integrator_UoM_Test::TestTwoScalarVariables() {
     Region<2U>& region = model->Region("Model");
     region.RenumberNodes();
-    pde_validate = new PDE_Integrator_UoM_Mock<2U, Region>();
-    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>();
+    
+    GaussJordan_Solver solver;
+
+    pde_validate = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
+    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
 
     pde_validate->Add(pressureLHS);
     pde_validate->Add(sourceVolume);
@@ -248,14 +255,13 @@ namespace csmp {
     pde_test->Add(sourceHeat);
 
     const std::vector<size_t>& DOF_indexes = pde_test->GetDOFIndex();
-    size_t offset = 2;
     // 1. test matrix establish and enumerate DOFs
     pde_validate->EstablishMatrixSetup(region);
     pde_test->EstablishMatrixSetupTest(region);
     size_t dirchletDOFs(0);
     Index pressureKey = model->Database().StorageKey("fluid pressure");
     Index temperatureKey = model->Database().StorageKey("temperature");
-    for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) == DIRICH) {
         dirchletDOFs += 1;
       }
@@ -309,13 +315,16 @@ namespace csmp {
 
     Index pressureKey = model->Database().StorageKey("fluid pressure");
     Index pressureValKey = model->Database().StorageKey("fluid pressure previous");
-    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>();
+    
+    GaussJordan_Solver solver;
+
+    pde_test = new PDE_Integrator_UoM_Mock<2U, Region>(solver);
     pde_test->Add(pressureLHS);
     pde_test->Add(sourceVolume);    
     pde_test->EstablishMatrixSetupTest(region);
     pde_test->EnumerateAndFixMatrixSize(region);
     std::map<size_t, double64> result;
-    for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       if ((*nIter)->Status(pressureKey) != DIRICH) {
         result[(*nIter)->Idx()] = (*nIter)->Read(pressureKey);
       } 
@@ -329,7 +338,7 @@ namespace csmp {
     }
 
     pde_test->OutputResultsTest(region);
-    for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+    for (auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
       _test((*nIter)->Read(pressureKey) == (*nIter)->Read(pressureValKey));     
     }
     

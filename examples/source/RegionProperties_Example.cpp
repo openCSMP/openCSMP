@@ -49,7 +49,7 @@ void RegionProperties_Example::Run()
     
     // making two extra regions
     set<string>  fem_type;
-    fem_type.insert("QUAD_4");
+    fem_type.insert("ISOPARAMETRIC_LINEAR_QUADRILATERAL");
     ModelTopology   mesh_topology( "variable-access-test model", isoparametric );
     vector<size_t>  elms; 
     elms.reserve(n_squares_on_side);

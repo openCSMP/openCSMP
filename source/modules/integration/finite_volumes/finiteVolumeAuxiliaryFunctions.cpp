@@ -722,12 +722,13 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
     // input variables
     const csmp::Index phi_key = model.Database().StorageKey("porosity");
     const csmp::Index thi_key = model.Database().StorageKey("thickness");
+
     // output variables
     const csmp::Index pv_key  = model.Database().StorageKey("FV pore volume");
     const csmp::Index spv_key = model.Database().StorageKey("sector pore volume");
     const csmp::Index fa_key  = model.Database().StorageKey("facet area");
     const csmp::Index fn_key  = model.Database().StorageKey("facet normal");
- 
+
     Point<dim>           nrml;
     VectorVariable<dim>  fnrml;
  
@@ -742,8 +743,8 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
 
-         // 1. computing sector pore volumes
-         // --------------------------------
+         // 1. computing sector pore volumes and sector rock compressibilities
+         // ------------------------------------------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
          const double64 phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
          for ( size_t i=0U; i<sectors; ++i ) {
@@ -755,6 +756,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
               // sector volume from FV traits
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( pv_key, makeScalar(PLAIN,pore_volume) );
+              // accumulating 'total rock compressibility' from the 'compressibility rock' values on the sectors
            }
 
          // 2. computing facet normals and areas

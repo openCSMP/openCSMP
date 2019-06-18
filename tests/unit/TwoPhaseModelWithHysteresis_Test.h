@@ -14,31 +14,20 @@ class TwoPhaseModelwithHysteresis_Test : public Test {
     virtual void run();
     
   private:
-
-    /// do drainage and imbibition cycles, move along scanning curves
   
-    bool Out_of_Bond(double64 , double64 , double64 );
+    enum TestCases { CapillaryPressure, DerivativeOfCapillaryPressure, krw, krn };
   
-    void UpdatePseduoResidualSaturations(const Model<1U>& , double64 , double64 );
+    std::string parseTestCases( TestCases cases)
+    {
+      if ( cases == CapillaryPressure ) return "CapillaryPressure";
+      if ( cases == DerivativeOfCapillaryPressure ) return "DerivativeOfCapillaryPressure";
+      if ( cases == krw ) return "krw";
+      if ( cases == krn ) return "krn";
+      return "NONE" ;
+    }
   
-    void runOverSaturationRange( Model<1U>& );
-
-    void CreateArtifitialDrainageProcess(const Model<1U>&) ;
-  
-    void CreateArtifitialImbibitionProcess(const Model<1U>&);
-  
-    std::vector <std::pair< double64,double64 > > Process_Test(const Model<1U>& ) ;
-  
-    std::vector <std::pair< double64,double64 > > Imbibition_Test(const Model<1U>&, const std::array<std::array<double64,2>,2>& , const std::array<std::array<double64,2>,2>& ) ;
-  
-    std::vector <std::pair< double64,double64 > > Drainage_Test(const Model<1U>&,  const std::array<std::array<double64,2>,2>& , const std::array<std::array<double64,2>,2>& ) ;
-  
-    std::vector <std::pair< double64,double64 > > TransitionProcess_Test(const Model<1U>&) ;
-  
-    std::vector <std::pair< double64,double64 > > DrainageToImbibition_Test(const Model<1U>&, const std::array<std::array<double64,2>,2>& , const std::array<std::array<double64,2>,2>& ) ;
-  
-    std::vector <std::pair< double64,double64 > > ImbibitionToDrainage_Test(const Model<1U>&, const std::array<std::array<double64,2>,2>&, const std::array<std::array<double64,2>,2>& ) ;
-
+    void runOverSaturationRange( TestCases  );
+    std::vector <std::pair< double64,double64 > > Extract_data( Model<1U>&, TestCases  ) ;
     
 };
 

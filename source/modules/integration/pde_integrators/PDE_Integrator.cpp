@@ -3,6 +3,7 @@
 #include "omp.h"
 #include "FiniteElementManager.h"
 #endif
+#include "NimbleRegion.h"
 
 using namespace std;
 
@@ -1737,5 +1738,9 @@ template class PDE_Integrator<3U,Boundary>;
 template class PDE_Integrator<1U,SplitBoundary>;
 template class PDE_Integrator<2U,SplitBoundary>;
 template class PDE_Integrator<3U,SplitBoundary>;
+
+template class PDE_Integrator<1U,NimbleRegion>;
+template class PDE_Integrator<2U,NimbleRegion>;
+template class PDE_Integrator<3U,NimbleRegion>;
 
 } // end namespace csmp

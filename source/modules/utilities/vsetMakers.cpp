@@ -735,13 +735,13 @@ void test_Create_SlitRectangle_VSet( VSet<2U> & vset, size_t x_dimension, size_t
      deqElementNeighbors[iElement].resize(4);
   	 
 	 	 //face 1
-     deqElementNeighbors[iElement][1]= j==0?BOTTOM_OUTSIDE:(1+ (iDim_i_-1)*(j-1)+i);
+     deqElementNeighbors[iElement][0]= j==0?BOTTOM_OUTSIDE:(1+ (iDim_i_-1)*(j-1)+i);
      //face 2
-     deqElementNeighbors[iElement][2]= i==iDim_i_-2?RIGHT_OUTSIDE:(1+ (iDim_i_-1)*j+i+1);
+     deqElementNeighbors[iElement][1]= i==iDim_i_-2?RIGHT_OUTSIDE:(1+ (iDim_i_-1)*j+i+1);
      //face iDim_k-1
-     deqElementNeighbors[iElement][3]= j==iDim_j_-2?TOP_OUTSIDE:(1+ (iDim_i_-1)*(j+1)+i);
+     deqElementNeighbors[iElement][2]= j==iDim_j_-2?TOP_OUTSIDE:(1+ (iDim_i_-1)*(j+1)+i);
      //face 4
-     deqElementNeighbors[iElement][4]= i==0?LEFT_OUTSIDE:(1+ (iDim_i_-1)*j+(i-1));
+     deqElementNeighbors[iElement][3]= i==0?LEFT_OUTSIDE:(1+ (iDim_i_-1)*j+(i-1));
      
      const bool over_slit  = (j == y_dimension/2       && i+1 >= x_dimension-depth_of_slit);
      const bool under_slit = (j == (y_dimension/2 - 1) && i+1 >= x_dimension-depth_of_slit);

@@ -157,11 +157,13 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( faces[i - elements] );
+    if( (i - elements) < faces.size() )
+      this->elmt_vec_.push_back( faces[i - elements] );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( faces[i - elements] );
+    if ( (i - elements) < faces.size() )
+      this->elmt_vec_.push_back( faces[i - elements] );
 
   // sorting the subvectors for future searching
   const auto perimeterFacesBegin( next( this->elmt_vec_.begin(), info.interior_elmts.size() ) );
@@ -1119,7 +1121,7 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
   } // perimeter elements
 
-    // free
+  // free
   vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   // initialize boundary essentials

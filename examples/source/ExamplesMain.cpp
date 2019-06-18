@@ -66,8 +66,7 @@ int main()
             examplesSuite.RegisterExample( new Tutorial1_Example() );
             examplesSuite.RegisterExample( new Tutorial2_Example() );
             examplesSuite.RegisterExample( new Tutorial3_Example() );
-            examplesSuite.RegisterExample( new Tutorial4_Example() );
-            examplesSuite.RegisterExample( new Tutorial4_Example_Revisited() );
+            examplesSuite.RegisterExample( new Tutorial4_Example() );            
             examplesSuite.RegisterExample( new Geothermal_Example() );
             examplesSuite.RegisterExample( new LinearSolver_Example() );
             examplesSuite.RegisterExample( new EclipseMeshInterface_Example() );

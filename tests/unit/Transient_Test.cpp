@@ -97,7 +97,7 @@ namespace csmp {
 		// the result variable "conductivity" is computed automatically and its range is checked
 		//model.Apply(conductivity);
 		const Index conductKey = p_ref.StorageKey("conductivity");
-		for (auto& eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); eIter++) {
+		for ( auto eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); eIter++ ) {
 			(*eIter)->Store(conductKey, makeScalar(DIRICH, 1.));
 		}
 		// output the range of the result variable
@@ -123,27 +123,12 @@ namespace csmp {
 		//
 		// ------------------------------------------------------------------------------------------
 
-		// create the CSMP FE Algorithm with SAMG solver to invert linear system
-#ifdef CSMP_WITH_SAMG_SOLVER
-		//SAMG_Solver  solver_validate;
-		//SAMG_Solver  solver_test;
-
-		GaussJordan_Solver  solver_validate;
-		GaussJordan_Solver  solver_test;
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
 
 		//PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
-		PDE_Integrator_UoM_Mock<2U, Region>  pde_validate;
-		pde_validate.SetSolver(&solver_validate);
-		PDE_Integrator_UoM_Mock<2U, Region>  pde_test;
-		pde_test.SetSolver(&solver_test);
+		PDE_Integrator_UoM_Mock<2U, Region>  pde_validate(linear_solver);
+		PDE_Integrator_UoM_Mock<2U, Region>  pde_test(linear_solver);
 
-#else
-		CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-		PDE_Integrator<2U, Region>  pde_validate(linear_solver);
-#endif
-
-		// LHS stiffness matrix                              operand         basis function    test function
-		//NumIntegral_dNT_op_dN_dV<2U, Element<2U> >  stiffness_matrix(p_ref, "conductivity", "fluid pressure", "fluid pressure");
 		NumIntegral_dNT_dN_dV<2U, Element<2U> >  stiffness_matrix(p_ref, "fluid pressure", "fluid pressure");
 		// LHS mass matrix
 		NumIntegral_NT_lhsop_N_dV<2U, Element<2U> > mass_matrix_lhs(p_ref, "compressibility", "fluid pressure", "fluid pressure");
@@ -211,7 +196,7 @@ namespace csmp {
 
 		size_t pressureDirchletDOFs(0);
 		Index pressureKey = model.Database().StorageKey("fluid pressure");
-		for (auto& nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter) {
+		for ( auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter ) {
 			if ((*nIter)->Status(pressureKey) == DIRICH) {
 				pressureDirchletDOFs += 1;
 			}

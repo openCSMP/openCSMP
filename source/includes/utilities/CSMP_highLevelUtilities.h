@@ -46,7 +46,7 @@ void replaceWhiteSpaceBy( std::string&, char ascii_char );
 template <typename T>
 inline std::string number_to_string( const T& value ) {
   std::stringstream sstr;
-  sstr << value;
+  sstr << std::setprecision( 16 ) << value;
   return sstr.str();
 }
 

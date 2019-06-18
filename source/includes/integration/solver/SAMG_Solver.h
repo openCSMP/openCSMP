@@ -3,15 +3,15 @@
 
 #include "Solver.h"
 #include "SparseMatrix.h"
-#include "CompressedSparseRowMatrix.h"
 #if defined(_OPENMP )
 #include "CSRMatrix.h"
+#else
+#include "CompressedRowMatrix.h"
 #endif
 
 namespace csmp {
 
   class SAMG_Settings;
-  class CompressedSparseRowMatrix;
 
 /** 
 
@@ -74,7 +74,7 @@ namespace csmp {
                                         std::vector<double64>& x,
                                         size_t no_unknowns );
 
-      virtual void SolveMatrixEquation( CompressedSparseRowMatrix& A,
+      virtual void SolveMatrixEquation( CompressedRowMatrix& A,
                                         std::vector<double64>& b,
                                         std::vector<double64>& x,
                                         size_t no_unknowns );
@@ -102,7 +102,7 @@ namespace csmp {
 #if defined(_OPENMP )
       CSRMatrix crmat_;
 #else
-      CompressedSparseRowMatrix   crmat_;
+      CompressedRowMatrix   crmat_;
 
 #endif
 

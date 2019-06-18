@@ -9,7 +9,7 @@
 namespace csmp {
 
 class SparseMatrix;
-class CompressedSparseRowMatrix;
+class CompressedRowMatrix;
 
 /**
 
@@ -86,7 +86,7 @@ public:
                std::vector<double64>& x,
                size_t no_unknowns = 1U );
 
-  void  Solve( CompressedSparseRowMatrix& G,
+  void  Solve( CompressedRowMatrix& G,
                std::vector<double64>& rh,
                std::vector<double64>& x,
                size_t no_unknowns = 1U );
@@ -109,7 +109,7 @@ protected:
                                      std::vector<double64>& x,
                                      size_t no_unknowns ) = 0;
 
-  virtual void  SolveMatrixEquation( CompressedSparseRowMatrix& A,
+  virtual void  SolveMatrixEquation( CompressedRowMatrix& A,
                                      std::vector<double64>& b,
                                      std::vector<double64>& x,
                                      size_t no_unknowns ) = 0;

@@ -53,7 +53,7 @@ class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration, 
                              public Fluid<dim,FlowFunctionsModule1> {                         ///< fluids module / EOS interface
       
    public:
-     explicit FlowFunctionsModule1( const PropertyDatabase<dim>&, double64 acc_gravity );
+     FlowFunctionsModule1( const PropertyDatabase<dim>&, double64 acc_gravity );
      double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
@@ -68,7 +68,7 @@ class FlowFunctionsModule2 : public variables::VariableSet_CO2GeoSequestration, 
                              public Fluid<dim,FlowFunctionsModule2> {                                       ///< fluids module / EOS interface
       
    public:
-     explicit FlowFunctionsModule2( const PropertyDatabase<dim>&, double64 acc_gravity );
+     FlowFunctionsModule2( PropertyDatabase<dim>&, double64 acc_gravity );
      double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
@@ -100,7 +100,7 @@ class FlowFunctionsModule4 : public variables::VariableSet_CO2GeoSequestration, 
     public Fluid<dim,FlowFunctionsModule4> {                          ///< fluids module / EOS interface
       
    public:
-     explicit FlowFunctionsModule4( const PropertyDatabase<dim>&, double64 acc_gravity );
+     FlowFunctionsModule4( const PropertyDatabase<dim>&, double64 acc_gravity );
      double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)
 };
 
@@ -114,7 +114,7 @@ class FlowFunctionsModule5 : public variables::VariableSet_CO2GeoSequestration, 
     public Fluid<dim,FlowFunctionsModule5> {                                        ///< fluids module / EOS interface
       
    public:
-     explicit FlowFunctionsModule5( const PropertyDatabase<dim>&, double64 acc_gravity );
+     FlowFunctionsModule5( PropertyDatabase<dim>&, double64 acc_gravity );
      double64 acceleration_of_gravity_; ///< this must be read and input from the model (key_g)};
 };
 

@@ -12,7 +12,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_CRM.h"
+#include "PDE_Integrator_UoM.h"
 #include "PDE_IntegratorExperimental.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
@@ -144,7 +144,7 @@ void SlopeMechanics_Example::Run()
   // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
   SAMG_Settings  samg_settings;
   SAMG_Solver    samg_solver(&samg_settings);
-  PDE_Integrator_CRM<DIM,Region>  hydrostatic_pressure(samg_solver);
+  PDE_Integrator_UoM<DIM,Region>  hydrostatic_pressure(samg_solver);
   // minimizing screen output
   samg_settings.Set_iout1( 0 );
   samg_settings.Set_iout2( 0 );

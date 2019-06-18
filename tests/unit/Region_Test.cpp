@@ -68,7 +68,7 @@ void Region_Test::run()
     const string varFileName( "CSMP-1phase-variables.txt" );
     ANSYS_Model3D model( model_name, varFileName.data() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model ) );
-
+        
     InputDataManager<DIM>  model_configuration;
 
     model_configuration.ConfigureFromFile( model, model_name,
@@ -325,8 +325,7 @@ void Region_Test::run()
     if ( verbose_ ) cout << "\n\n\nRegion_Test::run: number of contiguous sub regions: ";
     _test(model.PartitionRegionIntoContiguousSubRegions( "FRAC_VOLUMES" ) == 0 );
     // removal of new partitions
-//JC: check it later due to the comment from SKM: logic of this method seems to be broken and it does not always work.Refactor!
-    //_test(model.RemoveRegionPartitionsFor("FRAC_VOLUMES") == 0 );
+    _test(model.RemoveRegionPartitionsFor("FRAC_VOLUMES") == 0 );
 
 } // end run
 

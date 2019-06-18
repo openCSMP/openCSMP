@@ -151,7 +151,7 @@ SolverSettings* SAMG_Solver::GetSolverSettings() {
     return settings_;
 }
 
-void SAMG_Solver::SolveMatrixEquation( CompressedSparseRowMatrix& A,
+void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
                                        vector<double64>& b,
                                        vector<double64>& x,
                                        size_t no_unknowns )

@@ -18,9 +18,11 @@ template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 class PDE_Integrator_UoM : public PDE_Integrator<dim, COMPUTATION_DOMAIN> {
   public:
     /// only use this constructor
-    PDE_Integrator_UoM( Solver& );
+    explicit PDE_Integrator_UoM( Solver& );
     virtual ~PDE_Integrator_UoM();
-    void  IntegrateOver( COMPUTATION_DOMAIN<dim>& ); // Luat Khoa Tran
+    
+    virtual void  IntegrateOver( COMPUTATION_DOMAIN<dim>& ); // Luat Khoa Tran
+  
   protected:
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
     virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
@@ -33,8 +35,6 @@ class PDE_Integrator_UoM : public PDE_Integrator<dim, COMPUTATION_DOMAIN> {
   protected:
  	  std::vector<size_t>    DOF_indexes_; ///< for indexing DOFs (only non-Dirichlet BC dofs, enumerated 0 -> maximum DOF
 	  std::vector<double64>  pivotVector_; ///< terms recovered from eliminated rows
-
-  private:
     void  EnumerateAndFixMatrixSize( const COMPUTATION_DOMAIN<dim>& );  // Luat Khoa Tran
 
   private:
