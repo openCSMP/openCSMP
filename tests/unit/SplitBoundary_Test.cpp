@@ -941,6 +941,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
 
   // Load Model
   const std::string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+
   Model<dim>* modelIN = NULL;
 
   if ( dim == 2U )
@@ -959,7 +960,6 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   if ( verbose_ ) cout << endl;
 
   // Create SplitBoundaries
-  set<pair<string, string>>  region_pairs;
   std::vector<std::string> regions;
   regions.reserve( modelIN->UniqueRegions() );
 
@@ -971,30 +971,18 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
       regions.push_back( (*it).second.Name() );
   }
 
-  if ( regions.size() > 0 )
-    for ( size_t i = 0; i < regions.size(); i++ ) {
-      const csmp::Region<dim>&  gref1( modelIN->Region( regions[i] ) );
-      for ( size_t j = i + 1; j < regions.size(); j++ ) {
-        if ( regions[i].compare( regions[j] ) == 0 ) continue;
-        const csmp::Region<dim>&  gref2( modelIN->Region( regions[j] ) );
-        const size_t  shared_nodes( sharedNodes( gref1, gref2 ) );
-        if ( shared_nodes > 1 )
-          region_pairs.insert( make_pair( regions[i], regions[j] ) );
-      }
-    }
-
-  // traversal of the existing unique sub-regions
+  // Search the existing unique sub-regions
   set<pair<string, string>>	discovered;
   deque<string>	current_regions;
   vector<pair<string, string>>  region_final_pairs;
   for ( size_t i = 0U; i < regions.size(); i++ ) {
     string root = regions[i];
-    // starting at the first face
+    // starting at the first region
     current_regions.push_back( root );
     while ( !current_regions.empty() ) {
       std::string current_region( *current_regions.begin() );
       set<string> neighbors;
-      // for all neighbor faces of the current face
+      // for all neighbor sub-regions of the current region
       const csmp::Region<dim>&  gref1( modelIN->Region( current_region ) );
       for ( size_t j = 0; j < regions.size(); j++ ) {
         if ( current_region.compare( regions[j] ) == 0 ) continue;
@@ -1056,12 +1044,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   dimension += "D";
 
   if ( verbose_ ) std::cerr << "\nStart " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";
-
-  std::string test_name( "SPLITBOUNDARY_TEST_AROUND_REGIONS_" );
-  test_name += dimension;
-  test_name += "_";
-  test_name += model_name;
-
+    
   // Load Model
   std::vector<std::string> interfaces;
   LoadContiguousModel<dim>( model_name, interfaces );
@@ -1082,8 +1065,10 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
   
   // Visualize
-  //double64 displacement( 0.001 );
-  //PullApartSplitboundaries( model_out, interfaces, displacement );
+  std::string test_name( "SPLITBOUNDARY_TEST_AROUND_REGIONS_" );
+  test_name += dimension;
+  test_name += "_";
+  test_name += model_name;
   VisualiseSplitBoundaries( model_out, test_name );
   
   if ( verbose_ ) std::cerr << "\nFinish " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";
@@ -1124,8 +1109,6 @@ void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& m
   // 4. visualising
   std::string test_name( "DETECTED_SPLITBOUNDARY_TEST_FROM_" );
   test_name += model_name;
-  //double64 displacement( 0.001 );
-  //PullApartSplitboundaries( model_out, displacement );
   VisualiseSplitBoundaries( model_out, test_name );
 
   return;
@@ -1162,36 +1145,44 @@ void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( con
   // 4. visualising
   std::string test_name( "CREATED_SPLITBOUNDARY_TEST_FROM_" );
   test_name += model_name;
-  //double64 displacement( 0.001 );
-  //PullApartSplitboundaries( model_out, displacement );
+  double64 displacement( 0.001 );
+  PullApartSplitboundaries( model_out, displacement );
   VisualiseSplitBoundaries( model_out, test_name );   
 
   return;
 }
 
 void SplitBoundary_Test::run()
-{  
+{
+  // test splitboundary between 2D regions
   test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
-  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
   test_splitboundary_between_regions<2U>( "ThreeZones2D" );
-  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
-  
 
+  // test splitboundary between 3D regions
+  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
+  test_splitboundary_between_regions<3U>( "ThreeZones3D" );  
+
+  // test splitboundary around interfaces
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" ); // need to handle with many-folds
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );  // need to handle with many-folds  
   test_splitboundary_around_regions<2U>( "SplitBoundaries2D" );
 
+  // test splitboundary from constructor of ansys model
   detect_and_create_splitboundaries_from_constructor<2U>( "BoxHalfs2D" );
   detect_and_create_splitboundaries_from_constructor<3U>( "BoxHalfs3D" );
-  detect_and_create_splitboundaries_from_constructor<2U>( "ThreeZones2D" );  
-  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );  // non-split edges // discontiguous regions + requires interfaces    
-
-  //JC: need to check and refine the model, then try it again    
-  test_splitboundary_between_regions<3U>( "lamination" ); // this includes discontiguous regions
-  test_splitboundary_between_regions<2U>( "kueper_contiguous" );
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
   
+  // JC: testing with Luat  
+  //test_splitboundary_between_regions<3U>( "lamination" ); // this includes discontiguous regions
+  //test_splitboundary_between_regions<2U>( "kueper_contiguous" );
+  //test_splitboundary_between_regions<2U>( "9_rectangles" );
+  //test_splitboundary_between_regions<2U>( "kueper_one_interface" );  
+  //test_splitboundary_between_regions<3U>( "TKL_ThreeZones3D" );
+  //detect_and_create_splitboundaries_from_constructor<2U>( "FourRegions2D" ); // discontiguous regions + requires interfaces   
+  //test_splitboundary_around_regions<2U>( "Jura-slope1" ); // discontiguous regions + requires interfaces // need to handle with many-folds
+  //test_splitboundary_between_regions<3U>( "Split_Edges" ); // split edges  
   return;
 }
 
