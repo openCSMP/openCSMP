@@ -132,10 +132,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     // ----------------------------------------
     // building blocks
     // ----------------------------------------
-
-    // Permanently deletes existing elements, correcting the neighbor connectivity
-    void   DetachElementsFromNeighbors() const;
-
+    
     /// Local variable storage interface
     virtual PLACEMENT Placement() const { return SPLIT_BOUNDARY; }
   

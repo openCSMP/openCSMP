@@ -2009,12 +2009,13 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
           // the new face is connected to the elements it is sandwiched between
           // this assignment also includes connecting the element to its nodes
-          //                 inner        outer  element w.r.t. to normal of face
+          // inner/outer  element w.r.t. to normal of face
           face_node_ids.clear();
           face_node_ids.resize( ePtr->FE()->NodesPerFace( face ) );
           ePtr->FE()->NodesOfFace( face, face_node_ids );
-          for ( size_t nid = 0U; nid < face_node_ids.size(); ++nid )
-            elmtObj->Assign( nid, ePtr->N( face_node_ids[i] ) );
+          size_t face_size = face_node_ids.size();
+          for ( size_t nid = 0U; nid < face_size; ++nid )
+            elmtObj->Assign( nid, ePtr->N( face_node_ids[nid] ) );
 
           // added to boundary
           this->elmt_vec_.emplace_back( elmtObj );

@@ -2282,7 +2282,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset ) const
       if ( f->InnerParent()->AtBoundary() == NOT ) {
         f->Out();
         csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo (face neighbors):",
-                           "inner dim+1 element should be at model boundary because Face has is no outer element." );
+                           "inner dim+1 element should be at model boundary because Face has no outer element." );
         f->InnerParent()->AtBoundary( IRREGULAR );
       }
       vset.Pfvert( eidx, neighbors + 1U, f->InnerParent()->AtBoundary() );
