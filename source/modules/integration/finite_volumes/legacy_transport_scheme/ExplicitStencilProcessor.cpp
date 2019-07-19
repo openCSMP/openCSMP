@@ -633,7 +633,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
                    relperm.SaturationWettingPhase( 1. - psi_hat_c );
                    relperm.EffectiveSaturation();
 
-                   const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
+                   const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                    res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                    res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -713,7 +713,7 @@ needs extra source term vector<double64> for accumulation:
 
 @code
 {
-   capillary_flux *= param.FacetArea(i) * relperm.CapillaryDiffusionMultiplier(2U);
+   capillary_flux *= param.FacetArea(i) * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE);
    const double64 sn_ltd = LimitExplicitSourceTerm( mapping, SMINMAX,
                                               sn_inside_node, sn_outside_node,
                                               sn_facet, capillary_flux );
@@ -750,7 +750,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
           // --------------------------------------------------------
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet        = relperm.Saturation(2U);
+          double64 sn_facet        = relperm.Saturation(NONWETTING_PHASE);
           // get non-wetting-phase saturations for the inside and the outside nodes
           const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -770,7 +770,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                // computing flow properties at upstream node
                relperm.EffectiveSaturation();
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
+               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -832,7 +832,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
                // computing flow properties at upstream node
                relperm.EffectiveSaturation();
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
+               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -871,7 +871,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      fill( pc_grad_.begin(), pc_grad_.end(), 0. );
      for ( size_t j=0U; j<e.Nodes(); j++ ) {
           relperm.SaturationWettingPhase( 1. - e.N(j)->Read( adv1key_ ) );
-          const double64 pc_at_node = relperm.pc_Phase(2U);
+          const double64 pc_at_node = relperm.pc_Phase(NONWETTING_PHASE);
           for ( size_t k=0U; k<dim; k++ ) pc_grad_[k] += DN_(k,j) * pc_at_node;
      }*/
 
@@ -893,7 +893,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           // --------------------------------------------------------
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet = relperm.Saturation(2U);
+          double64 sn_facet = relperm.Saturation(NONWETTING_PHASE);
           // get non-wetting-phase saturations for the inside and the outside nodes
           const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
           const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
@@ -924,7 +924,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.EffectiveSaturation();
 
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
+               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -974,7 +974,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.SaturationWettingPhase( 1. - psi_hat_c );
                relperm.EffectiveSaturation();
 
-               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
+               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -1050,7 +1050,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.EffectiveSaturation();
 
                // + div . [fn vt]
-               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(2U);
+               const double64 nonlinear_flux = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.f_Phase(NONWETTING_PHASE);
 
                // 2nd-order fluxes coming into the sector (fluxes = negative since normals are pointing outward) are added
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += nonlinear_flux;
@@ -1081,7 +1081,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                relperm.SaturationWettingPhase( 1. - psi_hat_c );
                relperm.EffectiveSaturation();
 
-               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(2U) * param.FacetArea(i);
+               const double64 capillary_flux = -dsdn * relperm.CapillaryDiffusionMultiplier(NONWETTING_PHASE) * param.FacetArea(i);
 
                res[ e.N( e.FV()->InsideNode(i) )->Idx() ]  += capillary_flux;
                res[ e.N( e.FV()->OutsideNode(i) )->Idx() ] -= capillary_flux;
@@ -1147,14 +1147,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
           relperm.InitializeForNode( e, inside_node_ );
           relperm.EffectiveSaturation();
           const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
-          const double64 ln_inside_node  = relperm.MobilityPhase(2U);
-          const double64 lw_inside_node  = relperm.MobilityPhase(1U);
+          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
           relperm.InitializeForNode( e, outside_node_ );
           relperm.EffectiveSaturation();
           const double64 sn_outside_node = e.N(outside_node_)->Read( adv1_key_ );
-          const double64 ln_outside_node = relperm.MobilityPhase(2U);
-          const double64 lw_outside_node = relperm.MobilityPhase(1U);
+          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1171,8 +1171,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
               if( with_gravity_forces ){
 
-                  vn_gravity_component_of_velocity = relperm.MobilityPhase(1U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
-                  vw_gravity_component_of_velocity = relperm.MobilityPhase(2U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vn_gravity_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vw_gravity_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
               }
 
@@ -1181,8 +1181,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
                   dsdn  = param.FacetNormalProjection( i, dsdn_ );
                   dpcdn = -dsdn*relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
 
-                  vn_capillary_component_of_velocity = relperm.MobilityPhase(1U)*relperm.Permeability() * dpcdn;
-                  vw_capillary_component_of_velocity = relperm.MobilityPhase(2U)*relperm.Permeability() * dpcdn;
+                  vn_capillary_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.Permeability() * dpcdn;
+                  vw_capillary_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.Permeability() * dpcdn;
               }
 
               vn_at_facet_int_point = param.FacetNormalVelocity(i) - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
@@ -1268,7 +1268,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
                    relperm.SaturationWettingPhase( 1. - upstream_sn );
                    relperm.EffectiveSaturation();
 
-                   viscous_velocity_component = relperm.f_Phase(2U/*non-wetting phase*/)* param.FacetNormalVelocity(i);
+                   viscous_velocity_component = relperm.f_Phase(NONWETTING_PHASE/*non-wetting phase*/)* param.FacetNormalVelocity(i);
 
               }
 
@@ -1281,9 +1281,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
 
 
           if(DebugOutput){
-              cout<<"So="<<relperm.Saturation(2U)<<endl;
-              cout<<"Sw="<<relperm.Saturation(1U)<<endl;
-              cout<<"So+Sw="<<relperm.Saturation(1U)+relperm.Saturation(2U)<<endl;
+              cout<<"So="<<relperm.Saturation(NONWETTING_PHASE)<<endl;
+              cout<<"Sw="<<relperm.Saturation(WETTING_PHASE)<<endl;
+              cout<<"So+Sw="<<relperm.Saturation(WETTING_PHASE)+relperm.Saturation(NONWETTING_PHASE)<<endl;
               cout<<"So_outside="<<sn_outside_node<<endl;
               cout<<"Sn_inside="<<sn_inside_node<<endl;
           }
@@ -1345,7 +1345,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           // Saturation at the facet
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
           relperm.EffectiveSaturation();
-          double64 sn_facet        = relperm.Saturation(2U);
+          double64 sn_facet        = relperm.Saturation(NONWETTING_PHASE);
 
           // Saturation at the nodes
           const double64 sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
@@ -1359,8 +1359,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                                                SMINMAX[ e.N( inside_node_ )->Idx() ] ) );
           relperm.EffectiveSaturation();
 
-          const double64 ln_inside_node  = relperm.MobilityPhase(2U);
-          const double64 lw_inside_node  = relperm.MobilityPhase(1U);
+          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
 
           // #######################################################################
@@ -1371,8 +1371,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                                                SMINMAX[ e.N( outside_node_ )->Idx() ] ) );
           relperm.EffectiveSaturation();
 
-          const double64 ln_outside_node = relperm.MobilityPhase(2U);
-          const double64 lw_outside_node = relperm.MobilityPhase(1U);
+          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1389,8 +1389,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
               if( with_gravity_forces ){
 
-                  vn_gravity_component_of_velocity = relperm.MobilityPhase(1U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
-                  vw_gravity_component_of_velocity = relperm.MobilityPhase(2U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vn_gravity_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vw_gravity_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
               }
 
@@ -1399,8 +1399,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                   dsdn  = param.FacetNormalProjection( i, dsdn_ );
                   dpcdn = -dsdn*relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
 
-                  vn_capillary_component_of_velocity = relperm.MobilityPhase(1U)*relperm.Permeability() * dpcdn;
-                  vw_capillary_component_of_velocity = relperm.MobilityPhase(2U)*relperm.Permeability() * dpcdn;
+                  vn_capillary_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.Permeability() * dpcdn;
+                  vw_capillary_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.Permeability() * dpcdn;
               }
 
               vn_at_facet_int_point = param.FacetNormalVelocity(i) - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
@@ -1486,7 +1486,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                    relperm.SaturationWettingPhase( 1. - upstream_sn );
                    relperm.EffectiveSaturation();
 
-                   viscous_velocity_component = relperm.f_Phase(2U/*non-wetting phase*/)* param.FacetNormalVelocity(i);
+                   viscous_velocity_component = relperm.f_Phase(NONWETTING_PHASE/*non-wetting phase*/)* param.FacetNormalVelocity(i);
 
               }
 
@@ -1500,9 +1500,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
 
           if(DebugOutput){
-              cout<<"So="<<relperm.Saturation(2U)<<endl;
-              cout<<"Sw="<<relperm.Saturation(1U)<<endl;
-              cout<<"So+Sw="<<relperm.Saturation(1U)+relperm.Saturation(2U)<<endl;
+              cout<<"So="<<relperm.Saturation(NONWETTING_PHASE)<<endl;
+              cout<<"Sw="<<relperm.Saturation(WETTING_PHASE)<<endl;
+              cout<<"So+Sw="<<relperm.Saturation(WETTING_PHASE)+relperm.Saturation(NONWETTING_PHASE)<<endl;
               cout<<"So_outside="<<sn_outside_node<<endl;
               cout<<"Sn_inside="<<sn_inside_node<<endl;
           }
@@ -1583,8 +1583,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.SaturationWettingPhase( 1. - limited_sn_inside_node );
           relperm.EffectiveSaturation();
 
-          const double64 ln_inside_node  = relperm.MobilityPhase(2U);
-          const double64 lw_inside_node  = relperm.MobilityPhase(1U);
+          const double64 ln_inside_node  = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_inside_node  = relperm.MobilityPhase(WETTING_PHASE);
 
 
           // #######################################################################
@@ -1594,8 +1594,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
           relperm.SaturationWettingPhase( 1. - limited_sn_outside_node );
           relperm.EffectiveSaturation();
 
-          const double64 ln_outside_node = relperm.MobilityPhase(2U);
-          const double64 lw_outside_node = relperm.MobilityPhase(1U);
+          const double64 ln_outside_node = relperm.MobilityPhase(NONWETTING_PHASE);
+          const double64 lw_outside_node = relperm.MobilityPhase(WETTING_PHASE);
 
 
           relperm.InitializeForFacetIntegrationPoint( i, 0U, e );
@@ -1612,8 +1612,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
               if( with_gravity_forces ){
 
-                  vn_gravity_component_of_velocity = relperm.MobilityPhase(1U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
-                  vw_gravity_component_of_velocity = relperm.MobilityPhase(2U)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vn_gravity_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
+                  vw_gravity_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
               }
 
@@ -1622,8 +1622,8 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                   dsdn  = param.FacetNormalProjection( i, dsdn_ );
                   dpcdn = -dsdn*relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
 
-                  vn_capillary_component_of_velocity = relperm.MobilityPhase(1U)*relperm.Permeability() * dpcdn;
-                  vw_capillary_component_of_velocity = relperm.MobilityPhase(2U)*relperm.Permeability() * dpcdn;
+                  vn_capillary_component_of_velocity = relperm.MobilityPhase(NONWETTING_PHASE)*relperm.Permeability() * dpcdn;
+                  vw_capillary_component_of_velocity = relperm.MobilityPhase(WETTING_PHASE)*relperm.Permeability() * dpcdn;
               }
 
               vn_at_facet_int_point = param.FacetNormalVelocity(i) - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
@@ -1709,7 +1709,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
                    relperm.SaturationWettingPhase( 1. - upstream_sn );
                    relperm.EffectiveSaturation();
 
-                   viscous_velocity_component = relperm.f_Phase(2U/*non-wetting phase*/)* param.FacetNormalVelocity(i);
+                   viscous_velocity_component = relperm.f_Phase(NONWETTING_PHASE/*non-wetting phase*/)* param.FacetNormalVelocity(i);
 
               }
 
@@ -1723,9 +1723,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
 
           if(DebugOutput){
-              cout<<"So="<<relperm.Saturation(2U)<<endl;
-              cout<<"Sw="<<relperm.Saturation(1U)<<endl;
-              cout<<"So+Sw="<<relperm.Saturation(1U)+relperm.Saturation(2U)<<endl;
+              cout<<"So="<<relperm.Saturation(NONWETTING_PHASE)<<endl;
+              cout<<"Sw="<<relperm.Saturation(WETTING_PHASE)<<endl;
+              cout<<"So+Sw="<<relperm.Saturation(WETTING_PHASE)+relperm.Saturation(NONWETTING_PHASE)<<endl;
               cout<<"So_outside="<<sn_outside_node<<endl;
               cout<<"Sn_inside="<<sn_inside_node<<endl;
           }
@@ -1791,16 +1791,16 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
                  const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
-                     flux += (relperm.f_Phase(2U) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
+                     flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
                  else
-                     flux -= (relperm.f_Phase(2U) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
+                     flux -= (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.GravityMultiplier_G()*gravity_vel_component - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
 
              }else{
 
                  if ( pnid == inside_node_ )
-                     flux += ( relperm.f_Phase(2U) * viscous_vel_component - relperm.GravityMultiplier_G()*gravity_vel_component )*facetArea;
+                     flux += ( relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component - relperm.GravityMultiplier_G()*gravity_vel_component )*facetArea;
                  else
-                     flux -= ( relperm.f_Phase(2U) * viscous_vel_component - relperm.GravityMultiplier_G()*gravity_vel_component )*facetArea;
+                     flux -= ( relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component - relperm.GravityMultiplier_G()*gravity_vel_component )*facetArea;
 
              }
 
@@ -1811,16 +1811,16 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
                  const double64 capillary_vel_component( -param.FacetNormalProjection( i, dsdn_ )*relperm.dpcds_Phase( ) );
 
                  if ( pnid == inside_node_ )
-                     flux += (relperm.f_Phase(2U) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
+                     flux += (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
                  else
-                     flux -= (relperm.f_Phase(2U) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
+                     flux -= (relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component  - relperm.Permeability()*relperm.G()*capillary_vel_component)*facetArea;
 
              }else{
 
                  if ( pnid == inside_node_ )
-                     flux += relperm.f_Phase(2U) * viscous_vel_component*facetArea;
+                     flux += relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component*facetArea;
                  else
-                     flux -= relperm.f_Phase(2U) * viscous_vel_component*facetArea;
+                     flux -= relperm.f_Phase(NONWETTING_PHASE) * viscous_vel_component*facetArea;
 
              }
 

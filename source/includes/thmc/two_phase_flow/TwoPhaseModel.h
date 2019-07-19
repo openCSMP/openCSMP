@@ -12,6 +12,8 @@
 
 namespace csmp {
 
+enum { WETTING_PHASE = 1U, NONWETTING_PHASE = 2U };
+
 /** base class for 2-phase flow models
 
 base class for 2-phase flow models (Linear, Brooks Corey, Van Genuchten, Richards)
