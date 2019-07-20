@@ -560,7 +560,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( do
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver             GJ_solver;
-    PDE_Integrator_CRM<1U,Region>  hydrostatic_pressure(GJ_solver);
+    PDE_Integrator_UoM<1U,Region>  hydrostatic_pressure(GJ_solver);
  
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
