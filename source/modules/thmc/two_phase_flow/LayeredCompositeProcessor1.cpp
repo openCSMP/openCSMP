@@ -9,7 +9,7 @@
 #include "LayeredCompositeProcessor1.h"
 #include "TextFileIO.h"
 #include "ErrorHandler.h"
-#include "CompareFloats.h"
+#include "compareFloats.h"
 
 using namespace std;
 
