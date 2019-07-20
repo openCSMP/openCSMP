@@ -199,7 +199,7 @@ int bd_free(BAND *);
   PERM    *bpx_finput(FILE *fp, PERM *px);
   VEC *ifin_vec(FILE *fp, VEC *vec);
   VEC     *bfin_vec(FILE *fp, VEC *vec);
-  char	*setformat(char    *f_string);
+  const char* setformat( const char*f_string );
 
 
 /* from 'svd.c' */

@@ -71,9 +71,9 @@ static char	rcsid[] = "$Id: sprow.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $
    -- return -(idx+2) where idx is index to insertion point */
   int	sprow_idx(SPROW	*r, int col)
 {
-   register int		lo, hi, mid;
+   int		lo, hi, mid;
    int			tmp;
-   register row_elt	*r_elt;
+   row_elt	*r_elt;
    
    /*******************************************
      if ( r == (SPROW *)NULL )

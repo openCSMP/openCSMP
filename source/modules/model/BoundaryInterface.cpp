@@ -639,7 +639,7 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, std::vector<Element<dim
 template<> bool  higherDimensionalNeighbors( const Element<1U>& e, std::vector<Element<1U>*>& )
 {
   throw logic_error( "higherDimensionalNeighbor(in BoundaryInterface: there should be no boundaries in 1D model" );
-  return &e;
+  return false;
 }
 
 template bool  higherDimensionalNeighbors( const Element<2U>&, std::vector<Element<2U>*>& );
