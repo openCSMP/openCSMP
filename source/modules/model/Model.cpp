@@ -541,6 +541,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
         this->EstablishBoundariesFromDiscontiguousModel( remove_original_lower_dimensional_regions );
       UpdateIndices();
     }
+
     if ( create_splitboundaries )
       this->DetectAndCreateSplitBoundaries();
   }

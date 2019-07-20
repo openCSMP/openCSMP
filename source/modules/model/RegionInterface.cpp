@@ -2704,7 +2704,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, co
   else
     throw csmp::Exception( ERROR, "RegionInterface<dim,REGION_COMPLEX>::RegionBetweeen", "Creating Region failed!" );
 
-  return false;
+  return true;
 }
 
 

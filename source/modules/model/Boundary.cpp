@@ -1099,7 +1099,8 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
           // nodes are assigned to the new face
           ePtr->FE()->NodesOfFace( face, fnids );
-          for ( size_t node = 0U; node<fnids.size(); ++node )
+          
+          for ( size_t node = 0U; node < fnids.size(); ++node )
             faceObj->Assign( node, ePtr->N( fnids[node] ) );
 
           // the new face is connected to the elements it is sandwiched between

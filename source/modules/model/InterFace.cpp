@@ -659,9 +659,8 @@ size_t  InterFace<dim>::ParentNodeNumber( size_t n, INTERFACE_SIDE side ) const
   else if ( side == MIDDLE )
     return n;
 
-  //JC: some nodes are not connected to the outer parent element in the unit test.
-  //throw csmp::Exception( ERROR, "InterFace<dim>::ParentNodeNumber:",
-  //                      "Node does not seem to be connected to parent element." );
+  throw csmp::Exception( ERROR, "InterFace<dim>::ParentNodeNumber:",
+                         "Node does not seem to be connected to parent element." );
   return 0;
 }
 
