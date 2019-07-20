@@ -29,7 +29,7 @@
 #include "GaussJordan_Solver.h"
 #include "PDE_Integrator_UoM_Mock.h"
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_NT_lhsop_N_dV.H"
+#include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VTK_Interface.h"
 #include "Quadrilaterator.h"
 
