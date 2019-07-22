@@ -346,6 +346,9 @@ class PDE_IntegratorExperimental {
     /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
     bool IdentifySharedBoundaries( const Model<dim>&, const COMPUTATION_DOMAIN<dim>&, std::list<std::string>& shared_boundaries );
   
+    /// for the elimination of Dirichlet constraints (Luat Khoa Tran)
+    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+  
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
@@ -366,6 +369,7 @@ class PDE_IntegratorExperimental {
 
     /// late accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
+    
 
     /// calls connected solver object to find x in A x = b problem
     virtual void  Solve();
@@ -386,7 +390,9 @@ class PDE_IntegratorExperimental {
     SparseMatrix            G_;                        ///< solution matrix
     std::vector<double64>   rh_;                       ///< righthand vector
     std::vector<double64>   x_;                        ///< solution vector
-    std::vector<long64>     Dirichlet_index_mapping_;  ///< mapping from the unknowns in the condensed solution matrix back to the indexed mode
+    std::vector<size_t>     DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
+    std::vector<double64>   pivotVector_;              ///< terms recovered from eliminated rows
+
     Solver*                 solver_;
 
     size_t                  dof_per_node_;

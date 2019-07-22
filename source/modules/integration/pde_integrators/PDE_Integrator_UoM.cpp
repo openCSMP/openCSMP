@@ -728,7 +728,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
           gfirst++;
         }
       }
-                   break;
+        break;
       case ARRAY: {
         ArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {

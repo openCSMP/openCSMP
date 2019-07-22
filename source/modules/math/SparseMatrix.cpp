@@ -39,10 +39,11 @@ SparseMatrix::~SparseMatrix()
  }
 
 
-void SparseMatrix::Resize( size_t n_x_m )
+void SparseMatrix::Resize( size_t n_x_m, bool preserve_allocated_memory )
  {
     data.resize( n_x_m );
-    vector<map<size_t,double64> >( data ).swap( data );
+    if ( !preserve_allocated_memory )
+      vector<map<size_t,double64> >( data ).swap( data );
  }
 
 

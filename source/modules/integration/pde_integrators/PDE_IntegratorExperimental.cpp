@@ -336,12 +336,11 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vect
 /**
 
 After an PDE_IntegratorExperimental has been applied, the solution matrix G and the righthand
-vector rh contain processed accumulation data which need to be removed before
+vector rh contain data which need to be removed before
 a new accumulation can take place. This is done automatically by the
-PDE_IntegratorExperimental, unless it has been set to retain the solution matrix.
+PDE_IntegratorExperimental, unless it has been asked to retain the solution matrix.
 
-In addition, you may want to re-use the PDE_IntegratorExperimental and define
-new PDE operators, a new computational domain and/or computational
+However, you may want to use new PDE operators, a new computational domain and/or computational
 method. In this case, Reset() allows to restore the PDE_IntegratorExperimental's default state
 and zero's the elements of its matrix and vector storage.
 
@@ -506,18 +505,19 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
  {
    // -------------------------------------------------------------------
    // 0. If the algorithm is just re-used, (and has not been reset by
-   //    the user, the righthand vector and
+   //    the user), the righthand vector and
    //    the solution vector are zeroed and nothing else is done.
    // -------------------------------------------------------------------
-   // * Change: x is not reset anymore
    if ( setup_established_ &&
-        ( !basic_operands_.empty() && !test_operands_.empty() ) )
+        target_.nodes == gref.Nodes() &&
+       !basic_operands_.empty() && !test_operands_.empty() )
      {
         if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
         if ( G_.Rows()  > 0 && !retain_matrix_ ) {
             G_.Erase();
             G_.Resize( rh_.size() );
           }
+        return;
      }
 
    // -------------------------------------------
@@ -528,79 +528,82 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
     target_.elements = gref.Elements();
 
 
-   // ------------------------------------------------------
-   // 2. if A.-setup for first time or if rebuild is necessary:
-   //    checking basic operands and comparing MathOperators
-   // ------------------------------------------------------
-   const Index  unspecified;
-
-   // lefthand MathOperators first
-   // ----------------------------
-   for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-         lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+   // ---------------------------------------------------------------------------------
+   // 2. if the PDE_Integrator is setup for first time or if its rebuild is necessary,
+   //    new maps of basic and test function operands are established
+   // ----------------------------------------------------------------------------------
+   if ( basic_operands_.empty() || test_operands_.empty() )
      {
-        // making list of unique basic operands
-        Index pkey = (*lhs_it).second->BasicOperandKey();
-        if (verbose_) cout <<"\nFor: '"<< (*lhs_it).first <<"' PDE operator is added to lefthand term list."<< endl;
-        // checking whether the intended variables exist in the database
-        //                                   Index,   calculation offset
-        if ( unspecified != pkey ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
-        else
-            throw csmp::Exception( WARNING,
-                                   "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
-                                   "lefthand basic operand not found.");
-        // test function operands are picked up when the righthandside is accumulated
-        // since they must also be present in there
-     }
+       const Index  unspecified;
 
-   // righthand MathOperators
-   // -----------------------
-   for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-         rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
-     {
-        // making a list of unique test operands
-        Index pkey = (*rhs_it).second->TestOperandKey();
-        if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
-        if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
-        else
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
-                                         "righthand test operand not found.");
-     }
-   // including pde operators on the model boundary
-   if ( !rhs_boundary_operators_.empty() ) {
+       // lefthand MathOperators first
+       // ----------------------------
+       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
+             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+         {
+            // making list of unique basic operands
+            Index pkey = (*lhs_it).second->BasicOperandKey();
+            if (verbose_) cout <<"\nFor: '"<< (*lhs_it).first <<"' PDE operator is added to lefthand term list."<< endl;
+            // checking whether the intended variables exist in the database
+            //                                   Index,   calculation offset
+            if ( pkey != unspecified ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
+            else
+                throw csmp::Exception( WARNING,
+                                       "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                       "lefthand basic operand not found.");
+            // test function operands are picked up when the righthandside is accumulated
+            // since they must also be present in there
+         }
+
+       // righthand MathOperators
+       // -----------------------
        for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-             rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+             rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
          {
             // making a list of unique test operands
             Index pkey = (*rhs_it).second->TestOperandKey();
-            if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
-            if ( unspecified != pkey ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+            if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
+            if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
             else
               throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
                                              "righthand test operand not found.");
          }
-     }
+       // including pde operators on the model boundary
+       if ( !rhs_boundary_operators_.empty() ) {
+           for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+                 rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+             {
+                // making a list of unique test operands
+                Index pkey = (*rhs_it).second->TestOperandKey();
+                if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
+                if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+                else
+                  throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                                 "righthand test operand not found.");
+             }
+         }
+
+       // Testing: for each righthand operand there must be a basic or test operand on the LHS
+       // ------------------------------------------------------------------------------------
+       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
+             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+         if ( basic_operands_.find( ((*lhs_it).second->BasicOperand()) ) == basic_operands_.end() &&
+              test_operands_.find( ((*lhs_it).second->TestOperand()) ) == test_operands_.end() )
+           {
+              cout <<"\nPDE_IntegratorExperimental<"<<  dim <<">::EstablishMatrixSetup: ";
+              cout <<"There is no lefthand operand corresponding to righthand operand. ";
+              cout <<"\nThe system of equations is undefined. ";
+              cout <<"\nCreate corresponding LHS basic or test Operand for: ";
+              cout << (*lhs_it).first << endl;
+              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+                                             "lefthand basic or test operand missing");
+           }
+
+      } // end: establishing basic and test function operators
    
 
-   // ---------------------------------------------------------------------------------------
-   // 3. Testing: for each righthand operand there must be a basic or test operand on the LHS
-   // ---------------------------------------------------------------------------------------
-   for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-         lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
-     if ( basic_operands_.find( ((*lhs_it).second->BasicOperand()) ) == basic_operands_.end() &&
-          test_operands_.find( ((*lhs_it).second->TestOperand()) ) == test_operands_.end() )
-       {
-          cout <<"\nPDE_IntegratorExperimental<"<<  dim <<">::EstablishMatrixSetup: ";
-          cout <<"There is no lefthand operand corresponding to righthand operand. ";
-          cout <<"\nThe system of equations is undefined. ";
-          cout <<"\nCreate corresponding LHS basic or test Operand for: ";
-          cout << (*lhs_it).first << endl;
-          throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                         "lefthand basic or test operand missing");
-       }
-
    // ----------------------------------------------------------------
-   //   4. Offsets are assigned to test Operands
+   //   3. Offsets are assigned to test Operands
    //      indicating positions, i,j in solution matrix.
    // ----------------------------------------------------------------
    size_t       offset(0U);
@@ -660,8 +663,9 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
          }
       }
 
+
    // --------------------------------------------------------------------------
-   // 5. communicating offsets to MathOperators
+   // 4. communicating offsets to MathOperators
    // --------------------------------------------------------------------------
    operandsIterator  iter;
 
@@ -706,22 +710,22 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
           (*rhs_it).second->TestOperandOffset( (*iter).second );
         else
           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                          (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
+                                 (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
+
    // ----------------------------------------------------------------------
-   // 6. Resizing 'G' and righthand vector 'rh' which is initialised to zero
+   // 5. Resizing 'G' and righthand vector 'rh' which is initialised to zero
    // ----------------------------------------------------------------------
-   // * Change: resize x as well
    G_.Resize( offset );
    rh_.resize( offset );
-   vector<double64>( rh_ ).swap( rh_ );
+// reduce runtime overhead:   vector<double64>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   vector<double64>( x_ ).swap( x_ );
+// reduce runtime overhead:   vector<double64>( x_ ).swap( x_ );
    setup_established_ = true;
 
- } // end EstablishMatrixSetup()
+ } // end EstablishMatrixSetup
 
 
 
@@ -779,95 +783,98 @@ TODO: write alternative method that deals with the case when a boundary is only 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    size_t                  i, j;
-    size_t                  position, offset;
-    ScalarVariable          sc;
-    VectorVariable<dim>     vc;
-    TensorVariable<dim>     ts;
-    Index                   prop_key;
-    const size_t            dim2(dim * dim);
-
     if ( !setup_established_ )
       throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
-    if ( basic_operands_.empty() ) {
+    if ( basic_operands_.empty() )
       throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
                              "No basic operands have been specified...");
-         return;
-      }
 
-     for ( operandsConstIterator
-           it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-         {
-            prop_key = (*it).first.key;
-            offset   = (*it).second;
-            typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+    size_t position(NULL_IDX);
 
-            if ( prop_key.place != NODE ) {
-                 throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
-                 "So far no conditions are assigned to elements, faces, segments");
-                 return;
-              }
+     for ( operandsConstIterator it=test_operands_.begin(); it!=test_operands_.end(); it++ )
+       {
+          Index prop_key = (*it).first.key;
+          if ( prop_key.place != NODE )
+            throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+                                            "So far no conditions are assigned to elements, faces, segments");
+          size_t offset = (*it).second;
+          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
-            switch( prop_key.type )
-              {
-                 case SCALAR:
-                    while ( niter != gref.NodesEnd() ) {
-                         // here the number in the new list is required to facilitate input
-                         // into the size-restricted computation matrix
-                         (*niter)->Read( prop_key, sc );
-                         position = (*niter)->Idx() + offset;
-                         rh_[ position ] *= sc();
-                         niter++;
-                      }
-                   break;
-                 case VECTOR:
-                    while ( niter != gref.NodesEnd() ) {
-                         (*niter)->Read( prop_key, vc );
-                         for ( i=0; i<dim; i++ ) {
-                             position = (*niter)->Idx() * dim + i + offset;
-                             rh_[ position ] *= vc(i);
-                           }
-                         niter++;
-                      }
-                   break;
-                 case TENSOR:
-                    while ( niter != gref.NodesEnd() ) {
-                         (*niter)->Read( prop_key, ts );
-                         for ( i=0; i<dim; i++ )
-                           for ( j=0; j<dim; j++ ) {
-                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                               rh_[ position ] *= ts(i,j);
-                             }
-                         niter++;
-                      }
-                    break;
-                 case ARRAY:{
-                   ArrayVariable  ar(prop_key.dataDepth);
-                   while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        for ( i=0; i<prop_key.dataDepth; i++ ) {
-                            position = (*niter)->Idx() * prop_key.dataDepth  + i + offset;
-                            rh_[ position ] *= ar(i);
-                          }
-                        niter++;
-                     }
-                   }
-                   break;
-                 case FLAGGEDARRAY:{
-                  FlaggedArrayVariable far(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                       (*niter)->Read( prop_key, far );
-                       for ( i=0; i<prop_key.dataDepth; i++ ) {
-                           position = (*niter)->Idx() * prop_key.dataDepth  + i + offset;
-                           rh_[ position ] *= far(i);
-                         }
-                       niter++;
+          switch (prop_key.type)
+            {
+              case SCALAR:
+                while (niter != gref.NodesEnd()) {
+                  // here the number in the new list is required to facilitate input
+                  // into the size-restricted computation matrix
+                  position = (*niter)->Idx() + offset;
+                  position = DOF_indexes_[position];
+                  if ( position != NULL_IDX )
+                    this->rh_[position] *= (*niter)->Read(prop_key);
+                  niter++;
+                }
+                break;
+              case VECTOR: {
+                  VectorVariable<dim> vc;
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, vc);
+                      for ( size_t i = 0; i < dim; i++) {
+                          position = (*niter)->Idx() * dim + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= vc(i);
+                        }
+                      niter++;
                     }
                   }
-             }
-         }
+                break;
+              case TENSOR: {
+                  TensorVariable<dim> ts;
+                  const size_t        dim2(dim * dim);
+                  while (niter != gref.NodesEnd()) {
+                    (*niter)->Read(prop_key, ts);
+                    for ( size_t i = 0; i < dim; i++)
+                      for ( size_t j = 0; j < dim; j++) {
+                          position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= ts(i, j);
+                        }
+                    niter++;
+                    }
+                  }
+                break;
+              case ARRAY: {
+                  ArrayVariable  ar(prop_key.dataDepth);
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, ar);
+                      for ( size_t i = 0; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= ar(i);
+                        }
+                      niter++;
+                    }
+                  }
+                break;
+              case FLAGGEDARRAY: {
+                  FlaggedArrayVariable far(prop_key.dataDepth);
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, far);
+                      for ( size_t i = 0; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= far(i);
+                        }
+                      niter++;
+                    }
+                 }
+               break;
+             default:
+                 throw csmp::Exception( WARNING, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+                                                 "Variable placement not recognised; nothing was done.");
+        } // end switch
+        
+    } // end for
 
  } // end AssignInitialConditions
 
@@ -876,185 +883,22 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
 
 
 
-
 /**
+    The Dirichlet constraints have already been eliminated,
+    but their contributions to the non-Dirichlet rows have to be added to the RHS.
+ 
+    The guts of the elimation now live in EnumerateAndFixMatrixSize().
 
-Two versions, for Modeland for Region computations are defined.
-This method accumulates the basic 'Operands' of the finite-element equations
-into the global solution matrix and the righthand vector. This is
-done only if their condition flag (VARIABLE_FLAG) is equal to the essential
-condition flag defined for this basic operand. (by default,
-essential-condition flags of Operands are DIRICH(let)).
-
-The method retrieves information from the mesh and the property managers.
-If a group computation is carried out, the target group is accessed by
-a pointer.
-
-@section implementation Implementation
-
-AssignEssentialConditions() does not decrease the size of the global
-matrix 'G' or the righthand vector 'rh'. In stead, it zeros rows
-in 'G' and then sets the G'ith element in question to one while the
-Operand value is then placed into 'rh' (this technique is described for
-fixed displacements (Dirichlet) in Segerlind, 1984, p. 417ff).
-
-@section application Application
-
-Because it simultaneously affects the solution matrix and the righthand
-vector, AssignEssentialConditions() must be applied AFTER the accumulation
-process has been completed.
-
-When you assemble vector or tensor variables, you also have the option
-of only assembling one of their components. To do this just flag the
-components that you want to assemble as DIRICH.
-
-@section messages Messages
-
-The following errors and warnings will be reported:
-
-@code
-please call EstablishMatrixSetup() prior to this method.
-@endcode
-
-If EstablishMatrixSetup() has not been executed so far.
-
-@code
-No basic operands have been specified...
-@endcode
-
-If there are no dependent variables defined !!!
-
-@code
-Warning: So far no conditions are assigned to elements, faces, segments
-@endcode
-
-The dependent variable must be placed on the nodes:
+    @author Luat Khoa Tran
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain)
  {
-    if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                      "please call EstablishMatrixSetup() prior to this method.");
-
-    if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                             "No (basic) operands have been specified...");
-
-    // ----------------------------------------------------
-    // 2. if the PDE_IntegratorExperimental applies to a Region
-    // ----------------------------------------------------
-    //  This method accumulates basic 'Operands' in the finite-element equations
-    //  into the global solution matrix and the righthand vector, if their condition
-    //  flag is equal to the essential condition flag of the basic operand.
-    //  (by default, the essential-condition flag of Operand's is DIRICH(let)).
-
-    //  AssignEssentialConditions() must be applied AFTER accumulation process.
-    //
-    //  When you assemble vector or tensor variables, you also have the option
-    //  of only assembling one of their components. To do this just set the
-    //  components that you do not want to assemble to DBL_MAX.
-    // -------------------------------------------------------------
-     const size_t dim2(dim * dim);
-
-     for ( operandsConstIterator
-           it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       {
-         typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
-         csmp::Index prop_key = (*it).first.key;
-         size_t      offset   = (*it).second;
-
-         if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                                 "So far no conditions are assigned to elements, faces, segments");
-
-          switch( prop_key.type )
-           {
-              case SCALAR:
-                while ( niter != gref.NodesEnd() ) {
-                      if ( (*niter)->Status( prop_key ) == DIRICH )
-                        {
-                           size_t  position = (*niter)->Idx() + offset;
-                           G_.ZeroRow( position );
-                           G_.Add( position, position, 1. );
-                           rh_[ position ] = (*niter)->Read( prop_key );
-                        }
-                       niter++;
-                    }
-                break;
-              case VECTOR: {
-                  VectorVariable<dim>  vc;
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, vc );
-                        for ( size_t i=0U; i<dim; i++ )
-                          if ( vc.Flag(i) == DIRICH ) {
-                               size_t  position = (*niter)->Idx() * dim + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, 1. );
-                               rh_[ position ] = vc(i);
-                            }
-                        niter++;
-                     }
-                  }
-                break;
-              case TENSOR: {
-                 TensorVariable<dim>  ts;
-                 while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ts );
-                        for ( size_t i=0U; i<dim; i++ )
-                          if ( ts.Flag(i) == DIRICH ) 
-                            for ( size_t j=0U; j<dim; j++ )
-                              {
-                                size_t  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                                G_.ZeroRow( position );
-                                G_.Add( position, position, 1. );
-                                rh_[ position ] = ts(i,j);
-                              }
-                         ++niter;
-                      }
-                   }
-                 break;
-              case ARRAY: {
-                  ArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        if ( ar.Flag() == DIRICH )
-                        {
-                            for ( size_t i=0U; i<prop_key.dataDepth; i++ )
-                            {
-                               size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, 1. );
-                               rh_[ position ] = ar(i);
-                            }
-                        }
-                        niter++;
-                     }
-                  }
-                 break;
-              case FLAGGEDARRAY: {
-                  FlaggedArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        for ( size_t i=0U; i<prop_key.dataDepth; i++ )
-                          if ( ar.Flag(i) == DIRICH ) {
-                               size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, 1. );
-                               rh_[ position ] = ar(i);
-                            }
-                        niter++;
-                     }
-                  }
-                 break;
-               default:
-                 throw csmp::Exception( FATAL_ERROR,
-                                       "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                                       "Variable type not recognised by this method" );
-        }
-    } // end for
-
-} // end AssignEssentialConditions
+    const size_t rh_size(this->rh_.size());
+    for ( size_t i(0); i < rh_size; ++i ) {
+         this->rh_[i] += pivotVector_[i];
+      }
+ }
 
 
 
@@ -1110,7 +954,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
              (*it_lhs).second->ComputeContribution( *(*git) );
              if ( (*it_lhs).second->MultiplyWithTimeIncrement() )
                (*it_lhs).second->MultiplyWithTimeFactor( time_increment_ );
-             (*it_lhs).second->AssignToGlobal( *(*git), G_ );
+             // LUAT KHOA TRAN - (*it_lhs).second->AssignToGlobal( *(*git), G_ );
+             (*it_lhs).second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
            }
 
     // accumulating into the righhand vector 'rhs'
@@ -1125,13 +970,19 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
              (*it_rhs).second->ComputeContribution( *(*git) );
              if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-             (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_);
            }
 
  } // end Accumulate
 
 
-// determining whether the nodes of the supplied element are contained in the computational domain
+
+
+
+/**
+    determining whether the nodes of the supplied element are contained in the computational domain
+*/
 template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>& face )
  {
@@ -1142,11 +993,12 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>&
  }
 
 
+
+
 /**
     for the accumulation of Neumann-flagged element integrals evaluated on Face objects
     
     TODO: deal with boundary conditions applied to LHS
-    TODO: deal with Robin and similar more complicated boundary conditions
     TODO: adopt method to handle InterFace objects (in split boundaries) as well
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
@@ -1221,7 +1073,8 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const 
              (*it_rhs).second->ComputeContribution( *(*git) );
              if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-             (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
            }
 
  } // end Late Accumulate
@@ -1254,7 +1107,8 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
                (*it_rhs).second->ComputeContribution( *(*git) );
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
              }
 
  } // end LateAccumulateBoundaryIntegrals
@@ -1342,75 +1196,92 @@ to the Model.
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref ) 
  {
-   Index   prop_key;
-   size_t  offset;
+   size_t       position;
    const size_t dim2(dim * dim);
 
-    for ( operandsIterator
-          it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
+    for ( operandsIterator it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
      {
         typename vector<Node<dim>*>::iterator  gfirst(gref.NodesBegin());
-        prop_key = (*it).first.key;
-        offset   = (*it).second;
-
+        Index   prop_key = (*it).first.key;
         if ( prop_key.place != NODE )
             throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
+        size_t  offset = (*it).second;
+       
         switch ( prop_key.type  )
          {
             case SCALAR:
-                 while ( gfirst != gref.NodesEnd() ) {
-                      const double64 sc = x_[ (*gfirst)->Idx() + offset ];
-                      (*gfirst)->Store( prop_key, makeScalar((*gfirst)->Status(prop_key),sc) );
-                      gfirst++;
-                   }
-               break;
-            case VECTOR: {
-                 VectorVariable<dim>  vc;
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, vc );
-                      for ( size_t i=0U; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
-                      (*gfirst)->Store( prop_key, vc );
-                      gfirst++;
-                   }
-                 }
-               break;
-            case TENSOR: {
-                 TensorVariable<dim>  ts;
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ts );
-                      for ( size_t i=0U; i<dim; i++ )
-                        for ( size_t k=0U; k<dim; k++ )
-                          ts(i,k) = x_[ (*gfirst)->Idx() * dim2 + i * dim + k + offset ];
-                      (*gfirst)->Store( prop_key, ts );
-                      gfirst++;
-                   }
+              while (gfirst != gref.NodesEnd()) {
+                  position = (*gfirst)->Idx() + offset;
+                  position = DOF_indexes_[position];
+                  if (position != NULL_IDX) {
+                    const double64 sc = this->x_[position];
+                    (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
+                  }
+                  gfirst++;
                 }
               break;
-            case ARRAY: {
-                 ArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
+            case VECTOR: {
+              VectorVariable<dim>  vc;
+              while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, vc);
+                  for (size_t i = 0U; i < dim; i++) {
+                      position = (*gfirst)->Idx() * dim + i + offset;
+                      position = DOF_indexes_[position];
+                      if (position != NULL_IDX) vc(i) = this->x_[position];
+                    }
+                  (*gfirst)->Store(prop_key, vc);
+                  gfirst++;
+                }
+              }
+            break;
+          case TENSOR: {
+            TensorVariable<dim>  ts;
+            while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, ts);
+                  for (size_t i = 0U; i < dim; i++)
+                    for (size_t k = 0U; k < dim; k++) {
+                         position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
+                         position = DOF_indexes_[position];
+                         if (position != NULL_IDX) ts(i, k) = this->x_[position];
+                      }
+                  (*gfirst)->Store(prop_key, ts);
+                  gfirst++;
+                }
+              }
+            break;
+          case ARRAY: {
+            ArrayVariable  ar(prop_key.dataDepth);
+            while (gfirst != gref.NodesEnd()) {
+                 (*gfirst)->Read(prop_key, ar);
+                 for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                     position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
+                     position = DOF_indexes_[position];
+                     if (position != NULL_IDX) ar(i) = this->x_[position];
                    }
-                 }
-               break;
-            case FLAGGEDARRAY: {
-                 FlaggedArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
-                   }
-                 }
-               break;
-        default:
+                 (*gfirst)->Store(prop_key, ar);
+                 gfirst++;
+              }
+            }
+          break;
+          case FLAGGEDARRAY: {
+              FlaggedArrayVariable  ar(prop_key.dataDepth);
+              while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, ar);
+                  for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                      position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
+                      position = DOF_indexes_[position];
+                      if (position != NULL_IDX) ar(i) = this->x_[position];
+                    }
+                  (*gfirst)->Store(prop_key, ar);
+                  gfirst++;
+                }
+            }
+          break;
+          default:
               throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
-            
+             
          } // end switch(type)
 
  } // end for
@@ -1451,6 +1322,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTAT
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
+    ReduceSystemSizeEliminatingEssentialConditions( domain );
  
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
     Accumulate( domain );
@@ -1631,6 +1503,151 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
     return false;
    
  } // end IdentifySharedBoundaries
+
+
+
+
+
+/**
+    Enumerate method must be applied AFTER establish matrix setup process.
+    and BEFORE the accumulated proecess.
+    When you assemble vector or tensor variables, you also have the option
+    of only assembling one of their components. To do this just set the
+    components that you do not want to assemble to DBL_MAX.
+ 
+    @author Luat Khoa Tran
+
+*/
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+ {
+    const size_t dim2(dim * dim);
+    DOF_indexes_.resize(this->rh_.size());
+    fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
+
+    if (!this->setup_established_)
+      throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+        "please call EstablishMatrixSetup() prior to this method.");
+
+    if (this->basic_operands_.empty())
+      throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+        "No (basic) operands have been specified...");
+
+    size_t DOF(0);
+
+    for ( typename PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::operandsConstIterator
+          it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
+        {
+          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
+          csmp::Index prop_key = (*it).first.key;
+          size_t      offset = (*it).second;
+
+          if (prop_key.place != NODE)
+            throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+              "So far no conditions are assigned to elements, faces, segments");
+
+          size_t  position(0);
+          switch (prop_key.type) {
+              case SCALAR:
+                while (niter != gref.NodesEnd()) {
+                    position = (*niter)->Idx() + offset;
+                    if ((*niter)->Status(prop_key) == DIRICH) DOF_indexes_[position] = NULL_IDX;
+                    else {
+                        DOF_indexes_[position] = DOF;
+                        DOF = DOF + 1U;
+                      }
+                    niter++;
+                  }
+                break;
+              case VECTOR:
+                while ( niter != gref.NodesEnd()) {
+                       for ( size_t i = 0U; i < dim; ++i ) {
+                            position = (*niter)->Idx() * dim + i + offset;
+                            if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
+                            else {
+                                 DOF_indexes_[position] = DOF;
+                                 DOF = DOF + 1U;
+                              }
+                         }
+                      niter++;
+                   }
+                break;
+              case TENSOR:
+                // tensors have flags only for their diagonal elements
+                while ( niter != gref.NodesEnd() )
+                  {
+                     for (size_t i = 0U; i < dim; i++) {
+                        if ( (*niter)->Status(prop_key,i) == DIRICH )
+                          for (size_t j = 0U; j < dim; j++) {
+                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                               DOF_indexes_[position] = NULL_IDX;
+                            }
+                        else for (size_t j = 0U; j < dim; j++) {
+                                  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                                  DOF_indexes_[position] = DOF;
+                                  DOF = DOF + 1U;
+                               }
+
+                       }
+                    niter++;
+                  }
+                break;
+              case ARRAY:
+                // array variables only have a single flag
+                while (niter != gref.NodesEnd()) {
+                    if ( (*niter)->Status(prop_key) == DIRICH )
+                      {
+                        for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          DOF_indexes_[position] = NULL_IDX;
+                        }
+                      }
+                    else {
+                        for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          DOF_indexes_[position] = DOF;
+                          DOF = DOF + 1U;
+                        }
+                      }// end if
+                    niter++;
+                  } // end while
+                break;
+              case FLAGGEDARRAY:
+                while ( niter != gref.NodesEnd() )
+                  {
+                     for (size_t i = 0U; i < prop_key.dataDepth; i++ )
+                        if ( (*niter)->Status(prop_key,i) == DIRICH ) {
+                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                             DOF_indexes_[position] = NULL_IDX;
+                          }
+                        else {
+                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                             DOF_indexes_[position] = DOF;
+                             DOF = DOF + 1U;
+                          }
+                     niter++;
+                  }
+             break;
+              default:
+                throw csmp::Exception(FATAL_ERROR,
+                  "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+                  "Variable type not recognised by this method");
+              }
+          
+      } // end for (all Dirichlet flagged variables)
+
+    this->G_.Resize(DOF);
+    this->rh_.resize(DOF);
+    vector<double64>(this->rh_).swap(this->rh_);
+    fill(this->rh_.begin(), this->rh_.end(), 0.);
+    this->x_.resize(DOF);
+    
+    pivotVector_.resize(DOF);
+    fill(pivotVector_.begin(), pivotVector_.end(), 0.);
+    vector<double64>(this->x_).swap(this->x_);
+
+ } // end ReduceSystemSizeEliminatingEssentialConditions
+
 
 
 
