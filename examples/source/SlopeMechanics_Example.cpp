@@ -50,7 +50,7 @@ namespace csmp {
 
 void SlopeMechanics_Example::Specifications()
   {
-     SetTitle( "Fluid pressure and stress distribution in embankment" );
+     SetTitle( "Fluid pressure and stress distribution in hill slope" );
      SetDifficulty( 2 );
      SetCategory( "Simulation of Physical Processes" );
      AddAuthor( "Stephan Matthai" );

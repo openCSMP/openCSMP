@@ -40,6 +40,9 @@ class SlightlyCompressible2PhaseDESTransport : public TwoPhaseDESTransport<dim, 
     virtual bool Schedule(Event<dim>* nd, double64 t_end);
     virtual void Update_DES(Event<dim>* nd, double64 t_clock);
     virtual void Update_TDS(Event<dim>* nd, double64 delta_t);
+  
+    private:
+      csmp::Index key_nQV_;  ///< 'nodal fluid volume source' for slightly compressible flow formulation (SKM fix)
    
 };
   

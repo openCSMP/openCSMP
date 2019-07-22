@@ -747,14 +747,32 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
   {
     Element<dim>* eit = (*ifit)->OuterParent();    
     for ( size_t en( 0 ); en < eit->Nodes(); ++en )
-      outsideElementNodes.insert( eit->N( en ) );
+    {
+      bool found( false );
+      for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
+      {
+        if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
+          found = true;
+      }
+      if( found )
+        outsideElementNodes.insert( eit->N( en ) );
+    }
   }
 
   for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
   {
     Element<dim>* eit = (*ifit)->InnerParent();    
     for ( size_t en( 0 ); en < eit->Nodes(); ++en )
+    {
+      bool found( false );
+      for ( size_t ifn( 0 ); ifn < (*ifit)->Nodes(); ++ifn )
+      {
+        if ( (*ifit)->N( ifn )->Idx() == eit->N( en )->Idx() )
+          found = true;
+      }
+      if ( found )
       insideElementNodes.insert( eit->N( en ) );
+    }
   }
 
   for ( auto oen : outsideElementNodes ) {

@@ -43,13 +43,13 @@
 
 using namespace std;
 
-static char rcsid[] = "$Id: meminfo.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
+static const char rcsid[] = "$Id: meminfo.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
 /* this array is defined further in this file */
 MEM_CONNECT mem_connect[MEM_CONNECT_MAX_LISTS];
 
 /* names of types */
-static char *mem_type_names[] = {
+static const char* mem_type_names[] = {
    "MAT",
    "BAND",
    "PERM",
@@ -104,8 +104,7 @@ MEM_CONNECT mem_connect2[MEM_CONNECT_MAX_LISTS] = {
 
 /* attach a new list of types */
 
-int mem_attach_list(int list, int ntypes, char *type_names[], 
-		    int (*free_funcs[])(void *), MEM_ARRAY info_sum[])
+int mem_attach_list(int list, int ntypes, const char* type_names[], int (*free_funcs[])(void *), MEM_ARRAY info_sum[] )
 /* number of a list and number of types there */
 /* list of names of types */
 /* list of releasing functions */

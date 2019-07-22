@@ -14,19 +14,13 @@ template<size_t> class Element;
 /**
     Specialisation for Element objects.
  
-    A light (non-unique) version of Region
+    A light (non-unique) version of Region that can grow or shrink,
+    retaining the knowledge of its perimeter.
+
+    @attention NimbleRegion does not have a name or properties of its own and
+    it is not managed by the RegionInterface, but by DES or any other parallel algorithm.
  
-    By contrast with ModelSubDomain, there is no partitioning into interior and perimeter
-    as this would require the costly creation of the inter-element connectivity, which
-    is already there because all unique regions are already there.
- 
-    The distinction of the perimeter is not needed either because boundary flags for computation
-    will be assigned by DES or any other user class of the NimbleRegion.
- 
-    NimbleRegion also cannot have a name or properties of its own and it is not managed by the RegionInterface
-    but by DES or another algorithm.
- 
- @attention this algorithm works only for linear elements.
+    @attention Thus far, Nimbleregion only works with linear elements.
  
     ===========================================================
 
@@ -38,8 +32,8 @@ template<size_t> class Element;
     3. Should be able to grow or shrink at low computational cost
     4. have the interfaces that are needed by the PDE_Integrator to function:
 
-   5. Since it is based on vectors, it must run high-mem so that they do not need to be reallocated all the time.
-      This means that they should not be pruned back after creation.
+   5. Since it is based on vectors, it must run high-mem so that these do not need to be reallocated all the time.
+      This means that are not be pruned back after creation.
 
    6. may or may not have a name (Name() or ID).
 

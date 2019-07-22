@@ -181,24 +181,24 @@ typedef unsigned int u_int;
 extern	int	isatty(int);
 #endif*/
 
-double	__ip__(register double	*dp1, 
-               register double *dp2,
-               register int len );
+double	__ip__(double	*dp1,
+               double *dp2,
+               int len );
 
 
-void	__mltadd__(register double *dp1,register double *dp2, 
-                   register double s, register int len);
+void	__mltadd__(double *dp1,double *dp2,
+                   double s, int len);
 
-void	__smlt__(register double *dp,register double s, register double	*out, 
-                 register int len);
+void	__smlt__(double *dp,double s, double	*out,
+                 int len);
 
-void	__add__(register double	*dp1, register double *dp2,register double *out,
-                register int len);
+void	__add__(double	*dp1, double *dp2,double *out,
+                int len);
 
-void	__sub__(register double	*dp1, register double *dp2, register double *out, 
-                register int len);
+void	__sub__(double	*dp1, double *dp2, double *out,
+                int len);
 
-void	__zero__(register double *dp,register int len);
+void	__zero__(double *dp,int len);
 
 void	__ip4__(double *v0,double *v1,double *v2,double *v3,double *w,double out[4], int len);
 
