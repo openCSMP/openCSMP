@@ -35,7 +35,6 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental()
    setup_established_(false),
    retain_matrix_(false),
    time_increment_(0.),
-   scale_factor_(1.),
    verbose_(true)
 {
    target_.nodes = target_.elements = 0U;
@@ -53,7 +52,6 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( 
    setup_established_(false),
    retain_matrix_(false),
    time_increment_(0.),
-   scale_factor_(1.),
    verbose_(true)
 {
   target_.nodes = target_.elements = 0U;
@@ -68,9 +66,11 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::~PDE_IntegratorExperimental(
  }
 
 
+
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Verbose( bool verbose )
 { verbose_=verbose; }
+
 
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
@@ -78,87 +78,11 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Verbose() const
 { return verbose_; }
 
 
-/** 
-@attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
-*/
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( const PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>& a )
- :
-   solver_(a.solver_),
-   newed_Solver_object_(false),
-   rh_(a.rh_),
-   x_(a.x_),
-   G_(a.G_),
-   lhs_operators_(a.lhs_operators_),
-   rhs_operators_(a.rhs_operators_),
-   basic_operands_(a.basic_operands_),
-   test_operands_(a.test_operands_),
-   postpro_operators_(a.postpro_operators_),
-   dof_per_node_(a.dof_per_node_),
-   setup_established_(a.setup_established_),
-   Dirichlet_index_mapping_(a.Dirichlet_index_mapping_),
-   retain_matrix_(a.retain_matrix_),
-   scale_factor_(1.),
-   time_increment_(a.time_increment_),
-   target_(a.target_),
-   verbose_(a.verbose_)
-{
-   cout <<"\nPDE_IntegratorExperimental: copy constructor: ";
-   cout <<"New algorithm uses new instance of solver."<< endl;
-}
-
-
-
-/** 
-@attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
-
-@todo SKM: fix so that the copy construction also involves the Solver
-*/
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>& PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::operator=( const PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>& a )
-{
-  if ( &a != this ) {
-      G_                 = a.G_;
-      rh_                = a.rh_;
-      x_                 = a.x_;
-
-      if ( a.solver_ != NULL ) {
-           assert( solver_ != NULL or solver_ == 0 );
-           if ( newed_Solver_object_ ) {
-               delete solver_;
-               /// SKM fix:  this is not a clean solution. One should bring over solver from other integrator instance
-               #ifdef CSMP_WITH_SAMG_SOLVER
-               solver_ = new SAMG_Solver();
-               #else
-               /// add extra functionality for alternative solver if needed
-               solver_ = new CSMP_DEFAULT_LINEAR_SOLVER();
-               #endif
-            }
-           else solver_ = a.solver_;
-        }
-
-      lhs_operators_     = a.lhs_operators_;
-      rhs_operators_     = a.rhs_operators_;
-      postpro_operators_ = a.postpro_operators_;
-      basic_operands_    = a.basic_operands_;
-      test_operands_     = a.test_operands_;
-      time_increment_    = a.time_increment_;
-      retain_matrix_     = a.retain_matrix_;
-      Dirichlet_index_mapping_ = a.Dirichlet_index_mapping_;
-      setup_established_ = a.setup_established_;
-      target_            = a.target_;
-      dof_per_node_      = a.dof_per_node_;
-      scale_factor_      = a.scale_factor_;
-      verbose_           = a.verbose_;
-    }
-  return *this;
-}
-
-
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain ) 
  { retain_matrix_=retain; }
+
 
 
 /**
@@ -311,7 +235,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<di
 
 
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegrals( MathOperatorRHS<dim>* op )
+void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( MathOperatorRHS<dim>* op )
  {
     rhs_boundary_operators_[ op->Name() ] = op;
     // force update during next application
@@ -951,23 +875,6 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
 
 
 
-/** 
-    Applies scale factor to Dirichlet matrix diagonal entries as applied by AssignEssentialConditions() and the rhs entries.
-    
-    Use, for instance, in mechanics problems where the unscaled matrix diagonal entry of (1) 
-    is >10 orders of magnitude greater than the other matrix entries and often, this is aggrevated
-    by extremely small entries in the RHS vector.
-    
-    @author SKM 1/10/2014
-*/
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ScaleEssentialConditions( double64 scale_factor )
- {
-    scale_factor_ = scale_factor;
-   
- } // end ScaleEssentialConditions
-
-
 
 
 /**
@@ -1069,8 +976,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
                         {
                            size_t  position = (*niter)->Idx() + offset;
                            G_.ZeroRow( position );
-                           G_.Add( position, position, scale_factor_ );
-                           rh_[ position ] = scale_factor_ * (*niter)->Read( prop_key );
+                           G_.Add( position, position, 1. );
+                           rh_[ position ] = (*niter)->Read( prop_key );
                         }
                        niter++;
                     }
@@ -1083,8 +990,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
                           if ( vc.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * dim + i + offset;
                                G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * vc(i);
+                               G_.Add( position, position, 1. );
+                               rh_[ position ] = vc(i);
                             }
                         niter++;
                      }
@@ -1100,8 +1007,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
                               {
                                 size_t  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                 G_.ZeroRow( position );
-                                G_.Add( position, position, scale_factor_ );
-                                rh_[ position ] = scale_factor_ * ts(i,j);
+                                G_.Add( position, position, 1. );
+                                rh_[ position ] = ts(i,j);
                               }
                          ++niter;
                       }
@@ -1117,8 +1024,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
                             {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * ar(i);
+                               G_.Add( position, position, 1. );
+                               rh_[ position ] = ar(i);
                             }
                         }
                         niter++;
@@ -1133,8 +1040,8 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
                           if ( ar.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * ar(i);
+                               G_.Add( position, position, 1. );
+                               rh_[ position ] = ar(i);
                             }
                         niter++;
                      }
@@ -1149,184 +1056,6 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignEssentialConditio
 
 } // end AssignEssentialConditions
 
-
-
-/**
-     For a given vector of Dirichlet entries in the solution sparse matrix A and the righthand vector rhs
-     this function performs a row / column elimination.
-     The results are returned into SparseMatrix B.
-     
-     @param index_mapping integer mapping relating the row/column indices of the condensed matrix to those of the
-     original matrix. This mapping is needed for the assignment of the solution results to the 
-     Model.
-*/
-void eliminateDirichletConstraints( const map<size_t,double64>& Dirichlet_constraints,
-                                    const csmp::SparseMatrix& A, vector<double64>& rhs,
-                                    csmp::SparseMatrix& B, vector<long64>& index_mapping  )
-{
-    // 0. checking whether anything needs to be done
-    if ( Dirichlet_constraints.empty() ) {
-         B = A;
-         index_mapping.resize( A.Rows() );
-         iota( index_mapping.begin(), index_mapping.end(), 0U );
-         return;
-      }
-
-    // 1. creating an old (full matrix) to new (eliminated matrix) index mapping
-    const size_t dof(A.Rows());
-    index_mapping.resize(dof);
-    long64 new_index(0U);
-  
-    for ( size_t i=0U; i<dof; ++i ) {
-         // if the index corresponds to a Dirichlet row, we can omitt it
-         if ( Dirichlet_constraints.find(i) != Dirichlet_constraints.end() )
-           index_mapping[i] = UNSPECIFIED;
-         else {
-             index_mapping[i] = new_index;
-             new_index++;
-          }
-      }
-
-    // 2. modifying the righthand vector taking into account the Dirichlet conditions
-    for ( map<size_t,double64>::const_iterator
-          it = Dirichlet_constraints.begin(); it != Dirichlet_constraints.end(); ++it )
-      {
-          // looping over rows, avoiding the zero elements
-          const SparseMatrix::colsConstIterator rowEnd(A.RowEnd((*it).first));
-          for ( SparseMatrix::colsConstIterator cit(A.RowBegin((*it).first)); cit!=rowEnd; ++cit )
-            if ( (*cit).first != (*it).first )
-              {
-                 // dividing the remaining rhs elements by the column values from the eliminated rows
-                 rhs[ (*cit).first ] = (*it).second * -A( (*cit).first, (*it).first );
-              }
-      }
-  
-     // 3. condensing the right-hand vector into non-Dirichlet elements only
-     new_index = 0U;
-     for ( size_t i=0U; i<dof; ++i )
-      // if the index corresponds to a Dirichlet row, we can omitt it
-      if ( index_mapping[i] != UNSPECIFIED ) {
-            rhs[new_index] = rhs[i];
-            new_index++;
-         }
-      rhs.resize( dof - Dirichlet_constraints.size() );
-  
-    // 4. generating the new condensed sparse matrix. Use the index_mapping to set matrix elements indices.
-    if ( B.Entries() > 0U ) B.Erase();
-    B.Resize( dof - Dirichlet_constraints.size() );
-    size_t row(0U);
-    // for all rows of the original matrix
-    for ( size_t original_row=0U; original_row<dof; ++original_row ) {
-        // if they are non zero
-        if ( index_mapping[original_row] != UNSPECIFIED ) {
-              const SparseMatrix::colsConstIterator rowEnd(A.RowEnd(original_row));
-              for ( SparseMatrix::colsConstIterator cit(A.RowBegin(original_row)); cit!=rowEnd; ++cit )
-                 // copying values if they are non zero
-                if ( index_mapping[ (*cit).first ] != UNSPECIFIED )
-                  B.Assign( row, index_mapping[ (*cit).first ], A( original_row, (*cit).first ) );
-               row++;
-          }
-     }
-  
-} // end eliminateDirichletConstraints
-
-
-
-
-    /// eliminates essential (Dirichlet) conditions, condensing the the solution matrix, rhs etc. to that of the remaining DOF
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions( const COMPUTATION_DOMAIN<dim>& domain )
- {
-    if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions:",
-                      "please call EstablishMatrixSetup() prior to this method.");
-
-    if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions:",
-                             "No (basic) operands have been specified...");
-
-     // 1. establish the rows (and columns) to which Dirichlet conditions were applied and storing these in a map
-     //    of index-value pairs
-    map<size_t,double64>  Dirichlet_constraints;
-
-    for ( operandsConstIterator
-          it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       {
-         typename vector<csmp::Node<dim>*>::const_iterator  niter(domain.NodesBegin());
-         const auto nodesEnd(domain.NodesEnd());
-         csmp::Index prop_key = (*it).first.key;
-         size_t      offset   = (*it).second;
-
-         if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions:",
-                                 "So far no conditions are assigned to elements, faces, segments");
-
-          switch( prop_key.type )
-           {
-              case SCALAR:
-                while ( niter != nodesEnd ) {
-                      if ( (*niter)->Status( prop_key ) == DIRICH ) {
-                           const size_t position = (*niter)->Idx() + offset;
-                           Dirichlet_constraints.insert( make_pair( position, scale_factor_ * (*niter)->Read( prop_key ) ) );
-                        }
-                       niter++;
-                    }
-                break;
-              case VECTOR: {
-                  VectorVariable<dim>  vc;
-                  while ( niter != nodesEnd ) {
-                        (*niter)->Read( prop_key, vc );
-                        for ( size_t i=0U; i<dim; i++ )
-                          if ( vc.Flag(i) == DIRICH ) {
-                               const size_t  position = (*niter)->Idx() * dim + i + offset;
-                               Dirichlet_constraints.insert( make_pair( position, scale_factor_ * vc(i) ) );
-                            }
-                        niter++;
-                     }
-                  }
-                break;
-              case ARRAY: {
-                  ArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != nodesEnd ) {
-                        (*niter)->Read( prop_key, ar );
-                        if ( ar.Flag() == DIRICH ) {
-                            for ( size_t i=0U; i<prop_key.dataDepth; i++ ) {
-                                 const size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                                 Dirichlet_constraints.insert( make_pair( position, scale_factor_ * ar(i) ) );
-                              }
-                          }
-                        niter++;
-                     }
-                  }
-                 break;
-              case FLAGGEDARRAY: {
-                  FlaggedArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != nodesEnd ) {
-                        (*niter)->Read( prop_key, ar );
-                        for ( size_t i=0U; i<prop_key.dataDepth; i++ )
-                          if ( ar.Flag(i) == DIRICH ) {
-                               const size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                               Dirichlet_constraints.insert( make_pair( position, scale_factor_ * ar(i) ) );
-                            }
-                        niter++;
-                     }
-                  }
-                 break;
-               default:
-                 throw csmp::Exception( FATAL_ERROR,
-                                       "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions:",
-                                       "Variable type not recognised by this method" );
-        }
-    } // end for
- 
-    cout <<"\n\nPDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EliminateEssentialConditions: eliminating "<< Dirichlet_constraints.size() <<" degrees of freedom.\n";
- 
-    // X. using the information about the Dirichlet constraints to do a row/ column elimination on the solution matrix
-    csmp::SparseMatrix B;
-    eliminateDirichletConstraints( Dirichlet_constraints, G_, rh_, B, Dirichlet_index_mapping_ );
-    G_ = B;
-   
- } // EliminateEssentialConditions
 
 
 
@@ -1694,90 +1423,6 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
 
 
 
-/**
-    Maps the results from the reduced-size solution vector back onto the full-size model.
-    The Dirichlet values are not touched; corresponding entries are flagged as UNSPECIFIED in the 
-    index mapping.
-*/
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults1( COMPUTATION_DOMAIN<dim>& domain )
- {
-   Index   prop_key;
-   size_t  offset;
-
-    for ( operandsIterator
-          it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
-     {
-        typename vector<Node<dim>*>::iterator  gfirst(domain.NodesBegin());
-        prop_key = (*it).first.key;
-        offset   = (*it).second;
-
-        if ( prop_key.place != NODE )
-            throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults1:",
-                                           "only nodal properties can be output by this method.");
-        switch ( prop_key.type  )
-         {
-            case SCALAR:
-                 while ( gfirst != domain.NodesEnd() ) {
-                      const size_t dof( (*gfirst)->Idx() + offset );
-                      if ( Dirichlet_index_mapping_[dof] != UNSPECIFIED )
-                        (*gfirst)->Store( prop_key, makeScalar((*gfirst)->Status(prop_key),x_[ Dirichlet_index_mapping_[dof] ]) );
-                      gfirst++;
-                   }
-               break;
-            case VECTOR: {
-                 VectorVariable<dim>  vc;
-                 while ( gfirst != domain.NodesEnd() ) {
-                      // reading the variable so that the flag variables are not overwritting
-                      (*gfirst)->Read( prop_key, vc );
-                      for ( size_t i=0U; i<dim; i++ ) {
-                            const size_t dof( (*gfirst)->Idx() * dim + i + offset );
-                            if ( Dirichlet_index_mapping_[dof] != UNSPECIFIED )
-                              vc(i) = x_[ Dirichlet_index_mapping_[dof] ];
-                        }
-                      (*gfirst)->Store( prop_key, vc );
-                      gfirst++;
-                   }
-                 }
-               break;
-            case ARRAY: {
-                 ArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != domain.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) {
-                            const size_t dof( (*gfirst)->Idx() * prop_key.dataDepth + i + offset );
-                            if ( Dirichlet_index_mapping_[dof] != UNSPECIFIED )
-                              ar(i) = x_[ Dirichlet_index_mapping_[dof] ];
-                         }
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
-                   }
-                 }
-               break;
-            case FLAGGEDARRAY: {
-                 FlaggedArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != domain.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) {
-                            const size_t dof( (*gfirst)->Idx() * prop_key.dataDepth + i + offset );
-                            if ( Dirichlet_index_mapping_[dof] != UNSPECIFIED )
-                              ar(i) = x_[ Dirichlet_index_mapping_[dof] ];
-                        }
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
-                   }
-                 }
-               break;
-        default:
-              throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults:",
-                                            "Output to ARRAY type variables is not supported by this method yet.");
-            
-         } // end switch(type)
-
- } // end for
-
- } // end OutputResults1
-
 
 
 
@@ -1840,49 +1485,6 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTAT
 
 
 
-/**
-    Eliminates Dirichlet conditions from the solution matrix and the righthand vector
-    prior to solving the linear algebraic system of equations.
-    
-    SKM FIX
-*/
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
-void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver1( COMPUTATION_DOMAIN<dim>& domain, bool debug )
- {
-    // 1. configure algorithm
-    EstablishMatrixSetup( domain );
- 
-    // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
-    Accumulate( domain );
-
-    // 3. If the computation is transient initial conditions must be input into the righthand vector
-    if ( Transient() == true ) AssignInitialConditions( domain );
-
-    // 4. If the computation is transient initial conditions must be input into the righthand vector
-    if ( Transient() == true ) LateAccumulate( domain );    
-
-    // 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
-    // AssignEssentialConditions( domain );
-    // directly generates the solution matrix in CompressedRowStorage format 
-    EliminateEssentialConditions( domain );
-   
-    // 6. diagnostics
-    if ( debug ) {
-         Out();
-         OutputGlobals();
-         // OutputInput();
-      }
- 
-    // 7. invert global matrix
-    Solve();
-
-    // 8. write results back into Model
-    OutputResults1( domain );
-                           
-    // 9. Calculation of result-dependent properties                                 
-    PostProcess( domain );
-
- } // end IntegrateOver1
 
 
 
@@ -2145,7 +1747,6 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Out() const
      cout <<"\n\tset up etablished:                  "<< setup_established_;
      cout <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
      cout <<"\n\ttime increment:                     "<< time_increment_;
-     cout <<"\n\tscale factor for essential conds:   "<< scale_factor_;
    
      if ( solver_ != NULL ) cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
    
@@ -2163,8 +1764,8 @@ template class PDE_IntegratorExperimental<1U,Boundary>;
 template class PDE_IntegratorExperimental<2U,Boundary>;
 template class PDE_IntegratorExperimental<3U,Boundary>;
 
-//template class PDE_IntegratorExperimental<1U,SplitBoundary>;
-//template class PDE_IntegratorExperimental<2U,SplitBoundary>;
-//template class PDE_IntegratorExperimental<3U,SplitBoundary>;
+template class PDE_IntegratorExperimental<1U,SplitBoundary>;
+template class PDE_IntegratorExperimental<2U,SplitBoundary>;
+template class PDE_IntegratorExperimental<3U,SplitBoundary>;
 
 } // end namespace csmp
