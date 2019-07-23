@@ -20,7 +20,8 @@ SlightlyCompressible2PhaseDESTransport<dim,FLOW_FUNCTIONS>::SlightlyCompressible
                                                                                                     bool tensor_k,
                                                                                                     double64 PEP_multiplier,
                                                                                                     double64 cfl_multiplier )
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier),
+      key_nQV_(m.Database().StorageKey("nodal fluid volume source"))
 {
     cout<<"SlightlyCompressible2PhaseDESTransport constructed"<<endl;
 } // end constructor  
@@ -36,7 +37,8 @@ SlightlyCompressible2PhaseDESTransport<dim,FLOW_FUNCTIONS>::SlightlyCompressible
                                                                                                      double64 PEP_multiplier,
                                                                                                      double64 cfl_multiplier,
                                                                                                      double64 relaxing_factor )
-    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor)
+    : TwoPhaseDESTransport<dim,FLOW_FUNCTIONS> (m,target_region,ff,with_capillary_spreading,with_gravity_forces,tensor_k,PEP_multiplier,cfl_multiplier, relaxing_factor),
+      key_nQV_(m.Database().StorageKey("nodal fluid volume source"))
 {
     cout<<"SlightlyCompressible2PhaseDESTransport constructed"<<endl;
 } // end constructor 
@@ -299,7 +301,7 @@ bool SlightlyCompressible2PhaseDESTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<
     //compute target change
     double64 dt_CFL = array[2];//CFL time increment
     double64 ChangeRate = nd->Read( this->key_dsnw);//rate of change
-    double64 source = nd->Read(this->key_nQV);
+    double64 source = nd->Read(this->key_nQV_);
     double64 dC_CFL = dt_CFL*this->CFL_multiplier_*(-ChangeRate+source);//targe change
 
     if (fabs(dC_CFL) < numeric_limits<double64>::epsilon()){//idle node/FV
@@ -345,7 +347,7 @@ void SlightlyCompressible2PhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_DES(Even
     nd->Store(this->key_sCO2_0, makeScalar( status, solution ));//store old solution
     double64 t_current = array[0]; //current time stamp
     double64 new_solution = solution - (t_clock - t_current) * ChangeRate;//compute new solution
-    const double64 source(nd->Read(this->key_nQV));
+    const double64 source(nd->Read(this->key_nQV_));
     new_solution += source * (t_clock - t_current);//add source to new solution
         
     //check new solution value against range and stored it to key_sCO2
@@ -388,7 +390,7 @@ void SlightlyCompressible2PhaseDESTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Even
     double64 solution = nd->Read(this->key_sCO2);//old solution
     nd->Store(this->key_sCO2_0, makeScalar( status, solution ));//store old solution
     double64 new_solution = solution - delta_t * ChangeRate;//compute new solution
-    const double64 source(nd->Read( this->key_nQV));
+    const double64 source(nd->Read( this->key_nQV_));
     new_solution += source * delta_t;//add source to new solution.
                 
     //check new solution value against range and stored it to key_sCO2

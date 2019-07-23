@@ -276,14 +276,13 @@ ZVEC     *bzv_finput(FILE *fp,ZVEC *vec)
 /**************************************************************************
   Output routines
   **************************************************************************/
-static char    *zformat = " (%14.9g, %14.9g) ";
+static const char* zformat = " (%14.9g, %14.9g) ";
 
-char	*setzformat(char *f_string)
+const char* setzformat( const char* f_string )
 {
-    char	*old_f_string;
-    old_f_string = zformat;
+    const char* old_f_string(zformat);
     if ( f_string != (char *)NULL && *f_string != '\0' )
-	zformat = f_string;
+	  zformat = f_string;
 
     return old_f_string;
 }

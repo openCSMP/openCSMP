@@ -361,15 +361,13 @@ static char line[MAXLINE];
 /**************************************************************************
   Output routines
   **************************************************************************/
-static char    *format = "%14.9g ";
+static const char* format = "%14.9g ";
 
-  char	*setformat(char    *f_string)
+const char* setformat( const char* f_string )
 {
-    char	*old_f_string;
-    old_f_string = format;
-    if ( f_string != (char *)NULL && *f_string != '\0' )
-	format = f_string;
-
+    const char* old_f_string(format);
+    if ( f_string != (const char *)NULL && *f_string != '\0' )
+	  format = f_string;
     return old_f_string;
 }
 

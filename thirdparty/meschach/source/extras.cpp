@@ -91,7 +91,7 @@ static char	rcsid[] = "$Id: extras.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp 
 /* Mscale -- sets x <- alpha.x */
 void	Mscale(int len, double alpha, Real *x)
 {
-    register int	i;
+    int	i;
 
     for ( i = 0; i < len; i++ )
 	x[i] *= alpha;
@@ -100,8 +100,8 @@ void	Mscale(int len, double alpha, Real *x)
 /* Mswap -- swaps x and y */
 void	Mswap(int len,Real *x,Real *y)
 {
-    register int	i;
-    register Real	tmp;
+    int	i;
+    Real	tmp;
 
     for ( i = 0; i < len; i++ )
     {
@@ -114,7 +114,7 @@ void	Mswap(int len,Real *x,Real *y)
 /* Mcopy -- copies x to y */
 void	Mcopy(int len,Real *x,Real *y)
 {
-    register int	i;
+    int	i;
 
     for ( i = 0; i < len; i++ )
 	y[i] = x[i];
@@ -123,7 +123,7 @@ void	Mcopy(int len,Real *x,Real *y)
 /* Maxpy -- y <- y + alpha.x */
 void	Maxpy(int len,double alpha,Real *x,Real *y)
 {
-    register int	i, len4;
+    int	i, len4;
 
     /****************************************
     for ( i = 0; i < len; i++ )
@@ -149,15 +149,15 @@ void	Maxpy(int len,double alpha,Real *x,Real *y)
 /* Mdot -- returns x'.y */
 double	Mdot(int len,Real *x,Real *y)
 {
-    register int	i, len4;
-    register Real	sum;
+    int	i, len4;
+    Real	sum;
 
 #ifndef REGISTER_RICH
     sum = 0.0;
 #endif
 
 #ifdef REGISTER_RICH
-    register Real	sum0, sum1, sum2, sum3;
+    Real	sum0, sum1, sum2, sum3;
     
     sum0 = sum1 = sum2 = sum3 = 0.0;
     
@@ -188,8 +188,8 @@ double	Mdot(int len,Real *x,Real *y)
 /* Mnorminf -- returns ||x||_inf */
 double	Mnorminf(int len, Real *x)
 {
-    register int	i;
-    register Real	tmp, max_val;
+    int	i;
+    Real	tmp, max_val;
 
     max_val = 0.0;
     for ( i = 0; i < len; i++ )
@@ -205,8 +205,8 @@ double	Mnorminf(int len, Real *x)
 /* Mnorm1 -- returns ||x||_1 */
 double	Mnorm1(int len,Real *x)
 {
-    register int	i;
-    register Real	sum;
+    int	i;
+    Real	sum;
 
     sum = 0.0;
     for ( i = 0; i < len; i++ )
@@ -218,8 +218,8 @@ double	Mnorm1(int len,Real *x)
 /* Mnorm2 -- returns ||x||_2 */
 double	Mnorm2(int len,Real *x)
 {
-    register int	i;
-    register Real	norm, invnorm, sum, tmp;
+    int	i;
+    Real	norm, invnorm, sum, tmp;
 
     norm = Mnorminf(len,x);
     if ( norm == 0.0 )
@@ -240,9 +240,9 @@ double	Mnorm2(int len,Real *x)
 /* Mmv -- y <- alpha.A.x + beta.y */
 void	Mmv(int m,int n,double alpha,Real **A, int j0, Real *x,double beta,Real *y)
 {
-    register int	i, j, m4, n4;
-    register Real	sum0, sum1, sum2, sum3, tmp0, tmp1, tmp2, tmp3;
-    register Real	*dp0, *dp1, *dp2, *dp3;
+    int	i, j, m4, n4;
+    Real	sum0, sum1, sum2, sum3, tmp0, tmp1, tmp2, tmp3;
+    Real	*dp0, *dp1, *dp2, *dp3;
 
     /****************************************
     for ( i = 0; i < m; i++ )
@@ -301,14 +301,14 @@ void	Mmv(int m,int n,double alpha,Real **A, int j0, Real *x,double beta,Real *y)
 /* Mvm -- y <- alpha.A^T.x + beta.y */
 void	Mvm(int m, int n, double alpha,Real **A,int j0,Real *x,double beta,Real *y)
 {
-    register int	i, j, m4, n2;
-    register Real	*Aref;
-    register Real 	tmp;
+    int	i, j, m4, n2;
+    Real	*Aref;
+    Real 	tmp;
 
 #ifdef REGISTER_RICH
-    register Real	*Aref0, *Aref1;
-    register Real	tmp0, tmp1;
-    register Real	yval0, yval1, yval2, yval3;
+    Real	*Aref0, *Aref1;
+    Real	tmp0, tmp1;
+    Real	yval0, yval1, yval2, yval3;
 #endif
 
     if ( beta != 1.0 )
@@ -368,9 +368,9 @@ void	Mvm(int m, int n, double alpha,Real **A,int j0,Real *x,double beta,Real *y)
 /* Mupdate -- A <- A + alpha.x.y^T */
 void	Mupdate(int m,int n,double alpha,Real *x,Real *y,Real **A,int j0)
 {
-    register int	i, j, n4;
-    register Real	*Aref;
-    register Real 	tmp;
+    int	i, j, n4;
+    Real	*Aref;
+    Real 	tmp;
 
     /****************************************
     for ( i = 0; i < m; i++ )
@@ -402,8 +402,8 @@ void	Mupdate(int m,int n,double alpha,Real *x,Real *y,Real **A,int j0)
 void	Mmm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    register int	i, j, k;
-    /* register Real	tmp, sum; */
+    int	i, j, k;
+    /* Real	tmp, sum; */
 
     /****************************************
     for ( i = 0; i < m; i++ )
@@ -418,7 +418,7 @@ void	Mmm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real
 void	Mmtrm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    register int	i, j, k;
+    int	i, j, k;
 
     /****************************************
     for ( i = 0; i < m; i++ )
@@ -433,7 +433,7 @@ void	Mmtrm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Re
 void	Mmmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    register int	i, j, k;
+    int	i, j, k;
 
     /****************************************
     for ( i = 0; i < m; i++ )
@@ -448,7 +448,7 @@ void	Mmmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Re
 void	Mmtrmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    register int	i, j, k;
+    int	i, j, k;
 
     for ( i = 0; i < m; i++ )
 	for ( j = 0; j < n; j++ )

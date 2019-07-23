@@ -56,7 +56,7 @@ using namespace std;
 /* The only error caught in this file! */
 #define	E_SIGNAL	16
 
-static	char	*err_mesg[] =
+static	const char* err_mesg[] =
 {	  "unknown error",			/* 0 */
 	  "sizes of objects don't match",	/* 1 */
 	  "index out of bounds",		/* 2 */
@@ -83,7 +83,7 @@ static	char	*err_mesg[] =
 
 #define	MAXERR	(sizeof(err_mesg)/sizeof(char *))
 
-static char *warn_mesg[] = {
+static const char* warn_mesg[] = {
    "unknown warning",				/* 0 */
    "wrong type number (use macro TYPE_*)",	/* 1 */
    "no corresponding mem_stat_mark",		/* 2 */
@@ -103,7 +103,7 @@ jmp_buf	restart;
 /* array of pointers to lists of errors */
 
 typedef struct {
-   char **listp;    /* pointer to a list of errors */
+   const char** listp;    /* pointer to a list of errors */
    unsigned len;    /* length of the list */
    unsigned warn;   /* =FALSE - errors, =TRUE - warnings */
 }  Err_list;
@@ -124,8 +124,8 @@ static int err_list_end = 2;   /* number of elements in err_list */
    warn == TRUE - warnings (continue the program);
    Note: lists numbered 0 and 1 are attached automatically,
    you do not need to do it
-   */
-  int err_list_attach(int list_num, int list_len, char **err_ptr, int warn)
+*/
+int err_list_attach(int list_num, int list_len, const char** err_ptr, int warn)
 {
    if (list_num < 0 || list_len <= 0 ||
        err_ptr == (char **)NULL) 
@@ -143,7 +143,7 @@ static int err_list_end = 2;   /* number of elements in err_list */
 	exit(0);
      }
 
-   if (err_list[list_num].listp != (char **)NULL &&
+   if (err_list[list_num].listp != static_cast<const char**>(NULL) &&
        err_list[list_num].listp != err_ptr)
      free((char *)err_list[list_num].listp);
    err_list[list_num].listp = err_ptr;
@@ -159,8 +159,8 @@ static int err_list_end = 2;   /* number of elements in err_list */
   int err_list_free(int list_num)
 {
    if (list_num < 0 || list_num >= err_list_end) return -1;
-   if (err_list[list_num].listp != (char **)NULL) {
-      err_list[list_num].listp = (char **)NULL;
+   if (err_list[list_num].listp != static_cast<const char**>(NULL) ) {
+      err_list[list_num].listp = static_cast<const char**>(NULL);
       err_list[list_num].len = 0;
       err_list[list_num].warn = 0;
    }
@@ -212,7 +212,7 @@ static	int	err_flag = EF_EXIT, num_errs = 0, cnt_errs = 1;
    list_num is an error list number (0 is the basic list 
    pointed by err_mesg, 1 is the basic list of warnings)
  */
-  int	ev_err(char *file, int err_num, int line_num, char *fn_name, int list_num)
+  int	ev_err( const char* file, int err_num, int line_num, const char* fn_name, int list_num )
 {
    int	num;
    
