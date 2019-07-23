@@ -782,13 +782,34 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
     manyfoldNodes.insert( make_pair( oen, duplicatedNode ) );
   }
 
+  Region<dim>* outer_region = nullptr;
   for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
   {
-    Element<dim>* eit = (*ifit)->OuterParent();
-    for ( size_t en( 0 ); en < eit->Nodes(); ++en ) {
-      if ( manyfoldNodes.find( eit->N( en ) ) != manyfoldNodes.end() ) {
-        eit->Assign( en, manyfoldNodes[eit->N( en )] );
+    Element<dim>* oeit = (*ifit)->OuterParent();
+    for ( typename std::map<std::string, csmp::Region<dim> >::iterator
+          it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it ) {
+      if ( (*it).second.Contains( oeit ) ) {
+        outer_region = &(*it).second;
+        break;
       }
+    }
+  }
+  for ( typename std::vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != this->ElementsEnd(); ++ifit )
+  {
+    Element<dim>* oeit = (*ifit)->OuterParent();
+    for ( size_t en( 0 ); en < oeit->Nodes(); ++en ) {
+      if ( manyfoldNodes.find( oeit->N( en ) ) != manyfoldNodes.end() ) {
+        oeit->Assign( en, manyfoldNodes[oeit->N( en )] );
+      }
+    }
+
+    if ( model.UniqueRegions() > 1 ) {
+      Region<dim>&  mref( model.Region( "Model" ) );
+      for ( typename vector<Element<dim>*>::iterator eit( mref.ElementsBegin() ); eit != mref.ElementsEnd(); ++eit )
+        for ( size_t en( 0 ); en < (*eit)->Nodes(); ++en )
+          if ( outer_region->Contains( (*eit) ) )
+            if ( manyfoldNodes.find( (*eit)->N( en ) ) != manyfoldNodes.end() )
+              (*eit)->Assign( en, manyfoldNodes[(*eit)->N( en )] );
     }
   }
 
