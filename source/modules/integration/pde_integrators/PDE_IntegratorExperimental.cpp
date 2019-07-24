@@ -34,6 +34,7 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental()
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
+   trim_vectors_(false),
    time_increment_(0.),
    verbose_(true)
 {
@@ -51,6 +52,7 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( 
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
+   trim_vectors_(false),
    time_increment_(0.),
    verbose_(true)
 {
@@ -82,6 +84,16 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Verbose() const
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain ) 
  { retain_matrix_=retain; }
+
+
+/**
+    Default = false, switch on if size matters more than speed.
+*/
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVectors( bool trim )
+ {
+     trim_vectors_ = trim;
+ }
 
 
 
@@ -512,8 +524,10 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
         target_.nodes == gref.Nodes() &&
        !basic_operands_.empty() && !test_operands_.empty() )
      {
+        // TODO: one might want to retain the right-hand vector, but not the matrix
         if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
         if ( G_.Rows()  > 0 && !retain_matrix_ ) {
+            // TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
             G_.Erase();
             G_.Resize( rh_.size() );
           }
@@ -719,10 +733,10 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
    // ----------------------------------------------------------------------
    G_.Resize( offset );
    rh_.resize( offset );
-// reduce runtime overhead:   vector<double64>( rh_ ).swap( rh_ );
+   if ( trim_vectors_ ) vector<double64>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-// reduce runtime overhead:   vector<double64>( x_ ).swap( x_ );
+   if ( trim_vectors_ ) vector<double64>( x_ ).swap( x_ );
    setup_established_ = true;
 
  } // end EstablishMatrixSetup
@@ -935,13 +949,11 @@ with the time-increment.
 
 Accumulate() is executed internally when the PDE_IntegratorExperimental is passed to the
 Model.
+
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    // setting up the index mapping from global to local node ID numbers
-    gref.RenumberNodes();
-
     // accumulating into the sparse matrix 'G'
     // ---------------------------------------
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
@@ -1057,6 +1069,9 @@ AssignToGlobal();
 LateAccumulate() is executed only in time-dependent calculations. The
 execution is invoked internally, when the PDE_IntegratorExperimental is passed to the
 Model.
+
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_DOMAIN<dim>& gref )
@@ -1086,6 +1101,9 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const 
 /**
     For source terms on the surface that need to be added to the righthand side after time or other
     conditions were multiplied in the righthand vector.
+
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+ 
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
@@ -1191,6 +1209,8 @@ The solution vector indices are re-translated into the temporary node ids.
 
 OutputResults() is executed internally, when a PDE_IntegratorExperimental object is passed
 to the Model.
+
+@attention Method relies on an 0..n contiguous node numbering in the region (computational domain).
 
  */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
@@ -1322,6 +1342,13 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTAT
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
+    if ( !rhs_boundary_operators_.empty() )
+      throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<>::IntegrateOver(domain):",
+                            "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
+   
+    // setting up 0..n contiguous node numbering for index mapping
+    domain.RenumberNodes();
+
     ReduceSystemSizeEliminatingEssentialConditions( domain );
  
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
@@ -1362,7 +1389,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTAT
 
 
 /** 
-    Accumulates element integrals, 
+    Accumulates element integrals, but
     simultaneously considering potential Boundary objects associated with the simplicial complex.
     The domain is the computational domain to which the PDE_Integrator is applied.
     
@@ -1375,7 +1402,12 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
- 
+
+    // setting up 0..n contiguous node numbering for index mapping
+    domain.RenumberNodes();
+
+    ReduceSystemSizeEliminatingEssentialConditions( domain );
+
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
     Accumulate( domain );
    
@@ -1515,6 +1547,8 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
     of only assembling one of their components. To do this just set the
     components that you do not want to assemble to DBL_MAX.
  
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+ 
     @author Luat Khoa Tran
 
 */
@@ -1532,6 +1566,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
     if (this->basic_operands_.empty())
       throw csmp::Exception(ERROR, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
         "No (basic) operands have been specified...");
+
 
     size_t DOF(0);
 
@@ -1638,13 +1673,14 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    vector<double64>(this->rh_).swap(this->rh_);
+    if ( trim_vectors_ ) vector<double64>(this->rh_).swap(this->rh_);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
-    
+    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
+
     pivotVector_.resize(DOF);
     fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    vector<double64>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) vector<double64>(this->x_).swap(this->x_);
 
  } // end ReduceSystemSizeEliminatingEssentialConditions
 

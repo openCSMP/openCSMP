@@ -325,6 +325,9 @@ class PDE_IntegratorExperimental {
     /// if an evolutionary problem where only the right-hand side changes, the matrix needs to be assembled only once
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
   
+    /// enables the 'swap trick' to keep the size and capacity of solution and righthand vectors equal
+    void          TrimExcessCapacityOfVectors( bool trim );
+  
     /// writes out the sparsity pattern of the solution matrix
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
   
@@ -396,7 +399,7 @@ class PDE_IntegratorExperimental {
     Solver*                 solver_;
 
     size_t                  dof_per_node_;
-    bool                    setup_established_, retain_matrix_;
+    bool                    setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
     bool                    newed_Solver_object_;
     double64                time_increment_;
 

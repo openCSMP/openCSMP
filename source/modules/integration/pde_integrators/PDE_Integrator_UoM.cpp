@@ -626,7 +626,6 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
     
-    // LUAT's new code
     pivotVector_.resize(DOF);
 	  fill(pivotVector_.begin(), pivotVector_.end(), 0.);
     vector<double64>(this->x_).swap(this->x_);
