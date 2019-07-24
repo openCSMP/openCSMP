@@ -2,60 +2,28 @@
 #include "BrooksCoreySaturationFunctionswithHysteresis.h"
 #include "FlowFunctionsModule.h"
 #include "Element.h"
+#include "Model.h"
 
 
 using namespace std;
 
 namespace csmp {
   
-  template<size_t dim, template<size_t> class USER>
-  BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis(  PropertyDatabase<dim>& pref )
-  {
-    InitializeVariablsAndKeys( pref );
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-// Initialising the local variables and keys
 template<size_t dim, template<size_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::InitializeVariablsAndKeys( PropertyDatabase<dim>& pref )
-  {
-  
-  //creating new variables if not defined yet from input file
-/* SKM FIX
-
-You need to call
-
-CreateProperty( const char* new_prop, const char* unit,
-                               VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
-                               size_t vsize = 1, double64 vmin = -1.0e+30, double64 vmax = 1.0e+30,
-                               std::string usage = "???" );
-
-on the model, else there is no storage for the variable and all hell breaks loose!
-
-  if(!pref.IsDefined("previous imbibition endpoint"))      pref.AddProperty( "previous imbibition endpoint", "none", SCALAR, ELEMENT);
-  if(!pref.IsDefined("previous drainage endpoint"))        pref.AddProperty( "previous drainage endpoint", "none", SCALAR, ELEMENT);
-  if(!pref.IsDefined("pseudo residual water saturation"))  pref.AddProperty( "pseudo residual water saturation", "none", SCALAR, ELEMENT);
-  if(!pref.IsDefined("pseudo residual CO2 saturation"))    pref.AddProperty( "pseudo residual CO2 saturation", "none", SCALAR, ELEMENT);
-    
-  //assigning keys
-  key_SwImbToDr_ = pref.StorageKey("previous imbibition endpoint");
-  key_SwDrToImb_ = pref.StorageKey("previous drainage endpoint");
-  key_prsH2O_    = pref.StorageKey("pseudo residual water saturation");
-  key_prsCO2_    = pref.StorageKey("pseudo residual CO2 saturation");
-*/
-}
-
-
-
-  
-  
+BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& pref )
+  : key_SwImbToDr_(pref.StorageKey("previous imbibition endpoint")),
+    key_SwDrToImb_(pref.StorageKey("previous drainage endpoint")),
+    key_prsH2O_(pref.StorageKey("pseudo residual water saturation")),
+    key_prsCO2_(pref.StorageKey("pseudo residual CO2 saturation"))
+ {
+   /* in case these will have to be created dynamically
+   
+     model.CreateProperty( "previous imbibition endpoint", "none", SCALAR, ELEMENT);
+     model.CreateProperty( "previous drainage endpoint", "none", SCALAR, ELEMENT);
+     model.CreateProperty( "pseudo residual water saturation", "none", SCALAR, ELEMENT);
+     model.CreateProperty( "pseudo residual CO2 saturation", "none", SCALAR, ELEMENT);
+   */
+ }
   
   
   
@@ -138,9 +106,9 @@ double64 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatu
  
 */
 template<size_t dim, template<size_t> class USER>
-TWO_PHASE_FLOW_PROCESS BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e ) const
+typename BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::TWO_PHASE_FLOW_PROCESS
+BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e ) const
   {
-
     const double64 S_old = e->PropertyValueAtBaryCenter( User()->key_sCO2_0 );
     assert(S_old >= 0 and S_old <=1) ;
 

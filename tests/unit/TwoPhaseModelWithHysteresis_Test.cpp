@@ -189,23 +189,20 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   
   ArrayVariable arrayvariable1_(8, PLAIN);
   
-  arrayvariable1_(AWD) = a_[H2O][DRAINAGE];
-  arrayvariable1_(AOD) = a_[CO2][DRAINAGE];
-  arrayvariable1_(CWD) = c_[H2O][DRAINAGE];
-  arrayvariable1_(COD) = c_[CO2][DRAINAGE];
+  typedef BrooksCoreySaturationFunctionsWithHysteresis<1,FlowFunctionsModule2> bcp;
   
-  arrayvariable1_(AWI) = a_[H2O][IMBIBITION];
-  arrayvariable1_(AOI) = a_[CO2][IMBIBITION];
-  arrayvariable1_(CWI) = c_[H2O][IMBIBITION];
-  arrayvariable1_(COI) = c_[CO2][IMBIBITION];
+  arrayvariable1_(bcp::AWD) = a_[bcp::H2O][bcp::DRAINAGE];
+  arrayvariable1_(bcp::AOD) = a_[bcp::CO2][bcp::DRAINAGE];
+  arrayvariable1_(bcp::CWD) = c_[bcp::H2O][bcp::DRAINAGE];
+  arrayvariable1_(bcp::COD) = c_[bcp::CO2][bcp::DRAINAGE];
   
-  
+  arrayvariable1_(bcp::AWI) = a_[bcp::H2O][bcp::IMBIBITION];
+  arrayvariable1_(bcp::AOI) = a_[bcp::CO2][bcp::IMBIBITION];
+  arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
+  arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
   for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
-  {
     (*it)->Store( var.key_kri_param, arrayvariable1_);
-    
-  }
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
   
@@ -461,22 +458,20 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   
   ArrayVariable arrayvariable1_(8, PLAIN);
   
-  arrayvariable1_(AWD) = a_[H2O][DRAINAGE];
-  arrayvariable1_(AOD) = a_[CO2][DRAINAGE];
-  arrayvariable1_(CWD) = c_[H2O][DRAINAGE];
-  arrayvariable1_(COD) = c_[CO2][DRAINAGE];
+    typedef BrooksCoreySaturationFunctionsWithHysteresis<1,FlowFunctionsModule2> bcp;
   
-  arrayvariable1_(AWI) = a_[H2O][IMBIBITION];
-  arrayvariable1_(AOI) = a_[CO2][IMBIBITION];
-  arrayvariable1_(CWI) = c_[H2O][IMBIBITION];
-  arrayvariable1_(COI) = c_[CO2][IMBIBITION];
+  arrayvariable1_(bcp::AWD) = a_[bcp::H2O][bcp::DRAINAGE];
+  arrayvariable1_(bcp::AOD) = a_[bcp::CO2][bcp::DRAINAGE];
+  arrayvariable1_(bcp::CWD) = c_[bcp::H2O][bcp::DRAINAGE];
+  arrayvariable1_(bcp::COD) = c_[bcp::CO2][bcp::DRAINAGE];
   
-  
+  arrayvariable1_(bcp::AWI) = a_[bcp::H2O][bcp::IMBIBITION];
+  arrayvariable1_(bcp::AOI) = a_[bcp::CO2][bcp::IMBIBITION];
+  arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
+  arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
   for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
-  {
     (*it)->Store( var.key_kri_param, arrayvariable1_);
-  }
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
   

@@ -8,11 +8,8 @@
 namespace csmp {
 
 template<size_t> class Element;
-  
-enum FLUID_PHASE {H2O, CO2} ;
-enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION } ;
-enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7} ;  /// suggested by Stephan 17/Aug/2018
-  
+template<size_t> class PropertyDatabase;
+
   /**
    @brief The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability and their first derivatives.
    
@@ -42,7 +39,6 @@ enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6
    
    @attention: To have Primary Drainage, we need just use non-autamatic and use the forced intialize by set the :
    
-   
    c_[H2O][DRAINAGE] = entery pressure
    c_[CO2][DRAINAGE] = 0
    
@@ -51,7 +47,9 @@ enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6
    @attention relies on sw(sH2O), swr(srH2O), sor(srCO2) and so(sCO2) variable values stored by the USER.
    @attention needs the Brooks-Corey constants (a's and c's)
    
-   @note The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability has been implemented from the Skjaeveland et al. 2000
+   @note The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability has been implemented from the Skjaeveland et al. 2000.
+   
+   @attention current implementation is suitable only for slightly compressible flow computations, but could be extended to compositional modelling.
 
    @section  Reference
    
@@ -59,80 +57,83 @@ enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6
    Capillary Pressure Correlation for Mixed-Wet Reservoirs. SPE Reservoir Evaluation & Engineering. 3. 10.2118/39497-MS.
    
    @author Mahyar Madadi
-   @date 2019
+   @author Stephan Matthai
+   @date May, 2019
    
 */
 template<size_t dim, template<size_t> class USER>
 class BrooksCoreySaturationFunctionsWithHysteresis {
   public:
-        BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& pref );
+    enum FLUID_PHASE {H2O, CO2};
+    enum TWO_PHASE_FLOW_PROCESS { DRAINAGE, IMBIBITION };
+    enum HYSTERIC_MODEL_PARAMETERS { AWD=0, AOD=1, CWD=2, COD=3, AWI=4, AOI=5, CWI=6, COI=7 };
+  
+  public:
+    /// accesses the model to create or attach to associated variable storage
+    BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& );
   
     /// Effective saturation function
-        double64 EffectiveSaturation( Element<dim>* const ) const;
+    double64 EffectiveSaturation( Element<dim>* const ) const;
   
     /// Effective saturation function for saturation S
-        double64 EffectiveSaturation_at( Element<dim>* const, double64 s1 ) const;
+    double64 EffectiveSaturation_at( Element<dim>* const, double64 s1 ) const;
   
     /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000
-        double64 pc( Element<dim>* const ) const;
+    double64 pc( Element<dim>* const ) const;
   
     /// Capillary pressure Eq. (2) from Skjaeveland et al. 2000 for saturation S
-        double64 pc_at( Element<dim>* const , double64 s1 ) const;
+    double64 pc_at( Element<dim>* const , double64 s1 ) const;
   
-    /// First derivative of capillary pressure.
-        double64 dpcds( Element<dim>* const ) const;
-        
-        double64 dpcds_at( Element<dim>* const, double64 ) const;
+    /// First derivative of capillary pressure as a function of saturation
+    double64 dpcds( Element<dim>* const ) const;
   
-    /// Oil residual saturation estimated from Land's formula.
-        double64 OilResidualSaturation( Element<dim>* const ) const;
-  
-    /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
-        double64 WaterResidualSaturation( Element<dim>* const, double64 Sor ) const;
-
-    /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
-        void WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr, double64& Sor )  const;
-  
+    double64 dpcds_at( Element<dim>* const, double64 ) const;
   
     /// The water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krw( Element<dim>* const ) const ;
-    
-        double64 krw_at( Element<dim>* const , double64 S) const ;
+    double64 krw( Element<dim>* const ) const ;
+
+    double64 krw_at( Element<dim>* const , double64 S) const ;
   
     /// The CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 krn( Element<dim>* const ) const ;
-    
-        double64 krn_at( Element<dim>* const, double64 S) const ;
+    double64 krn( Element<dim>* const ) const ;
+
+    double64 krn_at( Element<dim>* const, double64 S) const ;
   
     /// The first relative of water relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrwds( Element<dim>* const ) const ;
-    
-        double64 dkrwds_at( Element<dim>* const, double64 S) const ;
+    double64 dkrwds( Element<dim>* const ) const ;
+
+    double64 dkrwds_at( Element<dim>* const, double64 S) const ;
   
     /// The first relative of CO2 relative Permeability is evaluated from the Brooks Corey Capillary Pressure model. See the Skaevland et al. 2000 at page 65
-        double64 dkrnds( Element<dim>* const ) const ;
-    
-        double64 dkrnds_at( Element<dim>* const, double64 S) const ;
+    double64 dkrnds( Element<dim>* const ) const ;
+
+    double64 dkrnds_at( Element<dim>* const, double64 S) const ;
   
     /// Numerical derivatives of first derivatives of relative permeability of water and CO2
-        double64 dkrwds_Numerical( Element<dim>* const, double64 delta_s ) const ;
+    double64 dkrwds_Numerical( Element<dim>* const, double64 delta_s ) const ;
 
-        double64 dkrwds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
+    double64 dkrwds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
 
-        double64 dkrnds_Numerical( Element<dim>* const, double64 delta_s ) const ;
+    double64 dkrnds_Numerical( Element<dim>* const, double64 delta_s ) const ;
+
+    double64 dkrnds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
   
-        double64 dkrnds_at_Numerical( Element<dim>* const, double64 sw, double64 delta_s ) const ;
+    // -----------------------
+    // NON-STANDARD INTERFACES
+    // -----------------------
   
+    /// Oil residual saturation estimated from Land's formula.
+    double64 OilResidualSaturation( Element<dim>* const ) const;
+  
+    /// Water residual saturation estimated from the intersection of capillary pressures from Dranage and Imbibition curves in Imbibition process.
+    double64 WaterResidualSaturation( Element<dim>* const, double64 Sor ) const;
+
+    /// Estimate the residual of water and oil for the target saturations for the Dranaige process from the Imbibitions curve.
+    void WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double64& Swr, double64& Sor )  const;
+
   private:
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-  
-    mutable ArrayVariable  ac_params_;
-
-
-    /// Update parameter values when necessary
-  
-    void InitializeVariablsAndKeys( PropertyDatabase<dim>& p) ;
   
     void SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double64, 2>& a,std::array<double64, 2>& c ) const ;
   
@@ -160,10 +161,9 @@ class BrooksCoreySaturationFunctionsWithHysteresis {
     /// print out the co2 (non-wet phase) relative permeability function bounds upper and lowwer limits..
     std::pair<double64,double64> krnLimits_at( Element<dim>* const , double64 const ) const;
   
+  private:
     csmp::Index key_SwImbToDr_, key_SwDrToImb_, key_prsH2O_, key_prsCO2_ ;
-
- 
-    
+    mutable ArrayVariable  ac_params_; ///< extra parameters that are used only in this relative permeability model
 };
 
   

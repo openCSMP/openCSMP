@@ -49,7 +49,7 @@ class NimbleRegion {
     /// for flexibility with regard to application domain
     typedef Element<dim>  CellType;
 
-    /// construction region from nodes, relying on existing node-parent-element connectivity to identify elements
+    /// construction of region from nodes, relying on existing node-parent-element connectivity to identify elements
     NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
 
     /// adds multiple nodes and potential extra elements to region, does not remove any nodes or elements
