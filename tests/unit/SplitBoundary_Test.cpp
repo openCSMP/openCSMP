@@ -1160,29 +1160,21 @@ void SplitBoundary_Test::run()
 
   // test splitboundary between 3D regions
   test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
-  test_splitboundary_between_regions<3U>( "ThreeZones3D" );  
+  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
 
   // test splitboundary around interfaces
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" ); // need to handle with many-folds
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );  // need to handle with many-folds  
-  test_splitboundary_around_regions<2U>( "SplitBoundaries2D" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" ); // with many-folds
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );  // with many-folds  
 
   // test splitboundary from constructor of ansys model
-  detect_and_create_splitboundaries_from_constructor<2U>( "BoxHalfs2D" );
-  detect_and_create_splitboundaries_from_constructor<3U>( "BoxHalfs3D" );
+  detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
   detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
-  
-  // JC: testing with Luat  
-  //test_splitboundary_between_regions<3U>( "lamination" ); // this includes discontiguous regions
-  //test_splitboundary_between_regions<2U>( "kueper_contiguous" );
-  //test_splitboundary_between_regions<2U>( "9_rectangles" );
-  //test_splitboundary_between_regions<2U>( "kueper_one_interface" );  
-  //test_splitboundary_between_regions<3U>( "TKL_ThreeZones3D" );
-  //detect_and_create_splitboundaries_from_constructor<2U>( "FourRegions2D" ); // discontiguous regions + requires interfaces   
-  //test_splitboundary_around_regions<2U>( "Jura-slope1" ); // discontiguous regions + requires interfaces // need to handle with many-folds
-  //test_splitboundary_between_regions<3U>( "Split_Edges" ); // split edges  
+
+  // JC: testing with Luat 
+  test_splitboundary_between_regions<3U>( "lamination" );           // discontiguous regions
+  test_splitboundary_between_regions<2U>( "kueper_one_interface" ); // discontiguous regions
   return;
 }
 
