@@ -24,6 +24,8 @@ template<size_t dim>
 NimbleRegion<dim>::NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
  : n_interior_nodes_(0U)
  {
+    cout <<"\nNimbleRegion<"<< dim <<">(constructor): building region from ";
+    cout << distance(first,last) <<" nodes.\n";
     Rebuild( first, last );
 
  } // end (constructur)
