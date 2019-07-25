@@ -292,6 +292,11 @@ class PDE_IntegratorExperimental {
     /// adds integral terms on the boundary of the computational domain if any
     void          AddBoundaryIntegral( MathOperatorRHS<dim>* );
   
+    // TODO: void addInterfaceIntegral( MathOperatorRHS<dim>* );
+  
+    /// for the computation of fluxes across internal split boundaries
+    // TODO: void addInterfaceIntegral( MathOperatorLHS<dim>* );
+
     /// adds math operators that will be applied in a second loop after the matrix has been inverted
     void          AddPostProcess( MathOperatorLHS<dim>* );
 
@@ -301,10 +306,10 @@ class PDE_IntegratorExperimental {
     /// returns whether a finite-difference time increment has been set
     bool          Transient() const;
   
-    /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file
+    /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
     void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
   
-    /// simultaneously considers potential Boundary objects sharing nodes with the simplicial complex on which the solution is obtained
+    /// simultaneously considers potential Boundary objects sharing nodes with the model subdomain on which the solution is obtained; uses node numbering
     void          IntegrateOver( Model<dim>&, COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
     /// switch to another solver deleting any dynamically allocated solver that was associated with integrator
@@ -355,32 +360,31 @@ class PDE_IntegratorExperimental {
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
-    /// if this is a time-dependent calculation, this method assigns initial conditions to the RHS
+    /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
 
-    /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
+    /// eliminates Dirichlet conditions from the solution matrix and right-hand vector; uses node numbering
     virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
-    /// accumulates the finite element integrals into the solution matrix and right-hand side
+    /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
     virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
 
-    /// accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
+    /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
 
-    /// permits to add finite-element integrals to matrix and vector after terms were multiplied into them
+    /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
     virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
 
-    /// late accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
+    /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
-    
 
-    /// calls connected solver object to find x in A x = b problem
+    /// calls connected solver object to find x in G x = rh problem
     virtual void  Solve();
 
-    /// allows to apply pde operators to post-process the solution
+    /// allows to apply pde operators to post-process the newly computed solution
     virtual void  PostProcess( const COMPUTATION_DOMAIN<dim>& );
 
-    /// transfers the results stored in solution vector onto the nodes of the computational domain
+    /// transfers the results stored in solution vector onto the nodes of the computational domain; uses node numbering
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
 
     std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< pde operators for solution matrix
