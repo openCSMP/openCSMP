@@ -97,8 +97,8 @@ public:
   void OutputAllRegionsToBinary( const char* file_name ) const;
 
   // NEW:
-  /// Reads unique and non-unique regions from binary file as written by OutputAllRegionsToBinary()
-  void InputAllRegionsFromBinary( const char* file_name );
+  /// Reads unique and non-unique regions from binary file as written by OutputAllRegionsToBinary(); it can also read only a subset of variables
+  void InputAllRegionsFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
 
   // TODO: DEPRECATE THESE METHODS AFTER FIRST TWO HAVE BEEN VERIFIED
   /// writes a single region to binary file relying on a prexisting unique element and node numbering

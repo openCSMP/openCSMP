@@ -140,6 +140,7 @@ Can be used to create Splitboundaries from node-matched interface meshes
 which already contain multiplicated yet collocated nodes (can be done in ANSYS).
 
 @author SKM 15/08/2018
+@author modified by JC 1/7/2019
 
 */
 template<size_t dim>
@@ -318,8 +319,8 @@ We use the following order her:
 -array data count, property name & array FEM_Data
 -flagged array data count, property name & flagged array FEM_Data
 
-@author  P. Lang
-@date  9/29/2012
+@author  JC 
+@date  1/7/2019
 
 @tparam  dim Dimension
 @param [in,out]  fp  If non-null, the file pointer to the binary output file
@@ -383,16 +384,16 @@ bool SplitBoundary<dim>::Out( std::fstream& fp ) const
       idx = NULL_IDX;
       fp.write( (char*)&idx, bytes );
     }
-    const size_t nodesCount( interface->Nodes() );
-    fp.write( (char*)&nodesCount, bytes );
-    for ( size_t fn( 0 ); fn < nodesCount; ++fn )
-    {
-      const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
-      fp.write( (char*)&localInnerNodeIdx, bytes );
+    //const size_t nodesCount( interface->Nodes() );
+    //fp.write( (char*)&nodesCount, bytes );
+    //for ( size_t fn( 0 ); fn < nodesCount; ++fn )
+    //{
+    //  const size_t localInnerNodeIdx( interface->ParentNodeNumber( fn, INSIDE ) );
+    //  fp.write( (char*)&localInnerNodeIdx, bytes );
 
-      const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
-      fp.write( (char*)&localOuterNodeIdx, bytes );
-    }
+    //  const size_t localOuterNodeIdx( interface->ParentNodeNumber( fn, OUTSIDE ) );
+    //  fp.write( (char*)&localOuterNodeIdx, bytes );
+    //}
   }
 
   // interface variable count: scalar, vector, tensor, array, flagged array
@@ -409,8 +410,8 @@ bool SplitBoundary<dim>::Out( std::fstream& fp ) const
 
 see Out( fstream& fp )
 
-@author  P. Lang
-@date  9/29/2012
+@author  JC
+@date  1/7/2019
 
 @param [in,out]  fp  If non-null, the fp.
 
@@ -455,15 +456,6 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
     fp.read( (char*)&interfaceParents[f][3], bytes );
 
     fp.read( (char*)&interfaceParents[f][4], bytes );
-
-    fp.read( (char*)&interfaceNodes, bytes );
-    interfaceParentNodes[f].resize( interfaceNodes, make_pair( NULL_IDX, NULL_IDX ) );
-    for ( size_t fn( 0 ); fn < interfaceNodes; ++fn )
-    {
-      fp.read( (char*)&localInnerNodeIdx, bytes );
-      fp.read( (char*)&localOuterNodeIdx, bytes );
-      interfaceParentNodes[f][fn] = make_pair( localInnerNodeIdx, localOuterNodeIdx );
-    }
   }
 
   std::map<size_t, Element<dim>*> elementIdPtr;
@@ -618,11 +610,10 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
 /**
 @brief Creates splitboundary from input vectors (used in binary IO)
 
-@author  P. Lang
-@author  R. Manasipov
-@date  01/08/2014
+@author  JC
+@date  1/7/2019
 
-@param  Dimension
+@param Dimension
 @param femManager  Manager for finite elements.
 @param interfaceTypes   List of types of the interfaces.
 @param interfaceParents The interface parents.

@@ -675,7 +675,7 @@ constructing them using the SubDomainInfo data, thereby avoiding the costly
 re-initialisation.
 */
 template<size_t dim, template<size_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char* file_name )
+void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char* file_name, const std::set<std::string>* subset_variables )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -732,7 +732,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputAllRegionsFromBinary( const char
         // reconstruct the region
         std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
           it = uniqueGroupMap_.insert( std::make_pair( info.name, csmp::Region<dim>( database, nodes, elmts, info ) ) );
-        //   ^^^^^^^^^^^^^^^
+
         if ( !it.second )
           throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputAllRegionsFromBinary:",
                                  info.name, "Region could not be formed; issue with binary file." );

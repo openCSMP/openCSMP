@@ -11,7 +11,7 @@ namespace csmp
     public:
         PropertyDatabase_Test();
         ~PropertyDatabase_Test();
-        void AddPropertyNotFromCommandLineTest();
+        
         //Tests
         void AddPropertyTest();
         void IsDefinedTest();
@@ -29,6 +29,7 @@ namespace csmp
         void VariablesFaceTest(size_t);
         void VariablesInterFaceTest(size_t);
         void VariablesModelTest(size_t);
+        void SubsetVariablesTest();
         void FromFile();
 
         void run();

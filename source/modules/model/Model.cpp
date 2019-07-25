@@ -73,14 +73,13 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 Full input from CSMP-native binary file.
 */
 template<size_t dim>
-Model<dim>::Model( const std::string& binaryFileNames )
-  : model_name_( binaryFileNames ),
-  database_( BinaryVariablesFileName( binaryFileNames.c_str() ).c_str(), true ),
+Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>* subset_variables )
+  : model_name_( binaryFileName ),
+  database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, subset_variables),
   fvStencilManager_( nullptr )
 {
-  InitializeLocalVariableStorage();
-  //  InputFromDisk(binaryFileNames); // WORKS, but all regions are rebuilt from scratch
-  InputFromBinaryFile( binaryFileNames.c_str() );
+  InitializeLocalVariableStorage();  
+  InputFromBinaryFile( binaryFileName.c_str(), subset_variables );
 }
 
 
@@ -2937,10 +2936,10 @@ void Model<dim>::OutputToBinaryFile( const char* file_string ) const
 
 
 /**
-reads model written by OutputToBinaryFile() including all associated properties
+reads model written by OutputToBinaryFile() including all associated properties or a subset of variables
 */
 template<size_t dim>
-void Model<dim>::InputFromBinaryFile( const char* model_name )
+void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2950,7 +2949,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
   cout << "\nModel<" << dim;
   cout << ">::InputFromBinaryFile: Reading '" << model_name;
   cout << "' from VSet... " << endl;
-  vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time );
+  vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time, subset_variables );
 
   // 2. initializing the finite-element manager true=isoparametric
   fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), true );
@@ -3017,7 +3016,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
   }
 
   // 6. reconstruction of the regions
-  this->InputAllRegionsFromBinary( BinaryRegionsFileName( model_name ).c_str() );
+  this->InputAllRegionsFromBinary( BinaryRegionsFileName( model_name ).c_str(), subset_variables );
 
   // making sure that the computational region has been built
   const bool contiguous_model( mesh_manager_.ElementGroups() == 1 );
@@ -3026,10 +3025,10 @@ void Model<dim>::InputFromBinaryFile( const char* model_name )
       throw csmp::Exception( ERROR, "Model<>::InputFromBinaryFile", "Root region 'Model' is not present." );
 
   // 7. reconstructing the boundaries (TODO: what if there are no boundaries?)
-  this->InputAllBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str() );
+  this->InputAllBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
 
   // 8. reconstructing the splitboundaries
-  this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str() );
+  this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   // 9. do a final sanity check
   CheckElementsAfterBuilding();

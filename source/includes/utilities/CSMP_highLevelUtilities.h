@@ -319,11 +319,16 @@ bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref
     V var;
     char propName[200];
     skm_C_fread( fp, propName );
-    Index key( pref.StorageKey( propName ) );
-    femDataOutputDispatch::initVariable( key, var );
-    if ( !var.In( fp ) )
-      return false;
-    domain.Store( key, var );
+    if ( pref.IsDefined( propName ) ) {
+      Index key( pref.StorageKey( propName ) );
+      femDataOutputDispatch::initVariable( key, var );
+      if ( !var.In( fp ) )
+        return false;
+      domain.Store( key, var );
+    }else{
+      if ( !var.In( fp ) )
+        return false;
+    }
   }
   return true;
 }
