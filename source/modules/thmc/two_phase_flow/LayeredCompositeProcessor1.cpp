@@ -21,12 +21,12 @@ namespace csmp {
 */
 LayeredCompositeProcessor1::LayeredCompositeProcessor1( const char* RRT_data )
  :  // material properties
-     k_low_(1.0e-16), k_high_(1.0e-12),  // layer permeabilities
-     LY_low_(0.2), LY_high_(0.8),        // cumulative layer thickness in the vertical direction (Y)
-     Swi_low_(0.2), Swi_high_(0.05),     // irreducible saturations of the 2 different layers
-     m_low_(2.), m_high_(2.),            // van Genuchten exponents for the 2 different layers
-     pd_low_(1e6), pd_high_(1e3),        // capillary (drainage) entry pressure of low and high k layers
-     bcp_low_(2.), bcp_high_(2.)         // Brooks-Corey 64' exponents for low and high k layers
+     k_low_(3.4759e-14), k_high_(3.6075e-13),  // layer permeabilities
+     LY_low_(0.5), LY_high_(0.5),        // cumulative layer thickness in the vertical direction (Y)
+     Swi_low_(0.18), Swi_high_(0.159),     // irreducible saturations of the 2 different layers
+     m_low_(0.5), m_high_(0.6),            // van Genuchten exponents for the 2 different layers
+     pd_low_(20684280.), pd_high_(6894760.),        // capillary (drainage) entry pressure of low and high k layers - high = far too high!
+     bcp_low_(1.), bcp_high_(1.5)         // Brooks-Corey 64' exponents for low and high k layers
  {
     ReadRockTypeData( RRT_data );
  }
@@ -407,10 +407,12 @@ double64 LayeredCompositeProcessor1::SwStarHigh( double64 Sw_high_at_Nc ) const
  
  
 
-/// krw relperm of low-k layer at given saturation and capillary number
+/**
+    krw relperm of low-k layer at given saturation and capillary number
+    (uses van Genuchten model - with m parameter)
+*/
 double64 LayeredCompositeProcessor1::KrwLow( double64 SwStar_low ) const
  {
-    assert( approximatelyEqual(m_low_,bcp_low_) == true );
     double64 t1 = sqrt(SwStar_low);
     double64 t4 = pow(SwStar_low, 1. / m_low_);
     double64 t6 = pow(1. - t4, m_low_);
@@ -421,10 +423,12 @@ double64 LayeredCompositeProcessor1::KrwLow( double64 SwStar_low ) const
  
 
 
-/// krw relperm of high-k layer at given saturation and capillary number
+/**
+    krw relperm of high-k layer at given saturation and capillary number
+    (uses van Genuchten model - with m parameter)
+*/
 double64 LayeredCompositeProcessor1::KrwHigh( double64 SwStar_high ) const
  {
-    assert( approximatelyEqual(m_high_,bcp_high_) == true );
     double64 t1 = sqrt(SwStar_high);
     double64 t4 = pow(SwStar_high, 0.1e1 / m_high_);
     double64 t6 = pow(0.1e1 - t4, m_high_);
@@ -435,10 +439,12 @@ double64 LayeredCompositeProcessor1::KrwHigh( double64 SwStar_high ) const
  
 
 
-/// krn relperm of low-k layer at given saturation and capillary number
+/**
+    krn relperm of low-k layer at given saturation and capillary number
+    (uses Brooks-Corey model - with bcp parameter)
+*/
 double64 LayeredCompositeProcessor1::KrnLow( double64 SwStar_low ) const
  {
-    assert( m_low_ == bcp_low_ );
     double64 t2 = pow(1. - SwStar_low, bcp_low_);
     double64 t3 = SwStar_low * SwStar_low;
     return((0.1e1 - t3) * t2);
@@ -446,10 +452,12 @@ double64 LayeredCompositeProcessor1::KrnLow( double64 SwStar_low ) const
  
  
  
-/// krn relperm of high-k layer at given saturation and capillary number
+/**
+    krn relperm of high-k layer at given saturation and capillary number
+    (uses Brooks-Corey model - with bcp parameter)
+*/
 double64 LayeredCompositeProcessor1::KrnHigh( double64 SwStar_high ) const
  {
-    assert( m_high_ == bcp_high_ );
     double64 t2 = pow(1. - SwStar_high, bcp_high_);
     double64 t3 = SwStar_high * SwStar_high;
     return((0.1e1 - t3) * t2);
@@ -457,7 +465,10 @@ double64 LayeredCompositeProcessor1::KrnHigh( double64 SwStar_high ) const
  
  
  
-/// relative permeability at the given water saturation and capillary number
+/**
+    relative permeability at the given water saturation and capillary number
+    (uses van Genuchten model - with m parameter)
+*/
 double64 LayeredCompositeProcessor1::KrwComposite( double64 swAtNc_Low_k_Layer, double64 swAtNc_High_k_Layer ) const
  {
     double64 t2 = SwStarLow(swAtNc_Low_k_Layer);

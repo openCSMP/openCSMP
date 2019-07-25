@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-void TestSuite::addTest(Test* t) throw(TestSuiteError)
+void TestSuite::addTest(Test* t)
 {
     // Make sure test has a stream:
     if (t == 0)
@@ -20,7 +20,7 @@ void TestSuite::addTest(Test* t) throw(TestSuiteError)
     t->reset();
 }
 
-void TestSuite::addTest(const char* test_name, Test* t) throw(TestSuiteError)
+void TestSuite::addTest(const char* test_name, Test* t)
 {
     // Make sure test has a stream:
     if (t == 0)
@@ -33,7 +33,7 @@ void TestSuite::addTest(const char* test_name, Test* t) throw(TestSuiteError)
     t->setName(test_name);
 }
 
-void TestSuite::addTestSuite(const TestSuite& s) throw(TestSuiteError)
+void TestSuite::addTestSuite(const TestSuite& s) 
 {
     for (size_t i = 0; i < s.m_tests.size(); ++i)
         addTest(s.m_tests[i]);

@@ -39,7 +39,8 @@ class SparseMatrix {
     double64            At( size_t, size_t ) const;
     const std::map<size_t,double64>& Row( size_t i ) const { assert( i < data.size() ); return data[i]; }
 
-    void                Resize( size_t n_x_m );
+    /// resets the rows=columns of the square matrix, retaining potential extra capacity of the vector used
+    void                Resize( size_t n_x_m, bool preserve_allocated_memory=true );
   
     /// reports the non-zero elements currently stored in the sparse matrix
     size_t              Entries() const;

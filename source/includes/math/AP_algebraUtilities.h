@@ -105,13 +105,15 @@ namespace csmp {
    This method is used to make the input vector a unitary vector, thus to make
    its length equal to one, preserving its original direction and orientation.
    
+   @note SKM - replaced - std::bind2nd(std::multiplies<double64>(), fNorm - by lambda function
+   
    */
   inline void euclideanNormalize( std::vector<double64>& vectorToNormalize )
   {
     const double64 fNorm(1.0 / std::sqrt(dotProduct(vectorToNormalize, vectorToNormalize)));
     if(fNorm != 0)
-      std::transform(vectorToNormalize.begin(), vectorToNormalize.end(), vectorToNormalize.begin(),
-                     std::bind2nd(std::multiplies<double64>(), fNorm));
+      std::transform( vectorToNormalize.begin(), vectorToNormalize.end(), vectorToNormalize.begin(),
+                      [fNorm](const double64 val){ return val * fNorm; } );
   }
   
   /** Binary predicate used to compare elements of a set to be order by magnitude.

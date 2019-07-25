@@ -41,42 +41,44 @@ template<size_t> class Model;
 template<size_t> class Boundary;
 
 /**
-@brief Accumulator and integrator for FEM or FVM or mixed global solution
-of linear algebraic sets of equations (system Ax=b) on a Model or its subregions.
+@brief Accumulator and integrator for FEM or FVM-derived integral forms of PDEs
+and their solution in the form of linear algebraic sets of equations (system Ax=b).
+Applicable to CSMP++ Model objects or their subregions.
 
 @author S.K. Matthai
 @author Stephen G. Roberts
+@author various extra constributions (Adrian Burri, Julian Mindel, Kho Luat Tran).
 @date 1997
-
-@attention By default(if not explicitly specified otherwise), this uses the LUdcmp_Solver as default to circumvent 3rd party dependence
 
 @section motivation Motivation
 
 To encapsulate the integration and numerical solution of
-partial-differential equations (PDE) in their finite-element form. This
-should entail (1) the assembly of a sparse matrix with the contributions
-from the finite elements and (2) the assembly of a right-hand vector with
-essential and initial conditions. (3) The matrix equation Ax=b is inverted
-to find the solution vector x. The dependent physical variable stored in
-the solution vector must be stored back into property storage.
+partial-differential equations (PDE) in their integral form. This
+process entails (1) the assembly of a sparse matrix with the contributions
+from finite elements or finite volumes, (2) the assembly of a right-hand vector with
+essential and initial conditions; elimination of Dirichlet constraints.
+(3) Inversion of the matrix equation Ax=b to find the solution vector x.
+The dependent physical variable(s) stored in
+the solution vector are updated on the mesh.
 
 
 @section design Design Intent
 
-The intent of the algorithm
-design was to separate the PDE operator implementation from the
-implementation of the type of finite element which is used. Thus, the same
-PDE operator can now be used for a range of finite element types with
+The intent of using a 'strategy' pattern for the
+design was to separate the PDE operator / integrator implementation from the
+the type of finite element(s) or FV's used and the solution method chosen.
+As a consequence, the same PDE operator objects and solution methods can
+be used for a range of computational cell types with
 different node numbers and so forth.
 
-The PDE_IntegratorExperimental class is a base class from which specific PDE_IntegratorExperimentals can
+The PDE_IntegratorExperimental class is a base class from which specific PDE_IntegratorExperimental subclasses can
 be inherited to test improvements of its functionality.
 
 
 @section applicability Applicability
 
 PDE_IntegratorExperimental objects can be used to carry out any 2D and 3D computation which
-are possible with CSP. These computations may either appy to entire
+are possible with CSMP++. These computations may either appy to entire
 Model objects or to Regions which form subsets thereof.
 
 
@@ -87,45 +89,45 @@ that are inherited from the MathOperatorLHS and MathOperatorRHS base
 classes. Other variables set the state of the algorithm, the time_increment
 in transient calculations and so forth.
 
-PDE_IntegratorExperimentals contain a Solver object which inverts the sparse solution matrix.
+PDE_IntegratorExperimental also contains or connects to a Solver object which inverts the sparse solution matrix.
 
 
 
 @section collaborations Collaborations
 
-PDE_IntegratorExperimentals interact with SuperGrous and Regions. They query these objects
-for the data which they need to setup the solution matrices and vectors.
+PDE_IntegratorExperimental interact with Model, Region, Boundary and SplitBoundary objects.
+It queries these objects for the data needed to setup the solution matrices and vectors.
 
-
-They also use references to the MeshManager, MemoryManager, and the
-PropertyDatabase to gain access to the variables and the finite elements
+PDE_IntegratorExperimental also collaborates with the MeshManager and the
+PropertyDatabase to gain access to variables and finite elements
 (Element class instances).
 
-PDE_IntegratorExperimentals obtain the finite-element contributions from the Element class
+PDE_IntegratorExperimental obtains the finite-element contributions from the Element class
 that in turn accesses the specific finite-element type which appears hidden
 behind the specific element that is assembled.
+This is implemented as a 'bridge' pattern.
 
 
 @section consequences Consequences
 
-If you want to create a new PDE operator you now only have to write a
-single addition inherited class. None of the existing code has to be
-modified. You do this by inheriting from MathOperatorLHS or
+The design as a full-function base class implies that to create a PDE operator subclass one only has to
+overwrite those methods that one wants to modify.
+Other code does not need to be
+modified. To create additional PDE operators, inherit these from MathOperatorLHS or
 MathOperatorRHS.
 
 
 @section implementation Implementation
 
-PDE_IntegratorExperimentals are stand-alone objects which are passed to the Model. The
-interaction with the S.G. follows then a visitor pattern. The Model
-passes the PDE_IntegratorExperimental on to a group if its application has been restricted
-to Regions. Inside the Model, the following steps take place when an
+The PDE_IntegratorExperimental is a stand-alone object, which is passed to the Model.
+The interaction with the Model follows a visitor like pattern. The Model
+passes the PDE_IntegratorExperimental on to a region to which its application has been restricted.
+Inside the Model, the following steps take place when a
 PDE_IntegratorExperimental is applied by calling Model::Apply():
 
-
-First, the Model checks whether the PDE_IntegratorExperimental must be handed down to
-a specific group. If not, the PDE_IntegratorExperimental is allowed to build or update its
-vectors and matrices:
+To start with, the Model checks whether the PDE_IntegratorExperimental must be handed down to
+a specific region, boundary or split boundary. Then the PDE_IntegratorExperimental builds or updates its
+vectors and matrices so that they can store a sufficient number of entries:
 
 @code
 PDE_IntegratorExperimental::EstablishMatrixSetup( mesh, phys_vars );
@@ -150,6 +152,7 @@ side:
 
 @code
 PDE_IntegratorExperimental::AssignEssentialConditions( mesh, property_collection );
+Here an elimination is performed, retaining, if so, the symmetric shape of the solution matrix.
 @endcode
 
 If the computation is a transient one, and the solution method is Backward
@@ -212,8 +215,7 @@ are applied for vector and tensor variables.
 
 @section examples Application Examples
 
-
-The simplemost computation with an PDE_IntegratorExperimental is a 3D steady-state
+The simple most computation with an PDE_IntegratorExperimental is a 3D steady-state
 computation of fluid pressure. This involves the definition and
 instantiation of some PDE operators as first step:
 
@@ -263,15 +265,9 @@ done in the following example:
   example_model.Apply( deformation );
 @endcode
 
-@section outlook Future Implementations
-
-@todo !!! SKM: Implement the automatic integration over boundaries in the case where surface integrals are present
-      (design approved: Garmisch and Colleoli)
-
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 class PDE_IntegratorExperimental {
-
   public:
 
     typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator; ///< constant iterator over solution variables
@@ -282,16 +278,10 @@ class PDE_IntegratorExperimental {
     /// create an integrator with a solver managed elsewhere
     explicit PDE_IntegratorExperimental( Solver& );
     virtual ~PDE_IntegratorExperimental();
-
-  protected:
-
-    /// make a copy of this PDE integrator with its own unique solver
-    PDE_IntegratorExperimental( const PDE_IntegratorExperimental& );
-  
-    /// assign setup to another PDE integrator
-    PDE_IntegratorExperimental& operator=( const PDE_IntegratorExperimental& );
-
-  public:
+    /// do not copy because of all the pointer ramificatons
+    PDE_IntegratorExperimental( const PDE_IntegratorExperimental& ) = delete;
+    /// do not assign
+    PDE_IntegratorExperimental& operator=( const PDE_IntegratorExperimental& ) = delete;
 
     /// add desired integral terms (pde operators) to the left-hand side matrix of the algebraic system of equations
     void          Add( MathOperatorLHS<dim>* );
@@ -300,7 +290,7 @@ class PDE_IntegratorExperimental {
     void          Add( MathOperatorRHS<dim>* );
   
     /// adds integral terms on the boundary of the computational domain if any
-    void          AddBoundaryIntegrals( MathOperatorRHS<dim>* );
+    void          AddBoundaryIntegral( MathOperatorRHS<dim>* );
   
     /// adds math operators that will be applied in a second loop after the matrix has been inverted
     void          AddPostProcess( MathOperatorLHS<dim>* );
@@ -314,9 +304,6 @@ class PDE_IntegratorExperimental {
     /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file
     void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
   
-    /// performs an elimination of the Dirichlet degrees-of-freedom prior to solving the problem
-    void          IntegrateOver1( COMPUTATION_DOMAIN<dim>&, bool debug=false );
-
     /// simultaneously considers potential Boundary objects sharing nodes with the simplicial complex on which the solution is obtained
     void          IntegrateOver( Model<dim>&, COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
@@ -326,16 +313,10 @@ class PDE_IntegratorExperimental {
     /// returns a reference to the current solver object
     Solver&       GetSolver() const;
   
-    /// applies scale factor to Dirichlet matrix-diagonal entries as applied by AssignEssentialConditions() and the rhs entries
-    void          ScaleEssentialConditions( double64 scale_factor);
-  
     /// returns PDE integrator into the state created by default constructor ( @todo is Reset is this needed?)
     virtual void  Reset( bool delete_math_operators=true );
 
-    void          ListMathOperatorsLHS() const;
-    void          ListMathOperatorsRHS() const;
-  
-    /// outputs solution vector; @attention this is useful only after an application of the PDE integrator
+    /// outputs solution vector; @attention this produces meaningful results only after application of the PDE integrator
     void          SolutionVector( std::vector<double64>& ) const;
   
     /// optional input of a solution vector with an initial guess of the result; for SAMG set ifirst=0 so that this vector is used
@@ -344,8 +325,14 @@ class PDE_IntegratorExperimental {
     /// if an evolutionary problem where only the right-hand side changes, the matrix needs to be assembled only once
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
   
+    /// enables the 'swap trick' to keep the size and capacity of solution and righthand vectors equal
+    void          TrimExcessCapacityOfVectors( bool trim );
+  
     /// writes out the sparsity pattern of the solution matrix
     void          WriteGlobalMatrixBitMapToText( const char* file_name );
+  
+    void          ListMathOperatorsLHS() const;
+    void          ListMathOperatorsRHS() const;
   
     /// outputs the system A x = b to the screen
     void          OutputGlobals( int precision=1 );
@@ -362,6 +349,9 @@ class PDE_IntegratorExperimental {
     /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
     bool IdentifySharedBoundaries( const Model<dim>&, const COMPUTATION_DOMAIN<dim>&, std::list<std::string>& shared_boundaries );
   
+    /// for the elimination of Dirichlet constraints (Luat Khoa Tran)
+    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+  
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
@@ -370,9 +360,6 @@ class PDE_IntegratorExperimental {
 
     /// zeroes out Dirichlet matrix rows, puts 1's into its diagonal, and overwrites RHS with condition value
     virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
-
-    /// eliminates essential (Dirichlet) conditions, condensing the the solution matrix, rhs etc. to that of the remaining DOF
-    virtual void  EliminateEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// accumulates the finite element integrals into the solution matrix and right-hand side
     virtual void  Accumulate( const COMPUTATION_DOMAIN<dim>& );
@@ -385,6 +372,7 @@ class PDE_IntegratorExperimental {
 
     /// late accumulates surface integrals from those parts of the supplied boundary that are shared with the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
+    
 
     /// calls connected solver object to find x in A x = b problem
     virtual void  Solve();
@@ -394,11 +382,6 @@ class PDE_IntegratorExperimental {
 
     /// transfers the results stored in solution vector onto the nodes of the computational domain
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
-  
-    // SKM FIX output method that takes into account the Dirichlet_index_mapping_ from the reduced solution matrix to the model
-    virtual void  OutputResults1( COMPUTATION_DOMAIN<dim>& );
-
-  protected:
 
     std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< pde operators for solution matrix
     std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;           ///< pde operators for righthand vector
@@ -410,23 +393,24 @@ class PDE_IntegratorExperimental {
     SparseMatrix            G_;                        ///< solution matrix
     std::vector<double64>   rh_;                       ///< righthand vector
     std::vector<double64>   x_;                        ///< solution vector
-    std::vector<long64>     Dirichlet_index_mapping_;  ///< mapping from the unknowns in the condensed solution matrix back to the indexed mode
+    std::vector<size_t>     DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
+    std::vector<double64>   pivotVector_;              ///< terms recovered from eliminated rows
+
     Solver*                 solver_;
 
     size_t                  dof_per_node_;
-    bool                    setup_established_, retain_matrix_;
+    bool                    setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
     bool                    newed_Solver_object_;
     double64                time_increment_;
 
     struct SIZES {
         size_t nodes;
         size_t elements;
-    } target_;
+      } target_;
 
   private:
 
-    double64                scale_factor_; ///< for essential conditions
-    bool                    verbose_;
+    bool verbose_ = true;
 };
 
 } // csmp
