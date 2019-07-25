@@ -13,7 +13,8 @@ template<size_t dim>
 class Event {
   public:
     //constructor
-    Event(Node<dim>* nd);
+    explicit Event(Node<dim>* nd);
+    Event() = delete;
     //getting node
     csmp::Node<dim>* getNode() const {return node_;}
     bool valid() const {return valid_;}

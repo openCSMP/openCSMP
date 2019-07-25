@@ -6,8 +6,9 @@
 
 using namespace std;
 
-namespace csmp {
+#define NIMBLE_REGION_DEBUG
 
+namespace csmp {
 
 /**
    construction from nodes only, relying on existing node-parent-element connectivity to identify elements
@@ -26,7 +27,7 @@ NimbleRegion<dim>::NimbleRegion( typename std::vector<Node<dim>*>::iterator firs
  {
     cout <<"\nNimbleRegion<"<< dim <<">(constructor): building region from ";
     cout << distance(first,last) <<" nodes.\n";
-    Rebuild( first, last );
+    Initialise( first, last );
 
  } // end (constructur)
 
@@ -46,18 +47,25 @@ NimbleRegion<dim>::NimbleRegion( typename std::vector<Node<dim>*>::iterator firs
    then additional nodes are added where necessary to capture a halo for the pressure equation.
 */
 template<size_t dim>
-void NimbleRegion<dim>::Rebuild( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
+void NimbleRegion<dim>::Initialise( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
  {
-    if ( distance(first,last) == 0U )
-      throw csmp::Exception( ERROR, "NimbleRegion<dim>::Rebuild", "Supplied node range is empty" );
+    const size_t n_target_nodes( distance(first,last));
+    if (  n_target_nodes == 0U )
+      throw csmp::Exception( ERROR, "NimbleRegion<dim>::Rebuild", "Supplied node range is empty; nothing was done." );
  
     // allocating a reasonable amount of memory
     if ( !nodes_.empty() ) nodes_.clear();
     if ( !elements_.empty() ) elements_.clear();
-    nodes_.reserve(distance(first,last));
+    nodes_.reserve(n_target_nodes);
+    size_t  counter(0U);
    
-    // assigning the 'interior' nodes, i.e. the ones without a halo, and excluding nodes at the model boundary
+    // recording the 'interior' nodes, excluding nodes at model boundary
     while ( first != last ) {
+#ifdef NIMBLE_REGION_DEBUG
+         // debugging: labeling the input nodes continuously
+         (*first)->Idx( counter++ );
+#endif
+         // storing interior nodes
          if ( (*first)->AtBoundary() == NOT ) nodes_.push_back( (*first) );
          first++;
       }
@@ -66,60 +74,54 @@ void NimbleRegion<dim>::Rebuild( typename std::vector<Node<dim>*>::iterator firs
     n_interior_nodes_ = nodes_.size();
     sort( nodes_.begin(), nodes_.end() );
    
-    // making a set for finding the perimeter nodes, identifying a unique set of member elements as parents of interior nodes
-    set<CellType*>  elmts;
-    set<Node<dim>*>  marginal_nodes;
-    for ( typename vector<Node<dim>*>::const_iterator nit=nodes_.begin(); nit!=nodes_.end(); ++nit )
+    // creating unique node and element sets for the nimble regions
+    // the node set will also be used to find the perimeter nodes
+    set<CellType*>   elmts;
+    set<Node<dim>*>  perimeter_nodes;
+    const typename vector<Node<dim>*>::iterator nodes_end(nodes_.end());
+    for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_end; ++nit )
        for ( size_t i=0; i<(*nit)->Parents(); ++i ) {
+            assert( (*nit)->Parent(i) != nullptr );
             pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit)->Parent(i) );
-            // if this is an element that was not added before, we keep track of its nodes
-            if ( eit.second )
-              for ( size_t j=0U; j<(*nit)->Parent(i)->Nodes(); ++j )
-                marginal_nodes.insert( (*nit)->Parent(i)->N(j) );
+            // if this is element was not encountered before, we keep track of its nodes
+            if ( eit.second ) {
+                const size_t nodes((*nit)->Parent(i)->Nodes());
+                for ( size_t j=0U; j<nodes; ++j )
+                    // but only those nodes that are not contained in the interior
+                    if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit)->Parent(i)->N(j) ) ) {
+                         // storing the unique perimeter nodes
+                         perimeter_nodes.insert( (*nit)->Parent(i)->N(j) );
+#ifdef NIMBLE_REGION_DEBUG
+                          // debugging
+                         if ( perimeter_nodes.find((*nit)->Parent(i)->N(j)) != perimeter_nodes.end() )
+                           (*nit)->Parent(i)->N(j)->Idx( counter++ );
+#endif
+                      }
+                }
          }
-    // transfer creating sorted vector
+    // transfer element set to a sorted vector
     elements_.assign( elmts.begin(), elmts.end() );
-    sort( elements_.begin(), elements_.end() ); // needed?
+    // sort( elements_.begin(), elements_.end() ); // needed?
    
     // check that the elements only have corner nodes, i.e. linear interpolation
     if ( elements_[0U]->FE()->Interpolation() != 1 )
       throw csmp::Exception( FATAL_ERROR, "NimbleRegion(constructor):",
                              "this implementation works only for straight-sided elements with linear interpolation functions.");
-   
-    // separating the perimeter nodes into the corresponding vector
-    const typename vector<Node<dim>*>::iterator interior_nodes_end(next(nodes_.begin(),n_interior_nodes_));
-    for ( typename set<Node<dim>*>::const_iterator nit=marginal_nodes.begin(); nit!=marginal_nodes.end(); ++nit ) {
-          // if the node is located on the model boundary, it is a perimeter node
-          if ( (*nit)->AtBoundary() != NOT ) nodes_.push_back( (*nit) );
-          else {
-               // if the node is not contained in the interior, it is a perimeter / halo node
-               if ( !binary_search( nodes_.begin(), interior_nodes_end, (*nit) ) ) {
-                     nodes_.push_back( (*nit) );
-                 }
-            }
-      }
-    // sorting the perimeter nodes
-    sort( next(nodes_.begin(),n_interior_nodes_), nodes_.end() );
 
- } // end Rebuild
+    // inserting the sorted perimeter nodes at the end of the node vector so that it now consists of 2 sorted ranges
+    nodes_.reserve( n_interior_nodes_ + perimeter_nodes.size() );
+    const typename set<Node<dim>*>::const_iterator perimeter_nodes_end(perimeter_nodes.end());
+    for ( typename set<Node<dim>*>::const_iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes_end; ++nit )
+      // if the node is located on the model boundary, it is a perimeter node
+      nodes_.push_back( (*nit) );
+
+ } // end Initialise
 
 
-/*
 
-    /// adds multiple nodes and potential extra elements to region, does not remove any nodes or elements
-template<size_t dim>
 
-void NimbleRegion<dim>::AddNodes( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
- {
- }
- 
-    /// removes nodes and elements that might have become disconnected from the region
-template<size_t dim>
 
-void NimbleRegion<dim>::RemoveNodes(std::vector<Node<dim>*>& )
- {
- }
-*/
+
 
 
 
@@ -128,7 +130,6 @@ void NimbleRegion<dim>::RemoveNodes(std::vector<Node<dim>*>& )
 // retrieving information
 
 template<size_t dim>
-
 size_t NimbleRegion<dim>::Nodes() const
  {
      return nodes_.size();
@@ -136,7 +137,6 @@ size_t NimbleRegion<dim>::Nodes() const
 
 
 template<size_t dim>
-
 size_t NimbleRegion<dim>::InteriorNodes() const
  {
      return n_interior_nodes_;
@@ -144,7 +144,6 @@ size_t NimbleRegion<dim>::InteriorNodes() const
 
 
 template<size_t dim>
-
 size_t NimbleRegion<dim>::PerimeterNodes() const
  {
      return nodes_.size() - n_interior_nodes_;
@@ -152,7 +151,6 @@ size_t NimbleRegion<dim>::PerimeterNodes() const
 
 
 template<size_t dim>
-
 size_t NimbleRegion<dim>::Elements() const
  {
      return elements_.size();
@@ -163,7 +161,6 @@ size_t NimbleRegion<dim>::Elements() const
     Consecutive numbering, interior nodes first, perimeter nodes second.
 */
 template<size_t dim>
-
 size_t NimbleRegion<dim>::RenumberNodes() const
  {
      size_t node_number(0U);
@@ -193,7 +190,6 @@ const typename NimbleRegion<dim>::CellType* const NimbleRegion<dim>::E( size_t n
 
  
 template<size_t dim>
-
 Node<dim>* const NimbleRegion<dim>::N( size_t n )
  {
     assert( n < nodes_.size() );
@@ -202,7 +198,6 @@ Node<dim>* const NimbleRegion<dim>::N( size_t n )
 
 
 template<size_t dim>
-
 const Node<dim>* const NimbleRegion<dim>::N( size_t n ) const
  {
     assert( n < nodes_.size() );
@@ -212,103 +207,40 @@ const Node<dim>* const NimbleRegion<dim>::N( size_t n ) const
 
 // iterators
 template<size_t dim>
-
 typename std::vector<csmp::Node<dim>*>::iterator  NimbleRegion<dim>::NodesBegin() { return nodes_.begin(); }
 
 template<size_t dim>
-
 typename std::vector<csmp::Node<dim>*>::iterator  NimbleRegion<dim>::NodesEnd() { return nodes_.end(); }
 
 template<size_t dim>
-
 typename std::vector<csmp::Node<dim>*>::const_iterator  NimbleRegion<dim>::NodesBegin() const  { return nodes_.begin(); }
 
 template<size_t dim>
-
 typename std::vector<csmp::Node<dim>*>::const_iterator  NimbleRegion<dim>::NodesEnd() const  { return nodes_.end(); }
 
 template<size_t dim>
-
 typename std::vector<Element
 <dim>*>::iterator  NimbleRegion<dim>::ElementsBegin() { return elements_.begin(); }
 
 template<size_t dim>
-
 typename std::vector<Element
 <dim>*>::iterator  NimbleRegion<dim>::ElementsEnd() { return elements_.end(); }
 
 template<size_t dim>
-
 typename std::vector<Element
 <dim>*>::const_iterator NimbleRegion<dim>::ElementsBegin() const { return elements_.begin(); }
 
 template<size_t dim>
-
 typename std::vector<Element
 <dim>*>::const_iterator NimbleRegion<dim>::ElementsEnd() const { return elements_.end(); }
 
 
+
 /**
-    Assuming that there was no remeshing, the region can only grow at its perimeter.
-    Thus all former interior nodes will remain interior nodes.
- 
-    Where the new nodes are added, former perimeter nodes may become interior nodes.
- 
-    New elements will be added in the process.
+    When you do not want to call the destructor yet.
 */
-
 template<size_t dim>
-
-void NimbleRegion<dim>::AddNodes( typename std::vector<Node<dim>*>::iterator first,
-                                       typename std::vector<Node<dim>*>::iterator last )
-{
-   // inserting the new nodes at the end of the vector
-	 std::copy( first, last, std::inserter(nodes_, nodes_.end()));
-	 set<Node<dim>*> set(nodes_.begin(), nodes_.end());
-	 nodes_.assign(set.begin(), set.end());
-
-}
-
-
-
-// LUAT's METHODS - COMMENTED OUT - NOT SURE WHAT THESE METHODS DO BECAUSE THERE IS NO DOCUMENTATION
-
-/*
-template<size_t dim>
-
-void NimbleRegion<dim>::CollectRegionElements() {
-	for (auto& nIter = nodes_.cbegin(); nIter != nodes_.cend(); ++nIter) {
-		for (size_t i(0); i < (*nIter)->Parents(); ++i) {
-			elements_.push_back((*nIter)->Parent(i));
-		}
-	}
-	set<CellType*> set(elements_.begin(), elements_.end());
-	elements_.assign(set.begin(), set.end());
-}
-
-// use it if one wants to add large number of node
-template<size_t dim>
-
-void NimbleRegion<dim>::CreatePerimeters() {
-	set<Node<dim>*> internalNode(nodes_.begin(), nodes_.end());
-	set<Node<dim>*> p_set;
-	set<Node<dim>*>::iterator nIter;
-	for (auto& eIter = elements_.cbegin(); eIter != elements_.cend(); ++eIter) {
-		for (size_t i(0); i < (*eIter)->Nodes(); ++i) {
-			nIter = internalNode.find((*eIter)->N(i));
-			if (nIter == internalNode.end()) {
-				p_set.insert((*eIter)->N(i));
-			}
-		}
-	}
-	perimeters_nodes_.assign(p_set.begin(), p_set.end());
-	std::copy(begin(perimeters_nodes_), end(perimeters_nodes_), std::back_inserter(nodes_));
-}
-*/
-
-template<size_t dim>
-
-void NimbleRegion<dim>::Erase() {
+void NimbleRegion<dim>::Clear() {
 	nodes_.clear();
 	elements_.clear();
 	n_interior_nodes_ = 0U;
@@ -317,19 +249,75 @@ void NimbleRegion<dim>::Erase() {
 
 
 template<size_t dim>
-
 typename std::vector<csmp::Node<dim>*>::const_iterator NimbleRegion<dim>::PerimeterNodesBegin() const
   {
      return next( nodes_.begin(), n_interior_nodes_ );
   }
 
 
-template<size_t dim>
 
+template<size_t dim>
 typename std::vector<csmp::Node<dim>*>::iterator NimbleRegion<dim>::PerimeterNodesBegin()
   {
      return next( nodes_.begin(), n_interior_nodes_ );
   }
+
+
+
+/**
+    Print the NimbleRegion to screen.
+*/
+template<size_t dim>
+void NimbleRegion<dim>::Out() const
+ {
+    cout <<"\nNimbleRegion<dim>::Out: "<< nodes_.size() <<" nodes, "<< elements_.size() <<" elements.\n";
+    cout <<"\t"<< n_interior_nodes_ <<" interior nodes.\n";
+    cout <<"\nindices of member nodes:\ninterior: ";
+    for ( auto nit=nodes_.begin(); nit!=next(nodes_.begin(),n_interior_nodes_); nit++ )
+      cout << (*nit)->Idx() <<" ";
+    cout <<"\nperimeter: ";
+    for ( auto nit=next(nodes_.begin(),n_interior_nodes_); nit!=nodes_.end(); nit++ )
+      cout << (*nit)->Idx() <<" ";
+    cout <<"\n";
+   
+    cout <<"\nindices of member elements (not renumbered):\n";
+    for ( auto it : elements_ )
+      cout << it->Idx() <<" ";
+    cout <<"\n";
+   
+    cout << endl;
+
+ } // end Out
+
+
+
+
+// EXPERIMENTAL METHODS
+
+/**
+    Assuming that there was no remeshing, the NimbleRegion may only have grown at its perimeter
+    and former interior nodes will remain interior nodes.
+ 
+    Where new nodes are added, these and former perimeter nodes may become interior nodes
+    because elements that they belong to will also be added, introducing additional nodes.
+    It follows that the interior - perimeter ordering has to be revisited.
+ 
+    New elements will be added in the process.
+*/
+
+template<size_t dim>
+void NimbleRegion<dim>::Grow( typename std::vector<Node<dim>*>::iterator first,
+                              typename std::vector<Node<dim>*>::iterator last )
+{
+   // inserting the new (exterior) nodes at the end of the nodes vector
+   std::copy( first, last, std::inserter(nodes_, nodes_.end()));
+  
+   // checking whether former perimeter nodes have become interior nodes,
+   // looking into the region from the new perimeter nodes
+   // TODO:
+  
+  
+} // end Grow
 
 
 

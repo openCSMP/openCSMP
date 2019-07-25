@@ -161,26 +161,18 @@ using namespace csmp;
      - after Boundary construction, the parent regions are moved to non-unique, but are kept, is this what we want?
 */
 
-TEST_CASE("Unported tests", "[Unported]") {
-  
+// TODO: why is this suite called 'unported'? - change as necessary
+TEST_CASE("Unported tests", "[Unported]")
+ {
   const bool verbose(false);
 
-// /* STANDARD
   const bool test_fundamentals(true),
   test_interdependent1(true),
   test_interdependent2(true),
   test_composite(true),
   test_refactoring(true),
   test_new_developments(false);
-// */
-/* TESTING
-  const bool test_fundamentals(false),
-  test_interdependent1(false),
-  test_interdependent2(false),
-  test_composite(false),
-  test_refactoring(true),
-  test_new_developments(false);
-*/
+
   long fails_fundamentals(0),
   fails_interdependent1(0),
   fails_interdependent2(0),
@@ -461,8 +453,13 @@ TEST_CASE("Unported tests", "[Unported]") {
   
   std::exit(total_failures);
 
-}
+} // end TEST_CASE
 
+
+
+// -----------------------------------------
+// RUNNING THE SUITES OF TESTS THROUGH CATCH
+// -----------------------------------------
 int main(int argc, char* argv[])
 {
   Catch::Session session;

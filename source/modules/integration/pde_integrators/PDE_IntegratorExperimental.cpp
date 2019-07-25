@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "NimbleRegion.h"
 
 using namespace std;
 
@@ -1820,5 +1821,9 @@ template class PDE_IntegratorExperimental<3U,Boundary>;
 template class PDE_IntegratorExperimental<1U,SplitBoundary>;
 template class PDE_IntegratorExperimental<2U,SplitBoundary>;
 template class PDE_IntegratorExperimental<3U,SplitBoundary>;
+
+//template class PDE_IntegratorExperimental<1U,NimbleRegion>;
+//template class PDE_IntegratorExperimental<2U,NimbleRegion>;
+//template class PDE_IntegratorExperimental<3U,NimbleRegion>;
 
 } // end namespace csmp

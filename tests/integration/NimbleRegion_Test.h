@@ -9,6 +9,8 @@
 
 namespace csmp {
 
+template<size_t> class Model;
+
 /**
      Models the propagation of a saturation front, updating pressure only in the region where
      saturation changes, including a one element-wide halo, using the NimbleRegion to keep track
@@ -25,6 +27,9 @@ class NimbleRegion_Test : public Test	{
 		void ConstrainPlumeBoundary( NimbleRegion<2U>& ,const PropertyDatabase<2U>&);
 		void ReleasePlumeBoundary( NimbleRegion<2U>&, const PropertyDatabase<2U>&);
 	};
+
+
+void  compute_vt_AtBaryCenter( Model<2U>& model, const char* flow_domain );
 
 } // csmp
 

@@ -8,11 +8,8 @@ namespace csmp {
 template<size_t> class Node;
 template<size_t> class Element;
 
-/// general flexible region template
-//template<size_t,template<size_t> class CELL> class NimbleRegion;
-
 /**
-    Specialisation for Element objects.
+    Flexible region of Element objects.
  
     A light (non-unique) version of Region that can grow or shrink,
     retaining the knowledge of its perimeter.
@@ -43,26 +40,25 @@ template<size_t> class Element;
       Create method, that allows DES algorithm to convey this information.
 */
 template<size_t dim>
-//class NimbleRegion<dim,Element> {
 class NimbleRegion {
   public:
     /// for flexibility with regard to application domain
     typedef Element<dim>  CellType;
 
+    /// constructs region from supplied nodes, relying on existing node-parent-element connectivity to identify elements
+    void Initialise( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+  
     /// construction of region from nodes, relying on existing node-parent-element connectivity to identify elements
     NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
 
     /// adds multiple nodes and potential extra elements to region, does not remove any nodes or elements
-    void AddNodes( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    void Grow( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
  
     /// removes nodes and elements that might have become disconnected from the region
-    void RemoveNodes(std::vector<Node<dim>*>& );
+    void Shrink( std::vector<Node<dim>*>& );
 
-    /// erases and reconstructs region from nodes, relying on existing node-parent-element connectivity to identify elements
-    void Rebuild( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
-  
     /// drop all storage
-    void Erase();
+    void Clear();
 
     // retrieving information
   
@@ -73,6 +69,7 @@ class NimbleRegion {
     size_t RenumberNodes() const;
 
     // accessors
+  
     CellType* const E(size_t);
     Node<dim>* const N(size_t);
 
@@ -80,6 +77,7 @@ class NimbleRegion {
     const Node<dim>* const N(size_t) const;
 
     // iterators
+  
     typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
     typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
@@ -91,15 +89,21 @@ class NimbleRegion {
     typename std::vector<CellType*>::iterator               ElementsEnd();
     typename std::vector<CellType*>::const_iterator         ElementsBegin() const;
     typename std::vector<CellType*>::const_iterator         ElementsEnd() const;
+  
+    /// writes the current element and node memberships to the console
+    void Out() const;
 
   private:
     NimbleRegion() = delete;
   
+    // current implementation based on idea that vectors are resized with little overhead as long as their capacity is not changed
+    // sets are used to keep nodes and elements unique
     std::vector<Node<dim>*>     nodes_;             ///< sorted into interior and perimeter ranges
     size_t                      n_interior_nodes_;  ///< first perimeter node
     std::vector<Element<dim>*>  elements_;          ///< all elements, interior and exterior
+    const bool                  verbose_ = true;    ///< flag for testing and reporting
 };
 
 } // csmp   
 
-#endif
+#endif /* CSMP_NIMBLE_REGION_H */

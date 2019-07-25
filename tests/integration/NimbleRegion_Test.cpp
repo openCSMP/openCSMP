@@ -1,35 +1,28 @@
 #include "NimbleRegion_Test.h"
 
-// the CSMP model
-#include "ANSYS_Model2D.h"
-#include "ModelTopology.h"
-
 // FE algorithm
-#include "SteadyStateDiffusor.h"
-#include "VelocityAndVolumeFlux.h"
+#include "PDE_Integrator_UoM.h"
+#include "SAMG_Solver.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_dN_dV.h"
+#include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "compute2PhaseMobilityAtBaryCenter.h"
+
 
 // FV algorithms
-#include "TwoPhaseImplicitNodeCenteredFVTransport.h"
 #include "TwoPhaseExplicitNodeCenteredFVTransport.h"
 #include "ExplicitStencilProcessor.h"
 
 // relative permeability calculations
 #include "BrooksCorey.h"
 
-// monitoring individual regions
-#include "RegionMonitor.h"
-
 // interfaces
 #include "InputDataManager.h"
-#include "MatlabInterface.h"
 #include "VTU_Interface.h"
 
 // utility functions
 #include "CSMP_highLevelUtilities.h"
-#include "GaussJordan_Solver.h"
-#include "PDE_Integrator_UoM_Mock.h"
-#include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VTK_Interface.h"
 #include "Quadrilaterator.h"
 
@@ -77,12 +70,18 @@ void NimbleRegion_Test::run()
 		Region<2U>& central = model.Region("central");
 		central.InputPropertyValue("fluid pressure", makeScalar(DIRICH, 2.e5));
 		central.InputPropertyValue("saturation oil", makeScalar(DIRICH, 0.9));
+    central.InputPropertyValue("saturation water", makeScalar(DIRICH, 0.1));
 		model.InputBoundaryValue(LEFT, "fluid pressure", makeScalar(DIRICH, 0.));
 		model.InputBoundaryValue(RIGHT, "fluid pressure", makeScalar(DIRICH, 0.));
 		model.InputBoundaryValue(LEFT, "saturation oil", makeScalar(DIRICH, 0.));
 		model.InputBoundaryValue(LEFT, "saturation oil", makeScalar(DIRICH, 0.));
-
-  
+   // flagging the nimble region nodes and elements as 1, which is a value that gets incremented as the nimble egion evolves
+    double64 nimble_val(1.);
+    model.InputPropertyValue("nimble nodes", makeScalar(PLAIN, 0.));
+    model.InputPropertyValue("nimble elements", makeScalar(PLAIN, 0.));
+    central.InputPropertyValue("nimble nodes", makeScalar(PLAIN, nimble_val));
+    central.InputPropertyValue("nimble elements", makeScalar(PLAIN, nimble_val));
+    nimble_val += 1.;
 
 		// ---------------------------------------------------------------------
 		// 2. Use Brooks-Corey model to compute the relative permeabilities
@@ -136,9 +135,8 @@ void NimbleRegion_Test::run()
 		PDE_Integrator_UoM<2U, Region>        pde_model(solver_test);
 		PDE_Integrator_UoM<2U, NimbleRegion>  pde_plume(solver_sub_region);
 
-		// LHS stiffness matrix                            operand         basis function    test function
+		// LHS conductance matrix                            operand         basis function    test function
 		NumIntegral_dNT_op_dN_dV<2U, Element<2U> >  stiffness_matrix(p_ref, "total mobility", "fluid pressure", "fluid pressure");
-		//NumIntegral_dNT_dN_dV<2U, Element<2U> >  stiffness_matrix(p_ref, "fluid pressure", "fluid pressure");
 		// LHS mass matrix
 		NumIntegral_NT_lhsop_N_dV<2U, Element<2U> > mass_matrix_lhs(p_ref, "total system compressibility", "fluid pressure", "fluid pressure");
 
@@ -159,35 +157,33 @@ void NimbleRegion_Test::run()
 
 		// evalute source term last
 		source_term.AddAccumulateLater();
-
+  
 		// define a post-processing step that computes the velocity in each finite element by solving Darcy's law
-		VelocityAndVolumeFlux<2U>  velo(model, "total mobility", "porosity", "fluid pressure", false); // true = extrapolate element velocities to nodes
+//		TwoPhaseVelocityAndVolumeFlux<2U>  velo( model, relperm_model ); // "total mobility", "porosity", "fluid pressure", false); // true = extrapolate element velocities to nodes
   
 		pde_model.Add(&stiffness_matrix);
 		pde_model.Add(&source_term);
 		pde_model.Add(&mass_matrix_lhs);
 		pde_model.Add(&mass_matrix_rhs);
-		pde_model.AddPostProcess(&velo);
+//		pde_model.AddPostProcess(&velo);
 
 		pde_plume.Add(&stiffness_matrix);
 		pde_plume.Add(&source_term);
 		pde_plume.Add(&mass_matrix_lhs);
 		pde_plume.Add(&mass_matrix_rhs);
-		pde_plume.AddPostProcess(&velo);
+//		pde_plume.AddPostProcess(&velo);
   
   
 		// ------------------------------
 		// 4. Setting up transport scheme
 		// ------------------------------
-		TwoPhaseExplicitNodeCenteredFVTransport<2U, ExplicitStencilProcessor>* transport = new TwoPhaseExplicitNodeCenteredFVTransport<2U, ExplicitStencilProcessor>("Model", model,
-			"porosity",
-			"diffusivity",
-			"saturation water",
-			"saturation oil",
-			"velocity",
-			"nodal fluid volume source",
-			false);
-
+		TwoPhaseExplicitNodeCenteredFVTransport<2U, ExplicitStencilProcessor> transport("Model", model, "porosity",
+                                                                                    "diffusivity",
+                                                                                    "saturation water",
+                                                                                    "saturation oil",
+                                                                                    "velocity",
+                                                                                    "nodal fluid volume source",
+                                                                                    false);
 		// define some constant variables
 		double64 model_time(0);
 		const double64    day(86400.0);
@@ -197,18 +193,30 @@ void NimbleRegion_Test::run()
 		const double64 sub_time_increment(time_increment/ frequency);
 
 
-
-
 		// -------------------------------------------------------------------------
 		// 5. creating a flexible NimbleRegion that moves with the saturation front
 		// -------------------------------------------------------------------------
     Region<2U>&       sub_domain(model.Region("central"));
-		NimbleRegion<2U>  plume_region( sub_domain.NodesBegin(), sub_domain.PerimeterNodesBegin() );
+    cout <<"\nrun: creating NimbleRegion object from region '"<< sub_domain.Name() <<"' with "<< sub_domain.Nodes() <<" nodes and "<< sub_domain.Elements() <<" elements.\n";
+		NimbleRegion<2U>  plume_region( sub_domain.NodesBegin(), sub_domain.NodesEnd() ); // will have a halo of one element extra
+    plume_region.Out(); // tested: O.K.
     
-		std::vector<Element<2U>*> plume_elements;
-		std::vector<Node<2U>*> plume_nodes;
-		VTU_Interface<2U> vtu(model);
-		double64 inc(10.);
+    // first check
+    VTU_Interface<2U>  vtu(model);
+    // augmenting the extra perimeter nodes by 2, to make sure they are visible
+    const csmp::Index  nn_key(model.Database().StorageKey("nimble nodes"));
+    for ( auto nit=plume_region.PerimeterNodesBegin(); nit!=plume_region.NodesEnd(); ++nit ) {
+         double64 nval = (*nit)->Read( nn_key ) + 2.;
+         (*nit)->Store( nn_key, makeScalar(PLAIN,nval) );
+      }
+
+    vtu.OutputDataToVTU("nimble-nodes", "nimble nodes", "Model", 0 );
+
+    
+    // The idea is that the NimbleRegion receives a vector of nodes that it consists of and rebuilds
+    // itself such that it contains all the elements that contain at least one of these nodes
+		std::vector<Node<2U>*>  plume_nodes;
+		const double64          increment(10.);
 
 		while (model_time < max_time)
       {
@@ -217,45 +225,50 @@ void NimbleRegion_Test::run()
 
         // compute pressure
         pde_model.IntegrateOver( model_domain );
+        compute_vt_AtBaryCenter( model, "Model" );
+        printRangeOfVariable( model, "fluid pressure" );
+        printRangeOfVariable( model, "total velocity" );
         vtu.OutputDataToVTU("fluid_pressure", "fluid pressure", "Model", 1000000000);
       
         // for loop to compute saturation and pressure
         for (size_t i(0); i < frequency; ++i)
           {
               model_time += sub_time_increment;
-              Point<2U>bottom_left(40. - i*inc, 40. - i*inc);
-              Point<2U>top_right(60. + i*inc, 60. + i*inc);
+              Point<2U>bottom_left(40. - i * increment, 40. - i * increment);
+              Point<2U>top_right(60. + i * increment, 60. + i * increment);
 
-              for ( auto nIter = model_domain.NodesBegin(); nIter != model_domain.NodesEnd(); ++nIter ) {
-                if ((*nIter)->Coordinate().IsBetween(bottom_left, top_right)) {
+              for ( auto nIter = model_domain.NodesBegin(); nIter != model_domain.NodesEnd(); ++nIter )
+                if ((*nIter)->Coordinate().IsBetween(bottom_left, top_right))
                   plume_nodes.push_back(*nIter);
-                }
+
+              // NIMBLE REGION IS REBUILD TO FOLLOW SATURATION FRONT
+//              plume_region.Initialise( plume_nodes.begin(), plume_nodes.begin() );
+
+              // compute2PhaseMobilityAtBaryCenter( model_domain, relperm_model );
+              //ComputeTotalMobility(plume_region, p_ref, relperm_model);
+              pde_plume.IntegrateOver(plume_region);
+              compute_vt_AtBaryCenter( model, "central" );
+
+              // compute advection of phases
+              transport.TransportPhase(relperm_model, sub_time_increment);
+              vtu.OutputDataToVTU("volume_flux", "nodal volume flux", "Model", model_time);
+              vtu.OutputDataToVTU("fluid_pressure", "fluid pressure", "Model", model_time);
+              vtu.OutputDataToVTU("saturation oil", "saturation oil", "Model", model_time);
+
+              // augmenting the perimeter nodes by one, to make sure they are visible
+              for ( auto nit=plume_region.PerimeterNodesBegin(); nit!=plume_region.NodesEnd(); ++nit )
+                (*nit)->Store( nn_key, makeScalar(PLAIN,(*nit)->Read( nn_key ) + 1. ) );
+
+              vtu.OutputDataToVTU("nimble-nodes", "nimble nodes", "Model", model_time );
+              vtu.OutputDataToVTU("nimble-elements", "nimble elements", "Model", model_time );
           }
 
-          plume_region.Rebuild( plume_nodes.begin(), plume_nodes.begin() );
-
-          ComputeTotalMobility(plume_region, p_ref, relperm_model);
-          
-          // UPDATING THE SHAPE OF THE NIMBLE REGION
-          ConstrainPlumeBoundary(plume_region, p_ref);
-          pde_plume.IntegrateOver(plume_region);
-          ReleasePlumeBoundary(plume_region, p_ref);
-          plume_region.Erase();
-          
-          // compute advection of phases
-          transport->TransportPhase(relperm_model, sub_time_increment);
-          vtu.OutputDataToVTU("volume_flux", "nodal volume flux", "Model", model_time);
-          vtu.OutputDataToVTU("fluid_pressure", "fluid pressure", "Model", model_time);
-          vtu.OutputDataToVTU("saturation oil", "saturation oil", "Model", model_time);
-
-        }
-
-			// runtime info
-			cout << "\n\nrun: RUNTIME (DAYS): " << model_time / day << endl << endl;
-
+        // runtime info
+        cout << "\n\nrun: RUNTIME (DAYS): " << model_time / day << endl << endl;
      }
 
 } // end run
+
 
 
 
@@ -366,6 +379,76 @@ void  NimbleRegion_Test::ComputeTotalMobility(Region<2U>& region, const Property
 		}
 
 	} // end compute2PhaseFlowProperties
+
+
+
+
+
+
+void  compute_vt_AtBaryCenter( Model<2U>& model, const char* flow_domain )
+ {
+    ErrorHandler&       csmp_error( ErrorHandler::Instance() );
+    ScalarVariable      flux;
+    VectorVariable<2U>  velo, gvt; // total velocity and gravity term
+    double64            vmin, vmax;
+    DenseMatrix<DM_MIN> DERIV;
+   
+    // variable keys
+    const csmp::Index lt_key(model.Database().StorageKey("total mobility"));
+    const csmp::Index pf1_key(model.Database().StorageKey("fluid pressure"));
+//    const csmp::Index gt_key(model.Database().StorageKey("nimble nodes"));
+    const csmp::Index vt_key(model.Database().StorageKey("total velocity"));
+    const csmp::Index vf1_key(model.Database().StorageKey("volume flux"));
+   
+    // establishing permissible range of output variable
+    model.Database().RangeOf( "total velocity", vmin, vmax );
+   
+    Region<2U>&  gref(model.Region(flow_domain));
+ 
+    for ( vector<Element<2U>*>::iterator
+          it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+      {
+         // computing the total velocity: vt = -k t (lt grad p - (lw rho_w + lo rho_o) g)
+         // (taking into account the thickness attribute of 2D elements)
+         const double64 total_mobility = (*it)->Read( lt_key );
+         velo = 0.;
+         (*it)->dN_AtBaryCenter( DERIV, 1U );
+         for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+              double64 pf = (*it)->N(i)->Read( pf1_key );
+              velo(0)  += pf  * -DERIV(0,i) * total_mobility;
+              velo(1)  += pf  * -DERIV(1,i) * total_mobility;
+              //velo(2)  += pf  * -DERIV(2,i) * total_mobility;
+           }
+         // taking into account the gravitational flow component for calculation of velocity of non-wetting phase
+         // (reading following vector variable from element)
+         //       gvelo = t * k * g * (lambda_w * rho_w + lambda_o * rho_o) grad z
+         //       in case of an inclined element it is sin alpha (=vertical / vector length) * gvelo
+ //        (*it)->Read( gt_key, gvt );
+        
+         // adding viscous + gravitional velocity components and applying thickness multiplier
+ //        velo += gvt;
+        
+         if ( !velo.IsWithinRange(vmin,vmax) ) {
+               (*it)->Out();
+               velo.Out();
+               csmp_error.notice( WARNING, "compute_vt_AtBaryCenterIncludingGravity",
+                                 "computed 'total velocity' is out of range specified in variables file.");
+           }
+        
+         // storing the computed velocity (checking the variable status flags)
+         (*it)->Store( vt_key, velo );
+        
+        // volume flux
+        flux = velo.Length();
+        (*it)->Store( vf1_key, flux );
+      }
+
+    printRangeOfVariable( model, "total velocity" );
+   
+} // end Compute_vt_AtBaryCenterIncludingGravity
+
+
+
 
 
 } // csmp
