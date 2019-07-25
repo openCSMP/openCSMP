@@ -197,15 +197,15 @@ public:
   /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
   Model( VSet<dim>&, bool isoparametric = false );
 
-  /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
+  /// constructs model with regions supplied as labeled element lists
   Model( ModelTopology&, VSet<dim>&, const char* var_file,
          bool binaryVariablesFile = false, bool create_boundary_objects = false, bool box_shaped = true );
 
-  /// constructs model with regions supplied as labeled element lists; @note 2/2/17: boundary creation still under construction
+  /// constructs model with regions supplied as labeled element lists
   Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
 
-  /// to read model from set of CSMP native binary files
-  explicit Model( const std::string& binaryFiles );
+  /// to read model from set of CSMP native binary files; it can read only a subset of variables
+  explicit Model( const std::string& binaryFileName, const std::set<std::string>* subset_variables = nullptr );
 
   /// to read model from set of CSMP native binary files
   Model( const std::string& varFile, bool binary );
@@ -251,8 +251,8 @@ public:
   void OutputToBinaryFile( const char* ) const;
 
   // NEW
-  /// reads model written by OutputToDisk() including all associated properties
-  void InputFromBinaryFile( const char* );
+  /// reads model written by OutputToDisk() including all associated properties; it can also read only a subset of variables
+  void InputFromBinaryFile( const char* model_name, const std::set<std::string>* subset_variables = nullptr );
 
   /// writes discretised variable to generic variable container
   template<class Var>

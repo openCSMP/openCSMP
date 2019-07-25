@@ -247,7 +247,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
 
 
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFromBinary( const char* file_name )
+bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFromBinary( const char* file_name, const std::set<std::string>* subset_variables )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

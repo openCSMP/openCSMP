@@ -54,12 +54,13 @@ class SplitBoundaryInterface {
     /// prints current split boundaries
     void SplitBoundariesOut() const;
   
-    // -----------------------------------------------
+    // -----------------------------------------------------------
     // Binary input/output
-    // -----------------------------------------------
+    // The properties can also be read from a subset of variables
+    // -----------------------------------------------------------
 
     bool OutputSplitBoundariesToBinary( const char* fileName ) const;
-    bool InputSplitBoundariesFromBinary( const char* fileName );
+    bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
 
 
   protected:

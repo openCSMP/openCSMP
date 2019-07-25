@@ -411,10 +411,10 @@ bool  VSet<dim>::OutputTo(const char* bin_file, double64 time) const
 
 
 /**
-Key method for recovery of a model from binary file.
+Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
 */
 template<size_t dim>
-bool  VSet<dim>::InputFrom(const char* bin_file, double64& time)
+bool  VSet<dim>::InputFrom(const char* bin_file, double64& time, const set<string>* subset_variables )
 {
 	char file_name[NAME_STRING];
 	strcpy(file_name, bin_file);
@@ -463,7 +463,15 @@ bool  VSet<dim>::InputFrom(const char* bin_file, double64& time)
 				char heading[INFO_STRING];
 				skm_C_fread(fp, heading);
 				dname = heading;
-				property_map_.insert(make_pair(dname, inBinaryPropertyData(fp)));
+
+        auto prop = make_pair( dname, inBinaryPropertyData( fp ) );
+        if ( subset_variables ) {
+          if ( subset_variables->find( dname ) != subset_variables->end() )
+            property_map_.insert( prop );
+        }
+        else {
+          property_map_.insert( prop );
+        }
 			}
 		else cout << "\nVSet<dim>::InputFrom: no PropertyData objects detected." << endl;
 	}

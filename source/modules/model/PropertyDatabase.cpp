@@ -20,7 +20,7 @@ namespace csmp {
 
 /// Goto ctor, initializing from text variables file
 template<size_t dim>
-PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isBinary )
+PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isBinary, const set<string>* subset_variables )
     : vectorFlags(dim),
       tensorFlags(dim),
       physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
@@ -31,7 +31,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, bool isB
  {
  if(isBinary)
    {
-     if( !BinaryIn(variablesFileName) )
+     if( !BinaryIn(variablesFileName, subset_variables ) )
       throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
    }
  else
@@ -458,28 +458,35 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
  @return  true if it succeeds, false if it fails.
  */
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( fstream& fp )
-  {
+bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>* subset_variables )
+{
   size_t parameterCount(0);
   fp.read( (char*) &parameterCount, sizeof(size_t) );
 
   char buf[255];
   for( size_t i(0); i < parameterCount; ++i )
-    {
+  {
     skm_C_fread( fp, buf );
     string parameterName(buf);
     csmp::Parameter parameter;
-    parameter.In(fp);
-    propList_[parameterName] = parameter;
-    }
+    parameter.In( fp );
 
-  return true; /// @todo (1-C) Meaningless return statement
+    if ( subset_variables ){
+      if (subset_variables->find( parameterName ) != subset_variables->end() )
+      propList_[parameterName] = parameter;
+    }
+    else {
+      propList_[parameterName] = parameter;
+    }
   }
 
+  return true; /// @todo (1-C) Meaningless return statement
+}
 
-/// Reads from binary file, appends '_variables.dat' if necessary
+
+/// Reads from binary file, appends '_variables.dat' if necessary, and can read only a subset of variables from the variables as an option
 template<size_t dim>
-bool PropertyDatabase<dim>::BinaryIn( const char* fileName )
+bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>* subset_variables )
   {
   InitializeCount();
 
@@ -489,7 +496,7 @@ bool PropertyDatabase<dim>::BinaryIn( const char* fileName )
   if (!fp.is_open())
     return false;
 
-  if( !BinaryIn(fp) )
+  if( !BinaryIn(fp, subset_variables ) )
     return false;
 
   fp.close();

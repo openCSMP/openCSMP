@@ -1311,7 +1311,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputAllBoundariesToBinary( const
      reads and initialises boundaries from file written by OutputAllBoundariesToBinary()
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( const char* file_name )
+void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( const char* file_name, const std::set<std::string>* subset_variables )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1375,7 +1375,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                   BOX_BOUNDARY bflag = intToBOX_BOUNDARY( box_boundary_index );
                   std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
                     it=faceBoundaryMap_.insert( std::make_pair( info.name.c_str(), csmp::Boundary<dim>(database, elements, nodes, faces, info,bflag) ) );
-                  //   ^^^^^^^^^^^^^^^
+                  
                   if ( !it.second )
                        throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputAllBoundariesFromBinary:",
                                             info.name, "Boundary could not be formed; issue with binary file." );

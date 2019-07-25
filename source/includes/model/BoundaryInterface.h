@@ -167,8 +167,8 @@ class BoundaryInterface {
     /// method used in the storage of a model to binary file
     bool OutputAllBoundariesToBinary( const char* file_name ) const;
   
-    /// reads boundaries stored in CSMP native binary file written by OutputAllBoundariesToBinary
-    void InputAllBoundariesFromBinary( const char* file_name );
+    /// reads boundaries stored in CSMP native binary file written by OutputAllBoundariesToBinary; it can also read only a subset of variables
+    void InputAllBoundariesFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
 
   protected:
     std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
