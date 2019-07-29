@@ -263,6 +263,19 @@ double64 TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t ph
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
+    
+    const double64 srw = e->Read( User()->key_srH2O );
+    const double64 srn = e->Read( User()->key_srCO2 );
+
+    if ( phase == 0 ) {
+         if ( sw <= srw ) return 0.;
+         else if ( sw  >= 1. - srn ) return 1.;
+    }
+    else if ( phase == 1 ) {
+         if ( sw <= srw ) return 1.;
+         else if ( sw  >= 1. - srn ) return 0.;
+    }
+
     assert( Mobility_at( e, phase, sw ) > 0. );
     assert( TotalMobility_at(e,sw) > 0. );
 
