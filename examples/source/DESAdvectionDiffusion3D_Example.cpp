@@ -1,4 +1,4 @@
-#include "DESAdvectionOfTracer3D_Example.h"
+#include "DESAdvectionDiffusion3D_Example.h"
 
 #include "Model.h"
 #include "Region.h"
@@ -23,7 +23,7 @@
 #include "ConstantFactor.h"
 
 // DES finite-volume transport scheme
-#include "DESTransport.h"
+#include "DESAdvectionDiffusion.h"
 
 #include "MeshDiagnostics.h"
 
@@ -31,7 +31,7 @@ using namespace std;
 
 namespace csmp {
 
-void DESAdvectionOfTracer3D_Example::Specifications()
+void DESAdvectionDiffusion3D_Example::Specifications()
   {
     SetTitle( "3D Passive advection of concentration using DES (discrete event simulation)");
     SetDifficulty( 3 );
@@ -39,7 +39,7 @@ void DESAdvectionOfTracer3D_Example::Specifications()
     AddAuthor( "Qi Shao" );
     AddDescription( "3D passive tracer advection by both discrete event simulation (DES) and time-driven simulation (TDS)." );
     AddDescription( "Their outputs are written to VTK files and and their efficiency are compared." );
-    AddRequirement( "source files: 'DESAdvectionOfTracer3D_Example.cpp' and '*.h'" );
+    AddRequirement( "source files: 'DESAdvectionDiffusion3D_Example.cpp' and '*.h'" );
     AddRequirement( "fracs4: files .dat, .asc, -regions.txt, -configuration.txt.");
     AddRequirement( "variables(DES_variables.txt)" );
   }
@@ -52,7 +52,7 @@ void DESAdvectionOfTracer3D_Example::Specifications()
     Use models 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt)
     as input file suites.
 */
-void DESAdvectionOfTracer3D_Example::Run()
+void DESAdvectionDiffusion3D_Example::Run()
 {
  // ------------------------------------------------------------
  // 1. building model from ANSYS data files
@@ -94,13 +94,15 @@ void DESAdvectionOfTracer3D_Example::Run()
                                            true,   // 6) boundary conditions
                                            run_settings );
 
-  Standard_IO_Handler  stdio;
-  printRangeOfVariable( model3D, stdio, "permeability" );
+    model3D.InputPropertyValue( "nodal concentration source",  makeScalar(PLAIN,0.0) );      // no sources/sinks for solute (units kg m-3 s-1)
+    
+    Standard_IO_Handler  stdio;
+    printRangeOfVariable( model3D, stdio, "permeability" );
 
-  // visualizing the input permeability and boundary conditions
-  VTK_Interface<3U>  vtk_output;
-  vtk_output.OutputDataToVTK( model3D, "permeability", "permeability", 0 );
-  vtk_output.OutputDataToVTK( model3D, "fluid-pressure", "fluid pressure", 0 );
+    // visualizing the input permeability and boundary conditions
+    VTK_Interface<3U>  vtk_output;
+    vtk_output.OutputDataToVTK( model3D, "permeability", "permeability", 0 );
+    vtk_output.OutputDataToVTK( model3D, "fluid-pressure", "fluid pressure", 0 );
 
 
  // -----------------------------------------------------------------------
@@ -167,10 +169,10 @@ void DESAdvectionOfTracer3D_Example::Run()
   // -----------------------------------------------------------------------
   cerr <<"\n\nmain: Starting DES simulation: "<<endl; 
   clock_t	T_begin= clock();
-  DESTransport<3U>	DES_advector( model3D, "Model");
+  DESAdvectionDiffusion<3U>	DES_advector( model3D, "Model", Courant_multiplier, PEP_factor, false);
   
   for ( int i=0; i<20; ++i ) {
-      DES_advector.AdvectVariable_DES( model_time+time_interval/20., Courant_multiplier, PEP_factor, n_threads);
+      DES_advector.AdvectVariable_DES( model_time+time_interval/20., n_threads);
       model_time += time_interval/20.;
       vtkOut.OutputDataToVTK( model3D, "DES_concentration", "concentration", i+1 );
       vtkOut.OutputDataToVTK( model3D, "DES_update_count", "update count", i+1 );
@@ -188,10 +190,10 @@ void DESAdvectionOfTracer3D_Example::Run()
   // -----------------------------------------------------------------------
   cerr <<"\n\nmain: Starting TDS simulation: "<<endl; 
   clock_t	T_begin= clock();
-  DESTransport<3U>	TDS_advector( model3D, "Model");  
+  DESAdvectionDiffusion<3U>	TDS_advector( model3D, "Model", Courant_multiplier, PEP_factor, false); 
 
   for ( int i=0; i<20; ++i ) {
-      TDS_advector.AdvectVariable_TDS( time_interval/20., Courant_multiplier, PEP_factor);
+      TDS_advector.AdvectVariable_TDS( time_interval/20., n_threads);
       model_time += time_interval/20.;
       vtkOut.OutputDataToVTK( model3D, "TDS_concentration", "concentration", i+1 );
    }

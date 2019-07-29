@@ -1,5 +1,5 @@
-#ifndef DES_ADVECTIONOFTRACER3D_EXAMPLE_H
-#define DES_ADVECTIONOFTRACER3D_EXAMPLE_H
+#ifndef DES_ADVECTIONDIFFUSION3D_EXAMPLE_H
+#define DES_ADVECTIONDIFFUSION3D_EXAMPLE_H
 
 #include "Example.h"
 
@@ -10,7 +10,7 @@ namespace csmp {
   template<size_t dim> class Model;
   template<size_t dim> class VTK_Interface;
 
-class  DESAdvectionOfTracer3D_Example : public Example {
+class  DESAdvectionDiffusion3D_Example : public Example {
   public:
     virtual void Run();
     virtual void Specifications();
@@ -18,4 +18,4 @@ class  DESAdvectionOfTracer3D_Example : public Example {
 
 } // csmp
 
-#endif // DES_ADVECTIONOFTRACER3D_EXAMPLE_H
+#endif // DES_ADVECTIONDIFFUSION3D_EXAMPLE_H

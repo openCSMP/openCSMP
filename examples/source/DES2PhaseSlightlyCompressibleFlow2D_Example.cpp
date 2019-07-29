@@ -1,21 +1,18 @@
-#include "DESTwoPhaseFlow3D_Example.h"
+#include "DES2PhaseSlightlyCompressibleFlow2D_Example.h"
 
 // the CSMP model
-#include "ANSYS_Model3D.h"
+#include "ANSYS_Model2D.h"
 
 // FE algorithm
 #include "SteadyStateDiffusor.h"
 #include "VelocityAndVolumeFlux.h"
 
 // FV algorithms
-#include "TwoPhaseImplicitNodeCenteredFVTransport.h"
-#include "TwoPhaseExplicitNodeCenteredFVTransport.h"
-#include "SlightlyCompressible2PhaseDESTransport.h"
-#include "ExplicitStencilProcessor.h"
+#include "DES2PhaseTransport.h"
+#include "DES2PhaseSlightlyCompressibleTransport.h"
 
 // relative permeability calculations
 #include "BrooksCorey.h"
-#include "FlowFunctionsModule.h"
 
 // monitoring individual regions
 #include "RegionMonitor.h"
@@ -23,7 +20,6 @@
 // interfaces
 #include "Standard_IO_Handler.h"
 #include "InputDataManager.h"
-#include "MatlabInterface.h"
 #include "VTU_Interface.h"
 
 // utility functions
@@ -33,27 +29,27 @@ using namespace std;
 
 namespace csmp{
 
-void DESTwoPhaseFlow3D_Example::Specifications()
+void DES2PhaseSlightlyCompressibleFlow2D_Example::Specifications()
 {
-  SetTitle( "3D two phase flow simulation using DES (discrete event simulation)");
+  SetTitle( "2D two phase slightly compressible flow simulation using DES (discrete event simulation)");
   SetDifficulty( 3 );
   SetCategory( "Numerical Methods" );
   AddAuthor( "Qi Shao" );
-  AddDescription( "3D two phase flow simulation with discrete event simulation (DES) or time-driven simulation (TDS).");
+  AddDescription( "2D two phase slightly compressible flow simulation with discrete event simulation (DES) or time-driven simulation (TDS).");
   AddDescription( "Output is written to to VTK files");
-  AddRequirement( "source files: 'DESTwoPhaseFlow3D_Example.cpp' and '*.h'" );
-  AddRequirement( "fracs4: files .dat, .asc, -regions.txt, -configuration.txt.");  
+  AddRequirement( "source files: 'DES2PhaseSlightlyCompressibleFlow2D_Example.cpp' and '*.h'" );
+  AddRequirement( "box2d_fault: files .dat, .asc, -regions.txt, -configuration.txt.");  
   AddRequirement( "variables(DES_2phase_variables.txt)" );
 } 
 
 /** 
-    3D two phase flow simulation via CSMP's DES transport method 
+    2D two phase slightly compressbiel flow simulation via CSMP's DES transport method 
     combining finite elements (for pressure) with finite volumes (for advection of non-wetting phase)
 
-    Use models 'fracs4' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
+    Use models 'box2d_fault' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
 */
 
-void DESTwoPhaseFlow3D_Example::Run()
+void DES2PhaseSlightlyCompressibleFlow2D_Example::Run()
 {
     // -------------------------------------
     // 0.0 Set variables used throughout the simulation
@@ -66,20 +62,20 @@ void DESTwoPhaseFlow3D_Example::Run()
     // ---------------------------------------------------
     string input_file;
 
-    cerr<< "\nPlease enter the name of input mesh (default: fracs4):"<< endl;
+    cerr<< "\nPlease enter the name of input mesh (default: box2d_fault):"<< endl;
     cin >> input_file;
 
     Standard_IO_Handler  stdio;
     bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES? (y=DES, n=TDS)"); 
     double64 Courant_multiplier, PEP_parameter;
-    cerr <<"\nEnter CFL multiplier (suggested value: 0.2) and PEP parameter (suggested value: 0.1)" << endl;
+    cerr <<"\nEnter CFL multiplier (suggested value: 0.3) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
      
-    bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
+    bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     
-    ANSYS_Model3D                model( input_file.c_str(), "DES_2phase_variables.txt" );
-    const PropertyDatabase<3>&   p_ref = model.Database();  
+    ANSYS_Model2D                model( input_file.c_str(), "DES_2phase_variables.txt" );
+    //const PropertyDatabase<2>&   p_ref = model.Database();  
 
     // give the model dimensions
     printModelDimensions( model, true );
@@ -87,15 +83,24 @@ void DESTwoPhaseFlow3D_Example::Run()
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
     // --------------------------------------------
-    InputDataManager<3U>  model_configuration;
+    InputDataManager<2U>  model_configuration;
     model_configuration.Configure_ANSYS_ModelFromFile( model, input_file.c_str() );
 
     // ---------------------------------------------------------------------
     // 4.0 Use the flow functions to compute the relative permeabilities
     // ---------------------------------------------------------------------
-    FlowFunctionsModule1<3U> flowfunctions(model.Database(), model.Read( model.Database().StorageKey("acceleration gravity") ));
-    TwoPhaseDESTransport<3U,FlowFunctionsModule1>* DEStransport;
-    DEStransport = new SlightlyCompressible2PhaseDESTransport<3U,FlowFunctionsModule1>(model, "Model", flowfunctions, with_capillary_spreading, with_gravity_forces, false, PEP_parameter, Courant_multiplier);
+    FlowFunctionsModule1<2U> flowfunctions(model.Database(), model.Read( model.Database().StorageKey("acceleration gravity") ));
+    DES2PhaseTransport<2U,FlowFunctionsModule1>* DEStransport;
+    DEStransport = new DES2PhaseSlightlyCompressibleTransport<2U,FlowFunctionsModule1>
+                       (model, 
+                       "Model", 
+                       with_gravity_forces, 
+                       with_capillary_spreading, 
+                       Courant_multiplier, 
+                       PEP_parameter, 
+                       1., //relaxing factor
+                       false, //tensor k 
+                       flowfunctions);
 
     computeTotalMobility( model, flowfunctions );
 
@@ -110,16 +115,16 @@ void DESTwoPhaseFlow3D_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create a steady-state CSMP FE Algorithm using a high-level class
-    SteadyStateDiffusor<3U,Region> fluid_pressure( model,
-                                                          "total mobility permeability product",
-                                                          "fluid pressure",
-                                                          "fluid volume source" );
+    SteadyStateDiffusor<2U,Region> fluid_pressure( model,
+                                                   "total mobility permeability product",
+                                                   "fluid pressure",
+                                                   "fluid volume source" );
 
     // operation to compute velocity
-    VelocityAndVolumeFlux<3U,Element<3U> >  velo( model,
-                               "total mobility permeability product",
-                               "porosity",
-                               "fluid pressure", true, "total velocity" );
+    VelocityAndVolumeFlux<2U,Element<2U> >  velo( model,
+                                                  "total mobility permeability product",
+                                                  "porosity",
+                                                  "fluid pressure", true, "total velocity" );
 
     // add velocity calculation as post process
     fluid_pressure.AddPostProcess( &velo );
@@ -134,20 +139,17 @@ void DESTwoPhaseFlow3D_Example::Run()
     // -----------------------------
     // 6.0 Output initial conditions
     // -----------------------------
-    VTU_Interface<3U>  vtu(model);  // binary VTK output, creates much smaller files than VTK
+    VTU_Interface<2U>  vtu(model);  // binary VTK output, creates much smaller files than VTK
 
     vtu.OutputDataToVTU( "volume_flux",    "nodal volume flux", "Model", 0 );
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", 0 );
-    vtu.OutputDataToVTU( "saturation oil", "saturation carbonic phase",    "Model", 0 );
+    vtu.OutputDataToVTU( "saturation carbonic phase", "saturation carbonic phase",    "Model", 0 );
     vtu.OutputDataToVTU( "fluid_velocity", "total velocity",    "Model", 0 );
 
     // -------------------------------------------------------------
     // 7.0 Construct the finite volume grid and DES transport algorithms
     // -------------------------------------------------------------
-
     model.InputPropertyValue( "nodal fluid volume source", makeScalar( PLAIN,0.0) ); // no FV sources/sinks
-    //model.InputPropertyValue( "diffusivity coefficient carbonic phase", makeScalar(PLAIN,1.0e-25) ); // very small value
-    //model.InputPropertyValue( "diffusivity coefficient aqueous phase", makeScalar(PLAIN,1.0e-25) ); // very small value
 
     // -----------------------
     // 8.0 Time Loop Variables
@@ -155,10 +157,11 @@ void DESTwoPhaseFlow3D_Example::Run()
 
     // define some constant variables
     const double64    day(86400.0);
-    const double64    max_time (60.0*day);     // run for 60 days
-    double64          time_increment(0.6*day);      // timestep 0.6 day
+    const double64    max_time (60.0*day);     // run for 30 days
+    double64          time_increment(0.6*day);      // timestep 0.3 day
     const long        save_frequency(3);       // write results to file every 3 days
     size_t	      time, save_counter(1);    
+    size_t	      n_threads(1);
     
     // -----------------------
     // 9.0 Transient loop
@@ -169,8 +172,8 @@ void DESTwoPhaseFlow3D_Example::Run()
       {
          // compute advection of phases
          T_begin = clock();
-         if (DES) DEStransport->AdvectVariable_DES( model_time+time_increment, 1);
-         else DEStransport->AdvectVariable_TDS( time_increment );
+         if (DES) DEStransport->AdvectVariable_DES( model_time+time_increment, n_threads );
+         else DEStransport->AdvectVariable_TDS( time_increment, n_threads );
          solving_time += clock() - T_begin;
          
          // increment time
@@ -193,19 +196,18 @@ void DESTwoPhaseFlow3D_Example::Run()
               // to VTU files
               if(DES) {
                   vtu.OutputDataToVTU( "DES_fluid_pressure", "fluid pressure",    "Model", time );
-                  vtu.OutputDataToVTU( "DES_saturation_oil", "saturation carbonic phase",    "Model", time );
+                  vtu.OutputDataToVTU( "DES_saturation_carbonic_phase", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "DES_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "DES_fluid_velocity", "total velocity",    "Model", time );
                   vtu.OutputDataToVTU( "DES_Update_count", "update count", "Model",  time );
                   vtu.OutputDataToVTU( "DES_CFL_multiplier", "cfl multiplier", "Model",  time );
-                  //vtu.OutputDataToVTU( "DES_sn_shock", "shock saturation carbonic phase", "Model",  time );
                   vtu.OutputDataToVTU( "DES_sw_shock", "shock saturation aqueous phase", "Model",  time );                 
               } else {
                   vtu.OutputDataToVTU( "TDS_fluid_pressure", "fluid pressure",    "Model", time );
-                  vtu.OutputDataToVTU( "TDS_saturation_oil", "saturation carbonic phase",    "Model", time );
+                  vtu.OutputDataToVTU( "TDS_saturation_carbonic_phase", "saturation carbonic phase",    "Model", time );
                   vtu.OutputDataToVTU( "TDS_volume_flux",    "nodal volume flux", "Model", time );
                   vtu.OutputDataToVTU( "TDS_fluid_velocity", "total velocity",    "Model", time );
-                  vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );                          
+                  vtu.OutputDataToVTU( "TDS_Update_count", "update count", "Model",  time );  
               }   
               save_counter = 0;
          }
@@ -226,10 +228,10 @@ void DESTwoPhaseFlow3D_Example::Run()
 } // Run()
 
 
-void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFunctionsModule1<3U>& flowfunctions )
+void DES2PhaseSlightlyCompressibleFlow2D_Example::computeTotalMobility( Model<2U>& mdl, FlowFunctionsModule1<2U>& flowfunctions )
  {
      
-    static const Region<3U>& mref = mdl.Region("Model"); 
+    static const Region<2U>& mref = mdl.Region("Model"); 
     // keys to properties
     static Index  mobt_key(mdl.Database().StorageKey("total mobility permeability product"));
     static Index  sw_key(mdl.Database().StorageKey("saturation aqueous phase"));
@@ -237,10 +239,11 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFuncti
     //csmp::INDEX<TENSOR,ELEMENT>  k_key(mdl.Database().StorageKey("permeability"));   
     //assert( k_key.type == TENSOR );  
     static Index  k_key(mdl.Database().StorageKey("permeability")); 
+    static Index  thi_key(mdl.Database().StorageKey("thickness")); 
 
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
-    vector<Node<3U>* >::const_iterator nit;
+    vector<Node<2U>* >::const_iterator nit;
     for ( nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
     {
         double64 sw = 1. - (*nit)->Read(snw_key);
@@ -250,19 +253,21 @@ void DESTwoPhaseFlow3D_Example::computeTotalMobility( Model<3U>& mdl, FlowFuncti
     
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    vector<Element<3U>* >::const_iterator eit;
+    vector<Element<2U>* >::const_iterator eit;
     for ( eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
     {
-        //flowfunctions.InitialiseBrooksCoreyParameters(*eit);
+        //flowfunctions.UpdateBrooksCoreyParameters(*eit);
         //total mobility
         double64 mob_t = flowfunctions.TotalMobility(*eit);
         /*
-        TensorVariable<3U> K;
+        TensorVariable<2U> K;
         e.Read( k_key, K );
-        double k = K.Trace() / 3.;
+        double k = K.Trace() / 2.;
         */
         double64 k = (*eit)->Read(k_key);
         mob_t *= k;  
+        double64 thi = (*eit)->Read(thi_key);
+        if(!isnan(thi)) mob_t *= thi;
         (*eit)->Store( mobt_key, makeScalar(PLAIN, mob_t) );
     } 
 

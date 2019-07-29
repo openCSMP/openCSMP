@@ -15,7 +15,8 @@ include(CsmpDependencies)
 add_subdirectory(source)
 add_subdirectory(thirdparty)
 #JC: skip temperally since some examples related to pde_integrator_uom need to be updated
-#add_subdirectory(examples)
+#QS: should be fixed now
+add_subdirectory(examples)
 add_subdirectory(tests)
 
 FILE(COPY cmake/CsmpTestResultTransform.cmake DESTINATION ${CMAKE_BINARY_DIR})

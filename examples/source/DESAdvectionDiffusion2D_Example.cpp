@@ -1,4 +1,4 @@
-#include "DESAdvectionOfTracer2D_Example.h"
+#include "DESAdvectionDiffusion2D_Example.h"
 
 // the CSMP model
 #include "Model.h"
@@ -12,11 +12,10 @@
 #include "VelocityAndVolumeFlux.h"
 
 // DES algorithms
-#include "DESTransport.h"
+#include "DESAdvectionDiffusion.h"
 
 // output interfaces
 #include "VTK_Interface.h"
-#include "MatlabInterface.h"
 
 // utility functions
 #include "CSMP_highLevelUtilities.h"
@@ -30,7 +29,7 @@ using namespace std;
 
 namespace csmp {
 
-void DESAdvectionOfTracer2D_Example::Specifications()
+void DESAdvectionDiffusion2D_Example::Specifications()
 {
   SetTitle( "2D Passive advection of concentration using DES (discrete event simulation)" );
   SetDifficulty( 3 );
@@ -57,7 +56,7 @@ void DESAdvectionOfTracer2D_Example::Specifications()
 //
 // **********************************************************************************************
 
-void DESAdvectionOfTracer2D_Example::Run()
+void DESAdvectionDiffusion2D_Example::Run()
 {
     // -----------------------------------------------------------------------
     // 1.0 Generate a simple quadrilateral FE mesh from color-coded input file
@@ -101,10 +100,9 @@ void DESAdvectionOfTracer2D_Example::Run()
     // assigning initial conditions
     model.InputPropertyValue( "fluid pressure",        makeScalar(PLAIN,1.0e+07) );  // always in Pascal
     model.InputPropertyValue( "fluid volume source",   makeScalar(PLAIN,0.0) );      // no sources/sinks (units m3 m-2 s-1)
-    model.InputPropertyValue( "nodal fluid volume source",   makeScalar(PLAIN,0.0) ); 
     model.InputPropertyValue( "concentration",         makeScalar(PLAIN,1.0) );      // initially one (units kg m-3)
     model.InputPropertyValue( "new concentration",     makeScalar(PLAIN,0.0) );
-    model.InputPropertyValue( "concentration source",  makeScalar(PLAIN,0.0) );      // no sources/sinks for solute (units kg m-3 s-1)
+    model.InputPropertyValue( "nodal concentration source",  makeScalar(PLAIN,0.0) );      // no sources/sinks for solute (units kg m-3 s-1)
 
 
     // assigning boundary conditions such that flow is from LEFT to RIGHT and solute
@@ -193,7 +191,6 @@ void DESAdvectionOfTracer2D_Example::Run()
     // -----------------------------
     // output to vtk and matlab
     VTK_Interface<2U>     vtk_output;
-    MatlabInterface       matlab;
 
 
     // to VTK files
@@ -234,12 +231,12 @@ void DESAdvectionOfTracer2D_Example::Run()
     // ----------------------------------------
     cerr <<"\n\nmain: Starting DES simulation: "<<endl;
     clock_t T_begin= clock();    
-    DESTransport<2U>* DES_transport = new DESTransport<2U>(model, "Model");        
+    DESAdvectionDiffusion<2U>* DES_transport = new DESAdvectionDiffusion<2U>(model, "Model", cfl_multiplier, PEP_factor, false);   
    
     while ( model_time < max_time )
     {
          // compute advection of solute with DES
-         DES_transport->AdvectVariable_DES( model_time+time_increment, cfl_multiplier, PEP_factor, n_threads);   
+         DES_transport->AdvectVariable_DES( model_time+time_increment, n_threads);   
          //DES_transport->AdvectVariable_TDS( time_increment, model_time+time_increment, cfl_multiplier, PEP_factor);
                  
          // increment time
@@ -272,12 +269,12 @@ void DESAdvectionOfTracer2D_Example::Run()
     // ----------------------------------------
     cerr <<"\n\nmain: Starting TDS simulation: "<<endl;
     clock_t	T_begin= clock();   
-    DESTransport<2U>* TDS_transport = new DESTransport<2U>(model, "Model");      
+    DESAdvectionDiffusion<2U>* TDS_transport = new DESAdvectionDiffusion<2U>(model, "Model", cfl_multiplier, PEP_factor, false);     
     
     while ( model_time < max_time )
     {
          // compute advection of solute with DES
-         TDS_transport->AdvectVariable_TDS( time_increment, cfl_multiplier, PEP_factor);
+         TDS_transport->AdvectVariable_TDS( time_increment, n_threads);
                  
          // increment time
          model_time += time_increment;

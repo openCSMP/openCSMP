@@ -247,7 +247,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e
       return min( 1., max( 0., EffectiveSaturation_at(e,sw) ) );
     
     // pm2 = lambda, the Brooks-Corey parameter
-    const double64 seff = min( 1., max( 0., EffectiveSaturation(e) ) );
+    const double64 seff = min( 1., max( 0., EffectiveSaturation_at(e,sw) ) );
     return std::pow( seff, 2. / bcp + 3. );
 }
 
@@ -284,7 +284,7 @@ double64 BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e
     if ( bcp == static_cast<double64>(0.) )
       return min( 1., max( 0., 1. - EffectiveSaturation_at(e,sw) ) );
 
-    const double64  seffn = min( 1., max( 0., 1. - EffectiveSaturation(e) ) );
+    const double64  seffn = min( 1., max( 0., 1. - EffectiveSaturation_at(e,sw) ) );
 
     return (seffn * seffn) * (1. - pow(  EffectiveSaturation_at(e,sw), 2./ bcp + 1.) );
 }

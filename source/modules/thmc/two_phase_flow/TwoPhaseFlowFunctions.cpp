@@ -368,8 +368,15 @@ void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier( Element<dim>* const e,
     // here the vertical permeability (key_kV) must be used since this is the direction in which gravity acts
     // TODO: use the specific acceleration of gravity that is stored on the actual model.
     e->Read( User()->key_dip, dip_vc );
-    assert( !isnan(e->Read(User()->key_kV)) );
-    dip_vc *= e->Read(User()->key_kV) * -ACC_GRAVITY * delta_rho;  
+    const size_t v( (dim==1u) ? 0u : 1u );
+    if(isnan(dip_vc(v))) { //dip vector has not been initialised
+        if(dim==1u) {dip_vc(0u) = -1.;}
+        else if(dim==2u) {dip_vc(0u) = 0.; dip_vc(1u) = -1.;}
+        else {dip_vc(0u) = 0.; dip_vc(1u) = -1.; dip_vc(2u) = 0.;}
+    }
+    const double64 kV = (User()->key_k.type==SCALAR) ? e->Read(User()->key_k) : e->Read(User()->key_kV);
+    assert( !isnan(kV) );
+    dip_vc *= kV * -ACC_GRAVITY * delta_rho;  
 }   
  
 

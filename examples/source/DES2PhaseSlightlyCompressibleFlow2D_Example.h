@@ -1,5 +1,5 @@
-#ifndef DES_TWOPHASEFLOW2D_EXAMPLE_H
-#define DES_TWOPHASEFLOW2D_EXAMPLE_H
+#ifndef DES_2PHASE_SLIGHTLY_COMPRESSBILE_FLOW_2D_EXAMPLE_H
+#define DES_2PHASE_SLIGHTLY_COMPRESSBILE_FLOW_2D_EXAMPLE_H
 
 #include "Example.h"
 
@@ -9,7 +9,7 @@
 
 namespace csmp {
 
-class  DESTwoPhaseFlow2D_Example : public Example
+class  DES2PhaseSlightlyCompressibleFlow2D_Example : public Example
 {
 
 public:
@@ -25,4 +25,4 @@ private:
 
 } // csmp
 
-#endif // DES_TWOPHASEFLOW2D_EXAMPLE_H
+#endif // DES_2PHASE_SLIGHTLY_COMPRESSBILE_FLOW_2D_EXAMPLE_H
