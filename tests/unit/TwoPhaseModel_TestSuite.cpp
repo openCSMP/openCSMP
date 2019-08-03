@@ -21,6 +21,7 @@
 #include "FractureMatrixUpscaled.h"
 #include "BrooksCoreyWithHysteresis.h"
 #include "LinearTwoPhaseModel.h"
+#include "HeterogeneityAndRateAwareModel.h"
 
 using namespace std;
 
@@ -303,7 +304,16 @@ void TwoPhaseModel_TestSuite::run()
                                           "nodal relative permeability oil",
                                           "nodal relative permeability water",
                                           "capillary pressure" ) );
-*/                                          
+*/
+  const bool transport_variables_on_nodes(true);
+  suite_.addTest( new TwoPhaseModel_Test( rock_model_,
+                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(),
+                                                                                 "rocktype", "total velocity", "entry pressure", transport_variables_on_nodes ),
+                                          "csmp::TwoPhaseModel_HeterogeneityAndRateAwareModel_Test",
+                                          "nodal relative permeability oil",
+                                          "nodal relative permeability water",
+                                          "capillary pressure" ) );
+
   suite_.addTest( new TwoPhaseModel_Test( fracture_rock_model_,
                                           new FractureMatrixUpscaled<1U>( fracture_rock_model_->Database(),
                                                           "permeability", "viscosity oil", "viscosity water",

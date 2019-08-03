@@ -7,6 +7,9 @@ namespace csmp {
 
 /**
     First attempt at implementing Maartje Boons & Sally Benson (Stanford visit May 16-23, 2019),
+    model for a layered composite. Material parameters are inferred from rocktype.
+    The composite is a dual of averages for the high-k laminations and the w-k ones.
+ 
     see Maple worksheet 'BHP/Stanford-visit/IMPLEMENTATION/HeterogeneityAwareSaturationFunctions'
  
     @note thus far, this is a drainage only model
@@ -19,7 +22,9 @@ namespace csmp {
 template<size_t dim>
 class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   public:
-
+    enum FLOW_DIRECTION { HORIZONTAL, VERTICAL } flow_direction_;
+ 
+  public:
     HeterogeneityAndRateAwareModel( const PropertyDatabase<dim>& database,
                                     const char* rocktype, const char* total_velocity,
                                     const char* pc_entry,
@@ -27,7 +32,6 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   
     virtual ~HeterogeneityAndRateAwareModel();
   
-    // TODO: implement
     virtual void Initialize( const Element<dim>& e );
 
     // relative permeabilities
@@ -35,55 +39,81 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     virtual double64 krw_Phase() const;
     virtual double64 krn_Phase() const;
   
-    // TODO: capillary pressure
+    /// capillary pressure of the non-wetting phase
     virtual double64 pc_Phase( ) const;
-
-    // TODO: capillary pressure derivatives (numeric)
-    virtual double64 dpcds_Phase( ) const;
-
-    // TODO: derivative of fractional flow (advection multipliers) - (numeric)
-    virtual double64 dfds() const;
+  
+    /// numeric implementation of capillary pressure derivative
+    virtual double64 dpcds_Phase() const;
     
-    // derivatives of gravitational flow term (advection multipliers)
-    virtual double64 dGds() const;
-
     // maximum absolute value returned by dfdS
     virtual double64 MaxFractionalFlowDerivative() const;
 
-    // TODO:
+    /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
+    double64  Nc_kgradP_Version() const;
+  
     virtual void Out( size_t phase ) const;
   
   private:
-    // internal support functions
-    /// model specific effective saturation
-    double64  SwStar( double64 sw ) const { return (sw - swr_) / (1. - swr_); }
- 
-    /// returns CL water saturation value below which water will enter the fine-grained layers
-    double64  SwStarKinkCO2( double64 sw, double64 Nc ) const;
+    /// Maartje: viscous - capillary force balance (RVC)
+    double64 RVC() const;
+  
+     /// Maartje: water saturation in the cell at the viscous limit
+    double64 Sw_VL( double64 RVC ) const;
+    /// Maartje: water saturation in the cell at the capillary limit
+    double64 Sw_CL( double64 sw_VL ) const;
+  
+    /// from the average cell saturation and the viscous-to-capillary force ratio, compute the effective saturations in the laminations at the given capillary number
+    void FlowRateDependentLayerSaturations( double64 sw_VL, double64 RVC, double64& sw_low_k_star, double64& sw_high_k_star ) const;
+  
+    /// average effective saturation as required by 2-phase model
+    virtual double64  EffectiveSaturation() const;
 
-    double64  SwStarKinkH2O( double64 sw, double64 Nc ) const;
+    /// weighted average
+    double64 PermeabilityParallelToLaminations() const;
+    /// harmonic mean
+    double64 PermeabilityPerpendicularToLaminations() const;
+    /// prominent direction of flow, determined from vt
+    HeterogeneityAndRateAwareModel::FLOW_DIRECTION ProminentFlowDirection() const;
   
-    /// standard form: Nc = vt mu_CO2 / sigma
-    double64  Nc_vtmuCO2_Version() const;
+    /// volume averaged irreducible water saturation
+    double64 Swr_Composite() const;
   
-    /// pressure gradient form: Nc = k ||grad p|| / sigma
-    double64  Nc_kgradP_Version() const;
+    /// capillary entry pressure
+  
+    /// capillary threshold pressure (pressure that needs to be overcome to flow across cell)
 
   private:
-
-    const csmp::Index  RRT_key_, bcp_key_, pd_key_, vt_key_;
-    // Brooks-Corey model
-    double64 k_, vt_magnitude_;
-    double64 lambda_, entry_pressure_;  ///< Brooks-Corey parameter and drainage capillary threshold pressure (Brooks-Corey), CL curve
-
-    const double64 IFT_ = 0.0035; ///< water - CO2 (N/m)
+    const csmp::Index  RRT_key_, pf_key_, vt_key_;
   
-    // saturations
-    double64  sw_, swr_, snr_;               ///< water saturations
+    DenseMatrix<DM_MIN>  DN_; ///< form computation of capillary pressure gradient
+    double64             grad_p_magnitude = UNSPECIFIED;;
+    const double64       IFT_ = 0.0035; ///< water - CO2 (N/m)
+    VectorVariable<dim>  vt_;
+  
     // specific points
-    double64  Nc_, Nc_VL_, Nc_CL_;
-    // model parameters (read by Initialise function)
+    double64  Nc_; // capillary mumber
   
+    // rock-sample parameters (read by Initialise function)
+    int      rocktype_ = 0;
+    double64 L_low_    = 0.025;
+    double64 L_high_   = 0.025;  ///< cumulative thickness of hiigh-k layers
+    double64 k_low_    = 3.4759e-14;  // low-permeability lamination (default)
+    double64 k_high_   = 3.6075e-13;  // high permeability lamination
+
+    // water saturation
+    mutable double64  sw_;
+    // irreducible saturations
+    double64 Swi_low_  = 0.18;      // irreducible saturations of the 2 different layers (CL)
+    double64 Swi_high_ = 0.159;
+    // limits and ratios for composite
+     double64 Sw_VL_, RVC_;   ///< as computed from the correlation between Sw_CL amd Sw_VL (not sure however why that should exist)
+     
+    // model exponents
+    double64 m_low_    = 0.5;        // van Genuchten exponents for the 2 different layers
+    double64 m_high_   = 0.6;
+    double64 pd_low_   = 3000.;
+    double64 pd_high_  = 1000.;
+    double64 dPc_      = 1.3061e+06; // capillary pressure difference between high_k and low_k layer at connate water saturation
 };
 
 } // end namespace csmp

@@ -21,10 +21,10 @@ BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2()
 */
 template<size_t dim>
 BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
-                                                           const char* permeability,
-                                                           double64 viscosity_nw, double64 viscosity_w,
-                                                           double64 density_nw, double64 density_w, 
-                                                           const char* lamda, const char* pc_entry )
+                                                                 const char* permeability,
+                                                                 double64 viscosity_nw, double64 viscosity_w,
+                                                                 double64 density_nw, double64 density_w,
+                                                                 const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
    sormax_key(database.StorageKey("maximum residual oil saturation")),
@@ -61,7 +61,7 @@ BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2( const PropertyD
 
 template<size_t dim>
 BrooksCoreyWithHysteresisCO2<dim>::BrooksCoreyWithHysteresisCO2( const PropertyDatabase<dim>& database,
-                                                           const char* lamda, const char* pc_entry )
+                                                                 const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
    lamda_key(database.StorageKey(lamda)),
    sormax_key(database.StorageKey("maximum residual oil saturation")),
