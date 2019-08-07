@@ -59,9 +59,6 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
       grad_p_magnitude += gradP[j] * gradP[j];
     grad_p_magnitude = sqrt(grad_p_magnitude);
 
-    // capillary number
-    Nc_ = Nc_kgradP_Version();
-
     // total velocity to get flow direction
     e.Read( vt_key_, vt_ );
     flow_direction_ = ProminentFlowDirection();
@@ -94,11 +91,14 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     TwoPhaseModel<dim>::ift_  = IFT_; // 20 mN/m
 
     // dynamic parameters
-    RVC_   = RVC();
+    Nc_    = Nc_kgradP_Version(); // capillary number
+    RVC_   = RVC( Nc_ );
     Sw_VL_ = Sw_VL( RVC_ );
 
 // DEBUGGING
 //Out(1);
+//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
+//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-4 );
 //cerr <<".";
 
  } // end Initialize
@@ -161,14 +161,19 @@ double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version() const
 
 
 
-// viscous - capillary force balance (RVC)
+/**
+    Viscous - capillary force balance (RVC)
+ 
+    Uses the capillary number and the interfacial tension as input parameters.
 
-// RVC = ((RVC_high_k * (Ly1+Ly3+Ly5)) + (RVC_low_k * (Ly2+Ly4)))/(Ly1+Ly2+Ly3+Ly4+Ly5);
+    RVC = ((RVC_high_k * (Ly1+Ly3+Ly5)) + (RVC_low_k * (Ly2+Ly4)))/(Ly1+Ly2+Ly3+Ly4+Ly5);
+
+*/
 template<size_t dim>
-double64 csmp::HeterogeneityAndRateAwareModel<dim>::RVC() const
+double64 csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double64 Ncap ) const
  {
-    const double64 rvc_low_k  = (Nc_ * IFT_ * L_low_/2.) / (dPc_ * k_low_);
-    const double64 rvc_high_k = (Nc_ * IFT_ * L_high_/3.) / (dPc_ * k_high_);
+    const double64 rvc_low_k  = (Ncap * IFT_ * L_low_/2.) / (dPc_ * k_low_);
+    const double64 rvc_high_k = (Ncap * IFT_ * L_high_/3.) / (dPc_ * k_high_);
    
     return (rvc_high_k * L_high_ + rvc_low_k * L_low_) / (L_low_ + L_high_);
  }
@@ -193,16 +198,16 @@ void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( dou
     // using max to elimiate negative values
     const double64 Sw_CL_high_k = max( -1. + 2. * sqrt( sw_VL ), 0. );
     const double64 Sw_CL_low_k = 0.55 + 0.45 * pow( Sw_CL_high_k, 0.29 );
-   
+
     const double64 sw_high_k = (RVC * sw_VL + Sw_CL_high_k) / (RVC + 1.);
     const double64 sw_low_k  = (RVC * sw_VL + Sw_CL_low_k) / (RVC + 1.);
 
     // Sw_star_FSst=(Sw-Swi_FSst)/(1-Swi_FSst)
     // Sw_high_k_star = (sw_high_k – swi_high_k) / (1 - swi_high_k)
-    sw_high_k_star = max( sw_high_k - Swi_high_, 0.) / (1 - Swi_high_);
+    sw_high_k_star = max( sw_high_k - Swi_high_, 0.) / (1. - Swi_high_);
     sw_high_k_star = min( sw_high_k_star, 1. );
     // Sw_low_k_star = (sw_low_k – swi_low_k) / (1 - swi_low_k)
-    sw_low_k_star = max( sw_low_k - Swi_low_, 0.) / (1 - Swi_low_);
+    sw_low_k_star = max( sw_low_k - Swi_low_, 0.) / (1. - Swi_low_);
     sw_low_k_star = min( sw_low_k_star, 1. );
  }
 
@@ -232,8 +237,7 @@ void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( dou
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::Sw_VL( double64 RVC ) const
  {
-
-    return 1.490090896 * sw_ * RVC - 0.5014155864 * RVC + 1.490090896 * sw_;
+    return min( max( 1.490090896 * sw_ * RVC - 0.5014155864 * RVC + 1.490090896 * sw_, 0.), 1. );
  }
 
 
@@ -241,7 +245,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::Sw_VL( double64 RVC ) const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::Sw_CL( double64 sw_VL ) const
  {
-     return 0.3365 + 0.6711 * Sw_VL_;
+     return min( 0.3365 + 0.6711 * Sw_VL_, 1. );
  }
 
 
@@ -435,6 +439,47 @@ double64 HeterogeneityAndRateAwareModel<dim>::Swr_Composite() const
 
 
 
+
+/**
+    writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0.05 saturation increments
+*/
+template<size_t dim>
+void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const char* filename, double64 Ncap )
+ {
+    ofstream  ofs( string(filename) + ".txt" );
+   
+    const string rocktype("laminated-sand-silt");
+    const double64 original_sw(sw_);
+    const double64 original_Nc(Nc_);
+    Nc_ = Ncap;
+
+    ofs <<"sw(Nc="<< Nc_ <<")\t krw(sw,Nc="<< Nc_ <<",rocktype="<< rocktype <<")\t krnw(sw,Nc) \t pc(sw,Nc)\n";
+    for ( double64 sw(0.); sw<1.05; sw+=0.05 )
+      {
+         // dynamic parameters
+         sw_    = sw;
+         RVC_   = RVC( Nc_ );
+         Sw_VL_ = Sw_VL( RVC_ );
+
+         ofs << sw << "\t"<< krw_Phase();
+         ofs <<"\t"<< krn_Phase();
+         ofs <<"\t"<< pc_Phase();
+         ofs << endl;
+      }
+   
+    // restoring current saturation
+    sw_    = original_sw;
+    Nc_    = original_Nc;
+    RVC_   = RVC( Nc_ );
+    Sw_VL_ = Sw_VL( RVC_ );
+
+ } // end WriteRelativePermeabilityTable
+  
+
+
+
+
+
 template<size_t dim>
 void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
  {
@@ -447,7 +492,7 @@ void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
     cout <<"\n                           capillary number, Nc: "<< Nc_;
     cout <<"\n               layer-parellel permeability (m2): "<< PermeabilityParallelToLaminations();
     cout <<"\n          layer-perpendicular permeability (m2): "<< PermeabilityPerpendicularToLaminations();
-    cout <<"\nratio between viscous and capillary forces, RVC: "<< RVC();
+    cout <<"\nratio between viscous and capillary forces, RVC: "<< RVC( Nc_ );
     cout <<"\n      average water saturation in composite, sw: "<< sw_;
     cout <<"\n                                        krw(sw): "<< krw_Phase();
     cout <<"\n                                        krn(sw): "<< krn_Phase();

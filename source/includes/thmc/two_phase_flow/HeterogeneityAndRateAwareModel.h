@@ -28,13 +28,16 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     HeterogeneityAndRateAwareModel( const PropertyDatabase<dim>& database,
                                     const char* rocktype, const char* total_velocity,
                                     const char* pc_entry,
-                                    const bool sw_ro_mu_placement = true ); // NODE=true ELEMENT=false
+                                    const bool sw_ro_mu_placement = false ); // NODE=true ELEMENT=false
   
     virtual ~HeterogeneityAndRateAwareModel();
   
     virtual void Initialize( const Element<dim>& e );
 
-    // relative permeabilities
+    /// average effective saturation as required by 2-phase model
+    virtual double64  EffectiveSaturation() const;
+  
+   // relative permeabilities
     /// heterogeneity-aware, rate-dependent version, Nc is calculated in the background
     virtual double64 krw_Phase() const;
     virtual double64 krn_Phase() const;
@@ -51,12 +54,25 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
     double64  Nc_kgradP_Version() const;
   
+    /// Outputs the relperms for the current model initialisation to a plot for visual examination
+    void WriteRelativePermeabilityTable( const char* filename, double64 Ncap );
+  
     virtual void Out( size_t phase ) const;
   
   private:
-    /// Maartje: viscous - capillary force balance (RVC)
-    double64 RVC() const;
+    /// weighted average
+    double64 PermeabilityParallelToLaminations() const;
+    /// harmonic mean
+    double64 PermeabilityPerpendicularToLaminations() const;
+    /// prominent direction of flow, determined from vt
+    HeterogeneityAndRateAwareModel::FLOW_DIRECTION ProminentFlowDirection() const;
+    /// volume averaged irreducible water saturation
+    double64 Swr_Composite() const;
   
+    // LAYER-PARALLEL FLOW
+
+    /// Maartje: viscous - capillary force balance (RVC) from capillary number and interfacial tension between wetting and non-wetting phase
+    double64 RVC( double64 Ncap ) const;
      /// Maartje: water saturation in the cell at the viscous limit
     double64 Sw_VL( double64 RVC ) const;
     /// Maartje: water saturation in the cell at the capillary limit
@@ -65,35 +81,28 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// from the average cell saturation and the viscous-to-capillary force ratio, compute the effective saturations in the laminations at the given capillary number
     void FlowRateDependentLayerSaturations( double64 sw_VL, double64 RVC, double64& sw_low_k_star, double64& sw_high_k_star ) const;
   
-    /// average effective saturation as required by 2-phase model
-    virtual double64  EffectiveSaturation() const;
+    // (BUOYANCY-DRIVEN) FLOW PERPENDICULAR TO THE LAYERS
 
-    /// weighted average
-    double64 PermeabilityParallelToLaminations() const;
-    /// harmonic mean
-    double64 PermeabilityPerpendicularToLaminations() const;
-    /// prominent direction of flow, determined from vt
-    HeterogeneityAndRateAwareModel::FLOW_DIRECTION ProminentFlowDirection() const;
   
-    /// volume averaged irreducible water saturation
-    double64 Swr_Composite() const;
+    /// @todo: capillary entry pressure
   
-    /// capillary entry pressure
+    /// @todo: capillary threshold pressure (pressure that needs to be overcome to flow across cell)
   
-    /// capillary threshold pressure (pressure that needs to be overcome to flow across cell)
+    /// @todo: think about what parameters to keep rather than using functions to compute them on the fly when needed
 
   private:
     const csmp::Index  RRT_key_, pf_key_, vt_key_;
   
     DenseMatrix<DM_MIN>  DN_; ///< form computation of capillary pressure gradient
-    double64             grad_p_magnitude = UNSPECIFIED;;
-    const double64       IFT_ = 0.0035; ///< water - CO2 (N/m)
+    double64             grad_p_magnitude = UNSPECIFIED;
+    const double64       IFT_ = 0.035; ///< 35 mN/m water - CO2
     VectorVariable<dim>  vt_;
   
     // specific points
     double64  Nc_; // capillary mumber
   
     // rock-sample parameters (read by Initialise function)
+    // TODO: discretise these values on the model via the rock-type file
     int      rocktype_ = 0;
     double64 L_low_    = 0.025;
     double64 L_high_   = 0.025;  ///< cumulative thickness of hiigh-k layers
