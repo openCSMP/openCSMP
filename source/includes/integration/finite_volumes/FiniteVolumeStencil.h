@@ -60,8 +60,8 @@ template<size_t dim>
 class FiniteVolumeStencil {
   public:
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
-    FiniteVolumeStencil( const FiniteVolumeStencil& fvs );
-    FiniteVolumeStencil& operator=( const FiniteVolumeStencil& fvs );
+    FiniteVolumeStencil( const FiniteVolumeStencil& );
+    FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
     ~FiniteVolumeStencil();
     void      Initialize( const char* csp_finite_element_type );
     void      Resize( size_t isrf, size_t srfs_per_node, size_t ivol, size_t spts, size_t vpts );

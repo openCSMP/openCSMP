@@ -15,10 +15,22 @@ namespace csmp {
 
 template<size_t> class Model;
 
+/**
+     Testing programme
+ 
+     1. Conservation on the initialised model
+        - prescribed velocity
+        - computed velocity
+        - tracer transport in steady-state pressure field, 1st order
+        - tracer transport 2nd order
+        - transport for transient pressure case
+        - transport in the presence of sources and sinks
+*/
 class ExplicitTransport_Test : public Test {
   public:
     ExplicitTransport_Test( const char* test_model, const char* test_variables );
     virtual ~ExplicitTransport_Test();
+    
     virtual void run();
   
   private:

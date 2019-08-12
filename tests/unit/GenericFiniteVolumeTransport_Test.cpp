@@ -393,20 +393,19 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
       vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
       vtk_output.OutputDataToVTK( model, "velocity",       "velocity",       1 );
 
+      model.InstantiateFiniteVolumes();
+      const Region<3>& model_domain(model.Region("Model"));
+      const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
+                        K_key(model.Database().StorageKey("conductivity")),
+                        v_key(model.Database().StorageKey("velocity"));
+   
+      std::vector<double64> DNR, DNS, DNT;
+      std::vector<double64> cross_section(model_domain.Nodes());
+      std::vector<double64> velocity_magnitude(model_domain.Nodes());
+
      // -----------------------------------------------------------------------
      // 4. stepping over the model comparing facet by facet flux calculations
      // -----------------------------------------------------------------------
-     model.InstantiateFiniteVolumes();
-     const Region<3>& model_domain(model.Region("Model"));
-     const csmp::Index p_key(model.Database().StorageKey("fluid pressure")),
-                       K_key(model.Database().StorageKey("conductivity")),
-                       v_key(model.Database().StorageKey("velocity"));
-   
-     std::vector<double64> DNR, DNS, DNT;
-     
-     std::vector<double64> cross_section(model_domain.Nodes());
-     std::vector<double64> velocity_magnitude(model_domain.Nodes());
-
      for (auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
          double64 csa = 0.0;
          double64 surface_area = 0.0;
@@ -578,7 +577,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                // 3. testing that the fluxes are the same
                // ---------------------------------------
                if (!at_boundary) {
-                   // _equal( flux_physical, flux_parametric, s_internal_flux_rel_err );
+                  _equal( flux_physical, flux_parametric, s_internal_flux_rel_err );
                }
            }
        }

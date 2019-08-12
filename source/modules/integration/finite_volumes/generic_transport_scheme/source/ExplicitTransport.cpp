@@ -122,7 +122,8 @@ template<size_t dim>
 double64 ExplicitTransport<dim>::TimeIncrement()
  {
     UpdateFacetFluxes();
-    return TimeIncrementAndFluxBalance( 356. * 86400. );
+    const double64 default_max_time_increment( 356. * 86400. ); // 1 year
+    return TimeIncrementAndFluxBalance( default_max_time_increment );
  }
 
 
@@ -295,10 +296,10 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
 template<size_t dim>
 void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
-    // 1. computing (velocity and) facet fluxes as necessary
+    // 1. element-by-element loop computation of (velocity and) facet fluxes as necessary
     UpdateFacetFluxes();
    
-    // 2. evaluation of time increment
+    // 2. node-by-node loop evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
    
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
@@ -320,6 +321,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
           //     - this steps also considers in and outflow of finite volume cells
           //     - (distributed) sources and sinks will be considered
           const bool with_divergence_correction(false);
+          // node loop: FV by FV
           AssembleSolution( time_increment, with_divergence_correction );
       
 // testing
@@ -327,7 +329,7 @@ double64 so1_min, so1_max;
 gref_.MinMaxOf( "new concentration", so1_min, so1_max );
 cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
 
-          // 4. 'new saturation oil' is used to replace 'saturation oil' performing a range check
+          // 4. node loop: 'new concentration' is used to replace 'concentration' performing a range check
           const bool range_check(true);
           const bool show_range(true);
           VerifyAndAssignResults( show_range, range_check );
