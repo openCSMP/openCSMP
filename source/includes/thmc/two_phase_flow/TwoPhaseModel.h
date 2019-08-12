@@ -18,8 +18,6 @@ enum { WETTING_PHASE = 1U, NONWETTING_PHASE = 2U };
 
 base class for 2-phase flow models (Linear, Brooks Corey, Van Genuchten, Richards)
 now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting... 
-
-@todo (3) To improve calculation speed, change relperm models from dynamic to static polymorphism (C)
  
  */
 template<size_t dim>

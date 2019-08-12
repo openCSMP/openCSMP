@@ -21,6 +21,7 @@
 #include "FractureMatrixUpscaled.h"
 #include "BrooksCoreyWithHysteresis.h"
 #include "LinearTwoPhaseModel.h"
+#include "HeterogeneityAndRateAwareModel.h"
 
 using namespace std;
 
@@ -303,7 +304,22 @@ void TwoPhaseModel_TestSuite::run()
                                           "nodal relative permeability oil",
                                           "nodal relative permeability water",
                                           "capillary pressure" ) );
-*/                                          
+*/
+  // assigning properties for CO2 - water at 89 bars, 50oC, for comparison with Stanford reference model, CO2 is non-wetting phase called oil
+  rock_model_->InputPropertyValue( "viscosity water",  makeScalar(PLAIN,0.00054843273523072 ) );
+  rock_model_->InputPropertyValue( "viscosity oil",    makeScalar(PLAIN,0.000022959) );
+  rock_model_->InputPropertyValue( "density water",    makeScalar(PLAIN,991.86) );
+  rock_model_->InputPropertyValue( "density oil",      makeScalar(PLAIN,282.5 ) );
+
+  const bool transport_variables_on_nodes(true);
+  suite_.addTest( new TwoPhaseModel_Test( rock_model_,
+                                          new HeterogeneityAndRateAwareModel<1U>( rock_model_->Database(),
+                                                                                 "rocktype", "total velocity", "entry pressure", transport_variables_on_nodes ),
+                                          "csmp::TwoPhaseModel_HeterogeneityAndRateAwareModel_Test",
+                                          "nodal relative permeability oil",
+                                          "nodal relative permeability water",
+                                          "capillary pressure" ) );
+
   suite_.addTest( new TwoPhaseModel_Test( fracture_rock_model_,
                                           new FractureMatrixUpscaled<1U>( fracture_rock_model_->Database(),
                                                           "permeability", "viscosity oil", "viscosity water",
