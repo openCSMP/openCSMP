@@ -306,6 +306,7 @@ void TwoPhaseModel_TestSuite::run()
                                           "capillary pressure" ) );
 */
   // assigning properties for CO2 - water at 89 bars, 50oC, for comparison with Stanford reference model, CO2 is non-wetting phase called oil
+  // this is needed only for the fractional flows etc.
   rock_model_->InputPropertyValue( "viscosity water",  makeScalar(PLAIN,0.00054843273523072 ) );
   rock_model_->InputPropertyValue( "viscosity oil",    makeScalar(PLAIN,0.000022959) );
   rock_model_->InputPropertyValue( "density water",    makeScalar(PLAIN,991.86) );

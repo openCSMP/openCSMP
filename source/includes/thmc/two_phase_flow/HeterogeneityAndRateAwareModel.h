@@ -95,7 +95,6 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   
     DenseMatrix<DM_MIN>  DN_; ///< form computation of capillary pressure gradient
     double64             grad_p_magnitude = UNSPECIFIED;
-    const double64       IFT_ = 0.035; ///< 35 mN/m water - CO2
     VectorVariable<dim>  vt_;
   
     // specific points
