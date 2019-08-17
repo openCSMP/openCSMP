@@ -158,6 +158,7 @@ class FiniteVolumeStencil {
     
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };
+    // TODO: flatten all these multidimensional arrays for faster access; use specific type for this
     std::vector<std::pair<size_t,size_t> >  edges_of_element;             ///< = facets
     std::vector<std::vector<size_t> >       facets_surrounding_node;      ///< [node][facet]
     std::vector<std::vector<Point<dim> > >  facet_integration_points;     ///< [isrf][spts][dim]

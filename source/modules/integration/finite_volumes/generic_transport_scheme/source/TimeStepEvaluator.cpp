@@ -113,25 +113,47 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
 /**
     Special case where the inflow or outflow needs to be established but the FV may be sliced
     by the model boundary.
+ 
+    2 boundary cases are considered:
+ 
+      1. No-flow boundary where flux balance is known because no in- or outflow should occur
+ 
+      2. Dirichlet in- or outflow boundary where balance has to be guessed and compensation
+         is necessary, else there is a saturation buildup at out-flow boundaries.
 */
 template<size_t dim, template<size_t> class USER>
 double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr ) const
  {
     assert( nptr != NULL );
     const double64 pore_volume = nptr->Read( User()->key_FVPV );
-   
-    // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance
+
+    // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
+    //    however, if we are at a no-flow boundary of the model and there is no fluid volume source, there should be no inflow or outflow
+    //    and any flux balance will therefore represent an error (at least if the flow is steady).
     if ( nptr->AtBoundary() != NOT ) {
          // 1.0 (Q) checking sources because these will not be picked up in the fluxes correctly if the FV is truncated
          const double64 fluid_source = ( nptr->Read(User()->key_NQV) > 0. ) ? nptr->Read(User()->key_NQV) : 0.;
-         // 1.1 (phi * V) / q_out = dt
          const double64 flux_balance = std::max( fabs( nptr->Read( User()->key_FB )), fluid_source );
-         if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-         return std::max( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+         // if we are at an in- or outflow boundary
+         if ( nptr->Status( User()->key_PF ) == DIRICH ) {
+               // 1.1 (phi * V) / q_out = dt
+               if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
+               return std::max( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+           }
+         // no-flow boundary case
+         else {
+              const double64 tolerance_factor(100.);
+              assert( fabs(flux_balance) < numeric_limits<double64>::epsilon() * tolerance_factor );
+              // see below:
+              // - leave the if statement, but not this method
+              // - compute the outflow from the FV into the current region
+              // - limit the time-stepping criterion using the outflow: dt = (phi * V) / q_out
+           }
       }
  
-    // 2. for a perimeter FV that is intact, the volumetric outflow needs to be calculated 
-     double64 outflow(0.);
+    // 2. if the perimeter of the FV at the boundary is intact because it lies inside of the model,
+    //    the volumetric outflow is calculated and used to limit the time increment
+    double64 outflow(0.);
 
      const size_t parent_elements(nptr->Parents());
      for ( size_t i=0U; i<parent_elements; ++i ) {
@@ -199,8 +221,6 @@ input max_time_increment which may be the case if there is no flow at all
 in the domain. Equally, the user is informed if the CFL increment is 
 less than a millisecond (usually a prohibitively small increment).  
 
-TODO: implement streamline CFL
-
 */
 template<size_t dim, template<size_t> class USER>
 double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const eit ) const
@@ -210,7 +230,6 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const 
     double64                    velocity, courant_increment(max_time_increment_);
     const double64              millisecond(1.0e-3);
     const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
-    const bool                  unless_has_equal_dimension(dim!=1U);
 
    // 1. limit imposed by advection
    // -----------------------------

@@ -326,7 +326,9 @@ double64 limitProperty_LSMGRAD( const Element<dim>& e,
 length of edge 01s as described by a vector
 get the distance between control volume centres which share this face
 (this distance is equivalent to the length of corresponding edge)
-get the edge length to calculate the saturation gradient*/
+get the edge length to calculate the saturation gradient
+
+*/
 double64  diffusionVelocity( const Region<1>& sg,
                               const Node<1U>* const nd,
                               const set<size_t>& ngraph_entry,
@@ -666,7 +668,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              // ---------------------------------------
              // computing sector volumes & pore volumes
              // ---------------------------------------
-             const double64 porosity = eptr->Read( phi_key );
+             const double64 porosity = eptr->Read( phi_key ) * eptr->Read( thi_key );
              const size_t sectors(eptr->Sectors());
              for ( size_t j=0U; j<sectors; ++j ) {
                   const double64 sector_volume = eptr->SectorVolume(j);
@@ -680,20 +682,19 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
    // --------------------------------------------------------
    if ( initialize_flux ) {
         // loop over FV stencils, computing the relevant variable values
-     
         const typename vector<Node<dim>*>::iterator nit_end(gref.NodesEnd());
         double64 bmin(1e30), bmax(-1e30);
      
         for ( typename vector<Node<dim>*>::iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit )
-          if ( (*nit)->AtBoundary() != NOT )
+          if ( (*nit)->AtBoundary() == NOT )
             {
                const size_t parent_elements((*nit)->Parents());
                double64 flux_balance(0.);
                for ( size_t i=0U; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
-                    const size_t sector_node      = (*nit)->ParentNodeNumber(i);
+                    const size_t sector_node = (*nit)->ParentNodeNumber(i);
                     for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
-                         const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+                         const size_t facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
                          const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                          const double64 facet_flux = sign * eptr->Read( facet, 0U, ff_key );
                          flux_balance += facet_flux;
@@ -712,6 +713,35 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
 // explicit instantiation of function template in 2 and 3D
 template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>&, bool );
 template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>&, bool );
+
+
+
+
+/**
+    Inflow / outflow integration over finte volume sectors.
+ 
+    @note if lower-dimensional elements are part of the mesh, a thickness attribute has to be specified for them,
+    this is taken into account when the facet fluxes are first computed.
+    If so, thickness is considered by this method.
+
+    @return accumulated influx into the FV sector (added), outflux subtracted.
+*/
+template<size_t dim>
+double64 sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key )
+ {
+   double64 sector_flux(0.);
+   for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector); ++j ) {
+         const size_t facet  = eptr->FV()->FacetSurroundingSector( sector, j );
+         const double64 sign = (sector==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
+         const double64 facet_flux = sign * eptr->Read( facet, 0U, flux_key );
+         sector_flux += facet_flux;
+      }
+   return sector_flux;
+ 
+ } // end
+
+template double64 sectorFlux( const Element<2U>* const, size_t, const csmp::Index& );
+template double64 sectorFlux( const Element<3U>* const, size_t, const csmp::Index& );
 
 
 

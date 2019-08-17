@@ -28,6 +28,15 @@ template<size_t dim> void initializeFiniteVolumeProperties( Model<dim>&, Region<
 /// taking into account thickness, initialising FV sector volume, FV pore volume, facet area, facet normal
 template<size_t dim> void initializeBasicFiniteVolumeProperties( Model<dim>&, Region<dim>& );
 
+/// sums precomputed fluxes over the facets that surround the FE - FV sector; thickness of dim-1 elements is taken into account
+template<size_t dim> double64 sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key );
+
+template<size_t dim>
+double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey );
+
+template<size_t dim, typename ForwardIt>
+double64 fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey );
+
 
 double64  diffusionVelocity( const Region<1>& super_group,
                              const Node<1U>* const nd,
@@ -43,12 +52,6 @@ double64  diffusionVelocity( const Region<3>&,
                              const Node<3U>* const,
                              const std::set<size_t>&,
                              const csmp::Index& );
-
-template<size_t dim>
-double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey );
-
-template<size_t dim, typename ForwardIt>
-double64 fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey );
 
 double64 delta_X_FromFV_Volume( double64 FV_volume, size_t dim );
 

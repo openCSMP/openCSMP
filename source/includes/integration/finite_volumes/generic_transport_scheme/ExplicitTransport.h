@@ -12,11 +12,21 @@ template<size_t> class Model;
 
 // TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode...)
 // TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
+/**
+    Single-phase flow tracer, heat or other transport, taking into account the thickness attribute
+    of lower-dimensional elements in the flux calculations.
+ 
+    @author SKM
+    @date 25/6/2015
+ 
+    @copyright Stephan K. Matthai
+*/
 template<size_t dim>
 class ExplicitTransport : public variables::VariableSet_TracerTransfer,
                           public FacetFlux_TracerTransferExplicit<dim,ExplicitTransport>,
                           public TimeStepEvaluator<dim,ExplicitTransport> {
   public:
+    friend class ExplicitTransport_Test;
     // TODO: add choice of transport scheme: 1st versus 2nd order in space
     /// constructor for target region; by default all driving forces are considered
     ExplicitTransport( Model<dim>&, const char* target_region );
@@ -26,6 +36,10 @@ class ExplicitTransport : public variables::VariableSet_TracerTransfer,
     
     /// executes incremental time-stepping (a suitable time increment is computed by scheme)
     void AdvectVariable( double64 time_interval );
+    
+    // TODO: rate of solute influx into the model
+    double64 Influx() const;
+    double64 OutFlux() const;
   
   private:
     /// 1.a computations of facet flux using FacetFlux (facet flux) policy

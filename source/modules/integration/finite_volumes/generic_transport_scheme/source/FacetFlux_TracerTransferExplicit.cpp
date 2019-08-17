@@ -23,6 +23,8 @@ namespace csmp {
     
     @attention that vD can be used directly as interstitial velocity since the FV is scaled by porosity
  
+    @attention the thickness of lower-dimensional elements is taken into account
+ 
     @tested 
  
 */
@@ -33,6 +35,7 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( El
 
    // element-based Darcy velocity
    eptr->Read( User()->key_V, vD_ );
+   const double64 thickness = eptr->Read( User()->key_thi );
 
    // computing total facet fluxes by projecting vt onto facet normals
    const size_t facets(eptr->FV()->Facets());
@@ -42,6 +45,8 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( El
         double64 facet_flux = nrml_[0] * vD_[0];
         if ( dim != 1U ) facet_flux += nrml_[1] * vD_[1];
         if ( dim >  2U ) facet_flux += nrml_[2] * vD_[2];
+        // multiplication with element thickness
+        facet_flux *= thickness;
         // multiplication with facet area
         facet_flux *= eptr->Read( j, 0U, User()->key_fA );
 
@@ -143,6 +148,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
               assert( eptr != NULL );
               const size_t pnid(nd_ptr->ParentNodeNumber(t));
               eptr->Read( User()->key_V, vD_ );
+              const double64 thickness = eptr->Read( User()->key_thi );
 
               const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
               for ( size_t i=0U; i<sector_facets; i++ )
@@ -152,7 +158,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
                    const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
 
                    eptr->Read( iFacet, 0U, User()->key_fn, nrml_ );
-                   const double64  vD_n = vD_.DotProduct(nrml_);
+                   const double64  vD_n = vD_.DotProduct(nrml_) * thickness;
                    const double64  facetArea = eptr->Read( iFacet, 0U, User()->key_fA );
                   
                    // finding the upstream concentration
@@ -193,6 +199,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
           assert( eptr != NULL );
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
           eptr->Read( User()->key_V, vD_ );
+          const double64 thickness = eptr->Read( User()->key_thi );
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)
@@ -204,7 +211,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
                const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
 
                eptr->Read( iFacet, 0U, User()->key_fn, nrml_ );
-               const double64  normal_vel_component = vD_.DotProduct(nrml_);
+               const double64  normal_vel_component = vD_.DotProduct(nrml_) * thickness;
                const double64  facetArea = eptr->Read( iFacet, 0U, User()->key_fA );
               
                const double64 C_upstream = (normal_vel_component < 0.) ? eptr->N(outside_node)->Read( User()->key_C0 ) :
@@ -253,7 +260,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
 
 
 /**
-    stores and returns FV flux balance computed from current facet fluxes
+    stores and returns FV flux balance computed from current thickness-weighted facet fluxes.
 */
 template<size_t dim, template<size_t> class USER>
 double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* const nptr ) const
@@ -271,9 +278,6 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::FluxBalance( Node<dim>* con
             }
        }
      nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
-  
-     //bmin = std::min( bmin, (*nit)->Read( User()->key_FB ) );
-     //bmax = std::max( bmax, (*nit)->Read( User()->key_FB ) );
    
      return flux_balance;
 
