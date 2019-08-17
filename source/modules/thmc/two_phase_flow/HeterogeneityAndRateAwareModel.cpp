@@ -88,7 +88,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     TwoPhaseModel<dim>::swr_  = Swr_Composite();
     TwoPhaseModel<dim>::snr_  = 0.;
     TwoPhaseModel<dim>::seff_ = EffectiveSaturation();
-    TwoPhaseModel<dim>::ift_  = IFT_; // 20 mN/m
+    TwoPhaseModel<dim>::ift_  = 0.035; // 35 mN/m water - CO2
 
     // dynamic parameters
     Nc_    = Nc_kgradP_Version(); // capillary number
@@ -97,9 +97,9 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
 
 // DEBUGGING
 //Out(1);
-//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
-//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-4 );
-//cerr <<".";
+WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
+WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-5 );
+cerr <<".";
 
  } // end Initialize
 
@@ -156,7 +156,7 @@ double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version() const
  {
      assert( grad_p_magnitude != UNSPECIFIED );
    
-     return PermeabilityParallelToLaminations() * grad_p_magnitude / IFT_;
+     return PermeabilityParallelToLaminations() * grad_p_magnitude / TwoPhaseModel<dim>::ift_;
  }
 
 
@@ -172,8 +172,8 @@ double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version() const
 template<size_t dim>
 double64 csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double64 Ncap ) const
  {
-    const double64 rvc_low_k  = (Ncap * IFT_ * L_low_/2.) / (dPc_ * k_low_);
-    const double64 rvc_high_k = (Ncap * IFT_ * L_high_/3.) / (dPc_ * k_high_);
+    const double64 rvc_low_k  = ((Ncap * TwoPhaseModel<dim>::ift_) * L_low_/2.) / (dPc_ * k_low_);
+    const double64 rvc_high_k = ((Ncap * TwoPhaseModel<dim>::ift_) * L_high_/3.) / (dPc_ * k_high_);
    
     return (rvc_high_k * L_high_ + rvc_low_k * L_low_) / (L_low_ + L_high_);
  }
@@ -181,40 +181,7 @@ double64 csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double64 Ncap ) const
 
 
 
- 
-
-
-
-/**
-    from the average cell saturation at the viscous limit,
-    and the viscous-to-capillary force ratio, compute the lamination saturations at the given capillary number.
- 
-    @note the effective saturations are bracketed to 0..1 to avoid error propagation when the model is applied outside of its
-    established saturation range.
-*/
-template<size_t dim>
-void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( double64 sw_VL, double64 RVC, double64& sw_low_k_star, double64& sw_high_k_star ) const
- {
-    // using max to elimiate negative values
-    const double64 Sw_CL_high_k = max( -1. + 2. * sqrt( sw_VL ), 0. );
-    const double64 Sw_CL_low_k = 0.55 + 0.45 * pow( Sw_CL_high_k, 0.29 );
-
-    const double64 sw_high_k = (RVC * sw_VL + Sw_CL_high_k) / (RVC + 1.);
-    const double64 sw_low_k  = (RVC * sw_VL + Sw_CL_low_k) / (RVC + 1.);
-
-    // Sw_star_FSst=(Sw-Swi_FSst)/(1-Swi_FSst)
-    // Sw_high_k_star = (sw_high_k – swi_high_k) / (1 - swi_high_k)
-    sw_high_k_star = max( sw_high_k - Swi_high_, 0.) / (1. - Swi_high_);
-    sw_high_k_star = min( sw_high_k_star, 1. );
-    // Sw_low_k_star = (sw_low_k – swi_low_k) / (1 - swi_low_k)
-    sw_low_k_star = max( sw_low_k - Swi_low_, 0.) / (1. - Swi_low_);
-    sw_low_k_star = min( sw_low_k_star, 1. );
- }
-
-
-
-
-/**
+ /**
     @attention This is where the actual water saturation in the cell enters the computation.
  
     Since Sw_CL can be written as a function of the Sw_VL (curve fit) and cell average water saturation
@@ -232,12 +199,15 @@ void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( dou
     Sw_VL = 1.490090896*SwNC*RVC-.5014155864*RVC+1.490090896*SwNC
 
     where SwNc   Sw_cell(Nc)
+ 
+    @attention Sw_VL must be limited to [0,1], else kri will have NaN values.
 
 */
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::Sw_VL( double64 RVC ) const
  {
-    return min( max( 1.490090896 * sw_ * RVC - 0.5014155864 * RVC + 1.490090896 * sw_, 0.), 1. );
+    //return ((sw_ * (RVC + 1.)) - 0.3365) / (RVC + 0.6711);
+    return min( max( ((sw_ * (RVC + 1.)) - 0.3365) / (RVC + 0.6711), 0. ), 1. );
  }
 
 
@@ -245,8 +215,40 @@ double64 HeterogeneityAndRateAwareModel<dim>::Sw_VL( double64 RVC ) const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::Sw_CL( double64 sw_VL ) const
  {
-     return min( 0.3365 + 0.6711 * Sw_VL_, 1. );
+    // limited version: return min( 0.3365 + 0.6711 * Sw_VL_, 1. );
+    return 0.3365 + 0.6711 * Sw_VL_;
  }
+
+
+
+
+/**
+    from the average cell saturation at the viscous limit,
+    and the viscous-to-capillary force ratio, compute the lamination saturations at the given capillary number.
+ 
+    @note the effective saturations are bracketed to 0..1 to avoid error propagation when the model is applied outside of its
+    established saturation range.
+*/
+template<size_t dim>
+void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( double64 sw_VL, double64 RVC, double64& sw_low_k_star, double64& sw_high_k_star ) const
+ {
+    // ESSENTIAL: using max to eliminate negative values
+    const double64 Sw_CL_high_k = max( -1. + 2. * sqrt( sw_VL ), 0. );
+    const double64 Sw_CL_low_k  = 0.55 + 0.45 * pow( Sw_CL_high_k, 0.29 );
+
+    // limiting these water saturations to the residual saturation of water
+    // TODO: how about capillary desaturation in highly permeable layers; put at least a warning here for sufficienctly high Nc
+    const double64 sw_high_k = max( (RVC * sw_VL + Sw_CL_high_k) / (RVC + 1.), Swi_high_ );
+    const double64 sw_low_k  = max( (RVC * sw_VL + Sw_CL_low_k) / (RVC + 1.), Swi_low_ );
+
+    // Sw_star_FSst=(Sw-Swi_FSst)/(1-Swi_FSst)
+    sw_high_k_star = (sw_high_k - Swi_high_) / (1. - Swi_high_);
+    sw_low_k_star  = (sw_low_k  - Swi_low_)  / (1. - Swi_low_);
+
+ } // end FlowRateDependentLayerSaturations
+
+
+
 
 
 
@@ -256,27 +258,29 @@ double64 HeterogeneityAndRateAwareModel<dim>::Sw_CL( double64 sw_VL ) const
     6.  Use saturations found in step 5 to calculate relative permeability using the VanGenuchten relationship
  
     Sw_star_FSst=(Sw-Swi_FSst)/(1-Swi_FSst)
- 
+    Krw_ave=((Krw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
+
 */
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  {
     if ( sw_ <= Swr_Composite() ) return 0.;
    
-    if ( flow_direction_ == HORIZONTAL ) {
-         double64 sw_low_k_star, sw_high_k_star;
-         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star, sw_high_k_star );
+//    if ( flow_direction_ == HORIZONTAL ) {
+         double64 Sw_low_k_star, Sw_high_k_star;
+         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
 
          // Krw_high_k=(Sw_high_k_star^0.5)*(1-(1-Sw_high_k_star^(1/m_high))^m_high)^2
-         double64 term = 1. - pow( 1. - pow( sw_high_k_star, (1./m_high_)), m_high_ );
-         const double64 Krw_high_k = sqrt( sw_high_k_star ) * (term * term);
-      
+         double64 term = 1. - pow( 1. - pow( Sw_high_k_star, (1./m_high_)), m_high_ );
+         const double64 Krw_high_k = sqrt( Sw_high_k_star ) * (term * term);
+ 
          // Krw_low_k=(Sw_low_k^0.5)*(1-(1-Sw_low_k^(1/m_low))^m_low)^2
-         term = 1. - pow( 1. - pow( sw_low_k_star, (1./m_low_)), m_low_ );
-         const double64 Krw_low_k = sqrt( sw_low_k_star ) * (term * term);
-
-         return min( max( (L_high_ * Krw_high_k + L_low_ * Krw_low_k) / (L_high_ + L_low_), 0. ), 1. );
-      }
+         term = 1. - pow( 1. - pow( Sw_low_k_star, (1./m_low_)), m_low_ );
+         const double64 Krw_low_k = sqrt( Sw_low_k_star ) * (term * term);
+   
+         // Krw_ave=((Krw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
+         return min( max( (L_high_ * Krw_high_k * k_high_ + L_low_ * Krw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
+//      }
    
     // layer-perpendicular case
     // ------------------------
@@ -285,11 +289,30 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  } // end krw_Phase
 
 
+/*   Maple from Matlab script gives same results:
+
+         // Krw_high_k
+         const double64 t1 = sqrt(Sw_high_k_star);
+         const double64 t4 = pow(Sw_high_k_star, 0.1e1 / m_high_);
+         const double64 t6 = pow(0.1e1 - t4, m_high_);
+         const double64 t8 = (0.1e1 - t6) * (0.1e1 - t6); // pow(0.1e1 - t6, 0.2e1);
+         const double64 Krw_high_k = t1 * t8;
+         // Krw_low_k
+         const double64 tt1 = sqrt(Sw_low_k_star);
+         const double64 tt4 = pow(Sw_low_k_star, 0.1e1 / m_low_);
+         const double64 tt6 = pow(0.1e1 - tt4, m_low_);
+         const double64 tt8 = (0.1e1 - tt6) * (0.1e1 - tt6); // pow(0.1e1 - tt6, 0.2e1);
+         const double64 Krw_low_k = tt1 * tt8;
+
+*/
 
 
 
 /**
     CO2 relative permeability
+ 
+    Krnw_ave=((Krnw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krnw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
+
 */
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
@@ -298,18 +321,19 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
     const double64 percolation_threshold_nw(0.01);
     if ( (1. - sw_) <= percolation_threshold_nw ) return 0.;
 
-    if ( flow_direction_ == HORIZONTAL ) {
-         double64 sw_low_k_star, sw_high_k_star;
-         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star, sw_high_k_star );
+//    if ( flow_direction_ == HORIZONTAL ) {
+         double64 Sw_low_k_star, Sw_high_k_star;
+         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
 
          // Krnw_high_k=((1-Sw_high_k)^2).*((1-Sw_high_k^2))
-         const double64 Krnw_high_k = ((1. - sw_high_k_star)*(1. - sw_high_k_star)) * (1. - sw_high_k_star*sw_high_k_star);
+         const double64 Krnw_high_k = ((1. - Sw_high_k_star)*(1. - Sw_high_k_star)) * (1. - Sw_high_k_star*Sw_high_k_star);
 
          // Krnw_low_k=((1-Sw_low_k)^2)*((1-Sw_low_k^2))
-         const double64 Krnw_low_k = ((1. - sw_low_k_star)*(1. - sw_low_k_star)) * (1. - sw_low_k_star*sw_low_k_star);
-     
-         return min( max( (L_high_ * Krnw_high_k + L_low_ * Krnw_low_k) / (L_high_ + L_low_), 0. ), 1. );
-      }
+         const double64 Krnw_low_k = ((1. - Sw_low_k_star)*(1. - Sw_low_k_star)) * (1. - Sw_low_k_star*Sw_low_k_star);
+
+         // Krnw_ave=((Krnw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krnw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
+         return min( max( (L_high_ * Krnw_high_k * k_high_ + L_low_ * Krnw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
+//      }
    
     // layer-perpendicular case
     // ------------------------
@@ -317,6 +341,17 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  }
 
 
+/*  Maple from Matlab script gives same results:
+
+         // Krnw_high_k
+         const double64 t2 = pow(0.1e1 - Sw_high_k_star, 0.2e1);
+         const double64 t3 = Sw_high_k_star * Sw_high_k_star;
+         const double64 Krnw_high_k = t2 * (0.1e1 - t3);
+         // Krnw_low_k
+         const double64 tt2 = pow(0.1e1 - Sw_low_k_star, 0.2e1);
+         const double64 tt3 = Sw_low_k_star * Sw_low_k_star;
+         const double64 Krnw_low_k = tt2 * (0.1e1 - tt3);
+*/
 
 
 /// for the wetting phase
@@ -348,7 +383,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
     double64 sw_low_k_star, sw_high_k_star;
     FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star, sw_high_k_star );
 
-    if ( flow_direction_ == HORIZONTAL ) {
+//    if ( flow_direction_ == HORIZONTAL ) {
          // Pc_drain_high = Pd_high * ((Sw_star_high)^(-1/m_high) - 1)^(1-m_high)
          const double64 Pc_drain_high = pd_high_ * pow( (pow( max(Swi_high_,sw_high_k_star), -1./m_high_ ) - 1.), 1. - m_high_ );
          // Pc_drain_low=Pd_low.*((Sw_star_low).^(-1/m_low)-1).^(1-m_low)
@@ -356,7 +391,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
       
          // averaging
          return min( (L_high_ * Pc_drain_high + L_low_ * Pc_drain_low) / (L_high_ + L_low_), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
-      }
+//      }
 
     // layer-perpendicular case (just using the properties of the low_k layer
     // ----------------------------------------------------------------------
