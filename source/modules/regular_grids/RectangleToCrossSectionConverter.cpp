@@ -58,6 +58,10 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
                                                         const Point<3U>& upper_left,
                                                         vector<Point<3U> >& global_coordinates ) const
  {
+    cout <<"\nRectangularGrid::ProjectCellCentersToCrossSection: generating a cell-centered grid ";
+    cout <<"("<< n_cells_y_ <<" rows x "<< n_cells_x_ <<" columns), ";
+    cout <<"with dimensions "<< upper_right.DistanceTo(upper_left) <<" (m, horizontal) x ";
+    cout << upper_left.DistanceTo(lower_left) <<" (m, vertical).\n";
     // Creating an isoparametric linear quadrilateral element for the extrapolation of the point locations
     const size_t dim(3U);
     IsoparametricLinearQuadrilateral quadrilateral( dim );
@@ -92,6 +96,25 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
  
  
  
+/**
+    tab-delimited integer (0..256) input for quadrilaterator
+*/
+void RectangularGrid::WriteGridAsIntegerMatrix( const char* file_name ) const
+ {
+    cout <<"\nRectangularGrid::WriteGridAsIntegerMatrix: creating: "<< file_name << " textfile, listing an integer for each of ";
+    cout << n_cells_y_ <<"x"<< n_cells_x_<<"="<< n_cells_y_ * n_cells_x_ <<" cells forming the regular grid.\n";
+
+    ofstream ofs( file_name );
+ 
+    for (  size_t i=0U; i<n_cells_y_; ++i ) {
+         for ( size_t j=0U; j<n_cells_x_; ++j ) ofs <<"1\t";
+         ofs <<"\n";
+      }
+
+    ofs.close();
+    cout << "\nRectangularGrid::WriteGridAsIntegerMatrix: '" << file_name << "' written successfully.\n";
+ }
+
 
 
 /**
@@ -109,10 +132,12 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
 void RectangularGrid::Out( const char* file_name, const std::vector<Point<3U> >& cell_center_coordinates ) const
  {
     ofstream ofs( string( file_name ) + "-element_barycentres.txt" );
-    ofs << file_name << "-element_barycentres.txt  textfile listing the barcyentre coordinates of all elements in the rectangular grid.\n";
-    ofs << "element number,x,y,z\n";
+    ofs << file_name << "-element_barycentres.txt  textfile listing the barcyentre coordinates of ";
+    ofs << n_cells_y_ <<"x"<< n_cells_x_<<"="<< n_cells_y_ * n_cells_x_ <<" cells forming the regular grid.\n";
+    ofs << "element-number,x,y,z\n";
  
     size_t cell_number(0U);
+    typedef numeric_limits<double64> dbl;
     for ( auto it = cell_center_coordinates.begin(); it != cell_center_coordinates.end(); ++it, ++cell_number )
       {
          // element number
@@ -120,11 +145,11 @@ void RectangularGrid::Out( const char* file_name, const std::vector<Point<3U> >&
          // point coordinates (ordered and flipped to reflect SKUA's UTM lefthandrule coordinate system)
          //                   SKUA x             SKUA -y          SKUA -z
          //ofs << scientific << (*it)[0] << "," << (*it)[2] <<","<< (*it)[1] << endl;
-         ofs << scientific << (*it)[0] << "," << (*it)[1] <<","<< (*it)[2] << endl;
+         ofs << scientific << setprecision(dbl::max_digits10) << (*it)[0] << "," << (*it)[1] <<","<< (*it)[2] << endl;
       }
  
     ofs.close();
-    cout << "\noRectangularGrid::Out: " << file_name << "-element_barycentres.txt written successfully.\n";
+    cout << "\nRectangularGrid::Out: '" << file_name << "-element_barycentres.txt' written successfully.\n";
  
  } // end Out
 

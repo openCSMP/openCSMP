@@ -19,7 +19,7 @@
 namespace csmp {
 
 /// Element policy for node-centered finite-volume computations; see full specializations for 1D, 2D, 3D
-template<size_t, template<size_t> class SIMPLEX> class FiniteVolumePolicy;
+template<size_t, template<size_t> class CELL> class FiniteVolumePolicy;
 
 /**
 
@@ -42,7 +42,7 @@ Finite Element parts of the stencil implementation.
  
 @section functionality Functionality
  
-Provides a set of functionality to perform operations, used in the CVSIMPLEX 
+Provides a set of functionality to perform operations, used in the CVCELL 
 transport method, implemented in CSMP. This includes calculation of volumes 
 of sectors and surfaces of internal division walls - facets - inside the
 element, definition of projections of the velocity at the facet integration
@@ -76,8 +76,8 @@ TODO: @todo (3) Put finiteVolumeAuxiliaryFunctions into FiniteVolumePolicy class
 TODO: @todo SKM try to do computations in parametric space
 
  */
-template<template<size_t> class SIMPLEX>
-class FiniteVolumePolicy<3U, SIMPLEX> {
+template<template<size_t> class CELL>
+class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
@@ -164,14 +164,14 @@ class FiniteVolumePolicy<3U, SIMPLEX> {
 
     // get finite-volume facet area, normal and sector volume in parametric space from FiniteVolumeStencil class
 private:
-    FiniteVolumePolicy( const SIMPLEX<3U>& );
+    FiniteVolumePolicy( const CELL<3U>& );
     const csmp::FiniteVolumeStencil<3U>*  fvptr_;
 };
 
 
 /// full specialization ( 2D )
-template<template<size_t> class SIMPLEX>
-class FiniteVolumePolicy<2U,SIMPLEX> {
+template<template<size_t> class CELL>
+class FiniteVolumePolicy<2U,CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<2U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
@@ -206,15 +206,15 @@ class FiniteVolumePolicy<2U,SIMPLEX> {
     Point<2U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
-    FiniteVolumePolicy( const SIMPLEX<2U>& );
+    FiniteVolumePolicy( const CELL<2U>& );
     const csmp::FiniteVolumeStencil<2U>*  fvptr_;
 };
 
 
 
 /// full specialization ( 1D )
-template<template<size_t> class SIMPLEX>
-class FiniteVolumePolicy<1U, SIMPLEX> {
+template<template<size_t> class CELL>
+class FiniteVolumePolicy<1U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<1U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
@@ -249,7 +249,7 @@ class FiniteVolumePolicy<1U, SIMPLEX> {
     Point<1U>  ParametricFacetNormal( size_t iFacet ) const;
 
 private:
-    FiniteVolumePolicy( const SIMPLEX<1U>& );
+    FiniteVolumePolicy( const CELL<1U>& );
     const csmp::FiniteVolumeStencil<1U>*  fvptr_;
 };
 

@@ -59,7 +59,7 @@ void rhinoOutput( const Model<3U>& sgroup )
      
    for(size_t iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
    {
-    const Point<3U> pt( efvt.RstToXYZ(e.FV()->FacetPoint(iFacet,iPoint)) );
+    const Point<3U> pt( e.RstToXYZ(e.FV()->FacetPoint(iFacet,iPoint)) );
     ss << pt[0] << "," << pt[1] << "," << pt[2] << " ";
    }
    
@@ -68,7 +68,7 @@ void rhinoOutput( const Model<3U>& sgroup )
  
  void writeNormal (std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, size_t iFacet, bool bInverted)
  {
-   Point<3U> pt1( efvt.RstToXYZ(e.FV()->FacetIntegrationPoint(iFacet,0U)) );
+   Point<3U> pt1( e.RstToXYZ(e.FV()->FacetIntegrationPoint(iFacet,0U)) );
    Point<3U> pt2;
    
    if(bInverted)

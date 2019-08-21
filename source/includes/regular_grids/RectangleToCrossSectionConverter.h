@@ -31,6 +31,9 @@ class RectangularGrid {
                                            const Point<3U>& upper_left,
                                            std::vector<Point<3U> >& global_coordinates ) const;
   
+    /// input for quadrilaterator
+    void WriteGridAsIntegerMatrix( const char* gridfile ) const;
+  
     /// writes the supplied cell center coordinates to a comma-delimited ascii file
     void Out( const char* file_name, const std::vector<Point<3U> >& cell_center_coordinates ) const;
   
