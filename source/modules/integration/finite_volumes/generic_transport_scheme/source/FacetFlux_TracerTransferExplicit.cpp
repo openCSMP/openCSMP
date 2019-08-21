@@ -20,18 +20,18 @@ namespace csmp {
 /** 
     Computes A_i vD . n_i for all facets and its product with the upstream concentrations
     of element stencil, storing it there.
+    Stores 'facet flux'  and 'facet flux concentration' product variables.
     
     @attention that vD can be used directly as interstitial velocity since the FV is scaled by porosity
  
     @attention the thickness of lower-dimensional elements is taken into account
  
-    @tested 
- 
+    @tested OK SKM 17/8/19 
 */
 template<size_t dim, template<size_t> class USER>
 void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( Element<dim>* eptr ) const
  {
-   assert( eptr != NULL );
+   assert( eptr != nullptr );
 
    // element-based Darcy velocity
    eptr->Read( User()->key_V, vD_ );

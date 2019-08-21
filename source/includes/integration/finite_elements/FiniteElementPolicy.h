@@ -37,7 +37,14 @@ class FiniteElementPolicy {
     Point<dim> IntegrationPoint( size_t ip ) const;
     double64   WeightAtIntegrationPoint( size_t i ) const;
 
-    // DEPRECATE - or call XYZtoRST() in here
+    /// mapping of local points from local to global coordinates
+    Point<dim> RstToXYZ( Point<dim> rst ) const;
+
+    /// interpolation function values at local points
+    void       N_At( const Point<dim>& rst ) const;
+    void       N_At( const Point<dim>& rst, std::vector<double64>& N )  const;
+  
+     // DEPRECATE - or call XYZtoRST() in here
     void       N_AtGlobalPoint( std::vector<double64>& N, const std::vector<double64>& xyz ) const;
     // N_AtPoint();
     void       N_AtBaryCenter( std::vector<double64>& N ) const;

@@ -6,6 +6,7 @@
 #include "variableOperations.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -112,6 +113,7 @@ Point<dim>  FiniteElementPolicy<dim,SIMPLEX>::IntegrationPoint( size_t ip ) cons
     return Point<dim>( fptr_->DNR );
   }
 
+
 template<size_t dim, template<size_t> class SIMPLEX>
 double64 FiniteElementPolicy<dim,SIMPLEX>::WeightAtIntegrationPoint( size_t i ) const
   {
@@ -120,7 +122,93 @@ double64 FiniteElementPolicy<dim,SIMPLEX>::WeightAtIntegrationPoint( size_t i ) 
   }
 
 
+// MAPPING BETWEEN LOCAL AND GLOBAL COORDINATES
+
+/**
+    Transforms point location from local to global coordinates.
+ 
+    @note passing the point by value is intentional because the copy is reused by the function.
+*/
+template<size_t dim, template<size_t> class CELL>
+Point<dim>  FiniteElementPolicy<dim,CELL>::RstToXYZ( Point<dim> rst ) const
+{
+   const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+
+   // initialises NRST
+   N_At( rst );
+  
+   assert( e  != nullptr );
+   rst = 0.;
+   const size_t nodes(e->Nodes());
+   for ( size_t i=0U; i<nodes; i++ )
+     for ( size_t j=0U; j<dim; ++j )
+       // transformation of the coordinates
+       rst[j] += e->FE()->NRST[i] * (*e->N(i))[j];
+  
+   // standard RVO
+   return rst;
+}
+
+
+
+
 // SHAPE FUNCTIONS AT DIFFERENT POINTS
+
+
+
+// SHAPE FUNCTIONS AT DIFFERENT POINTS
+
+
+/**
+     Calculates local interpolation function values at the supplied parametric
+     coordinate->
+*/
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst ) const
+ {
+    const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+    assert( e != nullptr );
+ 
+    if ( e->IsVolumeElement() ) {
+         e->FE()->Nrst( rst[0], rst[1], rst[2], e->FE()->NRST );
+         return;
+      }
+    if ( e->IsSurfaceElement() ) {
+         e->FE()->Nrs( rst[0], rst[1], e->FE()->NRST );
+         return;
+      }
+    // line element
+    e->FE()->Nr( rst[0], e->FE()->NRST );
+ }
+
+
+
+/**
+    Returns element interpolation functions at point rst in local coordinate system
+    into argument vector IPOL.
+*/
+template<size_t dim, template<size_t> class CELL>
+void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst,
+                                          std::vector<double64>& IPOL ) const
+ {
+
+    const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
+    assert( e != nullptr );
+    if ( e->IsVolumeElement() ) {
+         e->FE()->Nrst( rst[0], rst[1], rst[2], IPOL );
+         return;
+      }
+    if ( e->FE()->IsSurfaceElement() ) {
+         e->FE()->Nrs( rst[0], rst[1], IPOL );
+         return;
+      }
+    // line element
+    e->FE()->Nr( rst[0], IPOL );
+ }
+
+
+
+
 
 /**
     Returns the value of the interpolation functions at a point in physical space.

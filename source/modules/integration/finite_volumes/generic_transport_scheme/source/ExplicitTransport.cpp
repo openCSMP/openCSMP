@@ -82,6 +82,8 @@ void ExplicitTransport<dim>::UpdateFacetFluxes()
 
 /**
     Computation of time increment, flux balance, and temporary new concentration.
+ 
+    @attention default is the most stringent time increment: outflux < PV.
 */
 template<size_t dim>
 double64 ExplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_increment )
@@ -298,14 +300,19 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
     // 1. element-by-element loop computation of (velocity and) facet fluxes as necessary
     UpdateFacetFluxes();
-   
+// TESTING
+double64 gmin, gmax;
+gref_.MinMaxOf( "facet flux", gmin, gmax );
+cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable: range of 'facet flux': ";
+cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
+
     // 2. node-by-node loop evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
    
     cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable:";
     cout <<"\n\tTime interval         = "<< time_interval;
     cout <<"\n\tScaled time increment = "<< time_increment;
-    cout <<"\n\tSolution steps needed = "<< std::max( rint(floor(time_interval/time_increment)),1. );
+    cout <<"\n\tSolution steps needed = "<< std::max( rint(floor(time_interval/time_increment)), 1. );
 
     cout <<"\n\n\nExplicitTransport::EvolveSolution: FV transport simulation initiated...\n";
     size_t   substep(1);

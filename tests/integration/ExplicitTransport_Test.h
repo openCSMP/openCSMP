@@ -61,7 +61,7 @@ class ExplicitTransport_Test : public Test {
     void  TestNoFlowBoundaryFluxBalance( double64 tolerance_relaxation_factor = 100. );
   
     /// TVD? - first-order scheme during transport in a const velocity field and out of model
-    void  TestFlowThroughModel( const char* model = "cube100" );
+    void  TestFlowThroughModel( const char* model = "BOX40x3x10m", bool prescribed_velocity=false );
   
     // fluid sources and sinks
   

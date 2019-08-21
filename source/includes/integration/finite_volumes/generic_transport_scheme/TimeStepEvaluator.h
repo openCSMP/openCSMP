@@ -12,7 +12,7 @@ template<size_t> class Element;
 template<size_t dim, template<size_t> class USER>
 class TimeStepEvaluator {
   public:
-    explicit TimeStepEvaluator( double64 step_size_reduction_factor=0.5, double64 max_time_increment=86400. * 365. );
+    explicit TimeStepEvaluator( double64 step_size_reduction_factor=0.1, double64 max_time_increment=86400. * 365. );
 
     /// returns robust delta_t criterion in the presence of fluid sources and sinks; also computes and stores flux balance
     double64 OutFlowLessThanContentIncrement( Node<dim>* const ) const;
@@ -36,8 +36,8 @@ class TimeStepEvaluator {
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
 
   private:
-    const double64 max_time_increment_;
-    double64 step_size_reduction_factor_;
+    const double64 max_time_increment_;    ///< set through constructor argument
+    double64 step_size_reduction_factor_;  ///< CFL multiplier set through constructor argument
 };
 
 /**

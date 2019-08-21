@@ -65,7 +65,7 @@ double64 TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
  
     This is robust criterion in the presence of fluid sources and sinks
     
-    The method also computes and stores the 2) flux balance (=divergence of flow field) on the current
+    2) The method also computes and stores the 'flux balance' (=divergence of flow field) on the current
     FV for later used for correction.
     
     3) the flux concentration products are accumulated into the new concentration variable
@@ -82,14 +82,14 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
           const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
           for ( size_t j=0U; j<sector_facets; ++j )
             {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const size_t facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // accumulation of volumetric facet flow into flux balance
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
+               const double64 facet_flux       = sign * eptr->Read( facet, 0U, User()->key_ff );
                if ( facet_flux > 0. ) outflow += facet_flux;
-               flux_balance += facet_flux;
+               flux_balance                   += facet_flux;
                // temporary accumulation of flux-concentration products into the variable 'new concentration'
-               flux_concentration_products += sign * eptr->Read( facet, 0U, User()->key_ffC );
+               flux_concentration_products    += sign * facet_flux * eptr->Read( facet, 0U, User()->key_ffC );
             }
        }
 

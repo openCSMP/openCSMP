@@ -65,58 +65,11 @@ size_t FiniteVolumePolicy<2U,SIMPLEX>::IntegrationPointsPerFacet() const
   }
 
 
-// MAPPING BETWEEN LOCAL AND GLOBAL COORDINATES
-
-template<template<size_t> class SIMPLEX>
-Point<2U>  FiniteVolumePolicy<2U,SIMPLEX>::RstToXYZ( const Point<2U>& rst ) const
-{
-   const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-   N_At( rst );
-  
-   assert( e  != nullptr );
-   double64 sumx(0.), sumy(0.);
-   const size_t nodes(e->Nodes());
-   for ( size_t i=0U; i<nodes; i++ ) {
-       sumx += e->FE()->NRST[i] * e->N(i)->x();
-       sumy += e->FE()->NRST[i] * e->N(i)->y();
-    }
-   // standard RVO
-   return Point<2U>(sumx,sumy);
-}
-
 
 
 
 
 // SHAPE FUNCTIONS AT DIFFERENT POINTS
-
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_At( const Point<2U>& rst ) const
- {
-   const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-   assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
-         e->FE()->Nrs( rst[0], rst[1], e->FE()->NRST );
-         return;
-      }
-    // line element
-    e->FE()->Nr( rst[0], e->FE()->NRST );
- }
-
-
-template<template<size_t> class SIMPLEX>
-void FiniteVolumePolicy<2U,SIMPLEX>::N_At( const Point<2U>& rst,
-                                           std::vector<double64>& IPOL ) const
- {
-    const SIMPLEX<2U>* e( static_cast<const SIMPLEX<2U>*>(this) );
-    assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
-         e->FE()->Nrs( rst[0], rst[1], IPOL );
-         return;
-      }
-    // line element
-    e->FE()->Nr( rst[0], IPOL );
- }
 
 template<template<size_t> class SIMPLEX>
 void FiniteVolumePolicy<2U,SIMPLEX>::N_AtFacetIntegrationPoint( size_t iFacet, size_t ip ) const

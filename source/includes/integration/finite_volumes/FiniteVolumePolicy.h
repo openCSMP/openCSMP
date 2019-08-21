@@ -102,14 +102,7 @@ class FiniteVolumePolicy<3U, SIMPLEX> {
     /// surface quadrature points: usually one, but there may be multiple
     size_t     IntegrationPointsPerFacet()  const;
 
-    /// mapping of integration points from local to global coordinates
-    Point<3U>  RstToXYZ( const Point<3U>& rst ) const;
-
-    /// shape function values at sector and facet integration points
-    void       N_At( const Point<3U>& rst ) const;
-    void       N_At( const Point<3U>& rst, std::vector<double64>& N )  const;
-  
-    /// finite-element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point
+   /// finite-element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point
     void       N_AtFacetIntegrationPoint(  size_t iFacet,  size_t ip ) const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
   
@@ -190,9 +183,6 @@ class FiniteVolumePolicy<2U,SIMPLEX> {
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
     size_t     IntegrationPointsPerFacet()  const;
-    Point<2U>  RstToXYZ( const Point<2U>& rst ) const;
-    void       N_At( const Point<2U>& rst ) const;
-    void       N_At( const Point<2U>& rst, std::vector<double64>& N )  const;
     void       N_AtFacetIntegrationPoint(  size_t iFacet,  size_t ip ) const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
     void       Local_dN_At( const Point<2U>& rst ) const;
@@ -236,9 +226,6 @@ class FiniteVolumePolicy<1U, SIMPLEX> {
     size_t     Sectors() const;
     size_t     IntegrationPointsPerSector() const;
     size_t     IntegrationPointsPerFacet()  const;
-    Point<1U>  RstToXYZ( const Point<1U>& rst ) const;
-    void       N_At( const Point<1U>& rst ) const;
-    void       N_At( const Point<1U>& rst, std::vector<double64>& N )  const;
     void       N_AtFacetIntegrationPoint( size_t iFacet, size_t ip )   const;
     void       N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const;
     void       Local_dN_At( const Point<1U>& rst ) const;

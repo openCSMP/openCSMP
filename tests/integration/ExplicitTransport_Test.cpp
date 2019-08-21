@@ -135,8 +135,9 @@ void ExplicitTransport_Test::run()
  
     // test 3: flow through model with TVD concentration
     // -------------------------------------------------------------------------
-    TestFlowThroughModel(); // cube100
- 
+    const bool prescribed_velocity(true);
+    TestFlowThroughModel( "BOX40x3x10m", prescribed_velocity );
+    TestFlowThroughModel( "BOX40x3x10m", false );
 
     // void test_Create_Prism_VSet(VSet<3U>& vset, bool bSkewed=false );
     
@@ -487,15 +488,24 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double64 tolerance_r
  
     TODO: not clear what to compare results with, compute reference solution using old transport scheme.
 */
-void  ExplicitTransport_Test::TestFlowThroughModel( const char* model )
+void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool prescribed_velocity )
  {
     // model_ptr_ = CreateModel( model );
-    model_ptr_ = CreateModel( "BOX40x3x10m" );
+    //model_ptr_ = CreateModel( "BOX40x3x10m" );
     model_ptr_->InstantiateFiniteVolumes();
     AssignFlowProperties();
-    // left->right pressure gradient and flow (hydrostatic)
-    const double64 delta_pf( 9.8 * 1000. * model_length_ );
-    DivergenceFreeTotalVelocityField( delta_pf );
+ 
+    // constant velocity field, left-to-right, velocity = 1m/s
+    if ( prescribed_velocity ) {
+          VectorVariable<3U>  vc1(ANY,ANY,ANY,1.0,0.,0.);
+          model_ptr_->InputPropertyValue( "velocity", vc1 ); // NB: transport scheme uses 'velocity'
+          // TODO: adjust other parameters so that method performs the same when velocity is calculated internally
+      }
+    else {
+         // left->right pressure gradient and flow (hydrostatic)
+         const double64 delta_pf( 9.8 * 1000. * model_length_ );
+         DivergenceFreeTotalVelocityField( delta_pf );
+      }
  
     // initial and boundary conditions for tracer transport
     // - concentration
@@ -507,6 +517,13 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model )
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 0, true );
 
     ExplicitTransport<3U>  transport( *model_ptr_, "Model" );
+ 
+//     if ( verbose_ ) {
+         cout <<"\nExplicitTransport_Test::TestFlowThroughModel: key variable ranges in current model '"<< model <<"'\n";
+         printRangeOfVariable( *model_ptr_, "FV pore volume" );
+         printRangeOfVariable( *model_ptr_, "velocity" );
+         printRangeOfVariable( *model_ptr_, "concentration" );
+//      }
  
     const double64     time_interval(250000.); // ~10-m travel distance
     double64           duration(0.); // calculated from velocity and model length
