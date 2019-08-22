@@ -100,10 +100,10 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
      // 2. recording the flux balance
      nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
    
-     // 3. recording the flux concentration product balance
+     // 3. recording the flux concentration product balance in 'new concentration'
      nptr->Store( User()->key_C1, makeScalar(nptr->Status(User()->key_C1),flux_concentration_products) );
 
-     return std::max( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( time_increment, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrement
 
@@ -122,23 +122,52 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>
          is necessary, else there is a saturation buildup at out-flow boundaries.
 */
 template<size_t dim, template<size_t> class USER>
-double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr ) const
- {
-    assert( nptr != NULL );
-    const double64 pore_volume = nptr->Read( User()->key_FVPV );
+double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( Node<dim>* const nptr ) const
+  {
+     assert( nptr != NULL );
+ 
+     // 0. COMPUTING THE FLUX BALANCE
+     const double64 pore_volume = nptr->Read( User()->key_FVPV );
+     double64 flux_balance(0.), outflow(0.), flux_concentration_products(0.);
+  
+     // for truncated FVs at the model boundary this balance will be non zero
+     const size_t parent_elements(nptr->Parents());
+     for ( size_t i=0U; i<parent_elements; ++i ) {
+          const Element<3U>* const eptr = nptr->Parent(i);
+          const size_t sector_node      = nptr->ParentNodeNumber(i);
+          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
+          for ( size_t j=0U; j<sector_facets; ++j )
+            {
+               const size_t facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
+               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
+               // accumulation of volumetric facet flow into flux balance
+               const double64 facet_flux       = sign * eptr->Read( facet, 0U, User()->key_ff );
+               if ( facet_flux > 0. ) outflow += facet_flux;
+               flux_balance                   += facet_flux;
+               // temporary accumulation of flux-concentration products into the variable 'new concentration'
+               flux_concentration_products    += sign * facet_flux * eptr->Read( facet, 0U, User()->key_ffC );
+            }
+       }
+     // recording the flux balance and the flux concentration product balance
+     nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
+     nptr->Store( User()->key_C1, makeScalar(nptr->Status(User()->key_C1),flux_concentration_products) );
 
-    // 1. if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
+
+    // 1. FINITE VOLUMES TRUNCATED BY MODEL BOUNDARY
+    //    if we are at the model boundary we either have in- or outflow; this flow is given by the flux balance.
     //    however, if we are at a no-flow boundary of the model and there is no fluid volume source, there should be no inflow or outflow
     //    and any flux balance will therefore represent an error (at least if the flow is steady).
     if ( nptr->AtBoundary() != NOT ) {
-         // 1.0 (Q) checking sources because these will not be picked up in the fluxes correctly if the FV is truncated
-         const double64 fluid_source = ( nptr->Read(User()->key_NQV) > 0. ) ? nptr->Read(User()->key_NQV) : 0.;
-         const double64 flux_balance = std::max( fabs( nptr->Read( User()->key_FB )), fluid_source );
+         // 1.0 (Q) adding sources because these will not be picked up by the flux balance correctly if the FV is truncated
+         const double64 fluid_source = nptr->Read(User()->key_NQV );
+         flux_balance = nptr->Read( User()->key_FB )  + fluid_source;
+         nptr->Store( User()->key_FB, makeScalar(nptr->Status(User()->key_FB),flux_balance) );
+
          // if we are at an in- or outflow boundary
          if ( nptr->Status( User()->key_PF ) == DIRICH ) {
                // 1.1 (phi * V) / q_out = dt
                if ( fabs(flux_balance) < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-               return std::max( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
+               return std::min( fabs(pore_volume / flux_balance), max_time_increment_ ) * step_size_reduction_factor_;
            }
          // no-flow boundary case
          else {
@@ -151,27 +180,13 @@ double64 TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( c
            }
       }
  
-    // 2. if the perimeter of the FV at the boundary is intact because it lies inside of the model,
+    // 2. INTACT PERIMETER FINITE VOLUMES
+    //    if the perimeter of the FV at the boundary is intact because it lies inside of the model,
     //    the volumetric outflow is calculated and used to limit the time increment
-    double64 outflow(0.);
-
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
-          const Element<3U>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-          const size_t sector_facets    = eptr->FV()->FacetsPerSector(sector_node);
-          for ( size_t j=0U; j<sector_facets; ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
-               const double64 sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
-               // accumulation of volumetric outflow
-               const double64 facet_flux = sign * eptr->Read( facet, 0U, User()->key_ff );
-               if ( facet_flux > 0. ) outflow += facet_flux;
-            }
-       }
 
      // (phi * V) / q_out = dt
      if ( outflow < numeric_limits<double64>::epsilon() ) return max_time_increment_ * step_size_reduction_factor_;
-     return std::max( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
+     return std::min( pore_volume / outflow, max_time_increment_ ) * step_size_reduction_factor_;
  
  } // OutFlowLessThanContentIncrementBoundary
 

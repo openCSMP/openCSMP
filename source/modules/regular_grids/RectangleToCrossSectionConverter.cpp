@@ -23,15 +23,28 @@ RectangularGrid::RectangularGrid( size_t n_cells_x, size_t n_cells_y )
 
 
 
-/// accessor of the cell-center locations in the grid
+/**
+    accessor of the cell-center locations in the grid
+ 
+    @attention uses the isoparametric linear quadrilateral for the mapping
+    assuming that its local coordinate system extends from -1,-1 to 1,1 (width=2),
+    if this is not true, the conversion will be shifted.
+*/
 Point<3U> RectangularGrid::operator()( size_t i, size_t j ) const
  {
     assert( i < n_cells_y_ ); // rows
     assert( j < n_cells_x_ ); // columns
 
-    const double64 offset_x(dx_/2.), offset_y(dy_/2.);
+    // shift for local coordinate system and offset of barycentre
+    // from grid edge.
+    const double64 offset_x(-1. + dx_/2.), offset_y(1. - dy_/2.);
     const double64 r = j * dx_ + offset_x;
-    const double64 s = i * dy_ + offset_y;
+    const double64 s = offset_y - i * dy_;
+ 
+    assert( r >= -1. );
+    assert( r <=  1. );
+    assert( s >= -1. );
+    assert( s <=  1. );
  
     return Point<3U>(r,s,0.);
  }
@@ -50,7 +63,8 @@ size_t RectangularGrid::CellNumber( size_t i, size_t j ) const
 
 
 /**
-   transfers regular grid in local coordinates to a potentially distorted grid in physical space coordinates
+    Transfers regular grid in local coordinates to a potentially distorted grid in physical space coordinates
+
 */
 void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_left,
                                                         const Point<3U>& lower_right,
@@ -91,6 +105,15 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
            Point<3U> cell_center_xyz = rectangle.RstToXYZ( rs );
            global_coordinates.push_back( cell_center_xyz );
         }
+ 
+    // checking the reproduction of the corner points
+    cout <<"\nRectangularGrid::ProjectCellCentersToCrossSection: grid generation completed.\n";
+    cout <<"reproduction of the corner points (input vs. output):\n";
+    cout <<"\n\tlower left:  "<< lower_left  <<" vs. "<< global_coordinates[ (n_cells_y_ - 1) * n_cells_x_ ];
+    cout <<"\n\tlower right: "<< lower_right <<" vs. "<< global_coordinates[ n_cells_x_ * n_cells_y_ - 1 ];
+    cout <<"\n\tupper right: "<< upper_right <<" vs. "<< global_coordinates[ n_cells_x_ - 1 ];
+    cout <<"\n\tupper left:  "<< upper_left  <<" vs. "<< global_coordinates[ 0 ];
+    cout << endl;
 
  } // end ProjectCellCentersToCrossSection
  

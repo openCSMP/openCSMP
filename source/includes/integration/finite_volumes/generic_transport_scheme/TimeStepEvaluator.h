@@ -18,7 +18,7 @@ class TimeStepEvaluator {
     double64 OutFlowLessThanContentIncrement( Node<dim>* const ) const;
   
     /// returns robust delta_t criterion in the presence of fluid sources and sinks at model boundary (no variables are touched)
-    double64 OutFlowLessThanContentIncrementBoundary( const Node<dim>* const ) const;
+    double64 OutFlowLessThanContentIncrementBoundary( Node<dim>* const ) const;
 
     /// anisotropic CFL for the strictly hyperbolic case; also computes and stores flux balance
     double64 StreamlineCFL( const Element<dim>* const ) const;

@@ -20,9 +20,8 @@ namespace csmp {
 template<size_t dim>
 ExplicitTransport<dim>::ExplicitTransport( Model<dim>& m, const char* target_region )
   : VariableSet_TracerTransfer(m.Database()),
-    gref_(m.Region(target_region)),
-    upper_limit_(1.), lower_limit_(0.)
- {
+    gref_(m.Region(target_region))
+  {
     m.InstantiateFiniteVolumes();
     const bool initialise_flux(true);
     initializeFiniteVolumeProperties( m, m.Region(target_region), initialise_flux );
@@ -152,12 +151,12 @@ void ExplicitTransport<dim>::AssembleSolution( double64 delta_t,
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
     for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
       {
-         // 1. starting with the sum of facet flux-concentration products stored in 'new concentration'
+         // 1. starting with the sum of facet flux-concentration products temporarily stored in 'new concentration'
          double64 accumulation = (*nit)->Read(this->key_C1);
         
          // 2. correcting this sum for div vD using 'flux balance' except for at model boundary
-         //if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulation * (*nit)->Read( this->fb_key );
-         accumulation -= accumulation * (*nit)->Read( this->key_FB );
+         if ( (*nit)->AtBoundary() == NOT ) accumulation -= accumulation * (*nit)->Read( this->key_FB );
+//         accumulation -= accumulation * (*nit)->Read( this->key_FB );
         
          // 3. ACCUMULATION: subtracting flux time-interval products from concentration at previous time level
          accumulation = (*nit)->Read(this->key_C0) - (delta_t/(*nit)->Read(this->key_FVPV)) * accumulation;
@@ -231,8 +230,8 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
     const typename vector<Node<dim>*>::iterator  nodes_end(gref_.NodesEnd());
     typename vector<Node<dim>*>::iterator nit = gref_.NodesBegin();
 
-    double64        amin(1.),  // = (*nit)->Read( this->so1_key ),
-                    amax(0.),  // = (*nit)->Read( this->so1_key ),
+    double64        amin(upper_limit_),
+                    amax(0.),  
                     difference_to_last_output(0.);
     size_t          error_counter(0);
     ScalarVariable  C1;
@@ -265,8 +264,8 @@ double64 ExplicitTransport<dim>::VerifyAndAssignResults( bool show_range, bool d
        }
 
     if ( do_range_check ) {
-          if ( error_counter > (this->gref_.Nodes() * 1000000U) )
-            throw out_of_range("ExplicitTransport<dim>::VerifyAndAssignResults: Advected variable out of range");
+          if ( error_counter > (this->gref_.Nodes()/10) )
+            throw out_of_range("ExplicitTransport<dim>::VerifyAndAssignResults: Advected variable out of range.");
       }
 
     if ( show_range ) {
@@ -300,11 +299,6 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
  {
     // 1. element-by-element loop computation of (velocity and) facet fluxes as necessary
     UpdateFacetFluxes();
-// TESTING
-double64 gmin, gmax;
-gref_.MinMaxOf( "facet flux", gmin, gmax );
-cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable: range of 'facet flux': ";
-cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
 
     // 2. node-by-node loop evaluation of time increment
     double64 time_increment = TimeIncrementAndFluxBalance( this->MaxTimeIncrement() );
@@ -354,7 +348,13 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
  } // end AdvectVariable
 
 
-
+// TESTING
+/*
+double64 gmin, gmax;
+gref_.MinMaxOf( "facet flux", gmin, gmax );
+cout <<"\nExplicitTransport<"<< fixed << setprecision(0) << dim <<">::AdvectVariable: range of 'facet flux': ";
+cout << scientific << setprecision(5) << gmin <<" to "<< gmax;
+*/
 
 
 

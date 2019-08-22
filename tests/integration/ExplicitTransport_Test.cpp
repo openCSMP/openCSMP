@@ -511,8 +511,9 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // - concentration
     // - constraints at boundary
     // - initial amount of tracer in the system
-    const double64 concentration(3.);
-    model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,concentration) );
+    model_ptr_->InputPropertyValue( "concentration", makeScalar(ANY,0.) );
+    const double64 inlet_concentration(3.);
+    model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,inlet_concentration) );
     VTK_Interface<3U>  vtk_output;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 0, true );
 
@@ -525,8 +526,8 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
          printRangeOfVariable( *model_ptr_, "concentration" );
 //      }
  
-    const double64     time_interval(250000.); // ~10-m travel distance
-    double64           duration(0.); // calculated from velocity and model length
+    const double64 time_interval(250000.); // ~10-m travel distance
+    double64       duration(0.); // calculated from velocity and model length
 
     // 0. getting some tracer into model
     transport.AdvectVariable( time_interval );
@@ -558,7 +559,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // first TVD test
     const bool print_maximum(true);
     const double64 max_concentration = printRangeOfVariable( *model_ptr_, "concentration", print_maximum );
-    _test( max_concentration <= concentration );
+    _test( max_concentration <= inlet_concentration );
     _test( printRangeOfVariable( *model_ptr_, "concentration", !print_maximum ) >= 0. );
     // tracer conservation test
     _equal( initial_concentration, final_concentration, numeric_limits<double64>::epsilon() * initial_concentration );
@@ -566,7 +567,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // 3. transporting tracer across outflow boundary, verifying that there is no build up
     transport.AdvectVariable( time_interval * 10. );
     duration += time_interval * 10.;
-    _test( printRangeOfVariable( *model_ptr_, "concentration", print_maximum ) <= concentration );
+    _test( printRangeOfVariable( *model_ptr_, "concentration", print_maximum ) <= inlet_concentration );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 4, true );
  
     // TODO: test that the arrival time of the tracer is modelled correctly
