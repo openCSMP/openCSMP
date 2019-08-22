@@ -35,7 +35,7 @@ void FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesInterior( El
 
    // element-based Darcy velocity
    eptr->Read( User()->key_V, vD_ );
-   const double64 thickness = eptr->Read( User()->key_thi );
+   const double64 thickness = eptr->Read( User()->key_THI );
 
    // computing total facet fluxes by projecting vt onto facet normals
    const size_t facets(eptr->FV()->Facets());
@@ -148,7 +148,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
               assert( eptr != NULL );
               const size_t pnid(nd_ptr->ParentNodeNumber(t));
               eptr->Read( User()->key_V, vD_ );
-              const double64 thickness = eptr->Read( User()->key_thi );
+              const double64 thickness = eptr->Read( User()->key_THI );
 
               const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
               for ( size_t i=0U; i<sector_facets; i++ )
@@ -199,7 +199,7 @@ double64 FacetFlux_TracerTransferExplicit<dim,USER>::Advective_O1_FluxesAtBounda
           assert( eptr != NULL );
           const size_t pnid(nd_ptr->ParentNodeNumber(t));
           eptr->Read( User()->key_V, vD_ );
-          const double64 thickness = eptr->Read( User()->key_thi );
+          const double64 thickness = eptr->Read( User()->key_THI );
 
           // for all FACETS per SECTOR surrounding the finite volume at the boundary
           // getting the volumetric fluxes only (upstream concentrations are found later)

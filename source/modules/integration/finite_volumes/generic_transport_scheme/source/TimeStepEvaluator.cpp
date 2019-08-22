@@ -301,7 +301,7 @@ double64  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double64
     double64                    velocity,
                                 courant_increment(max_time_increment);
     const double64              millisecond(1.0e-3);
-    const bool                  multiply_with_cell_thickess = (User()->thi_key == csmp::Index()) ? false : true;
+    const bool                  multiply_with_cell_thickess = (User()->key_THI == csmp::Index()) ? false : true;
     const bool                  unless_has_equal_dimension(dim!=1U);
 
     for ( typename vector<Element<dim>*>::const_iterator 

@@ -7,7 +7,7 @@
 //
 
 #include "RectangleToCrossSectionConverter.h"
-#include "IsoParametricLinearQuadrilateral.h"
+#include "IsoparametricLinearQuadrilateral.h"
 #include "Element.h"
 
 using namespace std;
