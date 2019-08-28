@@ -34,11 +34,7 @@ class FluxEvaluator {
   public:
     FluxEvaluator() { /* assumes external initialisation of variables in base class */ };
   
-    /// initialisation
-    void FacetNormalPermeabilities();
-    void UpwindDirection();
-
-    // FLUX PROJECTIONS AND INTEGRATIONS
+    // 1st-ORDER FLUX PROJECTIONS AND INTEGRATIONS
 
     /// computes F = (A_i vD . n_i) and its products with the upstream C0 on all facets, also computes FV flux balances
     void   Advective_O1_FluxesAndBalances( Element<dim>* const ) const;
@@ -46,11 +42,13 @@ class FluxEvaluator {
     /// computes F = (A_i vD . n_i)  and its products with transported variables, also computes FV flux balances
     void  Advective_O1_FluxesAndBalances( Node<dim>* const ) const;
 
+// TODO: tensor permeability fluxes and higher-order in space approximations of fluxes
 
-    // COMPUTATIONS WITH PRECOMPUTED FACET VALUES
+
+    // COMPUTATIONS DEPENDENT ON PRECOMPUTED FACET FLUXES
 
     /// computes flux balances on boundary FVs, using precomputed facet fluxes; volumetric balances are set to zero
-    void  Advective_O1_FluxBalancesAtBoundary( Node<dim>* const ) const;
+    void  FluxBalancesAtBoundary( Node<dim>* const ) const;
 
     /// computes first-order facet fluxes, F = ff * C0;  ff=(pre-computed) volumetric flow, C0=transport variable
     void  TransportVariableFluxes( Element<dim>* const ) const;

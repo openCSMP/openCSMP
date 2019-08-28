@@ -35,7 +35,8 @@ ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const 
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
     second_order_(second_order),
-    key_acc_(m.CreateProperty("accumulation","node"))
+    key_acc_(m.CreateProperty("accumulation","node")),
+    key_out_(m.CreateProperty("outflow","node"))
  {
     m.InstantiateFiniteVolumes();
      m.Region(target_region).InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );

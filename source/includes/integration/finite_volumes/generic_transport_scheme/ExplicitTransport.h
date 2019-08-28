@@ -57,7 +57,8 @@ class ExplicitTransport : public variables::VariableSet_TracerTransfer,
     double64 IncomingVolumetricFlow() const;
     double64 OutgoingVolumetricFlow() const;
     
-    csmp::Index  key_acc_;  ///< accumulated interim result on the FV (scalar)
+    const csmp::Index  key_acc_;  ///< accumulated interim result on the FV (scalar)
+    const csmp::Index  key_out_;  ///< outflow from the cell at the current timestep
 
   private:
     /// identifies "halo elements", i.e. which contribute to domain FVs, but are outside of domain, returns number
@@ -75,18 +76,17 @@ class ExplicitTransport : public variables::VariableSet_TracerTransfer,
     /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV
     double64 TimeIncrement_CFL_Outflow( double64 max_time_increment );
     
-    /// 3. inflow and outflow flux compensation
-    void AccumulateBoundaryConditions();
-    
     /// 4. composes 'new concentration': C^t+1 = C^t - dt/(phi Vi) * sum_j^faces Aj n . [vi]
     void Assemble1stOrderSolution( double64 delta_t, bool enforce_divergence_free_vt_field );
     
+    /// 5. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
+    double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
+    
+  private:
+    // DEPRACATE ?
     /// if we know beforehand that velocity field will be divergence free, this method compensates for small abberations from this
     void AdjustResultsAssumingDivergenceFreeVelocityField( double64 time_interval );
     
-    /// 5. transfer results updating concentration, zeroing out 'new concentration' values, and performing range checks; returns error
-    double64 VerifyAndAssignResults( bool show_range, bool do_range_check ) const;
-  
   private:
     Region<dim>&                subdomain_;   ///< region to which transport algorithm is applied
     std::vector<Element<dim>*>  halo_elmts_;  ///< elements outside of subdomain, contributing stencils to subdomain FVs

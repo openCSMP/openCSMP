@@ -173,7 +173,7 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Node<dim>* const n
 
 
 /**
-    From precomputed facet fluxes, AdvectiveFluxesAtBoundary() computes:
+    From precomputed facet fluxes, FluxBalancesAtBoundary() computes:
  
      0. Nothing for FVs on the model boundary with Dirichlet concentration constraints.
     
@@ -192,19 +192,14 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Node<dim>* const n
  
 */
 template<size_t dim, template<size_t> class USER>
-void FluxEvaluator<dim,USER>::Advective_O1_FluxBalancesAtBoundary( Node<dim>* const nd_ptr ) const
+void FluxEvaluator<dim,USER>::FluxBalancesAtBoundary( Node<dim>* const nd_ptr ) const
   {
      assert( nd_ptr != NULL );
   
      // INTACT FINITE VOLUMES
   
-     // 1. computation of flux balances
-     // -------------------------------
-     // The divergence of vD is stored and returned
-     // the transport variable flux balance is computed from current facet fluxes and stored in 'accumulation'
-     // TODO: probably no need to recompute this
-//     FluxBalancesFromFacetFluxes( nd_ptr );
-  
+     // 1. no need to recompute flux balances here because these were done in the element FV-stencil loop
+     // -------------------------------------------------------------------------------------------------
   
      // 2. where the boundary FVs are intact influxes and outfluxes are balanced
      //    and no special treatment is needed
@@ -253,7 +248,7 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxBalancesAtBoundary( Node<dim>* co
           nd_ptr->Store( User()->key_acc_, makeScalar( ANY, nd_ptr->Read( User()->key_C0 ) ) );
        }
   
- } // end Advective_O1_FluxBalancesAtBoundary
+ } // end FluxBalancesAtBoundary
 
 
 
@@ -282,7 +277,22 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxes( Element<dim>* const eptr 
         const size_t outside_node = eptr->FV()->OutsideNode( j );
         if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
         else                   facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
-
+/*
+  if ( facet_flux < 0. ) {
+       // outflow from the outside finite volume
+       eptr->N(outside_node)->Read( User()->key_out_, sc_ );
+       eptr->N(outside_node)->Store( User()->key_out_, (sc_ -= facet_flux) );
+       // flux of the transport variable
+       facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
+    }
+  else {
+       // outflow from the inside finite volume
+       eptr->N(inside_node)->Read( User()->key_out_, sc_ );
+       eptr->N(inside_node)->Store( User()->key_out_, (sc_ += facet_flux) );
+       // flux of the transport variable
+       facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
+    }
+*/
         // storing facet flux concentration product without altering the variables flag
         const VARIABLE_FLAG flag2 = eptr->Status( j, 0U, User()->key_ffC );
         eptr->Store( j, 0U, User()->key_ffC, makeScalar(flag2,facet_flux) );
@@ -291,6 +301,9 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxes( Element<dim>* const eptr 
  } // end TransportVariableFluxes
 
 
+/**
+    Also computes the outflow from each FV cell.
+*/
 template<size_t dim, template<size_t> class USER>
 void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* const eptr ) const
  {
@@ -304,9 +317,21 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* 
         // establishing the upstream direction
         const size_t inside_node  = eptr->FV()->InsideNode( j );
         const size_t outside_node = eptr->FV()->OutsideNode( j );
-        if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
-        else                   facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
-
+        if ( facet_flux < 0. ) {
+             // outflow from the outside finite volume
+             eptr->N(outside_node)->Read( User()->key_out_, sc_ );
+             eptr->N(outside_node)->Store( User()->key_out_, (sc_ -= facet_flux) );
+             // flux of the transport variable
+             facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
+          }
+        else {
+             // outflow from the inside finite volume
+             eptr->N(inside_node)->Read( User()->key_out_, sc_ );
+             eptr->N(inside_node)->Store( User()->key_out_, (sc_ += facet_flux) );
+             // flux of the transport variable
+             facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
+          }
+     
         // storing facet flux concentration product without altering the variables flag
         const VARIABLE_FLAG flag2 = eptr->Status( j, 0U, User()->key_ffC );
         eptr->Store( j, 0U, User()->key_ffC, makeScalar(flag2,facet_flux) );

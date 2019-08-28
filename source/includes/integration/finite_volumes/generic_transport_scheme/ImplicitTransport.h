@@ -37,6 +37,7 @@ class ImplicitTransport : public variables::VariableSet_TracerTransfer,
     const Model<dim>& GetModel() const;
  
     csmp::Index  key_acc_;     ///< accumulated interim result on the FV (scalar)
+    csmp::Index  key_out_;     ///< accumulated interim result on the FV (scalar)
 
   private:
     /// 2. calculates optimal time increment, flux balance, and in- and out flows for each FV

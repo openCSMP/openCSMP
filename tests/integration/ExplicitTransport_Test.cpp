@@ -529,32 +529,43 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
          printRangeOfVariable( *model_ptr_, "concentration" );
       }
  
-    const double64 model_length(40.);
+    const double64 model_length(40.), xsect_area(3. * 10.);
     const double64 time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
     double64       duration(0.); // calculated from velocity and model length
 
-    // 0. getting some tracer into model
+    // 0. testing whether inflow and outflow from the model have the expected values
+    // -----------------------------------------------------------------------------
+    if ( prescribed_velocity ) {
+          cout <<"\nrun: prescribed_velocity 'velocity' magnitude: "<< velo_magnitude << endl;
+          const double64 expected_volume_flux(xsect_area * velo_magnitude);
+          _equal( transport.IncomingVolumetricFlow(), expected_volume_flux, numeric_limits<double64>::epsilon() * expected_volume_flux );
+          _equal( transport.OutgoingVolumetricFlow(), expected_volume_flux, numeric_limits<double64>::epsilon() * expected_volume_flux );
+      }
+
+    // 1. tracer tranport and conservation tests
+    // -----------------------------------------
+    // 1.1 getting some tracer into model
     transport.AdvectVariable( time_interval );
     duration += time_interval;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 1, true );
 
-    // 1. switching supply off and transporting more
+    // 1.2 switching supply off and transporting more
     model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,0.) );
     transport.AdvectVariable( time_interval );
     duration += time_interval;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 2, true );
 
-    // integrating this initial tracer concentration
+    // 1.3 integrating this initial tracer concentration
     Region<3U>  model_domain = model_ptr_->Region("Model");
     const bool  multiply_with_porosity(true);
     const double64 initial_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
  
-    // 2. transporting almost to boundary
+    // 1.4 transporting almost to boundary
     transport.AdvectVariable( time_interval );
     duration += time_interval;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 3, true );
 
-    // integration final tracer concentration and comparing total amount of tracer
+    // 1.5 integration final tracer concentration and comparing total amount of tracer
     const double64 final_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
     duration += time_interval;
  
@@ -568,13 +579,20 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     // tracer conservation test
     _equal( initial_concentration, final_concentration, numeric_limits<double64>::epsilon() * initial_concentration );
 
-    // 3. transporting tracer across outflow boundary, verifying that there is no build up
-    transport.AdvectVariable( time_interval * 10. );
+
+    // 2. transporting tracer across outflow boundary, verifying that there is no build up
+    // -----------------------------------------------------------------------------------
+    transport.AdvectVariable( time_interval * 100. );
     duration += time_interval * 10.;
     _test( printRangeOfVariable( *model_ptr_, "concentration", print_maximum ) <= inlet_concentration );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 4, true );
  
     // TODO: test that the arrival time of the tracer is modelled correctly
+    double64 phi_min, phi_max;
+    model_ptr_->MinMaxOf( "porosity", phi_min, phi_max );
+    assert( phi_min == phi_max );
+    const double64 porosity(phi_max);
+    const double64 expected_arrival_time( (velo_magnitude/porosity) * model_length );
 
  } // end TestFlowThroughModel
 
