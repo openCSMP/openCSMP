@@ -34,7 +34,8 @@ ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const 
     model_(m),
     gref_(m.Region(target_region)),
     upper_limit_(1.), lower_limit_(0.),
-    second_order_(second_order)
+    second_order_(second_order),
+    key_acc_(m.CreateProperty("accumulation","node"))
  {
     m.InstantiateFiniteVolumes();
      m.Region(target_region).InputPropertyValue( "new concentration", makeScalar(PLAIN,0.), COMPLETE );
@@ -46,6 +47,9 @@ ImplicitTransport<dim>::ImplicitTransport( Solver& solver, Model<dim>& m, const 
     // retrieving the physically meaningful upper and lower solution limit from database
     m.Database().RangeOf( m.Database().Name(this->key_C0), lower_limit_, upper_limit_ );
  }
+  
+  
+  
   
 /**
     Computation of time increment, flux balance, and temporary new concentration.
@@ -60,8 +64,9 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      for ( auto nit=gref_.InteriorNodesBegin(); nit!=interior_nodes_end; ++nit )
        {
           assert( (*nit)->AtBoundary() == NOT );
+          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // computes time-increment, flux balance, and flux-concentration product balance
-          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit );
+          const double64 time_increment = this->OutFlowLessThanContentIncrement( *nit, out_flow );
           dt_min = std::min( dt_min, time_increment );
        }
 
@@ -70,8 +75,9 @@ double64 ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double64 max_time_
      for ( typename vector<Node<dim>*>::const_iterator
            nit=gref_.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
+          const double64 out_flow = this->FluxBalanceAndOutFlow( (*nit) );
           // boundary fluxes must be part of the time-increment calculation
-          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit ) );
+          dt_min = std::min( dt_min, this->OutFlowLessThanContentIncrementBoundary( *nit, out_flow ) );
        }
    
     return dt_min;

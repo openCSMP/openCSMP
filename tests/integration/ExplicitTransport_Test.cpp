@@ -123,7 +123,7 @@ void ExplicitTransport_Test::run()
     // computing divergence free 'total velocity' field and 'facet flux'
     DivergenceFreeTotalVelocityField();
     ExplicitTransport<3U>  transport( *model_ptr_, "Model" );
-    transport.UpdateFacetFluxes();
+    transport.UpdateFluxesAndFluxBalances();
 
     // 2.1 flux balance in the model interior for computed velocity
     // -------------------------------------------------------------------------
@@ -132,6 +132,8 @@ void ExplicitTransport_Test::run()
     // 2.2 flux balance at no-flow boundaries
     // -------------------------------------------------------------------------
     TestNoFlowBoundaryFluxBalance();
+    _equal( transport.IncomingVolumetricFlow(),
+            transport.OutgoingVolumetricFlow(), numeric_limits<double64>::epsilon() * transport.IncomingVolumetricFlow() );
  
     // test 3: flow through model with TVD concentration
     // -------------------------------------------------------------------------
@@ -496,8 +498,9 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     AssignFlowProperties();
  
     // constant velocity field, left-to-right, velocity = 1m/s
+    double64  velo_magnitude(1.);
     if ( prescribed_velocity ) {
-          VectorVariable<3U>  vc1(ANY,ANY,ANY,1.0,0.,0.);
+          VectorVariable<3U>  vc1(ANY,ANY,ANY,1.,0.,0.);
           model_ptr_->InputPropertyValue( "velocity", vc1 ); // NB: transport scheme uses 'velocity'
           // TODO: adjust other parameters so that method performs the same when velocity is calculated internally
       }
@@ -505,6 +508,7 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
          // left->right pressure gradient and flow (hydrostatic)
          const double64 delta_pf( 9.8 * 1000. * model_length_ );
          DivergenceFreeTotalVelocityField( delta_pf );
+         velo_magnitude = printRangeOfVariable( *model_ptr_, "velocity" );
       }
  
     // initial and boundary conditions for tracer transport
@@ -519,14 +523,14 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
 
     ExplicitTransport<3U>  transport( *model_ptr_, "Model" );
  
-//     if ( verbose_ ) {
+     if ( verbose_ ) {
          cout <<"\nExplicitTransport_Test::TestFlowThroughModel: key variable ranges in current model '"<< model <<"'\n";
          printRangeOfVariable( *model_ptr_, "FV pore volume" );
-         printRangeOfVariable( *model_ptr_, "velocity" );
          printRangeOfVariable( *model_ptr_, "concentration" );
-//      }
+      }
  
-    const double64 time_interval(250000.); // ~10-m travel distance
+    const double64 model_length(40.);
+    const double64 time_interval( (model_length/velo_magnitude) / 100. ); // ~10-m travel distance
     double64       duration(0.); // calculated from velocity and model length
 
     // 0. getting some tracer into model

@@ -403,6 +403,8 @@ double64  diffusionVelocity( const Region<3>& sg,
     
  } // end diffusionVelocity
 
+
+
 template<size_t dim>
 double64 fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey )
 {
