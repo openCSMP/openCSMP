@@ -271,9 +271,8 @@ double64 ExplicitTransport<dim>::TimeIncrement_CFL_Outflow( double64 max_time_in
            nit=subdomain_.NodesBegin(); nit!=nodes_end; ++nit )
        {
           // using pre-computed facet fluxes
-          // this recomputes facet fluxes, avoid this
-//          const double64 out_flow = (*nit)->Read( key_out_ ); // this->OutFlow( (*nit) ); TODO: breaks the code
-          const double64 out_flow = this->OutFlow( (*nit) );
+          const double64 out_flow = (*nit)->Read( key_out_ ); // this->OutFlow( (*nit) ); - computing outflow which is much slower
+
           // computes time-increment, flux balance, and flux-concentration product balance
           const double64 time_increment = this->OutFlowLessThanContentIncrement( (*nit), out_flow );
           dt_min = std::min( dt_min, time_increment );
@@ -504,6 +503,7 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
     //
     // 2. accumulation of upstream variable flux products, and
     //    computation of the divergence of the volumetric flow on the finite volumes
+// TODO: compute outflow in here so that it can used by CFL calculation
     VolumetricFlowAndTransportVariableFluxBalances();
 
     // 2. node-by-node evaluation of time increment (no new variable values are stored)

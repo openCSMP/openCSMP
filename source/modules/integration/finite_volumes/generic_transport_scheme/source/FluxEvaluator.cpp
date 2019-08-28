@@ -71,8 +71,20 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Element<dim>* cons
 
         // multiplying the volumetric facet flux with the upstream concentration
          // fluxes get multiplied with upstream concentrations
-        if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
-        else                   facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
+        if ( facet_flux < 0. ) {
+             // outflow from the outside finite volume
+             eptr->N(outside_node)->Read( User()->key_out_, sc_ );
+             eptr->N(outside_node)->Store( User()->key_out_, (sc_ -= facet_flux) );
+             // flux of the transport variable
+             facet_flux *= eptr->N(outside_node)->Read( User()->key_C0 );
+          }
+        else {
+             // outflow from the inside finite volume
+             eptr->N(inside_node)->Read( User()->key_out_, sc_ );
+             eptr->N(inside_node)->Store( User()->key_out_, (sc_ += facet_flux) );
+             // flux of the transport variable
+             facet_flux *= eptr->N(inside_node)->Read( User()->key_C0 );
+          }
 
         // storing facet flux concentration product without altering the variables flag
         const VARIABLE_FLAG flag2 = eptr->Status( j, 0U, User()->key_ffC );
@@ -357,7 +369,6 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* 
  
     @attention this method relies on precomputed facet fluxes.
 */
-// TODO: turn off the volumetric flow balance computation because it already exists
 template<size_t dim, template<size_t> class USER>
 void FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr ) const
  {
