@@ -231,7 +231,7 @@ void VSet<dim>::AddPfverts(typename deque<vector<long64> >::const_iterator first
 	*/
 template<size_t dim>
 void VSet<dim>::AddBFlags(typename unordered_map<size_t, long64>::const_iterator first,
-						  typename unordered_map<size_t, long64>::const_iterator last)
+                          typename unordered_map<size_t, long64>::const_iterator last)
 {
 	while (first != last)
 	{
@@ -271,6 +271,17 @@ bool VSet<dim>::AddData(const char* s, const PropertyData& data)
 	return result.second;
 
 } // end AddData
+
+
+/**
+   To delete a dataset
+*/
+template<size_t dim>
+void VSet<dim>::RemoveData( const char* s )
+{
+   property_map_.erase(s);
+
+} // end RemoveData
 
 
 /**
