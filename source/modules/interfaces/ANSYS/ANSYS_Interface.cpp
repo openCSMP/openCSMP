@@ -1215,7 +1215,6 @@ template bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream&,VSet<3U>& );
 
 
 
-
 // BINARY data file
 
 template<size_t dim>

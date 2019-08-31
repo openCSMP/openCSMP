@@ -97,9 +97,9 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
 
 // DEBUGGING
 //Out(1);
-WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
-WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-5 );
-cerr <<".";
+//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
+//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-5 );
+//cerr <<".";
 
  } // end Initialize
 
