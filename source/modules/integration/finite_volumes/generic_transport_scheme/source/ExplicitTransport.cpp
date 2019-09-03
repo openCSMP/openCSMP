@@ -531,11 +531,6 @@ void ExplicitTransport<dim>::AdvectVariable( double64 time_interval )
           // node loop: FV by FV
           Assemble1stOrderSolution( time_increment, with_divergence_correction );
       
-// TESTING
-double64 so1_min, so1_max;
-subdomain_.MinMaxOf( "concentration", so1_min, so1_max );
-cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
-
           // 4. node loop: 'new concentration' is used to replace 'concentration' performing a range check
           const bool range_check(true);
           const bool show_range(false);
@@ -551,6 +546,10 @@ cerr <<"\n\ttime-increment: "<< time_increment <<": range of assembled solution:
       }
 
     cout <<"\nExplicitTransport::AdvectVariable: 'transport completed.\n";
+// TESTING
+double64 so1_min, so1_max;
+subdomain_.MinMaxOf( "concentration", so1_min, so1_max );
+cerr <<"\n\ttime interval computed: "<< time <<": range of assembled solution: "<< so1_min <<" to "<< so1_max << endl;
 
  } // end AdvectVariable
 

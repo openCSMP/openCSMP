@@ -908,7 +908,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
                 gravity_velocity_component = upstream_lambda_overbar * relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
             if( with_capillary_spreading )
-                capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+                // Luat fix (2/9/2019) capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+                capillary_velocity_component = upstream_lambda_overbar * relperm.Permeability() * dpcdn;
 
 
         }else{
@@ -1186,11 +1187,12 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
 
             viscous_velocity_component = upstream_fn * param.FacetNormalVelocity(i);
 
-            if( with_gravity_forces )
+            if ( with_gravity_forces )
                 gravity_velocity_component = upstream_lambda_overbar * relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
-            if( with_capillary_spreading )
-                capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+            if ( with_capillary_spreading )
+                // Luat fix (2/9/2019) capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+                capillary_velocity_component = upstream_lambda_overbar * relperm.Permeability() * dpcdn;
 
 
         }else{
@@ -1477,8 +1479,9 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
             if( with_gravity_forces )
                 gravity_velocity_component = upstream_lambda_overbar * relperm.GravityTerm() * param.FacetNormalComponent(i,v);
 
-            if( with_capillary_spreading )
-                capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+            if ( with_capillary_spreading )
+              // Luat fix (2/9/2019) capillary_velocity_component = upstream_fn*vn_capillary_component_of_velocity;
+              capillary_velocity_component = upstream_lambda_overbar * relperm.Permeability() * dpcdn;
 
 
         }else{

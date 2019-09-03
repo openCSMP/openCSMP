@@ -560,14 +560,13 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     const bool  multiply_with_porosity(true);
     const double64 initial_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
  
-    // 1.4 transporting almost to boundary
-    transport.AdvectVariable( time_interval );
-    duration += time_interval;
+    // 1.4 transporting for trice the time
+    transport.AdvectVariable( time_interval * 3. );
+    duration += time_interval * 3.;
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 3, true );
 
     // 1.5 integration final tracer concentration and comparing total amount of tracer
     const double64 final_concentration = model_domain.VolumeIntegral_x_Thickness( "concentration",  multiply_with_porosity );
-    duration += time_interval;
  
     // testing
     // -------
@@ -582,19 +581,57 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
 
     // 2. transporting tracer across outflow boundary, verifying that there is no build up
     // -----------------------------------------------------------------------------------
-    transport.AdvectVariable( time_interval * 100. );
-    duration += time_interval * 10.;
+    transport.AdvectVariable( time_interval * 20. );
+    duration += time_interval * 20.;
     _test( printRangeOfVariable( *model_ptr_, "concentration", print_maximum ) <= inlet_concentration );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 4, true );
- 
-    // TODO: test that the arrival time of the tracer is modelled correctly
+
+
+    // 3. test that the arrival time of tracer is modelled correctly
+    // -----------------------------------------------------------------------------------
+    // resetting the model
+    model_ptr_->InputPropertyValue( "concentration", makeScalar(ANY,0.) );
+    model_ptr_->InputBoundaryValue( LEFT, "concentration", makeScalar(DIRICH,inlet_concentration) );
     double64 phi_min, phi_max;
     model_ptr_->MinMaxOf( "porosity", phi_min, phi_max );
     assert( phi_min == phi_max );
     const double64 porosity(phi_max);
-    const double64 expected_arrival_time( (velo_magnitude/porosity) * model_length );
+    const double64 expected_arrival_time( model_length / (velo_magnitude/porosity) );
+    const double64 threshold_value(inlet_concentration * 0.1);
+
+    // tracer should not be there yet
+    transport.AdvectVariable( expected_arrival_time * 0.9 );
+    _test( !TestForTracerArrival( "RIGHT", threshold_value ) );
+    vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 5, true );
+
+    // tracer should have arrived at expected_arrival_time because the scheme will be diffusive
+    transport.AdvectVariable( expected_arrival_time * 0.1 );
+    _test( TestForTracerArrival( "RIGHT", threshold_value ) );
+    vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 6, true );
+ 
+    return;
 
  } // end TestFlowThroughModel
+
+
+
+/**
+    Has the front arrived ?
+*/
+bool  ExplicitTransport_Test::TestForTracerArrival( const char* boundary, double64 threshold_value ) const
+ {
+     assert( model_ptr_->ContainsBoundary( string(boundary) ) );
+     const Boundary<3U>& boundary_domain(model_ptr_->Boundary(string(boundary)));
+ 
+     double64 var_min, var_max;
+     boundary_domain.MinMaxOf( "concentration", var_min, var_max );
+ 
+     // if the average of min-max values is above the threshold value, we detect the tracer arrival
+     if ( (var_min+var_max)/2. >= threshold_value ) return true;
+ 
+     return false;
+ 
+ } // end TestForTracerArrival
 
 
 

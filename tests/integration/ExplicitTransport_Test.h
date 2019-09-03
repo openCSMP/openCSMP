@@ -63,6 +63,9 @@ class ExplicitTransport_Test : public Test {
     /// TVD? - first-order scheme during transport in a const velocity field and out of model
     void  TestFlowThroughModel( const char* model = "BOX40x3x10m", bool prescribed_velocity=false );
   
+    /// helper method that establishes whether the tracer front has arrived at the target boundary
+    bool TestForTracerArrival( const char* boundary, double64 threshold_value ) const;
+  
     // fluid sources and sinks
   
     // transient velocity field
