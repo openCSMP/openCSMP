@@ -11,7 +11,36 @@
 
 namespace csmp {
 
-/// surface (3D) or line (2D) element connector for elements which share faces but not nodes
+/**
+
+@brief Surface (3D) or line (2D) element connector for elements which share faces but not nodes.
+
+To represent surfaces / interfaces in an mesh.
+
+@section conventions Conventions
+
+If one wants to acces nodes of an interface, the method InterFace::N( n_node, interface_side ) has to be used.
+
+The normal to the interface points from the INNER to the OUTSIDE element and is inherited from the lower
+dimensional element that the Face and then InterFace was built from.
+The boolean variable collocated_nodes, tells whether the nodes on opposite sides of the InterFace are
+collocated, meaning that they have the same location (collocated_nodes=true) or whether they were
+separated over the course of a simulation (collocated_nodes=false).
+Default is true.
+
+If the nodes are not collocated, the UnitNormal() method will return the normal to the mirror
+symmetry plane between the 2 sides of the InterFace.
+
+The base (csmp::Element) class is a nullptr by default, but it can be connected
+to an intervening lower-dimensional element mesh once the InterFace has been created.
+
+@note InterFaces are not listed as parents in their nodes.
+
+@author SKM & Junchul Kim, refactored changing design to node-pointer based etc.
+@author first version by P. Lang
+@date 2011, 2014, 2016, 2019.
+
+*/
 template<size_t dim>
 class InterFace : public FiniteElementPolicy<dim,InterFace>,
                   public FiniteVolumePolicy<dim,InterFace>,
@@ -163,7 +192,12 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// returns area of the face; method assumes same role as Volume() for the element
     double64       Area( INTERFACE_SIDE=MIDDLE ) const;
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
+  
+    /// returns the normal to the 'current' side of the interface
     void           UnitNormal( VectorVariable<dim>& ) const;
+  
+    /// returns the normal pointing from the inside to the outside higher-dimensional Element of the InterFace, calculated for bisector plane.
+    csmp::Point<dim>  UnitNormal() const;
 
     /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
     bool           NodeSpacing( size_t n_local, VectorVariable<dim>& ) const;
@@ -208,42 +242,21 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     mutable size_t                idx_;                 ///< unique identifier for indexing operations
     std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
     std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces on inside followed by those on outside
+    bool                          collocated_nodes_;    ///< node match across InterFace or have been displaced relative to oneanother
   
     // used for compatibility with Element and Face methods (Neighbor etc.)
     INTERFACE_SIDE  current_side_;  ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
 
     // pointers to the higher-dimensional elements this face sits in between
     // the (same dimensional) neighbors are stored by the base class
-    Element<dim>* innerParent_;           ///< higher-dimensional parent element on side opposite to normal direction
-    size_t        inner_parent_face_id_;  ///< face number of inside higher-dimensional parent element
+    Element<dim>* innerParent_;            ///< higher-dimensional parent element on side opposite to normal direction
+    size_t        inner_parent_face_id_;   ///< face number of inside higher-dimensional parent element
 
-    Element<dim>* outerParent_;           ///< higher-dimensional neighbor element in direction of interface normal
-    size_t        outer_parent_face_id_;  ///< face number of outside higher-dimensional parent element
+    Element<dim>* outerParent_;            ///< higher-dimensional neighbor element in direction of interface normal
+    size_t        outer_parent_face_id_;   ///< face number of outside higher-dimensional parent element
 
-    Element<dim>* baseElement_; ///< Element object from which interface was constructed; may not be there
+    Element<dim>* baseElement_ = nullptr;  ///< pointer to lower-dimensional element that sits between sides of InterFace.
 };
-
-/**
-
-@class InterFace InterFace "main_library/InterFace.h"
-
-@author SKM refactored and changed design to node-pointer based etc.
-@author P. Lang
-@author Roman
-@date 2011,2014, 2016
-
-@note InterFaces are not listed as parents in their nodes.
-
-@section motivation Motivation
-
-To represent surfaces / interfaces in an mesh.  
-
-@section conventions Conventions
-
-The base (csmp::Element) class has in its node container the nodes of the inner element only.
-If one wants to acces nodes of an interface, InterFace::N( i, j ) is to be used.
-
-*/
 
 
 } // csmp

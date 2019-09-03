@@ -507,7 +507,7 @@ void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& 
 
   model.InputPropertyValue( "element vector", nrml_zero );
 
-  Index normal_idx( model.Database().StorageKey( "element vector" ) );;
+  Index normal_idx( model.Database().StorageKey( "element vector" ) );
 
   // Loop over SplitBoundaries
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
@@ -628,7 +628,7 @@ template<size_t dim>
 void SplitBoundary_Test::LoadModel( const std::string& model_name )
 {
   // Model initialization
-  const std::string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
@@ -661,7 +661,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
                                     std::vector<std::string>& regions )
 {
   // Model initialization
-  const std::string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
@@ -699,7 +699,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
                                               std::vector<std::string>& interfaces )
 {
   // 0. Model initialization
-  const string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
@@ -940,14 +940,15 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   test_name += model_name;
 
   // Load Model
-  const std::string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const std::string variables_file( "SplitBoundary_Test-variables.txt" );
 
   Model<dim>* modelIN = NULL;
 
   if ( dim == 2U )
     modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
   else if ( dim == 3U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+    // SKM FIX: irregular = true
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
 
   // validating the model
   if ( verbose_ ) cout << "\nSplitBoundary_Test<" << dim << ">::test_splitboundary_between_regions: model contains the regions:";
@@ -1006,7 +1007,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
     }
   }
 
-  // do this sequentially according to their neihbours, otherwise boundaries are not assgiend properly
+  // do this sequentially according to neighbours, otherwise boundaries are not assgiend properly
   for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
     modelIN->InsertSplitBoundary( it.first, it.second );
   
@@ -1079,7 +1080,7 @@ template<size_t dim>
 void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& model_name )
 {
   const bool verbose( false );
-  const string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const string variables_file( "SplitBoundary_Test-variables.txt" );
 
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
@@ -1118,7 +1119,7 @@ template<size_t dim>
 void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( const std::string& model_name )
 {
   const bool verbose( false );
-  const string variables_file( "ANSYS_SplitBoundaryMatch_Test-variables.txt" );
+  const string variables_file( "SplitBoundary_Test-variables.txt" );
   
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;

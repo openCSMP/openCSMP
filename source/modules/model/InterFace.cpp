@@ -15,13 +15,14 @@ namespace csmp {
 template<size_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-  idx_( UINT_MAX ),
-  node_connector_( f->Nodes() * 2, nullptr ),
-  interface_connector_( f->Neighbors(), nullptr ),
-  baseElement_( nullptr ),
-  current_side_( INSIDE ),
-  innerParent_( nullptr ),
-  outerParent_( nullptr )
+    idx_( UINT_MAX ),
+    node_connector_( f->Nodes() * 2, nullptr ),
+    interface_connector_( f->Neighbors(), nullptr ),
+    baseElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( nullptr ),
+    outerParent_( nullptr ),
+    collocated_nodes_(true)
 {
 }
 
@@ -30,14 +31,15 @@ template<size_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-  FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
-  idx_( UINT_MAX ),
-  node_connector_( f->Nodes() * 2, nullptr ),
-  interface_connector_( f->Neighbors(), nullptr ),
-  baseElement_( nullptr ),
-  current_side_( INSIDE ),
-  innerParent_( nullptr ),
-  outerParent_( nullptr )
+    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
+    idx_( UINT_MAX ),
+    node_connector_( f->Nodes() * 2, nullptr ),
+    interface_connector_( f->Neighbors(), nullptr ),
+    baseElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( nullptr ),
+    outerParent_( nullptr ),
+    collocated_nodes_(true)
 {
 }
 
@@ -49,14 +51,15 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-  FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
-  idx_( UINT_MAX ),
-  node_connector_( f->Nodes() * 2, nullptr ),
-  interface_connector_( f->Neighbors(), nullptr ),
-  baseElement_( nullptr ),
-  current_side_( INSIDE ),
-  innerParent_( nullptr ),
-  outerParent_( nullptr )
+    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
+    idx_( UINT_MAX ),
+    node_connector_( f->Nodes() * 2, nullptr ),
+    interface_connector_( f->Neighbors(), nullptr ),
+    baseElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( nullptr ),
+    outerParent_( nullptr ),
+    collocated_nodes_(true)
 {
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, ip );
@@ -71,13 +74,14 @@ InterFace<dim>::InterFace( size_t index,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-  idx_( index ),
-  node_connector_( f->Nodes() * 2, nullptr ),
-  interface_connector_( f->Neighbors(), nullptr ),
-  baseElement_( nullptr ),
-  current_side_( INSIDE ),
-  innerParent_( nullptr ),
-  outerParent_( nullptr )
+    idx_( index ),
+    node_connector_( f->Nodes() * 2, nullptr ),
+    interface_connector_( f->Neighbors(), nullptr ),
+    baseElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( nullptr ),
+    outerParent_( nullptr ),
+    collocated_nodes_(true)
 {
   if ( this->UsesLocalCoordinates() )
     this->ResizePropertyStorage( ep, ip );
@@ -86,26 +90,21 @@ InterFace<dim>::InterFace( size_t index,
 }
 
 
-template<size_t dim>
-InterFace<dim>::~InterFace()
-{
-}
-
-
 /// copy constructor
 template<size_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( ifc.FE() ),
-  FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
-  idx_( ifc.idx_ ),
-  node_connector_( ifc.node_connector_ ),
-  interface_connector_( ifc.interface_connector_ ),
-  baseElement_( ifc.baseElement_ ),
-  current_side_( ifc.current_side_ ),
-  innerParent_( ifc.innerParent_ ),
-  outerParent_( ifc.outerParent_ ),
-  inner_parent_face_id_( ifc.inner_parent_face_id_ ),
-  outer_parent_face_id_( ifc.outer_parent_face_id_ )
+    FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
+    idx_( ifc.idx_ ),
+    node_connector_( ifc.node_connector_ ),
+    interface_connector_( ifc.interface_connector_ ),
+    baseElement_( ifc.baseElement_ ),
+    current_side_( ifc.current_side_ ),
+    innerParent_( ifc.innerParent_ ),
+    outerParent_( ifc.outerParent_ ),
+    inner_parent_face_id_( ifc.inner_parent_face_id_ ),
+    outer_parent_face_id_( ifc.outer_parent_face_id_ ),
+    collocated_nodes_( ifc.collocated_nodes_ )
 {
   assert( !interface_connector_.empty() /* detected unitialized element*/ );
   // variable storage: call of initialization function
@@ -117,16 +116,17 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 template<size_t dim>
 InterFace<dim>::InterFace( InterFace<dim>&& ifc )
   : FiniteElementPolicy<dim, ::csmp::InterFace>( move( ifc.FE() ) ),
-  FiniteVolumePolicy<dim, csmp::InterFace>( move( ifc.FV() ) ),
-  idx_( move( ifc.idx_ ) ),
-  node_connector_( move( ifc.node_connector_ ) ),
-  interface_connector_( move( ifc.interface_connector_ ) ),
-  baseElement_( move( ifc.baseElement_ ) ),
-  current_side_( move( ifc.current_side_ ) ),
-  innerParent_( move( ifc.innerParent_ ) ),
-  outerParent_( move( ifc.outerParent_ ) ),
-  inner_parent_face_id_( move( ifc.inner_parent_face_id_ ) ),
-  outer_parent_face_id_( move( ifc.outer_parent_face_id_ ) )
+    FiniteVolumePolicy<dim, csmp::InterFace>( move( ifc.FV() ) ),
+    idx_( move( ifc.idx_ ) ),
+    node_connector_( move( ifc.node_connector_ ) ),
+    interface_connector_( move( ifc.interface_connector_ ) ),
+    baseElement_( move( ifc.baseElement_ ) ),
+    current_side_( move( ifc.current_side_ ) ),
+    innerParent_( move( ifc.innerParent_ ) ),
+    outerParent_( move( ifc.outerParent_ ) ),
+    inner_parent_face_id_( move( ifc.inner_parent_face_id_ ) ),
+    outer_parent_face_id_( move( ifc.outer_parent_face_id_ ) ),
+    collocated_nodes_( move(ifc.collocated_nodes_ ) )
 {
   assert( !interface_connector_.empty() ); // detected unitialized element
                                            // variable storage: call of initialization function
@@ -138,6 +138,16 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
   ifc.AssignFiniteElementNullPtr();
   ifc.AssignFiniteVolumeNullPtr();
 }
+
+
+
+
+template<size_t dim>
+InterFace<dim>::~InterFace()
+{
+}
+
+
 
 
 /// assignment
@@ -152,6 +162,7 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
     idx_ = ifc.idx_;
     node_connector_ = ifc.node_connector_;
     interface_connector_ = ifc.interface_connector_;
+    collocated_nodes_    = ifc.collocated_nodes_;
     baseElement_ = ifc.baseElement_;
     current_side_ = ifc.current_side_;
     innerParent_ = ifc.innerParent_;
@@ -174,9 +185,10 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
   if ( ifc.FV() ) FiniteVolumePolicy<dim, csmp::InterFace>::AssignFiniteVolume( move( ifc.FV() ) );
 
   idx_ = ifc.idx_;
-  node_connector_ = ifc.node_connector_;
+  collocated_nodes_    = ifc.collocated_nodes_;
   interface_connector_ = ifc.interface_connector_;
-  baseElement_ = ifc.baseElement_;
+  baseElement_         = ifc.baseElement_;
+  node_connector_      = ifc.node_connector_;
   current_side_ = ifc.current_side_;
   innerParent_ = ifc.innerParent_;
   outerParent_ = ifc.outerParent_;
@@ -268,6 +280,8 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, Element<dim>* const
   if ( assign_nodes )
     // connect the nodes of the higher dimensional neighbors to the interface
     InitializeNodeVector();
+  
+  // TODO: check whether nodes are collocated
 }
 
 
@@ -291,7 +305,11 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, size_t inner_local_
   if ( assign_nodes )
     // connect the nodes of the higher dimensional neighbors to the interface
     InitializeNodeVector( inner_parent_face_id_, outer_parent_face_id_ );
+  
+  // TODO: check whether nodes are collocated
 }
+
+
 
 
 template<size_t dim>
@@ -313,16 +331,18 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
     throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( side, Element, face_id )", "This method is not intended to be used for base element!" );
   }
 
-}
+} // end Assign
+
+
 
 
 /**
-Assigns nodes to node_connector_ vector of the InterFace
+    Assigns nodes to node_connector_ vector of the InterFace
 
-@note the nodes on the inner side of the interface are the first in the node connector
-vector, the outer ones follow
+    @note the nodes on the inner side of the interface are the first in the node connector
+    vector, the outer ones follow
 
-@author SKM 16/6/2016
+    @author SKM 16/6/2016
 */
 template<size_t dim>
 void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE side )
@@ -359,8 +379,10 @@ bool InterFace<dim>::Unassign( InterFace<dim>* f_ptr )
 } // end Unassign
 
 
+
+
 /**
-return the number of the Interface object neighbors which are connected with the InterFace and not null.
+    return the number of the Interface object neighbors which are connected with the InterFace and not null.
 */
 template<size_t dim>
 size_t  InterFace<dim>::ConnectedNeighbors() const
@@ -372,9 +394,11 @@ size_t  InterFace<dim>::ConnectedNeighbors() const
 }
 
 
+
+
 /**
-finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface;
-uses point coordinates that must be matched
+    finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface;
+    uses point coordinates that must be matched
 */
 template<size_t dim>
 std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
@@ -422,22 +446,24 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
 } // end SharedElementFaces
 
 
+
+
 /**
-1. From the finite element connected to the Interface we know the topology of the faces of the higher-dimensional
-neighbor elements so that we can assign their nodes. Start with the inside element.
+    1. From the finite element connected to the Interface we know the topology of the faces of the higher-dimensional
+    neighbor elements so that we can assign their nodes. Start with the inside element.
 
-(We rely on the fact that the nodes on either side of the interface are collocated)
+    (We rely on the fact that the nodes on either side of the interface are collocated)
 
-2. Find the faces connected to this element and assign them
+    2. Find the faces connected to this element and assign them
 
-3. Get its nodes
+    3. Get its nodes
 
-4. Assign the nodes in the same order as for that face since the normal points into the Interface
+    4. Assign the nodes in the same order as for that face since the normal points into the Interface
 
-5. Repeat for other side
+    5. Repeat for other side
 
-@attention special provisions are made in 1D where there is no corresponding elemnent type for the Interface.
-Thus the number of nodes is assumed to be 1, duplicated to 2.
+    @attention special provisions are made in 1D where there is no corresponding elemnent type for the Interface.
+    Thus the number of nodes is assumed to be 1, duplicated to 2.
 
 */
 template<size_t dim>
@@ -479,15 +505,17 @@ void InterFace<dim>::InitializeNodeVector()
   }
   else Assign( 0U, outerParent_->N( 0 ), OUTSIDE );
 
-} // end
+} // end InitializeNodeVector
+
+
 
 
 /**
-Same as initialise node vector, but for the case where the shared faces have
-already been established.
+    Same as initialise node vector, but for the case where the shared faces have
+    already been established.
 
-@note Nodes() cannot not be used here because the node_connector_ vector is
-just getting initialised
+    @note Nodes() cannot not be used here because the node_connector_ vector is
+    just getting initialised
 */
 template<size_t dim>
 void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
@@ -531,7 +559,10 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
   }
   else Assign( 0U, outerParent_->N( 0 ), OUTSIDE );
 
-} // end
+} // end InitializeNodeVector (version 2)
+
+
+
 
 
 template<size_t dim>
@@ -569,21 +600,21 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
 
 /**
 
-Returns pointers to the nodes on either side of the Interface.
+    Returns pointers to the nodes on either side of the Interface.
 
-@section input Input Arguments
+    @section input Input Arguments
 
-An integer from 0...n-1, where n is the number of nodes per face of the Element.
-These are numbered counterclockwise looking from the outside into the face
-of parent element 1.
+    An integer from 0...n-1, where n is the number of nodes per face of the Element.
+    These are numbered counterclockwise looking from the outside into the face
+    of parent element 1.
 
-@param side  side refers to the first or second parent element.
+    @param side  side refers to the first or second parent element.
 
-@section implementation Implementation
+    @section implementation Implementation
 
-A range check is performed.
+    A range check is performed.
 
-@return A pointer to the Target node.
+    @return A pointer to the Target node.
 */
 template<size_t dim>
 csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
@@ -615,7 +646,7 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
 
 
 /**
-Access to all nodes of the interface.
+    Access to all nodes of the interface.
 */
 template<size_t dim>
 csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
@@ -626,7 +657,7 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
 
 
 /**
-Returns the equal dimensional neighbor of the InterFace which also is an interface element.
+    Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
 template<size_t dim>
 csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
@@ -638,7 +669,10 @@ csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
 
 
 /**
-@note costly method, use judiciously.
+    Returns which local node number the current node corresponds to in the given
+    parent element.
+ 
+   @note costly method, use judiciously.
 */
 template<size_t dim>
 size_t  InterFace<dim>::ParentNodeNumber( size_t n, INTERFACE_SIDE side ) const
@@ -663,6 +697,8 @@ size_t  InterFace<dim>::ParentNodeNumber( size_t n, INTERFACE_SIDE side ) const
                          "Node does not seem to be connected to parent element." );
   return 0;
 }
+
+
 
 
 // watch out if there is no base element this returns a nullptr pointer
@@ -736,10 +772,12 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 }
 
 // GEOMETRY
+
+
 /**
-Computes the interface area from scratch and not using the CoordinateMatrix / InterFace FEM machinery.
-The area is computed taking the side of the interface into account.
-Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match.
+    Computes the interface area from scratch and not using the CoordinateMatrix / InterFace FEM machinery.
+    The area is computed taking the side of the interface into account.
+    Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match.
 */
 template<size_t dim>
 double64 InterFace<dim>::Area( INTERFACE_SIDE side ) const
@@ -803,7 +841,7 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side )
   if ( baseElement_ != nullptr )
     return baseElement_->UnitNormal( vc );
 
-  throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal( side )", "Base Element does not exist!" );
+  throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal(side):", "higher-dimensional parent Element does not exist!" );
   innerParent_->UnitNormalToFace( inner_parent_face_id_, vc );
 }
 
@@ -813,6 +851,62 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
 {
   UnitNormal( vc, current_side_ );
 }
+
+
+/**
+   returns the normal pointing from the inside to the outside higher-dimensional Element of the InterFace, calculated for bisector plane.
+*/
+template<size_t dim>
+csmp::Point<dim>  InterFace<dim>::UnitNormal() const
+ {
+    if ( baseElement_ != nullptr ) return baseElement_->UnitNormal();
+
+      if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
+          // building a triangle from the node mid-points across the interface and return its area
+          if ( collocated_nodes_ ) {
+               Point<dim> p1 = N( 0 )->Coordinate();
+               Point<dim> p2 = N( 1 )->Coordinate();
+               Point<dim> p3 = N( 2 )->Coordinate();
+               return normalOfTriangle( p1, p2, p3 );
+            }
+          Point<dim> p1 = (N( 0 )->Coordinate() + N( this->FE()->Nodes() )->Coordinate()) / 2.;
+          Point<dim> p2 = (N( 1 )->Coordinate() + N( this->FE()->Nodes() + 1U )->Coordinate()) / 2.;
+          Point<dim> p3 = (N( 2 )->Coordinate() + N( this->FE()->Nodes() + 2U )->Coordinate()) / 2.;
+          return normalOfTriangle( p1, p2, p3 );
+        }
+ 
+      if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
+          // building a quadrilateral from the node mid-points across the interface and return its area
+          if ( collocated_nodes_ ) {
+               Point<dim> p1 = N( 0 )->Coordinate();
+               Point<dim> p2 = N( 1 )->Coordinate();
+               Point<dim> p3 = N( 2 )->Coordinate();
+               Point<dim> p4 = N( 3 )->Coordinate();
+               return normalAtFacetCenter( p1, p2, p3, p4 );
+            }
+          Point<dim> p1 = (N( 0 )->Coordinate() + N( this->FE()->Nodes() )->Coordinate()) / 2.;
+          Point<dim> p2 = (N( 1 )->Coordinate() + N( this->FE()->Nodes() + 1U )->Coordinate()) / 2.;
+          Point<dim> p3 = (N( 2 )->Coordinate() + N( this->FE()->Nodes() + 2U )->Coordinate()) / 2.;
+          Point<dim> p4 = (N( 3 )->Coordinate() + N( this->FE()->Nodes() + 3U )->Coordinate()) / 2.;
+          return normalAtFacetCenter( p1, p2, p3, p4 );
+        }
+ 
+      if ( this->FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) {
+          if ( collocated_nodes_ ) {
+               Point<dim> p1 = N( 0 )->Coordinate();
+               Point<dim> p2 = N( 1 )->Coordinate();
+               return p2 - p1;
+            }
+          Point<dim> p1 = (N( 0 )->Coordinate() + N( this->FE()->Nodes() )->Coordinate()) / 2.;
+          Point<dim> p2 = (N( 1 )->Coordinate() + N( this->FE()->Nodes() + 1U )->Coordinate()) / 2.;
+          return p2 - p1;
+        }
+ 
+      throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal:", "InterFace FE type not recognized." );
+
+ } // end UnitNormal
+
+
 
 
 /**

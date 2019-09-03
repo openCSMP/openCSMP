@@ -155,7 +155,7 @@ std::string    parsePlacement( PLACEMENT );
 bool           faceVariable( PLACEMENT );
 bool           interFaceVariable( PLACEMENT );
 
-/// determine from type whether the placement of the variable is Region, Boundary or SplitBoundary
+/// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
 template<size_t dim, template<size_t> class SIMPLEX>
 PLACEMENT      parsePlacement();
 
@@ -165,6 +165,9 @@ VARIABLE_FLAG  intToVARIABLE_FLAG( int i );
 VARIABLE_FLAG  parseCondition( std::string& s );
 VARIABLE_FLAG  parseStatus( const char* status );
 std::string    parseStatus( VARIABLE_FLAG );
+
+/// returns the side of the Face or InterFace element
+std::string    parseSide( INTERFACE_SIDE );
 
 /** @} */
 
