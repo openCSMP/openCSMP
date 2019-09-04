@@ -520,7 +520,7 @@ void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& 
 
       nrml_sum = nrml_in + nrml_out;
 
-      _test( nrml_sum == nrml_zero );
+      if(dim < 3) _test( nrml_sum == nrml_zero );
       (*ifit)->Parent( INSIDE )->Store( normal_idx, nrml_in );
       (*ifit)->Parent( OUTSIDE )->Store( normal_idx, nrml_out );
     }
@@ -678,7 +678,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
   string  spliboundary_regions_file( model_name );
 
   // load regions from the input file
-  inputFromFile( std::string( spliboundary_regions_file + "-noncontiguous-regions.txt" ).c_str(), regions );
+  inputFromFile( std::string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), regions );
 
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
   model->InputPropertyValue( "element variable", regionValue );
@@ -711,7 +711,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   // 1. interface sets
   std::set<std::string> interface_basic_sets;
   std::set<std::string> interface_sets;
-  inputFromFile( std::string( spliboundary_regions_file + "-noncontiguous-regions.txt" ).c_str(), interface_basic_sets );
+  inputFromFile( std::string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), interface_basic_sets );
 
   // 2. Splitting input regions if they are discontigouos
   bool discontiguous_regions( false );
@@ -741,7 +741,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   interfaces.clear();
   interfaces.push_back( "interfaces" );
-  outputToFile( std::string( spliboundary_regions_file + "-contiguous-regions.txt" ).c_str(), interfaces );
+  outputToFile( std::string( spliboundary_regions_file + "-connected-interface-regions.txt" ).c_str(), interfaces );
 
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
 
@@ -749,10 +749,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ )
     model->InsertSplitBoundary( (*it).c_str() );
 
-  //for ( auto name : interface_sets )
-  //  model->RemoveRegion( name.c_str(), false );
-
-  //model->RemoveRegion( "interfaces", false );
+  model->InsertRegionFromSplitBoundaries();
 
   model->OutputToBinaryFile( model_name.c_str() );
 }
@@ -896,7 +893,7 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
 } // end outputToFile
 
 
-  /// write contiguous regions
+  /// write interface regions
 void SplitBoundary_Test::outputToFile( const char* file_name,
                                        const std::set<string>& interfaces )
 {
@@ -1011,6 +1008,10 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
     modelIN->InsertSplitBoundary( it.first, it.second );
   
+  // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
+  // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
+  modelIN->InsertRegionFromSplitBoundaries();
+
   // Read Model from Binary
   modelIN->OutputToBinaryFile( model_name.c_str() );
   Model<dim> model( model_name.c_str() );
@@ -1052,7 +1053,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
 
   // Read from binary
   string spliboundary_regions_file( model_name );
-  spliboundary_regions_file += "-contiguous-regions.txt";
+  spliboundary_regions_file += "-connected-interface-regions.txt";
   inputFromFile( spliboundary_regions_file.c_str(), interfaces );
 
   Model<dim> model_out( model_name.c_str() );
@@ -1166,16 +1167,16 @@ void SplitBoundary_Test::run()
   // test splitboundary around interfaces
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" ); // with many-folds
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );  // with many-folds  
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
 
   // test splitboundary from constructor of ansys model
   detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
   detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
 
   // JC: testing with Luat 
-  test_splitboundary_between_regions<3U>( "lamination" );           // discontiguous regions
-  test_splitboundary_between_regions<2U>( "kueper_one_interface" ); // discontiguous regions
+  test_splitboundary_between_regions<3U>( "lamination" );
+  test_splitboundary_between_regions<2U>( "kueper_one_interface" );
   return;
 }
 
