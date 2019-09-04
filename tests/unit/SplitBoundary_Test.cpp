@@ -749,6 +749,8 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ )
     model->InsertSplitBoundary( (*it).c_str() );
 
+  // 4. create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
+  //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
   model->InsertRegionFromSplitBoundaries();
 
   model->OutputToBinaryFile( model_name.c_str() );
@@ -1129,8 +1131,12 @@ void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( con
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
   else if ( dim == 3U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true, create_splitboundaries ));
-    
-  // 2. see whether the split boundary survives being writting to and recovered from file
+  
+  // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
+  //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
+  model->InsertRegionFromSplitBoundaries();
+
+  // 3. see whether the split boundary survives being writting to and recovered from file
   // ------------------------------------------------------------------------------------------
   model->OutputToBinaryFile( model_name.c_str() );
 
@@ -1174,7 +1180,7 @@ void SplitBoundary_Test::run()
   detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
   detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
 
-  // JC: testing with Luat 
+  // test splitboundary for complex ansys models
   test_splitboundary_between_regions<3U>( "lamination" );
   test_splitboundary_between_regions<2U>( "kueper_one_interface" );
   return;
