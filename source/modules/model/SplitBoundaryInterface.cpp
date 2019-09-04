@@ -3,6 +3,10 @@
 #include "SplitBoundary.h"
 #include "Model.h"
 #include "CSMP_highLevelUtilities.h"
+#include "MeshManager.h"
+#include "IsoparametricLinearLineElement.h" 
+#include "IsoparametricLinearTriangle.h" 
+#include "IsoparametricLinearQuadrilateral.h" 
 
 using namespace std;
 
@@ -589,6 +593,135 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 
 } // end InsertSplitBoundary
 
+
+/**
+Insert a lower-dimensional element mesh into the model, which is fully disconnected from the model,
+to represent a fracture that coincides with a SplitBoundary according to
+the desire to use SplitBoundary objects for lower-dimensional fractures
+for the modelling of both, fluid flow and geomechanics.
+It only shares the locations of the nodes (if the SplitBoundary has not been modified) or
+lies in the symmetry plane of the 2 sides if the nodes have been separated by deformation.
+
+@author JCK updated 26/08/2019
+*/
+
+template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBoundaries()
+{
+  SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+  ErrorHandler&               csmp_error(ErrorHandler::Instance());
+  MeshManager<dim>* mesh = &splitboundaryComplex->Mesh();
+
+  //1. search the nodes and the elements of the splitboundaries
+  std::set<Node<dim>*> ifnodes;
+  std::vector<InterFace<dim>*> ifelmts;
+  for (typename std::map<std::string, csmp::SplitBoundary<dim> >::const_iterator
+    it = splitboundaryComplex->SplitBoundariesBegin(); it != splitboundaryComplex->SplitBoundariesEnd(); it++)
+  {
+    for (auto eit = (*it).second.ElementsBegin(); eit != (*it).second.ElementsEnd(); eit++)
+    {
+      csmp::InterFace<dim>* pInterFace = (*eit);
+      ifelmts.push_back(pInterFace);
+      for (size_t j = 0; j < pInterFace->Nodes() / 2; j++)
+        ifnodes.insert(pInterFace->N(j, INSIDE));
+    }
+  }
+
+  //2. create new nodes and new elements for a new mesh which coincides the splitboundaries
+  size_t node_idx(mesh->Nodes());
+  size_t elmt_idx(mesh->Elements());
+  std::map<Node<dim>*,Node<dim>*>           node_pairs;
+  std::map<InterFace<dim>*, Element<dim>*>  elmt_pairs;
+
+  for (auto ifnode : ifnodes)
+  {
+    Node<dim>* new_node = mesh->Add(*ifnode);
+    if (new_node) {
+      new_node->Idx(node_idx++);
+      new_node->ResizeParentStorage(0);
+      node_pairs.insert(make_pair(ifnode, new_node));
+    }
+  }
+
+  FiniteElement* feptr = nullptr;
+  FiniteVolumeStencil<dim>* fvptr = nullptr;
+  for (auto ifelmt : ifelmts)
+  {
+    Element<dim>* new_elmt = nullptr;
+    CSMP_FEM_TYPE fe_type = ifelmt->FE_Type();
+    switch (fe_type)
+    {
+      case csmp::ISOPARAMETRIC_LINEAR_BAR:
+        {
+          if (feptr == nullptr) feptr = new IsoparametricLinearLineElement(dim);
+          if (fvptr == nullptr) fvptr = new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_BAR");
+          Element<dim>  elmt(feptr);
+          elmt.AssignFiniteVolume(fvptr);
+          new_elmt = mesh->Add(elmt);
+        }
+        break;
+      case csmp::ISOPARAMETRIC_LINEAR_TRIANGLE:
+        {
+          if (feptr == nullptr) feptr = new IsoparametricLinearTriangle(dim);
+          if (fvptr == nullptr) fvptr = new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_TRIANGLE");
+          Element<dim>  elmt(feptr);
+          elmt.AssignFiniteVolume(fvptr);
+          new_elmt = mesh->Add(elmt);
+        }
+        break;
+      case csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+        {
+          if (feptr == nullptr) feptr = new IsoparametricLinearQuadrilateral(dim);
+          if (fvptr == nullptr) fvptr = new FiniteVolumeStencil<dim>("ISOPARAMETRIC_LINEAR_QUADRILATERAL");
+          Element<dim>  elmt(feptr);
+          elmt.AssignFiniteVolume(fvptr);
+          new_elmt = mesh->Add(elmt);
+        }
+        break;
+      default:
+        break;    
+    }
+    if (new_elmt) {
+      new_elmt->Idx(elmt_idx++);
+      elmt_pairs.insert(make_pair(ifelmt, new_elmt));
+    }
+  }
+
+  //3. construct connections for new nodes and new elements 
+  //   and assign a root node and a root element for new nodes elements respectively
+  std::vector<Element<dim>*> new_elmts;
+  const LocalVariables nvars(splitboundaryComplex->Database().LocalVariablesAt(ELEMENT));
+  for (auto ifelmt : ifelmts)
+  {
+    Element<dim>* new_elmt = elmt_pairs[ifelmt];
+    new_elmt->ResizePropertyStorage(nvars);
+    for (size_t i = 0; i < ifelmt->Nodes() / 2; i++) {
+      Node<dim>* new_node = node_pairs[ifelmt->N(i, INSIDE)];
+      new_elmt->Assign(i, new_node);
+      new_node->ResizeParentStorage(new_node->Parents() + 1);
+      new_node->Assign(new_node->Parents(), new_elmt);
+      mesh->SetRootNode(new_node);
+    }
+
+    new_elmts.push_back(new_elmt);
+    ifelmt->Assign(new_elmt);
+        
+    mesh->SetRootElement(new_elmt);
+  }
+
+  //4. insert a new mesh into a new region of the model
+  std::vector<size_t> element_numbers;
+  for (Element<dim>* e : new_elmts)
+    element_numbers.push_back(e->Idx());
+
+  bool unique_map = true;
+
+  std::string subregion_name("SPLITBOUNDARY_SURFACE");
+  splitboundaryComplex->FormRegionFrom(subregion_name.c_str(), element_numbers, unique_map);
+
+  return true;
+
+} // end InsertRegionFromSplitBoundaries
 
 /**
 Prints current SplitBoundaries to screen

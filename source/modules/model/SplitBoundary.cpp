@@ -459,9 +459,13 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
   }
 
   std::map<size_t, Element<dim>*> elementIdPtr;
-  const typename vector<Element<dim>*>::const_iterator eitEnd( modelRegion.ElementsEnd() );
-  for ( typename vector<Element<dim>*>::const_iterator eit( modelRegion.ElementsBegin() ); eit != eitEnd; ++eit )
-    elementIdPtr[(*eit)->Idx()] = (*eit);
+  deque<const csmp::Node<dim>*>	nodes;
+  deque<csmp::Element<dim>*>		elmts;
+  exploreNodesAndElementsFromMesh(&meshManager, nodes, elmts);
+  sort(elmts.begin(), elmts.end(), [](auto& lhs, auto& rhs) {return lhs->Idx() < rhs->Idx(); });
+  for (auto e : elmts) {
+    elementIdPtr[e->Idx()] = e;
+  }
 
   // creating splitboundary
   CreateFrom( meshManager, femManager, elementIdPtr, interfaceTypes, interfaceParents, interfaceParentNodes );

@@ -1426,7 +1426,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname
 
 
 
-  /// Forms group from the supplied vector of global Element IDs (0..n-1)
+/// Forms group from the supplied vector of global Element IDs (0..n-1)
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname, std::vector<size_t>& element_ids, bool unique_region )
 {
@@ -1472,9 +1472,6 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname
   return true;
 
 } // FormRegionFrom
-
-
-
 
 
 /**

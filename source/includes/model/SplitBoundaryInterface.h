@@ -48,6 +48,8 @@ class SplitBoundaryInterface {
     /// Creation of SplitBoundary between regions
     bool InsertSplitBoundary( const std::string& region1, const std::string& region2, bool createRegionBetween = false );
 
+    bool InsertRegionFromSplitBoundaries();
+
     /// Removes splitboundary
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary, bool deleteElements = false );
 
