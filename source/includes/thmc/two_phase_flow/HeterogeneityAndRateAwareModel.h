@@ -6,23 +6,40 @@
 namespace csmp {
 
 /**
-    First attempt at implementing Maartje Boons & Sally Benson (Stanford visit May 16-23, 2019),
+    Maartje Boons & Sally Benson (Stanford visit May 16-23, 2019),
     model for a layered composite. Material parameters are inferred from rocktype.
     The composite is a dual of averages for the high-k laminations and the w-k ones.
+ 
+    Model Concept
+ 
+    - compute the flow rate dependent saturations in the sublayers of the composite
+      - end-member cases:
+        - viscous limit (VL) where all saturations are the same, i.e. the saturation is uniform and equal to that of the cell
+        - CL where pc(sw_cell_average) is the same everywhere, but the saturations in the layers reflect their pc curves
+      these limiting cases are not directionaly dependent
+    - compute the relperms, layer by layer
+    - apply averaging to find the horizontal (weighted mean) and vertical (harmonic mean) relative permeability pairs
+    - since this model does drainage only, relperm effects of spontaneous imbibition can be ignored
+ 
+    Implementation
+ 
+    - extended curve fitting and interpolation between the curves
+    - there are only 2 flow directions: horizontal and vertical, switch occurs at 45o
+    - the anisotropy of the absolute permeability, is treated by scaling the vertical relative permeabilities with Kv/Kh ratio
+    - capillary pressure is also averaged, but for the vertical CL case a Brooks-Corey model is used,
+      parameterised with the properties of the low permeability layer.
+    - for primary drainage, the capillary entry pressure, pd of the lowest permeability layer is used
  
     see Maple worksheet 'BHP/Stanford-visit/IMPLEMENTATION/HeterogeneityAwareSaturationFunctions'
  
     @note thus far, this is a drainage only model
+    @note an alternative capillary number: k ||grad p|| / sigma   is used to get around the viscosity problem
  
-    @note use alternative capillary number: k ||grad p|| / sigma   to get around viscosity problem
-
-    @note for lambda=0, this implementation of Brooks-Corey model switches to linear
-    @note for linear case capillary pressure is a constant value equal to entry pressure
- 
-    @todo: add capillary entry pressure
-    @todo: define irreducible water saturation and use it in relperm model
+    @todo: perhaps define irreducible water saturation and use it in relperm model
     @todo: check how this can be handled efficiently for a suite of composite rocktypes
     @todo: think about what parameters to keep rather than using functions to compute them on the fly when needed
+ 
+    @todo: change FlowRateDependentLayerSaturations that it deals with horizontal and vertical flow and all funky cases
 
 */
 template<size_t dim>

@@ -3,7 +3,7 @@
 #include "ErrorHandler.h"
 
 
-// #define DEBUG_HETEROGENEITY_AWARE_MODEL
+#define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
 using namespace std;
@@ -103,6 +103,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     TwoPhaseModel<dim>::seff_ = EffectiveSaturation();
 
 // DEBUGGING
+/*
 if ( isnan(TwoPhaseModel<dim>::TotalMobility()) )
   throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                         "mobt = NaN.");
@@ -114,7 +115,7 @@ if ( TwoPhaseModel<dim>::TotalMobility() < 0. )
 if ( TwoPhaseModel<dim>::TotalMobility() <= numeric_limits<double64>::epsilon() )
   throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                         "mobt is zero.");
-
+*/
 #ifdef DEBUG_HETEROGENEITY_AWARE_MODEL
 Out(1);
 // no flow
