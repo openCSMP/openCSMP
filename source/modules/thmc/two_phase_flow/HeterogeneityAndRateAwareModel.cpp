@@ -591,7 +591,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
          sw_    = sw;
          RVC_   = RVC( Nc_ );
          Sw_VL_ = Sw_VL( RVC_ );
-
+         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star_, sw_high_k_star_ );
          ofs << sw << "\t"<< krw_Phase();
          ofs <<"\t"<< krn_Phase();
          ofs <<"\t"<< pc_Phase();
@@ -603,6 +603,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
     Nc_    = original_Nc;
     RVC_   = RVC( Nc_ );
     Sw_VL_ = Sw_VL( RVC_ );
+    FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star_, sw_high_k_star_ );
 
  } // end WriteRelativePermeabilityTable
   
