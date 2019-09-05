@@ -18,6 +18,12 @@ namespace csmp {
 
     @note for lambda=0, this implementation of Brooks-Corey model switches to linear
     @note for linear case capillary pressure is a constant value equal to entry pressure
+ 
+    @todo: add capillary entry pressure
+    @todo: define irreducible water saturation and use it in relperm model
+    @todo: check how this can be handled efficiently for a suite of composite rocktypes
+    @todo: think about what parameters to keep rather than using functions to compute them on the fly when needed
+
 */
 template<size_t dim>
 class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
@@ -51,9 +57,6 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     // maximum absolute value returned by dfdS
     virtual double64 MaxFractionalFlowDerivative() const;
 
-    /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
-    double64  Nc_kgradP_Version() const;
-  
     /// Outputs the relperms for the current model initialisation to a plot for visual examination
     void WriteRelativePermeabilityTable( const char* filename, double64 Ncap );
   
@@ -68,6 +71,12 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     HeterogeneityAndRateAwareModel::FLOW_DIRECTION ProminentFlowDirection() const;
     /// volume averaged irreducible water saturation
     double64 Swr_Composite() const;
+    /// Magnitude of the pressure gradient
+    double64 PressureGradientMagnitude( const Element<dim>& ) const;
+    /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
+    double64  Nc_kgradP_Version( double64 pf_gradient_magnitude ) const;
+  
+    // TODO: add function that assesses whether we are dealing with imbibition or drainage
   
     // LAYER-PARALLEL FLOW
 
@@ -83,45 +92,43 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   
     // (BUOYANCY-DRIVEN) FLOW PERPENDICULAR TO THE LAYERS
 
-  
-    /// @todo: capillary entry pressure
-  
-    /// @todo: capillary threshold pressure (pressure that needs to be overcome to flow across cell)
-  
-    /// @todo: think about what parameters to keep rather than using functions to compute them on the fly when needed
-
   private:
     const csmp::Index  RRT_key_, pf_key_, vt_key_;
   
-    DenseMatrix<DM_MIN>  DN_; ///< form computation of capillary pressure gradient
-    double64             grad_p_magnitude = UNSPECIFIED;
-    VectorVariable<dim>  vt_;
+    mutable DenseMatrix<DM_MIN>  DN_; ///< for gradient computations
+    VectorVariable<dim>          vt_; ///< velocity
   
-    // specific points
-    double64  Nc_; // capillary mumber
-  
-    // rock-sample parameters (read by Initialise function)
-    // TODO: discretise these values on the model via the rock-type file
-    int      rocktype_ = 0;
-    double64 L_low_    = 0.025;
-    double64 L_high_   = 0.025;  ///< cumulative thickness of hiigh-k layers
-    double64 k_low_    = 3.4759e-14;  // low-permeability lamination (default)
-    double64 k_high_   = 3.6075e-13;  // high permeability lamination
+    // properties of Composite1
+    const int      rocktype_ = 1;           ///< FSst-Slt (Fine Sandstone - Silt) Planar Bedding
+    // composite is modelled as a dual of two rock types
+    const double64 L_low_    = 0.025;       ///< cumulative thickness of low-k layers
+    const double64 L_high_   = 0.025;       ///< cumulative thickness of high-k layers
+    const double64 k_low_    = 3.4759e-14;  ///< low-permeability lamination (default)
+    const double64 k_high_   = 3.6075e-13;  ///< high permeability lamination
+    const double64 phi_low_  = 0.15;        ///< porosity of low-perm layer
+    const double64 phi_high_ = 0.27;        ///< porosity of high_perm layer
+    const double64 m_low_    = 0.5;         ///< van Genuchten exponents for the 2 different layers
+    const double64 m_high_   = 0.6;
+    const double64 pd_low_   = 3000.;       ///< entry pressures of layers
+    const double64 pd_high_  = 1000.;
+    const double64 dPc_      = 1.3061e+06;  ///< capillary pressure difference between high_k and low_k layer at connate water saturation
+    const double64 Swi_low_  = 0.18;        ///< irreducible saturations of the 2 different layers (CL)
+    const double64 Swi_high_ = 0.159;
+    const double64 Swc_      = 0.4;         ///< irreducible water saturation of composite measured in lab @todo check
 
     // water saturation
     mutable double64  sw_;
-    // irreducible saturations
-    double64 Swi_low_  = 0.18;      // irreducible saturations of the 2 different layers (CL)
-    double64 Swi_high_ = 0.159;
+
+    // derived quantities
+    double64  grad_p_magnitude_ = UNSPECIFIED;
+    double64  KvKh_ratio_;                  ///< vertical over horizontal permeability ratio
+    double64  X_PV_low_   =  (phi_low_ * L_low_) / (phi_low_ * L_low_+ phi_high_ * L_high_); ///< pore volume fraction of low perm layer
+    double64  Nc_; // capillary mumber
+
+  
     // limits and ratios for composite
      double64 Sw_VL_, RVC_;   ///< as computed from the correlation between Sw_CL amd Sw_VL (not sure however why that should exist)
      
-    // model exponents
-    double64 m_low_    = 0.5;        // van Genuchten exponents for the 2 different layers
-    double64 m_high_   = 0.6;
-    double64 pd_low_   = 3000.;
-    double64 pd_high_  = 1000.;
-    double64 dPc_      = 1.3061e+06; // capillary pressure difference between high_k and low_k layer at connate water saturation
 };
 
 } // end namespace csmp

@@ -2,6 +2,10 @@
 #include "PropertyDatabase.h"
 #include "ErrorHandler.h"
 
+#ifdef DEBUG
+#define DEBUG_HETEROGENEITY_AWARE_MODEL
+#endif
+
 using namespace std;
 
 namespace csmp {
@@ -33,7 +37,28 @@ HeterogeneityAndRateAwareModel<dim>::~HeterogeneityAndRateAwareModel()
  }
  
  
- 
+
+
+    /// Magnitude of the pressure gradient
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
+ {
+    array<double64,3> gradP({0.,0.,0.});
+    e.dN_AtBaryCenter( DN_ );
+    for ( size_t i=0U; i<e.Nodes(); ++i ) {
+         const double64 pf = e.N(i)->Read( pf_key_ );
+         for ( size_t j=0U; j<dim; ++j )
+         gradP[j] += DN_(j,i) * pf;
+      }
+    double64 grad_p_magnitude = 0.;
+    for ( size_t j=0U; j<dim; ++j )
+      grad_p_magnitude += gradP[j] * gradP[j];
+    grad_p_magnitude = sqrt(grad_p_magnitude_);
+   
+    return grad_p_magnitude;
+
+} // end GradP_Magnitude
+
 
 /**
     Computing the magnitude of the capillary pressure gradient.
@@ -43,25 +68,9 @@ template<size_t dim>
 void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
-//    rocktype_ = static_cast<int>(e.Read( RRT_key_ ));
 
-    // computing the magnitude of the pressure gradient
-    array<double64,3> gradP({0.,0.,0.});
-    e.dN_AtBaryCenter( DN_ );
-    for ( size_t i=0U; i<e.Nodes(); ++i ) {
-         const double64 pf = e.N(i)->Read( pf_key_ );
-         for ( size_t j=0U; j<dim; ++j )
-         gradP[j] += DN_(j,i) * pf;
-      }
-    grad_p_magnitude = 0;
-    for ( size_t j=0U; j<dim; ++j )
-      grad_p_magnitude += gradP[j] * gradP[j];
-    grad_p_magnitude = sqrt(grad_p_magnitude);
-
-    // total velocity to get flow direction
-    e.Read( vt_key_, vt_ );
-    flow_direction_ = ProminentFlowDirection();
+    // inferring input parameters from the rocktype
+    // rocktype_ = static_cast<int>(e.Read( RRT_key_ ));
 
     // if saturation is an element variable
     if (!TwoPhaseModel<dim>::sw_ro_mu_placement_) {
@@ -81,9 +90,16 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
          TwoPhaseModel<dim>::rhw_ = e.PropertyValueAtBaryCenter( TwoPhaseModel<dim>::rhw_key_ );
       }
    
+    // computing the magnitude of the pressure gradient
+    e.Read( vt_key_, vt_ );
+    flow_direction_   = ProminentFlowDirection();
+    grad_p_magnitude_ = PressureGradientMagnitude(e);
+
     // communicating assigned values to base class to get information for testing
-    TwoPhaseModel<dim>::k_    = (flow_direction_ == HORIZONTAL) ? PermeabilityParallelToLaminations()
-                                                                : PermeabilityPerpendicularToLaminations();
+    const double64      kv   = PermeabilityPerpendicularToLaminations();
+    const double64      kh   = PermeabilityParallelToLaminations();
+    TwoPhaseModel<dim>::k_   = (flow_direction_ == HORIZONTAL) ? kh : kv;
+    KvKh_ratio_              = kv / kh;
     TwoPhaseModel<dim>::tensor_permeability_ = false; // TODO: Needs to change later
     TwoPhaseModel<dim>::swr_  = Swr_Composite();
     TwoPhaseModel<dim>::snr_  = 0.;
@@ -91,15 +107,39 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     TwoPhaseModel<dim>::ift_  = 0.035; // 35 mN/m water - CO2
 
     // dynamic parameters
-    Nc_    = Nc_kgradP_Version(); // capillary number
+    Nc_    = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
     RVC_   = RVC( Nc_ );
     Sw_VL_ = Sw_VL( RVC_ );
 
 // DEBUGGING
-//Out(1);
-//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
-//WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-4", 1.0e-5 );
-//cerr <<".";
+#ifdef DEBUG_HETEROGENEITY_AWARE_MODEL
+Out(1);
+// no flow
+vt_(0) = 0.;
+vt_(1) = 0.;
+flow_direction_   = ProminentFlowDirection();
+Nc_               = 0.;
+RVC_              = RVC( Nc_ );
+Sw_VL_            = Sw_VL( RVC_ );
+grad_p_magnitude_ = 0.;
+WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
+// horizontal flow
+vt_(0) = 1.0e-6;
+vt_(1) = 0.;
+flow_direction_   = ProminentFlowDirection();
+Nc_               = 1.0e-6;
+RVC_              = RVC( Nc_ );
+Sw_VL_            = Sw_VL( RVC_ );
+grad_p_magnitude_ = 1.0e-9;
+WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-6", 1.0e-6 );
+// vertical flow
+vt_(0) = 0.;
+vt_(1) = 1.0e-6;
+flow_direction_ = ProminentFlowDirection();
+WriteRelativePermeabilityTable( "Maartje2_layer_perpendicular_Nc-6", 1.0e-6 );
+throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                       "written relative permeability curves to file for testing.");
+#endif
 
  } // end Initialize
 
@@ -135,13 +175,17 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminat
 
 
 /**
-    Prominent direction of flow
+    Computes prominent direction of the flow of the fluid mixture.
  
     Uses total velocity, vt, to establish whether vertical component of flow is greater than horizontal one.
+ 
+    @note if the flow velocity magnitude is below threshold value, HORIZONAL is returned.
 */
 template<size_t dim>
 typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection() const
  {
+     if ( fabs(vt_[0]+vt_[1]) <= numeric_limits<double64>::epsilon() ) return HORIZONTAL;
+   
      // comparing the vertical component with the horizontal magnitude of the flow
      const double64 horizontal_magnitude = ( dim == 2U )  ? vt_[0] : sqrt( vt_[0]*vt_[0] + vt_[2]*vt_[2] );
      FLOW_DIRECTION direction = ( fabs(vt_[1]) > horizontal_magnitude ) ? VERTICAL : HORIZONTAL;
@@ -152,11 +196,10 @@ typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION HeterogeneityAndRat
 
 /// pressure gradient form: Nc = k ||grad p|| / sigma
 template<size_t dim>
-double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version() const
+double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double64 pf_gradient_magnitude ) const
  {
-     assert( grad_p_magnitude != UNSPECIFIED );
-   
-     return PermeabilityParallelToLaminations() * grad_p_magnitude / TwoPhaseModel<dim>::ift_;
+     assert( pf_gradient_magnitude != UNSPECIFIED );
+     return PermeabilityParallelToLaminations() * pf_gradient_magnitude / TwoPhaseModel<dim>::ift_;
  }
 
 
@@ -266,7 +309,9 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  {
     if ( sw_ <= Swr_Composite() ) return 0.;
    
-//    if ( flow_direction_ == HORIZONTAL ) {
+    // layer-parallel case
+    // -------------------
+    if ( flow_direction_ == HORIZONTAL ) {
          double64 Sw_low_k_star, Sw_high_k_star;
          FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
 
@@ -280,16 +325,24 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
    
          // Krw_ave=((Krw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
          return min( max( (L_high_ * Krw_high_k * k_high_ + L_low_ * Krw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
-//      }
+      }
    
     // layer-perpendicular case
     // ------------------------
-    return ScalarVariable()();
+    // Maartje 2/9/2019
+    double64 u = vt_.Length() * KvKh_ratio_;
+    //If ux=>5e-5 m/s use viscous limit relative permeability curves.
+    //If ux=<5e-7 m/s use capillary limit relative permeablity curves.
+    u = min( max( u, 5.0e-5 ), 5.0e-7 );
+   
+    const double64 krw = (0.6554e37 * pow(u,0.8e1) - 0.1456e34 * pow(u,0.7e1) + 0.1352e30 * pow(u,0.6e1) - 0.6797e25 * pow(u,0.5e1) + 0.2007e21 * pow(u,0.4e1) - 0.3526e16 * pow(u,0.3e1) + 0.3547e11 * u * u - 0.1815e6 * u + 0.9447e0) * pow(sw_,-0.5214e19 * pow(u,0.4e1) + 0.6725e15 * pow(u,0.3e1) - 0.3122e11 * u * u + 0.6112e6 * u + 0.4933e1) - 0.1177e37 * pow(u,0.8e1) + 0.2601e33 * pow(u,0.7e1) - 0.2404e29 * pow(u, 0.6e1) + 0.1205e25 * pow(u,0.5e1) - 0.3558e20 * pow(u,0.4e1) + 0.6307e15 * pow(u,0.3e1) - 0.6549e10 * u * u + 0.3644e5 * u - 0.5009e-1;
+   
+    return max( krw, 0. );
    
  } // end krw_Phase
 
 
-/*   Maple from Matlab script gives same results:
+/*   Maple version derived from Matlab script gives same results for horizontal case:
 
          // Krw_high_k
          const double64 t1 = sqrt(Sw_high_k_star);
@@ -321,7 +374,9 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
     const double64 percolation_threshold_nw(0.01);
     if ( (1. - sw_) <= percolation_threshold_nw ) return 0.;
 
-//    if ( flow_direction_ == HORIZONTAL ) {
+    // layer-parallel case
+    // ------------------------
+    if ( flow_direction_ == HORIZONTAL ) {
          double64 Sw_low_k_star, Sw_high_k_star;
          FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
 
@@ -333,12 +388,21 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
 
          // Krnw_ave=((Krnw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krnw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
          return min( max( (L_high_ * Krnw_high_k * k_high_ + L_low_ * Krnw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
-//      }
+      }
    
     // layer-perpendicular case
     // ------------------------
-    return ScalarVariable()();
- }
+    // Maartje 2/9/2019
+    double64 u = vt_.Length() * KvKh_ratio_;
+    //If ux=>5e-5 m/s use viscous limit relative permeability curves.
+    //If ux=<5e-7 m/s use capillary limit relative permeablity curves.
+    u = min( max( u, 5.0e-5 ), 5.0e-7 );
+    
+    const double64 krn = (-0.3228e9 * u * u + 0.3561e5 * u + 0.2139e0) * pow(-0.2838e37 * pow(u,0.8e1) + 0.6254e33 * pow(u,0.7e1) - 0.5748e29 * pow(u,0.6e1) + 0.2856e25 * pow(u,0.5e1) - 0.8316e20 * pow(u,0.4e1) + 0.1438e16 * pow(u,0.3e1) - 0.1422e11 * u * u + 0.707e5 * u + 0.8596e0 - sw_, 0.2e1);
+   
+    return min( krn, 1. );
+
+ } // end krn_Phase
 
 
 /*  Maple from Matlab script gives same results:
@@ -383,19 +447,24 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
     double64 sw_low_k_star, sw_high_k_star;
     FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star, sw_high_k_star );
 
-//    if ( flow_direction_ == HORIZONTAL ) {
+    if ( flow_direction_ == HORIZONTAL ) {
          // Pc_drain_high = Pd_high * ((Sw_star_high)^(-1/m_high) - 1)^(1-m_high)
          const double64 Pc_drain_high = pd_high_ * pow( (pow( max(Swi_high_,sw_high_k_star), -1./m_high_ ) - 1.), 1. - m_high_ );
          // Pc_drain_low=Pd_low.*((Sw_star_low).^(-1/m_low)-1).^(1-m_low)
          const double64 Pc_drain_low  = pd_low_ * pow( (pow( max(Swi_low_,sw_low_k_star), -1./m_low_ ) - 1.), 1. - m_low_ );
-      
-         // averaging
-         return min( (L_high_ * Pc_drain_high + L_low_ * Pc_drain_low) / (L_high_ + L_low_), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ );
-//      }
+         // thickness-weighted averaging, value must be greater than entry pressure of the more permeable layer
+         return max( min( (L_high_ * Pc_drain_high + L_low_ * Pc_drain_low) / (L_high_ + L_low_), TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_ ), pd_high_ );
+      }
 
     // layer-perpendicular case (just using the properties of the low_k layer
     // ----------------------------------------------------------------------
-    return pd_low_ * pow( (pow( max(Swi_low_,sw_low_k_star), -1./m_low_ ) - 1.), 1. - m_low_ );
+// HAS NO ENTRY PRESSURE EFFECT:    return pd_low_ * pow( (pow( max(Swi_low_,sw_low_k_star), -1./m_low_ ) - 1.), 1. - m_low_ );
+    // capping pc_max by dissallowing Sw values below the irreducible saturation of composite
+    const double64 sw = max( sw_, Swr_Composite() );
+    const double64 lambda = (m_low_ / (1. - m_low_)) * (1. - pow( sw, 1./m_low_ ));
+    assert( lambda <= 10. );
+    // Brooks-Corey for low-k layer instead (checked against Helmig, 97)
+    return ( sw > 1. - numeric_limits<double64>::epsilon() ) ? pd_low_ : pd_low_ * pow( sw, -1. / lambda );
 
  } // end pc_Phase
 
@@ -521,7 +590,7 @@ void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nHeterogeneityAndRateAwareModel<"<< dim << ">::Out: Additional properties and return values of functions: "<< endl;
     cout <<"\nelement properties:";
-    cout <<"\n                           total velocity (m/s): "<< vt_;
+    cout <<"\n                                 velocity (m/s): "<< vt_;
     if ( ProminentFlowDirection() == HORIZONTAL ) cout <<", dominantly horizontal flow.";
     else cout <<", dominantly vertical flow.";
     cout <<"\n                           capillary number, Nc: "<< Nc_;
