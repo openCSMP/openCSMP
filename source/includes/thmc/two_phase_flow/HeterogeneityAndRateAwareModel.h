@@ -127,8 +127,9 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
 
   
     // limits and ratios for composite
-     double64 Sw_VL_, RVC_;   ///< as computed from the correlation between Sw_CL amd Sw_VL (not sure however why that should exist)
-     
+    double64 Sw_VL_, RVC_;                     ///< as computed from the correlation between Sw_CL amd Sw_VL (not sure however why that should exist)
+    double64 sw_low_k_star_, sw_high_k_star_;  ///< effective saturations in the low and high k layers at the given Nc and flow direction
+  
 };
 
 } // end namespace csmp

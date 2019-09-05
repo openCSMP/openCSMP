@@ -2,9 +2,9 @@
 #include "PropertyDatabase.h"
 #include "ErrorHandler.h"
 
-#ifdef DEBUG
-#define DEBUG_HETEROGENEITY_AWARE_MODEL
-#endif
+
+// #define DEBUG_HETEROGENEITY_AWARE_MODEL
+
 
 using namespace std;
 
@@ -39,26 +39,6 @@ HeterogeneityAndRateAwareModel<dim>::~HeterogeneityAndRateAwareModel()
  
 
 
-    /// Magnitude of the pressure gradient
-template<size_t dim>
-double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
- {
-    array<double64,3> gradP({0.,0.,0.});
-    e.dN_AtBaryCenter( DN_ );
-    for ( size_t i=0U; i<e.Nodes(); ++i ) {
-         const double64 pf = e.N(i)->Read( pf_key_ );
-         for ( size_t j=0U; j<dim; ++j )
-         gradP[j] += DN_(j,i) * pf;
-      }
-    double64 grad_p_magnitude = 0.;
-    for ( size_t j=0U; j<dim; ++j )
-      grad_p_magnitude += gradP[j] * gradP[j];
-    grad_p_magnitude = sqrt(grad_p_magnitude_);
-   
-    return grad_p_magnitude;
-
-} // end GradP_Magnitude
-
 
 /**
     Computing the magnitude of the capillary pressure gradient.
@@ -72,6 +52,9 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     // inferring input parameters from the rocktype
     // rocktype_ = static_cast<int>(e.Read( RRT_key_ ));
 
+
+    // 1. base class parameter initialisation
+    // --------------------------------------
     // if saturation is an element variable
     if (!TwoPhaseModel<dim>::sw_ro_mu_placement_) {
          sw_ = TwoPhaseModel<dim>::sat_ = e.Read( TwoPhaseModel<dim>::sat_key_ );
@@ -90,28 +73,48 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
          TwoPhaseModel<dim>::rhw_ = e.PropertyValueAtBaryCenter( TwoPhaseModel<dim>::rhw_key_ );
       }
    
+    // permeability anisotropy
+    const double64 kv = PermeabilityPerpendicularToLaminations();
+    const double64 kh = PermeabilityParallelToLaminations();
+    KvKh_ratio_       = kv / kh;
+
+    // communicating assigned values to base class to get information for testing
+    TwoPhaseModel<dim>::k_   = (flow_direction_ == HORIZONTAL) ? kh : kv;
+    TwoPhaseModel<dim>::tensor_permeability_ = false; // TODO: Needs to change later
+    TwoPhaseModel<dim>::swr_  = Swr_Composite();
+    TwoPhaseModel<dim>::snr_  = 0.;
+    TwoPhaseModel<dim>::ift_  = 0.035; // 35 mN/m water - CO2
+
+
+    // 2. Flow-rate and direction dependent parameters
+    // -----------------------------------------------
     // computing the magnitude of the pressure gradient
     e.Read( vt_key_, vt_ );
     flow_direction_   = ProminentFlowDirection();
     grad_p_magnitude_ = PressureGradientMagnitude(e);
-
-    // communicating assigned values to base class to get information for testing
-    const double64      kv   = PermeabilityPerpendicularToLaminations();
-    const double64      kh   = PermeabilityParallelToLaminations();
-    TwoPhaseModel<dim>::k_   = (flow_direction_ == HORIZONTAL) ? kh : kv;
-    KvKh_ratio_              = kv / kh;
-    TwoPhaseModel<dim>::tensor_permeability_ = false; // TODO: Needs to change later
-    TwoPhaseModel<dim>::swr_  = Swr_Composite();
-    TwoPhaseModel<dim>::snr_  = 0.;
+    Nc_               = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
+    RVC_              = RVC( Nc_ );
+    Sw_VL_            = Sw_VL( RVC_ );
+    // default values (VL case, where the sample saturation is uniform)
+    sw_low_k_star_ = sw_high_k_star_ = sw_;
+    // VERY IMPORTANT as the whole model is based on this
+    FlowRateDependentLayerSaturations( Sw_VL_, RVC_, sw_low_k_star_, sw_high_k_star_ );
+    // ATTENTION: do not move: seff depends on Nc, RVC and flow direction
     TwoPhaseModel<dim>::seff_ = EffectiveSaturation();
-    TwoPhaseModel<dim>::ift_  = 0.035; // 35 mN/m water - CO2
-
-    // dynamic parameters
-    Nc_    = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
-    RVC_   = RVC( Nc_ );
-    Sw_VL_ = Sw_VL( RVC_ );
 
 // DEBUGGING
+if ( isnan(TwoPhaseModel<dim>::TotalMobility()) )
+  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                        "mobt = NaN.");
+
+if ( TwoPhaseModel<dim>::TotalMobility() < 0. )
+  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                        "mobt is negative.");
+
+if ( TwoPhaseModel<dim>::TotalMobility() <= numeric_limits<double64>::epsilon() )
+  throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
+                        "mobt is zero.");
+
 #ifdef DEBUG_HETEROGENEITY_AWARE_MODEL
 Out(1);
 // no flow
@@ -194,6 +197,30 @@ typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION HeterogeneityAndRat
 
 
 
+/**
+    Returns the magnitude of the pressure gradient
+*/
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
+ {
+    array<double64,3> gradP({0.,0.,0.});
+    e.dN_AtBaryCenter( DN_ );
+    for ( size_t i=0U; i<e.Nodes(); ++i ) {
+         const double64 pf = e.N(i)->Read( pf_key_ );
+         for ( size_t j=0U; j<dim; ++j )
+         gradP[j] += DN_(j,i) * pf;
+      }
+    double64 grad_p_magnitude = 0.;
+    for ( size_t j=0U; j<dim; ++j )
+      grad_p_magnitude += gradP[j] * gradP[j];
+    grad_p_magnitude = sqrt(grad_p_magnitude);
+   
+    return grad_p_magnitude;
+
+} // end PressureGradientMagnitude
+
+
+
 /// pressure gradient form: Nc = k ||grad p|| / sigma
 template<size_t dim>
 double64 csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double64 pf_gradient_magnitude ) const
@@ -266,11 +293,14 @@ double64 HeterogeneityAndRateAwareModel<dim>::Sw_CL( double64 sw_VL ) const
 
 
 /**
-    from the average cell saturation at the viscous limit,
-    and the viscous-to-capillary force ratio, compute the lamination saturations at the given capillary number.
+    From the average cell saturation at the viscous limit, and the given capillary number and
+    viscous-to-capillary force ratio, this method computes the effective saturations in the individual laminations.
  
     @note the effective saturations are bracketed to 0..1 to avoid error propagation when the model is applied outside of its
     established saturation range.
+ 
+    TODO: extend this method to contain both, the horizontal and vertical flow cases
+    TODO: include the VL and CL cases: in vertical VL case sw=s_ave and is the same in all layers
 */
 template<size_t dim>
 void HeterogeneityAndRateAwareModel<dim>::FlowRateDependentLayerSaturations( double64 sw_VL, double64 RVC, double64& sw_low_k_star, double64& sw_high_k_star ) const
@@ -312,16 +342,13 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
     // layer-parallel case
     // -------------------
     if ( flow_direction_ == HORIZONTAL ) {
-         double64 Sw_low_k_star, Sw_high_k_star;
-         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
-
          // Krw_high_k=(Sw_high_k_star^0.5)*(1-(1-Sw_high_k_star^(1/m_high))^m_high)^2
-         double64 term = 1. - pow( 1. - pow( Sw_high_k_star, (1./m_high_)), m_high_ );
-         const double64 Krw_high_k = sqrt( Sw_high_k_star ) * (term * term);
+         double64 term = 1. - pow( 1. - pow( sw_high_k_star_, (1./m_high_)), m_high_ );
+         const double64 Krw_high_k = sqrt( sw_high_k_star_ ) * (term * term);
  
          // Krw_low_k=(Sw_low_k^0.5)*(1-(1-Sw_low_k^(1/m_low))^m_low)^2
-         term = 1. - pow( 1. - pow( Sw_low_k_star, (1./m_low_)), m_low_ );
-         const double64 Krw_low_k = sqrt( Sw_low_k_star ) * (term * term);
+         term = 1. - pow( 1. - pow( sw_low_k_star_, (1./m_low_)), m_low_ );
+         const double64 Krw_low_k = sqrt( sw_low_k_star_ ) * (term * term);
    
          // Krw_ave=((Krw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
          return min( max( (L_high_ * Krw_high_k * k_high_ + L_low_ * Krw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
@@ -337,7 +364,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
    
     const double64 krw = (0.6554e37 * pow(u,0.8e1) - 0.1456e34 * pow(u,0.7e1) + 0.1352e30 * pow(u,0.6e1) - 0.6797e25 * pow(u,0.5e1) + 0.2007e21 * pow(u,0.4e1) - 0.3526e16 * pow(u,0.3e1) + 0.3547e11 * u * u - 0.1815e6 * u + 0.9447e0) * pow(sw_,-0.5214e19 * pow(u,0.4e1) + 0.6725e15 * pow(u,0.3e1) - 0.3122e11 * u * u + 0.6112e6 * u + 0.4933e1) - 0.1177e37 * pow(u,0.8e1) + 0.2601e33 * pow(u,0.7e1) - 0.2404e29 * pow(u, 0.6e1) + 0.1205e25 * pow(u,0.5e1) - 0.3558e20 * pow(u,0.4e1) + 0.6307e15 * pow(u,0.3e1) - 0.6549e10 * u * u + 0.3644e5 * u - 0.5009e-1;
    
-    return max( krw, 0. );
+    return max( krw * KvKh_ratio_, 0. );
    
  } // end krw_Phase
 
@@ -377,14 +404,11 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
     // layer-parallel case
     // ------------------------
     if ( flow_direction_ == HORIZONTAL ) {
-         double64 Sw_low_k_star, Sw_high_k_star;
-         FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
-
          // Krnw_high_k=((1-Sw_high_k)^2).*((1-Sw_high_k^2))
-         const double64 Krnw_high_k = ((1. - Sw_high_k_star)*(1. - Sw_high_k_star)) * (1. - Sw_high_k_star*Sw_high_k_star);
+         const double64 Krnw_high_k = ((1. - sw_high_k_star_)*(1. - sw_high_k_star_)) * (1. - sw_high_k_star_ * sw_high_k_star_);
 
          // Krnw_low_k=((1-Sw_low_k)^2)*((1-Sw_low_k^2))
-         const double64 Krnw_low_k = ((1. - Sw_low_k_star)*(1. - Sw_low_k_star)) * (1. - Sw_low_k_star*Sw_low_k_star);
+         const double64 Krnw_low_k = ((1. - sw_low_k_star_)*(1. - sw_low_k_star_)) * (1. - sw_low_k_star_ * sw_low_k_star_);
 
          // Krnw_ave=((Krnw_high_k.*k_high.*(Ly1+Ly3+Ly5))+(Krnw_low_k.*k_low.*(Ly2+Ly4)))./(k_ave.*(Ly1+Ly2+Ly3+Ly4+Ly5));
          return min( max( (L_high_ * Krnw_high_k * k_high_ + L_low_ * Krnw_low_k * k_low_) / (k_high_ * L_high_ + k_low_ * L_low_), 0. ), 1. );
@@ -400,7 +424,7 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
     
     const double64 krn = (-0.3228e9 * u * u + 0.3561e5 * u + 0.2139e0) * pow(-0.2838e37 * pow(u,0.8e1) + 0.6254e33 * pow(u,0.7e1) - 0.5748e29 * pow(u,0.6e1) + 0.2856e25 * pow(u,0.5e1) - 0.8316e20 * pow(u,0.4e1) + 0.1438e16 * pow(u,0.3e1) - 0.1422e11 * u * u + 0.707e5 * u + 0.8596e0 - sw_, 0.2e1);
    
-    return min( krn, 1. );
+    return min( krn * KvKh_ratio_, 1. );
 
  } // end krn_Phase
 
@@ -473,16 +497,18 @@ double64 HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
 
 /**
     SKM: thickness-weighted average of the effective saturations in the high and the low k laminations.
+ 
+    @attention must always be called first because Seff must be communicated with the base class.
 */
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
  {
-    double64 Sw_low_k_star, Sw_high_k_star;
-    FlowRateDependentLayerSaturations( Sw_VL_, RVC_, Sw_low_k_star, Sw_high_k_star );
+    if ( flow_direction_ == HORIZONTAL )
+      return (L_high_ * sw_high_k_star_ + L_low_ * sw_low_k_star_) / (L_high_ + L_low_);
    
-    return (L_high_ * Sw_high_k_star + L_low_ * Sw_low_k_star) / (L_high_ + L_low_);
+    return (sw_ - TwoPhaseModel<dim>::swr_) / (1. - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_);
    
- } // end
+ } // end EffectiveSaturation
 
 
 
