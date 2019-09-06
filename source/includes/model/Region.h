@@ -108,11 +108,12 @@ public:
           const std::deque<Element<dim>*>&,
           const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
 
-                                   // --------------------------------------------
-                                   // Property input/output
-                                   // --------------------------------------------
 
-                                   /// outputs region into VSet polygonal data container; all properties may be output as well
+ // --------------------------------------------
+ // Property input/output
+ // --------------------------------------------
+
+  /// outputs region into VSet polygonal data container; all properties may be output as well
   void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;
 
   /// outputs region into VSet polygonal data container, including a selected list of properties
