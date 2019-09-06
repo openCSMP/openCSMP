@@ -708,6 +708,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBo
         
     mesh->SetRootElement(new_elmt);
   }
+  establishNeighborConnectivity(new_elmts); // update the new elements' neighbour connectivity
 
   //4. insert a new mesh into a new region of the model
   std::vector<size_t> element_numbers;
@@ -715,7 +716,6 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBo
     element_numbers.push_back(e->Idx());
 
   bool unique_map = true;
-
   std::string subregion_name("SPLITBOUNDARY_SURFACE");
   splitboundaryComplex->FormRegionFrom(subregion_name.c_str(), element_numbers, unique_map);
 

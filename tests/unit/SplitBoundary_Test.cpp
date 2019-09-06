@@ -83,7 +83,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double64 shift )
             baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
             displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
             displacementToBaryCenter.NormalizeLengthTo( 1.0 );
-            displacementToBaryCenter *= shift;//static_cast<double64>(null_neighbors);
+            displacementToBaryCenter *= shift;
             (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
             (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
           }
@@ -424,15 +424,15 @@ void SplitBoundary_Test::TestSplitNodeAssignment( const Model<dim>& model )
   set<size_t> not_duplicated_nodes;
   not_duplicated_nodes.clear();
 
-  // Loop over SplitBoundaries
+  // loop over SplitBoundaries
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
-    // Loop over InterFaces
+    // loop over InterFaces
     for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
     {
       if ( NoNeighborNull( *(*ifit) ) )
       {
-        // Interior interfaces
+        // interior interfaces
 
         const Element<dim>* const outerParent( (*ifit)->Parent( OUTSIDE ) );
         for ( size_t n( 0 ); n < outerParent->Nodes(); ++n )
@@ -475,14 +475,14 @@ void SplitBoundary_Test::TestSplitNodeAssignment( const Model<dim>& model )
 
       }
       else {
-        // Perimeter interfaces
+        // perimeter interfaces
         for ( size_t i = 0; i<(*ifit)->Nodes(); ++i )
           if ( (*ifit)->N( i, INSIDE )->Idx() == (*ifit)->N( i, OUTSIDE )->Idx() )
             not_duplicated_nodes.insert( (*ifit)->N( i )->Idx() );
       }
     }
 
-    // Check whether the not duplicated nodes are sorted correctly
+    // check whether the not duplicated nodes are sorted correctly
     set<size_t>::const_iterator nidx( not_duplicated_nodes.begin() );
     if ( not_duplicated_nodes.size() == spbit->second.PerimeterNodes() )
       for ( typename std::vector<Node<dim>* >::const_iterator nit = spbit->second.PerimeterNodesBegin(); nit != spbit->second.NodesEnd(); ++nit, ++nidx )
@@ -509,10 +509,10 @@ void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& 
 
   Index normal_idx( model.Database().StorageKey( "element vector" ) );
 
-  // Loop over SplitBoundaries
+  // loop over SplitBoundaries
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
-    // Loop over InterFaces
+    // loop over InterFaces
     for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
     {
       (*ifit)->UnitNormal( nrml_in, INSIDE );
@@ -533,7 +533,7 @@ void SplitBoundary_Test::TestUnitNormals( Model<dim>& model, const std::string& 
 template<size_t dim>
 void SplitBoundary_Test::VisualiseSplitBoundaries( Model<dim>& model, const std::string& test_name )
 {
-  // Visualization
+  // visualization
   VTU_Interface<dim> vtu( model );
   vtu.OmitZeroInFileName( false );
   list<string> outputProps;
@@ -558,19 +558,19 @@ void SplitBoundary_Test::VisualiseSplitBoundaries( Model<dim>& model, const std:
   Index node_prop_idx( model.Database().StorageKey( "nodal variable" ) );
   Index element_prop_idx( model.Database().StorageKey( "element variable" ) );
 
-  // Loop over SplitBoundaries
+  // loop over SplitBoundaries
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
     interfaceValue += 1.0;
 
-    // Loop over InterFaces
+    // loop over InterFaces
     for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
     {
       (*ifit)->Parent( INSIDE )->Read( element_prop_idx, interfaceValueRead );
-      interfaceValueWrite = +1;// interfaceValueRead - interfaceValue;
+      interfaceValueWrite = +1;
       (*ifit)->Parent( INSIDE )->Store( element_prop_idx, interfaceValueWrite );
       (*ifit)->Parent( OUTSIDE )->Read( element_prop_idx, interfaceValueRead );
-      interfaceValueWrite = -1;// interfaceValueRead + interfaceValue;
+      interfaceValueWrite = -1;
       (*ifit)->Parent( OUTSIDE )->Store( element_prop_idx, interfaceValueWrite );
 
       for ( size_t i = 0; i<(*ifit)->Nodes(); ++i )
@@ -602,7 +602,7 @@ void SplitBoundary_Test::VisualiseSplitBoundaries( Model<dim>& model, const std:
 template<size_t dim>
 void SplitBoundary_Test::PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& interfaces, double64 displacement )
 {
-  // Pull apart SplitBoundaries
+  // pull apart SplitBoundaries
   std::string split_boundary_name;
 
   size_t split_boundaries( model.SplitBoundaries() );
@@ -618,7 +618,7 @@ void SplitBoundary_Test::PullApartSplitboundaries( Model<dim>& model, std::vecto
 template<size_t dim>
 void SplitBoundary_Test::PullApartSplitboundaries( Model<dim>& model, double64 displacement )
 {
-  // Pull apart SplitBoundaries
+  //pPull apart SplitBoundaries
   for ( typename Model<dim>::splitBoundaryIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
     shiftSplitBoundary( (*spbit).second, displacement );
 }
@@ -635,7 +635,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
   else if ( dim == 3U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
 
-  // Visualization
+  // visualization
   VTU_Interface<dim> vtu( *model );
   vtu.OmitZeroInFileName( false );
   list<string> outputProps;
@@ -668,7 +668,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
   else if ( dim == 3U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
 
-  // Visualization
+  // visualization
   VTU_Interface<dim> vtu( *model );
   vtu.OmitZeroInFileName( false );
   list<string> outputProps;
@@ -708,12 +708,12 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   string  spliboundary_regions_file( model_name );
 
-  // 1. interface sets
+  // 1. InterFace sets
   std::set<std::string> interface_basic_sets;
   std::set<std::string> interface_sets;
   inputFromFile( std::string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), interface_basic_sets );
 
-  // 2. Splitting input regions if they are discontigouos
+  // 2. splitting input regions if they are discontigouos
   bool discontiguous_regions( false );
   for ( set<string>::const_iterator it = interface_basic_sets.begin(); it != interface_basic_sets.end(); ++it )
     if ( !model->IsContiguous( (*it).c_str() ) ) {
@@ -731,7 +731,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
       model->PartitionRegionIntoContiguousSubRegions( (*it).c_str() );
   }
 
-  // 2. Preparing low dimensional regions for making SplitBoundaries around
+  // 2. preparing low dimensional regions for making SplitBoundaries around
   etablishContiguosRegionsList( *model, interface_basic_sets, interface_sets );
 
   model->MergeRegions( interface_sets, "interfaces" );
@@ -745,19 +745,20 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
 
-  // 3. Creating SplitBoundaries
+  // 3. creating SplitBoundaries
   for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ )
     model->InsertSplitBoundary( (*it).c_str() );
 
-  // 4. create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
+  // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
   model->InsertRegionFromSplitBoundaries();
 
+  // 5. Writing it 
   model->OutputToBinaryFile( model_name.c_str() );
 }
 
 
-// input name of regions to split
+/// Input name of regions to split
 void SplitBoundary_Test::inputFromFile( const char* file_name,
                                         std::set<string>& interface_basic_set )
 {
@@ -798,7 +799,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
 } // end inputFromFile
 
 
-  /// input name of regions to split
+/// Input name of regions to split
 template<size_t dim>
 void SplitBoundary_Test::etablishContiguosRegionsList( Model<dim>& model,
                                                        const std::set<string>& interface_basic_set,
@@ -829,7 +830,7 @@ void SplitBoundary_Test::etablishContiguosRegionsList( Model<dim>& model,
 } // end inputFromFile
 
 
-  /// input name of regions to split
+/// Input name of regions to split
 void SplitBoundary_Test::inputFromFile( const char* file_name,
                                         std::vector<string>& interfaces )
 {
@@ -870,7 +871,7 @@ void SplitBoundary_Test::inputFromFile( const char* file_name,
 } // end inputFromFile
 
 
-  /// write contiguous regions
+/// Write contiguous regions
 void SplitBoundary_Test::outputToFile( const char* file_name,
                                        const std::vector<string>& interfaces )
 {
@@ -895,7 +896,7 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
 } // end outputToFile
 
 
-  /// write interface regions
+/// Write interface regions
 void SplitBoundary_Test::outputToFile( const char* file_name,
                                        const std::set<string>& interfaces )
 {
@@ -920,8 +921,8 @@ void SplitBoundary_Test::outputToFile( const char* file_name,
 } // end outputToFile
 
 
-  /// TESTS
-  /// SPLITBOUNDARY BETWEEN REGIONS
+/// TESTS
+/// SPLITBOUNDARY BETWEEN REGIONS
 template<size_t dim>
 void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& model_name )
 {
@@ -938,7 +939,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   test_name += "_";
   test_name += model_name;
 
-  // Load Model
+  // load Model
   const std::string variables_file( "SplitBoundary_Test-variables.txt" );
 
   Model<dim>* modelIN = NULL;
@@ -959,7 +960,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
     if ( verbose_ ) cout << "\n\tboundary: " << (*it).first;
   if ( verbose_ ) cout << endl;
 
-  // Create SplitBoundaries
+  // create SplitBoundaries
   std::vector<std::string> regions;
   regions.reserve( modelIN->UniqueRegions() );
 
@@ -971,7 +972,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
       regions.push_back( (*it).second.Name() );
   }
 
-  // Search the existing unique sub-regions
+  // search the existing unique sub-regions
   set<pair<string, string>>	discovered;
   deque<string>	current_regions;
   vector<pair<string, string>>  region_final_pairs;
@@ -1014,7 +1015,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
   modelIN->InsertRegionFromSplitBoundaries();
 
-  // Read Model from Binary
+  // read Model from Binary
   modelIN->OutputToBinaryFile( model_name.c_str() );
   Model<dim> model( model_name.c_str() );
   cout << "\nNodes: " << model.Mesh().Nodes() << "\n";
@@ -1026,7 +1027,7 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   cout << "\nInterfaces: " << model.Mesh().InterFaces() << "\n";
   cout << "\nInterface Groups: " << model.Mesh().InterFaceGroups() << "\n";
 
-  // Tests
+  // tests
   TestSplitNodeAssignment( model );
   TestUnitNormals( model, test_name.c_str() );
   double64 displacement( 0.001 );
@@ -1049,11 +1050,11 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
 
   if ( verbose_ ) std::cerr << "\nStart " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";
     
-  // Load Model
+  // load Model
   std::vector<std::string> interfaces;
   LoadContiguousModel<dim>( model_name, interfaces );
 
-  // Read from binary
+  // read from binary
   string spliboundary_regions_file( model_name );
   spliboundary_regions_file += "-connected-interface-regions.txt";
   inputFromFile( spliboundary_regions_file.c_str(), interfaces );
@@ -1068,7 +1069,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
   
-  // Visualize
+  // visualization
   std::string test_name( "SPLITBOUNDARY_TEST_AROUND_REGIONS_" );
   test_name += dimension;
   test_name += "_";
@@ -1183,6 +1184,7 @@ void SplitBoundary_Test::run()
   // test splitboundary for complex ansys models
   test_splitboundary_between_regions<3U>( "lamination" );
   test_splitboundary_between_regions<2U>( "kueper_one_interface" );
+
   return;
 }
 
