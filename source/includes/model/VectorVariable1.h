@@ -81,6 +81,9 @@ class VectorVariable<1U> {
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
     VectorVariable   ProjectOnto( const std::vector<double64>& v ) const;
     VectorVariable   ProjectOnto( const VectorVariable& v ) const;
+  
+    /// normalize length to 1
+    void             EuclideanNormalize() { data = 1.; }
 
     void             In();
     void             Out() const;

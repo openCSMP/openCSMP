@@ -3,7 +3,7 @@
 #include "ErrorHandler.h"
 
 
-#define DEBUG_HETEROGENEITY_AWARE_MODEL
+// #define DEBUG_HETEROGENEITY_AWARE_MODEL
 
 
 using namespace std;
@@ -22,7 +22,6 @@ HeterogeneityAndRateAwareModel<dim>::HeterogeneityAndRateAwareModel( const Prope
                      "residual saturation non-wetting phase",
                      "residual saturation wetting phase",
                       sw_ro_mu_placement ),
-
 //   RRT_key_(database.StorageKey(rocktype)),
    pf_key_(database.StorageKey("fluid pressure")), // to calculate fluid pressure gradient
    vt_key_(database.StorageKey("velocity"))  // to calculate flow direction
@@ -76,7 +75,9 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     // permeability anisotropy
     const double64 kv = PermeabilityPerpendicularToLaminations();
     const double64 kh = PermeabilityParallelToLaminations();
-    KvKh_ratio_       = kv / kh;
+    KK_ = 0.;
+    KK_(0,0)          = kh;
+    KK_(1,1)          = kv;
 
     // communicating assigned values to base class to get information for testing
     TwoPhaseModel<dim>::k_   = (flow_direction_ == HORIZONTAL) ? kh : kv;
@@ -91,6 +92,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
     // computing the magnitude of the pressure gradient
     e.Read( vt_key_, vt_ );
     flow_direction_   = ProminentFlowDirection();
+    K_flow_direction_ = PermeabilityInFlowDirection( vt_ );
     grad_p_magnitude_ = PressureGradientMagnitude(e);
     Nc_               = Nc_kgradP_Version( grad_p_magnitude_ ); // capillary number
     RVC_              = RVC( Nc_ );
@@ -122,6 +124,7 @@ Out(1);
 vt_(0) = 0.;
 vt_(1) = 0.;
 flow_direction_   = ProminentFlowDirection();
+K_flow_direction_ = PermeabilityInFlowDirection( vt_ );
 Nc_               = 0.;
 RVC_              = RVC( Nc_ );
 Sw_VL_            = Sw_VL( RVC_ );
@@ -131,6 +134,7 @@ WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc0", 0. );
 vt_(0) = 1.0e-6;
 vt_(1) = 0.;
 flow_direction_   = ProminentFlowDirection();
+K_flow_direction_ = PermeabilityInFlowDirection( vt_ );
 Nc_               = 1.0e-6;
 RVC_              = RVC( Nc_ );
 Sw_VL_            = Sw_VL( RVC_ );
@@ -139,7 +143,8 @@ WriteRelativePermeabilityTable( "Maartje2_layer_parallel_Nc-6", 1.0e-6 );
 // vertical flow
 vt_(0) = 0.;
 vt_(1) = 1.0e-6;
-flow_direction_ = ProminentFlowDirection();
+flow_direction_   = ProminentFlowDirection();
+K_flow_direction_ = PermeabilityInFlowDirection( vt_ );
 WriteRelativePermeabilityTable( "Maartje2_layer_perpendicular_Nc-6", 1.0e-6 );
 throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
                        "written relative permeability curves to file for testing.");
@@ -175,6 +180,26 @@ double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminat
     return sum_of_weights / (LY_1/k_high_ + LY_2/k_low_ + LY_3/k_high_ + LY_4/k_low_ + LY_5/k_high_);
  }
 
+
+
+/**
+    Assuming that the layers are horizontal, this method returns the permeability in the flow direction
+    which by interpolation between the layer parallel and layer-perpendicular permeability.
+*/
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& mv ) const
+ {
+    // copying the velocity and normalising it to one
+    vc_ = vt_;
+    vc_.EuclideanNormalize();
+
+    // finding the permeability in the direction of the velocity vector
+    vc_ = KK_ * vc_;
+
+    // the length of vc_ is equal to the magnitude of permeability in the tarfet direction
+    return vc_.Length();
+   
+ } // end PermeabilityInFlowDirection
 
 
 
@@ -357,35 +382,20 @@ double64 HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
    
     // layer-perpendicular case
     // ------------------------
+    const double64 KvKh_ratio = K_flow_direction_ / KK_(0,0);
     // Maartje 2/9/2019
-    double64 u = vt_.Length() * KvKh_ratio_;
+    double64 u = vt_.Length() * KvKh_ratio;
     //If ux=>5e-5 m/s use viscous limit relative permeability curves.
+    if ( u >= 5.5e-5 ) return krw_VL_LayerPerpendicular();
     //If ux=<5e-7 m/s use capillary limit relative permeablity curves.
-    u = min( max( u, 5.0e-5 ), 5.0e-7 );
+    if ( u <= 5.0e-7 ) return krw_CL_LayerPerpendicular();
    
     const double64 krw = (0.6554e37 * pow(u,0.8e1) - 0.1456e34 * pow(u,0.7e1) + 0.1352e30 * pow(u,0.6e1) - 0.6797e25 * pow(u,0.5e1) + 0.2007e21 * pow(u,0.4e1) - 0.3526e16 * pow(u,0.3e1) + 0.3547e11 * u * u - 0.1815e6 * u + 0.9447e0) * pow(sw_,-0.5214e19 * pow(u,0.4e1) + 0.6725e15 * pow(u,0.3e1) - 0.3122e11 * u * u + 0.6112e6 * u + 0.4933e1) - 0.1177e37 * pow(u,0.8e1) + 0.2601e33 * pow(u,0.7e1) - 0.2404e29 * pow(u, 0.6e1) + 0.1205e25 * pow(u,0.5e1) - 0.3558e20 * pow(u,0.4e1) + 0.6307e15 * pow(u,0.3e1) - 0.6549e10 * u * u + 0.3644e5 * u - 0.5009e-1;
    
-    return max( krw * KvKh_ratio_, 0. );
+    return max( krw * KvKh_ratio, 0. );
    
  } // end krw_Phase
 
-
-/*   Maple version derived from Matlab script gives same results for horizontal case:
-
-         // Krw_high_k
-         const double64 t1 = sqrt(Sw_high_k_star);
-         const double64 t4 = pow(Sw_high_k_star, 0.1e1 / m_high_);
-         const double64 t6 = pow(0.1e1 - t4, m_high_);
-         const double64 t8 = (0.1e1 - t6) * (0.1e1 - t6); // pow(0.1e1 - t6, 0.2e1);
-         const double64 Krw_high_k = t1 * t8;
-         // Krw_low_k
-         const double64 tt1 = sqrt(Sw_low_k_star);
-         const double64 tt4 = pow(Sw_low_k_star, 0.1e1 / m_low_);
-         const double64 tt6 = pow(0.1e1 - tt4, m_low_);
-         const double64 tt8 = (0.1e1 - tt6) * (0.1e1 - tt6); // pow(0.1e1 - tt6, 0.2e1);
-         const double64 Krw_low_k = tt1 * tt8;
-
-*/
 
 
 
@@ -417,15 +427,17 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
    
     // layer-perpendicular case
     // ------------------------
+    const double64 KvKh_ratio = K_flow_direction_ / KK_(0,0);
     // Maartje 2/9/2019
-    double64 u = vt_.Length() * KvKh_ratio_;
+    double64 u = vt_.Length() * KvKh_ratio;
     //If ux=>5e-5 m/s use viscous limit relative permeability curves.
+    if ( u >= 5.5e-5 ) return krw_VL_LayerPerpendicular();
     //If ux=<5e-7 m/s use capillary limit relative permeablity curves.
-    u = min( max( u, 5.0e-5 ), 5.0e-7 );
-    
+    if ( u <= 5.0e-7 ) return krw_CL_LayerPerpendicular();
+
     const double64 krn = (-0.3228e9 * u * u + 0.3561e5 * u + 0.2139e0) * pow(-0.2838e37 * pow(u,0.8e1) + 0.6254e33 * pow(u,0.7e1) - 0.5748e29 * pow(u,0.6e1) + 0.2856e25 * pow(u,0.5e1) - 0.8316e20 * pow(u,0.4e1) + 0.1438e16 * pow(u,0.3e1) - 0.1422e11 * u * u + 0.707e5 * u + 0.8596e0 - sw_, 0.2e1);
    
-    return min( krn * KvKh_ratio_, 1. );
+    return min( krn * KvKh_ratio, 1. );
 
  } // end krn_Phase
 
@@ -565,8 +577,64 @@ double64 HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::Swr_Composite() const
  {
-     return (Swi_low_ * L_low_ + Swi_high_ * L_high_) / (L_low_ + L_high_);
+     return (Swi_low_ * phi_low_ * L_low_ + Swi_high_ * phi_high_ * L_high_) / (L_low_ * phi_low_ + L_high_ * phi_high_);
  }
+
+
+
+
+
+    // limit approximations for vertical flow arrived at by curve fitting (6/9/19)
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::krw_VL_LayerPerpendicular() const
+ {
+    const double64 C1(6.342), C2(0.4549);
+    // Krw_VL = Sw(ux)^0.5 * (1 - (1 - Sw(ux)^C1)^C2
+    return max( sqrt(sw_) * pow( 1. - (1. - pow( sw_, C1 ) ), C2 ), 0.);
+ }
+
+
+
+// piecewise defined functions 
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::krn_VL_LayerPerpendicular() const
+ {
+    const double64 C1(1.491 ), C2(1.945), C3(2.472);
+    // Krnw_VL = C1 * ((1-Sw(ux))^C2) * ((1-Sw(ux)^C3))
+    return max( C1 * (1. - pow( sw_, C2 )) * (1. - pow( sw_, C3 )), 0.);
+ }
+
+
+
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::krw_CL_LayerPerpendicular() const
+ {
+    const double64 C1 = (sw_ > 0.83) ? 2.717  : 7.39;
+    const double64 C2 = (sw_ > 0.83) ? 0.5099 : 1.557;
+   
+    // Krw_CL = (Sw(ux)^0.5)*(1-(1-Sw(ux)^C1)^C2)
+    return max( sqrt(sw_) * pow( 1. - (1. - pow( sw_, C1 ) ), C2 ), 0.);
+ }
+
+
+
+template<size_t dim>
+double64 HeterogeneityAndRateAwareModel<dim>::krn_CsL_LayerPerpendicular() const
+ {
+    const double64 C1 = (sw_ > 0.3) ? 3.1   : 2.199;
+    const double64 C2 = (sw_ > 0.3) ? 5.033 : 4.148;
+    const double64 C3 = (sw_ > 0.3) ? 2.758 : 30.1;
+   
+    // Krnw_CL = C1 * ((1-Sw(ux))^C2) * ((1-Sw(ux)^C3))
+    return max( C1 * (1. - pow( sw_, C2 )) * (1. - pow( sw_, C3 )), 0.);
+}
+
+
+
+
+
+
+
 
 
 
