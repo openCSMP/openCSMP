@@ -35,6 +35,8 @@ namespace csmp {
     @note thus far, this is a drainage only model
     @note an alternative capillary number: k ||grad p|| / sigma   is used to get around the viscosity problem
  
+    @todo MUST WE BLEND BETWEEN HORIZONTAL AND VERTICAL FLOW?
+ 
     @todo: perhaps define irreducible water saturation and use it in relperm model
     @todo: check how this can be handled efficiently for a suite of composite rocktypes
     @todo: think about what parameters to keep rather than using functions to compute them on the fly when needed
@@ -92,7 +94,16 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     double64 PressureGradientMagnitude( const Element<dim>& ) const;
     /// Capillary number, pressure gradient form: Nc = k ||grad p|| / sigma
     double64  Nc_kgradP_Version( double64 pf_gradient_magnitude ) const;
+    /// tensor decomposition
+    double64 PermeabilityInFlowDirection( const VectorVariable<dim>& mixture_velocity ) const;
   
+    // limit approximations for vertical flow arrived at by curve fitting (Maartje 6/9/19)
+    double64 krw_VL_LayerPerpendicular() const;
+    double64 krn_VL_LayerPerpendicular() const;
+    // piecewise defineed functions
+    double64 krw_CL_LayerPerpendicular() const;
+    double64 krn_CsL_LayerPerpendicular() const;
+
     // TODO: add function that assesses whether we are dealing with imbibition or drainage
   
     // LAYER-PARALLEL FLOW
@@ -113,17 +124,19 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     const csmp::Index  RRT_key_, pf_key_, vt_key_;
   
     mutable DenseMatrix<DM_MIN>  DN_; ///< for gradient computations
+    TensorVariable<dim>          KK_; ///< tensor permeability
     VectorVariable<dim>          vt_; ///< velocity
-  
-    // properties of Composite1
+    mutable VectorVariable<dim>  vc_; ///< for all kinds of purposes
+
+    // Composite1 - hypothetical sample based on Achyut's rocktypes
     const int      rocktype_ = 1;           ///< FSst-Slt (Fine Sandstone - Silt) Planar Bedding
     // composite is modelled as a dual of two rock types
-    const double64 L_low_    = 0.025;       ///< cumulative thickness of low-k layers
-    const double64 L_high_   = 0.025;       ///< cumulative thickness of high-k layers
+    const double64 L_low_    = 0.025;       ///< siltstone: cumulative thickness of low-k layers
+    const double64 L_high_   = 0.025;       ///< fine sandstone: cumulative thickness of high-k layers
     const double64 k_low_    = 3.4759e-14;  ///< low-permeability lamination (default)
     const double64 k_high_   = 3.6075e-13;  ///< high permeability lamination
-    const double64 phi_low_  = 0.15;        ///< porosity of low-perm layer
-    const double64 phi_high_ = 0.27;        ///< porosity of high_perm layer
+    const double64 phi_low_  = 0.19;        ///< porosity of low-perm layer
+    const double64 phi_high_ = 0.28;        ///< porosity of high_perm layer
     const double64 m_low_    = 0.5;         ///< van Genuchten exponents for the 2 different layers
     const double64 m_high_   = 0.6;
     const double64 pd_low_   = 3000.;       ///< entry pressures of layers
@@ -138,7 +151,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
 
     // derived quantities
     double64  grad_p_magnitude_ = UNSPECIFIED;
-    double64  KvKh_ratio_;                  ///< vertical over horizontal permeability ratio
+    double64  K_flow_direction_;             ///< permeability in flow direction
     double64  X_PV_low_   =  (phi_low_ * L_low_) / (phi_low_ * L_low_+ phi_high_ * L_high_); ///< pore volume fraction of low perm layer
     double64  Nc_; // capillary mumber
 
