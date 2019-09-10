@@ -1068,14 +1068,7 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   cout << "\nFace Groups: " << model_out.Mesh().FaceGroups() << "\n";
   cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
-  
-  // visualization
-  std::string test_name( "SPLITBOUNDARY_TEST_AROUND_REGIONS_" );
-  test_name += dimension;
-  test_name += "_";
-  test_name += model_name;
-  VisualiseSplitBoundaries( model_out, test_name );
-  
+    
   if ( verbose_ ) std::cerr << "\nFinish " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";
 }
 
@@ -1151,13 +1144,6 @@ void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( con
   cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
 
-  // 4. visualising
-  std::string test_name( "CREATED_SPLITBOUNDARY_TEST_FROM_" );
-  test_name += model_name;
-  double64 displacement( 0.001 );
-  PullApartSplitboundaries( model_out, displacement );
-  VisualiseSplitBoundaries( model_out, test_name );   
-
   return;
 }
 
@@ -1173,10 +1159,10 @@ void SplitBoundary_Test::run()
 
   // test splitboundary around interfaces
   // JC: working on the QC process which is requried for the following models
-  //test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
-  //test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
-  //test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
-  //test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
 
   // test splitboundary from constructor of ansys model
   detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
