@@ -1165,7 +1165,8 @@ void SplitBoundary_Test::run()
   test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
 
   // test splitboundary from constructor of ansys model
-  detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
+  // JC: working on the QC process which is requried for the following models
+  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
   detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
 
   // test splitboundary for complex ansys models
