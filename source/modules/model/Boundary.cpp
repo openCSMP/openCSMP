@@ -684,7 +684,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary, bool updateNeighborCon
 
   // identify entities on boundary perimeter
   if ( updateNeighborConnectivity )
-    this->EstablishNeighborConnectivity();
+    this->EstablishNeighborConnectivity( false );
 
   // sorts node and cell vectors into interior and exterior ranges; initialises boundary face vector bd_face_vec_
   this->IdentifyPerimeter();

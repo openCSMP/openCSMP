@@ -188,7 +188,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
-  this->EstablishNeighborConnectivity();
+  this->EstablishNeighborConnectivity( false );
 
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------
@@ -490,7 +490,7 @@ void SplitBoundary<dim>::Initialize( bool updateNeighborConnectivity, bool updat
 
   // identify entities on splitboundary perimeter
   if ( updateNeighborConnectivity )
-    this->EstablishNeighborConnectivity();
+    this->EstablishNeighborConnectivity( false );
 
   this->IdentifyPerimeter();
 

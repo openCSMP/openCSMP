@@ -84,7 +84,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     void Apply( Interrelation<dim>& );
 
     /// connects simplices (=cells) with their equidimensional neighbors
-    void EstablishNeighborConnectivity();
+    void EstablishNeighborConnectivity( bool verbose = true );
 
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();

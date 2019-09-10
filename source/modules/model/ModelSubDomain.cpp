@@ -582,18 +582,20 @@ pair<int32,int32>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     Connects the simplices with their equidimensional neighbors
 */
 template<size_t dim, template<size_t> class CELL>
-void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
+void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity( bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( elmt_vec_.empty() ) {
          csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
-    cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
+    if (verbose)
+      cout << "\nModelSubDomain<"<< dim <<",CELL>::EstablishNeighborConnectivity: Establishing CSMP FE neighbor connectivity...\n";
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building a list of the faces of the cells...\n";
+    if (verbose)
+      cout << "  Building a list of the faces of the cells...\n";
     //       key             face number,neighbor
     multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >  volume_neighbor_keys,
                                                            surface_neighbor_keys, 
@@ -631,7 +633,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
     // 2. (re)building element neigborhoods
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  (Re)building neighbor connectivity...";
+    if (verbose)
+      cout << "  (Re)building neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
@@ -640,7 +643,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
 
-        cout << "\n\t\tline elements...";
+        if (verbose)
+          cout << "\n\t\tline elements...";
         //                key                  n-face, neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(line_neighbor_keys.begin()),
                                                                                  it2(line_neighbor_keys.begin());
@@ -678,7 +682,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
     // --------------------
     if ( dim >= 2U and !surface_neighbor_keys.empty() )
       {
-        cout << "\n\t\tsurface elements...";
+        if (verbose)
+          cout << "\n\t\tsurface elements...";
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
                                                                                  it2(surface_neighbor_keys.begin());
@@ -715,7 +720,8 @@ void  ModelSubDomain<dim,CELL>::EstablishNeighborConnectivity()
         CELL<dim>* e1Ptr(nullptr);
         CELL<dim>* e2Ptr(nullptr);
 
-        cout << "\n\t\tvolume elements...\n";
+        if (verbose)
+          cout << "\n\t\tvolume elements...\n";
         //                key             n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,CELL<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
                                                                                  it2(volume_neighbor_keys.begin());
@@ -1067,8 +1073,8 @@ cout.flush();
               // do some additional diagnostics on these elements
               // ------------------------------------------------
               cerr <<"\n\tdetached elements: "<< lesser_dim_elmts_detached.size() <<":";
-              for ( typename set<CELL<dim>*>::const_iterator
-                    it=lesser_dim_elmts_detached.begin(); it!=lesser_dim_elmts_detached.end(); ++it ) cerr <<" "<< (*it)->Idx();
+              //for ( typename set<CELL<dim>*>::const_iterator
+              //      it=lesser_dim_elmts_detached.begin(); it!=lesser_dim_elmts_detached.end(); ++it ) cerr <<" "<< (*it)->Idx();
               cerr << endl;
            }
 

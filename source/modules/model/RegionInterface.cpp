@@ -2753,7 +2753,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
 
   // rebuilding the decimated region
   r1_ref.ElementVector() = std::move( new_region1 );
-  r1_ref.EstablishNeighborConnectivity(); // TODO: needed, but this connectivity should have been established long ago !
+  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
   r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 
@@ -2805,7 +2805,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
 
   // rebuilding the decimated region
   r1_ref.ElementVector() = std::move( new_region1 );
-  r1_ref.EstablishNeighborConnectivity(); // TODO: needed, but this connectivity should have been established long ago !
+  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
   r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 

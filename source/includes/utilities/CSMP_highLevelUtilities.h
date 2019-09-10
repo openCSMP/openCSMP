@@ -172,13 +172,10 @@ bool containsElementsOfTtype( const Region<dim>&, ELEMENT_DIMENSION );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements) 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside = false );
+void  establishNeighborConnectivity( std::vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside = false, bool verbose = true );
 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<Face<dim>*>& simplexVector, bool unassign_neighbors_outside = false );
-
-template<size_t dim>
-void  establishNeighborConnectivity( std::vector<InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside = false );
+void  establishNeighborConnectivity( std::vector<InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
 template<size_t dim>

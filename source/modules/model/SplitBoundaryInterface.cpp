@@ -473,22 +473,22 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
     
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->UniqueRegionsBegin(); rit != splitboundaryComplex->UniqueRegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector();
-    rit->second.EstablishNeighborConnectivity();
+    rit->second.EstablishNeighborConnectivity(false);
     rit->second.IdentifyPerimeter();
   }
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->RegionsBegin(); rit != splitboundaryComplex->RegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector();
-    rit->second.EstablishNeighborConnectivity();
+    rit->second.EstablishNeighborConnectivity(false);
     rit->second.IdentifyPerimeter();
   }
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::boundaryIterator bit = splitboundaryComplex->BoundariesBegin(); bit != splitboundaryComplex->BoundariesEnd(); ++bit ) {
     bit->second.CreateNodePointerVector();
-    bit->second.EstablishNeighborConnectivity();
+    bit->second.EstablishNeighborConnectivity(false);
     bit->second.IdentifyPerimeter();
   }
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::splitBoundaryIterator sbit = splitboundaryComplex->SplitBoundariesBegin(); sbit != splitboundaryComplex->SplitBoundariesEnd(); ++sbit ) {
     sbit->second.CreateNodePointerVector();
-    sbit->second.EstablishNeighborConnectivity();
+    sbit->second.EstablishNeighborConnectivity(false);
     sbit->second.IdentifyPerimeter();
   }
 
@@ -561,23 +561,23 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
   // unique regions
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->UniqueRegionsBegin(); rit != splitboundaryComplex->UniqueRegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector();
-    rit->second.EstablishNeighborConnectivity();
+    rit->second.EstablishNeighborConnectivity(false);
     rit->second.IdentifyPerimeter();
   }
   // non-unique regions
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->RegionsBegin(); rit != splitboundaryComplex->RegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector();
-    rit->second.EstablishNeighborConnectivity();
+    rit->second.EstablishNeighborConnectivity(false);
     rit->second.IdentifyPerimeter();
   }
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::boundaryIterator bit = splitboundaryComplex->BoundariesBegin(); bit != splitboundaryComplex->BoundariesEnd(); ++bit ) {
     bit->second.CreateNodePointerVector();
-    bit->second.EstablishNeighborConnectivity();
+    bit->second.EstablishNeighborConnectivity(false);
     bit->second.IdentifyPerimeter();
   }
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::splitBoundaryIterator sbit = splitboundaryComplex->SplitBoundariesBegin(); sbit != splitboundaryComplex->SplitBoundariesEnd(); ++sbit ) {
     sbit->second.CreateNodePointerVector();
-    sbit->second.EstablishNeighborConnectivity();
+    sbit->second.EstablishNeighborConnectivity(false);
     sbit->second.IdentifyPerimeter();
   }
 
@@ -708,7 +708,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBo
         
     mesh->SetRootElement(new_elmt);
   }
-  establishNeighborConnectivity(new_elmts); // update the new elements' neighbour connectivity
+  establishNeighborConnectivity(new_elmts, false, false); // update the new elements' neighbour connectivity
 
   //4. insert a new mesh into a new region of the model
   std::vector<size_t> element_numbers;

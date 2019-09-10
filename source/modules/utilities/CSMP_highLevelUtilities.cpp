@@ -2102,7 +2102,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
 // CONNECTIVITY BETWEEN ELEMENTS
 
 template<size_t dim>
-void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside )
+void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -2114,7 +2114,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
  
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
+    if (verbose) cout << "  Building element face list...\n";
 
     //       key             face number neighbor
     multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >  volume_neighbor_keys,
@@ -2170,7 +2170,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
 
-    cout << "  Building element neighbor connectivity...";
+    if (verbose) cout << "  Building element neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
@@ -2179,7 +2179,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tline elements...";
+        if (verbose) cout << "\n\t\tline elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(line_neighbor_keys.begin()),
@@ -2220,7 +2220,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tsurface elements...";
+        if (verbose) cout << "\n\t\tsurface elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
@@ -2261,7 +2261,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
         Element<dim>* e1Ptr(NULL);
         Element<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tvolume elements...\n";
+        if (verbose) cout << "\n\t\tvolume elements...\n";
 
         //                key             n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >::iterator it1(volume_neighbor_keys.begin()),
@@ -2298,15 +2298,15 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
  } // end establishNeighborConnectivity
 
 // explicit instantiations
-template void establishNeighborConnectivity<1U>( std::vector<csmp::Element<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool );
+template void establishNeighborConnectivity<1U>( std::vector<csmp::Element<1U>*>&, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>&, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool, bool );
 
 
 // CONNECTIVITY BETWEEN INTERFACES
 
 template<size_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside )
+void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( simplexVector.empty() ) {
@@ -2314,11 +2314,11 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
          return;
       }
 
-    cout << "\nestablishNeighborConnectivity( InterFace ): Establishing CSMP FE neighbor connectivity...\n";
+    if (verbose) cout << "\nestablishNeighborConnectivity( InterFace ): Establishing CSMP FE neighbor connectivity...\n";
 
     // 1. making separate search vectors of face keys for surface and line elements
     // ----------------------------------------------------------------------------
-    cout << "  Building element face list...\n";
+    if (verbose)  cout << "  Building element face list...\n";
 
     //       key             face number neighbor
     multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >  surface_neighbor_keys,
@@ -2379,18 +2379,16 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
     // 2. (re)building element neigborhoods
     // ------------------------------------
     // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "  Building element neighbor connectivity...";
+    if (verbose) cout << "  Building element neighbor connectivity...";
 
     // 2.1 line elements
     // -----------------
-    cout << "line elements...";
-
     if ( !line_neighbor_keys.empty() ) {
 
         InterFace<dim>* e1Ptr(NULL);
         InterFace<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tline elements...";
+        if (verbose) cout << "\n\t\tline elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(line_neighbor_keys.begin()),
@@ -2426,14 +2424,12 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
     // 2.2 surface elements
     // --------------------
-    cout << "surface elements...";
-
     if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
 
         InterFace<dim>* e1Ptr(NULL);
         InterFace<dim>* e2Ptr(NULL);
 
-        cout << "\n\t\tsurface elements...";
+        if (verbose) cout << "\n\t\tsurface elements...";
 
         //                key              n-face neighbor
         typename multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
@@ -2471,9 +2467,9 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
 
  } // end establishNeighborConnectivity
 
-template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool );
+template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool, bool );
+template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool, bool );
+template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool, bool );
 
 
 
