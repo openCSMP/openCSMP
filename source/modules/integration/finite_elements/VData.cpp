@@ -4,7 +4,7 @@
 #include "binaryReadWrite.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
-#include "TextFileInterface.h"
+#include "TextFileIO.h"
 
 using namespace std;
 

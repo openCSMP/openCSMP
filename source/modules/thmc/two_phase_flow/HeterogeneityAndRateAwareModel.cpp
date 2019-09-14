@@ -442,17 +442,11 @@ double64 HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  } // end krn_Phase
 
 
-/*  Maple from Matlab script gives same results:
 
-         // Krnw_high_k
-         const double64 t2 = pow(0.1e1 - Sw_high_k_star, 0.2e1);
-         const double64 t3 = Sw_high_k_star * Sw_high_k_star;
-         const double64 Krnw_high_k = t2 * (0.1e1 - t3);
-         // Krnw_low_k
-         const double64 tt2 = pow(0.1e1 - Sw_low_k_star, 0.2e1);
-         const double64 tt3 = Sw_low_k_star * Sw_low_k_star;
-         const double64 Krnw_low_k = tt2 * (0.1e1 - tt3);
-*/
+
+
+
+
 
 
 /// for the wetting phase

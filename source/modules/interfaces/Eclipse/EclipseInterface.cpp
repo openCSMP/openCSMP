@@ -10,7 +10,7 @@
 #include "ArrayVariable.h"
 #include "FlaggedArrayVariable.h"
 #include "ErrorHandler.h"
-#include "TextFileInterface.h"
+#include "EclipseTextFileInterface.h"
 #include "vectorOperations.h"
 #include "CellGenerator.h"
 
@@ -372,7 +372,7 @@ Configures the interface for the case where everything is supplied as separated 
 
 bool EclipseInterface::ReadFile( std::ifstream&  ifs, size_t line_length )
 {
-  TextFileInterface<EclipseInterface > reader( line_length );
+  EclipseTextFileInterface<EclipseInterface > reader( line_length );
 
   // keyword INCLUDE allows to include other file to be read
   reader.AddKeyword( "INCLUDE" );

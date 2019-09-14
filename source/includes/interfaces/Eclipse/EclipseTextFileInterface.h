@@ -1,5 +1,5 @@
-#ifndef TEXT_FILE_INTERFACE_H
-#define TEXT_FILE_INTERFACE_H
+#ifndef ECLIPSE_TEXT_FILE_INTERFACE_H
+#define ECLIPSE_TEXT_FILE_INTERFACE_H
 
 #include "Exception.h"
 #include "ErrorHandler.h"
@@ -28,11 +28,11 @@ basis of keywords.
 
 */
 template<class STREAM>
-class TextFileInterface {
+class EclipseTextFileInterface {
   public:
 
-    TextFileInterface( size_t max_line_length = 256 );
-    ~TextFileInterface();
+    EclipseTextFileInterface( size_t max_line_length = 256 );
+    ~EclipseTextFileInterface();
 
     bool ReadFile( std::ifstream& ifs,
                    STREAM*,
@@ -76,12 +76,12 @@ class TextFileInterface {
 
 
 template<>
-class TextFileInterface<GlobalFunction> {
+class EclipseTextFileInterface<GlobalFunction> {
 
   public:
 
-    TextFileInterface( size_t max_line_length = 256 );
-    ~TextFileInterface();
+    EclipseTextFileInterface( size_t max_line_length = 256 );
+    ~EclipseTextFileInterface();
 
     bool ReadFile( std::ifstream& ifs,
                    bool (*IsCommentLineFunction)(char*),
@@ -121,36 +121,36 @@ class TextFileInterface<GlobalFunction> {
 
 
 template<class STREAM>
-TextFileInterface<STREAM>
-::TextFileInterface( size_t line_length )
+EclipseTextFileInterface<STREAM>
+::EclipseTextFileInterface( size_t line_length )
   : line_length_( line_length )
 {
     text_line_ = new char[ line_length ];
 }
 
 template<class STREAM>
-TextFileInterface<STREAM>
-::~TextFileInterface()
+EclipseTextFileInterface<STREAM>
+::~EclipseTextFileInterface()
 {
     delete text_line_;
 }
 
 template<class STREAM>
-bool TextFileInterface<STREAM>
+bool EclipseTextFileInterface<STREAM>
 ::FindKeyword( const std::string& keyword )
 {
     return ( keywords_.find( keyword ) != keywords_.end() );
 }
 
 template<class STREAM>
-void TextFileInterface<STREAM>
+void EclipseTextFileInterface<STREAM>
 ::AddKeyword( const std::string& keyword )
 {
     keywords_.insert( keyword );
 }
 
 template<class STREAM>
-void TextFileInterface<STREAM>
+void EclipseTextFileInterface<STREAM>
 ::AddKeywords( const std::set<std::string>& keywords )
 {
     std::set<std::string>::const_iterator kitEnd = keywords.end();
@@ -160,7 +160,7 @@ void TextFileInterface<STREAM>
 }
 
 template<class STREAM>
-void TextFileInterface<STREAM>
+void EclipseTextFileInterface<STREAM>
 ::ClearKeywords( )
 {
     keywords_.clear();
@@ -173,7 +173,7 @@ void TextFileInterface<STREAM>
 
 */
 template<class STREAM>
-bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
+bool EclipseTextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
                                           STREAM* stream,
                                           bool (STREAM::*IsCommentLineFunction)(char*),
                                           bool (STREAM::*ReadFunction)( std::ifstream&, char*, size_t, std::set<std::string>&, std::string&, std::vector<std::string>& ),
@@ -188,7 +188,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
         if ( ifs.eof() )
         {
             if( error_handler.Verbose() )
-                std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
             ifs.close();
             return true;
         }
@@ -203,23 +203,23 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             if ( ifs.eof() )
             {
                 if( error_handler.Verbose() )
-                    std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                    std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
                 ifs.close();
                 return true;
             }
             // check the keyword
             if( fail_for_unknown_keyword && keywords_.find( keyword_) == keywords_.end() )
             {
-                std::cerr<< "TextFileInterfaceInClass<dim>::ReadFile: Can not read data in block marked by keyword: "<< keyword_ << std::endl;
+                std::cerr<< "EclipseTextFileInterfaceInClass<dim>::ReadFile: Can not read data in block marked by keyword: "<< keyword_ << std::endl;
                 std::cerr<< "Please correct the keyword that you've used in your file" << std::endl;
                 std::cerr<< "The list of the avaliable keywords: "<< std::endl;
                 size_t i(1);
                 for( std::set<std::string>::const_iterator it = keywords_.begin(); it != keywords_.end(); it++, i++)
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_ );
                 return false;
@@ -228,10 +228,10 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             else if( !(stream->*ReadFunction)( ifs, text_line_, line_length_,
                                                keywords_, keyword_, keyword_parameters_ ) )
             {
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_ );
                 return false;
@@ -241,7 +241,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
     while ( !ifs.eof() );
 
     if( error_handler.Verbose() )
-        std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+        std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
 
     ifs.close();
 
@@ -255,7 +255,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
 
 
 template<class STREAM>
-bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
+bool EclipseTextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
                                           STREAM* stream,
                                           bool (*IsCommentLineFunction)(char*),
                                           bool (STREAM::*ReadFunction)( std::ifstream&, char*, size_t, std::set<std::string>&, std::string&, std::vector<std::string>& ),
@@ -270,7 +270,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
         if ( ifs.eof() )
         {
             if( error_handler.Verbose() )
-                std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
             ifs.close();
             return true;
         }
@@ -285,23 +285,23 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             if ( ifs.eof() )
             {
                 if( error_handler.Verbose() )
-                    std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                    std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
                 ifs.close();
                 return true;
             }
             // check the keyword
             if( fail_for_unknown_keyword && keywords_.find( keyword_) == keywords_.end() )
             {
-                std::cerr<< "TextFileInterfaceInClass<dim>::ReadFile: Can not read data in block marked by keyword: "<< keyword_  << std::endl;
+                std::cerr<< "EclipseTextFileInterfaceInClass<dim>::ReadFile: Can not read data in block marked by keyword: "<< keyword_  << std::endl;
                 std::cerr<< "Please correct the keyword that you've used in your file" << std::endl;
                 std::cerr<< "The list of the avaliable keywords: "<< std::endl;
                 size_t i(1);
                 for( std::set<std::string>::const_iterator it = keywords_.begin(); it != keywords_.end(); it++, i++)
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_.c_str() );
                 return false;
@@ -310,10 +310,10 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
             else if( !(stream->*ReadFunction)( ifs, text_line_, line_length_,
                                                keywords_, keyword_, keyword_parameters_ ) )
             {
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );
                 return false;
@@ -323,7 +323,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
     while ( !ifs.eof() );
 
     if( error_handler.Verbose() )
-        std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+        std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
 
     ifs.close();
 
@@ -333,7 +333,7 @@ bool TextFileInterface<STREAM>::ReadFile( std::ifstream& ifs,
 
 
 template<class STREAM>
-bool TextFileInterface<STREAM>
+bool EclipseTextFileInterface<STREAM>
 ::ReadFile( std::ifstream& ifs,
             STREAM* stream,
             bool (STREAM::*IsCommentLineFunction)(char*),
@@ -348,7 +348,7 @@ bool TextFileInterface<STREAM>
         if ( ifs.eof() )
         {
             if( error_handler.Verbose() )
-                std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
             ifs.close();
             return true;
         }
@@ -357,10 +357,10 @@ bool TextFileInterface<STREAM>
         {
             if( !(stream->*ReadFunction)( ifs, text_line_, line_length_ ) )
             {
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_ );
                 return false;
@@ -370,7 +370,7 @@ bool TextFileInterface<STREAM>
     while ( !ifs.eof() );
 
     if( error_handler.Verbose() )
-        std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+        std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
 
     ifs.close();
 
@@ -382,7 +382,7 @@ bool TextFileInterface<STREAM>
 
 
 template<class STREAM>
-bool TextFileInterface<STREAM>
+bool EclipseTextFileInterface<STREAM>
 ::ReadFile( std::ifstream& ifs,
             STREAM* stream,
             bool (*IsCommentLineFunction)(char*),
@@ -397,7 +397,7 @@ bool TextFileInterface<STREAM>
         if ( ifs.eof() )
         {
             if( error_handler.Verbose() )
-                std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+                std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
             ifs.close();
             return true;
         }
@@ -406,10 +406,10 @@ bool TextFileInterface<STREAM>
         {
             if( !(stream->*ReadFunction)( ifs, text_line_, line_length_ ) )
             {
-                std::cerr <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
+                std::cerr <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
                 error_handler.notice( csmp::FATAL_ERROR,
-                                   "TextFileInterfaceInClass<dim>::ReadFile:",
+                                   "EclipseTextFileInterfaceInClass<dim>::ReadFile:",
                                    "Cannot read data in block marked by keyword: ",
                                    keyword_.c_str() );
                 return false;
@@ -419,7 +419,7 @@ bool TextFileInterface<STREAM>
     while ( !ifs.eof() );
 
     if( error_handler.Verbose() )
-        std::cout <<"\nTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
+        std::cout <<"\nEclipseTextFileInterfaceInClass<dim>::ReadFile: Reading completed!" << std::endl;
 
     ifs.close();
 
