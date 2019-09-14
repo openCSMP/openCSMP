@@ -23,7 +23,12 @@ namespace csmp {
 
 /**
 
-Global Text File Reading Functions
+Collection of highlevel functions for seeking and reading in textfiles.
+
+Support for comments, which must be preceded by the hash tag.
+
+@note single-hash tags will not be parsed correctly.
+
 @author S.K. Matthai
 @author S. Geiger
 @author S.G. Roberts
@@ -36,8 +41,7 @@ Global Text File Reading Functions
 // Common text file interface functionality
 
 // Check existance of file
-bool isFileExist( const std::string& );
-bool isFileExistStat( const std::string& );
+bool doesFileExist( const std::string& );
 bool checkExistance( const char* filename );
 
 // Open file
@@ -166,8 +170,8 @@ void reportAssignment( const std::string& prop, const std::string& unit,
 
 /// functionalty specificly related to the configuration file
 
-bool isConfigFileExist( const std::string& filename_prefix );
-bool isVariablesFileExist( const std::string& filename_prefix );
+bool doesConfigFileExist( const std::string& filename_prefix );
+bool doesVariableFileExist( const std::string& filename_prefix );
 
 /// read point data  such as well rates ( a.k.a block7 )
 template<size_t dim>

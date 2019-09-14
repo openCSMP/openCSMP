@@ -50,7 +50,7 @@ ARP_FSst_Slt_new_names.txt - Input data table to define Heterogeneity Aware Rela
 */
 void LayeredCompositeProcessor1::ReadRockTypeData( const char* datafile )
  {
-    if ( !isFileExist( datafile ) )
+    if ( !doesFileExist( datafile ) )
       throw csmp::Exception( ERROR, "LayeredCompositeProcessor1::ReadRockTypeData",
                              datafile, "does not exist; nothing was done." );
     ifstream ifs(datafile);

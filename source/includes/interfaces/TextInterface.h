@@ -11,7 +11,7 @@ class Matrix;
 template<size_t>  class Model;
 
 /**
-     Writing model data to text output files.
+     CSMP Output interface for writing model variables to text files.
      
      @author S. K. Matthai
      @date 14/5/1999

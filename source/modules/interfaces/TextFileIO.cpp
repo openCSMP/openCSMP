@@ -13,7 +13,7 @@ namespace csmp {
 
 // GLOBAL READING FUNCTIONS
 
-bool isFileExist( const std::string& name )
+bool doesFileExist( const std::string& name )
 {
   ifstream f( name.c_str() );
   if ( f.good() ) {
@@ -26,11 +26,16 @@ bool isFileExist( const std::string& name )
   }
 }
 
+
+/* no longer used - function from Roman Manasipov
+
 bool isFileExistStat( const std::string& name )
 {
   struct stat buffer;
   return (stat( name.c_str(), &buffer ) == 0);
 }
+*/
+
 
 /// checks whether a file with the given name exists in the current directory
 bool checkExistance( const char* filename )
@@ -1360,21 +1365,21 @@ template void reportAssignment<3U>( const std::string& prop, const std::string& 
 
 
 // CONFIG FILE
-bool isConfigFileExist( const std::string& filename_prefix )
+bool doesConfigFileExist( const std::string& filename_prefix )
 {
   std::string config_filename = filename_prefix;
   config_filename += "-configuration.txt";
-  if ( !csmp::isFileExist( config_filename ) )
+  if ( !csmp::doesFileExist( config_filename ) )
     return false;
   return true;
 }
 
 // VARIABLES FILE
-bool isVariablesFileExist( const std::string& filename_prefix )
+bool doesVariableFileExist( const std::string& filename_prefix )
 {
   std::string config_filename = filename_prefix;
   config_filename += "-variables.txt";
-  if ( !csmp::isFileExist( config_filename ) )
+  if ( !csmp::doesFileExist( config_filename ) )
     return false;
   return true;
 }
