@@ -13,8 +13,8 @@ template<size_t dim, template<size_t> class USER>
 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& pref )
   : key_SwImbToDr_(pref.StorageKey("previous imbibition endpoint")),
     key_SwDrToImb_(pref.StorageKey("previous drainage endpoint")),
-    key_prsH2O_(pref.StorageKey("pseudo residual water saturation")),
-    key_prsCO2_(pref.StorageKey("pseudo residual CO2 saturation"))
+    key_prsH2O_(pref.StorageKey("pseudo residual saturation aqueous phase")),
+    key_prsCO2_(pref.StorageKey("pseudo residual saturation carbonic phase"))
  {
    /* in case these will have to be created dynamically
    

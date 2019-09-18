@@ -1822,8 +1822,8 @@ template class PDE_IntegratorExperimental<1U,SplitBoundary>;
 template class PDE_IntegratorExperimental<2U,SplitBoundary>;
 template class PDE_IntegratorExperimental<3U,SplitBoundary>;
 
-//template class PDE_IntegratorExperimental<1U,NimbleRegion>;
-//template class PDE_IntegratorExperimental<2U,NimbleRegion>;
-//template class PDE_IntegratorExperimental<3U,NimbleRegion>;
+template class PDE_IntegratorExperimental<1U,NimbleRegion>;
+template class PDE_IntegratorExperimental<2U,NimbleRegion>;
+template class PDE_IntegratorExperimental<3U,NimbleRegion>;
 
 } // end namespace csmp

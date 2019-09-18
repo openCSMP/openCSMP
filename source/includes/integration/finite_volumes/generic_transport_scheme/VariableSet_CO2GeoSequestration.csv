@@ -88,3 +88,7 @@ bulk mass and fractions,Xbulk,none,ARRAY,0.,1e8,NODE,computed,,,
 end of injection,eoi,secs,SCALAR,86400.,31536000000,MODEL,input,,,
 total velocity,vt,m/s,VECTOR,-1.00E+03,1.00E+03,ELEMENT,computed,multiphase flow,,Darcy velocity of fluid mixture
 mixture density,rhom,kg/m3,SCALAR,2.00E+02,1.00E+04,NODE,computed,fluid properties,,
+previous drainage endpoint,SwDrToImb,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
+previous imbibition endpoint,SwImbToDr,m3/m3,SCALAR,-5.00E-02,1.05E+00,NODE,computed,multiphase flow,,extra data needed by hysteretic relperm model
+pseudo residual saturation carbonic phase,psrCO2,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model
+pseudo residual saturation aqueous phase,psrH2O,m3/m3,SCALAR,0.00E+00,5.00E-01,ELEMENT,computed/input,multiphase flow,,extra data needed by hysteretic relperm model

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define NIMBLE_REGION_DEBUG
+//#define NIMBLE_REGION_DEBUG
 
 namespace csmp {
 
@@ -25,11 +25,11 @@ template<size_t dim>
 NimbleRegion<dim>::NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
  : n_interior_nodes_(0U)
  {
-    cout <<"\nNimbleRegion<"<< dim <<">(constructor): building region from ";
-    cout << distance(first,last) <<" nodes.\n";
+    //cout <<"\nNimbleRegion<"<< dim <<">(constructor): building region from ";
+    //cout << distance(first,last) <<" nodes.\n";
    
     // universal function that is most efficient when the region needs to be build from scratch
-    Update( first, last );
+    Update3( first, last );
 
  } // end (constructur)
 
@@ -219,6 +219,108 @@ void NimbleRegion<dim>::Update2( typename std::vector<Node<dim>*>::iterator firs
       nodes_.push_back( (*nit) );
 
  } // end Update2
+
+
+
+
+/**
+    combine update and update2.
+*/
+template<size_t dim>
+void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last )
+ {
+    const size_t n_target_nodes( distance(first,last));
+    if (  n_target_nodes == 0U )
+      throw csmp::Exception( ERROR, "NimbleRegion<dim>::Update", "Supplied node range is empty; nothing was done." );
+
+    // destructing existing node members, but keeping potential storage
+    if ( !nodes_.empty() ) nodes_.clear();
+    nodes_.reserve(n_target_nodes);
+    size_t  counter(0U);
+   
+    typename vector<Node<dim>*>::iterator nit(first);
+    const typename vector<Node<dim>*>::iterator nodes_end(last);
+    while ( nit != nodes_end ) {
+#ifdef NIMBLE_REGION_DEBUG
+         // debugging: labeling the input nodes continuously
+         (*nit)->Idx( counter++ );
+#endif
+         // storing interior nodes
+         /*if ( (*nit)->AtBoundary() == NOT )*/ nodes_.push_back( (*nit) );
+         nit++;
+    }
+   
+    // making the interior node vector searchable by sorting
+    n_interior_nodes_ = nodes_.size();
+    
+    sort( nodes_.begin(), nodes_.end() );
+    
+    // creating unique node and element sets for the nimble regions
+    // the node set will also be used to find the perimeter nodes
+    set<CellType*>   elmts;
+    set<Node<dim>*>  perimeter_nodes;
+    //for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_end; ++nit )
+    for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_.end(); ++nit )
+       for ( size_t i=0; i<(*nit)->Parents(); ++i ) {
+            assert( (*nit)->Parent(i) != nullptr );
+            pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit)->Parent(i) );
+            // if this is element was not encountered before, we keep track of its nodes
+            if ( eit.second ) {
+                const size_t nodes((*nit)->Parent(i)->Nodes());
+                for ( size_t j=0U; j<nodes; ++j )
+                    // but only those nodes that are not contained in the interior
+                    if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit)->Parent(i)->N(j) ) ) {
+                         // storing the unique perimeter nodes
+                         perimeter_nodes.insert( (*nit)->Parent(i)->N(j) );
+                      }
+                }
+         }
+    // transfer element set to a sorted vector
+    elements_.assign( elmts.begin(), elmts.end() );
+    sort( elements_.begin(), elements_.end() ); // needed?
+    
+    // check that the elements only have corner nodes, i.e. linear interpolation
+    if ( elements_[0U]->FE()->Interpolation() != 1 )
+      throw csmp::Exception( FATAL_ERROR, "NimbleRegion(constructor):",
+                             "this implementation works only for straight-sided elements with linear interpolation functions.");
+    
+
+    // finding addtional boundary nodes, as those nodes that are on element faces that have no or only an outside-region neighbor
+    vector<size_t>  fnids;
+    for ( auto it : elements_ ) {
+         const size_t neighbors(it->Neighbors());
+         //cout<<"    neighbors = "<<neighbors<<endl;
+         for ( size_t i=0U; i<neighbors; ++i )
+            if ( it->Neighbor(i) == nullptr ||
+                !binary_search( elements_.begin(), elements_.end(), it->Neighbor(i) ) ) {
+                 // collecting the perimeter nodes into a set
+                 it->FE()->NodesOfFace( i, fnids );
+                 const size_t nodes_of_face(fnids.size());
+                 //cout<<"   nodes_of_face = "<<nodes_of_face<<endl;
+                 for ( size_t j=0U; j<nodes_of_face; ++j )
+                   perimeter_nodes.insert( it->N(fnids[j]) );
+              }
+            //else cerr <<"i ";
+      }
+
+    // SHOULD NOT BE NECESSARY (but else, the interior nodes are overwritten by superfluous perimeter nodes???
+    for ( typename vector<Node<dim>*>::iterator nit(first); nit!=nodes_end; ++nit )
+        perimeter_nodes.erase( (*nit) );
+
+#ifdef NIMBLE_REGION_DEBUG
+    // debugging: labeling the perimeter nodes continuously
+    for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes.end(); ++nit )
+      (*nit)->Idx( counter++ );
+#endif
+
+    // inserting the sorted perimeter nodes at the end of the node vector so that it now consists of 2 sorted ranges
+    nodes_.reserve( n_interior_nodes_ + perimeter_nodes.size() );
+    const typename set<Node<dim>*>::iterator perimeter_nodes_end(perimeter_nodes.end());
+    for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes_end; ++nit )
+      // if the node is located on the model boundary, it is a perimeter node
+      nodes_.push_back( (*nit) );
+ } // end Update
+
 
 
 
