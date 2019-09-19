@@ -1,10 +1,12 @@
 #include "TextFileIO.h"
 #include "Boundary.h"
 
+#include <algorithm>
+#include <regex>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef _WIN32
-#include <unistd.h>
+#include <unistd.h> // part of the unix operating system
 #endif
 
 using namespace std;
@@ -66,7 +68,7 @@ An error is reported if the input file cannot be opened.
 template<class FileStream>
 bool openFile( FileStream& fs, const std::string& fname )
 {
-  char    filename[200];
+  char    filename[NAME_STRING];
 
   assert( !fname.empty() );
   strcpy( filename, fname.c_str() );
@@ -89,7 +91,7 @@ template bool openFile( std::ofstream&, const std::string& );
 template<class FileStream>
 bool openFile( FileStream& fs, const std::string& fname, const std::string& file_extension )
 {
-  char    filename[200];
+  char    filename[NAME_STRING];
 
   assert( !fname.empty() );
   strcpy( filename, fname.c_str() );
@@ -114,7 +116,7 @@ template<class FileStream>
 bool openFile( FileStream& fs, const std::string& fname, const std::vector<std::string>& file_extensions )
 {
   bool success( false );
-  char    filename[200];
+  char    filename[NAME_STRING];
   assert( !fname.empty() );
 
   strcpy( filename, fname.c_str() );
@@ -154,6 +156,74 @@ template bool openFile( std::ifstream&, const std::string&, const std::vector<st
 template bool openFile( std::ofstream&, const std::string&, const std::vector<std::string>& );
 
 
+
+/**
+    Splitting a C-string into tokens.
+*/
+vector<string> split( const char *str, char c )
+{
+    vector<string> result;
+    do {
+        const char *begin = str;
+        while( *str != c && *str != '\0' ) str++;
+        result.push_back(string(begin, str));
+      
+    } while (0 != *str++);
+
+    return result;
+}
+
+
+
+
+
+/**
+    tokenising a string with a C++ regex token iterator
+*/
+vector<string> tokenise( string str, const string regular_expression )
+ {
+    regex rgx(regular_expression);
+    sregex_token_iterator iter( str.begin(), str.end(), rgx, -1 );
+    sregex_token_iterator end;
+   
+    vector<string> tokens;
+    for ( ; iter != end; ++iter )
+      tokens.push_back( *iter );
+   
+    return tokens;
+}
+
+
+
+
+/* OTHER REGEX OPERATIONS
+/// tokenising a string with a C++ regular expression
+vector<string> tokenise( string str, const string regular_expression )
+ {
+    regex words_regex(regular_expression);
+    auto words_begin = sregex_iterator( str.begin(), str.end(), words_regex );
+    auto words_end   = sregex_iterator();
+
+    vector<string> tokens;
+    tokens.reserve( distance(words_begin,words_end) );
+    for ( sregex_iterator i = words_begin; i != words_end; ++i )
+      tokens.push_back( (*i).str() );
+ 
+    return tokens;
+ }
+*/
+
+
+/// removes any whitespace from string, returning the remaining character sequence
+string  withoutSpaces( std::string str )
+ {
+    str.erase( remove_if(str.begin(), str.end(), ::isspace ), str.end() );
+    return str;
+ }
+
+
+
+
 /** The method reads the ASCII file headline and echoes it to the
 screen. The correctly read string is returned.
 
@@ -169,17 +239,16 @@ a title line,
 */
 bool readFileHeader( ifstream& ifs, string& header, bool verbose )
 {
-  char  text_line[256];
+  char  text_line[NAME_STRING];
 
   // reading file header
-  ifs.getline( text_line, 256 ); // title line
+  ifs.getline( text_line, NAME_STRING ); // title line
 
-  if ( verbose )
-  {
-    cout << "\nreadFileHeader: File header: " << endl;
-    cout << "\n\t" << text_line << endl;
-    header = text_line;
-  }
+  if ( verbose ) {
+      cout << "\nreadFileHeader: File header: " << endl;
+      cout << "\n\t" << text_line << endl;
+    }
+  header = text_line;
 
   if ( header.empty() )
     return false;
@@ -188,11 +257,17 @@ bool readFileHeader( ifstream& ifs, string& header, bool verbose )
 
 } // readFileHeader
 
+
+
+
+
 bool readLineTellIfBlank( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   ifs.getline( text_line, line_length );
   return isBlankLine( text_line );
 }
+
+
 
 bool readNonBlankLine( std::ifstream& ifs, char* text_line, size_t line_length )
 {
@@ -201,6 +276,8 @@ bool readNonBlankLine( std::ifstream& ifs, char* text_line, size_t line_length )
     ifs.getline( text_line, line_length );
   return true;
 }
+
+
 
 int readFirstLineInBlock( std::ifstream& ifs, char* text_line, size_t line_length )
 {
@@ -218,6 +295,8 @@ int readFirstLineInBlock( std::ifstream& ifs, char* text_line, size_t line_lengt
   return 1;
 }
 
+
+
 int readIncludeFileName( std::ifstream& ifs, char* text_line, size_t line_length,
                          std::string& fname )
 {
@@ -233,6 +312,8 @@ int readIncludeFileName( std::ifstream& ifs, char* text_line, size_t line_length
 
   return 1;
 }
+
+
 
 bool readKeyword( std::ifstream& ifs, char* text_line, size_t line_length,
                   std::string& keyword, std::vector<std::string>&  keyword_parameters )
@@ -259,6 +340,8 @@ bool readKeyword( std::ifstream& ifs, char* text_line, size_t line_length,
   return true;
 }
 
+
+
 bool readKeywordsAndParameters( std::ifstream& ifs, char* text_line, size_t line_length, bool verbose,
                                 std::vector<std::pair<std::string, std::vector<std::string> > >& keywords_and_parameters )
 {
@@ -283,6 +366,9 @@ bool readKeywordsAndParameters( std::ifstream& ifs, char* text_line, size_t line
   return true;
 }
 
+
+
+
 /**
 @section arguments Input Arguments
 
@@ -290,6 +376,17 @@ The method acts on the input character string.
 
 @return The method returns true if the line is blank, else false.
 */
+bool isBlankLine( const char* str )
+{
+   const size_t strlength = strlen( str );
+   for ( size_t i=0U; i<strlength; ++i )
+     if ( !isblank( str[i] ) ) return false;
+
+   return true;
+}
+
+
+/* SUPERSEDED FUNCTION
 bool isBlankLine( const char* str )
 {
   if ( strlen( str ) <= 1 || str == NULL ) return true;
@@ -303,56 +400,79 @@ bool isBlankLine( const char* str )
 
   return false;
 }
-
+*/
 
 
 /**
 
-If string commences with # sign true is returned, else
-false is returned but if there is a # sign anywhere within the
-string reading is terminated there.
+If string commences with #, % or -- signs, true is returned, else
+false is returned.
+Also if any of these signs are encountered anywhere within the
+string reading is terminated there and an end-of-string '\0'
+terminator is inserted.
 
 @section arguments Input Arguments
 
 The method acts on the input character string.
 
-@return The method returns true if the line is a comment, else false.
+@return The method returns true if the line only contains a comment,
+else false.
+
 */
 bool isCommentLine( char* str )
 {
+  const size_t strlength( strlen(str) );
+
+  // if the comment identifier is at the beginning of line
   if ( str == NULL )
     return false;
+  if ( str[0] == '#' || str[0] == '%' )
+    return true;
+  if ( (strlength >= 2) && (str[0] == '-') && (str[1] == '-') )
+    return true;
+
+  // if the comment identifier is somewhere in the line
+  for ( size_t i = 0U; i<strlength; i++ )
+    {
+       if ( str[i] == '#' || str[i] == '%' ) {
+            str[i] = '\0';
+            break;
+         }
+       else if ( str[i] == '-' ) {
+          if ( i < (strlength - 1) )
+            if ( str[i + 1] == '-' ) {
+                 str[i] = '\0';
+                 break;
+              }
+        }
+    }
+  return false;
+}
+
+
+/*
+bool isCommentLine( const string& str )
+{
+  if ( str.empty() ) return false;
+  
   if ( str[0] == '#' || str[0] == '%' )
     return true;
   if ( (str[0] == '-') && (str[1] == '-') )
     return true;
 
-  const size_t strlength( strlen( str ) );
-  for ( size_t i = 0U; i<strlength; i++ )
-    if ( str[i] == '#' || str[i] == '%' ) {
-      str[i] = '\0';
-      break;
-    }
-    else if ( str[i] == '-' ) {
-      if ( i != strlength - 1 )
-        if ( str[i + 1] == '-' ) {
-          str[i] = '\0';
-          break;
-        }
-    }
-    return false;
+   return false;
 }
-
+*/
 
 
 /** Advances the file stream to behind the comment line.
 */
 void advancePastCommentLine( std::ifstream& ifs )
 {
-  char  text_line[512];
+  char  text_line[INFO_STRING];
   do {
-    ifs.getline( text_line, 512 );
-  } while ( (!isCommentLine( text_line ) && !ifs.eof()) );
+    ifs.getline( text_line, INFO_STRING );
+  } while ( !isCommentLine( text_line ) && !ifs.eof() );
 
   std::cout << "\n\tSkipped comment line: " << text_line << std::endl;
 
@@ -387,6 +507,8 @@ bool isYES( const std::string& text_line )
     return true;
   return false;
 }
+
+
 
 
 bool isNO( const std::string& text_line )
@@ -490,18 +612,32 @@ bool isIntegerNumber( const char* s, int len )
 
 // READ PROPERTY VALUES
 
+/**
+    Converts string to double returning NaN when nodata values are encountered.
+    Turns values into NaN when encountering any of the strings:
+ 
+    "nodata", "NO_DATA", "no data", "NaN", "NAN"
+*/
+double64 parseDataValue( const std::string& value )
+ {
+    if ( value == "nodata" || value == "NO_DATA" || value == "no data" ||
+         value == "NaN" || value == "NAN" )
+      return numeric_limits<double64>::quiet_NaN();
+   
+    return atof( value.c_str() );
+ }
 
 
 /**
 
-reads any of the CSP basic variables from the current string stream
+Reads any of the CSMP basic variables from the current string stream
 tokenizing it with the delimiters ' ,:,\t,\n,\r'. Depending on the
 variable type and the dimension of the model a certain number of
 tokens is expected to be contained in the stream. Thus, for a
 vector and tensor variables in 2D, 2 and 4 variable values are
 expected, respectively. and dim and dim x dim in any other dimension.
 
-@param sc The correctluy parsed data is returned into the variable that forms
+@param sc The correctly parsed data is returned into the variable that forms
 the method argument.
 
 @section messages Messages

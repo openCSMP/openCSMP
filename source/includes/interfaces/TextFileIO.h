@@ -64,6 +64,7 @@ bool readKeyword( std::ifstream& ifs, char* text_line, size_t line_length,
 bool readKeywordsAndParameters( std::ifstream& ifs, char* text_line, size_t line_length, bool verbose,
                                 std::vector<std::pair<std::string, std::vector<std::string> > >& );
 bool isBlankLine( const char* str );
+/// detects lines beginning with #, %, --; char* not constant because first comment char gets replaced by '\0'
 bool isCommentLine( char* str );
 void advancePastCommentLine( std::ifstream& ifs );
 int  yes_or_no( const std::string& );
@@ -74,7 +75,20 @@ bool isRealNumber( const char*, int len=2 );
 bool isIntegerNumber( const std::string&, int len=2 );
 bool isIntegerNumber( const char*, int len=2 );
 
+/// tokenising a string with a single chosen control character; default = blank
+std::vector<std::string> split( const char* , char c = ' ' );
+
+/// tokenising a string with a set of chosen control characters using C++ regular expressions
+std::vector<std::string> tokenise( std::string, const std::string regular_expression="[#%^\t\r\n]" );
+
+/// removes whitespace from string, returning the remaining character sequence
+std::string  withoutSpaces( std::string );
+
+
 // Reading property values
+
+/// parses scalars including "nodata" and NaN values
+double64 parseDataValue( const std::string& value );
 
 void readPropertyValue( ScalarVariable& sc );
 
