@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Stephan Matthai. All rights reserved.
 //
 
-#ifndef MECHANICAL_PROPERTIES_H
-#define MECHANICAL_PROPERTIES_H
+#ifndef CSMP_MECHANICAL_PROPERTIES_H
+#define CSMP_MECHANICAL_PROPERTIES_H
 
 #include "CSMP_definitions.h"
 
@@ -20,8 +20,28 @@ double64  frictionAngle( double64 friction_coeff );
 double64  tensileStrengthFromUCS_Griffith( double64 UCS, double64 fric_coeff );
 
 
+/**
+    Regional properties shared by multiple elements, but have variations
+    that can be calculated knowing other local properties discretized
+    on the elements.
+ 
+    Example: Young's modulus can be calculated from the value stored
+    here with corrections based on the deviation of the local porosity
+    from that for which E was determined.
+ 
+    Such calculations must be informed by petrophysical correlations
+    and the results might have to be perturbed by some randon variable
+    to reflect natural variations.
+ 
+*/
 struct MechanicalProperties {
+   /// granite properties as default
    MechanicalProperties();
+  
+   /// from property values supplied as a vector
+   explicit MechanicalProperties( const std::vector<double64>& properties );
+  
+   /// partial initialisation
    MechanicalProperties( double64 E, double64 K, double64 nu,
                          double64 tensile_strength, double64 fric_coeff );
   
@@ -36,9 +56,12 @@ struct MechanicalProperties {
    double64  nu;         ///< Poisson's ratio
    double64  C;          ///< cohesive strength = inherent shear strength
   
+   // TODO: here we need the correlations that relate the properties to variations in the parent rock type
+   // derived properties for fault rocks: dilatation, compaction etc.
+  
    void Out() const;
 };
 
 }  // end namespace csmp
 
-#endif
+#endif /* CSMP_MECHANICAL_PROPERTIES_H */

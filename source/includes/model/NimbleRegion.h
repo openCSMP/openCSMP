@@ -2,6 +2,8 @@
 #define CSMP_NIMBLE_REGION_H
 
 #include "CSMP_definitions.h"
+#include "Exception.h"
+#include "ErrorHandler.h"
 
 namespace csmp {
 
@@ -67,6 +69,8 @@ class NimbleRegion {
 
     /// as above, but with different way to find perimeter (FAIL: perimeter incorrect for discontiguous patches)
     void Update2( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    
+    void Update3( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
   
 /* CARRY OUT DIAGNOSTICS WHETHER THESE INTERFACES ARE WORTH IMPLEMENTING
 
@@ -118,6 +122,19 @@ class NimbleRegion {
   
     /// writes the current element and node memberships to the console
     void Out() const;
+    
+    std::string Name() const
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::Name","Method not implemented");};
+    bool IsPerimeterNode( const csmp::Node<dim>* ) const 
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterNode","Method not implemented");};
+    void UpdateMemberIndexes() const
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::UpdateMemberIndexes","Method not implemented");};    
+    bool IsPerimeterElement( const size_t eidx ) const
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterElement","Method not implemented");};  
+    size_t SharedPerimeterNodes(typename std::vector<csmp::Node<dim>*>::const_iterator start, 
+                                typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::SharedPerimeterNodes","Method not implemented");};  
+    
 
   private:
     NimbleRegion() = delete;

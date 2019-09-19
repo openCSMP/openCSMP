@@ -33,6 +33,8 @@ class DES2PhaseTransport {
     
     virtual void AdvectVariable_DES( double64 model_time, size_t num_threads=1 ) = 0;
     virtual void AdvectVariable_TDS( double64 time_interval, size_t num_threads=1 ) = 0;
+    
+    void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;}; 
    
     typedef ajb::detail::FibonacciHeap_Node<double64,size_t> Heap_Node;
 
@@ -49,7 +51,6 @@ class DES2PhaseTransport {
     virtual void Update_TDS(Event<dim>* event, double64 delta_t) = 0;    
     virtual void Synchronize(Event<dim>* event,double64 t_clock,double64& t_remove) = 0;
     
-    void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;};  
 
     Model<dim>& sg_;
     Region<dim>& gref_;

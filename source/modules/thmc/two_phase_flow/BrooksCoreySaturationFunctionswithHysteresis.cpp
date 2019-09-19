@@ -11,10 +11,11 @@ namespace csmp {
   
 template<size_t dim, template<size_t> class USER>
 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& pref )
-// TODO: create props  : key_SwImbToDr_(pref.StorageKey("previous imbibition endpoint")),
-// TODO: create props    key_SwDrToImb_(pref.StorageKey("previous drainage endpoint")),
-// TODO: create props    key_prsH2O_(pref.StorageKey("pseudo residual water saturation")),
-// TODO: create props    key_prsCO2_(pref.StorageKey("pseudo residual CO2 saturation"))
+
+  : key_SwImbToDr_(pref.StorageKey("previous imbibition endpoint")),
+    key_SwDrToImb_(pref.StorageKey("previous drainage endpoint")),
+    key_prsH2O_(pref.StorageKey("pseudo residual saturation aqueous phase")),
+    key_prsCO2_(pref.StorageKey("pseudo residual saturation carbonic phase"))
  {
    /* in case these will have to be created dynamically
    

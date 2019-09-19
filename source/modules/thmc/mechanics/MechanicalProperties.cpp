@@ -8,6 +8,7 @@
 
 #include "MechanicalProperties.h"
 #include "CSMP_physical_constants.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -27,6 +28,27 @@ MechanicalProperties::MechanicalProperties()
    C(0.2*E)          // cohesion = inherent shear strength
  {
  }
+
+
+
+
+MechanicalProperties::MechanicalProperties( const std::vector<double64>& p )
+ {
+   if ( p.size() < 10 )
+     throw csmp::Exception( ERROR, "MechanicalProperties::ctor(vector):", "input vector too small to initialise values." );
+   E     = p[0];  // Young's modulus
+   B     = p[1];  // drained bulk modulus (K_dry)
+   nu    = p[2];  // Poisson's ratio
+   TS    = p[3];  // tensile strength
+   mu    = p[4];  // friction coefficient from 0 to >1 (some rubbers)
+   G     = p[5];  // from relations between elastic moduli
+   alpha = p[6];  // Biot coefficient phi <= alpha <= 1
+   UCS   = p[7];  // Hoek-Brown criterion inferred value
+   pstar = p[8];  // about 5-7 times of the UCS of the rock
+   C     = p[9];  // cohesion = inherent shear strength
+ }
+
+
 
 
 MechanicalProperties::MechanicalProperties( double64 E, double64 beta, double64 nu,
