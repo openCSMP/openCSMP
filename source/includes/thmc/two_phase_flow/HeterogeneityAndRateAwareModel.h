@@ -57,7 +57,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   
     virtual ~HeterogeneityAndRateAwareModel();
   
-    virtual void Initialize( const Element<dim>& e );
+    virtual void Initialize( const Element<dim>& );
 
     /// average effective saturation as required by 2-phase model
     virtual double64  EffectiveSaturation() const;

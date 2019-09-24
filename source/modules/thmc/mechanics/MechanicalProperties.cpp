@@ -16,16 +16,16 @@ namespace csmp {
 
 /// granite
 MechanicalProperties::MechanicalProperties()
- : E(5.5e10),        // Young's modulus
-   B(5.0e10),        // drained bulk modulus (K_dry)
-   nu(0.2),          // Poisson's ratio
-   TS(5.0e7),        // tensile strength
-   mu(0.6),          // friction coefficient from 0 to >1 (some rubbers)
-   G(0.5*E/(1+0.2)), // from relations between elastic moduli
-   alpha(0.03),      // Biot coefficient phi <= alpha <= 1
-   UCS(1.5e8),       // Hoek-Brown criterion inferred value
-   pstar(0.6*E),     // about 5-7 times of the UCS of the rock
-   C(0.2*E)          // cohesion = inherent shear strength
+ : E_(5.5e10),        // Young's modulus
+   B_(5.0e10),        // drained bulk modulus (K_dry)
+   nu_(0.2),          // Poisson's ratio
+   TS_(5.0e7),        // tensile strength
+   mu_(0.6),          // friction coefficient from 0 to >1 (some rubbers)
+   G_(0.5*E_/(1+0.2)), // from relations between elastic moduli
+   alpha_(0.03),      // Biot coefficient phi <= alpha <= 1
+   UCS_(1.5e8),       // Hoek-Brown criterion inferred value
+   pstar_(0.6*E_),    // about 5-7 times of the UCS of the rock
+   C_(0.2*E_)         // cohesion = inherent shear strength
  {
  }
 
@@ -36,16 +36,16 @@ MechanicalProperties::MechanicalProperties( const std::vector<double64>& p )
  {
    if ( p.size() < 10 )
      throw csmp::Exception( ERROR, "MechanicalProperties::ctor(vector):", "input vector too small to initialise values." );
-   E     = p[0];  // Young's modulus
-   B     = p[1];  // drained bulk modulus (K_dry)
-   nu    = p[2];  // Poisson's ratio
-   TS    = p[3];  // tensile strength
-   mu    = p[4];  // friction coefficient from 0 to >1 (some rubbers)
-   G     = p[5];  // from relations between elastic moduli
-   alpha = p[6];  // Biot coefficient phi <= alpha <= 1
-   UCS   = p[7];  // Hoek-Brown criterion inferred value
-   pstar = p[8];  // about 5-7 times of the UCS of the rock
-   C     = p[9];  // cohesion = inherent shear strength
+   E_     = p[0];  // Young's modulus
+   B_     = p[1];  // drained bulk modulus (K_dry)
+   nu_    = p[2];  // Poisson's ratio
+   TS_    = p[3];  // tensile strength
+   mu_    = p[4];  // friction coefficient from 0 to >1 (some rubbers)
+   G_     = p[5];  // from relations between elastic moduli
+   alpha_ = p[6];  // Biot coefficient phi <= alpha <= 1
+   UCS_   = p[7];  // Hoek-Brown criterion inferred value
+   pstar_ = p[8];  // about 5-7 times of the UCS of the rock
+   C_     = p[9];  // cohesion = inherent shear strength
  }
 
 
@@ -53,17 +53,17 @@ MechanicalProperties::MechanicalProperties( const std::vector<double64>& p )
 
 MechanicalProperties::MechanicalProperties( double64 E, double64 beta, double64 nu,
                                             double64 tensile_strength, double64 fric_coeff )
- : E(E),    // Young's modulus
-   B(beta), // drained bulk modulus (K_dry)
-   nu(nu),  // Poisson's ratio
-   TS(tensile_strength),
-   mu(fric_coeff),  // friction coefficient from 0 to >1 (some rubbers)
+ : E_(E),    // Young's modulus
+   B_(beta), // drained bulk modulus (K_dry)
+   nu_(nu),  // Poisson's ratio
+   TS_(tensile_strength),
+   mu_(fric_coeff),  // friction coefficient from 0 to >1 (some rubbers)
    // plausible values for sedimentary rocks
-   G(0.5*E/(1+nu)), // from relations between elastic moduli
-   alpha(0.6),      // Biot coefficient phi <= alpha <= 1
-   UCS(0.1*E),      // Hoek-Brown criterion inferred value
-   pstar(0.6*E),    // about 5-7 times of the UCS of the rock
-   C(1.0e4)         // cohesion = inherent shear strength
+   G_(0.5*E/(1+nu)), // from relations between elastic moduli
+   alpha_(0.6),      // Biot coefficient phi <= alpha <= 1
+   UCS_(0.1*E),      // Hoek-Brown criterion inferred value
+   pstar_(0.6*E),    // about 5-7 times of the UCS of the rock
+   C_(1.0e4)         // cohesion = inherent shear strength
  {
  }
 
@@ -102,16 +102,16 @@ double64  tensileStrengthFromUCS_Griffith( double64 UCS, double64 fric_coeff )
 void MechanicalProperties::Out() const
  {
     cout <<"\nMechanicalProperties::Out:";
-    cout <<"\nE:     "<< E <<" Young's modulus (Pa)";
-    cout <<"\nB:     "<< B <<" bulk modulus = compressibility of rock skeleton = K_dry (Pa)";
-    cout <<"\nG:     "<< G <<" shear modulus = modulus of rigidity (Pa)";
-    cout <<"\nalpha: "<< alpha <<" Biot coefficient alpha = 1 - K_dry/K_grain (dimensionless ratio)";
-    cout <<"\nTS:    "<< TS <<" tensile strength (Pa)";
-    cout <<"\nUCS:   "<< UCS <<" unconfined compressive strength (Pa)";
-    cout <<"\npstar: "<< pstar <<" crushing pressure of the rock, see Fjaer et al. 08', p. 68 (Pa)";
-    cout <<"\nmu:    "<< mu <<" friction coefficient (dimensionless)";
-    cout <<"\nnu:    "<< nu <<" Poisson's ratio (dimensionless ratio)";
-    cout <<"\nC:     "<< C <<" cohesive strength = inherent shear strength (Pa).\n";
+    cout <<"\n\tE:     "<< E_ <<" Young's modulus (Pa)";
+    cout <<"\n\tB:     "<< B_ <<" bulk modulus = compressibility of rock skeleton = K_dry (Pa)";
+    cout <<"\n\tG:     "<< G_ <<" shear modulus = modulus of rigidity (Pa)";
+    cout <<"\n\talpha: "<< alpha_ <<" Biot coefficient alpha = 1 - K_dry/K_grain (dimensionless ratio)";
+    cout <<"\n\tTS:    "<< TS_ <<" tensile strength (Pa)";
+    cout <<"\n\tUCS:   "<< UCS_ <<" unconfined compressive strength (Pa)";
+    cout <<"\n\tpstar: "<< pstar_ <<" crushing pressure of the rock, see Fjaer et al. 08', p. 68 (Pa)";
+    cout <<"\n\tmu:    "<< mu_ <<" friction coefficient (dimensionless)";
+    cout <<"\n\tnu:    "<< nu_ <<" Poisson's ratio (dimensionless ratio)";
+    cout <<"\n\tC:     "<< C_ <<" cohesive strength = inherent shear strength (Pa).\n";
  }
 
 

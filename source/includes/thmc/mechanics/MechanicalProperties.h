@@ -45,16 +45,16 @@ struct MechanicalProperties {
    MechanicalProperties( double64 E, double64 K, double64 nu,
                          double64 tensile_strength, double64 fric_coeff );
   
-   double64  E;          ///< Young's modulus
-   double64  B;          ///< bulk modulus = compressibility of rock skeleton = K_dry
-   double64  G;          ///< shear modulus = modulus of rigidity
-   double64  alpha;      ///< Biot coefficient alpha = 1 - K_dry/K_grain
-   double64  TS;         ///< tensile strength
-   double64  UCS;        ///< unconfined compressive strength
-   double64  pstar;      ///< crushing pressure of the rock, see Fjaer et al. 08', p. 68
-   double64  mu;         ///< friction coefficient
-   double64  nu;         ///< Poisson's ratio
-   double64  C;          ///< cohesive strength = inherent shear strength
+   double64  E_;          ///< Young's modulus
+   double64  B_;          ///< bulk modulus = compressibility of rock skeleton = K_dry
+   double64  G_;          ///< shear modulus = modulus of rigidity
+   double64  alpha_;      ///< Biot coefficient alpha = 1 - K_dry/K_grain
+   double64  TS_;         ///< tensile strength
+   double64  UCS_;        ///< unconfined compressive strength
+   double64  pstar_;      ///< crushing pressure of the rock, see Fjaer et al. 08', p. 68
+   double64  mu_;         ///< friction coefficient
+   double64  nu_;         ///< Poisson's ratio
+   double64  C_;          ///< cohesive strength = inherent shear strength
   
    // TODO: here we need the correlations that relate the properties to variations in the parent rock type
    // derived properties for fault rocks: dilatation, compaction etc.
