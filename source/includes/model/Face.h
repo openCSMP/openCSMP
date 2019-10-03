@@ -134,7 +134,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// access the nodes that are connected to the Face
     csmp::Node<dim>*  N( size_t n_local ) const;
   
-    /// access the meighbor faces of this face
+    /// access the neighbor faces of this face
     csmp::Face<dim>*  Neighbor( size_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)

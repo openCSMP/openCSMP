@@ -181,10 +181,11 @@ can also be used for mixed (poly-element type meshes).
 
 @section messages Messages 
 
-Binary files cannot be transferred between platforms. To protect the
+To protect the
 user against the erratic reading of transferred binary files a 
 detailed reporting of the reading progress is output and 
 errors are raised is encountered.  
+
 */
 
 template<size_t dim>

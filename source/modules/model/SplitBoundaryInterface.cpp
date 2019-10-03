@@ -382,6 +382,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBou
 } // end DetectAndCreateSplitBoundaries
 
 
+
+
+
 /**
 Method forms a SplitBoundary between the two supplied regions. This will involve the creation
 and connection of InterFaces.
@@ -502,6 +505,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 } // end InsertSplitBoundary
 
 
+
+
+
 /**
 Creates SplitBoundarty around a unique volumetric(3D) / surface(2D) region; except for model boundary.
 
@@ -594,6 +600,9 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 } // end InsertSplitBoundary
 
 
+
+
+
 /**
 Insert a lower-dimensional element mesh into the model, which is fully disconnected from the model,
 to represent a fracture that coincides with a SplitBoundary according to
@@ -603,10 +612,13 @@ It only shares the locations of the nodes (if the SplitBoundary has not been mod
 lies in the symmetry plane of the 2 sides if the nodes have been separated by deformation.
 
 @author JCK updated 26/08/2019
+
+TODO: like Boundary patches, the split boundary patches should have unique names that reflect juxtaposition relationships of regions
+
 */
 
 template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
-bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBoundaries()
+bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RegionsFromSplitBoundaries( std::set<std::string>& newly_created_regions )
 {
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
   ErrorHandler&               csmp_error(ErrorHandler::Instance());
@@ -717,11 +729,16 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionFromSplitBo
 
   bool unique_map = true;
   std::string subregion_name("SPLITBOUNDARY_SURFACE");
+  // TODO: here should be the names of the patches, created one-by-one reflecting the juxtaposition relationships of the split regions
+  newly_created_regions.insert( subregion_name );
   splitboundaryComplex->FormRegionFrom(subregion_name.c_str(), element_numbers, unique_map);
 
   return true;
 
-} // end InsertRegionFromSplitBoundaries
+} // end RegionsFromSplitBoundaries
+
+
+
 
 /**
 Prints current SplitBoundaries to screen

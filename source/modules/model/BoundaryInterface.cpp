@@ -113,6 +113,7 @@ const Boundary<dim>&  BoundaryInterface<dim,BOUNDARY_COMPLEX>::Boundary( const s
 /**
     @author Philipp Lang
 */
+/*
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim,BOUNDARY_COMPLEX>::SwitchBoundaryNames( csmp::Boundary<dim> const& b1, csmp::Boundary<dim> const& b2 )
 {
@@ -151,7 +152,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::SwitchBoundaryNames( csmp::Boundar
   faceBoundaryMap_.insert( make_pair( b2Name, b1Copy) );
   faceBoundaryMap_.insert( make_pair( b1Name, b2Copy) );
 } 
-
+*/
 
 
 

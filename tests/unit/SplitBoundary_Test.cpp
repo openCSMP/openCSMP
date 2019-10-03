@@ -8,6 +8,8 @@
 
 using namespace std;
 
+// TODO: when the new nodes and elements are created, are the property values from the old nodes mapped to them? - would this help a user?
+
 namespace csmp
 {
 
@@ -751,7 +753,8 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  model->InsertRegionFromSplitBoundaries();
+  set<string> new_regions;
+  model->RegionsFromSplitBoundaries( new_regions );
 
   // 5. Writing it 
   model->OutputToBinaryFile( model_name.c_str() );
@@ -1013,7 +1016,8 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  modelIN->InsertRegionFromSplitBoundaries();
+  set<string> new_regions;
+  modelIN->RegionsFromSplitBoundaries( new_regions );
 
   // read Model from Binary
   modelIN->OutputToBinaryFile( model_name.c_str() );
@@ -1073,6 +1077,8 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
 }
 
 
+
+
 template<size_t dim>
 void SplitBoundary_Test::detect_and_create_splitboundaries( const std::string& model_name )
 {
@@ -1128,7 +1134,8 @@ void SplitBoundary_Test::detect_and_create_splitboundaries_from_constructor( con
   
   // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  model->InsertRegionFromSplitBoundaries();
+  set<string> new_regions;
+  model->RegionsFromSplitBoundaries( new_regions );
 
   // 3. see whether the split boundary survives being writting to and recovered from file
   // ------------------------------------------------------------------------------------------
