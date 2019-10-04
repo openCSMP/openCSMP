@@ -221,6 +221,8 @@ template<size_t dim>
 IntegrationPointVariables  SplitBoundary<dim>::InterFaceIntegrationPointVariables() const
 { return this->pref_.IntegrationPointVariablesAt( INTER_FACE ); }
 
+
+
 template<size_t dim>
 LocalVariables  SplitBoundary<dim>::InterFaceVariables() const
 { return this->pref_.LocalVariablesAt( INTER_FACE ); }
@@ -566,7 +568,6 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
   deque<InterFace<dim>*> interfaces;
   exploreInterFacesFromMesh( &model.Mesh(), interfaces );
 
-  size_t idx = model.Mesh().Elements() + model.Mesh().Faces() + model.Mesh().InterFaces();// faces.size() + interfaces.size();
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
   {
@@ -617,7 +618,7 @@ bool  SplitBoundary<dim>::CreateFrom( Model<dim>& model,
 @author  JC
 @date  1/7/2019
 
-@param Dimension
+@param meshManager which will take care of the creation of the new elements
 @param femManager  Manager for finite elements.
 @param interfaceTypes   List of types of the interfaces.
 @param interfaceParents The interface parents.
@@ -650,7 +651,6 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
   // looping over regions elements, assuring that it's an eligible interface type, creating new interface with variable storage,
   // establishing connectivity and inserting into boundary element container
   size_t fidx = meshManager.Elements() + meshManager.Faces() + meshManager.InterFaces();
-  InterFace<dim>* root_interface( NULL );
   for ( size_t f( 0 ); f < interfaceTypes.size(); ++f )
   {
     femPtr = femManager.E( interfaceTypes[f] );
@@ -714,6 +714,8 @@ bool SplitBoundary<dim>::CreateFrom( MeshManager<dim>&                          
   return true;
 
 } // end CreateFrom
+
+
 
 
 /*
@@ -810,6 +812,10 @@ void SplitBoundary<dim>::Split( Model<dim>& model,
 
   return;
 }
+
+
+
+
 
 
 /// CALCULATIONS

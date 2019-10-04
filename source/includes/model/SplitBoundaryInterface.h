@@ -37,13 +37,16 @@ class SplitBoundaryInterface {
     // -----------------------------------------------
     // SplitBoundary creation and deletion
     // -----------------------------------------------
+    // TODO: make consistent with Boundary (line 302-318 .cpp file)
     std::string  CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
         
     /// Creates SplitBoundary detecting and connecting node-matched disconnected perimeter element faces in mesh; these are grouped and named for regions
+    // TODO: check name generation, use material ID
     bool DetectAndCreateSplitBoundaries();
 
 //  TODO: a separate method is needed for the one-to-one conversion of a Boundary into a SplitBoundary
     bool CreateFrom( const Boundary<dim>& );
+    bool CreateFrom( const Region<dim>& );
 
     /// Creation of SplitBoundary around region
     bool InsertSplitBoundary( const std::string& region );
@@ -52,6 +55,7 @@ class SplitBoundaryInterface {
     bool InsertSplitBoundary( const std::string& region1, const std::string& region2, bool createRegionBetween = false );
 
     /// Creates lower-dimensional regions that lie in between the mesh patches that are separated by the split boundaries; creates unique names indicating region juxtaposition
+    // TODO: think of new names for these regions like INTERFACE...
     bool RegionsFromSplitBoundaries( std::set<std::string>& newly_created_regions );
 
     /// Removes splitboundary

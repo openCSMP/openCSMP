@@ -372,9 +372,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBou
     }
     else
       throw csmp::Exception( INFO,
-                              "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries:",
-                              "",
-                              "splitboundary already exists. Nothing was done." );
+                            "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries:",
+                            "splitboundary already exists. Nothing was done." );
   }
 
   return true;
@@ -449,6 +448,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 
   // attempt to create a regular (InterFace-based) splitboundary
   else {
+    // TODO: make name consistent with name of boundary (replace string BOUNDARY with SPLIT_BOUNDARY)
     std::string  splitboundaryName( CreateSplitBoundaryName( key ) );
     std::pair<typename std::map<std::string, csmp::SplitBoundary<dim> >::iterator, bool>
       it = splitBoundaryMap_.insert( std::make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,

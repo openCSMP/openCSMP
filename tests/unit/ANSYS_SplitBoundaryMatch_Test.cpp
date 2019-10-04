@@ -10,8 +10,6 @@
 #include "Model.h"
 #include "VTU_Interface.h"
 
-#include "catch.hpp"
-
 using namespace std;
 
 namespace csmp {

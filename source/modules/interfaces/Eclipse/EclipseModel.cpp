@@ -115,7 +115,7 @@ void EclipseModel::Initialize()
 		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
 		const bool isoparametric(true);
 		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model); // eclipse_model_settings_.create_boundaries_ should be false here.    
-    EstablishRegularitiesForEclipse();
+    EstablishBoxBoundariesFromFlags();
 		UpdateIndices();    
 	}
 	// ---------------------------------------------------

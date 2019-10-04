@@ -38,18 +38,18 @@ template<size_t dim>
 class MathOperatorLHS {
   public:
 
-    MathOperatorLHS( const PropertyDatabase<dim>& pref, 
+    MathOperatorLHS( const PropertyDatabase<dim>&,
                      const char* basic, 
                      const char* test );
 
-    MathOperatorLHS( const PropertyDatabase<dim>& pref, 
+    MathOperatorLHS( const PropertyDatabase<dim>&,
                      const char* oper, 
                      const char* basic, 
                      const char* test );
     
     MathOperatorLHS( const MathOperatorLHS& mo );
     
-    MathOperatorLHS& operator=( const MathOperatorLHS& mo );
+    MathOperatorLHS& operator=( const MathOperatorLHS& );
     
     virtual ~MathOperatorLHS();
     
@@ -163,8 +163,8 @@ class MathOperatorLHS {
     std::string                         name_;   ///< name of operator
 
     Parameter                           op;      ///< material property operand
-    std::pair<Parameter, size_t >       bop;     ///< basic function operand
-    std::pair<Parameter, size_t >       top;     ///< test function operand
+    std::pair<Parameter, size_t >       bop;     ///< basic function operand and calculation offset
+    std::pair<Parameter, size_t >       top;     ///< test function operand and calculation offset
 
     DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
     std::vector<size_t>                 IDT;     ///< node-ID & global constraint points vector ( test operand )

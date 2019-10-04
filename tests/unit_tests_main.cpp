@@ -5,19 +5,15 @@
 #include <string>
 
 #define CATCH_CONFIG_RUNNER
-#include "catch.hpp"
+#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
 
+#include "Test.h" // includes catch.hpp
+#include "TestSuite.h"
 #include "CSMP_definitions.h"
 #include "Exception.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Exception.h"
 #endif
-
-#include "Test.h"
-#include "TestSuite.h"
-
-// read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/  as a tutorial how to use with XCode
-// #include "catch.h"
 
 #include "ScalarVar_Test.h"
 #include "VectorVar_Test.h"

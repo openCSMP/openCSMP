@@ -18,11 +18,6 @@ namespace csmp {
 
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundaryInterface()
-  {}
-
-template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundaryInterface( const BoundaryInterface& bd )
-:faceBoundaryMap_( bd.faceBoundaryMap_ )
   {
   }
 
@@ -292,14 +287,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::IsBoundaryName( const std::string&
      
      3. the patch identifier number attached to boundary
      
-     3. the name of the inner region, i.e. the region that the lower-dimensional element normals point away from
+     4. the name of the inner region, i.e. the region that the lower-dimensional element normals point away from
      
-     4. the name of the outer region, i.e. that into which the normals point
+     5. the name of the outer region, i.e. that into which the normals point
      
      @attention  where the boundary just intersects a layer (same material on either side), the layer name appears
      only once. The second instance is replaced by INTERSECTION.
 */
-std::string createNameOfInternalBoundaryFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const FaceConstructionData& fdata, const vector<string>& region_names ) const
  {
      assert( fdata.ElementMaterial() < region_names.size() );
      std::string boundary_name( region_names[ fdata.ElementMaterial() ] );
@@ -860,6 +856,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
     const string region_tag("region identifier");
     if ( !model.Database().IsDefined(region_tag.c_str()) )
       model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+    // TODO: use ElementMaterial_ID here rather than relying on a new variable
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
     const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
@@ -895,7 +892,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
           // incrementing number of juxtapositions and corresponding patch names
           if ( it.second == true ) {
                fdata.PatchNumber( (*it.first).second );
-               patch_name = createNameOfInternalBoundaryFrom( fdata, region_names );
+               patch_name = CreateBoundaryNameFrom( fdata, region_names );
                patch_names.insert( make_pair(n_juxtapositions,patch_name) );
                n_juxtapositions++;
             }
@@ -2571,16 +2568,16 @@ template<size_t dim> void setToVector( const set<Face<dim>*>& input, vector<Face
     @date 21/8/2018
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientation()
   {
 
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-    std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishRegularities: searching for eligible boundary domains...\n";
+    std::cout << "\nBoundaryInterface<"<< dim <<">::EstablishBoxBoundariesFromOrientation: searching for eligible boundary domains...\n";
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( !boundaryComplex->ContainsBoundary("Model") ) {
-         csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary:",
+         csmp_error.notice( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientation:",
                             "Model", "Boundary was missing. Creating it now.");
 
          AddFaces("Model");
@@ -2679,10 +2676,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishRegularities()
              (*nit)->AtBoundary( bflag );
         }
 
-    std::cout << "\n\nBoundaryInterface::EstablishRegularities: done!\n";
+    std::cout << "\n\nBoundaryInterface::EstablishBoxBoundariesFromOrientation: done!\n";
     return true;
     
-} // end EstablishRegularities
+} // end EstablishBoundaryFlagsFromOrientation
+
+
+
 
 /**
 Tries to partition and replace general boundary 'Model' with more computationally useful model patches
@@ -2692,13 +2692,19 @@ such as TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc.
 @attention this method was designed primarily for three-dimensional models.
 */
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishRegularitiesForEclipse()
+bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromFlags()
 {
 
   BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishRegularities: searching for eligible boundary domains...\n";
+  std::cout << "\nBoundaryInterface<" << dim << ">::EstablishBoxBoundariesFromFlags: searching for eligible boundary domains...\n";
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+  if ( !faceBoundaryMap_.empty() ) {
+       csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoxBoundariesFromFlags:",
+                                   "model already contains Boundary objects; nothing was done.");
+       return false;
+    }
   
   AddFaces( "Model" );
 
@@ -2779,11 +2785,10 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishRegularitiesForEclipse()
         (*nit)->AtBoundary( bflag );
     }
 
-  std::cout << "\n\nBoundaryInterface::EstablishRegularities: done!\n";
+  std::cout << "\n\nBoundaryInterface::EstablishBoxBoundariesFromFlags: done!\n";
   return true;
 
-} // end EstablishRegularities
-
+} // end EstablishBoxBoundariesFromFlags
 
 
 

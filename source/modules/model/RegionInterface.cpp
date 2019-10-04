@@ -1533,7 +1533,9 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegion
 
 /**
 Forms regions using the element ID containers stored in the model topology
-object.
+object. The regions are numbered in their alphabetical order and these numbers are assigned to the material ID of the element class.
+
+@note the material IDs may later be overwritten by rocktypes .
 
 @section arguments Input Arguments
 
@@ -1570,38 +1572,41 @@ bool RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology&
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  size_t new_regions( 0U );
+  int32 new_regions( 0U );
   for ( typename std::list<std::string>::const_iterator lit = regions.begin(); lit != regions.end(); lit++ )
   {
     std::string group_name( *lit );
     std::pair<typename std::map<std::string, csmp::Region<dim> >::iterator, bool>
       it = uniqueGroupMap_.insert( make_pair( group_name, csmp::Region<dim>( group_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    // if the region was successfully inserted
     if ( it.second )
-    {
-      assert( ContainsRegion( (*lit).c_str() ) == true );
+      {
+        // making a list of the element numbers
+        std::vector<size_t>  element_ids;
+        element_ids.reserve( topo.ElementsOfRegion( (*lit).c_str() ) );
+        copy( topo.ElementsOfRegionBegin( (*lit).c_str() ),
+              topo.ElementsOfRegionEnd( (*lit).c_str() ),
+              back_inserter( element_ids ) );
 
-      // making a list of the element numbers
-      std::vector<size_t>  element_ids;
-      element_ids.reserve( topo.ElementsOfRegion( (*lit).c_str() ) );
-      copy( topo.ElementsOfRegionBegin( (*lit).c_str() ),
-            topo.ElementsOfRegionEnd( (*lit).c_str() ),
-            back_inserter( element_ids ) );
+        // assigning the element IDs to the group & cleaning up
+        (*it.first).second.AccumulateByNumber( mesh, element_ids );
+        element_ids.erase( element_ids.begin(), element_ids.end() );
 
-      // assigning the element IDs to the group & cleaning up
-      (*it.first).second.AccumulateByNumber( mesh, element_ids );
-      element_ids.erase( element_ids.begin(), element_ids.end() );
-
-      // removing the group if it contains no elements
-      if ( (*it.first).second.Elements() == 0U ) {
-        uniqueGroupMap_.erase( it.first );
-        csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom",
-                           "Region could not be formed", (*lit).c_str() );
+        // removing the group if it contains no elements
+        if ( (*it.first).second.Elements() == 0U ) {
+            uniqueGroupMap_.erase( it.first );
+            csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom",
+                               "Region could not be formed", (*lit).c_str() );
+          }
+        else {
+            // assigning unique material IDs to the element members of the region
+            for ( auto eit=(*it.first).second.ElementsBegin(); eit!=(*it.first).second.ElementsEnd(); ++eit )
+              (*eit)->Material_ID( new_regions );
+            // reporting the name of the newly generated region
+            std::cout << group_name << " ";
+            new_regions++;
+          }
       }
-      else {
-        std::cout << group_name << " ";
-        new_regions++;
-      }
-    }
     else
       throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom",
                              "Region could not be formed. Does this region already exist?", (*lit).c_str() );

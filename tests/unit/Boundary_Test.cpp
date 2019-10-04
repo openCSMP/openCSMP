@@ -490,7 +490,11 @@ void Boundary_Test::runLegacy()
     */
 
     
-  }
+  } // runLegacy
+
+
+
+
 
   void Boundary_Test::runCurrent()
     {      

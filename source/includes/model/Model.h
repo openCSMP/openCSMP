@@ -337,7 +337,7 @@ public:
   /// permits to transfer node coordinate components to the target scalar node variable; char options are 'x', 'y', 'z'
   void AssignNodeCoordinatesTo( const char* scalar_variable, char coord ); // x, y, z
 
-                                                                           /// transfers the node coordinates to the target VectorVariable<dim>
+  /// transfers  node coordinates to  target VectorVariable<dim>
   void AssignNodeCoordinatesTo( const char* vector_variable );
 
   /// shifts the node coordinates by an amount that is determined by the value of the target VectorVariable<dim>

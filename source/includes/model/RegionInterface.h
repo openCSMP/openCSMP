@@ -141,6 +141,7 @@ public:
   // -----------------------------------------------
 
   /// forms contiguous multiple domains by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
+  // TODO: add material ID initialisation here
   bool CreateRegions( bool is_unique, bool reestablishNeighborConnectivity = true );
 
   /// forms region by graph traversal of all reachable elements in the mesh without expecting element-to-neighbor connections
@@ -149,7 +150,7 @@ public:
   /// forms region from the largest component in the mesh. Does not expect element-no-neighbour connections
   bool CreateRegionFromLargestComponent( const char* regionname, bool is_unique, bool reestablishNeighborConnectivity );
 
-  /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object
+  /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object, and assigns region number to the material ID of the elements
   bool FormRegionsFrom( const ModelTopology& );
 
   /// treats the values of the property as discrete, forming one region per value and returning their names into the set

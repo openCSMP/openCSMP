@@ -243,6 +243,10 @@ public:
   /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
   void         AtBoundary( BOX_BOUNDARY b );
   BOX_BOUNDARY AtBoundary() const;
+  
+  /// unique material identifier that matches number of parent unique region
+  int32 Material_ID() const;
+  void Material_ID( int32 id );
 
   // ------------------------------------------------------------------------
   // Functionality
@@ -277,7 +281,8 @@ private:
   mutable size_t                 idx_;
   std::vector<Element<dim>*>     elmt_connector_; ///< neighbors
   std::vector<csmp::Node<dim>*>  node_connector_; ///< nodes
-  BOX_BOUNDARY                   at_boundary_;
+  BOX_BOUNDARY                   at_boundary_;    ///< legacy boundary flag from before the creation of Boundary and Face classes
+  int32                          material_id_;    ///< unique identifier, equal to number of unique region that  element belongs or rocktype indentifier
 };
 
 

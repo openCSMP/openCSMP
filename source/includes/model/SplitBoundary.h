@@ -74,51 +74,46 @@ template<size_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   public:
     SplitBoundary() = delete;
-    /// constructs split boundary with given name from the set of juxtaposed elements; prompts MeshManager to create elements
+    /// constroctor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     SplitBoundary( const SplitBoundary& );
     SplitBoundary( SplitBoundary&& );
+    /// re-constructor of split boundaries from csmp native file format
+    SplitBoundary( const PropertyDatabase<dim>&,
+                   MeshManager<dim>&,       ///< not constant since write access is granted to boundary
+                   const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
+    
     virtual ~SplitBoundary();
     SplitBoundary<dim>&  operator=( const SplitBoundary& );
+
+    /// applies visitor to split boundary
+    virtual void Accept( Visitor<dim>& );
+    
+    virtual PLACEMENT Placement() const { return SPLIT_BOUNDARY; }
+    virtual bool ValidVariable( const char* variableName ) const;
+
 
     // --------------------------------------------------
     // building of SplitBoundaries and their modification
     // --------------------------------------------------
 
-    /// creates split boundary from supplied vectors (used in binary IO - supplied ids used from Model region)
-    bool CreateFrom( MeshManager<dim>& ,
-                     const FiniteElementManager& ,
-                     const std::map<size_t,csmp::Element<dim>*>&        elementIdPtr,
-                     const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
-                     const std::vector<std::vector<size_t> >&           interfaceParents,
-                     const std::vector<std::vector<std::pair<size_t,size_t> > >&  interfaceParentNodes );
-
     /// creates split boundary from boundary
     bool CreateFrom( Model<dim>&, Boundary<dim>& );
   
-    // ------------------------------------------------
-    // reconstruction of boundaries that existed before
-    // ------------------------------------------------
-  
-    /// re-constructor of split boundaries from csmp native file format
-    SplitBoundary( const PropertyDatabase<dim>&,
-                   MeshManager<dim>&,       ///< not constant since write access is granted to boundary
-                   const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
- 
-    /// applies visitor this split boundary
-    virtual void Accept( Visitor<dim>& );
-
-    // returns location of split boundary relative to adjacent region
-    INTERFACE_SIDE  RegionLocation( const Region<dim>& );
+    /// reestablishes the pointers to the nodes associated with the stored elements
+    void CreateNodePointerVector();
 
     // ----------------------------------------
-    // operations on properties
+    // user interface
     // ----------------------------------------
 
     /// input node variable values on specific side of split boundary
     template<class Var>
     void InputNodePropertyValue( const char* input_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE=INSIDE );
+
+    // returns location of split boundary relative to adjacent region
+    INTERFACE_SIDE  RegionLocation( const Region<dim>& );
 
     /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced
     double64  Area( INTERFACE_SIDE=MIDDLE ) const;
@@ -128,22 +123,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
   
     /// integrates the property over the boundary line or surface
     double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property, INTERFACE_SIDE=INSIDE  ) const;
-
-    // ----------------------------------------
-    // building blocks
-    // ----------------------------------------
-    
-    /// Local variable storage interface
-    virtual PLACEMENT Placement() const { return SPLIT_BOUNDARY; }
-  
-    /// verifies that the variable is placed either on the node, interface, the split boundary or
-    virtual bool ValidVariable( const char* variableName ) const;
-
-    /// establishes connectivity and initializes LVS
-    void Initialize( bool updateNeighborConnectivity = true, bool updateIndexes = true );
-
-    /// reestablishes the pointers to the nodes associated with the stored elements
-    void CreateNodePointerVector();
 
     /// returns 1) interfaces of how many different spatial dimensions are contained, and 2) the highest interface spatial dimension in subdomain
     std::pair<int32,int32>  InterFaceSpatialDimensions() const;
@@ -162,12 +141,26 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace> {
     bool In( MeshManager<dim>& ,
              const FiniteElementManager& ,
              const Region<dim>&, std::fstream& );
+             
+             
+  protected:
+      /// creates split boundary from supplied vectors (used in binary IO - supplied ids used from Model region)
+      bool CreateFrom( MeshManager<dim>& ,
+                       const FiniteElementManager& ,
+                       const std::map<size_t,csmp::Element<dim>*>&        elementIdPtr,
+                       const std::vector<CSMP_FEM_TYPE>&                  interfaceTypes,
+                       const std::vector<std::vector<size_t> >&           interfaceParents,
+                       const std::vector<std::vector<std::pair<size_t,size_t> > >&  interfaceParentNodes );
+
+      /// establishes connectivity and initializes LVS
+      void Initialize( bool updateNeighborConnectivity = true, bool updateIndexes = true );
 
   protected:
     /// return physical variable count at given integration points
     IntegrationPointVariables InterFaceIntegrationPointVariables() const;
     LocalVariables InterFaceVariables() const;
 
+    // TODO: move to the SplitBoundaryInterface
     void Split( Model<dim>& , Boundary<dim>& );
 };
 

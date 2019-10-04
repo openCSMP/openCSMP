@@ -33,7 +33,7 @@ Constructor for an empty boundary (no faces yet).
 template<size_t dim>
 Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& pref, BOX_BOUNDARY flag )
   : ModelSubDomain<dim, Face>( boundaryname, pref ),
-  boundaryFlag_( flag )
+    boundaryFlag_( flag )
 {
   if ( dim == 1 )
     ErrorHandler::Instance().notice( ERROR, "Boundary<dim>::(custom constructor):", "boundary objects are only supported in 2 & 3D models." );
@@ -45,7 +45,7 @@ Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& 
 template<size_t dim>
 Boundary<dim>::Boundary( const Boundary& ed )
   : ModelSubDomain<dim, Face>( ed ),
-  boundaryFlag_( ed.boundaryFlag_ )
+    boundaryFlag_( ed.boundaryFlag_ )
 {
 }
 
@@ -54,7 +54,7 @@ Boundary<dim>::Boundary( const Boundary& ed )
 template<size_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
   : ModelSubDomain<dim, Face>( ed ),
-  boundaryFlag_( ed.boundaryFlag_ )
+    boundaryFlag_( ed.boundaryFlag_ )
 {
 }
 
@@ -76,7 +76,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
                          const SubDomainInfo& info,
                          BOX_BOUNDARY bflag )
   : ModelSubDomain<dim, Face>( info.name, pref ),
-  boundaryFlag_( bflag )
+    boundaryFlag_( bflag )
 {
   // building the face vector
   // ------------------------
@@ -149,7 +149,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
                          const SubDomainInfo& info,
                          BOX_BOUNDARY bflag )
   : ModelSubDomain<dim, Face>( info.name, pref ),
-  boundaryFlag_( bflag )
+    boundaryFlag_( bflag )
 {
   // building the face vector
   // ------------------------	 
@@ -229,7 +229,7 @@ Boundary<dim>::Boundary( const string& boundary_name,
                          typename std::vector<Face<dim>*>::iterator facesEnd,
                          BOX_BOUNDARY flag )
   : ModelSubDomain<dim, Face>( boundary_name, dbase_ref ),
-  boundaryFlag_( flag )
+    boundaryFlag_( flag )
 {
   // moving the supplied Face pointers into the element storage
   this->elmt_vec_.assign( facesBegin, facesEnd );

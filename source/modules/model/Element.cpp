@@ -31,8 +31,9 @@ pointer to zero.
 */
 template<size_t dim>
 Element<dim>::Element( BOX_BOUNDARY bflag )
-  : at_boundary_( bflag ),
-  idx_( UINT_MAX )
+  : idx_( UINT_MAX ),
+    at_boundary_( bflag ),
+    material_id_(UNSPECIFIED)
 {
 }
 
@@ -65,7 +66,8 @@ Element<dim>::Element( csmp::FiniteElement* f )
   at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr )
+  node_connector_( f->Nodes(), nullptr ),
+  material_id_(UNSPECIFIED)
 {
   elmt_connector_.resize( f->Neighbors(), nullptr );
   node_connector_.resize( f->Nodes(), nullptr );
@@ -81,7 +83,8 @@ Element<dim>::Element( csmp::FiniteElement* f,
   at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr )
+  node_connector_( f->Nodes(), nullptr ),
+  material_id_(UNSPECIFIED)
 {
   elmt_connector_.resize( f->Neighbors(), nullptr );
   node_connector_.resize( f->Nodes(), nullptr );
@@ -100,7 +103,8 @@ Element<dim>::Element( csmp::FiniteElement* f,
   at_boundary_( NOT ),
   idx_( UINT_MAX ),
   elmt_connector_( f->Neighbors(), nullptr ),
-  node_connector_( f->Nodes(), nullptr )
+  node_connector_( f->Nodes(), nullptr ),
+  material_id_(UNSPECIFIED)
 {
   // variable storage is resized here because the
   // finite element pointer must be initialised first
@@ -129,7 +133,8 @@ Element<dim>::Element( size_t idx,
   idx_( idx ),
   elmt_connector_( f->Neighbors(), nullptr ),
   node_connector_( f->Nodes(), nullptr ),
-  at_boundary_( boundary_flag )
+  at_boundary_( boundary_flag ),
+  material_id_(UNSPECIFIED)
 {
   elmt_connector_.resize( f->Neighbors(), nullptr );
   node_connector_.resize( f->Nodes(), nullptr );
@@ -150,7 +155,8 @@ Element<dim>::Element( const Element<dim>& el )
   at_boundary_( el.at_boundary_ ),
   idx_( el.idx_ ),
   elmt_connector_( el.elmt_connector_ ), // watch out where the pointers point to
-  node_connector_( el.node_connector_ )  // watch out where the pointers point to
+  node_connector_( el.node_connector_ ),  // watch out where the pointers point to
+  material_id_(UNSPECIFIED)
 {
   assert( !node_connector_.empty() /* detected unitialized element*/ );
   assert( !elmt_connector_.empty() /* detected unitialized element*/ );
@@ -168,7 +174,8 @@ Element<dim>::Element( Element<dim>&& el )
   at_boundary_( move( el.at_boundary_ ) ),
   idx_( move( el.idx_ ) ),
   elmt_connector_( move( el.elmt_connector_ ) ),
-  node_connector_( move( el.node_connector_ ) )
+  node_connector_( move( el.node_connector_ ) ),
+  material_id_(UNSPECIFIED)
 {
   this->LVS( move( el.LVS() ) );
   el.AssignFiniteElementNullPtr();
@@ -197,6 +204,7 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
     idx_ = el.idx_;
     elmt_connector_ = el.elmt_connector_;
     node_connector_ = el.node_connector_;
+    material_id_    = el.material_id_;
     this->LVS( el.LVS() );
   }
   return *this;
@@ -220,6 +228,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   idx_ = move( el.idx_ );
   elmt_connector_ = move( el.elmt_connector_ );
   node_connector_ = move( el.node_connector_ );
+  material_id_    = move(el.material_id_ );
   this->LVS( move( el.LVS() ) );
 
   el.AssignFiniteElementNullPtr();
@@ -461,7 +470,19 @@ void  Element<dim>::AtBoundary( BOX_BOUNDARY b )
 }
 
 
-
+/// unique material identifier that matches number of parent unique region
+template<size_t dim>
+int32 Element<dim>::Material_ID() const
+ {
+    return material_id_;
+ }
+ 
+ 
+template<size_t dim>
+void Element<dim>::Material_ID( int32 id )
+ {
+    material_id_ = id;
+ }
 
 
 
@@ -735,6 +756,7 @@ void Element<dim>::Out() const
 {
   string str( parseBoundary( at_boundary_ ) );
   cout << "\n\nElement<" << dim << ">::Out: number: " << idx_;
+  cout <<"\n\tMaterial ID: "<< material_id_;
   cout << " (" << parseFiniteElementType( this->FE_Type() ) << " = ";
   if ( this->IsLineElement() )    cout << "line element";
   else if ( this->IsSurfaceElement() ) cout << "surface element";
