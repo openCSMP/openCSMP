@@ -13,6 +13,7 @@
 
 // HARDCODED ROCK PROPERTIES FOR SIMULATION OF CRC3-CRC2 CROSS SECTION
 // based on data compiled by Maartje Boon (23/9/2019)
+// SKM 24/9/19 - replaced layer thicknesses with volume fractions
 
 namespace csmp {
 
