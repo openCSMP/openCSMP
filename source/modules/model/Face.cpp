@@ -464,7 +464,7 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
 
 
 template<size_t dim>
-bool Face<dim>::Unassign(Face<dim>* f_ptr)
+bool Face<dim>::DisconnectNeighbor(Face<dim>* f_ptr)
 {
 	assert(f_ptr != nullptr);	
 	assert(face_connector_.size() == this->FE()->Neighbors());
@@ -476,7 +476,9 @@ bool Face<dim>::Unassign(Face<dim>* f_ptr)
 			return true;
 		}
 	return false;
-} // end Unassign
+} // end DisconnectNeighbor
+
+
 
 template<size_t dim>
 size_t  Face<dim>::Nodes() const

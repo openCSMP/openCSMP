@@ -20,25 +20,19 @@ template<size_t> class Region;
 
 /**
 
-@brief Boundaries are lower dimensional regions=subdomains of the Model
-which consist of Face objects
+@brief Boundary is lower-dimensional subclass and specialisation of ModelSubDomain 
+which consist of Face objects.
 
-@author P. Lang
-@author S.K. Matthai
-@date 2010
-
-Boundaries are collections of Faces (interior and exterior model boundaries)
-made accessible for specific computations.
-Like Region objects, they are contructed from the master
-region that contains all elements.
-It must be initialized before boundary operations can proceed.
+Boundaries are collections of Faces covering interior and exterior model boundaries,
+and are made accessible through BoundaryInterface of the Model class.
 
 @section motivation Motivation
 
-To address and carry out computations at material interfaces or model
-boundaries.
+To apply conditions, carry out computations or monitor processes
+at material interfaces or model side boundaries.
 
-To avoid conditional processing of all elements of a model, by treating
+To distinguish surface elements by turning them into Face objects 
+for specific processing, and treating
 boundary-specific calculations separately.
 
 @section consequences Consequences
@@ -46,6 +40,13 @@ boundary-specific calculations separately.
 Through the use of boundaries essential conditions and coupling terms
 arising at material interfaces can be computed with greater ease and
 efficiency.
+
+Boundary adds an extra variable placement BOUNDARY, which permits
+targeting of variables like 'basal heat flow' etc.
+
+@author S.K. Matthai
+@author P. Lang
+@date 2010
 
 */
 template<size_t dim>
@@ -100,7 +101,7 @@ class Boundary : public ModelSubDomain<dim, Face> {
 
 
     // -----------------------------------------------
-    // binary input/output
+    //  input/output to binary file
     // -----------------------------------------------
 
     /// assigning the variable values from the FEM_DATA container to the corresponding property of the Boundary
@@ -110,8 +111,9 @@ class Boundary : public ModelSubDomain<dim, Face> {
     template<class Var>
     void OutputVariableTo( const char* property, FEM_Data<Var>& ) const;
 
+
     // ----------------------------------------
-    // building & modification
+    //  boundary initialisation & modification
     // ----------------------------------------
 
     /// reestablish nodes based on element container
@@ -157,7 +159,7 @@ class Boundary : public ModelSubDomain<dim, Face> {
 
 
     // ----------------------------------------
-    // various information output
+    //  geometric properties and integrals
     // ----------------------------------------
 
     /// surface area of the boundary
@@ -179,9 +181,6 @@ class Boundary : public ModelSubDomain<dim, Face> {
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in boundary
     std::pair<int32, int32>  FaceSpatialDimensions() const;
 
-    // ----------------------------------------
-    // screen output
-    // ----------------------------------------
     void Out() const;
 
   protected:
@@ -196,7 +195,7 @@ class Boundary : public ModelSubDomain<dim, Face> {
     LocalVariables FaceVariables() const;
 
   protected:
-    // auxilliary binary IO
+    // binary IO
     template<class Var>
     bool Out( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
     template<class Var>

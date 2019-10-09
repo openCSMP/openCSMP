@@ -2794,6 +2794,22 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromFlags()
 
 
 
+template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
+ {
+     cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut:\n";
+     cout <<"\tBoundaries of ";
+     if ( BoxShaped() ) cout <<"box-shaped model:\n";
+     else cout <<"irregularly-shaped model:\n";
+     for ( auto bit=BoundariesBegin(); bit!=BoundariesEnd(); ++bit ) {
+          cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
+          cout <<" "<< (*bit).second.Elements() <<" faces, ";
+          cout <<" area (m2): "<< (*bit).second.Area() <<", perimeter length (m): "<< (*bit).second.Perimeter();
+       }
+     cout << endl;
+ }
+
+
 
 
   template class BoundaryInterface<1U, Model>;

@@ -15,11 +15,13 @@ template<size_t> class Visitor;
 /**
     Lower dimensional surface (3D) or line (2D) element that serves as interface (Face) or connector (InterFace)
     between higher dimensional mesh domains. The Face is used for material interfaces that are welded
-    together. The boundaries of a CSMP model consist of Face objects.
+    together. Boundary objects of a CSMP model consist of Face objects.
     
     The Face is rather similar in its functionality to the Element with many member functions
     sharing their names. However, Face objects know their higher-dimensional neighbors which are Elemen objects.
     This means that Face objects have an extra set of pointers that connect them to Element objects.
+    
+    Face objects also have a unit normal that helps with the application of tractions etc.
     
     Use Face objects for operations targeted on internal or external model boundaries.
     For external boundaries only the higher-dimensional neighbor 0 will be defined.
@@ -95,8 +97,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// tell face about its face neighbors
     void Assign( size_t nbor, Face<dim>* const );
   
-	/// unassign its face neighbors
-	bool Unassign( Face<dim>* );
+    /// unassign its face neighbors
+	  bool DisconnectNeighbor( Face<dim>* );
 
     /// @attention because of the pointers, this assignment makes sense only in the rarest cases
     Face& operator=( const Face<dim>& );
@@ -104,32 +106,29 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// hand-coded move assignment; important since pointers need to be assigned
     Face& operator=( Face<dim>&& );
   
-    // ------------------------------------------------------------------------
-    // Basic information
-    // ------------------------------------------------------------------------
-
-    size_t  Nodes() const;
-    size_t  Neighbors() const;
-	size_t  ConnectedNeighbors() const;
-    
-    /// for element face, there can be a neighbor
-    size_t  Faces() const;
-
     /// compares faces with one-another
     bool operator==( const Face<dim>& ) const;
+
+    // TODO: poor design; rather tell Face what to do than taking over its functionality
+    typename  std::vector<csmp::Face<dim>*>& NeighborElementVector();
+
+
+    // ------------------------------------------------------------------------
+    //  User interface of Face
+    // ------------------------------------------------------------------------
 
     /// Local variable storage interface
     PLACEMENT Placement() const { return FACE; }
 
-    // ------------------------------------------------------------------------
-    // Member access
-    // ------------------------------------------------------------------------
+    size_t  Nodes() const;
+    size_t  Neighbors() const;
+	  size_t  ConnectedNeighbors() const;
+    
+    /// sides of Face object by analogy with Element
+    size_t  Faces() const;
 
     /// to apply visitors whose application level is Boundary and target is Face
     void Accept( csmp::Visitor<dim>& );
-
-    /// helper method for remeshing purposes; @todo move to remeshing policy
-    typename  std::vector<csmp::Face<dim>*>& NeighborElementVector();
 
     /// access the nodes that are connected to the Face
     csmp::Node<dim>*  N( size_t n_local ) const;
@@ -157,7 +156,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     size_t         ParentNodeNumber( size_t n_local ) const;
 
     // ------------------------------------------------------------------------
-    // Geometry
+    //  Face geometry operations
     // ------------------------------------------------------------------------
   
     /// returns area of the face; method assumes same role as Volume() for the element
@@ -166,14 +165,10 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// not a face-normal vector, but the shortest path between the barycenters of face and element
     void           VectorToInnerElementBaryCenter( VectorVariable<dim>& ) const;
   
-    //// to compute unit normal to Face, see FiniteElementTraits for following methods
+    // unit normal computations for Face are handled by its FiniteElementPolicy the options are
     // Point<dim> UnitNormal() const;
     // void       UnitNormal( std::vector<double64>& nrml ) const;
     // void       UnitNormal( VectorVariable<dim>& nrml ) const;
-
-    // ------------------------------------------------------------------------
-    // Functionality
-    // ------------------------------------------------------------------------
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
@@ -187,11 +182,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
     double64    LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
-
-
-    // ------------------------------------------------------------------------
-    // Screen Output
-    // ------------------------------------------------------------------------
 
     /// prints state of this object
     void  Out() const;
@@ -214,66 +204,6 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Element<dim>*            innerParent_;     ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;     ///< (optional) higher-dimensional neighbor in direction of unit normal
 };
-
-/**  PRECURSOR VERSION
-
-@author P. Lang
-@author S.K. Matthai
-@author R. Manasipov
-@date 2010,2014,2016
-
-Faces are lower-dimensional element objects with a unit normal that point
-from their inner to their outer higher-dimensional parent neighbors.
-
-The inside of a Face is classified as the side opposite to the direction into which the
-unit normal of the face points to.
-
-Like Element objects, Face objects contain pointers to their equidimensional
-neigbor elements, but - in addition - they also have pointers to their
-higher-dimensional parent elements that lie on either side of them.
-
-If a Face lies on a model boundary, there is no outside parent element.
-Thus, when using face objects, one can only rely on the presence of the 
-innerParent element.
-
-@attention the indices of the nodes stored in parent_element_node_ids_.
-It contains the local parent element node numbers that match the nodes of the face
-as the inner parent element face pointers will always be defined. Since these nodes are
-shared with the Face and the outer parent element, only one such container is needed.
-
-@note By contrast with Elements, Face and InterFace objects are not registered as parents
-elements within Node objects.
-
-@note In Box shaped models, you can also rely on the BOX_BOUNDARY flag to determine whether 
-a Face is located on an external model boundary: when flagged INTERNAL the face lies inside
-the model.
-
-@note The property placement FACE is unique and to recuperate ELEMENT properties when
-working with a Face one needs to call on its higher-dimensional parents.
-
-@section motivation Motivation
-
-To represent internal boundaries / material interfaces in an mesh.
-Faces permit to implement algorithms that couple different domains of a model together
-efficiently.
-
-Algorithms that require a special treatment of boundary elements can also be made more
-efficiently and written more transparently by braking them up into interior and
-boundary parts, rather than writing iffy code that checks each element
-whether it is at a boundary or not.
-
-*/
-
-
-// extra constructor: constructs face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
-/*
-    Face( const FiniteElementManager& finiteElementManager,
-          Element<dim>& dim_dimensional_inner_parent_element,
-          size_t& nth_boundary_face, ///< takes target boundary face as input and returns number of discovered boundary faces as output
-          const LocalVariables&,
-          const IntegrationPointVariables& );
-*/
-
 
 } // csmp
 

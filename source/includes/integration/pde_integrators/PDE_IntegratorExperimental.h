@@ -41,6 +41,7 @@ template<size_t> class Model;
 template<size_t> class Boundary;
 
 /**
+
 @brief Accumulator and integrator for FEM or FVM-derived integral forms of PDEs
 and their solution in the form of linear algebraic sets of equations (system Ax=b).
 Applicable to CSMP++ Model objects or their subregions.
@@ -291,11 +292,10 @@ class PDE_IntegratorExperimental {
   
     /// adds integral terms on the boundary of the computational domain if any
     void          AddBoundaryIntegral( MathOperatorRHS<dim>* );
-  
-    // TODO: void addInterfaceIntegral( MathOperatorRHS<dim>* );
-  
+
     /// for the computation of fluxes across internal split boundaries
-    // TODO: void addInterfaceIntegral( MathOperatorLHS<dim>* );
+    void          AddSplitBoundaryIntegral( MathOperatorRHS<dim>* );
+    void          AddSplitBoundaryIntegral( MathOperatorLHS<dim>* );
 
     /// adds math operators that will be applied in a second loop after the matrix has been inverted
     void          AddPostProcess( MathOperatorLHS<dim>* );
@@ -330,7 +330,7 @@ class PDE_IntegratorExperimental {
     /// if an evolutionary problem where only the right-hand side changes, the matrix needs to be assembled only once
     void          RetainGlobalSolutionMatrix( bool yes_or_no );
   
-    /// enables the 'swap trick' to keep the size and capacity of solution and righthand vectors equal
+    /// 'swap trick' keeps size and capacity of solution and righthand vectors equal
     void          TrimExcessCapacityOfVectors( bool trim );
   
     /// writes out the sparsity pattern of the solution matrix
@@ -371,12 +371,16 @@ class PDE_IntegratorExperimental {
 
     /// accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
+    
+    /// accumulation of Robin-type boundary conditions to SplitBoundary interfaces
+    virtual void  AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
 
     /// accumulates finite-element integrals to matrix and vector after the corresponding entries were already multiplied with the initial conditions; uses node numbering
     virtual void  LateAccumulate( const COMPUTATION_DOMAIN<dim>& );
 
     /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
+    virtual void  LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
 
     /// calls connected solver object to find x in G x = rh problem
     virtual void  Solve();
@@ -387,9 +391,11 @@ class PDE_IntegratorExperimental {
     /// transfers the results stored in solution vector onto the nodes of the computational domain; uses node numbering
     virtual void  OutputResults( COMPUTATION_DOMAIN<dim>& );
 
-    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< pde operators for solution matrix
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;           ///< pde operators for righthand vector
-    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< potential surface integrals for accumulation over boundary
+    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;           ///< stencils for lefthand solution matrix
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;           ///< stencils for righthand vector
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
+    std::map<std::string,MathOperatorLHS<dim>*>  lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
     std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;       ///< post-processing: Darcy velocities, stresses from strains etc.
     std::map<Parameter,size_t>                   basic_operands_;
     std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations

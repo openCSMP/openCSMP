@@ -1717,7 +1717,7 @@ void MeshManager<dim>::Erase( Face<dim>& face )
   if ( found_face ) {
     // unassign the connections of its neighbors
     for ( auto n : found_face->NeighborElementVector() )
-      if ( n != NULL ) n->Unassign( found_face );
+      if ( n != NULL ) n->DisconnectNeighbor( found_face );
 
     delete found_face;
     found_face = NULL;
@@ -1761,7 +1761,7 @@ void MeshManager<dim>::Erase( Face<dim>* face )
   if ( face ) {
     // unassign the connections of its neighbors
     for ( auto n : face->NeighborElementVector() )
-      if ( n != NULL ) n->Unassign( face );
+      if ( n != NULL ) n->DisconnectNeighbor( face );
 
     delete face;
     face = NULL;
@@ -1824,7 +1824,7 @@ void MeshManager<dim>::Erase( InterFace<dim>& interface )
   if ( found_interface ) {
     // unassign the connections of its neighbors
     for ( auto n : found_interface->NeighborElementVector() )
-      if ( n != NULL ) n->Unassign( found_interface );
+      if ( n != NULL ) n->DisconnectNeighbor( found_interface );
 
     delete found_interface;
     found_interface = NULL;
@@ -1868,7 +1868,7 @@ void MeshManager<dim>::Erase( InterFace<dim>* interface )
   if ( interface ) {
     // unassign the connections of its neighbors
     for ( auto n : interface->NeighborElementVector() )
-      if ( n != NULL ) n->Unassign( interface );
+      if ( n != NULL ) n->DisconnectNeighbor( interface );
 
     delete interface;
     interface = NULL;

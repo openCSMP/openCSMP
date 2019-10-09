@@ -89,14 +89,14 @@ public:
   bool IsContiguous( const std::string& regionname ) const;
 
   // -----------------------------------------------
-  // Binary input/output
+  //  Input/output
   // -----------------------------------------------
 
-  // NEW:
+  void RegionsOut() const;
+
   /// writes unique and non-unique regions to binary file, including, interior/perimeter/boundary face information; relies on unique indexes
   void OutputAllRegionsToBinary( const char* file_name ) const;
 
-  // NEW:
   /// Reads unique and non-unique regions from binary file as written by OutputAllRegionsToBinary(); it can also read only a subset of variables
   void InputAllRegionsFromBinary( const char* file_name, const std::set<std::string>* subset_variables = nullptr );
 
@@ -114,7 +114,7 @@ public:
   void InputRegionsFromBinary( const char* file_name );
 
   // -------------------------------------------------------------------------
-  // Regions access and manipulations with the list of Regions
+  //  Regions access and manipulations with the list of Regions
   // -------------------------------------------------------------------------
 
   /// iterators to associative containers of regions

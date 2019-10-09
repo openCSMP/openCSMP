@@ -61,14 +61,14 @@ class SplitBoundaryInterface {
     /// Removes splitboundary
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary, bool deleteElements = false );
 
-    /// prints current split boundaries
-    void SplitBoundariesOut() const;
-  
     // -----------------------------------------------------------
-    // Binary input/output
+    // Input/output
     // The properties can also be read from a subset of variables
     // -----------------------------------------------------------
-
+    
+    /// prints current split boundaries to screen
+    void SplitBoundariesOut() const;
+    
     bool OutputSplitBoundariesToBinary( const char* fileName ) const;
     bool InputSplitBoundariesFromBinary( const char* fileName, const std::set<std::string>* subset_variables = nullptr );
 

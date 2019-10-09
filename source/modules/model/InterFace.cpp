@@ -226,6 +226,7 @@ bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 }
 
 
+
 // VISITOR
 template<size_t dim>
 void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
@@ -363,8 +364,10 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
 } // end Assign node pointers
 
 
+
+
 template<size_t dim>
-bool InterFace<dim>::Unassign( InterFace<dim>* f_ptr )
+bool InterFace<dim>::DisconnectNeighbor( InterFace<dim>* f_ptr )
 {
   assert( f_ptr != nullptr );
   assert( interface_connector_.size() == this->FE()->Neighbors() );
@@ -376,7 +379,7 @@ bool InterFace<dim>::Unassign( InterFace<dim>* f_ptr )
       return true;
     }
   return false;
-} // end Unassign
+} // end DisconnectNeighbor
 
 
 

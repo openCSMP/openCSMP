@@ -256,6 +256,26 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( Ma
  }
 
 
+
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorRHS<dim>* op )
+ {
+    rhs_split_boundary_operators_[ op->Name() ] = op;
+    // force update during next application
+    setup_established_ = false;
+ }
+
+
+
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorLHS<dim>* op )
+ {
+    lhs_split_boundary_operators_[ op->Name() ] = op;
+    // force update during next application
+    setup_established_ = false;
+ }
+
+
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddPostProcess( MathOperatorLHS<dim>* op )
  {
@@ -1005,13 +1025,22 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>&
     return true;
  }
 
+// same but for SplitBoundary objects
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<dim>& interface )
+ {
+    const size_t nodes(interface.Nodes());
+    for ( size_t i=0U; i<nodes; ++i )
+      if ( !comp_domain.IsPerimeterNode( interface.N(i) ) ) return false;
+    return true;
+ }
 
 
 
 /**
     for the accumulation of Neumann-flagged element integrals evaluated on Face objects
     
-    TODO: deal with boundary conditions applied to LHS
+    TODO: include boundary conditions applied to LHS
     TODO: adopt method to handle InterFace objects (in split boundaries) as well
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
@@ -1040,6 +1069,40 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
    
  } // AccumulateBoundaryIntegrals
 
+
+
+/**
+    Coupling conditions / surface integrals applied to SplitBoundary objects
+*/
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                            const SplitBoundary<dim>& boundary )
+ {
+    // TODO: include accumulation for LHS operators
+    
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+           it_rhs=rhs_split_boundary_operators_.begin(); it_rhs!=rhs_split_boundary_operators_.end(); it_rhs++ )
+       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+         for ( typename vector<InterFace<dim>*>::const_iterator
+               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+           // if the material operand is flagged Robin, the accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT && 
+                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             }
+   
+ } // AccumulateSplitBoundaryIntegrals
 
 
 
@@ -1119,7 +1182,8 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
                git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
                 ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
                (*it_rhs).second->GetOperands( *(*git) );
@@ -1127,6 +1191,35 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
                if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                  (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
                // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+             }
+
+ } // end LateAccumulateBoundaryIntegrals
+
+
+// same but for SplitBoundary objects
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                                const SplitBoundary<dim>& boundary )
+ {
+    // accumulating as late addition into the righhand vector 'rhs'
+    // ------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
+           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
+       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+         for ( typename vector<InterFace<dim>*>::const_iterator
+               git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+           // accumulations need to be performed only where material operands are flagged Neumann
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&  
+                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
                (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
              }
 
@@ -1415,15 +1508,27 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
     // 3. Accumulation: potential boundary integrals from Boundary objects that share nodes with the simplicial
     //    complex of interest
     list<string> shared_boundaries;
+    // enlist all boundaries: split- and regular ones
     IdentifySharedBoundaries( model, domain, shared_boundaries );
    
+    // TODO: distinguish between split boundaries and boundaries  
     if ( !shared_boundaries.empty() ) {
          for ( list<string>::const_iterator
                it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
-              const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
-              cout <<"\nPDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
-              cout <<" accumulating boundary: "<< (*it) <<"\n";
-              AccumulateBoundaryIntegrals( domain, domain_boundary );
+              // handling the split boundaries
+              if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+                   const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
+                   cout <<"\nPDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
+                   cout <<" accumulating split boundary: "<< (*it) <<"\n";
+                   AccumulateSplitBoundaryIntegrals( domain, domain_boundary );
+                }
+              // handing the normal boundaries
+              else {
+                   const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
+                   cout <<"\nPDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
+                   cout <<" accumulating boundary: "<< (*it) <<"\n";
+                   AccumulateBoundaryIntegrals( domain, domain_boundary );
+                }
            }
       }
 
@@ -1436,8 +1541,14 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
          if ( !shared_boundaries.empty() ) {
               for ( list<string>::const_iterator
                     it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
-                   const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
-                   LateAccumulateBoundaryIntegrals( domain, domain_boundary );
+                  if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+                        const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
+                        LateAccumulateSplitBoundaryIntegrals( domain, domain_boundary );
+                     }
+                   else {
+                        const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
+                        LateAccumulateBoundaryIntegrals( domain, domain_boundary );
+                     }
                 }
            }
       }
@@ -1471,14 +1582,24 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
  
  
 /**
-    Identifies the names of model boundaries that are shared with the computational domain 'subdomain'
+    Identifies the names of any model boundaries (standard and split ones),
+    which are shared with the computational domain 'subdomain'
     by searching for the corresponding string in the boundaries. The identified boundaries 
     are returned in the argument list.
     
     @attention method assumes that the names of the boundaries are composed of the strings
     BOUNDARY, the name of the volumetric boundary that is adjacent to them and their name,
-    for instance,  BOUNDARY_MATRIX_LANDSURFACE. The only exception that is handled is that 
-    of a box-shaped model and the domain 'Model' for the computations.
+    for instance,  BOUNDARY_MATRIX_LANDSURFACE. The only other names that are handled are those
+    of the boundaries in a box-shaped model.
+    
+    @attention method also handles case, where the computational domain is the region 'Model'.
+    
+    @attention internal model boundaries are not handled yet.
+    
+    @author SKM
+       
+    TODO: think about meaningful PDE operators for internal model boundaries
+
 */
 template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Model<dim>& model,
@@ -1486,16 +1607,14 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
                                                                                    list<string>& shared_boundaries )
  {
     shared_boundaries.clear();
-   
-    // 1. deal with any kind of internal or free-form boundaries
+
+    // 1. enlist any internal or free-form boundaries
     for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
           it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
       if ( (*it).first.find(subdomain.Name()) != string::npos )
         shared_boundaries.push_back( (*it).first );
    
-// TODO: look at the case of internal boundaries
-   
-    // 2. box-shaped model and computational region = "Model"
+    // 2. box-shaped model and computational domain = "Model"
     if ( subdomain.Name() == "Model" ) {
          shared_boundaries.push_back( "BOTTOM" );
          if ( dim != 1U ) {
@@ -1509,7 +1628,8 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
            }
          return true;
       }
-    // if the subdomain is any other part of the model interior
+      
+    // 3. if the computational domain is any other subregion of the model
     else {
         for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
               it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
@@ -1517,7 +1637,7 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
             shared_boundaries.push_back( (*it).first );    
       }
    
-    // 3. entire model the boundaries that contains all the boundaries
+    // 3. for an entire irregularly shaped model find boundaries which touch each other
     model.Region("Model").UpdateMemberIndexes();
    
     for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
