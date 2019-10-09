@@ -1062,6 +1062,11 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
   // CALCULATIONS
 
+/**
+    Returns the length of the perimeter line of the boundary.
+    
+    @attention method can only be applied in 3D.
+*/
 template<size_t dim>
 double64  Boundary<dim>::Perimeter() const
 {
@@ -1072,7 +1077,7 @@ double64  Boundary<dim>::Perimeter() const
 
   double64        perimeter_length( 0. );
   vector<size_t>  fnids;
-  size_t          n( 0U );
+  size_t          n( this->InteriorElements() );
   for ( typename vector<Face<dim>*>::const_iterator
         it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
     for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {

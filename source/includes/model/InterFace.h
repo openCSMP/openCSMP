@@ -143,12 +143,12 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     PLACEMENT Placement() const { return INTER_FACE; }
 
     /// node_connector_.size() = total nodes on both sides of InterFace
-    size_t  Nodes() const { return node_connector_.size(); }
+    size_t  Nodes() const;
     
-    size_t  Faces() const { return Faces(); }
+    size_t  Faces() const;
   
     /// the InterFace object neighbors of the InterFace (one per face of interface)
-    size_t  Neighbors() const { return interface_connector_.size(); }
+    size_t  Neighbors() const;
 
     /// the InterFace object neighbors which are connected with the InterFace and not null.
     size_t  ConnectedNeighbors() const;

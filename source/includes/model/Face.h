@@ -191,7 +191,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
   
     // TODO: SKM: deprecate this inefficient method
     void AssignFaceID( const std::vector<Node<dim>*>& faceNodes );
-    //void CheckNodeOrderingAccordingToUnitNormalOrientation();
+
+    // TODO: move this method to unit test: void CheckNodeOrderingAccordingToUnitNormalOrientation();
   
     // ------------------------------------------------------------------------
     // Data members

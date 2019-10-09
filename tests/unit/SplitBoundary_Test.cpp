@@ -1037,6 +1037,11 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
   double64 displacement( 0.001 );
   PullApartSplitboundaries( model, displacement );
   VisualiseSplitBoundaries( model, test_name );
+  
+  // screen output
+  modelIN->RegionsOut();
+  modelIN->BoundariesOut();
+  modelIN->SplitBoundariesOut();
 
   return;
 }
@@ -1064,13 +1069,13 @@ void SplitBoundary_Test::test_splitboundary_around_regions( const std::string& m
   inputFromFile( spliboundary_regions_file.c_str(), interfaces );
 
   Model<dim> model_out( model_name.c_str() );
-  cout << "\nNodes: " << model_out.Mesh().Nodes() << "\n";
-  cout << "\nNode Groups: " << model_out.Mesh().NodeGroups() << "\n";
-  cout << "\nElements: " << model_out.Mesh().Elements() << "\n";
-  cout << "\nElement Groups: " << model_out.Mesh().ElementGroups() << "\n";
-  cout << "\nFaces: " << model_out.Mesh().Faces() << "\n";
-  cout << "\nFace Groups: " << model_out.Mesh().FaceGroups() << "\n";
-  cout << "\nInterfaces: " << model_out.Mesh().InterFaces() << "\n";
+  cout << "\nNodes: " << model_out.Mesh().Nodes();
+  cout << "\nNode Groups: " << model_out.Mesh().NodeGroups();
+  cout << "\nElements: " << model_out.Mesh().Elements();
+  cout << "\nElement Groups: " << model_out.Mesh().ElementGroups();
+  cout << "\nFaces: " << model_out.Mesh().Faces();
+  cout << "\nFace Groups: " << model_out.Mesh().FaceGroups();
+  cout << "\nInterfaces: " << model_out.Mesh().InterFaces();
   cout << "\nInterface Groups: " << model_out.Mesh().InterFaceGroups() << "\n";
     
   if ( verbose_ ) std::cerr << "\nFinish " << dimension << " SplitBoundary Test: SplitBoundary around Regions\n";

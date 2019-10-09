@@ -398,6 +398,35 @@ size_t  InterFace<dim>::ConnectedNeighbors() const
 
 
 
+  /// node_connector_.size() = total nodes on both sides of InterFace
+template<size_t dim>
+size_t  InterFace<dim>::Nodes() const 
+ { 
+    assert( this->FE()!=nullptr ); 
+//    assert( this->FE()->Nodes() == (node_connector_.size()*2) );   TODO: why does this assertion fail
+    return node_connector_.size(); 
+ }
+
+  
+/// the InterFace object neighbors of the InterFace (one per face of interface)
+template<size_t dim>
+size_t  InterFace<dim>::Neighbors() const 
+  {
+     assert( this->FE()!=nullptr ); 
+     assert( this->FE()->Neighbors() == interface_connector_.size() );   
+     return interface_connector_.size(); 
+  }
+
+
+template<size_t dim>
+size_t  InterFace<dim>::Faces() const 
+ { 
+    assert( this->FE()!=nullptr ); 
+    assert( this->FE()->Faces() == interface_connector_.size() ); 
+    return interface_connector_.size(); 
+ }
+
+
 
 /**
     finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface;

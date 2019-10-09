@@ -492,6 +492,7 @@ size_t  Face<dim>::Neighbors() const
 	return face_connector_.size();
 }
 
+
 template<size_t dim>
 size_t  Face<dim>::ConnectedNeighbors() const
 {
@@ -501,7 +502,7 @@ size_t  Face<dim>::ConnectedNeighbors() const
 	return (face_connector_.size() - nulls);
 }
 
-/// for element face, there can be a neighbor
+
 template<size_t dim>
 size_t  Face<dim>::Faces() const
 {
