@@ -71,12 +71,18 @@ void PassiveAdvectionOfTracer_Example::Run()
   cin >> model_name;
 
   ANSYS_Model3D  model3D( model_name.c_str(), "example25.txt");
+
+
+ // ------------------------------------------------------------
+ // 2. checking model and mesh quality
+ // ------------------------------------------------------------
   printModelDimensions( model3D, true );
+  // different ways of printing what a model actually consists off
+  model3D.Out();
+  model3D.RegionsOut();
+  model3D.BoundariesOut();
+  model3D.SplitBoundariesOut();
 
-
- // ------------------------------------------------------------
- // 2. checking the mesh quality
- // ------------------------------------------------------------
   MeshDiagnostics<3U>  mesh_check;
   double64             vol_min, vol_max;
   mesh_check.ElementVolumeRange( model3D, vol_min, vol_max );

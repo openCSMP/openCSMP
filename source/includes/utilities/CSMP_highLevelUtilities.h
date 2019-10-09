@@ -466,7 +466,10 @@ template<> struct hash<csmp::ijk> {
     return s;
   }
 };
-}
+
+
+
+} // end csmp
 
 
 #endif

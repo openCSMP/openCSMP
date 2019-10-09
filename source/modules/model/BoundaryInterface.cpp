@@ -324,7 +324,7 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
 {
 	const BOUNDARY_COMPLEX<dim>& boundaryComplex(static_cast<const BOUNDARY_COMPLEX<dim>& >(*this));
 
-	std::cout << "\nBoundaryInterface<" << dim << ">::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
+//	std::cout << "\nBoundaryInterface<" << dim << ">::BoxShaped: checking whether the model contains the boundaries LEFT, RIGHT...";
 	size_t boundaries(6);
 	if (dim == 2)
 		boundaries = 4;
@@ -342,12 +342,12 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
 		boundariesFound.insert(currentBoundary);
 		if (boundariesFound.size() >= boundaries)
 		{
-			std::cout << "...true\n";
+//			std::cout << "...true\n";
 			return true;
 		}
 		// TODO: dealing with the case where there might be one IRREGULAR boundary instead of the TOP boundary
 	}
-	std::cout << "...false\n";
+//	std::cout << "...false\n";
 	return false;
 }
 
@@ -2797,12 +2797,12 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromFlags()
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
  {
-     cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut:\n";
+     cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut: ";
      if ( Boundaries() == 0 ) {
           cout <<"\tmodel does not contain any boundaries.\n\n";
           return;
        }
-     cout <<"\tBoundaries of ";
+     cout <<"boundaries of ";
      if ( BoxShaped() ) cout <<"box-shaped model:\n";
      else cout <<"irregularly-shaped model:\n";
      for ( auto bit=BoundariesBegin(); bit!=BoundariesEnd(); ++bit ) {
@@ -2811,7 +2811,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
           cout <<" area (m2): "<< (*bit).second.Area();
           if ( dim == 3 ) cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
        }
-     cout << endl;
+     cout << endl << endl;
  }
 
 

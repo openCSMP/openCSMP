@@ -1065,27 +1065,34 @@ bool Boundary<dim>::CreateBetween( MeshManager<dim>& meshManager,
 /**
     Returns the length of the perimeter line of the boundary.
     
-    @attention method can only be applied in 3D.
+    @return returns either the length of the perimeter of the boundary or NaN if the boundary is an edge.
+    
+    @attention method can only be applied in 3D and only on boundaries which are not lines themselves
+    else the perimeter is not defined.
 */
 template<size_t dim>
 double64  Boundary<dim>::Perimeter() const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   if ( dim != 3U )
-    csmp_error.notice( ERROR, "Boundary<dim>::Perimeter",
-                       "result would not be meaningful" );
+    csmp_error.notice( ERROR, "Boundary<dim>::Perimeter:",
+                      "the perimeter of a Boundary is only defined when the boundary is a surface." );
 
   double64        perimeter_length( 0. );
   vector<size_t>  fnids;
   size_t          n( this->InteriorElements() );
   for ( typename vector<Face<dim>*>::const_iterator
-        it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
-    for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
-      (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
-      perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
-                            (*it)->N( fnids[0] )->Coordinate()).Length();
+        it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
+      if ( (*it)->IsLineElement() ) {
+           return std::numeric_limits<double64>::quiet_NaN();
+        }
+      for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
+        (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
+        perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
+                             (*it)->N( fnids[0] )->Coordinate()).Length();
+      }
     }
-
+    
   return perimeter_length;
 }
 

@@ -165,7 +165,7 @@ class Boundary : public ModelSubDomain<dim, Face> {
     /// surface area of the boundary
     double64  Area() const;
 
-    /// length of the perimeter of the boundary
+    /// length of the boundary perimeter in 3D, else NaN
     double64  Perimeter() const;
 
     /// surface integral over the variable of interest

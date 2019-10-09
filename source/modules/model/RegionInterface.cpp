@@ -2966,24 +2966,24 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 template<size_t dim, template<size_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
  {
-     std::cout <<"\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";
-     std::cout <<"\tUnique regions of model:\n";
+     std::cout <<"\n\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";
+     std::cout <<"\n\tUnique regions of model:\n";
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
-          std::cout <<"\n\t"<< (*rit).first;
+          std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,";
           std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
-          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second;
+          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second << std::endl;
        }
-     std::cout <<"\tNon-unique regions of model:\n";
+     std::cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
-          std::cout <<"\n\t"<< (*rit).first;
+          std::cout <<"\t\t"<< (*rit).first;
           std::cout <<" "<< (*rit).second.Elements() <<" elements,"<< (*rit).second.Volume();
           std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           std::pair<int32, int32> rdim = (*rit).second.ElementSpatialDimensions();
-          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second;       
+          std::cout <<", range of spatial dimensions: "<< rdim.first <<" to "<< rdim.second << std::endl;
        }
-     std::cout << std::endl;
+     std::cout << std::endl << std::endl;
  }
 
 

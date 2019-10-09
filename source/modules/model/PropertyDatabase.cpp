@@ -1489,7 +1489,8 @@ void PropertyDatabase<dim>::Out() const
           cout <<"detailed variable counts:\n";
           for( map<PLACEMENT,map<VARIABLE_TYPE,size_t> >::const_iterator it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
            for( map<VARIABLE_TYPE,size_t>::const_iterator iit( it->second.begin() ); iit != it->second.end(); ++iit )
-             cout << parseType(iit->first) << " variables at " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
+             if ( VariableCount( it->first, iit->first ) > 0 )
+               cout <<"\t"<< parseType(iit->first) << " variables on " << parsePlacement(it->first) << ": "  << VariableCount( it->first, iit->first ) << endl;
 
           cout <<"\nDetailed information on current properties in alphabetical order: "<< endl;
           for ( auto& prop : propList_ )
