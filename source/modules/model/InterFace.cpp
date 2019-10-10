@@ -403,7 +403,7 @@ template<size_t dim>
 size_t  InterFace<dim>::Nodes() const 
  { 
     assert( this->FE()!=nullptr ); 
-//    assert( this->FE()->Nodes() == (node_connector_.size()*2) );   TODO: why does this assertion fail
+    assert( (this->FE()->Nodes()*2) == node_connector_.size() );
     return node_connector_.size(); 
  }
 
