@@ -865,34 +865,34 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
          @date 11/10/2019
 */
 template<size_t dim, template<size_t> class CELL>
-void  ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector( size_t interior_elements )
+void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elements )
   {
      assert( interior_elements > 0 );
      
      // verification of suitable model state
      if ( elmt_vec_.empty() )
-       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                               Name(), "model subdomain: CELL vector not initialised yet.");
                               
      if ( interior_elements > elmt_vec_.size() ) {
            cerr <<"\ninterior cells: "<< interior_elements;
-           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                                   Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
        }
 
      if ( !is_sorted( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_elements)) ) {
           cerr <<"\ninterior cells: "<< interior_elements;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                                  Name(), "model subdomain: supplied CELL vector not sorted.");
        }
        
-     // (re)constructing the CELL face vector
-     if ( !bd_face_vec_.empty() ) bd_face_vec_.clear();
-     this->bd_face_vec_.reserve( elmt_vec_.size() - interior_elements );
+     // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
+     this->bd_face_vec_.resize( elmt_vec_.size() - interior_elements );
 
      const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(this->elmt_vec_.begin(),interior_elements) );
      const typename vector<CELL<dim>*>::const_iterator elementsEnd( this->elmt_vec_.end() );
      vector<ONE_BYTE_NUMBER>  boundary_faces;
+     size_t                   counter(0U);
 
      for ( typename vector<CELL<dim>*>::const_iterator it = perimeterElementsBegin; it != elementsEnd; ++it ) {
          assert( (*it)->Faces() == (*it)->Neighbors() );
@@ -905,13 +905,14 @@ void  ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector( size_t interior_element
              boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
          // storing the boundary face vector for the current element
          if ( boundary_faces.size() == faces ) {
-              cerr <<"\n\tBuildBoundaryFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+              cerr <<"\n\tBuildPerimeterFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
            }
-         this->bd_face_vec_.push_back( boundary_faces );
+         this->bd_face_vec_[counter] = boundary_faces;
          boundary_faces.clear();
+         counter++;
       }
       
-  } // end BuildBoundaryFaceVector
+  } // end BuildPerimeterFaceVector
 
 
 

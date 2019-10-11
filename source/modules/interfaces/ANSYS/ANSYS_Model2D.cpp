@@ -34,7 +34,23 @@ void ANSYS_Model2D::Initialize( bool isoparametric,
     //    and eliminating the unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
 
-    // 1. construct model based on obtained model topology and vset
+    // 1. writing element and node numbers to property data and storing them in the VSet
+    if ( Database().IsDefined( "element number" ) ) {
+      // element numbers
+      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+      elmt_nums.Reserve( vset.Elements() );
+      for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", elmt_nums );
+    }
+    if ( Database().IsDefined( "node number" ) ) {
+      // node numbers
+      PropertyData node_nums( NODE, SCALAR, 2U );
+      node_nums.Reserve( vset.Vertices() );
+      for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", node_nums );
+    }
+
+    // 2. construct model based on obtained model topology and vset
     //    ansys neighbor info will be overwritten later since it includes neighbor information
     //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbor)
     if ( use_regions_file )
@@ -127,7 +143,23 @@ void ANSYS_Model2D::Initialize( const char* mesh_file_set,
     //    and eliminating the unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, irregular_mesh );
 
-    // 1. construct model based on obtained model topology and vset
+    // 1. writing element and node numbers to property data and storing them in the VSet
+    if ( Database().IsDefined( "element number" ) ) {
+      // element numbers
+      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+      elmt_nums.Reserve( vset.Elements() );
+      for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", elmt_nums );
+    }
+    if ( Database().IsDefined( "node number" ) ) {
+      // node numbers
+      PropertyData node_nums( NODE, SCALAR, 2U );
+      node_nums.Reserve( vset.Vertices() );
+      for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", node_nums );
+    }
+
+    // 2. construct model based on obtained model topology and vset
     //    ansys neighbor info will be overwritten later since it includes neighbor information
     //    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbor)
     if ( use_regions_file )

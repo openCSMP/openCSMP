@@ -68,7 +68,8 @@ void Experimental_Example::Specifications()
 
 // OTHER RELATIONSHIPS
 
-
+// helper
+void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const Region<2>& domain );
 
 /**
      Put CSMP code that you would like to test here and run it as part of the 
@@ -96,11 +97,11 @@ void Experimental_Example::Run()
                              
   // testing region insertion here
   Region<2> region1_before(ansys_model.Region("MATRIX_RIGHT"));
-//   ansys_model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
+//  printNeigboursOfPerimeterElements( ansys_model.Database(), region1_before );
+//  ansys_model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
 
   // saving model into CSMP native file format
   ansys_model.OutputToBinaryFile( model_name.c_str() );
-   
 
   // 1. starting the simulation with the creation of a SplitBoundary
   // -------------------------------------------------------------------------------
@@ -118,6 +119,8 @@ void Experimental_Example::Run()
 
   // create SplitBoundary between the model regions
   Region<2> region1_after(model.Region("MATRIX_RIGHT"));
+//  printNeigboursOfPerimeterElements( ansys_model.Database(), region1_before );
+  
   model.InsertSplitBoundary( "MATRIX_RIGHT", "MATRIX_LEFT" );
   // putting a lower dimensional region inside of all split boundaries
   set<string>  newly_created_regions;
@@ -134,7 +137,27 @@ void Experimental_Example::Run()
 } // end Run
 
 
-
+void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const Region<2>& domain )
+ {
+     const csmp::Index key(pbase.StorageKey("element number"));
+     map<long,Element<2>*>  ordered_elmts;
+     
+     for ( auto it=domain.PerimeterElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+           ordered_elmts.insert( make_pair( (*it)->Read(key), (*it) ) );
+       }
+       
+     // printint the neighbours
+     cout <<"\nprintNeigboursOfPerimeterElements: of region '"<< domain.Name() <<"'\t";
+     for ( auto it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
+          cout <<"\n"<< (*it).first <<": ";
+          for ( size_t i=0U; i<(*it).second->Faces(); ++i )
+            if ( (*it).second->Neighbor(i) == nullptr )
+              cout <<"NONE ";
+            else
+              cout << (*it).second->Neighbor(i)->Read(key) <<" ";
+       }
+       
+ } // printNeigboursOfPerimeterElements
 
 
 /* TODO: get 3D approach to work in 2D, see below

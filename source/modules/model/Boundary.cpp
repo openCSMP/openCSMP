@@ -119,7 +119,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
   // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
-  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------
@@ -177,7 +177,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
   // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
-  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------

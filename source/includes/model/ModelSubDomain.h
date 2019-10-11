@@ -92,8 +92,8 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
     
-    /// assuming that the partitioned (and sorted) element vector is in place, constructs the face vector by checking whether neighbor elements belong to region or not
-    void BuildBoundaryFaceVector( size_t interior_elements );
+    /// assuming that a partitioned (and sorted) element vector is in place, constructs the bd_face_vec_ by checking whether neighbor elements belong to the domain or not
+    void BuildPerimeterFaceVector( size_t interior_elements );
 
     // ----------------------------------------
     // Indexes

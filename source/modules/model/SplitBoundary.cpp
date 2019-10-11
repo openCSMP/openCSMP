@@ -109,7 +109,7 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
 
   // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
   // ---------------------------------------------------------------------------------------------------
-  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for subdomain properties
   // -----------------------------------------------

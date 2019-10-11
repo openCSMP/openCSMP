@@ -136,7 +136,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
   // -------------------------------------------------------------------------------------------------
-  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------
@@ -189,7 +189,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
   // -------------------------------------------------------------------------------------------------
-  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------
