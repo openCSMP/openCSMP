@@ -74,6 +74,7 @@ group-internal object flags, depending on whether the nodes, constraint
 points or elements in the group lie at the group boundary or inside of
 the group. Elements are assigned a boundary flag if at least one of
 their faces coincides with the region boundary.
+
 */
 template<size_t dim>
 class Region : public ModelSubDomain<dim, Element> {
@@ -188,9 +189,9 @@ public:
   // Accumulate based on the location
 
   /// accumulates region of elements whose barycenter lies within the defined bounding box
-  void   AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
-                                      typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                                      const Point<dim>& xyz_min, const Point<dim>& xyz_max );
+  void AccumulateRectangularRegion( typename std::vector<csmp::Element<dim>*>::const_iterator start,
+                                    typename std::vector<csmp::Element<dim>*>::const_iterator end,
+                                    const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
   void AccumulateRectangularRegion( const csmp::MeshManager<dim>& mesh, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
@@ -198,7 +199,7 @@ public:
   size_t FromLargestComponent( MeshManager<dim>& mesh, bool reestablishNeighborConnectivity );
 
   /// merges supplied region with the current one
-  void   Add( const Region& );
+  void  Add( const Region& );
 
   /// reestablish nodes based on element container
   void CreateNodePointerVector();

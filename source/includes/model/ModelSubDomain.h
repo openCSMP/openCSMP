@@ -88,6 +88,12 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
 
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
+    
+    /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
+    void SortVectors( size_t interior_cells, size_t interior_nodes );
+    
+    /// assuming that the partitioned (and sorted) element vector is in place, constructs the face vector by checking whether neighbor elements belong to region or not
+    void BuildBoundaryFaceVector( size_t interior_elements );
 
     // ----------------------------------------
     // Indexes
@@ -109,7 +115,7 @@ class ModelSubDomain : public LocalVariableStorage<dim,ModelSubDomain<dim,CELL> 
     typename std::vector<CELL<dim>*>&  SimplexVector();
   
     /// reference to Node pointer vector
-    typename std::vector<Node<dim>*>&     NodeVector();
+    typename std::vector<Node<dim>*>&  NodeVector();
   
     // TODO: remove this proliferation of names! - if needed put into subclasses
     typename std::vector<CELL<dim>*>&  ElementVector();

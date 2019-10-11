@@ -204,11 +204,11 @@ public:
   /// constructs model with regions supplied as labeled element lists
   Model( ModelTopology&, VSet<dim>&, bool create_boundary_objects = false, bool box_shaped = true );
 
-  /// to read model from set of CSMP native binary files; it can read only a subset of variables
-  explicit Model( const std::string& binaryFileName, const std::set<std::string>* subset_variables = nullptr );
-
   /// to read model from set of CSMP native binary files
-  Model( const std::string& varFile, bool binary );
+  explicit Model( const std::string& binaryFiles );
+
+  /// to read model from set of CSMP native binary files; but only with a subset of variables
+  Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// destructor that needs to be overloaded when a subclass is derived from model
   virtual ~Model();
@@ -395,6 +395,9 @@ public:
 protected:
 
   Model();
+
+  /// to read model from set of CSMP native binary files; boolean whether a binary variable file with same name as model is available or not
+  Model( const std::string& modelName, bool with_binary_variables_file );
 
   /// build model from scratch
   void Initialize( bool isoparametric_elements,

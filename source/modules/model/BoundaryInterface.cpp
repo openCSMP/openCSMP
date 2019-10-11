@@ -424,7 +424,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 template<size_t dim>
 FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const csmp::Index& mtrl_key )
  {
-     assert( e.IsSurfaceElement() );
+     if ( dim == 2 ) assert( e.IsLineElement() );
+     if ( dim == 3 ) assert( e.IsSurfaceElement() );
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------
@@ -844,12 +845,14 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( cons
                                          "region appears to have inconstent surface-normal orientations; nothing was done." );
          return 0;
       }
+    // checking that the region is not located at the model boundary
     size_t boundary_elements(0);
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit ) {
          if ( (*eit)->AtBoundary() != NOT and (*eit)->AtBoundary() != INTERNAL and (*eit)->AtBoundary() != IRREGULAR ) boundary_elements++;
       }
-    if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
+    // TODO: find better diagnostics to test whether any of the elements in the region is located on the model boundary
+    if ( boundary_elements > dim ) {
+         ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
          return 0;
       }
     // creating region labels and tagging the regions with unique integer indentifiers
@@ -1359,7 +1362,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
         // reading the regions sequentially
         for ( size_t i=0U; i<records; ++i )
           {
-            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
+             BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
              // 1.1 reading name and face indices for each boundaries
              readDomainIndexesFromBinaryFile( dim, fp, info );
@@ -1383,12 +1386,12 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputAllBoundariesFromBinary( cons
                
                   // 1.4 reporting out
                   cout <<"\n\t\t"<< (*it.first).first <<" ("<< parseBoundary(bflag) <<", "<< (*it.first).second.Elements() <<" faces).";
-
-				  if (info.name.c_str() == "LEFT")
-					  cout << "error after this!!!\n";
          }
-     else csmp_error.notice( WARNING, "BoundaryInterface::InputAllBoundariesFromBinary:",
-                            bin_file, "does not contain any boundary descriptions; no boundaries were initialised." );
+// TODO: this code was creating a strange output message
+//				  if ( info.name == "LEFT" )
+//					  cout << "error after this!!!\n";
+//     else csmp_error.notice( WARNING, "BoundaryInterface::InputAllBoundariesFromBinary:",
+ //                           bin_file, "does not contain any boundary descriptions; no boundaries were initialised." );
    }
 
    // 2. read boundary complex variables here
@@ -1496,7 +1499,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* group1
              it = faceBoundaryMap_.insert( std::make_pair( b_normal, csmp::Boundary<dim>( b_normal, boundaryComplex->Database(), INTERNAL ) ) );
          if ( it.second ) 
            {
-             std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): creating boundary between " << group1 << " and " << group2 << std::endl;
+             //std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(between): creating boundary between " << group1 << " and " << group2 << std::endl;
              boundaryComplex->UpdateIndices();
              if( createRegionBetween )
              {
@@ -1587,7 +1590,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const char* region
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary from Region "<< region << "\n";
+        // std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary from Region "<< region << "\n";
         boundaryComplex->UpdateIndices();
         bool succeeded( (*it.first).second.CreateFrom( boundaryComplex->Mesh(), rref, csmp::Index(), boxBoundary ) );
         boundaryComplex->UpdateIndices();
@@ -1632,7 +1635,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( BOX_BOUNDARY boxBo
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary " <<  parseBoundary( boxBoundary ) << std::endl;
+        // std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): creating boundary " <<  parseBoundary( boxBoundary ) << std::endl;
         bool succeeded( (*it.first).second.CreateFrom( boundaryComplex->Mesh(), rref, csmp::Index(), boxBoundary ) );
         boundaryComplex->UpdateIndices();
         std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary(from dim-1 region): created boundary " <<  parseBoundary( boxBoundary ) << std::endl;
@@ -1673,7 +1676,7 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::AddFaces(const char* region)
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), bflag ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: creating boundary around " << region << std::endl;
+        // std::cout << "\nBoundaryInterface<"<< dim <<">::AddFaces: creating boundary around " << region << std::endl;
         //boundaryComplex->UpdateIndices(region);
         //                                 FACE & BOUNDARY CREATION
         bool succeeded( (*it.first).second.CreateAround( boundaryComplex->Mesh(), boundaryComplex->FE_Manager(), rref ) );
@@ -1712,7 +1715,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::InsertBoundary( const typename std
         it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), parseBoundary(bName) ) ) );
     if ( it.second )
       {
-        std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary creating boundary " <<  bName << std::endl;
+        // std::cout << "\nBoundaryInterface<"<< dim <<">::InsertBoundary creating boundary " <<  bName << std::endl;
         boundaryComplex->UpdateIndices();
         bool succeeded = (*it.first).second.CreateFrom( facesBegin, facesEnd );
         boundaryComplex->UpdateIndices();

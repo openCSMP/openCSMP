@@ -44,9 +44,8 @@ class SplitBoundaryInterface {
     // TODO: check name generation, use material ID
     bool DetectAndCreateSplitBoundaries();
 
-//  TODO: a separate method is needed for the one-to-one conversion of a Boundary into a SplitBoundary
-    bool CreateFrom( const Boundary<dim>& );
-    bool CreateFrom( const Region<dim>& );
+    ///  one-to-one conversion of a model Boundary into a SplitBoundary, Boundary gets removed
+    bool CreateSplitBoundaryFrom( Boundary<dim>& );
 
     /// Creation of SplitBoundary around region
     bool InsertSplitBoundary( const std::string& region );

@@ -170,6 +170,9 @@ class Boundary : public ModelSubDomain<dim, Face> {
 
     /// surface integral over the variable of interest
     double64  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
+    
+    /// reports whether the boundary lies on the outside of the whole model
+    bool IsExternal() const;
 
     /// application of single-value Box boundary flagging
     // TODO: should this also do the flagging of the edges etc.

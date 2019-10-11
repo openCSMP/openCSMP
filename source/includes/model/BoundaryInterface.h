@@ -94,7 +94,7 @@ class BoundaryInterface {
     // Boundary creation, modification & removal
     // -----------------------------------------------
     
-    /// creates  uniquely named boundary patches, returning their number; the patches are created from meshed surface inside of model which will be removed by default
+    /// creates  uniquely named boundary patches, returning their number; the patches are created from meshed surface inside of model which will be removed by default  (3D only)
     size_t  CreateInternalBoundaryFrom( const char* dimension_minus1_region, bool remove_dim_minus1_region=true );
 
     /// insert Boundary<Face> between two equidimensional unique regions, first on the inside by convention

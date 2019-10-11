@@ -85,26 +85,6 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
   for ( size_t i : info.perimeter_elmts )
     this->elmt_vec_.push_back( interfaces[i] );
 
-  // sorting the subvectors for future searching
-  const auto perimeterInterFacesBegin( next( this->elmt_vec_.begin(), info.interior_elmts.size() ) );
-
-  // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
-  // ---------------------------------------------------------------------------------------------------
-  this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-  const auto elementsEnd( this->elmt_vec_.end() );
-  for ( auto it = perimeterInterFacesBegin; it != elementsEnd; ++it ) {
-    assert( (*it)->Faces() == (*it)->Neighbors() );
-    // for all the faces of the element that are located on the model boundary
-    vector<ONE_BYTE_NUMBER>  boundary_faces;
-    const size_t faces( (*it)->Faces() );
-    boundary_faces.reserve( faces );
-    for ( size_t interface = 0U; interface<faces; ++interface )
-      if ( (*it)->Neighbor( interface ) == nullptr )
-        boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(interface) );
-    // storing the boundary interface vector for the current element
-    this->bd_face_vec_.emplace_back( boundary_faces );
-  }
-
   // building the node vector
   // ------------------------
   // assigning pointers to the interior and perimeter nodes
@@ -124,6 +104,12 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_nodes )
     this->node_vec_.push_back( nodes[i] );
+
+  this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
+
+  // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
+  // ---------------------------------------------------------------------------------------------------
+  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for subdomain properties
   // -----------------------------------------------
@@ -210,11 +196,15 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 } // end constructor
 
 
+
+
+
 /// Does not delet interfaces, Delete() has to be called for this
 template<size_t dim>
 SplitBoundary<dim>::~SplitBoundary()
 {
 }
+
 
 
 template<size_t dim>
@@ -444,9 +434,7 @@ bool SplitBoundary<dim>::In( MeshManager<dim>& meshManager,
   bytes = sizeof( size_t );
   std::vector<std::vector<size_t> >                     interfaceParents( interfaceCount );
   std::vector<std::vector<std::pair<size_t, size_t> > > interfaceParentNodes( interfaceCount );
-  size_t interfaceNodes( 1 );
-  size_t localInnerNodeIdx( 1 );
-  size_t localOuterNodeIdx( 1 );
+
   for ( size_t f( 0 ); f < interfaceCount; ++f )
   {
     interfaceParents[f].resize( 5, NULL_IDX );
@@ -505,7 +493,9 @@ void SplitBoundary<dim>::Initialize( bool updateNeighborConnectivity, bool updat
 template<size_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
 {
-  assert( !this->elmt_vec_.empty() );
+  if ( this->elmt_vec_.empty() )
+    throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateNodePointerVector:",
+                           this->Name(), "interface vector is empty; nothing could be done." );
 
   if ( !this->node_vec_.empty() )
     this->node_vec_.clear();

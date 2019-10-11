@@ -858,6 +858,63 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
 
 
 
+/**
+     Method for reconstruction of model  subdomains from binary file.
+     
+         @author  SKM
+         @date 11/10/2019
+*/
+template<size_t dim, template<size_t> class CELL>
+void  ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector( size_t interior_elements )
+  {
+     assert( interior_elements > 0 );
+     
+     // verification of suitable model state
+     if ( elmt_vec_.empty() )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+                              Name(), "model subdomain: CELL vector not initialised yet.");
+                              
+     if ( interior_elements > elmt_vec_.size() ) {
+           cerr <<"\ninterior cells: "<< interior_elements;
+           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+                                  Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+       }
+
+     if ( !is_sorted( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_elements)) ) {
+          cerr <<"\ninterior cells: "<< interior_elements;
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::BuildBoundaryFaceVector",
+                                 Name(), "model subdomain: supplied CELL vector not sorted.");
+       }
+       
+     // (re)constructing the CELL face vector
+     if ( !bd_face_vec_.empty() ) bd_face_vec_.clear();
+     this->bd_face_vec_.reserve( elmt_vec_.size() - interior_elements );
+
+     const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(this->elmt_vec_.begin(),interior_elements) );
+     const typename vector<CELL<dim>*>::const_iterator elementsEnd( this->elmt_vec_.end() );
+     vector<ONE_BYTE_NUMBER>  boundary_faces;
+
+     for ( typename vector<CELL<dim>*>::const_iterator it = perimeterElementsBegin; it != elementsEnd; ++it ) {
+         assert( (*it)->Faces() == (*it)->Neighbors() );
+         // for all faces of the CELLs that are located on the domain boundary
+         const size_t faces( (*it)->Faces() );
+         boundary_faces.reserve( faces );
+         for ( size_t face(0U); face<faces; ++face )
+           // TODO: see whether this costly search (=Contains()) can be avoided
+           if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
+             boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
+         // storing the boundary face vector for the current element
+         if ( boundary_faces.size() == faces ) {
+              cerr <<"\n\tBuildBoundaryFaceVector: for '"<< Name() <<"', cell: "<< (*it)->Idx() <<" has no neighbors in region.";
+           }
+         this->bd_face_vec_.push_back( boundary_faces );
+         boundary_faces.clear();
+      }
+      
+  } // end BuildBoundaryFaceVector
+
+
+
 
 
 
@@ -897,9 +954,9 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     //   (at this point the elements and nodes are already known)
     // -----------------------------------------------------------------
     set<CELL<dim>*> interior_elmts, boundary_elmts;
-    set<Node<dim>*>                boundary_nodes;
-    set<pair<CELL<dim>*,size_t> >  boundary_faces;
-    vector<size_t>                 fnids;
+    set<Node<dim>*>                 boundary_nodes;
+    set<pair<CELL<dim>*,size_t> >   boundary_faces;
+    vector<size_t>                  fnids;
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
@@ -913,23 +970,23 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 			long  nbors_that_belong_to_group((*eit)->Neighbors());
 			for (size_t i = 0U; i<(*eit)->Faces(); i++)
 				// if the face is at a model boundary or has a neighbor that does not belong to the region
-				if ((*eit)->Neighbor(i) == NULL or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)))
-				{
-					// boundary faces
-					boundary_faces.insert(make_pair((*eit), i));
-					// boundary nodes
-					assert((*eit)->FE() != NULL);
-					(*eit)->FE()->NodesOfFace(i, fnids);
-					for (size_t j = 0U; j<fnids.size(); ++j)
-						boundary_nodes.insert((*eit)->N(fnids[j]));
-					// counting neighbors
-					nbors_that_belong_to_group--;
-				}
+				if ( (*eit)->Neighbor(i) == nullptr or !binary_search(this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i)) )
+          {
+            // boundary faces
+            boundary_faces.insert( make_pair((*eit),i) );
+            // boundary nodes
+            assert( (*eit)->FE() != nullptr );
+            (*eit)->FE()->NodesOfFace(i, fnids);
+            for (size_t j = 0U; j<fnids.size(); ++j)
+              boundary_nodes.insert((*eit)->N(fnids[j]));
+            // counting neighbors
+            nbors_that_belong_to_group--;
+          }
 
 			// storing the distinguished elements in the respective vectors
 			// ------------------------------------------------------------
 			// interior elements
-				if (nbors_that_belong_to_group == (*eit)->Neighbors())
+				if ( nbors_that_belong_to_group == (*eit)->Neighbors() )
 					interior_elmts.insert((*eit));
 				// elements with at least one face on the region boundary
 				else
@@ -1126,34 +1183,37 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // 3. creating the boundary face vector
     // --------------------------------------------------
     if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
-	// bd_face_vec_ is only avaialble if there are boundary elements.
-	if (boundary_elmts.size() > 0) 
-	{
-		this->bd_face_vec_.reserve(this->elmt_vec_.size() - boundary_elmts.size());
-		//       parent element of face, face
-		typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
-		typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
-		vector<ONE_BYTE_NUMBER>  bface_data;
-		bface_data.reserve(3);
-		size_t counter(0U);
+    // bd_face_vec_ is only available if there are boundary elements
+    if (boundary_elmts.size() > 0)
+      {
+        this->bd_face_vec_.reserve(this->elmt_vec_.size() - boundary_elmts.size());
+        //       parent element of face, face
+        typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
+        typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
+        vector<ONE_BYTE_NUMBER>  bface_data;
+        size_t                   counter(0U);
 
-		while (bfit != boundary_faces.end()) {
-			assert((*ffit).first == this->elmt_vec_[counter + interior_elmts.size()]);
-			while ((*bfit).first == (*ffit).first) {
-				bface_data.push_back(static_cast<ONE_BYTE_NUMBER>((*bfit).second));
-				bfit++;
-				if (bfit == boundary_faces.end())
-					break;
-			}
-			ffit = bfit;
-			counter++;
-			this->bd_face_vec_.push_back(bface_data);
-			bface_data.clear();
-		}
-		vector<vector<ONE_BYTE_NUMBER> >(this->bd_face_vec_).swap(this->bd_face_vec_);
-
-		assert(this->bd_face_vec_.size() == this->Elements() - this->InteriorElements());
-	}
+        while ( bfit != boundary_faces.end() ) {
+            assert((*ffit).first == this->elmt_vec_[counter + interior_elmts.size()]);
+            bface_data.reserve(3);
+            // as long as we considering faces of the same element
+            while ( (*bfit).first == (*ffit).first ) {
+                bface_data.push_back(static_cast<ONE_BYTE_NUMBER>((*bfit).second));
+                bfit++;
+                if ( bfit == boundary_faces.end() ) break;
+              }
+            ffit = bfit;
+            assert( bface_data.size() > 0 );
+            this->bd_face_vec_.push_back(bface_data);
+            bface_data.clear();
+            counter++;
+          }
+        vector<vector<ONE_BYTE_NUMBER> >(this->bd_face_vec_).swap(this->bd_face_vec_);
+        // debug checks
+        for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
+          assert( (*it).size() >= 1 );
+        assert(this->bd_face_vec_.size() == this->Elements() - this->InteriorElements());
+     }
 
 
     // --------------------------------------------------
@@ -1189,6 +1249,44 @@ cout.flush();
 
 
 
+
+
+
+
+template<size_t dim, template<size_t> class CELL>
+void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
+  {
+    assert( interior_cells > 0 );
+    assert( interior_nodes > 0 );
+
+    // verification of suitable model state
+    if ( elmt_vec_.empty() )
+      throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                             Name(), "model subdomain: CELL vector not initialised yet.");
+                             
+    if ( interior_cells > elmt_vec_.size() ) {
+          cerr <<"\ninterior cells: "<< interior_cells;
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                 Name(), "model subdomain: less CELLs in CELL vector than interior elements specified.");
+      }
+   if ( node_vec_.empty() )
+     throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                            Name(), "model subdomain: node vector not initialised yet.");
+                            
+   if ( interior_nodes > node_vec_.size() ) {
+         cerr <<"\ninterior cells: "<< interior_nodes;
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                                Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
+     }
+   
+   // sorting
+   sort( elmt_vec_.begin(), next(elmt_vec_.begin(),interior_cells) );
+   sort( next(elmt_vec_.begin(),interior_cells), elmt_vec_.end() );
+
+   sort( node_vec_.begin(), next(node_vec_.begin(),interior_nodes) );
+   sort( next(node_vec_.begin(),interior_nodes), node_vec_.end() );
+
+  } // end SortVectors
 
 
 
@@ -1359,12 +1457,12 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     returns true or false.
 */
 template<size_t dim, template<size_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* e ) const
+bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* eptr ) const
  {
-    if ( binary_search( elmt_vec_.begin(), elmt_vec_.begin() + static_cast<long>(InteriorElements()), e ) )
+    if ( binary_search( elmt_vec_.begin(), next(elmt_vec_.begin(),InteriorElements()), eptr ) )
        return true;
 
-    if ( binary_search( elmt_vec_.begin() + static_cast<long>(InteriorElements()), elmt_vec_.end(), e ) )
+    if ( binary_search( next(elmt_vec_.begin(),InteriorElements()), elmt_vec_.end(), eptr ) )
        return true;
 
     return false;
@@ -1381,10 +1479,10 @@ bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* nptr ) const
  {
     assert( nptr != NULL );
 
-    if ( binary_search( node_vec_.begin(), node_vec_.begin() + static_cast<long>(InteriorNodes()), nptr ) )
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), InteriorNodes()), nptr ) )
        return true;
 
-    if ( binary_search( node_vec_.begin() + static_cast<long>(InteriorNodes()), node_vec_.end(), nptr ) )
+    if ( binary_search( next(node_vec_.begin(), InteriorNodes()), node_vec_.end(), nptr ) )
        return true;
 
     return false;

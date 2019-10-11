@@ -4,7 +4,9 @@
 #include "Model.h"
 
 namespace csmp {
-
+/**
+       2D specialisation of ANSYS interface.
+ */
 class ANSYS_Model2D : public Model<2U> {
 public:
 
@@ -42,8 +44,7 @@ public:
     bool create_boundaries = true,         /* true = creates boundaries around model, false = does not create boundaries */
     bool create_splitboundaries = false ); /* true = creates splitboundaries around model, false = does not create splitboundaries */
 
-  /// input from ANSYS *.asc, *.dat files
-  /// creates empty property database
+  /// input from ANSYS *.asc, *.dat files; creates empty property database
   ANSYS_Model2D(
     const char* icem_file_set,
     bool irregular_mesh = false,           /* true = non-box shaped model, false = box shaped model */

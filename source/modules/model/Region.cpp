@@ -63,16 +63,9 @@ Region<dim>&  Region<dim>::operator=( const Region& g )
   return *this;
 } // end assignment
 
-/**
-The destructor does not reduce the counter of groups n_groups_.
-This is avoided because the group which gets deleted is not necessarily
-the group with the highest number. Thus, if the counter would be decremented
-after each deletion, groups created thereafter might share the same
-group ID.
 
-As a consequence of the implemented approach, the group numbering is
-no longer contiguous.
-*/
+
+
 template<size_t dim>
 Region<dim>::~Region()
 {
@@ -108,7 +101,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   : ModelSubDomain<dim, Element>( info.name, pref )
 {
   // traversal of the existing mesh nodes to find all its elements
-  deque<csmp::Node<dim>*>		nodes;
+  deque<csmp::Node<dim>*>		  nodes;
   deque<csmp::Element<dim>*>	elmts;
   exploreNodesAndElementsFromMesh( &mesh, nodes, elmts );
   sort( nodes.begin(), nodes.end(), []( auto& lhs, auto& rhs ) {return lhs->Idx() < rhs->Idx(); } );
@@ -118,31 +111,13 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   // ---------------------------
   this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
-  // assigning pointers to the interior elements
+  // pushing back the pointers to the interior elements
   for ( size_t i : info.interior_elmts )
     this->elmt_vec_.push_back( elmts[i] );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
     this->elmt_vec_.push_back( elmts[i] );
-
-  // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
-  // -------------------------------------------------------------------------------------------------
-  const auto perimeterElementsBegin( next( this->elmt_vec_.begin(), info.interior_elmts.size() ) );
-  this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-  const auto elementsEnd( this->elmt_vec_.end() );
-  for ( auto it = perimeterElementsBegin; it != elementsEnd; ++it ) {
-    assert( (*it)->Faces() == (*it)->Neighbors() );
-    // for all the faces of the element that are located on the model boundary
-    vector<ONE_BYTE_NUMBER>  boundary_faces;
-    const size_t faces( (*it)->Faces() );
-    boundary_faces.reserve( faces );
-    for ( size_t face = 0U; face<faces; ++face )
-      if ( (*it)->Neighbor( face ) == nullptr )
-        boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-    // storing the boundary face vector for the current element
-    this->bd_face_vec_.push_back( boundary_faces );
-  }
 
   // building the node vector
   // ------------------------
@@ -157,6 +132,12 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   for ( size_t i : info.perimeter_nodes )
     this->node_vec_.push_back( nodes[i] );
 
+  this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
+
+  // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
+  // -------------------------------------------------------------------------------------------------
+  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
+
   // allocating the storage for boundary properties
   // ----------------------------------------------
   this->ResizePropertyStorage( pref.LocalVariablesAt( REGION ) );
@@ -164,7 +145,14 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 } // end region re-constructor (using MeshManager)
 
 
-/// re-constructor for regions via the nodes and elements which are explored by the MeshManager
+
+
+
+
+
+/**
+      re-constructor for regions via the nodes and elements which are explored by the MeshManager
+ */
 template<size_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      const deque<Node<dim>*>& nodes,
@@ -178,30 +166,12 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior elements
   for ( size_t i : info.interior_elmts )
-    if ( i < elmts.size() ) this->elmt_vec_.push_back( elmts[i] );
+    this->elmt_vec_.push_back( elmts[i] );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
-    if ( i < elmts.size() ) this->elmt_vec_.push_back( elmts[i] );
-
-  // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
-  // -------------------------------------------------------------------------------------------------
-  const auto perimeterElementsBegin( next( this->elmt_vec_.begin(), info.interior_elmts.size() ) );
-  this->bd_face_vec_.reserve( info.perimeter_faces.size() );
-  const auto elementsEnd( this->elmt_vec_.end() );
-  for ( auto it = perimeterElementsBegin; it != elementsEnd; ++it ) {
-    assert( (*it)->Faces() == (*it)->Neighbors() );
-    // for all the faces of the element that are located on the model boundary
-    vector<ONE_BYTE_NUMBER>  boundary_faces;
-    const size_t faces( (*it)->Faces() );
-    boundary_faces.reserve( faces );
-    for ( size_t face = 0U; face<faces; ++face )
-      if ( (*it)->Neighbor( face ) == nullptr )
-        boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
-    // storing the boundary face vector for the current element
-    this->bd_face_vec_.push_back( boundary_faces );
-  }
-
+    this->elmt_vec_.push_back( elmts[i] );
+    
   // building the node vector
   // ------------------------
   this->first_bd_node_ = info.interior_nodes.size();
@@ -214,6 +184,12 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
   // assigning pointers to the perimeter nodes
   for ( size_t i : info.perimeter_nodes )
     this->node_vec_.push_back( nodes[i] );
+
+  this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
+
+  // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
+  // -------------------------------------------------------------------------------------------------
+  this->BuildBoundaryFaceVector( info.interior_elmts.size() );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------

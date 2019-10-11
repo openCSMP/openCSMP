@@ -69,17 +69,44 @@ Model<dim>::Model( const std::string& varFile, bool binary )
 // PUBLIC CONSTRUCTORS
 
 
+
 /**
-Full input from CSMP-native binary file.
+    Builds model from binary file set with a binary variables file that has the same name as the Model.
+    
+    @author SKM
+    @date 11/9/2019
+    
 */
 template<size_t dim>
-Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>* subset_variables )
+Model<dim>::Model( const std::string& binaryFileName )
   : model_name_( binaryFileName ),
-  database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, subset_variables),
-  fvStencilManager_( nullptr )
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, NULL ),
+    fvStencilManager_( nullptr )
 {
-  InitializeLocalVariableStorage();  
-  InputFromBinaryFile( binaryFileName.c_str(), subset_variables );
+  InitializeLocalVariableStorage();
+  // TODO: this is just a quick fix to a proper solution, InputFromBinaryFile must check whether subset is empty
+  InputFromBinaryFile( binaryFileName.c_str(), nullptr );
+}
+
+
+/**
+Full input from CSMP-native binary file.
+
+@author Junchul Kim
+@date 2019
+
+*/
+template<size_t dim>
+Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables )
+  : model_name_( binaryFileName ),
+    database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), true, &subset_variables ),
+    fvStencilManager_( nullptr )
+{
+  InitializeLocalVariableStorage();
+  if ( subset_variables.empty() )
+    InputFromBinaryFile( binaryFileName.c_str(), &subset_variables );
+  else
+    InputFromBinaryFile( binaryFileName.c_str(), nullptr );
 }
 
 
@@ -3036,6 +3063,11 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";
 
 } // end InputFromBinaryFile
+
+
+
+
+
 
 
 template<size_t dim>

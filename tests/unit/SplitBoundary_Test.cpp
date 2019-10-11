@@ -1010,6 +1010,8 @@ void SplitBoundary_Test::test_splitboundary_between_regions( const std::string& 
     }
   }
 
+  // CREATION OF SPLITBOUNDARY BETWEEN 2 REGIONS
+  // -------------------------------------------
   // do this sequentially according to neighbours, otherwise boundaries are not assgiend properly
   for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
     modelIN->InsertSplitBoundary( it.first, it.second );

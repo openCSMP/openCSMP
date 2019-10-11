@@ -295,6 +295,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 } // end InputSplitBoundariesFromBinary
 
 
+
+
 /// container of juxtaposed element pairs for SplitBoundary creation:
 template<size_t dim>
 struct SplitBoundaryElementSets : public
@@ -384,9 +386,96 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBou
 
 
 
+
+
+/**
+       CreateSplitBoundaryFrom( const Boundary<dim>& );
+       
+       @attention the input boundary is removed in the process.
+       
+       @return true if the method was able to create the boundary
+
+*/
+template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( Boundary<dim>& boundary )
+{
+  SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // checking whether boundary is external to the model in which case a SplitBoundary cannot be buid
+  if ( boundary.IsExternal() ) {
+    csmp_error.notice( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom", "Region 'Model' not eligible for InsertSplitBoundary." );
+    return false;
+  }
+
+  // creating boundary name by replacing BOUNDARY with SPLIT_BOUNDARY
+  std::string  splitboundaryName( boundary.Name() );
+  splitboundaryName.replace(splitboundaryName.find("BOUNDARY"),splitboundaryName.length(),"SPLIT_BOUNDARY");
+
+  // attempt to create a splitboundary
+  bool succeeded(false);
+  pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
+    it = splitBoundaryMap_.insert( std::make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
+                                                                                                splitboundaryComplex->Database() ) ) );
+  if ( it.second ) {
+      cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom:";
+      cout <<" creating splitboundary from 'Boundary' "<< boundary.Name() << endl;
+      splitboundaryComplex->UpdateIndices();
+      succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
+    }
+  else
+    throw csmp::Exception( WARNING,
+                           "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom",
+                           splitboundaryName.c_str(),
+                           "boundary already exists. Nothing was done." );
+
+  splitboundaryComplex->UpdateIndices();
+
+  // removes boundary also deleting its elements
+  splitboundaryComplex->RemoveBoundary( boundary, true );
+
+  // update indexes
+  splitboundaryComplex->UpdateIndices();
+
+// TODO: put this repeated code into a private method that can be called separately
+  for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->UniqueRegionsBegin(); rit != splitboundaryComplex->UniqueRegionsEnd(); ++rit ) {
+    rit->second.CreateNodePointerVector();
+    rit->second.EstablishNeighborConnectivity(false);
+    rit->second.IdentifyPerimeter();
+  }
+  for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->RegionsBegin(); rit != splitboundaryComplex->RegionsEnd(); ++rit ) {
+    rit->second.CreateNodePointerVector();
+    rit->second.EstablishNeighborConnectivity(false);
+    rit->second.IdentifyPerimeter();
+  }
+  for ( typename SPLITBOUNDARY_COMPLEX<dim>::boundaryIterator bit = splitboundaryComplex->BoundariesBegin(); bit != splitboundaryComplex->BoundariesEnd(); ++bit ) {
+    bit->second.CreateNodePointerVector();
+    bit->second.EstablishNeighborConnectivity(false);
+    bit->second.IdentifyPerimeter();
+  }
+  for ( typename SPLITBOUNDARY_COMPLEX<dim>::splitBoundaryIterator sbit = splitboundaryComplex->SplitBoundariesBegin(); sbit != splitboundaryComplex->SplitBoundariesEnd(); ++sbit ) {
+    sbit->second.CreateNodePointerVector();
+    sbit->second.EstablishNeighborConnectivity(false);
+    sbit->second.IdentifyPerimeter();
+  }
+
+  if ( succeeded ) {
+        cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
+        cout << splitboundaryName <<"' successfully.\n\n";
+    }
+
+  return true;
+
+} // end CreateSplitBoundaryFrom( Boundary )
+
+
+
+
+
+
 /**
 Method forms a SplitBoundary between the two supplied regions. This will involve the creation
-and connection of InterFaces.
+and connection of InterFaces by the MeshManager.
 
 @attention:  BoundariesInterface cannot be created in 1D models or between regions which contain
 one-dimensional elements.
@@ -400,6 +489,11 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 {
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( dim == 1 ) {
+    csmp_error.notice( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "There are no SplitBoundaries in 1D models." );
+    return false;
+  }
 
   if ( group1 == "Model" or group2 == "Model" ) {
     csmp_error.notice( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Region 'Model' not eligible for InsertSplitBoundary." );
@@ -427,7 +521,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
     }
   }
 
-  std::string  boundaryName( std::string( group1 ) + std::string( "_" ) + std::string( group2 ) );
+  std::string  boundaryName( string(group1) + string("_") + string(group2) );
   pair<string, string> key = make_pair( group1, group2 );
 
   splitboundaryComplex->InsertBoundary( group1.c_str(), group2.c_str(), createRegionBetween );
@@ -450,12 +544,13 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
   else {
     // TODO: make name consistent with name of boundary (replace string BOUNDARY with SPLIT_BOUNDARY)
     std::string  splitboundaryName( CreateSplitBoundaryName( key ) );
+    boundaryName = splitboundaryName;
     std::pair<typename std::map<std::string, csmp::SplitBoundary<dim> >::iterator, bool>
       it = splitBoundaryMap_.insert( std::make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
                                      splitboundaryComplex->Database() ) ) );
     if ( it.second )
     {
-      std::cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary creating splitboundary between " << group1 << " and " << group2 << std::endl;
+      //std::cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary creating splitboundary between " << group1 << " and " << group2 << std::endl;
       splitboundaryComplex->UpdateIndices();
       succeeded = (*it.first).second.CreateFrom( *splitboundaryComplex, boundary );
     }
@@ -473,7 +568,8 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
 
   // update indexes
   splitboundaryComplex->UpdateIndices();
-    
+
+// TODO: put this repeated code into a private method that can be called separately
   for ( typename SPLITBOUNDARY_COMPLEX<dim>::regionIterator rit = splitboundaryComplex->UniqueRegionsBegin(); rit != splitboundaryComplex->UniqueRegionsEnd(); ++rit ) {
     rit->second.CreateNodePointerVector();
     rit->second.EstablishNeighborConnectivity(false);
@@ -495,8 +591,10 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( co
     sbit->second.IdentifyPerimeter();
   }
 
-  if ( succeeded )
-    std::cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary created splitboundary between " << group1 << " and " << group2 << std::endl;
+  if ( succeeded ) {
+       cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary: created split boundary '";
+       cout << boundaryName <<"' between " << group1 << " and " << group2 << std::endl;
+    }
   else
     throw csmp::Exception( ERROR, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary", "Splitting failed!" );
 
