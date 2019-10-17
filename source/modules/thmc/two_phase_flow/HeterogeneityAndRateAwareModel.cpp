@@ -230,7 +230,7 @@ typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION HeterogeneityAndRat
 template<size_t dim>
 double64 HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
  {
-    array<double64,3> gradP({0.,0.,0.});
+    array<double64, 3> gradP{ 0., 0., 0. };
     e.dN_AtBaryCenter( DN_ );
     for ( size_t i=0U; i<e.Nodes(); ++i ) {
          const double64 pf = e.N(i)->Read( pf_key_ );
