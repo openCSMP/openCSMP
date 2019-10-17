@@ -87,7 +87,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// harmonic mean
     double64 PermeabilityPerpendicularToLaminations() const;
     /// prominent direction of flow, determined from vt
-    HeterogeneityAndRateAwareModel::FLOW_DIRECTION ProminentFlowDirection() const;
+    FLOW_DIRECTION ProminentFlowDirection() const;
     /// volume averaged irreducible water saturation
     double64 Swr_Composite() const;
     /// Magnitude of the pressure gradient
