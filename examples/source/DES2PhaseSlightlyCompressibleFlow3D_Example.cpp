@@ -76,7 +76,6 @@ void DES2PhaseSlightlyCompressibleFlow3D_Example::Run()
     bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     
     ANSYS_Model3D                model( input_file.c_str(), "DES_2phase_variables.txt" );
-    const PropertyDatabase<3>&   p_ref = model.Database();  
 
     // give the model dimensions
     printModelDimensions( model, true );

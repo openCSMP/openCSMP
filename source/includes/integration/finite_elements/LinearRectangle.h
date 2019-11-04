@@ -4,7 +4,8 @@
 #include "FiniteElement.h"
 
 namespace csmp {
-	class LinearRectangle : public FiniteElement {
+
+class LinearRectangle : public FiniteElement {
 	public:
 		LinearRectangle(size_t dim);
 		virtual ~LinearRectangle();
@@ -24,12 +25,13 @@ namespace csmp {
 		virtual CSMP_FEM_TYPE  ElementTypeOfSegment(size_t) const { return LINEAR_BAR; };
 		virtual CSMP_FEM_TYPE  ElementTypeOfFace(size_t) const { return LINEAR_BAR; };
 	private:
-		void Nrs(std::vector<double64>& N, DenseMatrix<DM_MIN>&   RS, const std::vector<double64>& rs);
+		void Nrs( std::vector<double64>& N, DenseMatrix<DM_MIN>& RS, const std::vector<double64>& rs );
 		DenseMatrix<DM_MIN>   M1_;
-		std::vector<double64> V_; // Auxiliary vector
-	}; // end class linear rectangle
+		std::vector<double64> V_; 
+    
+}; // end class linear rectangle
 
 } // end csmp
 
-#endif // !lINEAR_RECTANGLE_H
+#endif // LINEAR_RECTANGLE_H
 
